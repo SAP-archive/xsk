@@ -1,0 +1,29 @@
+grammar com.sap.xsk.models.hdbsequence.HdbSequence with org.eclipse.xtext.common.Terminals
+
+generate hdbSequence "http://www.sap.com/xsk/models/hdbsequence/HdbSequence"
+
+HdbSequenceModel:
+    (elements+=HdbSequenceElements);
+    
+ListString:
+	'[' ((values+=STRING) (',' values+=STRING)*)? ']'
+;
+
+terminal BOOL:
+	'true' | 'false'
+;
+
+HdbSequenceElements:
+	(schema='schema''=' schemaValue=STRING ';')  &
+	(incrementBy='increment_by' '=' incrementByValue=INT ';')? &
+	(startWith='start_with' '=' startWithValue=INT ';')?  &
+	(maxValue='maxvalue' '=' maxValueValue=INT ';')?  &
+	(noMaxValue='nomaxvalue' '=' noMaxValueValue=BOOL ';')?  &
+	(minValue='minvalue' '=' minVlaueValue=INT ';')? &
+	(noMinValue='nominvalue' '=' noMinValueValue=BOOL ';')? & 
+	(cycles='cycles' '=' cyclesValue=BOOL ';')? &
+	(public='public' '=' publicValue=BOOL ';')? &
+	(dependsOnTable='depends_on_table' '=' dependsOnTableValue=STRING ';')? &
+	(dependsOnView='depends_on_view' '=' dependsOnViewValue=STRING ';')? &
+	('depends_on' '=' value=ListString ';')?
+;

@@ -1,0 +1,20 @@
+grammar com.sap.xsk.models.hdbview.HdbView with org.eclipse.xtext.common.Terminals
+
+generate hdbView "http://www.sap.com/xsk/models/hdbview/HdbView"
+
+HdbViewModel:
+	(viewElement=View);
+	
+	
+terminal BOOL:
+	'true' | 'false'
+;
+
+View:
+    schema?='schema' '=' schemaName=STRING ';' &
+    query?='query' '=' queryValue=STRING ';' &
+    dependsOn?='depends_on' '=' '[' ((dependsOnValues+=STRING) (',' dependsOnValues+=STRING)*)? ']' ';'
+;
+
+
+	

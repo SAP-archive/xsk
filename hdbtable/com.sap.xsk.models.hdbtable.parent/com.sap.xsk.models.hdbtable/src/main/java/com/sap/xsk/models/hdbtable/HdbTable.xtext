@@ -1,0 +1,30 @@
+grammar com.sap.xsk.models.hdbtable.HdbTable with org.eclipse.xtext.common.Terminals
+
+generate hdbTable "http://www.sap.com/xsk/models/hdbtable/HdbTable"
+
+HdbTableModel:
+	(tableElement=Table);
+	
+	
+terminal BOOL:
+	'true' | 'false'
+;
+
+ColumnType:
+	'{'
+		'name' '=' columnName=STRING ';' &
+		'sqlType' '=' columnSqlType=ID ';' &
+		('length' '=' columnLength=INT ';')? &
+		('nullable' '=' columnNullable=BOOL)? ';'
+	'}'
+;
+
+Table:
+    schema?='table.schemaName' '=' schemaName=STRING ';' &
+    type?='table.tableType' '=' typeValue=ID ';' &
+    description?='table.description' '=' descriptionText=STRING ';' &
+    columns?='table.columns' '=' '[' ((columnsValues+=ColumnType) (',' columnsValues+=ColumnType)*)? ']' ';' &
+    primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' ((tablePrimaryKeyColumnsValues+=STRING) (',' tablePrimaryKeyColumnsValues+=STRING)*)? ']' ';'
+;
+
+

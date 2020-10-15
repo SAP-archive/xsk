@@ -1,0 +1,1 @@
+exports.codec = require("xsk/util/codec/codec");

@@ -1,0 +1,47 @@
+package com.sap.xsk.xsodata.ds.filter;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+
+@WebFilter("/*")
+public class XSODataForwardFilter implements Filter {
+
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		//		
+	}
+
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		if (httpServletRequest.getHeader("Dirigible-Editor") == null) {
+			String uri = httpServletRequest.getRequestURI();
+			int index = uri.indexOf(".xsodata");
+			if (index > 0) {
+				String parameters = "";
+				if (uri.length() > index + 7) {
+					parameters = uri.substring(index + 8);
+				}
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/odata/v2" + parameters);
+				dispatcher.forward(request, response);
+			}
+		}
+		chain.doFilter(request, response);
+	}
+
+	@Override
+	public void destroy() {
+		//		
+	}
+
+}

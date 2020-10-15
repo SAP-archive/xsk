@@ -1,0 +1,6 @@
+com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizerJobDefinitionProvider	# XSK Data Structures Synchronizer Job Definition Provider
+com.sap.xsk.xsodata.ds.synchronizer.XSKODataSynchronizerJobDefinitionProvider	# XSK OData Synchronizer Job Definition Provider
+com.sap.xsk.xssecurestore.ds.synchronizer.XSKSecureStoreSynchronizerJobDefinitionProvider  # XSK Secure createSecureStoreValue Synchronizer Job Definition Provider
+com.sap.xsk.xscjob.ds.synchronizer.XSKJobSynchronizerJobDefinitionProvider # XSK Job Synchronizer Job Definition Provider
+com.sap.xsk.xsaccess.ds.synchronizer.XSKSecuritySynchronizerJobDefinitionProvider # XSK Access Synchronizer Job Definition Provider
+com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizerJobDefinitionProvider # XSK Table Import Synchronizer Job Definition Provider

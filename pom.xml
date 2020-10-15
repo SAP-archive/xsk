@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+	<name>XSK - HANA XS Classic Compatibility Environment - Parent</name>
+	<description>XSK Parent</description>
+	<groupId>com.sap.xsk</groupId>
+	<artifactId>xsk-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<inceptionYear>2019</inceptionYear>
+
+	<url>http://www.sap.com</url>
+	<organization>
+		<name>SAP SE</name>
+		<url>http://www.sap.com</url>
+	</organization>
+	<scm>
+		<url>https://github.com/SAP/xsk</url>
+	</scm>
+
+	<modules>
+		<module>hdbdd/com.sap.xsk.models.hdbdd.parent</module>
+		<module>hdbsequence/com.sap.xsk.models.hdbsequence.parent</module>
+		<module>hdbtable/com.sap.xsk.models.hdbtable.parent</module>
+		<module>hdbti/com.sap.xsk.models.hdbti.parent</module>
+		<module>hdbview/com.sap.xsk.models.hdbview.parent</module>
+		<module>xsodata/com.sap.xsk.models.xsodata.parent</module>
+		<module>engine/xsk</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<java.version>11</java.version>
+	</properties>
+</project>

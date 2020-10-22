@@ -3,9 +3,12 @@
  */
 package com.sap.xsk.models.hdbdd.web;
 
+import com.google.inject.Injector;
+import com.sap.xsk.models.hdbdd.web.ModelWebSetup;
 import javax.servlet.annotation.WebServlet;
 import org.eclipse.xtext.util.DisposableRegistry;
 import org.eclipse.xtext.web.servlet.XtextServlet;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 
 /**
  * Deploy this class into a servlet container to enable DSL-specific services.
@@ -17,9 +20,13 @@ public class ModelServlet extends XtextServlet {
   
   @Override
   public void init() {
-    throw new Error("Unresolved compilation problems:"
-      + "\nThe method createInjectorAndDoEMFRegistration() is undefined for the type ModelWebSetup"
-      + "\ngetInstance cannot be resolved");
+    try {
+      super.init();
+      final Injector injector = new ModelWebSetup().createInjectorAndDoEMFRegistration();
+      this.disposableRegistry = injector.<DisposableRegistry>getInstance(DisposableRegistry.class);
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
+    }
   }
   
   @Override

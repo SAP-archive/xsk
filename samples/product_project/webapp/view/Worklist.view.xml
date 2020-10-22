@@ -1,0 +1,114 @@
+<mvc:View
+	controllerName="products.demo.app.controller.Worklist"
+	xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.f.semantic">
+
+    <Page
+        title="{i18n>ordersViewTitle}">
+        <content>
+ 
+            <f:SimpleForm>
+                <Table
+                    id="table"
+                    width="auto"
+                    items="{
+                        path: '/Orders',
+                        sorter: {
+                            path: 'CustomerName',
+                            descending: false
+                        }
+                    }"
+                    mode="Delete"
+                    delete="onDeleteOrder"
+                    class="sapUiResponsiveMargin sapUiNoMarginTop sapUiNoMarginBegin"
+                    noDataText="{worklistView>/tableNoDataText}"
+                    busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+                    growing="true"
+                    growingScrollToLoad="true"
+                    updateFinished="onUpdateFinished">
+                    
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title
+                                id="tableHeader"
+                                text="{worklistView>/worklistTableTitle}"
+                                level="H3"/>
+                            <ToolbarSpacer />
+                            <SearchField
+                                id="searchField"
+                                tooltip="{i18n>worklistSearchTooltip}"
+                                search="onSearch">
+                                <layoutData>
+                                    <OverflowToolbarLayoutData
+                                        maxWidth="200px"
+                                        priority="NeverOverflow"/>
+                                </layoutData>
+                            </SearchField>
+                        <OverflowToolbarButton
+                                text="add"
+                                icon="sap-icon://add"
+                                type="Transparent"
+                                press="onOpenOrderDialogPress"/>
+                        </OverflowToolbar>
+                        
+                    
+                    </headerToolbar>
+
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>tableNameColumnTitle}"/>
+                        </Column>
+
+                        <Column>
+                            <Text text="{i18n>tableCreateAtColumnTitle}"/>
+                        </Column>
+
+                        <Column>
+                            <Text text="{i18n>tableCreateByColumnTitle}"/>
+                        </Column>
+                        
+                        <Column>
+                            <Text text="{i18n>tableStatusColumnTitle}"/>
+                        </Column>
+                        
+                        <Column hAlign="End">
+                            <Text text="{i18n>tableDescriptionNumberColumnTitle}"/>
+                        </Column>
+                    </columns>				
+
+                    <items>
+                        <ColumnListItem
+                            type="Navigation"
+                            press="onPress">
+                            <cells>
+                                <ObjectIdentifier
+                                    title="{CustomerName}"/>
+
+                                <ObjectIdentifier
+                                    title="{
+                                        path: 'CreatedAt',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: { 
+                                            style: 'long', UTC: true
+                                        }       
+                                    }"/>
+                                    
+                                <ObjectIdentifier
+                                    title="{CreatedBy}"/>
+                                    
+                                <ObjectIdentifier
+                                    title="{Status}"/>
+                                    
+                                <ObjectIdentifier
+                                    title="{Description}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </f:SimpleForm>
+        </content>
+    </Page>
+
+</mvc:View> 

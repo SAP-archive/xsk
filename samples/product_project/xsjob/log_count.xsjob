@@ -1,0 +1,12 @@
+{
+    "description": "Log Count",
+    "action": "product_project.xsjob:log_count.xsjs::logCount",
+    "schedules": [
+       {
+          "description": "Log the count of the entities",
+          "xscron": "* * * * * * */10",
+          "parameter": {
+          }
+       }
+    ]
+}

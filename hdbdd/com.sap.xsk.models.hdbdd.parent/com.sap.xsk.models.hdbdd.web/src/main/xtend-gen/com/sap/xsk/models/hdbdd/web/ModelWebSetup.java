@@ -14,7 +14,6 @@ public class ModelWebSetup extends ModelStandaloneSetup {
   @Override
   public Injector createInjector() {
     throw new Error("Unresolved compilation problems:"
-      + "\nType mismatch: cannot convert from ModelRuntimeModule to Module"
       + "\nType mismatch: cannot convert from ModelIdeModule to Module"
       + "\nType mismatch: cannot convert from ModelWebModule to Module");
   }

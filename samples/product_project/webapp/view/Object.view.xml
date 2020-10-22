@@ -1,0 +1,162 @@
+<mvc:View
+	controllerName="products.demo.app.controller.Object"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.ui.layout.form"
+	xmlns:semantic="sap.f.semantic">
+
+    <Page
+        title="Order details"
+        showNavButton="true"
+        navButtonPress="onNavBack">
+        <content>
+            <HBox>
+                <ObjectHeader
+                        id="header"
+                        title="{
+                        parts: [
+                            'i18n>detailsPageOrderInfo',
+                            'Id',
+                            {
+                                path: 'CreatedAt',
+                                type: 'sap.ui.model.type.Date',
+                                formatOptions: { 
+                                    style: 'long', UTC: true
+                                }
+                            }
+                        ],
+                        formatter: 'jQuery.sap.formatMessage'}"
+                        responsive="false"
+                        fullScreenOptimized="false">
+                    <attributes>
+                        <ObjectAttribute
+                                text="{
+                                parts: [
+                                'i18n>detailsViewStatus',
+                                'Status'
+                                ],
+                                formatter: 'jQuery.sap.formatMessage'
+                        }"/>
+                    </attributes>
+                    <attributes>
+                        <ObjectAttribute
+                                text="{
+                                parts: [
+                                'i18n>detailsViewCustomer',
+                                'CustomerName'
+                                ],
+                                formatter: 'jQuery.sap.formatMessage'}"/>
+                    </attributes>
+
+                </ObjectHeader>
+
+            </HBox>
+
+            <IconTabBar
+                    id="idIconTabBarNoIcons"
+                    class="sapUiResponsiveContentPadding">
+                <items>
+                    <IconTabFilter
+                            text="{i18n>detailsViewTabCustomerInfo}">
+                        <f:SimpleForm id="simpleFormId"
+                                width="auto"
+                                maxContainerCols="1"
+                                layout="ResponsiveGridLayout"
+                                adjustLabelSpan="false"
+                                labelSpanL="3"
+                                emptySpanL="4"
+                                labelSpanM="2"
+                                emptySpanM="2"
+                                labelSpanS="12"
+                                emptySpanS="0"
+                                columnsL="1"
+                                columnsM="1">
+                            <f:toolbar>
+                                <Toolbar>
+                                    <Title text="{i18n>detailsViewCustomerInfoForm}"/>
+                                    <OverflowToolbarButton
+                                            icon="sap-icon://edit"
+                                            type="Transparent"
+                                            visible="{=!${objectView>/customerEditMode}}"
+                                            press="onEditCustomerPress"/>
+                                    <OverflowToolbarButton
+                                            press="onUpdateCustomerInfoPress"
+                                            icon="sap-icon://save"
+                                            visible="{objectView>/customerEditMode}"
+                                            type="Transparent"/>
+                                    <OverflowToolbarButton
+                                            press="onCloseUpdateCustomerInfoPress"
+                                            icon="sap-icon://cancel"
+                                            visible="{objectView>/customerEditMode}"
+                                            type="Transparent"/>
+                                </Toolbar>
+                            </f:toolbar>
+                            <f:content id="simpleFormContentId">
+                                <Label text="{i18n>detailsViewCustomerInfoFirstName}"/>
+                                <Input editable="{objectView>/customerEditMode}" value="{CustomerName}"/>
+                                <Label text="{i18n>detailsViewCustomerInfoLastName}"/>
+                                <Input editable="{objectView>/customerEditMode}" value="{CustomerSurname}"/>
+                                <Label text="{i18n>detailsViewCustomerInfoAddress}"/>
+                                <Input editable="{objectView>/customerEditMode}" value="{Address}"/>
+                                <Label text="{i18n>detailsViewCustomerInfoPhone}"/>
+                                <Input editable="{objectView>/customerEditMode}" value="{Phone}"/>
+                                <Label text="{i18n>detailsViewCustomerInfoEmail}"/>
+                                <Input editable="{objectView>/customerEditMode}" value="{Email}"/>
+                            </f:content>
+                        </f:SimpleForm>
+                    </IconTabFilter>
+                    <IconTabFilter text="{i18n>detailsViewTabProducts}">
+                        <Toolbar>
+                            <ToolbarSpacer/>
+                            <OverflowToolbarButton
+                                    icon="sap-icon://add"
+                                    type="Transparent"
+                                    press="onOpenProductDialogPress"/>
+                        </Toolbar>
+                        <Table
+                                id="productsTable"
+                                class="sapUiNoMarginTop sapUiNoMarginBegin"
+                                mode="Delete"
+                                delete="onDeleteProduct"
+                                items="{Items}">
+                            <columns>
+
+                                <Column demandPopin="true"
+                                        minScreenWidth="550px">
+                                    <Text text="{i18n>detailsViewProductsName}"/>
+                                </Column>
+                                <Column>
+                                    <Text text="{i18n>detailsViewProductsType}"/>
+                                </Column>
+                                <Column demandPopin="true"
+                                        minScreenWidth="800px">
+                                    <Text text="{i18n>detailsViewProductsPrice}"/>
+                                </Column>
+                                <Column demandPopin="true"
+                                        minScreenWidth="1000px">
+                                    <Text text="{i18n>detailsViewProductsQuantity}"/>
+                                </Column>
+                                <Column>
+                                    <Text text="{i18n>detailsViewProductsCurrency}"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                
+                                    <Text text="{Name}"/>                  
+                                    <Text text="{Type}"/>
+                                    <Text text="{Price}"/>
+                                    <Text text="{Quantity}"/>
+                                    <Text text="{Currency}"/>
+
+                        
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                        
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </content>
+    </Page>
+</mvc:View>

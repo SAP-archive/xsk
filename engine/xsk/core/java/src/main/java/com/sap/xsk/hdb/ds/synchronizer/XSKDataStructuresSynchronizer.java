@@ -257,6 +257,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
         DATA_STRUCTURE_VIEWS_MODELS.clear();
         DATA_STRUCTURE_CALCVULATIONVIEWS_MODELS.clear();
         DATA_STRUCTURE_HDB_PROCEDURES_MODELS.clear();
+        DATA_STRUCTURE_HDB_TABLE_FUNCTIONS_MODELS.clear();
         DATA_STRUCTURE_HDB_SCHEMAS_MODELS.clear();
 
         //Perhaps clear the other synchronized structures as well. during runtime these are not being cleared and, therefore, nothing would be deleted from the DB Table
@@ -821,7 +822,9 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 
         if (DATA_STRUCTURE_ENTITIES_MODELS.isEmpty()
                 && DATA_STRUCTURE_TABLES_MODELS.isEmpty() && DATA_STRUCTURE_VIEWS_MODELS.isEmpty()
-                && DATA_STRUCTURE_CALCVULATIONVIEWS_MODELS.isEmpty() && DATA_STRUCTURE_HDB_PROCEDURES_MODELS.isEmpty()
+                && DATA_STRUCTURE_CALCVULATIONVIEWS_MODELS.isEmpty() 
+                && DATA_STRUCTURE_HDB_PROCEDURES_MODELS.isEmpty()
+                && DATA_STRUCTURE_HDB_TABLE_FUNCTIONS_MODELS.isEmpty()
                 && DATA_STRUCTURE_HDB_SCHEMAS_MODELS.isEmpty()) {
             logger.trace("No XSK Data Structures to update.");
             return;

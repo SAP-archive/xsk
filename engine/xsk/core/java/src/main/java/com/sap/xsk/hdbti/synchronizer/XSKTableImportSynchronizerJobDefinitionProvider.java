@@ -18,7 +18,7 @@ public class XSKTableImportSynchronizerJobDefinitionProvider implements IJobDefi
         jobDefinition.setGroup(ISchedulerCoreService.JOB_GROUP_INTERNAL);
         jobDefinition.setClazz(XSKTableImportSynchronizerJob.class.getCanonicalName());
         jobDefinition.setDescription(XSK_TABLE_IMPORT_SYNCHRONIZER_JOB);
-        jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_TABLE_IMPORT, "0/15 * * * * ?"));
+        jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_TABLE_IMPORT, "0/45 * * * * ?"));
         jobDefinition.setSingleton(true);
         return jobDefinition;
     }

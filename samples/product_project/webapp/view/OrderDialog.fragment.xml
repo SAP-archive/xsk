@@ -1,0 +1,50 @@
+<core:FragmentDefinition xmlns="sap.m"
+     xmlns:core="sap.ui.core"
+     xmlns:f="sap.ui.layout.form">
+    <Dialog
+            id="ProductDialog"
+            title="Order form">
+        <f:SimpleForm
+                maxContainerCols="1"
+                layout="ResponsiveGridLayout"
+                labelSpanL="12"
+                labelSpanM="12"
+                emptySpanL="0"
+                emptySpanM="0"
+                columnsL="1"
+                columnsM="1">
+
+
+                <f:content>
+                    <Label text="{i18n>detailsViewCustomerInfoFirstName}"/>
+                    <Input value="{CustomerName}"/>
+                    
+                    <Label text="{i18n>detailsViewCustomerInfoLastName}"/>
+                    <Input value="{CustomerSurname}"/>
+                    
+                    <Label text="{i18n>detailsViewCustomerInfoAddress}"/>
+                    <Input id="inputCustomerAddress" value="{Address}"/>
+                    
+                    <Label text="{i18n>tableStatusColumnTitle}"/>
+                    <Select id="inputStatus"
+                            width="100%"
+                            selectedKey="{Status}">
+                        <core:Item text=""/>
+                        <core:Item key="Accepted" text="{i18n>orderDialogAccepted}"/>
+                        <core:Item key="Pending" text="{i18n>orderDialogPending}"/>
+                    </Select>
+                    
+                    <Label text="{i18n>detailsViewCustomerInfoPhone}"/>
+                    <Input id="inputCustomerPhone" value="{Phone}"/>
+                    
+                    <Label text="{i18n>detailsViewCustomerInfoEmail}"/>
+                    <Input id="inputCustomerEmail" value="{Email}"/>
+                </f:content>
+
+        </f:SimpleForm>
+        <buttons>
+            <Button type="Accept" text="{i18n>objectCreate}" press="onCreateOrderPress"/>
+            <Button type="Reject" text="{i18n>objectClose}" press="onCloseOrderDialogPress"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,8 @@
+{
+    "exposed": true,
+    "authentication" :
+         {
+            "method": "Form"
+         },
+    "anonymous_connection": null
+}

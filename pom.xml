@@ -9,8 +9,8 @@
 		<version>7</version>
 	</parent>
 
-	<name>XSK - HANA XS Classic Compatibility Environment - Parent</name>
-	<description>XSK Parent</description>
+	<name>XSK - Parent</name>
+	<description>XSK - HANA XS Classic Compatibility Environment</description>
 	<groupId>com.sap.xsk</groupId>
 	<artifactId>xsk-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>

@@ -6,7 +6,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchema;
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 
 public class XSKHDBSchemaParser implements XSKDataStructureParser {
@@ -17,12 +17,12 @@ public class XSKHDBSchemaParser implements XSKDataStructureParser {
 
   @Override
   public Class getDataStructureClass() {
-    return XSKDataStructureHDBSchema.class;
+    return XSKDataStructureHDBSchemaModel.class;
   }
 
   @Override
-  public XSKDataStructureHDBSchema parse(String location, String content) {
-    XSKDataStructureHDBSchema hdbProcedure = new XSKDataStructureHDBSchema();
+  public XSKDataStructureHDBSchemaModel parse(String location, String content) {
+    XSKDataStructureHDBSchemaModel hdbProcedure = new XSKDataStructureHDBSchemaModel();
     hdbProcedure.setName(extractSchemaNameFromContent(content));
     hdbProcedure.setLocation(location);
     hdbProcedure.setType(IXSKDataStructureModel.TYPE_HDB_SCHEMA);

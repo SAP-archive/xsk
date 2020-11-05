@@ -7,7 +7,7 @@ import org.eclipse.dirigible.api.v3.security.UserFacade;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedure;
+import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 
 public class XSKHDBProcedureParser implements XSKDataStructureParser {
@@ -24,8 +24,8 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser {
 
 
     @Override
-    public XSKDataStructureHDBProcedure parse(String location, String content) throws XSKDataStructuresException {
-        XSKDataStructureHDBProcedure hdbProcedure = new XSKDataStructureHDBProcedure();
+    public XSKDataStructureHDBProcedureModel parse(String location, String content) throws XSKDataStructuresException {
+        XSKDataStructureHDBProcedureModel hdbProcedure = new XSKDataStructureHDBProcedureModel();
         hdbProcedure.setName(extractProcedureNameFromContent(content));
         hdbProcedure.setLocation(location);
         hdbProcedure.setType(getType());
@@ -43,6 +43,6 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser {
 
     @Override
     public Class getDataStructureClass() {
-        return XSKDataStructureHDBProcedure.class;
+        return XSKDataStructureHDBProcedureModel.class;
     }
 }

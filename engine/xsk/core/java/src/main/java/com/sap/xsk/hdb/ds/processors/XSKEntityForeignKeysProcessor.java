@@ -15,8 +15,8 @@ import org.eclipse.dirigible.database.sql.builders.table.AlterTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.utils.XSKUtils;
 
 /**
@@ -41,8 +41,8 @@ public class XSKEntityForeignKeysProcessor {
 		logger.info("Processing Foreign Keys to the Table: {}", tableName);
 //		CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
 		
-		List<XSKDataStructureTableConstraintForeignKeyModel> foreignKeys = entityModel.getConstraints().getForeignKeys();
-		for (XSKDataStructureTableConstraintForeignKeyModel foreignKeyModel : foreignKeys) {
+		List<XSKDataStructureHDBTableConstraintForeignKeyModel> foreignKeys = entityModel.getConstraints().getForeignKeys();
+		for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKeyModel : foreignKeys) {
 			
 			String sourceTable = XSKUtils.getTableName(entityModel);
 			String name = "FK_" + sourceTable + "_" + tableName;

@@ -14,8 +14,8 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.utils.XSKUtils;
 
 /**
@@ -63,7 +63,7 @@ public class XSKEntityDropProcessor {
             }
 
             if (entityModel.getConstraints().getForeignKeys() != null) {
-                for (XSKDataStructureTableConstraintForeignKeyModel foreignKeyModel : entityModel.getConstraints().getForeignKeys()) {
+                for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKeyModel : entityModel.getConstraints().getForeignKeys()) {
                     sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyModel.getName()).fromTable(tableName).build();
                     executeUpdate(connection, sql);
                 }

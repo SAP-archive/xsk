@@ -8,15 +8,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedure;
+import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 
 public class HDBProcedureCreateProcessor {
     private static final Logger logger = LoggerFactory.getLogger(HDBProcedureCreateProcessor.class);
 
     private HDBProcedureCreateProcessor() {}
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBProcedure> hdbProcedures) throws SQLException {
-        for (XSKDataStructureHDBProcedure proc : hdbProcedures) {
+    public static void execute(Connection connection, List<XSKDataStructureHDBProcedureModel> hdbProcedures) throws SQLException {
+        for (XSKDataStructureHDBProcedureModel proc : hdbProcedures) {
             String sql = "CREATE " + proc.getContent();
             executeCreate(connection, sql);
         }

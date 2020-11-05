@@ -7,8 +7,8 @@ import org.eclipse.dirigible.api.v3.security.UserFacade;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedure;
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunction;
+import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
+import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 
 public class XSKHDBTableFunctionParser implements XSKDataStructureParser {
@@ -25,8 +25,8 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser {
 
 
     @Override
-    public XSKDataStructureHDBTableFunction parse(String location, String content) throws XSKDataStructuresException {
-    	XSKDataStructureHDBTableFunction hdbTableFunction = new XSKDataStructureHDBTableFunction();
+    public XSKDataStructureHDBTableFunctionModel parse(String location, String content) throws XSKDataStructuresException {
+    	XSKDataStructureHDBTableFunctionModel hdbTableFunction = new XSKDataStructureHDBTableFunctionModel();
         hdbTableFunction.setName(extractTableFunctionNameFromContent(content));
         hdbTableFunction.setLocation(location);
         hdbTableFunction.setType(getType());
@@ -44,6 +44,6 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser {
 
     @Override
     public Class getDataStructureClass() {
-        return XSKDataStructureHDBProcedure.class;
+        return XSKDataStructureHDBTableFunctionModel.class;
     }
 }

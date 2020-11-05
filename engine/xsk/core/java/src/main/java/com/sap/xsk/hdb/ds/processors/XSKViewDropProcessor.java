@@ -20,7 +20,7 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureViewModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 
 /**
  * The View Drop Processor.
@@ -36,7 +36,7 @@ public class XSKViewDropProcessor {
 	 * @param viewModel the view model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureViewModel viewModel) throws SQLException {
+	public static void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String viewName = viewModel.getName();
 		if (caseSensitive) {

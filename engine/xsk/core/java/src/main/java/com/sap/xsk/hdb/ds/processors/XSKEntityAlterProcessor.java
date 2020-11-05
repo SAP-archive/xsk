@@ -23,8 +23,8 @@ import org.eclipse.dirigible.database.sql.builders.table.AlterTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.utils.XSKUtils;
 
 /**
@@ -66,7 +66,7 @@ public class XSKEntityAlterProcessor {
 		List<String> modelColumnNames = new ArrayList<String>();
 		
 		// ADD iteration
-		for (XSKDataStructureTableColumnModel columnModel : entityModel.getColumns()) {
+		for (XSKDataStructureHDBTableColumnModel columnModel : entityModel.getColumns()) {
 			String name = columnModel.getName();
 			if (caseSensitive) {
 				name = "\"" + name + "\"";

@@ -18,9 +18,9 @@ import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableColumnModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.utils.XSKUtils;
 
 /**
@@ -47,9 +47,9 @@ public class XSKEntityCreateProcessor {
 		}
 		logger.info("Processing Create Table: {}", tableName);
 		CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
-		List<XSKDataStructureTableColumnModel> columns = entityModel.getColumns();
+		List<XSKDataStructureHDBTableColumnModel> columns = entityModel.getColumns();
 		List<String> primaryKeyColumns = new ArrayList<String>();
-		for (XSKDataStructureTableColumnModel columnModel : columns) {
+		for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
 			String name = columnModel.getName();
 			if (caseSensitive) {
 				name = "\"" + name + "\"";
@@ -94,7 +94,7 @@ public class XSKEntityCreateProcessor {
 				createTableBuilder.primaryKey(entityModel.getConstraints().getPrimaryKey().getName(), entityModel.getConstraints().getPrimaryKey().getColumns());
 			}
 			if (entityModel.getConstraints().getForeignKeys() != null) {
-				for (XSKDataStructureTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
+				for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
 					String foreignKeyName = "FK_" + foreignKey.getName();
 					String[] fkColumns = foreignKey.getColumns();
 					String referencedTable = XSKUtils.getTableName(entityModel, foreignKey.getReferencedTable());

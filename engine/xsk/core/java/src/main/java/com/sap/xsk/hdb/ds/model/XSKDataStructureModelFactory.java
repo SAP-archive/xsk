@@ -33,6 +33,14 @@ import com.sap.xsk.models.hdbdd.model.impl.NamespaceImpl;
 import com.sap.xsk.models.hdbdd.model.impl.SchemaImpl;
 import com.sap.xsk.models.hdbdd.model.impl.TypeDefinitionImpl;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.calculationview.XSKDataStructureCalculationViewModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureContextModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureTypeDefinitionModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 
 /**
  * The factory for creation of the data structure models from source content.
@@ -62,14 +70,14 @@ public class XSKDataStructureModelFactory {
 	 *            the table definition
 	 * @return the table model instance
 	 */
-	public static XSKDataStructureTableModel parseTable(String location, String content) {
+	public static XSKDataStructureHDBTableModel parseTable(String location, String content) {
 		
 		content = content.replace('"', ' ');
 		
-		XSKDataStructureTableModel result = new XSKDataStructureTableModel();
+		XSKDataStructureHDBTableModel result = new XSKDataStructureHDBTableModel();
 		result.setName(new File(location).getName());
 		result.setLocation(location);
-		result.setType(IXSKDataStructureModel.TYPE_TABLE);
+		result.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
 		result.setHash(DigestUtils.md5Hex(content));
 		result.setCreatedBy(UserFacade.getName());
 		result.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
@@ -87,7 +95,7 @@ public class XSKDataStructureModelFactory {
 	 *            the table definition
 	 * @return the table model instance
 	 */
-	public static XSKDataStructureTableModel parseTable(String location, byte[] bytes) {
+	public static XSKDataStructureHDBTableModel parseTable(String location, byte[] bytes) {
 		return parseTable(location, new String(bytes));
 	}
 
@@ -98,14 +106,14 @@ public class XSKDataStructureModelFactory {
 	 *            the view definition
 	 * @return the view model instance
 	 */
-	public static XSKDataStructureViewModel parseView(String location, String content) {
+	public static XSKDataStructureHDBViewModel parseView(String location, String content) {
 		
 		content = content.replace('"', ' ');
 		
-		XSKDataStructureViewModel result = new XSKDataStructureViewModel();
+		XSKDataStructureHDBViewModel result = new XSKDataStructureHDBViewModel();
 		result.setName(new File(location).getName());
 		result.setLocation(location);
-		result.setType(IXSKDataStructureModel.TYPE_VIEW);
+		result.setType(IXSKDataStructureModel.TYPE_HDB_VIEW);
 		result.setHash(DigestUtils.md5Hex(content));
 		result.setCreatedBy(UserFacade.getName());
 		result.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
@@ -123,7 +131,7 @@ public class XSKDataStructureModelFactory {
 	 *            the view definition
 	 * @return the view model instance
 	 */
-	public static XSKDataStructureViewModel parseView(String location, byte[] bytes) {
+	public static XSKDataStructureHDBViewModel parseView(String location, byte[] bytes) {
 		return parseView(location, new String(bytes));
 	}
 	
@@ -154,7 +162,7 @@ public class XSKDataStructureModelFactory {
 		
 		hdbddModel.setName(new File(location).getName());
 		hdbddModel.setLocation(location);
-		hdbddModel.setType(IXSKDataStructureModel.TYPE_ENTITIES);
+		hdbddModel.setType(IXSKDataStructureModel.TYPE_HDB_ENTITIES);
 		hdbddModel.setHash(DigestUtils.md5Hex(content));
 		hdbddModel.setCreatedBy(UserFacade.getName());
 		hdbddModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
@@ -183,7 +191,7 @@ public class XSKDataStructureModelFactory {
 							FieldImpl eField = (FieldImpl) iteratorColumns.next();
 							if (eField instanceof FieldPrimitiveImpl) {
 								FieldPrimitiveImpl eFieldPrimitive = (FieldPrimitiveImpl) eField;
-								XSKDataStructureTableColumnModel column = new XSKDataStructureTableColumnModel();
+								XSKDataStructureHDBTableColumnModel column = new XSKDataStructureHDBTableColumnModel();
 								//column.setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, eFieldPrimitive.getName()));
 								column.setName(eFieldPrimitive.getName());
 								column.setPrimaryKey(eFieldPrimitive.isKey());
@@ -197,7 +205,7 @@ public class XSKDataStructureModelFactory {
 								FieldTypeImpl eFieldType = (FieldTypeImpl) eField;
 								XSKDataStructureTypeDefinitionModel typeDefinition = context.getTypes().get(eFieldType.getName());
 								if (typeDefinition != null) {
-									XSKDataStructureTableColumnModel column = new XSKDataStructureTableColumnModel();
+									XSKDataStructureHDBTableColumnModel column = new XSKDataStructureHDBTableColumnModel();
 									// column.setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, typeDefinition.getName()));
 									column.setName(typeDefinition.getName());
 									column.setPrimaryKey(eFieldType.isKey());

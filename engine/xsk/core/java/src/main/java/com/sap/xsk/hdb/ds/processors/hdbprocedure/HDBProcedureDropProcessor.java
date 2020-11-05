@@ -8,7 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedure;
+import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 
 public class HDBProcedureDropProcessor {
 
@@ -16,8 +16,8 @@ public class HDBProcedureDropProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(HDBProcedureDropProcessor.class);
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBProcedure> hdbProcedures) throws SQLException {
-        for (XSKDataStructureHDBProcedure proc : hdbProcedures) {
+    public static void execute(Connection connection, List<XSKDataStructureHDBProcedureModel> hdbProcedures) throws SQLException {
+        for (XSKDataStructureHDBProcedureModel proc : hdbProcedures) {
             executeSingle(connection, proc);
         }
     }
@@ -38,7 +38,7 @@ public class HDBProcedureDropProcessor {
         }
     }
 
-    public static void executeSingle(Connection connection, XSKDataStructureHDBProcedure hdbProcedure) throws SQLException {
+    public static void executeSingle(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
         String sql = "DROP PROCEDURE " + hdbProcedure.getName();
         executePreparedStatement(connection, sql);
     }

@@ -24,13 +24,15 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import com.sap.xsk.hdb.ds.parser.calcview.XSKCalculationViewParser;
-import com.sap.xsk.hdb.ds.parser.entities.XSKEntitiesParser;
+import com.sap.xsk.hdb.ds.parser.calculationview.XSKCalculationViewParser;
+import com.sap.xsk.hdb.ds.parser.hdbcalculationview.XSKHDBCalculationViewParser;
+import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
 import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKHDBSchemaParser;
+import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionParser;
-import com.sap.xsk.hdb.ds.parser.table.XSKTableParser;
-import com.sap.xsk.hdb.ds.parser.view.XSKViewParser;
+import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
+import com.sap.xsk.hdb.ds.parser.hdi.XSKHDIParser;
 
 @Singleton
 public class XSKDataStructuresCoreService implements IXSKDataStructuresCoreService {
@@ -51,12 +53,14 @@ public class XSKDataStructuresCoreService implements IXSKDataStructuresCoreServi
         //Add other parsers if new datastructures occur
         parsers = new HashMap<>();
         parsers.put(IXSKDataStructureModel.TYPE_CALCVIEW, new XSKCalculationViewParser());
-        parsers.put(IXSKDataStructureModel.TYPE_ENTITIES, new XSKEntitiesParser());
+        parsers.put(IXSKDataStructureModel.TYPE_HDB_CALCVIEW, new XSKHDBCalculationViewParser());
+        parsers.put(IXSKDataStructureModel.TYPE_HDB_ENTITIES, new XSKEntitiesParser());
         parsers.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new XSKHDBProcedureParser());
         parsers.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new XSKHDBSchemaParser());
-        parsers.put(IXSKDataStructureModel.TYPE_TABLE, new XSKTableParser());
-        parsers.put(IXSKDataStructureModel.TYPE_VIEW, new XSKViewParser());
+        parsers.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new XSKTableParser());
+        parsers.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new XSKViewParser());
         parsers.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new XSKHDBTableFunctionParser());
+        parsers.put(IXSKDataStructureModel.TYPE_HDI, new XSKHDIParser());
     }
 
     @Inject

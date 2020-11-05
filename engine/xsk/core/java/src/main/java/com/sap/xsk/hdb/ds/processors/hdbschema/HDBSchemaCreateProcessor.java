@@ -8,15 +8,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchema;
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 
 public class HDBSchemaCreateProcessor {
     private HDBSchemaCreateProcessor() {}
 
     private static final Logger logger = LoggerFactory.getLogger(HDBSchemaCreateProcessor.class);
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBSchema> hdbSchemas) throws SQLException {
-        for (XSKDataStructureHDBSchema schema : hdbSchemas) {
+    public static void execute(Connection connection, List<XSKDataStructureHDBSchemaModel> hdbSchemas) throws SQLException {
+        for (XSKDataStructureHDBSchemaModel schema : hdbSchemas) {
             String sql = "CREATE SCHEMA " + schema.getName();
             executeCreate(connection, sql);
         }

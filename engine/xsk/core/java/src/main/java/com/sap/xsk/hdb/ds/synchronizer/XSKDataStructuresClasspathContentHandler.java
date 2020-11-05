@@ -5,10 +5,12 @@ package com.sap.xsk.hdb.ds.synchronizer;
 
 import org.eclipse.dirigible.commons.api.content.AbstractClasspathContentHandler;
 import org.eclipse.dirigible.commons.api.module.StaticInjector;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
 
 /**
  * The XSK Data Structures Classpath Content Handler.
@@ -27,6 +29,15 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
     protected boolean isValid(String path) {
 
         try {
+        	
+        	boolean hdiSupported = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_SUPPORTED, "true"));
+            if (hdiSupported) {
+            	if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDI)) {
+                    dataStructuresSynchronizer.registerPredeliveredHDBSchema(path);
+                    return true;
+                }
+            }
+            
             if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES)) {
                 dataStructuresSynchronizer.registerPredeliveredEntities(path);
                 return true;
@@ -39,10 +50,14 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
                 dataStructuresSynchronizer.registerPredeliveredView(path);
                 return true;
             }
-            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_CALCULATION_VIEW)) {
-                dataStructuresSynchronizer.registerPredeliveredCalculationView(path);
-                return true;
-            }
+//            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_CALCULATION_VIEW)) {
+//                dataStructuresSynchronizer.registerPredeliveredCalculationView(path);
+//                return true;
+//            }
+//            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBCALCULATION_VIEW)) {
+//                dataStructuresSynchronizer.registerPredeliveredHDBCalculationView(path);
+//                return true;
+//            }
             if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE)) {
                 dataStructuresSynchronizer.registerPredeliveredHDBProcedure(path);
                 return true;
@@ -55,6 +70,7 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
                 dataStructuresSynchronizer.registerPredeliveredHDBSchema(path);
                 return true;
             }
+            
         } catch (Exception e) {
             logger.error("Predelivered Artifact is not valid", e);
         }

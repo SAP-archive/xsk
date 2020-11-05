@@ -24,11 +24,11 @@ import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableColumnModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableConstraintCheckModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableConstraintForeignKeyModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableConstraintUniqueModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintCheckModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 
 /**
  * The Table Create Processor.
@@ -44,7 +44,7 @@ public class XSKTableCreateProcessor {
 	 * @param tableModel the table model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureTableModel tableModel) throws SQLException {
+	public static void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = tableModel.getName();
 		if (caseSensitive) {
@@ -52,8 +52,8 @@ public class XSKTableCreateProcessor {
 		}
 		logger.info("Processing Create Table: " + tableName);
 		CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
-		List<XSKDataStructureTableColumnModel> columns = tableModel.getColumns();
-		for (XSKDataStructureTableColumnModel columnModel : columns) {
+		List<XSKDataStructureHDBTableColumnModel> columns = tableModel.getColumns();
+		for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
 			String name = columnModel.getName();
 			if (caseSensitive) {
 				name = "\"" + name + "\"";
@@ -93,7 +93,7 @@ public class XSKTableCreateProcessor {
 				createTableBuilder.primaryKey(tableModel.getConstraints().getPrimaryKey().getColumns());
 			}
 			if (tableModel.getConstraints().getForeignKeys() != null) {
-				for (XSKDataStructureTableConstraintForeignKeyModel foreignKey : tableModel.getConstraints().getForeignKeys()) {
+				for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : tableModel.getConstraints().getForeignKeys()) {
 					String foreignKeyName = foreignKey.getName();
 					if (caseSensitive) {
 						foreignKeyName = "\"" + foreignKeyName + "\"";
@@ -103,7 +103,7 @@ public class XSKTableCreateProcessor {
 				}
 			}
 			if (tableModel.getConstraints().getUniqueIndices() != null) {
-				for (XSKDataStructureTableConstraintUniqueModel uniqueIndex : tableModel.getConstraints().getUniqueIndices()) {
+				for (XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex : tableModel.getConstraints().getUniqueIndices()) {
 					String uniqueIndexName = uniqueIndex.getName();
 					if (caseSensitive) {
 						uniqueIndexName = "\"" + uniqueIndexName + "\"";
@@ -112,7 +112,7 @@ public class XSKTableCreateProcessor {
 				}
 			}
 			if (tableModel.getConstraints().getChecks() != null) {
-				for (XSKDataStructureTableConstraintCheckModel check : tableModel.getConstraints().getChecks()) {
+				for (XSKDataStructureHDBTableConstraintCheckModel check : tableModel.getConstraints().getChecks()) {
 					String checkName = check.getName();
 					if (caseSensitive) {
 						checkName = "\"" + checkName + "\"";

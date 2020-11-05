@@ -18,13 +18,32 @@ Compatible environment for SAP HANA Extended Application Services (XS) based app
 
 ## How to run
 
+#### Local database
+
     docker run -p 8888:8080 dirigiblelabs/dirigible-xsk:0.0.1
 
-With persistent volume
+#### Remote HANA Cloud instance
+
+    docker run -p 8888:8080 dirigiblelabs/dirigible-xsk:0.0.1 \
+    -e DIRIGIBLE_DATABASE_PROVIDER=custom \
+    -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
+    -e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
+    -e HANA_DRIVER=com.sap.db.jdbc.Driver \
+    -e HANA_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443/?encrypt=true\&validateCertificate=false \
+    -e HANA_USERNAME=DBADMIN \
+    -e HANA_PASSWORD=<password> \
+    -e DIRIGIBLE_SCHEDULER_DATABASE_DRIVER=com.sap.db.jdbc.Driver \
+    -e DIRIGIBLE_SCHEDULER_DATABASE_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443/?encrypt=true\&validateCertificate=false \
+    -e DIRIGIBLE_SCHEDULER_DATABASE_USER=DBADMIN \
+    -e DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<password> \
+    -e DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false \
+    -e DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false
+
+#### With persistent volume
 
     docker run -p 8888:8080 -v <your-local-directory>:/usr/local/tomcat/target dirigiblelabs/dirigible-xsk:0.0.1
     
-Go to:
+### Go to:
 
 > http://localhost:8888
 
@@ -41,21 +60,4 @@ Go to:
     docker push dirigiblelabs/dirigible-xsk:0.0.1-application-keycloak
 
 
-## Development Environment Details
-
-API Root
-
-> https://github.com/SAP/xsk/blob/master/xsk/modules/api/src/main/resources/xsk/api.js
-
-Sample API
-
-> https://github.com/SAP/xsk/blob/master/xsk/modules/api/src/main/resources/xsk/response.js
-
-Sample Test
-
-> https://github.com/SAP/xsk/blob/master/xsk/core/java/src/test/resources/test/xsk/response.xsjs
-
-Adding to the Tests Suite
-
-> https://github.com/SAP/xsk/blob/master/xsk/core/java/src/test/java/com/sap/xsk/engine/api/test/XSKApiSuiteTest.java
 

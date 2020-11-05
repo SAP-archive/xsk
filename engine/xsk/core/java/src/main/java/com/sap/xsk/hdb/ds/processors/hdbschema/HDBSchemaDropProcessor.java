@@ -8,7 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchema;
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 
 public class HDBSchemaDropProcessor {
 
@@ -16,8 +16,8 @@ public class HDBSchemaDropProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBSchema> hdbSchemas) throws SQLException {
-        for (XSKDataStructureHDBSchema schema : hdbSchemas) {
+    public static void execute(Connection connection, List<XSKDataStructureHDBSchemaModel> hdbSchemas) throws SQLException {
+        for (XSKDataStructureHDBSchemaModel schema : hdbSchemas) {
             executeSingle(connection, schema);
         }
     }
@@ -38,7 +38,7 @@ public class HDBSchemaDropProcessor {
         }
     }
 
-    public static void executeSingle(Connection connection, XSKDataStructureHDBSchema hdbSchema) throws SQLException {
+    public static void executeSingle(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
         String sql = "DROP SCHEMA " + hdbSchema.getName();
         executePreparedStatement(connection, sql);
     }

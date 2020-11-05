@@ -8,8 +8,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedure;
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunction;
+import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
+import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 
 public class HDBTableFunctionDropProcessor {
 
@@ -17,8 +17,8 @@ public class HDBTableFunctionDropProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionDropProcessor.class);
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBTableFunction> hdbTableFunction) throws SQLException {
-        for (XSKDataStructureHDBTableFunction func : hdbTableFunction) {
+    public static void execute(Connection connection, List<XSKDataStructureHDBTableFunctionModel> hdbTableFunction) throws SQLException {
+        for (XSKDataStructureHDBTableFunctionModel func : hdbTableFunction) {
             executeSingle(connection, func);
         }
     }
@@ -39,7 +39,7 @@ public class HDBTableFunctionDropProcessor {
         }
     }
 
-    public static void executeSingle(Connection connection, XSKDataStructureHDBTableFunction hdbTableFunction) throws SQLException {
+    public static void executeSingle(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
         String sql = "DROP FUNCTION " + hdbTableFunction.getName();
         executePreparedStatement(connection, sql);
     }

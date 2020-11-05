@@ -23,8 +23,8 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableConstraintForeignKeyModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureTableModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 
 /**
  * The Table Drop Processor.
@@ -43,7 +43,7 @@ public class XSKTableDropProcessor {
 	 * @throws SQLException
 	 *             the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureTableModel tableModel) throws SQLException {
+	public static void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = tableModel.getName();
 		if (caseSensitive) {
@@ -76,7 +76,7 @@ public class XSKTableDropProcessor {
 			}
 			
 			if (tableModel.getConstraints().getForeignKeys() != null) {
-				for (XSKDataStructureTableConstraintForeignKeyModel foreignKeyModel : tableModel.getConstraints().getForeignKeys()) {
+				for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKeyModel : tableModel.getConstraints().getForeignKeys()) {
 					sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyModel.getName()).fromTable(tableName).build();
 					executeUpdate(connection, sql);
 				}

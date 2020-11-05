@@ -8,16 +8,16 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedure;
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunction;
+import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
+import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 
 public class HDBTableFunctionCreateProcessor {
     private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionCreateProcessor.class);
 
     private HDBTableFunctionCreateProcessor() {}
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBTableFunction> hdbTableFunctions) throws SQLException {
-        for (XSKDataStructureHDBTableFunction func : hdbTableFunctions) {
+    public static void execute(Connection connection, List<XSKDataStructureHDBTableFunctionModel> hdbTableFunctions) throws SQLException {
+        for (XSKDataStructureHDBTableFunctionModel func : hdbTableFunctions) {
             String sql = "CREATE " + func.getContent();
             executeCreate(connection, sql);
         }

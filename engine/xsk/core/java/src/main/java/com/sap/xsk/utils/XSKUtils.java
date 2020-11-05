@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.xsodata.ds.model.XSKODataEntity;
 
 public class XSKUtils {

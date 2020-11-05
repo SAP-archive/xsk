@@ -22,6 +22,10 @@ public interface IXSKDataStructureModel {
      */
     public static final String FILE_EXTENSION_CALCULATION_VIEW = ".calculationview";
     /**
+     * File extension for *.hdbcalculationview files
+     */
+    public static final String FILE_EXTENSION_HDBCALCULATION_VIEW = ".hdbcalculationview";
+    /**
      * File extension for *.hdbprocedure files
      */
     public static final String FILE_EXTENSION_HDBPROCEDURE = ".hdbprocedure";
@@ -33,23 +37,32 @@ public interface IXSKDataStructureModel {
      * File extension for *.hdbschema files
      */
     public static final String FILE_EXTENSION_HDBSCHEMA = ".hdbschema";
+    /**
+     * File extension for *.hdi files
+     */
+    public static final String FILE_EXTENSION_HDI = ".hdi";
+    
 
     /**
      * Type table
      */
-    public static final String TYPE_TABLE = "TABLE";
+    public static final String TYPE_HDB_TABLE = "HDBTABLE";
     /**
      * Type view
      */
-    public static final String TYPE_VIEW = "VIEW";
+    public static final String TYPE_HDB_VIEW = "HDBVIEW";
     /**
      * Type entities
      */
-    public static final String TYPE_ENTITIES = "ENTITIES";
+    public static final String TYPE_HDB_ENTITIES = "HDBENTITIES";
     /**
      * Type calculation view
      */
     public static final String TYPE_CALCVIEW = "CALCVIEW";
+    /**
+     * Type hdb calculation view
+     */
+    public static final String TYPE_HDB_CALCVIEW = "HDBCALCVIEW";
     /**
      * Type hdbprocedure
      */
@@ -57,11 +70,16 @@ public interface IXSKDataStructureModel {
     /**
      * Type hdbdschema
      */
-    public static final String TYPE_HDB_SCHEMA = "SCHEMA";
+    public static final String TYPE_HDB_SCHEMA = "HDBSCHEMA";
     
     /**
      * Type hdbtablefunction
      */
     public static final String TYPE_HDB_TABLE_FUNCTION = "HDBTABLEFUNC";
+    
+    /**
+     * Type hdi
+     */
+    public static final String TYPE_HDI = "HDI";
 
 }

@@ -1,0 +1,8 @@
+{
+  "Orders": {
+    "target": {
+      "object": "product_project.db::Products.Orders",
+      "schema": "DBADMIN"
+    }
+  }
+}

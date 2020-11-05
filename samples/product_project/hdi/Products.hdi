@@ -1,0 +1,11 @@
+{
+    "configuration": "/product_project/hdi/config.hdiconfig",
+    "users": ["DBADMIN"],
+    "group": "MYGROUP",
+    "container": "MYCONTAINER",
+    "deploy": [
+    	"/product_project/hdi/Orders.hdbsynonym",
+    	"/product_project/hdi/Orders.hdbcalculationview"
+    ],
+    "undeploy": []
+}

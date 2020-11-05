@@ -4,7 +4,7 @@ namespace product_project.db;
 
 context Products {
 
-    entity  Orders{
+    entity  Orders {
         key Id               : String(32);
         CustomerName         : String(500);
         CustomerSurname      : String(500);

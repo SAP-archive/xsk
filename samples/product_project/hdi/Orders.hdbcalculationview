@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario id="product_project.hdi::OrdersCalc" outputViewType="Projection">
+    <dataSources>
+        <DataSource id="Orders" type="DATA_BASE_TABLE">
+          <resourceUri>Orders</resourceUri>
+        </DataSource>
+    </dataSources>
+    <calculationViews>
+        <calculationView xsi:type="Calculation:ProjectionView" id="OrdersCalc">
+            <viewAttributes>
+                <viewAttribute id="CustomerName"/>
+            </viewAttributes>
+            <input node="#Orders">
+                <mapping xsi:type="Calculation:AttributeMapping" target="CustomerName" source="CustomerName"/>
+            </input>
+        </calculationView>
+    </calculationViews>
+    <logicalModel id="OrdersCalc">
+        <attributes>
+            <attribute id="CustomerName">
+                <keyMapping columnObjectName="OrdersCalc" columnName="CustomerName"/>
+            </attribute>
+        </attributes>
+    </logicalModel>
+</Calculation:scenario>
+

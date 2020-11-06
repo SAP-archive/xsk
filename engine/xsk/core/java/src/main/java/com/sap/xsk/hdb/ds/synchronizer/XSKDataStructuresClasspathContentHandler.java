@@ -38,37 +38,40 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
                 }
             }
             
-            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES)) {
-                dataStructuresSynchronizer.registerPredeliveredEntities(path);
-                return true;
-            }
-            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_TABLE)) {
-                dataStructuresSynchronizer.registerPredeliveredTable(path);
-                return true;
-            }
-            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_VIEW)) {
-                dataStructuresSynchronizer.registerPredeliveredView(path);
-                return true;
-            }
-//            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_CALCULATION_VIEW)) {
-//                dataStructuresSynchronizer.registerPredeliveredCalculationView(path);
-//                return true;
-//            }
-//            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBCALCULATION_VIEW)) {
-//                dataStructuresSynchronizer.registerPredeliveredHDBCalculationView(path);
-//                return true;
-//            }
-            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE)) {
-                dataStructuresSynchronizer.registerPredeliveredHDBProcedure(path);
-                return true;
-            }
-            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION)) {
-                dataStructuresSynchronizer.registerPredeliveredHDBTableFunction(path);
-                return true;
-            }
-            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA)) {
-                dataStructuresSynchronizer.registerPredeliveredHDBSchema(path);
-                return true;
+            boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
+            if (!hdiOnly) {
+            	if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES)) {
+	                dataStructuresSynchronizer.registerPredeliveredEntities(path);
+	                return true;
+	            }
+	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_TABLE)) {
+	                dataStructuresSynchronizer.registerPredeliveredTable(path);
+	                return true;
+	            }
+	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_VIEW)) {
+	                dataStructuresSynchronizer.registerPredeliveredView(path);
+	                return true;
+	            }
+	//            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_CALCULATION_VIEW)) {
+	//                dataStructuresSynchronizer.registerPredeliveredCalculationView(path);
+	//                return true;
+	//            }
+	//            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBCALCULATION_VIEW)) {
+	//                dataStructuresSynchronizer.registerPredeliveredHDBCalculationView(path);
+	//                return true;
+	//            }
+	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE)) {
+	                dataStructuresSynchronizer.registerPredeliveredHDBProcedure(path);
+	                return true;
+	            }
+	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION)) {
+	                dataStructuresSynchronizer.registerPredeliveredHDBTableFunction(path);
+	                return true;
+	            }
+	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA)) {
+	                dataStructuresSynchronizer.registerPredeliveredHDBSchema(path);
+	                return true;
+	            }
             }
             
         } catch (Exception e) {

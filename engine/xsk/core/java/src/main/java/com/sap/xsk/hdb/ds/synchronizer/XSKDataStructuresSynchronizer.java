@@ -731,7 +731,6 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
         
         boolean hdiSupported = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_SUPPORTED, "true"));
         if (hdiSupported) {
-
         	if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDI)) {
         		String contentAsString = getContent(resource);
 	        	XSKDataStructureHDIModel hdi;
@@ -744,98 +743,102 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	            synchronizeHDI(hdi);
 	            return;
 	        }
-        	
+        }
+        
+        boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
+        if (!hdiOnly) {
+        	if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES)) {
+	        	String contentAsString = getContent(resource);
+	            XSKDataStructureEntitiesModel entitiesModel;
+	            try {
+	                entitiesModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_ENTITIES, registryPath, contentAsString);
+	            } catch (Exception e) {
+	                throw new SynchronizationException(e);
+	            }
+	            entitiesModel.setLocation(registryPath);
+	            synchronizeEntities(entitiesModel);
+	            return;
+	        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_TABLE)) {
+	        	String contentAsString = getContent(resource);
+	            XSKDataStructureHDBTableModel tableModel;
+	            try {
+	                tableModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_TABLE, registryPath, contentAsString);
+	            } catch (Exception e) {
+	                throw new SynchronizationException(e);
+	            }
+	            tableModel.setLocation(registryPath);
+	            synchronizeTable(tableModel);
+	            return;
+	        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_VIEW)) {
+	        	String contentAsString = getContent(resource);
+	            XSKDataStructureHDBViewModel viewModel;
+	            try {
+	                viewModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_VIEW, registryPath, contentAsString);
+	            } catch (Exception e) {
+	                throw new SynchronizationException(e);
+	            }
+	            viewModel.setLocation(registryPath);
+	            synchronizeView(viewModel);
+	            return;
+	//        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_CALCULATION_VIEW)) {
+	//            String contentAsString = getContent(resource);
+	//            XSKDataStructureCalculationViewModel calculationViewModel;
+	//            try {
+	//                calculationViewModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_CALCVIEW, registryPath, contentAsString);
+	//            } catch (Exception e) {
+	//                throw new SynchronizationException(e);
+	//            }
+	//            calculationViewModel.setLocation(registryPath);
+	//            synchronizeCalculationView(calculationViewModel);
+	//            return;
+	//        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBCALCULATION_VIEW)) {
+	//            String contentAsString = getContent(resource);
+	//        	XSKDataStructureHDBCalculationViewModel hdbCalculationView;
+	//            try {
+	//            	hdbCalculationView = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_CALCVIEW, registryPath, contentAsString);
+	//            } catch (Exception e) {
+	//                throw new SynchronizationException(e);
+	//            }
+	//            hdbCalculationView.setLocation(registryPath);
+	//            synchronizeHDBCalculationView(hdbCalculationView);
+	//            return;
+	        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE)) {
+	        	String contentAsString = getContent(resource);
+	        	XSKDataStructureHDBProcedureModel hdbProcedure;
+	            try {
+	                hdbProcedure = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, registryPath, contentAsString);
+	            } catch (Exception e) {
+	                throw new SynchronizationException(e);
+	            }
+	            hdbProcedure.setLocation(registryPath);
+	            synchronizeHDBProcedure(hdbProcedure);
+	            return;
+	        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION)) {
+	        	String contentAsString = getContent(resource);
+	            XSKDataStructureHDBTableFunctionModel hdbTableFunction;
+	            try {
+	            	hdbTableFunction = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, registryPath, contentAsString);
+	            } catch (Exception e) {
+	                throw new SynchronizationException(e);
+	            }
+	            hdbTableFunction.setLocation(registryPath);
+	            synchronizeHDBTableFunction(hdbTableFunction);
+	            return;
+	        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA)) {
+	        	String contentAsString = getContent(resource);
+	            XSKDataStructureHDBSchemaModel hdbSchema;
+	            try {
+	                hdbSchema = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_SCHEMA, registryPath, contentAsString);
+	            } catch (Exception e) {
+	                throw new SynchronizationException(e);
+	            }
+	            hdbSchema.setLocation(registryPath);
+	            synchronizeHDBSchema(hdbSchema);
+	            return;
+	        }
         }
 
-        if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES)) {
-        	String contentAsString = getContent(resource);
-            XSKDataStructureEntitiesModel entitiesModel;
-            try {
-                entitiesModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_ENTITIES, registryPath, contentAsString);
-            } catch (Exception e) {
-                throw new SynchronizationException(e);
-            }
-            entitiesModel.setLocation(registryPath);
-            synchronizeEntities(entitiesModel);
-            return;
-        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_TABLE)) {
-        	String contentAsString = getContent(resource);
-            XSKDataStructureHDBTableModel tableModel;
-            try {
-                tableModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_TABLE, registryPath, contentAsString);
-            } catch (Exception e) {
-                throw new SynchronizationException(e);
-            }
-            tableModel.setLocation(registryPath);
-            synchronizeTable(tableModel);
-            return;
-        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_VIEW)) {
-        	String contentAsString = getContent(resource);
-            XSKDataStructureHDBViewModel viewModel;
-            try {
-                viewModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_VIEW, registryPath, contentAsString);
-            } catch (Exception e) {
-                throw new SynchronizationException(e);
-            }
-            viewModel.setLocation(registryPath);
-            synchronizeView(viewModel);
-            return;
-//        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_CALCULATION_VIEW)) {
-//            String contentAsString = getContent(resource);
-//            XSKDataStructureCalculationViewModel calculationViewModel;
-//            try {
-//                calculationViewModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_CALCVIEW, registryPath, contentAsString);
-//            } catch (Exception e) {
-//                throw new SynchronizationException(e);
-//            }
-//            calculationViewModel.setLocation(registryPath);
-//            synchronizeCalculationView(calculationViewModel);
-//            return;
-//        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBCALCULATION_VIEW)) {
-//            String contentAsString = getContent(resource);
-//        	XSKDataStructureHDBCalculationViewModel hdbCalculationView;
-//            try {
-//            	hdbCalculationView = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_CALCVIEW, registryPath, contentAsString);
-//            } catch (Exception e) {
-//                throw new SynchronizationException(e);
-//            }
-//            hdbCalculationView.setLocation(registryPath);
-//            synchronizeHDBCalculationView(hdbCalculationView);
-//            return;
-        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE)) {
-        	String contentAsString = getContent(resource);
-        	XSKDataStructureHDBProcedureModel hdbProcedure;
-            try {
-                hdbProcedure = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, registryPath, contentAsString);
-            } catch (Exception e) {
-                throw new SynchronizationException(e);
-            }
-            hdbProcedure.setLocation(registryPath);
-            synchronizeHDBProcedure(hdbProcedure);
-            return;
-        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION)) {
-        	String contentAsString = getContent(resource);
-            XSKDataStructureHDBTableFunctionModel hdbTableFunction;
-            try {
-            	hdbTableFunction = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, registryPath, contentAsString);
-            } catch (Exception e) {
-                throw new SynchronizationException(e);
-            }
-            hdbTableFunction.setLocation(registryPath);
-            synchronizeHDBTableFunction(hdbTableFunction);
-            return;
-        } else if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA)) {
-        	String contentAsString = getContent(resource);
-            XSKDataStructureHDBSchemaModel hdbSchema;
-            try {
-                hdbSchema = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_SCHEMA, registryPath, contentAsString);
-            } catch (Exception e) {
-                throw new SynchronizationException(e);
-            }
-            hdbSchema.setLocation(registryPath);
-            synchronizeHDBSchema(hdbSchema);
-            return;
-        }
+	        
         
     }
 
@@ -1028,215 +1031,220 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	                }
                 	executeHDI(connection, hdiModels);
                 }
-
-//                // drop calculation views
-//                List<XSKDataStructureCalculationViewModel> calculationViews = new ArrayList<XSKDataStructureCalculationViewModel>();
-//                for (int i = sorted.size() - 1; i >= 0; i--) {
-//                    String dsName = sorted.get(i);
-//                    XSKDataStructureCalculationViewModel model = DATA_STRUCTURE_CALCULATIONVIEWS_MODELS.get(dsName);
-//                    if (model != null) {
-//                    	calculationViews.add(model);
-//                    }
-//                }
-////                executeCalculationViewsDrop(connection, calculationViews);
-//                
-//                // drop HDB Calculation Views
-//                List<XSKDataStructureHDBCalculationViewModel> hdbCalculationsViewToUpdate = new ArrayList<XSKDataStructureHDBCalculationViewModel>();
-//                for (int i = sorted.size() - 1; i >= 0; i--) {
-//                    String dsName = sorted.get(i);
-//                    XSKDataStructureHDBCalculationViewModel model = DATA_STRUCTURE_HDB_CALCULATIONVIEWS_MODELS.get(dsName);
-//                    if (model != null) {
-//                    	hdbCalculationsViewToUpdate.add(model);
-//                    }
-//                }
-//                executeHDBCalculationViewsDrop(connection, hdbCalculationsViewToUpdate);
-
-                // drop HDB Procedures
-                List<XSKDataStructureHDBProcedureModel> hdbProceduresToUpdate = new ArrayList<XSKDataStructureHDBProcedureModel>();
-                for (int i = sorted.size() - 1; i >= 0; i--) {
-                    String dsName = sorted.get(i);
-                    XSKDataStructureHDBProcedureModel model = DATA_STRUCTURE_HDB_PROCEDURES_MODELS.get(dsName);
-                    if (model != null) {
-                    	hdbProceduresToUpdate.add(model);
-                    }
-                }
-                executeHDBProceduresDrop(connection, hdbProceduresToUpdate);
                 
-                // drop HDB Table Functions
-                List<XSKDataStructureHDBTableFunctionModel> hdbTableFunctionsToUpdate = new ArrayList<XSKDataStructureHDBTableFunctionModel>();
-                for (int i = sorted.size() - 1; i >= 0; i--) {
-                    String dsName = sorted.get(i);
-                    XSKDataStructureHDBTableFunctionModel model = DATA_STRUCTURE_HDB_TABLE_FUNCTIONS_MODELS.get(dsName);
-                    if (model != null) {
-                    	hdbTableFunctionsToUpdate.add(model);
-                    }
+                boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
+                if (!hdiOnly) {
+                		
+	//                // drop calculation views
+	//                List<XSKDataStructureCalculationViewModel> calculationViews = new ArrayList<XSKDataStructureCalculationViewModel>();
+	//                for (int i = sorted.size() - 1; i >= 0; i--) {
+	//                    String dsName = sorted.get(i);
+	//                    XSKDataStructureCalculationViewModel model = DATA_STRUCTURE_CALCULATIONVIEWS_MODELS.get(dsName);
+	//                    if (model != null) {
+	//                    	calculationViews.add(model);
+	//                    }
+	//                }
+	////                executeCalculationViewsDrop(connection, calculationViews);
+	//                
+	//                // drop HDB Calculation Views
+	//                List<XSKDataStructureHDBCalculationViewModel> hdbCalculationsViewToUpdate = new ArrayList<XSKDataStructureHDBCalculationViewModel>();
+	//                for (int i = sorted.size() - 1; i >= 0; i--) {
+	//                    String dsName = sorted.get(i);
+	//                    XSKDataStructureHDBCalculationViewModel model = DATA_STRUCTURE_HDB_CALCULATIONVIEWS_MODELS.get(dsName);
+	//                    if (model != null) {
+	//                    	hdbCalculationsViewToUpdate.add(model);
+	//                    }
+	//                }
+	//                executeHDBCalculationViewsDrop(connection, hdbCalculationsViewToUpdate);
+	
+	                // drop HDB Procedures
+	                List<XSKDataStructureHDBProcedureModel> hdbProceduresToUpdate = new ArrayList<XSKDataStructureHDBProcedureModel>();
+	                for (int i = sorted.size() - 1; i >= 0; i--) {
+	                    String dsName = sorted.get(i);
+	                    XSKDataStructureHDBProcedureModel model = DATA_STRUCTURE_HDB_PROCEDURES_MODELS.get(dsName);
+	                    if (model != null) {
+	                    	hdbProceduresToUpdate.add(model);
+	                    }
+	                }
+	                executeHDBProceduresDrop(connection, hdbProceduresToUpdate);
+	                
+	                // drop HDB Table Functions
+	                List<XSKDataStructureHDBTableFunctionModel> hdbTableFunctionsToUpdate = new ArrayList<XSKDataStructureHDBTableFunctionModel>();
+	                for (int i = sorted.size() - 1; i >= 0; i--) {
+	                    String dsName = sorted.get(i);
+	                    XSKDataStructureHDBTableFunctionModel model = DATA_STRUCTURE_HDB_TABLE_FUNCTIONS_MODELS.get(dsName);
+	                    if (model != null) {
+	                    	hdbTableFunctionsToUpdate.add(model);
+	                    }
+	                }
+	                executeHDBTableFunctionsDrop(connection, hdbTableFunctionsToUpdate);
+	
+	                // drop views in a reverse order
+	                for (int i = sorted.size() - 1; i >= 0; i--) {
+	                    String dsName = sorted.get(i);
+	                    XSKDataStructureHDBViewModel model = DATA_STRUCTURE_VIEWS_MODELS.get(dsName);
+	                    try {
+	                        if (model != null) {
+	                            executeViewDrop(connection, model);
+	                        }
+	                    } catch (Exception e) {
+	                        logger.error(e.getMessage(), e);
+	                        errors.add(e.getMessage());
+	                    }
+	                }
+	
+	                // drop tables in a reverse order
+	                for (int i = sorted.size() - 1; i >= 0; i--) {
+	                    String dsName = sorted.get(i);
+	                    XSKDataStructureHDBTableModel model = DATA_STRUCTURE_TABLES_MODELS.get(dsName);
+	                    try {
+	                        if (model != null) {
+	                            if (SqlFactory.getNative(connection).exists(connection, model.getName())) {
+	                                if (SqlFactory.getNative(connection).count(connection, model.getName()) == 0) {
+	                                    executeTableDrop(connection, model);
+	                                } else {
+	                                    logger.warn(format("Table [{0}] cannot be deleted during the update process, because it is not empty", dsName));
+	                                }
+	                            }
+	                        }
+	                    } catch (Exception e) {
+	                        logger.error(e.getMessage(), e);
+	                        errors.add(e.getMessage());
+	                    }
+	                }
+	
+	                // drop entities in a reverse order
+	                for (int i = sorted.size() - 1; i >= 0; i--) {
+	                    String dsName = sorted.get(i);
+	                    XSKDataStructureEntitiesModel entitiesModel = DATA_STRUCTURE_ENTITIES_MODELS.get(dsName);
+	                    try {
+	                        if (entitiesModel != null) {
+	                        	for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
+	                        		String tableName = XSKUtils.getTableName(entityModel);
+	                        		if (caseSensitive) {
+	                        			tableName = "\"" + tableName + "\"";
+	                        		}
+	                        		if (SqlFactory.getNative(connection).exists(connection, tableName)) {
+	                        			if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
+	                        				executeEntityDrop(connection, entityModel);
+	                        			} else {
+	                        				logger.warn(format("Entity [{0}] cannot be deleted during the update process, because it is not empty", dsName));
+	                        			}
+	                        		}
+	                        	}
+	                        }
+	                    } catch (Exception e) {
+	                        logger.error(e.getMessage(), e);
+	                        errors.add(e.getMessage());
+	                    }
+	                }
+	
+	                // drop HDB Schemas
+	                List<XSKDataStructureHDBSchemaModel> hdbSchemasToUpdate = new ArrayList<XSKDataStructureHDBSchemaModel>();
+	                for (int i = sorted.size() - 1; i >= 0; i--) {
+	                    String dsName = sorted.get(i);
+	                    XSKDataStructureHDBSchemaModel model = DATA_STRUCTURE_HDB_SCHEMAS_MODELS.get(dsName);
+	                    if (model != null) {
+	                    	hdbSchemasToUpdate.add(model);
+	                    }
+	                }
+	//                executeHDBSchemasDrop(connection, hdbSchemasToUpdate);
+	
+	                // process hdbSchemas
+	                executeHDBSchemasCreate(connection, hdbSchemasToUpdate);
+	
+	                // process tables in the proper order
+	                for (String dsName : sorted) {
+	                	XSKDataStructureHDBTableModel model = DATA_STRUCTURE_TABLES_MODELS.get(dsName);
+	                    try {
+	                        if (model != null) {
+	                            if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
+	                                executeTableCreate(connection, model);
+	                            } else {
+	                                logger.warn(format("Table [{0}] already exists during the update process", dsName));
+	                                if (SqlFactory.getNative(connection).count(connection, model.getName()) != 0) {
+	                                    executeTableAlter(connection, model);
+	                                }
+	                            }
+	                        }
+	                    } catch (Exception e) {
+	                        logger.error(e.getMessage(), e);
+	                        errors.add(e.getMessage());
+	                    }
+	                }
+	
+	                // process entities in the proper order
+	                for (String dsName : sorted) {
+	                	XSKDataStructureEntitiesModel entitesModel = DATA_STRUCTURE_ENTITIES_MODELS.get(dsName);
+	                    try {
+	                        if (entitesModel != null) {
+	                        	for (XSKDataStructureEntityModel entityModel : entitesModel.getContext().getЕntities()) {
+	                        		String tableName = XSKUtils.getTableName(entityModel);
+	                        		if (caseSensitive) {
+	                        			tableName = "\"" + tableName + "\"";
+	                        		}
+	                        		if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
+	                        			executeEntityCreate(connection, entityModel);
+	                        		} else {
+	                        			executeEntityUpdate(connection, entityModel);
+	                        		}
+	                        	}
+	                        }
+	                    } catch (Exception e) {
+	                        logger.error(e.getMessage(), e);
+	                        errors.add(e.getMessage());
+	                    }
+	                }
+	                
+	//                // process the foreign keys of the entities
+	//                for (String dsName : sorted) {
+	//                    XSKDataStructureModel model = DATA_STRUCTURE_MODELS.get(dsName);
+	//                    try {
+	//                        if (model != null && model instanceof XSKDataStructureEntityModel) {
+	//                            XSKDataStructureEntityModel entityModel = (XSKDataStructureEntityModel) model;
+	//                            String tableName = entityModel.getContext() + "_" + entityModel.getName();
+	//                            executeForeignKeys(connection, (XSKDataStructureEntityModel) model);
+	//                        }
+	//                    } catch (Exception e) {
+	//                        logger.error(e.getMessage(), e);
+	//                        errors.add(e.getMessage());
+	//                    }
+	//                }
+	
+	                // process views in the proper order
+	                for (String dsName : sorted) {
+	                	XSKDataStructureHDBViewModel model = DATA_STRUCTURE_VIEWS_MODELS.get(dsName);
+	                    try {
+	                        if (model != null) {
+	                            if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
+	                                executeViewCreate(connection, model);
+	                            } else {
+	                                logger.warn(format("View [{0}] already exists during the update process", dsName));
+	                            }
+	                        }
+	                    } catch (Exception e) {
+	                        logger.error(e.getMessage(), e);
+	                        errors.add(e.getMessage());
+	                    }
+	                }
+	
+	               
+	
+	                // process hdbProcedures
+	                executeHDBProceduresCreate(connection, hdbProceduresToUpdate);
+	                
+	                // process hdbTableFunctions
+	                executeHDBTableFunctionsCreate(connection, hdbTableFunctionsToUpdate);
+	                
+	                // process calculation views
+	//              executeCalculationViewsCreate(connection, calculationViews);
+	                
+	                // process hdbCalculationViews
+	//                executeHDBCalculationViewsCreate(connection, hdbCalculationsViewToUpdate);
+	                
+	            
                 }
-                executeHDBTableFunctionsDrop(connection, hdbTableFunctionsToUpdate);
 
-                // drop views in a reverse order
-                for (int i = sorted.size() - 1; i >= 0; i--) {
-                    String dsName = sorted.get(i);
-                    XSKDataStructureHDBViewModel model = DATA_STRUCTURE_VIEWS_MODELS.get(dsName);
-                    try {
-                        if (model != null) {
-                            executeViewDrop(connection, model);
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                        errors.add(e.getMessage());
-                    }
-                }
-
-                // drop tables in a reverse order
-                for (int i = sorted.size() - 1; i >= 0; i--) {
-                    String dsName = sorted.get(i);
-                    XSKDataStructureHDBTableModel model = DATA_STRUCTURE_TABLES_MODELS.get(dsName);
-                    try {
-                        if (model != null) {
-                            if (SqlFactory.getNative(connection).exists(connection, model.getName())) {
-                                if (SqlFactory.getNative(connection).count(connection, model.getName()) == 0) {
-                                    executeTableDrop(connection, model);
-                                } else {
-                                    logger.warn(format("Table [{0}] cannot be deleted during the update process, because it is not empty", dsName));
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                        errors.add(e.getMessage());
-                    }
-                }
-
-                // drop entities in a reverse order
-                for (int i = sorted.size() - 1; i >= 0; i--) {
-                    String dsName = sorted.get(i);
-                    XSKDataStructureEntitiesModel entitiesModel = DATA_STRUCTURE_ENTITIES_MODELS.get(dsName);
-                    try {
-                        if (entitiesModel != null) {
-                        	for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-                        		String tableName = XSKUtils.getTableName(entityModel);
-                        		if (caseSensitive) {
-                        			tableName = "\"" + tableName + "\"";
-                        		}
-                        		if (SqlFactory.getNative(connection).exists(connection, tableName)) {
-                        			if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
-                        				executeEntityDrop(connection, entityModel);
-                        			} else {
-                        				logger.warn(format("Entity [{0}] cannot be deleted during the update process, because it is not empty", dsName));
-                        			}
-                        		}
-                        	}
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                        errors.add(e.getMessage());
-                    }
-                }
-
-                // drop HDB Schemas
-                List<XSKDataStructureHDBSchemaModel> hdbSchemasToUpdate = new ArrayList<XSKDataStructureHDBSchemaModel>();
-                for (int i = sorted.size() - 1; i >= 0; i--) {
-                    String dsName = sorted.get(i);
-                    XSKDataStructureHDBSchemaModel model = DATA_STRUCTURE_HDB_SCHEMAS_MODELS.get(dsName);
-                    if (model != null) {
-                    	hdbSchemasToUpdate.add(model);
-                    }
-                }
-//                executeHDBSchemasDrop(connection, hdbSchemasToUpdate);
-
-                // process hdbSchemas
-                executeHDBSchemasCreate(connection, hdbSchemasToUpdate);
-
-                // process tables in the proper order
-                for (String dsName : sorted) {
-                	XSKDataStructureHDBTableModel model = DATA_STRUCTURE_TABLES_MODELS.get(dsName);
-                    try {
-                        if (model != null) {
-                            if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
-                                executeTableCreate(connection, model);
-                            } else {
-                                logger.warn(format("Table [{0}] already exists during the update process", dsName));
-                                if (SqlFactory.getNative(connection).count(connection, model.getName()) != 0) {
-                                    executeTableAlter(connection, model);
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                        errors.add(e.getMessage());
-                    }
-                }
-
-                // process entities in the proper order
-                for (String dsName : sorted) {
-                	XSKDataStructureEntitiesModel entitesModel = DATA_STRUCTURE_ENTITIES_MODELS.get(dsName);
-                    try {
-                        if (entitesModel != null) {
-                        	for (XSKDataStructureEntityModel entityModel : entitesModel.getContext().getЕntities()) {
-                        		String tableName = XSKUtils.getTableName(entityModel);
-                        		if (caseSensitive) {
-                        			tableName = "\"" + tableName + "\"";
-                        		}
-                        		if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
-                        			executeEntityCreate(connection, entityModel);
-                        		} else {
-                        			executeEntityUpdate(connection, entityModel);
-                        		}
-                        	}
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                        errors.add(e.getMessage());
-                    }
-                }
-                
-//                // process the foreign keys of the entities
-//                for (String dsName : sorted) {
-//                    XSKDataStructureModel model = DATA_STRUCTURE_MODELS.get(dsName);
-//                    try {
-//                        if (model != null && model instanceof XSKDataStructureEntityModel) {
-//                            XSKDataStructureEntityModel entityModel = (XSKDataStructureEntityModel) model;
-//                            String tableName = entityModel.getContext() + "_" + entityModel.getName();
-//                            executeForeignKeys(connection, (XSKDataStructureEntityModel) model);
-//                        }
-//                    } catch (Exception e) {
-//                        logger.error(e.getMessage(), e);
-//                        errors.add(e.getMessage());
-//                    }
-//                }
-
-                // process views in the proper order
-                for (String dsName : sorted) {
-                	XSKDataStructureHDBViewModel model = DATA_STRUCTURE_VIEWS_MODELS.get(dsName);
-                    try {
-                        if (model != null) {
-                            if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
-                                executeViewCreate(connection, model);
-                            } else {
-                                logger.warn(format("View [{0}] already exists during the update process", dsName));
-                            }
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                        errors.add(e.getMessage());
-                    }
-                }
-
-               
-
-                // process hdbProcedures
-                executeHDBProceduresCreate(connection, hdbProceduresToUpdate);
-                
-                // process hdbTableFunctions
-                executeHDBTableFunctionsCreate(connection, hdbTableFunctionsToUpdate);
-                
-                // process calculation views
-//              executeCalculationViewsCreate(connection, calculationViews);
-                
-                // process hdbCalculationViews
-//                executeHDBCalculationViewsCreate(connection, hdbCalculationsViewToUpdate);
-                
-            
 
 
             } finally {

@@ -18,6 +18,13 @@ Compatible environment for SAP HANA Extended Application Services (XS) based app
 
 ## How to run
 
+#### Environment Variables
+
+* **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
+* **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
+
+
+
 #### Local database
 
     docker run -p 8888:8080 dirigiblelabs/dirigible-xsk:0.0.1

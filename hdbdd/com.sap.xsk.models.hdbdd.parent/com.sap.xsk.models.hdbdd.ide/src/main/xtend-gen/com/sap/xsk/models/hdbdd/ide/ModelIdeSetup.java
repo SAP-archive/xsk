@@ -3,12 +3,8 @@
  */
 package com.sap.xsk.models.hdbdd.ide;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.sap.xsk.models.hdbdd.ModelRuntimeModule;
 import com.sap.xsk.models.hdbdd.ModelStandaloneSetup;
-import com.sap.xsk.models.hdbdd.ide.ModelIdeModule;
-import org.eclipse.xtext.util.Modules2;
 
 /**
  * Initialization support for running Xtext languages as language servers.
@@ -17,8 +13,7 @@ import org.eclipse.xtext.util.Modules2;
 public class ModelIdeSetup extends ModelStandaloneSetup {
   @Override
   public Injector createInjector() {
-    ModelRuntimeModule _modelRuntimeModule = new ModelRuntimeModule();
-    ModelIdeModule _modelIdeModule = new ModelIdeModule();
-    return Guice.createInjector(Modules2.mixin(_modelRuntimeModule, _modelIdeModule));
+    throw new Error("Unresolved compilation problems:"
+      + "\nType mismatch: cannot convert from ModelIdeModule to Module");
   }
 }

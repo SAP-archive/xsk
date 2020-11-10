@@ -14,8 +14,10 @@ import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
 public class XSKODataSynchronizerJobDefinitionProvider implements IJobDefinitionProvider {
 
 	private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_ODATA = "DIRIGIBLE_JOB_EXPRESSION_XSK_ODATA";
-	private static final String XSK_O_DATA_SYNCHRONIZER_JOB = "XSK OData Synchronizer Job";
-	private static final String DIRIGIBLE_INTERNAL_XSK_ODATA_SYNCHRONIZER_JOB = "dirigible-internal-xsc-odata-synchronizer-job";
+	
+	private static final String DIRIGIBLE_INTERNAL_XSK_ODATA_SYNCHRONIZER_JOB = "dirigible-internal-xsk-odata-synchronizer-job";
+	
+	static final String XSK_ODATA_SYNCHRONIZER_JOB = "XSK OData Synchronizer Job";
 
 	/*
 	 * (non-Javadoc)
@@ -27,7 +29,7 @@ public class XSKODataSynchronizerJobDefinitionProvider implements IJobDefinition
 		jobDefinition.setName(DIRIGIBLE_INTERNAL_XSK_ODATA_SYNCHRONIZER_JOB);
 		jobDefinition.setGroup(ISchedulerCoreService.JOB_GROUP_INTERNAL);
 		jobDefinition.setClazz(XSKODataSynchronizerJob.class.getCanonicalName());
-		jobDefinition.setDescription(XSK_O_DATA_SYNCHRONIZER_JOB);
+		jobDefinition.setDescription(XSK_ODATA_SYNCHRONIZER_JOB);
 		jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_ODATA, "0/10 * * * * ?"));
 		jobDefinition.setSingleton(true);
 		return jobDefinition;

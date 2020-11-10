@@ -41,13 +41,13 @@ import com.sap.xsk.utils.XSKUtils;
 public class XSKTableImportSynchronizer extends AbstractSynchronizer {
 
     @Inject
-    private XSKTableImportCoreService xscTableImportCoreService;
+    private XSKTableImportCoreService xskTableImportCoreService;
 
     @Inject
-    private XSKTableImportProcessor xscTableImportProcessor;
+    private XSKTableImportProcessor xskTableImportProcessor;
 
     @Inject
-    private XSKCsvToHdbtiRelationService xscCsvToHdbtiRelationService;
+    private XSKCsvToHdbtiRelationService xskCsvToHdbtiRelationService;
 
     @Inject
     private static final Logger logger = LoggerFactory.getLogger(XSKTableImportSynchronizer.class);
@@ -67,15 +67,15 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
 
         if (resourceName.endsWith(IXSKTableImportModel.FILE_EXTENSION_TABLE_IMPORT)) {
             try {
-                XSKTableImportArtifact xscTableImportArtifact = xscTableImportCoreService.parseTableImportArtifact(registryPath, contentAsString);
-                synchronizeTableImport(xscTableImportArtifact);
+                XSKTableImportArtifact xskTableImportArtifact = xskTableImportCoreService.parseTableImportArtifact(registryPath, contentAsString);
+                synchronizeTableImport(xskTableImportArtifact);
             } catch (IOException e) {
                 throw new SynchronizationException();
             }
         } else if (resourceName.endsWith(IXSKTableImportModel.FILE_EXTENSION_CSV)) {
-            List<XSKTableImportToCsvRelation> affectedHdbtiToCsvRelations = xscCsvToHdbtiRelationService.getAffectedHdbtiToCsvRelations(getRegistryPath(resource));
+            List<XSKTableImportToCsvRelation> affectedHdbtiToCsvRelations = xskCsvToHdbtiRelationService.getAffectedHdbtiToCsvRelations(getRegistryPath(resource));
             if (!affectedHdbtiToCsvRelations.isEmpty()) {
-                if (xscCsvToHdbtiRelationService.hasCsvChanged(affectedHdbtiToCsvRelations.get(0), contentAsString)) {
+                if (xskCsvToHdbtiRelationService.hasCsvChanged(affectedHdbtiToCsvRelations.get(0), contentAsString)) {
                     affectedHdbtiToCsvRelations.forEach(relation -> reimportAffectedHdbtiFiles(XSKUtils.convertToFullPath(relation.getHdbti())));
                 }
             }
@@ -85,8 +85,8 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     private void reimportAffectedHdbtiFiles(String hdbtiFilePath) {
         IResource hdbtiResource = getRepository().getResource(hdbtiFilePath);
         try (Connection connection = dataSource.getConnection()) {
-            XSKTableImportArtifact xscTableImportArtifact = xscTableImportCoreService.parseTableImportArtifact(hdbtiFilePath, getContentFromResource(hdbtiResource));
-            executeTableImport(xscTableImportArtifact, connection);
+            XSKTableImportArtifact xskTableImportArtifact = xskTableImportCoreService.parseTableImportArtifact(hdbtiFilePath, getContentFromResource(hdbtiResource));
+            executeTableImport(xskTableImportArtifact, connection);
         } catch (IOException | SynchronizationException | SQLException e) {
             logger.error("Error during the force reimport of an HDBTI file due to a linked csv file change", e);
         }
@@ -107,26 +107,26 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     }
 
 
-    private void synchronizeTableImport(XSKTableImportArtifact xscTableImportArtifact) throws SynchronizationException {
+    private void synchronizeTableImport(XSKTableImportArtifact xskTableImportArtifact) throws SynchronizationException {
         try {
-            if (!xscTableImportCoreService.existsTableImportArtifact(xscTableImportArtifact.getLocation())) {
-                xscTableImportCoreService.createTableImportArtifact(xscTableImportArtifact);
-                HDBTI_MODELS.put(xscTableImportArtifact.getName(), xscTableImportArtifact);
+            if (!xskTableImportCoreService.existsTableImportArtifact(xskTableImportArtifact.getLocation())) {
+                xskTableImportCoreService.createTableImportArtifact(xskTableImportArtifact);
+                HDBTI_MODELS.put(xskTableImportArtifact.getName(), xskTableImportArtifact);
                 logger
-                        .info("Synchronized a new HDBTI file [{}] from location: {}", xscTableImportArtifact.getName(),
-                                xscTableImportArtifact.getLocation());
+                        .info("Synchronized a new HDBTI file [{}] from location: {}", xskTableImportArtifact.getName(),
+                                xskTableImportArtifact.getLocation());
             } else {
-                XSKTableImportArtifact existing = xscTableImportCoreService.getTableImportArtifact(xscTableImportArtifact.getLocation());
-                if (!xscTableImportArtifact.equals(existing)) {
-                    xscTableImportCoreService.updateTableImportArtifact(xscTableImportArtifact);
-                    HDBTI_MODELS.put(xscTableImportArtifact.getName(), xscTableImportArtifact);
+                XSKTableImportArtifact existing = xskTableImportCoreService.getTableImportArtifact(xskTableImportArtifact.getLocation());
+                if (!xskTableImportArtifact.equals(existing)) {
+                    xskTableImportCoreService.updateTableImportArtifact(xskTableImportArtifact);
+                    HDBTI_MODELS.put(xskTableImportArtifact.getName(), xskTableImportArtifact);
                     logger
                             .info("Synchronized a modified HDBTI file [{}] from location: {}",
-                                    xscTableImportArtifact.getName(), xscTableImportArtifact.getLocation());
+                                    xskTableImportArtifact.getName(), xskTableImportArtifact.getLocation());
                 }
             }
-            if (!HDBTI_SYNCHRONIZED.contains(xscTableImportArtifact.getLocation())) {
-                HDBTI_SYNCHRONIZED.add(xscTableImportArtifact.getLocation());
+            if (!HDBTI_SYNCHRONIZED.contains(xskTableImportArtifact.getLocation())) {
+                HDBTI_SYNCHRONIZED.add(xskTableImportArtifact.getLocation());
             }
         } catch (XSKTableImportException e) {
             throw new SynchronizationException(e);
@@ -136,12 +136,12 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     @Override
     protected void cleanup() throws SynchronizationException {
         try {
-            List<XSKTableImportArtifact> tableImportArtifacts = xscTableImportCoreService.getTableImportArtifacts();
+            List<XSKTableImportArtifact> tableImportArtifacts = xskTableImportCoreService.getTableImportArtifacts();
 
             IRepository repository = getRepository();
             for (XSKTableImportArtifact tableImportArtifact : tableImportArtifacts) {
                 if (!repository.hasResource(XSKUtils.convertToFullPath(tableImportArtifact.getLocation()))) {
-                    xscTableImportCoreService.removeTableImportArtifact(tableImportArtifact.getLocation());
+                    xskTableImportCoreService.removeTableImportArtifact(tableImportArtifact.getLocation());
                     logger
                             .warn("Cleaned up HDBTI file [{}] from location: {}", tableImportArtifact.getName(),
                                     tableImportArtifact.getLocation());
@@ -180,11 +180,11 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     private void executeTableImport(XSKTableImportArtifact tableImportArtifact, Connection connection) {
         List<XSKTableImportConfigurationDefinition> configurationDefinitions = tableImportArtifact.getImportConfigurationDefinition();
 
-        xscCsvToHdbtiRelationService.deleteCsvAndHdbtiRelations(XSKUtils.convertToFullPath(tableImportArtifact.getLocation()), connection);
-        xscCsvToHdbtiRelationService.persistNewCsvAndHdbtiRelations(tableImportArtifact, connection);
+        xskCsvToHdbtiRelationService.deleteCsvAndHdbtiRelations(XSKUtils.convertToFullPath(tableImportArtifact.getLocation()), connection);
+        xskCsvToHdbtiRelationService.persistNewCsvAndHdbtiRelations(tableImportArtifact, connection);
         for (XSKTableImportConfigurationDefinition configurationDefinition : configurationDefinitions) {
             try {
-                xscTableImportProcessor.process(configurationDefinition, connection);
+                xskTableImportProcessor.process(configurationDefinition, connection);
             } catch (IOException | SQLException e) {
                 logger.error("Error while executing the HDBTI artifacts", e);
             }
@@ -208,7 +208,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
 
     public void registerPredeliveredTableImports(String contentPath) throws IOException {
         String data = loadResourceContent(contentPath);
-        XSKTableImportArtifact tableImportArtifact = xscTableImportCoreService.parseTableImportArtifact(contentPath, data);
+        XSKTableImportArtifact tableImportArtifact = xskTableImportCoreService.parseTableImportArtifact(contentPath, data);
         HDBTI_PREDELIVERED.put(contentPath, tableImportArtifact);
     }
 

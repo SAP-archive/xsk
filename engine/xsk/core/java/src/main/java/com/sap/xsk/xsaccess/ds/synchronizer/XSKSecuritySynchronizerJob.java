@@ -5,6 +5,7 @@ import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
 
 public class XSKSecuritySynchronizerJob extends AbstractSynchronizerJob {
+	
     /** The extensions synchronizer. */
     private XSKSecuritySynchronizer extensionsSynchronizer = StaticInjector.getInjector().getInstance(XSKSecuritySynchronizer.class);
 
@@ -16,4 +17,13 @@ public class XSKSecuritySynchronizerJob extends AbstractSynchronizerJob {
     public ISynchronizer getSynchronizer() {
         return extensionsSynchronizer;
     }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getName()
+     */
+	@Override
+	public String getName() {
+		return XSKSecuritySynchronizerJobDefinitionProvider.XSK_PRIVILEGES_AND_ACCESS_SYNCHRONIZER_JOB;
+	}
 }

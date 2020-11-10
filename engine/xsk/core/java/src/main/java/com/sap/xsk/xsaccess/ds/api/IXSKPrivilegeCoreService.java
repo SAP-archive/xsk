@@ -5,6 +5,7 @@ import java.util.List;
 import com.sap.xsk.xsaccess.ds.model.privilege.XSKPrivilegeDefinition;
 
 public interface IXSKPrivilegeCoreService {
+	
     String XSK_FILE_EXTENSION_PRIVILEGE = ".xsprivileges";
 
     String XSK_PRIVILEGES_TABLE_NAME = "XSK_PRIVILEGES";
@@ -19,5 +20,5 @@ public interface IXSKPrivilegeCoreService {
 
     XSKPrivilegeDefinition getXSKPrivilegeByName(String name) throws XSKPrivilegeException;
 
-    boolean xscPrivilegeExists(String name) throws XSKPrivilegeException;
+    boolean xskPrivilegeExists(String name) throws XSKPrivilegeException;
 }

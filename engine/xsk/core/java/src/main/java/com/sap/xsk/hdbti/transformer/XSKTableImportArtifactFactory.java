@@ -41,7 +41,7 @@ public class XSKTableImportArtifactFactory {
 
     private IRepository repository = StaticInjector.getInjector().getInstance(IRepository .class);
 
-    private XSKCsvToHdbtiRelationService xscCsvToHdbtiRelationService = StaticInjector.getInjector().getInstance(XSKCsvToHdbtiRelationService .class);
+    private XSKCsvToHdbtiRelationService xskCsvToHdbtiRelationService = StaticInjector.getInjector().getInstance(XSKCsvToHdbtiRelationService .class);
 
     public XSKTableImportArtifactFactory() {
         setupParser();
@@ -92,7 +92,7 @@ public class XSKTableImportArtifactFactory {
     }
 
     private void addHdbtiToCsvRelation(XSKTableImportArtifact tableImportArtifact, ImportConfig configuration, String hdbtiLocation) {
-        String csvParsedFilePath = xscCsvToHdbtiRelationService.convertToActualFileName(configuration.getFileValue());
+        String csvParsedFilePath = xskCsvToHdbtiRelationService.convertToActualFileName(configuration.getFileValue());
         XSKTableImportToCsvRelation tableImportToCsvRelation = new XSKTableImportToCsvRelation();
         IResource csvFile = repository.getResource(csvParsedFilePath);
         tableImportToCsvRelation.setCsv(csvParsedFilePath);

@@ -14,8 +14,10 @@ import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
 public class XSKDataStructuresSynchronizerJobDefinitionProvider implements IJobDefinitionProvider {
 
 	private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE = "DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE";
-	private static final String XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB = "XSK Data Structures Synchronizer Job";
+	
 	private static final String DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB = "dirigible-internal-xsk-data-structures-synchronizer-job";
+	
+	static final String XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB = "XSK Data Structures Synchronizer Job";
 
 	/*
 	 * (non-Javadoc)

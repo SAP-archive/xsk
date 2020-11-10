@@ -31,19 +31,19 @@ public class XSKTableImportCoreService implements IXSKTableImportCoreService {
     private static final Logger logger = LoggerFactory.getLogger(XSKTableImportCoreService.class);
 
     @Inject
-    private XSKTableImportArtifactFactory xscTableImportArtifactFactory;
+    private XSKTableImportArtifactFactory xskTableImportArtifactFactory;
 
     private DataSource dataSource = StaticInjector.getInjector().getInstance(DataSource.class);
 
     @Inject
-    private PersistenceManager<XSKTableImportArtifact> xscPersistenceManager;
+    private PersistenceManager<XSKTableImportArtifact> xskPersistenceManager;
 
     @Override
-    public XSKTableImportArtifact createTableImportArtifact(XSKTableImportArtifact xscTableImportArtifact) throws XSKTableImportException {
+    public XSKTableImportArtifact createTableImportArtifact(XSKTableImportArtifact xskTableImportArtifact) throws XSKTableImportException {
 
         try (Connection connection = dataSource.getConnection()) {
-            xscPersistenceManager.insert(connection, xscTableImportArtifact);
-            return xscTableImportArtifact;
+            xskPersistenceManager.insert(connection, xskTableImportArtifact);
+            return xskTableImportArtifact;
         } catch (SQLException e) {
             throw new XSKTableImportException(e);
         }
@@ -55,7 +55,7 @@ public class XSKTableImportCoreService implements IXSKTableImportCoreService {
             XSKTableImportArtifact tableImportArtifact = getTableImportArtifact(artifact.getLocation());
             tableImportArtifact.setName(artifact.getName());
             tableImportArtifact.setHash(artifact.getHash());
-            xscPersistenceManager.update(connection, tableImportArtifact);
+            xskPersistenceManager.update(connection, tableImportArtifact);
         } catch (SQLException e) {
             throw new XSKTableImportException(e);
         }
@@ -64,7 +64,7 @@ public class XSKTableImportCoreService implements IXSKTableImportCoreService {
     @Override
     public XSKTableImportArtifact getTableImportArtifact(String location) throws XSKTableImportException {
         try (Connection connection = dataSource.getConnection()) {
-            return xscPersistenceManager.find(connection, XSKTableImportArtifact.class, location);
+            return xskPersistenceManager.find(connection, XSKTableImportArtifact.class, location);
         } catch (SQLException e) {
             throw new XSKTableImportException(e);
         }
@@ -73,7 +73,7 @@ public class XSKTableImportCoreService implements IXSKTableImportCoreService {
     @Override
     public void removeTableImportArtifact(String location) {
         try (Connection connection = dataSource.getConnection()) {
-            xscPersistenceManager.delete(connection, XSKTableImportArtifact.class, location);
+            xskPersistenceManager.delete(connection, XSKTableImportArtifact.class, location);
         } catch (SQLException e) {
             logger.error("Error cleaning up and HDBTI file from DB", e);
         }
@@ -82,7 +82,7 @@ public class XSKTableImportCoreService implements IXSKTableImportCoreService {
     @Override
     public List<XSKTableImportArtifact> getTableImportArtifacts() throws XSKTableImportException {
         try (Connection connection = dataSource.getConnection()) {
-            return xscPersistenceManager.findAll(connection, XSKTableImportArtifact.class);
+            return xskPersistenceManager.findAll(connection, XSKTableImportArtifact.class);
         } catch (SQLException e) {
             logger.error("Error getting the HDBTI artifacts from DB");
             throw new XSKTableImportException(e);
@@ -96,7 +96,7 @@ public class XSKTableImportCoreService implements IXSKTableImportCoreService {
 
     @Override
     public XSKTableImportArtifact parseTableImportArtifact(String location, String content) throws IOException {
-        XSKTableImportArtifact parsedArtifact = xscTableImportArtifactFactory.parseTableImport(content, location);
+        XSKTableImportArtifact parsedArtifact = xskTableImportArtifactFactory.parseTableImport(content, location);
         parsedArtifact.setName(new File(location).getName());
         parsedArtifact.setLocation(location);
         parsedArtifact.setType(TYPE_HDBTI);

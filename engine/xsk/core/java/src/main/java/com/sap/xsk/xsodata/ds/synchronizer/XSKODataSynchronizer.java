@@ -55,7 +55,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	private static final Map<String, XSKODataModel> ODATA_MODELS = new LinkedHashMap<String, XSKODataModel>();
 
 	@Inject
-	private XSKODataCoreService xscODataCoreService;
+	private XSKODataCoreService xskODataCoreService;
 	
 	@Inject
 	private ODataCoreService odataCoreService;
@@ -64,10 +64,10 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	private DataSource dataSource;
 
 	@Inject
-	private XSKOData2ODataMTransformer xscoData2ODataMTransformer;
+	private XSKOData2ODataMTransformer xskOData2ODataMTransformer;
 
 	@Inject
-	private XSKOData2ODataXTransformer xscoData2ODataXTransformer;
+	private XSKOData2ODataXTransformer xskOData2ODataXTransformer;
 
 	/**
 	 * Force synchronization.
@@ -86,7 +86,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	 */
 	public void registerPredeliveredOData(String contentPath) throws Exception {
 		String data = loadResourceContent(contentPath);
-		XSKODataModel model = xscODataCoreService.parseOData(contentPath, data);
+		XSKODataModel model = xskODataCoreService.parseOData(contentPath, data);
 		ODATA_PREDELIVERED.put(contentPath, model);
 	}
 
@@ -161,14 +161,14 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	 */
 	private void synchronizeOData(XSKODataModel odataModel) throws SynchronizationException {
 		try {
-			if (!xscODataCoreService.existsOData(odataModel.getLocation())) {
-				xscODataCoreService.createOData(odataModel.getLocation(), odataModel.getName(), odataModel.getHash());
+			if (!xskODataCoreService.existsOData(odataModel.getLocation())) {
+				xskODataCoreService.createOData(odataModel.getLocation(), odataModel.getName(), odataModel.getHash());
 				ODATA_MODELS.put(odataModel.getName(), odataModel);
 				logger.info("Synchronized a new OData file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
 			} else {
-				XSKODataModel existing = xscODataCoreService.getOData(odataModel.getLocation());
+				XSKODataModel existing = xskODataCoreService.getOData(odataModel.getLocation());
 				if (!odataModel.equals(existing)) {
-					xscODataCoreService.updateOData(odataModel.getLocation(), odataModel.getName(), odataModel.getHash());
+					xskODataCoreService.updateOData(odataModel.getLocation(), odataModel.getName(), odataModel.getHash());
 					ODATA_MODELS.put(odataModel.getName(), odataModel);
 					logger.info("Synchronized a modified OData file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
 				}
@@ -212,7 +212,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 		if (resourceName.endsWith(IXSKODataModel.FILE_EXTENSION_XSODATA)) {
 			XSKODataModel odataModel;
 			try {
-				odataModel = xscODataCoreService.parseOData(registryPath, contentAsString);
+				odataModel = xskODataCoreService.parseOData(registryPath, contentAsString);
 			} catch (Exception e) {
 				throw new SynchronizationException(e);
 			}
@@ -235,10 +235,10 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 			try {
 				connection = dataSource.getConnection();
 				
-				List<XSKODataModel> odataModels = xscODataCoreService.getODatas();
+				List<XSKODataModel> odataModels = xskODataCoreService.getODatas();
 				for (XSKODataModel odataModel : odataModels) {
 					if (!ODATA_SYNCHRONIZED.contains(odataModel.getLocation())) {
-						xscODataCoreService.removeOData(odataModel.getLocation());
+						xskODataCoreService.removeOData(odataModel.getLocation());
 						logger.warn("Cleaned up OData Data file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
 					}
 				}
@@ -329,11 +329,11 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	
 
 	private String[] generateODataX(XSKODataModel model) throws SQLException {
-		return xscoData2ODataXTransformer.transform(model);
+		return xskOData2ODataXTransformer.transform(model);
 	}
 	
 	private String[] generateODataMs(XSKODataModel model) throws SQLException {
-		return xscoData2ODataMTransformer.transform(model);
+		return xskOData2ODataMTransformer.transform(model);
 	}
 
 	/**

@@ -7,7 +7,7 @@ import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 
 public interface IXSKTableImportCoreService {
 
-    XSKTableImportArtifact createTableImportArtifact(XSKTableImportArtifact xscTableImportArtifact) throws XSKTableImportException;
+    XSKTableImportArtifact createTableImportArtifact(XSKTableImportArtifact xskTableImportArtifact) throws XSKTableImportException;
 
     void updateTableImportArtifact(XSKTableImportArtifact artifact) throws XSKTableImportException;
 

@@ -23,7 +23,7 @@ public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
     private static final Logger logger = LoggerFactory.getLogger(XSKSecureStoreSynchronizer.class);
 
     @Inject
-    private XSKSecureStoreCoreService xscSecureStoreCoreService;
+    private XSKSecureStoreCoreService xskSecureStoreCoreService;
 
     @Override
     protected void synchronizeResource(IResource resource) throws SynchronizationException {
@@ -33,8 +33,8 @@ public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
 
         try {
             if (resourceName.endsWith(IXSKSecureStoreModel.FILE_EXTENSION_XSSECURESTORE) &&
-                    !xscSecureStoreCoreService.existsSecureStore(location)) {
-                xscSecureStoreCoreService.createSecureStore(location, content);
+                    !xskSecureStoreCoreService.existsSecureStore(location)) {
+                xskSecureStoreCoreService.createSecureStore(location, content);
             }
         } catch (XSKSecureStoreException e) {
             throw  new SynchronizationException(e);
@@ -47,13 +47,13 @@ public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
         IRepository repository = getRepository();
 
         try {
-            List<XSKSecureStore> xscSecureStores = xscSecureStoreCoreService.getXSKSecureStores();
-            for (XSKSecureStore xscSecureStore: xscSecureStores) {
-                String xscSecureStoreLocation = xscSecureStore.getLocation();
-                if (!repository.hasResource(xscSecureStoreLocation)) {
-                    xscSecureStoreCoreService.removeXSKSecureStore(xscSecureStoreLocation);
-                    xscSecureStoreCoreService.deleteSecureStoreValuesByStoreId(xscSecureStoreLocation);
-                    logger.warn("Cleaned up Secure Stores from location: {}", xscSecureStoreLocation);
+            List<XSKSecureStore> xskSecureStores = xskSecureStoreCoreService.getXSKSecureStores();
+            for (XSKSecureStore xskSecureStore: xskSecureStores) {
+                String xskSecureStoreLocation = xskSecureStore.getLocation();
+                if (!repository.hasResource(xskSecureStoreLocation)) {
+                    xskSecureStoreCoreService.removeXSKSecureStore(xskSecureStoreLocation);
+                    xskSecureStoreCoreService.deleteSecureStoreValuesByStoreId(xskSecureStoreLocation);
+                    logger.warn("Cleaned up Secure Stores from location: {}", xskSecureStoreLocation);
                 }
             }
 

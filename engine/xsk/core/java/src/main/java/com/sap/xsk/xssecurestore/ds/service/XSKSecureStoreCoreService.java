@@ -32,7 +32,7 @@ public class XSKSecureStoreCoreService implements IXSKSecureStoreCoreService {
     private PersistenceManager<XSKSecureStoreContent> secureStoreContentPersistenceManager;
 
     @Inject
-    private XSKSecureStoreEncryptor xscSecureStoreEncryptor;
+    private XSKSecureStoreEncryptor xskSecureStoreEncryptor;
 
     @Override
     public XSKSecureStore createSecureStore(String location, String content) throws XSKSecureStoreException {
@@ -126,23 +126,23 @@ public class XSKSecureStoreCoreService implements IXSKSecureStoreCoreService {
 
         XSKSecureStoreContent existingXscSecureStoreContent = findSecureStoreContent(storeId, userId, dataId);
         if (existingXscSecureStoreContent != null) {
-            existingXscSecureStoreContent.setDataValue(xscSecureStoreEncryptor.encode(dataValueAsBytes));
+            existingXscSecureStoreContent.setDataValue(xskSecureStoreEncryptor.encode(dataValueAsBytes));
             updateSecureStoreValue(existingXscSecureStoreContent);
             return;
         }
 
-        XSKSecureStoreContent xscSecureStoreContent = new XSKSecureStoreContent();
-        xscSecureStoreContent.setStoreId(storeId);
-        xscSecureStoreContent.setUserId(userId);
-        xscSecureStoreContent.setDataId(dataId);
+        XSKSecureStoreContent xskSecureStoreContent = new XSKSecureStoreContent();
+        xskSecureStoreContent.setStoreId(storeId);
+        xskSecureStoreContent.setUserId(userId);
+        xskSecureStoreContent.setDataId(dataId);
 
-        xscSecureStoreContent.setDataValue(xscSecureStoreEncryptor.encode(dataValueAsBytes));
+        xskSecureStoreContent.setDataValue(xskSecureStoreEncryptor.encode(dataValueAsBytes));
 
         try {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                secureStoreContentPersistenceManager.insert(connection, xscSecureStoreContent);
+                secureStoreContentPersistenceManager.insert(connection, xskSecureStoreContent);
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -154,12 +154,12 @@ public class XSKSecureStoreCoreService implements IXSKSecureStoreCoreService {
     }
 
     @Override
-    public void updateSecureStoreValue(XSKSecureStoreContent xscSecureStoreContent) throws XSKSecureStoreException {
+    public void updateSecureStoreValue(XSKSecureStoreContent xskSecureStoreContent) throws XSKSecureStoreException {
         try {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                secureStoreContentPersistenceManager.update(connection, xscSecureStoreContent);
+                secureStoreContentPersistenceManager.update(connection, xskSecureStoreContent);
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -184,9 +184,9 @@ public class XSKSecureStoreCoreService implements IXSKSecureStoreCoreService {
                 if (foundContent.size() == 0) {
                     return null;
                 } else if (foundContent.size() == 1)  {
-                    XSKSecureStoreContent xscSecureStoreContent = foundContent.get(0);
-                    byte[] encodedData = xscSecureStoreContent.getDataValue();
-                    xscSecureStoreContent.setDataValue(xscSecureStoreEncryptor.decode(encodedData));
+                    XSKSecureStoreContent xskSecureStoreContent = foundContent.get(0);
+                    byte[] encodedData = xskSecureStoreContent.getDataValue();
+                    xskSecureStoreContent.setDataValue(xskSecureStoreEncryptor.decode(encodedData));
                     return foundContent.get(0);
                 } else {
                     throw new SQLException("Duplicate security createSecureStoreValue content identifier");

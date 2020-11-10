@@ -21,7 +21,7 @@ public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
     private DataSource dataSource;
 
     @Inject
-    private PersistenceManager<XSKPrivilegeDefinition> xscPrivilegeDefinitionPersistenceManager;
+    private PersistenceManager<XSKPrivilegeDefinition> xskPrivilegeDefinitionPersistenceManager;
 
     @Override
     public XSKPrivilegeDefinition createXSKPrivilege(String name, String description) throws XSKPrivilegeException {
@@ -29,15 +29,15 @@ public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                XSKPrivilegeDefinition xscPrivilegeDefinition = new XSKPrivilegeDefinition();
-                xscPrivilegeDefinition.setName(name);
-                xscPrivilegeDefinition.setDescription(description);
-                xscPrivilegeDefinition.setCreatedBy(UserFacade.getName());
-                xscPrivilegeDefinition.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+                XSKPrivilegeDefinition xskPrivilegeDefinition = new XSKPrivilegeDefinition();
+                xskPrivilegeDefinition.setName(name);
+                xskPrivilegeDefinition.setDescription(description);
+                xskPrivilegeDefinition.setCreatedBy(UserFacade.getName());
+                xskPrivilegeDefinition.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
 
-                xscPrivilegeDefinitionPersistenceManager.insert(connection, xscPrivilegeDefinition);
+                xskPrivilegeDefinitionPersistenceManager.insert(connection, xskPrivilegeDefinition);
 
-                return xscPrivilegeDefinition;
+                return xskPrivilegeDefinition;
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -61,7 +61,7 @@ public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
                 connection = dataSource.getConnection();
                 foundXscPrivilegeDefinition.setName(name);
                 foundXscPrivilegeDefinition.setDescription(description);
-                xscPrivilegeDefinitionPersistenceManager.update(connection, foundXscPrivilegeDefinition);
+                xskPrivilegeDefinitionPersistenceManager.update(connection, foundXscPrivilegeDefinition);
 
                 return foundXscPrivilegeDefinition;
             } finally {
@@ -82,7 +82,7 @@ public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                return xscPrivilegeDefinitionPersistenceManager.findAll(connection, XSKPrivilegeDefinition.class);
+                return xskPrivilegeDefinitionPersistenceManager.findAll(connection, XSKPrivilegeDefinition.class);
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -100,7 +100,7 @@ public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
             try {
                 connection = dataSource.getConnection();
 
-                xscPrivilegeDefinitionPersistenceManager.delete(connection, XSKPrivilegeDefinition.class, name);
+                xskPrivilegeDefinitionPersistenceManager.delete(connection, XSKPrivilegeDefinition.class, name);
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -118,9 +118,9 @@ public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
             try {
                 connection = dataSource.getConnection();
 
-                XSKPrivilegeDefinition xscPrivilegeDefinition = xscPrivilegeDefinitionPersistenceManager.find(connection, XSKPrivilegeDefinition.class, name);
+                XSKPrivilegeDefinition xskPrivilegeDefinition = xskPrivilegeDefinitionPersistenceManager.find(connection, XSKPrivilegeDefinition.class, name);
 
-                return xscPrivilegeDefinition;
+                return xskPrivilegeDefinition;
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -132,7 +132,7 @@ public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
     }
 
     @Override
-    public boolean xscPrivilegeExists(String name) throws XSKPrivilegeException {
+    public boolean xskPrivilegeExists(String name) throws XSKPrivilegeException {
         return getXSKPrivilegeByName(name) != null;
     }
 }

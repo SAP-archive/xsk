@@ -23,4 +23,13 @@ public class XSKDataStructuresSynchronizerJob extends AbstractSynchronizerJob {
 		return dataStructureSynchronizer;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getName()
+	 */
+	@Override
+	public String getName() {
+		return XSKDataStructuresSynchronizerJobDefinitionProvider.XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB;
+	}
+
 }

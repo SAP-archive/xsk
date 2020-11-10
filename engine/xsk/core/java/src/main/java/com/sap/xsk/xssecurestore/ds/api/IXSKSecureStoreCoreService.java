@@ -19,7 +19,7 @@ public interface IXSKSecureStoreCoreService {
 
     void createSecureStoreValue(String storeId, String userId, String dataId, String value) throws XSKSecureStoreException;
 
-    void updateSecureStoreValue(XSKSecureStoreContent xscSecureStoreContent) throws XSKSecureStoreException;
+    void updateSecureStoreValue(XSKSecureStoreContent xskSecureStoreContent) throws XSKSecureStoreException;
 
     XSKSecureStoreContent findSecureStoreContent(String storeId, String userId, String dataId) throws XSKSecureStoreException;
 

@@ -29,8 +29,8 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
 
 	@Override
 	protected void beforeEval(Context context) throws IOException {
-		String xscApi = getXscApi();
-		context.getBindings(ENGINE_JAVA_SCRIPT).putMember("$", context.eval(ENGINE_JAVA_SCRIPT, xscApi));
+		String xskApi = getXskApi();
+		context.getBindings(ENGINE_JAVA_SCRIPT).putMember("$", context.eval(ENGINE_JAVA_SCRIPT, xskApi));
 		super.beforeEval(context);
 	}
 
@@ -39,7 +39,7 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
 		return sourceProvider.loadSource(module);
 	}
 
-	private String getXscApi() throws IOException {
+	private String getXskApi() throws IOException {
 		if (XSK_API_CONTENT == null) {
 			XSK_API_CONTENT = IOUtils.toString(XSKJavascriptEngineExecutor.class.getResourceAsStream(XSK_API_LOCATION), DEFAULT_CHARSET);
 		}

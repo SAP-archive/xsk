@@ -27,7 +27,7 @@ public class XSKCsvToHdbtiRelationService implements IXSKCsvToHdbtiRelationServi
     private static final Logger logger = LoggerFactory.getLogger(XSKCsvToHdbtiRelationService.class);
 
     @Inject
-    private PersistenceManager<XSKTableImportToCsvRelation> xscTableImportToCsvRelationPersistenceManager;
+    private PersistenceManager<XSKTableImportToCsvRelation> xskTableImportToCsvRelationPersistenceManager;
 
     @Inject
     private DataSource dataSource;
@@ -36,7 +36,7 @@ public class XSKCsvToHdbtiRelationService implements IXSKCsvToHdbtiRelationServi
     public void persistNewCsvAndHdbtiRelations(XSKTableImportArtifact tableImportArtifact, Connection connection) {
         for(XSKTableImportToCsvRelation relation : tableImportArtifact.getTableImportToCsvRelations()){
             relation.setHdbti(XSKUtils.convertToFullPath(relation.getHdbti()));
-            xscTableImportToCsvRelationPersistenceManager.insert(connection, relation);
+            xskTableImportToCsvRelationPersistenceManager.insert(connection, relation);
         }
     }
 
@@ -55,7 +55,7 @@ public class XSKCsvToHdbtiRelationService implements IXSKCsvToHdbtiRelationServi
     public List<XSKTableImportToCsvRelation> getAllHdbtiToCsvRelations() {
         List<XSKTableImportToCsvRelation> listOfcsvToHdbtiRelations = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
-            listOfcsvToHdbtiRelations = xscTableImportToCsvRelationPersistenceManager.findAll(connection, XSKTableImportToCsvRelation.class);
+            listOfcsvToHdbtiRelations = xskTableImportToCsvRelationPersistenceManager.findAll(connection, XSKTableImportToCsvRelation.class);
         } catch (SQLException e) {
             logger.error("Error occured while retrieving the HdbtiToCsv relations from DB", e);
         }

@@ -79,7 +79,7 @@ public class XSKSecurityFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKSecurityFilter.class);
 
-    private static IXSKAccessCoreService xscAccessCoreService = StaticInjector.getInjector().getInstance(XSKAccessCoreService.class);
+    private static IXSKAccessCoreService xskAccessCoreService = StaticInjector.getInjector().getInstance(XSKAccessCoreService.class);
 
     private static final Set<String> SECURED_PREFIXES = new HashSet<String>();
 
@@ -97,7 +97,7 @@ public class XSKSecurityFilter implements Filter {
         SECURED_PREFIXES.add("/web");
         SECURED_PREFIXES.add("/wiki");
         SECURED_PREFIXES.add("/command");
-        SECURED_PREFIXES.add("/xsc");
+        SECURED_PREFIXES.add("/xsk");
     }
 
     /*
@@ -125,17 +125,17 @@ public class XSKSecurityFilter implements Filter {
                 boolean isInRole = false;
                 Principal principal = httpServletRequest.getUserPrincipal();
 
-                XSKAccessDefinition xscAccessDefinition = XSKAccessVerifier.getMatchingAccessDefinitions(xscAccessCoreService, path, method);
+                XSKAccessDefinition xskAccessDefinition = XSKAccessVerifier.getMatchingAccessDefinitions(xskAccessCoreService, path, method);
 
-                if (xscAccessDefinition != null) {
-                    List<String> xscAccessRoles = xscAccessDefinition.getAuthorizationRolesAsList();
-                    if (xscAccessRoles.isEmpty()) {
+                if (xskAccessDefinition != null) {
+                    List<String> xskAccessRoles = xskAccessDefinition.getAuthorizationRolesAsList();
+                    if (xskAccessRoles.isEmpty()) {
                     	chain.doFilter(request, response);
                     	return;
                     }
                     if (principal == null) {
                         // white list check
-                        for (String role : xscAccessRoles) {
+                        for (String role : xskAccessRoles) {
                             if (ROLE_PUBLIC.equalsIgnoreCase(role)) {
                                 isInRole = true;
                                 break;
@@ -147,7 +147,7 @@ public class XSKSecurityFilter implements Filter {
                             return;
                         }
                     } else {
-                        for (String role : xscAccessRoles) {
+                        for (String role : xskAccessRoles) {
                             if (ROLE_PUBLIC.equalsIgnoreCase(role) || httpServletRequest.isUserInRole(role)) {
                                 isInRole = true;
                                 break;

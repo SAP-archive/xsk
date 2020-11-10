@@ -49,13 +49,13 @@ public class XSKAccessArtifact {
 
 
     public XSKAccessDefinition toXSKAccessDefinition() {
-        XSKAccessDefinition xscAccessDefinition = new XSKAccessDefinition();
-        xscAccessDefinition.setAuthorizationRolesAsList(getAuthorization());
+        XSKAccessDefinition xskAccessDefinition = new XSKAccessDefinition();
+        xskAccessDefinition.setAuthorizationRolesAsList(getAuthorization());
         if (getAuthentication() != null) {
-        	xscAccessDefinition.setAuthenticationMethod(getAuthentication().getMethod());
+        	xskAccessDefinition.setAuthenticationMethod(getAuthentication().getMethod());
         }
-        xscAccessDefinition.setExposed(isExposed());
+        xskAccessDefinition.setExposed(isExposed());
 
-        return xscAccessDefinition;
+        return xskAccessDefinition;
     }
 }

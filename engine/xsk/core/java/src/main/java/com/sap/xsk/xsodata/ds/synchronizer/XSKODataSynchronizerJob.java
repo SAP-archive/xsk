@@ -23,4 +23,13 @@ public class XSKODataSynchronizerJob extends AbstractSynchronizerJob {
 		return odataSynchronizer;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getName()
+	 */
+	@Override
+	public String getName() {
+		return XSKODataSynchronizerJobDefinitionProvider.XSK_ODATA_SYNCHRONIZER_JOB;
+	}
+
 }

@@ -26,6 +26,7 @@ public class XSKHDIContainerCreateProcessor {
 	private XSKConfigureLibrariesProcessor configureLibrariesProcessor = new XSKConfigureLibrariesProcessor();
 	private XSKDeployContainerContentProcessor deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
 	private XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
+	private XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor = new XSKGrantPrivilegesContainerTargetSchemaProcessor();
 	
 	
 	private XSKHDIContainerCreateProcessor() {}
@@ -62,6 +63,9 @@ public class XSKHDIContainerCreateProcessor {
 				
 				// Configure Libraries for the Container
 				INSTANCE.configureLibrariesProcessor.execute(connection, hdiModel.getContainer());
+				
+				// Grant Privileges on the Target Schema
+				INSTANCE.grantPrivilegesContainerTargetSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
 				
 				// Deploy the Content
 				INSTANCE.deployContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getUndeploy());

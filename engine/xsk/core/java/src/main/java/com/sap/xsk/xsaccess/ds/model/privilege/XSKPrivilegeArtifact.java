@@ -32,15 +32,15 @@ public class XSKPrivilegeArtifact {
     }
 
     public List<XSKPrivilegeDefinition> divide() {
-        List<XSKPrivilegeDefinition> xscPrivilegeDefinitions = new ArrayList<>();
-        for (XSKPrivilege xscPrivilege : privileges) {
-            XSKPrivilegeDefinition xscPrivilegeDefinition = new XSKPrivilegeDefinition();
-            xscPrivilegeDefinition.setName(xscPrivilege.getName());
-            xscPrivilegeDefinition.setDescription(xscPrivilege.getDescription());
+        List<XSKPrivilegeDefinition> xskPrivilegeDefinitions = new ArrayList<>();
+        for (XSKPrivilege xskPrivilege : privileges) {
+            XSKPrivilegeDefinition xskPrivilegeDefinition = new XSKPrivilegeDefinition();
+            xskPrivilegeDefinition.setName(xskPrivilege.getName());
+            xskPrivilegeDefinition.setDescription(xskPrivilege.getDescription());
 
-            xscPrivilegeDefinitions.add(xscPrivilegeDefinition);
+            xskPrivilegeDefinitions.add(xskPrivilegeDefinition);
         }
 
-        return xscPrivilegeDefinitions;
+        return xskPrivilegeDefinitions;
     }
 }

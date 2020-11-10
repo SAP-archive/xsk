@@ -41,14 +41,14 @@ public class XSKTableImportProcessor implements IXSKTableImportProcessor{
     private IRepository repository;
 
     @Inject
-    private XSKTableImportCoreService xscTableImportCoreService;
+    private XSKTableImportCoreService xskTableImportCoreService;
 
     @Inject
-    private XSKCsvToHdbtiRelationService xscCsvToHdbtiRelationService;
+    private XSKCsvToHdbtiRelationService xskCsvToHdbtiRelationService;
 
     @Override
     public void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection) throws IOException, SQLException {
-        IResource resource = repository.getResource(xscCsvToHdbtiRelationService.convertToActualFileName(tableImportConfigurationDefinition.getFile()));
+        IResource resource = repository.getResource(xskCsvToHdbtiRelationService.convertToActualFileName(tableImportConfigurationDefinition.getFile()));
         String contentAsString = IOUtils
                 .toString(new InputStreamReader(new ByteArrayInputStream(resource.getContent()), StandardCharsets.UTF_8));
         CSVFormat csvFormat = createCSVFormat(tableImportConfigurationDefinition);
@@ -67,7 +67,7 @@ public class XSKTableImportProcessor implements IXSKTableImportProcessor{
 
     private void deleteFromTable(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection) {
         DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
-        String tableName = xscTableImportCoreService.convertToActualTableName(tableImportConfigurationDefinition.getTable());
+        String tableName = xskTableImportCoreService.convertToActualTableName(tableImportConfigurationDefinition.getTable());
         String sql = deleteBuilder.from(tableName).generate();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.execute();
@@ -77,7 +77,7 @@ public class XSKTableImportProcessor implements IXSKTableImportProcessor{
     }
 
     private void insertTableData(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, CSVRecord csvRecord, Connection connection) throws SQLException {
-        String tableName = xscTableImportCoreService.convertToActualTableName(tableImportConfigurationDefinition.getTable());
+        String tableName = xskTableImportCoreService.convertToActualTableName(tableImportConfigurationDefinition.getTable());
         PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName);
         InsertBuilder insertBuilder = new InsertBuilder(SqlFactory.deriveDialect(connection));
         insertBuilder.into(tableName);

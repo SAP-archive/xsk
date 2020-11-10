@@ -31,10 +31,10 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
     private DataSource dataSource;
 
     @Inject
-    private PersistenceManager<XSKAccessDefinition> xscAccessDefinitionPersistenceManager;
+    private PersistenceManager<XSKAccessDefinition> xskAccessDefinitionPersistenceManager;
 
     @Inject
-    private XSKPrivilegeCoreService xscPrivilegeCoreService;
+    private XSKPrivilegeCoreService xskPrivilegeCoreService;
 
     private static final List<XSKAccessDefinition> CACHE = Collections.synchronizedList(new ArrayList<>());
 
@@ -42,28 +42,28 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
     @Override
     public XSKAccessDefinition createXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed, List<String> authorizationRolesAsList) throws XSKAccessException {
         try {
-            XSKAccessDefinition xscAccessDefinition = new XSKAccessDefinition();
-            xscAccessDefinition.setPath(path);
-            xscAccessDefinition.setAuthenticationMethod(authenticationMethod);
-            xscAccessDefinition.setHash(hash);
-            xscAccessDefinition.setExposed(exposed);
+            XSKAccessDefinition xskAccessDefinition = new XSKAccessDefinition();
+            xskAccessDefinition.setPath(path);
+            xskAccessDefinition.setAuthenticationMethod(authenticationMethod);
+            xskAccessDefinition.setHash(hash);
+            xskAccessDefinition.setExposed(exposed);
             if (authorizationRolesAsList == null) {
-            	authorizationRolesAsList = new ArrayList();
-                xscAccessDefinition.setAuthorizationRolesAsList(new ArrayList());
+            	authorizationRolesAsList = new ArrayList<String>();
+                xskAccessDefinition.setAuthorizationRolesAsList(new ArrayList<String>());
             }
            
 	        validatePrivileges(authorizationRolesAsList);
-	        xscAccessDefinition.setAuthorizationRoles(objectToByteArray(authorizationRolesAsList));
+	        xskAccessDefinition.setAuthorizationRoles(objectToByteArray(authorizationRolesAsList));
             
-            xscAccessDefinition.setCreatedBy(UserFacade.getName());
-            xscAccessDefinition.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+            xskAccessDefinition.setCreatedBy(UserFacade.getName());
+            xskAccessDefinition.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
 
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                xscAccessDefinitionPersistenceManager.insert(connection, xscAccessDefinition);
+                xskAccessDefinitionPersistenceManager.insert(connection, xskAccessDefinition);
                 clearCache();
-                return xscAccessDefinition;
+                return xskAccessDefinition;
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -77,21 +77,21 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
     @Override
     public XSKAccessDefinition updateXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed, List<String> authorizationRolesAsList) throws XSKAccessException {
         try {
-            XSKAccessDefinition xscAccessDefinition = getXSKAccessDefinition(path);
-            xscAccessDefinition.setAuthenticationMethod(authenticationMethod);
-            xscAccessDefinition.setHash(hash);
-            xscAccessDefinition.setExposed(exposed);
+            XSKAccessDefinition xskAccessDefinition = getXSKAccessDefinition(path);
+            xskAccessDefinition.setAuthenticationMethod(authenticationMethod);
+            xskAccessDefinition.setHash(hash);
+            xskAccessDefinition.setExposed(exposed);
             if (authorizationRolesAsList != null && !authorizationRolesAsList.isEmpty()) {
 	            validatePrivileges(authorizationRolesAsList);
-	            xscAccessDefinition.setAuthorizationRoles(objectToByteArray(authorizationRolesAsList));
+	            xskAccessDefinition.setAuthorizationRoles(objectToByteArray(authorizationRolesAsList));
             }
 
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                xscAccessDefinitionPersistenceManager.update(connection, xscAccessDefinition);
+                xskAccessDefinitionPersistenceManager.update(connection, xskAccessDefinition);
                 clearCache();
-                return xscAccessDefinition;
+                return xskAccessDefinition;
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -108,14 +108,14 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                XSKAccessDefinition xscAccessDefinition = xscAccessDefinitionPersistenceManager.find(connection, XSKAccessDefinition.class, id);
-                if (xscAccessDefinition == null) {
+                XSKAccessDefinition xskAccessDefinition = xskAccessDefinitionPersistenceManager.find(connection, XSKAccessDefinition.class, id);
+                if (xskAccessDefinition == null) {
                     return null;
                 }
 
-                List<String> authorizationRoles = XSKUtils.byteArrayToObject(xscAccessDefinition.getAuthorizationRoles());
-                xscAccessDefinition.setAuthorizationRolesAsList(authorizationRoles);
-                return xscAccessDefinition;
+                List<String> authorizationRoles = XSKUtils.byteArrayToObject(xskAccessDefinition.getAuthorizationRoles());
+                xskAccessDefinition.setAuthorizationRolesAsList(authorizationRoles);
+                return xskAccessDefinition;
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -136,17 +136,17 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                List<XSKAccessDefinition> xscAccessDefinitions = xscAccessDefinitionPersistenceManager.findAll(connection, XSKAccessDefinition.class);
-                for (XSKAccessDefinition xscAccessDefinition : xscAccessDefinitions) {
-                	if (xscAccessDefinition.getAuthorizationRoles() != null) {
-                		List<String> authorizationRoles = XSKUtils.byteArrayToObject(xscAccessDefinition.getAuthorizationRoles());
-                		xscAccessDefinition.setAuthorizationRolesAsList(authorizationRoles);
+                List<XSKAccessDefinition> xskAccessDefinitions = xskAccessDefinitionPersistenceManager.findAll(connection, XSKAccessDefinition.class);
+                for (XSKAccessDefinition xskAccessDefinition : xskAccessDefinitions) {
+                	if (xskAccessDefinition.getAuthorizationRoles() != null) {
+                		List<String> authorizationRoles = XSKUtils.byteArrayToObject(xskAccessDefinition.getAuthorizationRoles());
+                		xskAccessDefinition.setAuthorizationRolesAsList(authorizationRoles);
                 	} else {
-                		xscAccessDefinition.setAuthorizationRolesAsList(new ArrayList());
+                		xskAccessDefinition.setAuthorizationRolesAsList(new ArrayList<String>());
                 	}
                 }
-                CACHE.addAll(xscAccessDefinitions);
-                return Collections.unmodifiableList(xscAccessDefinitions);
+                CACHE.addAll(xskAccessDefinitions);
+                return Collections.unmodifiableList(xskAccessDefinitions);
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -163,7 +163,7 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                xscAccessDefinitionPersistenceManager.delete(connection, XSKAccessDefinition.class, path);
+                xskAccessDefinitionPersistenceManager.delete(connection, XSKAccessDefinition.class, path);
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -194,8 +194,8 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
 
     private void validatePrivileges(List<String> privileges) throws XSKPrivilegeException {
         for (String privilege : privileges) {
-            if (!xscPrivilegeCoreService.xscPrivilegeExists(privilege)) {
-                throw new XSKPrivilegeException(String.format("No XSK Privilege found with name:{%s}", privilege));
+            if (!xskPrivilegeCoreService.xskPrivilegeExists(privilege)) {
+                throw new XSKPrivilegeException(String.format("No XSK Privilege found with name: {%s}", privilege));
             }
         }
     }

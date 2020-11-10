@@ -8,8 +8,10 @@ import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
 public class XSKSecuritySynchronizerJobDefinitionProvider implements IJobDefinitionProvider {
 
     private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_SECURITY = "DIRIGIBLE_JOB_EXPRESSION_XSK_SECURITY";
-	private static final String XSK_PRIVILEGES_AND_ACCESS_SYNCHRONIZER_JOB = "XSK Privileges and Access Synchronizer Job";
-	private static final String DIRIGIBLE_INTERNAL_XSK_ACCESS_SYNCHRONIZER_JOB = "dirigible-internal-xsc-access-synchronizer-job";
+	
+	private static final String DIRIGIBLE_INTERNAL_XSK_ACCESS_SYNCHRONIZER_JOB = "dirigible-internal-xsk-access-synchronizer-job";
+	
+	static final String XSK_PRIVILEGES_AND_ACCESS_SYNCHRONIZER_JOB = "XSK Privileges and Access Synchronizer Job";
 
 	@Override
     public JobDefinition getJobDefinition() {

@@ -47,10 +47,10 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     private static final Set<String> ACCESS_SYNCHRONIZED = Collections.synchronizedSet(new HashSet<>());
 
     @Inject
-    private XSKAccessCoreService xscAccessCoreService;
+    private XSKAccessCoreService xskAccessCoreService;
 
     @Inject
-    private XSKPrivilegeCoreService xscPrivilegeCoreService;
+    private XSKPrivilegeCoreService xskPrivilegeCoreService;
 
     /**
      * Force synchronization.
@@ -72,9 +72,9 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
         InputStream in = SecuritySynchronizer.class.getResourceAsStream(rolesPath);
         try {
             String json = IOUtils.toString(in, StandardCharsets.UTF_8);
-            List<XSKPrivilegeDefinition> xscPrivilegeDefinitions = XSKPrivilegeArtifact.parse(json).divide();
+            List<XSKPrivilegeDefinition> xskPrivilegeDefinitions = XSKPrivilegeArtifact.parse(json).divide();
 
-            PRIVILEGES_PREDELIVERED.put(rolesPath, xscPrivilegeDefinitions);
+            PRIVILEGES_PREDELIVERED.put(rolesPath, xskPrivilegeDefinitions);
         } finally {
             if (in != null) {
                 in.close();
@@ -85,20 +85,20 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     /**
      * Register pre-delivered access.
      *
-     * @param xscAccessPath
+     * @param xskAccessPath
      *            the access path
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public void registerPredeliveredAccess(String xscAccessPath) throws IOException {
-        InputStream in = SecuritySynchronizer.class.getResourceAsStream(xscAccessPath);
+    public void registerPredeliveredAccess(String xskAccessPath) throws IOException {
+        InputStream in = SecuritySynchronizer.class.getResourceAsStream(xskAccessPath);
         try {
             String json = IOUtils.toString(in, StandardCharsets.UTF_8);
-            XSKAccessDefinition xscAccessDefinition = XSKAccessArtifact.parse(json).toXSKAccessDefinition();
+            XSKAccessDefinition xskAccessDefinition = XSKAccessArtifact.parse(json).toXSKAccessDefinition();
 
-            xscAccessDefinition.setPath(xscAccessPath);
+            xskAccessDefinition.setPath(xskAccessPath);
 
-            ACCESS_PREDELIVERED.put(xscAccessPath, xscAccessDefinition);
+            ACCESS_PREDELIVERED.put(xskAccessPath, xskAccessDefinition);
         } finally {
             if (in != null) {
                 in.close();
@@ -133,7 +133,7 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     private void clearCache() {
         PRIVILEGES_SYNCHRONIZED.clear();
         ACCESS_SYNCHRONIZED.clear();
-        xscAccessCoreService.clearCache();
+        xskAccessCoreService.clearCache();
     }
 
     /**
@@ -147,15 +147,15 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
 
         // Roles
         for (List<XSKPrivilegeDefinition> roleDefinitions : PRIVILEGES_PREDELIVERED.values()) {
-            for (XSKPrivilegeDefinition xscPrivilegeDefinition : roleDefinitions) {
-                synchronizeRole(xscPrivilegeDefinition);
+            for (XSKPrivilegeDefinition xskPrivilegeDefinition : roleDefinitions) {
+                synchronizeRole(xskPrivilegeDefinition);
             }
         }
 
         // Access
-        for (XSKAccessDefinition xscAccessDefinition : ACCESS_PREDELIVERED.values()) {
-            xscAccessDefinition.setHash("" + xscAccessDefinition.hashCode());
-            synchronizeAccess(xscAccessDefinition);
+        for (XSKAccessDefinition xskAccessDefinition : ACCESS_PREDELIVERED.values()) {
+            xskAccessDefinition.setHash("" + xskAccessDefinition.hashCode());
+            synchronizeAccess(xskAccessDefinition);
         }
 
         logger.trace("Done synchronizing predelivered Roles and Access artifacts.");
@@ -164,26 +164,26 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     /**
      * Synchronize role.
      *
-     * @param xscPrivilegeDefinition
+     * @param xskPrivilegeDefinition
      *            the role definition
      * @throws SynchronizationException
      *             the synchronization exception
      */
-    private void synchronizeRole(XSKPrivilegeDefinition xscPrivilegeDefinition) throws SynchronizationException {
+    private void synchronizeRole(XSKPrivilegeDefinition xskPrivilegeDefinition) throws SynchronizationException {
         try {
-            if (!xscPrivilegeCoreService.xscPrivilegeExists(xscPrivilegeDefinition.getName())) {
-                xscPrivilegeCoreService.createXSKPrivilege(xscPrivilegeDefinition.getName(), xscPrivilegeDefinition.getDescription());
-                logger.info("Synchronized a new XSK Privilege [{}]", xscPrivilegeDefinition.getName());
+            if (!xskPrivilegeCoreService.xskPrivilegeExists(xskPrivilegeDefinition.getName())) {
+                xskPrivilegeCoreService.createXSKPrivilege(xskPrivilegeDefinition.getName(), xskPrivilegeDefinition.getDescription());
+                logger.info("Synchronized a new XSK Privilege [{}]", xskPrivilegeDefinition.getName());
             } else {
-                XSKPrivilegeDefinition existingXscPrivilegeDefinition = xscPrivilegeCoreService.getXSKPrivilegeByName(xscPrivilegeDefinition.getName());
-                if (!existingXscPrivilegeDefinition.getDescription().equals(xscPrivilegeDefinition.getDescription())) {
-                    xscPrivilegeCoreService.updateXSKPrivileges(xscPrivilegeDefinition.getName(), xscPrivilegeDefinition.getDescription());
-                    logger.info("Synchronized a modified XSK Privilege [{}]", xscPrivilegeDefinition.getName());
+                XSKPrivilegeDefinition existingXscPrivilegeDefinition = xskPrivilegeCoreService.getXSKPrivilegeByName(xskPrivilegeDefinition.getName());
+                if (!existingXscPrivilegeDefinition.getDescription().equals(xskPrivilegeDefinition.getDescription())) {
+                    xskPrivilegeCoreService.updateXSKPrivileges(xskPrivilegeDefinition.getName(), xskPrivilegeDefinition.getDescription());
+                    logger.info("Synchronized a modified XSK Privilege [{}]", xskPrivilegeDefinition.getName());
                 }
 
             }
 
-            ACCESS_SYNCHRONIZED.add(xscPrivilegeDefinition.getName());
+            ACCESS_SYNCHRONIZED.add(xskPrivilegeDefinition.getName());
         } catch (XSKPrivilegeException e) {
             throw new SynchronizationException(e);
         }
@@ -192,29 +192,29 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     /**
      * Synchronize access.
      *
-     * @param xscAccessDefinition
+     * @param xskAccessDefinition
      *            the access definition
      * @throws SynchronizationException
      *             the synchronization exception
      */
-    private void synchronizeAccess(XSKAccessDefinition xscAccessDefinition) throws SynchronizationException {
+    private void synchronizeAccess(XSKAccessDefinition xskAccessDefinition) throws SynchronizationException {
         try {
-            XSKAccessDefinition existingXSKAccessDefinition = xscAccessCoreService.getXSKAccessDefinition(xscAccessDefinition.getPath());
+            XSKAccessDefinition existingXSKAccessDefinition = xskAccessCoreService.getXSKAccessDefinition(xskAccessDefinition.getPath());
             if (existingXSKAccessDefinition == null) {
-                xscAccessCoreService.createXSKAccessDefinition(xscAccessDefinition.getPath(), xscAccessDefinition.getAuthenticationMethod(), xscAccessDefinition.getHash(),
-                        xscAccessDefinition.isExposed(), xscAccessDefinition.getAuthorizationRolesAsList());
+                xskAccessCoreService.createXSKAccessDefinition(xskAccessDefinition.getPath(), xskAccessDefinition.getAuthenticationMethod(), xskAccessDefinition.getHash(),
+                        xskAccessDefinition.isExposed(), xskAccessDefinition.getAuthorizationRolesAsList());
                 logger.info("Synchronized a new XSK Access definition [[{}]-[{}]] from location: {}",
-                        xscAccessDefinition.getAuthenticationMethod(), String.join(",", 
-                        		(xscAccessDefinition.getAuthorizationRolesAsList() != null ? xscAccessDefinition.getAuthorizationRolesAsList() : new ArrayList())), xscAccessDefinition.getPath());
-            } else if (!existingXSKAccessDefinition.getHash().equals(xscAccessDefinition.getHash())) {
-                xscAccessCoreService.updateXSKAccessDefinition(xscAccessDefinition.getPath(), xscAccessDefinition.getAuthenticationMethod(), xscAccessDefinition.getHash(),
-                        xscAccessDefinition.isExposed(), xscAccessDefinition.getAuthorizationRolesAsList());
+                        xskAccessDefinition.getAuthenticationMethod(), String.join(",", 
+                        		(xskAccessDefinition.getAuthorizationRolesAsList() != null ? xskAccessDefinition.getAuthorizationRolesAsList() : new ArrayList())), xskAccessDefinition.getPath());
+            } else if (!existingXSKAccessDefinition.getHash().equals(xskAccessDefinition.getHash())) {
+                xskAccessCoreService.updateXSKAccessDefinition(xskAccessDefinition.getPath(), xskAccessDefinition.getAuthenticationMethod(), xskAccessDefinition.getHash(),
+                        xskAccessDefinition.isExposed(), xskAccessDefinition.getAuthorizationRolesAsList());
                 logger.info("Synchronized a modified XSK Access definition [[{}]-[{}]] from location: {}",
-                        xscAccessDefinition.getAuthenticationMethod(), String.join(",", 
-                        		(xscAccessDefinition.getAuthorizationRolesAsList() != null ? xscAccessDefinition.getAuthorizationRolesAsList() : new ArrayList())), xscAccessDefinition.getPath());
+                        xskAccessDefinition.getAuthenticationMethod(), String.join(",", 
+                        		(xskAccessDefinition.getAuthorizationRolesAsList() != null ? xskAccessDefinition.getAuthorizationRolesAsList() : new ArrayList())), xskAccessDefinition.getPath());
             }
 
-            ACCESS_SYNCHRONIZED.add(xscAccessDefinition.getPath());
+            ACCESS_SYNCHRONIZED.add(xskAccessDefinition.getPath());
         } catch (XSKAccessException e) {
             throw new SynchronizationException(e);
         }
@@ -242,20 +242,20 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     protected void synchronizeResource(IResource resource) throws SynchronizationException {
         String resourceName = resource.getName();
         if (resourceName.equals(IXSKPrivilegeCoreService.XSK_FILE_EXTENSION_PRIVILEGE)) {
-            XSKPrivilegeArtifact xscPrivilegeArtifact = XSKPrivilegeArtifact.parse(resource.getContent());
-            for (XSKPrivilegeDefinition xscPrivilegeDefinition : xscPrivilegeArtifact.divide()) {
-                synchronizeRole(xscPrivilegeDefinition);
+            XSKPrivilegeArtifact xskPrivilegeArtifact = XSKPrivilegeArtifact.parse(resource.getContent());
+            for (XSKPrivilegeDefinition xskPrivilegeDefinition : xskPrivilegeArtifact.divide()) {
+                synchronizeRole(xskPrivilegeDefinition);
             }
 
         }
         if (resourceName.equals(IXSKAccessCoreService.XSK_FILE_EXTENSION_ACCESS)) {
-            XSKAccessDefinition xscAccessDefinition = xscAccessCoreService.parseXSAccessArtifact(resource.getContent());
+            XSKAccessDefinition xskAccessDefinition = xskAccessCoreService.parseXSAccessArtifact(resource.getContent());
 
-            xscAccessDefinition.setPath(removeXscFileFromPath(getRegistryPath(resource)));
+            xskAccessDefinition.setPath(removeXscFileFromPath(getRegistryPath(resource)));
             String hash = DigestUtils.md5Hex(resource.getContent());
-            xscAccessDefinition.setHash(hash);
+            xskAccessDefinition.setHash(hash);
 
-            synchronizeAccess(xscAccessDefinition);
+            synchronizeAccess(xskAccessDefinition);
         }
     }
 
@@ -268,21 +268,21 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
         logger.trace("Cleaning up Roles and Access artifacts...");
 
         try {
-            List<XSKPrivilegeDefinition> roleDefinitions = xscPrivilegeCoreService.getXSKPrivileges();
-            for (XSKPrivilegeDefinition xscPrivilegeDefinition : roleDefinitions) {
-                if (!ACCESS_SYNCHRONIZED.contains(xscPrivilegeDefinition.getName())) {
+            List<XSKPrivilegeDefinition> roleDefinitions = xskPrivilegeCoreService.getXSKPrivileges();
+            for (XSKPrivilegeDefinition xskPrivilegeDefinition : roleDefinitions) {
+                if (!ACCESS_SYNCHRONIZED.contains(xskPrivilegeDefinition.getName())) {
 
-                    xscPrivilegeCoreService.removeXSKPrivilegeByName(xscPrivilegeDefinition.getName());
-                    logger.warn("Cleaned up XSK Privilege [{}]", xscPrivilegeDefinition.getName());
+                    xskPrivilegeCoreService.removeXSKPrivilegeByName(xskPrivilegeDefinition.getName());
+                    logger.warn("Cleaned up XSK Privilege [{}]", xskPrivilegeDefinition.getName());
                 }
             }
 
-            List<XSKAccessDefinition> accessDefinitions = xscAccessCoreService.getAccessXSKDefinitions();
-            for (XSKAccessDefinition xscAccessDefinition : accessDefinitions) {
-                if (!ACCESS_SYNCHRONIZED.contains(xscAccessDefinition.getPath())) {
-                    xscAccessCoreService.removeXSKAccessDefinition(xscAccessDefinition.getPath());
-                    logger.warn("Cleaned up XSK Access definition [[{}]-[{}]-[{}]] from location: {}", xscAccessDefinition.getAuthenticationMethod(),
-                            String.join(",", xscAccessDefinition.getAuthorizationRolesAsList()), xscAccessDefinition.getPath());
+            List<XSKAccessDefinition> accessDefinitions = xskAccessCoreService.getAccessXSKDefinitions();
+            for (XSKAccessDefinition xskAccessDefinition : accessDefinitions) {
+                if (!ACCESS_SYNCHRONIZED.contains(xskAccessDefinition.getPath())) {
+                    xskAccessCoreService.removeXSKAccessDefinition(xskAccessDefinition.getPath());
+                    logger.warn("Cleaned up XSK Access definition [[{}]-[{}]-[{}]] from location: {}", xskAccessDefinition.getAuthenticationMethod(),
+                            String.join(",", xskAccessDefinition.getAuthorizationRolesAsList()), xskAccessDefinition.getPath());
                 }
             }
         } catch (XSKAccessException | XSKPrivilegeException e) {

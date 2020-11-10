@@ -8,8 +8,10 @@ import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
 public class XSKTableImportSynchronizerJobDefinitionProvider implements IJobDefinitionProvider {
 
     private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_TABLE_IMPORT = "DIRIGIBLE_JOB_EXPRESSION_XSK_TABLE_IMPORT";
-	private static final String XSK_TABLE_IMPORT_SYNCHRONIZER_JOB = "XSK Table Import Synchronizer Job";
-	private static final String DIRIGIBLE_INTERNAL_XSK_TABLE_IMPORT_SYNCHRONIZER_JOB = "dirigible-internal-xsc-table-import-synchronizer-job";
+	
+	private static final String DIRIGIBLE_INTERNAL_XSK_TABLE_IMPORT_SYNCHRONIZER_JOB = "dirigible-internal-xsk-table-import-synchronizer-job";
+	
+	static final String XSK_TABLE_IMPORT_SYNCHRONIZER_JOB = "XSK Table Import Synchronizer Job";
 
 	@Override
     public JobDefinition getJobDefinition() {

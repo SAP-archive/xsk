@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.sap.xsk.models.hdbview</groupId>
 		<artifactId>com.sap.xsk.models.hdbview.parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.sap.xsk.models.hdbview.ide</artifactId>
 	<packaging>jar</packaging>

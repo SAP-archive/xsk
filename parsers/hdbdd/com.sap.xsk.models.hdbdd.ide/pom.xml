@@ -1,12 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>com.sap.xsk.models.hdbdd</groupId>
-		<artifactId>com.sap.xsk.models.hdbdd.parent</artifactId>
+		<groupId>com.sap.xsk</groupId>
+		<artifactId>xsk-parsers-hdbdd-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>com.sap.xsk.models.hdbdd.ide</artifactId>
+
+	<name>XSK Parsers - HDBDD IDE</name>
+	<artifactId>xsk-parsers-hdbdd-ide</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<build>
@@ -103,7 +107,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>com.sap.xsk.models.hdbdd</artifactId>
+			<artifactId>xsk-parsers-hdbdd</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

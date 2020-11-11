@@ -63,8 +63,22 @@ public class XSKEntityDropProcessor {
             }
 
             if (entityModel.getConstraints().getForeignKeys() != null) {
-                for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKeyModel : entityModel.getConstraints().getForeignKeys()) {
-                    sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyModel.getName()).fromTable(tableName).build();
+                for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
+                	String foreignKeyName = "FK_" + foreignKey.getName();
+					String[] fkColumns = foreignKey.getColumns();
+					String referencedTable = XSKUtils.getTableName(entityModel, foreignKey.getReferencedTable());
+					String[] referencedColumns = foreignKey.getReferencedColumns();
+					if (caseSensitive) {
+						foreignKeyName = "\"" + foreignKeyName + "\"";
+						for (int i=0;i<fkColumns.length;i++) {
+							fkColumns[i] = "\"" + fkColumns[i] + "\"";
+						}
+						referencedTable = "\"" + referencedTable + "\"";
+						for (int i=0;i<referencedColumns.length;i++) {
+							referencedColumns[i] = "\"" + referencedColumns[i] + "\"";
+						}
+					}
+                    sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyName).fromTable(tableName).build();
                     executeUpdate(connection, sql);
                 }
             }

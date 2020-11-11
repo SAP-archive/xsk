@@ -194,7 +194,7 @@
 		<!-- Application - XS Classic -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>xsk-api</artifactId>
+			<artifactId>xsk-api-xsjs</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

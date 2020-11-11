@@ -218,8 +218,6 @@
 	</dependencies>
 
 	<modules>
-		<module>core</module>
-		<module>modules</module>
 		<module>application</module>
 	</modules>
 

@@ -5,13 +5,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-modules</artifactId>
+		<artifactId>xsk-api-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK - Javascript</name>
-	<artifactId>xsk-api</artifactId>
+	<name>XSK API - XSJS</name>
+	<artifactId>xsk-api-xsjs</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 

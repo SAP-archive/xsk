@@ -6,17 +6,28 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-core</artifactId>
+		<artifactId>xsk-engines-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK - Java</name>
-	<artifactId>xsk-java</artifactId>
+	<name>XSK Engines - XSK</name>
+	<artifactId>xsk-engines-xsk</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.sap.xsk</groupId>
+			<artifactId>xsk-parsers-all</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sap.xsk</groupId>
+			<artifactId>xsk-api-xsjs</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.eclipse.dirigible</groupId>
 			<artifactId>dirigible-engine-javascript-graalvm</artifactId>
@@ -26,11 +37,6 @@
 			<groupId>org.eclipse.dirigible</groupId>
 			<artifactId>dirigible-engine-odata</artifactId>
 			<version>${dirigible.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk</groupId>
-			<artifactId>xsk-parsers-all</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
@@ -164,11 +170,6 @@
             <artifactId>hamcrest-all</artifactId>
             <version>${hamcrest.all.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-        	<groupId>com.sap.xsk</groupId>
-        	<artifactId>xsk-api</artifactId>
-        	<version>0.0.1-SNAPSHOT</version>
         </dependency>
 	</dependencies>
 

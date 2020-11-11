@@ -28,7 +28,7 @@
 	</scm>
 
 	<modules>
-		<module>parsers</module>
+		<module>modules</module>
 		<module>engine/xsk</module>
 	</modules>
 

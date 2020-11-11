@@ -1,17 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.sap.xsk.models.hdbtable</groupId>
+
+	<parent>
+		<groupId>com.sap.xsk</groupId>
+		<artifactId>xsk-parsers-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<name>XSK Parsers - HDB Table Parent</name>
+	<artifactId>xsk-parsers-hdbtable-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<artifactId>com.sap.xsk.models.hdbtable.parent</artifactId>
 	<packaging>pom</packaging>
 
-	<properties>
-		<xtextVersion>2.18.0</xtextVersion>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
-	</properties>
 	<modules>
 		<module>com.sap.xsk.models.hdbtable</module>
 		<module>com.sap.xsk.models.hdbtable.ide</module>

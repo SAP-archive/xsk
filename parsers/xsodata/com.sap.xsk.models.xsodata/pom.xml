@@ -1,12 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>com.sap.xsk.models.xsodata</groupId>
-		<artifactId>com.sap.xsk.models.xsodata.parent</artifactId>
+		<groupId>com.sap.xsk</groupId>
+		<artifactId>xsk-parsers-xsodata-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>com.sap.xsk.models.xsodata</artifactId>
+
+	<name>XSK Parsers - XS OData</name>
+	<artifactId>xsk-parsers-xsodata</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<build>

@@ -29,31 +29,9 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
-			<artifactId>xsk-parsers-hdbdd</artifactId>
+			<artifactId>xsk-parsers-all</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk</groupId>
-			<artifactId>xsk-parsers-xsodata</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk</groupId>
-			<artifactId>xsk-parsers-hdbti</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk</groupId>
-			<artifactId>xsk-parsers-hdbtable</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk</groupId>
-			<artifactId>xsk-parsers-hdbview</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		
-		
 		
 		<dependency>
 			<groupId>org.apache.commons</groupId>

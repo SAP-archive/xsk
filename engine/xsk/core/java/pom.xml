@@ -28,32 +28,10 @@
 			<version>${dirigible.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sap.xsk.models.hdbdd</groupId>
-			<artifactId>com.sap.xsk.models.hdbdd</artifactId>
+			<groupId>com.sap.xsk</groupId>
+			<artifactId>xsk-parsers-all</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk.models.xsodata</groupId>
-			<artifactId>com.sap.xsk.models.xsodata</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk.models.hdbti</groupId>
-			<artifactId>com.sap.xsk.models.hdbti</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk.models.hdbtable</groupId>
-			<artifactId>com.sap.xsk.models.hdbtable</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.xsk.models.hdbview</groupId>
-			<artifactId>com.sap.xsk.models.hdbview</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		
-		
 		
 		<dependency>
 			<groupId>org.apache.commons</groupId>

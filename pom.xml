@@ -28,12 +28,7 @@
 	</scm>
 
 	<modules>
-		<module>hdbdd/com.sap.xsk.models.hdbdd.parent</module>
-		<module>hdbsequence/com.sap.xsk.models.hdbsequence.parent</module>
-		<module>hdbtable/com.sap.xsk.models.hdbtable.parent</module>
-		<module>hdbti/com.sap.xsk.models.hdbti.parent</module>
-		<module>hdbview/com.sap.xsk.models.hdbview.parent</module>
-		<module>xsodata/com.sap.xsk.models.xsodata.parent</module>
+		<module>parsers</module>
 		<module>engine/xsk</module>
 	</modules>
 

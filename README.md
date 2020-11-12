@@ -2,9 +2,28 @@
 
 ## Description
 
-Compatible environment for SAP HANA Extended Application Services (XS) based applications outside of SAP HANA instance running in a container deployed on Kubernetes.
+Compatible environment for [SAP HANA Extended Application Services](https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/a6c0749255d84a81a154a7fc87dd33ce.html) (XS) based applications. It is deployed outside of [SAP HANA](https://www.sap.com/products/hana.html?btp=991d50bf-fa15-4979-ac4b-b280b0eb951f) instance as a [Docker](https://www.docker.com/) a container on [Kubernetes](https://kubernetes.io/). Hence, some of the features can work against any other JDBC compliant RDBMS such as [PostgreSQL](https://www.postgresql.org/). The compatibility stack is an extension of the [Eclipse Dirigible](https://github.com/eclipse/dirigible) cloud development platform.
 
 > Note: the project is not yet ready to be used productively
+
+### The Promise
+
+#### Development Experience
+
+| Aspect                         | Scope | Description  |
+| ------------------------------ |:-----:| ------------:|
+| Preserve hdb* descriptors      | ✅    |              |
+| Preserve XSJS code             | ✅    |              |
+| Preserve XSOData descriptors   | ✅    |              |
+| Preserve XSC development model | ✅    |              |
+| Preserve XSC security model    | ✅    |              |
+| Support for XSJS code          | ✅    |              |
+
+
+
+
+
+
 
 ## Installation
 

@@ -6,22 +6,69 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 
 > Note: the project is not yet ready to be used productively
 
-### The Promise
 
-#### Development Experience
+### Development Experience
 
 | Aspect                         | Scope | Description  |
 | ------------------------------ |:-----:| ------------:|
-| Preserve hdb* descriptors      | ✅    |              |
-| Preserve XSJS code             | ✅    |              |
-| Preserve XSOData descriptors   | ✅    |              |
-| Preserve XSC development model | ✅    |              |
-| Preserve XSC security model    | ✅    |              |
-| Support for XSJS code          | ✅    |              |
+| Preserve hdb* descriptors      |  ✅   |              |
+| Preserve XSJS code             |  ✅   |              |
+| Preserve XSOData descriptors   |  ✅   |              |
+| Preserve XSC development model |  ✅   |              |
+| Preserve XSC security model    |  🔔   |              |
+| Support for XSJS code          |  ✅   |              |
+
+
+### Life-cycle Management
+
+| Aspect                                | Scope | Description  |
+| ------------------------------------- |:-----:| ------------:|
+| End-to-end life-cycle management      |  ✅   |              |
+| Single-step migration                 |  ✅   |              |
+| Can be deployed as a monolith         |  ✅   |              |
+| Can be deployed as a microservices    |  ✅   |              |
+| Can be deployed on Kubernetes         |  ✅   |              |
+| Can be deployed on Cloud Foundry      |  ✅   |              |
+
+
+### Artifacts Coverage
+
+| Aspect                | Scope | Description  |
+| --------------------- |:-----:| ------------:|
+| .xsjs                 |  ✅   |              |
+| .xsjslib              |  ✅   |              |
+| .calculationview      |  🔔   |              |
+| .hdbprocedure         |  ✅   |              |
+| .hdbrole              |  ❌   |              |
+| .hdbsequence          |  ✅   |              |
+| .xsodata              |  🔔   |              |
+| .hdbdd                |  🔔   |              |
+| .xsaccess             |  ✅   |              |
+| .xsjob                |  ✅   |              |
+| .xssecurestore        |  ✅   |              |
+| .hdbti (+csv)         |  ✅   |              |
+| .xshttpdest           |  ✅   |              |
+| .hdbschema            |  ✅   |              |
 
 
 
+### Artifacts Coverage
 
+| Aspect                | Scope | Description  |
+| --------------------- |:-----:| ------------:|
+| $.session             |  ✅   |              |
+| $.request             |  ✅   |              |
+| $.response            |  ✅   |              |
+| $.hdb                 |  ✅   |              |
+| $.db                  |  ✅   |              |
+| $.util                |  ✅   |              |
+| $.trace               |  ✅   |              |
+| $.import              |  ✅   |              |
+| $.net                 |  ✅   |              |
+| $.net.http            |  ✅   |              |
+| $.util.codec          |  ✅   |              |
+| $.web                 |  ✅   |              |
+| $.security            |  ✅   |              |
 
 
 

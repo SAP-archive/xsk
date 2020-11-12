@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-hdbti-parent</artifactId>
+		<artifactId>xsk-parsers-hdbview-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 

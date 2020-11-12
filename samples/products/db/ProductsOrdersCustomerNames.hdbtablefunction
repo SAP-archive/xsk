@@ -1,0 +1,16 @@
+FUNCTION "ProductsOrdersCustomerNames" ( )
+   RETURNS Table (
+       "Id" NVARCHAR(50),
+       "CustomerName" NVARCHAR(500)
+   )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER AS
+BEGIN
+ 
+    RETURN
+   
+        SELECT      "Id",
+                    "CustomerName"
+        FROM "products.db::Products.Orders";
+ 
+END;

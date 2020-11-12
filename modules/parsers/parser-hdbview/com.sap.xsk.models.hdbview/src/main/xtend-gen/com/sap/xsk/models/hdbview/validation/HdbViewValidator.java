@@ -3,13 +3,11 @@
  */
 package com.sap.xsk.models.hdbview.validation;
 
-import com.sap.xsk.models.hdbview.validation.AbstractHdbViewValidator;
-
 /**
  * This class contains custom validation rules.
  * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 @SuppressWarnings("all")
-public class HdbViewValidator extends AbstractHdbViewValidator {
+public class HdbViewValidator /* implements AbstractHdbViewValidator  */{
 }

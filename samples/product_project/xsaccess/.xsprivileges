@@ -1,9 +1,0 @@
-{
-     "privileges" :
-          [
-               { "name" : "farms_admin", "description" : "Basic execution privilege" },
-               { "name" : "seed_admin", "description" : "Administration privilege" },
-               { "name" : "farms_user", "description" : "Administration privilege" },
-               { "name" : "seed_user", "description" : "Administration privilege" }
-          ]
-}

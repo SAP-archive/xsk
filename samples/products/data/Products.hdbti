@@ -1,0 +1,18 @@
+import = [
+	{
+		table = "products.db::Products.Orders";
+		file = "products.data:Products_Orders.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+	},
+	{
+		table = "products.db::Products.Item";
+		file = "products.data:Products_Item.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+	}
+];

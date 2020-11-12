@@ -1,0 +1,12 @@
+{
+   "file_suffixes":{
+      "hdbtable":{
+         "plugin_name":"com.sap.hana.di.table",
+         "plugin_version":"12.1.0"
+      },
+      "hdbcalculationview":{
+         "plugin_name":"com.sap.hana.di.calculationview",
+         "plugin_version":"12.1.0"
+      }
+   }
+}

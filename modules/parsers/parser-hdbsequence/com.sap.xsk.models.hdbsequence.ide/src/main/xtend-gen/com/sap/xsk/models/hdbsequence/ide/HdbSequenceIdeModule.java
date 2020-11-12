@@ -3,11 +3,9 @@
  */
 package com.sap.xsk.models.hdbsequence.ide;
 
-import com.sap.xsk.models.hdbsequence.ide.AbstractHdbSequenceIdeModule;
-
 /**
  * Use this class to register ide components.
  */
 @SuppressWarnings("all")
-public class HdbSequenceIdeModule extends AbstractHdbSequenceIdeModule {
+public class HdbSequenceIdeModule /* implements AbstractHdbSequenceIdeModule  */{
 }

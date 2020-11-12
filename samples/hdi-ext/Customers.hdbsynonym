@@ -1,0 +1,8 @@
+{
+  "CUSTOMERS": {
+    "target": {
+      "object": "CUSTOMERS",
+      "schema": "DBADMIN"
+    }
+  }
+}

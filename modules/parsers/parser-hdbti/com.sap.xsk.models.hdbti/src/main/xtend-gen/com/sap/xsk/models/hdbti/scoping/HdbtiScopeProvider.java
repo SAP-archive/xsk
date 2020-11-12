@@ -3,8 +3,6 @@
  */
 package com.sap.xsk.models.hdbti.scoping;
 
-import com.sap.xsk.models.hdbti.scoping.AbstractHdbtiScopeProvider;
-
 /**
  * This class contains custom scoping description.
  * 
@@ -12,5 +10,5 @@ import com.sap.xsk.models.hdbti.scoping.AbstractHdbtiScopeProvider;
  * on how and when to use it.
  */
 @SuppressWarnings("all")
-public class HdbtiScopeProvider extends AbstractHdbtiScopeProvider {
+public class HdbtiScopeProvider /* implements AbstractHdbtiScopeProvider  */{
 }

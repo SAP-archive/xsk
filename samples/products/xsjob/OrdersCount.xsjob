@@ -1,0 +1,12 @@
+{
+    "description": "Orders Count",
+    "action": "products.xsjob:OrdersCount.xsjs::countOrders",
+    "schedules": [
+       {
+          "description": "Log the count of the orders",
+          "xscron": "* * * * * * */10",
+          "parameter": {
+          }
+       }
+    ]
+}

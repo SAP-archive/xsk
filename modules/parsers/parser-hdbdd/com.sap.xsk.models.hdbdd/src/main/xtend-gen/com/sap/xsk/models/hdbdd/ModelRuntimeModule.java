@@ -3,11 +3,9 @@
  */
 package com.sap.xsk.models.hdbdd;
 
-import com.sap.xsk.models.hdbdd.AbstractModelRuntimeModule;
-
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class ModelRuntimeModule extends AbstractModelRuntimeModule {
+public class ModelRuntimeModule /* implements AbstractModelRuntimeModule  */{
 }

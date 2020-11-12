@@ -4,70 +4,26 @@
 package com.sap.xsk.models.hdbview.tests;
 
 import com.google.inject.Inject;
-import com.sap.xsk.models.hdbview.hdbView.HdbViewModel;
-import com.sap.xsk.models.hdbview.tests.HdbViewInjectorProvider;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.testing.InjectWith;
 import org.eclipse.xtext.testing.XtextRunner;
 import org.eclipse.xtext.testing.util.ParseHelper;
-import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(XtextRunner.class)
-@InjectWith(HdbViewInjectorProvider.class)
+@RunWith(XtextRunner.class)/* 
+@InjectWith(/* name is null */) */
 @SuppressWarnings("all")
 public class HdbViewParsingTest {
   @Inject
-  private ParseHelper<HdbViewModel> parseHelper;
+  private /* ParseHelper<HdbViewModel> */Object parseHelper;
   
   @Test
   public void loadModel() {
-    try {
-      StringConcatenation _builder = new StringConcatenation();
-      _builder.append("schema = \"SAP_SPORTS_FND\";");
-      _builder.newLine();
-      _builder.append("query = \"");
-      _builder.newLine();
-      _builder.append("\t");
-      _builder.append("SELECT");
-      _builder.newLine();
-      _builder.append("\t\t");
-      _builder.append("MATCH_ID,");
-      _builder.newLine();
-      _builder.append("\t\t");
-      _builder.append("TEAM_ID,");
-      _builder.newLine();
-      _builder.append("\t\t");
-      _builder.append("PERSON_ID");
-      _builder.newLine();
-      _builder.append("\t");
-      _builder.append("FROM \\\"sap.sports.fnd.module.playerstatistics.private.table::ABSENT_PLAYERS\\\"");
-      _builder.newLine();
-      _builder.append("\";");
-      _builder.newLine();
-      _builder.append("depends_on = [");
-      _builder.newLine();
-      _builder.append("\t");
-      _builder.append("\"sap.sports.fnd.module.playerstatistics.private.table::ABSENT_PLAYERS\"");
-      _builder.newLine();
-      _builder.append("];");
-      _builder.newLine();
-      _builder.newLine();
-      final HdbViewModel result = this.parseHelper.parse(_builder);
-      Assert.assertNotNull(result);
-      final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
-      StringConcatenation _builder_1 = new StringConcatenation();
-      _builder_1.append("Unexpected errors: ");
-      String _join = IterableExtensions.join(errors, ", ");
-      _builder_1.append(_join);
-      Assert.assertTrue(_builder_1.toString(), errors.isEmpty());
-    } catch (Throwable _e) {
-      throw Exceptions.sneakyThrow(_e);
-    }
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe field HdbViewParsingTest.parseHelper refers to the missing type HdbViewModel"
+      + "\neResource cannot be resolved"
+      + "\nerrors cannot be resolved"
+      + "\njoin cannot be resolved"
+      + "\nisEmpty cannot be resolved");
   }
 }

@@ -1,0 +1,11 @@
+{
+    "configuration": "/hdi-simple/config.hdiconfig",
+    "users": ["DBADMIN"],
+    "group": "XSK_HDI_SIMPLE_GROUP",
+    "container": "XSK_HDI_SIMPLE",
+    "deploy": [
+    	"/hdi-simple/XSK_HDI_SIMPLE_TABLE.hdbtable",
+    	"/hdi-simple/XSK_HDI_SIMPLE_CALC_VIEW.hdbcalculationview"
+    ],
+    "undeploy": []
+}

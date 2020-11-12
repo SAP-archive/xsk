@@ -3,14 +3,13 @@
  */
 package com.sap.xsk.models.hdbtable;
 
-import com.sap.xsk.models.hdbtable.HdbTableStandaloneSetupGenerated;
-
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class HdbTableStandaloneSetup extends HdbTableStandaloneSetupGenerated {
+public class HdbTableStandaloneSetup /* implements HdbTableStandaloneSetupGenerated  */{
   public static void doSetup() {
-    new HdbTableStandaloneSetup().createInjectorAndDoEMFRegistration();
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method createInjectorAndDoEMFRegistration() is undefined for the type HdbTableStandaloneSetup");
   }
 }

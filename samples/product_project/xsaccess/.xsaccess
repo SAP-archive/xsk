@@ -1,9 +1,0 @@
-{
-  "exposed" : true,               // Expose data via http
-  "authentication" :
-         {
-            "method": "Form"
-         },
-  "authorization":                // Privileges for application access
-       ["seed_user", "farms_admin"]
-}

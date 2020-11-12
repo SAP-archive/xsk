@@ -3,12 +3,8 @@
  */
 package com.sap.xsk.models.hdbtable.ide;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.sap.xsk.models.hdbtable.HdbTableRuntimeModule;
 import com.sap.xsk.models.hdbtable.HdbTableStandaloneSetup;
-import com.sap.xsk.models.hdbtable.ide.HdbTableIdeModule;
-import org.eclipse.xtext.util.Modules2;
 
 /**
  * Initialization support for running Xtext languages as language servers.
@@ -17,8 +13,8 @@ import org.eclipse.xtext.util.Modules2;
 public class HdbTableIdeSetup extends HdbTableStandaloneSetup {
   @Override
   public Injector createInjector() {
-    HdbTableRuntimeModule _hdbTableRuntimeModule = new HdbTableRuntimeModule();
-    HdbTableIdeModule _hdbTableIdeModule = new HdbTableIdeModule();
-    return Guice.createInjector(Modules2.mixin(_hdbTableRuntimeModule, _hdbTableIdeModule));
+    throw new Error("Unresolved compilation problems:"
+      + "\nType mismatch: cannot convert from HdbTableRuntimeModule to Module"
+      + "\nType mismatch: cannot convert from HdbTableIdeModule to Module");
   }
 }

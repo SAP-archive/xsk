@@ -3,6 +3,8 @@
  */
 package com.sap.xsk.models.xsodata.scoping;
 
+import com.sap.xsk.models.xsodata.scoping.AbstractModelScopeProvider;
+
 /**
  * This class contains custom scoping description.
  * 
@@ -10,5 +12,5 @@ package com.sap.xsk.models.xsodata.scoping;
  * on how and when to use it.
  */
 @SuppressWarnings("all")
-public class ModelScopeProvider /* implements AbstractModelScopeProvider  */{
+public class ModelScopeProvider extends AbstractModelScopeProvider {
 }

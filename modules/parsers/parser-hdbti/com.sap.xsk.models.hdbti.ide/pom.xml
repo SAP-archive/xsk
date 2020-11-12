@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-hdbti-parent</artifactId>
+		<artifactId>xsk-modules-parsers-hdbti-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - HDBTI IDE</name>
-	<artifactId>xsk-parsers-hdbti-ide</artifactId>
+	<name>XSK - Modules - Parsers - HDB TI - IDE</name>
+	<artifactId>xsk-modules-parsers-hdbti-ide</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -54,7 +55,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>xsk-parsers-hdbti</artifactId>
+			<artifactId>xsk-modules-parsers-hdbti</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

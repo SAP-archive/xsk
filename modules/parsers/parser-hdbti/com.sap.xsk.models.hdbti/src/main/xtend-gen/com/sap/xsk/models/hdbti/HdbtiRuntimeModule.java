@@ -3,9 +3,11 @@
  */
 package com.sap.xsk.models.hdbti;
 
+import com.sap.xsk.models.hdbti.AbstractHdbtiRuntimeModule;
+
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class HdbtiRuntimeModule /* implements AbstractHdbtiRuntimeModule  */{
+public class HdbtiRuntimeModule extends AbstractHdbtiRuntimeModule {
 }

@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-hdbsequence-parent</artifactId>
+		<artifactId>xsk-modules-parsers-hdbsequence-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - HDB Sequence IDE</name>
-	<artifactId>xsk-parsers-hdbsequence-ide</artifactId>
+	<name>XSK - Modules - Parsers - HDB Sequence - IDE</name>
+	<artifactId>xsk-modules-parsers-hdbsequence-ide</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -54,7 +55,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>xsk-parsers-hdbsequence</artifactId>
+			<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

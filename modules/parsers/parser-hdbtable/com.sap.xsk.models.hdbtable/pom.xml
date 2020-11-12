@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-hdbtable-parent</artifactId>
+		<artifactId>xsk-modules-parsers-hdbtable-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - HDB Table</name>
-	<artifactId>xsk-parsers-hdbtable</artifactId>
+	<name>XSK - Modules - Parsers - HDB Table</name>
+	<artifactId>xsk-modules-parsers-hdbtable</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 

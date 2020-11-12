@@ -7,10 +7,11 @@
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - Parent</name>
-	<artifactId>xsk-parsers-parent</artifactId>
+	<name>XSK - Modules - Parsers - Parent</name>
+	<artifactId>xsk-modules-parsers-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 

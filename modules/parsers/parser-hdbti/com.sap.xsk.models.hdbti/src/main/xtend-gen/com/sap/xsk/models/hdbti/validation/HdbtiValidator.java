@@ -3,11 +3,13 @@
  */
 package com.sap.xsk.models.hdbti.validation;
 
+import com.sap.xsk.models.hdbti.validation.AbstractHdbtiValidator;
+
 /**
  * This class contains custom validation rules.
  * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 @SuppressWarnings("all")
-public class HdbtiValidator /* implements AbstractHdbtiValidator  */{
+public class HdbtiValidator extends AbstractHdbtiValidator {
 }

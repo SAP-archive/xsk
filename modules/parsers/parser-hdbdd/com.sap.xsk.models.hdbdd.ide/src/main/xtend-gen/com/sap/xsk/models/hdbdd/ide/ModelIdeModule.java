@@ -3,9 +3,11 @@
  */
 package com.sap.xsk.models.hdbdd.ide;
 
+import com.sap.xsk.models.hdbdd.ide.AbstractModelIdeModule;
+
 /**
  * Use this class to register ide components.
  */
 @SuppressWarnings("all")
-public class ModelIdeModule /* implements AbstractModelIdeModule  */{
+public class ModelIdeModule extends AbstractModelIdeModule {
 }

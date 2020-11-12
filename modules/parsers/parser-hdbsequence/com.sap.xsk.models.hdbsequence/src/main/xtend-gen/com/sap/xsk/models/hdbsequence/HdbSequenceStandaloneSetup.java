@@ -3,13 +3,14 @@
  */
 package com.sap.xsk.models.hdbsequence;
 
+import com.sap.xsk.models.hdbsequence.HdbSequenceStandaloneSetupGenerated;
+
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class HdbSequenceStandaloneSetup /* implements HdbSequenceStandaloneSetupGenerated  */{
+public class HdbSequenceStandaloneSetup extends HdbSequenceStandaloneSetupGenerated {
   public static void doSetup() {
-    throw new Error("Unresolved compilation problems:"
-      + "\nThe method createInjectorAndDoEMFRegistration() is undefined for the type HdbSequenceStandaloneSetup");
+    new HdbSequenceStandaloneSetup().createInjectorAndDoEMFRegistration();
   }
 }

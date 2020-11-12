@@ -1,12 +1,18 @@
-# xsk
-Compatible environment for SAP HANA Extended Application Services (XS) based applications outside of SAP HANA instance running in a container deployed on Kubernetes
+# project "XSK"
 
+## Description
 
-## How to build
+Compatible environment for SAP HANA Extended Application Services (XS) based applications outside of SAP HANA instance running in a container deployed on Kubernetes.
+
+> Note: the project is not yet ready to be used productively
+
+## Installation
+
+### How to build
 
     mvn clean install
     
-### Build Docker images
+#### Build Docker images
 
     docker build -t dirigiblelabs/dirigible-xsk:0.0.1 .
     
@@ -16,14 +22,7 @@ Compatible environment for SAP HANA Extended Application Services (XS) based app
 
     docker build -t dirigiblelabs/dirigible-xsk:0.0.1-application-keycloak . -f Dockerfile-application-keycloak
 
-## How to run
-
-#### Environment Variables
-
-* **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
-* **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
-
-
+### How to run
 
 #### Local database
 
@@ -50,11 +49,11 @@ Compatible environment for SAP HANA Extended Application Services (XS) based app
 
     docker run -p 8888:8080 -v <your-local-directory>:/usr/local/tomcat/target dirigiblelabs/dirigible-xsk:0.0.1
     
-### Go to:
+#### Go to:
 
 > http://localhost:8888
 
-## How to push on Docker Hub
+### How to push on Docker Hub
 
     docker login
     
@@ -66,5 +65,28 @@ Compatible environment for SAP HANA Extended Application Services (XS) based app
 
     docker push dirigiblelabs/dirigible-xsk:0.0.1-application-keycloak
 
+## Configuration
+
+### Environment Variables
+
+* **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
+* **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
+
+## Limitations
+
+Not all of the XS classic artifacts are supported as well as not all the features of the supported artifacts are covered so far.
+
+## Known Issues
+
+* Hard coded URLs have to be manually changed
+* Hard coded SCHEMA names within SQL statements have to be manually changed
+
+## How to obtain support
+
+All the bug reports as well as the feature requests have to be registered as issues.
+
+## Contributing
+
+Everyone is welcome to propose PRs which will be reviewed and applied in a timely manner.
 
 

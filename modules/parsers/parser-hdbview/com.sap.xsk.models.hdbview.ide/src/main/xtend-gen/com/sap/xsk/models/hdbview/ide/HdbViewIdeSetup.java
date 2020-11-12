@@ -3,8 +3,12 @@
  */
 package com.sap.xsk.models.hdbview.ide;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.sap.xsk.models.hdbview.HdbViewRuntimeModule;
 import com.sap.xsk.models.hdbview.HdbViewStandaloneSetup;
+import com.sap.xsk.models.hdbview.ide.HdbViewIdeModule;
+import org.eclipse.xtext.util.Modules2;
 
 /**
  * Initialization support for running Xtext languages as language servers.
@@ -13,8 +17,8 @@ import com.sap.xsk.models.hdbview.HdbViewStandaloneSetup;
 public class HdbViewIdeSetup extends HdbViewStandaloneSetup {
   @Override
   public Injector createInjector() {
-    throw new Error("Unresolved compilation problems:"
-      + "\nType mismatch: cannot convert from HdbViewRuntimeModule to Module"
-      + "\nType mismatch: cannot convert from HdbViewIdeModule to Module");
+    HdbViewRuntimeModule _hdbViewRuntimeModule = new HdbViewRuntimeModule();
+    HdbViewIdeModule _hdbViewIdeModule = new HdbViewIdeModule();
+    return Guice.createInjector(Modules2.mixin(_hdbViewRuntimeModule, _hdbViewIdeModule));
   }
 }

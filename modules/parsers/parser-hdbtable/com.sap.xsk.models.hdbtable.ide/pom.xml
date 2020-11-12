@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-hdbtable-parent</artifactId>
+		<artifactId>xsk-modules-parsers-hdbtable-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - HDB Table IDE</name>
-	<artifactId>xsk-parsers-hdbtable-ide</artifactId>
+	<name>XSK - Modules - Parsers - HDB Table - IDE</name>
+	<artifactId>xsk-modules-parsers-hdbtable-ide</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -54,7 +55,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>xsk-parsers-hdbtable</artifactId>
+			<artifactId>xsk-modules-parsers-hdbtable</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

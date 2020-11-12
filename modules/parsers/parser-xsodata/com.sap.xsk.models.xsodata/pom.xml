@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-xsodata-parent</artifactId>
+		<artifactId>xsk-modules-parsers-xsodata-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - XS OData</name>
-	<artifactId>xsk-parsers-xsodata</artifactId>
+	<name>XSK - Modules - Parsers - XS OData</name>
+	<artifactId>xsk-modules-parsers-xsodata</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 

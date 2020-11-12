@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-hdbdd-parent</artifactId>
+		<artifactId>xsk-modules-parsers-hdbdd-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - HDBDD IDE</name>
-	<artifactId>xsk-parsers-hdbdd-ide</artifactId>
+	<name>XSK - Modules - Parsers - HDB DD - IDE</name>
+	<artifactId>xsk-modules-parsers-hdbdd-ide</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -107,7 +108,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>xsk-parsers-hdbdd</artifactId>
+			<artifactId>xsk-modules-parsers-hdbdd</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

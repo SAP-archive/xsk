@@ -3,9 +3,11 @@
  */
 package com.sap.xsk.models.hdbtable;
 
+import com.sap.xsk.models.hdbtable.AbstractHdbTableRuntimeModule;
+
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class HdbTableRuntimeModule /* implements AbstractHdbTableRuntimeModule  */{
+public class HdbTableRuntimeModule extends AbstractHdbTableRuntimeModule {
 }

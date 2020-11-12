@@ -5,17 +5,19 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parent</artifactId>
+		<artifactId>xsk-modules-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK API - Parent</name>
-	<artifactId>xsk-api-parent</artifactId>
+	<name>XSK - Modules - API - Parent</name>
+	<artifactId>xsk-modules-api-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>xsjs</module>
+		<module>api-all</module>
+		<module>api-xsjs</module>
 	</modules>
 
 </project>

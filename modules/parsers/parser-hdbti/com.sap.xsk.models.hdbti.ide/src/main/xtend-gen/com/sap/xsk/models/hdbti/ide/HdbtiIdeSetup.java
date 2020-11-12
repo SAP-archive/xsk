@@ -3,8 +3,12 @@
  */
 package com.sap.xsk.models.hdbti.ide;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.sap.xsk.models.hdbti.HdbtiRuntimeModule;
 import com.sap.xsk.models.hdbti.HdbtiStandaloneSetup;
+import com.sap.xsk.models.hdbti.ide.HdbtiIdeModule;
+import org.eclipse.xtext.util.Modules2;
 
 /**
  * Initialization support for running Xtext languages as language servers.
@@ -13,8 +17,8 @@ import com.sap.xsk.models.hdbti.HdbtiStandaloneSetup;
 public class HdbtiIdeSetup extends HdbtiStandaloneSetup {
   @Override
   public Injector createInjector() {
-    throw new Error("Unresolved compilation problems:"
-      + "\nType mismatch: cannot convert from HdbtiRuntimeModule to Module"
-      + "\nType mismatch: cannot convert from HdbtiIdeModule to Module");
+    HdbtiRuntimeModule _hdbtiRuntimeModule = new HdbtiRuntimeModule();
+    HdbtiIdeModule _hdbtiIdeModule = new HdbtiIdeModule();
+    return Guice.createInjector(Modules2.mixin(_hdbtiRuntimeModule, _hdbtiIdeModule));
   }
 }

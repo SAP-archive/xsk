@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-parent</artifactId>
+		<artifactId>xsk-modules-parsers-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - HDBTI Parent</name>
-	<artifactId>xsk-parsers-hdbti-parent</artifactId>
+	<name>XSK - Modules - Parsers - HDB TI - Parent</name>
+	<artifactId>xsk-modules-parsers-hdbti-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 

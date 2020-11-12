@@ -3,6 +3,8 @@
  */
 package com.sap.xsk.models.hdbdd.scoping;
 
+import com.sap.xsk.models.hdbdd.scoping.AbstractModelScopeProvider;
+
 /**
  * This class contains custom scoping description.
  * 
@@ -10,5 +12,5 @@ package com.sap.xsk.models.hdbdd.scoping;
  * on how and when to use it.
  */
 @SuppressWarnings("all")
-public class ModelScopeProvider /* implements AbstractModelScopeProvider  */{
+public class ModelScopeProvider extends AbstractModelScopeProvider {
 }

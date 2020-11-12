@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-parsers-hdbdd-parent</artifactId>
+		<artifactId>xsk-modules-parsers-hdbdd-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<name>XSK Parsers - HDBDD Web</name>
-	<artifactId>xsk-parsers-hdbdd-web</artifactId>
+	<name>XSK - Modules - Parsers - HDB DD - Web</name>
+	<artifactId>xsk-modules-parsers-hdbdd-web</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
@@ -69,12 +70,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>com.sap.xsk.models.hdbdd</artifactId>
+			<artifactId>xsk-modules-parsers-hdbdd</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>com.sap.xsk.models.hdbdd.ide</artifactId>
+			<artifactId>xsk-modules-parsers-hdbdd-ide</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

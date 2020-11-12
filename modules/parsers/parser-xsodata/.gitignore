@@ -1,0 +1,19 @@
+# folders
+dist/
+.settings/
+.idea/
+target/
+dirigible_local/
+bin/
+
+# files
+.DS_Store
+.project
+.classpath
+*.bak
+*.class
+*.jar
+derby.log
+*.versionsBackup
+*.fpr
+*.xtendbin

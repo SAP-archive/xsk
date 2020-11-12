@@ -15,7 +15,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 | Preserve XSJS code             |  ✅   |              |
 | Preserve XSOData descriptors   |  ✅   |              |
 | Preserve XSC development model |  ✅   |              |
-| Preserve XSC security model    |  🔔   |              |
+| Preserve XSC security model    |  🔔   | Authentication is managed by the runtime container             |
 | Support for XSJS code          |  ✅   |              |
 
 
@@ -70,6 +70,8 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 | $.web                 |  ✅   |              |
 | $.security            |  ✅   |              |
 
+
+---
 
 
 ## Installation
@@ -138,18 +140,28 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 * **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
 * **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
 
+---
+
 ## Limitations
 
 Not all of the XS classic artifacts are supported as well as not all the features of the supported artifacts are covered so far.
 
+---
+
 ## Known Issues
 
-* Hard coded URLs have to be manually changed
+* Hard coded FQDN URLs have to be manually changed
 * Hard coded SCHEMA names within SQL statements have to be manually changed
+* Authentication is managed by the runtime container
+* Authorization checks in the application layer only (no HANA database security/user management)
+
+---
 
 ## How to obtain support
 
 All the bug reports as well as the feature requests have to be registered as issues.
+
+---
 
 ## Contributing
 

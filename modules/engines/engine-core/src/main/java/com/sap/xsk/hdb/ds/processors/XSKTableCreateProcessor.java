@@ -150,7 +150,7 @@ public class XSKTableCreateProcessor {
 							uniqueIndexColumns[i++] = column;
 						}
 					}
-					createTableBuilder.unique(uniqueIndexName, uniqueIndex.getColumns());
+					createTableBuilder.unique(uniqueIndexName, uniqueIndexColumns);
 				}
 			}
 			if (tableModel.getConstraints().getChecks() != null) {

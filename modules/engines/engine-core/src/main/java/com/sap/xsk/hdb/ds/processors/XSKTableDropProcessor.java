@@ -53,8 +53,9 @@ public class XSKTableDropProcessor {
 		if (SqlFactory.getNative(connection).exists(connection, tableName)) {
 			String sql = SqlFactory.getNative(connection).select().column("COUNT(*)").from(tableName)
 					.build();
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = null;
 			try {
+				statement = connection.prepareStatement(sql);
 				logger.info(sql);
 				ResultSet resultSet = statement.executeQuery();
 				if (resultSet.next()) {
@@ -88,9 +89,9 @@ public class XSKTableDropProcessor {
 	}
 
 	private static void executeUpdate(Connection connection, String sql) throws SQLException {
-		PreparedStatement statement;
-		statement = connection.prepareStatement(sql);
+		PreparedStatement statement = null;
 		try {
+			statement = connection.prepareStatement(sql);
 			logger.info(sql);
 			statement.executeUpdate();
 		} catch (SQLException e) {

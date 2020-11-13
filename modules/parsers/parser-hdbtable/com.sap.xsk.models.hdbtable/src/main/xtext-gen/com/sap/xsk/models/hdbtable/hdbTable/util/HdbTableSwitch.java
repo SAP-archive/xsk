@@ -87,6 +87,13 @@ public class HdbTableSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case HdbTablePackage.INDEX_TYPE:
+      {
+        IndexType indexType = (IndexType)theEObject;
+        T result = caseIndexType(indexType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case HdbTablePackage.TABLE:
       {
         Table table = (Table)theEObject;
@@ -126,6 +133,22 @@ public class HdbTableSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseColumnType(ColumnType object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Index Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Index Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseIndexType(IndexType object)
   {
     return null;
   }

@@ -1,0 +1,71 @@
+grammar com.sap.xsk.models.xsodata.XSOData with org.eclipse.xtext.common.Terminals
+
+generate xsOData "http://www.sap.com/xsk/models/xsodata/XSOData"
+
+XSOData :
+    (elements+=Type)*;
+	
+Type:
+    Service;
+    
+Service:
+    'service' 'namespace' name=QualifiedName '{'
+        (entities+=Entity)*
+        (associations+=Association)*
+    '}';
+
+QualifiedName:
+   ID ('.' ID)*;
+    
+Entity:
+    namespace=EntityQualifiedNamespace '::' name=EntityQualifiedName 'as' alias=EntityQualifiedAlias
+    (navigates+=Navigation)*
+    (createEvents+=CreateEvent)*
+    (deleteUsing+=DeleteUsing)?
+    (update+=Update)? ';';
+    
+EntityQualifiedNamespace:
+    QualifiedName;
+    
+EntityQualifiedName:
+	QualifiedName;
+	
+EntityQualifiedAlias:
+	ID;
+    
+Navigation:
+	'navigates' '(' association=NavigationAssociation 'as' alias=NavigationAlias ')';
+
+NavigationAssociation:
+	ID;
+	
+NavigationAlias:
+	ID;
+	
+CreateEvent:
+	'create' 'events' '(' 'before'  ID '.xsjs' ':' ID '.xsjslib' '::' ID  ')';
+	
+DeleteUsing:
+	'delete' 'using'  ID '.xsjs' ':' ID '.xsjslib' '::' ID ;
+	
+Update:
+	'update' 'forbidden';
+	
+Association:
+	'association' name=ID  'principal'  principal=AssociationPrincipal  '('  principalKey=AssociationPrincipalKey  ')'
+	   'multiplicity' principalMultiplicity=MultiplicityType  'dependent'  dependent=AssociationDependent  '('  dependentProperty=AssociationDependentProperty  ')' 'multiplicity'  dependentMultiplicity=MultiplicityType ';';
+	   
+AssociationPrincipal:
+	ID;
+	
+AssociationPrincipalKey:
+	ID;
+	
+AssociationDependent:
+	ID;
+	
+AssociationDependentProperty:
+	ID;
+	
+MultiplicityType:
+	'*' | '1';

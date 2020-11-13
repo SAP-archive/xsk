@@ -123,13 +123,49 @@ public interface HdbTablePackage extends EPackage
   int COLUMN_TYPE__COLUMN_LENGTH = 2;
 
   /**
+   * The feature id for the '<em><b>Column Comment</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_TYPE__COLUMN_COMMENT = 3;
+
+  /**
+   * The feature id for the '<em><b>Column Default Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_TYPE__COLUMN_DEFAULT_VALUE = 4;
+
+  /**
+   * The feature id for the '<em><b>Column Precision</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_TYPE__COLUMN_PRECISION = 5;
+
+  /**
+   * The feature id for the '<em><b>Column Scale</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_TYPE__COLUMN_SCALE = 6;
+
+  /**
    * The feature id for the '<em><b>Column Nullable</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COLUMN_TYPE__COLUMN_NULLABLE = 3;
+  int COLUMN_TYPE__COLUMN_NULLABLE = 7;
 
   /**
    * The number of structural features of the '<em>Column Type</em>' class.
@@ -138,7 +174,71 @@ public interface HdbTablePackage extends EPackage
    * @generated
    * @ordered
    */
-  int COLUMN_TYPE_FEATURE_COUNT = 4;
+  int COLUMN_TYPE_FEATURE_COUNT = 8;
+
+  /**
+   * The meta object id for the '{@link com.sap.xsk.models.hdbtable.hdbTable.impl.IndexTypeImpl <em>Index Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.sap.xsk.models.hdbtable.hdbTable.impl.IndexTypeImpl
+   * @see com.sap.xsk.models.hdbtable.hdbTable.impl.HdbTablePackageImpl#getIndexType()
+   * @generated
+   */
+  int INDEX_TYPE = 2;
+
+  /**
+   * The feature id for the '<em><b>Column Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX_TYPE__COLUMN_NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Column Unique</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX_TYPE__COLUMN_UNIQUE = 1;
+
+  /**
+   * The feature id for the '<em><b>Column Order</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX_TYPE__COLUMN_ORDER = 2;
+
+  /**
+   * The feature id for the '<em><b>Index Columns</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX_TYPE__INDEX_COLUMNS = 3;
+
+  /**
+   * The feature id for the '<em><b>Table Index Columns Values</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX_TYPE__TABLE_INDEX_COLUMNS_VALUES = 4;
+
+  /**
+   * The number of structural features of the '<em>Index Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX_TYPE_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl <em>Table</em>}' class.
@@ -148,7 +248,7 @@ public interface HdbTablePackage extends EPackage
    * @see com.sap.xsk.models.hdbtable.hdbTable.impl.HdbTablePackageImpl#getTable()
    * @generated
    */
-  int TABLE = 2;
+  int TABLE = 3;
 
   /**
    * The feature id for the '<em><b>Schema</b></em>' attribute.
@@ -223,13 +323,31 @@ public interface HdbTablePackage extends EPackage
   int TABLE__COLUMNS_VALUES = 7;
 
   /**
+   * The feature id for the '<em><b>Indexes</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE__INDEXES = 8;
+
+  /**
+   * The feature id for the '<em><b>Indexes Values</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE__INDEXES_VALUES = 9;
+
+  /**
    * The feature id for the '<em><b>Primary Key Columns</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TABLE__PRIMARY_KEY_COLUMNS = 8;
+  int TABLE__PRIMARY_KEY_COLUMNS = 10;
 
   /**
    * The feature id for the '<em><b>Table Primary Key Columns Values</b></em>' attribute list.
@@ -238,7 +356,7 @@ public interface HdbTablePackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE__TABLE_PRIMARY_KEY_COLUMNS_VALUES = 9;
+  int TABLE__TABLE_PRIMARY_KEY_COLUMNS_VALUES = 11;
 
   /**
    * The number of structural features of the '<em>Table</em>' class.
@@ -247,7 +365,7 @@ public interface HdbTablePackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE_FEATURE_COUNT = 10;
+  int TABLE_FEATURE_COUNT = 12;
 
 
   /**
@@ -315,6 +433,50 @@ public interface HdbTablePackage extends EPackage
   EAttribute getColumnType_ColumnLength();
 
   /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnComment <em>Column Comment</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Column Comment</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnComment()
+   * @see #getColumnType()
+   * @generated
+   */
+  EAttribute getColumnType_ColumnComment();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnDefaultValue <em>Column Default Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Column Default Value</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnDefaultValue()
+   * @see #getColumnType()
+   * @generated
+   */
+  EAttribute getColumnType_ColumnDefaultValue();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnPrecision <em>Column Precision</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Column Precision</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnPrecision()
+   * @see #getColumnType()
+   * @generated
+   */
+  EAttribute getColumnType_ColumnPrecision();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnScale <em>Column Scale</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Column Scale</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnScale()
+   * @see #getColumnType()
+   * @generated
+   */
+  EAttribute getColumnType_ColumnScale();
+
+  /**
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.ColumnType#getColumnNullable <em>Column Nullable</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -324,6 +486,71 @@ public interface HdbTablePackage extends EPackage
    * @generated
    */
   EAttribute getColumnType_ColumnNullable();
+
+  /**
+   * Returns the meta object for class '{@link com.sap.xsk.models.hdbtable.hdbTable.IndexType <em>Index Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Index Type</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.IndexType
+   * @generated
+   */
+  EClass getIndexType();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.IndexType#getColumnName <em>Column Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Column Name</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.IndexType#getColumnName()
+   * @see #getIndexType()
+   * @generated
+   */
+  EAttribute getIndexType_ColumnName();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.IndexType#getColumnUnique <em>Column Unique</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Column Unique</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.IndexType#getColumnUnique()
+   * @see #getIndexType()
+   * @generated
+   */
+  EAttribute getIndexType_ColumnUnique();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.IndexType#getColumnOrder <em>Column Order</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Column Order</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.IndexType#getColumnOrder()
+   * @see #getIndexType()
+   * @generated
+   */
+  EAttribute getIndexType_ColumnOrder();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.IndexType#isIndexColumns <em>Index Columns</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Index Columns</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.IndexType#isIndexColumns()
+   * @see #getIndexType()
+   * @generated
+   */
+  EAttribute getIndexType_IndexColumns();
+
+  /**
+   * Returns the meta object for the attribute list '{@link com.sap.xsk.models.hdbtable.hdbTable.IndexType#getTableIndexColumnsValues <em>Table Index Columns Values</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Table Index Columns Values</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.IndexType#getTableIndexColumnsValues()
+   * @see #getIndexType()
+   * @generated
+   */
+  EAttribute getIndexType_TableIndexColumnsValues();
 
   /**
    * Returns the meta object for class '{@link com.sap.xsk.models.hdbtable.hdbTable.Table <em>Table</em>}'.
@@ -424,6 +651,28 @@ public interface HdbTablePackage extends EPackage
   EReference getTable_ColumnsValues();
 
   /**
+   * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.Table#isIndexes <em>Indexes</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Indexes</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.Table#isIndexes()
+   * @see #getTable()
+   * @generated
+   */
+  EAttribute getTable_Indexes();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.sap.xsk.models.hdbtable.hdbTable.Table#getIndexesValues <em>Indexes Values</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Indexes Values</em>'.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.Table#getIndexesValues()
+   * @see #getTable()
+   * @generated
+   */
+  EReference getTable_IndexesValues();
+
+  /**
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.hdbtable.hdbTable.Table#isPrimaryKeyColumns <em>Primary Key Columns</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -521,12 +770,94 @@ public interface HdbTablePackage extends EPackage
     EAttribute COLUMN_TYPE__COLUMN_LENGTH = eINSTANCE.getColumnType_ColumnLength();
 
     /**
+     * The meta object literal for the '<em><b>Column Comment</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COLUMN_TYPE__COLUMN_COMMENT = eINSTANCE.getColumnType_ColumnComment();
+
+    /**
+     * The meta object literal for the '<em><b>Column Default Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COLUMN_TYPE__COLUMN_DEFAULT_VALUE = eINSTANCE.getColumnType_ColumnDefaultValue();
+
+    /**
+     * The meta object literal for the '<em><b>Column Precision</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COLUMN_TYPE__COLUMN_PRECISION = eINSTANCE.getColumnType_ColumnPrecision();
+
+    /**
+     * The meta object literal for the '<em><b>Column Scale</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COLUMN_TYPE__COLUMN_SCALE = eINSTANCE.getColumnType_ColumnScale();
+
+    /**
      * The meta object literal for the '<em><b>Column Nullable</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EAttribute COLUMN_TYPE__COLUMN_NULLABLE = eINSTANCE.getColumnType_ColumnNullable();
+
+    /**
+     * The meta object literal for the '{@link com.sap.xsk.models.hdbtable.hdbTable.impl.IndexTypeImpl <em>Index Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.sap.xsk.models.hdbtable.hdbTable.impl.IndexTypeImpl
+     * @see com.sap.xsk.models.hdbtable.hdbTable.impl.HdbTablePackageImpl#getIndexType()
+     * @generated
+     */
+    EClass INDEX_TYPE = eINSTANCE.getIndexType();
+
+    /**
+     * The meta object literal for the '<em><b>Column Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INDEX_TYPE__COLUMN_NAME = eINSTANCE.getIndexType_ColumnName();
+
+    /**
+     * The meta object literal for the '<em><b>Column Unique</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INDEX_TYPE__COLUMN_UNIQUE = eINSTANCE.getIndexType_ColumnUnique();
+
+    /**
+     * The meta object literal for the '<em><b>Column Order</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INDEX_TYPE__COLUMN_ORDER = eINSTANCE.getIndexType_ColumnOrder();
+
+    /**
+     * The meta object literal for the '<em><b>Index Columns</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INDEX_TYPE__INDEX_COLUMNS = eINSTANCE.getIndexType_IndexColumns();
+
+    /**
+     * The meta object literal for the '<em><b>Table Index Columns Values</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INDEX_TYPE__TABLE_INDEX_COLUMNS_VALUES = eINSTANCE.getIndexType_TableIndexColumnsValues();
 
     /**
      * The meta object literal for the '{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl <em>Table</em>}' class.
@@ -601,6 +932,22 @@ public interface HdbTablePackage extends EPackage
      * @generated
      */
     EReference TABLE__COLUMNS_VALUES = eINSTANCE.getTable_ColumnsValues();
+
+    /**
+     * The meta object literal for the '<em><b>Indexes</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TABLE__INDEXES = eINSTANCE.getTable_Indexes();
+
+    /**
+     * The meta object literal for the '<em><b>Indexes Values</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TABLE__INDEXES_VALUES = eINSTANCE.getTable_IndexesValues();
 
     /**
      * The meta object literal for the '<em><b>Primary Key Columns</b></em>' attribute feature.

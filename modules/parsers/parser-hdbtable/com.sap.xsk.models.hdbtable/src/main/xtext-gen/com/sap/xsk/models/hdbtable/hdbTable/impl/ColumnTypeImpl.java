@@ -24,6 +24,10 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.ColumnTypeImpl#getColumnName <em>Column Name</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.ColumnTypeImpl#getColumnSqlType <em>Column Sql Type</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.ColumnTypeImpl#getColumnLength <em>Column Length</em>}</li>
+ *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.ColumnTypeImpl#getColumnComment <em>Column Comment</em>}</li>
+ *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.ColumnTypeImpl#getColumnDefaultValue <em>Column Default Value</em>}</li>
+ *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.ColumnTypeImpl#getColumnPrecision <em>Column Precision</em>}</li>
+ *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.ColumnTypeImpl#getColumnScale <em>Column Scale</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.ColumnTypeImpl#getColumnNullable <em>Column Nullable</em>}</li>
  * </ul>
  *
@@ -90,6 +94,86 @@ public class ColumnTypeImpl extends MinimalEObjectImpl.Container implements Colu
    * @ordered
    */
   protected int columnLength = COLUMN_LENGTH_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getColumnComment() <em>Column Comment</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColumnComment()
+   * @generated
+   * @ordered
+   */
+  protected static final String COLUMN_COMMENT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getColumnComment() <em>Column Comment</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColumnComment()
+   * @generated
+   * @ordered
+   */
+  protected String columnComment = COLUMN_COMMENT_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getColumnDefaultValue() <em>Column Default Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColumnDefaultValue()
+   * @generated
+   * @ordered
+   */
+  protected static final String COLUMN_DEFAULT_VALUE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getColumnDefaultValue() <em>Column Default Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColumnDefaultValue()
+   * @generated
+   * @ordered
+   */
+  protected String columnDefaultValue = COLUMN_DEFAULT_VALUE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getColumnPrecision() <em>Column Precision</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColumnPrecision()
+   * @generated
+   * @ordered
+   */
+  protected static final int COLUMN_PRECISION_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getColumnPrecision() <em>Column Precision</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColumnPrecision()
+   * @generated
+   * @ordered
+   */
+  protected int columnPrecision = COLUMN_PRECISION_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getColumnScale() <em>Column Scale</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColumnScale()
+   * @generated
+   * @ordered
+   */
+  protected static final int COLUMN_SCALE_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getColumnScale() <em>Column Scale</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColumnScale()
+   * @generated
+   * @ordered
+   */
+  protected int columnScale = COLUMN_SCALE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getColumnNullable() <em>Column Nullable</em>}' attribute.
@@ -206,6 +290,98 @@ public class ColumnTypeImpl extends MinimalEObjectImpl.Container implements Colu
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getColumnComment()
+  {
+    return columnComment;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setColumnComment(String newColumnComment)
+  {
+    String oldColumnComment = columnComment;
+    columnComment = newColumnComment;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbTablePackage.COLUMN_TYPE__COLUMN_COMMENT, oldColumnComment, columnComment));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getColumnDefaultValue()
+  {
+    return columnDefaultValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setColumnDefaultValue(String newColumnDefaultValue)
+  {
+    String oldColumnDefaultValue = columnDefaultValue;
+    columnDefaultValue = newColumnDefaultValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbTablePackage.COLUMN_TYPE__COLUMN_DEFAULT_VALUE, oldColumnDefaultValue, columnDefaultValue));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public int getColumnPrecision()
+  {
+    return columnPrecision;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setColumnPrecision(int newColumnPrecision)
+  {
+    int oldColumnPrecision = columnPrecision;
+    columnPrecision = newColumnPrecision;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbTablePackage.COLUMN_TYPE__COLUMN_PRECISION, oldColumnPrecision, columnPrecision));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public int getColumnScale()
+  {
+    return columnScale;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setColumnScale(int newColumnScale)
+  {
+    int oldColumnScale = columnScale;
+    columnScale = newColumnScale;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbTablePackage.COLUMN_TYPE__COLUMN_SCALE, oldColumnScale, columnScale));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getColumnNullable()
   {
     return columnNullable;
@@ -240,6 +416,14 @@ public class ColumnTypeImpl extends MinimalEObjectImpl.Container implements Colu
         return getColumnSqlType();
       case HdbTablePackage.COLUMN_TYPE__COLUMN_LENGTH:
         return getColumnLength();
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_COMMENT:
+        return getColumnComment();
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_DEFAULT_VALUE:
+        return getColumnDefaultValue();
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_PRECISION:
+        return getColumnPrecision();
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_SCALE:
+        return getColumnScale();
       case HdbTablePackage.COLUMN_TYPE__COLUMN_NULLABLE:
         return getColumnNullable();
     }
@@ -264,6 +448,18 @@ public class ColumnTypeImpl extends MinimalEObjectImpl.Container implements Colu
         return;
       case HdbTablePackage.COLUMN_TYPE__COLUMN_LENGTH:
         setColumnLength((Integer)newValue);
+        return;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_COMMENT:
+        setColumnComment((String)newValue);
+        return;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_DEFAULT_VALUE:
+        setColumnDefaultValue((String)newValue);
+        return;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_PRECISION:
+        setColumnPrecision((Integer)newValue);
+        return;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_SCALE:
+        setColumnScale((Integer)newValue);
         return;
       case HdbTablePackage.COLUMN_TYPE__COLUMN_NULLABLE:
         setColumnNullable((String)newValue);
@@ -291,6 +487,18 @@ public class ColumnTypeImpl extends MinimalEObjectImpl.Container implements Colu
       case HdbTablePackage.COLUMN_TYPE__COLUMN_LENGTH:
         setColumnLength(COLUMN_LENGTH_EDEFAULT);
         return;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_COMMENT:
+        setColumnComment(COLUMN_COMMENT_EDEFAULT);
+        return;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_DEFAULT_VALUE:
+        setColumnDefaultValue(COLUMN_DEFAULT_VALUE_EDEFAULT);
+        return;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_PRECISION:
+        setColumnPrecision(COLUMN_PRECISION_EDEFAULT);
+        return;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_SCALE:
+        setColumnScale(COLUMN_SCALE_EDEFAULT);
+        return;
       case HdbTablePackage.COLUMN_TYPE__COLUMN_NULLABLE:
         setColumnNullable(COLUMN_NULLABLE_EDEFAULT);
         return;
@@ -314,6 +522,14 @@ public class ColumnTypeImpl extends MinimalEObjectImpl.Container implements Colu
         return COLUMN_SQL_TYPE_EDEFAULT == null ? columnSqlType != null : !COLUMN_SQL_TYPE_EDEFAULT.equals(columnSqlType);
       case HdbTablePackage.COLUMN_TYPE__COLUMN_LENGTH:
         return columnLength != COLUMN_LENGTH_EDEFAULT;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_COMMENT:
+        return COLUMN_COMMENT_EDEFAULT == null ? columnComment != null : !COLUMN_COMMENT_EDEFAULT.equals(columnComment);
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_DEFAULT_VALUE:
+        return COLUMN_DEFAULT_VALUE_EDEFAULT == null ? columnDefaultValue != null : !COLUMN_DEFAULT_VALUE_EDEFAULT.equals(columnDefaultValue);
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_PRECISION:
+        return columnPrecision != COLUMN_PRECISION_EDEFAULT;
+      case HdbTablePackage.COLUMN_TYPE__COLUMN_SCALE:
+        return columnScale != COLUMN_SCALE_EDEFAULT;
       case HdbTablePackage.COLUMN_TYPE__COLUMN_NULLABLE:
         return COLUMN_NULLABLE_EDEFAULT == null ? columnNullable != null : !COLUMN_NULLABLE_EDEFAULT.equals(columnNullable);
     }
@@ -337,6 +553,14 @@ public class ColumnTypeImpl extends MinimalEObjectImpl.Container implements Colu
     result.append(columnSqlType);
     result.append(", columnLength: ");
     result.append(columnLength);
+    result.append(", columnComment: ");
+    result.append(columnComment);
+    result.append(", columnDefaultValue: ");
+    result.append(columnDefaultValue);
+    result.append(", columnPrecision: ");
+    result.append(columnPrecision);
+    result.append(", columnScale: ");
+    result.append(columnScale);
     result.append(", columnNullable: ");
     result.append(columnNullable);
     result.append(')');

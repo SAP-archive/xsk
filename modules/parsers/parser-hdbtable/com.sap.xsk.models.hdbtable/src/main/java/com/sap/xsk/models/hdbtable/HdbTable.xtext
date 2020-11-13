@@ -15,16 +15,30 @@ ColumnType:
 		'name' '=' columnName=STRING ';' &
 		'sqlType' '=' columnSqlType=ID ';' &
 		('length' '=' columnLength=INT ';')? &
-		('nullable' '=' columnNullable=BOOL)? ';'
+		('comment' '=' columnComment=STRING ';')? &
+		('defaultValue' '=' columnDefaultValue=STRING ';')? & 
+		('precision' '=' columnPrecision=INT ';')? &
+		('scale' '=' columnScale=INT ';')? &
+		('nullable' '=' columnNullable=BOOL )? ';'
+	'}'
+;
+
+IndexType:
+	'{'
+		'name' '=' columnName=STRING ';' &
+		('unique' '=' columnUnique=BOOL ';')? &
+		('order' '=' columnOrder=ID ';')? &
+		indexColumns?='indexColumns' '=' '[' ((tableIndexColumnsValues+=STRING) (',' tableIndexColumnsValues+=STRING)*)? ']' ';'
 	'}'
 ;
 
 Table:
     schema?='table.schemaName' '=' schemaName=STRING ';' &
     type?='table.tableType' '=' typeValue=ID ';' &
-    description?='table.description' '=' descriptionText=STRING ';' &
+    (description?='table.description' '=' descriptionText=STRING ';')? &
     columns?='table.columns' '=' '[' ((columnsValues+=ColumnType) (',' columnsValues+=ColumnType)*)? ']' ';' &
-    primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' ((tablePrimaryKeyColumnsValues+=STRING) (',' tablePrimaryKeyColumnsValues+=STRING)*)? ']' ';'
+    (indexes?='table.indexes' '=' '[' ((indexesValues+=IndexType) (',' indexesValues+=IndexType)*)? ']' ';')? &
+    (primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' ((tablePrimaryKeyColumnsValues+=STRING) (',' tablePrimaryKeyColumnsValues+=STRING)*)? ']')? ';'
 ;
 
 

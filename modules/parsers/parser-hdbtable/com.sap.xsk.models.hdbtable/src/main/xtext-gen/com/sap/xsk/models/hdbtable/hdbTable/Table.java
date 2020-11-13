@@ -24,6 +24,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.Table#getDescriptionText <em>Description Text</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.Table#isColumns <em>Columns</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.Table#getColumnsValues <em>Columns Values</em>}</li>
+ *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.Table#isIndexes <em>Indexes</em>}</li>
+ *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.Table#getIndexesValues <em>Indexes Values</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.Table#isPrimaryKeyColumns <em>Primary Key Columns</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.Table#getTablePrimaryKeyColumnsValues <em>Table Primary Key Columns Values</em>}</li>
  * </ul>
@@ -231,6 +233,48 @@ public interface Table extends EObject
    * @generated
    */
   EList<ColumnType> getColumnsValues();
+
+  /**
+   * Returns the value of the '<em><b>Indexes</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Indexes</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Indexes</em>' attribute.
+   * @see #setIndexes(boolean)
+   * @see com.sap.xsk.models.hdbtable.hdbTable.HdbTablePackage#getTable_Indexes()
+   * @model
+   * @generated
+   */
+  boolean isIndexes();
+
+  /**
+   * Sets the value of the '{@link com.sap.xsk.models.hdbtable.hdbTable.Table#isIndexes <em>Indexes</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Indexes</em>' attribute.
+   * @see #isIndexes()
+   * @generated
+   */
+  void setIndexes(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Indexes Values</b></em>' containment reference list.
+   * The list contents are of type {@link com.sap.xsk.models.hdbtable.hdbTable.IndexType}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Indexes Values</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Indexes Values</em>' containment reference list.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.HdbTablePackage#getTable_IndexesValues()
+   * @model containment="true"
+   * @generated
+   */
+  EList<IndexType> getIndexesValues();
 
   /**
    * Returns the value of the '<em><b>Primary Key Columns</b></em>' attribute.

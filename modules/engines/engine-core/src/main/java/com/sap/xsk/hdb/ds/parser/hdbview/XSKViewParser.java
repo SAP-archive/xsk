@@ -59,11 +59,16 @@ public class XSKViewParser implements XSKDataStructureParser {
         hdbViewModel.setCreatedBy(UserFacade.getName());
         hdbViewModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
         
-        hdbViewModel.setSchema(hdbView.getViewElement().getSchemaName());
-        hdbViewModel.setQuery(hdbView.getViewElement().getQueryValue());
+        if (hdbView.getViewElement() != null) {
         
-        for (Iterator iterator = hdbView.getViewElement().getDependsOnValues().iterator(); iterator.hasNext();) {
-        	XSKDataStructureDependencyModel dependency = new XSKDataStructureDependencyModel((String)iterator.next(), "");
+	        hdbViewModel.setSchema(hdbView.getViewElement().getSchemaName());
+	        hdbViewModel.setQuery(hdbView.getViewElement().getQueryValue());
+	        
+	        for (Iterator iterator = hdbView.getViewElement().getDependsOnValues().iterator(); iterator.hasNext();) {
+	        	XSKDataStructureDependencyModel dependency = new XSKDataStructureDependencyModel((String)iterator.next(), "");
+	        }
+        } else {
+        	throw new XSKDataStructuresException(String.format("Wrong format of HDB View: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version.", location));
         }
         
         return hdbViewModel;

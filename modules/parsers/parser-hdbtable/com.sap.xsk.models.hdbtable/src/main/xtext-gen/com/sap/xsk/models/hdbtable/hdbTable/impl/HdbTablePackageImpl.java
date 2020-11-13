@@ -7,6 +7,7 @@ import com.sap.xsk.models.hdbtable.hdbTable.ColumnType;
 import com.sap.xsk.models.hdbtable.hdbTable.HdbTableFactory;
 import com.sap.xsk.models.hdbtable.hdbTable.HdbTableModel;
 import com.sap.xsk.models.hdbtable.hdbTable.HdbTablePackage;
+import com.sap.xsk.models.hdbtable.hdbTable.IndexType;
 import com.sap.xsk.models.hdbtable.hdbTable.Table;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -37,6 +38,13 @@ public class HdbTablePackageImpl extends EPackageImpl implements HdbTablePackage
    * @generated
    */
   private EClass columnTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass indexTypeEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -173,9 +181,109 @@ public class HdbTablePackageImpl extends EPackageImpl implements HdbTablePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getColumnType_ColumnNullable()
+  public EAttribute getColumnType_ColumnComment()
   {
     return (EAttribute)columnTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getColumnType_ColumnDefaultValue()
+  {
+    return (EAttribute)columnTypeEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getColumnType_ColumnPrecision()
+  {
+    return (EAttribute)columnTypeEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getColumnType_ColumnScale()
+  {
+    return (EAttribute)columnTypeEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getColumnType_ColumnNullable()
+  {
+    return (EAttribute)columnTypeEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getIndexType()
+  {
+    return indexTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIndexType_ColumnName()
+  {
+    return (EAttribute)indexTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIndexType_ColumnUnique()
+  {
+    return (EAttribute)indexTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIndexType_ColumnOrder()
+  {
+    return (EAttribute)indexTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIndexType_IndexColumns()
+  {
+    return (EAttribute)indexTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIndexType_TableIndexColumnsValues()
+  {
+    return (EAttribute)indexTypeEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -273,7 +381,7 @@ public class HdbTablePackageImpl extends EPackageImpl implements HdbTablePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getTable_PrimaryKeyColumns()
+  public EAttribute getTable_Indexes()
   {
     return (EAttribute)tableEClass.getEStructuralFeatures().get(8);
   }
@@ -283,9 +391,29 @@ public class HdbTablePackageImpl extends EPackageImpl implements HdbTablePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getTable_IndexesValues()
+  {
+    return (EReference)tableEClass.getEStructuralFeatures().get(9);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTable_PrimaryKeyColumns()
+  {
+    return (EAttribute)tableEClass.getEStructuralFeatures().get(10);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getTable_TablePrimaryKeyColumnsValues()
   {
-    return (EAttribute)tableEClass.getEStructuralFeatures().get(9);
+    return (EAttribute)tableEClass.getEStructuralFeatures().get(11);
   }
 
   /**
@@ -325,7 +453,18 @@ public class HdbTablePackageImpl extends EPackageImpl implements HdbTablePackage
     createEAttribute(columnTypeEClass, COLUMN_TYPE__COLUMN_NAME);
     createEAttribute(columnTypeEClass, COLUMN_TYPE__COLUMN_SQL_TYPE);
     createEAttribute(columnTypeEClass, COLUMN_TYPE__COLUMN_LENGTH);
+    createEAttribute(columnTypeEClass, COLUMN_TYPE__COLUMN_COMMENT);
+    createEAttribute(columnTypeEClass, COLUMN_TYPE__COLUMN_DEFAULT_VALUE);
+    createEAttribute(columnTypeEClass, COLUMN_TYPE__COLUMN_PRECISION);
+    createEAttribute(columnTypeEClass, COLUMN_TYPE__COLUMN_SCALE);
     createEAttribute(columnTypeEClass, COLUMN_TYPE__COLUMN_NULLABLE);
+
+    indexTypeEClass = createEClass(INDEX_TYPE);
+    createEAttribute(indexTypeEClass, INDEX_TYPE__COLUMN_NAME);
+    createEAttribute(indexTypeEClass, INDEX_TYPE__COLUMN_UNIQUE);
+    createEAttribute(indexTypeEClass, INDEX_TYPE__COLUMN_ORDER);
+    createEAttribute(indexTypeEClass, INDEX_TYPE__INDEX_COLUMNS);
+    createEAttribute(indexTypeEClass, INDEX_TYPE__TABLE_INDEX_COLUMNS_VALUES);
 
     tableEClass = createEClass(TABLE);
     createEAttribute(tableEClass, TABLE__SCHEMA);
@@ -336,6 +475,8 @@ public class HdbTablePackageImpl extends EPackageImpl implements HdbTablePackage
     createEAttribute(tableEClass, TABLE__DESCRIPTION_TEXT);
     createEAttribute(tableEClass, TABLE__COLUMNS);
     createEReference(tableEClass, TABLE__COLUMNS_VALUES);
+    createEAttribute(tableEClass, TABLE__INDEXES);
+    createEReference(tableEClass, TABLE__INDEXES_VALUES);
     createEAttribute(tableEClass, TABLE__PRIMARY_KEY_COLUMNS);
     createEAttribute(tableEClass, TABLE__TABLE_PRIMARY_KEY_COLUMNS_VALUES);
   }
@@ -378,7 +519,18 @@ public class HdbTablePackageImpl extends EPackageImpl implements HdbTablePackage
     initEAttribute(getColumnType_ColumnName(), ecorePackage.getEString(), "columnName", null, 0, 1, ColumnType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getColumnType_ColumnSqlType(), ecorePackage.getEString(), "columnSqlType", null, 0, 1, ColumnType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getColumnType_ColumnLength(), ecorePackage.getEInt(), "columnLength", null, 0, 1, ColumnType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getColumnType_ColumnComment(), ecorePackage.getEString(), "columnComment", null, 0, 1, ColumnType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getColumnType_ColumnDefaultValue(), ecorePackage.getEString(), "columnDefaultValue", null, 0, 1, ColumnType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getColumnType_ColumnPrecision(), ecorePackage.getEInt(), "columnPrecision", null, 0, 1, ColumnType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getColumnType_ColumnScale(), ecorePackage.getEInt(), "columnScale", null, 0, 1, ColumnType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getColumnType_ColumnNullable(), ecorePackage.getEString(), "columnNullable", null, 0, 1, ColumnType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(indexTypeEClass, IndexType.class, "IndexType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getIndexType_ColumnName(), ecorePackage.getEString(), "columnName", null, 0, 1, IndexType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIndexType_ColumnUnique(), ecorePackage.getEString(), "columnUnique", null, 0, 1, IndexType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIndexType_ColumnOrder(), ecorePackage.getEString(), "columnOrder", null, 0, 1, IndexType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIndexType_IndexColumns(), ecorePackage.getEBoolean(), "indexColumns", null, 0, 1, IndexType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIndexType_TableIndexColumnsValues(), ecorePackage.getEString(), "tableIndexColumnsValues", null, 0, -1, IndexType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(tableEClass, Table.class, "Table", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTable_Schema(), ecorePackage.getEBoolean(), "schema", null, 0, 1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -389,6 +541,8 @@ public class HdbTablePackageImpl extends EPackageImpl implements HdbTablePackage
     initEAttribute(getTable_DescriptionText(), ecorePackage.getEString(), "descriptionText", null, 0, 1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTable_Columns(), ecorePackage.getEBoolean(), "columns", null, 0, 1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTable_ColumnsValues(), this.getColumnType(), null, "columnsValues", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTable_Indexes(), ecorePackage.getEBoolean(), "indexes", null, 0, 1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTable_IndexesValues(), this.getIndexType(), null, "indexesValues", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTable_PrimaryKeyColumns(), ecorePackage.getEBoolean(), "primaryKeyColumns", null, 0, 1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTable_TablePrimaryKeyColumnsValues(), ecorePackage.getEString(), "tablePrimaryKeyColumnsValues", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

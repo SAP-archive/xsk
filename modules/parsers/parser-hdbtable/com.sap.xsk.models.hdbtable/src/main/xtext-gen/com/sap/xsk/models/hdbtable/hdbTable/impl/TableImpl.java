@@ -5,6 +5,7 @@ package com.sap.xsk.models.hdbtable.hdbTable.impl;
 
 import com.sap.xsk.models.hdbtable.hdbTable.ColumnType;
 import com.sap.xsk.models.hdbtable.hdbTable.HdbTablePackage;
+import com.sap.xsk.models.hdbtable.hdbTable.IndexType;
 import com.sap.xsk.models.hdbtable.hdbTable.Table;
 
 import java.util.Collection;
@@ -40,6 +41,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl#getDescriptionText <em>Description Text</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl#isColumns <em>Columns</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl#getColumnsValues <em>Columns Values</em>}</li>
+ *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl#isIndexes <em>Indexes</em>}</li>
+ *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl#getIndexesValues <em>Indexes Values</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl#isPrimaryKeyColumns <em>Primary Key Columns</em>}</li>
  *   <li>{@link com.sap.xsk.models.hdbtable.hdbTable.impl.TableImpl#getTablePrimaryKeyColumnsValues <em>Table Primary Key Columns Values</em>}</li>
  * </ul>
@@ -197,6 +200,36 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table
    * @ordered
    */
   protected EList<ColumnType> columnsValues;
+
+  /**
+   * The default value of the '{@link #isIndexes() <em>Indexes</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIndexes()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean INDEXES_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isIndexes() <em>Indexes</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIndexes()
+   * @generated
+   * @ordered
+   */
+  protected boolean indexes = INDEXES_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getIndexesValues() <em>Indexes Values</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getIndexesValues()
+   * @generated
+   * @ordered
+   */
+  protected EList<IndexType> indexesValues;
 
   /**
    * The default value of the '{@link #isPrimaryKeyColumns() <em>Primary Key Columns</em>}' attribute.
@@ -429,6 +462,43 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isIndexes()
+  {
+    return indexes;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIndexes(boolean newIndexes)
+  {
+    boolean oldIndexes = indexes;
+    indexes = newIndexes;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbTablePackage.TABLE__INDEXES, oldIndexes, indexes));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<IndexType> getIndexesValues()
+  {
+    if (indexesValues == null)
+    {
+      indexesValues = new EObjectContainmentEList<IndexType>(IndexType.class, this, HdbTablePackage.TABLE__INDEXES_VALUES);
+    }
+    return indexesValues;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public boolean isPrimaryKeyColumns()
   {
     return primaryKeyColumns;
@@ -473,6 +543,8 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table
     {
       case HdbTablePackage.TABLE__COLUMNS_VALUES:
         return ((InternalEList<?>)getColumnsValues()).basicRemove(otherEnd, msgs);
+      case HdbTablePackage.TABLE__INDEXES_VALUES:
+        return ((InternalEList<?>)getIndexesValues()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -503,6 +575,10 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table
         return isColumns();
       case HdbTablePackage.TABLE__COLUMNS_VALUES:
         return getColumnsValues();
+      case HdbTablePackage.TABLE__INDEXES:
+        return isIndexes();
+      case HdbTablePackage.TABLE__INDEXES_VALUES:
+        return getIndexesValues();
       case HdbTablePackage.TABLE__PRIMARY_KEY_COLUMNS:
         return isPrimaryKeyColumns();
       case HdbTablePackage.TABLE__TABLE_PRIMARY_KEY_COLUMNS_VALUES:
@@ -546,6 +622,13 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table
       case HdbTablePackage.TABLE__COLUMNS_VALUES:
         getColumnsValues().clear();
         getColumnsValues().addAll((Collection<? extends ColumnType>)newValue);
+        return;
+      case HdbTablePackage.TABLE__INDEXES:
+        setIndexes((Boolean)newValue);
+        return;
+      case HdbTablePackage.TABLE__INDEXES_VALUES:
+        getIndexesValues().clear();
+        getIndexesValues().addAll((Collection<? extends IndexType>)newValue);
         return;
       case HdbTablePackage.TABLE__PRIMARY_KEY_COLUMNS:
         setPrimaryKeyColumns((Boolean)newValue);
@@ -592,6 +675,12 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table
       case HdbTablePackage.TABLE__COLUMNS_VALUES:
         getColumnsValues().clear();
         return;
+      case HdbTablePackage.TABLE__INDEXES:
+        setIndexes(INDEXES_EDEFAULT);
+        return;
+      case HdbTablePackage.TABLE__INDEXES_VALUES:
+        getIndexesValues().clear();
+        return;
       case HdbTablePackage.TABLE__PRIMARY_KEY_COLUMNS:
         setPrimaryKeyColumns(PRIMARY_KEY_COLUMNS_EDEFAULT);
         return;
@@ -628,6 +717,10 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table
         return columns != COLUMNS_EDEFAULT;
       case HdbTablePackage.TABLE__COLUMNS_VALUES:
         return columnsValues != null && !columnsValues.isEmpty();
+      case HdbTablePackage.TABLE__INDEXES:
+        return indexes != INDEXES_EDEFAULT;
+      case HdbTablePackage.TABLE__INDEXES_VALUES:
+        return indexesValues != null && !indexesValues.isEmpty();
       case HdbTablePackage.TABLE__PRIMARY_KEY_COLUMNS:
         return primaryKeyColumns != PRIMARY_KEY_COLUMNS_EDEFAULT;
       case HdbTablePackage.TABLE__TABLE_PRIMARY_KEY_COLUMNS_VALUES:
@@ -661,6 +754,8 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table
     result.append(descriptionText);
     result.append(", columns: ");
     result.append(columns);
+    result.append(", indexes: ");
+    result.append(indexes);
     result.append(", primaryKeyColumns: ");
     result.append(primaryKeyColumns);
     result.append(", tablePrimaryKeyColumnsValues: ");

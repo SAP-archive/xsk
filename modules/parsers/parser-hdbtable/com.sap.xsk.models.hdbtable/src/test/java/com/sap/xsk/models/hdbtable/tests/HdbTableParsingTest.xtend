@@ -21,15 +21,15 @@ class HdbTableParsingTest {
 	@Test
 	def void loadModel() {
 		val result = parseHelper.parse('''
-			table.schemaName = "SAP_SPORTS_FND";
+			table.schemaName = "SPORTS";
 			table.tableType = COLUMNSTORE;
 			table.description = "Team players missing in lineup (not nominated for the match)";
 			table.columns = [
-				{ name = "MATCH_ID";	sqlType = NVARCHAR;		length = 32;	nullable = false; },
-				{ name = "TEAM_ID";		sqlType = NVARCHAR;		length = 32;	nullable = false; },
-				{ name = "PERSON_ID";	sqlType = NVARCHAR;		length = 32;	nullable = false; },
-				{ name = "CHANGED_BY";	sqlType = NVARCHAR; 	length = 256;	nullable = true; },
-				{ name = "CHANGED_AT";	sqlType = TIMESTAMP; 					nullable = true; }
+				{ name = "MATCH_ID";	sqlType = NVARCHAR;		length = 32;	comment="test"; 	nullable = false; },
+				{ name = "TEAM_ID";		sqlType = NVARCHAR;		length = 32;						nullable = false; },
+				{ name = "PERSON_ID";	sqlType = NVARCHAR;		length = 32;						nullable = false; },
+				{ name = "CHANGED_BY";	sqlType = NVARCHAR; 	length = 256;						nullable = true; },
+				{ name = "CHANGED_AT";	sqlType = TIMESTAMP; 										nullable = true; }
 			];
 			table.primaryKey.pkcolumns = ["MATCH_ID", "TEAM_ID", "PERSON_ID"];
 		''')

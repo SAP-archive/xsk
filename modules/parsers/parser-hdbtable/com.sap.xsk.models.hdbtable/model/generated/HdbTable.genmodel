@@ -13,7 +13,18 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//ColumnType/columnName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//ColumnType/columnSqlType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//ColumnType/columnLength"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//ColumnType/columnComment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//ColumnType/columnDefaultValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//ColumnType/columnPrecision"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//ColumnType/columnScale"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//ColumnType/columnNullable"/>
+    </genClasses>
+    <genClasses ecoreClass="HdbTable.ecore#//IndexType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//IndexType/columnName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//IndexType/columnUnique"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//IndexType/columnOrder"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//IndexType/indexColumns"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//IndexType/tableIndexColumnsValues"/>
     </genClasses>
     <genClasses ecoreClass="HdbTable.ecore#//Table">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//Table/schema"/>
@@ -24,6 +35,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//Table/descriptionText"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//Table/columns"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference HdbTable.ecore#//Table/columnsValues"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//Table/indexes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference HdbTable.ecore#//Table/indexesValues"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//Table/primaryKeyColumns"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HdbTable.ecore#//Table/tablePrimaryKeyColumnsValues"/>
     </genClasses>

@@ -73,29 +73,52 @@ public class XSKTableParser implements XSKDataStructureParser {
         hdbTableModel.setCreatedBy(UserFacade.getName());
         hdbTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
         
-        hdbTableModel.setSchema(hdbTable.getTableElement().getSchemaName());
-        hdbTableModel.setTableType(hdbTable.getTableElement().getTypeValue());
-        hdbTableModel.setDescription(hdbTable.getTableElement().getDescriptionText());
-        
-        for (Iterator iterator = hdbTable.getTableElement().getColumnsValues().iterator(); iterator.hasNext();) {
-            com.sap.xsk.models.hdbtable.hdbTable.ColumnType columnType = (com.sap.xsk.models.hdbtable.hdbTable.ColumnType) iterator.next();
-            XSKDataStructureHDBTableColumnModel column = new XSKDataStructureHDBTableColumnModel();
-            column.setName(columnType.getColumnName());
-            column.setLength(columnType.getColumnLength() + "");
-            column.setNullable(Boolean.parseBoolean(columnType.getColumnNullable()));
-            column.setType(columnType.getColumnSqlType());
-            // TODO more attributes
-            hdbTableModel.getColumns().add(column);
-        }
-        
-        List<String> keys = new ArrayList<>();
-        for (Iterator iterator = hdbTable.getTableElement().getTablePrimaryKeyColumnsValues().iterator(); iterator.hasNext();) {
-        	keys.add((String) iterator.next());
-        }
-        if (!keys.isEmpty()) {
-        	XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
-        	primaryKey.setColumns(keys.toArray(new String[]{}));
-        	hdbTableModel.getConstraints().setPrimaryKey(primaryKey);
+        if (hdbTable.getTableElement() != null) {
+	        hdbTableModel.setSchema(hdbTable.getTableElement().getSchemaName());
+	        hdbTableModel.setTableType(hdbTable.getTableElement().getTypeValue());
+	        hdbTableModel.setDescription(hdbTable.getTableElement().getDescriptionText());
+	        
+	        for (Iterator iterator = hdbTable.getTableElement().getColumnsValues().iterator(); iterator.hasNext();) {
+	            com.sap.xsk.models.hdbtable.hdbTable.ColumnType columnType = (com.sap.xsk.models.hdbtable.hdbTable.ColumnType) iterator.next();
+	            XSKDataStructureHDBTableColumnModel column = new XSKDataStructureHDBTableColumnModel();
+	            column.setName(columnType.getColumnName());
+	            column.setLength(columnType.getColumnLength() + "");
+	            column.setNullable(Boolean.parseBoolean(columnType.getColumnNullable()));
+	            column.setType(columnType.getColumnSqlType());
+	            if (columnType.getColumnPrecision() > 0) {
+	            	column.setPrecision(columnType.getColumnPrecision() + "");
+	            }
+	            if (columnType.getColumnScale() > 0) {
+	            	column.setScale(columnType.getColumnScale() + "");
+	            }
+	            if (columnType.getColumnDefaultValue() != null) {
+	            	column.setDefaultValue(columnType.getColumnDefaultValue());
+	            }
+	            if (columnType.getColumnComment() != null) {
+	            	//column.setComment(columnType.getColumnComment());
+	            }
+	            hdbTableModel.getColumns().add(column);
+	        }
+	        
+	        for (Iterator iterator = hdbTable.getTableElement().getIndexesValues().iterator(); iterator.hasNext();) {
+	            com.sap.xsk.models.hdbtable.hdbTable.IndexType indexType = (com.sap.xsk.models.hdbtable.hdbTable.IndexType) iterator.next();
+//	            XSKDataStructureHDBTableIndexModel index = new XSKDataStructureHDBTableIndexModel();
+	            
+	            logger.warn("Index processing not yet supported: {}", location);
+	            
+	        }
+	        
+	        List<String> keys = new ArrayList<>();
+	        for (Iterator iterator = hdbTable.getTableElement().getTablePrimaryKeyColumnsValues().iterator(); iterator.hasNext();) {
+	        	keys.add((String) iterator.next());
+	        }
+	        if (!keys.isEmpty()) {
+	        	XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
+	        	primaryKey.setColumns(keys.toArray(new String[]{}));
+	        	hdbTableModel.getConstraints().setPrimaryKey(primaryKey);
+	        }
+        } else {
+        	throw new XSKDataStructuresException(String.format("Wrong format of HDB Table: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version.", location));
         }
         
         return hdbTableModel;

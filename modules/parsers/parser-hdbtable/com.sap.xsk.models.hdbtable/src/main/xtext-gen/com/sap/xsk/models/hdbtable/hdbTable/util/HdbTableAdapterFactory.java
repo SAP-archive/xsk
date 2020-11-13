@@ -86,6 +86,11 @@ public class HdbTableAdapterFactory extends AdapterFactoryImpl
         return createColumnTypeAdapter();
       }
       @Override
+      public Adapter caseIndexType(IndexType object)
+      {
+        return createIndexTypeAdapter();
+      }
+      @Override
       public Adapter caseTable(Table object)
       {
         return createTableAdapter();
@@ -138,6 +143,21 @@ public class HdbTableAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createColumnTypeAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.sap.xsk.models.hdbtable.hdbTable.IndexType <em>Index Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.sap.xsk.models.hdbtable.hdbTable.IndexType
+   * @generated
+   */
+  public Adapter createIndexTypeAdapter()
   {
     return null;
   }

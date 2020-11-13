@@ -22,13 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
-import com.sap.xsk.models.xsodata.ModelStandaloneSetup;
-import com.sap.xsk.models.xsodata.ModelStandaloneSetupGenerated;
-import com.sap.xsk.models.xsodata.model.Navigation;
-import com.sap.xsk.models.xsodata.model.Service;
-import com.sap.xsk.models.xsodata.model.XsOData;
-import com.sap.xsk.models.xsodata.model.impl.AssociationImpl;
-import com.sap.xsk.models.xsodata.model.impl.EntityImpl;
+import com.sap.xsk.models.xsodata.XSODataStandaloneSetup;
+import com.sap.xsk.models.xsodata.XSODataStandaloneSetup;
+import com.sap.xsk.models.xsodata.XSODataStandaloneSetupGenerated;
+import com.sap.xsk.models.xsodata.xsOData.Navigation;
+import com.sap.xsk.models.xsodata.xsOData.Service;
+import com.sap.xsk.models.xsodata.xsOData.XSOData;
+import com.sap.xsk.models.xsodata.xsOData.impl.AssociationImpl;
+import com.sap.xsk.models.xsodata.xsOData.impl.EntityImpl;
 
 /**
  * The factory for creation of the data structure models from source content.
@@ -49,7 +50,7 @@ public class XSKODataModelFactory {
     }
 	
 	private void setupParser() {
-        Injector injector = new ModelStandaloneSetup().createInjectorAndDoEMFRegistration();
+        Injector injector = new XSODataStandaloneSetup().createInjectorAndDoEMFRegistration();
         injector.injectMembers(this);
     }
 	
@@ -66,14 +67,14 @@ public class XSKODataModelFactory {
 		content = content.replace('"', ' ');
 		
 		new org.eclipse.emf.mwe.utils.StandaloneSetup().setPlatformUri("../");
-		Injector injector = new ModelStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
+		Injector injector = new XSODataStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
 		XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 		
 		Resource resource = resourceSet.createResource(URI.createURI("dummy:/example.xsodata"));
 		InputStream in = new ByteArrayInputStream(content.getBytes()); 
 		resource.load(in, resourceSet.getLoadOptions());
-		XsOData xsOData = (XsOData) resource.getContents().get(0);
+		XSOData xsOData = (XSOData) resource.getContents().get(0);
 		
 		
 		EList errors = xsOData.eResource().getErrors();
@@ -90,9 +91,9 @@ public class XSKODataModelFactory {
 		odataModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
 		
 		for (Iterator iterator = xsOData.getElements().iterator(); iterator.hasNext();) {
-			com.sap.xsk.models.xsodata.model.Type type = (com.sap.xsk.models.xsodata.model.Type) iterator.next();
+			com.sap.xsk.models.xsodata.xsOData.Type type = (com.sap.xsk.models.xsodata.xsOData.Type) iterator.next();
 			if (type instanceof Service) {
-				com.sap.xsk.models.xsodata.model.Service service = (com.sap.xsk.models.xsodata.model.Service) type;
+				com.sap.xsk.models.xsodata.xsOData.Service service = (com.sap.xsk.models.xsodata.xsOData.Service) type;
 				XSKODataService odataService = new XSKODataService();
 				odataService.setNamespace(service.getName());
 				odataModel.setService(odataService);

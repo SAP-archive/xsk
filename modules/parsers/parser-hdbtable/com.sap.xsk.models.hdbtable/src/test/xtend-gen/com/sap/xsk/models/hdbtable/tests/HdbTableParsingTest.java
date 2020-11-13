@@ -29,7 +29,7 @@ public class HdbTableParsingTest {
   public void loadModel() {
     try {
       StringConcatenation _builder = new StringConcatenation();
-      _builder.append("table.schemaName = \"SAP_SPORTS_FND\";");
+      _builder.append("table.schemaName = \"SPORTS\";");
       _builder.newLine();
       _builder.append("table.tableType = COLUMNSTORE;");
       _builder.newLine();
@@ -38,19 +38,19 @@ public class HdbTableParsingTest {
       _builder.append("table.columns = [");
       _builder.newLine();
       _builder.append("\t");
-      _builder.append("{ name = \"MATCH_ID\";\tsqlType = NVARCHAR;\t\tlength = 32;\tnullable = false; },");
+      _builder.append("{ name = \"MATCH_ID\";\tsqlType = NVARCHAR;\t\tlength = 32;\tcomment=\"test\"; \tnullable = false; },");
       _builder.newLine();
       _builder.append("\t");
-      _builder.append("{ name = \"TEAM_ID\";\t\tsqlType = NVARCHAR;\t\tlength = 32;\tnullable = false; },");
+      _builder.append("{ name = \"TEAM_ID\";\t\tsqlType = NVARCHAR;\t\tlength = 32;\t\t\t\t\t\tnullable = false; },");
       _builder.newLine();
       _builder.append("\t");
-      _builder.append("{ name = \"PERSON_ID\";\tsqlType = NVARCHAR;\t\tlength = 32;\tnullable = false; },");
+      _builder.append("{ name = \"PERSON_ID\";\tsqlType = NVARCHAR;\t\tlength = 32;\t\t\t\t\t\tnullable = false; },");
       _builder.newLine();
       _builder.append("\t");
-      _builder.append("{ name = \"CHANGED_BY\";\tsqlType = NVARCHAR; \tlength = 256;\tnullable = true; },");
+      _builder.append("{ name = \"CHANGED_BY\";\tsqlType = NVARCHAR; \tlength = 256;\t\t\t\t\t\tnullable = true; },");
       _builder.newLine();
       _builder.append("\t");
-      _builder.append("{ name = \"CHANGED_AT\";\tsqlType = TIMESTAMP; \t\t\t\t\tnullable = true; }");
+      _builder.append("{ name = \"CHANGED_AT\";\tsqlType = TIMESTAMP; \t\t\t\t\t\t\t\t\t\tnullable = true; }");
       _builder.newLine();
       _builder.append("];");
       _builder.newLine();

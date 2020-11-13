@@ -20,18 +20,18 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
 import com.google.inject.Injector;
-import com.sap.xsk.models.hdbdd.ModelStandaloneSetup;
-import com.sap.xsk.models.hdbdd.ModelStandaloneSetupGenerated;
-import com.sap.xsk.models.hdbdd.model.HdbDD;
-import com.sap.xsk.models.hdbdd.model.impl.ContextImpl;
-import com.sap.xsk.models.hdbdd.model.impl.EntityImpl;
-import com.sap.xsk.models.hdbdd.model.impl.FieldImpl;
-import com.sap.xsk.models.hdbdd.model.impl.FieldPrimitiveImpl;
-import com.sap.xsk.models.hdbdd.model.impl.FieldReferenceImpl;
-import com.sap.xsk.models.hdbdd.model.impl.FieldTypeImpl;
-import com.sap.xsk.models.hdbdd.model.impl.NamespaceImpl;
-import com.sap.xsk.models.hdbdd.model.impl.SchemaImpl;
-import com.sap.xsk.models.hdbdd.model.impl.TypeDefinitionImpl;
+import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
+import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetupGenerated;
+import com.sap.xsk.models.hdbdd.hdbDD.HdbDD;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.ContextImpl;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.EntityImpl;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.FieldImpl;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.FieldPrimitiveImpl;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.FieldReferenceImpl;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.FieldTypeImpl;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.NamespaceImpl;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.SchemaImpl;
+import com.sap.xsk.models.hdbdd.hdbDD.impl.TypeDefinitionImpl;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.calculationview.XSKDataStructureCalculationViewModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureContextModel;
@@ -59,7 +59,7 @@ public class XSKDataStructureModelFactory {
     }
 	
 	private void setupParser() {
-        Injector injector = new ModelStandaloneSetup().createInjectorAndDoEMFRegistration();
+        Injector injector = new HdbDDStandaloneSetup().createInjectorAndDoEMFRegistration();
         injector.injectMembers(this);
     }
 
@@ -148,7 +148,7 @@ public class XSKDataStructureModelFactory {
 		content = content.replace('"', ' ');
 		
 		new org.eclipse.emf.mwe.utils.StandaloneSetup().setPlatformUri("../");
-		Injector injector = new ModelStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
+		Injector injector = new HdbDDStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
 		XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 		
@@ -168,7 +168,7 @@ public class XSKDataStructureModelFactory {
 		hdbddModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
 		
 		for (Iterator iterator = hdbDD.getElements().iterator(); iterator.hasNext();) {
-			com.sap.xsk.models.hdbdd.model.Type type = (com.sap.xsk.models.hdbdd.model.Type) iterator.next();
+			com.sap.xsk.models.hdbdd.hdbDD.Type type = (com.sap.xsk.models.hdbdd.hdbDD.Type) iterator.next();
 			if (type instanceof NamespaceImpl) {
 				hdbddModel.setNamespace(((NamespaceImpl) type).getName());
 			} else if (type instanceof SchemaImpl) {

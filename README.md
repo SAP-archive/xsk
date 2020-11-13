@@ -15,7 +15,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 | Preserve XSJS code             |  ✅   |              |
 | Preserve XSOData descriptors   |  ✅   |              |
 | Preserve XSC development model |  ✅   |              |
-| Preserve XSC security model    |  🔔   | Authentication is managed by the runtime container             |
+| Preserve XSC security model    |  ⚠️   | Authentication is managed by the runtime container |
 | Support for XSJS code          |  ✅   |              |
 
 
@@ -37,12 +37,12 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 | --------------------- |:-----:| ------------:|
 | .xsjs                 |  ✅   |              |
 | .xsjslib              |  ✅   |              |
-| .calculationview      |  🔔   |              |
+| .calculationview      |  ⚠️   |              |
 | .hdbprocedure         |  ✅   |              |
 | .hdbrole              |  ❌   |              |
 | .hdbsequence          |  ✅   |              |
-| .xsodata              |  🔔   |              |
-| .hdbdd                |  🔔   |              |
+| .xsodata              |  ⚠️   |              |
+| .hdbdd                |  ⚠️   |              |
 | .xsaccess             |  ✅   |              |
 | .xsjob                |  ✅   |              |
 | .xssecurestore        |  ✅   |              |
@@ -56,7 +56,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 
 | Aspect                | Scope | Description  |
 | --------------------- |:-----:| ------------:|
-| $.session             |  ✅   |              |
+| $.session             |  ⚠️   |              |
 | $.request             |  ✅   |              |
 | $.response            |  ✅   |              |
 | $.hdb                 |  ✅   |              |
@@ -111,7 +111,8 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
     -e DIRIGIBLE_SCHEDULER_DATABASE_USER=DBADMIN \
     -e DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<password> \
     -e DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false \
-    -e DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false
+    -e DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false \
+    -e DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE=true
 
 #### With persistent volume
 
@@ -132,6 +133,9 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
     docker push dirigiblelabs/dirigible-xsk:0.0.1-application
 
     docker push dirigiblelabs/dirigible-xsk:0.0.1-application-keycloak
+    
+    
+---
 
 ## Configuration
 

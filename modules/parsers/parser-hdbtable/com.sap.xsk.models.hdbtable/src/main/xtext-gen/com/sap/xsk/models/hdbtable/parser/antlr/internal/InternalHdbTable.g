@@ -250,20 +250,184 @@ ruleColumnType returns [EObject current=null]
 				{
 					getUnorderedGroupHelper().select(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 3);
 				}
+							({true}?=>(otherlv_14='comment'
+							{
+								newLeafNode(otherlv_14, grammarAccess.getColumnTypeAccess().getCommentKeyword_3_0());
+							}
+							otherlv_15='='
+							{
+								newLeafNode(otherlv_15, grammarAccess.getColumnTypeAccess().getEqualsSignKeyword_3_1());
+							}
+							(
+								(
+									lv_columnComment_16_0=RULE_STRING
+									{
+										newLeafNode(lv_columnComment_16_0, grammarAccess.getColumnTypeAccess().getColumnCommentSTRINGTerminalRuleCall_3_2_0());
+									}
+									{
+										if ($current==null) {
+											$current = createModelElement(grammarAccess.getColumnTypeRule());
+										}
+										setWithLastConsumed(
+											$current,
+											"columnComment",
+											lv_columnComment_16_0,
+											"org.eclipse.xtext.common.Terminals.STRING");
+									}
+								)
+							)
+							otherlv_17=';'
+							{
+								newLeafNode(otherlv_17, grammarAccess.getColumnTypeAccess().getSemicolonKeyword_3_3());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getColumnTypeAccess().getUnorderedGroup());
+				}
+			)
+		)|
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 4)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 4);
+				}
+							({true}?=>(otherlv_18='defaultValue'
+							{
+								newLeafNode(otherlv_18, grammarAccess.getColumnTypeAccess().getDefaultValueKeyword_4_0());
+							}
+							otherlv_19='='
+							{
+								newLeafNode(otherlv_19, grammarAccess.getColumnTypeAccess().getEqualsSignKeyword_4_1());
+							}
+							(
+								(
+									lv_columnDefaultValue_20_0=RULE_STRING
+									{
+										newLeafNode(lv_columnDefaultValue_20_0, grammarAccess.getColumnTypeAccess().getColumnDefaultValueSTRINGTerminalRuleCall_4_2_0());
+									}
+									{
+										if ($current==null) {
+											$current = createModelElement(grammarAccess.getColumnTypeRule());
+										}
+										setWithLastConsumed(
+											$current,
+											"columnDefaultValue",
+											lv_columnDefaultValue_20_0,
+											"org.eclipse.xtext.common.Terminals.STRING");
+									}
+								)
+							)
+							otherlv_21=';'
+							{
+								newLeafNode(otherlv_21, grammarAccess.getColumnTypeAccess().getSemicolonKeyword_4_3());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getColumnTypeAccess().getUnorderedGroup());
+				}
+			)
+		)|
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 5)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 5);
+				}
+							({true}?=>(otherlv_22='precision'
+							{
+								newLeafNode(otherlv_22, grammarAccess.getColumnTypeAccess().getPrecisionKeyword_5_0());
+							}
+							otherlv_23='='
+							{
+								newLeafNode(otherlv_23, grammarAccess.getColumnTypeAccess().getEqualsSignKeyword_5_1());
+							}
+							(
+								(
+									lv_columnPrecision_24_0=RULE_INT
+									{
+										newLeafNode(lv_columnPrecision_24_0, grammarAccess.getColumnTypeAccess().getColumnPrecisionINTTerminalRuleCall_5_2_0());
+									}
+									{
+										if ($current==null) {
+											$current = createModelElement(grammarAccess.getColumnTypeRule());
+										}
+										setWithLastConsumed(
+											$current,
+											"columnPrecision",
+											lv_columnPrecision_24_0,
+											"org.eclipse.xtext.common.Terminals.INT");
+									}
+								)
+							)
+							otherlv_25=';'
+							{
+								newLeafNode(otherlv_25, grammarAccess.getColumnTypeAccess().getSemicolonKeyword_5_3());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getColumnTypeAccess().getUnorderedGroup());
+				}
+			)
+		)|
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 6)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 6);
+				}
+							({true}?=>(otherlv_26='scale'
+							{
+								newLeafNode(otherlv_26, grammarAccess.getColumnTypeAccess().getScaleKeyword_6_0());
+							}
+							otherlv_27='='
+							{
+								newLeafNode(otherlv_27, grammarAccess.getColumnTypeAccess().getEqualsSignKeyword_6_1());
+							}
+							(
+								(
+									lv_columnScale_28_0=RULE_INT
+									{
+										newLeafNode(lv_columnScale_28_0, grammarAccess.getColumnTypeAccess().getColumnScaleINTTerminalRuleCall_6_2_0());
+									}
+									{
+										if ($current==null) {
+											$current = createModelElement(grammarAccess.getColumnTypeRule());
+										}
+										setWithLastConsumed(
+											$current,
+											"columnScale",
+											lv_columnScale_28_0,
+											"org.eclipse.xtext.common.Terminals.INT");
+									}
+								)
+							)
+							otherlv_29=';'
+							{
+								newLeafNode(otherlv_29, grammarAccess.getColumnTypeAccess().getSemicolonKeyword_6_3());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getColumnTypeAccess().getUnorderedGroup());
+				}
+			)
+		)|
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 7)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getColumnTypeAccess().getUnorderedGroup(), 7);
+				}
 							({true}?=>((
-								otherlv_14='nullable'
+								otherlv_30='nullable'
 								{
-									newLeafNode(otherlv_14, grammarAccess.getColumnTypeAccess().getNullableKeyword_3_0_0());
+									newLeafNode(otherlv_30, grammarAccess.getColumnTypeAccess().getNullableKeyword_7_0_0());
 								}
-								otherlv_15='='
+								otherlv_31='='
 								{
-									newLeafNode(otherlv_15, grammarAccess.getColumnTypeAccess().getEqualsSignKeyword_3_0_1());
+									newLeafNode(otherlv_31, grammarAccess.getColumnTypeAccess().getEqualsSignKeyword_7_0_1());
 								}
 								(
 									(
-										lv_columnNullable_16_0=RULE_BOOL
+										lv_columnNullable_32_0=RULE_BOOL
 										{
-											newLeafNode(lv_columnNullable_16_0, grammarAccess.getColumnTypeAccess().getColumnNullableBOOLTerminalRuleCall_3_0_2_0());
+											newLeafNode(lv_columnNullable_32_0, grammarAccess.getColumnTypeAccess().getColumnNullableBOOLTerminalRuleCall_7_0_2_0());
 										}
 										{
 											if ($current==null) {
@@ -272,19 +436,19 @@ ruleColumnType returns [EObject current=null]
 											setWithLastConsumed(
 												$current,
 												"columnNullable",
-												lv_columnNullable_16_0,
+												lv_columnNullable_32_0,
 												"com.sap.xsk.models.hdbtable.HdbTable.BOOL");
 										}
 									)
 								)
 							)?
-							otherlv_17=';'
+							otherlv_33=';'
 							{
-								newLeafNode(otherlv_17, grammarAccess.getColumnTypeAccess().getSemicolonKeyword_3_1());
+								newLeafNode(otherlv_33, grammarAccess.getColumnTypeAccess().getSemicolonKeyword_7_1());
 							}
-							otherlv_18='}'
+							otherlv_34='}'
 							{
-								newLeafNode(otherlv_18, grammarAccess.getColumnTypeAccess().getRightCurlyBracketKeyword_3_2());
+								newLeafNode(otherlv_34, grammarAccess.getColumnTypeAccess().getRightCurlyBracketKeyword_7_2());
 							}
 							))
 				{ 
@@ -298,6 +462,254 @@ ruleColumnType returns [EObject current=null]
 		)
 			{ 
 			  getUnorderedGroupHelper().leave(grammarAccess.getColumnTypeAccess().getUnorderedGroup());
+			}
+	)
+;
+
+// Entry rule entryRuleIndexType
+entryRuleIndexType returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getIndexTypeRule()); }
+	iv_ruleIndexType=ruleIndexType
+	{ $current=$iv_ruleIndexType.current; }
+	EOF;
+
+// Rule IndexType
+ruleIndexType returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{ 
+			  getUnorderedGroupHelper().enter(grammarAccess.getIndexTypeAccess().getUnorderedGroup());
+			}
+			(
+				(
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getIndexTypeAccess().getUnorderedGroup(), 0)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getIndexTypeAccess().getUnorderedGroup(), 0);
+				}
+							({true}?=>(otherlv_1='{'
+							{
+								newLeafNode(otherlv_1, grammarAccess.getIndexTypeAccess().getLeftCurlyBracketKeyword_0_0());
+							}
+							otherlv_2='name'
+							{
+								newLeafNode(otherlv_2, grammarAccess.getIndexTypeAccess().getNameKeyword_0_1());
+							}
+							otherlv_3='='
+							{
+								newLeafNode(otherlv_3, grammarAccess.getIndexTypeAccess().getEqualsSignKeyword_0_2());
+							}
+							(
+								(
+									lv_columnName_4_0=RULE_STRING
+									{
+										newLeafNode(lv_columnName_4_0, grammarAccess.getIndexTypeAccess().getColumnNameSTRINGTerminalRuleCall_0_3_0());
+									}
+									{
+										if ($current==null) {
+											$current = createModelElement(grammarAccess.getIndexTypeRule());
+										}
+										setWithLastConsumed(
+											$current,
+											"columnName",
+											lv_columnName_4_0,
+											"org.eclipse.xtext.common.Terminals.STRING");
+									}
+								)
+							)
+							otherlv_5=';'
+							{
+								newLeafNode(otherlv_5, grammarAccess.getIndexTypeAccess().getSemicolonKeyword_0_4());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getIndexTypeAccess().getUnorderedGroup());
+				}
+			)
+		)|
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getIndexTypeAccess().getUnorderedGroup(), 1)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getIndexTypeAccess().getUnorderedGroup(), 1);
+				}
+							({true}?=>(otherlv_6='unique'
+							{
+								newLeafNode(otherlv_6, grammarAccess.getIndexTypeAccess().getUniqueKeyword_1_0());
+							}
+							otherlv_7='='
+							{
+								newLeafNode(otherlv_7, grammarAccess.getIndexTypeAccess().getEqualsSignKeyword_1_1());
+							}
+							(
+								(
+									lv_columnUnique_8_0=RULE_BOOL
+									{
+										newLeafNode(lv_columnUnique_8_0, grammarAccess.getIndexTypeAccess().getColumnUniqueBOOLTerminalRuleCall_1_2_0());
+									}
+									{
+										if ($current==null) {
+											$current = createModelElement(grammarAccess.getIndexTypeRule());
+										}
+										setWithLastConsumed(
+											$current,
+											"columnUnique",
+											lv_columnUnique_8_0,
+											"com.sap.xsk.models.hdbtable.HdbTable.BOOL");
+									}
+								)
+							)
+							otherlv_9=';'
+							{
+								newLeafNode(otherlv_9, grammarAccess.getIndexTypeAccess().getSemicolonKeyword_1_3());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getIndexTypeAccess().getUnorderedGroup());
+				}
+			)
+		)|
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getIndexTypeAccess().getUnorderedGroup(), 2)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getIndexTypeAccess().getUnorderedGroup(), 2);
+				}
+							({true}?=>(otherlv_10='order'
+							{
+								newLeafNode(otherlv_10, grammarAccess.getIndexTypeAccess().getOrderKeyword_2_0());
+							}
+							otherlv_11='='
+							{
+								newLeafNode(otherlv_11, grammarAccess.getIndexTypeAccess().getEqualsSignKeyword_2_1());
+							}
+							(
+								(
+									lv_columnOrder_12_0=RULE_ID
+									{
+										newLeafNode(lv_columnOrder_12_0, grammarAccess.getIndexTypeAccess().getColumnOrderIDTerminalRuleCall_2_2_0());
+									}
+									{
+										if ($current==null) {
+											$current = createModelElement(grammarAccess.getIndexTypeRule());
+										}
+										setWithLastConsumed(
+											$current,
+											"columnOrder",
+											lv_columnOrder_12_0,
+											"org.eclipse.xtext.common.Terminals.ID");
+									}
+								)
+							)
+							otherlv_13=';'
+							{
+								newLeafNode(otherlv_13, grammarAccess.getIndexTypeAccess().getSemicolonKeyword_2_3());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getIndexTypeAccess().getUnorderedGroup());
+				}
+			)
+		)|
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getIndexTypeAccess().getUnorderedGroup(), 3)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getIndexTypeAccess().getUnorderedGroup(), 3);
+				}
+							({true}?=>((
+								(
+									lv_indexColumns_14_0='indexColumns'
+									{
+										newLeafNode(lv_indexColumns_14_0, grammarAccess.getIndexTypeAccess().getIndexColumnsIndexColumnsKeyword_3_0_0());
+									}
+									{
+										if ($current==null) {
+											$current = createModelElement(grammarAccess.getIndexTypeRule());
+										}
+										setWithLastConsumed($current, "indexColumns", true, "indexColumns");
+									}
+								)
+							)
+							otherlv_15='='
+							{
+								newLeafNode(otherlv_15, grammarAccess.getIndexTypeAccess().getEqualsSignKeyword_3_1());
+							}
+							otherlv_16='['
+							{
+								newLeafNode(otherlv_16, grammarAccess.getIndexTypeAccess().getLeftSquareBracketKeyword_3_2());
+							}
+							(
+								(
+									(
+										lv_tableIndexColumnsValues_17_0=RULE_STRING
+										{
+											newLeafNode(lv_tableIndexColumnsValues_17_0, grammarAccess.getIndexTypeAccess().getTableIndexColumnsValuesSTRINGTerminalRuleCall_3_3_0_0());
+										}
+										{
+											if ($current==null) {
+												$current = createModelElement(grammarAccess.getIndexTypeRule());
+											}
+											addWithLastConsumed(
+												$current,
+												"tableIndexColumnsValues",
+												lv_tableIndexColumnsValues_17_0,
+												"org.eclipse.xtext.common.Terminals.STRING");
+										}
+									)
+								)
+								(
+									otherlv_18=','
+									{
+										newLeafNode(otherlv_18, grammarAccess.getIndexTypeAccess().getCommaKeyword_3_3_1_0());
+									}
+									(
+										(
+											lv_tableIndexColumnsValues_19_0=RULE_STRING
+											{
+												newLeafNode(lv_tableIndexColumnsValues_19_0, grammarAccess.getIndexTypeAccess().getTableIndexColumnsValuesSTRINGTerminalRuleCall_3_3_1_1_0());
+											}
+											{
+												if ($current==null) {
+													$current = createModelElement(grammarAccess.getIndexTypeRule());
+												}
+												addWithLastConsumed(
+													$current,
+													"tableIndexColumnsValues",
+													lv_tableIndexColumnsValues_19_0,
+													"org.eclipse.xtext.common.Terminals.STRING");
+											}
+										)
+									)
+								)*
+							)?
+							otherlv_20=']'
+							{
+								newLeafNode(otherlv_20, grammarAccess.getIndexTypeAccess().getRightSquareBracketKeyword_3_4());
+							}
+							otherlv_21=';'
+							{
+								newLeafNode(otherlv_21, grammarAccess.getIndexTypeAccess().getSemicolonKeyword_3_5());
+							}
+							otherlv_22='}'
+							{
+								newLeafNode(otherlv_22, grammarAccess.getIndexTypeAccess().getRightCurlyBracketKeyword_3_6());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getIndexTypeAccess().getUnorderedGroup());
+				}
+			)
+		)
+				)+
+				{getUnorderedGroupHelper().canLeave(grammarAccess.getIndexTypeAccess().getUnorderedGroup())}?
+			)
+		)
+			{ 
+			  getUnorderedGroupHelper().leave(grammarAccess.getIndexTypeAccess().getUnorderedGroup());
 			}
 	)
 ;
@@ -571,15 +983,15 @@ ruleTable returns [EObject current=null]
 				}
 							({true}?=>((
 								(
-									lv_primaryKeyColumns_21_0='table.primaryKey.pkcolumns'
+									lv_indexes_21_0='table.indexes'
 									{
-										newLeafNode(lv_primaryKeyColumns_21_0, grammarAccess.getTableAccess().getPrimaryKeyColumnsTablePrimaryKeyPkcolumnsKeyword_4_0_0());
+										newLeafNode(lv_indexes_21_0, grammarAccess.getTableAccess().getIndexesTableIndexesKeyword_4_0_0());
 									}
 									{
 										if ($current==null) {
 											$current = createModelElement(grammarAccess.getTableRule());
 										}
-										setWithLastConsumed($current, "primaryKeyColumns", true, "table.primaryKey.pkcolumns");
+										setWithLastConsumed($current, "indexes", true, "table.indexes");
 									}
 								)
 							)
@@ -594,19 +1006,20 @@ ruleTable returns [EObject current=null]
 							(
 								(
 									(
-										lv_tablePrimaryKeyColumnsValues_24_0=RULE_STRING
 										{
-											newLeafNode(lv_tablePrimaryKeyColumnsValues_24_0, grammarAccess.getTableAccess().getTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_4_3_0_0());
+											newCompositeNode(grammarAccess.getTableAccess().getIndexesValuesIndexTypeParserRuleCall_4_3_0_0());
 										}
+										lv_indexesValues_24_0=ruleIndexType
 										{
 											if ($current==null) {
-												$current = createModelElement(grammarAccess.getTableRule());
+												$current = createModelElementForParent(grammarAccess.getTableRule());
 											}
-											addWithLastConsumed(
+											add(
 												$current,
-												"tablePrimaryKeyColumnsValues",
-												lv_tablePrimaryKeyColumnsValues_24_0,
-												"org.eclipse.xtext.common.Terminals.STRING");
+												"indexesValues",
+												lv_indexesValues_24_0,
+												"com.sap.xsk.models.hdbtable.HdbTable.IndexType");
+											afterParserOrEnumRuleCall();
 										}
 									)
 								)
@@ -617,19 +1030,20 @@ ruleTable returns [EObject current=null]
 									}
 									(
 										(
-											lv_tablePrimaryKeyColumnsValues_26_0=RULE_STRING
 											{
-												newLeafNode(lv_tablePrimaryKeyColumnsValues_26_0, grammarAccess.getTableAccess().getTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_4_3_1_1_0());
+												newCompositeNode(grammarAccess.getTableAccess().getIndexesValuesIndexTypeParserRuleCall_4_3_1_1_0());
 											}
+											lv_indexesValues_26_0=ruleIndexType
 											{
 												if ($current==null) {
-													$current = createModelElement(grammarAccess.getTableRule());
+													$current = createModelElementForParent(grammarAccess.getTableRule());
 												}
-												addWithLastConsumed(
+												add(
 													$current,
-													"tablePrimaryKeyColumnsValues",
-													lv_tablePrimaryKeyColumnsValues_26_0,
-													"org.eclipse.xtext.common.Terminals.STRING");
+													"indexesValues",
+													lv_indexesValues_26_0,
+													"com.sap.xsk.models.hdbtable.HdbTable.IndexType");
+												afterParserOrEnumRuleCall();
 											}
 										)
 									)
@@ -642,6 +1056,93 @@ ruleTable returns [EObject current=null]
 							otherlv_28=';'
 							{
 								newLeafNode(otherlv_28, grammarAccess.getTableAccess().getSemicolonKeyword_4_5());
+							}
+							))
+				{ 
+					getUnorderedGroupHelper().returnFromSelection(grammarAccess.getTableAccess().getUnorderedGroup());
+				}
+			)
+		)|
+		(
+			{getUnorderedGroupHelper().canSelect(grammarAccess.getTableAccess().getUnorderedGroup(), 5)}?=>(
+				{
+					getUnorderedGroupHelper().select(grammarAccess.getTableAccess().getUnorderedGroup(), 5);
+				}
+							({true}?=>((
+								(
+									(
+										lv_primaryKeyColumns_29_0='table.primaryKey.pkcolumns'
+										{
+											newLeafNode(lv_primaryKeyColumns_29_0, grammarAccess.getTableAccess().getPrimaryKeyColumnsTablePrimaryKeyPkcolumnsKeyword_5_0_0_0());
+										}
+										{
+											if ($current==null) {
+												$current = createModelElement(grammarAccess.getTableRule());
+											}
+											setWithLastConsumed($current, "primaryKeyColumns", true, "table.primaryKey.pkcolumns");
+										}
+									)
+								)
+								otherlv_30='='
+								{
+									newLeafNode(otherlv_30, grammarAccess.getTableAccess().getEqualsSignKeyword_5_0_1());
+								}
+								otherlv_31='['
+								{
+									newLeafNode(otherlv_31, grammarAccess.getTableAccess().getLeftSquareBracketKeyword_5_0_2());
+								}
+								(
+									(
+										(
+											lv_tablePrimaryKeyColumnsValues_32_0=RULE_STRING
+											{
+												newLeafNode(lv_tablePrimaryKeyColumnsValues_32_0, grammarAccess.getTableAccess().getTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_5_0_3_0_0());
+											}
+											{
+												if ($current==null) {
+													$current = createModelElement(grammarAccess.getTableRule());
+												}
+												addWithLastConsumed(
+													$current,
+													"tablePrimaryKeyColumnsValues",
+													lv_tablePrimaryKeyColumnsValues_32_0,
+													"org.eclipse.xtext.common.Terminals.STRING");
+											}
+										)
+									)
+									(
+										otherlv_33=','
+										{
+											newLeafNode(otherlv_33, grammarAccess.getTableAccess().getCommaKeyword_5_0_3_1_0());
+										}
+										(
+											(
+												lv_tablePrimaryKeyColumnsValues_34_0=RULE_STRING
+												{
+													newLeafNode(lv_tablePrimaryKeyColumnsValues_34_0, grammarAccess.getTableAccess().getTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_5_0_3_1_1_0());
+												}
+												{
+													if ($current==null) {
+														$current = createModelElement(grammarAccess.getTableRule());
+													}
+													addWithLastConsumed(
+														$current,
+														"tablePrimaryKeyColumnsValues",
+														lv_tablePrimaryKeyColumnsValues_34_0,
+														"org.eclipse.xtext.common.Terminals.STRING");
+												}
+											)
+										)
+									)*
+								)?
+								otherlv_35=']'
+								{
+									newLeafNode(otherlv_35, grammarAccess.getTableAccess().getRightSquareBracketKeyword_5_0_4());
+								}
+							)?
+							otherlv_36=';'
+							{
+								newLeafNode(otherlv_36, grammarAccess.getTableAccess().getSemicolonKeyword_5_1());
 							}
 							))
 				{ 

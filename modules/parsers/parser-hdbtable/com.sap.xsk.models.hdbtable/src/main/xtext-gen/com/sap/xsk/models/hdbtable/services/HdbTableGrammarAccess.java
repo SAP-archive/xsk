@@ -60,23 +60,50 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cColumnLengthINTTerminalRuleCall_2_2_0 = (RuleCall)cColumnLengthAssignment_2_2.eContents().get(0);
 		private final Keyword cSemicolonKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
 		private final Group cGroup_3 = (Group)cUnorderedGroup.eContents().get(3);
-		private final Group cGroup_3_0 = (Group)cGroup_3.eContents().get(0);
-		private final Keyword cNullableKeyword_3_0_0 = (Keyword)cGroup_3_0.eContents().get(0);
-		private final Keyword cEqualsSignKeyword_3_0_1 = (Keyword)cGroup_3_0.eContents().get(1);
-		private final Assignment cColumnNullableAssignment_3_0_2 = (Assignment)cGroup_3_0.eContents().get(2);
-		private final RuleCall cColumnNullableBOOLTerminalRuleCall_3_0_2_0 = (RuleCall)cColumnNullableAssignment_3_0_2.eContents().get(0);
-		private final Keyword cSemicolonKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
-		private final Keyword cRightCurlyBracketKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Keyword cCommentKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
+		private final Assignment cColumnCommentAssignment_3_2 = (Assignment)cGroup_3.eContents().get(2);
+		private final RuleCall cColumnCommentSTRINGTerminalRuleCall_3_2_0 = (RuleCall)cColumnCommentAssignment_3_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_3_3 = (Keyword)cGroup_3.eContents().get(3);
+		private final Group cGroup_4 = (Group)cUnorderedGroup.eContents().get(4);
+		private final Keyword cDefaultValueKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
+		private final Assignment cColumnDefaultValueAssignment_4_2 = (Assignment)cGroup_4.eContents().get(2);
+		private final RuleCall cColumnDefaultValueSTRINGTerminalRuleCall_4_2_0 = (RuleCall)cColumnDefaultValueAssignment_4_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_4_3 = (Keyword)cGroup_4.eContents().get(3);
+		private final Group cGroup_5 = (Group)cUnorderedGroup.eContents().get(5);
+		private final Keyword cPrecisionKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_5_1 = (Keyword)cGroup_5.eContents().get(1);
+		private final Assignment cColumnPrecisionAssignment_5_2 = (Assignment)cGroup_5.eContents().get(2);
+		private final RuleCall cColumnPrecisionINTTerminalRuleCall_5_2_0 = (RuleCall)cColumnPrecisionAssignment_5_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_5_3 = (Keyword)cGroup_5.eContents().get(3);
+		private final Group cGroup_6 = (Group)cUnorderedGroup.eContents().get(6);
+		private final Keyword cScaleKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_6_1 = (Keyword)cGroup_6.eContents().get(1);
+		private final Assignment cColumnScaleAssignment_6_2 = (Assignment)cGroup_6.eContents().get(2);
+		private final RuleCall cColumnScaleINTTerminalRuleCall_6_2_0 = (RuleCall)cColumnScaleAssignment_6_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_6_3 = (Keyword)cGroup_6.eContents().get(3);
+		private final Group cGroup_7 = (Group)cUnorderedGroup.eContents().get(7);
+		private final Group cGroup_7_0 = (Group)cGroup_7.eContents().get(0);
+		private final Keyword cNullableKeyword_7_0_0 = (Keyword)cGroup_7_0.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_7_0_1 = (Keyword)cGroup_7_0.eContents().get(1);
+		private final Assignment cColumnNullableAssignment_7_0_2 = (Assignment)cGroup_7_0.eContents().get(2);
+		private final RuleCall cColumnNullableBOOLTerminalRuleCall_7_0_2_0 = (RuleCall)cColumnNullableAssignment_7_0_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_7_1 = (Keyword)cGroup_7.eContents().get(1);
+		private final Keyword cRightCurlyBracketKeyword_7_2 = (Keyword)cGroup_7.eContents().get(2);
 		
 		//ColumnType:
 		//	'{'
 		//	'name' '=' columnName=STRING ';' &
-		//	'sqlType' '=' columnSqlType=ID ';' & ('length' '=' columnLength=INT ';')? & ('nullable' '=' columnNullable=BOOL)? ';'
+		//	'sqlType' '=' columnSqlType=ID ';' & ('length' '=' columnLength=INT ';')? & ('comment' '=' columnComment=STRING ';')?
+		//	& ('defaultValue' '=' columnDefaultValue=STRING ';')? & ('precision' '=' columnPrecision=INT ';')? & ('scale' '='
+		//	columnScale=INT ';')? & ('nullable' '=' columnNullable=BOOL)? ';'
 		//	'}';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//'{' 'name' '=' columnName=STRING ';' & 'sqlType' '=' columnSqlType=ID ';' & ('length' '=' columnLength=INT ';')? &
-		//('nullable' '=' columnNullable=BOOL)? ';' '}'
+		//('comment' '=' columnComment=STRING ';')? & ('defaultValue' '=' columnDefaultValue=STRING ';')? & ('precision' '='
+		//columnPrecision=INT ';')? & ('scale' '=' columnScale=INT ';')? & ('nullable' '=' columnNullable=BOOL)? ';' '}'
 		public UnorderedGroup getUnorderedGroup() { return cUnorderedGroup; }
 		
 		//'{' 'name' '=' columnName=STRING ';'
@@ -136,29 +163,254 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_2_3() { return cSemicolonKeyword_2_3; }
 		
-		//('nullable' '=' columnNullable=BOOL)? ';' '}'
+		//('comment' '=' columnComment=STRING ';')?
 		public Group getGroup_3() { return cGroup_3; }
 		
-		//('nullable' '=' columnNullable=BOOL)?
-		public Group getGroup_3_0() { return cGroup_3_0; }
-		
-		//'nullable'
-		public Keyword getNullableKeyword_3_0_0() { return cNullableKeyword_3_0_0; }
+		//'comment'
+		public Keyword getCommentKeyword_3_0() { return cCommentKeyword_3_0; }
 		
 		//'='
-		public Keyword getEqualsSignKeyword_3_0_1() { return cEqualsSignKeyword_3_0_1; }
+		public Keyword getEqualsSignKeyword_3_1() { return cEqualsSignKeyword_3_1; }
 		
-		//columnNullable=BOOL
-		public Assignment getColumnNullableAssignment_3_0_2() { return cColumnNullableAssignment_3_0_2; }
+		//columnComment=STRING
+		public Assignment getColumnCommentAssignment_3_2() { return cColumnCommentAssignment_3_2; }
 		
-		//BOOL
-		public RuleCall getColumnNullableBOOLTerminalRuleCall_3_0_2_0() { return cColumnNullableBOOLTerminalRuleCall_3_0_2_0; }
+		//STRING
+		public RuleCall getColumnCommentSTRINGTerminalRuleCall_3_2_0() { return cColumnCommentSTRINGTerminalRuleCall_3_2_0; }
 		
 		//';'
-		public Keyword getSemicolonKeyword_3_1() { return cSemicolonKeyword_3_1; }
+		public Keyword getSemicolonKeyword_3_3() { return cSemicolonKeyword_3_3; }
+		
+		//('defaultValue' '=' columnDefaultValue=STRING ';')?
+		public Group getGroup_4() { return cGroup_4; }
+		
+		//'defaultValue'
+		public Keyword getDefaultValueKeyword_4_0() { return cDefaultValueKeyword_4_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_4_1() { return cEqualsSignKeyword_4_1; }
+		
+		//columnDefaultValue=STRING
+		public Assignment getColumnDefaultValueAssignment_4_2() { return cColumnDefaultValueAssignment_4_2; }
+		
+		//STRING
+		public RuleCall getColumnDefaultValueSTRINGTerminalRuleCall_4_2_0() { return cColumnDefaultValueSTRINGTerminalRuleCall_4_2_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_4_3() { return cSemicolonKeyword_4_3; }
+		
+		//('precision' '=' columnPrecision=INT ';')?
+		public Group getGroup_5() { return cGroup_5; }
+		
+		//'precision'
+		public Keyword getPrecisionKeyword_5_0() { return cPrecisionKeyword_5_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_5_1() { return cEqualsSignKeyword_5_1; }
+		
+		//columnPrecision=INT
+		public Assignment getColumnPrecisionAssignment_5_2() { return cColumnPrecisionAssignment_5_2; }
+		
+		//INT
+		public RuleCall getColumnPrecisionINTTerminalRuleCall_5_2_0() { return cColumnPrecisionINTTerminalRuleCall_5_2_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_5_3() { return cSemicolonKeyword_5_3; }
+		
+		//('scale' '=' columnScale=INT ';')?
+		public Group getGroup_6() { return cGroup_6; }
+		
+		//'scale'
+		public Keyword getScaleKeyword_6_0() { return cScaleKeyword_6_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_6_1() { return cEqualsSignKeyword_6_1; }
+		
+		//columnScale=INT
+		public Assignment getColumnScaleAssignment_6_2() { return cColumnScaleAssignment_6_2; }
+		
+		//INT
+		public RuleCall getColumnScaleINTTerminalRuleCall_6_2_0() { return cColumnScaleINTTerminalRuleCall_6_2_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_6_3() { return cSemicolonKeyword_6_3; }
+		
+		//('nullable' '=' columnNullable=BOOL)? ';' '}'
+		public Group getGroup_7() { return cGroup_7; }
+		
+		//('nullable' '=' columnNullable=BOOL)?
+		public Group getGroup_7_0() { return cGroup_7_0; }
+		
+		//'nullable'
+		public Keyword getNullableKeyword_7_0_0() { return cNullableKeyword_7_0_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_7_0_1() { return cEqualsSignKeyword_7_0_1; }
+		
+		//columnNullable=BOOL
+		public Assignment getColumnNullableAssignment_7_0_2() { return cColumnNullableAssignment_7_0_2; }
+		
+		//BOOL
+		public RuleCall getColumnNullableBOOLTerminalRuleCall_7_0_2_0() { return cColumnNullableBOOLTerminalRuleCall_7_0_2_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_7_1() { return cSemicolonKeyword_7_1; }
 		
 		//'}'
-		public Keyword getRightCurlyBracketKeyword_3_2() { return cRightCurlyBracketKeyword_3_2; }
+		public Keyword getRightCurlyBracketKeyword_7_2() { return cRightCurlyBracketKeyword_7_2; }
+	}
+	public class IndexTypeElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.sap.xsk.models.hdbtable.HdbTable.IndexType");
+		private final UnorderedGroup cUnorderedGroup = (UnorderedGroup)rule.eContents().get(1);
+		private final Group cGroup_0 = (Group)cUnorderedGroup.eContents().get(0);
+		private final Keyword cLeftCurlyBracketKeyword_0_0 = (Keyword)cGroup_0.eContents().get(0);
+		private final Keyword cNameKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Keyword cEqualsSignKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
+		private final Assignment cColumnNameAssignment_0_3 = (Assignment)cGroup_0.eContents().get(3);
+		private final RuleCall cColumnNameSTRINGTerminalRuleCall_0_3_0 = (RuleCall)cColumnNameAssignment_0_3.eContents().get(0);
+		private final Keyword cSemicolonKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
+		private final Group cGroup_1 = (Group)cUnorderedGroup.eContents().get(1);
+		private final Keyword cUniqueKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cColumnUniqueAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cColumnUniqueBOOLTerminalRuleCall_1_2_0 = (RuleCall)cColumnUniqueAssignment_1_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
+		private final Group cGroup_2 = (Group)cUnorderedGroup.eContents().get(2);
+		private final Keyword cOrderKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
+		private final Assignment cColumnOrderAssignment_2_2 = (Assignment)cGroup_2.eContents().get(2);
+		private final RuleCall cColumnOrderIDTerminalRuleCall_2_2_0 = (RuleCall)cColumnOrderAssignment_2_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
+		private final Group cGroup_3 = (Group)cUnorderedGroup.eContents().get(3);
+		private final Assignment cIndexColumnsAssignment_3_0 = (Assignment)cGroup_3.eContents().get(0);
+		private final Keyword cIndexColumnsIndexColumnsKeyword_3_0_0 = (Keyword)cIndexColumnsAssignment_3_0.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
+		private final Keyword cLeftSquareBracketKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Group cGroup_3_3 = (Group)cGroup_3.eContents().get(3);
+		private final Assignment cTableIndexColumnsValuesAssignment_3_3_0 = (Assignment)cGroup_3_3.eContents().get(0);
+		private final RuleCall cTableIndexColumnsValuesSTRINGTerminalRuleCall_3_3_0_0 = (RuleCall)cTableIndexColumnsValuesAssignment_3_3_0.eContents().get(0);
+		private final Group cGroup_3_3_1 = (Group)cGroup_3_3.eContents().get(1);
+		private final Keyword cCommaKeyword_3_3_1_0 = (Keyword)cGroup_3_3_1.eContents().get(0);
+		private final Assignment cTableIndexColumnsValuesAssignment_3_3_1_1 = (Assignment)cGroup_3_3_1.eContents().get(1);
+		private final RuleCall cTableIndexColumnsValuesSTRINGTerminalRuleCall_3_3_1_1_0 = (RuleCall)cTableIndexColumnsValuesAssignment_3_3_1_1.eContents().get(0);
+		private final Keyword cRightSquareBracketKeyword_3_4 = (Keyword)cGroup_3.eContents().get(4);
+		private final Keyword cSemicolonKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
+		private final Keyword cRightCurlyBracketKeyword_3_6 = (Keyword)cGroup_3.eContents().get(6);
+		
+		//IndexType:
+		//	'{'
+		//	'name' '=' columnName=STRING ';' & ('unique' '=' columnUnique=BOOL ';')? & ('order' '=' columnOrder=ID ';')? &
+		//	indexColumns?='indexColumns' '=' '[' (tableIndexColumnsValues+=STRING (',' tableIndexColumnsValues+=STRING)*)? ']' ';'
+		//	'}';
+		@Override public ParserRule getRule() { return rule; }
+		
+		//'{' 'name' '=' columnName=STRING ';' & ('unique' '=' columnUnique=BOOL ';')? & ('order' '=' columnOrder=ID ';')? &
+		//indexColumns?='indexColumns' '=' '[' (tableIndexColumnsValues+=STRING (',' tableIndexColumnsValues+=STRING)*)? ']' ';'
+		//'}'
+		public UnorderedGroup getUnorderedGroup() { return cUnorderedGroup; }
+		
+		//'{' 'name' '=' columnName=STRING ';'
+		public Group getGroup_0() { return cGroup_0; }
+		
+		//'{'
+		public Keyword getLeftCurlyBracketKeyword_0_0() { return cLeftCurlyBracketKeyword_0_0; }
+		
+		//'name'
+		public Keyword getNameKeyword_0_1() { return cNameKeyword_0_1; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_0_2() { return cEqualsSignKeyword_0_2; }
+		
+		//columnName=STRING
+		public Assignment getColumnNameAssignment_0_3() { return cColumnNameAssignment_0_3; }
+		
+		//STRING
+		public RuleCall getColumnNameSTRINGTerminalRuleCall_0_3_0() { return cColumnNameSTRINGTerminalRuleCall_0_3_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_0_4() { return cSemicolonKeyword_0_4; }
+		
+		//('unique' '=' columnUnique=BOOL ';')?
+		public Group getGroup_1() { return cGroup_1; }
+		
+		//'unique'
+		public Keyword getUniqueKeyword_1_0() { return cUniqueKeyword_1_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_1_1() { return cEqualsSignKeyword_1_1; }
+		
+		//columnUnique=BOOL
+		public Assignment getColumnUniqueAssignment_1_2() { return cColumnUniqueAssignment_1_2; }
+		
+		//BOOL
+		public RuleCall getColumnUniqueBOOLTerminalRuleCall_1_2_0() { return cColumnUniqueBOOLTerminalRuleCall_1_2_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_1_3() { return cSemicolonKeyword_1_3; }
+		
+		//('order' '=' columnOrder=ID ';')?
+		public Group getGroup_2() { return cGroup_2; }
+		
+		//'order'
+		public Keyword getOrderKeyword_2_0() { return cOrderKeyword_2_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_2_1() { return cEqualsSignKeyword_2_1; }
+		
+		//columnOrder=ID
+		public Assignment getColumnOrderAssignment_2_2() { return cColumnOrderAssignment_2_2; }
+		
+		//ID
+		public RuleCall getColumnOrderIDTerminalRuleCall_2_2_0() { return cColumnOrderIDTerminalRuleCall_2_2_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_2_3() { return cSemicolonKeyword_2_3; }
+		
+		//indexColumns?='indexColumns' '=' '[' (tableIndexColumnsValues+=STRING (',' tableIndexColumnsValues+=STRING)*)? ']' ';'
+		//'}'
+		public Group getGroup_3() { return cGroup_3; }
+		
+		//indexColumns?='indexColumns'
+		public Assignment getIndexColumnsAssignment_3_0() { return cIndexColumnsAssignment_3_0; }
+		
+		//'indexColumns'
+		public Keyword getIndexColumnsIndexColumnsKeyword_3_0_0() { return cIndexColumnsIndexColumnsKeyword_3_0_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_3_1() { return cEqualsSignKeyword_3_1; }
+		
+		//'['
+		public Keyword getLeftSquareBracketKeyword_3_2() { return cLeftSquareBracketKeyword_3_2; }
+		
+		//(tableIndexColumnsValues+=STRING (',' tableIndexColumnsValues+=STRING)*)?
+		public Group getGroup_3_3() { return cGroup_3_3; }
+		
+		//tableIndexColumnsValues+=STRING
+		public Assignment getTableIndexColumnsValuesAssignment_3_3_0() { return cTableIndexColumnsValuesAssignment_3_3_0; }
+		
+		//STRING
+		public RuleCall getTableIndexColumnsValuesSTRINGTerminalRuleCall_3_3_0_0() { return cTableIndexColumnsValuesSTRINGTerminalRuleCall_3_3_0_0; }
+		
+		//(',' tableIndexColumnsValues+=STRING)*
+		public Group getGroup_3_3_1() { return cGroup_3_3_1; }
+		
+		//','
+		public Keyword getCommaKeyword_3_3_1_0() { return cCommaKeyword_3_3_1_0; }
+		
+		//tableIndexColumnsValues+=STRING
+		public Assignment getTableIndexColumnsValuesAssignment_3_3_1_1() { return cTableIndexColumnsValuesAssignment_3_3_1_1; }
+		
+		//STRING
+		public RuleCall getTableIndexColumnsValuesSTRINGTerminalRuleCall_3_3_1_1_0() { return cTableIndexColumnsValuesSTRINGTerminalRuleCall_3_3_1_1_0; }
+		
+		//']'
+		public Keyword getRightSquareBracketKeyword_3_4() { return cRightSquareBracketKeyword_3_4; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_3_5() { return cSemicolonKeyword_3_5; }
+		
+		//'}'
+		public Keyword getRightCurlyBracketKeyword_3_6() { return cRightCurlyBracketKeyword_3_6; }
 	}
 	public class TableElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.sap.xsk.models.hdbtable.HdbTable.Table");
@@ -199,32 +451,50 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightSquareBracketKeyword_3_4 = (Keyword)cGroup_3.eContents().get(4);
 		private final Keyword cSemicolonKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
 		private final Group cGroup_4 = (Group)cUnorderedGroup.eContents().get(4);
-		private final Assignment cPrimaryKeyColumnsAssignment_4_0 = (Assignment)cGroup_4.eContents().get(0);
-		private final Keyword cPrimaryKeyColumnsTablePrimaryKeyPkcolumnsKeyword_4_0_0 = (Keyword)cPrimaryKeyColumnsAssignment_4_0.eContents().get(0);
+		private final Assignment cIndexesAssignment_4_0 = (Assignment)cGroup_4.eContents().get(0);
+		private final Keyword cIndexesTableIndexesKeyword_4_0_0 = (Keyword)cIndexesAssignment_4_0.eContents().get(0);
 		private final Keyword cEqualsSignKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
 		private final Keyword cLeftSquareBracketKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		private final Group cGroup_4_3 = (Group)cGroup_4.eContents().get(3);
-		private final Assignment cTablePrimaryKeyColumnsValuesAssignment_4_3_0 = (Assignment)cGroup_4_3.eContents().get(0);
-		private final RuleCall cTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_4_3_0_0 = (RuleCall)cTablePrimaryKeyColumnsValuesAssignment_4_3_0.eContents().get(0);
+		private final Assignment cIndexesValuesAssignment_4_3_0 = (Assignment)cGroup_4_3.eContents().get(0);
+		private final RuleCall cIndexesValuesIndexTypeParserRuleCall_4_3_0_0 = (RuleCall)cIndexesValuesAssignment_4_3_0.eContents().get(0);
 		private final Group cGroup_4_3_1 = (Group)cGroup_4_3.eContents().get(1);
 		private final Keyword cCommaKeyword_4_3_1_0 = (Keyword)cGroup_4_3_1.eContents().get(0);
-		private final Assignment cTablePrimaryKeyColumnsValuesAssignment_4_3_1_1 = (Assignment)cGroup_4_3_1.eContents().get(1);
-		private final RuleCall cTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_4_3_1_1_0 = (RuleCall)cTablePrimaryKeyColumnsValuesAssignment_4_3_1_1.eContents().get(0);
+		private final Assignment cIndexesValuesAssignment_4_3_1_1 = (Assignment)cGroup_4_3_1.eContents().get(1);
+		private final RuleCall cIndexesValuesIndexTypeParserRuleCall_4_3_1_1_0 = (RuleCall)cIndexesValuesAssignment_4_3_1_1.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_4_4 = (Keyword)cGroup_4.eContents().get(4);
 		private final Keyword cSemicolonKeyword_4_5 = (Keyword)cGroup_4.eContents().get(5);
+		private final Group cGroup_5 = (Group)cUnorderedGroup.eContents().get(5);
+		private final Group cGroup_5_0 = (Group)cGroup_5.eContents().get(0);
+		private final Assignment cPrimaryKeyColumnsAssignment_5_0_0 = (Assignment)cGroup_5_0.eContents().get(0);
+		private final Keyword cPrimaryKeyColumnsTablePrimaryKeyPkcolumnsKeyword_5_0_0_0 = (Keyword)cPrimaryKeyColumnsAssignment_5_0_0.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_5_0_1 = (Keyword)cGroup_5_0.eContents().get(1);
+		private final Keyword cLeftSquareBracketKeyword_5_0_2 = (Keyword)cGroup_5_0.eContents().get(2);
+		private final Group cGroup_5_0_3 = (Group)cGroup_5_0.eContents().get(3);
+		private final Assignment cTablePrimaryKeyColumnsValuesAssignment_5_0_3_0 = (Assignment)cGroup_5_0_3.eContents().get(0);
+		private final RuleCall cTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_5_0_3_0_0 = (RuleCall)cTablePrimaryKeyColumnsValuesAssignment_5_0_3_0.eContents().get(0);
+		private final Group cGroup_5_0_3_1 = (Group)cGroup_5_0_3.eContents().get(1);
+		private final Keyword cCommaKeyword_5_0_3_1_0 = (Keyword)cGroup_5_0_3_1.eContents().get(0);
+		private final Assignment cTablePrimaryKeyColumnsValuesAssignment_5_0_3_1_1 = (Assignment)cGroup_5_0_3_1.eContents().get(1);
+		private final RuleCall cTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_5_0_3_1_1_0 = (RuleCall)cTablePrimaryKeyColumnsValuesAssignment_5_0_3_1_1.eContents().get(0);
+		private final Keyword cRightSquareBracketKeyword_5_0_4 = (Keyword)cGroup_5_0.eContents().get(4);
+		private final Keyword cSemicolonKeyword_5_1 = (Keyword)cGroup_5.eContents().get(1);
 		
 		//Table:
 		//	schema?='table.schemaName' '=' schemaName=STRING ';' & type?='table.tableType' '=' typeValue=ID ';' &
-		//	description?='table.description' '=' descriptionText=STRING ';' & columns?='table.columns' '=' '['
-		//	(columnsValues+=ColumnType (',' columnsValues+=ColumnType)*)? ']' ';' &
-		//	primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' (tablePrimaryKeyColumnsValues+=STRING (','
-		//	tablePrimaryKeyColumnsValues+=STRING)*)? ']' ';';
+		//	(description?='table.description' '=' descriptionText=STRING ';')? & columns?='table.columns' '=' '['
+		//	(columnsValues+=ColumnType (',' columnsValues+=ColumnType)*)? ']' ';' & (indexes?='table.indexes' '=' '['
+		//	(indexesValues+=IndexType (',' indexesValues+=IndexType)*)? ']' ';')? &
+		//	(primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' (tablePrimaryKeyColumnsValues+=STRING (','
+		//	tablePrimaryKeyColumnsValues+=STRING)*)? ']')? ';';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//schema?='table.schemaName' '=' schemaName=STRING ';' & type?='table.tableType' '=' typeValue=ID ';' &
-		//description?='table.description' '=' descriptionText=STRING ';' & columns?='table.columns' '=' '['
-		//(columnsValues+=ColumnType (',' columnsValues+=ColumnType)*)? ']' ';' & primaryKeyColumns?='table.primaryKey.pkcolumns'
-		//'=' '[' (tablePrimaryKeyColumnsValues+=STRING (',' tablePrimaryKeyColumnsValues+=STRING)*)? ']' ';'
+		//(description?='table.description' '=' descriptionText=STRING ';')? & columns?='table.columns' '=' '['
+		//(columnsValues+=ColumnType (',' columnsValues+=ColumnType)*)? ']' ';' & (indexes?='table.indexes' '=' '['
+		//(indexesValues+=IndexType (',' indexesValues+=IndexType)*)? ']' ';')? &
+		//(primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' (tablePrimaryKeyColumnsValues+=STRING (','
+		//tablePrimaryKeyColumnsValues+=STRING)*)? ']')? ';'
 		public UnorderedGroup getUnorderedGroup() { return cUnorderedGroup; }
 		
 		//schema?='table.schemaName' '=' schemaName=STRING ';'
@@ -269,7 +539,7 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_1_3() { return cSemicolonKeyword_1_3; }
 		
-		//description?='table.description' '=' descriptionText=STRING ';'
+		//(description?='table.description' '=' descriptionText=STRING ';')?
 		public Group getGroup_2() { return cGroup_2; }
 		
 		//description?='table.description'
@@ -332,15 +602,14 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 		//';'
 		public Keyword getSemicolonKeyword_3_5() { return cSemicolonKeyword_3_5; }
 		
-		//primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' (tablePrimaryKeyColumnsValues+=STRING (','
-		//tablePrimaryKeyColumnsValues+=STRING)*)? ']' ';'
+		//(indexes?='table.indexes' '=' '[' (indexesValues+=IndexType (',' indexesValues+=IndexType)*)? ']' ';')?
 		public Group getGroup_4() { return cGroup_4; }
 		
-		//primaryKeyColumns?='table.primaryKey.pkcolumns'
-		public Assignment getPrimaryKeyColumnsAssignment_4_0() { return cPrimaryKeyColumnsAssignment_4_0; }
+		//indexes?='table.indexes'
+		public Assignment getIndexesAssignment_4_0() { return cIndexesAssignment_4_0; }
 		
-		//'table.primaryKey.pkcolumns'
-		public Keyword getPrimaryKeyColumnsTablePrimaryKeyPkcolumnsKeyword_4_0_0() { return cPrimaryKeyColumnsTablePrimaryKeyPkcolumnsKeyword_4_0_0; }
+		//'table.indexes'
+		public Keyword getIndexesTableIndexesKeyword_4_0_0() { return cIndexesTableIndexesKeyword_4_0_0; }
 		
 		//'='
 		public Keyword getEqualsSignKeyword_4_1() { return cEqualsSignKeyword_4_1; }
@@ -348,38 +617,86 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 		//'['
 		public Keyword getLeftSquareBracketKeyword_4_2() { return cLeftSquareBracketKeyword_4_2; }
 		
-		//(tablePrimaryKeyColumnsValues+=STRING (',' tablePrimaryKeyColumnsValues+=STRING)*)?
+		//(indexesValues+=IndexType (',' indexesValues+=IndexType)*)?
 		public Group getGroup_4_3() { return cGroup_4_3; }
 		
-		//tablePrimaryKeyColumnsValues+=STRING
-		public Assignment getTablePrimaryKeyColumnsValuesAssignment_4_3_0() { return cTablePrimaryKeyColumnsValuesAssignment_4_3_0; }
+		//indexesValues+=IndexType
+		public Assignment getIndexesValuesAssignment_4_3_0() { return cIndexesValuesAssignment_4_3_0; }
 		
-		//STRING
-		public RuleCall getTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_4_3_0_0() { return cTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_4_3_0_0; }
+		//IndexType
+		public RuleCall getIndexesValuesIndexTypeParserRuleCall_4_3_0_0() { return cIndexesValuesIndexTypeParserRuleCall_4_3_0_0; }
 		
-		//(',' tablePrimaryKeyColumnsValues+=STRING)*
+		//(',' indexesValues+=IndexType)*
 		public Group getGroup_4_3_1() { return cGroup_4_3_1; }
 		
 		//','
 		public Keyword getCommaKeyword_4_3_1_0() { return cCommaKeyword_4_3_1_0; }
 		
-		//tablePrimaryKeyColumnsValues+=STRING
-		public Assignment getTablePrimaryKeyColumnsValuesAssignment_4_3_1_1() { return cTablePrimaryKeyColumnsValuesAssignment_4_3_1_1; }
+		//indexesValues+=IndexType
+		public Assignment getIndexesValuesAssignment_4_3_1_1() { return cIndexesValuesAssignment_4_3_1_1; }
 		
-		//STRING
-		public RuleCall getTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_4_3_1_1_0() { return cTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_4_3_1_1_0; }
+		//IndexType
+		public RuleCall getIndexesValuesIndexTypeParserRuleCall_4_3_1_1_0() { return cIndexesValuesIndexTypeParserRuleCall_4_3_1_1_0; }
 		
 		//']'
 		public Keyword getRightSquareBracketKeyword_4_4() { return cRightSquareBracketKeyword_4_4; }
 		
 		//';'
 		public Keyword getSemicolonKeyword_4_5() { return cSemicolonKeyword_4_5; }
+		
+		//(primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' (tablePrimaryKeyColumnsValues+=STRING (','
+		//tablePrimaryKeyColumnsValues+=STRING)*)? ']')? ';'
+		public Group getGroup_5() { return cGroup_5; }
+		
+		//(primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' (tablePrimaryKeyColumnsValues+=STRING (','
+		//tablePrimaryKeyColumnsValues+=STRING)*)? ']')?
+		public Group getGroup_5_0() { return cGroup_5_0; }
+		
+		//primaryKeyColumns?='table.primaryKey.pkcolumns'
+		public Assignment getPrimaryKeyColumnsAssignment_5_0_0() { return cPrimaryKeyColumnsAssignment_5_0_0; }
+		
+		//'table.primaryKey.pkcolumns'
+		public Keyword getPrimaryKeyColumnsTablePrimaryKeyPkcolumnsKeyword_5_0_0_0() { return cPrimaryKeyColumnsTablePrimaryKeyPkcolumnsKeyword_5_0_0_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_5_0_1() { return cEqualsSignKeyword_5_0_1; }
+		
+		//'['
+		public Keyword getLeftSquareBracketKeyword_5_0_2() { return cLeftSquareBracketKeyword_5_0_2; }
+		
+		//(tablePrimaryKeyColumnsValues+=STRING (',' tablePrimaryKeyColumnsValues+=STRING)*)?
+		public Group getGroup_5_0_3() { return cGroup_5_0_3; }
+		
+		//tablePrimaryKeyColumnsValues+=STRING
+		public Assignment getTablePrimaryKeyColumnsValuesAssignment_5_0_3_0() { return cTablePrimaryKeyColumnsValuesAssignment_5_0_3_0; }
+		
+		//STRING
+		public RuleCall getTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_5_0_3_0_0() { return cTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_5_0_3_0_0; }
+		
+		//(',' tablePrimaryKeyColumnsValues+=STRING)*
+		public Group getGroup_5_0_3_1() { return cGroup_5_0_3_1; }
+		
+		//','
+		public Keyword getCommaKeyword_5_0_3_1_0() { return cCommaKeyword_5_0_3_1_0; }
+		
+		//tablePrimaryKeyColumnsValues+=STRING
+		public Assignment getTablePrimaryKeyColumnsValuesAssignment_5_0_3_1_1() { return cTablePrimaryKeyColumnsValuesAssignment_5_0_3_1_1; }
+		
+		//STRING
+		public RuleCall getTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_5_0_3_1_1_0() { return cTablePrimaryKeyColumnsValuesSTRINGTerminalRuleCall_5_0_3_1_1_0; }
+		
+		//']'
+		public Keyword getRightSquareBracketKeyword_5_0_4() { return cRightSquareBracketKeyword_5_0_4; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_5_1() { return cSemicolonKeyword_5_1; }
 	}
 	
 	
 	private final HdbTableModelElements pHdbTableModel;
 	private final TerminalRule tBOOL;
 	private final ColumnTypeElements pColumnType;
+	private final IndexTypeElements pIndexType;
 	private final TableElements pTable;
 	
 	private final Grammar grammar;
@@ -394,6 +711,7 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 		this.pHdbTableModel = new HdbTableModelElements();
 		this.tBOOL = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "com.sap.xsk.models.hdbtable.HdbTable.BOOL");
 		this.pColumnType = new ColumnTypeElements();
+		this.pIndexType = new IndexTypeElements();
 		this.pTable = new TableElements();
 	}
 	
@@ -443,7 +761,9 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 	//ColumnType:
 	//	'{'
 	//	'name' '=' columnName=STRING ';' &
-	//	'sqlType' '=' columnSqlType=ID ';' & ('length' '=' columnLength=INT ';')? & ('nullable' '=' columnNullable=BOOL)? ';'
+	//	'sqlType' '=' columnSqlType=ID ';' & ('length' '=' columnLength=INT ';')? & ('comment' '=' columnComment=STRING ';')?
+	//	& ('defaultValue' '=' columnDefaultValue=STRING ';')? & ('precision' '=' columnPrecision=INT ';')? & ('scale' '='
+	//	columnScale=INT ';')? & ('nullable' '=' columnNullable=BOOL)? ';'
 	//	'}';
 	public ColumnTypeElements getColumnTypeAccess() {
 		return pColumnType;
@@ -453,12 +773,26 @@ public class HdbTableGrammarAccess extends AbstractGrammarElementFinder {
 		return getColumnTypeAccess().getRule();
 	}
 	
+	//IndexType:
+	//	'{'
+	//	'name' '=' columnName=STRING ';' & ('unique' '=' columnUnique=BOOL ';')? & ('order' '=' columnOrder=ID ';')? &
+	//	indexColumns?='indexColumns' '=' '[' (tableIndexColumnsValues+=STRING (',' tableIndexColumnsValues+=STRING)*)? ']' ';'
+	//	'}';
+	public IndexTypeElements getIndexTypeAccess() {
+		return pIndexType;
+	}
+	
+	public ParserRule getIndexTypeRule() {
+		return getIndexTypeAccess().getRule();
+	}
+	
 	//Table:
 	//	schema?='table.schemaName' '=' schemaName=STRING ';' & type?='table.tableType' '=' typeValue=ID ';' &
-	//	description?='table.description' '=' descriptionText=STRING ';' & columns?='table.columns' '=' '['
-	//	(columnsValues+=ColumnType (',' columnsValues+=ColumnType)*)? ']' ';' &
-	//	primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' (tablePrimaryKeyColumnsValues+=STRING (','
-	//	tablePrimaryKeyColumnsValues+=STRING)*)? ']' ';';
+	//	(description?='table.description' '=' descriptionText=STRING ';')? & columns?='table.columns' '=' '['
+	//	(columnsValues+=ColumnType (',' columnsValues+=ColumnType)*)? ']' ';' & (indexes?='table.indexes' '=' '['
+	//	(indexesValues+=IndexType (',' indexesValues+=IndexType)*)? ']' ';')? &
+	//	(primaryKeyColumns?='table.primaryKey.pkcolumns' '=' '[' (tablePrimaryKeyColumnsValues+=STRING (','
+	//	tablePrimaryKeyColumnsValues+=STRING)*)? ']')? ';';
 	public TableElements getTableAccess() {
 		return pTable;
 	}

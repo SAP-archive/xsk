@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import com.sap.xsk.models.hdbtable.hdbTable.ColumnType;
 import com.sap.xsk.models.hdbtable.hdbTable.HdbTableModel;
 import com.sap.xsk.models.hdbtable.hdbTable.HdbTablePackage;
+import com.sap.xsk.models.hdbtable.hdbTable.IndexType;
 import com.sap.xsk.models.hdbtable.hdbTable.Table;
 import com.sap.xsk.models.hdbtable.services.HdbTableGrammarAccess;
 import java.util.Set;
@@ -40,6 +41,9 @@ public class HdbTableSemanticSequencer extends AbstractDelegatingSemanticSequenc
 			case HdbTablePackage.HDB_TABLE_MODEL:
 				sequence_HdbTableModel(context, (HdbTableModel) semanticObject); 
 				return; 
+			case HdbTablePackage.INDEX_TYPE:
+				sequence_IndexType(context, (IndexType) semanticObject); 
+				return; 
 			case HdbTablePackage.TABLE:
 				sequence_Table(context, (Table) semanticObject); 
 				return; 
@@ -53,7 +57,16 @@ public class HdbTableSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	 *     ColumnType returns ColumnType
 	 *
 	 * Constraint:
-	 *     (columnName=STRING | columnSqlType=ID | columnLength=INT | columnNullable=BOOL)*
+	 *     (
+	 *         columnName=STRING | 
+	 *         columnSqlType=ID | 
+	 *         columnLength=INT | 
+	 *         columnComment=STRING | 
+	 *         columnDefaultValue=STRING | 
+	 *         columnPrecision=INT | 
+	 *         columnScale=INT | 
+	 *         columnNullable=BOOL
+	 *     )*
 	 */
 	protected void sequence_ColumnType(ISerializationContext context, ColumnType semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -80,16 +93,27 @@ public class HdbTableSemanticSequencer extends AbstractDelegatingSemanticSequenc
 	
 	/**
 	 * Contexts:
-	 *     Table returns Table
+	 *     IndexType returns IndexType
 	 *
 	 * Constraint:
 	 *     (
-	 *         (schema?='table.schemaName' schemaName=STRING) | 
-	 *         (type?='table.tableType' typeValue=ID) | 
-	 *         (description?='table.description' descriptionText=STRING) | 
-	 *         (columns?='table.columns' (columnsValues+=ColumnType columnsValues+=ColumnType*)?) | 
-	 *         (primaryKeyColumns?='table.primaryKey.pkcolumns' (tablePrimaryKeyColumnsValues+=STRING tablePrimaryKeyColumnsValues+=STRING*)?)
+	 *         columnName=STRING | 
+	 *         columnUnique=BOOL | 
+	 *         columnOrder=ID | 
+	 *         (indexColumns?='indexColumns' (tableIndexColumnsValues+=STRING tableIndexColumnsValues+=STRING*)?)
 	 *     )+
+	 */
+	protected void sequence_IndexType(ISerializationContext context, IndexType semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     Table returns Table
+	 *
+	 * Constraint:
+	 *     {Table}
 	 */
 	protected void sequence_Table(ISerializationContext context, Table semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

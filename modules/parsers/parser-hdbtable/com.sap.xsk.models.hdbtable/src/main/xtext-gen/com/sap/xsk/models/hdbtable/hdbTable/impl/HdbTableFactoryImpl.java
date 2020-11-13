@@ -67,6 +67,7 @@ public class HdbTableFactoryImpl extends EFactoryImpl implements HdbTableFactory
     {
       case HdbTablePackage.HDB_TABLE_MODEL: return createHdbTableModel();
       case HdbTablePackage.COLUMN_TYPE: return createColumnType();
+      case HdbTablePackage.INDEX_TYPE: return createIndexType();
       case HdbTablePackage.TABLE: return createTable();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -93,6 +94,17 @@ public class HdbTableFactoryImpl extends EFactoryImpl implements HdbTableFactory
   {
     ColumnTypeImpl columnType = new ColumnTypeImpl();
     return columnType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IndexType createIndexType()
+  {
+    IndexTypeImpl indexType = new IndexTypeImpl();
+    return indexType;
   }
 
   /**

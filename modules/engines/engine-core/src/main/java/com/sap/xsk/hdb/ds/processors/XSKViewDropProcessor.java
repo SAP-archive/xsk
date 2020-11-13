@@ -45,8 +45,9 @@ public class XSKViewDropProcessor {
 		logger.info("Processing Drop View: " + viewName);
 		if (SqlFactory.getNative(connection).exists(connection, viewName)) {
 			String sql = SqlFactory.getNative(connection).drop().view(viewName).build();
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = null;
 			try {
+				statement = connection.prepareStatement(sql);
 				logger.info(sql);
 				statement.executeUpdate();
 			} catch (SQLException e) {

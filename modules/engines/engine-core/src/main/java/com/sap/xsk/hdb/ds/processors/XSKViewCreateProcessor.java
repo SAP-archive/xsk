@@ -45,8 +45,9 @@ public class XSKViewCreateProcessor {
 		logger.info("Processing Create View: " + viewName);
 		if (!SqlFactory.getNative(connection).exists(connection, viewName)) {
 			String sql = SqlFactory.getNative(connection).create().view(viewName).asSelect(viewModel.getQuery()).build();
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = null;
 			try {
+				statement = connection.prepareStatement(sql);
 				logger.info(sql);
 				statement.executeUpdate();
 			} catch (SQLException e) {

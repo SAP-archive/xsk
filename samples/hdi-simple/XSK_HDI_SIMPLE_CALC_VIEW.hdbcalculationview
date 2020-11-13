@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario id="com.sap.xsk.samples::XSK_HDI_SIMPLE_TABLE_CALC_VIEW" outputViewType="Projection">
+<Calculation:scenario id="com.sap.xsk.samples::XSK_HDI_SIMPLE_CALC_VIEW" outputViewType="Projection">
     <dataSources>
         <DataSource id="XSK_HDI_SIMPLE_TABLE" type="DATA_BASE_TABLE">
             <resourceUri>XSK_HDI_SIMPLE_TABLE</resourceUri>
         </DataSource>
     </dataSources>
     <calculationViews>
-        <calculationView xsi:type="Calculation:ProjectionView" id="CT">
+        <calculationView xsi:type="Calculation:ProjectionView" id="XSK_HDI_SIMPLE_CALC_VIEW">
             <viewAttributes>
                 <viewAttribute id="COLUMN1"/>
             </viewAttributes>
@@ -15,10 +15,10 @@
             </input>
         </calculationView>
     </calculationViews>
-    <logicalModel id="XSK_HDI_SIMPLE_TABLE_CALC_VIEW">
+    <logicalModel id="XSK_HDI_SIMPLE_CALC_VIEW">
         <attributes>
             <attribute id="COLUMN1">
-                <keyMapping columnObjectName="XSK_HDI_SIMPLE_TABLE_CALC_VIEW" columnName="A"/>
+                <keyMapping columnObjectName="XSK_HDI_SIMPLE_CALC_VIEW" columnName="COLUMN1"/>
             </attribute>
         </attributes>
     </logicalModel>

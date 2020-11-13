@@ -7,8 +7,8 @@ public class XSKGrantPrivilegesContainerTargetSchemaProcessor extends XSKHDIAbst
 	
 	public final void execute(Connection connection, String container, String[] users) throws SQLException {
     	for (String user : users) {
-    		executeUpdate(connection, "GRANT SELECT ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTIONS;');");
-    		executeUpdate(connection, "GRANT EXECUTE ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTIONS;');");
+    		executeUpdate(connection, "GRANT SELECT ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTION;");
+    		executeUpdate(connection, "GRANT EXECUTE ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTION;");
     	}
 	}
 

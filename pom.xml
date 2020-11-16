@@ -32,32 +32,128 @@
 		<module>releng</module>
 	</modules>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>${maven.compiler.plugin.version}</version>
+						<configuration>
+							<source>${maven.compiler.source}</source>
+							<target>${maven.compiler.target}</target>
+							<debug>true</debug>
+							<debuglevel>lines,vars,source</debuglevel>
+						</configuration>
+					</plugin>
+					<!-- <plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.2.0</version>
+						<configuration>
+							<source>${java.version}</source>
+						</configuration>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration> <failOnError>false</failOnError> </configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.commons</groupId>
+								<artifactId>commons-lang3</artifactId>
+								<version>${commons.lang3}</version>
+							</dependency>
+						</dependencies>
+					</plugin> -->
+
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>license</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>${license-maven-plugin.version}</version>
+						<inherited>true</inherited>
+						<configuration>
+							<header>${license.header.location}</header>
+							<aggregate>true</aggregate>
+							<properties>
+								<inceptionYear>${project.inceptionYear}</inceptionYear>
+								<currentYear>${currentYear}</currentYear>
+							</properties>
+							<includes>
+								<include>src/**/*.java</include>
+								<include>src/**/*.xml</include>
+								<include>src/**/*.js</include>
+							</includes>
+							<excludes>
+								<exclude>**/logback.xml</exclude>
+								<exclude>**/logback-test.xml</exclude>
+								<exclude>**/src/test/resources/**</exclude>
+							</excludes>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>com.mycila</groupId>
+								<artifactId>license-maven-plugin-git</artifactId>
+								<version>${license-maven-plugin.version}</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>format-license</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>format</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>${maven.compiler.plugin.version}</version>
+						<configuration>
+							<source>${maven.compiler.source}</source>
+							<target>${maven.compiler.target}</target>
+							<debug>true</debug>
+							<debuglevel>lines,vars,source</debuglevel>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<properties>
 		<java.version>11</java.version>
 		<xtextVersion>2.18.0</xtextVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
 
 		<dirigible.version>5.5.0</dirigible.version>
 
 		<maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
 		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
-		<maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
+		<maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<maven.scm.plugin.version>1.9</maven.scm.plugin.version>
 		<commons.io>2.5</commons.io>
 		<commons.codec>1.10</commons.codec>
@@ -86,5 +182,10 @@
 		<okhttp.version>2.7.5</okhttp.version>
 		<xsuaa.client.version>2.2.0</xsuaa.client.version>
 		<apache.httpclient.version>4.5.8</apache.httpclient.version>
+		<commons.lang3>3.9</commons.lang3>
+		<license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
+
+		<license.header.location>license-header.txt</license.header.location>
+
 	</properties>
 </project>

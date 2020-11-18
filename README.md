@@ -82,23 +82,45 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
     
 #### Build Docker images
 
-    docker build -t dirigiblelabs/dirigible-xsk:0.0.1 .
-    
-    docker build -t dirigiblelabs/dirigible-xsk:0.0.1-keycloak . -f Dockerfile-keycloak
+##### Local (Tomcat Server)
 
-    docker build -t dirigiblelabs/dirigible-xsk:0.0.1-application . -f Dockerfile-application
+```
+cd releng/server
 
-    docker build -t dirigiblelabs/dirigible-xsk:0.0.1-application-keycloak . -f Dockerfile-application-keycloak
+docker build -t dirigiblelabs/xsk-server .
+```
+
+##### Kyma
+
+```
+cd releng/sap-kyma
+
+docker build -t dirigiblelabs/xsk-kyma .
+```
+
+##### Cloud Foundry
+
+```
+cd releng/sap-cf
+
+docker build -t dirigiblelabs/xsk-cf .
+```
 
 ### How to run
 
-#### Local database
+#### Local (Tomcat Server)
 
-    docker run -p 8888:8080 dirigiblelabs/dirigible-xsk:0.0.1
+##### With local database
 
-#### Remote HANA Cloud instance
+    docker run -p 8888:8080 dirigiblelabs/xsk
 
-    docker run -p 8888:8080 dirigiblelabs/dirigible-xsk:0.0.1 \
+##### With persistent volume
+
+    docker run -p 8888:8080 -v <your-local-directory>:/usr/local/tomcat/target dirigiblelabs/xsk
+
+##### With HANA Cloud instance
+
+    docker run -p 8888:8080 dirigiblelabs/xsk \
     -e DIRIGIBLE_DATABASE_PROVIDER=custom \
     -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
     -e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
@@ -114,26 +136,163 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
     -e DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false \
     -e DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE=true
 
-#### With persistent volume
-
-    docker run -p 8888:8080 -v <your-local-directory>:/usr/local/tomcat/target dirigiblelabs/dirigible-xsk:0.0.1
-    
-#### Go to:
+##### Go to:
 
 > http://localhost:8888
+
+#### Kyma
+
+Pre-requisites: Get access to SAP Cloud Platform Kyma environment. You can visit the following articles:
+- [Kyma Environment](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/468c2f3c3ca24c2c8497ef9f83154c44.html)
+- [SAP Cloud Platform, Kyma runtime: How to get started](https://blogs.sap.com/2020/05/13/sap-cloud-platform-extension-factory-kyma-runtime-how-to-get-started/)
+- [How to deploy Eclipse Dirigible in the SAP Cloud Platform Kyma environment](https://blogs.sap.com/2020/10/13/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-kyma-environment/)
+
+1. Copy the YAML deployment configuration and create new file `deployment.yaml`. Replace **<your-kyma-cluster-host>** with the Kyma cluster host.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xsk
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xsk
+  template:
+    metadata:
+      labels:
+        app: xsk
+    spec:
+      containers:
+      - env:
+        - name: DIRIGIBLE_THEME_DEFAULT
+          value: fiori
+        - name: DIRIGIBLE_HOST
+          value: https://xsk.<your-kyma-cluster-host>
+        image: dirigiblelabs/xsk-kyma
+        imagePullPolicy: Always
+        name: xsk
+        ports:
+        - containerPort: 8080
+          name: xsk
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xsk
+  name: xsk
+  namespace: default
+spec:
+  ports:
+  - name: xsk
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: xsk
+  type: ClusterIP
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: xsk
+  namespace: default
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+  - accessStrategies:
+    - config: {}
+      handler: noop
+    methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - HEAD
+    path: /.*
+  service:
+    host: xsk.<your-kyma-cluster-host>
+    name: xsk
+    port: 8080
+```
+
+1. Navigate to the Kyma Console and use the **Deploy new resource** button to upload the **deployment.yaml** file
+1. Select the **Service Management > Marketplace** tab
+1. Open the **Authorization & Trust Management** service
+1. Click on the **Create** button to create new service instance
+    - Name: xsuaa-xsk
+    - Plan: application
+    - In the **Add parameters** section provide the following JSON and replace the **<your-kyma-cluster-host>** placeholder:
+
+```json
+{
+    "xsappname": "xsk-xsuaa",
+    "oauth2-configuration": {
+       "token-validity": 7200,
+       "redirect-uris": [
+          "https://xsk.<your-kyma-cluster-host>"
+       ]
+    },
+    "scopes": [
+       {
+          "name": "$XSAPPNAME.Developer",
+          "description": "Developer scope"
+       },
+       {
+          "name": "$XSAPPNAME.Operator",
+          "description": "Operator scope"
+       }
+    ],
+    "role-templates": [
+       {
+          "name": "Developer",
+          "description": "Developer related roles",
+          "scope-references": [
+             "$XSAPPNAME.Developer"
+          ]
+       },
+       {
+          "name": "Operator",
+          "description": "Operator related roles",
+          "scope-references": [
+             "$XSAPPNAME.Operator"
+          ]
+       }
+    ],
+    "role-collections": [
+       {
+          "name": "xsk-developer",
+          "description": "XSK Developer",
+          "role-template-references": [ 
+             "$XSAPPNAME.Developer",
+             "$XSAPPNAME.Operator"
+          ]
+       }
+    ]	
+ }
+```
+
+1. Once the service instance is in **RUNNING** state, select the **Bound Applications** tab
+1. Click on the **Bind Application** button and from the list of applications select the **xsk** deployment
+
+##### With HANA Cloud instance
+
+---
 
 ### How to push on Docker Hub
 
     docker login
     
-    docker push dirigiblelabs/dirigible-xsk
+    docker push dirigiblelabs/xsk
 
-    docker push dirigiblelabs/dirigible-xsk:0.0.1-keycloak
+    docker push dirigiblelabs/xsk-kyma
 
-    docker push dirigiblelabs/dirigible-xsk:0.0.1-application
-
-    docker push dirigiblelabs/dirigible-xsk:0.0.1-application-keycloak
-    
+    docker push dirigiblelabs/xsk-cf  
     
 ---
 

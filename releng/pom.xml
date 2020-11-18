@@ -18,7 +18,7 @@
 	<modules>
 		<module>server</module>
 		<!-- <module>sap-cf</module> -->
-		<!-- <module>sap-kyma</module> -->
+		<module>sap-kyma</module>
 	</modules>
 
 </project>

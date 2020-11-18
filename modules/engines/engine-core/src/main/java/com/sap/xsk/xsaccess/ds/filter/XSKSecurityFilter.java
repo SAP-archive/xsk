@@ -27,6 +27,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.dirigible.api.v3.http.HttpRequestFacade;
 import org.eclipse.dirigible.api.v3.utils.EscapeFacade;
 import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -144,7 +145,7 @@ public class XSKSecurityFilter implements Filter {
                     	chain.doFilter(request, response);
                     	return;
                     }
-                    if (principal == null) {
+                    if (principal == null && !Configuration.isJwtModeEnabled()) {
                         // white list check
                         for (String role : xskAccessRoles) {
                             if (ROLE_PUBLIC.equalsIgnoreCase(role)) {
@@ -159,7 +160,7 @@ public class XSKSecurityFilter implements Filter {
                         }
                     } else {
                         for (String role : xskAccessRoles) {
-                            if (ROLE_PUBLIC.equalsIgnoreCase(role) || httpServletRequest.isUserInRole(role)) {
+                            if (ROLE_PUBLIC.equalsIgnoreCase(role) || HttpRequestFacade.isUserInRole(role)) {
                                 isInRole = true;
                                 break;
                             }
@@ -170,7 +171,7 @@ public class XSKSecurityFilter implements Filter {
                         }
                     }
                 } else {
-                    if (!Configuration.isAnonymousModeEnabled() && principal == null) {
+                    if (!Configuration.isAnonymousModeEnabled() && principal == null && !Configuration.isJwtModeEnabled()) {
                         forbidden(path, "No logged in user and no white list constraints", httpServletResponse);
                         return;
                     }

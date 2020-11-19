@@ -280,7 +280,8 @@ spec:
 
 1. Once the service instance is in **RUNNING** state, select the **Bound Applications** tab
 1. Click on the **Bind Application** button and from the list of applications select the **xsk** deployment
-
+1. Wait about **30sec - 1min** until the **XSK** deployment is updated with the bound service instance
+1. Access the XSK instance at **https://xsk.your-kyma-cluster-host**
 ##### With HANA Cloud instance
 
 ---

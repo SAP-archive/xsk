@@ -147,7 +147,7 @@ Pre-requisites: Get access to SAP Cloud Platform Kyma environment. You can visit
 - [SAP Cloud Platform, Kyma runtime: How to get started](https://blogs.sap.com/2020/05/13/sap-cloud-platform-extension-factory-kyma-runtime-how-to-get-started/)
 - [How to deploy Eclipse Dirigible in the SAP Cloud Platform Kyma environment](https://blogs.sap.com/2020/10/13/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-kyma-environment/)
 
-1. Copy the YAML deployment configuration and create new file `deployment.yaml`. Replace **<your-kyma-cluster-host>** with the Kyma cluster host.
+1. Copy the YAML deployment configuration and create new file `deployment.yaml`. Replace **your-kyma-cluster-host** with the Kyma cluster host.
 
 ```yaml
 apiVersion: apps/v1
@@ -170,7 +170,8 @@ spec:
         - name: DIRIGIBLE_THEME_DEFAULT
           value: fiori
         - name: DIRIGIBLE_HOST
-          value: https://xsk.<your-kyma-cluster-host>
+          value: https://xsk.<
+          >
         image: dirigiblelabs/xsk-kyma
         imagePullPolicy: Always
         name: xsk

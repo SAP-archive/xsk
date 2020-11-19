@@ -223,7 +223,7 @@ spec:
 ```
 
 1. Navigate to the Kyma Console and use the **Deploy new resource** button to upload the **deployment.yaml** file
-1. Select the **Service Management > Marketplace** tab
+1. Select the **Service Management > Catalog** tab
 1. Open the **Authorization & Trust Management** service
 1. Click on the **Create** button to create new service instance
     - Name: xsuaa-xsk

@@ -282,6 +282,8 @@ spec:
 1. Click on the **Bind Application** button and from the list of applications select the **xsk** deployment
 1. Wait about **30sec - 1min** until the **XSK** deployment is updated with the bound service instance
 1. Access the XSK instance at **https://xsk.your-kyma-cluster-host**
+  - The XSK instance URL can be found also from the Kyma Console under the **Configuration -> API Rules** tab
+
 ##### With HANA Cloud instance
 
 ---

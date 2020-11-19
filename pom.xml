@@ -143,6 +143,8 @@
 	</profiles>
 
 	<properties>
+		<project.title>XSK - Compatibility for HANA Extended Application Engine</project.title>
+
 		<java.version>11</java.version>
 		<xtextVersion>2.18.0</xtextVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

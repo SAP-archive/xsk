@@ -228,7 +228,7 @@ spec:
 1. Click on the **Create** button to create new service instance
     - Name: xsuaa-xsk
     - Plan: application
-    - In the **Add parameters** section provide the following JSON and replace the **<your-kyma-cluster-host>** placeholder:
+    - In the **Add parameters** section provide the following JSON and replace the **your-kyma-cluster-host** placeholder:
 
 ```json
 {

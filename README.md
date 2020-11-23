@@ -174,8 +174,7 @@ spec:
         - name: DIRIGIBLE_THEME_DEFAULT
           value: fiori
         - name: DIRIGIBLE_HOST
-          value: https://xsk.<
-          >
+          value: https://xsk.<your-kyma-cluster-host>
         image: dirigiblelabs/xsk-kyma
         imagePullPolicy: Always
         name: xsk

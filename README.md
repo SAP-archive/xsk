@@ -4,12 +4,33 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub contributors](https://img.shields.io/github/contributors/sap/xsk.svg)](https://github.com/sap/xsk/graphs/contributors)
 
+
 ## Description
 
 Compatible environment for [SAP HANA Extended Application Services](https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/a6c0749255d84a81a154a7fc87dd33ce.html) (XS) based applications. It is deployed outside of [SAP HANA](https://www.sap.com/products/hana.html?btp=991d50bf-fa15-4979-ac4b-b280b0eb951f) instance as a [Docker](https://www.docker.com/) a container on [Kubernetes](https://kubernetes.io/). Hence, some of the features can work against any other JDBC compliant RDBMS such as [PostgreSQL](https://www.postgresql.org/). The compatibility stack is an extension of the [Eclipse Dirigible](https://github.com/eclipse/dirigible) cloud development platform.
 
 > Note: the project is not yet ready to be used productively
 
+## Overview
+- [Project XSK](#project-xsk)
+  - [Development Experience](#development-experience)
+  - [Life-cycle Management](#life-cycle-management)
+  - [Artifacts Coverage](#artifacts-coverage)
+  - [XSJS APIs Coverage](#xsjs-apis-coverage)
+- [Build](#installation)
+  - [Maven Build](#how-to-build)
+  - [Docker Build](#build-docker-images)
+- [Deploy](#how-to-run)
+  - [Local](#local-tomcat-server-2)
+  - [Cloud Foundry](#cloud-foundry-2)
+  - [Kyma](#kyma-2)
+- [Push to Docker Hub](#how-to-push-on-docker-hub)
+- [Configuration](#configuration)
+  - [Environment Variables](#environment-variables)
+- [Limitations](#limitations)
+- [Known Issues](#known-issues)
+- [Support](#how-to-obtain-support)
+- [Contributing](#contributing)
 
 ### Development Experience
 
@@ -56,7 +77,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 
 
 
-### Artifacts Coverage
+### XSJS APIs Coverage
 
 | Aspect                | Scope | Description  |
 | --------------------- |:-----:| ------------:|

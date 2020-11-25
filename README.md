@@ -1,4 +1,4 @@
-# project "XSK"
+# Project "XSK"
 
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/xsk)](https://api.reuse.software/info/github.com/SAP/xsk)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -82,8 +82,33 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 
 ### How to build
 
-    mvn clean install
-    
+Prerequisites:
+- Java 11 or later
+- Maven 3.5.0 or later
+```
+mvn clean install
+```
+
+#### Pull Docker images
+
+##### Local (Tomcat Server)
+
+```
+docker pull dirigiblelabs/xsk-server
+```
+
+##### Cloud Foundry
+
+```
+docker pull dirigiblelabs/xsk-cf
+```
+
+##### Kyma
+
+```
+docker pull dirigiblelabs/xsk-kyma
+```
+
 #### Build Docker images
 
 ##### Local (Tomcat Server)
@@ -93,6 +118,13 @@ cd releng/server
 
 docker build -t dirigiblelabs/xsk-server .
 ```
+##### Cloud Foundry
+
+```
+cd releng/sap-cf
+
+docker build -t dirigiblelabs/xsk-cf .
+```
 
 ##### Kyma
 
@@ -100,14 +132,6 @@ docker build -t dirigiblelabs/xsk-server .
 cd releng/sap-kyma
 
 docker build -t dirigiblelabs/xsk-kyma .
-```
-
-##### Cloud Foundry
-
-```
-cd releng/sap-cf
-
-docker build -t dirigiblelabs/xsk-cf .
 ```
 
 ### How to run
@@ -144,9 +168,86 @@ docker build -t dirigiblelabs/xsk-cf .
 
 > http://localhost:8888
 
+#### Cloud Foundry
+Prerequisites: Get access to the **SAP Cloud Platform Cloud Foundry** environment.
+
+1. Set the correct Cloud Foundry **API Endpoint**:
+    ```
+    cf api https://api.cf.eu10.hana.ondemand.com
+    ```
+1. **Login** to the target Cloud Foundry space:
+    ```
+    cf login
+    ```
+1. **Deploy** the XSK engine to your Cloud Foundry space, with the following command:
+    ```
+    cf push xsk \
+    --docker-image=dirigiblelabs/xsk-cf \
+    --hostname xsk-<org-name> \
+    -m 2G -k 2G
+    ```
+1. Create XSUAA Service Instance:
+    - Create **security.json** file with the following content:
+        ```json
+        {
+          "xsappname": "xsk-xsuaa",
+          "scopes": [
+            {
+              "name": "$XSAPPNAME.Developer",
+              "description": "Developer scope"
+            },
+            {
+              "name": "$XSAPPNAME.Operator",
+              "description": "Operator scope"
+            }
+          ],
+          "role-templates": [
+            {
+              "name": "Developer",
+              "description": "Developer related roles",
+              "scope-references": [
+                "$XSAPPNAME.Developer"
+              ]
+            },
+            {
+              "name": "Operator",
+              "description": "Operator related roles",
+              "scope-references": [
+                "$XSAPPNAME.Operator"
+              ]
+            }
+          ],
+          "role-collections": [
+            {
+              "name": "xsk-developer",
+              "description": "XSK Developer",
+              "role-template-references": [ 
+                "$XSAPPNAME.Developer",
+                "$XSAPPNAME.Operator"
+              ]
+            }
+          ]
+        }
+        ```
+    - Execute the following command to create the XSUAA service instance:
+        ```
+        cf create-service xsuaa application xsk-xsuaa -c security.json
+        ```
+1. Bind the XSUAA Service Instance to the XSK engine:
+    ```
+    cf bind-service xsk xsk-xsuaa
+    ```
+1. Restart the XSK engine:
+    ```
+    cf restart xsk
+    ```
+1. Assign the **xsk-developer** role collection to your user, from the SAP Cloud Platform Cockpit.
+1. Access the XSK engine:
+    > You can retrieve the application URL from the SAP Cloud Platform Cockpit, or by executing the following command: **cf apps**
+
 #### Kyma
 
-Pre-requisites: Get access to SAP Cloud Platform Kyma environment. You can visit the following articles:
+Prerequisites: Get access to the **SAP Cloud Platform Kyma** environment. You can visit the following articles:
 - [Kyma Environment](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/468c2f3c3ca24c2c8497ef9f83154c44.html)
 - [SAP Cloud Platform, Kyma runtime: How to get started](https://blogs.sap.com/2020/05/13/sap-cloud-platform-extension-factory-kyma-runtime-how-to-get-started/)
 - [How to deploy Eclipse Dirigible in the SAP Cloud Platform Kyma environment](https://blogs.sap.com/2020/10/13/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-kyma-environment/)
@@ -277,7 +378,7 @@ spec:
              "$XSAPPNAME.Operator"
           ]
        }
-    ]	
+    ]
  }
 ```
 

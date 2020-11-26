@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 
 /**
  * The XSK Data Structures Classpath Content Handler.
@@ -40,26 +41,49 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
         	
         	boolean hdiSupported = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_SUPPORTED, "true"));
             if (hdiSupported) {
-            	if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDI)) {
-                    dataStructuresSynchronizer.registerPredeliveredHDBSchema(path);
-                    return true;
-                }
+            	try {
+					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDI)) {
+					    dataStructuresSynchronizer.registerPredeliveredHDI(path);
+					    return true;
+					}
+				} catch (XSKDataStructuresException e) {
+					logger.error("Predelivered hdi artifact is not valid");
+		        	logger.error(e.getMessage());
+				}
             }
             
             boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
             if (!hdiOnly) {
-            	if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES)) {
-	                dataStructuresSynchronizer.registerPredeliveredEntities(path);
-	                return true;
-	            }
-	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_TABLE)) {
-	                dataStructuresSynchronizer.registerPredeliveredTable(path);
-	                return true;
-	            }
-	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_VIEW)) {
-	                dataStructuresSynchronizer.registerPredeliveredView(path);
-	                return true;
-	            }
+            	try {
+					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES)) {
+					    dataStructuresSynchronizer.registerPredeliveredEntities(path);
+					    return true;
+					}
+				} catch (XSKDataStructuresException e) {
+					logger.error("Predelivered hdbdd artifact is not valid");
+		        	logger.error(e.getMessage());
+				}
+            	
+	            try {
+					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_TABLE)) {
+					    dataStructuresSynchronizer.registerPredeliveredTable(path);
+					    return true;
+					}
+				} catch (XSKDataStructuresException e) {
+					logger.error("Predelivered hdbtable artifact is not valid or is in the new format");
+		        	logger.error(e.getMessage());
+				}
+	            
+	            try {
+					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_VIEW)) {
+					    dataStructuresSynchronizer.registerPredeliveredView(path);
+					    return true;
+					}
+				} catch (XSKDataStructuresException e) {
+					logger.error("Predelivered hdbview artifact is not valid or is in the new format");
+		        	logger.error(e.getMessage());
+				}
+	            
 	//            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_CALCULATION_VIEW)) {
 	//                dataStructuresSynchronizer.registerPredeliveredCalculationView(path);
 	//                return true;
@@ -68,20 +92,37 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
 	//                dataStructuresSynchronizer.registerPredeliveredHDBCalculationView(path);
 	//                return true;
 	//            }
-	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE)) {
-	                dataStructuresSynchronizer.registerPredeliveredHDBProcedure(path);
-	                return true;
-	            }
-	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION)) {
-	                dataStructuresSynchronizer.registerPredeliveredHDBTableFunction(path);
-	                return true;
-	            }
-	            if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA)) {
-	                dataStructuresSynchronizer.registerPredeliveredHDBSchema(path);
-	                return true;
-	            }
+	            
+	            try {
+					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE)) {
+					    dataStructuresSynchronizer.registerPredeliveredHDBProcedure(path);
+					    return true;
+					}
+				} catch (XSKDataStructuresException e) {
+					logger.error("Predelivered hdbprocedure artifact is not valid");
+		        	logger.error(e.getMessage());
+				}
+	            
+	            try {
+					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION)) {
+					    dataStructuresSynchronizer.registerPredeliveredHDBTableFunction(path);
+					    return true;
+					}
+				} catch (XSKDataStructuresException e) {
+					logger.error("Predelivered hdbtablefunction artifact is not valid");
+		        	logger.error(e.getMessage());
+				}
+	            
+	            try {
+					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA)) {
+					    dataStructuresSynchronizer.registerPredeliveredHDBSchema(path);
+					    return true;
+					}
+				} catch (XSKDataStructuresException e) {
+					logger.error("Predelivered hdbschema artifact is not valid");
+		        	logger.error(e.getMessage());
+				}
             }
-            
         } catch (Exception e) {
             logger.error("Predelivered Artifact is not valid", e);
         }

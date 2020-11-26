@@ -744,6 +744,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	        	XSKDataStructureHDIModel hdi;
 	            try {
 	            	hdi = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDI, registryPath, contentAsString);
+	            } catch (XSKDataStructuresException e) {
+					logger.error("Synchronized hdi artifact is not valid");
+		        	logger.error(e.getMessage());
+		        	return;
 	            } catch (Exception e) {
 	                throw new SynchronizationException(e);
 	            }
@@ -760,6 +764,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	            XSKDataStructureEntitiesModel entitiesModel;
 	            try {
 	                entitiesModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_ENTITIES, registryPath, contentAsString);
+	            } catch (XSKDataStructuresException e) {
+					logger.error("Synchronized hdbdd artifact is not valid");
+		        	logger.error(e.getMessage());
+		        	return;
 	            } catch (Exception e) {
 	                throw new SynchronizationException(e);
 	            }
@@ -771,6 +779,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	            XSKDataStructureHDBTableModel tableModel;
 	            try {
 	                tableModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_TABLE, registryPath, contentAsString);
+	            } catch (XSKDataStructuresException e) {
+					logger.error("Synchronized hdbtable artifact is not valid or is in the new format");
+		        	logger.error(e.getMessage());
+		        	return;
 	            } catch (Exception e) {
 	                throw new SynchronizationException(e);
 	            }
@@ -782,6 +794,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	            XSKDataStructureHDBViewModel viewModel;
 	            try {
 	                viewModel = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_VIEW, registryPath, contentAsString);
+	            } catch (XSKDataStructuresException e) {
+					logger.error("Synchronized hdbview artifact is not valid or is in the new format");
+		        	logger.error(e.getMessage());
+		        	return;
 	            } catch (Exception e) {
 	                throw new SynchronizationException(e);
 	            }
@@ -815,6 +831,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	        	XSKDataStructureHDBProcedureModel hdbProcedure;
 	            try {
 	                hdbProcedure = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, registryPath, contentAsString);
+	            } catch (XSKDataStructuresException e) {
+					logger.error("Synchronized hdbprocedure artifact is not valid");
+		        	logger.error(e.getMessage());
+		        	return;
 	            } catch (Exception e) {
 	                throw new SynchronizationException(e);
 	            }
@@ -826,6 +846,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	            XSKDataStructureHDBTableFunctionModel hdbTableFunction;
 	            try {
 	            	hdbTableFunction = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, registryPath, contentAsString);
+	            } catch (XSKDataStructuresException e) {
+					logger.error("Synchronized hdbtablefunction artifact is not valid");
+		        	logger.error(e.getMessage());
+		        	return;
 	            } catch (Exception e) {
 	                throw new SynchronizationException(e);
 	            }
@@ -837,6 +861,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	            XSKDataStructureHDBSchemaModel hdbSchema;
 	            try {
 	                hdbSchema = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDB_SCHEMA, registryPath, contentAsString);
+	            } catch (XSKDataStructuresException e) {
+					logger.error("Synchronized hdbschema artifact is not valid");
+		        	logger.error(e.getMessage());
+		        	return;
 	            } catch (Exception e) {
 	                throw new SynchronizationException(e);
 	            }
@@ -845,8 +873,6 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 	            return;
 	        }
         }
-
-	        
         
     }
 

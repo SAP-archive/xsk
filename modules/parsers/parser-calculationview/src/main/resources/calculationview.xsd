@@ -1,0 +1,411 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="origin" type="xs:string"/>
+  <xs:element name="descriptions">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="defaultDescription"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="metadata">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="changedAt"/>
+          <xs:attribute type="xs:string" name="createdAt"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="defaultSchema">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="schemaName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="localVariables" type="xs:string"/>
+  <xs:element name="variableMappings" type="xs:string"/>
+  <xs:element name="informationModelLayout">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="relativeWidthScenario"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dataSources">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DataSource" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="viewAttributes">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="allViewAttributes" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="columnObject" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="schemaName"/>
+                      <xs:attribute type="xs:string" name="columnObjectName"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element type="xs:string" name="resourceUri" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="id" use="optional"/>
+            <xs:attribute type="xs:string" name="type" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="calculationViews">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="calculationView" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="descriptions"/>
+              <xs:element name="viewAttributes">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="viewAttribute" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="id" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element type="xs:string" name="calculatedViewAttributes"/>
+              <xs:element name="input" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="mapping" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="target" use="optional"/>
+                            <xs:attribute type="xs:string" name="source" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="node" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+              <xs:element type="xs:string" name="filter" minOccurs="0"/>
+              <xs:element name="joinAttribute" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="name" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="id" use="optional"/>
+            <xs:attribute type="xs:string" name="filterExpressionLanguage" use="optional"/>
+            <xs:attribute type="xs:string" name="joinType" use="optional"/>
+            <xs:attribute type="xs:string" name="languageColumn" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="logicalModel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string" name="descriptions"/>
+        <xs:element name="attributes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="attribute" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="descriptions">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="defaultDescription" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:string" name="externalLikeStructureName" minOccurs="0"/>
+                    <xs:element type="xs:string" name="externalLikeElementName" minOccurs="0"/>
+                    <xs:element name="keyMapping">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="columnObjectName" use="optional"/>
+                            <xs:attribute type="xs:string" name="columnName" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="id" use="optional"/>
+                  <xs:attribute type="xs:string" name="key" use="optional"/>
+                  <xs:attribute type="xs:byte" name="order" use="optional"/>
+                  <xs:attribute type="xs:string" name="attributeHierarchyActive" use="optional"/>
+                  <xs:attribute type="xs:string" name="displayAttribute" use="optional"/>
+                  <xs:attribute type="xs:string" name="descriptionColumnName" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element type="xs:string" name="calculatedAttributes"/>
+        <xs:element name="privateDataFoundation">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="tableProxies"/>
+              <xs:element type="xs:string" name="joins"/>
+              <xs:element name="layout">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="shapes"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="baseMeasures">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="measure" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="descriptions">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="defaultDescription" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="measureMapping">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="columnObjectName" use="optional"/>
+                            <xs:attribute type="xs:string" name="columnName" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="id" use="optional"/>
+                  <xs:attribute type="xs:byte" name="order" use="optional"/>
+                  <xs:attribute type="xs:string" name="semanticType" use="optional"/>
+                  <xs:attribute type="xs:string" name="aggregationType" use="optional"/>
+                  <xs:attribute type="xs:string" name="measureType" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="calculatedMeasures">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="measure" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="descriptions">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="defaultDescription"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="exceptionAggregation">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="attribute" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute type="xs:string" name="attributeName" use="optional"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="exceptionAggregationType" use="optional"/>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:byte" name="formula"/>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="id" use="optional"/>
+                  <xs:attribute type="xs:string" name="hidden" use="optional"/>
+                  <xs:attribute type="xs:byte" name="order" use="optional"/>
+                  <xs:attribute type="xs:string" name="aggregationType" use="optional"/>
+                  <xs:attribute type="xs:string" name="measureType" use="optional"/>
+                  <xs:attribute type="xs:string" name="calculatedMeasureType" use="optional"/>
+                  <xs:attribute type="xs:string" name="datatype" use="optional"/>
+                  <xs:attribute type="xs:string" name="expressionLanguage" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element type="xs:string" name="restrictedMeasures"/>
+        <xs:element name="localDimensions">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="localDimension" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="attributeRef" maxOccurs="unbounded" minOccurs="0"/>
+                    <xs:element name="hierarchies">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="hierarchy">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="descriptions">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute type="xs:string" name="defaultDescription" use="optional"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="levels">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="level" maxOccurs="unbounded" minOccurs="0">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute type="xs:string" name="levelAttribute" use="optional"/>
+                                              <xs:attribute type="xs:string" name="levelType" use="optional"/>
+                                              <xs:attribute type="xs:byte" name="order" use="optional"/>
+                                              <xs:attribute type="xs:string" name="orderAttribute" use="optional"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="id" use="optional"/>
+                              <xs:attribute type="xs:string" name="aggregateAllNodes" use="optional"/>
+                              <xs:attribute type="xs:string" name="rootNodeVisibility" use="optional"/>
+                              <xs:attribute type="xs:string" name="withRootNode" use="optional"/>
+                              <xs:attribute type="xs:string" name="nodeStyle" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="id" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="layout">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="shapes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="shape" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="upperLeftCorner">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:short" name="x" use="optional"/>
+                            <xs:attribute type="xs:short" name="y" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="rectangleSize">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:byte" name="height" use="optional"/>
+                            <xs:attribute type="xs:byte" name="width" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="expanded" use="optional"/>
+                  <xs:attribute type="xs:string" name="modelObjectName" use="optional"/>
+                  <xs:attribute type="xs:string" name="modelObjectNameSpace" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CalculationScenario">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="origin"/>
+        <xs:element ref="descriptions"/>
+        <xs:element ref="metadata"/>
+        <xs:element ref="defaultSchema"/>
+        <xs:element ref="localVariables"/>
+        <xs:element ref="variableMappings"/>
+        <xs:element ref="dataSources"/>
+        <xs:element ref="calculationViews"/>
+        <xs:element ref="logicalModel"/>
+        <xs:element ref="layout"/>
+      </xs:sequence>
+      <xs:attribute type="xs:float" name="schemaVersion"/>
+      <xs:attribute type="xs:string" name="id"/>
+      <xs:attribute type="xs:string" name="applyPrivilegeType"/>
+      <xs:attribute type="xs:string" name="checkAnalyticPrivileges"/>
+      <xs:attribute type="xs:string" name="defaultClient"/>
+      <xs:attribute type="xs:string" name="defaultLanguage"/>
+      <xs:attribute type="xs:string" name="hierarchiesSQLEnabled"/>
+      <xs:attribute type="xs:string" name="translationRelevant"/>
+      <xs:attribute type="xs:string" name="visibility"/>
+      <xs:attribute type="xs:string" name="calculationScenarioType"/>
+      <xs:attribute type="xs:string" name="dataCategory"/>
+      <xs:attribute type="xs:string" name="enforceSqlExecution"/>
+      <xs:attribute type="xs:string" name="executionSemantic"/>
+      <xs:attribute type="xs:string" name="outputViewType"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

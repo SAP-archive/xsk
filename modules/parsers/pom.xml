@@ -23,6 +23,8 @@
 		<module>parser-hdbti</module>
 		<module>parser-hdbview</module>
 		<module>parser-xsodata</module>
+		<module>parser-hdbcalculationview</module>
+		<module>parser-calculationview</module>
 	</modules>
 
 </project>

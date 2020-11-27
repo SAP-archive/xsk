@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" 
+       id="com.sap.hana.example::projection" outputViewType="Projection"> 
+<dataSources> 
+  <DataSource id="D1" type="DATA_BASE_TABLE"> 
+    <resourceUri>com.sap.hana.example::TAB1</resourceUri> 
+  </DataSource> 
+</dataSources> 
+<calculationViews> 
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1"> 
+    <viewAttributes> 
+      <viewAttribute id="K1"/> 
+      <viewAttribute id="K2"/> 
+    </viewAttributes> 
+  <calculatedViewAttributes> 
+    <calculatedViewAttribute datatype="integer" id="CC"> 
+      <formula>40 + 2</formula> 
+    </calculatedViewAttribute> 
+  </calculatedViewAttributes> 
+    <input node="#D1"> 
+      <mapping xsi:type="Calculation:AttributeMapping" target="K1" source="K1"/> 
+      <mapping xsi:type="Calculation:AttributeMapping" target="K2" source="K2"/> 
+    </input> 
+  </calculationView> 
+</calculationViews> 
+<logicalModel id="Projection_1"> 
+  <attributes> 
+    <attribute id="K1"> 
+      <keyMapping columnObjectName="Projection_1" columnName="K1"/> 
+    </attribute> 
+    <attribute id="K2"> 
+      <keyMapping columnObjectName="Projection_1" columnName="K2"/> 
+    </attribute> 
+    <attribute id="CC"> 
+      <keyMapping columnObjectName="Projection_1" columnName="CC"/> 
+    </attribute> 
+  </attributes> 
+  <calculatedAttributes> 
+    <calculatedAttribute id="CalcAttr" hidden="false"> 
+      <keyCalculation datatype="INTEGER"> 
+        <formula>40 + 2</formula> 
+      </keyCalculation> 
+    </calculatedAttribute> 
+  </calculatedAttributes> 
+</logicalModel> 
+</Calculation:scenario>

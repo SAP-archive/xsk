@@ -13,6 +13,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 
 ## Overview
 - [Project XSK](#project-xsk)
+  - [Background](#background)
   - [Development Experience](#development-experience)
   - [Life-cycle Management](#life-cycle-management)
   - [Artifacts Coverage](#artifacts-coverage)
@@ -31,6 +32,21 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 - [Known Issues](#known-issues)
 - [Support](#how-to-obtain-support)
 - [Contributing](#contributing)
+
+
+### Background
+
+In the SAP Cloud Platform Neo environment XS classic programming model (XSC) is supported via the HANA 1.x database. The XSC engine resides in the HANA system itself. It can scale up, but cannot scale out. It is based on the multi-threaded JavaScript runtime Mozilla Spydermonkey (Firefox's engine). It supports synchronous programming model. It can serve backend services in JavaScript, HTML5 and other static content. It supports OData v2.0 compatible services defined in an \*.xsodata descriptors. It supports automatic tables, views, calculationviews materialisation based on proprietary formats.
+
+XSK approach is to provide a custom [Eclipse Dirigible](https://www.dirigible.io/) stack coming with XSC engine type. This engine is based on the standard Dirigible's JavaScript engine with several enhancements such as predefined XSC API pre-loaded ($.* APIs), execution based on \*.xsjs instead of \*.js only, imports based on \*.xsjslib instead of \*.js.
+
+There are corresponding APIs in Dirigible playing the same role as the ones in XSC (e.g. request, response, connection, etc.). A thin XSC bridge is provided for full compatibility.
+
+The programming model is synchronous in multi-threaded environment (based on [GraalJS](https://github.com/graalvm/graaljs)). The descriptors for the table, views and calculationviews currently exists with the same life-cycle management, only the format is different. OData via descriptor approach is also available as part of the stack as well.
+
+XSK stack is based on Java (JVM), so all the available plugins and/or new frameworks from Apache, Eclipse, and other open source providers can be easily integrated as well.
+
+XSK stack can run within the HANA box, also in the virtual HANA system or outside in e.g. Kubernetes cluster, Kyma, Cloud Foundry, Open Stack. 
 
 ### Development Experience
 

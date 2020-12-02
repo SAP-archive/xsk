@@ -3,8 +3,6 @@
  */
 package com.sap.xsk.models.hdbsequence.scoping;
 
-import com.sap.xsk.models.hdbsequence.scoping.AbstractHdbSequenceScopeProvider;
-
 /**
  * This class contains custom scoping description.
  * 
@@ -12,5 +10,5 @@ import com.sap.xsk.models.hdbsequence.scoping.AbstractHdbSequenceScopeProvider;
  * on how and when to use it.
  */
 @SuppressWarnings("all")
-public class HdbSequenceScopeProvider extends AbstractHdbSequenceScopeProvider {
+public class HdbSequenceScopeProvider /* implements AbstractHdbSequenceScopeProvider  */{
 }

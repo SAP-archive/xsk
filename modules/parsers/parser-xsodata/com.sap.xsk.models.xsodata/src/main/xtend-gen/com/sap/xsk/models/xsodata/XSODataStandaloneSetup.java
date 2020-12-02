@@ -3,14 +3,13 @@
  */
 package com.sap.xsk.models.xsodata;
 
-import com.sap.xsk.models.xsodata.XSODataStandaloneSetupGenerated;
-
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class XSODataStandaloneSetup extends XSODataStandaloneSetupGenerated {
+public class XSODataStandaloneSetup /* implements XSODataStandaloneSetupGenerated  */{
   public static void doSetup() {
-    new XSODataStandaloneSetup().createInjectorAndDoEMFRegistration();
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method createInjectorAndDoEMFRegistration() is undefined for the type XSODataStandaloneSetup");
   }
 }

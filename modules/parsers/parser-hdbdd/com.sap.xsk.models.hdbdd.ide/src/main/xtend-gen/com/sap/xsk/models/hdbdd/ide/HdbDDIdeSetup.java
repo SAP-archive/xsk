@@ -3,12 +3,8 @@
  */
 package com.sap.xsk.models.hdbdd.ide;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.sap.xsk.models.hdbdd.HdbDDRuntimeModule;
 import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
-import com.sap.xsk.models.hdbdd.ide.HdbDDIdeModule;
-import org.eclipse.xtext.util.Modules2;
 
 /**
  * Initialization support for running Xtext languages as language servers.
@@ -17,8 +13,8 @@ import org.eclipse.xtext.util.Modules2;
 public class HdbDDIdeSetup extends HdbDDStandaloneSetup {
   @Override
   public Injector createInjector() {
-    HdbDDRuntimeModule _hdbDDRuntimeModule = new HdbDDRuntimeModule();
-    HdbDDIdeModule _hdbDDIdeModule = new HdbDDIdeModule();
-    return Guice.createInjector(Modules2.mixin(_hdbDDRuntimeModule, _hdbDDIdeModule));
+    throw new Error("Unresolved compilation problems:"
+      + "\nType mismatch: cannot convert from HdbDDRuntimeModule to Module"
+      + "\nType mismatch: cannot convert from HdbDDIdeModule to Module");
   }
 }

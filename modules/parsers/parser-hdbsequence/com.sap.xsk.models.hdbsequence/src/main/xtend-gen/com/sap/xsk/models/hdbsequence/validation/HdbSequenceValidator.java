@@ -3,13 +3,11 @@
  */
 package com.sap.xsk.models.hdbsequence.validation;
 
-import com.sap.xsk.models.hdbsequence.validation.AbstractHdbSequenceValidator;
-
 /**
  * This class contains custom validation rules.
  * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 @SuppressWarnings("all")
-public class HdbSequenceValidator extends AbstractHdbSequenceValidator {
+public class HdbSequenceValidator /* implements AbstractHdbSequenceValidator  */{
 }

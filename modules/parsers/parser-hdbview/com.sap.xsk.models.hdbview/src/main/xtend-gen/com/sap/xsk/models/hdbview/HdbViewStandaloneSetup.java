@@ -3,14 +3,13 @@
  */
 package com.sap.xsk.models.hdbview;
 
-import com.sap.xsk.models.hdbview.HdbViewStandaloneSetupGenerated;
-
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class HdbViewStandaloneSetup extends HdbViewStandaloneSetupGenerated {
+public class HdbViewStandaloneSetup /* implements HdbViewStandaloneSetupGenerated  */{
   public static void doSetup() {
-    new HdbViewStandaloneSetup().createInjectorAndDoEMFRegistration();
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method createInjectorAndDoEMFRegistration() is undefined for the type HdbViewStandaloneSetup");
   }
 }

@@ -3,14 +3,13 @@
  */
 package com.sap.xsk.models.hdbti;
 
-import com.sap.xsk.models.hdbti.HdbtiStandaloneSetupGenerated;
-
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class HdbtiStandaloneSetup extends HdbtiStandaloneSetupGenerated {
+public class HdbtiStandaloneSetup /* implements HdbtiStandaloneSetupGenerated  */{
   public static void doSetup() {
-    new HdbtiStandaloneSetup().createInjectorAndDoEMFRegistration();
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method createInjectorAndDoEMFRegistration() is undefined for the type HdbtiStandaloneSetup");
   }
 }

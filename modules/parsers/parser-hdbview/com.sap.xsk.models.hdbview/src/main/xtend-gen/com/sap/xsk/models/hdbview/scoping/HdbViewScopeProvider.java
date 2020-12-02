@@ -3,8 +3,6 @@
  */
 package com.sap.xsk.models.hdbview.scoping;
 
-import com.sap.xsk.models.hdbview.scoping.AbstractHdbViewScopeProvider;
-
 /**
  * This class contains custom scoping description.
  * 
@@ -12,5 +10,5 @@ import com.sap.xsk.models.hdbview.scoping.AbstractHdbViewScopeProvider;
  * on how and when to use it.
  */
 @SuppressWarnings("all")
-public class HdbViewScopeProvider extends AbstractHdbViewScopeProvider {
+public class HdbViewScopeProvider /* implements AbstractHdbViewScopeProvider  */{
 }

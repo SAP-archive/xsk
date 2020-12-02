@@ -3,11 +3,9 @@
  */
 package com.sap.xsk.models.hdbview.ide;
 
-import com.sap.xsk.models.hdbview.ide.AbstractHdbViewIdeModule;
-
 /**
  * Use this class to register ide components.
  */
 @SuppressWarnings("all")
-public class HdbViewIdeModule extends AbstractHdbViewIdeModule {
+public class HdbViewIdeModule /* implements AbstractHdbViewIdeModule  */{
 }

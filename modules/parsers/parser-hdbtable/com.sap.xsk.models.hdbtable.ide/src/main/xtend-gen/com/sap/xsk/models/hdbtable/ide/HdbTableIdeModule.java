@@ -3,11 +3,9 @@
  */
 package com.sap.xsk.models.hdbtable.ide;
 
-import com.sap.xsk.models.hdbtable.ide.AbstractHdbTableIdeModule;
-
 /**
  * Use this class to register ide components.
  */
 @SuppressWarnings("all")
-public class HdbTableIdeModule extends AbstractHdbTableIdeModule {
+public class HdbTableIdeModule /* implements AbstractHdbTableIdeModule  */{
 }

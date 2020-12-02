@@ -3,11 +3,9 @@
  */
 package com.sap.xsk.models.hdbti.ide;
 
-import com.sap.xsk.models.hdbti.ide.AbstractHdbtiIdeModule;
-
 /**
  * Use this class to register ide components.
  */
 @SuppressWarnings("all")
-public class HdbtiIdeModule extends AbstractHdbtiIdeModule {
+public class HdbtiIdeModule /* implements AbstractHdbtiIdeModule  */{
 }

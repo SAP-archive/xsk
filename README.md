@@ -79,9 +79,9 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 | .xsjs                 |  ✅   |              |
 | .xsjslib              |  ✅   |              |
 | .calculationview      |  ⚠️   |              |
-| .hdbprocedure         |  ✅   |              |
-| .hdbrole              |  ❌   |              |
-| .hdbsequence          |  ✅   |              |
+| [.hdbprocedure](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.05/en-US/93de88bf2c8242179647e40f958c24e5.html)         |  ✅   |              |
+| [.hdbrole](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.05/en-US/625d7733c30b4666b4a522d7fa68a550.html)              |  ❌   |              |
+| [.hdbsequence](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.05/en-US/b295c2e0a5d547f8b1717ad7dd52cc90.html)          |  ✅   |              |
 | .xsodata              |  ⚠️   |              |
 | .hdbdd                |  ⚠️   |              |
 | .xsaccess             |  ✅   |              |

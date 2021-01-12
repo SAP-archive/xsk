@@ -95,21 +95,21 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 
 ### XSJS APIs Coverage
 
-| Aspect                | Scope | Description  |
-| --------------------- |:-----:| ------------:|
-| $.session             |  ⚠️   |              |
-| $.request             |  ✅   |              |
-| $.response            |  ✅   |              |
-| $.hdb                 |  ✅   |              |
-| $.db                  |  ✅   |              |
-| $.util                |  ✅   |              |
-| $.trace               |  ✅   |              |
-| $.import              |  ✅   |              |
-| $.net                 |  ✅   |              |
-| $.net.http            |  ✅   |              |
-| $.util.codec          |  ✅   |              |
-| $.web                 |  ✅   |              |
-| $.security            |  ✅   |              |
+| Aspect                                                                                                     | Scope | Description                        |
+| ---------------------------------------------------------------------------------------------------------- |:-----:| ----------------------------------:|
+| [$.session](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.Session.html)         |  ⚠️    | Represents an SAP HANA XS session   |
+| [$.request](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.WebRequest.html)  |  ✅   | Represents the client HTTP request currently being processed. |
+| [$.response](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.WebResponse.html)|  ✅   | Represents the HTTP response currently being populated. |
+| [$.hdb](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.hdb.html)                 |  ✅   | This namespace provides means for seamless HANA database access. It is intended to be a replacement of the older $.db namespace |
+| [$.db](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.db.html)                   |  ✅   | Namespace for HANA database access |
+| [$.util](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.util.html)               |  ✅   | Util namespace                     |
+| [$.trace](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.trace.html)             |  ✅   | Trace namespace                    |
+| [$.import](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.html#import)           |  ✅   | Imports a server-side JavaScript library artifact |
+| [$.net](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.net.html)                 |  ✅   | Network namespace                  |
+| [$.net.http](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.net.http.html)       |  ✅   | HTTP namespace                     |
+| [$.util.codec](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.util.codec.html)   |  ✅   | Codec namespace                    |
+| [$.web](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.html)                 |  ✅   | Web namespace                      |
+| [$.security](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.security.html)       |  ✅   | Security namespace                 |
 
 
 ---

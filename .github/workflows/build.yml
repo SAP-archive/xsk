@@ -1,0 +1,33 @@
+name: Project XSK CI/CD
+
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Maven Build
+      run: mvn clean install
+    - name: Dodcker Login
+      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+    - name: Push XSK
+      run: |
+        cd releng/server
+        docker build -t dirigiblelabs/xsk .
+        docker push dirigiblelabs/xsk
+    - name: Push XSK for SAP Cloud Foundry
+      run: |
+        cd releng/sap-cf
+        docker build -t dirigiblelabs/xsk-cf .
+        docker push dirigiblelabs/xsk-cf
+    - name: Push XSK for SAP Kyma
+      run: |
+        cd releng/sap-kyma
+        docker build -t dirigiblelabs/xsk-kyma .
+        docker push dirigiblelabs/xsk-kyma

@@ -3,13 +3,14 @@
  */
 package com.sap.xsk.models.hdbdd;
 
+import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetupGenerated;
+
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */
 @SuppressWarnings("all")
-public class HdbDDStandaloneSetup /* implements HdbDDStandaloneSetupGenerated  */{
+public class HdbDDStandaloneSetup extends HdbDDStandaloneSetupGenerated {
   public static void doSetup() {
-    throw new Error("Unresolved compilation problems:"
-      + "\nThe method createInjectorAndDoEMFRegistration() is undefined for the type HdbDDStandaloneSetup");
+    new HdbDDStandaloneSetup().createInjectorAndDoEMFRegistration();
   }
 }

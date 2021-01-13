@@ -3,9 +3,11 @@
  */
 package com.sap.xsk.models.hdbdd.ide;
 
+import com.sap.xsk.models.hdbdd.ide.AbstractHdbDDIdeModule;
+
 /**
  * Use this class to register ide components.
  */
 @SuppressWarnings("all")
-public class HdbDDIdeModule /* implements AbstractHdbDDIdeModule  */{
+public class HdbDDIdeModule extends AbstractHdbDDIdeModule {
 }

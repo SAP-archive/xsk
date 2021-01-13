@@ -3,6 +3,8 @@
  */
 package com.sap.xsk.models.hdbtable.scoping;
 
+import com.sap.xsk.models.hdbtable.scoping.AbstractHdbTableScopeProvider;
+
 /**
  * This class contains custom scoping description.
  * 
@@ -10,5 +12,5 @@ package com.sap.xsk.models.hdbtable.scoping;
  * on how and when to use it.
  */
 @SuppressWarnings("all")
-public class HdbTableScopeProvider /* implements AbstractHdbTableScopeProvider  */{
+public class HdbTableScopeProvider extends AbstractHdbTableScopeProvider {
 }

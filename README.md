@@ -131,7 +131,7 @@ mvn clean install
 ##### Local (Tomcat Server)
 
 ```
-docker pull dirigiblelabs/xsk-server
+docker pull dirigiblelabs/xsk
 ```
 
 ##### Cloud Foundry
@@ -153,7 +153,7 @@ docker pull dirigiblelabs/xsk-kyma
 ```
 cd releng/server
 
-docker build -t dirigiblelabs/xsk-server .
+docker build -t dirigiblelabs/xsk .
 ```
 ##### Cloud Foundry
 
@@ -177,15 +177,15 @@ docker build -t dirigiblelabs/xsk-kyma .
 
 ##### With local database
 
-    docker run -p 8888:8080 dirigiblelabs/xsk
+    docker run -p 8080:8080 dirigiblelabs/xsk
 
 ##### With persistent volume
 
-    docker run -p 8888:8080 -v <your-local-directory>:/usr/local/tomcat/target dirigiblelabs/xsk
+    docker run -p 8080:8080 -v <your-local-directory>:/usr/local/tomcat/target dirigiblelabs/xsk
 
 ##### With HANA Cloud instance
 
-    docker run -p 8888:8080 dirigiblelabs/xsk \
+    docker run -p 8080:8080 dirigiblelabs/xsk \
     -e DIRIGIBLE_DATABASE_PROVIDER=custom \
     -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
     -e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
@@ -203,7 +203,7 @@ docker build -t dirigiblelabs/xsk-kyma .
 
 ##### Go to:
 
-> http://localhost:8888
+> http://localhost:8080
 
 #### Cloud Foundry
 Prerequisites: Get access to the **SAP Cloud Platform Cloud Foundry** environment.

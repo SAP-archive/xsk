@@ -51,7 +51,7 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 ### Development Experience
 
 | Aspect                         | Scope | Description  |
-| ------------------------------ |:-----:| ------------:|
+| ------------------------------ |:-----:| -------------|
 | Preserve hdb* descriptors      |  ✅   |              |
 | Preserve XSJS code             |  ✅   |              |
 | Preserve XSOData descriptors   |  ✅   |              |
@@ -63,7 +63,7 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 ### Life-cycle Management
 
 | Aspect                                | Scope | Description  |
-| ------------------------------------- |:-----:| ------------:|
+| ------------------------------------- |:-----:| -------------|
 | End-to-end life-cycle management      |  ✅   |              |
 | Single-step migration                 |  ✅   |              |
 | Can be deployed as a monolith         |  ✅   |              |
@@ -75,7 +75,7 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 ### Artifacts Coverage
 
 | Aspect                | Scope | Description  |
-| --------------------- |:-----:| ------------:|
+| --------------------- |:-----:| -------------|
 | .xsjs                 |  ✅   |              |
 | .xsjslib              |  ✅   |              |
 | .calculationview      |  ⚠️   |              |
@@ -96,7 +96,7 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 ### XSJS APIs Coverage
 
 | Aspect                                                                                                     | Scope | Description                        |
-| ---------------------------------------------------------------------------------------------------------- |:-----:| ----------------------------------:|
+| ---------------------------------------------------------------------------------------------------------- |:-----:| -----------------------------------|
 | [$.session](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.Session.html)         |  ⚠️    | Represents an SAP HANA XS session   |
 | [$.request](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.WebRequest.html)  |  ✅   | Represents the client HTTP request currently being processed. |
 | [$.response](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.WebResponse.html)|  ✅   | Represents the HTTP response currently being populated. |

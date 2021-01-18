@@ -183,7 +183,7 @@ docker build -t dirigiblelabs/xsk-kyma .
 
     docker run -p 8080:8080 -v <your-local-directory>:/usr/local/tomcat/target dirigiblelabs/xsk
 
-##### With HANA Cloud instance
+##### With HANA Cloud instance(Mac)
 
     docker run -p 8080:8080 dirigiblelabs/xsk \
     -e DIRIGIBLE_DATABASE_PROVIDER=custom \
@@ -200,6 +200,9 @@ docker build -t dirigiblelabs/xsk-kyma .
     -e DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false \
     -e DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false \
     -e DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE=true
+    
+##### With HANA Cloud instance(Windows)
+    docker run -p 8080:8080 --env-file env-variables.env dirigiblelabs/xsk
 
 ##### Go to:
 

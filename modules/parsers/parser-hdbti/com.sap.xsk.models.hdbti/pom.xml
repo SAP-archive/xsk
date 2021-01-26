@@ -32,7 +32,7 @@
 				<configuration>
 					<mainClass>org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher</mainClass>
 					<arguments>
-						<argument>/${project.basedir}/src/main/java/com/sap/xsk/models/hdbti/GenerateHdbTi.mwe2</argument>
+						<argument>/${project.basedir}/src/main/java/com/sap/xsk/models/hdbti/GenerateHdbti.mwe2</argument>
 						<argument>-p</argument>
 						<argument>rootPath=/${project.basedir}/..</argument>
 					</arguments>

@@ -1,15 +1,17 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsaccess.ds.synchronizer;
+
+import static java.text.MessageFormat.format;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +30,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
+import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.core.security.synchronizer.SecuritySynchronizer;
 import org.eclipse.dirigible.repository.api.IResource;
@@ -62,6 +65,8 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
 
     @Inject
     private XSKPrivilegeCoreService xskPrivilegeCoreService;
+    
+    private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
 
     /**
      * Force synchronization.
@@ -72,20 +77,20 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     }
 
     /**
-     * Register pre-delivered roles.
+     * Register pre-delivered privileges.
      *
-     * @param rolesPath
-     *            the roles path
+     * @param privilegesPath
+     *            the privileges path
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public void registerPredeliveredRoles(String rolesPath) throws IOException {
-        InputStream in = SecuritySynchronizer.class.getResourceAsStream(rolesPath);
+    public void registerPredeliveredPrivileges(String privilegesPath) throws IOException {
+        InputStream in = SecuritySynchronizer.class.getResourceAsStream(privilegesPath);
         try {
             String json = IOUtils.toString(in, StandardCharsets.UTF_8);
             List<XSKPrivilegeDefinition> xskPrivilegeDefinitions = XSKPrivilegeArtifact.parse(json).divide();
 
-            PRIVILEGES_PREDELIVERED.put(rolesPath, xskPrivilegeDefinitions);
+            PRIVILEGES_PREDELIVERED.put(privilegesPath, xskPrivilegeDefinitions);
         } finally {
             if (in != null) {
                 in.close();
@@ -124,17 +129,30 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     @Override
     public void synchronize() {
         synchronized (SecuritySynchronizer.class) {
-            logger.trace("Synchronizing Roles and Access artifacts...");
+            logger.trace("Synchronizing Privileges and Access artifacts...");
             try {
+            	startSynchronization(SYNCHRONIZER_NAME);
                 clearCache();
                 synchronizePredelivered();
                 synchronizeRegistry();
+                int immutablePrivilegesCount = PRIVILEGES_PREDELIVERED.size();
+                int immutableAccessCount = ACCESS_PREDELIVERED.size();
+                
+				int mutablePrivilegesCount = PRIVILEGES_SYNCHRONIZED.size();
+				int mutableAccessCount = ACCESS_SYNCHRONIZED.size();
                 cleanup();
                 clearCache();
+                successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: [Privileges: {0}, Access: {1}], Mutable: [Privileges: {2}, Access: {3}]", 
+                		immutablePrivilegesCount, immutableAccessCount, mutablePrivilegesCount, mutableAccessCount));
             } catch (Exception e) {
-                logger.error("Synchronizing process for Roles and Access artifacts failed.", e);
+                logger.error("Synchronizing process for Privileges and Access artifacts failed.", e);
+                try {
+					failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+				} catch (SchedulerException e1) {
+					logger.error("Synchronizing process for Privileges and Access artifacts failed in registering the state log.", e);
+				}
             }
-            logger.trace("Done synchronizing Roles and Access artifacts.");
+            logger.trace("Done synchronizing Privileges and Access artifacts.");
         }
     }
 
@@ -154,12 +172,12 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
      *             the synchronization exception
      */
     private void synchronizePredelivered() throws SynchronizationException {
-        logger.trace("Synchronizing predelivered Roles and Access artifacts...");
+        logger.trace("Synchronizing predelivered Privileges and Access artifacts...");
 
-        // Roles
-        for (List<XSKPrivilegeDefinition> roleDefinitions : PRIVILEGES_PREDELIVERED.values()) {
-            for (XSKPrivilegeDefinition xskPrivilegeDefinition : roleDefinitions) {
-                synchronizeRole(xskPrivilegeDefinition);
+        // Privileges
+        for (List<XSKPrivilegeDefinition> privilegeDefinitions : PRIVILEGES_PREDELIVERED.values()) {
+            for (XSKPrivilegeDefinition xskPrivilegeDefinition : privilegeDefinitions) {
+                synchronizePrivilege(xskPrivilegeDefinition);
             }
         }
 
@@ -169,18 +187,18 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
             synchronizeAccess(xskAccessDefinition);
         }
 
-        logger.trace("Done synchronizing predelivered Roles and Access artifacts.");
+        logger.trace("Done synchronizing predelivered Privileges and Access artifacts.");
     }
 
     /**
-     * Synchronize role.
+     * Synchronize privileges.
      *
      * @param xskPrivilegeDefinition
-     *            the role definition
+     *            the privilege definition
      * @throws SynchronizationException
      *             the synchronization exception
      */
-    private void synchronizeRole(XSKPrivilegeDefinition xskPrivilegeDefinition) throws SynchronizationException {
+    private void synchronizePrivilege(XSKPrivilegeDefinition xskPrivilegeDefinition) throws SynchronizationException {
         try {
             if (!xskPrivilegeCoreService.xskPrivilegeExists(xskPrivilegeDefinition.getName())) {
                 xskPrivilegeCoreService.createXSKPrivilege(xskPrivilegeDefinition.getName(), xskPrivilegeDefinition.getDescription());
@@ -255,7 +273,7 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
         if (resourceName.equals(IXSKPrivilegeCoreService.XSK_FILE_EXTENSION_PRIVILEGE)) {
             XSKPrivilegeArtifact xskPrivilegeArtifact = XSKPrivilegeArtifact.parse(resource.getContent());
             for (XSKPrivilegeDefinition xskPrivilegeDefinition : xskPrivilegeArtifact.divide()) {
-                synchronizeRole(xskPrivilegeDefinition);
+                synchronizePrivilege(xskPrivilegeDefinition);
             }
 
         }
@@ -276,11 +294,11 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
      */
     @Override
     protected void cleanup() throws SynchronizationException {
-        logger.trace("Cleaning up Roles and Access artifacts...");
+        logger.trace("Cleaning up Privileges and Access artifacts...");
 
         try {
-            List<XSKPrivilegeDefinition> roleDefinitions = xskPrivilegeCoreService.getXSKPrivileges();
-            for (XSKPrivilegeDefinition xskPrivilegeDefinition : roleDefinitions) {
+            List<XSKPrivilegeDefinition> privilegeDefinitions = xskPrivilegeCoreService.getXSKPrivileges();
+            for (XSKPrivilegeDefinition xskPrivilegeDefinition : privilegeDefinitions) {
                 if (!ACCESS_SYNCHRONIZED.contains(xskPrivilegeDefinition.getName())) {
 
                     xskPrivilegeCoreService.removeXSKPrivilegeByName(xskPrivilegeDefinition.getName());

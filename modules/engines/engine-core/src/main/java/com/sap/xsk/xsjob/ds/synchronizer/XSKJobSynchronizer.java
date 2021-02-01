@@ -1,15 +1,17 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsjob.ds.synchronizer;
+
+import static java.text.MessageFormat.format;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,6 +62,8 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
 
     // @Inject
     // private SchedulerManager schedulerManager;
+    
+    private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
 
     /**
      * Force synchronization.
@@ -101,14 +105,23 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
         synchronized (XSKJobSynchronizer.class) {
             logger.trace("Synchronizing Jobs...");
             try {
+            	startSynchronization(SYNCHRONIZER_NAME);
                 clearCache();
                 synchronizePredelivered();
                 synchronizeRegistry();
                 startJobs();
+                int immutableCount = JOBS_PREDELIVERED.size();
+				int mutableCount = JOBS_SYNCHRONIZED.size();
                 cleanup();
                 clearCache();
+                successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
             } catch (Exception e) {
                 logger.error("Synchronizing process for Jobs failed.", e);
+                try {
+					failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+				} catch (SchedulerException e1) {
+					logger.error("Synchronizing process for Jobs files failed in registering the state log.", e);
+				}
             }
             logger.trace("Done synchronizing Jobs.");
         }

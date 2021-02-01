@@ -1,15 +1,17 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdbti.synchronizer;
+
+import static java.text.MessageFormat.format;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
+import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
@@ -64,17 +67,21 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     private static final Logger logger = LoggerFactory.getLogger(XSKTableImportSynchronizer.class);
 
     private static final Map<String, XSKTableImportArtifact> HDBTI_PREDELIVERED = Collections.synchronizedMap(new HashMap<>()); //ones which already exist in the JAR
+    
     private static final List<String> HDBTI_SYNCHRONIZED = Collections.synchronizedList(new ArrayList<>()); // used for leaving only the correct files after the sync
+    
     private static final Map<String, XSKTableImportArtifact> HDBTI_MODELS = new LinkedHashMap<>(); // used for collecting all created/updated models and later for the actual execution of the query ( import/ alter etc)
+    
     @Inject
     private DataSource dataSource;
+    
+    private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
 
     @Override
     protected void synchronizeResource(IResource resource) throws SynchronizationException {
         String resourceName = resource.getName();
         String registryPath = getRegistryPath(resource);
         String contentAsString = getContentFromResource(resource);
-
 
         if (resourceName.endsWith(IXSKTableImportModel.FILE_EXTENSION_TABLE_IMPORT)) {
             try {
@@ -166,14 +173,29 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     @Override
     public void synchronize() {
         try {
-            clearCache();
-            synchronizePredelivered();
-            synchronizeRegistry();
-            processTableImports();
-            cleanup();
-            clearCache();
+        	if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
+					&& isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")) {
+	        	startSynchronization(SYNCHRONIZER_NAME);
+	            clearCache();
+	            synchronizePredelivered();
+	            synchronizeRegistry();
+	            processTableImports();
+	            int immutableCount = HDBTI_PREDELIVERED.size();
+				int mutableCount = HDBTI_SYNCHRONIZED.size();
+	            cleanup();
+	            clearCache();
+	            successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
+        	} else {
+				failedSynchronization(SYNCHRONIZER_NAME, "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
+						+ "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer");
+			}
         } catch (Exception e) {
-            logger.debug("Error during synchronization", e);
+            logger.debug("Error during HDBTI synchronization", e);
+            try {
+				failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+			} catch (SchedulerException e1) {
+				logger.error("Synchronizing process for HDBTI files failed in registering the state log.", e);
+			}
         }
 
     }

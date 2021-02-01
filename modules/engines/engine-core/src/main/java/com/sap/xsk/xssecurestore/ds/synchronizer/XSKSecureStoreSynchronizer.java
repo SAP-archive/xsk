@@ -1,15 +1,17 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xssecurestore.ds.synchronizer;
+
+import static java.text.MessageFormat.format;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
+import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
@@ -35,6 +38,8 @@ public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
 
     @Inject
     private XSKSecureStoreCoreService xskSecureStoreCoreService;
+    
+    private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
 
     @Override
     protected void synchronizeResource(IResource resource) throws SynchronizationException {
@@ -78,11 +83,17 @@ public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
         synchronized (XSKSecureStoreSynchronizer.class) {
             logger.trace("Synchronizing Secure Stores ...");
             try {
-
+            	startSynchronization(SYNCHRONIZER_NAME);
                 synchronizeRegistry();
                 cleanup();
+                successfulSynchronization(SYNCHRONIZER_NAME, format("Passed successfully."));
             } catch (Exception e) {
                 logger.error("Synchronizing process for Secure Stores failed.", e);
+                try {
+					failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+				} catch (SchedulerException e1) {
+					logger.error("Synchronizing process for Secure Stores files failed in registering the state log.", e);
+				}
             }
             logger.trace("Done synchronizing Secure Stores.");
         }

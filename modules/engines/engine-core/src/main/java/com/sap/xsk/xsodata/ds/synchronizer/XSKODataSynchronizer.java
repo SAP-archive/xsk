@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsodata.ds.synchronizer;
@@ -34,6 +34,7 @@ import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
+import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.engine.odata2.service.ODataCoreService;
 import org.eclipse.dirigible.repository.api.IResource;
@@ -48,7 +49,7 @@ import com.sap.xsk.xsodata.ds.service.XSKOData2ODataXTransformer;
 import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
 
 /**
- * The XS OData Synchronizer.
+ * The XSOData Synchronizer.
  */
 @Singleton
 public class XSKODataSynchronizer extends AbstractSynchronizer {
@@ -76,6 +77,8 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 
 	@Inject
 	private XSKOData2ODataXTransformer xskOData2ODataXTransformer;
+	
+	private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
 
 	/**
 	 * Force synchronization.
@@ -117,18 +120,35 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	@Override
 	public void synchronize() {
 		synchronized (XSKODataSynchronizer.class) {
-			logger.trace("Synchronizing OData...");
+			logger.trace("Synchronizing XSOData...");
 			try {
-				clearCache();
-				synchronizePredelivered();
-				synchronizeRegistry();
-				updateOData();
-				cleanup(); // TODO drop tables and views for non-existing models
-				clearCache();
+				if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
+						&& isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")
+						&& isSynchronizerSuccessful("com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer")) {
+					startSynchronization(SYNCHRONIZER_NAME);
+					clearCache();
+					synchronizePredelivered();
+					synchronizeRegistry();
+					updateXSOData();
+					int immutableCount = ODATA_PREDELIVERED.size();
+					int mutableCount = ODATA_SYNCHRONIZED.size();
+					cleanup(); // TODO drop tables and views for non-existing models
+					clearCache();
+					successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
+				} else {
+					failedSynchronization(SYNCHRONIZER_NAME, "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
+							+ "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer, "
+							+ "com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer");
+				}
 			} catch (Exception e) {
-				logger.error("Synchronizing process for OData failed.", e);
+				logger.error("Synchronizing process for XSOData failed.", e);
+				try {
+					failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+				} catch (SchedulerException e1) {
+					logger.error("Synchronizing process for XSOData files failed in registering the state log.", e);
+				}
 			}
-			logger.trace("Done synchronizing OData.");
+			logger.trace("Done synchronizing XSOData.");
 		}
 	}
 
@@ -146,21 +166,21 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	 *             the synchronization exception
 	 */
 	private void synchronizePredelivered() throws SynchronizationException {
-		logger.trace("Synchronizing predelivered OData...");
+		logger.trace("Synchronizing predelivered XSOData...");
 
-		// OData
+		// XSOData
 		for (XSKODataModel odata : ODATA_PREDELIVERED.values()) {
 			try {
 				synchronizeOData(odata);
 			} catch (Exception e) {
-				logger.error(format("Update odata [{0}] skipped due to an error: {1}", odata, e.getMessage()), e);
+				logger.error(format("Update xsodata [{0}] skipped due to an error: {1}", odata, e.getMessage()), e);
 			}
 		}
-		logger.trace("Done synchronizing predelivered OData.");
+		logger.trace("Done synchronizing predelivered XSOData.");
 	}
 	
 	/**
-	 * Synchronize odata.
+	 * Synchronize xsodata.
 	 *
 	 * @param odataModel
 	 *            the odata model
@@ -172,13 +192,13 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 			if (!xskODataCoreService.existsOData(odataModel.getLocation())) {
 				xskODataCoreService.createOData(odataModel.getLocation(), odataModel.getName(), odataModel.getHash());
 				ODATA_MODELS.put(odataModel.getName(), odataModel);
-				logger.info("Synchronized a new OData file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
+				logger.info("Synchronized a new XSOData file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
 			} else {
 				XSKODataModel existing = xskODataCoreService.getOData(odataModel.getLocation());
 				if (!odataModel.equals(existing)) {
 					xskODataCoreService.updateOData(odataModel.getLocation(), odataModel.getName(), odataModel.getHash());
 					ODATA_MODELS.put(odataModel.getName(), odataModel);
-					logger.info("Synchronized a modified OData file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
+					logger.info("Synchronized a modified XSOData file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
 				}
 			}
 			ODATA_SYNCHRONIZED.add(odataModel.getLocation());
@@ -193,11 +213,11 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	 */
 	@Override
 	protected void synchronizeRegistry() throws SynchronizationException {
-		logger.trace("Synchronizing OData from Registry...");
+		logger.trace("Synchronizing XSOData from Registry...");
 
 		super.synchronizeRegistry();
 
-		logger.trace("Done synchronizing OData from Registry.");
+		logger.trace("Done synchronizing XSOData from Registry.");
 	}
 
 	/*
@@ -236,7 +256,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	 */
 	@Override
 	protected void cleanup() throws SynchronizationException {
-		logger.trace("Cleaning up OData...");
+		logger.trace("Cleaning up XSOData...");
 
 		try {
 			Connection connection = null;
@@ -247,7 +267,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 				for (XSKODataModel odataModel : odataModels) {
 					if (!ODATA_SYNCHRONIZED.contains(odataModel.getLocation())) {
 						xskODataCoreService.removeOData(odataModel.getLocation());
-						logger.warn("Cleaned up OData Data file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
+						logger.warn("Cleaned up XSOData Data file [{}] from location: {}", odataModel.getName(), odataModel.getLocation());
 					}
 				}
 			} finally {
@@ -259,14 +279,14 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 			throw new SynchronizationException(e);
 		}
 
-		logger.trace("Done cleaning up OData.");
+		logger.trace("Done cleaning up XSOData.");
 	}
 
-	private void updateOData() {
-		// Update OData
+	private void updateXSOData() {
+		// Update XSOData
 		
 		if (ODATA_MODELS.isEmpty()) {
-			logger.trace("No XSK OData to update.");
+			logger.trace("No XSK XSOData to update.");
 			return;
 		}
 
@@ -286,7 +306,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 					sorted.addAll(ODATA_MODELS.keySet());
 				}
 				
-				// drop odata in a reverse order
+				// drop xsodata in a reverse order
 				for (int i = sorted.size() - 1; i >= 0; i--) {
 					String dsName = sorted.get(i);
 					XSKODataModel model = ODATA_MODELS.get(dsName);

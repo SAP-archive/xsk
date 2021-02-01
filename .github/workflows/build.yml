@@ -21,13 +21,16 @@ jobs:
         cd releng/server
         docker build -t dirigiblelabs/xsk .
         docker push dirigiblelabs/xsk
+        cd ../../
     - name: Push XSK for SAP Cloud Foundry
       run: |
         cd releng/sap-cf
         docker build -t dirigiblelabs/xsk-cf .
         docker push dirigiblelabs/xsk-cf
+        cd ../../
     - name: Push XSK for SAP Kyma
       run: |
         cd releng/sap-kyma
         docker build -t dirigiblelabs/xsk-kyma .
         docker push dirigiblelabs/xsk-kyma
+        cd ../../

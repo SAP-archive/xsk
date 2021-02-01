@@ -126,6 +126,25 @@ Prerequisites:
 mvn clean install
 ```
 
+#### Environment Variables for Local Instance
+
+   export DIRIGIBLE_DATABASE_PROVIDER=custom
+   export DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA
+   export DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA
+   export HANA_DRIVER=com.sap.db.jdbc.Driver
+   export HANA_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443/?encrypt=true\&validateCertificate=false
+   export HANA_USERNAME=DBADMIN
+   export HANA_PASSWORD=<password>
+   export DIRIGIBLE_SCHEDULER_DATABASE_DRIVER=com.sap.db.jdbc.Driver
+   export DIRIGIBLE_SCHEDULER_DATABASE_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443/?encrypt=true\&validateCertificate=false
+   export DIRIGIBLE_SCHEDULER_DATABASE_USER=DBADMIN
+   export DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<password>
+   export DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false
+   export DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false
+   export DIRIGIBLE_CMS_PROVIDER=database
+   export DIRIGIBLE_CMS_DATABASE_DATASOURCE_TYPE=custom
+   export DIRIGIBLE_CMS_DATABASE_DATASOURCE_NAME=HANA
+
 #### Pull Docker images
 
 ##### Local (Tomcat Server)
@@ -199,7 +218,10 @@ docker build -t dirigiblelabs/xsk-kyma .
     -e DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<password> \
     -e DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false \
     -e DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false \
-    -e DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE=true
+    -e DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE=true \
+    -e DIRIGIBLE_CMS_PROVIDER=database \
+    -e DIRIGIBLE_CMS_DATABASE_DATASOURCE_TYPE=custom \
+    -e DIRIGIBLE_CMS_DATABASE_DATASOURCE_NAME=HANA
     
 ##### With HANA Cloud instance(Windows)
     docker run -p 8080:8080 --env-file env-variables.env dirigiblelabs/xsk

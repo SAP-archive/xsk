@@ -5,7 +5,7 @@
     "container": "XSK_HDI_EXT",
     "deploy": [
     	"/hdi-ext/Customers.hdbsynonym",
-    	"/hdi-ext/Customers.hdbcalculationview"
+    	"/hdi-ext/CustomersCalcView.hdbcalculationview"
     ],
     "undeploy": []
 }

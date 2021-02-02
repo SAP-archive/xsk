@@ -1,0 +1,10 @@
+import = [
+	{
+		table = "hdi-ext::Customers";
+		file = "hdi-ext:Customers.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+	}
+];

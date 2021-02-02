@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario id="com.sap.xsk.samples::CustomersCalc" outputViewType="Projection">
+<Calculation:scenario id="com.sap.xsk.samples::CustomersCalcView" outputViewType="Projection">
     <dataSources>
         <DataSource id="Customers" type="DATA_BASE_TABLE">
           <resourceUri>Customers</resourceUri>
         </DataSource>
     </dataSources>
     <calculationViews>
-        <calculationView xsi:type="Calculation:ProjectionView" id="CustomersCalc">
+        <calculationView xsi:type="Calculation:ProjectionView" id="CustomersCalcView">
             <viewAttributes>
                 <viewAttribute id="Name"/>
             </viewAttributes>
             <input node="#Customers">
-                <mapping xsi:type="Calculation:AttributeMapping" target="Name" source="Name"/>
+                <mapping xsi:type="Calculation:AttributeMapping" target="Name" source="NAME"/>
             </input>
         </calculationView>
     </calculationViews>
-    <logicalModel id="CustomersCalc">
+    <logicalModel id="CustomersCalcView">
         <attributes>
             <attribute id="Name">
-                <keyMapping columnObjectName="CustomersCalc" columnName="Name"/>
+                <keyMapping columnObjectName="CustomersCalcView" columnName="Name"/>
             </attribute>
         </attributes>
     </logicalModel>

@@ -33,7 +33,7 @@ public class HdbTableParsingTest {
       _builder.newLine();
       _builder.append("table.tableType = COLUMNSTORE;");
       _builder.newLine();
-      _builder.append("table.description = \"Team players missing in lineup (not nominated for the match)\";");
+      _builder.append("table.description = \"Team players\";");
       _builder.newLine();
       _builder.append("table.columns = [");
       _builder.newLine();

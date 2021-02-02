@@ -1461,7 +1461,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
      * @param entityModel the entity model
      * @throws SQLException the SQL exception
      */
-    private void executeEntityUpdate(Connection connection, XSKDataStructureEntityModel entityModel)
+    public void executeEntityUpdate(Connection connection, XSKDataStructureEntityModel entityModel)
             throws SQLException {
         XSKEntityUpdateProcessor.execute(connection, entityModel);
     }
@@ -1473,7 +1473,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
      * @param entityModel the entity model
      * @throws SQLException the SQL exception
      */
-    private void executeEntityCreate(Connection connection, XSKDataStructureEntityModel entityModel)
+    public void executeEntityCreate(Connection connection, XSKDataStructureEntityModel entityModel)
             throws SQLException {
         XSKEntityCreateProcessor.execute(connection, entityModel);
     }
@@ -1485,7 +1485,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
      * @param entityModel the entity model
      * @throws SQLException
      */
-	private void executeEntityAlter(Connection connection, XSKDataStructureEntityModel entityModel)
+    public void executeEntityAlter(Connection connection, XSKDataStructureEntityModel entityModel)
             throws SQLException {
         // throw new NotImplementedException("Altering of a non-empty entity is not
         // implemented yet.");
@@ -1499,7 +1499,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
      * @param entityModel the entity model
      * @throws SQLException the SQL exception
      */
-    private void executeEntityDrop(Connection connection, XSKDataStructureEntityModel entityModel)
+    public void executeEntityDrop(Connection connection, XSKDataStructureEntityModel entityModel)
             throws SQLException {
         XSKEntityDropProcessor.execute(connection, entityModel);
     }

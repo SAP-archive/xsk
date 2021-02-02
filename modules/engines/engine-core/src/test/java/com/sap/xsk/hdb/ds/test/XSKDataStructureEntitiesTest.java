@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.test;
@@ -21,10 +21,34 @@ package com.sap.xsk.hdb.ds.test;
  *   SAP - initial API and implementation
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+
+import javax.inject.Inject;
+import javax.sql.DataSource;
+
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.core.test.AbstractGuiceTest;
+import org.eclipse.dirigible.database.persistence.PersistenceManager;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
+
 /**
  * The Class DataStructureSchemaTest.
  */
-public class XSKDataStructureEntitiesTest { //extends AbstractGuiceTest {
+public class XSKDataStructureEntitiesTest {// extends AbstractGuiceTest {
 
 //	/** The data structure core service. */
 //	@Inject
@@ -51,13 +75,13 @@ public class XSKDataStructureEntitiesTest { //extends AbstractGuiceTest {
 //	 */
 //	@Test
 //	public void updateEntities() {
+//		Configuration.set("DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE", "true");
 //		try {
 //			InputStream in = XSKDataStructureEntitiesTest.class.getResourceAsStream("/Products.hdbdd");
 //			try {
-//				String schemaFile = IOUtils.toString(in, StandardCharsets.UTF_8);
-//				Injector injector = new ModelStandaloneSetup().createInjectorAndDoEMFRegistration();
-//				XSKDataStructureEntitiesModel entities = new XSKDataStructureModelFactory().parseEntities(schemaFile);
-//				assertEquals("product_project.db", entities.getNamespace());
+//				String contents = IOUtils.toString(in, StandardCharsets.UTF_8);
+//				XSKDataStructureEntitiesModel model = new XSKDataStructureModelFactory().parseEntities("/Products.hdbdd", contents);
+//				assertEquals("product_project.db", model.getNamespace());
 //				Connection connection = null;
 //				try {
 //					connection = dataSource.getConnection();
@@ -68,14 +92,14 @@ public class XSKDataStructureEntitiesTest { //extends AbstractGuiceTest {
 //						persistenceManager.tableDrop(connection, Orders.class);
 //					}
 //
-//					for (XSKDataStructureEntitiesEntityModel entity : entities.getContext().getЕntities()) {
+//					for (XSKDataStructureEntityModel entity : model.getContext().getЕntities()) {
 //						if ("Item".equals(entity.getName())) {
 //							dataStructuresSynchronizer.executeEntityUpdate(connection, entity);
 //							break;
 //						}
 //					}
 //
-//					for (XSKDataStructureEntitiesEntityModel entity : entities.getContext().getЕntities()) {
+//					for (XSKDataStructureEntityModel entity : model.getContext().getЕntities()) {
 //						if ("Orders".equals(entity.getName())) {
 //							dataStructuresSynchronizer.executeEntityUpdate(connection, entity);
 //							break;
@@ -85,14 +109,14 @@ public class XSKDataStructureEntitiesTest { //extends AbstractGuiceTest {
 //					boolean exists = persistenceManager.tableExists(connection, Orders.class);
 //					assertTrue(exists);
 //
-//					for (XSKDataStructureEntitiesEntityModel table : entities.getContext().getЕntities()) {
+//					for (XSKDataStructureEntityModel table : model.getContext().getЕntities()) {
 //						if ("Orders".equals(table.getName())) {
 //							dataStructuresSynchronizer.executeEntityDrop(connection, table);
 //							break;
 //						}
 //					}
 //
-//					for (XSKDataStructureEntitiesEntityModel table : entities.getContext().getЕntities()) {
+//					for (XSKDataStructureEntityModel table : model.getContext().getЕntities()) {
 //						dataStructuresSynchronizer.executeEntityDrop(connection, table);
 //					}
 //

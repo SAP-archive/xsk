@@ -23,7 +23,7 @@ class HdbTableParsingTest {
 		val result = parseHelper.parse('''
 			table.schemaName = "SPORTS";
 			table.tableType = COLUMNSTORE;
-			table.description = "Team players missing in lineup (not nominated for the match)";
+			table.description = "Team players";
 			table.columns = [
 				{ name = "MATCH_ID";	sqlType = NVARCHAR;		length = 32;	comment="test"; 	nullable = false; },
 				{ name = "TEAM_ID";		sqlType = NVARCHAR;		length = 32;						nullable = false; },

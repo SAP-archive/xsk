@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.processors;
@@ -89,7 +89,10 @@ public class XSKEntityAlterProcessor {
 			String scale = columnModel.getScale();
 			String args = "";
 			if (length != null) {
-				if (type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR)) {
+				if (type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR)
+						|| columnModel.getType().equalsIgnoreCase("NVARCHAR")
+						|| columnModel.getType().equalsIgnoreCase("ALPHANUM")
+						|| columnModel.getType().equalsIgnoreCase("SHORTTEXT")) {
 					args = ISqlKeywords.OPEN + length + ISqlKeywords.CLOSE;
 				}
 			} else if ((precision != null) && (scale != null)) {

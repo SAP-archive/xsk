@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.model;
@@ -49,6 +49,9 @@ import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureTypeDefinitionModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
+import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
+import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
 
 /**
  * The factory for creation of the data structure models from source content.
@@ -78,21 +81,9 @@ public class XSKDataStructureModelFactory {
 	 *            the table definition
 	 * @return the table model instance
 	 */
-	public static XSKDataStructureHDBTableModel parseTable(String location, String content) {
-		
-		content = content.replace('"', ' ');
-		
-		XSKDataStructureHDBTableModel result = new XSKDataStructureHDBTableModel();
-		result.setName(new File(location).getName());
-		result.setLocation(location);
-		result.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
-		result.setHash(DigestUtils.md5Hex(content));
-		result.setCreatedBy(UserFacade.getName());
-		result.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-		
-		// ... actual parsing
-		
-		
+	public static XSKDataStructureHDBTableModel parseTable(String location, String content) throws Exception {
+		XSKTableParser parser = new XSKTableParser();
+		XSKDataStructureHDBTableModel result = parser.parse(location, content);
 		return result;
 	}
 
@@ -103,7 +94,7 @@ public class XSKDataStructureModelFactory {
 	 *            the table definition
 	 * @return the table model instance
 	 */
-	public static XSKDataStructureHDBTableModel parseTable(String location, byte[] bytes) {
+	public static XSKDataStructureHDBTableModel parseTable(String location, byte[] bytes) throws Exception {
 		return parseTable(location, new String(bytes));
 	}
 
@@ -114,21 +105,9 @@ public class XSKDataStructureModelFactory {
 	 *            the view definition
 	 * @return the view model instance
 	 */
-	public static XSKDataStructureHDBViewModel parseView(String location, String content) {
-		
-		content = content.replace('"', ' ');
-		
-		XSKDataStructureHDBViewModel result = new XSKDataStructureHDBViewModel();
-		result.setName(new File(location).getName());
-		result.setLocation(location);
-		result.setType(IXSKDataStructureModel.TYPE_HDB_VIEW);
-		result.setHash(DigestUtils.md5Hex(content));
-		result.setCreatedBy(UserFacade.getName());
-		result.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-		
-		// ... actual parsing
-		
-		
+	public static XSKDataStructureHDBViewModel parseView(String location, String content) throws Exception {
+		XSKViewParser parser = new XSKViewParser();
+		XSKDataStructureHDBViewModel result = parser.parse(location, content);
 		return result;
 	}
 
@@ -139,7 +118,7 @@ public class XSKDataStructureModelFactory {
 	 *            the view definition
 	 * @return the view model instance
 	 */
-	public static XSKDataStructureHDBViewModel parseView(String location, byte[] bytes) {
+	public static XSKDataStructureHDBViewModel parseView(String location, byte[] bytes) throws Exception {
 		return parseView(location, new String(bytes));
 	}
 	
@@ -152,99 +131,9 @@ public class XSKDataStructureModelFactory {
 	 * @throws Exception 
 	 */
 	public XSKDataStructureEntitiesModel parseEntities(String location, String content) throws Exception {
-		
-		content = content.replace('"', ' ');
-		
-		new org.eclipse.emf.mwe.utils.StandaloneSetup().setPlatformUri("../");
-		Injector injector = new HdbDDStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
-		XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
-		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-		
-		Resource resource = resourceSet.createResource(URI.createURI("dummy:/example.hdbdd"));
-		InputStream in = new ByteArrayInputStream(content.getBytes()); 
-		resource.load(in, resourceSet.getLoadOptions());
-		HdbDD hdbDD = (HdbDD) resource.getContents().get(0);
-		
-		EList errors = hdbDD.eResource().getErrors();
-		XSKDataStructureEntitiesModel hdbddModel = new XSKDataStructureEntitiesModel();
-		
-		hdbddModel.setName(new File(location).getName());
-		hdbddModel.setLocation(location);
-		hdbddModel.setType(IXSKDataStructureModel.TYPE_HDB_ENTITIES);
-		hdbddModel.setHash(DigestUtils.md5Hex(content));
-		hdbddModel.setCreatedBy(UserFacade.getName());
-		hdbddModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-		
-		for (Iterator iterator = hdbDD.getElements().iterator(); iterator.hasNext();) {
-			com.sap.xsk.models.hdbdd.hdbDD.Type type = (com.sap.xsk.models.hdbdd.hdbDD.Type) iterator.next();
-			if (type instanceof NamespaceImpl) {
-				hdbddModel.setNamespace(((NamespaceImpl) type).getName());
-			} else if (type instanceof SchemaImpl) {
-				hdbddModel.setSchema(((SchemaImpl) type).getName());
-			} else if (type instanceof ContextImpl) {
-				ContextImpl eContext = ((ContextImpl) type);
-				XSKDataStructureContextModel context = new XSKDataStructureContextModel();
-				context.setName(eContext.getName());
-				hdbddModel.setContext(context);
-				for (Iterator iteratorEntries = eContext.getEntities().iterator(); iteratorEntries.hasNext();) {
-					
-					Object entry = iteratorEntries.next();
-					if (entry instanceof EntityImpl) {
-						EntityImpl eEntity = (EntityImpl) entry;
-						XSKDataStructureEntityModel entity = new XSKDataStructureEntityModel();
-						entity.setNamespace(hdbddModel.getNamespace());
-						entity.setContext(context.getName());
-						entity.setName(eEntity.getName());
-						for (Iterator iteratorColumns = eEntity.getFields().iterator(); iteratorColumns.hasNext();) {
-							FieldImpl eField = (FieldImpl) iteratorColumns.next();
-							if (eField instanceof FieldPrimitiveImpl) {
-								FieldPrimitiveImpl eFieldPrimitive = (FieldPrimitiveImpl) eField;
-								XSKDataStructureHDBTableColumnModel column = new XSKDataStructureHDBTableColumnModel();
-								//column.setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, eFieldPrimitive.getName()));
-								column.setName(eFieldPrimitive.getName());
-								column.setPrimaryKey(eFieldPrimitive.isKey());
-								String mappedType = TYPES_MAP.get(eFieldPrimitive.getFieldType());
-								column.setType(mappedType != null ? mappedType: "INTEGER");
-								if (eFieldPrimitive.getFieldLength() != 0) {
-									column.setLength(eFieldPrimitive.getFieldLength() + "");
-								}
-								entity.getColumns().add(column);
-							} else if (eField instanceof FieldTypeImpl) {
-								FieldTypeImpl eFieldType = (FieldTypeImpl) eField;
-								XSKDataStructureTypeDefinitionModel typeDefinition = context.getTypes().get(eFieldType.getName());
-								if (typeDefinition != null) {
-									XSKDataStructureHDBTableColumnModel column = new XSKDataStructureHDBTableColumnModel();
-									// column.setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, typeDefinition.getName()));
-									column.setName(typeDefinition.getName());
-									column.setPrimaryKey(eFieldType.isKey());
-									String mappedType = TYPES_MAP.get(typeDefinition.getType());
-									column.setType(mappedType != null ? mappedType: "INTEGER");
-									if (typeDefinition.getLength() != 0) {
-										column.setLength(typeDefinition.getLength() + "");
-									}
-									entity.getColumns().add(column);
-								} else {
-									throw new IllegalArgumentException("Undefined field type: " + eFieldType.getName());
-								}
-							}  else if (eField instanceof FieldReferenceImpl) {
-								
-							} else {
-								throw new IllegalArgumentException("Unknown field type: " + eField.getClass().getCanonicalName());
-							}
-						}
-						context.getЕntities().add(entity);
-					} else if (entry instanceof TypeDefinitionImpl) {
-						TypeDefinitionImpl eTypeDefinition = (TypeDefinitionImpl) entry;
-						XSKDataStructureTypeDefinitionModel typeDefinition = new XSKDataStructureTypeDefinitionModel(
-								eTypeDefinition.getName(), eTypeDefinition.getFieldType(), eTypeDefinition.getFieldLength());
-						context.getTypes().put(typeDefinition.getName(), typeDefinition);
-					} else {
-						throw new IllegalArgumentException("Unknown field entry: " + entry.getClass().getCanonicalName());
-					}
-				}
-			}
-		}
-		return hdbddModel;
+		XSKEntitiesParser parser = new XSKEntitiesParser();
+		XSKDataStructureEntitiesModel result = parser.parse(location, content);
+		return result;
 	}
 
 	/**
@@ -259,36 +148,36 @@ public class XSKDataStructureModelFactory {
 		return parseEntities(location, new String(bytes));
 	}
 
-	/**
-	 * Creates a calculation view model from the raw content.
-	 *
-	 * @param xml
-	 *            the XML definition
-	 * @return the calculation view model instance
-	 * @throws Exception 
-	 */
-	public static XSKDataStructureCalculationViewModel parseCalcView(String location, String xml) {
-		XSKDataStructureCalculationViewModel calcviewModel = new XSKDataStructureCalculationViewModel();
-		calcviewModel.setName(new File(location).getName());
-		calcviewModel.setLocation(location);
-		calcviewModel.setType(IXSKDataStructureModel.TYPE_CALCVIEW);
-		calcviewModel.setHash(DigestUtils.md5Hex(xml));
-		calcviewModel.setCreatedBy(UserFacade.getName());
-		calcviewModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-		calcviewModel.setXml(xml);
-		return calcviewModel;
-	}
-
-	/**
-	 * Creates a calculation view model from the raw content.
-	 *
-	 * @param xml
-	 *            the XML definition
-	 * @return the calculation view model instance
-	 * @throws Exception 
-	 */
-	public static XSKDataStructureCalculationViewModel parseCalcView(String location, byte[] xml) {
-		return parseCalcView(location, new String(xml));
-	}
+//	/**
+//	 * Creates a calculation view model from the raw content.
+//	 *
+//	 * @param xml
+//	 *            the XML definition
+//	 * @return the calculation view model instance
+//	 * @throws Exception 
+//	 */
+//	public static XSKDataStructureCalculationViewModel parseCalcView(String location, String xml) {
+//		XSKDataStructureCalculationViewModel calcviewModel = new XSKDataStructureCalculationViewModel();
+//		calcviewModel.setName(new File(location).getName());
+//		calcviewModel.setLocation(location);
+//		calcviewModel.setType(IXSKDataStructureModel.TYPE_CALCVIEW);
+//		calcviewModel.setHash(DigestUtils.md5Hex(xml));
+//		calcviewModel.setCreatedBy(UserFacade.getName());
+//		calcviewModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+//		calcviewModel.setXml(xml);
+//		return calcviewModel;
+//	}
+//
+//	/**
+//	 * Creates a calculation view model from the raw content.
+//	 *
+//	 * @param xml
+//	 *            the XML definition
+//	 * @return the calculation view model instance
+//	 * @throws Exception 
+//	 */
+//	public static XSKDataStructureCalculationViewModel parseCalcView(String location, byte[] xml) {
+//		return parseCalcView(location, new String(xml));
+//	}
 
 }

@@ -1,0 +1,10 @@
+import = [
+	{
+		table = "hdi-cube::SalesOrdersTable";
+		file = "hdi-cube:SalesOrdersData.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+	}
+];

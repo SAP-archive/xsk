@@ -1,0 +1,16 @@
+{
+   "file_suffixes":{
+      "hdbsynonym":{
+         "plugin_name":"com.sap.hana.di.synonym",
+         "plugin_version":"12.1.0"
+      },
+      "hdbpublicsynonym":{
+         "plugin_name":"com.sap.hana.di.publicsynonym",
+         "plugin_version":"12.1.0"
+      },
+      "hdbcalculationview":{
+         "plugin_name":"com.sap.hana.di.calculationview",
+         "plugin_version":"12.1.0"
+      }
+   }
+}

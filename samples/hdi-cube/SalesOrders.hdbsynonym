@@ -1,0 +1,8 @@
+{
+  "SalesOrdersTable": {
+    "target": {
+      "object": "hdi-cube::SalesOrdersTable",
+      "schema": "DBADMIN"
+    }
+  }
+}

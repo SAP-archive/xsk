@@ -76,7 +76,7 @@ import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
 import com.sap.xsk.utils.XSKUtils;
 
 /**
- * The Data Structures Synchronizer.
+ * The XSK Data Structures Synchronizer.
  */
 @Singleton
 public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
@@ -288,7 +288,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
     @Override
     public void synchronize() {
         synchronized (XSKDataStructuresSynchronizer.class) {
-            logger.trace("Synchronizing Data Structures...");
+            logger.trace("Synchronizing XSK Data Structures...");
             try {
             	startSynchronization(SYNCHRONIZER_NAME);
                 clearCache();
@@ -327,7 +327,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
 					logger.error("Synchronizing process for HDB Data Structures files failed in registering the state log.", e);
 				}
             }
-            logger.trace("Done synchronizing Data Structures.");
+            logger.trace("Done synchronizing XSK Data Structures.");
         }
     }
 
@@ -353,7 +353,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
      */
     private void synchronizePredelivered() throws SynchronizationException {
 
-        logger.trace("Synchronizing predelivered Data Structures...");
+        logger.trace("Synchronizing predelivered XSK Data Structures...");
 
         // HDBSchemas
         logger.trace("Synchronizing predelivered HDB Schemas...");
@@ -455,7 +455,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
         }
         logger.trace("Done synchronizing predelivered HDI Containers.");
 
-        logger.trace("Done synchronizing predelivered HDB Data Structures.");
+        logger.trace("Done synchronizing predelivered XSK Data Structures.");
     }
 
 
@@ -750,11 +750,11 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
      */
     @Override
     protected void synchronizeRegistry() throws SynchronizationException {
-        logger.trace("Synchronizing Data Structures from Registry...");
+        logger.trace("Synchronizing XSK Data Structures from Registry...");
 
         super.synchronizeRegistry();
 
-        logger.trace("Done synchronizing Data Structures from Registry.");
+        logger.trace("Done synchronizing XSK Data Structures from Registry.");
     }
 
     /*
@@ -926,7 +926,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
      */
     @Override
     protected void cleanup() throws SynchronizationException {
-        logger.trace("Cleaning up Data Structures...");
+        logger.trace("Cleaning up XSK Data Structures...");
 
         try {
             Connection connection = null;
@@ -1039,7 +1039,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
             throw new SynchronizationException(e);
         }
 
-        logger.trace("Done cleaning up Data Structures.");
+        logger.trace("Done cleaning up XSK Data Structures.");
     }
     
     boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));

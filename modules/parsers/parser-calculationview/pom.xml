@@ -7,13 +7,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-parsers-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Modules - Parsers - Calculation View</name>
 	<artifactId>xsk-modules-parsers-calculationview</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>

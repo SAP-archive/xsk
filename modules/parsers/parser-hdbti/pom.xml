@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-parsers-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Modules - Parsers - HDB TI - Parent</name>
 	<artifactId>xsk-modules-parsers-hdbti-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>pom</packaging>
 
 	<modules>

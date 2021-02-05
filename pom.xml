@@ -13,7 +13,7 @@
 	<description>XSK - HANA XS Classic Compatibility Environment</description>
 	<groupId>com.sap.xsk</groupId>
 	<artifactId>xsk-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>pom</packaging>
 
 	<inceptionYear>2019</inceptionYear>

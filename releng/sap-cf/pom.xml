@@ -38,6 +38,18 @@
 
 	<dependencies>
 
+		<!-- XS Classic -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>xsk-modules-all</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.mwe.utils</artifactId>
+			<version>${emf.mwe.utils.version}</version>
+		</dependency>
+
 		<!-- Platform -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -58,23 +70,11 @@
 		    <scope>compile</scope>
 		</dependency>
 
-		<!-- Kyma - Base -->
+		<!-- Cloud Foundry - Base -->
 		<dependency>
 		 	<groupId>org.eclipse.dirigible</groupId>
 		 	<artifactId>dirigible-sap-cf-base</artifactId>
 		 	<version>${dirigible.version}</version>
-		</dependency>
-
-		<!-- XS Classic -->
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>xsk-modules-all</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.mwe.utils</artifactId>
-			<version>${emf.mwe.utils.version}</version>
 		</dependency>
 
 	</dependencies>

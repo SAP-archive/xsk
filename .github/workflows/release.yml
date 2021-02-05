@@ -1,0 +1,115 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - 'v*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 13
+      uses: actions/setup-java@v1
+      with:
+        java-version: 13
+    - name: Set XSK Version
+      run: echo XSK_VERSION=${GITHUB_REF#refs/*/} | tr v " " | sed 's/ //'  >> $GITHUB_ENV
+    - name: Maven Build
+      run: mvn clean install
+    - name: Dodcker Login
+      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+    - name: Push XSK
+      run: |
+        cd releng/server
+        docker build -t dirigiblelabs/xsk:$XSK_VERSION .
+        docker push dirigiblelabs/xsk:$XSK_VERSION
+        cd ../../
+    - name: Push XSK for SAP Cloud Foundry
+      run: |
+        cd releng/sap-cf
+        docker build -t dirigiblelabs/xsk-cf:$XSK_VERSION .
+        docker push dirigiblelabs/xsk-cf:$XSK_VERSION
+        cd ../../
+    - name: Push XSK for SAP Kyma
+      run: |
+        cd releng/sap-kyma
+        docker build -t dirigiblelabs/xsk-kyma:$XSK_VERSION .
+        docker push dirigiblelabs/xsk-kyma:$XSK_VERSION
+        cd ../../
+
+#----------------Publish GitHub Release------------------#
+
+    - name: Package WAR files
+      run: |
+        zip --junk-paths server releng/server/target/ROOT.war
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        tag_name: v${{ env.XSK_VERSION }}
+        release_name: ${{ env.XSK_VERSION }}
+        draft: false
+        prerelease: false
+        body: |
+          ## XSK - ${{ env.XSK_VERSION }}
+         
+          #### Docker images:
+            - [dirigiblelabs/dirigible-anonymous](https://hub.docker.com/r/dirigiblelabs/dirigible-anonymous/tags?page=1&ordering=last_updated) - Anonymous access.
+            - [dirigiblelabs/dirigible-runtime-anonymous](https://hub.docker.com/r/dirigiblelabs/dirigible-runtime-anonymous/tags?page=1&ordering=last_updated) - Anonymous access _(runtime only)_.
+            - [dirigiblelabs/dirigible-openshift](https://hub.docker.com/r/dirigiblelabs/dirigible-openshift/tags?page=1&ordering=last_updated) - OpenShift.
+            - [dirigiblelabs/dirigible-sap-cf](https://hub.docker.com/r/dirigiblelabs/dirigible-sap-cf/tags?page=1&ordering=last_updated) - SAP Cloud Platform - Cloud Foundry environment.
+            - [dirigiblelabs/dirigible-sap-cf-runtime](https://hub.docker.com/r/dirigiblelabs/dirigible-sap-cf-runtime/tags?page=1&ordering=last_updated) - SAP Cloud Platform - Cloud Foundry environment _(runtime only)_.
+            - [dirigiblelabs/dirigible-sap-kyma](https://hub.docker.com/r/dirigiblelabs/dirigible-sap-kyma/tags?page=1&ordering=last_updated) - SAP Cloud Platform - Kyma environment.
+            - [dirigiblelabs/dirigible-sap-kyma-runtime](https://hub.docker.com/r/dirigiblelabs/dirigible-sap-kyma-runtime/tags?page=1&ordering=last_updated) - SAP Cloud Platform - Kyma environment _(runtime only)_.
+            - [dirigiblelabs/dirigible-all](https://hub.docker.com/r/dirigiblelabs/dirigible-all/tags?page=1&ordering=last_updated) - Basic docker image - recommended for local test & development.
+            - [dirigiblelabs/dirigible-runtime](https://hub.docker.com/r/dirigiblelabs/dirigible-runtime/tags?page=1&ordering=last_updated) - Basic docker image - recommended for local test & development _(runtime only)_.
+            - [dirigiblelabs/dirigible-trial](https://hub.docker.com/r/dirigiblelabs/dirigible-trial/tags?page=1&ordering=last_updated) - Trial _(guest/nickname access)_.
+            - [dirigiblelabs/dirigible-tomcat](https://hub.docker.com/r/dirigiblelabs/dirigible-tomcat/tags?page=1&ordering=last_updated) - Similar to [dirigiblelabs/dirigible-all](https://hub.docker.com/r/dirigiblelabs/dirigible-all/tags).
+            - [dirigiblelabs/dirigible-keycloak](https://hub.docker.com/r/dirigiblelabs/dirigible-keycloak/tags?page=1&ordering=last_updated) - Keycloak integration.
+            - [dirigiblelabs/dirigible-runtime-keycloak](https://hub.docker.com/r/dirigiblelabs/dirigible-runtime-keycloak/tags?page=1&ordering=last_updated) - Keycloak integration _(runtime only)_
+
+          #### Available for download `*.war` packages:
+            - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server.zip) - XSK Server.
+            
+          > _**Note:** Unzip the downloaded file to extract the `ROOT.war` binary._
+          
+          For more infromation go to [https://www.dirigible.io/help/setup/](https://www.dirigible.io/help/setup/).
+          
+    - name: Upload Server
+      id: upload-server 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./server.zip
+        asset_name: server.zip
+        asset_content_type: application/zip
+
+#----------------Publish GitHub Release------------------#
+
+#-----------------Create GitHub Branch-------------------#
+
+    - name: Create GitHub Branch
+      run: |
+        git checkout -b $XSK_VERSION
+        git push origin $XSK_VERSION
+
+#-----------------Create GitHub Branch-------------------#
+
+#------------------Update XSK Instance-------------------#
+
+#    - name: Kubectl tool installer
+#      uses: Azure/setup-kubectl@v1
+#    - name: Setup Kube Config File
+#      run: |
+#        mkdir $HOME/.kube
+#        echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
+#    - name: Update XSK Instance
+#      run: kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:$XSK_VERSION
+
+#------------------Update XSK Instance-------------------#

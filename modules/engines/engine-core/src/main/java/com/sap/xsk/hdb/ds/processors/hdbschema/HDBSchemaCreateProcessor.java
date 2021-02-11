@@ -26,14 +26,12 @@ public class HDBSchemaCreateProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(HDBSchemaCreateProcessor.class);
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBSchemaModel> hdbSchemas) throws SQLException {
-        for (XSKDataStructureHDBSchemaModel schema : hdbSchemas) {
-            String sql = "CREATE SCHEMA " + schema.getName();
-            executeCreate(connection, sql);
-        }
+    public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
+        String sql = "CREATE SCHEMA " + hdbSchema.getName();
+        executeCreate(connection, sql);
     }
 
-    private static void executeCreate(Connection connection, String sql) throws SQLException {
+    private void executeCreate(Connection connection, String sql) throws SQLException {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);

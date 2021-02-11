@@ -11,26 +11,19 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbprocedure;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
-
+import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class HDBProcedureDropProcessor {
-
-    private HDBProcedureDropProcessor() {}
-
     private static final Logger logger = LoggerFactory.getLogger(HDBProcedureDropProcessor.class);
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBProcedureModel> hdbProcedures) throws SQLException {
-        for (XSKDataStructureHDBProcedureModel proc : hdbProcedures) {
-            executeSingle(connection, proc);
-        }
+    public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
+        executeSingle(connection, hdbProcedure);
     }
 
     private static void executePreparedStatement(Connection connection, String sql) throws SQLException {
@@ -49,9 +42,9 @@ public class HDBProcedureDropProcessor {
         }
     }
 
-    public static void executeSingle(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
+    public void executeSingle(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
         String sql = "DROP PROCEDURE " + hdbProcedure.getName();
         executePreparedStatement(connection, sql);
     }
-    
+
 }

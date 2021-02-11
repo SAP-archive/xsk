@@ -26,8 +26,6 @@ public class XSKHDIContainerCreateProcessor {
 	
 	private static final Logger logger = LoggerFactory.getLogger(XSKHDIContainerCreateProcessor.class);
 	
-	private static XSKHDIContainerCreateProcessor INSTANCE = new XSKHDIContainerCreateProcessor();
-	
 	private XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor = new XSKGrantPrivilegesContainerGroupAPIProcessor();
 	private XSKCreateContainerGroupProcessor createContainerGroupProcessor = new XSKCreateContainerGroupProcessor();
 	private XSKGrantPrivilegesContainerGroupProcessor grantPrivilegesContainerGroupProcessor = new XSKGrantPrivilegesContainerGroupProcessor();
@@ -38,61 +36,49 @@ public class XSKHDIContainerCreateProcessor {
 	private XSKDeployContainerContentProcessor deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
 	private XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
 	private XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor = new XSKGrantPrivilegesContainerTargetSchemaProcessor();
-	
-	
-	private XSKHDIContainerCreateProcessor() {}
 
-    public static void execute(Connection connection, List<XSKDataStructureHDIModel> hdiModels) {
-    	
-    	if (hdiModels.isEmpty()) {
-    		return;
-    	}
-    	
+    public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
     	logger.info("Start processing HDI Containers...");
-    	
-    	for (XSKDataStructureHDIModel hdiModel : hdiModels) {
-    		try {
-				logger.info("Start processing HDI Container [{0}] from [{1}] ...", hdiModel.getContainer(), hdiModel.getLocation());
-				
-				// Grant Privileges to Container Group API
-				INSTANCE.grantPrivilegesContainerGroupAPIProcessor.execute(connection, hdiModel.getUsers());
-				
-				// Create a Container Group
-				INSTANCE.createContainerGroupProcessor.execute(connection, hdiModel.getGroup());
-				
-				// Grant Privileges to the Container Group
-				INSTANCE.grantPrivilegesContainerGroupProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getUsers());
+		try {
+			logger.info("Start processing HDI Container [{0}] from [{1}] ...", hdiModel.getContainer(), hdiModel.getLocation());
 
-				// Create a Container
-				INSTANCE.createContainerProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getContainer());
-				
-				// Grant Privileges to Container API
-				INSTANCE.grantPrivilegesContainerAPIProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getContainer(), hdiModel.getUsers());
-				
-				// Write the files content to the Container
-				INSTANCE.writeContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getConfiguration());
-				
-				// Configure Libraries for the Container
-				INSTANCE.configureLibrariesProcessor.execute(connection, hdiModel.getContainer());
-				
-				// Grant Privileges on the Target Schema
-				INSTANCE.grantPrivilegesContainerTargetSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
-				
-				// Deploy the Content
-				INSTANCE.deployContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getUndeploy());
-				
-				// Grant Privileges to the Container Schema
-				INSTANCE.grantPrivilegesContainerSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
-				
-				logger.info("HDI Container [{0}] from [{1}] finished successfully.", hdiModel.getContainer(), hdiModel.getLocation());
-			} catch (SQLException | IOException | ScriptingException e) {
-				logger.error("HDI Container [{0}] from [{1}] failed.\", hdiModel.getContainer(), hdiModel.getLocation()");
-				logger.error(e.getMessage(), e);
-			}
-    	}
+			// Grant Privileges to Container Group API
+			this.grantPrivilegesContainerGroupAPIProcessor.execute(connection, hdiModel.getUsers());
+
+			// Create a Container Group
+			this.createContainerGroupProcessor.execute(connection, hdiModel.getGroup());
+
+			// Grant Privileges to the Container Group
+			this.grantPrivilegesContainerGroupProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getUsers());
+
+			// Create a Container
+			this.createContainerProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getContainer());
+
+			// Grant Privileges to Container API
+			this.grantPrivilegesContainerAPIProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getContainer(), hdiModel.getUsers());
+
+			// Write the files content to the Container
+			this.writeContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getConfiguration());
+
+			// Configure Libraries for the Container
+			this.configureLibrariesProcessor.execute(connection, hdiModel.getContainer());
+
+			// Grant Privileges on the Target Schema
+			this.grantPrivilegesContainerTargetSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
+
+			// Deploy the Content
+			this.deployContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getUndeploy());
+
+			// Grant Privileges to the Container Schema
+			this.grantPrivilegesContainerSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
+
+			logger.info("HDI Container [{0}] from [{1}] finished successfully.", hdiModel.getContainer(), hdiModel.getLocation());
+		} catch (SQLException | IOException | ScriptingException e) {
+			logger.error("HDI Container [{0}] from [{1}] failed.\", hdiModel.getContainer(), hdiModel.getLocation()");
+			logger.error(e.getMessage(), e);
+		}
     	
     	logger.info("Done rocessing HDI Containers.");
-    	
     }
 
 }

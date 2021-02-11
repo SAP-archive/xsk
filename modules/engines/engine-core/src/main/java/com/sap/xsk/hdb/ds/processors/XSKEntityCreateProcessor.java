@@ -38,8 +38,6 @@ public class XSKEntityCreateProcessor {
 
 	private static final Logger logger = LoggerFactory.getLogger(XSKEntityCreateProcessor.class);
 
-	private XSKEntityCreateProcessor() {}
-
 	/**
 	 * Execute the corresponding statement.
 	 *
@@ -47,7 +45,7 @@ public class XSKEntityCreateProcessor {
 	 * @param entityModel the entity model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = XSKUtils.getTableName(entityModel);
 		if (caseSensitive) {

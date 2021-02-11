@@ -25,16 +25,12 @@ import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctio
 public class HDBTableFunctionCreateProcessor {
     private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionCreateProcessor.class);
 
-    private HDBTableFunctionCreateProcessor() {}
-
-    public static void execute(Connection connection, List<XSKDataStructureHDBTableFunctionModel> hdbTableFunctions) throws SQLException {
-        for (XSKDataStructureHDBTableFunctionModel func : hdbTableFunctions) {
-            String sql = "CREATE " + func.getContent();
-            executeCreate(connection, sql);
-        }
+    public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunctions) throws SQLException {
+        String sql = "CREATE " + hdbTableFunctions.getContent();
+        executeCreate(connection, sql);
     }
 
-    private static void executeCreate(Connection connection, String sql) throws SQLException {
+    private void executeCreate(Connection connection, String sql) throws SQLException {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);

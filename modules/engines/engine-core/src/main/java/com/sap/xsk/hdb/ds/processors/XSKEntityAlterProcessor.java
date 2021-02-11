@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
@@ -40,8 +41,6 @@ import com.sap.xsk.utils.XSKUtils;
  */
 public class XSKEntityAlterProcessor {
 
-	private XSKEntityAlterProcessor() {}
-
 	private static final Logger logger = LoggerFactory.getLogger(XSKEntityAlterProcessor.class);
 	
 	private static final String INCOMPATIBLE_CHANGE_OF_ENTITY = "Incompatible change of entity [%s] by adding a column [%s] which is [%s]"; //$NON-NLS-1$
@@ -53,7 +52,7 @@ public class XSKEntityAlterProcessor {
 	 * @param entityModel the entity model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = XSKUtils.getTableName(entityModel);
 		logger.info("Processing Alter Entity: {}", tableName);
@@ -145,7 +144,7 @@ public class XSKEntityAlterProcessor {
 		
 	}
 
-	private static void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
+	private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
 			throws SQLException {
 		final String sql = alterTableBuilder.build();
 		try(PreparedStatement statement = connection.prepareStatement(sql);) {
@@ -157,5 +156,4 @@ public class XSKEntityAlterProcessor {
 			throw new SQLException(e.getMessage(), e);
 		}
 	}
-
 }

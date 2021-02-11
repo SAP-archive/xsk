@@ -37,7 +37,7 @@ public class XSKViewDropProcessor {
 	 * @param viewModel the view model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
+	public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String viewName = viewModel.getName();
 		if (caseSensitive) {

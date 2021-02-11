@@ -44,7 +44,7 @@ public class XSKTableDropProcessor {
 	 * @throws SQLException
 	 *             the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+	public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = tableModel.getName();
 		if (caseSensitive) {
@@ -89,7 +89,7 @@ public class XSKTableDropProcessor {
 		}
 	}
 
-	private static void executeUpdate(Connection connection, String sql) throws SQLException {
+	private void executeUpdate(Connection connection, String sql) throws SQLException {
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(sql);

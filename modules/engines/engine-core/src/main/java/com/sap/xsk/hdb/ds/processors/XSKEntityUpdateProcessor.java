@@ -27,8 +27,8 @@ public class XSKEntityUpdateProcessor {
 
 	private static final Logger logger = LoggerFactory.getLogger(XSKEntityUpdateProcessor.class);
 
-	private XSKEntityUpdateProcessor() {}
-
+	private XSKEntityDropProcessor xskEntityDropProcessor;
+	private XSKEntityCreateProcessor xskEntityCreateProcessor;
 	/**
 	 * Execute the corresponding statement.
 	 *
@@ -36,7 +36,7 @@ public class XSKEntityUpdateProcessor {
 	 * @param entityModel the entity model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = XSKUtils.getTableName(entityModel);
         if (caseSensitive) {
@@ -45,13 +45,13 @@ public class XSKEntityUpdateProcessor {
         logger.info("Processing Update Entity: {}", tableName);
         if (SqlFactory.getNative(connection).exists(connection, tableName)) {
             if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
-            	XSKEntityDropProcessor.execute(connection, entityModel);
-            	XSKEntityCreateProcessor.execute(connection, entityModel);
+				xskEntityDropProcessor.execute(connection, entityModel);
+				xskEntityCreateProcessor.execute(connection, entityModel);
             } else {
             	// XSKEntityAlterProcessor.execute(connection, entityModel);
             }
         } else {
-        	XSKEntityCreateProcessor.execute(connection, entityModel);
+			xskEntityCreateProcessor.execute(connection, entityModel);
         }
 	}
 }

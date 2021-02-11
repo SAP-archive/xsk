@@ -31,8 +31,6 @@ import com.sap.xsk.utils.XSKUtils;
  */
 public class XSKEntityDropProcessor {
 
-    private XSKEntityDropProcessor() {}
-
     private static final Logger logger = LoggerFactory.getLogger(XSKEntityDropProcessor.class);
 
     /**
@@ -43,7 +41,7 @@ public class XSKEntityDropProcessor {
      * @throws SQLException the SQL exception
      * @return if delete operation has been performed successfully or the table does not exist
      */
-    public static boolean execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+    public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
     	boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
         String tableName = XSKUtils.getTableName(entityModel);
         if (caseSensitive) {
@@ -61,7 +59,6 @@ public class XSKEntityDropProcessor {
                         int count = resultSet.getInt(1);
                         if (count > 0) {
                             logger.error("Drop operation for the non empty Table {} will not be executed. Delete all the records in the table first.", tableName);
-                            return false;
                         }
                     }
                 }
@@ -93,13 +90,12 @@ public class XSKEntityDropProcessor {
 
             sql = SqlFactory.getNative(connection).drop().table(tableName).build();
             executeUpdate(connection, sql);
-            return true;
+            return;
         }
         logger.warn("Trying to delete non existing Table: {}", tableName);
-        return true;
     }
 
-    private static void executeUpdate(Connection connection, String sql) throws SQLException {
+    private void executeUpdate(Connection connection, String sql) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             logger.info(sql);
             statement.executeUpdate();

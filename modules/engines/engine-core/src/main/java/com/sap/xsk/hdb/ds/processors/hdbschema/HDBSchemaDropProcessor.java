@@ -22,18 +22,13 @@ import org.slf4j.LoggerFactory;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 
 public class HDBSchemaDropProcessor {
-
-    private HDBSchemaDropProcessor(){}
-
     private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBSchemaModel> hdbSchemas) throws SQLException {
-        for (XSKDataStructureHDBSchemaModel schema : hdbSchemas) {
-            executeSingle(connection, schema);
-        }
+    public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchemas) throws SQLException {
+        executeSingle(connection, hdbSchemas);
     }
 
-    private static void executePreparedStatement(Connection connection, String sql) throws SQLException {
+    private void executePreparedStatement(Connection connection, String sql) throws SQLException {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
@@ -49,7 +44,7 @@ public class HDBSchemaDropProcessor {
         }
     }
 
-    public static void executeSingle(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
+    private void executeSingle(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
         String sql = "DROP SCHEMA " + hdbSchema.getName();
         executePreparedStatement(connection, sql);
     }

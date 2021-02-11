@@ -43,7 +43,7 @@ public class XSKEntityForeignKeysProcessor {
 	 * @param entityModel the entity model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = XSKUtils.getTableName(entityModel);
 		logger.info("Processing Foreign Keys to the Table: {}", tableName);

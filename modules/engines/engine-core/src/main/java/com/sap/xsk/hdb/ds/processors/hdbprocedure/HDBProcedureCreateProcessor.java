@@ -24,16 +24,12 @@ import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 public class HDBProcedureCreateProcessor {
     private static final Logger logger = LoggerFactory.getLogger(HDBProcedureCreateProcessor.class);
 
-    private HDBProcedureCreateProcessor() {}
-
-    public static void execute(Connection connection, List<XSKDataStructureHDBProcedureModel> hdbProcedures) throws SQLException {
-        for (XSKDataStructureHDBProcedureModel proc : hdbProcedures) {
-            String sql = "CREATE " + proc.getContent();
-            executeCreate(connection, sql);
-        }
+    public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
+        String sql = "CREATE " + hdbProcedure.getContent();
+        executeCreate(connection, sql);
     }
 
-    private static void executeCreate(Connection connection, String sql) throws SQLException {
+    private void executeCreate(Connection connection, String sql) throws SQLException {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);

@@ -24,17 +24,13 @@ import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctio
 
 public class HDBTableFunctionDropProcessor {
 
-    private HDBTableFunctionDropProcessor() {}
-
     private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionDropProcessor.class);
 
-    public static void execute(Connection connection, List<XSKDataStructureHDBTableFunctionModel> hdbTableFunction) throws SQLException {
-        for (XSKDataStructureHDBTableFunctionModel func : hdbTableFunction) {
-            executeSingle(connection, func);
-        }
+    public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
+        executeSingle(connection, hdbTableFunction);
     }
 
-    private static void executePreparedStatement(Connection connection, String sql) throws SQLException {
+    private void executePreparedStatement(Connection connection, String sql) throws SQLException {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
@@ -50,7 +46,7 @@ public class HDBTableFunctionDropProcessor {
         }
     }
 
-    public static void executeSingle(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
+    private void executeSingle(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
         String sql = "DROP FUNCTION " + hdbTableFunction.getName();
         executePreparedStatement(connection, sql);
     }

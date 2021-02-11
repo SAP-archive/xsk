@@ -45,7 +45,7 @@ public class XSKTableCreateProcessor {
 	 * @param tableModel the table model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+	public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = tableModel.getName();
 		if (caseSensitive) {

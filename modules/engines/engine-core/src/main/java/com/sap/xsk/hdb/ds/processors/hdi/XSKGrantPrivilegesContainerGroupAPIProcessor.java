@@ -24,5 +24,4 @@ public class XSKGrantPrivilegesContainerGroupAPIProcessor extends XSKHDIAbstract
     	executeQuery(connection, "CALL _SYS_DI.GRANT_CONTAINER_GROUP_API_PRIVILEGES('_SYS_DI', #PRIVILEGES, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);");
     	executeUpdate(connection, "DROP TABLE #PRIVILEGES;");
 	}
-
 }

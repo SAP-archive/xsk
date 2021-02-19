@@ -67,13 +67,55 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     private XSKPrivilegeCoreService xskPrivilegeCoreService;
     
     private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
+    
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.dirigible.core.scheduler.api.ISynchronizer#synchronize()
+     */
+    @Override
+    public void synchronize() {
+        synchronized (SecuritySynchronizer.class) {
+        	if (beforeSynchronizing()) {
+	            logger.trace("Synchronizing Privileges and Access artifacts...");
+	            try {
+	            	startSynchronization(SYNCHRONIZER_NAME);
+	                clearCache();
+	                synchronizePredelivered();
+	                synchronizeRegistry();
+	                int immutablePrivilegesCount = PRIVILEGES_PREDELIVERED.size();
+	                int immutableAccessCount = ACCESS_PREDELIVERED.size();
+	                
+					int mutablePrivilegesCount = PRIVILEGES_SYNCHRONIZED.size();
+					int mutableAccessCount = ACCESS_SYNCHRONIZED.size();
+	                cleanup();
+	                clearCache();
+	                successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: [Privileges: {0}, Access: {1}], Mutable: [Privileges: {2}, Access: {3}]", 
+	                		immutablePrivilegesCount, immutableAccessCount, mutablePrivilegesCount, mutableAccessCount));
+	            } catch (Exception e) {
+	                logger.error("Synchronizing process for Privileges and Access artifacts failed.", e);
+	                try {
+						failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+					} catch (SchedulerException e1) {
+						logger.error("Synchronizing process for Privileges and Access artifacts failed in registering the state log.", e);
+					}
+	            }
+	            logger.trace("Done synchronizing Privileges and Access artifacts.");
+	            afterSynchronizing();
+        	}
+        }
+    }
 
     /**
      * Force synchronization.
      */
     public static final void forceSynchronization() {
-        SecuritySynchronizer securitySynchronizer = StaticInjector.getInjector().getInstance(SecuritySynchronizer.class);
-        securitySynchronizer.synchronize();
+        SecuritySynchronizer synchronizer = StaticInjector.getInjector().getInstance(SecuritySynchronizer.class);
+        synchronizer.setForcedSynchronization(true);
+		try {
+			synchronizer.synchronize();
+		} finally {
+			synchronizer.setForcedSynchronization(false);
+		}
     }
 
     /**
@@ -119,40 +161,6 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
             if (in != null) {
                 in.close();
             }
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.dirigible.core.scheduler.api.ISynchronizer#synchronize()
-     */
-    @Override
-    public void synchronize() {
-        synchronized (SecuritySynchronizer.class) {
-            logger.trace("Synchronizing Privileges and Access artifacts...");
-            try {
-            	startSynchronization(SYNCHRONIZER_NAME);
-                clearCache();
-                synchronizePredelivered();
-                synchronizeRegistry();
-                int immutablePrivilegesCount = PRIVILEGES_PREDELIVERED.size();
-                int immutableAccessCount = ACCESS_PREDELIVERED.size();
-                
-				int mutablePrivilegesCount = PRIVILEGES_SYNCHRONIZED.size();
-				int mutableAccessCount = ACCESS_SYNCHRONIZED.size();
-                cleanup();
-                clearCache();
-                successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: [Privileges: {0}, Access: {1}], Mutable: [Privileges: {2}, Access: {3}]", 
-                		immutablePrivilegesCount, immutableAccessCount, mutablePrivilegesCount, mutableAccessCount));
-            } catch (Exception e) {
-                logger.error("Synchronizing process for Privileges and Access artifacts failed.", e);
-                try {
-					failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-				} catch (SchedulerException e1) {
-					logger.error("Synchronizing process for Privileges and Access artifacts failed in registering the state log.", e);
-				}
-            }
-            logger.trace("Done synchronizing Privileges and Access artifacts.");
         }
     }
 

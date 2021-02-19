@@ -79,13 +79,60 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 	private XSKOData2ODataXTransformer xskOData2ODataXTransformer;
 	
 	private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.dirigible.core.scheduler.api.ISynchronizer#synchronize()
+	 */
+	@Override
+	public void synchronize() {
+		synchronized (XSKODataSynchronizer.class) {
+			if (beforeSynchronizing()) {
+				logger.trace("Synchronizing XSOData...");
+				try {
+					if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
+							&& isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")
+							&& isSynchronizerSuccessful("com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer")) {
+						startSynchronization(SYNCHRONIZER_NAME);
+						clearCache();
+						synchronizePredelivered();
+						synchronizeRegistry();
+						updateXSOData();
+						int immutableCount = ODATA_PREDELIVERED.size();
+						int mutableCount = ODATA_SYNCHRONIZED.size();
+						cleanup(); // TODO drop tables and views for non-existing models
+						clearCache();
+						successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
+					} else {
+						failedSynchronization(SYNCHRONIZER_NAME, "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
+								+ "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer, "
+								+ "com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer");
+					}
+				} catch (Exception e) {
+					logger.error("Synchronizing process for XSOData failed.", e);
+					try {
+						failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+					} catch (SchedulerException e1) {
+						logger.error("Synchronizing process for XSOData files failed in registering the state log.", e);
+					}
+				}
+				logger.trace("Done synchronizing XSOData.");
+				afterSynchronizing();
+			}
+		}
+	}
 
 	/**
 	 * Force synchronization.
 	 */
 	public static final void forceSynchronization() {
-		XSKODataSynchronizer dataStructureSynchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
-		dataStructureSynchronizer.synchronize();
+		XSKODataSynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
+		synchronizer.setForcedSynchronization(true);
+		try {
+			synchronizer.synchronize();
+		} finally {
+			synchronizer.setForcedSynchronization(false);
+		}
 	}
 	
 	/**
@@ -110,45 +157,6 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 			if (in != null) {
 				in.close();
 			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.dirigible.core.scheduler.api.ISynchronizer#synchronize()
-	 */
-	@Override
-	public void synchronize() {
-		synchronized (XSKODataSynchronizer.class) {
-			logger.trace("Synchronizing XSOData...");
-			try {
-				if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
-						&& isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")
-						&& isSynchronizerSuccessful("com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer")) {
-					startSynchronization(SYNCHRONIZER_NAME);
-					clearCache();
-					synchronizePredelivered();
-					synchronizeRegistry();
-					updateXSOData();
-					int immutableCount = ODATA_PREDELIVERED.size();
-					int mutableCount = ODATA_SYNCHRONIZED.size();
-					cleanup(); // TODO drop tables and views for non-existing models
-					clearCache();
-					successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
-				} else {
-					failedSynchronization(SYNCHRONIZER_NAME, "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
-							+ "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer, "
-							+ "com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer");
-				}
-			} catch (Exception e) {
-				logger.error("Synchronizing process for XSOData failed.", e);
-				try {
-					failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-				} catch (SchedulerException e1) {
-					logger.error("Synchronizing process for XSOData files failed in registering the state log.", e);
-				}
-			}
-			logger.trace("Done synchronizing XSOData.");
 		}
 	}
 

@@ -18,6 +18,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -26,6 +27,7 @@ import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.xssecurestore.ds.api.IXSKSecureStoreModel;
 import com.sap.xsk.xssecurestore.ds.api.XSKSecureStoreException;
 import com.sap.xsk.xssecurestore.ds.model.XSKSecureStore;
@@ -40,6 +42,43 @@ public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
     private XSKSecureStoreCoreService xskSecureStoreCoreService;
     
     private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
+    
+    @Override
+    public void synchronize()  {
+        synchronized (XSKSecureStoreSynchronizer.class) {
+        	if (beforeSynchronizing()) {
+	            logger.trace("Synchronizing Secure Stores ...");
+	            try {
+	            	startSynchronization(SYNCHRONIZER_NAME);
+	                synchronizeRegistry();
+	                cleanup();
+	                successfulSynchronization(SYNCHRONIZER_NAME, format("Passed successfully."));
+	            } catch (Exception e) {
+	                logger.error("Synchronizing process for Secure Stores failed.", e);
+	                try {
+						failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+					} catch (SchedulerException e1) {
+						logger.error("Synchronizing process for Secure Stores files failed in registering the state log.", e);
+					}
+	            }
+	            logger.trace("Done synchronizing Secure Stores.");
+	            afterSynchronizing();
+        	}
+        }
+    }
+    
+    /**
+     * Force synchronization.
+     */
+    public static final void forceSynchronization() {
+    	XSKSecureStoreSynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKSecureStoreSynchronizer.class);
+        synchronizer.setForcedSynchronization(true);
+		try {
+			synchronizer.synchronize();
+		} finally {
+			synchronizer.setForcedSynchronization(false);
+		}
+    }
 
     @Override
     protected void synchronizeResource(IResource resource) throws SynchronizationException {
@@ -75,27 +114,6 @@ public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
 
         } catch (XSKSecureStoreException e) {
             throw new SynchronizationException(e);
-        }
-    }
-
-    @Override
-    public void synchronize()  {
-        synchronized (XSKSecureStoreSynchronizer.class) {
-            logger.trace("Synchronizing Secure Stores ...");
-            try {
-            	startSynchronization(SYNCHRONIZER_NAME);
-                synchronizeRegistry();
-                cleanup();
-                successfulSynchronization(SYNCHRONIZER_NAME, format("Passed successfully."));
-            } catch (Exception e) {
-                logger.error("Synchronizing process for Secure Stores failed.", e);
-                try {
-					failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-				} catch (SchedulerException e1) {
-					logger.error("Synchronizing process for Secure Stores files failed in registering the state log.", e);
-				}
-            }
-            logger.trace("Done synchronizing Secure Stores.");
         }
     }
 

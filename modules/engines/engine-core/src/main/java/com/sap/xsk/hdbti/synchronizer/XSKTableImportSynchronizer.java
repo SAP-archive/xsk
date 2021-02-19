@@ -32,6 +32,7 @@ import javax.inject.Singleton;
 import javax.sql.DataSource;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -76,6 +77,55 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     private DataSource dataSource;
     
     private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
+    
+    @Override
+    public void synchronize() {
+    	synchronized (XSKDataStructuresSynchronizer.class) {
+        	if (beforeSynchronizing()) {
+	            logger.trace("Synchronizing HDBTI files ...");
+		        try {
+		        	if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
+							&& isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")) {
+			        	startSynchronization(SYNCHRONIZER_NAME);
+			            clearCache();
+			            synchronizePredelivered();
+			            synchronizeRegistry();
+			            processTableImports();
+			            int immutableCount = HDBTI_PREDELIVERED.size();
+						int mutableCount = HDBTI_SYNCHRONIZED.size();
+			            cleanup();
+			            clearCache();
+			            successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
+		        	} else {
+						failedSynchronization(SYNCHRONIZER_NAME, "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
+								+ "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer");
+					}
+		        } catch (Exception e) {
+		            logger.debug("Error during HDBTI synchronization", e);
+		            try {
+						failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+					} catch (SchedulerException e1) {
+						logger.error("Synchronizing process for HDBTI files failed in registering the state log.", e);
+					}
+		        }
+		        logger.trace("Done synchronizing HDBTI files.");
+	            afterSynchronizing();
+        	}
+        }
+    }
+    
+    /**
+     * Force synchronization.
+     */
+    public static final void forceSynchronization() {
+    	XSKTableImportSynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKTableImportSynchronizer.class);
+        synchronizer.setForcedSynchronization(true);
+		try {
+			synchronizer.synchronize();
+		} finally {
+			synchronizer.setForcedSynchronization(false);
+		}
+    }
 
     @Override
     protected void synchronizeResource(IResource resource) throws SynchronizationException {
@@ -168,36 +218,6 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
         } catch (XSKTableImportException e) {
             throw new SynchronizationException(e);
         }
-    }
-
-    @Override
-    public void synchronize() {
-        try {
-        	if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
-					&& isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")) {
-	        	startSynchronization(SYNCHRONIZER_NAME);
-	            clearCache();
-	            synchronizePredelivered();
-	            synchronizeRegistry();
-	            processTableImports();
-	            int immutableCount = HDBTI_PREDELIVERED.size();
-				int mutableCount = HDBTI_SYNCHRONIZED.size();
-	            cleanup();
-	            clearCache();
-	            successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
-        	} else {
-				failedSynchronization(SYNCHRONIZER_NAME, "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
-						+ "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer");
-			}
-        } catch (Exception e) {
-            logger.debug("Error during HDBTI synchronization", e);
-            try {
-				failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-			} catch (SchedulerException e1) {
-				logger.error("Synchronizing process for HDBTI files failed in registering the state log.", e);
-			}
-        }
-
     }
 
     private void processTableImports() {

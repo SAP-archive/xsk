@@ -130,14 +130,71 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
     
     private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
     
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.eclipse.dirigible.core.scheduler.api.ISynchronizer#synchronize()
+     */
+    @Override
+    public void synchronize() {
+        synchronized (XSKDataStructuresSynchronizer.class) {
+        	if (beforeSynchronizing()) {
+	            logger.trace("Synchronizing XSK Data Structures...");
+	            try {
+	            	startSynchronization(SYNCHRONIZER_NAME);
+	                clearCache();
+	                synchronizePredelivered();
+	                synchronizeRegistry();
+	                updateEntities();
+	                
+	                int immutableEntitiesCount = ENTITIES_PREDELIVERED.size();
+	                int immutableTablesCount = TABLES_PREDELIVERED.size();
+					int immutableViewsCount = VIEWS_PREDELIVERED.size();
+					int immutableProceduresCount = PROCEDURES_PREDELIVERED.size();
+					int immutableFunctionsCount = TABLEFUNCTIONS_PREDELIVERED.size();
+					int immutableSchemasCount = SCHEMAS_PREDELIVERED.size();
+					int immutableHDICount = HDI_PREDELIVERED.size();
+					
+					int mutableEntitiesCount = ENTITIES_SYNCHRONIZED.size();
+					int mutableTablesCount = TABLES_SYNCHRONIZED.size();
+					int mutableViewsCount = VIEWS_SYNCHRONIZED.size();
+					int mutableProceduresCount = PROCEDURES_SYNCHRONIZED.size();
+					int mutableFunctionsCount = TABLEFUNCTIONS_SYNCHRONIZED.size();
+					int mutableSchemasCount = SCHEMAS_SYNCHRONIZED.size();
+					int mutableHDICount = HDI_SYNCHRONIZED.size();
+					
+	//                cleanup();
+	                clearCache();
+	                
+	                successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: [Entities: {0}, Tables: {1}, Views: {2}, Procedures: {3}, Functions: {4}, Schemas: {5}, HDI: {6}], "
+							+ "Mutable: [Entities: {7}, Tables: {8}, Views: {9}, Procedures: {10}, Functions: {11}, Schemas: {12}, HDI: {13}]", 
+							immutableEntitiesCount, immutableTablesCount, immutableViewsCount, immutableProceduresCount, immutableFunctionsCount, immutableSchemasCount, immutableHDICount,
+							mutableEntitiesCount, mutableTablesCount, mutableViewsCount, mutableProceduresCount, mutableFunctionsCount, mutableSchemasCount, mutableHDICount));
+	            } catch (Exception e) {
+	                logger.error("Synchronizing process for Data Structures failed.", e);
+	                try {
+						failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+					} catch (SchedulerException e1) {
+						logger.error("Synchronizing process for HDB Data Structures files failed in registering the state log.", e);
+					}
+	            }
+	            logger.trace("Done synchronizing XSK Data Structures.");
+	            afterSynchronizing();
+        	}
+        }
+    }
+    
     /**
      * Force synchronization.
      */
     public static final void forceSynchronization() {
-        XSKDataStructuresSynchronizer dataStructureSynchronizer = StaticInjector
-                .getInjector()
-                .getInstance(XSKDataStructuresSynchronizer.class);
-        dataStructureSynchronizer.synchronize();
+        XSKDataStructuresSynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKDataStructuresSynchronizer.class);
+        synchronizer.setForcedSynchronization(true);
+		try {
+			synchronizer.synchronize();
+		} finally {
+			synchronizer.setForcedSynchronization(false);
+		}
     }
 
     /**
@@ -277,57 +334,6 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
             if (in != null) {
                 in.close();
             }
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.eclipse.dirigible.core.scheduler.api.ISynchronizer#synchronize()
-     */
-    @Override
-    public void synchronize() {
-        synchronized (XSKDataStructuresSynchronizer.class) {
-            logger.trace("Synchronizing XSK Data Structures...");
-            try {
-            	startSynchronization(SYNCHRONIZER_NAME);
-                clearCache();
-                synchronizePredelivered();
-                synchronizeRegistry();
-                updateEntities();
-                
-                int immutableEntitiesCount = ENTITIES_PREDELIVERED.size();
-                int immutableTablesCount = TABLES_PREDELIVERED.size();
-				int immutableViewsCount = VIEWS_PREDELIVERED.size();
-				int immutableProceduresCount = PROCEDURES_PREDELIVERED.size();
-				int immutableFunctionsCount = TABLEFUNCTIONS_PREDELIVERED.size();
-				int immutableSchemasCount = SCHEMAS_PREDELIVERED.size();
-				int immutableHDICount = HDI_PREDELIVERED.size();
-				
-				int mutableEntitiesCount = ENTITIES_SYNCHRONIZED.size();
-				int mutableTablesCount = TABLES_SYNCHRONIZED.size();
-				int mutableViewsCount = VIEWS_SYNCHRONIZED.size();
-				int mutableProceduresCount = PROCEDURES_SYNCHRONIZED.size();
-				int mutableFunctionsCount = TABLEFUNCTIONS_SYNCHRONIZED.size();
-				int mutableSchemasCount = SCHEMAS_SYNCHRONIZED.size();
-				int mutableHDICount = HDI_SYNCHRONIZED.size();
-				
-//                cleanup();
-                clearCache();
-                
-                successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: [Entities: {0}, Tables: {1}, Views: {2}, Procedures: {3}, Functions: {4}, Schemas: {5}, HDI: {6}], "
-						+ "Mutable: [Entities: {7}, Tables: {8}, Views: {9}, Procedures: {10}, Functions: {11}, Schemas: {12}, HDI: {13}]", 
-						immutableEntitiesCount, immutableTablesCount, immutableViewsCount, immutableProceduresCount, immutableFunctionsCount, immutableSchemasCount, immutableHDICount,
-						mutableEntitiesCount, mutableTablesCount, mutableViewsCount, mutableProceduresCount, mutableFunctionsCount, mutableSchemasCount, mutableHDICount));
-            } catch (Exception e) {
-                logger.error("Synchronizing process for Data Structures failed.", e);
-                try {
-					failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-				} catch (SchedulerException e1) {
-					logger.error("Synchronizing process for HDB Data Structures files failed in registering the state log.", e);
-				}
-            }
-            logger.trace("Done synchronizing XSK Data Structures.");
         }
     }
 

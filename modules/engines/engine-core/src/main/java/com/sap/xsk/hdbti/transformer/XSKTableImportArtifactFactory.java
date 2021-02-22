@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -79,7 +78,7 @@ public class XSKTableImportArtifactFactory {
         tableImportConfigurationDefinition.setHeader(configuration.getHeader());
         tableImportConfigurationDefinition.setDelimField(configuration.getDelimField());
         tableImportConfigurationDefinition.setDelimEnclosing(configuration.getDelimEnclosing());
-        tableImportConfigurationDefinition.setKeysAsMap(handleKeyPairs(tableImportArtifact, configuration.getKeys()));
+        tableImportConfigurationDefinition.setKeysAsMap(handleKeyValuePairs(configuration.getKeys()));
         tableImportArtifact.getImportConfigurationDefinition().add(tableImportConfigurationDefinition);
     }
 
@@ -94,7 +93,7 @@ public class XSKTableImportArtifactFactory {
 
     }
 
-    private Map<String, String> handleKeyPairs(XSKTableImportArtifact tableImportArtifact, List<XSKHDBTIImportConfigModel.Pair> pairs) {
+    private Map<String, String> handleKeyValuePairs(List<XSKHDBTIImportConfigModel.Pair> pairs) {
         return pairs.stream().collect(Collectors.toMap(XSKHDBTIImportConfigModel.Pair::getKey, XSKHDBTIImportConfigModel.Pair::getValue));
     }
 

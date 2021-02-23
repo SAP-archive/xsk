@@ -1,5 +1,5 @@
 com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresClasspathContentHandler	# XSK Data Structures Classpath Content Handler
-com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresHDIClasspathContentHandler	# XSK Data Structures HDI Classpath Content Handler
+com.sap.xsk.hdb.ds.hdi.synchronizer.XSKDataStructuresHDIClasspathContentHandler	# XSK Data Structures HDI Classpath Content Handler
 com.sap.xsk.xsodata.ds.synchronizer.XSKODataClasspathContentHandler	# XSK OData Classpath Content Handler
 com.sap.xsk.xssecurestore.ds.synchronizer.XSKSecureStoreClasspathContentHandler # XSK Secure Store Classpath Content Handler
 com.sap.xsk.xsjob.ds.synchronizer.XSKJobClasspathContentHandler # XSK Job Classpath Content Handler

@@ -20,7 +20,7 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
  */
 public class XSKDataStructuresHDISynchronizerJob extends AbstractSynchronizerJob {
 
-	private XSKDataStructuresHDISynchronizer dataStructureSynchronizer = StaticInjector.getInjector().getInstance(XSKDataStructuresHDISynchronizer.class);
+	private XSKDataStructuresHDISynchronizer dataStructureHDISynchronizer = StaticInjector.getInjector().getInstance(XSKDataStructuresHDISynchronizer.class);
 
 	/*
 	 * (non-Javadoc)
@@ -28,7 +28,7 @@ public class XSKDataStructuresHDISynchronizerJob extends AbstractSynchronizerJob
 	 */
 	@Override
 	public ISynchronizer getSynchronizer() {
-		return dataStructureSynchronizer;
+		return dataStructureHDISynchronizer;
 	}
 
 	/*

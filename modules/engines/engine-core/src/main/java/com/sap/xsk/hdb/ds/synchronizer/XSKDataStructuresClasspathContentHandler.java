@@ -39,19 +39,6 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
 
         try {
         	
-        	boolean hdiSupported = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_SUPPORTED, "true"));
-            if (hdiSupported) {
-            	try {
-					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDI)) {
-					    dataStructuresSynchronizer.registerPredeliveredHDI(path);
-					    return true;
-					}
-				} catch (XSKDataStructuresException e) {
-					logger.error("Predelivered hdi artifact is not valid");
-		        	logger.error(e.getMessage());
-				}
-            }
-            
             boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
             if (!hdiOnly) {
             	try {

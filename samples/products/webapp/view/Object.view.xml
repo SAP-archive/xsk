@@ -144,7 +144,7 @@
                                 <ColumnListItem>
                                 
                                     <Text text="{Name}"/>                  
-                                    <Text text="{Type}"/>
+                                    <Text text="{ItemType}"/>
                                     <Text text="{Price}"/>
                                     <Text text="{Quantity}"/>
                                     <Text text="{Currency}"/>

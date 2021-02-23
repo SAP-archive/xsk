@@ -18,7 +18,7 @@
                 <Label text="{i18n>NameLabel}"/>
                 <Input value="{Name}"/>
                 <Label text="{i18n>detailsViewProductsType}"/>
-                <Input value="{Type}"/>
+                <Input value="{ItemType}"/>
                 <Label text="{i18n>detailsViewProductsPrice}"/>
                 <Input type="Number" value="{Price}"/>
                 <Label text="{i18n>detailsViewProductsQuantity}"/>

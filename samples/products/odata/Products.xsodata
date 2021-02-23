@@ -20,4 +20,3 @@
  annotations {
    enable OData4SAP;
 }
-

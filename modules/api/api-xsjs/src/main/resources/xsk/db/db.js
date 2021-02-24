@@ -574,3 +574,11 @@ function XscResultSetMetaData(dResultSetMetaData) {
 function SQLException() {
 
 }
+
+exports.CallableStatement = XscCallableStatement;
+exports.Connection = XscConnection;
+exports.ParameterMetaData = XscParameterMetaData;
+exports.PreparedStatement = XscPreparedStatement;
+exports.ResultSet = XscResultSet;
+exports.ResultSetMetaData = XscResultSetMetaData;
+exports.SQLException = SQLException;

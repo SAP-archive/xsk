@@ -3,18 +3,18 @@ grammar Hdbti;
 importArr: 'import' '=' '[' (objConfig (',' objConfig)*)? ']' ';';
 
 objConfig: '{'
-                assingTable
+                assignTable
                 assignSchema?
                 assignFile
                 assignHeader?
                 assignUseHeaderNames?
                 assignDelimField?
-                assignDelimEnclosing
+                assignDelimEnclosing?
                 assignDistinguishEmptyFromNull?
                 assignKeys?
             '}';
 
-assingTable: 'table' '=' STRING ';';
+assignTable: 'table' '=' STRING ';';
 assignSchema: 'schema' '=' STRING ';';
 assignFile: 'file' '=' STRING ';';
 assignHeader: 'header' '=' BOOLEAN ';';

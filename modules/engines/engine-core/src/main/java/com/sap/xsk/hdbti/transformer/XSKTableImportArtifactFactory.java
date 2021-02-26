@@ -16,6 +16,7 @@ import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
 import com.sap.xsk.hdbti.service.XSKCsvToHdbtiRelationService;
 import com.sap.xsk.parser.hdbti.custom.XSKHDBTIParser;
+import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -31,7 +32,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,7 +56,7 @@ public class XSKTableImportArtifactFactory {
         xskhdbtiParser = new XSKHDBTIParser();
     }
 
-    public XSKTableImportArtifact parseTableImport(String content, String location) throws IOException {
+    public XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException {
         XSKTableImportArtifact tableImportArtifact = new XSKTableImportArtifact();
         List<XSKTableImportConfigurationDefinition> importConfigurationDefinitions = new ArrayList<>();
         List<XSKTableImportToCsvRelation> tableImportToCsvRelations = new ArrayList<>();
@@ -67,6 +70,7 @@ public class XSKTableImportArtifactFactory {
             addHdbtiToCsvRelation(tableImportArtifact, configuration, location);
             addTableImportConfiguration(tableImportArtifact, configuration);
         }
+
         return tableImportArtifact;
     }
 
@@ -94,6 +98,10 @@ public class XSKTableImportArtifactFactory {
     }
 
     private Map<String, String> handleKeyValuePairs(List<XSKHDBTIImportConfigModel.Pair> pairs) {
+        if (pairs == null) {
+            return new HashMap<>();
+        }
+
         return pairs.stream().collect(Collectors.toMap(XSKHDBTIImportConfigModel.Pair::getKey, XSKHDBTIImportConfigModel.Pair::getValue));
     }
 

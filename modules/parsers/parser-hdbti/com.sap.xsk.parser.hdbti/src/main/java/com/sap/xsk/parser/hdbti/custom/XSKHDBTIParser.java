@@ -13,6 +13,7 @@ package com.sap.xsk.parser.hdbti.custom;
 
 import com.sap.xsk.parser.hdbti.core.HdbtiLexer;
 import com.sap.xsk.parser.hdbti.core.HdbtiParser;
+import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -24,14 +25,23 @@ import java.io.IOException;
 
 public class XSKHDBTIParser {
 
-    public XSKHDBTIImportModel parse(String content) throws IOException {
+    public XSKHDBTIImportModel parse(String content) throws IOException, XSKHDBTISyntaxErrorException {
         ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
         HdbtiLexer hdbtiLexer = new HdbtiLexer(inputStream);
         CommonTokenStream tokenStream = new CommonTokenStream(hdbtiLexer);
+
         HdbtiParser hdbtiParser = new HdbtiParser(tokenStream);
         hdbtiParser.setBuildParseTree(true);
+        hdbtiParser.removeErrorListeners();
+
+        XSKHDBTISyntaxErrorListener xskhdbtiSyntaxErrorListener = new XSKHDBTISyntaxErrorListener();
+        hdbtiParser.addErrorListener(xskhdbtiSyntaxErrorListener);
         ParseTree parseTree = hdbtiParser.importArr();
+
+        if (hdbtiParser.getNumberOfSyntaxErrors() > 0) {
+            throw new XSKHDBTISyntaxErrorException(xskhdbtiSyntaxErrorListener.getErrorMessage());
+        }
 
         XSKHDBTICoreListener XSKHDBTICoreListener = new XSKHDBTICoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

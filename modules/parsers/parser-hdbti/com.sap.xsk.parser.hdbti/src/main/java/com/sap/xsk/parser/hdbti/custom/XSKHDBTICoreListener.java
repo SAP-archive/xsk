@@ -33,7 +33,7 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
 
     @Override
     public void exitObjConfig(HdbtiParser.ObjConfigContext ctx) {
-        String tableName = tokens.get(ctx.assingTable());
+        String tableName = tokens.get(ctx.assignTable());
         String schemaName = tokens.get(ctx.assignSchema());
         String fileName = tokens.get(ctx.assignFile());
         String header = tokens.get(ctx.assignHeader());
@@ -56,67 +56,89 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
     }
 
     @Override
-    public void exitAssingTable(HdbtiParser.AssingTableContext ctx) {
-        tokens.put(ctx, handleStringLiteral(ctx.STRING().getText()));
+    public void exitAssignTable(HdbtiParser.AssignTableContext ctx) {
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, ctx.STRING().getText());
+        }
     }
 
     @Override
     public void exitAssignFile(HdbtiParser.AssignFileContext ctx) {
-        tokens.put(ctx, ctx.STRING().getText());
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, ctx.STRING().getText());
+        }
+
     }
 
     @Override
     public void exitAssignSchema(HdbtiParser.AssignSchemaContext ctx) {
-        tokens.put(ctx, ctx.STRING().getText());
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, ctx.STRING().getText());
+        }
+
     }
 
     @Override
     public void exitPair(HdbtiParser.PairContext ctx) {
-        XSKHDBTIImportConfigModel.Pair pair = new XSKHDBTIImportConfigModel.Pair(tokens.get(ctx.pairKey()), tokens.get(ctx.pairValue()));
-        pairs.add(pair);
+        if (ctx.pairKey() != null && ctx.pairValue() != null) {
+            XSKHDBTIImportConfigModel.Pair pair = new XSKHDBTIImportConfigModel.Pair(tokens.get(ctx.pairKey()), tokens.get(ctx.pairValue()));
+            pairs.add(pair);
+        }
+
     }
 
     @Override
     public void enterKeyArr(HdbtiParser.KeyArrContext ctx) {
-
         pairs = new ArrayList<>();
     }
 
     @Override
     public void exitPairKey(HdbtiParser.PairKeyContext ctx) {
-
-        tokens.put(ctx, handleStringLiteral(ctx.STRING().getText()));
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, handleStringLiteral(ctx.STRING().getText()));
+        }
     }
 
     @Override
     public void exitPairValue(HdbtiParser.PairValueContext ctx) {
-
-        tokens.put(ctx, handleStringLiteral(ctx.STRING().getText()));
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, handleStringLiteral(ctx.STRING().getText()));
+        }
     }
 
     @Override
     public void exitAssignHeader(HdbtiParser.AssignHeaderContext ctx) {
-        tokens.put(ctx, ctx.BOOLEAN().getText());
+        if (ctx != null && ctx.BOOLEAN() != null) {
+            tokens.put(ctx, ctx.BOOLEAN().getText());
+        }
     }
 
     @Override
     public void exitAssignUseHeaderNames(HdbtiParser.AssignUseHeaderNamesContext ctx) {
-        tokens.put(ctx, ctx.BOOLEAN().getText());
+        if (ctx != null && ctx.BOOLEAN() != null) {
+            tokens.put(ctx, ctx.BOOLEAN().getText());
+        }
     }
 
     @Override
     public void exitAssignDelimField(HdbtiParser.AssignDelimFieldContext ctx) {
-        tokens.put(ctx, ctx.STRING().getText());
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, ctx.STRING().getText());
+        }
     }
 
     @Override
     public void exitAssignDelimEnclosing(HdbtiParser.AssignDelimEnclosingContext ctx) {
-        tokens.put(ctx, ctx.STRING().getText());
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, ctx.STRING().getText());
+        }
     }
 
     @Override
     public void exitAssignDistinguishEmptyFromNull(HdbtiParser.AssignDistinguishEmptyFromNullContext ctx) {
-        tokens.put(ctx, ctx.BOOLEAN().getText());
+        if (ctx != null && ctx.BOOLEAN() != null) {
+            tokens.put(ctx, ctx.BOOLEAN().getText());
+        }
     }
 
     public XSKHDBTIImportModel getImportModel() {
@@ -131,6 +153,6 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
             return escapedQuote.replace("\\\\", "\\");
         }
 
-        return null;
+        return value;
     }
 }

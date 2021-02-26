@@ -21,7 +21,7 @@ class HdbViewParsingTest {
 	@Test
 	def void loadModel() {
 		val result = parseHelper.parse('''
-			schema = "SAP_SPORTS_FND";
+			schema = "DBADMIN";
 			query = "
 				SELECT
 					MATCH_ID,

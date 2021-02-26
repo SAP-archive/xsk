@@ -29,7 +29,7 @@ public class HdbViewParsingTest {
   public void loadModel() {
     try {
       StringConcatenation _builder = new StringConcatenation();
-      _builder.append("schema = \"SAP_SPORTS_FND\";");
+      _builder.append("schema = \"DBADMIN\";");
       _builder.newLine();
       _builder.append("query = \"");
       _builder.newLine();

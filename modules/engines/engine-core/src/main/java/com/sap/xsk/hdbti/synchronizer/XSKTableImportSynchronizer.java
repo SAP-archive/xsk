@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
 
+import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
@@ -139,6 +140,8 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
                 synchronizeTableImport(xskTableImportArtifact);
             } catch (IOException e) {
                 throw new SynchronizationException();
+            } catch (XSKHDBTISyntaxErrorException syntaxErrorException) {
+                logger.error(syntaxErrorException.getMessage(), syntaxErrorException);
             }
         } else if (resourceName.endsWith(IXSKTableImportModel.FILE_EXTENSION_CSV)) {
             List<XSKTableImportToCsvRelation> affectedHdbtiToCsvRelations = xskCsvToHdbtiRelationService.getAffectedHdbtiToCsvRelations(getRegistryPath(resource));
@@ -157,6 +160,8 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
             executeTableImport(xskTableImportArtifact, connection);
         } catch (IOException | SynchronizationException | SQLException e) {
             logger.error("Error during the force reimport of an HDBTI file due to a linked csv file change", e);
+        } catch (XSKHDBTISyntaxErrorException syntaxErrorException) {
+            logger.error(syntaxErrorException.getMessage());
         }
 
     }
@@ -173,7 +178,6 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
         }
         return contentAsString;
     }
-
 
     private void synchronizeTableImport(XSKTableImportArtifact xskTableImportArtifact) throws SynchronizationException {
         try {
@@ -259,7 +263,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
         });
     }
 
-    public void registerPredeliveredTableImports(String contentPath) throws IOException {
+    public void registerPredeliveredTableImports(String contentPath) throws Exception {
         String data = loadResourceContent(contentPath);
         XSKTableImportArtifact tableImportArtifact = xskTableImportCoreService.parseTableImportArtifact(contentPath, data);
         HDBTI_PREDELIVERED.put(contentPath, tableImportArtifact);

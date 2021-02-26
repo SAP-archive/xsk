@@ -16,4 +16,5 @@ bin/
 derby.log
 *.versionsBackup
 *.fpr
+*.iml
 *._trace

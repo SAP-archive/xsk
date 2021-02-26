@@ -169,6 +169,12 @@
             <version>${hamcrest.all.version}</version>
             <scope>test</scope>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.sap.xsk</groupId>
+            <artifactId>xsk-modules-parsers-hdbti</artifactId>
+            <version>0.2.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>

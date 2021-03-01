@@ -1,3 +1,3 @@
 ## xsjs-simple
 
-This sample contains a single xsjs service of type `hello world`.
+This sample contains a single `xsjs` service of type *hello world*.

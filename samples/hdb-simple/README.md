@@ -1,3 +1,3 @@
 ## hdb-simple
 
-This sample contains a single hdbtable artefact.
+This sample contains a single `hdbtable` artefact.

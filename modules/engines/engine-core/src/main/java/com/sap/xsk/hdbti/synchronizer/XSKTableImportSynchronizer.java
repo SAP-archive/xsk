@@ -78,7 +78,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     private DataSource dataSource;
     
     private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
-    
+
     @Override
     public void synchronize() {
     	synchronized (XSKDataStructuresSynchronizer.class) {

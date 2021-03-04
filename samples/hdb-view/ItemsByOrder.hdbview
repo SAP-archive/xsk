@@ -1,0 +1,11 @@
+schema="TONI";
+public=false;
+query="SELECT T1.\"Id\" FROM \"hdb_view::Item\" T1";
+depends_on= ["hdb_view::Item","hdb_view::Orders"];
+depends_on_table=["hdb_view::Item","hdb_view::Order"];
+
+schema="TONI";
+public=false;
+query="SELECT T1.\"ItemId\" FROM \"TONI\".\"kneo.test.db::Products.Item\" T1";
+depends_on= ["TONI.kneo.test.db::Products","kneo.test.db::Products.Orders"];
+depends_on_table=["TONI.kneo.test.db::Products111111111111","kneo.test.db::Products.Orders"];

@@ -72,8 +72,10 @@ public class XSKViewParser implements XSKDataStructureParser {
         hdbViewModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
         hdbViewModel.setQuery(antlr4Model.getQuery());
         hdbViewModel.setSchema(antlr4Model.getSchema());
-
-        //TODO: process of antlr4Model.getDependsOnTable() values
+        hdbViewModel.setPublic(antlr4Model.isPublic());
+        hdbViewModel.setDependsOn(antlr4Model.getDependsOn());
+        hdbViewModel.setDependsOnTable(antlr4Model.getDependsOnTable());
+        hdbViewModel.setDependsOnView(antlr4Model.getDependsOnView());
 
         return hdbViewModel;
     }

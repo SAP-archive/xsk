@@ -9,18 +9,15 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.parser;
-
-import java.io.IOException;
+package com.sap.xsk.hdb.ds.service.parser;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
-public interface XSKDataStructureParser<T extends XSKDataStructureModel> {
+import java.io.IOException;
 
-    T parse(String location, String content) throws XSKDataStructuresException, IOException;
+public interface IXSKCoreParserService {
+    XSKDataStructureModel parseDataStructure(String type, String location, String content) throws XSKDataStructuresException, IOException;
 
-    String getType();
-
-    Class<T> getDataStructureClass();
+    Class<XSKDataStructureModel> getDataStructureClass(String type);
 }

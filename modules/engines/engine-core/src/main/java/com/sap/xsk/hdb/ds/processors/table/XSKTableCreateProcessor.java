@@ -9,13 +9,14 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.processors;
+package com.sap.xsk.hdb.ds.processors.table;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
@@ -34,7 +35,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 /**
  * The Table Create Processor.
  */
-public class XSKTableCreateProcessor {
+public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableModel> {
 
 	private static final Logger logger = LoggerFactory.getLogger(XSKTableCreateProcessor.class);
 
@@ -169,20 +170,7 @@ public class XSKTableCreateProcessor {
 		}
 
 		final String sql = createTableBuilder.build();
-		PreparedStatement statement = null;
-		try {
-			statement = connection.prepareStatement(sql);
-			logger.info(sql);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			logger.error(sql);
-			logger.error(e.getMessage(), e);
-			throw new SQLException(e.getMessage(), e);
-		} finally {
-			if (statement != null) {
-				statement.close();
-			}
-		}
+		executeSql(sql, connection);
 	}
 
 }

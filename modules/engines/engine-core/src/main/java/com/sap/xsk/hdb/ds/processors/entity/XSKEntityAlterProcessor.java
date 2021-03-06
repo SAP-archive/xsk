@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.processors;
+package com.sap.xsk.hdb.ds.processors.entity;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;

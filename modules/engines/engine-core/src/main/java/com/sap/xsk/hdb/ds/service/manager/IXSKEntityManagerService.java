@@ -1,17 +1,25 @@
-package com.sap.xsk.hdb.ds.manager;
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Singleton;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.processors.XSKEntityAlterProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKEntityCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKEntityDropProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKEntityUpdateProcessor;
-import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
 import com.sap.xsk.utils.XSKUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
@@ -24,34 +32,38 @@ import java.util.*;
 
 import static java.text.MessageFormat.format;
 
-@Singleton
-public class XSKEntityManagerService implements XSKDataStructureManager<XSKDataStructureEntitiesModel> {
-    private static final Logger logger = LoggerFactory.getLogger(XSKEntityManagerService.class);
+public class IXSKEntityManagerService extends AbstractDataStructureManagerService<XSKDataStructureEntitiesModel> {
+    private static final Logger logger = LoggerFactory.getLogger(IXSKEntityManagerService.class);
 
-    private final Map<String, XSKDataStructureEntitiesModel> dataStructureEntitiesModel = Collections
-            .synchronizedMap(new LinkedHashMap());
-    private final List<String> entitiesSynchronized = Collections.synchronizedList(new ArrayList<>());
+    private final Map<String, XSKDataStructureEntitiesModel> dataStructureEntitiesModel;
+    private final List<String> entitiesSynchronized;
 
-    private XSKDataStructuresCoreService dataStructuresCoreService;
-    private XSKEntityUpdateProcessor xskEntityUpdateProcessor;
-    private XSKEntityDropProcessor xskEntityDropProcessor;
-    private XSKEntityCreateProcessor xskEntityCreateProcessor;
+    @Inject @Named("xskEntityUpdateProcessor")
+    private IXSKHdbProcessor xskEntityUpdateProcessor;
 
-    public XSKEntityManagerService() {
-        System.out.println("__________________________________________ Created Instace Manager Entity __________________________________________");
+    @Inject @Named("xskEntityDropProcessor")
+    private IXSKHdbProcessor xskEntityDropProcessor;
+
+    @Inject @Named("xskEntityCreateProcessor")
+    private IXSKHdbProcessor xskEntityCreateProcessor;
+
+    public IXSKEntityManagerService() {
+        dataStructureEntitiesModel = Collections.synchronizedMap(new LinkedHashMap<>());
+        entitiesSynchronized = Collections.synchronizedList(new ArrayList<>());
     }
+
 
     @Override
     public void synchronizeRuntimeMetadata(XSKDataStructureEntitiesModel entitiesModel) throws XSKDataStructuresException {
-        if (!dataStructuresCoreService.existsDataStructure(entitiesModel.getLocation(), entitiesModel.getType())) {
-            dataStructuresCoreService
+        if (!getDataStructuresCoreService().existsDataStructure(entitiesModel.getLocation(), entitiesModel.getType())) {
+            getDataStructuresCoreService()
                     .createDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
             dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
             logger.info("Synchronized a new Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
         } else {
-            XSKDataStructureEntitiesModel existing = dataStructuresCoreService.getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
+            XSKDataStructureEntitiesModel existing = getDataStructuresCoreService().getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
             if (!entitiesModel.equals(existing)) {
-                dataStructuresCoreService
+                getDataStructuresCoreService()
                         .updateDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
                 dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
                 logger.info("Synchronized a modified Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
@@ -131,5 +143,15 @@ public class XSKEntityManagerService implements XSKDataStructureManager<XSKDataS
     @Override
     public List<String> getDataStructureSynchronized() {
         return Collections.unmodifiableList(this.entitiesSynchronized);
+    }
+
+    @Override
+    public String getDataStructureType() {
+        return IXSKDataStructureModel.FILE_EXTENSION_ENTITIES;
+    }
+
+    @Override
+    public void clearCache() {
+        dataStructureEntitiesModel.clear();
     }
 }

@@ -1,10 +1,23 @@
-package com.sap.xsk.hdb.ds.manager;
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Singleton;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
+import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
-import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureDropProcessor;
 import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,18 +27,23 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
-@Singleton
-public class XSKProceduresManagerService implements XSKDataStructureManager<XSKDataStructureHDBProcedureModel> {
+public class IXSKProceduresManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBProcedureModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(XSKProceduresManagerService.class);
+    private static final Logger logger = LoggerFactory.getLogger(IXSKProceduresManagerService.class);
 
 
-    private final Map<String, XSKDataStructureHDBProcedureModel> dataStructureProceduresModels = new LinkedHashMap<>();
-    private final List<String> proceduresSynchronized = Collections.synchronizedList(new ArrayList<>());
+    private final Map<String, XSKDataStructureHDBProcedureModel> dataStructureProceduresModels;
+    private final List<String> proceduresSynchronized;
 
-    private XSKDataStructuresCoreService xskDataStructuresCoreService;
-    private HDBProcedureDropProcessor hdbProcedureDropProcessor;
-    private HDBProcedureCreateProcessor hdbProcedureCreateProcessor;
+    @Inject @Named("hdbProcedureDropProcessor")
+    private IXSKHdbProcessor hdbProcedureDropProcessor;
+    @Inject @Named("hdbProcedureCreateProcessor")
+    private IXSKHdbProcessor hdbProcedureCreateProcessor;
+
+    public IXSKProceduresManagerService() {
+        dataStructureProceduresModels = new LinkedHashMap<>();
+        proceduresSynchronized = Collections.synchronizedList(new ArrayList<>());
+    }
 
     @Override
     public void synchronizeRuntimeMetadata(XSKDataStructureHDBProcedureModel hdbProcedureModel) throws XSKDataStructuresException {
@@ -33,15 +51,14 @@ public class XSKProceduresManagerService implements XSKDataStructureManager<XSKD
         // variable
         // String schemaNameConcatProcedureName = hdbProcedure.getSchemaName() + "." +
         // hdbProcedure.getName();
-        if (!xskDataStructuresCoreService.existsDataStructure(hdbProcedureModel.getLocation(), hdbProcedureModel.getType())) {
-            xskDataStructuresCoreService
-                    .createDataStructure(hdbProcedureModel.getLocation(), hdbProcedureModel.getName(), hdbProcedureModel.getHash(), hdbProcedureModel.getType());
+        if (!getDataStructuresCoreService().existsDataStructure(hdbProcedureModel.getLocation(), hdbProcedureModel.getType())) {
+            getDataStructuresCoreService().createDataStructure(hdbProcedureModel.getLocation(), hdbProcedureModel.getName(), hdbProcedureModel.getHash(), hdbProcedureModel.getType());
             dataStructureProceduresModels.put(hdbProcedureModel.getName(), hdbProcedureModel);
             logger.info("Synchronized a new HDB Procedure file [{}] from location: {}", hdbProcedureModel.getName(), hdbProcedureModel.getLocation());
         } else {
-            XSKDataStructureHDBProcedureModel existing = xskDataStructuresCoreService.getDataStructure(hdbProcedureModel.getLocation(), hdbProcedureModel.getType());
+            XSKDataStructureHDBProcedureModel existing = getDataStructuresCoreService().getDataStructure(hdbProcedureModel.getLocation(), hdbProcedureModel.getType());
             if (!hdbProcedureModel.equals(existing)) {
-                xskDataStructuresCoreService
+                getDataStructuresCoreService()
                         .updateDataStructure(hdbProcedureModel.getLocation(), hdbProcedureModel.getName(), hdbProcedureModel.getHash(), hdbProcedureModel.getType());
                 dataStructureProceduresModels.put(hdbProcedureModel.getName(), hdbProcedureModel);
                 logger.info("Synchronized a modified HDB Procedure file [{}] from location: {}", hdbProcedureModel.getName(), hdbProcedureModel.getLocation());
@@ -70,6 +87,16 @@ public class XSKProceduresManagerService implements XSKDataStructureManager<XSKD
     @Override
     public List<String> getDataStructureSynchronized() {
         return Collections.unmodifiableList(this.proceduresSynchronized);
+    }
+
+    @Override
+    public String getDataStructureType() {
+        return IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE;
+    }
+
+    @Override
+    public void clearCache() {
+        dataStructureProceduresModels.clear();
     }
 
     @Override

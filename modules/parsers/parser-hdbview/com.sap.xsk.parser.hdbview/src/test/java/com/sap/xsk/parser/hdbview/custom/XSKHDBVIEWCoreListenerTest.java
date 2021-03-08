@@ -18,18 +18,17 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class XSKHDBVIEWCoreListenerTest {
 
     @Test
-    public void parse_hdbviewModel_successfully() {
+    public void parseHdbviewFileWithoutErrorsSuccessfully() {
         String hdbviewSample = "";
         try {
             hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample.hdbview"), StandardCharsets.UTF_8);
@@ -49,13 +48,24 @@ public class XSKHDBVIEWCoreListenerTest {
         parseTreeWalker.walk(hdbviewCoreListener, parseTree);
 
         XSKHDBVIEWDefinitionModel model = hdbviewCoreListener.getModel();
-        Assert.assertNotNull(model);
-        Assert.assertEquals(hdbviewParser.getNumberOfSyntaxErrors(),0);
-        Assert.assertTrue(model.isPublic());
+        assertNotNull(model);
+        assertEquals(hdbviewParser.getNumberOfSyntaxErrors(), 0);
+        assertTrue(model.isPublic());
+        assertEquals("MYSCHEMA", model.getSchema());
+        assertEquals(2, model.getDependsOn().size());
+        assertEquals("acme.com.test.tables::MY_TABLE1", model.getDependsOn().get(0));
+        assertEquals("acme.com.test.views::MY_VIEW1", model.getDependsOn().get(1));
+        assertEquals(2, model.getDependsOnTable().size());
+        assertEquals("acme.com.test.tables::MY_TABLE1", model.getDependsOnTable().get(0));
+        assertEquals("acme.com.test.views::MY_TABLE2", model.getDependsOnTable().get(1));
+        assertEquals(2, model.getDependsOnView().size());
+        assertEquals("acme.com.test.tables::MY_VIEW1", model.getDependsOnView().get(0));
+        assertEquals("acme.com.test.views::MY_VIEW2", model.getDependsOnView().get(1));
+        assertEquals("SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"acme.com.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"MYSCHEMA\".\"acme.com.test.views::MY_VIEW1\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"", model.getQuery());
     }
 
     @Test
-    public void parse_hdbviewModel_exceptionThrown() {
+    public void parseHdbviewFileWithSyntaxErrorExceptionThrown() {
         String hdbviewSample = "";
         try {
             hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample_with_errors.hdbview"), StandardCharsets.UTF_8);
@@ -75,7 +85,7 @@ public class XSKHDBVIEWCoreListenerTest {
         parseTreeWalker.walk(hdbviewCoreListener, parseTree);
 
         XSKHDBVIEWDefinitionModel model = hdbviewCoreListener.getModel();
-        Assert.assertEquals(hdbviewParser.getNumberOfSyntaxErrors(),3);
-        Assert.assertFalse(model.isPublic());
+        assertEquals(hdbviewParser.getNumberOfSyntaxErrors(), 3);
+        assertFalse(model.isPublic());
     }
 }

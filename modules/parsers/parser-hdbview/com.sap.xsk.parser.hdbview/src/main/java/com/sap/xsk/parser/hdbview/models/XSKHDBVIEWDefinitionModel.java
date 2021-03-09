@@ -37,11 +37,11 @@ public class XSKHDBVIEWDefinitionModel {
         this.query = query;
     }
 
-    public boolean isPublicProp() {
+    public boolean isPublic() {
         return publicProp;
     }
 
-    public void setPublicProp(boolean publicProp) {
+    public void setPublic(boolean publicProp) {
         this.publicProp = publicProp;
     }
 

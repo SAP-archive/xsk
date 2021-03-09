@@ -27,7 +27,11 @@ public class XSKHDBVIEWCoreListener extends HdbviewBaseListener {
     @Override
     public void exitHdbviewDefinition(HdbviewParser.HdbviewDefinitionContext ctx) {
         model.setSchema(handleStringLiteral((String) tokens.get(ctx.schemaProp())));
-        model.setPublicProp((Boolean) tokens.get(ctx.publicProp()));
+        if (tokens.get(ctx.publicProp()) != null) {
+            model.setPublic((Boolean) tokens.get(ctx.publicProp()));
+        } else {
+            model.setPublic(true);
+        }
         model.setQuery(handleStringLiteral((String) tokens.get(ctx.queryProp())));
         model.setDependsOn((List<String>) tokens.get(ctx.dependsOnProp()));
         model.setDependsOnTable((List<String>) tokens.get(ctx.dependsOnTable()));
@@ -36,38 +40,50 @@ public class XSKHDBVIEWCoreListener extends HdbviewBaseListener {
 
     @Override
     public void exitQueryProp(HdbviewParser.QueryPropContext ctx) {
-        tokens.put(ctx, ctx.STRING().getText());
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, ctx.STRING().getText());
+        }
     }
 
     @Override
     public void exitDependsOnProp(HdbviewParser.DependsOnPropContext ctx) {
-        List<String> dependsOnPropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
-        ).collect(Collectors.toList());
-        tokens.put(ctx, dependsOnPropList);
+        if (ctx != null && ctx.STRING() != null) {
+            List<String> dependsOnPropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
+            ).collect(Collectors.toList());
+            tokens.put(ctx, dependsOnPropList);
+        }
     }
 
     @Override
     public void exitDependsOnView(HdbviewParser.DependsOnViewContext ctx) {
-        List<String> dependsOnViewPropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
-        ).collect(Collectors.toList());
-        tokens.put(ctx, dependsOnViewPropList);
+        if (ctx != null && ctx.STRING() != null) {
+            List<String> dependsOnViewPropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
+            ).collect(Collectors.toList());
+            tokens.put(ctx, dependsOnViewPropList);
+        }
     }
 
     @Override
     public void exitDependsOnTable(HdbviewParser.DependsOnTableContext ctx) {
-        List<String> dependsOnTablePropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
-        ).collect(Collectors.toList());
-        tokens.put(ctx, dependsOnTablePropList);
+        if (ctx != null && ctx.STRING() != null) {
+            List<String> dependsOnTablePropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
+            ).collect(Collectors.toList());
+            tokens.put(ctx, dependsOnTablePropList);
+        }
     }
 
     @Override
     public void exitSchemaProp(HdbviewParser.SchemaPropContext ctx) {
-        tokens.put(ctx, ctx.STRING().getText());
+        if (ctx != null && ctx.STRING() != null) {
+            tokens.put(ctx, ctx.STRING().getText());
+        }
     }
 
     @Override
     public void exitPublicProp(HdbviewParser.PublicPropContext ctx) {
-        tokens.put(ctx, Boolean.valueOf(ctx.BOOLEAN().getText()));
+        if (ctx != null && ctx.BOOLEAN() != null) {
+            tokens.put(ctx, Boolean.valueOf(ctx.BOOLEAN().getText()));
+        }
     }
 
     private String handleStringLiteral(String value) {
@@ -76,7 +92,6 @@ public class XSKHDBVIEWCoreListener extends HdbviewBaseListener {
             String escapedQuote = subStr.replace("\\\"", "\"");
             return escapedQuote.replace("\\\\", "\\");
         }
-
         return null;
     }
 

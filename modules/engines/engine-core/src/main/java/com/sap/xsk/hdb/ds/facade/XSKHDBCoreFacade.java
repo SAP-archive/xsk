@@ -73,6 +73,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         XSKDataStructureModel dataStructureModel;
         try {
             dataStructureModel = xskCoreParserService.parseDataStructure(resourceExtension, registryPath, contentAsString);
+            if (dataStructureModel == null) {
+                return;
+            }
         } catch (XSKDataStructuresException e) {
             logger.error("Synchronized artifact is not valid");
             logger.error(e.getMessage());
@@ -200,28 +203,13 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                     }
 
                     IXSKDataStructureManager<XSKDataStructureModel> xskEntityManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_ENTITIES);
-                    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 
                     // drop entities in a reverse order
                     for (int i = sorted.size() - 1; i >= 0; i--) {
                         String dsName = sorted.get(i);
                         XSKDataStructureEntitiesModel entitiesModel = (XSKDataStructureEntitiesModel) dataStructureEntitiesModel.get(dsName);
                         try {
-                            if (entitiesModel != null) {
-                                for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-                                    String tableName = XSKUtils.getTableName(entityModel);
-                                    if (caseSensitive) {
-                                        tableName = "\"" + tableName + "\"";
-                                    }
-                                    if (SqlFactory.getNative(connection).exists(connection, tableName)) {
-                                        if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
-                                            xskEntityManagerService.dropDataStructure(connection, entityModel);
-                                        } else {
-                                            logger.warn(format("Entity [{0}] cannot be deleted during the update process, because it is not empty", dsName));
-                                        }
-                                    }
-                                }
-                            }
+                            xskEntityManagerService.dropDataStructure(connection, entitiesModel);
                         } catch (Exception e) {
                             logger.error(e.getMessage(), e);
                             errors.add(e.getMessage());
@@ -269,19 +257,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                     for (String dsName : sorted) {
                         XSKDataStructureEntitiesModel entitesModel = (XSKDataStructureEntitiesModel) dataStructureEntitiesModel.get(dsName);
                         try {
-                            if (entitesModel != null) {
-                                for (XSKDataStructureEntityModel entityModel : entitesModel.getContext().getЕntities()) {
-                                    String tableName = XSKUtils.getTableName(entityModel);
-                                    if (caseSensitive) {
-                                        tableName = "\"" + tableName + "\"";
-                                    }
-                                    if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
-                                        xskEntityManagerService.createDataStructure(connection, entityModel);
-                                    } else {
-                                        xskEntityManagerService.updateDataStructure(connection, entityModel);
-                                    }
-                                }
-                            }
+                            xskEntityManagerService.createDataStructure(connection, entitesModel);
                         } catch (Exception e) {
                             logger.error(e.getMessage(), e);
                             errors.add(e.getMessage());

@@ -11,26 +11,15 @@
  */
 package com.sap.xsk.hdb.ds.hdi.synchronizer;
 
-import static java.text.MessageFormat.format;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.sql.DataSource;
-
+import com.google.inject.name.Named;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
+import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerDropProcessor;
+import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -38,42 +27,23 @@ import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
-import com.sap.xsk.hdb.ds.processors.XSKEntityCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKEntityDropProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKEntityForeignKeysProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKEntityUpdateProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKTableCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKTableDropProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKViewCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.XSKViewDropProcessor;
-//import com.sap.xsk.hdb.ds.processors.calculationview.CalculationViewCreateProcessor;
-//import com.sap.xsk.hdb.ds.processors.calculationview.CalculationViewDropProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureDropProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaDropProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionDropProcessor;
-import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerDropProcessor;
-import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
-import com.sap.xsk.utils.XSKUtils;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.sql.DataSource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+
+import static java.text.MessageFormat.format;
 
 /**
  * The XSK Data Structures HDI Synchronizer.
@@ -81,23 +51,29 @@ import com.sap.xsk.utils.XSKUtils;
 @Singleton
 public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
 
-	private static final Logger logger = LoggerFactory.getLogger(XSKDataStructuresHDISynchronizer.class);
+    private static final Logger logger = LoggerFactory.getLogger(XSKDataStructuresHDISynchronizer.class);
 
     private static final Map<String, XSKDataStructureHDIModel> HDI_PREDELIVERED = Collections
-            .synchronizedMap(new HashMap<String, XSKDataStructureHDIModel>());
+            .synchronizedMap(new HashMap<>());
 
     private static final List<String> HDI_SYNCHRONIZED = Collections.synchronizedList(new ArrayList<String>());
 
     private static final Map<String, XSKDataStructureHDIModel> DATA_STRUCTURE_HDI_MODELS = new LinkedHashMap<String, XSKDataStructureHDIModel>();
-    
+
+    @com.google.inject.Inject
+    @Named("xskCoreParserService")
+    private IXSKCoreParserService xskCoreParserService;
+    @com.google.inject.Inject
+    @Named("xskDataStructuresCoreService")
+    private IXSKDataStructuresCoreService xskDataStructuresCoreService;
 
     @Inject
-    private XSKDataStructuresCoreService dataStructuresCoreService;
+    private XSKHDIContainerCreateProcessor xskhdiContainerCreateProcessor;
     @Inject
     private DataSource dataSource;
-    
+
     private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
-    
+
     /*
      * (non-Javadoc)
      *
@@ -106,56 +82,56 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
     @Override
     public void synchronize() {
         synchronized (XSKDataStructuresHDISynchronizer.class) {
-        	if (beforeSynchronizing()) {
-	            logger.trace("Synchronizing XSK Data Structures HDI...");
-	            try {
-	            	if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
-							&& isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")
-							&& isSynchronizerSuccessful("com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer")) {
-		            	startSynchronization(SYNCHRONIZER_NAME);
-		                clearCache();
-		                synchronizePredelivered();
-		                synchronizeRegistry();
-		                updateEntities();
-		                
-						int immutableHDICount = HDI_PREDELIVERED.size();
-						
-						int mutableHDICount = HDI_SYNCHRONIZED.size();
-						
-		//                cleanup();
-		                clearCache();
-		                
-		                successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableHDICount, mutableHDICount));
-	            	} else {
-	            		failedSynchronization(SYNCHRONIZER_NAME, "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
-								+ "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer, "
-								+ "com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer");
-	            	}
-	            } catch (Exception e) {
-	                logger.error("Synchronizing process for Data Structures HDI failed.", e);
-	                try {
-						failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-					} catch (SchedulerException e1) {
-						logger.error("Synchronizing process for HDB Data Structures HDI files failed in registering the state log.", e);
-					}
-	            }
-	            logger.trace("Done synchronizing XSK Data Structures HDI.");
-	            afterSynchronizing();
-        	}
+            if (beforeSynchronizing()) {
+                logger.trace("Synchronizing XSK Data Structures HDI...");
+                try {
+                    if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
+                            && isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")
+                            && isSynchronizerSuccessful("com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer")) {
+                        startSynchronization(SYNCHRONIZER_NAME);
+                        clearCache();
+                        synchronizePredelivered();
+                        synchronizeRegistry();
+                        updateEntities();
+
+                        int immutableHDICount = HDI_PREDELIVERED.size();
+
+                        int mutableHDICount = HDI_SYNCHRONIZED.size();
+
+                        //                cleanup();
+                        clearCache();
+
+                        successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableHDICount, mutableHDICount));
+                    } else {
+                        failedSynchronization(SYNCHRONIZER_NAME, "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
+                                + "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer, "
+                                + "com.sap.xsk.hdbti.synchronizer.XSKTableImportSynchronizer");
+                    }
+                } catch (Exception e) {
+                    logger.error("Synchronizing process for Data Structures HDI failed.", e);
+                    try {
+                        failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+                    } catch (SchedulerException e1) {
+                        logger.error("Synchronizing process for HDB Data Structures HDI files failed in registering the state log.", e);
+                    }
+                }
+                logger.trace("Done synchronizing XSK Data Structures HDI.");
+                afterSynchronizing();
+            }
         }
     }
-    
+
     /**
      * Force synchronization.
      */
     public static final void forceSynchronization() {
         XSKDataStructuresHDISynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKDataStructuresHDISynchronizer.class);
         synchronizer.setForcedSynchronization(true);
-		try {
-			synchronizer.synchronize();
-		} finally {
-			synchronizer.setForcedSynchronization(false);
-		}
+        try {
+            synchronizer.synchronize();
+        } finally {
+            synchronizer.setForcedSynchronization(false);
+        }
     }
 
     /**
@@ -172,7 +148,7 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
         }
         return buff.toString();
     }
-    
+
     /**
      * Register predelivered *.hdi files.
      *
@@ -181,7 +157,7 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
      */
     public void registerPredeliveredHDI(String contentPath) throws Exception {
         String data = loadResourceContent(contentPath);
-        XSKDataStructureHDIModel model = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDI, contentPath, data);
+        XSKDataStructureHDIModel model = (XSKDataStructureHDIModel) xskCoreParserService.parseDataStructure(IXSKDataStructureModel.TYPE_HDI, contentPath, data);
         HDI_PREDELIVERED.put(contentPath, model);
     }
 
@@ -212,7 +188,7 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
     private void synchronizePredelivered() throws SynchronizationException {
 
         logger.trace("Synchronizing predelivered XSK Data Structures HDI...");
-        
+
         logger.trace("Synchronizing predelivered HDI Containers ...");
         for (XSKDataStructureHDIModel hdi : HDI_PREDELIVERED.values()) {
             try {
@@ -234,22 +210,22 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
      */
     private void synchronizeHDI(XSKDataStructureHDIModel hdi) throws SynchronizationException {
         try {
-            if (!dataStructuresCoreService.existsDataStructure(hdi.getLocation(), hdi.getType())) {
-                dataStructuresCoreService
+            if (!xskDataStructuresCoreService.existsDataStructure(hdi.getLocation(), hdi.getType())) {
+                xskDataStructuresCoreService
                         .createDataStructure(hdi.getLocation(), hdi.getName(), hdi.getHash(), hdi.getType());
                 DATA_STRUCTURE_HDI_MODELS.put(hdi.getName(), hdi);
                 logger.info("Synchronized a new HDI file [{}] from location: {}", hdi.getName(), hdi.getLocation());
             } else {
-                XSKDataStructureHDIModel existing = dataStructuresCoreService.getDataStructure(hdi.getLocation(), hdi.getType());
+                XSKDataStructureHDIModel existing = xskDataStructuresCoreService.getDataStructure(hdi.getLocation(), hdi.getType());
                 if (!hdi.equals(existing)) {
-                    dataStructuresCoreService
+                    xskDataStructuresCoreService
                             .updateDataStructure(hdi.getLocation(), hdi.getName(), hdi.getHash(), hdi.getType());
                     DATA_STRUCTURE_HDI_MODELS.put(hdi.getName(), hdi);
                     logger.info("Synchronized a modified HDI file [{}] from location: {}", hdi.getName(), hdi.getLocation());
                 }
             }
             if (!HDI_SYNCHRONIZED.contains(hdi.getLocation())) {
-            	HDI_SYNCHRONIZED.add(hdi.getLocation());
+                HDI_SYNCHRONIZED.add(hdi.getLocation());
             }
         } catch (XSKDataStructuresException e) {
             throw new SynchronizationException(e);
@@ -282,39 +258,39 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
     protected void synchronizeResource(IResource resource) throws SynchronizationException {
         String resourceName = resource.getName();
         String registryPath = getRegistryPath(resource);
-        
+
         boolean hdiSupported = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_SUPPORTED, "true"));
         if (hdiSupported) {
-        	if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDI)) {
-        		String contentAsString = getContent(resource);
-	        	XSKDataStructureHDIModel hdi;
-	            try {
-	            	hdi = dataStructuresCoreService.parseDataStructure(IXSKDataStructureModel.TYPE_HDI, registryPath, contentAsString);
-	            } catch (XSKDataStructuresException e) {
-					logger.error("Synchronized hdi artifact is not valid");
-		        	logger.error(e.getMessage());
-		        	return;
-	            } catch (Exception e) {
-	                throw new SynchronizationException(e);
-	            }
-	            hdi.setLocation(registryPath);
-	            synchronizeHDI(hdi);
-	            return;
-	        }
+            if (resourceName.endsWith(IXSKDataStructureModel.FILE_EXTENSION_HDI)) {
+                String contentAsString = getContent(resource);
+                XSKDataStructureHDIModel hdi;
+                try {
+                    hdi = (XSKDataStructureHDIModel) xskCoreParserService.parseDataStructure(IXSKDataStructureModel.TYPE_HDI, registryPath, contentAsString);
+                } catch (XSKDataStructuresException e) {
+                    logger.error("Synchronized hdi artifact is not valid");
+                    logger.error(e.getMessage());
+                    return;
+                } catch (Exception e) {
+                    throw new SynchronizationException(e);
+                }
+                hdi.setLocation(registryPath);
+                synchronizeHDI(hdi);
+                return;
+            }
         }
-        
+
     }
 
-	private String getContent(IResource resource) throws SynchronizationException {
-		byte[] content = resource.getContent();
-		String contentAsString;
-		try {
-		    contentAsString = IOUtils.toString(new InputStreamReader(new ByteArrayInputStream(content), StandardCharsets.UTF_8));
-		} catch (IOException e) {
-		    throw new SynchronizationException(e);
-		}
-		return contentAsString;
-	}
+    private String getContent(IResource resource) throws SynchronizationException {
+        byte[] content = resource.getContent();
+        String contentAsString;
+        try {
+            contentAsString = IOUtils.toString(new InputStreamReader(new ByteArrayInputStream(content), StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            throw new SynchronizationException(e);
+        }
+        return contentAsString;
+    }
 
     /*
      * (non-Javadoc)
@@ -329,20 +305,20 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                
+
                 // HDI
                 List<XSKDataStructureHDIModel> hdiForDrop = new ArrayList<>();
-                List<XSKDataStructureHDIModel> hdiModels = dataStructuresCoreService.getDataStructuresByType(IXSKDataStructureModel.TYPE_HDI);
+                List<XSKDataStructureHDIModel> hdiModels = xskDataStructuresCoreService.getDataStructuresByType(IXSKDataStructureModel.TYPE_HDI);
                 for (XSKDataStructureHDIModel hdiModel : hdiModels) {
                     if (!HDI_SYNCHRONIZED.contains(hdiModel.getLocation())) {
-                        dataStructuresCoreService.removeDataStructure(hdiModel.getLocation());
+                        xskDataStructuresCoreService.removeDataStructure(hdiModel.getLocation());
                         //DROP Deleted HDI
                         hdiForDrop.add(hdiModel);
                         logger.warn("Cleaned up HDI Container file [{}] from location: {}", hdiModel.getName(), hdiModel.getLocation());
                     }
                 }
                 XSKHDIContainerDropProcessor.execute(connection, hdiForDrop);
-                
+
             } finally {
                 if (connection != null) {
                     connection.close();
@@ -354,7 +330,7 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
 
         logger.trace("Done cleaning up XSK Data Structures HDI.");
     }
-    
+
     boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 
     /**
@@ -372,24 +348,24 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
             Connection connection = null;
             try {
                 connection = dataSource.getConnection();
-                
+
                 List<String> sorted = new ArrayList<String>();
                 if (sorted.isEmpty()) {
                     sorted.addAll(DATA_STRUCTURE_HDI_MODELS.keySet());
                 }
-                
+
                 boolean hdiSupported = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_SUPPORTED, "true"));
                 if (hdiSupported) {
-                	// HDI Containers
-                	List<XSKDataStructureHDIModel> hdiModels = new ArrayList<XSKDataStructureHDIModel>();
-	                for (int i = sorted.size() - 1; i >= 0; i--) {
-	                    String dsName = sorted.get(i);
-	                    XSKDataStructureHDIModel model = DATA_STRUCTURE_HDI_MODELS.get(dsName);
-	                    if (model != null) {
-	                    	hdiModels.add(model);
-	                    }
-	                }
-                	executeHDI(connection, hdiModels);
+                    // HDI Containers
+                    List<XSKDataStructureHDIModel> hdiModels = new ArrayList<XSKDataStructureHDIModel>();
+                    for (int i = sorted.size() - 1; i >= 0; i--) {
+                        String dsName = sorted.get(i);
+                        XSKDataStructureHDIModel model = DATA_STRUCTURE_HDI_MODELS.get(dsName);
+                        if (model != null) {
+                            hdiModels.add(model);
+                        }
+                    }
+                    executeHDI(connection, hdiModels);
                 }
 
             } finally {
@@ -401,10 +377,10 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
             logger.error(concatenateListOfStrings(errors, "\n---\n"), e);
         }
     }
-    
+
     private void executeHDI(Connection connection, List<XSKDataStructureHDIModel> hdiModels)
             throws SQLException {
-        XSKHDIContainerCreateProcessor.execute(connection, hdiModels);
+        hdiModels.forEach(hdiModel -> this.xskhdiContainerCreateProcessor.execute(connection, hdiModel));
     }
-    
+
 }

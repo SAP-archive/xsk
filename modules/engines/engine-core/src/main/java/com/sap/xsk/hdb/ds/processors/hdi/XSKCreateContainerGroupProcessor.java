@@ -11,9 +11,11 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdi;
 
+import javax.inject.Singleton;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Singleton
 public class XSKCreateContainerGroupProcessor extends XSKHDIAbstractProcessor {
 	
 	public final void execute(Connection connection, String group) throws SQLException {

@@ -19,7 +19,6 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
 import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
@@ -27,6 +26,7 @@ import com.sap.xsk.hdb.ds.parser.hdbschema.XSKHDBSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
+import com.sap.xsk.hdb.ds.parser.hdi.XSKHDIParser;
 import com.sap.xsk.hdb.ds.processors.entity.XSKEntityCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.entity.XSKEntityDropProcessor;
 import com.sap.xsk.hdb.ds.processors.entity.XSKEntityUpdateProcessor;
@@ -90,6 +90,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION).to(XSKHDBTableFunctionParser.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SCHEMA).to(XSKHDBSchemaParser.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_PROCEDURE).to(XSKHDBProcedureParser.class).asEagerSingleton();
+        mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDI).to(XSKHDIParser.class).asEagerSingleton();
     }
 
     private void bindProcessors() {

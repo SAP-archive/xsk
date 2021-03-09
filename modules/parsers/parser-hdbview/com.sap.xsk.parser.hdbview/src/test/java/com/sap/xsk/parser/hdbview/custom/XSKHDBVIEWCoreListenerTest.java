@@ -28,14 +28,9 @@ import static org.junit.Assert.*;
 public class XSKHDBVIEWCoreListenerTest {
 
     @Test
-    public void parseHdbviewFileWithoutErrorsSuccessfully() {
-        String hdbviewSample = "";
-        try {
-            hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample.hdbview"), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            fail("Parsing of sample.hdbview failed.");
-            e.printStackTrace();
-        }
+    public void parseHdbviewFileWithoutErrorsSuccessfully() throws IOException {
+        String hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample.hdbview"), StandardCharsets.UTF_8);
+
         ANTLRInputStream inputStream = new ANTLRInputStream(hdbviewSample);
         HdbviewLexer hdbviewLexer = new HdbviewLexer(inputStream);
         CommonTokenStream tokenStream = new CommonTokenStream(hdbviewLexer);
@@ -65,14 +60,9 @@ public class XSKHDBVIEWCoreListenerTest {
     }
 
     @Test
-    public void parseHdbviewFileWithSyntaxErrorExceptionThrown() {
-        String hdbviewSample = "";
-        try {
-            hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample_with_errors.hdbview"), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            fail("Parsing of sample_with_errors.hdbview failed.");
-            e.printStackTrace();
-        }
+    public void parseHdbviewFileWithSyntaxErrorExceptionThrown() throws IOException {
+        String hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample_with_errors.hdbview"), StandardCharsets.UTF_8);
+
         ANTLRInputStream inputStream = new ANTLRInputStream(hdbviewSample);
         HdbviewLexer hdbviewLexer = new HdbviewLexer(inputStream);
         CommonTokenStream tokenStream = new CommonTokenStream(hdbviewLexer);

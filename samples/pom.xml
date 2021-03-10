@@ -22,6 +22,7 @@
 		<module>hdi-simple</module>
 		<module>products</module>
 		<module>xsjs-simple</module>
+		<module>hdb-view</module>
 	</modules>
 	
 </project>

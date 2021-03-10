@@ -9,16 +9,13 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.processors.hdi;
+package com.sap.xsk.hdb.ds.api;
 
-import javax.inject.Singleton;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@Singleton
-public class XSKCreateContainerGroupProcessor extends XSKHDIAbstractProcessor {
-	
-	public final void execute(Connection connection, String group) throws SQLException {
-		executeQuery(connection, "CALL _SYS_DI.CREATE_CONTAINER_GROUP('" + group + "', _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);");
-	}
+public interface IXSKHdbProcessor<T extends XSKDataStructureModel> {
+    void execute(Connection connection, T entityModel) throws SQLException;
 }

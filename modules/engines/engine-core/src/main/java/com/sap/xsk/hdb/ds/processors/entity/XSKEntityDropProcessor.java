@@ -1,21 +1,22 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.processors;
+package com.sap.xsk.hdb.ds.processors.entity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -29,9 +30,7 @@ import com.sap.xsk.utils.XSKUtils;
 /**
  * The Entity Drop Processor.
  */
-public class XSKEntityDropProcessor {
-
-    private XSKEntityDropProcessor() {}
+public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructureEntityModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKEntityDropProcessor.class);
 
@@ -43,7 +42,7 @@ public class XSKEntityDropProcessor {
      * @throws SQLException the SQL exception
      * @return if delete operation has been performed successfully or the table does not exist
      */
-    public static boolean execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+    public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
     	boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
         String tableName = XSKUtils.getTableName(entityModel);
         if (caseSensitive) {
@@ -61,7 +60,6 @@ public class XSKEntityDropProcessor {
                         int count = resultSet.getInt(1);
                         if (count > 0) {
                             logger.error("Drop operation for the non empty Table {} will not be executed. Delete all the records in the table first.", tableName);
-                            return false;
                         }
                     }
                 }
@@ -87,26 +85,14 @@ public class XSKEntityDropProcessor {
 						}
 					}
                     sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyName).fromTable(tableName).build();
-                    executeUpdate(connection, sql);
+                    executeSql(sql, connection);
                 }
             }
 
             sql = SqlFactory.getNative(connection).drop().table(tableName).build();
-            executeUpdate(connection, sql);
-            return true;
+            executeSql(sql, connection);
+            return;
         }
         logger.warn("Trying to delete non existing Table: {}", tableName);
-        return true;
     }
-
-    private static void executeUpdate(Connection connection, String sql) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            logger.info(sql);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error(sql);
-            logger.error(e.getMessage(), e);
-        }
-    }
-
 }

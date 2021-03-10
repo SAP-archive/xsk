@@ -38,7 +38,7 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
     protected boolean isValid(String path) {
 
         try {
-        	
+
             boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
             if (!hdiOnly) {
             	try {

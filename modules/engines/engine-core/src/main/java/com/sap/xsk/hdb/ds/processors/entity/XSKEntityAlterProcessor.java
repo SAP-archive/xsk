@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.processors;
+package com.sap.xsk.hdb.ds.processors.entity;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -40,8 +40,6 @@ import com.sap.xsk.utils.XSKUtils;
  */
 public class XSKEntityAlterProcessor {
 
-	private XSKEntityAlterProcessor() {}
-
 	private static final Logger logger = LoggerFactory.getLogger(XSKEntityAlterProcessor.class);
 	
 	private static final String INCOMPATIBLE_CHANGE_OF_ENTITY = "Incompatible change of entity [%s] by adding a column [%s] which is [%s]"; //$NON-NLS-1$
@@ -53,7 +51,7 @@ public class XSKEntityAlterProcessor {
 	 * @param entityModel the entity model
 	 * @throws SQLException the SQL exception
 	 */
-	public static void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = XSKUtils.getTableName(entityModel);
 		logger.info("Processing Alter Entity: {}", tableName);
@@ -145,7 +143,7 @@ public class XSKEntityAlterProcessor {
 		
 	}
 
-	private static void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
+	private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
 			throws SQLException {
 		final String sql = alterTableBuilder.build();
 		try(PreparedStatement statement = connection.prepareStatement(sql);) {
@@ -157,5 +155,4 @@ public class XSKEntityAlterProcessor {
 			throw new SQLException(e.getMessage(), e);
 		}
 	}
-
 }

@@ -1,5 +1,6 @@
 # Project "XSK"
 
+[![Build Status](https://github.com/sap/xsk/workflows/Build/badge.svg)](https://github.com/sap/xsk/actions?query=workflow%3ABuild)
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/xsk)](https://api.reuse.software/info/github.com/SAP/xsk)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub contributors](https://img.shields.io/github/contributors/sap/xsk.svg)](https://github.com/sap/xsk/graphs/contributors)

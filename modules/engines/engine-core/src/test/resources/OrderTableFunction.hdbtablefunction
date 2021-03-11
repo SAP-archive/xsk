@@ -1,0 +1,12 @@
+FUNCTION "MYSCHEMA"."hdb_view::OrderTableFunction" ()
+	RETURNS TABLE (
+		"Id" NVARCHAR(32),
+		"CustomerName" NVARCHAR(500)
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER AS
+BEGIN
+
+RETURN  SELECT "Id", "CustomerName" FROM "hdb_view::Item";
+
+END;

@@ -18,5 +18,7 @@ public final class XSKConstants {
 
     public static final String XSK_HDBPROCEDURE_CREATE = "CREATE ";
     public static final String XSK_HDBPROCEDURE_DROP = "DROP PROCEDURE ";
+    public static final String XSK_HDBTABLEFUNCTION_CREATE = "CREATE ";
+    public static final String XSK_HDBTABLEFUNCTION_DROP = "DROP FUNCTION ";
 
 }

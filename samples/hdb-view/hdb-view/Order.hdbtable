@@ -1,4 +1,4 @@
-table.schemaName = "TONI";
+table.schemaName = "DBADMIN";
 table.tableType = COLUMNSTORE;
 table.columns = [    
     {

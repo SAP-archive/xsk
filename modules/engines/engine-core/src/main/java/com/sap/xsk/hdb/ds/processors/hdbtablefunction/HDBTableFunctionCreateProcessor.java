@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
     private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionCreateProcessor.class);
 
     public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunctions) throws SQLException {
-        String sql = "CREATE " + hdbTableFunctions.getContent();
+        String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunctions.getContent();
         executeSql(sql, connection);
     }
 }

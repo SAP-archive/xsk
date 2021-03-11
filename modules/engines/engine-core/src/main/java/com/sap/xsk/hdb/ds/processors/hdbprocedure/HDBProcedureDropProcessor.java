@@ -13,18 +13,18 @@ package com.sap.xsk.hdb.ds.processors.hdbprocedure;
 
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class HDBProcedureDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBProcedureModel> {
     private static final Logger logger = LoggerFactory.getLogger(HDBProcedureDropProcessor.class);
 
     public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
-        String sql = "DROP PROCEDURE " + hdbProcedure.getName();
+        String sql = XSKConstants.XSK_HDBPROCEDURE_DROP + hdbProcedure.getName();
         executeSql(sql, connection);
     }
 }

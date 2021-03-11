@@ -23,21 +23,15 @@ import java.sql.SQLException;
 
 
 public abstract class AbstractXSKProcessor<T extends XSKDataStructureModel> implements IXSKHdbProcessor<T> {
-	private static final Logger logger = LoggerFactory.getLogger(XSKHDBCoreFacade.class);
+    private static final Logger logger = LoggerFactory.getLogger(XSKHDBCoreFacade.class);
 
-	protected void executeSql(String sql, Connection connection) throws SQLException {
-		PreparedStatement statement = null;
-		try {
-			statement = connection.prepareStatement(sql);
-			logger.info(sql);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			logger.error(sql);
-			logger.error(e.getMessage(), e);
-		} finally {
-			if (statement != null) {
-				statement.close();
-			}
-		}
-	}
+    public void executeSql(String sql, Connection connection) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            logger.info(sql);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error(sql);
+            logger.error(e.getMessage(), e);
+        }
+    }
 }

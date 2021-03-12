@@ -80,8 +80,10 @@ public class XSKTableImportArtifactFactory {
         tableImportConfigurationDefinition.setSchema(configuration.getSchemaName());
         tableImportConfigurationDefinition.setFile(configuration.getFileName());
         tableImportConfigurationDefinition.setHeader(configuration.getHeader());
+        tableImportConfigurationDefinition.setUseHeaderNames(configuration.getUseHeaderNames());
         tableImportConfigurationDefinition.setDelimField(configuration.getDelimField());
         tableImportConfigurationDefinition.setDelimEnclosing(configuration.getDelimEnclosing());
+        tableImportConfigurationDefinition.setDistinguishEmptyFromNull(configuration.getDistinguishEmptyFromNull());
         tableImportConfigurationDefinition.setKeysAsMap(handleKeyValuePairs(configuration.getKeys()));
         tableImportArtifact.getImportConfigurationDefinition().add(tableImportConfigurationDefinition);
     }

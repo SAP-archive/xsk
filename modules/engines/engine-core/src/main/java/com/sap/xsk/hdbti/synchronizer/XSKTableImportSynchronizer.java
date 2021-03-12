@@ -102,7 +102,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
 								+ "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer");
 					}
 		        } catch (Exception e) {
-		            logger.debug("Error during HDBTI synchronization", e);
+		            logger.error("Error during HDBTI synchronization", e);
 		            try {
 						failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
 					} catch (SchedulerException e1) {

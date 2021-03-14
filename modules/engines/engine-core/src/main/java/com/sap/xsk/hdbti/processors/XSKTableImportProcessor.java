@@ -20,18 +20,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.sql.Types;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -42,6 +34,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.dirigible.commons.api.helpers.DateTimeUtils;
 import org.eclipse.dirigible.database.ds.model.transfer.TableColumn;
 import org.eclipse.dirigible.database.ds.model.transfer.TableMetadataHelper;
 import org.eclipse.dirigible.database.persistence.PersistenceException;
@@ -53,7 +46,6 @@ import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ctc.wstx.util.StringUtil;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.service.XSKCsvToHdbtiRelationService;
 import com.sap.xsk.hdbti.service.XSKTableImportCoreService;
@@ -178,11 +170,11 @@ public class XSKTableImportProcessor implements IXSKTableImportProcessor{
 		} else if (Types.CHAR == dataType) {
 			preparedStatement.setString(i, sanitize(value));
 		} else if (Types.DATE == dataType) {
-			preparedStatement.setDate(i, parseDate(value));
+			preparedStatement.setDate(i, DateTimeUtils.parseDate(value));
 		} else if (Types.TIME == dataType) {
-			preparedStatement.setTime(i, parseTime(value));
+			preparedStatement.setTime(i, DateTimeUtils.parseTime(value));
 		} else if (Types.TIMESTAMP == dataType) {
-			preparedStatement.setTimestamp(i, parseDateTime(value));
+			preparedStatement.setTimestamp(i, DateTimeUtils.parseDateTime(value));
 		} else if (Types.INTEGER == dataType) {
 			value = numberize(value);
 			preparedStatement.setInt(i, Integer.parseInt(value));
@@ -212,43 +204,6 @@ public class XSKTableImportProcessor implements IXSKTableImportProcessor{
 			throw new PersistenceException(format("Database type [{0}] not supported", dataType));
 		}
 	}
-
-	private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(""
-	        + "[yyyy/MM/dd]"
-	        + "[yyyy-MM-dd]"
-	        + "[dd[ ]MMM[ ]yyyy"
-	    , Locale.ENGLISH);
-	
-	private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(""
-	        + "[HH:mm:ss.SSSSSS]"
-	        + "[yyyy-MM-dd]"
-	        + "[HH:mm:ss[.SSS][ Z]]"
-	    , Locale.ENGLISH);
-	
-	private static final DateTimeFormatter datetimeFormatter = DateTimeFormatter.ofPattern(""
-	        + "[yyyy/MM/dd HH:mm:ss.SSSSSS]"
-	        + "[yyyy-MM-dd HH:mm:ss.SSSSSS]"
-	        + "[yyyy/MM/dd HH:mm:ss[.SSS][ Z]]"
-	        + "[yyyy-MM-dd HH:mm:ss[.SSS][ Z]]"
-	        + "[dd[ ]MMM[ ]yyyy:HH:mm:ss.SSS[ Z]]"
-	    , Locale.ENGLISH);
-	
-	private static Date parseDate(String value) {
-		value = sanitize(value);
-		return Date.valueOf(LocalDate.parse(value, dateFormatter));
-	}
-	
-	private static Time parseTime(String value) {
-		value = sanitize(value);
-		value = timezonize(value);
-		return Time.valueOf(LocalTime.parse(value, timeFormatter));
-	}
-
-	private static Timestamp parseDateTime(String value) {
-		value = sanitize(value);
-		value = timezonize(value);
-		return Timestamp.valueOf(LocalDateTime.parse(value, datetimeFormatter));
-	}
 	
 	private static String sanitize(String value) {
 		if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
@@ -258,13 +213,6 @@ public class XSKTableImportProcessor implements IXSKTableImportProcessor{
 			value = value.substring(1, value.length() - 1);
 		}
 		return value.trim();
-	}
-	
-	private static String timezonize(String value) {
-		if (value != null && value.indexOf('.') == value.length()-8) {
-			value = value.substring(0, value.indexOf('.') + 4) + " +" + value.substring(value.indexOf('.') + 4);
-		}
-		return value;
 	}
 	
 	private String numberize(String value) {

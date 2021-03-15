@@ -1,6 +1,6 @@
 grammar Hdbtable;
 
-hdbtableDefinition: schemaNameProp temporaryProp? tableTypeProp? publicProp? loggingTypeProp? tableColumnsProp tableIndexesProp? tablePrimaryKeyProp? descriptionProp?;
+hdbtableDefinition: schemaNameProp temporaryProp? tableTypeProp? publicProp? loggingTypeProp? tableColumnsProp tableIndexesProp? tablePrimaryKeyProp? tablePrimaryKeyIndexTypeProp? descriptionProp?;
 schemaNameProp: TABLE DOT 'schemaName' EQ STRING SEMICOLON ;
 temporaryProp: TABLE DOT 'temporary' EQ BOOLEAN SEMICOLON;
 tableTypeProp: TABLE DOT 'tableType' EQ TABLETYPE SEMICOLON ;
@@ -8,13 +8,15 @@ publicProp: TABLE DOT 'public' EQ BOOLEAN SEMICOLON;
 loggingTypeProp: TABLE DOT 'loggingType' EQ TABLELOGGINGTYPE SEMICOLON;
 tableColumnsProp: TABLE DOT 'columns' EQ '[' (columnsObject (',' columnsObject)*)? ']' SEMICOLON ;
 tableIndexesProp: TABLE DOT 'indexes' EQ '[' indexesObject (',' indexesObject)* ']' SEMICOLON ;
-tablePrimaryKeyProp: TABLE DOT 'primaryKey' DOT 'pkcolumns' EQ '['  (STRING(',' STRING)*)? ']' SEMICOLON ;
+tablePrimaryKeyProp: TABLE DOT 'primaryKey' DOT 'pkcolumns' EQ  tablePrimaryKeyColumnsProp SEMICOLON ;
+tablePrimaryKeyColumnsProp: '['  STRING(',' STRING)* ']';
+tablePrimaryKeyIndexTypeProp: TABLE DOT 'primaryKey' DOT 'indexType' EQ INDEXTYPE SEMICOLON;
 descriptionProp: TABLE DOT 'description' EQ STRING SEMICOLON ;
 columnsObject: '{'
         columnAssignName
         columnAssignSQLType
-        columnAssignNullable?
         columnAssignLength?
+        columnAssignNullable?
         columnAssignComment?
         columnAssignDefaultValue?
         columnAssignPrecision?
@@ -38,7 +40,7 @@ columnAssignScale: 'scale' EQ INT SEMICOLON;
 indexAssignName: 'name' EQ STRING SEMICOLON;
 indexAssignUnique: 'unique' EQ BOOLEAN SEMICOLON;
 indexAssignOrder: 'order' EQ ORDER SEMICOLON;
-indexAssignIndexColumns: 'indexColumns' EQ indexColumnsArray;
+indexAssignIndexColumns: 'indexColumns' EQ indexColumnsArray SEMICOLON;
 indexAssignIndexType: 'indexType' EQ INDEXTYPE;
 indexColumnsArray: '[' (STRING(',' STRING)*)? ']' SEMICOLON;
 STRING : '"' .*? '"' ; //match anything in "..."

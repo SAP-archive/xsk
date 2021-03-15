@@ -13,8 +13,10 @@ package com.sap.xsk.hdb.ds.parser.hdbtable;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintModel;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
@@ -26,6 +28,8 @@ import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.gson.JsonElementValueReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
@@ -34,7 +38,9 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 
-public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHDBTableModel> {
+import javax.print.attribute.standard.Destination;
+
+public class XSKTableParser implements XSKDataStructureParser {
 	
 	private static final Logger logger = LoggerFactory.getLogger(XSKTableParser.class);
 
@@ -82,9 +88,24 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         XSKDataStructureHDBTableColumnModel xskDataStructureHDBTableColumnModel = new XSKDataStructureHDBTableColumnModel();
         XSKDataStructureHDBTableConstraintModel xskDataStructureHDBTableConstraintModel = new XSKDataStructureHDBTableConstraintModel();
 
-        dataStructureHDBTableModel.setTableType(hdbtableDefinitionModel.getTableType().toString());
-        dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName().toString());
-        dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription().toString());
+        ModelMapper modelMapper = new ModelMapper();
+        //modelMapper.getConfiguration().addValueReader(new JsonElementValueReader());
+//        for (JsonElement column: hdbtableDefinitionModel.getColumns().getAsJsonArray()) {
+//            xskDataStructureHDBTableColumnModel=modelMapper.map(column, XSKDataStructureHDBTableColumnModel.class);
+//
+//            dataStructureHDBTableModel.setColumns();
+//        }
+
+
+        dataStructureHDBTableModel= modelMapper.map(hdbtableDefinitionModel, XSKDataStructureHDBTableModel.class);
+        modelMapper.typeMap(XSKHDBTABLEDefinitionModel.class, XSKDataStructureHDBTableModel.class).addMappings(mapper -> {
+            mapper.map(src -> src.getSchemaName().toString(), XSKDataStructureHDBTableModel::setSchema);
+            mapper.map(src -> src.getColumns(), XSKDataStructureHDBTableModel::setColumns);
+            mapper.map(src -> src.getDescription().toString(), XSKDataStructureHDBTableModel::setDescription);
+            mapper.map(src -> src.getTableType().toString(), XSKDataStructureHDBTableModel::setTableType);
+        });
+
+
 
 
         return dataStructureHDBTableModel;

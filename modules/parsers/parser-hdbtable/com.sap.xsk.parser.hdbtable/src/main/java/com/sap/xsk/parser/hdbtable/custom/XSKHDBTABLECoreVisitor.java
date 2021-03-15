@@ -18,7 +18,9 @@ import com.google.gson.JsonPrimitive;
 import com.sap.xsk.parser.hdbtable.core.HdbtableBaseVisitor;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
 import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLECoreVisitor;
-
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
 
 
 import java.util.stream.Collectors;
@@ -28,16 +30,19 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
     private JsonArray tableIndexes = new JsonArray();
     private JsonArray tableColumns = new JsonArray();
 
-
     @Override
     public JsonElement visitTableColumnsProp(HdbtableParser.TableColumnsPropContext ctx) {
-        tableColumns.add(ctx.columnsObject().stream().map(terminalNode -> terminalNode.getText()).collect(Collectors.joining(",")));
+        if(ctx!=null && ctx.columnsObject()!=null) {
+            ctx.columnsObject().forEach(column -> {
+                tableColumns.add(visitColumnsObject(column));
+            });
+        }
         return tableColumns;
     }
 
     @Override
     public JsonElement visitIndexAssignIndexType(HdbtableParser.IndexAssignIndexTypeContext ctx) {
-        return new JsonPrimitive(ctx.INDEXTYPE().getText());
+        return (ctx!=null && ctx.INDEXTYPE()!=null)? new JsonPrimitive(ctx.INDEXTYPE().getText()) : null;
     }
 
     @Override
@@ -51,73 +56,80 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
         hdbtableObject.add("temporary", visitTemporaryProp(ctx.temporaryProp()));
         hdbtableObject.add("publicProp", visitPublicProp(ctx.publicProp()));
         hdbtableObject.add("loggingType", visitLoggingTypeProp(ctx.loggingTypeProp()));
+        hdbtableObject.add("indexType", visitTablePrimaryKeyIndexTypeProp(ctx.tablePrimaryKeyIndexTypeProp()));
 
         return hdbtableObject;
     }
 
     @Override
     public JsonElement visitIndexAssignUnique(HdbtableParser.IndexAssignUniqueContext ctx) {
-        return new JsonPrimitive(ctx.BOOLEAN().getText());
+        return (ctx != null && ctx.BOOLEAN() !=null) ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText())) : null;
     }
 
     @Override
     public JsonElement visitTableIndexesProp(HdbtableParser.TableIndexesPropContext ctx) {
-        tableIndexes.add(ctx.indexesObject().stream().map(terminalNode -> terminalNode.getText()).collect(Collectors.joining(",")));
+        if(ctx!=null && ctx.indexesObject()!=null){
+            ctx.indexesObject().forEach(index -> {
+                tableIndexes.add(visitIndexesObject(index));
+            });
+        }
         return tableIndexes;
     }
 
     @Override
     public JsonElement visitColumnAssignDefaultValue(HdbtableParser.ColumnAssignDefaultValueContext ctx) {
-        return new JsonPrimitive(ctx.STRING().getText());
+        return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
     }
 
     @Override
     public JsonElement visitColumnAssignName(HdbtableParser.ColumnAssignNameContext ctx) {
-        return new JsonPrimitive(ctx.STRING().getText());
+        return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
     }
 
     @Override
     public JsonElement visitIndexAssignIndexColumns(HdbtableParser.IndexAssignIndexColumnsContext ctx) {
-        JsonArray indexColumnsArray = new JsonArray();
-        indexColumnsArray.add(visitIndexColumnsArray(ctx.indexColumnsArray()));
-        return indexColumnsArray;
+        return (ctx!=null && ctx.indexColumnsArray()!=null)? visitIndexColumnsArray(ctx.indexColumnsArray()): new JsonArray();
     }
 
     @Override
     public JsonElement visitColumnAssignNullable(HdbtableParser.ColumnAssignNullableContext ctx) {
-        return new JsonPrimitive(ctx.BOOLEAN().getText());
+        return (ctx != null && ctx.BOOLEAN() !=null) ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText())) : null;
     }
 
     @Override
     public JsonElement visitIndexColumnsArray(HdbtableParser.IndexColumnsArrayContext ctx) {
-        JsonPrimitive indexColumnsArray = new JsonPrimitive(ctx.STRING().stream().map(terminalNode -> terminalNode.getText()).collect(Collectors.joining(",")));
+        JsonArray indexColumnsArray = new JsonArray();
+        if(ctx!=null && ctx.STRING()!=null){
+            ctx.STRING().forEach(column -> {
+                indexColumnsArray.add(new JsonPrimitive(handleStringLiteral(column.getText())));
+            });
+        }
         return indexColumnsArray;
     }
 
     @Override
     public JsonElement visitIndexAssignOrder(HdbtableParser.IndexAssignOrderContext ctx) {
-        return new JsonPrimitive(ctx.ORDER().getText());
+        return (ctx!=null && ctx.ORDER()!=null)?new JsonPrimitive(ctx.ORDER().getText()):null;
     }
 
     @Override
     public JsonElement visitTableTypeProp(HdbtableParser.TableTypePropContext ctx) {
-        return new JsonPrimitive(ctx.TABLETYPE().getText());
+        return (ctx!=null && ctx.TABLETYPE()!=null)?new JsonPrimitive(ctx.TABLETYPE().getText()):null;
     }
 
     @Override
     public JsonElement visitColumnAssignLength(HdbtableParser.ColumnAssignLengthContext ctx) {
-        return new JsonPrimitive(ctx.INT().getText());
+        return (ctx!=null && ctx.INT()!=null)?new JsonPrimitive(Integer.parseInt(ctx.INT().getText())):null;
     }
 
     @Override
     public JsonElement visitTablePrimaryKeyProp(HdbtableParser.TablePrimaryKeyPropContext ctx) {
-        JsonPrimitive primaryKeysArray = new JsonPrimitive(ctx.STRING().stream().map(terminalNode -> terminalNode.getText()).collect(Collectors.joining(",")));
-        return primaryKeysArray;
+        return (ctx!=null && ctx.tablePrimaryKeyColumnsProp()!=null)? visitTablePrimaryKeyColumnsProp(ctx.tablePrimaryKeyColumnsProp()): new JsonArray();
     }
 
     @Override
     public JsonElement visitColumnAssignPrecision(HdbtableParser.ColumnAssignPrecisionContext ctx) {
-        return new JsonPrimitive(ctx.INT().getText());
+        return (ctx!=null && ctx.INT()!=null)?new JsonPrimitive(Integer.parseInt(ctx.INT().getText())):null;
     }
 
     @Override
@@ -149,47 +161,63 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitColumnAssignScale(HdbtableParser.ColumnAssignScaleContext ctx) {
-        return new JsonPrimitive(ctx.INT().getText());
+        return (ctx!=null && ctx.INT()!=null)?new JsonPrimitive(Integer.parseInt(ctx.INT().getText())):null;
     }
 
     @Override
     public JsonElement visitSchemaNameProp(HdbtableParser.SchemaNamePropContext ctx) {
-        return new JsonPrimitive(ctx.STRING().getText());
+        return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
     }
 
     @Override
     public JsonElement visitColumnAssignSQLType(HdbtableParser.ColumnAssignSQLTypeContext ctx) {
-        return new JsonPrimitive(ctx.SQLTYPES().getText());
+        return (ctx!=null && ctx.SQLTYPES()!=null)?new JsonPrimitive(ctx.SQLTYPES().getText()):null;
     }
 
     @Override
     public JsonElement visitColumnAssignComment(HdbtableParser.ColumnAssignCommentContext ctx) {
-        return new JsonPrimitive(ctx.STRING().getText());
+        return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
     }
 
     @Override
     public JsonElement visitIndexAssignName(HdbtableParser.IndexAssignNameContext ctx) {
-        return new JsonPrimitive(ctx.STRING().getText());
+        return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
     }
 
     @Override
     public JsonElement visitLoggingTypeProp(HdbtableParser.LoggingTypePropContext ctx) {
-        return new JsonPrimitive(ctx.TABLELOGGINGTYPE().getText());
+        return (ctx!=null && ctx.TABLELOGGINGTYPE()!=null)?new JsonPrimitive(ctx.TABLELOGGINGTYPE().getText()):null;
     }
 
     @Override
     public JsonElement visitTemporaryProp(HdbtableParser.TemporaryPropContext ctx) {
-        return new JsonPrimitive(ctx.BOOLEAN().getText());
+        return (ctx != null && ctx.BOOLEAN() !=null) ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText())) : null;
     }
 
     @Override
     public JsonElement visitPublicProp(HdbtableParser.PublicPropContext ctx) {
-        return new JsonPrimitive(ctx.BOOLEAN().getText());
+        return (ctx != null && ctx.BOOLEAN() !=null) ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText())) : null;
     }
 
     @Override
     public JsonElement visitDescriptionProp(HdbtableParser.DescriptionPropContext ctx) {
-        return new JsonPrimitive(ctx.STRING().getText());
+        return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
+    }
+
+    @Override
+    public JsonElement visitTablePrimaryKeyIndexTypeProp(HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx) {
+        return (ctx!=null && ctx.INDEXTYPE()!=null)?new JsonPrimitive(ctx.INDEXTYPE().getText()):null;
+    }
+
+    @Override
+    public JsonElement visitTablePrimaryKeyColumnsProp(HdbtableParser.TablePrimaryKeyColumnsPropContext ctx) {
+        JsonArray primaryKeyArray = new JsonArray();
+        if(ctx!=null && ctx.STRING()!=null){
+            ctx.STRING().forEach(primaryKey -> {
+                primaryKeyArray.add(new JsonPrimitive(handleStringLiteral(primaryKey.getText())));
+            });
+        }
+        return primaryKeyArray;
     }
 
     public JsonElement getHdbtableDefinitionObject() {
@@ -202,5 +230,15 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     public JsonElement getColumnsObject() {
         return tableColumns;
+    }
+
+    private String handleStringLiteral(String value) {
+        if (value != null && value.length() > 1) {
+            String subStr = value.substring(1, value.length() - 1);
+            String escapedQuote = subStr.replace("\\\"", "\"");
+            return escapedQuote.replace("\\\\", "\\");
+        }
+
+        return null;
     }
 }

@@ -96,6 +96,13 @@ public interface HdbtableVisitor<T> extends ParseTreeVisitor<T> {
 	T visitColumnAssignScale(@NotNull HdbtableParser.ColumnAssignScaleContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyIndexTypeProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTablePrimaryKeyIndexTypeProp(@NotNull HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignSQLType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -171,6 +178,13 @@ public interface HdbtableVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSchemaNameProp(@NotNull HdbtableParser.SchemaNamePropContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyColumnsProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTablePrimaryKeyColumnsProp(@NotNull HdbtableParser.TablePrimaryKeyColumnsPropContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignComment}.

@@ -13,90 +13,102 @@ package com.sap.xsk.parser.hdbtable.model;
 
 import com.google.gson.JsonElement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class XSKHDBTABLEDefinitionModel {
-    private JsonElement schemaName;
-    private JsonElement tableType;
-    private JsonElement pkcolumns;
-    private JsonElement columns;
-    private JsonElement indexes;
-    private JsonElement description;
-    private JsonElement publicProp;
-    private JsonElement loggingType;
-    private JsonElement temporary;
+    private String schemaName;
+    private String tableType;
+    private List<String> pkcolumns;
+    private String indexType;
+    private List<XSKHDBTABLEColumnsModel> columns;
+    private List<XSKHDBTABLEIndexesModel> indexes;
+    private String description;
+    private Boolean publicProp;
+    private String loggingType;
+    private Boolean temporary;
 
 
     public XSKHDBTABLEDefinitionModel() {
     }
 
-    public JsonElement getSchemaName() {
+    public String getSchemaName() {
         return schemaName;
     }
 
-    public void setSchemaName(JsonElement schemaName) {
+    public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
     }
 
-    public JsonElement getTableType() {
+    public String getTableType() {
         return tableType;
     }
 
-    public void setTableType(JsonElement tableType) {
+    public void setTableType(String tableType) {
         this.tableType = tableType;
     }
 
-    public JsonElement getPkcolumns() {
+    public List<String> getPkcolumns() {
         return pkcolumns;
     }
 
-    public void setPkcolumns(JsonElement pkcolumns) {
+    public void setPkcolumns(List<String> pkcolumns) {
         this.pkcolumns = pkcolumns;
     }
 
-    public JsonElement getColumns() {
-        return columns;
+    public String getIndexType() {
+        return indexType;
     }
 
-    public void setColumns(JsonElement columns) {
-        this.columns = columns;
+    public void setIndexType(String indexType) {
+        this.indexType = indexType;
     }
 
-    public JsonElement getIndexes() {
-        return indexes;
-    }
-
-    public void setIndexes(JsonElement indexes) {
-        this.indexes = indexes;
-    }
-
-    public JsonElement getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(JsonElement description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public JsonElement getPublicProp() {
+    public Boolean getPublicProp() {
         return publicProp;
     }
 
-    public void setPublicProp(JsonElement publicProp) {
+    public void setPublicProp(Boolean publicProp) {
         this.publicProp = publicProp;
     }
 
-    public JsonElement getLoggingType() {
+    public String getLoggingType() {
         return loggingType;
     }
 
-    public void setLoggingType(JsonElement loggingType) {
+    public void setLoggingType(String loggingType) {
         this.loggingType = loggingType;
     }
 
-    public JsonElement getTemporary() {
+    public Boolean getTemporary() {
         return temporary;
     }
 
-    public void setTemporary(JsonElement temporary) {
+    public void setTemporary(Boolean temporary) {
         this.temporary = temporary;
+    }
+
+    public void setColumns(List<XSKHDBTABLEColumnsModel> columns) {
+        this.columns = columns;
+    }
+
+    public void setIndexes(List<XSKHDBTABLEIndexesModel> indexes) {
+        this.indexes = indexes;
+    }
+
+    public List<XSKHDBTABLEColumnsModel> getColumns() {
+        return columns;
+    }
+
+    public List<XSKHDBTABLEIndexesModel> getIndexes() {
+        return indexes;
     }
 }

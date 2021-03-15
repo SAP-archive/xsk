@@ -141,6 +141,17 @@ public interface HdbtableListener extends ParseTreeListener {
 	void exitColumnAssignScale(@NotNull HdbtableParser.ColumnAssignScaleContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link HdbtableParser#tablePrimaryKeyIndexTypeProp}.
+	 * @param ctx the parse tree
+	 */
+	void enterTablePrimaryKeyIndexTypeProp(@NotNull HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyIndexTypeProp}.
+	 * @param ctx the parse tree
+	 */
+	void exitTablePrimaryKeyIndexTypeProp(@NotNull HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link HdbtableParser#columnAssignSQLType}.
 	 * @param ctx the parse tree
 	 */
@@ -260,6 +271,17 @@ public interface HdbtableListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSchemaNameProp(@NotNull HdbtableParser.SchemaNamePropContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbtableParser#tablePrimaryKeyColumnsProp}.
+	 * @param ctx the parse tree
+	 */
+	void enterTablePrimaryKeyColumnsProp(@NotNull HdbtableParser.TablePrimaryKeyColumnsPropContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyColumnsProp}.
+	 * @param ctx the parse tree
+	 */
+	void exitTablePrimaryKeyColumnsProp(@NotNull HdbtableParser.TablePrimaryKeyColumnsPropContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link HdbtableParser#columnAssignComment}.

@@ -173,6 +173,19 @@ public class HdbtableBaseListener implements HdbtableListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTablePrimaryKeyIndexTypeProp(@NotNull HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTablePrimaryKeyIndexTypeProp(@NotNull HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterColumnAssignSQLType(@NotNull HdbtableParser.ColumnAssignSQLTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -310,6 +323,19 @@ public class HdbtableBaseListener implements HdbtableListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSchemaNameProp(@NotNull HdbtableParser.SchemaNamePropContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTablePrimaryKeyColumnsProp(@NotNull HdbtableParser.TablePrimaryKeyColumnsPropContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTablePrimaryKeyColumnsProp(@NotNull HdbtableParser.TablePrimaryKeyColumnsPropContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

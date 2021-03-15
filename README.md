@@ -133,11 +133,11 @@ mvn clean install
     export DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA
     export DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA
     export HANA_DRIVER=com.sap.db.jdbc.Driver
-    export HANA_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443/?encrypt=true\&validateCertificate=false
+    export HANA_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443?encrypt=true&validateCertificate=true
     export HANA_USERNAME=DBADMIN
     export HANA_PASSWORD=<password>
     export DIRIGIBLE_SCHEDULER_DATABASE_DRIVER=com.sap.db.jdbc.Driver
-    export DIRIGIBLE_SCHEDULER_DATABASE_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443/?encrypt=true\&validateCertificate=false
+    export DIRIGIBLE_SCHEDULER_DATABASE_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443?encrypt=true&validateCertificate=true
     export DIRIGIBLE_SCHEDULER_DATABASE_USER=DBADMIN
     export DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<password>
     export DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false
@@ -210,11 +210,11 @@ docker build -t dirigiblelabs/xsk-kyma .
     -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
     -e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
     -e HANA_DRIVER=com.sap.db.jdbc.Driver \
-    -e HANA_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443/?encrypt=true\&validateCertificate=false \
+    -e HANA_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443?encrypt=true&validateCertificate=true \
     -e HANA_USERNAME=DBADMIN \
     -e HANA_PASSWORD=<password> \
     -e DIRIGIBLE_SCHEDULER_DATABASE_DRIVER=com.sap.db.jdbc.Driver \
-    -e DIRIGIBLE_SCHEDULER_DATABASE_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443/?encrypt=true\&validateCertificate=false \
+    -e DIRIGIBLE_SCHEDULER_DATABASE_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443?encrypt=true&validateCertificate=true \
     -e DIRIGIBLE_SCHEDULER_DATABASE_USER=DBADMIN \
     -e DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<password> \
     -e DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false \

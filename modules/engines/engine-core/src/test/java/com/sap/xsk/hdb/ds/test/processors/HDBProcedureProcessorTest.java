@@ -14,7 +14,7 @@ package com.sap.xsk.hdb.ds.test.processors;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureDropProcessor;
-import com.sap.xsk.hdb.ds.test.XSKViewParserTest;
+import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
 import com.sap.xsk.utils.XSKConstants;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.junit.Before;

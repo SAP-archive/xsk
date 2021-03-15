@@ -21,4 +21,19 @@ public final class XSKConstants {
     public static final String XSK_HDBTABLEFUNCTION_CREATE = "CREATE ";
     public static final String XSK_HDBTABLEFUNCTION_DROP = "DROP FUNCTION ";
 
+    public static final String XSK_HDBVIEW_SYNTAX = "VIEW ";
+    public static final String XSK_HDBVIEW_CREATE = "CREATE ";
+    public static final String XSK_HDBVIEW_DROP = "DROP VIEW ";
+
+
+    /**
+     * The Unix separator character.
+     */
+    public static final char UNIX_SEPARATOR = '/';
+
+    /**
+     * The Windows separator character.
+     */
+    public static final char WINDOWS_SEPARATOR = '\\';
+
 }

@@ -11,72 +11,88 @@
  */
 package com.sap.xsk.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.xsodata.ds.model.XSKODataEntity;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.*;
 
 public class XSKUtils {
 
-	private XSKUtils() {
+    private XSKUtils() {
 
-	}
+    }
 
-	public static byte[] objectToByteArray(Object object) throws IOException {
-		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(); ObjectOutput out = new ObjectOutputStream(bos)) {
-			out.writeObject(object);
-			out.flush();
+    public static byte[] objectToByteArray(Object object) throws IOException {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream(); ObjectOutput out = new ObjectOutputStream(bos)) {
+            out.writeObject(object);
+            out.flush();
 
-			return bos.toByteArray();
-		}
-	}
+            return bos.toByteArray();
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public static <T> T byteArrayToObject(byte[] byteArray) throws IOException, ClassNotFoundException {
-		try (ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
-				ObjectInput in = new ObjectInputStream(bis)) {
-			return (T) in.readObject();
-		}
-	}
+    @SuppressWarnings("unchecked")
+    public static <T> T byteArrayToObject(byte[] byteArray) throws IOException, ClassNotFoundException {
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
+             ObjectInput in = new ObjectInputStream(bis)) {
+            return (T) in.readObject();
+        }
+    }
 
-	public static String convertToFullPath(String filePath) {
-		if (!filePath.startsWith("/registry/public")) {
-			return "/registry/public" + filePath;
-		}
-		return filePath;
-	}
+    public static String convertToFullPath(String filePath) {
+        if (!filePath.startsWith("/registry/public")) {
+            return "/registry/public" + filePath;
+        }
+        return filePath;
+    }
 
-	public static String getTableName(XSKDataStructureEntityModel model) {
-		return getTableName(model, model.getName());
-	}
+    public static String getTableName(XSKDataStructureEntityModel model) {
+        return getTableName(model, model.getName());
+    }
 
-	public static String getTableName(XSKDataStructureEntityModel model, String tableName) {
-		return new StringBuilder()
-			.append(model.getNamespace()).append("::").append(model.getContext()).append(".").append(tableName)
-			.toString();
-	}
+    public static String getTableName(XSKDataStructureEntityModel model, String tableName) {
+        return new StringBuilder()
+                .append(model.getNamespace()).append("::").append(model.getContext()).append(".").append(tableName)
+                .toString();
+    }
 
-	public static String getTableName(XSKODataEntity model) {
-		return new StringBuilder().append(model.getNamespace()).append("::").append(model.getName()).toString();
-	}
-	
-	public static String getTableName(String location) {
-		String namespacePart = new File(location).getParent();
-		namespacePart = namespacePart.replace('/', '.');
-		namespacePart = namespacePart.replace('\\', '.');
-		if (namespacePart.startsWith(".")) {
-			namespacePart = namespacePart.substring(1);
-		}
-		String namePart = new File(location).getName();
-		namePart = namePart.substring(0, namePart.indexOf('.'));
-		
-		return new StringBuilder().append(namespacePart).append("::").append(namePart).toString();
-	}
+    public static String getTableName(XSKODataEntity model) {
+        return new StringBuilder().append(model.getNamespace()).append("::").append(model.getName()).toString();
+    }
+
+    /**
+     * Assemble the catalog name of a Repository Base Object(e.g hdbtable, hdbview, hdbsequence, hdbstructure, hdbprocedure)
+     * The catalog name includes the package path, the separating dots, and the object base name, as NAMESPACE::OBJECT_BASE_NAME
+     * For example: Given location "/projectname/com/sap/hana/example/ItemsByOrder.hdbview",
+     * the method will return "com.sap.hana.example::ItemsByOrder"
+     *
+     * @param location String representing file location path
+     * @return String representing assemble catalog name in format "NAMESPACE::OBJECT_BASE_NAME"
+     * @implNote Do not apply for CDS Objects
+     * @see <a href="https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/016a60fe929a4e9e89bbb3b6f7aad409.html">SAP HANA Repository Packages and Namespaces</a>
+     */
+    public static String getRepositoryBaseObjectName(String location) {
+        String objBaseName = FilenameUtils.getBaseName(location);
+        return new StringBuilder().append(getRepositoryNamespace(location)).append("::").append(objBaseName).toString();
+    }
+
+    /**
+     * Assemble Repository Package name from file location.
+     * For example "com.sap.test.hana.db"
+     *
+     * @param location String representing file location path
+     * @return String representing assemble repository package
+     * @see <a href="https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/016a60fe929a4e9e89bbb3b6f7aad409.html">SAP HANA Repository Packages and Namespaces</a>
+     */
+    public static String getRepositoryNamespace(String location) {
+        String namespacePart = FilenameUtils.getFullPathNoEndSeparator(location);
+        namespacePart = namespacePart.replace(XSKConstants.UNIX_SEPARATOR, '.');
+        namespacePart = namespacePart.replace(XSKConstants.WINDOWS_SEPARATOR, '.');
+        if (namespacePart.startsWith(".")) {
+            namespacePart = namespacePart.substring(1);
+        }
+        return namespacePart;
+    }
+
 }

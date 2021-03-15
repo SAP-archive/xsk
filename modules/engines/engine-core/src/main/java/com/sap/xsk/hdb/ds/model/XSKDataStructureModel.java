@@ -18,6 +18,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 
@@ -46,12 +47,14 @@ public class XSKDataStructureModel {
     @Column(name = "DS_CREATED_AT", columnDefinition = "TIMESTAMP", nullable = false)
     private Timestamp createdAt;
 
-    private List<XSKDataStructureDependencyModel> dependencies = new ArrayList<XSKDataStructureDependencyModel>();
+    private List<XSKDataStructureDependencyModel> dependencies = new ArrayList<>();
 
     private String schema;
 
+    @Transient
     private transient String rawContent;
 
+    @Transient
     private transient XSKHanaVersion hanaVersion;
 
     /**

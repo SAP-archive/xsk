@@ -44,7 +44,7 @@ public class XSKViewParserTest extends AbstractGuiceTest {
     @Test
     public void parseHdbviewFileHANAv2Successfully() throws Exception {
         String hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/ItemsByOrderHANAv2.hdbview"), StandardCharsets.UTF_8);
-        XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("sap/com/test/views/ItemsByOrderHANAv2.hdbview", hdbviewSample);
+        XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view/db/ItemsByOrderHANAv2.hdbview", hdbviewSample);
         assertEquals(XSKHanaVersion.VERSION_2, model.getHanaVersion());
         assertEquals(hdbviewSample, model.getRawContent());
     }

@@ -1,4 +1,0 @@
-schema="DBADMIN";
-public=false;
-query="SELECT T1.\"Id\" FROM \"hdb_view::Item\" T1";
-depends_on= ["hdb_view::Item","hdb_view::Order"];

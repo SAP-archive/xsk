@@ -69,7 +69,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
         XSKViewCreateProcessor processorSpy = spy(XSKViewCreateProcessor.class);
         String hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/ItemsByOrderHANAv1.hdbview"), StandardCharsets.UTF_8);
 
-        XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view/ItemsByOrderHANAv1.hdbview", hdbviewSample);
+        XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view.db/ItemsByOrderHANAv1.hdbview", hdbviewSample);
         String mockSQL = "testSQLScript";
 
         //PowerMock do not support deep stub calls
@@ -90,7 +90,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
         XSKViewCreateProcessor processorSpy = spy(XSKViewCreateProcessor.class);
         String hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/ItemsByOrderHANAv2.hdbview"), StandardCharsets.UTF_8);
 
-        XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("sap.com.test.views/ItemsByOrderHANAv2.hdbview", hdbviewSample);
+        XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view.db/ItemsByOrderHANAv2.hdbview", hdbviewSample);
         model.setRawContent(hdbviewSample);
         String sql = XSKConstants.XSK_HDBVIEW_CREATE + model.getRawContent();
 

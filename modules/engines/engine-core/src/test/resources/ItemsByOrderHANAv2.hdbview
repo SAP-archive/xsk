@@ -1,0 +1,2 @@
+VIEW "sap.com.test.views::ItemsByOrderHANAv2"
+AS SELECT "Id" FROM "hdb_view::Item";

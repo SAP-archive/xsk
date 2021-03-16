@@ -16,6 +16,8 @@ import com.sap.xsk.xsodata.ds.model.XSKODataEntity;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class XSKUtils {
 
@@ -93,6 +95,27 @@ public class XSKUtils {
             namespacePart = namespacePart.substring(1);
         }
         return namespacePart;
+    }
+
+    /**
+     * Extraxt corret RepositoryBaseObject definition from content, by removing tabs or spaces between the
+     * sybtaxx word and the Object name.
+     * For example "VIEW              "hdb_view::ItemsByOrderHANAv2" should be return as "VIEW "hdb_view::ItemsByOrderHANAv2"
+     *
+     * @param repositoryObjectSyntax syntax as VIEW, TABLE ..etc
+     * @param content                String representing file content of a Repository Object
+     * @return normalized definition of a Repository Object, consisting of 'SYNTAX_WORD "NAMESPACE::OBJECT_BASE_NAME"'
+     */
+    public static String extractRepositoryBaseObjectNameFromContent(String repositoryObjectSyntax, String content) {
+        Pattern pattern = Pattern.compile("(" + repositoryObjectSyntax + ")(\\t\\n)*(\\s)*(\".+\")", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(content.trim());
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            return matcher.group(1) + matcher.group(4);
+        } else {
+            return "";
+        }
+
     }
 
 }

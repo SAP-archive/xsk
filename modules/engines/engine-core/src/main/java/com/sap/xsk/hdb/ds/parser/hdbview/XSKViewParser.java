@@ -43,7 +43,9 @@ public class XSKViewParser implements XSKDataStructureParser {
     @Override
     public XSKDataStructureHDBViewModel parse(String location, String content) throws XSKDataStructuresException, IOException {
         String expectedHana2Syntax = XSKConstants.XSK_HDBVIEW_SYNTAX + "\"" + XSKUtils.getRepositoryBaseObjectName(location) + "\"";
-        if (content.trim().startsWith(expectedHana2Syntax)) {
+        String receivedHana2Syntax = XSKUtils.extractRepositoryBaseObjectNameFromContent(XSKConstants.XSK_HDBVIEW_SYNTAX, content);
+        logger.debug("Determine if the hdbview is Hana v1 or v2 by Comparing '" + receivedHana2Syntax + "' with '" + expectedHana2Syntax + "'");
+        if (receivedHana2Syntax.equals(expectedHana2Syntax)) {
             return parseHANAv2Content(location, content);
         } else {
             return parseHANAv1Content(location, content);

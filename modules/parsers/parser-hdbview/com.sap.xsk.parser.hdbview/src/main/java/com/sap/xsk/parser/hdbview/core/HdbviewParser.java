@@ -18,11 +18,12 @@ public class HdbviewParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__7=1, T__6=2, T__5=3, T__4=4, T__3=5, T__2=6, T__1=7, T__0=8, BOOLEAN=9, 
-		STRING=10, EQ=11, SEMICOLON=12, COMMA=13, WS=14, ESC=15;
+		STRING=10, EQ=11, SEMICOLON=12, COMMA=13, WS=14, ESC=15, LINE_COMMENT=16, 
+		COMMENT=17;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'schema'", "'depends_on_table'", "'['", "'depends_on'", 
 		"'depends_on_view'", "']'", "'query'", "'public'", "BOOLEAN", "STRING", 
-		"'='", "';'", "','", "WS", "ESC"
+		"'='", "';'", "','", "WS", "ESC", "LINE_COMMENT", "COMMENT"
 	};
 	public static final int
 		RULE_hdbviewDefinition = 0, RULE_schemaProp = 1, RULE_publicProp = 2, 
@@ -501,7 +502,7 @@ public class HdbviewParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\21^\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\23^\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\3\2\3\2\5\2\23\n\2\3\2\3\2"+
 		"\5\2\27\n\2\3\2\5\2\32\n\2\3\2\5\2\35\n\2\3\3\3\3\3\3\3\3\3\3\3\4\3\4"+
 		"\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\7\6\64\n\6\f"+

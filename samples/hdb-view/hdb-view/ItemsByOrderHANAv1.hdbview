@@ -1,0 +1,4 @@
+schema="DBADMIN";
+public=false;
+query="SELECT T1.\"Id\" FROM \"hdb-view::Item\" T1";
+depends_on= ["hdb_view::Item","hdb-view::Order"];

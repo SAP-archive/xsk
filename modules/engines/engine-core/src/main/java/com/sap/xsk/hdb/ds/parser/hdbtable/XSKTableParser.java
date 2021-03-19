@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.parser.hdbtable;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -25,10 +26,15 @@ import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLECoreVisitor;
 import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLESyntaxErrorListener;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
+import com.sap.xsk.utils.XSKUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
+import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.gson.JsonElementValueReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,32 +87,25 @@ public class XSKTableParser implements XSKDataStructureParser {
         Gson gson = new Gson();
 
         XSKHDBTABLEDefinitionModel hdbtableDefinitionModel = gson.fromJson(xskhdbtableCoreVisitor.getHdbtableDefinitionObject(), XSKHDBTABLEDefinitionModel.class);
-        XSKHDBTABLEColumnsModel hdbtableColumnsModel = gson.fromJson(xskhdbtableCoreVisitor.getColumnsObject(), XSKHDBTABLEColumnsModel.class);
-        XSKHDBTABLEIndexesModel hdbtableIndexesModel = gson.fromJson(xskhdbtableCoreVisitor.getIndexesObject(), XSKHDBTABLEIndexesModel.class);
+//        XSKHDBTABLEColumnsModel hdbtableColumnsModel = gson.fromJson(xskhdbtableCoreVisitor.getColumnsObject(), XSKHDBTABLEColumnsModel.class);
+//        XSKHDBTABLEIndexesModel hdbtableIndexesModel = gson.fromJson(xskhdbtableCoreVisitor.getIndexesObject(), XSKHDBTABLEIndexesModel.class);
 
-        XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
-        XSKDataStructureHDBTableColumnModel xskDataStructureHDBTableColumnModel = new XSKDataStructureHDBTableColumnModel();
-        XSKDataStructureHDBTableConstraintModel xskDataStructureHDBTableConstraintModel = new XSKDataStructureHDBTableConstraintModel();
 
         ModelMapper modelMapper = new ModelMapper();
-        //modelMapper.getConfiguration().addValueReader(new JsonElementValueReader());
-//        for (JsonElement column: hdbtableDefinitionModel.getColumns().getAsJsonArray()) {
-//            xskDataStructureHDBTableColumnModel=modelMapper.map(column, XSKDataStructureHDBTableColumnModel.class);
-//
-//            dataStructureHDBTableModel.setColumns();
-//        }
 
+        modelMapper.getConfiguration()
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setMatchingStrategy(MatchingStrategies.STRICT);
 
-        dataStructureHDBTableModel= modelMapper.map(hdbtableDefinitionModel, XSKDataStructureHDBTableModel.class);
-        modelMapper.typeMap(XSKHDBTABLEDefinitionModel.class, XSKDataStructureHDBTableModel.class).addMappings(mapper -> {
-            mapper.map(src -> src.getSchemaName().toString(), XSKDataStructureHDBTableModel::setSchema);
-            mapper.map(src -> src.getColumns(), XSKDataStructureHDBTableModel::setColumns);
-            mapper.map(src -> src.getDescription().toString(), XSKDataStructureHDBTableModel::setDescription);
-            mapper.map(src -> src.getTableType().toString(), XSKDataStructureHDBTableModel::setTableType);
-        });
+        XSKDataStructureHDBTableModel dataStructureHDBTableModel = modelMapper.map(hdbtableDefinitionModel, XSKDataStructureHDBTableModel.class);
 
-
-
+        dataStructureHDBTableModel.setName(XSKUtils.getTableName(location));
+        dataStructureHDBTableModel.setLocation(location);
+        dataStructureHDBTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
+        dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
+        dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
+        dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
 
         return dataStructureHDBTableModel;
     }

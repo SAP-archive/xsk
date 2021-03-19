@@ -58,3 +58,5 @@ INDEXTYPE: 'B_TREE' | 'CPB_TREE' ;
 INT: [0-9]+;
 TABLETYPE: 'COLUMNSTORE'|'ROWSTORE';
 TABLELOGGINGTYPE: 'LOGGING' | 'NOLOGGING';
+LINE_COMMENT : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
+COMMENT : '/*' .*? '*/' -> skip ; // Match "/*" stuff "*/"

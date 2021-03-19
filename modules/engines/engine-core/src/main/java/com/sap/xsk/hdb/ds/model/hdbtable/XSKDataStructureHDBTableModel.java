@@ -15,12 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
 
 /**
  * The table model representation.
  */
 public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
-	
+
+	private String schemaName;
+
 	private String tableType;
 	
 	private String description;
@@ -28,6 +32,18 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
 	private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<XSKDataStructureHDBTableColumnModel>();
 
 	private XSKDataStructureHDBTableConstraintsModel constraints = new XSKDataStructureHDBTableConstraintsModel();
+
+	private List<String> pkcolumns;
+
+	private String indexType;
+
+	private List<XSKHDBTABLEIndexesModel> indexes;
+
+	private Boolean publicProp;
+
+	private String loggingType;
+
+	private Boolean temporary;
 
 	/**
 	 * Getter for the columns.

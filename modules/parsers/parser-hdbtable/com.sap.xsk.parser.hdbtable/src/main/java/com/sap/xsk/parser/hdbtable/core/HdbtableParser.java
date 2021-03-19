@@ -22,7 +22,7 @@ public class HdbtableParser extends Parser {
 		T__10=17, T__9=18, T__8=19, T__7=20, T__6=21, T__5=22, T__4=23, T__3=24, 
 		T__2=25, T__1=26, T__0=27, STRING=28, WS=29, TABLE=30, DOT=31, EQ=32, 
 		SEMICOLON=33, SQLTYPES=34, BOOLEAN=35, ORDER=36, INDEXTYPE=37, INT=38, 
-		TABLETYPE=39, TABLELOGGINGTYPE=40;
+		TABLETYPE=39, TABLELOGGINGTYPE=40, LINE_COMMENT=41, COMMENT=42;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'loggingType'", "'sqlType'", "'name'", "'length'", "'scale'", 
 		"'tableType'", "'{'", "'order'", "'}'", "'indexes'", "'nullable'", "'pkcolumns'", 
@@ -30,7 +30,7 @@ public class HdbtableParser extends Parser {
 		"'columns'", "'precision'", "'defaultValue'", "'['", "']'", "'public'", 
 		"'comment'", "'temporary'", "'schemaName'", "STRING", "WS", "'table'", 
 		"'.'", "'='", "';'", "SQLTYPES", "BOOLEAN", "ORDER", "INDEXTYPE", "INT", 
-		"TABLETYPE", "TABLELOGGINGTYPE"
+		"TABLETYPE", "TABLELOGGINGTYPE", "LINE_COMMENT", "COMMENT"
 	};
 	public static final int
 		RULE_hdbtableDefinition = 0, RULE_schemaNameProp = 1, RULE_temporaryProp = 2, 
@@ -1694,7 +1694,7 @@ public class HdbtableParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3*\u012f\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3,\u012f\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+

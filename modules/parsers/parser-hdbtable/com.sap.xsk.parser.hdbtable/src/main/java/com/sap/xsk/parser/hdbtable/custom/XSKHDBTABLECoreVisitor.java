@@ -27,13 +27,13 @@ import java.util.stream.Collectors;
 
 public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
     private JsonObject hdbtableObject = new JsonObject();
-    private JsonArray tableIndexes = new JsonArray();
-    private JsonArray tableColumns = new JsonArray();
 
     @Override
     public JsonElement visitTableColumnsProp(HdbtableParser.TableColumnsPropContext ctx) {
+        JsonArray tableColumns = new JsonArray();
         if(ctx!=null && ctx.columnsObject()!=null) {
             ctx.columnsObject().forEach(column -> {
+
                 tableColumns.add(visitColumnsObject(column));
             });
         }
@@ -68,6 +68,7 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitTableIndexesProp(HdbtableParser.TableIndexesPropContext ctx) {
+        JsonArray tableIndexes = new JsonArray();
         if(ctx!=null && ctx.indexesObject()!=null){
             ctx.indexesObject().forEach(index -> {
                 tableIndexes.add(visitIndexesObject(index));
@@ -224,13 +225,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
         return hdbtableObject;
     }
 
-    public JsonElement getIndexesObject() {
-        return tableIndexes;
-    }
-
-    public JsonElement getColumnsObject() {
-        return tableColumns;
-    }
 
     private String handleStringLiteral(String value) {
         if (value != null && value.length() > 1) {

@@ -2,10 +2,10 @@
 /*we have some comment heree....*/
 {
   "kneo.test.db::Test.dvMySynonym1": {
+    "schema": "TONI",
     "target": {
         "object": "DUMMY",
         "schema": "SYS"
-    },
-    "schema": "TONI"
+    }
   }
 }

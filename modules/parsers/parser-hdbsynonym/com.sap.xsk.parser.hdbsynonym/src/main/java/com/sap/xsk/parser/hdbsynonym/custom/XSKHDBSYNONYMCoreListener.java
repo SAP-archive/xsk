@@ -22,20 +22,30 @@ public class XSKHDBSYNONYMCoreListener extends HdbsynonymBaseListener {
     public static final String TARGET_SCHEMA = "\"schema\"";
     public static final String TARGET_OBJECT = "\"object\"";
 
+    /**
+     * Currently the Parser do not take into account if a given property is mandatory.
+     * If the property order is misplaced the parser will still parse the values.
+     * If more than one value of one property is provided then only the first one is taken.
+     */
     @Override
     public void exitHdbsynonymDefinition(HdbsynonymParser.HdbsynonymDefinitionContext ctx) {
         model.setLocation(handleStringLiteral((String) tokens.get(ctx.location())));
-        model.setSynonymSchema(handleStringLiteral((String) tokens.get(ctx.synonymBody().synonymSchema())));
-        if (ctx.synonymBody().synonymTarget() != null) {
-            for (int i = 0; i < ctx.synonymBody().synonymTarget().synonymTargetProp().size(); i++) {
-                if (ctx.synonymBody().synonymTarget().synonymTargetProp().get(i).children != null) {
-                    if (ctx.synonymBody().synonymTarget().synonymTargetProp().get(i).children.get(0).getText().equals(TARGET_SCHEMA)) {
-                        model.setTargetSchema(handleStringLiteral((String) tokens.get(ctx.synonymBody().synonymTarget().synonymTargetProp(i))));
-                    } else if (ctx.synonymBody().synonymTarget().synonymTargetProp().get(i).children.get(0).getText().equals(TARGET_OBJECT)) {
-                        model.setTargetObject(handleStringLiteral((String) tokens.get(ctx.synonymBody().synonymTarget().synonymTargetProp(i))));
+        if (ctx.synonymBody().synonymSchema() != null && ctx.synonymBody().synonymSchema().size() > 0) {
+            model.setSynonymSchema(handleStringLiteral((String) tokens.get(ctx.synonymBody().synonymSchema().get(0))));
+        }
+
+        if (!(ctx.synonymBody().synonymTarget() == null || ctx.synonymBody().synonymTarget().isEmpty())) {
+            HdbsynonymParser.SynonymTargetContext target = ctx.synonymBody().synonymTarget().get(0);
+
+            target.synonymTargetProp().forEach(prop -> {
+                if (prop.children != null) {
+                    if (prop.children.get(0).getText().equals(TARGET_SCHEMA)) {
+                        model.setTargetSchema(handleStringLiteral((String) tokens.get(prop)));
+                    } else if (prop.children.get(0).getText().equals(TARGET_OBJECT)) {
+                        model.setTargetObject(handleStringLiteral((String) tokens.get(prop)));
                     }
                 }
-            }
+            });
         }
     }
 
@@ -66,7 +76,6 @@ public class XSKHDBSYNONYMCoreListener extends HdbsynonymBaseListener {
             String escapedQuote = subStr.replace("\\\"", "\"");
             return escapedQuote.replace("\\\\", "\\");
         }
-
         return null;
     }
 

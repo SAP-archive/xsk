@@ -101,6 +101,6 @@ public class XSKHDBSYNONYMCoreListenerTest {
         parseTreeWalker.walk(hdbsynonymCoreListener, parseTree);
 
         XSKHDBSYNONYMDefinitionModel model = hdbsynonymCoreListener.getModel();
-        Assert.assertEquals("Found 2 Syntax error", 2, hdbsynonymParser.getNumberOfSyntaxErrors());
+        Assert.assertEquals("Found 1 Syntax error", 1, hdbsynonymParser.getNumberOfSyntaxErrors());
     }
 }

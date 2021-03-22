@@ -21,6 +21,7 @@ import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
@@ -100,6 +101,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         Map<String, XSKDataStructureModel> dataStructureTableFunctionsModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION).getDataStructureModels();
         Map<String, XSKDataStructureModel> dataStructureSchemasModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SCHEMA).getDataStructureModels();
         Map<String, XSKDataStructureModel> dataStructureSynonymModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SYNONYM).getDataStructureModels();
+        Map<String, XSKDataStructureModel> dataStructureSequencesModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE).getDataStructureModels();
 
         if (dataStructureEntitiesModel.isEmpty()
                 && dataStructureTablesModel.isEmpty()
@@ -107,7 +109,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                 && dataStructureProceduresModel.isEmpty()
                 && dataStructureTableFunctionsModel.isEmpty()
                 && dataStructureSchemasModel.isEmpty()
-                && dataStructureSynonymModel.isEmpty()) {
+                && dataStructureSynonymModel.isEmpty()
+                && dataStructureSequencesModel.isEmpty()){
+
             logger.trace("No XSK Data Structures to update.");
             return;
         }
@@ -130,9 +134,25 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                 sorted.addAll(dataStructureTableFunctionsModel.keySet());
                 sorted.addAll(dataStructureSchemasModel.keySet());
                 sorted.addAll(dataStructureSynonymModel.keySet());
+                sorted.addAll(dataStructureSequencesModel.keySet());
 
                 boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
                 if (!hdiOnly) {
+                    //drop HDB Sequences
+                    List<XSKDataStructureHDBSequenceModel> hdbSequencesToUpdate = new ArrayList<>();
+                    for (int i = sorted.size() - 1; i >= 0; i--) {
+                        String dsName = sorted.get(i);
+                        XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) dataStructureSequencesModel.get(dsName);
+                        if (model != null) {
+                            hdbSequencesToUpdate.add(model);
+                        }
+                    }
+
+                    IXSKDataStructureManager<XSKDataStructureModel> xskSequencesManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
+                    for (XSKDataStructureHDBSequenceModel sequenceToUpdate :
+                            hdbSequencesToUpdate) {
+                        xskSequencesManagerService.dropDataStructure(connection, sequenceToUpdate);
+                    }
 
                     // drop HDB Procedures
                     List<XSKDataStructureHDBProcedureModel> hdbProceduresToUpdate = new ArrayList<>();
@@ -247,6 +267,25 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                     for (XSKDataStructureHDBSchemaModel schemaModel :
                             hdbSchemasToUpdate) {
                         xskSchemaManagerService.dropDataStructure(connection, schemaModel);
+                    }
+
+                    // process sequences in the proper order
+                    IXSKDataStructureManager<XSKDataStructureModel> xskSequenceManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
+                    for (String dsName : sorted) {
+                        XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) dataStructureSequencesModel.get(dsName);
+                        try {
+                            if (model != null) {
+                                if (!SqlFactory.getNative(connection).exists(connection, model.getName(),5)) {
+                                    xskSequenceManagerService.createDataStructure(connection, model);
+                                } else {
+                                    xskSequenceManagerService.updateDataStructure(connection, model);
+
+                                }
+                            }
+                        } catch (Exception e) {
+                            logger.error(e.getMessage(), e);
+                            errors.add(e.getMessage());
+                        }
                     }
 
                     // process tables in the proper order

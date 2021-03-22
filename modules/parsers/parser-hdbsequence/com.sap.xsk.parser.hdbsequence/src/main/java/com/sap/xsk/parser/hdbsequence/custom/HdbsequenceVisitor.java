@@ -44,7 +44,7 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
     @Override public JsonElement visitSchema(HdbsequenceParser.SchemaContext ctx) {
         return (ctx!=null && ctx.STRING()!=null)
                 ? new JsonPrimitive(ctx.STRING().getText())
-                : new JsonPrimitive("");
+                : null;
     }
 
 
@@ -58,14 +58,14 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
     @Override public JsonElement visitMaxvalue(HdbsequenceParser.MaxvalueContext ctx) {
         return (ctx!=null &&ctx.INT()!=null)
                 ? new JsonPrimitive(Integer.parseInt(ctx.INT().getText()))
-                : new JsonPrimitive(0);
+                : null;
     }
 
 
     @Override public JsonElement visitDepends_on(HdbsequenceParser.Depends_onContext ctx) {
         return (ctx!=null && ctx.depends_on_list()!=null)
                 ? visitDepends_on_list(ctx.depends_on_list())
-                : new JsonArray();
+                : null;
     }
 
 
@@ -79,7 +79,7 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
     @Override public JsonElement visitDepends_on_table(HdbsequenceParser.Depends_on_tableContext ctx) {
         return (ctx!=null && ctx.STRING()!=null)
                 ? new JsonPrimitive(ctx.STRING().getText())
-                : new JsonPrimitive("");
+                : null;
     }
 
 
@@ -93,35 +93,35 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
     @Override public JsonElement visitCycles(HdbsequenceParser.CyclesContext ctx) {
         return (ctx!=null && ctx.BOOLEAN()!=null)
                 ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText()))
-                : new JsonPrimitive(false); //no default value provided by docs
+                : null;
     }
 
 
     @Override public JsonElement visitMinvalue(HdbsequenceParser.MinvalueContext ctx) {
         return (ctx!=null && ctx.INT()!=null)
                 ? new JsonPrimitive(Integer.parseInt(ctx.INT().getText()))
-                : new JsonPrimitive(0);
+                : null;
     }
 
 
     @Override public JsonElement visitDepends_on_view(HdbsequenceParser.Depends_on_viewContext ctx) {
         return (ctx!=null && ctx.STRING()!=null)
                 ? new JsonPrimitive(ctx.STRING().getText())
-                : new JsonPrimitive("");
+                : null;
     }
 
 
     @Override public JsonElement visitReset_by(HdbsequenceParser.Reset_byContext ctx) {
         return (ctx!=null && ctx.STRING()!=null)
                 ? new JsonPrimitive(ctx.STRING().getText())
-                : new JsonPrimitive("");
+                : null;
     }
 
 
     @Override public JsonElement visitIncrement_by(HdbsequenceParser.Increment_byContext ctx) {
         return (ctx!=null && ctx.INT()!=null)
                 ? new JsonPrimitive(Integer.parseInt(ctx.INT().getText()))
-                : new JsonPrimitive(-1);
+                : new JsonPrimitive(1);
     }
 
 
@@ -135,8 +135,7 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         JsonArray dependsOnList = new JsonArray();
         if(ctx!=null && ctx.STRING()!=null){
             ctx.STRING().forEach( t -> {
-                //String tableName = handleStringLiteral(t.getText());
-                dependsOnList.add(t.getText());
+                dependsOnList.add(new JsonPrimitive(t.getText()));
             });
         }
         return dependsOnList;

@@ -35,27 +35,30 @@ public class CustomDeserializers {
         public XSKHDBSEQUENCEModel deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context)
                 throws JsonParseException {
             JsonObject parsedObj = jsonElement.getAsJsonObject();
-            String schema = handleStringLiteral(parsedObj.get("schema").getAsString());
-            Integer increment_by = parsedObj.get("increment_by").getAsInt();
-            Integer start_with = parsedObj.get("start_with").getAsInt();
-            Integer maxvalue = parsedObj.get("maxvalue").getAsInt();
-            Boolean nomaxvalue = parsedObj.get("nomaxvalue").getAsBoolean();
-            Integer minvalue = parsedObj.get("minvalue").getAsInt();
-            Boolean nominvalue = parsedObj.get("nominvalue").getAsBoolean();
-            Boolean cycles = parsedObj.get("cycles").getAsBoolean();
-            String reset_by = handleStringLiteral(parsedObj.get("reset_by").getAsString());
-            Boolean publicc = parsedObj.get("public").getAsBoolean();
+            String schema = (!parsedObj.get("schema").isJsonNull()) ? handleStringLiteral(parsedObj.get("schema").getAsString()) : null;
+            Integer increment_by = (!parsedObj.get("increment_by").isJsonNull()) ? parsedObj.get("increment_by").getAsInt() : null;
+            Integer start_with = (!parsedObj.get("start_with").isJsonNull()) ? parsedObj.get("start_with").getAsInt() : null;
+            Integer maxvalue = (!parsedObj.get("maxvalue").isJsonNull()) ? parsedObj.get("maxvalue").getAsInt() : null;
+            Boolean nomaxvalue = (!parsedObj.get("nomaxvalue").isJsonNull()) ? parsedObj.get("nomaxvalue").getAsBoolean() : null;
+            Integer minvalue = (!parsedObj.get("minvalue").isJsonNull()) ? parsedObj.get("minvalue").getAsInt() : null;
+            Boolean nominvalue = (!parsedObj.get("nominvalue").isJsonNull()) ? parsedObj.get("nominvalue").getAsBoolean() : null;
+            Boolean cycles = (!parsedObj.get("cycles").isJsonNull()) ? parsedObj.get("cycles").getAsBoolean() : null;
+            String reset_by = (!parsedObj.get("reset_by").isJsonNull()) ? handleStringLiteral(parsedObj.get("reset_by").getAsString()) : null;
+            Boolean publicc = (!parsedObj.get("public").isJsonNull()) ? parsedObj.get("public").getAsBoolean() : null;
 
-            String depends_on_table = handleStringLiteral(parsedObj.get("depends_on_table").getAsString());
-            String depends_on_view = handleStringLiteral(parsedObj.get("depends_on_view").getAsString());
+            String depends_on_table = (!parsedObj.get("depends_on_table").isJsonNull()) ? handleStringLiteral(parsedObj.get("depends_on_table").getAsString()) : null;
+            String depends_on_view = (!parsedObj.get("depends_on_view").isJsonNull()) ? handleStringLiteral(parsedObj.get("depends_on_view").getAsString()) : null;
             List<String> dependsOnList = new ArrayList<>();
-            JsonArray depends_on = parsedObj.get("depends_on").getAsJsonArray();
-            for (JsonElement tableName : depends_on) {
-                dependsOnList.add(handleStringLiteral(tableName.getAsString()));
+            JsonArray depends_on = (!parsedObj.get("depends_on").isJsonNull()) ? parsedObj.get("depends_on").getAsJsonArray() : null;
+            if(depends_on!=null){
+                for (JsonElement tableName : depends_on) {
+                    dependsOnList.add(handleStringLiteral(tableName.getAsString()));
+                }
             }
+
             return new XSKHDBSEQUENCEModel(schema,  increment_by,  start_with,  maxvalue,
-                     nomaxvalue,  minvalue,  nominvalue,  cycles,  reset_by,
-                     publicc,  depends_on_table,  depends_on_view, dependsOnList);
+                    nomaxvalue,  minvalue,  nominvalue,  cycles,  reset_by,
+                    publicc,  depends_on_table,  depends_on_view, dependsOnList);
         }
     }
 

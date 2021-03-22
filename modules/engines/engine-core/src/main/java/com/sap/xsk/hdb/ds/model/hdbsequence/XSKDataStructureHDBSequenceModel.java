@@ -9,59 +9,29 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package java.com.sap.xsk.parser.hdbsequence.models;
-
-import com.google.gson.annotations.SerializedName;
+package com.sap.xsk.hdb.ds.model.hdbsequence;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
 import java.util.List;
 
-public class XSKHDBSEQUENCEModel {
+public class XSKDataStructureHDBSequenceModel extends XSKDataStructureModel {
 
-    String schema;
-    Integer increment_by;
-    Integer start_with;
-    Integer maxvalue;
-    Boolean nomaxvalue;
-    Integer minvalue;
-    Boolean nominvalue;
-    Boolean cycles;
-    String reset_by;
+    private Integer increment_by;
+    private Integer start_with;
+    private Integer maxvalue;
+    private Boolean nomaxvalue;
+    private Integer minvalue;
+    private Boolean nominvalue;
+    private Boolean cycles;
+    private String reset_by;
 
-    @SerializedName(value = "public")
-    Boolean publicc;
 
-    String depends_on_table;
-    String depends_on_view;
-    List<String> depends_on;
+    private Boolean publicc;
 
-    public XSKHDBSEQUENCEModel() {
-    }
+    private String depends_on_table;
+    private String depends_on_view;
+    private List<String> depends_on;
 
-    public XSKHDBSEQUENCEModel(String schema, Integer increment_by, Integer start_with, Integer maxvalue,
-                               Boolean nomaxvalue, Integer minvalue, Boolean nominvalue, Boolean cycles, String reset_by,
-                               Boolean publicc, String depends_on_table, String depends_on_view, List<String> depends_on) {
-        this.schema = schema;
-        this.increment_by = increment_by;
-        this.start_with = start_with;
-        this.maxvalue = maxvalue;
-        this.nomaxvalue = nomaxvalue;
-        this.minvalue = minvalue;
-        this.nominvalue = nominvalue;
-        this.cycles = cycles;
-        this.reset_by = reset_by;
-        this.publicc = publicc;
-        this.depends_on_table = depends_on_table;
-        this.depends_on_view = depends_on_view;
-        this.depends_on = depends_on;
-    }
-
-    public String getSchema() {
-        return schema;
-    }
-
-    public void setSchema(String schema) {
-        this.schema = schema;
-    }
 
     public Integer getIncrement_by() {
         return increment_by;

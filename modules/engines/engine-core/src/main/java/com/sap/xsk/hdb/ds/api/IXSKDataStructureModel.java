@@ -51,6 +51,12 @@ public interface IXSKDataStructureModel {
     public static final String FILE_EXTENSION_HDI = ".hdi";
 
     /**
+     * File extension for *.hdbsequence files
+     */
+    public static final String FILE_EXTENSION_HDBSEQUENCE = ".hdbsequence";
+
+
+    /**
      * File extension for *.hdi files
      */
     public static final String FILE_EXTENSION_SYNONYM = ".hdbsynonym";
@@ -98,5 +104,10 @@ public interface IXSKDataStructureModel {
      * Type hdi
      */
     public static final String TYPE_HDI = "HDI";
+
+    /**
+     * Type hdbsequence
+     */
+    public static final String TYPE_HDB_SEQUENCE = "HDBSEQUENCE";
 
 }

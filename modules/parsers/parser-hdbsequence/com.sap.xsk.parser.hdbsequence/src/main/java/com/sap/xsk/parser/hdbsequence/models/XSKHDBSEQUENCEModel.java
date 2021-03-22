@@ -17,22 +17,22 @@ import java.util.List;
 
 public class XSKHDBSEQUENCEModel {
 
-    String schema;
-    Integer increment_by;
-    Integer start_with;
-    Integer maxvalue;
-    Boolean nomaxvalue;
-    Integer minvalue;
-    Boolean nominvalue;
-    Boolean cycles;
-    String reset_by;
+    private String schema;
+    private Integer increment_by;
+    private Integer start_with;
+    private Integer maxvalue;
+    private Boolean nomaxvalue;
+    private  Integer minvalue;
+    private Boolean nominvalue;
+    private Boolean cycles;
+    private String reset_by;
 
     @SerializedName(value = "public")
-    Boolean publicc;
+    private Boolean publicc;
 
-    String depends_on_table;
-    String depends_on_view;
-    List<String> depends_on;
+    private String depends_on_table;
+    private String depends_on_view;
+    private List<String> depends_on;
 
     public XSKHDBSEQUENCEModel() {
     }

@@ -24,6 +24,7 @@ import com.sap.xsk.parser.hdbsequence.core.HdbsequenceLexer;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser;
 import com.sap.xsk.parser.hdbsequence.custom.CustomDeserializers;
 import com.sap.xsk.parser.hdbsequence.custom.HdbsequenceVisitor;
+import com.sap.xsk.parser.hdbsequence.custom.XSKHDBSEQUENCESyntaxErrorListener;
 import com.sap.xsk.parser.hdbsequence.models.XSKHDBSEQUENCEModel;
 import com.sap.xsk.utils.XSKUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -47,8 +48,19 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
         HdbsequenceLexer lexer = new HdbsequenceLexer(inputStream);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+
         HdbsequenceParser parser = new HdbsequenceParser((tokenStream));
+        parser.setBuildParseTree(true);
+        parser.removeErrorListeners();
+        XSKHDBSEQUENCESyntaxErrorListener errorListener = new XSKHDBSEQUENCESyntaxErrorListener();
+        parser.addErrorListener(errorListener);
+
         ParseTree parseTree = parser.hdbsequence();
+        if (parser.getNumberOfSyntaxErrors() > 0) {
+            throw new XSKDataStructuresException(errorListener.getErrorMessage());
+        }
+
+
         HdbsequenceBaseVisitor<JsonElement> visitor = new HdbsequenceVisitor();
         JsonElement parsedResult = visitor.visit(parseTree);
         Gson gson = new GsonBuilder()

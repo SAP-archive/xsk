@@ -110,4 +110,15 @@ public interface IXSKDataStructureModel {
      */
     public static final String TYPE_HDB_SEQUENCE = "HDBSEQUENCE";
 
+    /**
+     * artifacts int values
+     * needed for Dirigible SqlDialects implementation
+     */
+    public static final int TABLE_ARTIFACT = 1;
+    public static final int VIEW_ARTIFACT= 2;
+    public static final int PROCEDURE_ARTIFACT = 3;
+    public static final int FUNCTION_ARTIFACT = 4;
+    public static final int SEQUENCE_ARTIFACT = 5;
+    public static final int SYNONYM_ARTIFACT = 6;
+
 }

@@ -62,7 +62,7 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
                 .setMatchingStrategy(MatchingStrategies.STRICT);
 
         XSKDataStructureHDBSequenceModel hdbSequenceModel = modelMapper.map(antlr4Model, XSKDataStructureHDBSequenceModel.class);
-        hdbSequenceModel.setName(XSKUtils.getTableName(location));
+        hdbSequenceModel.setName(XSKUtils.getRepositoryBaseObjectName(location));
         hdbSequenceModel.setLocation(location);
         hdbSequenceModel.setType(IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
         hdbSequenceModel.setHash(DigestUtils.md5Hex(content));

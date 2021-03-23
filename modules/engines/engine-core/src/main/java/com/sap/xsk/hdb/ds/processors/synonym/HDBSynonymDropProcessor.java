@@ -13,6 +13,8 @@ package com.sap.xsk.hdb.ds.processors.synonym;
 
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,11 +39,20 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
     @Override
     public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
         logger.info("Processing Drop Synonym: " + synonymModel);
+
+        //TODO: this is a workaround due to issue on AbstractSqlBuilder.encapsulateMany()
+        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
+        String synonymName = synonymModel.getName();
+        String escSynonymSchema = synonymModel.getSynonymSchema();
+        if (caseSensitive) {
+            synonymName = "\"" + synonymName + "\"";
+            if (!escSynonymSchema.isEmpty()) escSynonymSchema = "\"" + escSynonymSchema + "\"" + ".";
+        }
+
         if (SqlFactory.getNative(connection).exists(connection, synonymModel.getName())) {
-            String synonymSchemaName = (synonymModel.getSynonymSchema().isEmpty()) ? "" : (synonymModel.getSynonymSchema() + ".");
-            String sql = SqlFactory.getNative(connection).drop().synonym(synonymSchemaName + synonymModel.getName()).build();
+            String sql = SqlFactory.getNative(connection).drop().synonym(escSynonymSchema + synonymName).build();
             executeSql(sql, connection);
-        }else{
+        } else {
             logger.warn(format("Synonym [{0}] does not exists during the drop process", synonymModel.getName()));
         }
     }

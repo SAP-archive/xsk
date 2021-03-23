@@ -87,9 +87,6 @@ public class XSKTableParser implements XSKDataStructureParser {
         Gson gson = new Gson();
 
         XSKHDBTABLEDefinitionModel hdbtableDefinitionModel = gson.fromJson(xskhdbtableCoreVisitor.getHdbtableDefinitionObject(), XSKHDBTABLEDefinitionModel.class);
-//        XSKHDBTABLEColumnsModel hdbtableColumnsModel = gson.fromJson(xskhdbtableCoreVisitor.getColumnsObject(), XSKHDBTABLEColumnsModel.class);
-//        XSKHDBTABLEIndexesModel hdbtableIndexesModel = gson.fromJson(xskhdbtableCoreVisitor.getIndexesObject(), XSKHDBTABLEIndexesModel.class);
-
 
         ModelMapper modelMapper = new ModelMapper();
 
@@ -100,13 +97,16 @@ public class XSKTableParser implements XSKDataStructureParser {
 
         XSKDataStructureHDBTableModel dataStructureHDBTableModel = modelMapper.map(hdbtableDefinitionModel, XSKDataStructureHDBTableModel.class);
 
-        dataStructureHDBTableModel.setName(XSKUtils.getTableName(location));
+        //TODO
+        //Not implemented: foreignKeys,primaryKey,indices,schema name
+
+        dataStructureHDBTableModel.setName(XSKUtils.getRepositoryBaseObjectName(location));
         dataStructureHDBTableModel.setLocation(location);
         dataStructureHDBTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
         dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
         dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
         dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-
+        
         return dataStructureHDBTableModel;
     }
 }

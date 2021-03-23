@@ -18,7 +18,7 @@ public class XSKDataStructureHDBTableColumnModel {
 
 	private String name;
 	
-	private String type;
+	private String sqlType;
 	
 	private String length;
 	
@@ -64,7 +64,7 @@ public class XSKDataStructureHDBTableColumnModel {
 			String precision, String scale, boolean unique) {
 		super();
 		this.name = name;
-		this.type = type;
+		this.sqlType = type;
 		this.length = length;
 		this.nullable = nullable;
 		this.primaryKey = primaryKey;
@@ -98,16 +98,16 @@ public class XSKDataStructureHDBTableColumnModel {
 	 * @return the type
 	 */
 	public String getType() {
-		return type;
+		return sqlType;
 	}
 
 	/**
 	 * Setter for the type.
 	 *
-	 * @param type            the type
+	 * @param sqlType            the type
 	 */
-	public void setType(String type) {
-		this.type = type;
+	public void setType(String sqlType) {
+		this.sqlType = sqlType;
 	}
 
 	/**

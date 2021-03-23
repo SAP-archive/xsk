@@ -13,7 +13,7 @@ package com.sap.xsk.parser.hdbtable.model;
 
 public class XSKHDBTABLEColumnsModel {
     private String name;
-    private String type;
+    private String sqlType;
     private boolean nullable;
     private int length;
     private String comment;
@@ -32,12 +32,12 @@ public class XSKHDBTABLEColumnsModel {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getSqlType() {
+        return sqlType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSqlType(String sqlType) {
+        this.sqlType = sqlType;
     }
 
     public boolean isNullable() {

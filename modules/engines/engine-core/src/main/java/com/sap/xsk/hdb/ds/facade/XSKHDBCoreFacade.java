@@ -18,19 +18,17 @@ import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
-import com.sap.xsk.utils.XSKUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
@@ -101,13 +99,15 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         Map<String, XSKDataStructureModel> dataStructureProceduresModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_PROCEDURE).getDataStructureModels();
         Map<String, XSKDataStructureModel> dataStructureTableFunctionsModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION).getDataStructureModels();
         Map<String, XSKDataStructureModel> dataStructureSchemasModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SCHEMA).getDataStructureModels();
+        Map<String, XSKDataStructureModel> dataStructureSynonymModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SYNONYM).getDataStructureModels();
 
         if (dataStructureEntitiesModel.isEmpty()
                 && dataStructureTablesModel.isEmpty()
                 && dataStructureViewsModel.isEmpty()
                 && dataStructureProceduresModel.isEmpty()
                 && dataStructureTableFunctionsModel.isEmpty()
-                && dataStructureSchemasModel.isEmpty()) {
+                && dataStructureSchemasModel.isEmpty()
+                && dataStructureSynonymModel.isEmpty()) {
             logger.trace("No XSK Data Structures to update.");
             return;
         }
@@ -129,6 +129,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                 sorted.addAll(dataStructureProceduresModel.keySet());
                 sorted.addAll(dataStructureTableFunctionsModel.keySet());
                 sorted.addAll(dataStructureSchemasModel.keySet());
+                sorted.addAll(dataStructureSynonymModel.keySet());
 
                 boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
                 if (!hdiOnly) {
@@ -216,6 +217,21 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                         }
                     }
 
+                    // drop Synonym in a reverse order
+                    IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
+                    for (int i = sorted.size() - 1; i >= 0; i--) {
+                        String dsName = sorted.get(i);
+                        XSKDataStructureHDBSynonymModel model = (XSKDataStructureHDBSynonymModel) dataStructureSynonymModel.get(dsName);
+                        try {
+                            if (model != null) {
+                                xskSynonymManagerService.dropDataStructure(connection, model);
+                            }
+                        } catch (Exception e) {
+                            logger.error(e.getMessage(), e);
+                            errors.add(e.getMessage());
+                        }
+                    }
+
                     // drop HDB Schemas
                     List<XSKDataStructureHDBSchemaModel> hdbSchemasToUpdate = new ArrayList<>();
                     for (int i = sorted.size() - 1; i >= 0; i--) {
@@ -273,6 +289,23 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                                     xskViewManagerService.createDataStructure(connection, model);
                                 } else {
                                     logger.warn(format("View [{0}] already exists during the update process", dsName));
+                                }
+                            }
+                        } catch (Exception e) {
+                            logger.error(e.getMessage(), e);
+                            errors.add(e.getMessage());
+                        }
+                    }
+
+                    // process Synonym in the proper order
+                    for (String dsName : sorted) {
+                        XSKDataStructureHDBSynonymModel model = (XSKDataStructureHDBSynonymModel) dataStructureSynonymModel.get(dsName);
+                        try {
+                            if (model != null) {
+                                if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
+                                    xskSynonymManagerService.createDataStructure(connection, model);
+                                } else {
+                                    logger.warn(format("Synonym [{0}] already exists during the update process", dsName));
                                 }
                             }
                         } catch (Exception e) {

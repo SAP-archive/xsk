@@ -19,11 +19,10 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
-import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.module.StaticInjector;
@@ -35,10 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,11 +63,15 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
             .synchronizedMap(new HashMap<>());
     private static final Map<String, XSKDataStructureHDBSchemaModel> SCHEMAS_PREDELIVERED = Collections
             .synchronizedMap(new HashMap<>());
+    private static final Map<String, XSKDataStructureHDBSynonymModel> SYNONYMS_PREDELIVERED = Collections
+            .synchronizedMap(new HashMap<>());
 
-    @Inject @Named("xskCoreParserService")
+    @Inject
+    @Named("xskCoreParserService")
     private IXSKCoreParserService xskCoreParserService;
 
-    @Inject @Named("xskHDBCoreFacade")
+    @Inject
+    @Named("xskHDBCoreFacade")
     private IXSKHDBCoreFacade xskHDBCoreFacade;
 
     private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
@@ -119,6 +120,18 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
         String data = loadResourceContent(contentPath);
         XSKDataStructureHDBViewModel model = (XSKDataStructureHDBViewModel) xskCoreParserService.parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_VIEW, contentPath, data);
         VIEWS_PREDELIVERED.put(contentPath, model);
+    }
+
+    /**
+     * Register predelivered view files.
+     *
+     * @param contentPath the data path
+     * @throws Exception
+     */
+    public void registerPredeliveredSynonym(String contentPath) throws Exception {
+        String data = loadResourceContent(contentPath);
+        XSKDataStructureHDBSynonymModel model = (XSKDataStructureHDBSynonymModel) xskCoreParserService.parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM, contentPath, data);
+        SYNONYMS_PREDELIVERED.put(contentPath, model);
     }
 
     /**
@@ -196,6 +209,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
                 int immutableProceduresCount = PROCEDURES_PREDELIVERED.size();
                 int immutableFunctionsCount = TABLEFUNCTIONS_PREDELIVERED.size();
                 int immutableSchemasCount = SCHEMAS_PREDELIVERED.size();
+                int immutableSynonymsCount = SYNONYMS_PREDELIVERED.size();
 
 //				int mutableEntitiesCount = ENTITIES_SYNCHRONIZED.size();
 //				int mutableTablesCount = TABLES_SYNCHRONIZED.size();
@@ -209,9 +223,9 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
                 clearCache();
 
                 successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: [Entities: {0}, Tables: {1}, Views: {2}, Procedures: {3}, Functions: {4}, Schemas: {5}, HDI: {6}], "
-                                + "Mutable: [Entities: {7}, Tables: {8}, Views: {9}, Procedures: {10}, Functions: {11}, Schemas: {12}, HDI: {13}]",
+                                + "Mutable: [Entities: {7}, Tables: {8}, Views: {9}, Procedures: {10}, Functions: {11}, Schemas: {12}, HDI: {13}, Syninyms: {13}]",
                         immutableEntitiesCount, immutableTablesCount, immutableViewsCount, immutableProceduresCount, immutableFunctionsCount, immutableSchemasCount));
-//						mutableEntitiesCount, mutableTablesCount, mutableViewsCount, mutableProceduresCount, mutableFunctionsCount, mutableSchemasCount, mutableHDICount));
+//						mutableEntitiesCount, mutableTablesCount, mutableViewsCount, mutableProceduresCount, mutableFunctionsCount, mutableSchemasCount, mutableHDICount, immutableSynonymsCount));
             } catch (Exception e) {
                 logger.error("Synchronizing process for Data Structures failed.", e);
                 try {
@@ -305,6 +319,17 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
             }
         }
         logger.trace("Done synchronizing predelivered HDB Table Function.");
+
+        // Synonyms
+        logger.trace("Synchronizing predelivered Synonyms...");
+        for (XSKDataStructureHDBSynonymModel synonym : SYNONYMS_PREDELIVERED.values()) {
+            try {
+                xskHDBCoreFacade.handleResourceSynchronization(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM, synonym);
+            } catch (Exception e) {
+                logger.error(format("Update synonyms [{0}] skipped due to an error: {1}", synonym, e.getMessage()), e);
+            }
+        }
+        logger.trace("Done synchronizing predelivered Synonyms.");
 
         logger.trace("Done synchronizing predelivered XSK Data Structures.");
     }

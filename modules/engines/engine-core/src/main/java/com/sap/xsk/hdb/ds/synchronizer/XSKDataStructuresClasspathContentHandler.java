@@ -109,6 +109,16 @@ public class XSKDataStructuresClasspathContentHandler extends AbstractClasspathC
 					logger.error("Predelivered hdbschema artifact is not valid");
 		        	logger.error(e.getMessage());
 				}
+
+				try {
+					if (path.endsWith(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM)) {
+						dataStructuresSynchronizer.registerPredeliveredSynonym(path);
+						return true;
+					}
+				} catch (XSKDataStructuresException e) {
+					logger.error("Predelivered hdbsynonym artifact is not valid");
+					logger.error(e.getMessage());
+				}
             }
         } catch (Exception e) {
             logger.error("Predelivered Artifact is not valid", e);

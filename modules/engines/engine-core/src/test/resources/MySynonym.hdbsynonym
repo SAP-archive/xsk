@@ -1,11 +1,11 @@
 // we have some comment heree....
 /*we have some comment heree....*/
 {
-  "kneo.test.db::Test.dvMySynonym1": {
+  "hdb_view::MySynonym": {
     "schema": "TONI",
     "target": {
-        "object": "DUMMY",
-        "schema": "SYS"
+       "schema": "PUBLIC",
+      "object": "hdb_view::Order"
     }
   }
 }

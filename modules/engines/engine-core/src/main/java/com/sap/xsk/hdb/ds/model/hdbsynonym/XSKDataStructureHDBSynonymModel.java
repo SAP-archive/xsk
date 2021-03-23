@@ -9,21 +9,17 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.parser.hdbsynonym.models;
+package com.sap.xsk.hdb.ds.model.hdbsynonym;
 
-public class XSKHDBSYNONYMDefinitionModel {
-    private String location;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+
+/**
+ * The synonym model representation.
+ */
+public class XSKDataStructureHDBSynonymModel extends XSKDataStructureModel {
     private String targetObject;
     private String targetSchema;
     private String synonymSchema;
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
     public String getTargetObject() {
         return targetObject;
@@ -47,15 +43,5 @@ public class XSKHDBSYNONYMDefinitionModel {
 
     public void setSynonymSchema(String synonymSchema) {
         this.synonymSchema = synonymSchema;
-    }
-
-    @Override
-    public String toString() {
-        return "XSKHDBSYNONYMDefinitionModel{" +
-                "location='" + location + '\'' +
-                ", targetObject='" + targetObject + '\'' +
-                ", targetSchema='" + targetSchema + '\'' +
-                ", synonymSchema='" + synonymSchema + '\'' +
-                '}';
     }
 }

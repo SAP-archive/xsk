@@ -12,8 +12,10 @@
 package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
 
+import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKConstants;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.slf4j.Logger;
@@ -35,6 +37,14 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
         }
         logger.info("Processing Update HdbSequence: " + hdbSequenceName);
 
+        String sql =  (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
+                                ? getHanav1SQL(hdbSequenceModel, hdbSequenceName)
+                                : XSKConstants.XSK_HDBSEQUENCE_ALTER + hdbSequenceModel.getRawContent();
+        executeSql(sql, connection);
+
+    }
+
+    private String getHanav1SQL(XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName){
         Integer  startWith = hdbSequenceModel.getStart_with();
         Integer incrementBy = hdbSequenceModel.getIncrement_by();
         Integer maxvalue = hdbSequenceModel.getMaxvalue();
@@ -56,7 +66,7 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
         String sql = new StringBuilder()
                 .append("ALTER SEQUENCE")
                 .append(" ")
-                .append(hdbSequenceName)
+                .append(modifiedSequenceName)
                 .append(" ")
                 .append((startWith!=null) ? String.format("RESTART WITH %s", startWith) :"")
                 .append(" ")
@@ -65,7 +75,7 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
                 .append((resetBy!=null) ? String.format("RESET BY %s", resetBy) :"")
                 .append(";")
                 .toString();
-        executeSql(sql, connection);
 
+        return sql;
     }
 }

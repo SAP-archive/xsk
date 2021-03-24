@@ -11,8 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
+import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKConstants;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -35,15 +37,21 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
         }
         logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
         if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName)){
-            String sql = new StringBuilder()
-                    .append("DROP SEQUENCE")
-                    .append(" ")
-                    .append(hdbSequenceName)
-                    .append(" ")
-                    .append("RESTRICT")
-                    .append(";")
-                    .toString();
+            String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
+                                ? getHanav1SQL(hdbSequenceName)
+                                : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
             executeSql(sql, connection);
         }
+    }
+
+    private String getHanav1SQL(String modifiedSequenceName){
+        return new StringBuilder()
+                .append("DROP SEQUENCE")
+                .append(" ")
+                .append(modifiedSequenceName)
+                .append(" ")
+                .append("RESTRICT")
+                .append(";")
+                .toString();
     }
 }

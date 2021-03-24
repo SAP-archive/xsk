@@ -20,7 +20,6 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceBaseVisitor;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceLexer;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser;

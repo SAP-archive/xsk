@@ -25,6 +25,8 @@ import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKHDBSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
+import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
+import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;

@@ -19,12 +19,14 @@ public class HdbsequenceParser extends Parser {
 	public static final int
 		T__13=1, T__12=2, T__11=3, T__10=4, T__9=5, T__8=6, T__7=7, T__6=8, T__5=9, 
 		T__4=10, T__3=11, T__2=12, T__1=13, T__0=14, STRING=15, INT=16, BOOLEAN=17, 
-		TRUE=18, FALSE=19, WS=20, LB=21, RB=22, EQ=23, SC=24, SIGNED_INT=25;
+		TRUE=18, FALSE=19, WS=20, LB=21, RB=22, EQ=23, SC=24, SIGNED_INT=25, LINE_COMMENT=26, 
+		COMMENT=27;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'nominvalue'", "'depends_on_table'", "'depends_on'", "'depends_on_view'", 
 		"'public'", "'reset_by'", "'schema'", "'start_with'", "'cycles'", "'maxvalue'", 
 		"','", "'increment_by'", "'nomaxvalue'", "'minvalue'", "STRING", "INT", 
-		"BOOLEAN", "'true'", "'false'", "WS", "'['", "']'", "'='", "';'", "'-'"
+		"BOOLEAN", "'true'", "'false'", "WS", "'['", "']'", "'='", "';'", "'-'", 
+		"LINE_COMMENT", "COMMENT"
 	};
 	public static final int
 		RULE_hdbsequence = 0, RULE_schema = 1, RULE_increment_by = 2, RULE_start_with = 3, 
@@ -868,7 +870,7 @@ public class HdbsequenceParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\33\u008a\4\2\t\2"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\35\u008a\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\3\2\3\2\3\2\3\2\5"+
 		"\2%\n\2\3\2\3\2\5\2)\n\2\3\2\3\2\5\2-\n\2\3\2\5\2\60\n\2\3\2\3\2\5\2\64"+

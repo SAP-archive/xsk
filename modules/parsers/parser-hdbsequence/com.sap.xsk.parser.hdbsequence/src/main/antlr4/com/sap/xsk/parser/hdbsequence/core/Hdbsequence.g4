@@ -43,6 +43,8 @@ RB: ']';
 EQ: '=';
 SC: ';';
 SIGNED_INT: '-';
+LINE_COMMENT : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
+COMMENT : '/*' .*? '*/' -> skip ; // Match "/*" stuff "*/"
 
 fragment EscapeSequence
     : '\\' [btnfr"'\\]

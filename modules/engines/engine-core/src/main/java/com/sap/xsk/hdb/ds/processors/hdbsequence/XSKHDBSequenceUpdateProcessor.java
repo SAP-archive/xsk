@@ -38,13 +38,13 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
         logger.info("Processing Update HdbSequence: " + hdbSequenceName);
 
         String sql =  (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
-                                ? getHanav1SQL(hdbSequenceModel, hdbSequenceName)
+                                ? getHanav1ModelSQL(hdbSequenceModel, hdbSequenceName)
                                 : XSKConstants.XSK_HDBSEQUENCE_ALTER + hdbSequenceModel.getRawContent();
         executeSql(sql, connection);
 
     }
 
-    private String getHanav1SQL(XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName){
+    private String getHanav1ModelSQL(XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName){
         Integer  startWith = hdbSequenceModel.getStart_with();
         Integer incrementBy = hdbSequenceModel.getIncrement_by();
         Integer maxvalue = hdbSequenceModel.getMaxvalue();

@@ -17,7 +17,6 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,15 +34,15 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
             hdbSequenceName = "\"" + hdbSequenceName + "\"";
         }
         logger.info("Processing Create HdbSequence: " + hdbSequenceName);
-        if (!SqlFactory.getNative(connection).exists(connection, hdbSequenceName)) {
-            String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
-                                ? getHanav1SQL(hdbSequenceModel,hdbSequenceName)
-                                : XSKConstants.XSK_HDBSEQUENCE_CREATE + hdbSequenceModel.getRawContent();
-            executeSql(sql, connection);
-        }
+
+        String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
+                            ? getHanav1ModelSQL(hdbSequenceModel,hdbSequenceName)
+                            : XSKConstants.XSK_HDBSEQUENCE_CREATE + hdbSequenceModel.getRawContent();
+        executeSql(sql, connection);
+
     }
 
-    private String getHanav1SQL(XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName){
+    private String getHanav1ModelSQL(XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName){
         Integer  startWith = hdbSequenceModel.getStart_with();
         Integer incrementBy = hdbSequenceModel.getIncrement_by();
         Integer maxvalue = hdbSequenceModel.getMaxvalue();

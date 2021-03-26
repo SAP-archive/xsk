@@ -26,9 +26,9 @@ public final class XSKConstants {
     public static final String XSK_HDBVIEW_DROP = "DROP VIEW ";
 
     public static final String XSK_HDBSEQUENCE_SYNTAX = "SEQUENCE ";
-    public static final String XSK_HDBSEQUENCE_CREATE = "CREATE SEQUENCE ";
-    public static final String XSK_HDBSEQUENCE_ALTER = "ALTER SEQUENCE ";
-    public static final String XSK_HDBSEQUENCE_DROP = "DROP SEQUENCE ";
+    public static final String XSK_HDBSEQUENCE_CREATE = "CREATE ";
+    public static final String XSK_HDBSEQUENCE_ALTER = "ALTER ";
+    public static final String XSK_HDBSEQUENCE_DROP = "DROP  ";
 
 
     /**

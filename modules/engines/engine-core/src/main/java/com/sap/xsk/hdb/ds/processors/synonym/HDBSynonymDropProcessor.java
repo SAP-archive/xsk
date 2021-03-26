@@ -49,11 +49,12 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
             if (!escSynonymSchema.isEmpty()) escSynonymSchema = "\"" + escSynonymSchema + "\"" + ".";
         }
 
-        if (SqlFactory.getNative(connection).exists(connection, synonymModel.getName())) {
+        //TODO: will uncomment when the bug for issue on AbstractSqlBuilder.encapsulateMany() is fixed
+        //if (SqlFactory.getNative(connection).exists(connection, synonymName)) {
             String sql = SqlFactory.getNative(connection).drop().synonym(escSynonymSchema + synonymName).build();
             executeSql(sql, connection);
-        } else {
-            logger.warn(format("Synonym [{0}] does not exists during the drop process", synonymModel.getName()));
-        }
+        //} else {
+           // logger.warn(format("Synonym [{0}] does not exists during the drop process", synonymName));
+        //}
     }
 }

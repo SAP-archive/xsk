@@ -40,21 +40,21 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
     @Override
     public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
         logger.info("Processing Create Synonym: " + synonymModel);
+
+        //TODO: this is a workaround due to issue on AbstractSqlBuilder.encapsulateMany()
+        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
+        String synonymName = synonymModel.getName();
+        String targetObjectName = synonymModel.getTargetObject();
+        String escSynonymSchema = synonymModel.getSynonymSchema();
+        String escTargetSchema = synonymModel.getTargetSchema();
+        if (caseSensitive) {
+            synonymName = "\"" + synonymName + "\"";
+            targetObjectName = "\"" + targetObjectName + "\"";
+            if (!escSynonymSchema.isEmpty()) escSynonymSchema = "\"" + escSynonymSchema + "\"" + ".";
+            if (!escTargetSchema.isEmpty()) escTargetSchema = "\"" + escTargetSchema + "\"" + ".";
+        }
+
         if (!SqlFactory.getNative(connection).exists(connection, synonymModel.getName())) {
-
-            //TODO: this is a workaround due to issue on AbstractSqlBuilder.encapsulateMany()
-            boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-            String synonymName = synonymModel.getName();
-            String targetObjectName = synonymModel.getTargetObject();
-            String escSynonymSchema = synonymModel.getSynonymSchema();
-            String escTargetSchema = synonymModel.getTargetSchema();
-            if (caseSensitive) {
-                synonymName = "\"" + synonymName + "\"";
-                targetObjectName = "\"" + targetObjectName + "\"";
-                if (!escSynonymSchema.isEmpty()) escSynonymSchema = "\"" + escSynonymSchema + "\""+ ".";
-                if (!escTargetSchema.isEmpty()) escTargetSchema = "\"" + escTargetSchema + "\""+ ".";
-            }
-
             String sql = SqlFactory.getNative(connection).create().synonym(escSynonymSchema + synonymName).forSource(escTargetSchema + targetObjectName).build();
             executeSql(sql, connection);
         } else {

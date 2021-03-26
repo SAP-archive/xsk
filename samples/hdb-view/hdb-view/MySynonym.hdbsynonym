@@ -1,7 +1,7 @@
 {
-  "hdb_view::MySynonym": {
+  "hdb-view::MySynonym": {
     "target": {
-      "object": "hdb_view::Order",
+      "object": "hdb-view::Order",
       "schema": "PUBLIC"
     },
     "schema": "PUBLIC"

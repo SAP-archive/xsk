@@ -24,6 +24,9 @@ import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
 import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKHDBSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
+import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
+import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
+import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
@@ -35,6 +38,9 @@ import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureDropProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaDropProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceDropProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceUpdateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionDropProcessor;
 import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
@@ -48,6 +54,8 @@ import com.sap.xsk.hdb.ds.service.manager.*;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+
+import javax.ws.rs.HEAD;
 
 
 public class XSKHDBModule extends AbstractDirigibleModule {
@@ -75,6 +83,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SCHEMA).to(IXSKSchemaManagerService.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_PROCEDURE).to(IXSKProceduresManagerService.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SYNONYM).to(IXSKSynonymManagerService.class).asEagerSingleton();
+        mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SEQUENCE).to(IXSKHDBSequenceManagerService.class).asEagerSingleton();
     }
 
     private void bindParsersToFileExtension() {
@@ -88,6 +97,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
         mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION).to(XSKHDBTableFunctionParser.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA).to(XSKHDBSchemaParser.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE).to(XSKHDBProcedureParser.class).asEagerSingleton();
+        mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBSEQUENCE).to(XSKHDBSequenceParser.class).asEagerSingleton();
 
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_ENTITIES).to(XSKEntitiesParser.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_TABLE).to(XSKTableParser.class).asEagerSingleton();
@@ -96,6 +106,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION).to(XSKHDBTableFunctionParser.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SCHEMA).to(XSKHDBSchemaParser.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_PROCEDURE).to(XSKHDBProcedureParser.class).asEagerSingleton();
+        mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SEQUENCE).to(XSKHDBSequenceParser.class).asEagerSingleton();
         mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDI).to(XSKHDIParser.class).asEagerSingleton();
     }
 
@@ -125,9 +136,16 @@ public class XSKHDBModule extends AbstractDirigibleModule {
         bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskViewCreateProcessor")).to(XSKViewCreateProcessor.class).in(Scopes.SINGLETON);
         bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskViewDropProcessor")).to(XSKViewDropProcessor.class).in(Scopes.SINGLETON);
 
+
         // Hdb synonym processors instantiation
         bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskSynonymCreateProcessor")).to(HDBSynonymCreateProcessor.class).in(Scopes.SINGLETON);
         bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskSynonymDropProcessor")).to(HDBSynonymDropProcessor.class).in(Scopes.SINGLETON);
+
+        // Hdb sequence processors instantiation
+        bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskHdbSequenceUpdateProcessor")).to(XSKHDBSequenceUpdateProcessor.class).in(Scopes.SINGLETON);
+        bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskHdbSequenceDropProcessor")).to(XSKHDBSequenceDropProcessor.class).in(Scopes.SINGLETON);
+        bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskHdbSequenceCreateProcessor")).to(XSKHDBSequenceCreateProcessor.class).in(Scopes.SINGLETON);
+
     }
 
     @Override

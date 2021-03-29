@@ -45,5 +45,10 @@
 			<artifactId>xsk-modules-parsers-hdbsynonym</artifactId>
 			<version>0.2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sap.xsk</groupId>
+			<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
+			<version>0.2.0</version>
+		</dependency>
 	</dependencies>
 </project>

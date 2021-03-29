@@ -14,12 +14,12 @@ package com.sap.xsk.hdb.ds.parser.hdbtable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.*;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
 import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLECoreVisitor;
@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 
 import javax.print.attribute.standard.Destination;
@@ -88,17 +87,22 @@ public class XSKTableParser implements XSKDataStructureParser {
 
         XSKHDBTABLEDefinitionModel hdbtableDefinitionModel = gson.fromJson(xskhdbtableCoreVisitor.getHdbtableDefinitionObject(), XSKHDBTABLEDefinitionModel.class);
 
-        ModelMapper modelMapper = new ModelMapper();
+        XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
 
-        modelMapper.getConfiguration()
-                .setFieldMatchingEnabled(true)
-                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
-                .setMatchingStrategy(MatchingStrategies.STRICT);
-
-        XSKDataStructureHDBTableModel dataStructureHDBTableModel = modelMapper.map(hdbtableDefinitionModel, XSKDataStructureHDBTableModel.class);
-
-        //TODO
-        //Not implemented: foreignKeys,primaryKey,indices,schema name
+        List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
+        for( XSKHDBTABLEColumnsModel column : hdbtableDefinitionModel.getColumns()) {
+            XSKDataStructureHDBTableColumnModel dataStructureHDBTableColumnModel = new XSKDataStructureHDBTableColumnModel();
+            dataStructureHDBTableColumnModel.setLength(column.getLength());
+            dataStructureHDBTableColumnModel.setName(column.getName());
+            dataStructureHDBTableColumnModel.setType(column.getSqlType());
+            dataStructureHDBTableColumnModel.setComment(column.getComment());
+            dataStructureHDBTableColumnModel.setNullable(column.isNullable());
+            dataStructureHDBTableColumnModel.setDefaultValue(column.getDefaultValue());
+            dataStructureHDBTableColumnModel.setPrecision(column.getPrecision());
+            dataStructureHDBTableColumnModel.setScale(column.getScale());
+            dataStructureHDBTableColumnModel.setUnique(column.isUnique());
+            columns.add(dataStructureHDBTableColumnModel);
+        }
 
         dataStructureHDBTableModel.setName(XSKUtils.getRepositoryBaseObjectName(location));
         dataStructureHDBTableModel.setLocation(location);
@@ -106,7 +110,32 @@ public class XSKTableParser implements XSKDataStructureParser {
         dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
         dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
         dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-        
+        dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName());
+        dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription());
+        dataStructureHDBTableModel.setLoggingType(hdbtableDefinitionModel.getLoggingType());
+        dataStructureHDBTableModel.setPublicProp(hdbtableDefinitionModel.getPublicProp());
+        dataStructureHDBTableModel.setTemporary(hdbtableDefinitionModel.getTemporary());
+        dataStructureHDBTableModel.setTableType(hdbtableDefinitionModel.getTableType());
+
+        dataStructureHDBTableModel.setColumns(columns);
+        dataStructureHDBTableModel.setConstraints(new XSKDataStructureHDBTableConstraintsModel());
+
+        XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
+        primaryKey.setColumns(hdbtableDefinitionModel.getPkcolumns().toArray(String[]::new));
+        primaryKey.setName("PK_"+ dataStructureHDBTableModel.getName());
+        dataStructureHDBTableModel.getConstraints().setPrimaryKey(primaryKey);
+
+
+        List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndices = new ArrayList<>();
+
+        for(XSKHDBTABLEIndexesModel index : hdbtableDefinitionModel.getIndexes()){
+            XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex = new XSKDataStructureHDBTableConstraintUniqueModel();
+            uniqueIndex.setName(index.getIndexName());
+            uniqueIndex.setColumns(index.getIndexColumns().toArray(String[]::new));
+            uniqueIndices.add(uniqueIndex);
+        }
+        dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
+
         return dataStructureHDBTableModel;
     }
 }

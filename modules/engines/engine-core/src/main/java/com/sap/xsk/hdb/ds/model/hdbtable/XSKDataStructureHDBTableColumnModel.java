@@ -36,9 +36,6 @@ public class XSKDataStructureHDBTableColumnModel {
 
 	private String comment;
 
-	//private int length;
-	//private int precision;
-	//private int scale;
 
 	/**
 	 * The default constructor.
@@ -236,11 +233,11 @@ public class XSKDataStructureHDBTableColumnModel {
 		this.unique = unique;
 	}
 
-
-	public String getComment() {
-		return comment;
-	}
-
+	/**
+	 * Setter for the unique.
+	 *
+	 * @param comment            the comment value
+	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}

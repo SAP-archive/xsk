@@ -47,6 +47,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 	 * @throws SQLException the SQL exception
 	 */
 	public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = tableModel.getName();
 		if (caseSensitive) {
@@ -83,7 +84,9 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 			}
 			if (defaultValue != null) {
 				if ("".equals(defaultValue)) {
-					if ((type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR))) {
+					if ((type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR) || type.equals(DataType.NVARCHAR)
+							|| columnModel.getType().equalsIgnoreCase("ALPHANUM")
+							|| columnModel.getType().equalsIgnoreCase("SHORTTEXT"))) {
 						args += " DEFAULT '" + defaultValue + "' ";
 					}
 				} else {

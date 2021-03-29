@@ -39,19 +39,19 @@ public class HdbtableParser extends Parser {
 		RULE_tablePrimaryKeyColumnsProp = 9, RULE_tablePrimaryKeyIndexTypeProp = 10, 
 		RULE_descriptionProp = 11, RULE_columnsObject = 12, RULE_indexesObject = 13, 
 		RULE_columnAssignName = 14, RULE_columnAssignSQLType = 15, RULE_columnAssignNullable = 16, 
-		RULE_columnAssignLength = 17, RULE_columnAssignComment = 18, RULE_columnAssignDefaultValue = 19, 
-		RULE_columnAssignPrecision = 20, RULE_columnAssignScale = 21, RULE_indexAssignName = 22, 
-		RULE_indexAssignUnique = 23, RULE_indexAssignOrder = 24, RULE_indexAssignIndexColumns = 25, 
-		RULE_indexAssignIndexType = 26, RULE_indexColumnsArray = 27;
+		RULE_columnAssignUnique = 17, RULE_columnAssignLength = 18, RULE_columnAssignComment = 19, 
+		RULE_columnAssignDefaultValue = 20, RULE_columnAssignPrecision = 21, RULE_columnAssignScale = 22, 
+		RULE_indexAssignName = 23, RULE_indexAssignUnique = 24, RULE_indexAssignOrder = 25, 
+		RULE_indexAssignIndexColumns = 26, RULE_indexAssignIndexType = 27, RULE_indexColumnsArray = 28;
 	public static final String[] ruleNames = {
 		"hdbtableDefinition", "schemaNameProp", "temporaryProp", "tableTypeProp", 
 		"publicProp", "loggingTypeProp", "tableColumnsProp", "tableIndexesProp", 
 		"tablePrimaryKeyProp", "tablePrimaryKeyColumnsProp", "tablePrimaryKeyIndexTypeProp", 
 		"descriptionProp", "columnsObject", "indexesObject", "columnAssignName", 
-		"columnAssignSQLType", "columnAssignNullable", "columnAssignLength", "columnAssignComment", 
-		"columnAssignDefaultValue", "columnAssignPrecision", "columnAssignScale", 
-		"indexAssignName", "indexAssignUnique", "indexAssignOrder", "indexAssignIndexColumns", 
-		"indexAssignIndexType", "indexColumnsArray"
+		"columnAssignSQLType", "columnAssignNullable", "columnAssignUnique", "columnAssignLength", 
+		"columnAssignComment", "columnAssignDefaultValue", "columnAssignPrecision", 
+		"columnAssignScale", "indexAssignName", "indexAssignUnique", "indexAssignOrder", 
+		"indexAssignIndexColumns", "indexAssignIndexType", "indexColumnsArray"
 	};
 
 	@Override
@@ -130,69 +130,69 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(56); schemaNameProp();
-			setState(58);
+			setState(58); schemaNameProp();
+			setState(60);
 			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 			case 1:
 				{
-				setState(57); temporaryProp();
+				setState(59); temporaryProp();
 				}
 				break;
 			}
-			setState(61);
+			setState(63);
 			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 			case 1:
 				{
-				setState(60); tableTypeProp();
+				setState(62); tableTypeProp();
 				}
 				break;
 			}
-			setState(64);
+			setState(66);
 			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
 				{
-				setState(63); publicProp();
+				setState(65); publicProp();
 				}
 				break;
 			}
-			setState(67);
+			setState(69);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				{
-				setState(66); loggingTypeProp();
+				setState(68); loggingTypeProp();
 				}
 				break;
 			}
-			setState(69); tableColumnsProp();
-			setState(71);
+			setState(71); tableColumnsProp();
+			setState(73);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				{
-				setState(70); tableIndexesProp();
+				setState(72); tableIndexesProp();
 				}
 				break;
 			}
-			setState(74);
+			setState(76);
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				{
-				setState(73); tablePrimaryKeyProp();
+				setState(75); tablePrimaryKeyProp();
 				}
 				break;
 			}
-			setState(77);
+			setState(79);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
 				{
-				setState(76); tablePrimaryKeyIndexTypeProp();
+				setState(78); tablePrimaryKeyIndexTypeProp();
 				}
 				break;
 			}
-			setState(80);
+			setState(82);
 			_la = _input.LA(1);
 			if (_la==TABLE) {
 				{
-				setState(79); descriptionProp();
+				setState(81); descriptionProp();
 				}
 			}
 
@@ -240,12 +240,12 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(82); match(TABLE);
-			setState(83); match(DOT);
-			setState(84); match(T__0);
-			setState(85); match(EQ);
-			setState(86); match(STRING);
-			setState(87); match(SEMICOLON);
+			setState(84); match(TABLE);
+			setState(85); match(DOT);
+			setState(86); match(T__0);
+			setState(87); match(EQ);
+			setState(88); match(STRING);
+			setState(89); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -290,12 +290,12 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(89); match(TABLE);
-			setState(90); match(DOT);
-			setState(91); match(T__1);
-			setState(92); match(EQ);
-			setState(93); match(BOOLEAN);
-			setState(94); match(SEMICOLON);
+			setState(91); match(TABLE);
+			setState(92); match(DOT);
+			setState(93); match(T__1);
+			setState(94); match(EQ);
+			setState(95); match(BOOLEAN);
+			setState(96); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -340,12 +340,12 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(96); match(TABLE);
-			setState(97); match(DOT);
-			setState(98); match(T__21);
-			setState(99); match(EQ);
-			setState(100); match(TABLETYPE);
-			setState(101); match(SEMICOLON);
+			setState(98); match(TABLE);
+			setState(99); match(DOT);
+			setState(100); match(T__21);
+			setState(101); match(EQ);
+			setState(102); match(TABLETYPE);
+			setState(103); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -390,12 +390,12 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(103); match(TABLE);
-			setState(104); match(DOT);
-			setState(105); match(T__3);
-			setState(106); match(EQ);
-			setState(107); match(BOOLEAN);
-			setState(108); match(SEMICOLON);
+			setState(105); match(TABLE);
+			setState(106); match(DOT);
+			setState(107); match(T__3);
+			setState(108); match(EQ);
+			setState(109); match(BOOLEAN);
+			setState(110); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -440,12 +440,12 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(110); match(TABLE);
-			setState(111); match(DOT);
-			setState(112); match(T__26);
-			setState(113); match(EQ);
-			setState(114); match(TABLELOGGINGTYPE);
-			setState(115); match(SEMICOLON);
+			setState(112); match(TABLE);
+			setState(113); match(DOT);
+			setState(114); match(T__26);
+			setState(115); match(EQ);
+			setState(116); match(TABLELOGGINGTYPE);
+			setState(117); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -496,35 +496,35 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(117); match(TABLE);
-			setState(118); match(DOT);
-			setState(119); match(T__8);
-			setState(120); match(EQ);
-			setState(121); match(T__5);
-			setState(130);
+			setState(119); match(TABLE);
+			setState(120); match(DOT);
+			setState(121); match(T__8);
+			setState(122); match(EQ);
+			setState(123); match(T__5);
+			setState(132);
 			_la = _input.LA(1);
 			if (_la==T__20) {
 				{
-				setState(122); columnsObject();
-				setState(127);
+				setState(124); columnsObject();
+				setState(129);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__11) {
 					{
 					{
-					setState(123); match(T__11);
-					setState(124); columnsObject();
+					setState(125); match(T__11);
+					setState(126); columnsObject();
 					}
 					}
-					setState(129);
+					setState(131);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(132); match(T__4);
-			setState(133); match(SEMICOLON);
+			setState(134); match(T__4);
+			setState(135); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -575,28 +575,28 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(135); match(TABLE);
-			setState(136); match(DOT);
-			setState(137); match(T__17);
-			setState(138); match(EQ);
-			setState(139); match(T__5);
-			setState(140); indexesObject();
-			setState(145);
+			setState(137); match(TABLE);
+			setState(138); match(DOT);
+			setState(139); match(T__17);
+			setState(140); match(EQ);
+			setState(141); match(T__5);
+			setState(142); indexesObject();
+			setState(147);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__11) {
 				{
 				{
-				setState(141); match(T__11);
-				setState(142); indexesObject();
+				setState(143); match(T__11);
+				setState(144); indexesObject();
 				}
 				}
-				setState(147);
+				setState(149);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(148); match(T__4);
-			setState(149); match(SEMICOLON);
+			setState(150); match(T__4);
+			setState(151); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -646,14 +646,14 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(151); match(TABLE);
-			setState(152); match(DOT);
-			setState(153); match(T__9);
+			setState(153); match(TABLE);
 			setState(154); match(DOT);
-			setState(155); match(T__15);
-			setState(156); match(EQ);
-			setState(157); tablePrimaryKeyColumnsProp();
-			setState(158); match(SEMICOLON);
+			setState(155); match(T__9);
+			setState(156); match(DOT);
+			setState(157); match(T__15);
+			setState(158); match(EQ);
+			setState(159); tablePrimaryKeyColumnsProp();
+			setState(160); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -698,23 +698,23 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(160); match(T__5);
-			setState(161); match(STRING);
-			setState(166);
+			setState(162); match(T__5);
+			setState(163); match(STRING);
+			setState(168);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__11) {
 				{
 				{
-				setState(162); match(T__11);
-				setState(163); match(STRING);
+				setState(164); match(T__11);
+				setState(165); match(STRING);
 				}
 				}
-				setState(168);
+				setState(170);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(169); match(T__4);
+			setState(171); match(T__4);
 			}
 		}
 		catch (RecognitionException re) {
@@ -762,14 +762,14 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(171); match(TABLE);
-			setState(172); match(DOT);
-			setState(173); match(T__9);
+			setState(173); match(TABLE);
 			setState(174); match(DOT);
-			setState(175); match(T__14);
-			setState(176); match(EQ);
-			setState(177); match(INDEXTYPE);
-			setState(178); match(SEMICOLON);
+			setState(175); match(T__9);
+			setState(176); match(DOT);
+			setState(177); match(T__14);
+			setState(178); match(EQ);
+			setState(179); match(INDEXTYPE);
+			setState(180); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -814,12 +814,12 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(180); match(TABLE);
-			setState(181); match(DOT);
-			setState(182); match(T__12);
-			setState(183); match(EQ);
-			setState(184); match(STRING);
-			setState(185); match(SEMICOLON);
+			setState(182); match(TABLE);
+			setState(183); match(DOT);
+			setState(184); match(T__12);
+			setState(185); match(EQ);
+			setState(186); match(STRING);
+			setState(187); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -855,6 +855,9 @@ public class HdbtableParser extends Parser {
 		public ColumnAssignNullableContext columnAssignNullable() {
 			return getRuleContext(ColumnAssignNullableContext.class,0);
 		}
+		public ColumnAssignUniqueContext columnAssignUnique() {
+			return getRuleContext(ColumnAssignUniqueContext.class,0);
+		}
 		public ColumnAssignCommentContext columnAssignComment() {
 			return getRuleContext(ColumnAssignCommentContext.class,0);
 		}
@@ -884,58 +887,66 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(187); match(T__20);
-			setState(188); columnAssignName();
-			setState(189); columnAssignSQLType();
-			setState(191);
+			setState(189); match(T__20);
+			setState(190); columnAssignName();
+			setState(191); columnAssignSQLType();
+			setState(193);
+			_la = _input.LA(1);
+			if (_la==T__10) {
+				{
+				setState(192); columnAssignUnique();
+				}
+			}
+
+			setState(196);
 			_la = _input.LA(1);
 			if (_la==T__23) {
 				{
-				setState(190); columnAssignLength();
+				setState(195); columnAssignLength();
 				}
 			}
 
-			setState(194);
+			setState(199);
 			_la = _input.LA(1);
 			if (_la==T__16) {
 				{
-				setState(193); columnAssignNullable();
+				setState(198); columnAssignNullable();
 				}
 			}
 
-			setState(197);
+			setState(202);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(196); columnAssignComment();
+				setState(201); columnAssignComment();
 				}
 			}
 
-			setState(200);
+			setState(205);
 			_la = _input.LA(1);
 			if (_la==T__6) {
 				{
-				setState(199); columnAssignDefaultValue();
+				setState(204); columnAssignDefaultValue();
 				}
 			}
 
-			setState(203);
+			setState(208);
 			_la = _input.LA(1);
 			if (_la==T__7) {
 				{
-				setState(202); columnAssignPrecision();
+				setState(207); columnAssignPrecision();
 				}
 			}
 
-			setState(206);
+			setState(211);
 			_la = _input.LA(1);
 			if (_la==T__22) {
 				{
-				setState(205); columnAssignScale();
+				setState(210); columnAssignScale();
 				}
 			}
 
-			setState(208); match(T__18);
+			setState(213); match(T__18);
 			}
 		}
 		catch (RecognitionException re) {
@@ -991,27 +1002,27 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(210); match(T__20);
-			setState(211); indexAssignName();
-			setState(212); indexAssignUnique();
-			setState(214);
+			setState(215); match(T__20);
+			setState(216); indexAssignName();
+			setState(217); indexAssignUnique();
+			setState(219);
 			_la = _input.LA(1);
 			if (_la==T__19) {
 				{
-				setState(213); indexAssignOrder();
+				setState(218); indexAssignOrder();
 				}
 			}
 
-			setState(216); indexAssignIndexColumns();
-			setState(218);
+			setState(221); indexAssignIndexColumns();
+			setState(223);
 			_la = _input.LA(1);
 			if (_la==T__14) {
 				{
-				setState(217); indexAssignIndexType();
+				setState(222); indexAssignIndexType();
 				}
 			}
 
-			setState(220); match(T__18);
+			setState(225); match(T__18);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1054,10 +1065,10 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(222); match(T__24);
-			setState(223); match(EQ);
-			setState(224); match(STRING);
-			setState(225); match(SEMICOLON);
+			setState(227); match(T__24);
+			setState(228); match(EQ);
+			setState(229); match(STRING);
+			setState(230); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1100,10 +1111,10 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(227); match(T__25);
-			setState(228); match(EQ);
-			setState(229); match(SQLTYPES);
-			setState(230); match(SEMICOLON);
+			setState(232); match(T__25);
+			setState(233); match(EQ);
+			setState(234); match(SQLTYPES);
+			setState(235); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1146,10 +1157,56 @@ public class HdbtableParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(232); match(T__16);
-			setState(233); match(EQ);
-			setState(234); match(BOOLEAN);
-			setState(235); match(SEMICOLON);
+			setState(237); match(T__16);
+			setState(238); match(EQ);
+			setState(239); match(BOOLEAN);
+			setState(240); match(SEMICOLON);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ColumnAssignUniqueContext extends ParserRuleContext {
+		public TerminalNode SEMICOLON() { return getToken(HdbtableParser.SEMICOLON, 0); }
+		public TerminalNode EQ() { return getToken(HdbtableParser.EQ, 0); }
+		public TerminalNode BOOLEAN() { return getToken(HdbtableParser.BOOLEAN, 0); }
+		public ColumnAssignUniqueContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_columnAssignUnique; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof HdbtableListener ) ((HdbtableListener)listener).enterColumnAssignUnique(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof HdbtableListener ) ((HdbtableListener)listener).exitColumnAssignUnique(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof HdbtableVisitor ) return ((HdbtableVisitor<? extends T>)visitor).visitColumnAssignUnique(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ColumnAssignUniqueContext columnAssignUnique() throws RecognitionException {
+		ColumnAssignUniqueContext _localctx = new ColumnAssignUniqueContext(_ctx, getState());
+		enterRule(_localctx, 34, RULE_columnAssignUnique);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(242); match(T__10);
+			setState(243); match(EQ);
+			setState(244); match(BOOLEAN);
+			setState(245); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1188,14 +1245,14 @@ public class HdbtableParser extends Parser {
 
 	public final ColumnAssignLengthContext columnAssignLength() throws RecognitionException {
 		ColumnAssignLengthContext _localctx = new ColumnAssignLengthContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_columnAssignLength);
+		enterRule(_localctx, 36, RULE_columnAssignLength);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(237); match(T__23);
-			setState(238); match(EQ);
-			setState(239); match(INT);
-			setState(240); match(SEMICOLON);
+			setState(247); match(T__23);
+			setState(248); match(EQ);
+			setState(249); match(INT);
+			setState(250); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1234,14 +1291,14 @@ public class HdbtableParser extends Parser {
 
 	public final ColumnAssignCommentContext columnAssignComment() throws RecognitionException {
 		ColumnAssignCommentContext _localctx = new ColumnAssignCommentContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_columnAssignComment);
+		enterRule(_localctx, 38, RULE_columnAssignComment);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(242); match(T__2);
-			setState(243); match(EQ);
-			setState(244); match(STRING);
-			setState(245); match(SEMICOLON);
+			setState(252); match(T__2);
+			setState(253); match(EQ);
+			setState(254); match(STRING);
+			setState(255); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1280,14 +1337,14 @@ public class HdbtableParser extends Parser {
 
 	public final ColumnAssignDefaultValueContext columnAssignDefaultValue() throws RecognitionException {
 		ColumnAssignDefaultValueContext _localctx = new ColumnAssignDefaultValueContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_columnAssignDefaultValue);
+		enterRule(_localctx, 40, RULE_columnAssignDefaultValue);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(247); match(T__6);
-			setState(248); match(EQ);
-			setState(249); match(STRING);
-			setState(250); match(SEMICOLON);
+			setState(257); match(T__6);
+			setState(258); match(EQ);
+			setState(259); match(STRING);
+			setState(260); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1326,14 +1383,14 @@ public class HdbtableParser extends Parser {
 
 	public final ColumnAssignPrecisionContext columnAssignPrecision() throws RecognitionException {
 		ColumnAssignPrecisionContext _localctx = new ColumnAssignPrecisionContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_columnAssignPrecision);
+		enterRule(_localctx, 42, RULE_columnAssignPrecision);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(252); match(T__7);
-			setState(253); match(EQ);
-			setState(254); match(INT);
-			setState(255); match(SEMICOLON);
+			setState(262); match(T__7);
+			setState(263); match(EQ);
+			setState(264); match(INT);
+			setState(265); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1372,14 +1429,14 @@ public class HdbtableParser extends Parser {
 
 	public final ColumnAssignScaleContext columnAssignScale() throws RecognitionException {
 		ColumnAssignScaleContext _localctx = new ColumnAssignScaleContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_columnAssignScale);
+		enterRule(_localctx, 44, RULE_columnAssignScale);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(257); match(T__22);
-			setState(258); match(EQ);
-			setState(259); match(INT);
-			setState(260); match(SEMICOLON);
+			setState(267); match(T__22);
+			setState(268); match(EQ);
+			setState(269); match(INT);
+			setState(270); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1418,14 +1475,14 @@ public class HdbtableParser extends Parser {
 
 	public final IndexAssignNameContext indexAssignName() throws RecognitionException {
 		IndexAssignNameContext _localctx = new IndexAssignNameContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_indexAssignName);
+		enterRule(_localctx, 46, RULE_indexAssignName);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(262); match(T__24);
-			setState(263); match(EQ);
-			setState(264); match(STRING);
-			setState(265); match(SEMICOLON);
+			setState(272); match(T__24);
+			setState(273); match(EQ);
+			setState(274); match(STRING);
+			setState(275); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1464,14 +1521,14 @@ public class HdbtableParser extends Parser {
 
 	public final IndexAssignUniqueContext indexAssignUnique() throws RecognitionException {
 		IndexAssignUniqueContext _localctx = new IndexAssignUniqueContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_indexAssignUnique);
+		enterRule(_localctx, 48, RULE_indexAssignUnique);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(267); match(T__10);
-			setState(268); match(EQ);
-			setState(269); match(BOOLEAN);
-			setState(270); match(SEMICOLON);
+			setState(277); match(T__10);
+			setState(278); match(EQ);
+			setState(279); match(BOOLEAN);
+			setState(280); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1510,14 +1567,14 @@ public class HdbtableParser extends Parser {
 
 	public final IndexAssignOrderContext indexAssignOrder() throws RecognitionException {
 		IndexAssignOrderContext _localctx = new IndexAssignOrderContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_indexAssignOrder);
+		enterRule(_localctx, 50, RULE_indexAssignOrder);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(272); match(T__19);
-			setState(273); match(EQ);
-			setState(274); match(ORDER);
-			setState(275); match(SEMICOLON);
+			setState(282); match(T__19);
+			setState(283); match(EQ);
+			setState(284); match(ORDER);
+			setState(285); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1532,7 +1589,6 @@ public class HdbtableParser extends Parser {
 	}
 
 	public static class IndexAssignIndexColumnsContext extends ParserRuleContext {
-		public TerminalNode SEMICOLON() { return getToken(HdbtableParser.SEMICOLON, 0); }
 		public TerminalNode EQ() { return getToken(HdbtableParser.EQ, 0); }
 		public IndexColumnsArrayContext indexColumnsArray() {
 			return getRuleContext(IndexColumnsArrayContext.class,0);
@@ -1558,14 +1614,13 @@ public class HdbtableParser extends Parser {
 
 	public final IndexAssignIndexColumnsContext indexAssignIndexColumns() throws RecognitionException {
 		IndexAssignIndexColumnsContext _localctx = new IndexAssignIndexColumnsContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_indexAssignIndexColumns);
+		enterRule(_localctx, 52, RULE_indexAssignIndexColumns);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(277); match(T__13);
-			setState(278); match(EQ);
-			setState(279); indexColumnsArray();
-			setState(280); match(SEMICOLON);
+			setState(287); match(T__13);
+			setState(288); match(EQ);
+			setState(289); indexColumnsArray();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1580,6 +1635,7 @@ public class HdbtableParser extends Parser {
 	}
 
 	public static class IndexAssignIndexTypeContext extends ParserRuleContext {
+		public TerminalNode SEMICOLON() { return getToken(HdbtableParser.SEMICOLON, 0); }
 		public TerminalNode INDEXTYPE() { return getToken(HdbtableParser.INDEXTYPE, 0); }
 		public TerminalNode EQ() { return getToken(HdbtableParser.EQ, 0); }
 		public IndexAssignIndexTypeContext(ParserRuleContext parent, int invokingState) {
@@ -1603,13 +1659,14 @@ public class HdbtableParser extends Parser {
 
 	public final IndexAssignIndexTypeContext indexAssignIndexType() throws RecognitionException {
 		IndexAssignIndexTypeContext _localctx = new IndexAssignIndexTypeContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_indexAssignIndexType);
+		enterRule(_localctx, 54, RULE_indexAssignIndexType);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(282); match(T__14);
-			setState(283); match(EQ);
-			setState(284); match(INDEXTYPE);
+			setState(291); match(T__14);
+			setState(292); match(EQ);
+			setState(293); match(INDEXTYPE);
+			setState(294); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1650,36 +1707,36 @@ public class HdbtableParser extends Parser {
 
 	public final IndexColumnsArrayContext indexColumnsArray() throws RecognitionException {
 		IndexColumnsArrayContext _localctx = new IndexColumnsArrayContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_indexColumnsArray);
+		enterRule(_localctx, 56, RULE_indexColumnsArray);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(286); match(T__5);
-			setState(295);
+			setState(296); match(T__5);
+			setState(305);
 			_la = _input.LA(1);
 			if (_la==STRING) {
 				{
-				setState(287); match(STRING);
-				setState(292);
+				setState(297); match(STRING);
+				setState(302);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__11) {
 					{
 					{
-					setState(288); match(T__11);
-					setState(289); match(STRING);
+					setState(298); match(T__11);
+					setState(299); match(STRING);
 					}
 					}
-					setState(294);
+					setState(304);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(297); match(T__4);
-			setState(298); match(SEMICOLON);
+			setState(307); match(T__4);
+			setState(308); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1694,100 +1751,104 @@ public class HdbtableParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3,\u012f\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3,\u0139\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\3\2\3\2\5\2=\n\2\3\2\5\2@\n\2"+
-		"\3\2\5\2C\n\2\3\2\5\2F\n\2\3\2\3\2\5\2J\n\2\3\2\5\2M\n\2\3\2\5\2P\n\2"+
-		"\3\2\5\2S\n\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4"+
-		"\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3"+
-		"\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\7\b\u0080\n\b\f\b\16\b"+
-		"\u0083\13\b\5\b\u0085\n\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t"+
-		"\7\t\u0092\n\t\f\t\16\t\u0095\13\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n"+
-		"\3\n\3\n\3\n\3\13\3\13\3\13\3\13\7\13\u00a7\n\13\f\13\16\13\u00aa\13\13"+
-		"\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r"+
-		"\3\r\3\16\3\16\3\16\3\16\5\16\u00c2\n\16\3\16\5\16\u00c5\n\16\3\16\5\16"+
-		"\u00c8\n\16\3\16\5\16\u00cb\n\16\3\16\5\16\u00ce\n\16\3\16\5\16\u00d1"+
-		"\n\16\3\16\3\16\3\17\3\17\3\17\3\17\5\17\u00d9\n\17\3\17\3\17\5\17\u00dd"+
-		"\n\17\3\17\3\17\3\20\3\20\3\20\3\20\3\20\3\21\3\21\3\21\3\21\3\21\3\22"+
-		"\3\22\3\22\3\22\3\22\3\23\3\23\3\23\3\23\3\23\3\24\3\24\3\24\3\24\3\24"+
-		"\3\25\3\25\3\25\3\25\3\25\3\26\3\26\3\26\3\26\3\26\3\27\3\27\3\27\3\27"+
-		"\3\27\3\30\3\30\3\30\3\30\3\30\3\31\3\31\3\31\3\31\3\31\3\32\3\32\3\32"+
-		"\3\32\3\32\3\33\3\33\3\33\3\33\3\33\3\34\3\34\3\34\3\34\3\35\3\35\3\35"+
-		"\3\35\7\35\u0125\n\35\f\35\16\35\u0128\13\35\5\35\u012a\n\35\3\35\3\35"+
-		"\3\35\3\35\2\2\36\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62"+
-		"\64\668\2\2\u0128\2:\3\2\2\2\4T\3\2\2\2\6[\3\2\2\2\bb\3\2\2\2\ni\3\2\2"+
-		"\2\fp\3\2\2\2\16w\3\2\2\2\20\u0089\3\2\2\2\22\u0099\3\2\2\2\24\u00a2\3"+
-		"\2\2\2\26\u00ad\3\2\2\2\30\u00b6\3\2\2\2\32\u00bd\3\2\2\2\34\u00d4\3\2"+
-		"\2\2\36\u00e0\3\2\2\2 \u00e5\3\2\2\2\"\u00ea\3\2\2\2$\u00ef\3\2\2\2&\u00f4"+
-		"\3\2\2\2(\u00f9\3\2\2\2*\u00fe\3\2\2\2,\u0103\3\2\2\2.\u0108\3\2\2\2\60"+
-		"\u010d\3\2\2\2\62\u0112\3\2\2\2\64\u0117\3\2\2\2\66\u011c\3\2\2\28\u0120"+
-		"\3\2\2\2:<\5\4\3\2;=\5\6\4\2<;\3\2\2\2<=\3\2\2\2=?\3\2\2\2>@\5\b\5\2?"+
-		">\3\2\2\2?@\3\2\2\2@B\3\2\2\2AC\5\n\6\2BA\3\2\2\2BC\3\2\2\2CE\3\2\2\2"+
-		"DF\5\f\7\2ED\3\2\2\2EF\3\2\2\2FG\3\2\2\2GI\5\16\b\2HJ\5\20\t\2IH\3\2\2"+
-		"\2IJ\3\2\2\2JL\3\2\2\2KM\5\22\n\2LK\3\2\2\2LM\3\2\2\2MO\3\2\2\2NP\5\26"+
-		"\f\2ON\3\2\2\2OP\3\2\2\2PR\3\2\2\2QS\5\30\r\2RQ\3\2\2\2RS\3\2\2\2S\3\3"+
-		"\2\2\2TU\7 \2\2UV\7!\2\2VW\7\35\2\2WX\7\"\2\2XY\7\36\2\2YZ\7#\2\2Z\5\3"+
-		"\2\2\2[\\\7 \2\2\\]\7!\2\2]^\7\34\2\2^_\7\"\2\2_`\7%\2\2`a\7#\2\2a\7\3"+
-		"\2\2\2bc\7 \2\2cd\7!\2\2de\7\b\2\2ef\7\"\2\2fg\7)\2\2gh\7#\2\2h\t\3\2"+
-		"\2\2ij\7 \2\2jk\7!\2\2kl\7\32\2\2lm\7\"\2\2mn\7%\2\2no\7#\2\2o\13\3\2"+
-		"\2\2pq\7 \2\2qr\7!\2\2rs\7\3\2\2st\7\"\2\2tu\7*\2\2uv\7#\2\2v\r\3\2\2"+
-		"\2wx\7 \2\2xy\7!\2\2yz\7\25\2\2z{\7\"\2\2{\u0084\7\30\2\2|\u0081\5\32"+
-		"\16\2}~\7\22\2\2~\u0080\5\32\16\2\177}\3\2\2\2\u0080\u0083\3\2\2\2\u0081"+
-		"\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082\u0085\3\2\2\2\u0083\u0081\3\2\2"+
-		"\2\u0084|\3\2\2\2\u0084\u0085\3\2\2\2\u0085\u0086\3\2\2\2\u0086\u0087"+
-		"\7\31\2\2\u0087\u0088\7#\2\2\u0088\17\3\2\2\2\u0089\u008a\7 \2\2\u008a"+
-		"\u008b\7!\2\2\u008b\u008c\7\f\2\2\u008c\u008d\7\"\2\2\u008d\u008e\7\30"+
-		"\2\2\u008e\u0093\5\34\17\2\u008f\u0090\7\22\2\2\u0090\u0092\5\34\17\2"+
-		"\u0091\u008f\3\2\2\2\u0092\u0095\3\2\2\2\u0093\u0091\3\2\2\2\u0093\u0094"+
-		"\3\2\2\2\u0094\u0096\3\2\2\2\u0095\u0093\3\2\2\2\u0096\u0097\7\31\2\2"+
-		"\u0097\u0098\7#\2\2\u0098\21\3\2\2\2\u0099\u009a\7 \2\2\u009a\u009b\7"+
-		"!\2\2\u009b\u009c\7\24\2\2\u009c\u009d\7!\2\2\u009d\u009e\7\16\2\2\u009e"+
-		"\u009f\7\"\2\2\u009f\u00a0\5\24\13\2\u00a0\u00a1\7#\2\2\u00a1\23\3\2\2"+
-		"\2\u00a2\u00a3\7\30\2\2\u00a3\u00a8\7\36\2\2\u00a4\u00a5\7\22\2\2\u00a5"+
-		"\u00a7\7\36\2\2\u00a6\u00a4\3\2\2\2\u00a7\u00aa\3\2\2\2\u00a8\u00a6\3"+
-		"\2\2\2\u00a8\u00a9\3\2\2\2\u00a9\u00ab\3\2\2\2\u00aa\u00a8\3\2\2\2\u00ab"+
-		"\u00ac\7\31\2\2\u00ac\25\3\2\2\2\u00ad\u00ae\7 \2\2\u00ae\u00af\7!\2\2"+
-		"\u00af\u00b0\7\24\2\2\u00b0\u00b1\7!\2\2\u00b1\u00b2\7\17\2\2\u00b2\u00b3"+
-		"\7\"\2\2\u00b3\u00b4\7\'\2\2\u00b4\u00b5\7#\2\2\u00b5\27\3\2\2\2\u00b6"+
-		"\u00b7\7 \2\2\u00b7\u00b8\7!\2\2\u00b8\u00b9\7\21\2\2\u00b9\u00ba\7\""+
-		"\2\2\u00ba\u00bb\7\36\2\2\u00bb\u00bc\7#\2\2\u00bc\31\3\2\2\2\u00bd\u00be"+
-		"\7\t\2\2\u00be\u00bf\5\36\20\2\u00bf\u00c1\5 \21\2\u00c0\u00c2\5$\23\2"+
-		"\u00c1\u00c0\3\2\2\2\u00c1\u00c2\3\2\2\2\u00c2\u00c4\3\2\2\2\u00c3\u00c5"+
-		"\5\"\22\2\u00c4\u00c3\3\2\2\2\u00c4\u00c5\3\2\2\2\u00c5\u00c7\3\2\2\2"+
-		"\u00c6\u00c8\5&\24\2\u00c7\u00c6\3\2\2\2\u00c7\u00c8\3\2\2\2\u00c8\u00ca"+
-		"\3\2\2\2\u00c9\u00cb\5(\25\2\u00ca\u00c9\3\2\2\2\u00ca\u00cb\3\2\2\2\u00cb"+
-		"\u00cd\3\2\2\2\u00cc\u00ce\5*\26\2\u00cd\u00cc\3\2\2\2\u00cd\u00ce\3\2"+
-		"\2\2\u00ce\u00d0\3\2\2\2\u00cf\u00d1\5,\27\2\u00d0\u00cf\3\2\2\2\u00d0"+
-		"\u00d1\3\2\2\2\u00d1\u00d2\3\2\2\2\u00d2\u00d3\7\13\2\2\u00d3\33\3\2\2"+
-		"\2\u00d4\u00d5\7\t\2\2\u00d5\u00d6\5.\30\2\u00d6\u00d8\5\60\31\2\u00d7"+
-		"\u00d9\5\62\32\2\u00d8\u00d7\3\2\2\2\u00d8\u00d9\3\2\2\2\u00d9\u00da\3"+
-		"\2\2\2\u00da\u00dc\5\64\33\2\u00db\u00dd\5\66\34\2\u00dc\u00db\3\2\2\2"+
-		"\u00dc\u00dd\3\2\2\2\u00dd\u00de\3\2\2\2\u00de\u00df\7\13\2\2\u00df\35"+
-		"\3\2\2\2\u00e0\u00e1\7\5\2\2\u00e1\u00e2\7\"\2\2\u00e2\u00e3\7\36\2\2"+
-		"\u00e3\u00e4\7#\2\2\u00e4\37\3\2\2\2\u00e5\u00e6\7\4\2\2\u00e6\u00e7\7"+
-		"\"\2\2\u00e7\u00e8\7$\2\2\u00e8\u00e9\7#\2\2\u00e9!\3\2\2\2\u00ea\u00eb"+
-		"\7\r\2\2\u00eb\u00ec\7\"\2\2\u00ec\u00ed\7%\2\2\u00ed\u00ee\7#\2\2\u00ee"+
-		"#\3\2\2\2\u00ef\u00f0\7\6\2\2\u00f0\u00f1\7\"\2\2\u00f1\u00f2\7(\2\2\u00f2"+
-		"\u00f3\7#\2\2\u00f3%\3\2\2\2\u00f4\u00f5\7\33\2\2\u00f5\u00f6\7\"\2\2"+
-		"\u00f6\u00f7\7\36\2\2\u00f7\u00f8\7#\2\2\u00f8\'\3\2\2\2\u00f9\u00fa\7"+
-		"\27\2\2\u00fa\u00fb\7\"\2\2\u00fb\u00fc\7\36\2\2\u00fc\u00fd\7#\2\2\u00fd"+
-		")\3\2\2\2\u00fe\u00ff\7\26\2\2\u00ff\u0100\7\"\2\2\u0100\u0101\7(\2\2"+
-		"\u0101\u0102\7#\2\2\u0102+\3\2\2\2\u0103\u0104\7\7\2\2\u0104\u0105\7\""+
-		"\2\2\u0105\u0106\7(\2\2\u0106\u0107\7#\2\2\u0107-\3\2\2\2\u0108\u0109"+
-		"\7\5\2\2\u0109\u010a\7\"\2\2\u010a\u010b\7\36\2\2\u010b\u010c\7#\2\2\u010c"+
-		"/\3\2\2\2\u010d\u010e\7\23\2\2\u010e\u010f\7\"\2\2\u010f\u0110\7%\2\2"+
-		"\u0110\u0111\7#\2\2\u0111\61\3\2\2\2\u0112\u0113\7\n\2\2\u0113\u0114\7"+
-		"\"\2\2\u0114\u0115\7&\2\2\u0115\u0116\7#\2\2\u0116\63\3\2\2\2\u0117\u0118"+
-		"\7\20\2\2\u0118\u0119\7\"\2\2\u0119\u011a\58\35\2\u011a\u011b\7#\2\2\u011b"+
-		"\65\3\2\2\2\u011c\u011d\7\17\2\2\u011d\u011e\7\"\2\2\u011e\u011f\7\'\2"+
-		"\2\u011f\67\3\2\2\2\u0120\u0129\7\30\2\2\u0121\u0126\7\36\2\2\u0122\u0123"+
-		"\7\22\2\2\u0123\u0125\7\36\2\2\u0124\u0122\3\2\2\2\u0125\u0128\3\2\2\2"+
-		"\u0126\u0124\3\2\2\2\u0126\u0127\3\2\2\2\u0127\u012a\3\2\2\2\u0128\u0126"+
-		"\3\2\2\2\u0129\u0121\3\2\2\2\u0129\u012a\3\2\2\2\u012a\u012b\3\2\2\2\u012b"+
-		"\u012c\7\31\2\2\u012c\u012d\7#\2\2\u012d9\3\2\2\2\30<?BEILOR\u0081\u0084"+
-		"\u0093\u00a8\u00c1\u00c4\u00c7\u00ca\u00cd\u00d0\u00d8\u00dc\u0126\u0129";
+		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\3\2\3\2\5\2?\n\2\3"+
+		"\2\5\2B\n\2\3\2\5\2E\n\2\3\2\5\2H\n\2\3\2\3\2\5\2L\n\2\3\2\5\2O\n\2\3"+
+		"\2\5\2R\n\2\3\2\5\2U\n\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3"+
+		"\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\7"+
+		"\3\7\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\7\b\u0082\n\b"+
+		"\f\b\16\b\u0085\13\b\5\b\u0087\n\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t"+
+		"\3\t\3\t\7\t\u0094\n\t\f\t\16\t\u0097\13\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n"+
+		"\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\7\13\u00a9\n\13\f\13\16\13\u00ac"+
+		"\13\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3"+
+		"\r\3\r\3\r\3\16\3\16\3\16\3\16\5\16\u00c4\n\16\3\16\5\16\u00c7\n\16\3"+
+		"\16\5\16\u00ca\n\16\3\16\5\16\u00cd\n\16\3\16\5\16\u00d0\n\16\3\16\5\16"+
+		"\u00d3\n\16\3\16\5\16\u00d6\n\16\3\16\3\16\3\17\3\17\3\17\3\17\5\17\u00de"+
+		"\n\17\3\17\3\17\5\17\u00e2\n\17\3\17\3\17\3\20\3\20\3\20\3\20\3\20\3\21"+
+		"\3\21\3\21\3\21\3\21\3\22\3\22\3\22\3\22\3\22\3\23\3\23\3\23\3\23\3\23"+
+		"\3\24\3\24\3\24\3\24\3\24\3\25\3\25\3\25\3\25\3\25\3\26\3\26\3\26\3\26"+
+		"\3\26\3\27\3\27\3\27\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\31\3\31\3\31"+
+		"\3\31\3\31\3\32\3\32\3\32\3\32\3\32\3\33\3\33\3\33\3\33\3\33\3\34\3\34"+
+		"\3\34\3\34\3\35\3\35\3\35\3\35\3\35\3\36\3\36\3\36\3\36\7\36\u012f\n\36"+
+		"\f\36\16\36\u0132\13\36\5\36\u0134\n\36\3\36\3\36\3\36\3\36\2\2\37\2\4"+
+		"\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:\2\2\u0132\2"+
+		"<\3\2\2\2\4V\3\2\2\2\6]\3\2\2\2\bd\3\2\2\2\nk\3\2\2\2\fr\3\2\2\2\16y\3"+
+		"\2\2\2\20\u008b\3\2\2\2\22\u009b\3\2\2\2\24\u00a4\3\2\2\2\26\u00af\3\2"+
+		"\2\2\30\u00b8\3\2\2\2\32\u00bf\3\2\2\2\34\u00d9\3\2\2\2\36\u00e5\3\2\2"+
+		"\2 \u00ea\3\2\2\2\"\u00ef\3\2\2\2$\u00f4\3\2\2\2&\u00f9\3\2\2\2(\u00fe"+
+		"\3\2\2\2*\u0103\3\2\2\2,\u0108\3\2\2\2.\u010d\3\2\2\2\60\u0112\3\2\2\2"+
+		"\62\u0117\3\2\2\2\64\u011c\3\2\2\2\66\u0121\3\2\2\28\u0125\3\2\2\2:\u012a"+
+		"\3\2\2\2<>\5\4\3\2=?\5\6\4\2>=\3\2\2\2>?\3\2\2\2?A\3\2\2\2@B\5\b\5\2A"+
+		"@\3\2\2\2AB\3\2\2\2BD\3\2\2\2CE\5\n\6\2DC\3\2\2\2DE\3\2\2\2EG\3\2\2\2"+
+		"FH\5\f\7\2GF\3\2\2\2GH\3\2\2\2HI\3\2\2\2IK\5\16\b\2JL\5\20\t\2KJ\3\2\2"+
+		"\2KL\3\2\2\2LN\3\2\2\2MO\5\22\n\2NM\3\2\2\2NO\3\2\2\2OQ\3\2\2\2PR\5\26"+
+		"\f\2QP\3\2\2\2QR\3\2\2\2RT\3\2\2\2SU\5\30\r\2TS\3\2\2\2TU\3\2\2\2U\3\3"+
+		"\2\2\2VW\7 \2\2WX\7!\2\2XY\7\35\2\2YZ\7\"\2\2Z[\7\36\2\2[\\\7#\2\2\\\5"+
+		"\3\2\2\2]^\7 \2\2^_\7!\2\2_`\7\34\2\2`a\7\"\2\2ab\7%\2\2bc\7#\2\2c\7\3"+
+		"\2\2\2de\7 \2\2ef\7!\2\2fg\7\b\2\2gh\7\"\2\2hi\7)\2\2ij\7#\2\2j\t\3\2"+
+		"\2\2kl\7 \2\2lm\7!\2\2mn\7\32\2\2no\7\"\2\2op\7%\2\2pq\7#\2\2q\13\3\2"+
+		"\2\2rs\7 \2\2st\7!\2\2tu\7\3\2\2uv\7\"\2\2vw\7*\2\2wx\7#\2\2x\r\3\2\2"+
+		"\2yz\7 \2\2z{\7!\2\2{|\7\25\2\2|}\7\"\2\2}\u0086\7\30\2\2~\u0083\5\32"+
+		"\16\2\177\u0080\7\22\2\2\u0080\u0082\5\32\16\2\u0081\177\3\2\2\2\u0082"+
+		"\u0085\3\2\2\2\u0083\u0081\3\2\2\2\u0083\u0084\3\2\2\2\u0084\u0087\3\2"+
+		"\2\2\u0085\u0083\3\2\2\2\u0086~\3\2\2\2\u0086\u0087\3\2\2\2\u0087\u0088"+
+		"\3\2\2\2\u0088\u0089\7\31\2\2\u0089\u008a\7#\2\2\u008a\17\3\2\2\2\u008b"+
+		"\u008c\7 \2\2\u008c\u008d\7!\2\2\u008d\u008e\7\f\2\2\u008e\u008f\7\"\2"+
+		"\2\u008f\u0090\7\30\2\2\u0090\u0095\5\34\17\2\u0091\u0092\7\22\2\2\u0092"+
+		"\u0094\5\34\17\2\u0093\u0091\3\2\2\2\u0094\u0097\3\2\2\2\u0095\u0093\3"+
+		"\2\2\2\u0095\u0096\3\2\2\2\u0096\u0098\3\2\2\2\u0097\u0095\3\2\2\2\u0098"+
+		"\u0099\7\31\2\2\u0099\u009a\7#\2\2\u009a\21\3\2\2\2\u009b\u009c\7 \2\2"+
+		"\u009c\u009d\7!\2\2\u009d\u009e\7\24\2\2\u009e\u009f\7!\2\2\u009f\u00a0"+
+		"\7\16\2\2\u00a0\u00a1\7\"\2\2\u00a1\u00a2\5\24\13\2\u00a2\u00a3\7#\2\2"+
+		"\u00a3\23\3\2\2\2\u00a4\u00a5\7\30\2\2\u00a5\u00aa\7\36\2\2\u00a6\u00a7"+
+		"\7\22\2\2\u00a7\u00a9\7\36\2\2\u00a8\u00a6\3\2\2\2\u00a9\u00ac\3\2\2\2"+
+		"\u00aa\u00a8\3\2\2\2\u00aa\u00ab\3\2\2\2\u00ab\u00ad\3\2\2\2\u00ac\u00aa"+
+		"\3\2\2\2\u00ad\u00ae\7\31\2\2\u00ae\25\3\2\2\2\u00af\u00b0\7 \2\2\u00b0"+
+		"\u00b1\7!\2\2\u00b1\u00b2\7\24\2\2\u00b2\u00b3\7!\2\2\u00b3\u00b4\7\17"+
+		"\2\2\u00b4\u00b5\7\"\2\2\u00b5\u00b6\7\'\2\2\u00b6\u00b7\7#\2\2\u00b7"+
+		"\27\3\2\2\2\u00b8\u00b9\7 \2\2\u00b9\u00ba\7!\2\2\u00ba\u00bb\7\21\2\2"+
+		"\u00bb\u00bc\7\"\2\2\u00bc\u00bd\7\36\2\2\u00bd\u00be\7#\2\2\u00be\31"+
+		"\3\2\2\2\u00bf\u00c0\7\t\2\2\u00c0\u00c1\5\36\20\2\u00c1\u00c3\5 \21\2"+
+		"\u00c2\u00c4\5$\23\2\u00c3\u00c2\3\2\2\2\u00c3\u00c4\3\2\2\2\u00c4\u00c6"+
+		"\3\2\2\2\u00c5\u00c7\5&\24\2\u00c6\u00c5\3\2\2\2\u00c6\u00c7\3\2\2\2\u00c7"+
+		"\u00c9\3\2\2\2\u00c8\u00ca\5\"\22\2\u00c9\u00c8\3\2\2\2\u00c9\u00ca\3"+
+		"\2\2\2\u00ca\u00cc\3\2\2\2\u00cb\u00cd\5(\25\2\u00cc\u00cb\3\2\2\2\u00cc"+
+		"\u00cd\3\2\2\2\u00cd\u00cf\3\2\2\2\u00ce\u00d0\5*\26\2\u00cf\u00ce\3\2"+
+		"\2\2\u00cf\u00d0\3\2\2\2\u00d0\u00d2\3\2\2\2\u00d1\u00d3\5,\27\2\u00d2"+
+		"\u00d1\3\2\2\2\u00d2\u00d3\3\2\2\2\u00d3\u00d5\3\2\2\2\u00d4\u00d6\5."+
+		"\30\2\u00d5\u00d4\3\2\2\2\u00d5\u00d6\3\2\2\2\u00d6\u00d7\3\2\2\2\u00d7"+
+		"\u00d8\7\13\2\2\u00d8\33\3\2\2\2\u00d9\u00da\7\t\2\2\u00da\u00db\5\60"+
+		"\31\2\u00db\u00dd\5\62\32\2\u00dc\u00de\5\64\33\2\u00dd\u00dc\3\2\2\2"+
+		"\u00dd\u00de\3\2\2\2\u00de\u00df\3\2\2\2\u00df\u00e1\5\66\34\2\u00e0\u00e2"+
+		"\58\35\2\u00e1\u00e0\3\2\2\2\u00e1\u00e2\3\2\2\2\u00e2\u00e3\3\2\2\2\u00e3"+
+		"\u00e4\7\13\2\2\u00e4\35\3\2\2\2\u00e5\u00e6\7\5\2\2\u00e6\u00e7\7\"\2"+
+		"\2\u00e7\u00e8\7\36\2\2\u00e8\u00e9\7#\2\2\u00e9\37\3\2\2\2\u00ea\u00eb"+
+		"\7\4\2\2\u00eb\u00ec\7\"\2\2\u00ec\u00ed\7$\2\2\u00ed\u00ee\7#\2\2\u00ee"+
+		"!\3\2\2\2\u00ef\u00f0\7\r\2\2\u00f0\u00f1\7\"\2\2\u00f1\u00f2\7%\2\2\u00f2"+
+		"\u00f3\7#\2\2\u00f3#\3\2\2\2\u00f4\u00f5\7\23\2\2\u00f5\u00f6\7\"\2\2"+
+		"\u00f6\u00f7\7%\2\2\u00f7\u00f8\7#\2\2\u00f8%\3\2\2\2\u00f9\u00fa\7\6"+
+		"\2\2\u00fa\u00fb\7\"\2\2\u00fb\u00fc\7(\2\2\u00fc\u00fd\7#\2\2\u00fd\'"+
+		"\3\2\2\2\u00fe\u00ff\7\33\2\2\u00ff\u0100\7\"\2\2\u0100\u0101\7\36\2\2"+
+		"\u0101\u0102\7#\2\2\u0102)\3\2\2\2\u0103\u0104\7\27\2\2\u0104\u0105\7"+
+		"\"\2\2\u0105\u0106\7\36\2\2\u0106\u0107\7#\2\2\u0107+\3\2\2\2\u0108\u0109"+
+		"\7\26\2\2\u0109\u010a\7\"\2\2\u010a\u010b\7(\2\2\u010b\u010c\7#\2\2\u010c"+
+		"-\3\2\2\2\u010d\u010e\7\7\2\2\u010e\u010f\7\"\2\2\u010f\u0110\7(\2\2\u0110"+
+		"\u0111\7#\2\2\u0111/\3\2\2\2\u0112\u0113\7\5\2\2\u0113\u0114\7\"\2\2\u0114"+
+		"\u0115\7\36\2\2\u0115\u0116\7#\2\2\u0116\61\3\2\2\2\u0117\u0118\7\23\2"+
+		"\2\u0118\u0119\7\"\2\2\u0119\u011a\7%\2\2\u011a\u011b\7#\2\2\u011b\63"+
+		"\3\2\2\2\u011c\u011d\7\n\2\2\u011d\u011e\7\"\2\2\u011e\u011f\7&\2\2\u011f"+
+		"\u0120\7#\2\2\u0120\65\3\2\2\2\u0121\u0122\7\20\2\2\u0122\u0123\7\"\2"+
+		"\2\u0123\u0124\5:\36\2\u0124\67\3\2\2\2\u0125\u0126\7\17\2\2\u0126\u0127"+
+		"\7\"\2\2\u0127\u0128\7\'\2\2\u0128\u0129\7#\2\2\u01299\3\2\2\2\u012a\u0133"+
+		"\7\30\2\2\u012b\u0130\7\36\2\2\u012c\u012d\7\22\2\2\u012d\u012f\7\36\2"+
+		"\2\u012e\u012c\3\2\2\2\u012f\u0132\3\2\2\2\u0130\u012e\3\2\2\2\u0130\u0131"+
+		"\3\2\2\2\u0131\u0134\3\2\2\2\u0132\u0130\3\2\2\2\u0133\u012b\3\2\2\2\u0133"+
+		"\u0134\3\2\2\2\u0134\u0135\3\2\2\2\u0135\u0136\7\31\2\2\u0136\u0137\7"+
+		"#\2\2\u0137;\3\2\2\2\31>ADGKNQT\u0083\u0086\u0095\u00aa\u00c3\u00c6\u00c9"+
+		"\u00cc\u00cf\u00d2\u00d5\u00dd\u00e1\u0130\u0133";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -33,6 +33,13 @@ public interface HdbtableVisitor<T> extends ParseTreeVisitor<T> {
 	T visitHdbtableDefinition(@NotNull HdbtableParser.HdbtableDefinitionContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignUnique}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignUnique(@NotNull HdbtableParser.ColumnAssignUniqueContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#tableIndexesProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

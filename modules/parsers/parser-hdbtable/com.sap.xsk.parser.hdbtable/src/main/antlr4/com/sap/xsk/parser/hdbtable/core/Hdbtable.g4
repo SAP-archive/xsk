@@ -15,6 +15,7 @@ descriptionProp: TABLE DOT 'description' EQ STRING SEMICOLON ;
 columnsObject: '{'
         columnAssignName
         columnAssignSQLType
+        columnAssignUnique?
         columnAssignLength?
         columnAssignNullable?
         columnAssignComment?
@@ -32,6 +33,7 @@ indexesObject: '{'
 columnAssignName: 'name' EQ STRING SEMICOLON;
 columnAssignSQLType: 'sqlType' EQ SQLTYPES SEMICOLON;
 columnAssignNullable: 'nullable' EQ BOOLEAN SEMICOLON;
+columnAssignUnique: 'unique' EQ BOOLEAN SEMICOLON;
 columnAssignLength: 'length' EQ INT SEMICOLON;
 columnAssignComment: 'comment' EQ STRING SEMICOLON;
 columnAssignDefaultValue: 'defaultValue' EQ STRING SEMICOLON;
@@ -40,8 +42,8 @@ columnAssignScale: 'scale' EQ INT SEMICOLON;
 indexAssignName: 'name' EQ STRING SEMICOLON;
 indexAssignUnique: 'unique' EQ BOOLEAN SEMICOLON;
 indexAssignOrder: 'order' EQ ORDER SEMICOLON;
-indexAssignIndexColumns: 'indexColumns' EQ indexColumnsArray SEMICOLON;
-indexAssignIndexType: 'indexType' EQ INDEXTYPE;
+indexAssignIndexColumns: 'indexColumns' EQ indexColumnsArray ;
+indexAssignIndexType: 'indexType' EQ INDEXTYPE SEMICOLON;
 indexColumnsArray: '[' (STRING(',' STRING)*)? ']' SEMICOLON;
 STRING : '"' .*? '"' ; //match anything in "..."
 WS : [ \t\r\n]+ -> skip ; //toss out whitespace

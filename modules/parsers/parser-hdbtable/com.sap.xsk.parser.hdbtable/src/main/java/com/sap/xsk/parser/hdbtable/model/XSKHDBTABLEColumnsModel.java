@@ -15,11 +15,12 @@ public class XSKHDBTABLEColumnsModel {
     private String name;
     private String sqlType;
     private boolean nullable;
-    private int length;
+    private boolean unique;
+    private String length;
     private String comment;
     private String defaultValue;
-    private int precision;
-    private int scale;
+    private String precision;
+    private String scale;
 
     public XSKHDBTABLEColumnsModel() {
     }
@@ -48,11 +49,11 @@ public class XSKHDBTABLEColumnsModel {
         this.nullable = nullable;
     }
 
-    public int getLength() {
+    public String getLength() {
         return length;
     }
 
-    public void setLength(int length) {
+    public void setLength(String length) {
         this.length = length;
     }
 
@@ -72,20 +73,27 @@ public class XSKHDBTABLEColumnsModel {
         this.defaultValue = defaultValue;
     }
 
-    public int getPrecision() {
+    public String getPrecision() {
         return precision;
     }
 
-    public void setPrecision(int precision) {
+    public void setPrecision(String precision) {
         this.precision = precision;
     }
 
-    public int getScale() {
+    public String getScale() {
         return scale;
     }
 
-    public void setScale(int scale) {
+    public void setScale(String scale) {
         this.scale = scale;
     }
 
+    public boolean isUnique() {
+        return unique;
+    }
+
+    public void setUnique(boolean unique) {
+        this.unique = unique;
+    }
 }

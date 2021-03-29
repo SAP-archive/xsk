@@ -56,6 +56,19 @@ public class HdbtableBaseListener implements HdbtableListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterColumnAssignUnique(@NotNull HdbtableParser.ColumnAssignUniqueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColumnAssignUnique(@NotNull HdbtableParser.ColumnAssignUniqueContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTableIndexesProp(@NotNull HdbtableParser.TableIndexesPropContext ctx) { }
 	/**
 	 * {@inheritDoc}

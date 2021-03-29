@@ -151,6 +151,7 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
         columnsObject.add("name", visitColumnAssignName(ctx.columnAssignName()));
         columnsObject.add("sqlType", visitColumnAssignSQLType(ctx.columnAssignSQLType()));
         columnsObject.add("nullable", visitColumnAssignNullable(ctx.columnAssignNullable()));
+        columnsObject.add("unique", visitColumnAssignUnique(ctx.columnAssignUnique()));
         columnsObject.add("length", visitColumnAssignLength(ctx.columnAssignLength()));
         columnsObject.add("precision", visitColumnAssignPrecision(ctx.columnAssignPrecision()));
         columnsObject.add("comment", visitColumnAssignComment(ctx.columnAssignComment()));
@@ -219,6 +220,11 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
             });
         }
         return primaryKeyArray;
+    }
+
+    @Override
+    public JsonElement visitColumnAssignUnique(HdbtableParser.ColumnAssignUniqueContext ctx) {
+        return (ctx != null && ctx.BOOLEAN() !=null) ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText())) : null;
     }
 
     public JsonElement getHdbtableDefinitionObject() {

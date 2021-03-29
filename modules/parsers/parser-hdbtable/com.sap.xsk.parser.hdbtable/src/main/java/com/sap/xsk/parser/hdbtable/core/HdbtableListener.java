@@ -42,6 +42,17 @@ public interface HdbtableListener extends ParseTreeListener {
 	void exitHdbtableDefinition(@NotNull HdbtableParser.HdbtableDefinitionContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link HdbtableParser#columnAssignUnique}.
+	 * @param ctx the parse tree
+	 */
+	void enterColumnAssignUnique(@NotNull HdbtableParser.ColumnAssignUniqueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbtableParser#columnAssignUnique}.
+	 * @param ctx the parse tree
+	 */
+	void exitColumnAssignUnique(@NotNull HdbtableParser.ColumnAssignUniqueContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link HdbtableParser#tableIndexesProp}.
 	 * @param ctx the parse tree
 	 */

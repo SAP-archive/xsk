@@ -211,8 +211,13 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                         String dsName = sorted.get(i);
                         XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) dataStructureTablesModel.get(dsName);
                         try {
-                            if (model != null && SqlFactory.getNative(connection).exists(connection, model.getName())) {
-                                if (SqlFactory.getNative(connection).count(connection, model.getName()) == 0) {
+                            boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
+                            String modelName = model.getName();
+                            if(caseSensitive){
+                                modelName="\"" + modelName+"\"";
+                            }
+                            if (model != null && SqlFactory.getNative(connection).exists(connection, modelName)) {
+                                if (SqlFactory.getNative(connection).count(connection, modelName) == 0) {
                                     xskTableManagerService.dropDataStructure(connection, model);
                                 } else {
                                     logger.warn(format("Table [{0}] cannot be deleted during the update process, because it is not empty", dsName));

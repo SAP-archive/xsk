@@ -15,16 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
 
 /**
  * The table model representation.
  */
 public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
-
-	private String schemaName;
-
 	private String tableType;
 	
 	private String description;
@@ -32,12 +28,6 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
 	private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<XSKDataStructureHDBTableColumnModel>();
 
 	private XSKDataStructureHDBTableConstraintsModel constraints = new XSKDataStructureHDBTableConstraintsModel();
-
-	private List<String> pkcolumns;
-
-	private String indexType;
-
-	private List<XSKHDBTABLEIndexesModel> indexes;
 
 	private Boolean publicProp;
 
@@ -91,7 +81,38 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
 		this.description = description;
 	}
 
+	/**
+	 * @param columns the columns to set
+	 */
 	public void setColumns(List<XSKDataStructureHDBTableColumnModel> columns) {
 		this.columns = columns;
+	}
+
+	/**
+	 * @param constraints the constraints to set
+	 */
+	public void setConstraints(XSKDataStructureHDBTableConstraintsModel constraints) {
+		this.constraints = constraints;
+	}
+
+	/**
+	 * @param publicProp the publicProp to set
+	 */
+	public void setPublicProp(Boolean publicProp) {
+		this.publicProp = publicProp;
+	}
+
+	/**
+	 * @param loggingType the loggingType to set
+	 */
+	public void setLoggingType(String loggingType) {
+		this.loggingType = loggingType;
+	}
+
+	/**
+	 * @param temporary the temporary to set
+	 */
+	public void setTemporary(Boolean temporary) {
+		this.temporary = temporary;
 	}
 }

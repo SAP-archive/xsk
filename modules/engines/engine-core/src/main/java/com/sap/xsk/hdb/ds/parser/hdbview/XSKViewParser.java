@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.parser.hdbview;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbview.core.HdbviewLexer;
@@ -20,6 +21,7 @@ import com.sap.xsk.parser.hdbview.core.HdbviewParser;
 import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWCoreListener;
 import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWSyntaxErrorListener;
 import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
+import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -40,6 +42,30 @@ public class XSKViewParser implements XSKDataStructureParser {
 
     @Override
     public XSKDataStructureHDBViewModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+        String expectedHana2Syntax = XSKConstants.XSK_HDBVIEW_SYNTAX + "\"" + XSKUtils.getRepositoryBaseObjectName(location) + "\"";
+        String receivedHana2Syntax = XSKUtils.extractRepositoryBaseObjectNameFromContent(XSKConstants.XSK_HDBVIEW_SYNTAX, content);
+        logger.debug("Determine if the hdbview is Hana v1 or v2 by Comparing '" + receivedHana2Syntax + "' with '" + expectedHana2Syntax + "'");
+        if (receivedHana2Syntax.equals(expectedHana2Syntax)) {
+            return parseHANAv2Content(location, content);
+        } else {
+            return parseHANAv1Content(location, content);
+        }
+    }
+
+    private XSKDataStructureHDBViewModel parseHANAv2Content(String location, String content) {
+        XSKDataStructureHDBViewModel hdbViewModel = new XSKDataStructureHDBViewModel();
+        populateXSKDataStructureHDBViewModel(location, content, hdbViewModel);
+        hdbViewModel.setHanaVersion(XSKHanaVersion.VERSION_2);
+        hdbViewModel.setRawContent(content);
+        return hdbViewModel;
+    }
+
+
+    private XSKDataStructureHDBViewModel parseHANAv1Content(String location, String content) throws XSKDataStructuresException, IOException {
+        XSKDataStructureHDBViewModel hdbViewModel = new XSKDataStructureHDBViewModel();
+        populateXSKDataStructureHDBViewModel(location, content, hdbViewModel);
+        hdbViewModel.setHanaVersion(XSKHanaVersion.VERSION_1);
+
         ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
         HdbviewLexer hdbviewLexer = new HdbviewLexer(inputStream);
@@ -62,14 +88,6 @@ public class XSKViewParser implements XSKDataStructureParser {
         parseTreeWalker.walk(XSKHDBVIEWCoreListener, parseTree);
 
         XSKHDBVIEWDefinitionModel antlr4Model = XSKHDBVIEWCoreListener.getModel();
-        XSKDataStructureHDBViewModel hdbViewModel = new XSKDataStructureHDBViewModel();
-
-        hdbViewModel.setName(XSKUtils.getTableName(location));
-        hdbViewModel.setLocation(location);
-        hdbViewModel.setType(IXSKDataStructureModel.TYPE_HDB_VIEW);
-        hdbViewModel.setHash(DigestUtils.md5Hex(content));
-        hdbViewModel.setCreatedBy(UserFacade.getName());
-        hdbViewModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
         hdbViewModel.setQuery(antlr4Model.getQuery());
         hdbViewModel.setSchema(antlr4Model.getSchema());
         hdbViewModel.setPublic(antlr4Model.isPublic());
@@ -78,6 +96,15 @@ public class XSKViewParser implements XSKDataStructureParser {
         hdbViewModel.setDependsOnView(antlr4Model.getDependsOnView());
 
         return hdbViewModel;
+    }
+
+    private void populateXSKDataStructureHDBViewModel(String location, String content, XSKDataStructureHDBViewModel hdbViewModel) {
+        hdbViewModel.setName(XSKUtils.getRepositoryBaseObjectName(location));
+        hdbViewModel.setLocation(location);
+        hdbViewModel.setType(IXSKDataStructureModel.TYPE_HDB_VIEW);
+        hdbViewModel.setHash(DigestUtils.md5Hex(content));
+        hdbViewModel.setCreatedBy(UserFacade.getName());
+        hdbViewModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
     }
 
     @Override

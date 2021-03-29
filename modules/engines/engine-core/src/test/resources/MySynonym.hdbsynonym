@@ -1,0 +1,11 @@
+// we have some comment heree....
+/*we have some comment heree....*/
+{
+  "hdb_view::MySynonym": {
+    "schema": "TONI",
+    "target": {
+       "schema": "PUBLIC",
+      "object": "hdb_view::Order"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+VIEW          "hdb_view.db::ItemsByOrderHANAv2"
+AS SELECT "Id" FROM "hdb_view::Item";

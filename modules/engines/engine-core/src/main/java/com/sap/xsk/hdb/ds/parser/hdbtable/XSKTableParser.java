@@ -12,7 +12,6 @@
 package com.sap.xsk.hdb.ds.parser.hdbtable;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.emf.common.util.EList;
@@ -78,7 +76,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         }
         XSKDataStructureHDBTableModel hdbTableModel = new XSKDataStructureHDBTableModel();
 
-        hdbTableModel.setName(XSKUtils.getTableName(location));
+        hdbTableModel.setName(XSKUtils.getRepositoryBaseObjectName(location));
         hdbTableModel.setLocation(location);
         hdbTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
         hdbTableModel.setHash(DigestUtils.md5Hex(content));

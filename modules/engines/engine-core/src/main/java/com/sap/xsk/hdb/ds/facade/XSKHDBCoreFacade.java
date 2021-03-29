@@ -141,7 +141,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                 boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
                 if (!hdiOnly) {
                     //drop HDB Sequences
-                    List<XSKDataStructureHDBSequenceModel> hdbSequencesToUpdate = new ArrayList<>();
+                   /* List<XSKDataStructureHDBSequenceModel> hdbSequencesToUpdate = new ArrayList<>();
                     for (int i = sorted.size() - 1; i >= 0; i--) {
                         String dsName = sorted.get(i);
                         XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) dataStructureSequencesModel.get(dsName);
@@ -154,7 +154,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                     for (XSKDataStructureHDBSequenceModel sequenceToUpdate :
                             hdbSequencesToUpdate) {
                         xskSequencesManagerService.dropDataStructure(connection, sequenceToUpdate);
-                    }
+                    } */
 
                     // drop HDB Procedures
                     List<XSKDataStructureHDBProcedureModel> hdbProceduresToUpdate = new ArrayList<>();

@@ -83,13 +83,13 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 				}
 			}
 			if (defaultValue != null) {
-				if ("".equals(defaultValue)) {
+
 					if ((type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR) || type.equals(DataType.NVARCHAR)
 							|| columnModel.getType().equalsIgnoreCase("ALPHANUM")
 							|| columnModel.getType().equalsIgnoreCase("SHORTTEXT"))) {
 						args += " DEFAULT '" + defaultValue + "' ";
 					}
-				} else {
+				 else {
 					args += " DEFAULT " + defaultValue + " ";
 				}
 

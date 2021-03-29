@@ -36,7 +36,7 @@ columnAssignNullable: 'nullable' EQ BOOLEAN SEMICOLON;
 columnAssignUnique: 'unique' EQ BOOLEAN SEMICOLON;
 columnAssignLength: 'length' EQ INT SEMICOLON;
 columnAssignComment: 'comment' EQ STRING SEMICOLON;
-columnAssignDefaultValue: 'defaultValue' EQ STRING SEMICOLON;
+columnAssignDefaultValue: 'defaultValue' EQ (STRING | INT | DATETIMEDEFAULTVALUES) SEMICOLON;
 columnAssignPrecision: 'precision' EQ INT SEMICOLON;
 columnAssignScale: 'scale' EQ INT SEMICOLON;
 indexAssignName: 'name' EQ STRING SEMICOLON;
@@ -60,5 +60,11 @@ INDEXTYPE: 'B_TREE' | 'CPB_TREE' ;
 INT: [0-9]+;
 TABLETYPE: 'COLUMNSTORE'|'ROWSTORE';
 TABLELOGGINGTYPE: 'LOGGING' | 'NOLOGGING';
+DATETIMEDEFAULTVALUES: 'CURRENT_DATE'
+                        | 'CURRENT_TIME'
+                        | 'CURRENT_TIMESTAMP'
+                        | 'CURRENT_UTCDATE'
+                        | 'CURRENT_UTCTIME'
+                        | 'CURRENT_UTCTIMESTAMP';
 LINE_COMMENT : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
 COMMENT : '/*' .*? '*/' -> skip ; // Match "/*" stuff "*/"

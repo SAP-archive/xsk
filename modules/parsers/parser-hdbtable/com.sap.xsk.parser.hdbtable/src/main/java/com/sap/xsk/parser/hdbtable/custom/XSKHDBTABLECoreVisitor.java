@@ -79,7 +79,13 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitColumnAssignDefaultValue(HdbtableParser.ColumnAssignDefaultValueContext ctx) {
-        return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
+        if(ctx!=null && ctx.STRING()!=null) {
+            return new JsonPrimitive(handleStringLiteral(ctx.STRING().getText()));
+        }else if(ctx!=null && ctx.INT()!=null) {
+            return new JsonPrimitive(handleStringLiteral(ctx.INT().getText()));
+        } else {
+            return null;
+        }
     }
 
     @Override

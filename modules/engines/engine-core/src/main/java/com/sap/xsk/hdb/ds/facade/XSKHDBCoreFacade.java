@@ -32,6 +32,7 @@ import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;

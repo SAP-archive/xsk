@@ -1,24 +1,24 @@
-// Generated from com/sap/xsk/parser/hdbsequence/core/Hdbsequence.g4 by ANTLR 4.3
-package com.sap.xsk.parser.hdbsequence.core;
+// Generated from com/sap/xsk/parser/hdbti/core/Hdbti.g4 by ANTLR 4.3
+package com.sap.xsk.parser.hdbti.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
- * This class provides an empty implementation of {@link HdbsequenceVisitor},
+ * This class provides an empty implementation of {@link HdbtiVisitor},
  * which can be extended to create a visitor which only needs to handle a subset
  * of the available methods.
  *
  * @param <T> The return type of the visit operation. Use {@link Void} for
  * operations with no return type.
  */
-public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements HdbsequenceVisitor<T> {
+public class HdbtiBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements HdbtiVisitor<T> {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSchema(@NotNull HdbsequenceParser.SchemaContext ctx) { return visitChildren(ctx); }
+	@Override public T visitObjConfig(@NotNull HdbtiParser.ObjConfigContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -26,7 +26,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPublicc(@NotNull HdbsequenceParser.PubliccContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignUseHeaderNames(@NotNull HdbtiParser.AssignUseHeaderNamesContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -34,7 +34,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMaxvalue(@NotNull HdbsequenceParser.MaxvalueContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignHeader(@NotNull HdbtiParser.AssignHeaderContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -42,7 +42,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDepends_on(@NotNull HdbsequenceParser.Depends_onContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignDistinguishEmptyFromNull(@NotNull HdbtiParser.AssignDistinguishEmptyFromNullContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -50,7 +50,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNomaxvalue(@NotNull HdbsequenceParser.NomaxvalueContext ctx) { return visitChildren(ctx); }
+	@Override public T visitImportArr(@NotNull HdbtiParser.ImportArrContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -58,7 +58,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDepends_on_table(@NotNull HdbsequenceParser.Depends_on_tableContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignDelimEnclosing(@NotNull HdbtiParser.AssignDelimEnclosingContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -66,7 +66,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPair(@NotNull HdbtiParser.PairContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -74,7 +74,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitCycles(@NotNull HdbsequenceParser.CyclesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignFile(@NotNull HdbtiParser.AssignFileContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -82,7 +82,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignDelimField(@NotNull HdbtiParser.AssignDelimFieldContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -90,7 +90,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDepends_on_view(@NotNull HdbsequenceParser.Depends_on_viewContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPairValue(@NotNull HdbtiParser.PairValueContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -98,7 +98,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDepends_on_list(@NotNull HdbsequenceParser.Depends_on_listContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignSchema(@NotNull HdbtiParser.AssignSchemaContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -106,7 +106,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitReset_by(@NotNull HdbsequenceParser.Reset_byContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPairKey(@NotNull HdbtiParser.PairKeyContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -114,7 +114,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIncrement_by(@NotNull HdbsequenceParser.Increment_byContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignTable(@NotNull HdbtiParser.AssignTableContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -122,7 +122,7 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitHdbsequence(@NotNull HdbsequenceParser.HdbsequenceContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignKeys(@NotNull HdbtiParser.AssignKeysContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -130,5 +130,5 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStart_with(@NotNull HdbsequenceParser.Start_withContext ctx) { return visitChildren(ctx); }
+	@Override public T visitKeyArr(@NotNull HdbtiParser.KeyArrContext ctx) { return visitChildren(ctx); }
 }

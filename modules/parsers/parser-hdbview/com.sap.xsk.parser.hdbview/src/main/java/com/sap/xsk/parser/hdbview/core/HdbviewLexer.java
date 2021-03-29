@@ -1,4 +1,4 @@
-// Generated from com\sap\xsk\parser\hdbview\core\Hdbview.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbview.core;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

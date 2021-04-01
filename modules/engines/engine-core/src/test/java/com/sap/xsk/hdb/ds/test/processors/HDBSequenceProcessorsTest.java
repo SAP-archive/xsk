@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.test.processors;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceDropProcessor;
@@ -19,6 +18,7 @@ import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceUpdateProcessor;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,13 +30,11 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SqlFactory.class, Configuration.class})
@@ -65,7 +63,7 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
 
     @Test
     public void executeUpdate() throws SQLException {
-        XSKHDBSequenceUpdateProcessor  spyProccessor = spy(XSKHDBSequenceUpdateProcessor.class);
+        XSKHDBSequenceUpdateProcessor spyProccessor = spy(XSKHDBSequenceUpdateProcessor.class);
         XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
         spyProccessor.execute(mockConnection, mockModel);
 
@@ -81,13 +79,11 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
         when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("false");
         when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
 
-        when(SqlFactory.getNative(mockConnection).exists(mockConnection, mockModel.getName(), IXSKDataStructureModel.SEQUENCE_ARTIFACT)).thenReturn(true);
+        when(SqlFactory.getNative(mockConnection).exists(mockConnection, mockModel.getName(), DatabaseArtifactTypes.SEQUENCE)).thenReturn(true);
 
+        spyProccessor.execute(mockConnection, mockModel);
 
-       spyProccessor.execute(mockConnection, mockModel);
-
-       verify(spyProccessor, times(1)).executeSql(anyString(), any());
-
+        verify(spyProccessor, times(1)).executeSql(anyString(), any());
     }
 
 }

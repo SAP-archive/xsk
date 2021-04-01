@@ -29,7 +29,7 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
        int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("function") + "function".length();
        if(indexOfBracket > -1 && indexOfEndOfProcKeyword > -1){
            String procNameWithWhiteSymbols = content.substring(indexOfEndOfProcKeyword, indexOfBracket);
-           return procNameWithWhiteSymbols.replace("\\s", "");
+           return procNameWithWhiteSymbols.replace("\\s", "").trim();
        }
        throw new XSKDataStructuresException("HDB Table Function file not correct");
     }

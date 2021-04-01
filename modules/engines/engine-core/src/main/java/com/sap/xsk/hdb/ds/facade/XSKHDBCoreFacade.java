@@ -33,6 +33,7 @@ import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
@@ -283,7 +284,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                         XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) dataStructureSequencesModel.get(dsName);
                         try {
                             if (model != null) {
-                                if (!SqlFactory.getNative(connection).exists(connection, model.getName(),IXSKDataStructureModel.SEQUENCE_ARTIFACT)) {
+                                if (!SqlFactory.getNative(connection).exists(connection, model.getName(), DatabaseArtifactTypes.SEQUENCE)) {
                                     xskSequenceManagerService.createDataStructure(connection, model);
                                 } else {
                                     xskSequenceManagerService.updateDataStructure(connection, model);

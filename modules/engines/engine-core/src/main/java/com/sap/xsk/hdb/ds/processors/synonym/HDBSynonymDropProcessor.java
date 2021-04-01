@@ -13,8 +13,8 @@ package com.sap.xsk.hdb.ds.processors.synonym;
 
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import com.sap.xsk.utils.XSKUtils;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
 
     /**
      * Execute :
-     * DROP [PUBLIC] SYNONYM <synonym_name> [<drop_option>]
+     * DROP SYNONYM <synonym_name> [<drop_option>]
      * If <drop_option> is not specified, then a non-cascaded drop is performed which only drops the specified synonym.
      * Dependent objects of the synonym are invalidated but not dropped.
      *
@@ -38,23 +38,14 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
      */
     @Override
     public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
-        logger.info("Processing Drop Synonym: " + synonymModel);
+        logger.info("Processing Drop Synonym: " + synonymModel.getName());
 
-        //TODO: this is a workaround due to issue on AbstractSqlBuilder.encapsulateMany()
-        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-        String synonymName = synonymModel.getName();
-        String escSynonymSchema = synonymModel.getSynonymSchema();
-        if (caseSensitive) {
-            synonymName = "\"" + synonymName + "\"";
-            if (!escSynonymSchema.isEmpty()) escSynonymSchema = "\"" + escSynonymSchema + "\"" + ".";
-        }
-
-        //TODO: will uncomment when the bug for issue on AbstractSqlBuilder.encapsulateMany() is fixed
-        //if (SqlFactory.getNative(connection).exists(connection, synonymName)) {
-            String sql = SqlFactory.getNative(connection).drop().synonym(escSynonymSchema + synonymName).build();
+        String synonymName = XSKUtils.escapeArtifactName(synonymModel.getName());
+        if (SqlFactory.getNative(connection).exists(connection, synonymName, DatabaseArtifactTypes.SYNONYM)) {
+            String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();
             executeSql(sql, connection);
-        //} else {
-           // logger.warn(format("Synonym [{0}] does not exists during the drop process", synonymName));
-        //}
+        } else {
+            logger.warn(format("Synonym [{0}] does not exists during the drop process", synonymModel.getName()));
+        }
     }
 }

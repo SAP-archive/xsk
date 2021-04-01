@@ -11,46 +11,43 @@
  */
 package com.sap.xsk.hdb.ds.processors.view;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import com.sap.xsk.utils.XSKUtils;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import static java.text.MessageFormat.format;
 
 /**
  * The View Drop Processor.
  */
 public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBViewModel> {
 
-	private static final Logger logger = LoggerFactory.getLogger(XSKViewDropProcessor.class);
-	IXSKHdbProcessor<XSKDataStructureHDBViewModel> processor;
+    private static final Logger logger = LoggerFactory.getLogger(XSKViewDropProcessor.class);
 
-	/**
-	 * Execute the corresponding statement.
-	 *
-	 * @param connection the connection
-	 * @param viewModel the view model
-	 * @throws SQLException the SQL exception
-	 */
-	public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
-		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-		String viewName = viewModel.getName();
-		if (caseSensitive) {
-			viewName = "\"" + viewName + "\"";
-		}
-		logger.info("Processing Drop View: " + viewName);
-		if (SqlFactory.getNative(connection).exists(connection, viewName)) {
-			String sql = SqlFactory.getNative(connection).drop().view(viewName).build();
-			executeSql(sql, connection);
-		}
-	}
+    /**
+     * Execute the corresponding statement.
+     *
+     * @param connection the connection
+     * @param viewModel  the view model
+     * @throws SQLException the SQL exception
+     */
+    public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
+        logger.info("Processing Drop View: " + viewModel.getName());
+
+        String viewName = XSKUtils.escapeArtifactName(viewModel.getName());
+        if (SqlFactory.getNative(connection).exists(connection, viewName, DatabaseArtifactTypes.VIEW)) {
+            String sql = SqlFactory.getNative(connection).drop().view(viewName).build();
+            executeSql(sql, connection);
+        } else {
+            logger.warn(format("View [{0}] does not exists during the drop process", viewModel.getName()));
+        }
+    }
 
 }

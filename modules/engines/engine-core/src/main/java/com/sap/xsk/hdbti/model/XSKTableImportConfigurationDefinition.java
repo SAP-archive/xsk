@@ -20,6 +20,8 @@ public class XSKTableImportConfigurationDefinition {
 
     private String table;
 
+    private String hdbtiFileName;
+
     private String schema;
 
     private String file;
@@ -117,6 +119,14 @@ public class XSKTableImportConfigurationDefinition {
 
     public void setKeysAsMap(Map<String, String> keysAsMap) {
         this.keysAsMap = keysAsMap;
+    }
+
+    public String getHdbtiFileName() {
+        return hdbtiFileName;
+    }
+
+    public void setHdbtiFileName(String hdbtiFileName) {
+        this.hdbtiFileName = hdbtiFileName;
     }
 
     @Override

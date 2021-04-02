@@ -13,6 +13,7 @@ package com.sap.xsk.parser.hdbsequence.models;
 
 import com.google.gson.annotations.SerializedName;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceMissingPropertyException;
+import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class XSKHDBSEQUENCEModel {
     Boolean cycles;
     String reset_by;
 
-    @SerializedName(value = "public")
+    @SerializedName(value = HDBSequenceConstants.PUBLIC_PROPERTY)
     Boolean publicc;
 
     String depends_on_table;
@@ -38,12 +39,12 @@ public class XSKHDBSEQUENCEModel {
 
     private void checkMandatoryFieldsPresence(String schema, Integer increment_by, Integer start_with,
                                               Boolean nomaxvalue, Boolean nominvalue, Boolean publicc) throws XSKHDBSequenceMissingPropertyException {
-        checkPresence( schema , "schema" );
-        checkPresence( increment_by ,  "increment_by");
-        checkPresence( start_with ,  "start_with");
-        checkPresence( nomaxvalue , "nomaxvalue" );
-        checkPresence( nominvalue ,  "nominvalue");
-        checkPresence(  publicc, "publicc" );
+        checkPresence( schema , HDBSequenceConstants.SCHEMA_PROPERTY);
+        checkPresence( increment_by ,  HDBSequenceConstants.INCREMENT_BY_PROPERTY);
+        checkPresence( start_with ,  HDBSequenceConstants.START_WITH_PROPERTY);
+        checkPresence( nomaxvalue , HDBSequenceConstants.NOMAXVALUE_PROPERTY);
+        checkPresence( nominvalue ,  HDBSequenceConstants.NOMINVALUE_PROPERTY);
+        checkPresence(  publicc, HDBSequenceConstants.PUBLIC_PROPERTY );
 
     }
 

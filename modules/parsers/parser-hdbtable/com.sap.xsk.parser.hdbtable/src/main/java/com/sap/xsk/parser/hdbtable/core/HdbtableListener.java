@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbtable\core\Hdbtable.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbtable.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -73,6 +73,17 @@ public interface HdbtableListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitColumnAssignDefaultValue(@NotNull HdbtableParser.ColumnAssignDefaultValueContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbtableParser#indexProperties}.
+	 * @param ctx the parse tree
+	 */
+	void enterIndexProperties(@NotNull HdbtableParser.IndexPropertiesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbtableParser#indexProperties}.
+	 * @param ctx the parse tree
+	 */
+	void exitIndexProperties(@NotNull HdbtableParser.IndexPropertiesContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link HdbtableParser#columnAssignName}.
@@ -196,6 +207,17 @@ public interface HdbtableListener extends ParseTreeListener {
 	void exitIndexAssignUnique(@NotNull HdbtableParser.IndexAssignUniqueContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link HdbtableParser#hdbtableProperties}.
+	 * @param ctx the parse tree
+	 */
+	void enterHdbtableProperties(@NotNull HdbtableParser.HdbtablePropertiesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbtableParser#hdbtableProperties}.
+	 * @param ctx the parse tree
+	 */
+	void exitHdbtableProperties(@NotNull HdbtableParser.HdbtablePropertiesContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link HdbtableParser#loggingTypeProp}.
 	 * @param ctx the parse tree
 	 */
@@ -216,6 +238,17 @@ public interface HdbtableListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitColumnAssignNullable(@NotNull HdbtableParser.ColumnAssignNullableContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbtableParser#columnsProperties}.
+	 * @param ctx the parse tree
+	 */
+	void enterColumnsProperties(@NotNull HdbtableParser.ColumnsPropertiesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbtableParser#columnsProperties}.
+	 * @param ctx the parse tree
+	 */
+	void exitColumnsProperties(@NotNull HdbtableParser.ColumnsPropertiesContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link HdbtableParser#temporaryProp}.

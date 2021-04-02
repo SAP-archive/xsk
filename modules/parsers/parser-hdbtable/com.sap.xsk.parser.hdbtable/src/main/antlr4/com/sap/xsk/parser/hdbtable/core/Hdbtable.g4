@@ -1,6 +1,7 @@
 grammar Hdbtable;
 
-hdbtableDefinition: schemaNameProp temporaryProp? tableTypeProp? publicProp? loggingTypeProp? tableColumnsProp tableIndexesProp? tablePrimaryKeyProp? tablePrimaryKeyIndexTypeProp? descriptionProp?;
+hdbtableDefinition: hdbtableProperties+;
+hdbtableProperties: schemaNameProp | temporaryProp | tableTypeProp | publicProp | loggingTypeProp | tableColumnsProp | tableIndexesProp | tablePrimaryKeyProp | tablePrimaryKeyIndexTypeProp | descriptionProp;
 schemaNameProp: TABLE DOT 'schemaName' EQ STRING SEMICOLON ;
 temporaryProp: TABLE DOT 'temporary' EQ BOOLEAN SEMICOLON;
 tableTypeProp: TABLE DOT 'tableType' EQ TABLETYPE SEMICOLON ;
@@ -12,24 +13,24 @@ tablePrimaryKeyProp: TABLE DOT 'primaryKey' DOT 'pkcolumns' EQ  tablePrimaryKeyC
 tablePrimaryKeyColumnsProp: '['  STRING(',' STRING)* ']';
 tablePrimaryKeyIndexTypeProp: TABLE DOT 'primaryKey' DOT 'indexType' EQ INDEXTYPE SEMICOLON;
 descriptionProp: TABLE DOT 'description' EQ STRING SEMICOLON ;
-columnsObject: '{'
-        columnAssignName
-        columnAssignSQLType
-        columnAssignUnique?
-        columnAssignLength?
-        columnAssignNullable?
-        columnAssignComment?
-        columnAssignDefaultValue?
-        columnAssignPrecision?
-        columnAssignScale?
-      '}' ;
-indexesObject: '{'
-        indexAssignName
-        indexAssignUnique
-        indexAssignOrder?
-        indexAssignIndexColumns
-        indexAssignIndexType?
-      '}' ;
+columnsObject: '{' columnsProperties+ '}';
+columnsProperties:
+        columnAssignName |
+        columnAssignSQLType |
+        columnAssignUnique |
+        columnAssignLength |
+        columnAssignNullable |
+        columnAssignComment |
+        columnAssignDefaultValue |
+        columnAssignPrecision |
+        columnAssignScale;
+indexesObject: '{' indexProperties+ '}';
+indexProperties:
+        indexAssignName |
+        indexAssignUnique |
+        indexAssignOrder |
+        indexAssignIndexColumns |
+        indexAssignIndexType;
 columnAssignName: 'name' EQ STRING SEMICOLON;
 columnAssignSQLType: 'sqlType' EQ SQLTYPES SEMICOLON;
 columnAssignNullable: 'nullable' EQ BOOLEAN SEMICOLON;

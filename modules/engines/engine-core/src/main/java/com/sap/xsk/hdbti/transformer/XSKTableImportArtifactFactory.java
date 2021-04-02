@@ -14,7 +14,7 @@ package com.sap.xsk.hdbti.transformer;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
-import com.sap.xsk.hdbti.service.XSKCsvToHdbtiRelationService;
+import com.sap.xsk.hdbti.dao.XSKCsvToHdbtiRelationDao;
 import com.sap.xsk.parser.hdbti.custom.XSKHDBTIParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
@@ -32,7 +32,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +45,7 @@ public class XSKTableImportArtifactFactory {
 
     private IRepository repository = StaticInjector.getInjector().getInstance(IRepository .class);
 
-    private XSKCsvToHdbtiRelationService xskCsvToHdbtiRelationService = StaticInjector.getInjector().getInstance(XSKCsvToHdbtiRelationService .class);
+    private XSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = StaticInjector.getInjector().getInstance(XSKCsvToHdbtiRelationDao.class);
     private XSKHDBTIParser xskhdbtiParser;
     public XSKTableImportArtifactFactory() {
         setupParser();
@@ -89,7 +88,7 @@ public class XSKTableImportArtifactFactory {
     }
 
     private void addHdbtiToCsvRelation(XSKTableImportArtifact tableImportArtifact, XSKHDBTIImportConfigModel configuration, String hdbtiLocation) {
-        String csvParsedFilePath = xskCsvToHdbtiRelationService.convertToActualFileName(configuration.getFileName());
+        String csvParsedFilePath = xskCsvToHdbtiRelationDao.convertToActualFileName(configuration.getFileName());
         XSKTableImportToCsvRelation tableImportToCsvRelation = new XSKTableImportToCsvRelation();
         IResource csvFile = repository.getResource(csvParsedFilePath);
         tableImportToCsvRelation.setCsv(csvParsedFilePath);

@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.sql.DataSource;
 
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
@@ -38,6 +39,7 @@ import com.sap.xsk.hdbti.api.XSKTableImportException;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.transformer.XSKTableImportArtifactFactory;
 
+@Singleton
 public class XSKTableImportCoreService implements IXSKTableImportCoreService {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKTableImportCoreService.class);
@@ -119,12 +121,12 @@ public class XSKTableImportCoreService implements IXSKTableImportCoreService {
     }
 
     boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-    
+
     public String convertToActualTableName(String tableName) {
-    	if (caseSensitive) {
-			tableName = "\"" + tableName + "\"";
-		}
-    	return tableName;
+        if (caseSensitive) {
+            tableName = "\"" + tableName + "\"";
+        }
+        return tableName;
 //        return tableName.substring(tableName.lastIndexOf(':') + 1).replace('.', '_').toUpperCase();
     }
 

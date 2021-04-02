@@ -14,6 +14,7 @@ package com.sap.xsk.hdbti.api;
 import java.io.IOException;
 import java.util.List;
 
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 
 public interface IXSKTableImportCoreService {

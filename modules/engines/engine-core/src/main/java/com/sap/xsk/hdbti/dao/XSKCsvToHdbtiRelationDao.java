@@ -1,15 +1,15 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdbti.service;
+package com.sap.xsk.hdbti.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.sql.DataSource;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -33,9 +34,10 @@ import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
 import com.sap.xsk.utils.XSKUtils;
 
-public class XSKCsvToHdbtiRelationService implements IXSKCsvToHdbtiRelationService {
+@Singleton
+public class XSKCsvToHdbtiRelationDao implements IXSKCsvToHdbtiRelationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(XSKCsvToHdbtiRelationService.class);
+    private static final Logger logger = LoggerFactory.getLogger(XSKCsvToHdbtiRelationDao.class);
 
     @Inject
     private PersistenceManager<XSKTableImportToCsvRelation> xskTableImportToCsvRelationPersistenceManager;
@@ -53,8 +55,7 @@ public class XSKCsvToHdbtiRelationService implements IXSKCsvToHdbtiRelationServi
 
     @Override
     public void deleteCsvAndHdbtiRelations(String hdbtiFileName, Connection connection) {
-        DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
-        String sql = deleteBuilder.from("XSK_TABLE_IMPORT_TO_CSV").where("HDBTI_LOCATION = " + "'" + XSKUtils.convertToFullPath(hdbtiFileName) + "'").generate();
+        String sql = String.format("DELETE FROM \"XSK_TABLE_IMPORT_TO_CSV\" WHERE \"HDBTI_LOCATION\"='%s'", XSKUtils.convertToFullPath(hdbtiFileName));
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.execute();
         } catch (SQLException e) {

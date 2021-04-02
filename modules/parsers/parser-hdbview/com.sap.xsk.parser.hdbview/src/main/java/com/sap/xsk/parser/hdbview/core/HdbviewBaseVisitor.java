@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbview\core\Hdbview.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbview.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -43,6 +43,14 @@ public class HdbviewBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitDependsOnView(@NotNull HdbviewParser.DependsOnViewContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitProperty(@NotNull HdbviewParser.PropertyContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

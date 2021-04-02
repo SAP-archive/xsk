@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbview\core\Hdbview.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbview.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -38,6 +38,13 @@ public interface HdbviewVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDependsOnView(@NotNull HdbviewParser.DependsOnViewContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbviewParser#property}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProperty(@NotNull HdbviewParser.PropertyContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link HdbviewParser#hdbviewDefinition}.

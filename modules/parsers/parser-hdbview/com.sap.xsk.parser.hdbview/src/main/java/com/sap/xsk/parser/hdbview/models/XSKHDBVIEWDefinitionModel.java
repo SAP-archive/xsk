@@ -11,12 +11,15 @@
  */
 package com.sap.xsk.parser.hdbview.models;
 
+import com.sap.xsk.parser.hdbview.exceptions.XSKHDBViewMissingPropertyException;
+
 import java.util.List;
+import java.util.Objects;
 
 public class XSKHDBVIEWDefinitionModel {
     private String schema;
     private String query;
-    private boolean publicProp;
+    private boolean publicProp = true;
     private List<String> dependsOn;
     private List<String> dependsOnTable;
     private List<String> dependsOnView;
@@ -67,6 +70,17 @@ public class XSKHDBVIEWDefinitionModel {
 
     public void setDependsOnView(List<String> dependsOnView) {
         this.dependsOnView = dependsOnView;
+    }
+
+    public void checkForAllMandatoryFieldsPresence() throws Exception {
+        checkPresence(schema, "schema");
+        checkPresence(query, "query");
+    }
+
+    private <T> void checkPresence(T field, String fieldName) {
+        if (Objects.isNull(field)) {
+            throw new XSKHDBViewMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+        }
     }
 
     @Override

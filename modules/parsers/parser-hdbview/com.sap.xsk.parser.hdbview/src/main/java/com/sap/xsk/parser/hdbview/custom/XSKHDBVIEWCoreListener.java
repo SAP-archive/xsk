@@ -14,8 +14,10 @@ package com.sap.xsk.parser.hdbview.custom;
 import com.sap.xsk.parser.hdbview.core.HdbviewBaseListener;
 import com.sap.xsk.parser.hdbview.core.HdbviewParser;
 import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,17 +27,33 @@ public class XSKHDBVIEWCoreListener extends HdbviewBaseListener {
     private ParseTreeProperty<Object> tokens = new ParseTreeProperty<>();
 
     @Override
-    public void exitHdbviewDefinition(HdbviewParser.HdbviewDefinitionContext ctx) {
-        model.setSchema(handleStringLiteral((String) tokens.get(ctx.schemaProp())));
-        if (tokens.get(ctx.publicProp()) != null) {
-            model.setPublic((Boolean) tokens.get(ctx.publicProp()));
-        } else {
-            model.setPublic(true);
+    public void exitHdbviewDefinition(HdbviewParser.HdbviewDefinitionContext ctx){
+        List<ParseTree> ctxList = ctx.children;
+        for (ParseTree tree : ctxList) {
+            if (tree.getChild(0) instanceof HdbviewParser.SchemaPropContext) {
+                model.setSchema(handleStringLiteral((String) tokens.get((HdbviewParser.SchemaPropContext) tree.getChild(0))));
+            }
+            if (tree.getChild(0) instanceof HdbviewParser.QueryPropContext) {
+                model.setQuery(handleStringLiteral((String) tokens.get((HdbviewParser.QueryPropContext) tree.getChild(0))));
+            }
+            if (tree.getChild(0) instanceof HdbviewParser.DependsOnPropContext) {
+                model.setDependsOn((ArrayList) tokens.get((HdbviewParser.DependsOnPropContext) tree.getChild(0)));
+            }
+            if (tree.getChild(0) instanceof HdbviewParser.DependsOnTableContext) {
+                model.setDependsOnTable((ArrayList) tokens.get((HdbviewParser.DependsOnTableContext) tree.getChild(0)));
+            }
+            if (tree.getChild(0) instanceof HdbviewParser.DependsOnViewContext) {
+                model.setDependsOnView((ArrayList) tokens.get((HdbviewParser.DependsOnViewContext) tree.getChild(0)));
+            }
+            if (tree.getChild(0) instanceof HdbviewParser.PublicPropContext) {
+                Object publicProp = tokens.get((HdbviewParser.PublicPropContext) tree.getChild(0));
+                if (publicProp != null) {
+                    model.setPublic((Boolean) publicProp);
+                } else {
+                    model.setPublic(true);
+                }
+            }
         }
-        model.setQuery(handleStringLiteral((String) tokens.get(ctx.queryProp())));
-        model.setDependsOn((List<String>) tokens.get(ctx.dependsOnProp()));
-        model.setDependsOnTable((List<String>) tokens.get(ctx.dependsOnTable()));
-        model.setDependsOnView((List<String>) tokens.get(ctx.dependsOnView()));
     }
 
     @Override

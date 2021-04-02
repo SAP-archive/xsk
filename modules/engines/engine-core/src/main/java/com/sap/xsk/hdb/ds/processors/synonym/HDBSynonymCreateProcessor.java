@@ -13,8 +13,8 @@ package com.sap.xsk.hdb.ds.processors.synonym;
 
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import com.sap.xsk.utils.XSKUtils;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,23 +39,12 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
      */
     @Override
     public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
-        logger.info("Processing Create Synonym: " + synonymModel);
+        logger.info("Processing Create Synonym: " + synonymModel.getName());
 
-        //TODO: this is a workaround due to issue on AbstractSqlBuilder.encapsulateMany()
-        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-        String synonymName = synonymModel.getName();
-        String targetObjectName = synonymModel.getTargetObject();
-        String escSynonymSchema = synonymModel.getSynonymSchema();
-        String escTargetSchema = synonymModel.getTargetSchema();
-        if (caseSensitive) {
-            synonymName = "\"" + synonymName + "\"";
-            targetObjectName = "\"" + targetObjectName + "\"";
-            if (!escSynonymSchema.isEmpty()) escSynonymSchema = "\"" + escSynonymSchema + "\"" + ".";
-            if (!escTargetSchema.isEmpty()) escTargetSchema = "\"" + escTargetSchema + "\"" + ".";
-        }
-
-        if (!SqlFactory.getNative(connection).exists(connection, synonymModel.getName())) {
-            String sql = SqlFactory.getNative(connection).create().synonym(escSynonymSchema + synonymName).forSource(escTargetSchema + targetObjectName).build();
+        String synonymName = XSKUtils.escapeArtifactName(synonymModel.getName());
+        String targetObjectName = XSKUtils.escapeArtifactName(synonymModel.getTargetObject(), synonymModel.getTargetSchema());
+        if (!SqlFactory.getNative(connection).exists(connection, synonymModel.getName(), DatabaseArtifactTypes.SYNONYM)) {
+            String sql = SqlFactory.getNative(connection).create().synonym(synonymName).forSource(targetObjectName).build();
             executeSql(sql, connection);
         } else {
             logger.warn(format("Synonym [{0}] already exists during the create process", synonymModel.getName()));

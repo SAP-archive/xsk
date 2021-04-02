@@ -14,12 +14,16 @@ package com.sap.xsk.utils;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.xsodata.ds.model.XSKODataEntity;
 import org.apache.commons.io.FilenameUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class XSKUtils {
+
+    private Matcher matcher;
 
     private XSKUtils() {
 
@@ -115,7 +119,45 @@ public class XSKUtils {
         } else {
             return "";
         }
-
     }
+
+    /**
+     * Escape artifact name if DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE is activated
+     *
+     * @param artifactName name of the artifact
+     * @param schemaName   name of teh schema that will be assembled to the artifact name
+     * @return escaped in quotes artifact name
+     */
+    public static String escapeArtifactName(String artifactName, String schemaName) {
+        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
+
+        if (!artifactName.startsWith("\"")) {
+            if (caseSensitive) {
+                artifactName = "\"" + artifactName + "\"";
+            }
+        }
+
+        if (schemaName != null && !schemaName.trim().isEmpty()) {
+            if (!schemaName.startsWith("\"")) {
+                if (caseSensitive) {
+                    schemaName = "\"" + schemaName + "\"" + ".";
+                } else {
+                    schemaName = schemaName + ".";
+                }
+            }
+        } else {
+            schemaName = "";
+        }
+
+        return schemaName + artifactName;
+    }
+
+    /**
+     * See also {@link #escapeArtifactName(String, String)}.
+     */
+    public static String escapeArtifactName(String artifactName) {
+        return escapeArtifactName(artifactName, null);
+    }
+
 
 }

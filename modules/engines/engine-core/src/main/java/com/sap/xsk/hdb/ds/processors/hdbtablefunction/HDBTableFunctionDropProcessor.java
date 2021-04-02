@@ -11,21 +11,35 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbtablefunction;
 
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
+import com.sap.xsk.utils.XSKUtils;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static java.text.MessageFormat.format;
+
 public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableFunctionModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionDropProcessor.class);
 
     public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
-        String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + hdbTableFunction.getName();
-        executeSql(sql, connection);
+        logger.info("Processing Drop TableFunction: " + hdbTableFunction.getName());
+
+        String tableFunctionName = XSKUtils.escapeArtifactName(hdbTableFunction.getName());
+        if (SqlFactory.getNative(connection).exists(connection, tableFunctionName, DatabaseArtifactTypes.FUNCTION)) {
+            String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + hdbTableFunction.getName();
+            executeSql(sql, connection);
+        } else {
+            logger.warn(format("TableFunction [{0}] already exists during the drop process", hdbTableFunction.getName()));
+        }
     }
+
 }

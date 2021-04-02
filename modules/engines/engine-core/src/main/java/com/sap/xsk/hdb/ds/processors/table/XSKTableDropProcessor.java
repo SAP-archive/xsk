@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -46,11 +47,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
 	 *             the SQL exception
 	 */
 	public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
-		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-		String tableName = tableModel.getName();
-		if (caseSensitive) {
-			tableName = "\"" + tableName + "\"";
-		}
+		String tableName = XSKUtils.escapeArtifactName(tableModel.getName());
 		logger.info("Processing Drop Table: " + tableName);
 		if (SqlFactory.getNative(connection).exists(connection, tableName)) {
 			String sql = SqlFactory.getNative(connection).select().column("COUNT(*)").from(tableName)

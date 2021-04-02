@@ -16,12 +16,19 @@ import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionCreateProc
 import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionDropProcessor;
 import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
 import com.sap.xsk.utils.XSKConstants;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
@@ -34,10 +41,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({SqlFactory.class, Configuration.class})
 public class HDBTableFunctionProcessorTest extends AbstractGuiceTest {
 
-    @Mock
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Connection mockConnection;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private SqlFactory mockSqlfactory;
     @Mock
     private PreparedStatement mockStatement;
 
@@ -48,12 +58,19 @@ public class HDBTableFunctionProcessorTest extends AbstractGuiceTest {
 
     @Test
     public void executeCreateTableFunctionSuccessfully() throws IOException, SQLException {
+        //PowerMock do not support deep stub calls
+        PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+        when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+        when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
+
         HDBTableFunctionCreateProcessor processorSpy = spy(HDBTableFunctionCreateProcessor.class);
         String hdbprocedureSample = org.apache.commons.io.IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/OrderTableFunction.hdbtablefunction"), StandardCharsets.UTF_8);
 
         XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
         model.setContent(hdbprocedureSample);
-        String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE+ model.getContent();
+        model.setName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
+        String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + model.getContent();
+        when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.FUNCTION)).thenReturn(false);
 
         when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
         when(mockStatement.executeUpdate(any())).thenReturn(1);
@@ -64,11 +81,17 @@ public class HDBTableFunctionProcessorTest extends AbstractGuiceTest {
 
     @Test
     public void executeDropTableFunctionSuccessfully() throws SQLException {
+        //PowerMock do not support deep stub calls
+        PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+        when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+        when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
+
         HDBTableFunctionDropProcessor processorSpy = spy(HDBTableFunctionDropProcessor.class);
 
         XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
         model.setName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
         String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + model.getName();
+        when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.FUNCTION)).thenReturn(true);
 
         when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
         when(mockStatement.executeUpdate(any())).thenReturn(1);

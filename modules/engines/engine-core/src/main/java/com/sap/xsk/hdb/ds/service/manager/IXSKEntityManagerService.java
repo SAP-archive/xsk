@@ -76,14 +76,9 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
 
     @Override
     public void createDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
-        boolean caseSensitive = Boolean.parseBoolean(
-                Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
         if (entitiesModel != null) {
             for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-                String tableName = XSKUtils.getTableName(entityModel);
-                if (caseSensitive) {
-                    tableName = "\"" + tableName + "\"";
-                }
+                String tableName = XSKUtils.escapeArtifactName(XSKUtils.getTableName(entityModel));
                 if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
                     this.xskEntityCreateProcessor.execute(connection, entityModel);
                 } else {
@@ -96,14 +91,9 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
 
     @Override
     public void dropDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
-        boolean caseSensitive = Boolean.parseBoolean(
-                Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
         if (entitiesModel != null) {
             for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-                String tableName = XSKUtils.getTableName(entityModel);
-                if (caseSensitive) {
-                    tableName = "\"" + tableName + "\"";
-                }
+                String tableName = XSKUtils.escapeArtifactName(XSKUtils.getTableName(entityModel));
                 if (SqlFactory.getNative(connection).exists(connection, tableName)) {
                     if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
                         xskEntityDropProcessor.execute(connection, entityModel);
@@ -118,14 +108,9 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
     @Override
     public void updateDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel)
             throws SQLException, OperationNotSupportedException {
-        boolean caseSensitive = Boolean.parseBoolean(
-                Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
         if (entitiesModel != null) {
             for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-                String tableName = XSKUtils.getTableName(entityModel);
-                if (caseSensitive) {
-                    tableName = "\"" + tableName + "\"";
-                }
+                String tableName = XSKUtils.escapeArtifactName(XSKUtils.getTableName(entityModel));
                 if (SqlFactory.getNative(connection).exists(connection, tableName)) {
                     if (SqlFactory.getNative(connection).count(connection, tableName) != 0) {
                         this.xskEntityUpdateProcessor.execute(connection, entityModel);

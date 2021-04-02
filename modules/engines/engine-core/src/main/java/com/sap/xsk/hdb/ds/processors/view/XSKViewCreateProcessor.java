@@ -14,14 +14,18 @@ package com.sap.xsk.hdb.ds.processors.view;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
+import com.sap.xsk.utils.XSKUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import static java.text.MessageFormat.format;
 
 /**
  * The View Create Processor.
@@ -38,13 +42,10 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
      * @throws SQLException the SQL exception
      */
     public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
-        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-        String viewName = viewModel.getName();
-        if (caseSensitive) {
-            viewName = "\"" + viewName + "\"";
-        }
-        logger.info("Processing Create View: " + viewName);
-        if (!SqlFactory.getNative(connection).exists(connection, viewName)) {
+        logger.info("Processing Create View: " + viewModel.getName());
+
+        String viewName =  XSKUtils.escapeArtifactName(viewModel.getName());
+        if (!SqlFactory.getNative(connection).exists(connection, viewName, DatabaseArtifactTypes.VIEW)) {
             String sql = null;
             switch (viewModel.getHanaVersion()) {
                 case VERSION_1: {
@@ -57,6 +58,8 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
                 }
             }
             executeSql(sql, connection);
+        }else {
+            logger.warn(format("View [{0}] already exists during the create process", viewModel.getName()));
         }
     }
 

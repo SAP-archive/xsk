@@ -15,9 +15,10 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
-import com.sap.xsk.hdb.ds.test.parser.XSKSynonymParserTest;
-import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.CreateBranchingBuilder;
 import org.eclipse.dirigible.database.sql.builders.DropBranchingBuilder;
@@ -41,7 +42,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SqlFactory.class})
+@PrepareForTest({SqlFactory.class, Configuration.class})
 public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Connection mockConnection;
@@ -69,16 +70,18 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
         String hdbsynonymSample = org.apache.commons.io.IOUtils.toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
 
         XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdbsynonymSample);
+        model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
         String mockSQL = "testSQLScript";
 
         //PowerMock do not support deep stub calls
-        PowerMockito.mockStatic(SqlFactory.class);
+        PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
         when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-        when(SqlFactory.getNative(mockConnection).exists(any(), any())).thenReturn(false);
+        when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.SYNONYM)).thenReturn(false);
         when(SqlFactory.getNative(mockConnection).create()).thenReturn(create);
         when(SqlFactory.getNative(mockConnection).create().synonym(any())).thenReturn(mockCreateSynonymBuilder);
         when(SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any())).thenReturn(mockCreateSynonymBuilder);
         when(SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any()).build()).thenReturn(mockSQL);
+        when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
         processorSpy.execute(mockConnection, model);
         verify(processorSpy, times(1)).executeSql(mockSQL, mockConnection);
@@ -90,14 +93,16 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
         String hdsynonymSample = org.apache.commons.io.IOUtils.toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
 
         XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdsynonymSample);
+        model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
         String mockSQL = "testSQLScript";
 
-        PowerMockito.mockStatic(SqlFactory.class);
+        PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
         when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-        when(SqlFactory.getNative(mockConnection).exists(any(), any())).thenReturn(true);
+        when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
         when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
         when(SqlFactory.getNative(mockConnection).drop().synonym(any())).thenReturn(mockDropSynonymBuilder);
         when(SqlFactory.getNative(mockConnection).drop().synonym(any()).build()).thenReturn(mockSQL);
+        when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
         processorSpy.execute(mockConnection, model);
         verify(processorSpy, times(1)).executeSql(mockSQL, mockConnection);

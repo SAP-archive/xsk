@@ -45,11 +45,7 @@ public class XSKEntityUpdateProcessor extends AbstractXSKProcessor<XSKDataStruct
      * @throws SQLException the SQL exception
      */
     public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-        String tableName = XSKUtils.getTableName(entityModel);
-        if (caseSensitive) {
-            tableName = "\"" + tableName + "\"";
-        }
+        String tableName = XSKUtils.escapeArtifactName(XSKUtils.getTableName(entityModel));
         logger.info("Processing Update Entity: {}", tableName);
         if (SqlFactory.getNative(connection).exists(connection, tableName)) {
             if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {

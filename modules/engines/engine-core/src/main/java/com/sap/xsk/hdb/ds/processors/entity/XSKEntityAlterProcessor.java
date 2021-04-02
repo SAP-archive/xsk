@@ -52,7 +52,6 @@ public class XSKEntityAlterProcessor {
 	 * @throws SQLException the SQL exception
 	 */
 	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = XSKUtils.getTableName(entityModel);
 		logger.info("Processing Alter Entity: {}", tableName);
 		
@@ -73,10 +72,7 @@ public class XSKEntityAlterProcessor {
 		
 		// ADD iteration
 		for (XSKDataStructureHDBTableColumnModel columnModel : entityModel.getColumns()) {
-			String name = columnModel.getName();
-			if (caseSensitive) {
-				name = "\"" + name + "\"";
-			}
+			String name = XSKUtils.escapeArtifactName(columnModel.getName());
 			DataType type = DataType.valueOf(columnModel.getType());
 			String length = columnModel.getLength();
 			boolean isNullable = columnModel.isNullable();

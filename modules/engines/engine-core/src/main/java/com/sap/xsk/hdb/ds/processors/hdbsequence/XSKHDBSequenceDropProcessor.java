@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,7 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
         }
         logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
 
-        if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, IXSKDataStructureModel.SEQUENCE_ARTIFACT)){
+        if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)){
             String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
                                 ? getHanav1ModelSQL(hdbSequenceName)
                                 : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();

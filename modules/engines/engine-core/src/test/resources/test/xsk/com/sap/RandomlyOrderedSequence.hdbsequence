@@ -1,0 +1,8 @@
+start_with= 10;
+maxvalue= 30;
+nomaxvalue=false;
+nominvalue= true;
+cycles=false;
+public=false;
+increment_by=-2;
+schema="USR_9TCD6SXS67DP7AFLFE420B8EB";

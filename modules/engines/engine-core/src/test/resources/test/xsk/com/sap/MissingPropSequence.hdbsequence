@@ -1,0 +1,7 @@
+start_with= 10;
+maxvalue= 30;
+nomaxvalue=false;
+nominvalue= true;
+cycles=false;
+public=false;
+increment_by=-2;

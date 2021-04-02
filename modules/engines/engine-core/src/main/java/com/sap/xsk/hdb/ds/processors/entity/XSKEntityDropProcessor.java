@@ -43,11 +43,7 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
      * @return if delete operation has been performed successfully or the table does not exist
      */
     public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-    	boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-        String tableName = XSKUtils.getTableName(entityModel);
-        if (caseSensitive) {
-			tableName = "\"" + tableName + "\"";
-		}
+        String tableName = XSKUtils.escapeArtifactName(XSKUtils.getTableName(entityModel));
         logger.info("Processing Drop Table: {}", tableName);
         if (SqlFactory.getNative(connection).exists(connection, tableName)) {
             String sql = SqlFactory.getNative(connection).select().column("COUNT(*)").from(tableName)
@@ -72,18 +68,15 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
                 for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
                 	String foreignKeyName = "FK_" + foreignKey.getName();
 					String[] fkColumns = foreignKey.getColumns();
-					String referencedTable = XSKUtils.getTableName(entityModel, foreignKey.getReferencedTable());
+					String referencedTable = XSKUtils.escapeArtifactName(XSKUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
 					String[] referencedColumns = foreignKey.getReferencedColumns();
-					if (caseSensitive) {
-						foreignKeyName = "\"" + foreignKeyName + "\"";
+						foreignKeyName = XSKUtils.escapeArtifactName(foreignKeyName);
 						for (int i=0;i<fkColumns.length;i++) {
-							fkColumns[i] = "\"" + fkColumns[i] + "\"";
+							fkColumns[i] = XSKUtils.escapeArtifactName(fkColumns[i]);
 						}
-						referencedTable = "\"" + referencedTable + "\"";
 						for (int i=0;i<referencedColumns.length;i++) {
-							referencedColumns[i] = "\"" + referencedColumns[i] + "\"";
+							referencedColumns[i] = XSKUtils.escapeArtifactName(referencedColumns[i]);
 						}
-					}
                     sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyName).fromTable(tableName).build();
                     executeSql(sql, connection);
                 }

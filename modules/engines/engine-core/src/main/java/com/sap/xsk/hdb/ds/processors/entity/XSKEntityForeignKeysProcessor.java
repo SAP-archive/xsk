@@ -45,7 +45,6 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
 	 * @throws SQLException the SQL exception
 	 */
 	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
 		String tableName = XSKUtils.getTableName(entityModel);
 		logger.info("Processing Foreign Keys to the Table: {}", tableName);
 //		CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
@@ -55,9 +54,8 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
 			
 			String sourceTable = XSKUtils.getTableName(entityModel);
 			String name = "FK_" + sourceTable + "_" + tableName;
-			if (caseSensitive) {
-				sourceTable = "\"" + sourceTable + "\"";
-			}
+			sourceTable = XSKUtils.escapeArtifactName(sourceTable);
+
 			boolean existing = SqlFactory.getNative(connection).exists(connection, sourceTable);
 			if (existing) {
 				AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(sourceTable);

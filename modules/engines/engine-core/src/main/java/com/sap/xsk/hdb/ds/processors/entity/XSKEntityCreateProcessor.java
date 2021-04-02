@@ -47,20 +47,13 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
 	 * @throws SQLException the SQL exception
 	 */
 	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-		String tableName = XSKUtils.getTableName(entityModel);
-		if (caseSensitive) {
-			tableName = "\"" + tableName + "\"";
-		}
+		String tableName = XSKUtils.escapeArtifactName(XSKUtils.getTableName(entityModel));
 		logger.info("Processing Create Table: {}", tableName);
 		CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
 		List<XSKDataStructureHDBTableColumnModel> columns = entityModel.getColumns();
 		List<String> primaryKeyColumns = new ArrayList<String>();
 		for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
-			String name = columnModel.getName();
-			if (caseSensitive) {
-				name = "\"" + name + "\"";
-			}
+			String name = XSKUtils.escapeArtifactName(columnModel.getName());
 			DataType type = DataType.valueOf(columnModel.getType());
 			String length = columnModel.getLength();
 			boolean isNullable = columnModel.isNullable();
@@ -107,18 +100,15 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
 				for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
 					String foreignKeyName = "FK_" + foreignKey.getName();
 					String[] fkColumns = foreignKey.getColumns();
-					String referencedTable = XSKUtils.getTableName(entityModel, foreignKey.getReferencedTable());
+					String referencedTable = XSKUtils.escapeArtifactName(XSKUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
 					String[] referencedColumns = foreignKey.getReferencedColumns();
-					if (caseSensitive) {
-						foreignKeyName = "\"" + foreignKeyName + "\"";
+						foreignKeyName = XSKUtils.escapeArtifactName(foreignKeyName);
 						for (int i=0;i<fkColumns.length;i++) {
-							fkColumns[i] = "\"" + fkColumns[i] + "\"";
+							fkColumns[i] =XSKUtils.escapeArtifactName(fkColumns[i]);
 						}
-						referencedTable = "\"" + referencedTable + "\"";
 						for (int i=0;i<referencedColumns.length;i++) {
-							referencedColumns[i] = "\"" + referencedColumns[i] + "\"";
+							referencedColumns[i] = XSKUtils.escapeArtifactName(referencedColumns[i]);
 						}
-					}
 					createTableBuilder.foreignKey(foreignKeyName, fkColumns, referencedTable, referencedColumns);
 				}
 			}

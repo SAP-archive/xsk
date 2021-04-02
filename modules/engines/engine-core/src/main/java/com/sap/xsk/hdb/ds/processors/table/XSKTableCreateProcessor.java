@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
@@ -49,18 +50,12 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 	public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
 
 		boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-		String tableName = tableModel.getName();
-		if (caseSensitive) {
-			tableName = "\"" + tableName + "\"";
-		}
+		String tableName = XSKUtils.escapeArtifactName(tableModel.getName());
 		logger.info("Processing Create Table: " + tableName);
 		CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
 		List<XSKDataStructureHDBTableColumnModel> columns = tableModel.getColumns();
 		for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
-			String name = columnModel.getName();
-			if (caseSensitive) {
-				name = "\"" + name + "\"";
-			}
+			String name = XSKUtils.escapeArtifactName(columnModel.getName());
 			DataType type = DataType.valueOf(columnModel.getType());
 			String length = columnModel.getLength();
 			boolean isNullable = columnModel.isNullable();

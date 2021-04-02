@@ -331,8 +331,6 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
         logger.trace("Done cleaning up XSK Data Structures HDI.");
     }
 
-    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-
     /**
      * Update entities.
      */

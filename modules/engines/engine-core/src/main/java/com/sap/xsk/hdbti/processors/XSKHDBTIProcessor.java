@@ -195,7 +195,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
 
     private CSVFormat createCSVFormat(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) {
         char delimiter = Objects.isNull(tableImportConfigurationDefinition.getDelimField()) ? ',' : tableImportConfigurationDefinition.getDelimField().charAt(0);
-        return CSVFormat.newFormat(delimiter).withSkipHeaderRecord(tableImportConfigurationDefinition.getHeader()).withHeader();
+        return CSVFormat.newFormat(delimiter);
     }
 
 

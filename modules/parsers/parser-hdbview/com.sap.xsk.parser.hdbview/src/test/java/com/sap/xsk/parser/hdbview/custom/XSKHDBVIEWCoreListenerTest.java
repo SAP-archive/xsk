@@ -13,6 +13,7 @@ package com.sap.xsk.parser.hdbview.custom;
 
 import com.sap.xsk.parser.hdbview.core.HdbviewLexer;
 import com.sap.xsk.parser.hdbview.core.HdbviewParser;
+import com.sap.xsk.parser.hdbview.exceptions.XSKHDBViewMissingPropertyException;
 import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -20,7 +21,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.*;
@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 public class XSKHDBVIEWCoreListenerTest {
 
     @Test
-    public void parseHdbviewFileWithoutErrorsSuccessfully() throws IOException {
+    public void parseHdbviewFileWithoutErrorsSuccessfully() throws Exception {
         String hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample.hdbview"), StandardCharsets.UTF_8);
 
         ANTLRInputStream inputStream = new ANTLRInputStream(hdbviewSample);
@@ -43,6 +43,7 @@ public class XSKHDBVIEWCoreListenerTest {
         parseTreeWalker.walk(hdbviewCoreListener, parseTree);
 
         XSKHDBVIEWDefinitionModel model = hdbviewCoreListener.getModel();
+        model.checkForAllMandatoryFieldsPresence();
         assertNotNull(model);
         assertEquals(hdbviewParser.getNumberOfSyntaxErrors(), 0);
         assertTrue(model.isPublic());
@@ -59,8 +60,8 @@ public class XSKHDBVIEWCoreListenerTest {
         assertEquals("SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"acme.com.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"MYSCHEMA\".\"acme.com.test.views::MY_VIEW1\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"", model.getQuery());
     }
 
-    @Test
-    public void parseHdbviewFileWithSyntaxErrorExceptionThrown() throws IOException {
+    @Test(expected = XSKHDBViewMissingPropertyException.class)
+    public void parseHdbviewFileWithSyntaxErrorExceptionThrown() throws Exception {
         String hdbviewSample = org.apache.commons.io.IOUtils.toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample_with_errors.hdbview"), StandardCharsets.UTF_8);
 
         ANTLRInputStream inputStream = new ANTLRInputStream(hdbviewSample);
@@ -75,7 +76,8 @@ public class XSKHDBVIEWCoreListenerTest {
         parseTreeWalker.walk(hdbviewCoreListener, parseTree);
 
         XSKHDBVIEWDefinitionModel model = hdbviewCoreListener.getModel();
-        assertEquals(hdbviewParser.getNumberOfSyntaxErrors(), 3);
+        assertEquals(hdbviewParser.getNumberOfSyntaxErrors(), 2);
+        model.checkForAllMandatoryFieldsPresence();
         assertFalse(model.isPublic());
     }
 }

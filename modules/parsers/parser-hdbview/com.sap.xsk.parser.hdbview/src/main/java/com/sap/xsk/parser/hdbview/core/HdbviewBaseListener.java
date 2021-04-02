@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbview\core\Hdbview.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbview.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -63,6 +63,19 @@ public class HdbviewBaseListener implements HdbviewListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDependsOnView(@NotNull HdbviewParser.DependsOnViewContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProperty(@NotNull HdbviewParser.PropertyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProperty(@NotNull HdbviewParser.PropertyContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

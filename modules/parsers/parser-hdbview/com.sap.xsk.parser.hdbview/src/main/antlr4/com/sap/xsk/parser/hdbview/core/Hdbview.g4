@@ -1,6 +1,7 @@
 grammar Hdbview;
 
-hdbviewDefinition: schemaProp publicProp? queryProp dependsOnProp? dependsOnTable? dependsOnView?;
+hdbviewDefinition: property+;
+property: schemaProp | publicProp | queryProp | dependsOnProp | dependsOnTable | dependsOnView;
 
 schemaProp: 'schema' EQ STRING SEMICOLON;
 publicProp: 'public' EQ BOOLEAN SEMICOLON;
@@ -16,5 +17,3 @@ SEMICOLON : ';' ;
 COMMA : ',' ;
 WS  :   [ \t\r\n\u000C]+ -> skip;   // toss out whitespace
 ESC : '\\"' | '\\\\';   // 2-char sequences \" and \\
-LINE_COMMENT : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
-COMMENT : '/*' .*? '*/' -> skip ; // Match "/*" stuff "*/"

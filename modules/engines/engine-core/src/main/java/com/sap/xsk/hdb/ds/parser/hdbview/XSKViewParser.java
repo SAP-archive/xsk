@@ -83,11 +83,17 @@ public class XSKViewParser implements XSKDataStructureParser {
             String syntaxError = xskhdbviewSyntaxErrorListener.getErrorMessage();
             throw new XSKDataStructuresException(String.format("Wrong format of HDB View: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version. [%s]", location, syntaxError));
         }
+
         XSKHDBVIEWCoreListener XSKHDBVIEWCoreListener = new XSKHDBVIEWCoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
         parseTreeWalker.walk(XSKHDBVIEWCoreListener, parseTree);
 
         XSKHDBVIEWDefinitionModel antlr4Model = XSKHDBVIEWCoreListener.getModel();
+        try {
+            antlr4Model.checkForAllMandatoryFieldsPresence();
+        } catch (Exception e) {
+            throw new XSKDataStructuresException(String.format("Wrong format of HDB View: [%s] during parsing. [%s]", location, e.getMessage()));
+        }
         hdbViewModel.setQuery(antlr4Model.getQuery());
         hdbViewModel.setSchema(antlr4Model.getSchema());
         hdbViewModel.setPublic(antlr4Model.isPublic());

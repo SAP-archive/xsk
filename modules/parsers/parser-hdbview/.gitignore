@@ -5,6 +5,7 @@ dist/
 target/
 dirigible_local/
 bin/
+gen/
 
 # files
 .DS_Store

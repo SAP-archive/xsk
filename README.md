@@ -121,7 +121,7 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 ### How to build
 
 Prerequisites:
-- Java 11 or later
+- Java suuported versions 11 - 13
 - Maven 3.6.2 or later
 ```
 mvn clean install

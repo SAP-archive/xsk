@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbsequence/core/Hdbsequence.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbsequence\core\Hdbsequence.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbsequence.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -154,6 +154,19 @@ public class HdbsequenceBaseListener implements HdbsequenceListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDepends_on_list(@NotNull HdbsequenceParser.Depends_on_listContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProperty(@NotNull HdbsequenceParser.PropertyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProperty(@NotNull HdbsequenceParser.PropertyContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -13,6 +13,7 @@ package com.sap.xsk.parser.hdbsequence.custom;
 
 import com.google.gson.*;
 import com.sap.xsk.parser.hdbsequence.models.XSKHDBSEQUENCEModel;
+import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,30 +36,56 @@ public class CustomDeserializers {
         public XSKHDBSEQUENCEModel deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context)
                 throws JsonParseException {
             JsonObject parsedObj = jsonElement.getAsJsonObject();
-            String schema = (!parsedObj.get("schema").isJsonNull()) ? handleStringLiteral(parsedObj.get("schema").getAsString()) : null;
-            Integer increment_by = (!parsedObj.get("increment_by").isJsonNull()) ? parsedObj.get("increment_by").getAsInt() : null;
-            Integer start_with = (!parsedObj.get("start_with").isJsonNull()) ? parsedObj.get("start_with").getAsInt() : null;
-            Integer maxvalue = (!parsedObj.get("maxvalue").isJsonNull()) ? parsedObj.get("maxvalue").getAsInt() : null;
-            Boolean nomaxvalue = (!parsedObj.get("nomaxvalue").isJsonNull()) ? parsedObj.get("nomaxvalue").getAsBoolean() : null;
-            Integer minvalue = (!parsedObj.get("minvalue").isJsonNull()) ? parsedObj.get("minvalue").getAsInt() : null;
-            Boolean nominvalue = (!parsedObj.get("nominvalue").isJsonNull()) ? parsedObj.get("nominvalue").getAsBoolean() : null;
-            Boolean cycles = (!parsedObj.get("cycles").isJsonNull()) ? parsedObj.get("cycles").getAsBoolean() : null;
-            String reset_by = (!parsedObj.get("reset_by").isJsonNull()) ? handleStringLiteral(parsedObj.get("reset_by").getAsString()) : null;
-            Boolean publicc = (!parsedObj.get("public").isJsonNull()) ? parsedObj.get("public").getAsBoolean() : null;
+            String schema = (!parsedObj.get(HDBSequenceConstants.SCHEMA_PROPERTY).isJsonNull())
+                    ? handleStringLiteral(parsedObj.get(HDBSequenceConstants.SCHEMA_PROPERTY).getAsString())
+                    : null;
+            Integer increment_by = (!parsedObj.get(HDBSequenceConstants.INCREMENT_BY_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.INCREMENT_BY_PROPERTY).getAsInt()
+                    : null;
+            Integer start_with = (!parsedObj.get(HDBSequenceConstants.START_WITH_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.START_WITH_PROPERTY).getAsInt()
+                    : null;
+            Integer maxvalue = (!parsedObj.get(HDBSequenceConstants.MAXVALUE_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.MAXVALUE_PROPERTY).getAsInt()
+                    : null;
+            Boolean nomaxvalue = (!parsedObj.get(HDBSequenceConstants.NOMAXVALUE_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.NOMAXVALUE_PROPERTY).getAsBoolean()
+                    : null;
+            Integer minvalue = (!parsedObj.get(HDBSequenceConstants.MINVALUE_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.MINVALUE_PROPERTY).getAsInt()
+                    : null;
+            Boolean nominvalue = (!parsedObj.get(HDBSequenceConstants.NOMINVALUE_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.NOMINVALUE_PROPERTY).getAsBoolean()
+                    : null;
+            Boolean cycles = (!parsedObj.get(HDBSequenceConstants.CYCLES_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.CYCLES_PROPERTY).getAsBoolean()
+                    : null;
+            String reset_by = (!parsedObj.get(HDBSequenceConstants.RESET_BY_PROPERTY).isJsonNull())
+                    ? handleStringLiteral(parsedObj.get(HDBSequenceConstants.RESET_BY_PROPERTY).getAsString())
+                    : null;
+            Boolean publicc = (!parsedObj.get(HDBSequenceConstants.PUBLIC_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.PUBLIC_PROPERTY).getAsBoolean()
+                    : null;
 
-            String depends_on_table = (!parsedObj.get("depends_on_table").isJsonNull()) ? handleStringLiteral(parsedObj.get("depends_on_table").getAsString()) : null;
-            String depends_on_view = (!parsedObj.get("depends_on_view").isJsonNull()) ? handleStringLiteral(parsedObj.get("depends_on_view").getAsString()) : null;
+            String depends_on_table = (!parsedObj.get(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY).isJsonNull())
+                    ? handleStringLiteral(parsedObj.get(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY).getAsString())
+                    : null;
+            String depends_on_view = (!parsedObj.get(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY).isJsonNull())
+                    ? handleStringLiteral(parsedObj.get(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY).getAsString())
+                    : null;
             List<String> dependsOnList = new ArrayList<>();
-            JsonArray depends_on = (!parsedObj.get("depends_on").isJsonNull()) ? parsedObj.get("depends_on").getAsJsonArray() : null;
-            if(depends_on!=null){
+            JsonArray depends_on = (!parsedObj.get(HDBSequenceConstants.DEPENDS_ON_PROPERTY).isJsonNull())
+                    ? parsedObj.get(HDBSequenceConstants.DEPENDS_ON_PROPERTY).getAsJsonArray()
+                    : null;
+            if (depends_on != null) {
                 for (JsonElement tableName : depends_on) {
                     dependsOnList.add(handleStringLiteral(tableName.getAsString()));
                 }
             }
 
-            return new XSKHDBSEQUENCEModel(schema,  increment_by,  start_with,  maxvalue,
-                    nomaxvalue,  minvalue,  nominvalue,  cycles,  reset_by,
-                    publicc,  depends_on_table,  depends_on_view, dependsOnList);
+            return new XSKHDBSEQUENCEModel(schema, increment_by, start_with, maxvalue,
+                    nomaxvalue, minvalue, nominvalue, cycles, reset_by,
+                    publicc, depends_on_table, depends_on_view, dependsOnList);
         }
     }
 

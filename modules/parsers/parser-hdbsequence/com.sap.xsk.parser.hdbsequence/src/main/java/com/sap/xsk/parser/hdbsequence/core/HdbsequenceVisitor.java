@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbsequence/core/Hdbsequence.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbsequence\core\Hdbsequence.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbsequence.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -87,6 +87,13 @@ public interface HdbsequenceVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDepends_on_list(@NotNull HdbsequenceParser.Depends_on_listContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbsequenceParser#property}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProperty(@NotNull HdbsequenceParser.PropertyContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link HdbsequenceParser#reset_by}.

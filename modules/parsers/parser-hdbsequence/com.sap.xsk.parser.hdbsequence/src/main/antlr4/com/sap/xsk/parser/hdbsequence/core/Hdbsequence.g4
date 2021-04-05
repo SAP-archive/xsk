@@ -1,19 +1,19 @@
 grammar Hdbsequence;
 
-hdbsequence: schema
-             increment_by
-             start_with
-             maxvalue?
-             nomaxvalue
-             minvalue?
-             nominvalue
-             cycles?
-             reset_by?
-             publicc
-             depends_on_table?
-             depends_on_view?
-             depends_on? ;
-
+hdbsequence: property+ ;
+property: schema
+        | increment_by
+        | start_with
+        | maxvalue
+        | nomaxvalue
+        | minvalue
+        | nominvalue
+        | cycles
+        | reset_by
+        | publicc
+        | depends_on_table
+        | depends_on_view
+        | depends_on ;
 schema: 'schema' EQ STRING SC;
 increment_by: 'increment_by' EQ  INT SC;
 

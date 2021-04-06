@@ -150,7 +150,6 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
 
 	private Object runTest(IJavascriptEngineExecutor executor, IRepository repository, String testModule)
 			throws IOException, ScriptingException {
-//		InputStream in = XSKApiSuiteTest.class.getResourceAsStream(IRepositoryStructure.SEPARATOR + testModule);
 
 		try (InputStream in = XSKApiSuiteTest.class.getResourceAsStream(IRepositoryStructure.SEPARATOR + testModule)) {
 			if (in == null) {

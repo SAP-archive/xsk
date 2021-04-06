@@ -13,18 +13,22 @@ package com.sap.xsk.parser.hdbti.custom;
 
 import com.sap.xsk.parser.hdbti.core.HdbtiBaseListener;
 import com.sap.xsk.parser.hdbti.core.HdbtiParser;
+import com.sap.xsk.parser.hdbti.exception.DuplicateFieldNameException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class XSKHDBTICoreListener extends HdbtiBaseListener {
-    private ParseTreeProperty<String> tokens = new ParseTreeProperty<>();
+    private final ParseTreeProperty<String> tokens = new ParseTreeProperty<>();
     private List<XSKHDBTIImportConfigModel.Pair> pairs;
     private XSKHDBTIImportConfigModel configModel;
-    private XSKHDBTIImportModel importModel = new XSKHDBTIImportModel();
+    private final XSKHDBTIImportModel importModel = new XSKHDBTIImportModel();
+    private final Set<String> usedFields = new HashSet<>();
 
     @Override
     public void enterObjConfig(HdbtiParser.ObjConfigContext ctx) {
@@ -33,26 +37,52 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
 
     @Override
     public void exitObjConfig(HdbtiParser.ObjConfigContext ctx) {
-        String tableName = tokens.get(ctx.assignTable());
-        String schemaName = tokens.get(ctx.assignSchema());
-        String fileName = tokens.get(ctx.assignFile());
-        String header = tokens.get(ctx.assignHeader());
-        String useHeaderNames = tokens.get(ctx.assignUseHeaderNames());
-        String delimField = tokens.get(ctx.assignDelimField());
-        String delimEnclosing = tokens.get(ctx.assignDelimEnclosing());
-        String distinguishEmptyFromNull = tokens.get(ctx.assignDistinguishEmptyFromNull());
+        configModel.setUseHeaderNames(false);
+        configModel.setHeader(false);
+        configModel.setDistinguishEmptyFromNull(true);
 
-        configModel.setTableName(handleStringLiteral(tableName));
-        configModel.setSchemaName(handleStringLiteral(schemaName));
-        configModel.setFileName(handleStringLiteral(fileName));
-        configModel.setHeader(Boolean.parseBoolean(header));
-        configModel.setUseHeaderNames(Boolean.parseBoolean(useHeaderNames));
-        configModel.setDelimField(handleStringLiteral(delimField));
-        configModel.setDelimEnclosing(handleStringLiteral(delimEnclosing));
-        configModel.setDistinguishEmptyFromNull(Boolean.parseBoolean(distinguishEmptyFromNull));
+        for (HdbtiParser.AssignExpressionContext expressionContext :
+                ctx.assignExpression()) {
+            if (expressionContext.getChild(0) instanceof HdbtiParser.AssignTableContext) {
+                String tableName = tokens.get(expressionContext.getChild(0));
+                configModel.setTableName(handleStringLiteral(tableName));
+            } else if (expressionContext.getChild(0) instanceof HdbtiParser.AssignSchemaContext) {
+                String schemaName = tokens.get(expressionContext.getChild(0));
+                configModel.setSchemaName(handleStringLiteral(schemaName));
+            } else if (expressionContext.getChild(0) instanceof HdbtiParser.AssignFileContext) {
+                String fileName = tokens.get(expressionContext.getChild(0));
+                configModel.setFileName(handleStringLiteral(fileName));
+            } else if (expressionContext.getChild(0) instanceof HdbtiParser.AssignHeaderContext) {
+                String header = tokens.get(expressionContext.getChild(0));
+                configModel.setHeader(Boolean.parseBoolean(header));
+            } else if (expressionContext.getChild(0) instanceof HdbtiParser.AssignUseHeaderNamesContext) {
+                String useHeaderNames = tokens.get(expressionContext.getChild(0));
+                configModel.setUseHeaderNames(Boolean.parseBoolean(useHeaderNames));
+            } else if (expressionContext.getChild(0) instanceof HdbtiParser.AssignDelimFieldContext) {
+                String delimField = tokens.get(expressionContext.getChild(0));
+                configModel.setDelimField(handleStringLiteral(delimField));
+            } else if (expressionContext.getChild(0) instanceof HdbtiParser.AssignDelimEnclosingContext) {
+                String delimEnclosing = tokens.get(expressionContext.getChild(0));
+                configModel.setDelimEnclosing(handleStringLiteral(delimEnclosing));
+            } else if (expressionContext.getChild(0) instanceof HdbtiParser.AssignDistinguishEmptyFromNullContext) {
+                String distinguishEmptyFromNull = tokens.get(expressionContext.getChild(0));
+                configModel.setDistinguishEmptyFromNull(Boolean.parseBoolean(distinguishEmptyFromNull));
+            }
+        }
+
         configModel.setKeys(pairs);
-
         importModel.getConfigModels().add(configModel);
+        usedFields.clear();
+    }
+
+    @Override
+    public void enterAssignExpression(HdbtiParser.AssignExpressionContext ctx) {
+        String currentObjField = ctx.getChild(0).getChild(0).getText();
+        if (usedFields.contains(currentObjField)) {
+            throw new DuplicateFieldNameException(String.format("Duplicate fields: Field with name: '%s' is already in use.", currentObjField));
+        } else {
+            usedFields.add(currentObjField);
+        }
     }
 
     @Override
@@ -67,7 +97,6 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
         if (ctx != null && ctx.STRING() != null) {
             tokens.put(ctx, ctx.STRING().getText());
         }
-
     }
 
     @Override

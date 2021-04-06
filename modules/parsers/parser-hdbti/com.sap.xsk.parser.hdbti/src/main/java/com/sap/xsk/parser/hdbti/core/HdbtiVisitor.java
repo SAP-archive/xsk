@@ -26,6 +26,13 @@ public interface HdbtiVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAssignUseHeaderNames(@NotNull HdbtiParser.AssignUseHeaderNamesContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link HdbtiParser#assignExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignExpression(@NotNull HdbtiParser.AssignExpressionContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link HdbtiParser#assignHeader}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

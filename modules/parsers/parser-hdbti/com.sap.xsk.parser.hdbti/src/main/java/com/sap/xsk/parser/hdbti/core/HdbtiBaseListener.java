@@ -43,6 +43,19 @@ public class HdbtiBaseListener implements HdbtiListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAssignExpression(@NotNull HdbtiParser.AssignExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignExpression(@NotNull HdbtiParser.AssignExpressionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAssignHeader(@NotNull HdbtiParser.AssignHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -3,17 +3,10 @@ grammar Hdbti;
 importArr: 'import' '=' '[' (objConfig (',' objConfig)*)? ']' ';';
 
 objConfig: '{'
-                assignTable
-                assignSchema?
-                assignFile
-                assignHeader?
-                assignUseHeaderNames?
-                assignDelimField?
-                assignDelimEnclosing?
-                assignDistinguishEmptyFromNull?
-                assignKeys?
+                assignExpression*
             '}';
 
+assignExpression: assignTable | assignSchema | assignFile | assignHeader | assignUseHeaderNames | assignDelimField | assignDelimEnclosing | assignDistinguishEmptyFromNull | assignKeys;
 assignTable: 'table' '=' STRING ';';
 assignSchema: 'schema' '=' STRING ';';
 assignFile: 'file' '=' STRING ';';

@@ -34,6 +34,14 @@ public class HdbtiBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitAssignExpression(@NotNull HdbtiParser.AssignExpressionContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitAssignHeader(@NotNull HdbtiParser.AssignHeaderContext ctx) { return visitChildren(ctx); }
 
 	/**

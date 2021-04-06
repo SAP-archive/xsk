@@ -31,6 +31,17 @@ public interface HdbtiListener extends ParseTreeListener {
 	void exitAssignUseHeaderNames(@NotNull HdbtiParser.AssignUseHeaderNamesContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link HdbtiParser#assignExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignExpression(@NotNull HdbtiParser.AssignExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbtiParser#assignExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignExpression(@NotNull HdbtiParser.AssignExpressionContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link HdbtiParser#assignHeader}.
 	 * @param ctx the parse tree
 	 */

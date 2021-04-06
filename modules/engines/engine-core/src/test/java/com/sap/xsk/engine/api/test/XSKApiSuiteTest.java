@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.engine.api.test;
@@ -26,7 +26,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ContextException;
@@ -48,13 +47,15 @@ import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 
 public class XSKApiSuiteTest extends AbstractGuiceTest {
 
-	private static List<String> TEST_MODULES = new ArrayList<String>();
+	private static final List<String> TEST_MODULES = new ArrayList<>();
 
 	private IExtensionsCoreService extensionsCoreService;
 
 	private IRepository repository;
-	
-	/** The rhino javascript engine executor. */
+
+	/**
+	 * The rhino javascript engine executor.
+	 */
 	private XSKJavascriptEngineExecutor graaljsJavascriptEngineExecutor;
 
 	@Before
@@ -66,12 +67,25 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
 
 	@Before
 	public void registerModules() {
-
 		TEST_MODULES.add("test/xsk/response.xsjs");
-		
 	}
 
-	public void runSuite(IJavascriptEngineExecutor executor, IRepository repository)
+	/**
+	 * Runs suite.
+	 *
+	 * @throws RepositoryWriteException the repository write exception
+	 * @throws IOException              Signals that an I/O exception has occurred.
+	 * @throws ScriptingException       the scripting exception
+	 * @throws ContextException         the context exception
+	 * @throws ExtensionsException      the extensions exception
+	 */
+	@Test
+	public void runSuite()
+			throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException {
+		runSuite(this.graaljsJavascriptEngineExecutor, repository);
+	}
+
+	private void runSuite(IJavascriptEngineExecutor executor, IRepository repository)
 			throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException {
 		for (String testModule : TEST_MODULES) {
 			try {
@@ -79,21 +93,19 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
 				HttpServletResponse mockedResponse = Mockito.mock(HttpServletResponse.class);
 				mockRequest(mockedRequest);
 				mockResponse(mockedResponse);
-		
+
 				ThreadContextFacade.setUp();
 				try {
 					ThreadContextFacade.set(HttpServletRequest.class.getCanonicalName(), mockedRequest);
 					ThreadContextFacade.set(HttpServletResponse.class.getCanonicalName(), mockedResponse);
 					extensionsCoreService.createExtensionPoint("/test_extpoint1", "test_extpoint1", "Test");
 					extensionsCoreService.createExtension("/test_ext1", "/test_ext_module1", "test_extpoint1", "Test");
-					
-					Object result = null;
-					
-					result = runTest(executor, repository, testModule);
-					
+
+					Object result = runTest(executor, repository, testModule);
+
 					assertNotNull(result);
 					assertTrue("API test failed: " + testModule, Boolean.parseBoolean(result.toString()));
-					 
+
 				} finally {
 					extensionsCoreService.removeExtension("/test_ext1");
 					extensionsCoreService.removeExtensionPoint("/test_extpoint1");
@@ -107,25 +119,10 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
 	private void mockRequest(HttpServletRequest mockedRequest) {
 		when(mockedRequest.getMethod()).thenReturn("GET");
 		when(mockedRequest.getRemoteUser()).thenReturn("tester");
-//		when(mockedRequest.getPathInfo()).thenReturn("/path");
-//		when(mockedRequest.getPathTranslated()).thenReturn("/translated");
 		when(mockedRequest.getHeader("header1")).thenReturn("header1");
 		when(mockedRequest.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("header1", "header2")));
-//		when(mockedRequest.getServerName()).thenReturn("server1");
 		when(mockedRequest.getHeader("header1")).thenReturn("header1");
-//		when(mockedRequest.isUserInRole("role1")).thenReturn(true);
-//		when(mockedRequest.getAttribute("attr1")).thenReturn("val1");
-//		when(mockedRequest.getAuthType()).thenReturn("Basic");
 		when(mockedRequest.getRequestURI()).thenReturn("/services/v3/js/test/test.xsjs");
-
-		HttpSession mockedSession = Mockito.mock(HttpSession.class);
-//		when(mockedRequest.getSession()).thenReturn(mockedSession);
-//		when(mockedRequest.getSession(true)).thenReturn(mockedSession);
-//		mockSession(mockedSession);
-	}
-	
-	private void mockSession(HttpSession mockedSession) {
-		when(mockedSession.getAttributeNames()).thenReturn(Collections.enumeration(Arrays.asList("attr1")));
 	}
 
 	private void mockResponse(HttpServletResponse mockedResponse) throws IOException {
@@ -133,9 +130,9 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
 		when(mockedResponse.getOutputStream()).thenReturn(new StubServletOutputStream());
 	}
 
-	public class StubServletOutputStream extends ServletOutputStream {
+	private class StubServletOutputStream extends ServletOutputStream {
 
-		public void write(int i) throws IOException {
+		public void write(int i) {
 			System.out.write(i);
 		}
 
@@ -151,47 +148,26 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
 		}
 	}
 
-	private Object runTest(IJavascriptEngineExecutor executor, IRepository repository, String testModule) throws IOException, ScriptingException {
+	private Object runTest(IJavascriptEngineExecutor executor, IRepository repository, String testModule)
+			throws IOException, ScriptingException {
+//		InputStream in = XSKApiSuiteTest.class.getResourceAsStream(IRepositoryStructure.SEPARATOR + testModule);
 
-		try {
-			InputStream in = XSKApiSuiteTest.class.getResourceAsStream(IRepositoryStructure.SEPARATOR + testModule);
-			try {
-				if (in == null) {
-					throw new IOException(IRepositoryStructure.SEPARATOR + testModule + " does not exist");
-				}
-				repository.createResource(
-						IRepositoryStructure.PATH_REGISTRY_PUBLIC + IRepositoryStructure.SEPARATOR + testModule,
-						IOUtils.readBytesFromStream(in));
-			} finally {
-				if (in != null) {
-					in.close();
-				}
+		try (InputStream in = XSKApiSuiteTest.class.getResourceAsStream(IRepositoryStructure.SEPARATOR + testModule)) {
+			if (in == null) {
+				throw new IOException(IRepositoryStructure.SEPARATOR + testModule + " does not exist");
 			}
+			repository.createResource(IRepositoryStructure.PATH_REGISTRY_PUBLIC + IRepositoryStructure.SEPARATOR + testModule,
+					IOUtils.readBytesFromStream(in));
+
 		} catch (RepositoryWriteException e) {
 			throw new IOException(IRepositoryStructure.SEPARATOR + testModule, e);
 		}
-		Object result = null;
+
 		long start = System.currentTimeMillis();
-		result = executor.executeServiceModule(testModule, null);
+		Object result = executor.executeServiceModule(testModule, null);
 		long time = System.currentTimeMillis() - start;
-		System.out.println(String.format("API test [%s] on engine [%s] passed for: %d ms", testModule,
-				executor.getType(), time));
+		System.out.printf("API test [%s] on engine [%s] passed for: %d ms%n", testModule, executor.getType(), time);
 		return result;
 	}
-	
-	
 
-	/**
-	 * Run suite.
-	 *
-	 * @throws RepositoryWriteException the repository write exception
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws ScriptingException the scripting exception
-	 * @throws ContextException the context exception
-	 * @throws ExtensionsException the extensions exception
-	 */
-	@Test
-	public void runSuite() throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException {
-		runSuite(this.graaljsJavascriptEngineExecutor, repository);
-	}
 }

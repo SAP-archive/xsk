@@ -13,32 +13,27 @@ package com.sap.xsk.utils;
 
 public final class XSKConstants {
 
-    private XSKConstants() {
-    }
+  public static final String XSK_HDBPROCEDURE_CREATE = "CREATE ";
+  public static final String XSK_HDBPROCEDURE_DROP = "DROP PROCEDURE ";
+  public static final String XSK_HDBTABLEFUNCTION_CREATE = "CREATE ";
+  public static final String XSK_HDBTABLEFUNCTION_DROP = "DROP FUNCTION ";
+  public static final String XSK_HDBVIEW_SYNTAX = "VIEW ";
+  public static final String XSK_HDBVIEW_CREATE = "CREATE ";
+  public static final String XSK_HDBVIEW_DROP = "DROP VIEW ";
+  public static final String XSK_HDBSEQUENCE_SYNTAX = "SEQUENCE ";
+  public static final String XSK_HDBSEQUENCE_CREATE = "CREATE ";
+  public static final String XSK_HDBSEQUENCE_ALTER = "ALTER ";
+  public static final String XSK_HDBSEQUENCE_DROP = "DROP  ";
+  /**
+   * The Unix separator character.
+   */
+  public static final char UNIX_SEPARATOR = '/';
+  /**
+   * The Windows separator character.
+   */
+  public static final char WINDOWS_SEPARATOR = '\\';
 
-    public static final String XSK_HDBPROCEDURE_CREATE = "CREATE ";
-    public static final String XSK_HDBPROCEDURE_DROP = "DROP PROCEDURE ";
-    public static final String XSK_HDBTABLEFUNCTION_CREATE = "CREATE ";
-    public static final String XSK_HDBTABLEFUNCTION_DROP = "DROP FUNCTION ";
-
-    public static final String XSK_HDBVIEW_SYNTAX = "VIEW ";
-    public static final String XSK_HDBVIEW_CREATE = "CREATE ";
-    public static final String XSK_HDBVIEW_DROP = "DROP VIEW ";
-
-    public static final String XSK_HDBSEQUENCE_SYNTAX = "SEQUENCE ";
-    public static final String XSK_HDBSEQUENCE_CREATE = "CREATE ";
-    public static final String XSK_HDBSEQUENCE_ALTER = "ALTER ";
-    public static final String XSK_HDBSEQUENCE_DROP = "DROP  ";
-
-
-    /**
-     * The Unix separator character.
-     */
-    public static final char UNIX_SEPARATOR = '/';
-
-    /**
-     * The Windows separator character.
-     */
-    public static final char WINDOWS_SEPARATOR = '\\';
+  private XSKConstants() {
+  }
 
 }

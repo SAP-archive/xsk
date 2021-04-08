@@ -16,64 +16,64 @@ package com.sap.xsk.hdb.ds.model.hdbtable;
  */
 public class XSKDataStructureHDBTableConstraintModel {
 
-	private String name;
-	
-	private String[] modifiers;
-	
-	private String[] columns;
+  private String name;
 
-	/**
-	 * Gets the name.
-	 *
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  private String[] modifiers;
 
-	/**
-	 * Sets the name.
-	 *
-	 * @param name the new name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+  private String[] columns;
 
-	/**
-	 * Gets the modifiers.
-	 *
-	 * @return the modifiers
-	 */
-	public String[] getModifiers() {
-		return (modifiers != null) ? modifiers.clone() : null;
-	}
+  /**
+   * Gets the name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Sets the modifiers.
-	 *
-	 * @param modifiers the new modifiers
-	 */
-	public void setModifiers(String[] modifiers) {
-		this.modifiers = modifiers;
-	}
+  /**
+   * Sets the name.
+   *
+   * @param name the new name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * Gets the columns.
-	 *
-	 * @return the columns
-	 */
-	public String[] getColumns() {
-		return (columns != null) ? columns.clone() : null;
-	}
+  /**
+   * Gets the modifiers.
+   *
+   * @return the modifiers
+   */
+  public String[] getModifiers() {
+    return (modifiers != null) ? modifiers.clone() : null;
+  }
 
-	/**
-	 * Sets the columns.
-	 *
-	 * @param columns the new columns
-	 */
-	public void setColumns(String[] columns) {
-		this.columns = columns;
-	}
+  /**
+   * Sets the modifiers.
+   *
+   * @param modifiers the new modifiers
+   */
+  public void setModifiers(String[] modifiers) {
+    this.modifiers = modifiers;
+  }
+
+  /**
+   * Gets the columns.
+   *
+   * @return the columns
+   */
+  public String[] getColumns() {
+    return (columns != null) ? columns.clone() : null;
+  }
+
+  /**
+   * Sets the columns.
+   *
+   * @param columns the new columns
+   */
+  public void setColumns(String[] columns) {
+    this.columns = columns;
+  }
 
 }

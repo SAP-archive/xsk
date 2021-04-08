@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Orphan.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -38,52 +38,39 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "Orphan")
 @XmlEnum
 public enum Orphan {
 
 
-    /**
-     * 
-     * 						Orphans are silently ignored. This is the default behavior
-     * 					
-     * 
-     */
-    ORPHAN_IGNORE,
+  /**
+   * Orphans are silently ignored. This is the default behavior
+   */
+  ORPHAN_IGNORE,
 
-    /**
-     * 
-     * 						If the input data contains any orphans, an error is returned
-     * 					
-     * 
-     */
-    ORPHAN_ERROR,
+  /**
+   * If the input data contains any orphans, an error is returned
+   */
+  ORPHAN_ERROR,
 
-    /**
-     * 
-     * 						Top-level orphans are treated as root nodes
-     * 					
-     * 
-     */
-    ORPHAN_ROOT,
+  /**
+   * Top-level orphans are treated as root nodes
+   */
+  ORPHAN_ROOT,
 
-    /**
-     * 
-     * 						Orphans are adopted as children of the last root behind its	regular descendants. orphan and 
-     * 						depth property cannot be used at the same time. If a maximum search depth is specified, then orphaned nodes are always ignored
-     * 					
-     * 
-     */
-    ORPHAN_ADOPT;
+  /**
+   * Orphans are adopted as children of the last root behind its	regular descendants. orphan and
+   * depth property cannot be used at the same time. If a maximum search depth is specified, then orphaned nodes are always ignored
+   */
+  ORPHAN_ADOPT;
 
-    public String value() {
-        return name();
-    }
+  public static Orphan fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static Orphan fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

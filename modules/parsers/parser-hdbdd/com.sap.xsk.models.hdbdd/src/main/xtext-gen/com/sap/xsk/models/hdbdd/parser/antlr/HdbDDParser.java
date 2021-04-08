@@ -11,30 +11,30 @@ import org.eclipse.xtext.parser.antlr.XtextTokenStream;
 
 public class HdbDDParser extends AbstractAntlrParser {
 
-	@Inject
-	private HdbDDGrammarAccess grammarAccess;
+  @Inject
+  private HdbDDGrammarAccess grammarAccess;
 
-	@Override
-	protected void setInitialHiddenTokens(XtextTokenStream tokenStream) {
-		tokenStream.setInitialHiddenTokens("RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT");
-	}
-	
+  @Override
+  protected void setInitialHiddenTokens(XtextTokenStream tokenStream) {
+    tokenStream.setInitialHiddenTokens("RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT");
+  }
 
-	@Override
-	protected InternalHdbDDParser createParser(XtextTokenStream stream) {
-		return new InternalHdbDDParser(stream, getGrammarAccess());
-	}
 
-	@Override 
-	protected String getDefaultRuleName() {
-		return "HdbDD";
-	}
+  @Override
+  protected InternalHdbDDParser createParser(XtextTokenStream stream) {
+    return new InternalHdbDDParser(stream, getGrammarAccess());
+  }
 
-	public HdbDDGrammarAccess getGrammarAccess() {
-		return this.grammarAccess;
-	}
+  @Override
+  protected String getDefaultRuleName() {
+    return "HdbDD";
+  }
 
-	public void setGrammarAccess(HdbDDGrammarAccess grammarAccess) {
-		this.grammarAccess = grammarAccess;
-	}
+  public HdbDDGrammarAccess getGrammarAccess() {
+    return this.grammarAccess;
+  }
+
+  public void setGrammarAccess(HdbDDGrammarAccess grammarAccess) {
+    this.grammarAccess = grammarAccess;
+  }
 }

@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Root class for specifying tables for conversion (currency conversion and unit conversion)
- * 			
- * 
+ * Root class for specifying tables for conversion (currency conversion and unit conversion)
+ *
+ *
  * <p>Java class for CurrencyConversionTables complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CurrencyConversionTables"&gt;
  *   &lt;complexContent&gt;
@@ -49,147 +48,125 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CurrencyConversionTables")
 public class CurrencyConversionTables {
 
-    @XmlAttribute(name = "rates", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String rates;
-    @XmlAttribute(name = "configuration", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String configuration;
-    @XmlAttribute(name = "prefactors", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String prefactors;
-    @XmlAttribute(name = "notations", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String notations;
-    @XmlAttribute(name = "precisions", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String precisions;
+  @XmlAttribute(name = "rates", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String rates;
+  @XmlAttribute(name = "configuration", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String configuration;
+  @XmlAttribute(name = "prefactors", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String prefactors;
+  @XmlAttribute(name = "notations", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String notations;
+  @XmlAttribute(name = "precisions", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String precisions;
 
-    /**
-     * Gets the value of the rates property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRates() {
-        return rates;
-    }
+  /**
+   * Gets the value of the rates property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getRates() {
+    return rates;
+  }
 
-    /**
-     * Sets the value of the rates property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRates(String value) {
-        this.rates = value;
-    }
+  /**
+   * Sets the value of the rates property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRates(String value) {
+    this.rates = value;
+  }
 
-    /**
-     * Gets the value of the configuration property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getConfiguration() {
-        return configuration;
-    }
+  /**
+   * Gets the value of the configuration property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getConfiguration() {
+    return configuration;
+  }
 
-    /**
-     * Sets the value of the configuration property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setConfiguration(String value) {
-        this.configuration = value;
-    }
+  /**
+   * Sets the value of the configuration property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setConfiguration(String value) {
+    this.configuration = value;
+  }
 
-    /**
-     * Gets the value of the prefactors property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPrefactors() {
-        return prefactors;
-    }
+  /**
+   * Gets the value of the prefactors property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPrefactors() {
+    return prefactors;
+  }
 
-    /**
-     * Sets the value of the prefactors property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPrefactors(String value) {
-        this.prefactors = value;
-    }
+  /**
+   * Sets the value of the prefactors property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPrefactors(String value) {
+    this.prefactors = value;
+  }
 
-    /**
-     * Gets the value of the notations property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNotations() {
-        return notations;
-    }
+  /**
+   * Gets the value of the notations property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getNotations() {
+    return notations;
+  }
 
-    /**
-     * Sets the value of the notations property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNotations(String value) {
-        this.notations = value;
-    }
+  /**
+   * Sets the value of the notations property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setNotations(String value) {
+    this.notations = value;
+  }
 
-    /**
-     * Gets the value of the precisions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPrecisions() {
-        return precisions;
-    }
+  /**
+   * Gets the value of the precisions property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPrecisions() {
+    return precisions;
+  }
 
-    /**
-     * Sets the value of the precisions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPrecisions(String value) {
-        this.precisions = value;
-    }
+  /**
+   * Sets the value of the precisions property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPrecisions(String value) {
+    this.precisions = value;
+  }
 
 }

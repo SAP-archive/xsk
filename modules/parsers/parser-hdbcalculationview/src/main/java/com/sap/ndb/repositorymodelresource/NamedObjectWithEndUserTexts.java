@@ -19,23 +19,23 @@
 
 package com.sap.ndb.repositorymodelresource;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
 import com.sap.ndb.basemodelbase.EndUserTexts;
 import com.sap.ndb.datamodelhierarchy.InlineHierarchy;
 import com.sap.ndb.datamodeltype.DisplayFolder;
 import com.sap.ndb.datamodeltype.TypedObject;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  * Base object for named model classes that allow end user texts (non ecore ID based)
- * 
+ *
  * <p>Java class for NamedObjectWithEndUserTexts complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="NamedObjectWithEndUserTexts"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +47,6 @@ import com.sap.ndb.datamodeltype.TypedObject;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NamedObjectWithEndUserTexts", propOrder = {
@@ -61,30 +59,26 @@ import com.sap.ndb.datamodeltype.TypedObject;
 })
 public abstract class NamedObjectWithEndUserTexts {
 
-    protected EndUserTexts endUserTexts;
+  protected EndUserTexts endUserTexts;
 
-    /**
-     * Gets the value of the endUserTexts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public EndUserTexts getEndUserTexts() {
-        return endUserTexts;
-    }
+  /**
+   * Gets the value of the endUserTexts property.
+   *
+   * @return possible object is
+   * {@link EndUserTexts }
+   */
+  public EndUserTexts getEndUserTexts() {
+    return endUserTexts;
+  }
 
-    /**
-     * Sets the value of the endUserTexts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public void setEndUserTexts(EndUserTexts value) {
-        this.endUserTexts = value;
-    }
+  /**
+   * Sets the value of the endUserTexts property.
+   *
+   * @param value allowed object is
+   *              {@link EndUserTexts }
+   */
+  public void setEndUserTexts(EndUserTexts value) {
+    this.endUserTexts = value;
+  }
 
 }

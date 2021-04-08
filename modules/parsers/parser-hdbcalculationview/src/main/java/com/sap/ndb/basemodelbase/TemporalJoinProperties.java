@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Additional (join) properties neded to specify a temporal join
- * 			
- * 
+ * Additional (join) properties neded to specify a temporal join
+ *
+ *
  * <p>Java class for TemporalJoinProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="TemporalJoinProperties"&gt;
  *   &lt;complexContent&gt;
@@ -48,119 +47,101 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TemporalJoinProperties")
 public class TemporalJoinProperties {
 
-    @XmlAttribute(name = "temporalElementName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String temporalElementName;
-    @XmlAttribute(name = "fromElementName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String fromElementName;
-    @XmlAttribute(name = "toElementName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String toElementName;
-    @XmlAttribute(name = "temporalCondition", required = true)
-    protected TemporalCondition temporalCondition;
+  @XmlAttribute(name = "temporalElementName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String temporalElementName;
+  @XmlAttribute(name = "fromElementName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String fromElementName;
+  @XmlAttribute(name = "toElementName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String toElementName;
+  @XmlAttribute(name = "temporalCondition", required = true)
+  protected TemporalCondition temporalCondition;
 
-    /**
-     * Gets the value of the temporalElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTemporalElementName() {
-        return temporalElementName;
-    }
+  /**
+   * Gets the value of the temporalElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTemporalElementName() {
+    return temporalElementName;
+  }
 
-    /**
-     * Sets the value of the temporalElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTemporalElementName(String value) {
-        this.temporalElementName = value;
-    }
+  /**
+   * Sets the value of the temporalElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTemporalElementName(String value) {
+    this.temporalElementName = value;
+  }
 
-    /**
-     * Gets the value of the fromElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFromElementName() {
-        return fromElementName;
-    }
+  /**
+   * Gets the value of the fromElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getFromElementName() {
+    return fromElementName;
+  }
 
-    /**
-     * Sets the value of the fromElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFromElementName(String value) {
-        this.fromElementName = value;
-    }
+  /**
+   * Sets the value of the fromElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFromElementName(String value) {
+    this.fromElementName = value;
+  }
 
-    /**
-     * Gets the value of the toElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getToElementName() {
-        return toElementName;
-    }
+  /**
+   * Gets the value of the toElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getToElementName() {
+    return toElementName;
+  }
 
-    /**
-     * Sets the value of the toElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setToElementName(String value) {
-        this.toElementName = value;
-    }
+  /**
+   * Sets the value of the toElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setToElementName(String value) {
+    this.toElementName = value;
+  }
 
-    /**
-     * Gets the value of the temporalCondition property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TemporalCondition }
-     *     
-     */
-    public TemporalCondition getTemporalCondition() {
-        return temporalCondition;
-    }
+  /**
+   * Gets the value of the temporalCondition property.
+   *
+   * @return possible object is
+   * {@link TemporalCondition }
+   */
+  public TemporalCondition getTemporalCondition() {
+    return temporalCondition;
+  }
 
-    /**
-     * Sets the value of the temporalCondition property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TemporalCondition }
-     *     
-     */
-    public void setTemporalCondition(TemporalCondition value) {
-        this.temporalCondition = value;
-    }
+  /**
+   * Sets the value of the temporalCondition property.
+   *
+   * @param value allowed object is
+   *              {@link TemporalCondition }
+   */
+  public void setTemporalCondition(TemporalCondition value) {
+    this.temporalCondition = value;
+  }
 
 }

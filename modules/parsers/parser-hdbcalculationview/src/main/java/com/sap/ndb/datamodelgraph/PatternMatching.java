@@ -30,14 +30,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Specification of the graph action PATTERN_MATCHING
- * 			
- * 
+ * Specification of the graph action PATTERN_MATCHING
+ *
+ *
  * <p>Java class for PatternMatching complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PatternMatching"&gt;
  *   &lt;complexContent&gt;
@@ -55,8 +54,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PatternMatching", propOrder = {
@@ -68,204 +65,184 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PatternMatching {
 
-    protected List<VertexVariable> vertexVariable;
-    protected List<EdgeVariable> edgeVariable;
-    protected List<GraphVariableOrderBy> orderBy;
-    @XmlElement(required = true)
-    protected List<GraphVariableMapping> mapping;
-    @XmlElement(required = true)
-    protected Operation operation;
-    @XmlAttribute(name = "limit")
-    protected BigInteger limit;
-    @XmlAttribute(name = "offset")
-    protected BigInteger offset;
+  protected List<VertexVariable> vertexVariable;
+  protected List<EdgeVariable> edgeVariable;
+  protected List<GraphVariableOrderBy> orderBy;
+  @XmlElement(required = true)
+  protected List<GraphVariableMapping> mapping;
+  @XmlElement(required = true)
+  protected Operation operation;
+  @XmlAttribute(name = "limit")
+  protected BigInteger limit;
+  @XmlAttribute(name = "offset")
+  protected BigInteger offset;
 
-    /**
-     * Gets the value of the vertexVariable property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the vertexVariable property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getVertexVariable().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link VertexVariable }
-     * 
-     * 
-     */
-    public List<VertexVariable> getVertexVariable() {
-        if (vertexVariable == null) {
-            vertexVariable = new ArrayList<VertexVariable>();
-        }
-        return this.vertexVariable;
+  /**
+   * Gets the value of the vertexVariable property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the vertexVariable property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getVertexVariable().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link VertexVariable }
+   */
+  public List<VertexVariable> getVertexVariable() {
+    if (vertexVariable == null) {
+      vertexVariable = new ArrayList<VertexVariable>();
     }
+    return this.vertexVariable;
+  }
 
-    /**
-     * Gets the value of the edgeVariable property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the edgeVariable property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getEdgeVariable().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link EdgeVariable }
-     * 
-     * 
-     */
-    public List<EdgeVariable> getEdgeVariable() {
-        if (edgeVariable == null) {
-            edgeVariable = new ArrayList<EdgeVariable>();
-        }
-        return this.edgeVariable;
+  /**
+   * Gets the value of the edgeVariable property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the edgeVariable property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getEdgeVariable().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link EdgeVariable }
+   */
+  public List<EdgeVariable> getEdgeVariable() {
+    if (edgeVariable == null) {
+      edgeVariable = new ArrayList<EdgeVariable>();
     }
+    return this.edgeVariable;
+  }
 
-    /**
-     * Gets the value of the orderBy property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the orderBy property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getOrderBy().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link GraphVariableOrderBy }
-     * 
-     * 
-     */
-    public List<GraphVariableOrderBy> getOrderBy() {
-        if (orderBy == null) {
-            orderBy = new ArrayList<GraphVariableOrderBy>();
-        }
-        return this.orderBy;
+  /**
+   * Gets the value of the orderBy property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the orderBy property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getOrderBy().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link GraphVariableOrderBy }
+   */
+  public List<GraphVariableOrderBy> getOrderBy() {
+    if (orderBy == null) {
+      orderBy = new ArrayList<GraphVariableOrderBy>();
     }
+    return this.orderBy;
+  }
 
-    /**
-     * Gets the value of the mapping property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the mapping property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getMapping().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link GraphVariableMapping }
-     * 
-     * 
-     */
-    public List<GraphVariableMapping> getMapping() {
-        if (mapping == null) {
-            mapping = new ArrayList<GraphVariableMapping>();
-        }
-        return this.mapping;
+  /**
+   * Gets the value of the mapping property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the mapping property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getMapping().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link GraphVariableMapping }
+   */
+  public List<GraphVariableMapping> getMapping() {
+    if (mapping == null) {
+      mapping = new ArrayList<GraphVariableMapping>();
     }
+    return this.mapping;
+  }
 
-    /**
-     * Gets the value of the operation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Operation }
-     *     
-     */
-    public Operation getOperation() {
-        return operation;
-    }
+  /**
+   * Gets the value of the operation property.
+   *
+   * @return possible object is
+   * {@link Operation }
+   */
+  public Operation getOperation() {
+    return operation;
+  }
 
-    /**
-     * Sets the value of the operation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Operation }
-     *     
-     */
-    public void setOperation(Operation value) {
-        this.operation = value;
-    }
+  /**
+   * Sets the value of the operation property.
+   *
+   * @param value allowed object is
+   *              {@link Operation }
+   */
+  public void setOperation(Operation value) {
+    this.operation = value;
+  }
 
-    /**
-     * Gets the value of the limit property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getLimit() {
-        return limit;
-    }
+  /**
+   * Gets the value of the limit property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getLimit() {
+    return limit;
+  }
 
-    /**
-     * Sets the value of the limit property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setLimit(BigInteger value) {
-        this.limit = value;
-    }
+  /**
+   * Sets the value of the limit property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setLimit(BigInteger value) {
+    this.limit = value;
+  }
 
-    /**
-     * Gets the value of the offset property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getOffset() {
-        return offset;
-    }
+  /**
+   * Gets the value of the offset property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getOffset() {
+    return offset;
+  }
 
-    /**
-     * Sets the value of the offset property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setOffset(BigInteger value) {
-        this.offset = value;
-    }
+  /**
+   * Sets the value of the offset property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setOffset(BigInteger value) {
+    this.offset = value;
+  }
 
 }

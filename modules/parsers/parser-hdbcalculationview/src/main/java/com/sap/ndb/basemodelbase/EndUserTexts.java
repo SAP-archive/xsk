@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for EndUserTexts complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EndUserTexts"&gt;
  *   &lt;complexContent&gt;
@@ -49,8 +49,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EndUserTexts", propOrder = {
@@ -59,190 +57,164 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class EndUserTexts {
 
-    protected List<LocalizedText> localizedLabel;
-    protected CommentProperties comment;
-    @XmlAttribute(name = "label")
-    protected String label;
-    @XmlAttribute(name = "labelMaxLength")
-    protected Integer labelMaxLength;
-    @XmlAttribute(name = "quickInfo")
-    protected String quickInfo;
-    @XmlAttribute(name = "quickInfoMaxLength")
-    protected Integer quickInfoMaxLength;
-    @XmlAttribute(name = "documentation")
-    protected Boolean documentation;
+  protected List<LocalizedText> localizedLabel;
+  protected CommentProperties comment;
+  @XmlAttribute(name = "label")
+  protected String label;
+  @XmlAttribute(name = "labelMaxLength")
+  protected Integer labelMaxLength;
+  @XmlAttribute(name = "quickInfo")
+  protected String quickInfo;
+  @XmlAttribute(name = "quickInfoMaxLength")
+  protected Integer quickInfoMaxLength;
+  @XmlAttribute(name = "documentation")
+  protected Boolean documentation;
 
-    /**
-     * Gets the value of the localizedLabel property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the localizedLabel property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getLocalizedLabel().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link LocalizedText }
-     * 
-     * 
-     */
-    public List<LocalizedText> getLocalizedLabel() {
-        if (localizedLabel == null) {
-            localizedLabel = new ArrayList<LocalizedText>();
-        }
-        return this.localizedLabel;
+  /**
+   * Gets the value of the localizedLabel property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the localizedLabel property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getLocalizedLabel().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link LocalizedText }
+   */
+  public List<LocalizedText> getLocalizedLabel() {
+    if (localizedLabel == null) {
+      localizedLabel = new ArrayList<LocalizedText>();
     }
+    return this.localizedLabel;
+  }
 
-    /**
-     * Gets the value of the comment property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CommentProperties }
-     *     
-     */
-    public CommentProperties getComment() {
-        return comment;
-    }
+  /**
+   * Gets the value of the comment property.
+   *
+   * @return possible object is
+   * {@link CommentProperties }
+   */
+  public CommentProperties getComment() {
+    return comment;
+  }
 
-    /**
-     * Sets the value of the comment property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CommentProperties }
-     *     
-     */
-    public void setComment(CommentProperties value) {
-        this.comment = value;
-    }
+  /**
+   * Sets the value of the comment property.
+   *
+   * @param value allowed object is
+   *              {@link CommentProperties }
+   */
+  public void setComment(CommentProperties value) {
+    this.comment = value;
+  }
 
-    /**
-     * Gets the value of the label property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLabel() {
-        return label;
-    }
+  /**
+   * Gets the value of the label property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLabel() {
+    return label;
+  }
 
-    /**
-     * Sets the value of the label property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLabel(String value) {
-        this.label = value;
-    }
+  /**
+   * Sets the value of the label property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLabel(String value) {
+    this.label = value;
+  }
 
-    /**
-     * Gets the value of the labelMaxLength property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getLabelMaxLength() {
-        return labelMaxLength;
-    }
+  /**
+   * Gets the value of the labelMaxLength property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getLabelMaxLength() {
+    return labelMaxLength;
+  }
 
-    /**
-     * Sets the value of the labelMaxLength property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setLabelMaxLength(Integer value) {
-        this.labelMaxLength = value;
-    }
+  /**
+   * Sets the value of the labelMaxLength property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setLabelMaxLength(Integer value) {
+    this.labelMaxLength = value;
+  }
 
-    /**
-     * Gets the value of the quickInfo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getQuickInfo() {
-        return quickInfo;
-    }
+  /**
+   * Gets the value of the quickInfo property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getQuickInfo() {
+    return quickInfo;
+  }
 
-    /**
-     * Sets the value of the quickInfo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setQuickInfo(String value) {
-        this.quickInfo = value;
-    }
+  /**
+   * Sets the value of the quickInfo property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setQuickInfo(String value) {
+    this.quickInfo = value;
+  }
 
-    /**
-     * Gets the value of the quickInfoMaxLength property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getQuickInfoMaxLength() {
-        return quickInfoMaxLength;
-    }
+  /**
+   * Gets the value of the quickInfoMaxLength property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getQuickInfoMaxLength() {
+    return quickInfoMaxLength;
+  }
 
-    /**
-     * Sets the value of the quickInfoMaxLength property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setQuickInfoMaxLength(Integer value) {
-        this.quickInfoMaxLength = value;
-    }
+  /**
+   * Sets the value of the quickInfoMaxLength property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setQuickInfoMaxLength(Integer value) {
+    this.quickInfoMaxLength = value;
+  }
 
-    /**
-     * Gets the value of the documentation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDocumentation() {
-        return documentation;
-    }
+  /**
+   * Gets the value of the documentation property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDocumentation() {
+    return documentation;
+  }
 
-    /**
-     * Sets the value of the documentation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDocumentation(Boolean value) {
-        this.documentation = value;
-    }
+  /**
+   * Sets the value of the documentation property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDocumentation(Boolean value) {
+    this.documentation = value;
+  }
 
 }

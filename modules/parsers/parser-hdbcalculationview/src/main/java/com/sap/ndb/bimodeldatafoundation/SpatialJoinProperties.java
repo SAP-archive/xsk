@@ -19,24 +19,23 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.basemodelbase.SpatialPredicate;
+import com.sap.ndb.bimodelconversion.Parameterization;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.SpatialPredicate;
-import com.sap.ndb.bimodelconversion.Parameterization;
 
 
 /**
- * 
- * 				Additional (join) properties neded to specify a spatial join
- * 			
- * 
+ * Additional (join) properties neded to specify a spatial join
+ *
+ *
  * <p>Java class for SpatialJoinProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SpatialJoinProperties"&gt;
  *   &lt;complexContent&gt;
@@ -51,8 +50,6 @@ import com.sap.ndb.bimodelconversion.Parameterization;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SpatialJoinProperties", propOrder = {
@@ -61,113 +58,97 @@ import com.sap.ndb.bimodelconversion.Parameterization;
 })
 public class SpatialJoinProperties {
 
-    @XmlElement(required = true)
-    protected Parameterization distance;
-    @XmlElement(required = true)
-    protected Parameterization intersectionMatrix;
-    @XmlAttribute(name = "predicate", required = true)
-    protected SpatialPredicate predicate;
-    @XmlAttribute(name = "predicateEvaluatesTo")
-    protected Boolean predicateEvaluatesTo;
+  @XmlElement(required = true)
+  protected Parameterization distance;
+  @XmlElement(required = true)
+  protected Parameterization intersectionMatrix;
+  @XmlAttribute(name = "predicate", required = true)
+  protected SpatialPredicate predicate;
+  @XmlAttribute(name = "predicateEvaluatesTo")
+  protected Boolean predicateEvaluatesTo;
 
-    /**
-     * Gets the value of the distance property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getDistance() {
-        return distance;
-    }
+  /**
+   * Gets the value of the distance property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getDistance() {
+    return distance;
+  }
 
-    /**
-     * Sets the value of the distance property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setDistance(Parameterization value) {
-        this.distance = value;
-    }
+  /**
+   * Sets the value of the distance property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setDistance(Parameterization value) {
+    this.distance = value;
+  }
 
-    /**
-     * Gets the value of the intersectionMatrix property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getIntersectionMatrix() {
-        return intersectionMatrix;
-    }
+  /**
+   * Gets the value of the intersectionMatrix property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getIntersectionMatrix() {
+    return intersectionMatrix;
+  }
 
-    /**
-     * Sets the value of the intersectionMatrix property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setIntersectionMatrix(Parameterization value) {
-        this.intersectionMatrix = value;
-    }
+  /**
+   * Sets the value of the intersectionMatrix property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setIntersectionMatrix(Parameterization value) {
+    this.intersectionMatrix = value;
+  }
 
-    /**
-     * Gets the value of the predicate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SpatialPredicate }
-     *     
-     */
-    public SpatialPredicate getPredicate() {
-        return predicate;
-    }
+  /**
+   * Gets the value of the predicate property.
+   *
+   * @return possible object is
+   * {@link SpatialPredicate }
+   */
+  public SpatialPredicate getPredicate() {
+    return predicate;
+  }
 
-    /**
-     * Sets the value of the predicate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SpatialPredicate }
-     *     
-     */
-    public void setPredicate(SpatialPredicate value) {
-        this.predicate = value;
-    }
+  /**
+   * Sets the value of the predicate property.
+   *
+   * @param value allowed object is
+   *              {@link SpatialPredicate }
+   */
+  public void setPredicate(SpatialPredicate value) {
+    this.predicate = value;
+  }
 
-    /**
-     * Gets the value of the predicateEvaluatesTo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public boolean isPredicateEvaluatesTo() {
-        if (predicateEvaluatesTo == null) {
-            return true;
-        } else {
-            return predicateEvaluatesTo;
-        }
+  /**
+   * Gets the value of the predicateEvaluatesTo property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public boolean isPredicateEvaluatesTo() {
+    if (predicateEvaluatesTo == null) {
+      return true;
+    } else {
+      return predicateEvaluatesTo;
     }
+  }
 
-    /**
-     * Sets the value of the predicateEvaluatesTo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setPredicateEvaluatesTo(Boolean value) {
-        this.predicateEvaluatesTo = value;
-    }
+  /**
+   * Sets the value of the predicateEvaluatesTo property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setPredicateEvaluatesTo(Boolean value) {
+    this.predicateEvaluatesTo = value;
+  }
 
 }

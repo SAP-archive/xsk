@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for QidColumn complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="QidColumn"&gt;
  *   &lt;complexContent&gt;
@@ -44,117 +44,99 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QidColumn")
 public class QidColumn {
 
-    @XmlAttribute(name = "ID")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String id;
-    @XmlAttribute(name = "weight")
-    protected Double weight;
-    @XmlAttribute(name = "minLevel")
-    protected Integer minLevel;
-    @XmlAttribute(name = "maxLevel")
-    protected Integer maxLevel;
+  @XmlAttribute(name = "ID")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String id;
+  @XmlAttribute(name = "weight")
+  protected Double weight;
+  @XmlAttribute(name = "minLevel")
+  protected Integer minLevel;
+  @XmlAttribute(name = "maxLevel")
+  protected Integer maxLevel;
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getID() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getID() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setID(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setID(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Gets the value of the weight property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Double }
-     *     
-     */
-    public Double getWeight() {
-        return weight;
-    }
+  /**
+   * Gets the value of the weight property.
+   *
+   * @return possible object is
+   * {@link Double }
+   */
+  public Double getWeight() {
+    return weight;
+  }
 
-    /**
-     * Sets the value of the weight property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Double }
-     *     
-     */
-    public void setWeight(Double value) {
-        this.weight = value;
-    }
+  /**
+   * Sets the value of the weight property.
+   *
+   * @param value allowed object is
+   *              {@link Double }
+   */
+  public void setWeight(Double value) {
+    this.weight = value;
+  }
 
-    /**
-     * Gets the value of the minLevel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getMinLevel() {
-        return minLevel;
-    }
+  /**
+   * Gets the value of the minLevel property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getMinLevel() {
+    return minLevel;
+  }
 
-    /**
-     * Sets the value of the minLevel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setMinLevel(Integer value) {
-        this.minLevel = value;
-    }
+  /**
+   * Sets the value of the minLevel property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setMinLevel(Integer value) {
+    this.minLevel = value;
+  }
 
-    /**
-     * Gets the value of the maxLevel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getMaxLevel() {
-        return maxLevel;
-    }
+  /**
+   * Gets the value of the maxLevel property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getMaxLevel() {
+    return maxLevel;
+  }
 
-    /**
-     * Sets the value of the maxLevel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setMaxLevel(Integer value) {
-        this.maxLevel = value;
-    }
+  /**
+   * Sets the value of the maxLevel property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setMaxLevel(Integer value) {
+    this.maxLevel = value;
+  }
 
 }

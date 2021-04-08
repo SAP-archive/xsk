@@ -31,16 +31,15 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * 
- * 				Generates a time-dependent hierarchy on recursive parent-child source data whose edges are additionally 
- * 				qualified by validity intervals. 
- * 				Docs :	https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/ffc24d42a29443b5aa1ad2a8feeb0e0e.html
- * 			
- * 
+ * Generates a time-dependent hierarchy on recursive parent-child source data whose edges are additionally
+ * qualified by validity intervals.
+ * Docs :	https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/ffc24d42a29443b5aa1ad2a8feeb0e0e.html
+ *
+ *
  * <p>Java class for hierarchyTemporalParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="hierarchyTemporalParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -65,8 +64,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "hierarchyTemporalParameterization", propOrder = {
@@ -81,215 +78,183 @@ import javax.xml.datatype.XMLGregorianCalendar;
 })
 public class HierarchyTemporalParameterization {
 
-    protected String startWhere;
-    @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar validFrom;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String validFromParameter;
-    @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar validUntil;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String validUntilParameter;
-    protected BigInteger depth;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String depthParameter;
-    @XmlElement(required = true)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected Cache cache;
+  protected String startWhere;
+  @XmlSchemaType(name = "date")
+  protected XMLGregorianCalendar validFrom;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String validFromParameter;
+  @XmlSchemaType(name = "date")
+  protected XMLGregorianCalendar validUntil;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String validUntilParameter;
+  protected BigInteger depth;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String depthParameter;
+  @XmlElement(required = true)
+  @XmlSchemaType(name = "NMTOKEN")
+  protected Cache cache;
 
-    /**
-     * Gets the value of the startWhere property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStartWhere() {
-        return startWhere;
-    }
+  /**
+   * Gets the value of the startWhere property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStartWhere() {
+    return startWhere;
+  }
 
-    /**
-     * Sets the value of the startWhere property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStartWhere(String value) {
-        this.startWhere = value;
-    }
+  /**
+   * Sets the value of the startWhere property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStartWhere(String value) {
+    this.startWhere = value;
+  }
 
-    /**
-     * Gets the value of the validFrom property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public XMLGregorianCalendar getValidFrom() {
-        return validFrom;
-    }
+  /**
+   * Gets the value of the validFrom property.
+   *
+   * @return possible object is
+   * {@link XMLGregorianCalendar }
+   */
+  public XMLGregorianCalendar getValidFrom() {
+    return validFrom;
+  }
 
-    /**
-     * Sets the value of the validFrom property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public void setValidFrom(XMLGregorianCalendar value) {
-        this.validFrom = value;
-    }
+  /**
+   * Sets the value of the validFrom property.
+   *
+   * @param value allowed object is
+   *              {@link XMLGregorianCalendar }
+   */
+  public void setValidFrom(XMLGregorianCalendar value) {
+    this.validFrom = value;
+  }
 
-    /**
-     * Gets the value of the validFromParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValidFromParameter() {
-        return validFromParameter;
-    }
+  /**
+   * Gets the value of the validFromParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValidFromParameter() {
+    return validFromParameter;
+  }
 
-    /**
-     * Sets the value of the validFromParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValidFromParameter(String value) {
-        this.validFromParameter = value;
-    }
+  /**
+   * Sets the value of the validFromParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValidFromParameter(String value) {
+    this.validFromParameter = value;
+  }
 
-    /**
-     * Gets the value of the validUntil property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public XMLGregorianCalendar getValidUntil() {
-        return validUntil;
-    }
+  /**
+   * Gets the value of the validUntil property.
+   *
+   * @return possible object is
+   * {@link XMLGregorianCalendar }
+   */
+  public XMLGregorianCalendar getValidUntil() {
+    return validUntil;
+  }
 
-    /**
-     * Sets the value of the validUntil property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public void setValidUntil(XMLGregorianCalendar value) {
-        this.validUntil = value;
-    }
+  /**
+   * Sets the value of the validUntil property.
+   *
+   * @param value allowed object is
+   *              {@link XMLGregorianCalendar }
+   */
+  public void setValidUntil(XMLGregorianCalendar value) {
+    this.validUntil = value;
+  }
 
-    /**
-     * Gets the value of the validUntilParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValidUntilParameter() {
-        return validUntilParameter;
-    }
+  /**
+   * Gets the value of the validUntilParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValidUntilParameter() {
+    return validUntilParameter;
+  }
 
-    /**
-     * Sets the value of the validUntilParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValidUntilParameter(String value) {
-        this.validUntilParameter = value;
-    }
+  /**
+   * Sets the value of the validUntilParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValidUntilParameter(String value) {
+    this.validUntilParameter = value;
+  }
 
-    /**
-     * Gets the value of the depth property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getDepth() {
-        return depth;
-    }
+  /**
+   * Gets the value of the depth property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getDepth() {
+    return depth;
+  }
 
-    /**
-     * Sets the value of the depth property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setDepth(BigInteger value) {
-        this.depth = value;
-    }
+  /**
+   * Sets the value of the depth property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setDepth(BigInteger value) {
+    this.depth = value;
+  }
 
-    /**
-     * Gets the value of the depthParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDepthParameter() {
-        return depthParameter;
-    }
+  /**
+   * Gets the value of the depthParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDepthParameter() {
+    return depthParameter;
+  }
 
-    /**
-     * Sets the value of the depthParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDepthParameter(String value) {
-        this.depthParameter = value;
-    }
+  /**
+   * Sets the value of the depthParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDepthParameter(String value) {
+    this.depthParameter = value;
+  }
 
-    /**
-     * Gets the value of the cache property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Cache }
-     *     
-     */
-    public Cache getCache() {
-        return cache;
-    }
+  /**
+   * Gets the value of the cache property.
+   *
+   * @return possible object is
+   * {@link Cache }
+   */
+  public Cache getCache() {
+    return cache;
+  }
 
-    /**
-     * Sets the value of the cache property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Cache }
-     *     
-     */
-    public void setCache(Cache value) {
-        this.cache = value;
-    }
+  /**
+   * Sets the value of the cache property.
+   *
+   * @param value allowed object is
+   *              {@link Cache }
+   */
+  public void setCache(Cache value) {
+    this.cache = value;
+  }
 
 }

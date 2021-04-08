@@ -21,26 +21,24 @@ import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
  */
 public class XSKDataStructuresHDISynchronizerJobDefinitionProvider implements IJobDefinitionProvider {
 
-	private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_HDI_STRUCTURE = "DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE_HDI";
-	
-	private static final String DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_HDI_SYNCHRONIZER_JOB = "dirigible-internal-xsk-data-structures-hdi-synchronizer-job";
-	
-	static final String XSK_DATA_STRUCTURES_HDI_SYNCHRONIZER_JOB = "XSK Data Structures HDI Synchronizer Job";
+  static final String XSK_DATA_STRUCTURES_HDI_SYNCHRONIZER_JOB = "XSK Data Structures HDI Synchronizer Job";
+  private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_HDI_STRUCTURE = "DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE_HDI";
+  private static final String DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_HDI_SYNCHRONIZER_JOB = "dirigible-internal-xsk-data-structures-hdi-synchronizer-job";
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.dirigible.core.scheduler.api.IJobDefinitionProvider#getJobDefinition()
-	 */
-	@Override
-	public JobDefinition getJobDefinition() {
-		JobDefinition jobDefinition = new JobDefinition();
-		jobDefinition.setName(DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_HDI_SYNCHRONIZER_JOB);
-		jobDefinition.setGroup(ISchedulerCoreService.JOB_GROUP_INTERNAL);
-		jobDefinition.setClazz(XSKDataStructuresHDISynchronizerJob.class.getCanonicalName());
-		jobDefinition.setDescription(XSK_DATA_STRUCTURES_HDI_SYNCHRONIZER_JOB);
-		jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_HDI_STRUCTURE ,"0/55 * * * * ?"));
-		jobDefinition.setSingleton(true);
-		return jobDefinition;
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.dirigible.core.scheduler.api.IJobDefinitionProvider#getJobDefinition()
+   */
+  @Override
+  public JobDefinition getJobDefinition() {
+    JobDefinition jobDefinition = new JobDefinition();
+    jobDefinition.setName(DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_HDI_SYNCHRONIZER_JOB);
+    jobDefinition.setGroup(ISchedulerCoreService.JOB_GROUP_INTERNAL);
+    jobDefinition.setClazz(XSKDataStructuresHDISynchronizerJob.class.getCanonicalName());
+    jobDefinition.setDescription(XSK_DATA_STRUCTURES_HDI_SYNCHRONIZER_JOB);
+    jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_HDI_STRUCTURE, "0/55 * * * * ?"));
+    jobDefinition.setSingleton(true);
+    return jobDefinition;
+  }
 
 }

@@ -27,14 +27,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Base class for partitioning specification that specify the numbers of the partitions
- * 			
- * 
+ * Base class for partitioning specification that specify the numbers of the partitions
+ *
+ *
  * <p>Java class for NumberedPartitionSpecification complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="NumberedPartitionSpecification"&gt;
  *   &lt;complexContent&gt;
@@ -45,8 +44,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NumberedPartitionSpecification")
@@ -55,60 +52,51 @@ import javax.xml.bind.annotation.XmlType;
     HashPartitionSpecification.class
 })
 public abstract class NumberedPartitionSpecification
-    extends PartitionSpecification
-{
+    extends PartitionSpecification {
 
-    @XmlAttribute(name = "numberOfPartitions")
-    protected Integer numberOfPartitions;
-    @XmlAttribute(name = "useNumberOfServers")
-    protected Boolean useNumberOfServers;
+  @XmlAttribute(name = "numberOfPartitions")
+  protected Integer numberOfPartitions;
+  @XmlAttribute(name = "useNumberOfServers")
+  protected Boolean useNumberOfServers;
 
-    /**
-     * Gets the value of the numberOfPartitions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getNumberOfPartitions() {
-        return numberOfPartitions;
-    }
+  /**
+   * Gets the value of the numberOfPartitions property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getNumberOfPartitions() {
+    return numberOfPartitions;
+  }
 
-    /**
-     * Sets the value of the numberOfPartitions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setNumberOfPartitions(Integer value) {
-        this.numberOfPartitions = value;
-    }
+  /**
+   * Sets the value of the numberOfPartitions property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setNumberOfPartitions(Integer value) {
+    this.numberOfPartitions = value;
+  }
 
-    /**
-     * Gets the value of the useNumberOfServers property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isUseNumberOfServers() {
-        return useNumberOfServers;
-    }
+  /**
+   * Gets the value of the useNumberOfServers property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isUseNumberOfServers() {
+    return useNumberOfServers;
+  }
 
-    /**
-     * Sets the value of the useNumberOfServers property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setUseNumberOfServers(Boolean value) {
-        this.useNumberOfServers = value;
-    }
+  /**
+   * Sets the value of the useNumberOfServers property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setUseNumberOfServers(Boolean value) {
+    this.useNumberOfServers = value;
+  }
 
 }

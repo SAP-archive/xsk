@@ -21,48 +21,48 @@ import java.util.Map;
  */
 public class XSKDataStructureContextModel {
 
-	private String name;
-	
-	private Map<String, XSKDataStructureTypeDefinitionModel> types = new HashMap<String, XSKDataStructureTypeDefinitionModel>();
-	
-	private List<XSKDataStructureEntityModel> entities = new ArrayList<XSKDataStructureEntityModel>();
-	
-	
-	/**
-	 * Gets the name.
-	 *
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  private String name;
 
-	/**
-	 * Sets the name.
-	 *
-	 * @param name the new name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+  private Map<String, XSKDataStructureTypeDefinitionModel> types = new HashMap<String, XSKDataStructureTypeDefinitionModel>();
 
-	/**
-	 * Gets the types.
-	 *
-	 * @return the types
-	 */
-	public Map<String, XSKDataStructureTypeDefinitionModel> getTypes() {
-		return types;
-	}
-	
-	/**
-	 * Gets the entities.
-	 *
-	 * @return the entities
-	 */
-	public List<XSKDataStructureEntityModel> getЕntities() {
-		return entities;
-	}
-	
-	
+  private List<XSKDataStructureEntityModel> entities = new ArrayList<XSKDataStructureEntityModel>();
+
+
+  /**
+   * Gets the name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets the name.
+   *
+   * @param name the new name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets the types.
+   *
+   * @return the types
+   */
+  public Map<String, XSKDataStructureTypeDefinitionModel> getTypes() {
+    return types;
+  }
+
+  /**
+   * Gets the entities.
+   *
+   * @return the entities
+   */
+  public List<XSKDataStructureEntityModel> getЕntities() {
+    return entities;
+  }
+
+
 }

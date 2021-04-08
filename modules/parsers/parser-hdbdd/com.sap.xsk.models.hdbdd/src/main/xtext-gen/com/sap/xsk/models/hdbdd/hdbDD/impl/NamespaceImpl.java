@@ -5,7 +5,6 @@ package com.sap.xsk.models.hdbdd.hdbDD.impl;
 
 import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
 import com.sap.xsk.models.hdbdd.hdbDD.Namespace;
-
 import org.eclipse.emf.ecore.EClass;
 
 /**
@@ -15,26 +14,26 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class NamespaceImpl extends TypeImpl implements Namespace
-{
+public class NamespaceImpl extends TypeImpl implements Namespace {
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  protected NamespaceImpl()
-  {
+  protected NamespaceImpl() {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass()
-  {
+  protected EClass eStaticClass() {
     return HdbDDPackage.Literals.NAMESPACE;
   }
 

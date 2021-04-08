@@ -19,20 +19,20 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.bimodeldatafoundation.SpatialJoinProperties;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.bimodeldatafoundation.SpatialJoinProperties;
 
 
 /**
  * <p>Java class for JoinAttribute complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="JoinAttribute"&gt;
  *   &lt;complexContent&gt;
@@ -45,8 +45,6 @@ import com.sap.ndb.bimodeldatafoundation.SpatialJoinProperties;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "JoinAttribute", propOrder = {
@@ -54,57 +52,49 @@ import com.sap.ndb.bimodeldatafoundation.SpatialJoinProperties;
 })
 public class JoinAttribute {
 
-    protected SpatialJoinProperties spatialJoinProperties;
-    @XmlAttribute(name = "name", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String name;
+  protected SpatialJoinProperties spatialJoinProperties;
+  @XmlAttribute(name = "name", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String name;
 
-    /**
-     * Gets the value of the spatialJoinProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SpatialJoinProperties }
-     *     
-     */
-    public SpatialJoinProperties getSpatialJoinProperties() {
-        return spatialJoinProperties;
-    }
+  /**
+   * Gets the value of the spatialJoinProperties property.
+   *
+   * @return possible object is
+   * {@link SpatialJoinProperties }
+   */
+  public SpatialJoinProperties getSpatialJoinProperties() {
+    return spatialJoinProperties;
+  }
 
-    /**
-     * Sets the value of the spatialJoinProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SpatialJoinProperties }
-     *     
-     */
-    public void setSpatialJoinProperties(SpatialJoinProperties value) {
-        this.spatialJoinProperties = value;
-    }
+  /**
+   * Sets the value of the spatialJoinProperties property.
+   *
+   * @param value allowed object is
+   *              {@link SpatialJoinProperties }
+   */
+  public void setSpatialJoinProperties(SpatialJoinProperties value) {
+    this.spatialJoinProperties = value;
+  }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets the value of the name property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 
 }

@@ -19,6 +19,7 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilter;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -26,14 +27,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilter;
 
 
 /**
  * <p>Java class for ColumnFilter complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ColumnFilter"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +47,6 @@ import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ColumnFilter", propOrder = {
@@ -56,84 +54,72 @@ import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilter;
 })
 public class ColumnFilter {
 
-    @XmlElement(required = true)
-    protected ValueFilter valueFilter;
-    @XmlAttribute(name = "columnName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String columnName;
-    @XmlAttribute(name = "enableFunctions")
-    protected Boolean enableFunctions;
+  @XmlElement(required = true)
+  protected ValueFilter valueFilter;
+  @XmlAttribute(name = "columnName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String columnName;
+  @XmlAttribute(name = "enableFunctions")
+  protected Boolean enableFunctions;
 
-    /**
-     * Gets the value of the valueFilter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ValueFilter }
-     *     
-     */
-    public ValueFilter getValueFilter() {
-        return valueFilter;
-    }
+  /**
+   * Gets the value of the valueFilter property.
+   *
+   * @return possible object is
+   * {@link ValueFilter }
+   */
+  public ValueFilter getValueFilter() {
+    return valueFilter;
+  }
 
-    /**
-     * Sets the value of the valueFilter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ValueFilter }
-     *     
-     */
-    public void setValueFilter(ValueFilter value) {
-        this.valueFilter = value;
-    }
+  /**
+   * Sets the value of the valueFilter property.
+   *
+   * @param value allowed object is
+   *              {@link ValueFilter }
+   */
+  public void setValueFilter(ValueFilter value) {
+    this.valueFilter = value;
+  }
 
-    /**
-     * Gets the value of the columnName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getColumnName() {
-        return columnName;
-    }
+  /**
+   * Gets the value of the columnName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getColumnName() {
+    return columnName;
+  }
 
-    /**
-     * Sets the value of the columnName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setColumnName(String value) {
-        this.columnName = value;
-    }
+  /**
+   * Sets the value of the columnName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setColumnName(String value) {
+    this.columnName = value;
+  }
 
-    /**
-     * Gets the value of the enableFunctions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isEnableFunctions() {
-        return enableFunctions;
-    }
+  /**
+   * Gets the value of the enableFunctions property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isEnableFunctions() {
+    return enableFunctions;
+  }
 
-    /**
-     * Sets the value of the enableFunctions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setEnableFunctions(Boolean value) {
-        this.enableFunctions = value;
-    }
+  /**
+   * Sets the value of the enableFunctions property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setEnableFunctions(Boolean value) {
+    this.enableFunctions = value;
+  }
 
 }

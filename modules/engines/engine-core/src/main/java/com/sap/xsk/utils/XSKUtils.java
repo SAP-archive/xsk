@@ -21,33 +21,33 @@ import java.io.ObjectOutputStream;
 
 public class XSKUtils {
 
-    private XSKUtils() {
+  private XSKUtils() {
 
-    }
+  }
 
-    public static byte[] objectToByteArray(Object object) throws IOException {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream(); ObjectOutput out = new ObjectOutputStream(bos)) {
-            out.writeObject(object);
-            out.flush();
+  public static byte[] objectToByteArray(Object object) throws IOException {
+    try (ByteArrayOutputStream bos = new ByteArrayOutputStream(); ObjectOutput out = new ObjectOutputStream(bos)) {
+      out.writeObject(object);
+      out.flush();
 
-            return bos.toByteArray();
-        }
+      return bos.toByteArray();
     }
+  }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T byteArrayToObject(byte[] byteArray) throws IOException, ClassNotFoundException {
-        try (ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
-             ObjectInput in = new ObjectInputStream(bis)) {
-            return (T) in.readObject();
-        }
+  @SuppressWarnings("unchecked")
+  public static <T> T byteArrayToObject(byte[] byteArray) throws IOException, ClassNotFoundException {
+    try (ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
+        ObjectInput in = new ObjectInputStream(bis)) {
+      return (T) in.readObject();
     }
-    
-    public static String convertToFullPath(String filePath) {
-        if (!filePath.startsWith("/registry/public")) {
-            return "/registry/public" + filePath;
-        }
-        return filePath;
+  }
+
+  public static String convertToFullPath(String filePath) {
+    if (!filePath.startsWith("/registry/public")) {
+      return "/registry/public" + filePath;
     }
+    return filePath;
+  }
 
 
 }

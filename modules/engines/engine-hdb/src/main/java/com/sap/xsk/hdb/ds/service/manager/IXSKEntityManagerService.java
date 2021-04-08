@@ -11,6 +11,8 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
+import static java.text.MessageFormat.format;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
@@ -19,124 +21,128 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.utils.XSKHDBUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.naming.OperationNotSupportedException;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.OperationNotSupportedException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
-
-import static java.text.MessageFormat.format;
-
 public class IXSKEntityManagerService extends AbstractDataStructureManagerService<XSKDataStructureEntitiesModel> {
-    private static final Logger logger = LoggerFactory.getLogger(IXSKEntityManagerService.class);
 
-    private final Map<String, XSKDataStructureEntitiesModel> dataStructureEntitiesModel;
-    private final List<String> entitiesSynchronized;
+  private static final Logger logger = LoggerFactory.getLogger(IXSKEntityManagerService.class);
 
-    @Inject @Named("xskEntityUpdateProcessor")
-    private IXSKHdbProcessor xskEntityUpdateProcessor;
+  private final Map<String, XSKDataStructureEntitiesModel> dataStructureEntitiesModel;
+  private final List<String> entitiesSynchronized;
 
-    @Inject @Named("xskEntityDropProcessor")
-    private IXSKHdbProcessor xskEntityDropProcessor;
+  @Inject
+  @Named("xskEntityUpdateProcessor")
+  private IXSKHdbProcessor xskEntityUpdateProcessor;
 
-    @Inject @Named("xskEntityCreateProcessor")
-    private IXSKHdbProcessor xskEntityCreateProcessor;
+  @Inject
+  @Named("xskEntityDropProcessor")
+  private IXSKHdbProcessor xskEntityDropProcessor;
 
-    public IXSKEntityManagerService() {
-        dataStructureEntitiesModel = Collections.synchronizedMap(new LinkedHashMap<>());
-        entitiesSynchronized = Collections.synchronizedList(new ArrayList<>());
+  @Inject
+  @Named("xskEntityCreateProcessor")
+  private IXSKHdbProcessor xskEntityCreateProcessor;
+
+  public IXSKEntityManagerService() {
+    dataStructureEntitiesModel = Collections.synchronizedMap(new LinkedHashMap<>());
+    entitiesSynchronized = Collections.synchronizedList(new ArrayList<>());
+  }
+
+
+  @Override
+  public void synchronizeRuntimeMetadata(XSKDataStructureEntitiesModel entitiesModel) throws XSKDataStructuresException {
+    if (!getDataStructuresCoreService().existsDataStructure(entitiesModel.getLocation(), entitiesModel.getType())) {
+      getDataStructuresCoreService()
+          .createDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
+      dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
+      logger.info("Synchronized a new Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
+    } else {
+      XSKDataStructureEntitiesModel existing = getDataStructuresCoreService()
+          .getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
+      if (!entitiesModel.equals(existing)) {
+        getDataStructuresCoreService()
+            .updateDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
+        dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
+        logger.info("Synchronized a modified Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
+      }
     }
+    if (!entitiesSynchronized.contains(entitiesModel.getLocation())) {
+      entitiesSynchronized.add(entitiesModel.getLocation());
+    }
+  }
 
-
-    @Override
-    public void synchronizeRuntimeMetadata(XSKDataStructureEntitiesModel entitiesModel) throws XSKDataStructuresException {
-        if (!getDataStructuresCoreService().existsDataStructure(entitiesModel.getLocation(), entitiesModel.getType())) {
-            getDataStructuresCoreService()
-                    .createDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
-            dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
-            logger.info("Synchronized a new Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
+  @Override
+  public void createDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
+    if (entitiesModel != null) {
+      for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
+        String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
+        if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
+          this.xskEntityCreateProcessor.execute(connection, entityModel);
         } else {
-            XSKDataStructureEntitiesModel existing = getDataStructuresCoreService().getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
-            if (!entitiesModel.equals(existing)) {
-                getDataStructuresCoreService()
-                        .updateDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
-                dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
-                logger.info("Synchronized a modified Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
-            }
+          this.xskEntityUpdateProcessor.execute(connection, entityModel);
         }
-        if (!entitiesSynchronized.contains(entitiesModel.getLocation())) {
-            entitiesSynchronized.add(entitiesModel.getLocation());
+      }
+    }
+
+  }
+
+  @Override
+  public void dropDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
+    if (entitiesModel != null) {
+      for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
+        String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
+        if (SqlFactory.getNative(connection).exists(connection, tableName)) {
+          if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
+            xskEntityDropProcessor.execute(connection, entityModel);
+          } else {
+            logger.warn(format("Entity [{0}] cannot be deleted during the update process, because it is not empty", entityModel.getName()));
+          }
         }
+      }
     }
+  }
 
-    @Override
-    public void createDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
-        if (entitiesModel != null) {
-            for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-                String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
-                if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
-                    this.xskEntityCreateProcessor.execute(connection, entityModel);
-                } else {
-                    this.xskEntityUpdateProcessor.execute(connection, entityModel);
-                }
-            }
+  @Override
+  public void updateDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel)
+      throws SQLException, OperationNotSupportedException {
+    if (entitiesModel != null) {
+      for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
+        String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
+        if (SqlFactory.getNative(connection).exists(connection, tableName)) {
+          if (SqlFactory.getNative(connection).count(connection, tableName) != 0) {
+            this.xskEntityUpdateProcessor.execute(connection, entityModel);
+          }
         }
-
+      }
     }
+  }
 
-    @Override
-    public void dropDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
-        if (entitiesModel != null) {
-            for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-                String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
-                if (SqlFactory.getNative(connection).exists(connection, tableName)) {
-                    if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
-                        xskEntityDropProcessor.execute(connection, entityModel);
-                    } else {
-                        logger.warn(format("Entity [{0}] cannot be deleted during the update process, because it is not empty", entityModel.getName()));
-                    }
-                }
-            }
-        }
-    }
+  @Override
+  public Map<String, XSKDataStructureEntitiesModel> getDataStructureModels() {
+    return Collections.unmodifiableMap(this.dataStructureEntitiesModel);
+  }
 
-    @Override
-    public void updateDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel)
-            throws SQLException, OperationNotSupportedException {
-        if (entitiesModel != null) {
-            for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-                String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
-                if (SqlFactory.getNative(connection).exists(connection, tableName)) {
-                    if (SqlFactory.getNative(connection).count(connection, tableName) != 0) {
-                        this.xskEntityUpdateProcessor.execute(connection, entityModel);
-                    }
-                }
-            }
-        }
-    }
+  @Override
+  public List<String> getDataStructureSynchronized() {
+    return Collections.unmodifiableList(this.entitiesSynchronized);
+  }
 
-    @Override
-    public Map<String, XSKDataStructureEntitiesModel> getDataStructureModels() {
-        return Collections.unmodifiableMap(this.dataStructureEntitiesModel);
-    }
+  @Override
+  public String getDataStructureType() {
+    return IXSKDataStructureModel.FILE_EXTENSION_ENTITIES;
+  }
 
-    @Override
-    public List<String> getDataStructureSynchronized() {
-        return Collections.unmodifiableList(this.entitiesSynchronized);
-    }
-
-    @Override
-    public String getDataStructureType() {
-        return IXSKDataStructureModel.FILE_EXTENSION_ENTITIES;
-    }
-
-    @Override
-    public void clearCache() {
-        dataStructureEntitiesModel.clear();
-    }
+  @Override
+  public void clearCache() {
+    dataStructureEntitiesModel.clear();
+  }
 }

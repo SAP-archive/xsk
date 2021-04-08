@@ -19,32 +19,31 @@
 
 package com.sap.ndb.datamodelhierarchy;
 
+import com.sap.ndb.datamodeltype.Order;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.datamodeltype.Order;
 
 
 /**
- * 
- * 				Other than for leveled hierarchies (where each level needs to be specified explicitly), a parent-child is defined by 
- * 				exactly one parent element (for each key field in	case of compound keys). This parent(s) element describes a 
- * 				self-referencing relationship within the master data entity and will usually be defined via an association.	Only 
- * 				one level needs to be assigned to a parent-child hierarchy, because the levels present in the hierarchy are drawn 
- * 				from the parent-child relationships between	members associated with the parent element. Within the same master data 
- * 				entity one or more parent-child hierarchies could be defined. Therefore it is not sufficient to	only specify which 
- * 				element represents the "parent" but also the corresponding "child" element needs to be defined. A simple example of a
- * 				Parent-Child Hierarchy is the	"Employee" master data. A Manager is again an Employee and almost every Employee is 
- * 				assigned to a Manager
- * 			
- * 
+ * Other than for leveled hierarchies (where each level needs to be specified explicitly), a parent-child is defined by
+ * exactly one parent element (for each key field in	case of compound keys). This parent(s) element describes a
+ * self-referencing relationship within the master data entity and will usually be defined via an association.	Only
+ * one level needs to be assigned to a parent-child hierarchy, because the levels present in the hierarchy are drawn
+ * from the parent-child relationships between	members associated with the parent element. Within the same master data
+ * entity one or more parent-child hierarchies could be defined. Therefore it is not sufficient to	only specify which
+ * element represents the "parent" but also the corresponding "child" element needs to be defined. A simple example of a
+ * Parent-Child Hierarchy is the	"Employee" master data. A Manager is again an Employee and almost every Employee is
+ * assigned to a Manager
+ *
+ *
  * <p>Java class for ParentChildHierarchy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ParentChildHierarchy"&gt;
  *   &lt;complexContent&gt;
@@ -59,8 +58,6 @@ import com.sap.ndb.datamodeltype.Order;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ParentChildHierarchy", propOrder = {
@@ -70,124 +67,113 @@ import com.sap.ndb.datamodeltype.Order;
     "edgeAttribute"
 })
 public class ParentChildHierarchy
-    extends InlineHierarchy
-{
+    extends InlineHierarchy {
 
-    @XmlElement(required = true)
-    protected List<ParentDefinition> parentDefinition;
-    protected List<Order> siblingOrder;
-    protected HierarchyTimeProperties timeProperties;
-    protected List<EdgeAttribute> edgeAttribute;
+  @XmlElement(required = true)
+  protected List<ParentDefinition> parentDefinition;
+  protected List<Order> siblingOrder;
+  protected HierarchyTimeProperties timeProperties;
+  protected List<EdgeAttribute> edgeAttribute;
 
-    /**
-     * Gets the value of the parentDefinition property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the parentDefinition property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getParentDefinition().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link ParentDefinition }
-     * 
-     * 
-     */
-    public List<ParentDefinition> getParentDefinition() {
-        if (parentDefinition == null) {
-            parentDefinition = new ArrayList<ParentDefinition>();
-        }
-        return this.parentDefinition;
+  /**
+   * Gets the value of the parentDefinition property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the parentDefinition property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getParentDefinition().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link ParentDefinition }
+   */
+  public List<ParentDefinition> getParentDefinition() {
+    if (parentDefinition == null) {
+      parentDefinition = new ArrayList<ParentDefinition>();
     }
+    return this.parentDefinition;
+  }
 
-    /**
-     * Gets the value of the siblingOrder property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the siblingOrder property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getSiblingOrder().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Order }
-     * 
-     * 
-     */
-    public List<Order> getSiblingOrder() {
-        if (siblingOrder == null) {
-            siblingOrder = new ArrayList<Order>();
-        }
-        return this.siblingOrder;
+  /**
+   * Gets the value of the siblingOrder property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the siblingOrder property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getSiblingOrder().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Order }
+   */
+  public List<Order> getSiblingOrder() {
+    if (siblingOrder == null) {
+      siblingOrder = new ArrayList<Order>();
     }
+    return this.siblingOrder;
+  }
 
-    /**
-     * Gets the value of the timeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyTimeProperties }
-     *     
-     */
-    public HierarchyTimeProperties getTimeProperties() {
-        return timeProperties;
-    }
+  /**
+   * Gets the value of the timeProperties property.
+   *
+   * @return possible object is
+   * {@link HierarchyTimeProperties }
+   */
+  public HierarchyTimeProperties getTimeProperties() {
+    return timeProperties;
+  }
 
-    /**
-     * Sets the value of the timeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyTimeProperties }
-     *     
-     */
-    public void setTimeProperties(HierarchyTimeProperties value) {
-        this.timeProperties = value;
-    }
+  /**
+   * Sets the value of the timeProperties property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyTimeProperties }
+   */
+  public void setTimeProperties(HierarchyTimeProperties value) {
+    this.timeProperties = value;
+  }
 
-    /**
-     * Gets the value of the edgeAttribute property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the edgeAttribute property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getEdgeAttribute().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link EdgeAttribute }
-     * 
-     * 
-     */
-    public List<EdgeAttribute> getEdgeAttribute() {
-        if (edgeAttribute == null) {
-            edgeAttribute = new ArrayList<EdgeAttribute>();
-        }
-        return this.edgeAttribute;
+  /**
+   * Gets the value of the edgeAttribute property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the edgeAttribute property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getEdgeAttribute().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link EdgeAttribute }
+   */
+  public List<EdgeAttribute> getEdgeAttribute() {
+    if (edgeAttribute == null) {
+      edgeAttribute = new ArrayList<EdgeAttribute>();
     }
+    return this.edgeAttribute;
+  }
 
 }

@@ -28,18 +28,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				This is the meta data that is stored outside of the XML in the repository persistence 
- * 				Some of its attributes are stored redundantly in the EMF XML to have them available also when
- * 				performing a client export (e.g. timestamps like createdAt)
- * 				Other attributes are transient like e.g. the packageName. Also user name properties are transient
- * 				and not stored in the XML
- * 			
- * 
+ * This is the meta data that is stored outside of the XML in the repository persistence
+ * Some of its attributes are stored redundantly in the EMF XML to have them available also when
+ * performing a client export (e.g. timestamps like createdAt)
+ * Other attributes are transient like e.g. the packageName. Also user name properties are transient
+ * and not stored in the XML
+ *
+ *
  * <p>Java class for ResourceMetadata complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ResourceMetadata"&gt;
  *   &lt;complexContent&gt;
@@ -58,280 +57,238 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ResourceMetadata")
 public class ResourceMetadata {
 
-    @XmlAttribute(name = "activatedAt")
-    protected String activatedAt;
-    @XmlAttribute(name = "activatedBy")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String activatedBy;
-    @XmlAttribute(name = "changedAt")
-    protected String changedAt;
-    @XmlAttribute(name = "changedBy")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String changedBy;
-    @XmlAttribute(name = "createdAt")
-    protected String createdAt;
-    @XmlAttribute(name = "createdBy")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String createdBy;
-    @XmlAttribute(name = "packageName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String packageName;
-    @XmlAttribute(name = "status")
-    protected Status status;
-    @XmlAttribute(name = "version")
-    protected Version version;
-    @XmlAttribute(name = "versionNumber")
-    protected Integer versionNumber;
+  @XmlAttribute(name = "activatedAt")
+  protected String activatedAt;
+  @XmlAttribute(name = "activatedBy")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String activatedBy;
+  @XmlAttribute(name = "changedAt")
+  protected String changedAt;
+  @XmlAttribute(name = "changedBy")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String changedBy;
+  @XmlAttribute(name = "createdAt")
+  protected String createdAt;
+  @XmlAttribute(name = "createdBy")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String createdBy;
+  @XmlAttribute(name = "packageName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String packageName;
+  @XmlAttribute(name = "status")
+  protected Status status;
+  @XmlAttribute(name = "version")
+  protected Version version;
+  @XmlAttribute(name = "versionNumber")
+  protected Integer versionNumber;
 
-    /**
-     * Gets the value of the activatedAt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getActivatedAt() {
-        return activatedAt;
-    }
+  /**
+   * Gets the value of the activatedAt property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getActivatedAt() {
+    return activatedAt;
+  }
 
-    /**
-     * Sets the value of the activatedAt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setActivatedAt(String value) {
-        this.activatedAt = value;
-    }
+  /**
+   * Sets the value of the activatedAt property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setActivatedAt(String value) {
+    this.activatedAt = value;
+  }
 
-    /**
-     * Gets the value of the activatedBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getActivatedBy() {
-        return activatedBy;
-    }
+  /**
+   * Gets the value of the activatedBy property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getActivatedBy() {
+    return activatedBy;
+  }
 
-    /**
-     * Sets the value of the activatedBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setActivatedBy(String value) {
-        this.activatedBy = value;
-    }
+  /**
+   * Sets the value of the activatedBy property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setActivatedBy(String value) {
+    this.activatedBy = value;
+  }
 
-    /**
-     * Gets the value of the changedAt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getChangedAt() {
-        return changedAt;
-    }
+  /**
+   * Gets the value of the changedAt property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getChangedAt() {
+    return changedAt;
+  }
 
-    /**
-     * Sets the value of the changedAt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setChangedAt(String value) {
-        this.changedAt = value;
-    }
+  /**
+   * Sets the value of the changedAt property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setChangedAt(String value) {
+    this.changedAt = value;
+  }
 
-    /**
-     * Gets the value of the changedBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getChangedBy() {
-        return changedBy;
-    }
+  /**
+   * Gets the value of the changedBy property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getChangedBy() {
+    return changedBy;
+  }
 
-    /**
-     * Sets the value of the changedBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setChangedBy(String value) {
-        this.changedBy = value;
-    }
+  /**
+   * Sets the value of the changedBy property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setChangedBy(String value) {
+    this.changedBy = value;
+  }
 
-    /**
-     * Gets the value of the createdAt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCreatedAt() {
-        if (createdAt == null) {
-            return "";
-        } else {
-            return createdAt;
-        }
+  /**
+   * Gets the value of the createdAt property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getCreatedAt() {
+    if (createdAt == null) {
+      return "";
+    } else {
+      return createdAt;
     }
+  }
 
-    /**
-     * Sets the value of the createdAt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCreatedAt(String value) {
-        this.createdAt = value;
-    }
+  /**
+   * Sets the value of the createdAt property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCreatedAt(String value) {
+    this.createdAt = value;
+  }
 
-    /**
-     * Gets the value of the createdBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCreatedBy() {
-        return createdBy;
-    }
+  /**
+   * Gets the value of the createdBy property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getCreatedBy() {
+    return createdBy;
+  }
 
-    /**
-     * Sets the value of the createdBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCreatedBy(String value) {
-        this.createdBy = value;
-    }
+  /**
+   * Sets the value of the createdBy property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCreatedBy(String value) {
+    this.createdBy = value;
+  }
 
-    /**
-     * Gets the value of the packageName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPackageName() {
-        return packageName;
-    }
+  /**
+   * Gets the value of the packageName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPackageName() {
+    return packageName;
+  }
 
-    /**
-     * Sets the value of the packageName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPackageName(String value) {
-        this.packageName = value;
-    }
+  /**
+   * Sets the value of the packageName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPackageName(String value) {
+    this.packageName = value;
+  }
 
-    /**
-     * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Status }
-     *     
-     */
-    public Status getStatus() {
-        return status;
-    }
+  /**
+   * Gets the value of the status property.
+   *
+   * @return possible object is
+   * {@link Status }
+   */
+  public Status getStatus() {
+    return status;
+  }
 
-    /**
-     * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Status }
-     *     
-     */
-    public void setStatus(Status value) {
-        this.status = value;
-    }
+  /**
+   * Sets the value of the status property.
+   *
+   * @param value allowed object is
+   *              {@link Status }
+   */
+  public void setStatus(Status value) {
+    this.status = value;
+  }
 
-    /**
-     * Gets the value of the version property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Version }
-     *     
-     */
-    public Version getVersion() {
-        return version;
-    }
+  /**
+   * Gets the value of the version property.
+   *
+   * @return possible object is
+   * {@link Version }
+   */
+  public Version getVersion() {
+    return version;
+  }
 
-    /**
-     * Sets the value of the version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Version }
-     *     
-     */
-    public void setVersion(Version value) {
-        this.version = value;
-    }
+  /**
+   * Sets the value of the version property.
+   *
+   * @param value allowed object is
+   *              {@link Version }
+   */
+  public void setVersion(Version value) {
+    this.version = value;
+  }
 
-    /**
-     * Gets the value of the versionNumber property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getVersionNumber() {
-        return versionNumber;
-    }
+  /**
+   * Gets the value of the versionNumber property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getVersionNumber() {
+    return versionNumber;
+  }
 
-    /**
-     * Sets the value of the versionNumber property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setVersionNumber(Integer value) {
-        this.versionNumber = value;
-    }
+  /**
+   * Sets the value of the versionNumber property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setVersionNumber(Integer value) {
+    this.versionNumber = value;
+  }
 
 }

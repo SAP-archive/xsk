@@ -9,11 +9,10 @@ package com.sap.xsk.models.hdbdd.hdbDD;
  * A representation of the model object '<em><b>Namespace</b></em>'.
  * <!-- end-user-doc -->
  *
- *
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getNamespace()
  * @model
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getNamespace()
  */
-public interface Namespace extends Type
-{
+public interface Namespace extends Type {
+
 } // Namespace

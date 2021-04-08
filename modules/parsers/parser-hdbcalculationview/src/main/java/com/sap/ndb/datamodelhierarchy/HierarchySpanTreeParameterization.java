@@ -30,14 +30,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Creates a partial hierarchy based on parent-child source data and an (optional) maximum recursion depth input parameter.
- * 			
- * 
+ * Creates a partial hierarchy based on parent-child source data and an (optional) maximum recursion depth input parameter.
+ *
+ *
  * <p>Java class for HierarchySpanTreeParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HierarchySpanTreeParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -54,8 +53,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HierarchySpanTreeParameterization", propOrder = {
@@ -66,109 +63,93 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class HierarchySpanTreeParameterization {
 
-    protected String startWhere;
-    protected BigInteger depth;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String depthParameter;
-    @XmlElement(required = true)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected Cache cache;
+  protected String startWhere;
+  protected BigInteger depth;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String depthParameter;
+  @XmlElement(required = true)
+  @XmlSchemaType(name = "NMTOKEN")
+  protected Cache cache;
 
-    /**
-     * Gets the value of the startWhere property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStartWhere() {
-        return startWhere;
-    }
+  /**
+   * Gets the value of the startWhere property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStartWhere() {
+    return startWhere;
+  }
 
-    /**
-     * Sets the value of the startWhere property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStartWhere(String value) {
-        this.startWhere = value;
-    }
+  /**
+   * Sets the value of the startWhere property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStartWhere(String value) {
+    this.startWhere = value;
+  }
 
-    /**
-     * Gets the value of the depth property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getDepth() {
-        return depth;
-    }
+  /**
+   * Gets the value of the depth property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getDepth() {
+    return depth;
+  }
 
-    /**
-     * Sets the value of the depth property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setDepth(BigInteger value) {
-        this.depth = value;
-    }
+  /**
+   * Sets the value of the depth property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setDepth(BigInteger value) {
+    this.depth = value;
+  }
 
-    /**
-     * Gets the value of the depthParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDepthParameter() {
-        return depthParameter;
-    }
+  /**
+   * Gets the value of the depthParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDepthParameter() {
+    return depthParameter;
+  }
 
-    /**
-     * Sets the value of the depthParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDepthParameter(String value) {
-        this.depthParameter = value;
-    }
+  /**
+   * Sets the value of the depthParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDepthParameter(String value) {
+    this.depthParameter = value;
+  }
 
-    /**
-     * Gets the value of the cache property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Cache }
-     *     
-     */
-    public Cache getCache() {
-        return cache;
-    }
+  /**
+   * Gets the value of the cache property.
+   *
+   * @return possible object is
+   * {@link Cache }
+   */
+  public Cache getCache() {
+    return cache;
+  }
 
-    /**
-     * Sets the value of the cache property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Cache }
-     *     
-     */
-    public void setCache(Cache value) {
-        this.cache = value;
-    }
+  /**
+   * Sets the value of the cache property.
+   *
+   * @param value allowed object is
+   *              {@link Cache }
+   */
+  public void setCache(Cache value) {
+    this.cache = value;
+  }
 
 }

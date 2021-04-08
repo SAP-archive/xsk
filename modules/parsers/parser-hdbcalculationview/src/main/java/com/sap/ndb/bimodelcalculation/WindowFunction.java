@@ -19,6 +19,7 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.bimodelconversion.Parameterization;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,18 +27,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodelconversion.Parameterization;
 
 
 /**
- * 
- * 				Models the part of SQL windows functions that are supported by the calc engine
- * 			
- * 
+ * Models the part of SQL windows functions that are supported by the calc engine
+ *
+ *
  * <p>Java class for WindowFunction complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="WindowFunction"&gt;
  *   &lt;complexContent&gt;
@@ -55,8 +54,6 @@ import com.sap.ndb.bimodelconversion.Parameterization;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "WindowFunction", propOrder = {
@@ -67,196 +64,172 @@ import com.sap.ndb.bimodelconversion.Parameterization;
 })
 public class WindowFunction {
 
-    @XmlElement(required = true)
-    protected List<String> partitionViewAttributeName;
-    @XmlElement(required = true)
-    protected List<Order> order;
-    @XmlElement(required = true)
-    protected Parameterization rankThreshold;
-    protected String rankViewAttributeName;
-    @XmlAttribute(name = "type")
-    protected TopType type;
-    @XmlAttribute(name = "olympicRanking")
-    protected Boolean olympicRanking;
-    @XmlAttribute(name = "dynamicPartitionAttributes")
-    protected Boolean dynamicPartitionAttributes;
+  @XmlElement(required = true)
+  protected List<String> partitionViewAttributeName;
+  @XmlElement(required = true)
+  protected List<Order> order;
+  @XmlElement(required = true)
+  protected Parameterization rankThreshold;
+  protected String rankViewAttributeName;
+  @XmlAttribute(name = "type")
+  protected TopType type;
+  @XmlAttribute(name = "olympicRanking")
+  protected Boolean olympicRanking;
+  @XmlAttribute(name = "dynamicPartitionAttributes")
+  protected Boolean dynamicPartitionAttributes;
 
-    /**
-     * Gets the value of the partitionViewAttributeName property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the partitionViewAttributeName property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getPartitionViewAttributeName().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getPartitionViewAttributeName() {
-        if (partitionViewAttributeName == null) {
-            partitionViewAttributeName = new ArrayList<String>();
-        }
-        return this.partitionViewAttributeName;
+  /**
+   * Gets the value of the partitionViewAttributeName property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the partitionViewAttributeName property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getPartitionViewAttributeName().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link String }
+   */
+  public List<String> getPartitionViewAttributeName() {
+    if (partitionViewAttributeName == null) {
+      partitionViewAttributeName = new ArrayList<String>();
     }
+    return this.partitionViewAttributeName;
+  }
 
-    /**
-     * Gets the value of the order property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the order property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getOrder().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Order }
-     * 
-     * 
-     */
-    public List<Order> getOrder() {
-        if (order == null) {
-            order = new ArrayList<Order>();
-        }
-        return this.order;
+  /**
+   * Gets the value of the order property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the order property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getOrder().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Order }
+   */
+  public List<Order> getOrder() {
+    if (order == null) {
+      order = new ArrayList<Order>();
     }
+    return this.order;
+  }
 
-    /**
-     * Gets the value of the rankThreshold property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getRankThreshold() {
-        return rankThreshold;
-    }
+  /**
+   * Gets the value of the rankThreshold property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getRankThreshold() {
+    return rankThreshold;
+  }
 
-    /**
-     * Sets the value of the rankThreshold property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setRankThreshold(Parameterization value) {
-        this.rankThreshold = value;
-    }
+  /**
+   * Sets the value of the rankThreshold property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setRankThreshold(Parameterization value) {
+    this.rankThreshold = value;
+  }
 
-    /**
-     * Gets the value of the rankViewAttributeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRankViewAttributeName() {
-        return rankViewAttributeName;
-    }
+  /**
+   * Gets the value of the rankViewAttributeName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getRankViewAttributeName() {
+    return rankViewAttributeName;
+  }
 
-    /**
-     * Sets the value of the rankViewAttributeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRankViewAttributeName(String value) {
-        this.rankViewAttributeName = value;
-    }
+  /**
+   * Sets the value of the rankViewAttributeName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRankViewAttributeName(String value) {
+    this.rankViewAttributeName = value;
+  }
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TopType }
-     *     
-     */
-    public TopType getType() {
-        return type;
-    }
+  /**
+   * Gets the value of the type property.
+   *
+   * @return possible object is
+   * {@link TopType }
+   */
+  public TopType getType() {
+    return type;
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TopType }
-     *     
-     */
-    public void setType(TopType value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link TopType }
+   */
+  public void setType(TopType value) {
+    this.type = value;
+  }
 
-    /**
-     * Gets the value of the olympicRanking property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isOlympicRanking() {
-        return olympicRanking;
-    }
+  /**
+   * Gets the value of the olympicRanking property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isOlympicRanking() {
+    return olympicRanking;
+  }
 
-    /**
-     * Sets the value of the olympicRanking property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setOlympicRanking(Boolean value) {
-        this.olympicRanking = value;
-    }
+  /**
+   * Sets the value of the olympicRanking property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setOlympicRanking(Boolean value) {
+    this.olympicRanking = value;
+  }
 
-    /**
-     * Gets the value of the dynamicPartitionAttributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDynamicPartitionAttributes() {
-        return dynamicPartitionAttributes;
-    }
+  /**
+   * Gets the value of the dynamicPartitionAttributes property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDynamicPartitionAttributes() {
+    return dynamicPartitionAttributes;
+  }
 
-    /**
-     * Sets the value of the dynamicPartitionAttributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDynamicPartitionAttributes(Boolean value) {
-        this.dynamicPartitionAttributes = value;
-    }
+  /**
+   * Sets the value of the dynamicPartitionAttributes property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDynamicPartitionAttributes(Boolean value) {
+    this.dynamicPartitionAttributes = value;
+  }
 
 }

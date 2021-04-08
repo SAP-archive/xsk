@@ -28,20 +28,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Container for one parent element - i.e. an elements that has a n:1 relationship with the current element.
- * 				Example for parent elements: 
- * 				T1 has the fields customer (key), city and mayor T2 has the fields city (key) 
- * 				and country. The fields T1.city and T2.city are joined by an n:1 join.
- * 				Then country is a system derived parent attribute for city and mayor might be 
- * 				a manually entered parent attribute. In the latter case the cardinality cannot 
- * 				be derived by the system.
- * 	   		
- * 
+ * Container for one parent element - i.e. an elements that has a n:1 relationship with the current element.
+ * Example for parent elements:
+ * T1 has the fields customer (key), city and mayor T2 has the fields city (key)
+ * and country. The fields T1.city and T2.city are joined by an n:1 join.
+ * Then country is a system derived parent attribute for city and mayor might be
+ * a manually entered parent attribute. In the latter case the cardinality cannot
+ * be derived by the system.
+ *
+ *
  * <p>Java class for ElementRelationship complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ElementRelationship"&gt;
  *   &lt;complexContent&gt;
@@ -52,69 +51,59 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ElementRelationship")
 public class ElementRelationship {
 
-    @XmlAttribute(name = "parent", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String parent;
-    @XmlAttribute(name = "type")
-    protected ElementRelationshipType type;
+  @XmlAttribute(name = "parent", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String parent;
+  @XmlAttribute(name = "type")
+  protected ElementRelationshipType type;
 
-    /**
-     * Gets the value of the parent property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getParent() {
-        return parent;
-    }
+  /**
+   * Gets the value of the parent property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getParent() {
+    return parent;
+  }
 
-    /**
-     * Sets the value of the parent property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setParent(String value) {
-        this.parent = value;
-    }
+  /**
+   * Sets the value of the parent property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setParent(String value) {
+    this.parent = value;
+  }
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementRelationshipType }
-     *     
-     */
-    public ElementRelationshipType getType() {
-        if (type == null) {
-            return ElementRelationshipType.MANUAL;
-        } else {
-            return type;
-        }
+  /**
+   * Gets the value of the type property.
+   *
+   * @return possible object is
+   * {@link ElementRelationshipType }
+   */
+  public ElementRelationshipType getType() {
+    if (type == null) {
+      return ElementRelationshipType.MANUAL;
+    } else {
+      return type;
     }
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementRelationshipType }
-     *     
-     */
-    public void setType(ElementRelationshipType value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link ElementRelationshipType }
+   */
+  public void setType(ElementRelationshipType value) {
+    this.type = value;
+  }
 
 }

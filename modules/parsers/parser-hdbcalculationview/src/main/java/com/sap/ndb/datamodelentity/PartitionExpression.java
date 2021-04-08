@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Defines the link to one column / element and its usage in the partition
- * 			
- * 
+ * Defines the link to one column / element and its usage in the partition
+ *
+ *
  * <p>Java class for PartitionExpression complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PartitionExpression"&gt;
  *   &lt;complexContent&gt;
@@ -46,65 +45,55 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PartitionExpression")
 public class PartitionExpression {
 
-    @XmlAttribute(name = "element", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String element;
-    @XmlAttribute(name = "function")
-    protected PartitionExpressionFunction function;
+  @XmlAttribute(name = "element", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String element;
+  @XmlAttribute(name = "function")
+  protected PartitionExpressionFunction function;
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getElement() {
-        return element;
-    }
+  /**
+   * Gets the value of the element property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getElement() {
+    return element;
+  }
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setElement(String value) {
-        this.element = value;
-    }
+  /**
+   * Sets the value of the element property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setElement(String value) {
+    this.element = value;
+  }
 
-    /**
-     * Gets the value of the function property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PartitionExpressionFunction }
-     *     
-     */
-    public PartitionExpressionFunction getFunction() {
-        return function;
-    }
+  /**
+   * Gets the value of the function property.
+   *
+   * @return possible object is
+   * {@link PartitionExpressionFunction }
+   */
+  public PartitionExpressionFunction getFunction() {
+    return function;
+  }
 
-    /**
-     * Sets the value of the function property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PartitionExpressionFunction }
-     *     
-     */
-    public void setFunction(PartitionExpressionFunction value) {
-        this.function = value;
-    }
+  /**
+   * Sets the value of the function property.
+   *
+   * @param value allowed object is
+   *              {@link PartitionExpressionFunction }
+   */
+  public void setFunction(PartitionExpressionFunction value) {
+    this.function = value;
+  }
 
 }

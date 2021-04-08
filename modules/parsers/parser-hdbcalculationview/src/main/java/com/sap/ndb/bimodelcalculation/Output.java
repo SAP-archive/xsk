@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				For providing several named outputs for a node
- * 			
- * 
+ * For providing several named outputs for a node
+ *
+ *
  * <p>Java class for Output complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Output"&gt;
  *   &lt;complexContent&gt;
@@ -48,8 +47,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Output", propOrder = {
@@ -57,57 +54,49 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class Output {
 
-    protected ViewAttributes viewAttributes;
-    @XmlAttribute(name = "name", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String name;
+  protected ViewAttributes viewAttributes;
+  @XmlAttribute(name = "name", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String name;
 
-    /**
-     * Gets the value of the viewAttributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ViewAttributes }
-     *     
-     */
-    public ViewAttributes getViewAttributes() {
-        return viewAttributes;
-    }
+  /**
+   * Gets the value of the viewAttributes property.
+   *
+   * @return possible object is
+   * {@link ViewAttributes }
+   */
+  public ViewAttributes getViewAttributes() {
+    return viewAttributes;
+  }
 
-    /**
-     * Sets the value of the viewAttributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ViewAttributes }
-     *     
-     */
-    public void setViewAttributes(ViewAttributes value) {
-        this.viewAttributes = value;
-    }
+  /**
+   * Sets the value of the viewAttributes property.
+   *
+   * @param value allowed object is
+   *              {@link ViewAttributes }
+   */
+  public void setViewAttributes(ViewAttributes value) {
+    this.viewAttributes = value;
+  }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets the value of the name property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 
 }

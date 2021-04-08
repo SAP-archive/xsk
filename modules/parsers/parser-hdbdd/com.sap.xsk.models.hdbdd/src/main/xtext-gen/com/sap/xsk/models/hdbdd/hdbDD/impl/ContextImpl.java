@@ -7,16 +7,11 @@ import com.sap.xsk.models.hdbdd.hdbDD.Context;
 import com.sap.xsk.models.hdbdd.hdbDD.Entity;
 import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
 import com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition;
-
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -34,15 +29,16 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class ContextImpl extends TypeImpl implements Context
-{
+public class ContextImpl extends TypeImpl implements Context {
+
   /**
    * The cached value of the '{@link #getTypes() <em>Types</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getTypes()
+   *
    * @generated
    * @ordered
+   * @see #getTypes()
    */
   protected EList<TypeDefinition> types;
 
@@ -50,42 +46,42 @@ public class ContextImpl extends TypeImpl implements Context
    * The cached value of the '{@link #getEntities() <em>Entities</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getEntities()
+   *
    * @generated
    * @ordered
+   * @see #getEntities()
    */
   protected EList<Entity> entities;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  protected ContextImpl()
-  {
+  protected ContextImpl() {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass()
-  {
+  protected EClass eStaticClass() {
     return HdbDDPackage.Literals.CONTEXT;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<TypeDefinition> getTypes()
-  {
-    if (types == null)
-    {
+  public EList<TypeDefinition> getTypes() {
+    if (types == null) {
       types = new EObjectContainmentEList<TypeDefinition>(TypeDefinition.class, this, HdbDDPackage.CONTEXT__TYPES);
     }
     return types;
@@ -94,12 +90,11 @@ public class ContextImpl extends TypeImpl implements Context
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<Entity> getEntities()
-  {
-    if (entities == null)
-    {
+  public EList<Entity> getEntities() {
+    if (entities == null) {
       entities = new EObjectContainmentEList<Entity>(Entity.class, this, HdbDDPackage.CONTEXT__ENTITIES);
     }
     return entities;
@@ -108,17 +103,16 @@ public class ContextImpl extends TypeImpl implements Context
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
-    switch (featureID)
-    {
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+    switch (featureID) {
       case HdbDDPackage.CONTEXT__TYPES:
-        return ((InternalEList<?>)getTypes()).basicRemove(otherEnd, msgs);
+        return ((InternalEList<?>) getTypes()).basicRemove(otherEnd, msgs);
       case HdbDDPackage.CONTEXT__ENTITIES:
-        return ((InternalEList<?>)getEntities()).basicRemove(otherEnd, msgs);
+        return ((InternalEList<?>) getEntities()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -126,13 +120,12 @@ public class ContextImpl extends TypeImpl implements Context
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
-    switch (featureID)
-    {
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
       case HdbDDPackage.CONTEXT__TYPES:
         return getTypes();
       case HdbDDPackage.CONTEXT__ENTITIES:
@@ -144,21 +137,20 @@ public class ContextImpl extends TypeImpl implements Context
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void eSet(int featureID, Object newValue)
-  {
-    switch (featureID)
-    {
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
       case HdbDDPackage.CONTEXT__TYPES:
         getTypes().clear();
-        getTypes().addAll((Collection<? extends TypeDefinition>)newValue);
+        getTypes().addAll((Collection<? extends TypeDefinition>) newValue);
         return;
       case HdbDDPackage.CONTEXT__ENTITIES:
         getEntities().clear();
-        getEntities().addAll((Collection<? extends Entity>)newValue);
+        getEntities().addAll((Collection<? extends Entity>) newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -167,13 +159,12 @@ public class ContextImpl extends TypeImpl implements Context
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public void eUnset(int featureID)
-  {
-    switch (featureID)
-    {
+  public void eUnset(int featureID) {
+    switch (featureID) {
       case HdbDDPackage.CONTEXT__TYPES:
         getTypes().clear();
         return;
@@ -187,13 +178,12 @@ public class ContextImpl extends TypeImpl implements Context
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID)
-  {
-    switch (featureID)
-    {
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
       case HdbDDPackage.CONTEXT__TYPES:
         return types != null && !types.isEmpty();
       case HdbDDPackage.CONTEXT__ENTITIES:

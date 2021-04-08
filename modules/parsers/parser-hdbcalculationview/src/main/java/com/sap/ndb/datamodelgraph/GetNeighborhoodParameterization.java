@@ -29,18 +29,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Parameterization for the graph action GET_NEIGHBORHOOD.
- * 				The GET_NEIGHBORHOOD graph action retrieves the neighboring vertices within the given radius from the given start vertices.
- * 				Output columns: 
- * 				-key of the vertices table
- * 				-DEPTH
- * 			
- * 
+ * Parameterization for the graph action GET_NEIGHBORHOOD.
+ * The GET_NEIGHBORHOOD graph action retrieves the neighboring vertices within the given radius from the given start vertices.
+ * Output columns:
+ * -key of the vertices table
+ * -DEPTH
+ *
+ *
  * <p>Java class for GetNeighborhoodParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetNeighborhoodParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -69,8 +68,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetNeighborhoodParameterization", propOrder = {
@@ -86,267 +83,226 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "edgeFilter"
 })
 public class GetNeighborhoodParameterization
-    extends GraphActionParameterization
-{
+    extends GraphActionParameterization {
 
-    protected String startVertices;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String startVerticesParameter;
-    @XmlSchemaType(name = "NMTOKEN")
-    protected Direction direction;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String directionParameter;
-    protected BigInteger minDepth;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String minDepthParameter;
-    protected BigInteger maxDepth;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String maxDepthParameter;
-    protected String vertexFilter;
-    protected String edgeFilter;
+  protected String startVertices;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String startVerticesParameter;
+  @XmlSchemaType(name = "NMTOKEN")
+  protected Direction direction;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String directionParameter;
+  protected BigInteger minDepth;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String minDepthParameter;
+  protected BigInteger maxDepth;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String maxDepthParameter;
+  protected String vertexFilter;
+  protected String edgeFilter;
 
-    /**
-     * Gets the value of the startVertices property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStartVertices() {
-        return startVertices;
-    }
+  /**
+   * Gets the value of the startVertices property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStartVertices() {
+    return startVertices;
+  }
 
-    /**
-     * Sets the value of the startVertices property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStartVertices(String value) {
-        this.startVertices = value;
-    }
+  /**
+   * Sets the value of the startVertices property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStartVertices(String value) {
+    this.startVertices = value;
+  }
 
-    /**
-     * Gets the value of the startVerticesParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStartVerticesParameter() {
-        return startVerticesParameter;
-    }
+  /**
+   * Gets the value of the startVerticesParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStartVerticesParameter() {
+    return startVerticesParameter;
+  }
 
-    /**
-     * Sets the value of the startVerticesParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStartVerticesParameter(String value) {
-        this.startVerticesParameter = value;
-    }
+  /**
+   * Sets the value of the startVerticesParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStartVerticesParameter(String value) {
+    this.startVerticesParameter = value;
+  }
 
-    /**
-     * Gets the value of the direction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Direction }
-     *     
-     */
-    public Direction getDirection() {
-        return direction;
-    }
+  /**
+   * Gets the value of the direction property.
+   *
+   * @return possible object is
+   * {@link Direction }
+   */
+  public Direction getDirection() {
+    return direction;
+  }
 
-    /**
-     * Sets the value of the direction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Direction }
-     *     
-     */
-    public void setDirection(Direction value) {
-        this.direction = value;
-    }
+  /**
+   * Sets the value of the direction property.
+   *
+   * @param value allowed object is
+   *              {@link Direction }
+   */
+  public void setDirection(Direction value) {
+    this.direction = value;
+  }
 
-    /**
-     * Gets the value of the directionParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDirectionParameter() {
-        return directionParameter;
-    }
+  /**
+   * Gets the value of the directionParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDirectionParameter() {
+    return directionParameter;
+  }
 
-    /**
-     * Sets the value of the directionParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDirectionParameter(String value) {
-        this.directionParameter = value;
-    }
+  /**
+   * Sets the value of the directionParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDirectionParameter(String value) {
+    this.directionParameter = value;
+  }
 
-    /**
-     * Gets the value of the minDepth property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getMinDepth() {
-        return minDepth;
-    }
+  /**
+   * Gets the value of the minDepth property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getMinDepth() {
+    return minDepth;
+  }
 
-    /**
-     * Sets the value of the minDepth property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setMinDepth(BigInteger value) {
-        this.minDepth = value;
-    }
+  /**
+   * Sets the value of the minDepth property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setMinDepth(BigInteger value) {
+    this.minDepth = value;
+  }
 
-    /**
-     * Gets the value of the minDepthParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMinDepthParameter() {
-        return minDepthParameter;
-    }
+  /**
+   * Gets the value of the minDepthParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getMinDepthParameter() {
+    return minDepthParameter;
+  }
 
-    /**
-     * Sets the value of the minDepthParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMinDepthParameter(String value) {
-        this.minDepthParameter = value;
-    }
+  /**
+   * Sets the value of the minDepthParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setMinDepthParameter(String value) {
+    this.minDepthParameter = value;
+  }
 
-    /**
-     * Gets the value of the maxDepth property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getMaxDepth() {
-        return maxDepth;
-    }
+  /**
+   * Gets the value of the maxDepth property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getMaxDepth() {
+    return maxDepth;
+  }
 
-    /**
-     * Sets the value of the maxDepth property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setMaxDepth(BigInteger value) {
-        this.maxDepth = value;
-    }
+  /**
+   * Sets the value of the maxDepth property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setMaxDepth(BigInteger value) {
+    this.maxDepth = value;
+  }
 
-    /**
-     * Gets the value of the maxDepthParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMaxDepthParameter() {
-        return maxDepthParameter;
-    }
+  /**
+   * Gets the value of the maxDepthParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getMaxDepthParameter() {
+    return maxDepthParameter;
+  }
 
-    /**
-     * Sets the value of the maxDepthParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMaxDepthParameter(String value) {
-        this.maxDepthParameter = value;
-    }
+  /**
+   * Sets the value of the maxDepthParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setMaxDepthParameter(String value) {
+    this.maxDepthParameter = value;
+  }
 
-    /**
-     * Gets the value of the vertexFilter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getVertexFilter() {
-        return vertexFilter;
-    }
+  /**
+   * Gets the value of the vertexFilter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getVertexFilter() {
+    return vertexFilter;
+  }
 
-    /**
-     * Sets the value of the vertexFilter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVertexFilter(String value) {
-        this.vertexFilter = value;
-    }
+  /**
+   * Sets the value of the vertexFilter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setVertexFilter(String value) {
+    this.vertexFilter = value;
+  }
 
-    /**
-     * Gets the value of the edgeFilter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEdgeFilter() {
-        return edgeFilter;
-    }
+  /**
+   * Gets the value of the edgeFilter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getEdgeFilter() {
+    return edgeFilter;
+  }
 
-    /**
-     * Sets the value of the edgeFilter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEdgeFilter(String value) {
-        this.edgeFilter = value;
-    }
+  /**
+   * Sets the value of the edgeFilter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setEdgeFilter(String value) {
+    this.edgeFilter = value;
+  }
 
 }

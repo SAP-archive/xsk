@@ -23,19 +23,21 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  */
 @SuppressWarnings("all")
 public class ServerLauncher {
+
   public static void main(final String[] args) {
     InetSocketAddress _inetSocketAddress = new InetSocketAddress("localhost", 8080);
     final Server server = new Server(_inetSocketAddress);
     WebAppContext _webAppContext = new WebAppContext();
     final Procedure1<WebAppContext> _function = (WebAppContext it) -> {
       it.setResourceBase("src/main/webapp");
-      it.setWelcomeFiles(new String[] { "index.html" });
+      it.setWelcomeFiles(new String[]{"index.html"});
       it.setContextPath("/");
       AnnotationConfiguration _annotationConfiguration = new AnnotationConfiguration();
       WebXmlConfiguration _webXmlConfiguration = new WebXmlConfiguration();
       WebInfConfiguration _webInfConfiguration = new WebInfConfiguration();
       MetaInfConfiguration _metaInfConfiguration = new MetaInfConfiguration();
-      it.setConfigurations(new Configuration[] { _annotationConfiguration, _webXmlConfiguration, _webInfConfiguration, _metaInfConfiguration });
+      it.setConfigurations(
+          new Configuration[]{_annotationConfiguration, _webXmlConfiguration, _webInfConfiguration, _metaInfConfiguration});
       it.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, ".*/com\\.sap\\.xsk\\.models\\.hdbdd\\.web/.*,.*\\.jar");
       it.setInitParameter("org.mortbay.jetty.servlet.Default.useFileMappedBuffer", "false");
     };
@@ -66,7 +68,7 @@ public class ServerLauncher {
       server.join();
     } catch (final Throwable _t) {
       if (_t instanceof Exception) {
-        final Exception exception = (Exception)_t;
+        final Exception exception = (Exception) _t;
         log.warn(exception.getMessage());
         System.exit(1);
       } else {

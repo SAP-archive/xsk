@@ -19,6 +19,7 @@
 
 package com.sap.ndb.datamodeltype;
 
+import com.sap.ndb.datamodelentity.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -30,20 +31,18 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.datamodelentity.Entity;
 
 
 /**
- * 
- * 				Structured data type containing several elements
- * 				Attention in the catalog this is referred to as TableType, but a TableType in CDS really means
- * 				several rows!)
- * 			
- * 
+ * Structured data type containing several elements
+ * Attention in the catalog this is referred to as TableType, but a TableType in CDS really means
+ * several rows!)
+ *
+ *
  * <p>Java class for StructureType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="StructureType"&gt;
  *   &lt;complexContent&gt;
@@ -62,8 +61,6 @@ import com.sap.ndb.datamodelentity.Entity;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "StructureType", propOrder = {
@@ -75,231 +72,204 @@ import com.sap.ndb.datamodelentity.Entity;
     Entity.class
 })
 public class StructureType
-    extends DataType
-{
+    extends DataType {
 
-    @XmlElement(required = true)
-    protected List<Element> element;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected List<String> keyElement;
-    protected List<DisplayFolder> displayFolder;
-    @XmlAttribute(name = "catalogOnly")
-    protected Boolean catalogOnly;
-    @XmlAttribute(name = "physicalSchemaName")
-    protected String physicalSchemaName;
-    @XmlAttribute(name = "authoringSchemaName")
-    protected String authoringSchemaName;
-    @XmlAttribute(name = "physicalDatabaseName")
-    protected String physicalDatabaseName;
-    @XmlAttribute(name = "authoringDatabaseName")
-    protected String authoringDatabaseName;
+  @XmlElement(required = true)
+  protected List<Element> element;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected List<String> keyElement;
+  protected List<DisplayFolder> displayFolder;
+  @XmlAttribute(name = "catalogOnly")
+  protected Boolean catalogOnly;
+  @XmlAttribute(name = "physicalSchemaName")
+  protected String physicalSchemaName;
+  @XmlAttribute(name = "authoringSchemaName")
+  protected String authoringSchemaName;
+  @XmlAttribute(name = "physicalDatabaseName")
+  protected String physicalDatabaseName;
+  @XmlAttribute(name = "authoringDatabaseName")
+  protected String authoringDatabaseName;
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the element property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getElement().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * 
-     * 
-     */
-    public List<Element> getElement() {
-        if (element == null) {
-            element = new ArrayList<Element>();
-        }
-        return this.element;
+  /**
+   * Gets the value of the element property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the element property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getElement().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Element }
+   */
+  public List<Element> getElement() {
+    if (element == null) {
+      element = new ArrayList<Element>();
     }
+    return this.element;
+  }
 
-    /**
-     * Gets the value of the keyElement property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the keyElement property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getKeyElement().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getKeyElement() {
-        if (keyElement == null) {
-            keyElement = new ArrayList<String>();
-        }
-        return this.keyElement;
+  /**
+   * Gets the value of the keyElement property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the keyElement property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getKeyElement().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link String }
+   */
+  public List<String> getKeyElement() {
+    if (keyElement == null) {
+      keyElement = new ArrayList<String>();
     }
+    return this.keyElement;
+  }
 
-    /**
-     * Gets the value of the displayFolder property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the displayFolder property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDisplayFolder().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link DisplayFolder }
-     * 
-     * 
-     */
-    public List<DisplayFolder> getDisplayFolder() {
-        if (displayFolder == null) {
-            displayFolder = new ArrayList<DisplayFolder>();
-        }
-        return this.displayFolder;
+  /**
+   * Gets the value of the displayFolder property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the displayFolder property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getDisplayFolder().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link DisplayFolder }
+   */
+  public List<DisplayFolder> getDisplayFolder() {
+    if (displayFolder == null) {
+      displayFolder = new ArrayList<DisplayFolder>();
     }
+    return this.displayFolder;
+  }
 
-    /**
-     * Gets the value of the catalogOnly property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isCatalogOnly() {
-        return catalogOnly;
-    }
+  /**
+   * Gets the value of the catalogOnly property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isCatalogOnly() {
+    return catalogOnly;
+  }
 
-    /**
-     * Sets the value of the catalogOnly property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setCatalogOnly(Boolean value) {
-        this.catalogOnly = value;
-    }
+  /**
+   * Sets the value of the catalogOnly property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setCatalogOnly(Boolean value) {
+    this.catalogOnly = value;
+  }
 
-    /**
-     * Gets the value of the physicalSchemaName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPhysicalSchemaName() {
-        return physicalSchemaName;
-    }
+  /**
+   * Gets the value of the physicalSchemaName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPhysicalSchemaName() {
+    return physicalSchemaName;
+  }
 
-    /**
-     * Sets the value of the physicalSchemaName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPhysicalSchemaName(String value) {
-        this.physicalSchemaName = value;
-    }
+  /**
+   * Sets the value of the physicalSchemaName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPhysicalSchemaName(String value) {
+    this.physicalSchemaName = value;
+  }
 
-    /**
-     * Gets the value of the authoringSchemaName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAuthoringSchemaName() {
-        return authoringSchemaName;
-    }
+  /**
+   * Gets the value of the authoringSchemaName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAuthoringSchemaName() {
+    return authoringSchemaName;
+  }
 
-    /**
-     * Sets the value of the authoringSchemaName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAuthoringSchemaName(String value) {
-        this.authoringSchemaName = value;
-    }
+  /**
+   * Sets the value of the authoringSchemaName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAuthoringSchemaName(String value) {
+    this.authoringSchemaName = value;
+  }
 
-    /**
-     * Gets the value of the physicalDatabaseName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPhysicalDatabaseName() {
-        return physicalDatabaseName;
-    }
+  /**
+   * Gets the value of the physicalDatabaseName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPhysicalDatabaseName() {
+    return physicalDatabaseName;
+  }
 
-    /**
-     * Sets the value of the physicalDatabaseName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPhysicalDatabaseName(String value) {
-        this.physicalDatabaseName = value;
-    }
+  /**
+   * Sets the value of the physicalDatabaseName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPhysicalDatabaseName(String value) {
+    this.physicalDatabaseName = value;
+  }
 
-    /**
-     * Gets the value of the authoringDatabaseName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAuthoringDatabaseName() {
-        return authoringDatabaseName;
-    }
+  /**
+   * Gets the value of the authoringDatabaseName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAuthoringDatabaseName() {
+    return authoringDatabaseName;
+  }
 
-    /**
-     * Sets the value of the authoringDatabaseName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAuthoringDatabaseName(String value) {
-        this.authoringDatabaseName = value;
-    }
+  /**
+   * Sets the value of the authoringDatabaseName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAuthoringDatabaseName(String value) {
+    this.authoringDatabaseName = value;
+  }
 
 }

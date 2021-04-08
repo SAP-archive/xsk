@@ -27,15 +27,14 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Generates a hierarchy based on source data that has a leveled format. 
- * 				Docs: https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/9de4bc37efd0450baf15f95f9d3dccd1.html
- * 			
- * 
+ * Generates a hierarchy based on source data that has a leveled format.
+ * Docs: https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/9de4bc37efd0450baf15f95f9d3dccd1.html
+ *
+ *
  * <p>Java class for HierarchyLeveledParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HierarchyLeveledParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -48,8 +47,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HierarchyLeveledParameterization", propOrder = {
@@ -58,58 +55,50 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class HierarchyLeveledParameterization {
 
-    @XmlElement(required = true)
-    protected Levels levels;
-    @XmlElement(required = true)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected Cache cache;
+  @XmlElement(required = true)
+  protected Levels levels;
+  @XmlElement(required = true)
+  @XmlSchemaType(name = "NMTOKEN")
+  protected Cache cache;
 
-    /**
-     * Gets the value of the levels property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Levels }
-     *     
-     */
-    public Levels getLevels() {
-        return levels;
-    }
+  /**
+   * Gets the value of the levels property.
+   *
+   * @return possible object is
+   * {@link Levels }
+   */
+  public Levels getLevels() {
+    return levels;
+  }
 
-    /**
-     * Sets the value of the levels property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Levels }
-     *     
-     */
-    public void setLevels(Levels value) {
-        this.levels = value;
-    }
+  /**
+   * Sets the value of the levels property.
+   *
+   * @param value allowed object is
+   *              {@link Levels }
+   */
+  public void setLevels(Levels value) {
+    this.levels = value;
+  }
 
-    /**
-     * Gets the value of the cache property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Cache }
-     *     
-     */
-    public Cache getCache() {
-        return cache;
-    }
+  /**
+   * Gets the value of the cache property.
+   *
+   * @return possible object is
+   * {@link Cache }
+   */
+  public Cache getCache() {
+    return cache;
+  }
 
-    /**
-     * Sets the value of the cache property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Cache }
-     *     
-     */
-    public void setCache(Cache value) {
-        this.cache = value;
-    }
+  /**
+   * Sets the value of the cache property.
+   *
+   * @param value allowed object is
+   *              {@link Cache }
+   */
+  public void setCache(Cache value) {
+    this.cache = value;
+  }
 
 }

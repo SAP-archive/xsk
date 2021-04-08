@@ -19,6 +19,11 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.bimodelcube.Measure;
+import com.sap.ndb.bimodelvariable.AbstractVariableMapping;
+import com.sap.ndb.datamodeltype.InternalExternalConversion;
+import com.sap.ndb.datamodeltype.SemanticType;
+import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -30,22 +35,16 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.bimodelcube.Measure;
-import com.sap.ndb.bimodelvariable.AbstractVariableMapping;
-import com.sap.ndb.datamodeltype.InternalExternalConversion;
-import com.sap.ndb.datamodeltype.SemanticType;
-import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 
 
 /**
- * 
- * 				Generic father object for the representations of column in the logical model e.g. Attributes and Measures
- * 			
- * 
+ * Generic father object for the representations of column in the logical model e.g. Attributes and Measures
+ *
+ *
  * <p>Java class for LogicalColumn complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LogicalColumn"&gt;
  *   &lt;complexContent&gt;
@@ -75,8 +74,6 @@ import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LogicalColumn", propOrder = {
@@ -94,455 +91,388 @@ import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
     Measure.class
 })
 public abstract class LogicalColumn
-    extends IDObjectWithDescription
-{
+    extends IDObjectWithDescription {
 
-    protected QualifiedAttributeReference unitCurrencyAttribute;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected String fixedCurrency;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected String fixedUnit;
-    @XmlElement(required = true)
-    protected String externalLikeStructureName;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String externalLikeElementName;
-    protected List<AbstractVariableMapping> variableMapping;
-    protected InternalExternalConversion internalExternalConversion;
-    protected String maskingExpression;
-    @XmlAttribute(name = "key")
-    protected Boolean key;
-    @XmlAttribute(name = "hidden")
-    protected Boolean hidden;
-    @XmlAttribute(name = "infoObject")
-    protected String infoObject;
-    @XmlAttribute(name = "order")
-    protected Integer order;
-    @XmlAttribute(name = "semanticType")
-    protected SemanticType semanticType;
-    @XmlAttribute(name = "deprecated")
-    protected Boolean deprecated;
-    @XmlAttribute(name = "replaceNull")
-    protected Boolean replaceNull;
-    @XmlAttribute(name = "replaceNullBy")
-    protected String replaceNullBy;
-    @XmlAttribute(name = "displayFolder")
-    protected String displayFolder;
+  protected QualifiedAttributeReference unitCurrencyAttribute;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "NMTOKEN")
+  protected String fixedCurrency;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "NMTOKEN")
+  protected String fixedUnit;
+  @XmlElement(required = true)
+  protected String externalLikeStructureName;
+  @XmlElement(required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String externalLikeElementName;
+  protected List<AbstractVariableMapping> variableMapping;
+  protected InternalExternalConversion internalExternalConversion;
+  protected String maskingExpression;
+  @XmlAttribute(name = "key")
+  protected Boolean key;
+  @XmlAttribute(name = "hidden")
+  protected Boolean hidden;
+  @XmlAttribute(name = "infoObject")
+  protected String infoObject;
+  @XmlAttribute(name = "order")
+  protected Integer order;
+  @XmlAttribute(name = "semanticType")
+  protected SemanticType semanticType;
+  @XmlAttribute(name = "deprecated")
+  protected Boolean deprecated;
+  @XmlAttribute(name = "replaceNull")
+  protected Boolean replaceNull;
+  @XmlAttribute(name = "replaceNullBy")
+  protected String replaceNullBy;
+  @XmlAttribute(name = "displayFolder")
+  protected String displayFolder;
 
-    /**
-     * Gets the value of the unitCurrencyAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public QualifiedAttributeReference getUnitCurrencyAttribute() {
-        return unitCurrencyAttribute;
+  /**
+   * Gets the value of the unitCurrencyAttribute property.
+   *
+   * @return possible object is
+   * {@link QualifiedAttributeReference }
+   */
+  public QualifiedAttributeReference getUnitCurrencyAttribute() {
+    return unitCurrencyAttribute;
+  }
+
+  /**
+   * Sets the value of the unitCurrencyAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedAttributeReference }
+   */
+  public void setUnitCurrencyAttribute(QualifiedAttributeReference value) {
+    this.unitCurrencyAttribute = value;
+  }
+
+  /**
+   * Gets the value of the fixedCurrency property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getFixedCurrency() {
+    return fixedCurrency;
+  }
+
+  /**
+   * Sets the value of the fixedCurrency property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFixedCurrency(String value) {
+    this.fixedCurrency = value;
+  }
+
+  /**
+   * Gets the value of the fixedUnit property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getFixedUnit() {
+    return fixedUnit;
+  }
+
+  /**
+   * Sets the value of the fixedUnit property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFixedUnit(String value) {
+    this.fixedUnit = value;
+  }
+
+  /**
+   * Gets the value of the externalLikeStructureName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExternalLikeStructureName() {
+    return externalLikeStructureName;
+  }
+
+  /**
+   * Sets the value of the externalLikeStructureName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExternalLikeStructureName(String value) {
+    this.externalLikeStructureName = value;
+  }
+
+  /**
+   * Gets the value of the externalLikeElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExternalLikeElementName() {
+    return externalLikeElementName;
+  }
+
+  /**
+   * Sets the value of the externalLikeElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExternalLikeElementName(String value) {
+    this.externalLikeElementName = value;
+  }
+
+  /**
+   * Gets the value of the variableMapping property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the variableMapping property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getVariableMapping().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link AbstractVariableMapping }
+   */
+  public List<AbstractVariableMapping> getVariableMapping() {
+    if (variableMapping == null) {
+      variableMapping = new ArrayList<AbstractVariableMapping>();
     }
+    return this.variableMapping;
+  }
 
-    /**
-     * Sets the value of the unitCurrencyAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public void setUnitCurrencyAttribute(QualifiedAttributeReference value) {
-        this.unitCurrencyAttribute = value;
-    }
+  /**
+   * Gets the value of the internalExternalConversion property.
+   *
+   * @return possible object is
+   * {@link InternalExternalConversion }
+   */
+  public InternalExternalConversion getInternalExternalConversion() {
+    return internalExternalConversion;
+  }
 
-    /**
-     * Gets the value of the fixedCurrency property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFixedCurrency() {
-        return fixedCurrency;
-    }
+  /**
+   * Sets the value of the internalExternalConversion property.
+   *
+   * @param value allowed object is
+   *              {@link InternalExternalConversion }
+   */
+  public void setInternalExternalConversion(InternalExternalConversion value) {
+    this.internalExternalConversion = value;
+  }
 
-    /**
-     * Sets the value of the fixedCurrency property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFixedCurrency(String value) {
-        this.fixedCurrency = value;
-    }
+  /**
+   * Gets the value of the maskingExpression property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getMaskingExpression() {
+    return maskingExpression;
+  }
 
-    /**
-     * Gets the value of the fixedUnit property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFixedUnit() {
-        return fixedUnit;
-    }
+  /**
+   * Sets the value of the maskingExpression property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setMaskingExpression(String value) {
+    this.maskingExpression = value;
+  }
 
-    /**
-     * Sets the value of the fixedUnit property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFixedUnit(String value) {
-        this.fixedUnit = value;
-    }
+  /**
+   * Gets the value of the key property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isKey() {
+    return key;
+  }
 
-    /**
-     * Gets the value of the externalLikeStructureName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExternalLikeStructureName() {
-        return externalLikeStructureName;
-    }
+  /**
+   * Sets the value of the key property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setKey(Boolean value) {
+    this.key = value;
+  }
 
-    /**
-     * Sets the value of the externalLikeStructureName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExternalLikeStructureName(String value) {
-        this.externalLikeStructureName = value;
-    }
+  /**
+   * Gets the value of the hidden property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isHidden() {
+    return hidden;
+  }
 
-    /**
-     * Gets the value of the externalLikeElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExternalLikeElementName() {
-        return externalLikeElementName;
-    }
+  /**
+   * Sets the value of the hidden property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setHidden(Boolean value) {
+    this.hidden = value;
+  }
 
-    /**
-     * Sets the value of the externalLikeElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExternalLikeElementName(String value) {
-        this.externalLikeElementName = value;
-    }
+  /**
+   * Gets the value of the infoObject property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getInfoObject() {
+    return infoObject;
+  }
 
-    /**
-     * Gets the value of the variableMapping property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the variableMapping property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getVariableMapping().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link AbstractVariableMapping }
-     * 
-     * 
-     */
-    public List<AbstractVariableMapping> getVariableMapping() {
-        if (variableMapping == null) {
-            variableMapping = new ArrayList<AbstractVariableMapping>();
-        }
-        return this.variableMapping;
-    }
+  /**
+   * Sets the value of the infoObject property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setInfoObject(String value) {
+    this.infoObject = value;
+  }
 
-    /**
-     * Gets the value of the internalExternalConversion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link InternalExternalConversion }
-     *     
-     */
-    public InternalExternalConversion getInternalExternalConversion() {
-        return internalExternalConversion;
-    }
+  /**
+   * Gets the value of the order property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getOrder() {
+    return order;
+  }
 
-    /**
-     * Sets the value of the internalExternalConversion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link InternalExternalConversion }
-     *     
-     */
-    public void setInternalExternalConversion(InternalExternalConversion value) {
-        this.internalExternalConversion = value;
-    }
+  /**
+   * Sets the value of the order property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setOrder(Integer value) {
+    this.order = value;
+  }
 
-    /**
-     * Gets the value of the maskingExpression property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMaskingExpression() {
-        return maskingExpression;
-    }
+  /**
+   * Gets the value of the semanticType property.
+   *
+   * @return possible object is
+   * {@link SemanticType }
+   */
+  public SemanticType getSemanticType() {
+    return semanticType;
+  }
 
-    /**
-     * Sets the value of the maskingExpression property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMaskingExpression(String value) {
-        this.maskingExpression = value;
-    }
+  /**
+   * Sets the value of the semanticType property.
+   *
+   * @param value allowed object is
+   *              {@link SemanticType }
+   */
+  public void setSemanticType(SemanticType value) {
+    this.semanticType = value;
+  }
 
-    /**
-     * Gets the value of the key property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isKey() {
-        return key;
-    }
+  /**
+   * Gets the value of the deprecated property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDeprecated() {
+    return deprecated;
+  }
 
-    /**
-     * Sets the value of the key property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setKey(Boolean value) {
-        this.key = value;
-    }
+  /**
+   * Sets the value of the deprecated property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDeprecated(Boolean value) {
+    this.deprecated = value;
+  }
 
-    /**
-     * Gets the value of the hidden property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isHidden() {
-        return hidden;
-    }
+  /**
+   * Gets the value of the replaceNull property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isReplaceNull() {
+    return replaceNull;
+  }
 
-    /**
-     * Sets the value of the hidden property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setHidden(Boolean value) {
-        this.hidden = value;
-    }
+  /**
+   * Sets the value of the replaceNull property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setReplaceNull(Boolean value) {
+    this.replaceNull = value;
+  }
 
-    /**
-     * Gets the value of the infoObject property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getInfoObject() {
-        return infoObject;
-    }
+  /**
+   * Gets the value of the replaceNullBy property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getReplaceNullBy() {
+    return replaceNullBy;
+  }
 
-    /**
-     * Sets the value of the infoObject property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setInfoObject(String value) {
-        this.infoObject = value;
-    }
+  /**
+   * Sets the value of the replaceNullBy property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setReplaceNullBy(String value) {
+    this.replaceNullBy = value;
+  }
 
-    /**
-     * Gets the value of the order property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getOrder() {
-        return order;
-    }
+  /**
+   * Gets the value of the displayFolder property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDisplayFolder() {
+    return displayFolder;
+  }
 
-    /**
-     * Sets the value of the order property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setOrder(Integer value) {
-        this.order = value;
-    }
-
-    /**
-     * Gets the value of the semanticType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SemanticType }
-     *     
-     */
-    public SemanticType getSemanticType() {
-        return semanticType;
-    }
-
-    /**
-     * Sets the value of the semanticType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SemanticType }
-     *     
-     */
-    public void setSemanticType(SemanticType value) {
-        this.semanticType = value;
-    }
-
-    /**
-     * Gets the value of the deprecated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDeprecated() {
-        return deprecated;
-    }
-
-    /**
-     * Sets the value of the deprecated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDeprecated(Boolean value) {
-        this.deprecated = value;
-    }
-
-    /**
-     * Gets the value of the replaceNull property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isReplaceNull() {
-        return replaceNull;
-    }
-
-    /**
-     * Sets the value of the replaceNull property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setReplaceNull(Boolean value) {
-        this.replaceNull = value;
-    }
-
-    /**
-     * Gets the value of the replaceNullBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getReplaceNullBy() {
-        return replaceNullBy;
-    }
-
-    /**
-     * Sets the value of the replaceNullBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setReplaceNullBy(String value) {
-        this.replaceNullBy = value;
-    }
-
-    /**
-     * Gets the value of the displayFolder property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDisplayFolder() {
-        return displayFolder;
-    }
-
-    /**
-     * Sets the value of the displayFolder property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDisplayFolder(String value) {
-        this.displayFolder = value;
-    }
+  /**
+   * Sets the value of the displayFolder property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDisplayFolder(String value) {
+    this.displayFolder = value;
+  }
 
 }

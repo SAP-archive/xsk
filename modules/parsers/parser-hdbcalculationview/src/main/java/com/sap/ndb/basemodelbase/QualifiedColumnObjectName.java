@@ -19,6 +19,7 @@
 
 package com.sap.ndb.basemodelbase;
 
+import com.sap.ndb.bimodeldatafoundation.ColumnMapping;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -26,20 +27,18 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.bimodeldatafoundation.ColumnMapping;
 
 
 /**
- * 
- * 				Type for referencing a column based SQL object. This type is really meant for column based types, whereas 
- * 				Qualified SQL object name might also be used for non column based objects like functions or procedures. 
- * 				In addition this type  contains the alias in case the same table is used several times in the same data foundation.
- * 			
- * 
+ * Type for referencing a column based SQL object. This type is really meant for column based types, whereas
+ * Qualified SQL object name might also be used for non column based objects like functions or procedures.
+ * In addition this type  contains the alias in case the same table is used several times in the same data foundation.
+ *
+ *
  * <p>Java class for QualifiedColumnObjectName complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="QualifiedColumnObjectName"&gt;
  *   &lt;complexContent&gt;
@@ -49,8 +48,6 @@ import com.sap.ndb.bimodeldatafoundation.ColumnMapping;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QualifiedColumnObjectName")
@@ -58,35 +55,30 @@ import com.sap.ndb.bimodeldatafoundation.ColumnMapping;
     ColumnMapping.class
 })
 public class QualifiedColumnObjectName
-    extends QualifiedSQLObjectName
-{
+    extends QualifiedSQLObjectName {
 
-    @XmlAttribute(name = "alias")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String alias;
+  @XmlAttribute(name = "alias")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String alias;
 
-    /**
-     * Gets the value of the alias property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAlias() {
-        return alias;
-    }
+  /**
+   * Gets the value of the alias property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAlias() {
+    return alias;
+  }
 
-    /**
-     * Sets the value of the alias property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAlias(String value) {
-        this.alias = value;
-    }
+  /**
+   * Sets the value of the alias property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAlias(String value) {
+    this.alias = value;
+  }
 
 }

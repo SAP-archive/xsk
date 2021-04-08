@@ -19,21 +19,21 @@
 
 package com.sap.ndb.bimodeldimension;
 
+import com.sap.ndb.basemodelbase.LevelType;
+import com.sap.ndb.basemodelbase.SortDirection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.LevelType;
-import com.sap.ndb.basemodelbase.SortDirection;
 
 
 /**
  * <p>Java class for Level complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Level"&gt;
  *   &lt;complexContent&gt;
@@ -46,118 +46,100 @@ import com.sap.ndb.basemodelbase.SortDirection;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Level")
 public class Level {
 
-    @XmlAttribute(name = "levelAttribute", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String levelAttribute;
-    @XmlAttribute(name = "levelType")
-    protected LevelType levelType;
-    @XmlAttribute(name = "orderAttribute")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String orderAttribute;
-    @XmlAttribute(name = "sortDirection")
-    protected SortDirection sortDirection;
+  @XmlAttribute(name = "levelAttribute", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String levelAttribute;
+  @XmlAttribute(name = "levelType")
+  protected LevelType levelType;
+  @XmlAttribute(name = "orderAttribute")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String orderAttribute;
+  @XmlAttribute(name = "sortDirection")
+  protected SortDirection sortDirection;
 
-    /**
-     * Gets the value of the levelAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLevelAttribute() {
-        return levelAttribute;
-    }
+  /**
+   * Gets the value of the levelAttribute property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLevelAttribute() {
+    return levelAttribute;
+  }
 
-    /**
-     * Sets the value of the levelAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLevelAttribute(String value) {
-        this.levelAttribute = value;
-    }
+  /**
+   * Sets the value of the levelAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLevelAttribute(String value) {
+    this.levelAttribute = value;
+  }
 
-    /**
-     * Gets the value of the levelType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link LevelType }
-     *     
-     */
-    public LevelType getLevelType() {
-        return levelType;
-    }
+  /**
+   * Gets the value of the levelType property.
+   *
+   * @return possible object is
+   * {@link LevelType }
+   */
+  public LevelType getLevelType() {
+    return levelType;
+  }
 
-    /**
-     * Sets the value of the levelType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link LevelType }
-     *     
-     */
-    public void setLevelType(LevelType value) {
-        this.levelType = value;
-    }
+  /**
+   * Sets the value of the levelType property.
+   *
+   * @param value allowed object is
+   *              {@link LevelType }
+   */
+  public void setLevelType(LevelType value) {
+    this.levelType = value;
+  }
 
-    /**
-     * Gets the value of the orderAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOrderAttribute() {
-        return orderAttribute;
-    }
+  /**
+   * Gets the value of the orderAttribute property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getOrderAttribute() {
+    return orderAttribute;
+  }
 
-    /**
-     * Sets the value of the orderAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOrderAttribute(String value) {
-        this.orderAttribute = value;
-    }
+  /**
+   * Sets the value of the orderAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setOrderAttribute(String value) {
+    this.orderAttribute = value;
+  }
 
-    /**
-     * Gets the value of the sortDirection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SortDirection }
-     *     
-     */
-    public SortDirection getSortDirection() {
-        return sortDirection;
-    }
+  /**
+   * Gets the value of the sortDirection property.
+   *
+   * @return possible object is
+   * {@link SortDirection }
+   */
+  public SortDirection getSortDirection() {
+    return sortDirection;
+  }
 
-    /**
-     * Sets the value of the sortDirection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SortDirection }
-     *     
-     */
-    public void setSortDirection(SortDirection value) {
-        this.sortDirection = value;
-    }
+  /**
+   * Sets the value of the sortDirection property.
+   *
+   * @param value allowed object is
+   *              {@link SortDirection }
+   */
+  public void setSortDirection(SortDirection value) {
+    this.sortDirection = value;
+  }
 
 }

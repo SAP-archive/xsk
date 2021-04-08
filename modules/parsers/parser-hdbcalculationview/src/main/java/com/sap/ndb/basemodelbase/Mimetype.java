@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Mimetype.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,33 +37,32 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "Mimetype")
 @XmlEnum
 public enum Mimetype {
 
-    @XmlEnumValue("text/plain")
-    TEXT_PLAIN("text/plain"),
-    @XmlEnumValue("text/html")
-    TEXT_HTML("text/html");
-    private final String value;
+  @XmlEnumValue("text/plain")
+  TEXT_PLAIN("text/plain"),
+  @XmlEnumValue("text/html")
+  TEXT_HTML("text/html");
+  private final String value;
 
-    Mimetype(String v) {
-        value = v;
-    }
+  Mimetype(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static Mimetype fromValue(String v) {
+    for (Mimetype c : Mimetype.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static Mimetype fromValue(String v) {
-        for (Mimetype c: Mimetype.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

@@ -19,25 +19,24 @@
 
 package com.sap.ndb.bimodeldimension;
 
+import com.sap.ndb.bimodeldatafoundation.LogicalObject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodeldatafoundation.LogicalObject;
 
 
 /**
- * 
- * 				A dimension (aka attribute view) is a reusable entity to combine several physical table to a logical model
- * 				defining attributes and hierarchies on top.
- * 				Constraints: All key attributes must have the same table in the key mapping (see also df:DataFoundation)                        
- *        		
- * 
+ * A dimension (aka attribute view) is a reusable entity to combine several physical table to a logical model
+ * defining attributes and hierarchies on top.
+ * Constraints: All key attributes must have the same table in the key mapping (see also df:DataFoundation)
+ *
+ *
  * <p>Java class for Dimension complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Dimension"&gt;
  *   &lt;complexContent&gt;
@@ -52,8 +51,6 @@ import com.sap.ndb.bimodeldatafoundation.LogicalObject;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Dimension", propOrder = {
@@ -63,111 +60,94 @@ import com.sap.ndb.bimodeldatafoundation.LogicalObject;
     DerivedDimension.class
 })
 public class Dimension
-    extends LogicalObject
-{
+    extends LogicalObject {
 
-    protected Hierarchies hierarchies;
-    @XmlAttribute(name = "dimensionType", required = true)
-    protected DimensionType dimensionType;
-    @XmlAttribute(name = "derived")
-    protected Boolean derived;
-    @XmlAttribute(name = "defaultMember")
-    protected String defaultMember;
+  protected Hierarchies hierarchies;
+  @XmlAttribute(name = "dimensionType", required = true)
+  protected DimensionType dimensionType;
+  @XmlAttribute(name = "derived")
+  protected Boolean derived;
+  @XmlAttribute(name = "defaultMember")
+  protected String defaultMember;
 
-    /**
-     * Gets the value of the hierarchies property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Hierarchies }
-     *     
-     */
-    public Hierarchies getHierarchies() {
-        return hierarchies;
-    }
+  /**
+   * Gets the value of the hierarchies property.
+   *
+   * @return possible object is
+   * {@link Hierarchies }
+   */
+  public Hierarchies getHierarchies() {
+    return hierarchies;
+  }
 
-    /**
-     * Sets the value of the hierarchies property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Hierarchies }
-     *     
-     */
-    public void setHierarchies(Hierarchies value) {
-        this.hierarchies = value;
-    }
+  /**
+   * Sets the value of the hierarchies property.
+   *
+   * @param value allowed object is
+   *              {@link Hierarchies }
+   */
+  public void setHierarchies(Hierarchies value) {
+    this.hierarchies = value;
+  }
 
-    /**
-     * Gets the value of the dimensionType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DimensionType }
-     *     
-     */
-    public DimensionType getDimensionType() {
-        return dimensionType;
-    }
+  /**
+   * Gets the value of the dimensionType property.
+   *
+   * @return possible object is
+   * {@link DimensionType }
+   */
+  public DimensionType getDimensionType() {
+    return dimensionType;
+  }
 
-    /**
-     * Sets the value of the dimensionType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DimensionType }
-     *     
-     */
-    public void setDimensionType(DimensionType value) {
-        this.dimensionType = value;
-    }
+  /**
+   * Sets the value of the dimensionType property.
+   *
+   * @param value allowed object is
+   *              {@link DimensionType }
+   */
+  public void setDimensionType(DimensionType value) {
+    this.dimensionType = value;
+  }
 
-    /**
-     * Gets the value of the derived property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDerived() {
-        return derived;
-    }
+  /**
+   * Gets the value of the derived property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDerived() {
+    return derived;
+  }
 
-    /**
-     * Sets the value of the derived property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDerived(Boolean value) {
-        this.derived = value;
-    }
+  /**
+   * Sets the value of the derived property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDerived(Boolean value) {
+    this.derived = value;
+  }
 
-    /**
-     * Gets the value of the defaultMember property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultMember() {
-        return defaultMember;
-    }
+  /**
+   * Gets the value of the defaultMember property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultMember() {
+    return defaultMember;
+  }
 
-    /**
-     * Sets the value of the defaultMember property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultMember(String value) {
-        this.defaultMember = value;
-    }
+  /**
+   * Sets the value of the defaultMember property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultMember(String value) {
+    this.defaultMember = value;
+  }
 
 }

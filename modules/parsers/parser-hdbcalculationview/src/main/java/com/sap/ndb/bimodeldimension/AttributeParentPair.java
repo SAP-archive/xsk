@@ -19,20 +19,20 @@
 
 package com.sap.ndb.bimodeldimension;
 
+import com.sap.ndb.bimodelconversion.Parameterization;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.bimodelconversion.Parameterization;
 
 
 /**
  * <p>Java class for AttributeParentPair complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AttributeParentPair"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +47,6 @@ import com.sap.ndb.bimodelconversion.Parameterization;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AttributeParentPair", propOrder = {
@@ -56,110 +54,94 @@ import com.sap.ndb.bimodelconversion.Parameterization;
 })
 public class AttributeParentPair {
 
-    protected Parameterization rootNode;
-    @XmlAttribute(name = "attribute", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String attribute;
-    @XmlAttribute(name = "parentAttribute", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String parentAttribute;
-    @XmlAttribute(name = "stepParentNodeID")
-    protected String stepParentNodeID;
+  protected Parameterization rootNode;
+  @XmlAttribute(name = "attribute", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String attribute;
+  @XmlAttribute(name = "parentAttribute", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String parentAttribute;
+  @XmlAttribute(name = "stepParentNodeID")
+  protected String stepParentNodeID;
 
-    /**
-     * Gets the value of the rootNode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getRootNode() {
-        return rootNode;
-    }
+  /**
+   * Gets the value of the rootNode property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getRootNode() {
+    return rootNode;
+  }
 
-    /**
-     * Sets the value of the rootNode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setRootNode(Parameterization value) {
-        this.rootNode = value;
-    }
+  /**
+   * Sets the value of the rootNode property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setRootNode(Parameterization value) {
+    this.rootNode = value;
+  }
 
-    /**
-     * Gets the value of the attribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAttribute() {
-        return attribute;
-    }
+  /**
+   * Gets the value of the attribute property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAttribute() {
+    return attribute;
+  }
 
-    /**
-     * Sets the value of the attribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAttribute(String value) {
-        this.attribute = value;
-    }
+  /**
+   * Sets the value of the attribute property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAttribute(String value) {
+    this.attribute = value;
+  }
 
-    /**
-     * Gets the value of the parentAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getParentAttribute() {
-        return parentAttribute;
-    }
+  /**
+   * Gets the value of the parentAttribute property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getParentAttribute() {
+    return parentAttribute;
+  }
 
-    /**
-     * Sets the value of the parentAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setParentAttribute(String value) {
-        this.parentAttribute = value;
-    }
+  /**
+   * Sets the value of the parentAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setParentAttribute(String value) {
+    this.parentAttribute = value;
+  }
 
-    /**
-     * Gets the value of the stepParentNodeID property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStepParentNodeID() {
-        return stepParentNodeID;
-    }
+  /**
+   * Gets the value of the stepParentNodeID property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStepParentNodeID() {
+    return stepParentNodeID;
+  }
 
-    /**
-     * Sets the value of the stepParentNodeID property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStepParentNodeID(String value) {
-        this.stepParentNodeID = value;
-    }
+  /**
+   * Sets the value of the stepParentNodeID property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStepParentNodeID(String value) {
+    this.stepParentNodeID = value;
+  }
 
 }

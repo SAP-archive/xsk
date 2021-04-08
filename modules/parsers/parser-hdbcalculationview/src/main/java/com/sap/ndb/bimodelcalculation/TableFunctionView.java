@@ -19,6 +19,7 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.bimodelvariable.AbstractVariableMapping;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -27,22 +28,20 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.bimodelvariable.AbstractVariableMapping;
 
 
 /**
- * 
- * 				A view node integrating a table function. 
- * 				Tabular input parameters will be filled by other nodes / data sources of the calculation view. 
- * 				This includes column mapping as for other nodes. The mapping to the function parameter is done via the XML attribute
- * 				functionParameterName of Input Scalar input parameters will be filled with constants or by parameters.
- * 				The output of the table function will be mapped as	input to another node of the calculation view.
- * 			
- * 
+ * A view node integrating a table function.
+ * Tabular input parameters will be filled by other nodes / data sources of the calculation view.
+ * This includes column mapping as for other nodes. The mapping to the function parameter is done via the XML attribute
+ * functionParameterName of Input Scalar input parameters will be filled with constants or by parameters.
+ * The output of the table function will be mapped as	input to another node of the calculation view.
+ *
+ *
  * <p>Java class for TableFunctionView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="TableFunctionView"&gt;
  *   &lt;complexContent&gt;
@@ -55,73 +54,64 @@ import com.sap.ndb.bimodelvariable.AbstractVariableMapping;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TableFunctionView", propOrder = {
     "variableMapping"
 })
 public class TableFunctionView
-    extends CalculationView
-{
+    extends CalculationView {
 
-    protected List<AbstractVariableMapping> variableMapping;
-    @XmlAttribute(name = "tableFunctionName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String tableFunctionName;
+  protected List<AbstractVariableMapping> variableMapping;
+  @XmlAttribute(name = "tableFunctionName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String tableFunctionName;
 
-    /**
-     * Gets the value of the variableMapping property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the variableMapping property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getVariableMapping().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link AbstractVariableMapping }
-     * 
-     * 
-     */
-    public List<AbstractVariableMapping> getVariableMapping() {
-        if (variableMapping == null) {
-            variableMapping = new ArrayList<AbstractVariableMapping>();
-        }
-        return this.variableMapping;
+  /**
+   * Gets the value of the variableMapping property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the variableMapping property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getVariableMapping().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link AbstractVariableMapping }
+   */
+  public List<AbstractVariableMapping> getVariableMapping() {
+    if (variableMapping == null) {
+      variableMapping = new ArrayList<AbstractVariableMapping>();
     }
+    return this.variableMapping;
+  }
 
-    /**
-     * Gets the value of the tableFunctionName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTableFunctionName() {
-        return tableFunctionName;
-    }
+  /**
+   * Gets the value of the tableFunctionName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTableFunctionName() {
+    return tableFunctionName;
+  }
 
-    /**
-     * Sets the value of the tableFunctionName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTableFunctionName(String value) {
-        this.tableFunctionName = value;
-    }
+  /**
+   * Sets the value of the tableFunctionName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTableFunctionName(String value) {
+    this.tableFunctionName = value;
+  }
 
 }

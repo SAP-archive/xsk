@@ -19,19 +19,19 @@
 
 package com.sap.ndb.bimodeldimension;
 
+import com.sap.ndb.basemodelbase.NodeStyle;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.NodeStyle;
 
 
 /**
  * <p>Java class for LeveledHierarchy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LeveledHierarchy"&gt;
  *   &lt;complexContent&gt;
@@ -45,94 +45,79 @@ import com.sap.ndb.basemodelbase.NodeStyle;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LeveledHierarchy", propOrder = {
     "levels"
 })
 public class LeveledHierarchy
-    extends Hierarchy
-{
+    extends Hierarchy {
 
-    @XmlElement(required = true)
-    protected Levels levels;
-    @XmlAttribute(name = "nodeStyle")
-    protected NodeStyle nodeStyle;
-    @XmlAttribute(name = "stepParentNodeID")
-    protected String stepParentNodeID;
+  @XmlElement(required = true)
+  protected Levels levels;
+  @XmlAttribute(name = "nodeStyle")
+  protected NodeStyle nodeStyle;
+  @XmlAttribute(name = "stepParentNodeID")
+  protected String stepParentNodeID;
 
-    /**
-     * Gets the value of the levels property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Levels }
-     *     
-     */
-    public Levels getLevels() {
-        return levels;
-    }
+  /**
+   * Gets the value of the levels property.
+   *
+   * @return possible object is
+   * {@link Levels }
+   */
+  public Levels getLevels() {
+    return levels;
+  }
 
-    /**
-     * Sets the value of the levels property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Levels }
-     *     
-     */
-    public void setLevels(Levels value) {
-        this.levels = value;
-    }
+  /**
+   * Sets the value of the levels property.
+   *
+   * @param value allowed object is
+   *              {@link Levels }
+   */
+  public void setLevels(Levels value) {
+    this.levels = value;
+  }
 
-    /**
-     * Gets the value of the nodeStyle property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link NodeStyle }
-     *     
-     */
-    public NodeStyle getNodeStyle() {
-        return nodeStyle;
-    }
+  /**
+   * Gets the value of the nodeStyle property.
+   *
+   * @return possible object is
+   * {@link NodeStyle }
+   */
+  public NodeStyle getNodeStyle() {
+    return nodeStyle;
+  }
 
-    /**
-     * Sets the value of the nodeStyle property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link NodeStyle }
-     *     
-     */
-    public void setNodeStyle(NodeStyle value) {
-        this.nodeStyle = value;
-    }
+  /**
+   * Sets the value of the nodeStyle property.
+   *
+   * @param value allowed object is
+   *              {@link NodeStyle }
+   */
+  public void setNodeStyle(NodeStyle value) {
+    this.nodeStyle = value;
+  }
 
-    /**
-     * Gets the value of the stepParentNodeID property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStepParentNodeID() {
-        return stepParentNodeID;
-    }
+  /**
+   * Gets the value of the stepParentNodeID property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStepParentNodeID() {
+    return stepParentNodeID;
+  }
 
-    /**
-     * Sets the value of the stepParentNodeID property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStepParentNodeID(String value) {
-        this.stepParentNodeID = value;
-    }
+  /**
+   * Sets the value of the stepParentNodeID property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStepParentNodeID(String value) {
+    this.stepParentNodeID = value;
+  }
 
 }

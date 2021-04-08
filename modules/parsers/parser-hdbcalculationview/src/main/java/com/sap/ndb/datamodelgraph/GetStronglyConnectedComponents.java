@@ -25,19 +25,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Parameterization for the graph action GET_STRONGLY_CONNECTED_COMPONENTS
- * 				The action GET_STRONGLY_CONNECTED_COMPONENTS calculates strongly connected components in the given graph workspace. 
- * 				Strongly connected components partition the given graph workspace into largest subgraphs where every vertex is reachable 
- * 				from every other vertex.
- * 				The only output is a table containing the vertex key column and a "COMPONENT" column containing component numbers. 
- * 				All vertices having the same component number belong to the same strongly connected component.
- * 			
- * 
+ * Parameterization for the graph action GET_STRONGLY_CONNECTED_COMPONENTS
+ * The action GET_STRONGLY_CONNECTED_COMPONENTS calculates strongly connected components in the given graph workspace.
+ * Strongly connected components partition the given graph workspace into largest subgraphs where every vertex is reachable
+ * from every other vertex.
+ * The only output is a table containing the vertex key column and a "COMPONENT" column containing component numbers.
+ * All vertices having the same component number belong to the same strongly connected component.
+ *
+ *
  * <p>Java class for GetStronglyConnectedComponents complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetStronglyConnectedComponents"&gt;
  *   &lt;complexContent&gt;
@@ -48,14 +47,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetStronglyConnectedComponents")
 public class GetStronglyConnectedComponents
-    extends GraphActionParameterization
-{
+    extends GraphActionParameterization {
 
 
 }

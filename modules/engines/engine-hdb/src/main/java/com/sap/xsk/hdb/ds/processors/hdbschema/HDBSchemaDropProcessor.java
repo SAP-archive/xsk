@@ -11,22 +11,19 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbschema;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
-
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import java.sql.Connection;
+import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-
 public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSchemaModel> {
-    private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
-    public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
-        String sql = "DROP SCHEMA " + hdbSchema.getName();
-        executeSql(sql, connection);
-    }
+  private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
+
+  public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
+    String sql = "DROP SCHEMA " + hdbSchema.getName();
+    executeSql(sql, connection);
+  }
 }

@@ -29,15 +29,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				A derived dimension is reusing an existing dimension (the "baseDimension") completely but
- * 				defines an alias and an alias description for the base dimension.
- *        		
- * 
+ * A derived dimension is reusing an existing dimension (the "baseDimension") completely but
+ * defines an alias and an alias description for the base dimension.
+ *
+ *
  * <p>Java class for DerivedDimension complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DerivedDimension"&gt;
  *   &lt;complexContent&gt;
@@ -50,8 +49,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DerivedDimension", propOrder = {
@@ -59,62 +56,53 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "baseDimension"
 })
 public class DerivedDimension
-    extends Dimension
-{
+    extends Dimension {
 
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String baseDimensionUri;
-    @XmlElement(required = true)
-    protected Dimension baseDimension;
+  @XmlElement(required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String baseDimensionUri;
+  @XmlElement(required = true)
+  protected Dimension baseDimension;
 
-    /**
-     * Gets the value of the baseDimensionUri property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getBaseDimensionUri() {
-        return baseDimensionUri;
-    }
+  /**
+   * Gets the value of the baseDimensionUri property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getBaseDimensionUri() {
+    return baseDimensionUri;
+  }
 
-    /**
-     * Sets the value of the baseDimensionUri property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setBaseDimensionUri(String value) {
-        this.baseDimensionUri = value;
-    }
+  /**
+   * Sets the value of the baseDimensionUri property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setBaseDimensionUri(String value) {
+    this.baseDimensionUri = value;
+  }
 
-    /**
-     * Gets the value of the baseDimension property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Dimension }
-     *     
-     */
-    public Dimension getBaseDimension() {
-        return baseDimension;
-    }
+  /**
+   * Gets the value of the baseDimension property.
+   *
+   * @return possible object is
+   * {@link Dimension }
+   */
+  public Dimension getBaseDimension() {
+    return baseDimension;
+  }
 
-    /**
-     * Sets the value of the baseDimension property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Dimension }
-     *     
-     */
-    public void setBaseDimension(Dimension value) {
-        this.baseDimension = value;
-    }
+  /**
+   * Sets the value of the baseDimension property.
+   *
+   * @param value allowed object is
+   *              {@link Dimension }
+   */
+  public void setBaseDimension(Dimension value) {
+    this.baseDimension = value;
+  }
 
 }

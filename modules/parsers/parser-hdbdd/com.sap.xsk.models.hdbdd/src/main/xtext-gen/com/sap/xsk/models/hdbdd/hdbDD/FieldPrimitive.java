@@ -19,12 +19,12 @@ package com.sap.xsk.models.hdbdd.hdbDD;
  *   <li>{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#getFieldPredefinedType <em>Field Predefined Type</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive()
  * @model
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive()
  */
-public interface FieldPrimitive extends Field
-{
+public interface FieldPrimitive extends Field {
+
   /**
    * Returns the value of the '<em><b>Key</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -33,11 +33,12 @@ public interface FieldPrimitive extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Key</em>' attribute.
-   * @see #setKey(boolean)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_Key()
    * @model
    * @generated
+   * @see #setKey(boolean)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_Key()
    */
   boolean isKey();
 
@@ -45,9 +46,10 @@ public interface FieldPrimitive extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#isKey <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Key</em>' attribute.
-   * @see #isKey()
    * @generated
+   * @see #isKey()
    */
   void setKey(boolean value);
 
@@ -59,11 +61,12 @@ public interface FieldPrimitive extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Type</em>' attribute.
-   * @see #setFieldType(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldType()
    * @model
    * @generated
+   * @see #setFieldType(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldType()
    */
   String getFieldType();
 
@@ -71,9 +74,10 @@ public interface FieldPrimitive extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#getFieldType <em>Field Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Type</em>' attribute.
-   * @see #getFieldType()
    * @generated
+   * @see #getFieldType()
    */
   void setFieldType(String value);
 
@@ -85,11 +89,12 @@ public interface FieldPrimitive extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Length</em>' attribute.
-   * @see #setFieldLength(int)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldLength()
    * @model
    * @generated
+   * @see #setFieldLength(int)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldLength()
    */
   int getFieldLength();
 
@@ -97,9 +102,10 @@ public interface FieldPrimitive extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#getFieldLength <em>Field Length</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Length</em>' attribute.
-   * @see #getFieldLength()
    * @generated
+   * @see #getFieldLength()
    */
   void setFieldLength(int value);
 
@@ -111,11 +117,12 @@ public interface FieldPrimitive extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Predefined Type</em>' attribute.
-   * @see #setFieldPredefinedType(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldPredefinedType()
    * @model
    * @generated
+   * @see #setFieldPredefinedType(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldPredefinedType()
    */
   String getFieldPredefinedType();
 
@@ -123,9 +130,10 @@ public interface FieldPrimitive extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#getFieldPredefinedType <em>Field Predefined Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Predefined Type</em>' attribute.
-   * @see #getFieldPredefinedType()
    * @generated
+   * @see #getFieldPredefinedType()
    */
   void setFieldPredefinedType(String value);
 

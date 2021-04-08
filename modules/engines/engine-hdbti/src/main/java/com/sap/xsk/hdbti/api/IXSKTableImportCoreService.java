@@ -11,25 +11,22 @@
  */
 package com.sap.xsk.hdbti.api;
 
-import java.io.IOException;
-import java.util.List;
-
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
+import java.util.List;
 
 public interface IXSKTableImportCoreService {
 
-    XSKTableImportArtifact createTableImportArtifact(XSKTableImportArtifact xskTableImportArtifact) throws XSKTableImportException;
+  XSKTableImportArtifact createTableImportArtifact(XSKTableImportArtifact xskTableImportArtifact) throws XSKTableImportException;
 
-    void updateTableImportArtifact(XSKTableImportArtifact artifact) throws XSKTableImportException;
+  void updateTableImportArtifact(XSKTableImportArtifact artifact) throws XSKTableImportException;
 
-    XSKTableImportArtifact getTableImportArtifact(String location) throws XSKTableImportException;
+  XSKTableImportArtifact getTableImportArtifact(String location) throws XSKTableImportException;
 
-    void removeTableImportArtifact(String location);
+  void removeTableImportArtifact(String location);
 
-    List<XSKTableImportArtifact> getTableImportArtifacts() throws XSKTableImportException;
+  List<XSKTableImportArtifact> getTableImportArtifacts() throws XSKTableImportException;
 
-    boolean existsTableImportArtifact(String location) throws XSKTableImportException;
+  boolean existsTableImportArtifact(String location) throws XSKTableImportException;
 
-    XSKTableImportArtifact parseTableImportArtifact(String location, String content) throws Exception;
+  XSKTableImportArtifact parseTableImportArtifact(String location, String content) throws Exception;
 }

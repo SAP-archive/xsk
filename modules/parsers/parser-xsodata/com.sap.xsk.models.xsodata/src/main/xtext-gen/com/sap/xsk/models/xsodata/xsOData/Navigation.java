@@ -18,12 +18,12 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.sap.xsk.models.xsodata.xsOData.Navigation#getAlias <em>Alias</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getNavigation()
  * @model
  * @generated
+ * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getNavigation()
  */
-public interface Navigation extends EObject
-{
+public interface Navigation extends EObject {
+
   /**
    * Returns the value of the '<em><b>Association</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -32,11 +32,12 @@ public interface Navigation extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Association</em>' attribute.
-   * @see #setAssociation(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getNavigation_Association()
    * @model
    * @generated
+   * @see #setAssociation(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getNavigation_Association()
    */
   String getAssociation();
 
@@ -44,9 +45,10 @@ public interface Navigation extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Navigation#getAssociation <em>Association</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Association</em>' attribute.
-   * @see #getAssociation()
    * @generated
+   * @see #getAssociation()
    */
   void setAssociation(String value);
 
@@ -58,11 +60,12 @@ public interface Navigation extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Alias</em>' attribute.
-   * @see #setAlias(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getNavigation_Alias()
    * @model
    * @generated
+   * @see #setAlias(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getNavigation_Alias()
    */
   String getAlias();
 
@@ -70,9 +73,10 @@ public interface Navigation extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Navigation#getAlias <em>Alias</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Alias</em>' attribute.
-   * @see #getAlias()
    * @generated
+   * @see #getAlias()
    */
   void setAlias(String value);
 

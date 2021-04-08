@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for QidColumnHierarchy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="QidColumnHierarchy"&gt;
  *   &lt;complexContent&gt;
@@ -45,8 +45,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QidColumnHierarchy", propOrder = {
@@ -55,82 +53,70 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class QidColumnHierarchy {
 
-    protected String hierarchy;
-    protected String hierarchyEmbeded;
-    @XmlAttribute(name = "ID")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String id;
+  protected String hierarchy;
+  protected String hierarchyEmbeded;
+  @XmlAttribute(name = "ID")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String id;
 
-    /**
-     * Gets the value of the hierarchy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHierarchy() {
-        return hierarchy;
-    }
+  /**
+   * Gets the value of the hierarchy property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHierarchy() {
+    return hierarchy;
+  }
 
-    /**
-     * Sets the value of the hierarchy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHierarchy(String value) {
-        this.hierarchy = value;
-    }
+  /**
+   * Sets the value of the hierarchy property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHierarchy(String value) {
+    this.hierarchy = value;
+  }
 
-    /**
-     * Gets the value of the hierarchyEmbeded property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHierarchyEmbeded() {
-        return hierarchyEmbeded;
-    }
+  /**
+   * Gets the value of the hierarchyEmbeded property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHierarchyEmbeded() {
+    return hierarchyEmbeded;
+  }
 
-    /**
-     * Sets the value of the hierarchyEmbeded property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHierarchyEmbeded(String value) {
-        this.hierarchyEmbeded = value;
-    }
+  /**
+   * Sets the value of the hierarchyEmbeded property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHierarchyEmbeded(String value) {
+    this.hierarchyEmbeded = value;
+  }
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getID() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getID() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setID(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setID(String value) {
+    this.id = value;
+  }
 
 }

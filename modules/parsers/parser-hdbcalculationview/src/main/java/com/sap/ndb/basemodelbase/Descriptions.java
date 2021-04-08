@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Descriptions complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Descriptions"&gt;
  *   &lt;complexContent&gt;
@@ -44,8 +44,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Descriptions", propOrder = {
@@ -53,112 +51,96 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Descriptions {
 
-    protected CommentProperties comment;
-    @XmlAttribute(name = "defaultDescription")
-    protected String defaultDescription;
-    @XmlAttribute(name = "textType")
-    protected TextType textType;
-    @XmlAttribute(name = "maxLength")
-    protected Integer maxLength;
+  protected CommentProperties comment;
+  @XmlAttribute(name = "defaultDescription")
+  protected String defaultDescription;
+  @XmlAttribute(name = "textType")
+  protected TextType textType;
+  @XmlAttribute(name = "maxLength")
+  protected Integer maxLength;
 
-    /**
-     * Gets the value of the comment property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CommentProperties }
-     *     
-     */
-    public CommentProperties getComment() {
-        return comment;
-    }
+  /**
+   * Gets the value of the comment property.
+   *
+   * @return possible object is
+   * {@link CommentProperties }
+   */
+  public CommentProperties getComment() {
+    return comment;
+  }
 
-    /**
-     * Sets the value of the comment property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CommentProperties }
-     *     
-     */
-    public void setComment(CommentProperties value) {
-        this.comment = value;
-    }
+  /**
+   * Sets the value of the comment property.
+   *
+   * @param value allowed object is
+   *              {@link CommentProperties }
+   */
+  public void setComment(CommentProperties value) {
+    this.comment = value;
+  }
 
-    /**
-     * Gets the value of the defaultDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultDescription() {
-        if (defaultDescription == null) {
-            return " ";
-        } else {
-            return defaultDescription;
-        }
+  /**
+   * Gets the value of the defaultDescription property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultDescription() {
+    if (defaultDescription == null) {
+      return " ";
+    } else {
+      return defaultDescription;
     }
+  }
 
-    /**
-     * Sets the value of the defaultDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultDescription(String value) {
-        this.defaultDescription = value;
-    }
+  /**
+   * Sets the value of the defaultDescription property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultDescription(String value) {
+    this.defaultDescription = value;
+  }
 
-    /**
-     * Gets the value of the textType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TextType }
-     *     
-     */
-    public TextType getTextType() {
-        return textType;
-    }
+  /**
+   * Gets the value of the textType property.
+   *
+   * @return possible object is
+   * {@link TextType }
+   */
+  public TextType getTextType() {
+    return textType;
+  }
 
-    /**
-     * Sets the value of the textType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TextType }
-     *     
-     */
-    public void setTextType(TextType value) {
-        this.textType = value;
-    }
+  /**
+   * Sets the value of the textType property.
+   *
+   * @param value allowed object is
+   *              {@link TextType }
+   */
+  public void setTextType(TextType value) {
+    this.textType = value;
+  }
 
-    /**
-     * Gets the value of the maxLength property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getMaxLength() {
-        return maxLength;
-    }
+  /**
+   * Gets the value of the maxLength property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getMaxLength() {
+    return maxLength;
+  }
 
-    /**
-     * Sets the value of the maxLength property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setMaxLength(Integer value) {
-        this.maxLength = value;
-    }
+  /**
+   * Sets the value of the maxLength property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setMaxLength(Integer value) {
+    this.maxLength = value;
+  }
 
 }

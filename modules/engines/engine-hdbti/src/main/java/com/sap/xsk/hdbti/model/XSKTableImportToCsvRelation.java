@@ -18,52 +18,53 @@ import javax.persistence.Table;
 
 @Table(name = "XSK_TABLE_IMPORT_TO_CSV")
 public class XSKTableImportToCsvRelation {
-    @Id
-    @GeneratedValue
-    @Column(name = "ID", columnDefinition = "BIGINT", length = 32, nullable = false)
-    private Long id;
 
-    @Column(name = "CSV_LOCATION", columnDefinition = "VARCHAR", nullable = false)
-    private String csv;
+  @Id
+  @GeneratedValue
+  @Column(name = "ID", columnDefinition = "BIGINT", length = 32, nullable = false)
+  private Long id;
 
-    @Column(name = "HDBTI_LOCATION", columnDefinition = "VARCHAR", nullable = false)
-    private String hdbti;
+  @Column(name = "CSV_LOCATION", columnDefinition = "VARCHAR", nullable = false)
+  private String csv;
 
-    @Column(name="CSV_HASH", columnDefinition = "VARCHAR", nullable = false)
-    private String csvHash;
+  @Column(name = "HDBTI_LOCATION", columnDefinition = "VARCHAR", nullable = false)
+  private String hdbti;
 
-    public XSKTableImportToCsvRelation() {
-    }
+  @Column(name = "CSV_HASH", columnDefinition = "VARCHAR", nullable = false)
+  private String csvHash;
 
-    public Long getId() {
-        return id;
-    }
+  public XSKTableImportToCsvRelation() {
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getCsv() {
-        return csv;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setCsv(String csv) {
-        this.csv = csv;
-    }
+  public String getCsv() {
+    return csv;
+  }
 
-    public String getHdbti() {
-        return hdbti;
-    }
+  public void setCsv(String csv) {
+    this.csv = csv;
+  }
 
-    public void setHdbti(String hdbti) {
-        this.hdbti = hdbti;
-    }
+  public String getHdbti() {
+    return hdbti;
+  }
 
-    public String getCsvHash() {
-        return csvHash;
-    }
+  public void setHdbti(String hdbti) {
+    this.hdbti = hdbti;
+  }
 
-    public void setCsvHash(String csvHash) {
-        this.csvHash = csvHash;
-    }
+  public String getCsvHash() {
+    return csvHash;
+  }
+
+  public void setCsvHash(String csvHash) {
+    this.csvHash = csvHash;
+  }
 }

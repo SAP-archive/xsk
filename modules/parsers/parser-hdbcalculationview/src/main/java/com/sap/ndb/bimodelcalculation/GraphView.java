@@ -19,6 +19,13 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.datamodelgraph.GetNeighborhoodParameterization;
+import com.sap.ndb.datamodelgraph.GetShortestPathParameterization;
+import com.sap.ndb.datamodelgraph.GetShortestPathsParameterization;
+import com.sap.ndb.datamodelgraph.GetStronglyConnectedComponents;
+import com.sap.ndb.datamodelgraph.GraphAction;
+import com.sap.ndb.datamodelgraph.PatternMatching;
+import com.sap.ndb.datamodelgraph.ScriptPatternMatching;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -27,24 +34,16 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.datamodelgraph.GetNeighborhoodParameterization;
-import com.sap.ndb.datamodelgraph.GetShortestPathParameterization;
-import com.sap.ndb.datamodelgraph.GetShortestPathsParameterization;
-import com.sap.ndb.datamodelgraph.GetStronglyConnectedComponents;
-import com.sap.ndb.datamodelgraph.GraphAction;
-import com.sap.ndb.datamodelgraph.PatternMatching;
-import com.sap.ndb.datamodelgraph.ScriptPatternMatching;
 
 
 /**
- * 
- * 				A view node that contains a graph action
- * 			
- * 
+ * A view node that contains a graph action
+ *
+ *
  * <p>Java class for GraphView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GraphView"&gt;
  *   &lt;complexContent&gt;
@@ -66,8 +65,6 @@ import com.sap.ndb.datamodelgraph.ScriptPatternMatching;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GraphView", propOrder = {
@@ -80,241 +77,206 @@ import com.sap.ndb.datamodelgraph.ScriptPatternMatching;
     "getStronglyConnectedComponents"
 })
 public class GraphView
-    extends Node
-{
+    extends Node {
 
-    protected PatternMatching patternMatching;
-    protected ScriptPatternMatching scriptPatternMatching;
-    protected GetNeighborhoodParameterization getNeighborhoodParameterization;
-    protected List<Output> output;
-    protected GetShortestPathsParameterization getShortestPathsParameterization;
-    protected GetShortestPathParameterization getShortestPathParameterization;
-    protected GetStronglyConnectedComponents getStronglyConnectedComponents;
-    @XmlAttribute(name = "workspace", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String workspace;
-    @XmlAttribute(name = "action", required = true)
-    protected GraphAction action;
+  protected PatternMatching patternMatching;
+  protected ScriptPatternMatching scriptPatternMatching;
+  protected GetNeighborhoodParameterization getNeighborhoodParameterization;
+  protected List<Output> output;
+  protected GetShortestPathsParameterization getShortestPathsParameterization;
+  protected GetShortestPathParameterization getShortestPathParameterization;
+  protected GetStronglyConnectedComponents getStronglyConnectedComponents;
+  @XmlAttribute(name = "workspace", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String workspace;
+  @XmlAttribute(name = "action", required = true)
+  protected GraphAction action;
 
-    /**
-     * Gets the value of the patternMatching property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PatternMatching }
-     *     
-     */
-    public PatternMatching getPatternMatching() {
-        return patternMatching;
+  /**
+   * Gets the value of the patternMatching property.
+   *
+   * @return possible object is
+   * {@link PatternMatching }
+   */
+  public PatternMatching getPatternMatching() {
+    return patternMatching;
+  }
+
+  /**
+   * Sets the value of the patternMatching property.
+   *
+   * @param value allowed object is
+   *              {@link PatternMatching }
+   */
+  public void setPatternMatching(PatternMatching value) {
+    this.patternMatching = value;
+  }
+
+  /**
+   * Gets the value of the scriptPatternMatching property.
+   *
+   * @return possible object is
+   * {@link ScriptPatternMatching }
+   */
+  public ScriptPatternMatching getScriptPatternMatching() {
+    return scriptPatternMatching;
+  }
+
+  /**
+   * Sets the value of the scriptPatternMatching property.
+   *
+   * @param value allowed object is
+   *              {@link ScriptPatternMatching }
+   */
+  public void setScriptPatternMatching(ScriptPatternMatching value) {
+    this.scriptPatternMatching = value;
+  }
+
+  /**
+   * Gets the value of the getNeighborhoodParameterization property.
+   *
+   * @return possible object is
+   * {@link GetNeighborhoodParameterization }
+   */
+  public GetNeighborhoodParameterization getGetNeighborhoodParameterization() {
+    return getNeighborhoodParameterization;
+  }
+
+  /**
+   * Sets the value of the getNeighborhoodParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link GetNeighborhoodParameterization }
+   */
+  public void setGetNeighborhoodParameterization(GetNeighborhoodParameterization value) {
+    this.getNeighborhoodParameterization = value;
+  }
+
+  /**
+   * Gets the value of the output property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the output property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getOutput().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Output }
+   */
+  public List<Output> getOutput() {
+    if (output == null) {
+      output = new ArrayList<Output>();
     }
+    return this.output;
+  }
 
-    /**
-     * Sets the value of the patternMatching property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PatternMatching }
-     *     
-     */
-    public void setPatternMatching(PatternMatching value) {
-        this.patternMatching = value;
-    }
+  /**
+   * Gets the value of the getShortestPathsParameterization property.
+   *
+   * @return possible object is
+   * {@link GetShortestPathsParameterization }
+   */
+  public GetShortestPathsParameterization getGetShortestPathsParameterization() {
+    return getShortestPathsParameterization;
+  }
 
-    /**
-     * Gets the value of the scriptPatternMatching property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ScriptPatternMatching }
-     *     
-     */
-    public ScriptPatternMatching getScriptPatternMatching() {
-        return scriptPatternMatching;
-    }
+  /**
+   * Sets the value of the getShortestPathsParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link GetShortestPathsParameterization }
+   */
+  public void setGetShortestPathsParameterization(GetShortestPathsParameterization value) {
+    this.getShortestPathsParameterization = value;
+  }
 
-    /**
-     * Sets the value of the scriptPatternMatching property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ScriptPatternMatching }
-     *     
-     */
-    public void setScriptPatternMatching(ScriptPatternMatching value) {
-        this.scriptPatternMatching = value;
-    }
+  /**
+   * Gets the value of the getShortestPathParameterization property.
+   *
+   * @return possible object is
+   * {@link GetShortestPathParameterization }
+   */
+  public GetShortestPathParameterization getGetShortestPathParameterization() {
+    return getShortestPathParameterization;
+  }
 
-    /**
-     * Gets the value of the getNeighborhoodParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link GetNeighborhoodParameterization }
-     *     
-     */
-    public GetNeighborhoodParameterization getGetNeighborhoodParameterization() {
-        return getNeighborhoodParameterization;
-    }
+  /**
+   * Sets the value of the getShortestPathParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link GetShortestPathParameterization }
+   */
+  public void setGetShortestPathParameterization(GetShortestPathParameterization value) {
+    this.getShortestPathParameterization = value;
+  }
 
-    /**
-     * Sets the value of the getNeighborhoodParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GetNeighborhoodParameterization }
-     *     
-     */
-    public void setGetNeighborhoodParameterization(GetNeighborhoodParameterization value) {
-        this.getNeighborhoodParameterization = value;
-    }
+  /**
+   * Gets the value of the getStronglyConnectedComponents property.
+   *
+   * @return possible object is
+   * {@link GetStronglyConnectedComponents }
+   */
+  public GetStronglyConnectedComponents getGetStronglyConnectedComponents() {
+    return getStronglyConnectedComponents;
+  }
 
-    /**
-     * Gets the value of the output property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the output property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getOutput().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Output }
-     * 
-     * 
-     */
-    public List<Output> getOutput() {
-        if (output == null) {
-            output = new ArrayList<Output>();
-        }
-        return this.output;
-    }
+  /**
+   * Sets the value of the getStronglyConnectedComponents property.
+   *
+   * @param value allowed object is
+   *              {@link GetStronglyConnectedComponents }
+   */
+  public void setGetStronglyConnectedComponents(GetStronglyConnectedComponents value) {
+    this.getStronglyConnectedComponents = value;
+  }
 
-    /**
-     * Gets the value of the getShortestPathsParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link GetShortestPathsParameterization }
-     *     
-     */
-    public GetShortestPathsParameterization getGetShortestPathsParameterization() {
-        return getShortestPathsParameterization;
-    }
+  /**
+   * Gets the value of the workspace property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getWorkspace() {
+    return workspace;
+  }
 
-    /**
-     * Sets the value of the getShortestPathsParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GetShortestPathsParameterization }
-     *     
-     */
-    public void setGetShortestPathsParameterization(GetShortestPathsParameterization value) {
-        this.getShortestPathsParameterization = value;
-    }
+  /**
+   * Sets the value of the workspace property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setWorkspace(String value) {
+    this.workspace = value;
+  }
 
-    /**
-     * Gets the value of the getShortestPathParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link GetShortestPathParameterization }
-     *     
-     */
-    public GetShortestPathParameterization getGetShortestPathParameterization() {
-        return getShortestPathParameterization;
-    }
+  /**
+   * Gets the value of the action property.
+   *
+   * @return possible object is
+   * {@link GraphAction }
+   */
+  public GraphAction getAction() {
+    return action;
+  }
 
-    /**
-     * Sets the value of the getShortestPathParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GetShortestPathParameterization }
-     *     
-     */
-    public void setGetShortestPathParameterization(GetShortestPathParameterization value) {
-        this.getShortestPathParameterization = value;
-    }
-
-    /**
-     * Gets the value of the getStronglyConnectedComponents property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link GetStronglyConnectedComponents }
-     *     
-     */
-    public GetStronglyConnectedComponents getGetStronglyConnectedComponents() {
-        return getStronglyConnectedComponents;
-    }
-
-    /**
-     * Sets the value of the getStronglyConnectedComponents property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GetStronglyConnectedComponents }
-     *     
-     */
-    public void setGetStronglyConnectedComponents(GetStronglyConnectedComponents value) {
-        this.getStronglyConnectedComponents = value;
-    }
-
-    /**
-     * Gets the value of the workspace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getWorkspace() {
-        return workspace;
-    }
-
-    /**
-     * Sets the value of the workspace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setWorkspace(String value) {
-        this.workspace = value;
-    }
-
-    /**
-     * Gets the value of the action property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link GraphAction }
-     *     
-     */
-    public GraphAction getAction() {
-        return action;
-    }
-
-    /**
-     * Sets the value of the action property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GraphAction }
-     *     
-     */
-    public void setAction(GraphAction value) {
-        this.action = value;
-    }
+  /**
+   * Sets the value of the action property.
+   *
+   * @param value allowed object is
+   *              {@link GraphAction }
+   */
+  public void setAction(GraphAction value) {
+    this.action = value;
+  }
 
 }

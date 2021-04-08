@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for HierarchyFunction.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -41,26 +41,25 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "HierarchyFunction")
 @XmlEnum
 public enum HierarchyFunction {
 
-    HIERARCHY,
-    HIERARCHY_LEVELED,
-    HIERARCHY_TEMPORAL,
-    HIERARCHY_SPANTREE,
-    HIERARCHY_DESCENDANTS,
-    HIERARCHY_ANCESTORS,
-    HIERARCHY_SIBLINGS;
+  HIERARCHY,
+  HIERARCHY_LEVELED,
+  HIERARCHY_TEMPORAL,
+  HIERARCHY_SPANTREE,
+  HIERARCHY_DESCENDANTS,
+  HIERARCHY_ANCESTORS,
+  HIERARCHY_SIBLINGS;
 
-    public String value() {
-        return name();
-    }
+  public static HierarchyFunction fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static HierarchyFunction fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

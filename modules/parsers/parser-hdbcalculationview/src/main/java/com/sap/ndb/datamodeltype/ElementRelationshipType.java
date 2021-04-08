@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ElementRelationshipType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -36,21 +36,20 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ElementRelationshipType")
 @XmlEnum
 public enum ElementRelationshipType {
 
-    MANUAL,
-    SYSTEM_DERIVED;
+  MANUAL,
+  SYSTEM_DERIVED;
 
-    public String value() {
-        return name();
-    }
+  public static ElementRelationshipType fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static ElementRelationshipType fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

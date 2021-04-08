@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Simple string type to store an expression
- *      		
- * 
+ * Simple string type to store an expression
+ *
+ *
  * <p>Java class for Expression complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Expression"&gt;
  *   &lt;complexContent&gt;
@@ -46,8 +45,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Expression", propOrder = {
@@ -55,56 +52,48 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Expression {
 
-    protected String formula;
-    @XmlAttribute(name = "language")
-    protected ExpressionLanguage language;
+  protected String formula;
+  @XmlAttribute(name = "language")
+  protected ExpressionLanguage language;
 
-    /**
-     * Gets the value of the formula property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFormula() {
-        return formula;
-    }
+  /**
+   * Gets the value of the formula property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getFormula() {
+    return formula;
+  }
 
-    /**
-     * Sets the value of the formula property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFormula(String value) {
-        this.formula = value;
-    }
+  /**
+   * Sets the value of the formula property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFormula(String value) {
+    this.formula = value;
+  }
 
-    /**
-     * Gets the value of the language property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ExpressionLanguage }
-     *     
-     */
-    public ExpressionLanguage getLanguage() {
-        return language;
-    }
+  /**
+   * Gets the value of the language property.
+   *
+   * @return possible object is
+   * {@link ExpressionLanguage }
+   */
+  public ExpressionLanguage getLanguage() {
+    return language;
+  }
 
-    /**
-     * Sets the value of the language property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ExpressionLanguage }
-     *     
-     */
-    public void setLanguage(ExpressionLanguage value) {
-        this.language = value;
-    }
+  /**
+   * Sets the value of the language property.
+   *
+   * @param value allowed object is
+   *              {@link ExpressionLanguage }
+   */
+  public void setLanguage(ExpressionLanguage value) {
+    this.language = value;
+  }
 
 }

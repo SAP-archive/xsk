@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A view/node that combines one or more inputs by a union
- * 			
- * 
+ * A view/node that combines one or more inputs by a union
+ *
+ *
  * <p>Java class for UnionView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UnionView"&gt;
  *   &lt;complexContent&gt;
@@ -43,40 +42,33 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UnionView")
 public class UnionView
-    extends CalculationView
-{
+    extends CalculationView {
 
-    @XmlAttribute(name = "partitionedExecution")
-    protected Boolean partitionedExecution;
+  @XmlAttribute(name = "partitionedExecution")
+  protected Boolean partitionedExecution;
 
-    /**
-     * Gets the value of the partitionedExecution property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isPartitionedExecution() {
-        return partitionedExecution;
-    }
+  /**
+   * Gets the value of the partitionedExecution property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isPartitionedExecution() {
+    return partitionedExecution;
+  }
 
-    /**
-     * Sets the value of the partitionedExecution property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setPartitionedExecution(Boolean value) {
-        this.partitionedExecution = value;
-    }
+  /**
+   * Sets the value of the partitionedExecution property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setPartitionedExecution(Boolean value) {
+    this.partitionedExecution = value;
+  }
 
 }

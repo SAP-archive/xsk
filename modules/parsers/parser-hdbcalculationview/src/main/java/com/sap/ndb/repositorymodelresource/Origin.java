@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * Information about the origin of the resource, if exported from external system
- * 
+ *
  * <p>Java class for Origin complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Origin"&gt;
  *   &lt;complexContent&gt;
@@ -43,90 +43,76 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Origin")
 public class Origin {
 
-    @XmlAttribute(name = "entityName")
-    protected String entityName;
-    @XmlAttribute(name = "entityType")
-    protected String entityType;
-    @XmlAttribute(name = "system")
-    protected String system;
+  @XmlAttribute(name = "entityName")
+  protected String entityName;
+  @XmlAttribute(name = "entityType")
+  protected String entityType;
+  @XmlAttribute(name = "system")
+  protected String system;
 
-    /**
-     * Gets the value of the entityName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEntityName() {
-        return entityName;
-    }
+  /**
+   * Gets the value of the entityName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getEntityName() {
+    return entityName;
+  }
 
-    /**
-     * Sets the value of the entityName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEntityName(String value) {
-        this.entityName = value;
-    }
+  /**
+   * Sets the value of the entityName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setEntityName(String value) {
+    this.entityName = value;
+  }
 
-    /**
-     * Gets the value of the entityType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEntityType() {
-        return entityType;
-    }
+  /**
+   * Gets the value of the entityType property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getEntityType() {
+    return entityType;
+  }
 
-    /**
-     * Sets the value of the entityType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEntityType(String value) {
-        this.entityType = value;
-    }
+  /**
+   * Sets the value of the entityType property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setEntityType(String value) {
+    this.entityType = value;
+  }
 
-    /**
-     * Gets the value of the system property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSystem() {
-        return system;
-    }
+  /**
+   * Gets the value of the system property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSystem() {
+    return system;
+  }
 
-    /**
-     * Sets the value of the system property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSystem(String value) {
-        this.system = value;
-    }
+  /**
+   * Sets the value of the system property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSystem(String value) {
+    this.system = value;
+  }
 
 }

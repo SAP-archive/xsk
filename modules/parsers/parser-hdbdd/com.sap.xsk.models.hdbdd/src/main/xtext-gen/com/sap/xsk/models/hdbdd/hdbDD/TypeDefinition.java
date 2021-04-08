@@ -19,12 +19,12 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition#getFieldLength <em>Field Length</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getTypeDefinition()
  * @model
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getTypeDefinition()
  */
-public interface TypeDefinition extends EObject
-{
+public interface TypeDefinition extends EObject {
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -33,11 +33,12 @@ public interface TypeDefinition extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getTypeDefinition_Name()
    * @model
    * @generated
+   * @see #setName(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getTypeDefinition_Name()
    */
   String getName();
 
@@ -45,9 +46,10 @@ public interface TypeDefinition extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
    * @generated
+   * @see #getName()
    */
   void setName(String value);
 
@@ -59,11 +61,12 @@ public interface TypeDefinition extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Type</em>' attribute.
-   * @see #setFieldType(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getTypeDefinition_FieldType()
    * @model
    * @generated
+   * @see #setFieldType(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getTypeDefinition_FieldType()
    */
   String getFieldType();
 
@@ -71,9 +74,10 @@ public interface TypeDefinition extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition#getFieldType <em>Field Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Type</em>' attribute.
-   * @see #getFieldType()
    * @generated
+   * @see #getFieldType()
    */
   void setFieldType(String value);
 
@@ -85,11 +89,12 @@ public interface TypeDefinition extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Length</em>' attribute.
-   * @see #setFieldLength(int)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getTypeDefinition_FieldLength()
    * @model
    * @generated
+   * @see #setFieldLength(int)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getTypeDefinition_FieldLength()
    */
   int getFieldLength();
 
@@ -97,9 +102,10 @@ public interface TypeDefinition extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition#getFieldLength <em>Field Length</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Length</em>' attribute.
-   * @see #getFieldLength()
    * @generated
+   * @see #getFieldLength()
    */
   void setFieldLength(int value);
 

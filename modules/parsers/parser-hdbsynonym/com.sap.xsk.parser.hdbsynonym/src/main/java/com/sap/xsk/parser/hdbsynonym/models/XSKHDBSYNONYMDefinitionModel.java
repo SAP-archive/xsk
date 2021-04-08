@@ -12,50 +12,51 @@
 package com.sap.xsk.parser.hdbsynonym.models;
 
 public class XSKHDBSYNONYMDefinitionModel {
-    private String location;
-    private String targetObject;
-    private String targetSchema;
-    private String synonymSchema;
 
-    public String getLocation() {
-        return location;
-    }
+  private String location;
+  private String targetObject;
+  private String targetSchema;
+  private String synonymSchema;
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+  public String getLocation() {
+    return location;
+  }
 
-    public String getTargetObject() {
-        return targetObject;
-    }
+  public void setLocation(String location) {
+    this.location = location;
+  }
 
-    public void setTargetObject(String targetObject) {
-        this.targetObject = targetObject;
-    }
+  public String getTargetObject() {
+    return targetObject;
+  }
 
-    public String getTargetSchema() {
-        return targetSchema;
-    }
+  public void setTargetObject(String targetObject) {
+    this.targetObject = targetObject;
+  }
 
-    public void setTargetSchema(String targetSchema) {
-        this.targetSchema = targetSchema;
-    }
+  public String getTargetSchema() {
+    return targetSchema;
+  }
 
-    public String getSynonymSchema() {
-        return synonymSchema;
-    }
+  public void setTargetSchema(String targetSchema) {
+    this.targetSchema = targetSchema;
+  }
 
-    public void setSynonymSchema(String synonymSchema) {
-        this.synonymSchema = synonymSchema;
-    }
+  public String getSynonymSchema() {
+    return synonymSchema;
+  }
 
-    @Override
-    public String toString() {
-        return "XSKHDBSYNONYMDefinitionModel{" +
-                "location='" + location + '\'' +
-                ", targetObject='" + targetObject + '\'' +
-                ", targetSchema='" + targetSchema + '\'' +
-                ", synonymSchema='" + synonymSchema + '\'' +
-                '}';
-    }
+  public void setSynonymSchema(String synonymSchema) {
+    this.synonymSchema = synonymSchema;
+  }
+
+  @Override
+  public String toString() {
+    return "XSKHDBSYNONYMDefinitionModel{" +
+        "location='" + location + '\'' +
+        ", targetObject='" + targetObject + '\'' +
+        ", targetSchema='" + targetSchema + '\'' +
+        ", synonymSchema='" + synonymSchema + '\'' +
+        '}';
+  }
 }

@@ -32,9 +32,9 @@ import javax.xml.bind.annotation.XmlValue;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
@@ -77,8 +77,6 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -87,401 +85,353 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlRootElement(name = "dataSources")
 public class DataSources {
 
-    @XmlElement(name = "DataSource")
-    protected List<DataSources.DataSource> dataSource;
+  @XmlElement(name = "DataSource")
+  protected List<DataSources.DataSource> dataSource;
+
+  /**
+   * Gets the value of the dataSource property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the dataSource property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getDataSource().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link DataSources.DataSource }
+   */
+  public List<DataSources.DataSource> getDataSource() {
+    if (dataSource == null) {
+      dataSource = new ArrayList<DataSources.DataSource>();
+    }
+    return this.dataSource;
+  }
+
+
+  /**
+   * <p>Java class for anonymous complex type.
+   *
+   * <p>The following schema fragment specifies the expected content contained within this class.
+   *
+   * <pre>
+   * &lt;complexType&gt;
+   *   &lt;complexContent&gt;
+   *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+   *       &lt;sequence&gt;
+   *         &lt;element name="viewAttributes"&gt;
+   *           &lt;complexType&gt;
+   *             &lt;simpleContent&gt;
+   *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+   *                 &lt;attribute name="allViewAttributes" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *               &lt;/extension&gt;
+   *             &lt;/simpleContent&gt;
+   *           &lt;/complexType&gt;
+   *         &lt;/element&gt;
+   *         &lt;element name="columnObject" minOccurs="0"&gt;
+   *           &lt;complexType&gt;
+   *             &lt;simpleContent&gt;
+   *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+   *                 &lt;attribute name="schemaName" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *                 &lt;attribute name="columnObjectName" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *               &lt;/extension&gt;
+   *             &lt;/simpleContent&gt;
+   *           &lt;/complexType&gt;
+   *         &lt;/element&gt;
+   *         &lt;element name="resourceUri" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+   *       &lt;/sequence&gt;
+   *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *     &lt;/restriction&gt;
+   *   &lt;/complexContent&gt;
+   * &lt;/complexType&gt;
+   * </pre>
+   */
+  @XmlAccessorType(XmlAccessType.FIELD)
+  @XmlType(name = "", propOrder = {
+      "viewAttributes",
+      "columnObject",
+      "resourceUri"
+  })
+  public static class DataSource {
+
+    @XmlElement(required = true)
+    protected DataSources.DataSource.ViewAttributes viewAttributes;
+    protected DataSources.DataSource.ColumnObject columnObject;
+    protected String resourceUri;
+    @XmlAttribute(name = "id")
+    protected String id;
+    @XmlAttribute(name = "type")
+    protected String type;
 
     /**
-     * Gets the value of the dataSource property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the dataSource property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDataSource().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link DataSources.DataSource }
-     * 
-     * 
+     * Gets the value of the viewAttributes property.
+     *
+     * @return possible object is
+     * {@link DataSources.DataSource.ViewAttributes }
      */
-    public List<DataSources.DataSource> getDataSource() {
-        if (dataSource == null) {
-            dataSource = new ArrayList<DataSources.DataSource>();
-        }
-        return this.dataSource;
+    public DataSources.DataSource.ViewAttributes getViewAttributes() {
+      return viewAttributes;
+    }
+
+    /**
+     * Sets the value of the viewAttributes property.
+     *
+     * @param value allowed object is
+     *              {@link DataSources.DataSource.ViewAttributes }
+     */
+    public void setViewAttributes(DataSources.DataSource.ViewAttributes value) {
+      this.viewAttributes = value;
+    }
+
+    /**
+     * Gets the value of the columnObject property.
+     *
+     * @return possible object is
+     * {@link DataSources.DataSource.ColumnObject }
+     */
+    public DataSources.DataSource.ColumnObject getColumnObject() {
+      return columnObject;
+    }
+
+    /**
+     * Sets the value of the columnObject property.
+     *
+     * @param value allowed object is
+     *              {@link DataSources.DataSource.ColumnObject }
+     */
+    public void setColumnObject(DataSources.DataSource.ColumnObject value) {
+      this.columnObject = value;
+    }
+
+    /**
+     * Gets the value of the resourceUri property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getResourceUri() {
+      return resourceUri;
+    }
+
+    /**
+     * Sets the value of the resourceUri property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setResourceUri(String value) {
+      this.resourceUri = value;
+    }
+
+    /**
+     * Gets the value of the id property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getId() {
+      return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setId(String value) {
+      this.id = value;
+    }
+
+    /**
+     * Gets the value of the type property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getType() {
+      return type;
+    }
+
+    /**
+     * Sets the value of the type property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setType(String value) {
+      this.type = value;
     }
 
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
-     *   &lt;complexContent&gt;
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
-     *       &lt;sequence&gt;
-     *         &lt;element name="viewAttributes"&gt;
-     *           &lt;complexType&gt;
-     *             &lt;simpleContent&gt;
-     *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-     *                 &lt;attribute name="allViewAttributes" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *               &lt;/extension&gt;
-     *             &lt;/simpleContent&gt;
-     *           &lt;/complexType&gt;
-     *         &lt;/element&gt;
-     *         &lt;element name="columnObject" minOccurs="0"&gt;
-     *           &lt;complexType&gt;
-     *             &lt;simpleContent&gt;
-     *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-     *                 &lt;attribute name="schemaName" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *                 &lt;attribute name="columnObjectName" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *               &lt;/extension&gt;
-     *             &lt;/simpleContent&gt;
-     *           &lt;/complexType&gt;
-     *         &lt;/element&gt;
-     *         &lt;element name="resourceUri" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
-     *       &lt;/sequence&gt;
-     *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *     &lt;/restriction&gt;
-     *   &lt;/complexContent&gt;
+     *   &lt;simpleContent&gt;
+     *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+     *       &lt;attribute name="schemaName" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+     *       &lt;attribute name="columnObjectName" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+     *     &lt;/extension&gt;
+     *   &lt;/simpleContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "viewAttributes",
-        "columnObject",
-        "resourceUri"
+        "value"
     })
-    public static class DataSource {
+    public static class ColumnObject {
 
-        @XmlElement(required = true)
-        protected DataSources.DataSource.ViewAttributes viewAttributes;
-        protected DataSources.DataSource.ColumnObject columnObject;
-        protected String resourceUri;
-        @XmlAttribute(name = "id")
-        protected String id;
-        @XmlAttribute(name = "type")
-        protected String type;
+      @XmlValue
+      protected String value;
+      @XmlAttribute(name = "schemaName")
+      protected String schemaName;
+      @XmlAttribute(name = "columnObjectName")
+      protected String columnObjectName;
 
-        /**
-         * Gets the value of the viewAttributes property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link DataSources.DataSource.ViewAttributes }
-         *     
-         */
-        public DataSources.DataSource.ViewAttributes getViewAttributes() {
-            return viewAttributes;
-        }
+      /**
+       * Gets the value of the value property.
+       *
+       * @return possible object is
+       * {@link String }
+       */
+      public String getValue() {
+        return value;
+      }
 
-        /**
-         * Sets the value of the viewAttributes property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link DataSources.DataSource.ViewAttributes }
-         *     
-         */
-        public void setViewAttributes(DataSources.DataSource.ViewAttributes value) {
-            this.viewAttributes = value;
-        }
+      /**
+       * Sets the value of the value property.
+       *
+       * @param value allowed object is
+       *              {@link String }
+       */
+      public void setValue(String value) {
+        this.value = value;
+      }
 
-        /**
-         * Gets the value of the columnObject property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link DataSources.DataSource.ColumnObject }
-         *     
-         */
-        public DataSources.DataSource.ColumnObject getColumnObject() {
-            return columnObject;
-        }
+      /**
+       * Gets the value of the schemaName property.
+       *
+       * @return possible object is
+       * {@link String }
+       */
+      public String getSchemaName() {
+        return schemaName;
+      }
 
-        /**
-         * Sets the value of the columnObject property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link DataSources.DataSource.ColumnObject }
-         *     
-         */
-        public void setColumnObject(DataSources.DataSource.ColumnObject value) {
-            this.columnObject = value;
-        }
+      /**
+       * Sets the value of the schemaName property.
+       *
+       * @param value allowed object is
+       *              {@link String }
+       */
+      public void setSchemaName(String value) {
+        this.schemaName = value;
+      }
 
-        /**
-         * Gets the value of the resourceUri property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getResourceUri() {
-            return resourceUri;
-        }
+      /**
+       * Gets the value of the columnObjectName property.
+       *
+       * @return possible object is
+       * {@link String }
+       */
+      public String getColumnObjectName() {
+        return columnObjectName;
+      }
 
-        /**
-         * Sets the value of the resourceUri property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setResourceUri(String value) {
-            this.resourceUri = value;
-        }
-
-        /**
-         * Gets the value of the id property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getId() {
-            return id;
-        }
-
-        /**
-         * Sets the value of the id property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setId(String value) {
-            this.id = value;
-        }
-
-        /**
-         * Gets the value of the type property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getType() {
-            return type;
-        }
-
-        /**
-         * Sets the value of the type property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setType(String value) {
-            this.type = value;
-        }
-
-
-        /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
-         * <pre>
-         * &lt;complexType&gt;
-         *   &lt;simpleContent&gt;
-         *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-         *       &lt;attribute name="schemaName" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-         *       &lt;attribute name="columnObjectName" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-         *     &lt;/extension&gt;
-         *   &lt;/simpleContent&gt;
-         * &lt;/complexType&gt;
-         * </pre>
-         * 
-         * 
-         */
-        @XmlAccessorType(XmlAccessType.FIELD)
-        @XmlType(name = "", propOrder = {
-            "value"
-        })
-        public static class ColumnObject {
-
-            @XmlValue
-            protected String value;
-            @XmlAttribute(name = "schemaName")
-            protected String schemaName;
-            @XmlAttribute(name = "columnObjectName")
-            protected String columnObjectName;
-
-            /**
-             * Gets the value of the value property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
-             */
-            public String getValue() {
-                return value;
-            }
-
-            /**
-             * Sets the value of the value property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
-             */
-            public void setValue(String value) {
-                this.value = value;
-            }
-
-            /**
-             * Gets the value of the schemaName property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
-             */
-            public String getSchemaName() {
-                return schemaName;
-            }
-
-            /**
-             * Sets the value of the schemaName property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
-             */
-            public void setSchemaName(String value) {
-                this.schemaName = value;
-            }
-
-            /**
-             * Gets the value of the columnObjectName property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
-             */
-            public String getColumnObjectName() {
-                return columnObjectName;
-            }
-
-            /**
-             * Sets the value of the columnObjectName property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
-             */
-            public void setColumnObjectName(String value) {
-                this.columnObjectName = value;
-            }
-
-        }
-
-
-        /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
-         * <pre>
-         * &lt;complexType&gt;
-         *   &lt;simpleContent&gt;
-         *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-         *       &lt;attribute name="allViewAttributes" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-         *     &lt;/extension&gt;
-         *   &lt;/simpleContent&gt;
-         * &lt;/complexType&gt;
-         * </pre>
-         * 
-         * 
-         */
-        @XmlAccessorType(XmlAccessType.FIELD)
-        @XmlType(name = "", propOrder = {
-            "value"
-        })
-        public static class ViewAttributes {
-
-            @XmlValue
-            protected String value;
-            @XmlAttribute(name = "allViewAttributes")
-            protected String allViewAttributes;
-
-            /**
-             * Gets the value of the value property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
-             */
-            public String getValue() {
-                return value;
-            }
-
-            /**
-             * Sets the value of the value property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
-             */
-            public void setValue(String value) {
-                this.value = value;
-            }
-
-            /**
-             * Gets the value of the allViewAttributes property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
-             */
-            public String getAllViewAttributes() {
-                return allViewAttributes;
-            }
-
-            /**
-             * Sets the value of the allViewAttributes property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
-             */
-            public void setAllViewAttributes(String value) {
-                this.allViewAttributes = value;
-            }
-
-        }
+      /**
+       * Sets the value of the columnObjectName property.
+       *
+       * @param value allowed object is
+       *              {@link String }
+       */
+      public void setColumnObjectName(String value) {
+        this.columnObjectName = value;
+      }
 
     }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     *
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     *
+     * <pre>
+     * &lt;complexType&gt;
+     *   &lt;simpleContent&gt;
+     *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+     *       &lt;attribute name="allViewAttributes" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+     *     &lt;/extension&gt;
+     *   &lt;/simpleContent&gt;
+     * &lt;/complexType&gt;
+     * </pre>
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "value"
+    })
+    public static class ViewAttributes {
+
+      @XmlValue
+      protected String value;
+      @XmlAttribute(name = "allViewAttributes")
+      protected String allViewAttributes;
+
+      /**
+       * Gets the value of the value property.
+       *
+       * @return possible object is
+       * {@link String }
+       */
+      public String getValue() {
+        return value;
+      }
+
+      /**
+       * Sets the value of the value property.
+       *
+       * @param value allowed object is
+       *              {@link String }
+       */
+      public void setValue(String value) {
+        this.value = value;
+      }
+
+      /**
+       * Gets the value of the allViewAttributes property.
+       *
+       * @return possible object is
+       * {@link String }
+       */
+      public String getAllViewAttributes() {
+        return allViewAttributes;
+      }
+
+      /**
+       * Sets the value of the allViewAttributes property.
+       *
+       * @param value allowed object is
+       *              {@link String }
+       */
+      public void setAllViewAttributes(String value) {
+        this.allViewAttributes = value;
+      }
+
+    }
+
+  }
 
 }

@@ -5,11 +5,8 @@ package com.sap.xsk.models.hdbdd.hdbDD.impl;
 
 import com.sap.xsk.models.hdbdd.hdbDD.FieldType;
 import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -26,125 +23,128 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class FieldTypeImpl extends FieldImpl implements FieldType
-{
+public class FieldTypeImpl extends FieldImpl implements FieldType {
+
   /**
    * The default value of the '{@link #isKey() <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isKey()
+   *
    * @generated
    * @ordered
+   * @see #isKey()
    */
   protected static final boolean KEY_EDEFAULT = false;
-
-  /**
-   * The cached value of the '{@link #isKey() <em>Key</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isKey()
-   * @generated
-   * @ordered
-   */
-  protected boolean key = KEY_EDEFAULT;
-
   /**
    * The default value of the '{@link #getFieldPredefinedType() <em>Field Predefined Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFieldPredefinedType()
+   *
    * @generated
    * @ordered
+   * @see #getFieldPredefinedType()
    */
   protected static final String FIELD_PREDEFINED_TYPE_EDEFAULT = null;
-
+  /**
+   * The cached value of the '{@link #isKey() <em>Key</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #isKey()
+   */
+  protected boolean key = KEY_EDEFAULT;
   /**
    * The cached value of the '{@link #getFieldPredefinedType() <em>Field Predefined Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFieldPredefinedType()
+   *
    * @generated
    * @ordered
+   * @see #getFieldPredefinedType()
    */
   protected String fieldPredefinedType = FIELD_PREDEFINED_TYPE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  protected FieldTypeImpl()
-  {
+  protected FieldTypeImpl() {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass()
-  {
+  protected EClass eStaticClass() {
     return HdbDDPackage.Literals.FIELD_TYPE;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public boolean isKey()
-  {
+  public boolean isKey() {
     return key;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setKey(boolean newKey)
-  {
+  public void setKey(boolean newKey) {
     boolean oldKey = key;
     key = newKey;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_TYPE__KEY, oldKey, key));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getFieldPredefinedType()
-  {
+  public String getFieldPredefinedType() {
     return fieldPredefinedType;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setFieldPredefinedType(String newFieldPredefinedType)
-  {
+  public void setFieldPredefinedType(String newFieldPredefinedType) {
     String oldFieldPredefinedType = fieldPredefinedType;
     fieldPredefinedType = newFieldPredefinedType;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_TYPE__FIELD_PREDEFINED_TYPE, oldFieldPredefinedType, fieldPredefinedType));
+    if (eNotificationRequired()) {
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_TYPE__FIELD_PREDEFINED_TYPE, oldFieldPredefinedType,
+          fieldPredefinedType));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
-    switch (featureID)
-    {
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
       case HdbDDPackage.FIELD_TYPE__KEY:
         return isKey();
       case HdbDDPackage.FIELD_TYPE__FIELD_PREDEFINED_TYPE:
@@ -156,18 +156,17 @@ public class FieldTypeImpl extends FieldImpl implements FieldType
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public void eSet(int featureID, Object newValue)
-  {
-    switch (featureID)
-    {
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
       case HdbDDPackage.FIELD_TYPE__KEY:
-        setKey((Boolean)newValue);
+        setKey((Boolean) newValue);
         return;
       case HdbDDPackage.FIELD_TYPE__FIELD_PREDEFINED_TYPE:
-        setFieldPredefinedType((String)newValue);
+        setFieldPredefinedType((String) newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -176,13 +175,12 @@ public class FieldTypeImpl extends FieldImpl implements FieldType
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public void eUnset(int featureID)
-  {
-    switch (featureID)
-    {
+  public void eUnset(int featureID) {
+    switch (featureID) {
       case HdbDDPackage.FIELD_TYPE__KEY:
         setKey(KEY_EDEFAULT);
         return;
@@ -196,17 +194,17 @@ public class FieldTypeImpl extends FieldImpl implements FieldType
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID)
-  {
-    switch (featureID)
-    {
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
       case HdbDDPackage.FIELD_TYPE__KEY:
         return key != KEY_EDEFAULT;
       case HdbDDPackage.FIELD_TYPE__FIELD_PREDEFINED_TYPE:
-        return FIELD_PREDEFINED_TYPE_EDEFAULT == null ? fieldPredefinedType != null : !FIELD_PREDEFINED_TYPE_EDEFAULT.equals(fieldPredefinedType);
+        return FIELD_PREDEFINED_TYPE_EDEFAULT == null ? fieldPredefinedType != null
+            : !FIELD_PREDEFINED_TYPE_EDEFAULT.equals(fieldPredefinedType);
     }
     return super.eIsSet(featureID);
   }
@@ -214,12 +212,14 @@ public class FieldTypeImpl extends FieldImpl implements FieldType
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
+  public String toString() {
+    if (eIsProxy()) {
+      return super.toString();
+    }
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (key: ");

@@ -16,8 +16,9 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 @WebServlet(name = "XtextServices", urlPatterns = "/xtext-service/*")
 @SuppressWarnings("all")
 public class ModelServlet extends XtextServlet {
+
   private DisposableRegistry disposableRegistry;
-  
+
   @Override
   public void init() {
     try {
@@ -28,7 +29,7 @@ public class ModelServlet extends XtextServlet {
       throw Exceptions.sneakyThrow(_e);
     }
   }
-  
+
   @Override
   public void destroy() {
     if ((this.disposableRegistry != null)) {

@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Hierarchies complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Hierarchies"&gt;
  *   &lt;complexContent&gt;
@@ -43,8 +43,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Hierarchies", propOrder = {
@@ -52,36 +50,34 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Hierarchies {
 
-    @XmlElement(required = true)
-    protected List<Hierarchy> hierarchy;
+  @XmlElement(required = true)
+  protected List<Hierarchy> hierarchy;
 
-    /**
-     * Gets the value of the hierarchy property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the hierarchy property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getHierarchy().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Hierarchy }
-     * 
-     * 
-     */
-    public List<Hierarchy> getHierarchy() {
-        if (hierarchy == null) {
-            hierarchy = new ArrayList<Hierarchy>();
-        }
-        return this.hierarchy;
+  /**
+   * Gets the value of the hierarchy property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the hierarchy property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getHierarchy().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Hierarchy }
+   */
+  public List<Hierarchy> getHierarchy() {
+    if (hierarchy == null) {
+      hierarchy = new ArrayList<Hierarchy>();
     }
+    return this.hierarchy;
+  }
 
 }

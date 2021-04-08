@@ -19,23 +19,23 @@
 
 package com.sap.ndb.bimodeldimension;
 
+import com.sap.ndb.basemodelbase.SortDirection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.SortDirection;
 
 
 /**
  * Defines the order of one attribute
- * 			 
- * 
+ *
+ *
  * <p>Java class for SiblingOrder complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SiblingOrder"&gt;
  *   &lt;complexContent&gt;
@@ -46,65 +46,55 @@ import com.sap.ndb.basemodelbase.SortDirection;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SiblingOrder")
 public class SiblingOrder {
 
-    @XmlAttribute(name = "byAttribute", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String byAttribute;
-    @XmlAttribute(name = "direction")
-    protected SortDirection direction;
+  @XmlAttribute(name = "byAttribute", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String byAttribute;
+  @XmlAttribute(name = "direction")
+  protected SortDirection direction;
 
-    /**
-     * Gets the value of the byAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getByAttribute() {
-        return byAttribute;
-    }
+  /**
+   * Gets the value of the byAttribute property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getByAttribute() {
+    return byAttribute;
+  }
 
-    /**
-     * Sets the value of the byAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setByAttribute(String value) {
-        this.byAttribute = value;
-    }
+  /**
+   * Sets the value of the byAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setByAttribute(String value) {
+    this.byAttribute = value;
+  }
 
-    /**
-     * Gets the value of the direction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SortDirection }
-     *     
-     */
-    public SortDirection getDirection() {
-        return direction;
-    }
+  /**
+   * Gets the value of the direction property.
+   *
+   * @return possible object is
+   * {@link SortDirection }
+   */
+  public SortDirection getDirection() {
+    return direction;
+  }
 
-    /**
-     * Sets the value of the direction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SortDirection }
-     *     
-     */
-    public void setDirection(SortDirection value) {
-        this.direction = value;
-    }
+  /**
+   * Sets the value of the direction property.
+   *
+   * @param value allowed object is
+   *              {@link SortDirection }
+   */
+  public void setDirection(SortDirection value) {
+    this.direction = value;
+  }
 
 }

@@ -15,95 +15,97 @@ package com.sap.xsk.hdb.ds.service.manager;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.naming.OperationNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.OperationNotSupportedException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
-
 public class IXSKSchemaManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBSchemaModel> {
 
-	private static final Logger logger = LoggerFactory.getLogger(IXSKSchemaManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(IXSKSchemaManagerService.class);
+  private final Map<String, XSKDataStructureHDBSchemaModel> dataStructureSchemasModels;
+  private final List<String> schemasSynchronized;
+  @Inject
+  @Named("hdbSchemaCreateProcessor")
+  private IXSKHdbProcessor hdbSchemaCreateProcessor;
+  @Inject
+  @Named("hdbSchemaDropProcessor")
+  private IXSKHdbProcessor hdbSchemaDropProcessor;
 
-	@Inject @Named("hdbSchemaCreateProcessor")
-	private IXSKHdbProcessor hdbSchemaCreateProcessor;
-	@Inject @Named("hdbSchemaDropProcessor")
-	private IXSKHdbProcessor hdbSchemaDropProcessor;
+  public IXSKSchemaManagerService() {
+    dataStructureSchemasModels = new LinkedHashMap<>();
+    schemasSynchronized = Collections.synchronizedList(new ArrayList<>());
+  }
 
-	private final Map<String, XSKDataStructureHDBSchemaModel> dataStructureSchemasModels;
-	private final List<String> schemasSynchronized;
+  @Override
+  public void synchronizeRuntimeMetadata(XSKDataStructureHDBSchemaModel schemaModel) throws XSKDataStructuresException {
+    // TODO: ommit double calling of finding the hdbProcedure by extracting it in
+    // variable
+    // String schemaNameConcatProcedureName = hdbProcedure.getSchemaName() + "." +
+    // hdbProcedure.getName();
+    //logger.info("here");
+    if (!getDataStructuresCoreService().existsDataStructure(schemaModel.getLocation(), schemaModel.getType())) {
+      getDataStructuresCoreService()
+          .createDataStructure(schemaModel.getLocation(), schemaModel.getName(), schemaModel.getHash(), schemaModel.getType());
+      dataStructureSchemasModels.put(schemaModel.getName(), schemaModel);
+      logger.info("Synchronized a new HDB Schema file [{}] from location: {}", schemaModel.getName(), schemaModel.getLocation());
+    } else {
+      XSKDataStructureHDBSchemaModel existing = getDataStructuresCoreService()
+          .getDataStructure(schemaModel.getLocation(), schemaModel.getType());
+      if (!schemaModel.equals(existing)) {
+        getDataStructuresCoreService()
+            .updateDataStructure(schemaModel.getLocation(), schemaModel.getName(), schemaModel.getHash(), schemaModel.getType());
+        dataStructureSchemasModels.put(schemaModel.getName(), schemaModel);
+        logger.info("Synchronized a modified HDB Schema file [{}] from location: {}", schemaModel.getName(), schemaModel.getLocation());
+      }
+    }
+    if (!schemasSynchronized.contains(schemaModel.getLocation())) {
+      schemasSynchronized.add(schemaModel.getLocation());
+    }
+  }
 
-	public IXSKSchemaManagerService() {
-		dataStructureSchemasModels = new LinkedHashMap<>();
-		schemasSynchronized = Collections.synchronizedList(new ArrayList<>());
-	}
+  @Override
+  public void createDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel) throws SQLException {
+    this.hdbSchemaCreateProcessor.execute(connection, schemaModel);
+  }
 
-	@Override public void synchronizeRuntimeMetadata(XSKDataStructureHDBSchemaModel schemaModel) throws XSKDataStructuresException
-	{
-		// TODO: ommit double calling of finding the hdbProcedure by extracting it in
-		// variable
-		// String schemaNameConcatProcedureName = hdbProcedure.getSchemaName() + "." +
-		// hdbProcedure.getName();
-		//logger.info("here");
-		if (!getDataStructuresCoreService().existsDataStructure(schemaModel.getLocation(), schemaModel.getType())) {
-			getDataStructuresCoreService()
-					.createDataStructure(schemaModel.getLocation(), schemaModel.getName(), schemaModel.getHash(), schemaModel.getType());
-			dataStructureSchemasModels.put(schemaModel.getName(), schemaModel);
-			logger.info("Synchronized a new HDB Schema file [{}] from location: {}", schemaModel.getName(), schemaModel.getLocation());
-		} else {
-			XSKDataStructureHDBSchemaModel existing = getDataStructuresCoreService().getDataStructure(schemaModel.getLocation(), schemaModel.getType());
-			if (!schemaModel.equals(existing)) {
-				getDataStructuresCoreService()
-						.updateDataStructure(schemaModel.getLocation(), schemaModel.getName(), schemaModel.getHash(), schemaModel.getType());
-				dataStructureSchemasModels.put(schemaModel.getName(), schemaModel);
-				logger.info("Synchronized a modified HDB Schema file [{}] from location: {}", schemaModel.getName(), schemaModel.getLocation());
-			}
-		}
-		if (!schemasSynchronized.contains(schemaModel.getLocation())) {
-			schemasSynchronized.add(schemaModel.getLocation());
-		}
-	}
+  @Override
+  public void dropDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel) throws SQLException {
+    this.hdbSchemaDropProcessor.execute(connection, schemaModel);
+  }
 
-	@Override public void createDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel) throws SQLException
-	{
-		this.hdbSchemaCreateProcessor.execute(connection, schemaModel);
-	}
+  @Override
+  public void updateDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel)
+      throws OperationNotSupportedException {
+    throw new OperationNotSupportedException();
+  }
 
-	@Override public void dropDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel) throws SQLException
-	{
-		this.hdbSchemaDropProcessor.execute(connection, schemaModel);
-	}
+  @Override
+  public List<String> getDataStructureSynchronized() {
+    return Collections.unmodifiableList(this.schemasSynchronized);
+  }
 
-	@Override public void updateDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel)
-			throws OperationNotSupportedException
-	{
-		throw new OperationNotSupportedException();
-	}
+  @Override
+  public String getDataStructureType() {
+    return IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA;
+  }
 
-	@Override public List<String> getDataStructureSynchronized()
-	{
-		return Collections.unmodifiableList(this.schemasSynchronized);
-	}
+  @Override
+  public void clearCache() {
+    dataStructureSchemasModels.clear();
+  }
 
-	@Override
-	public String getDataStructureType() {
-		return IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA;
-	}
-
-	@Override
-	public void clearCache() {
-		dataStructureSchemasModels.clear();
-	}
-
-	@Override public Map<String, XSKDataStructureHDBSchemaModel> getDataStructureModels()
-	{
-		return Collections.unmodifiableMap(this.dataStructureSchemasModels);
-	}
+  @Override
+  public Map<String, XSKDataStructureHDBSchemaModel> getDataStructureModels() {
+    return Collections.unmodifiableMap(this.dataStructureSchemasModels);
+  }
 }

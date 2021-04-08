@@ -28,18 +28,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Fixed parameter for a UDF it can be filled with
- * 				- a constant
- * 				- an element
- * 				- a parameter
- * 				We will use annotations of the concrete model element to specify what kind of parameterization should be allowed
- * 			
- * 
+ * Fixed parameter for a UDF it can be filled with
+ * - a constant
+ * - an element
+ * - a parameter
+ * We will use annotations of the concrete model element to specify what kind of parameterization should be allowed
+ *
+ *
  * <p>Java class for UDFParameter complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UDFParameter"&gt;
  *   &lt;complexContent&gt;
@@ -53,8 +52,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UDFParameter", propOrder = {
@@ -64,84 +61,72 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class UDFParameter {
 
-    protected String constantValue;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String element;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String parameter;
+  protected String constantValue;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String element;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String parameter;
 
-    /**
-     * Gets the value of the constantValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getConstantValue() {
-        return constantValue;
-    }
+  /**
+   * Gets the value of the constantValue property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getConstantValue() {
+    return constantValue;
+  }
 
-    /**
-     * Sets the value of the constantValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setConstantValue(String value) {
-        this.constantValue = value;
-    }
+  /**
+   * Sets the value of the constantValue property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setConstantValue(String value) {
+    this.constantValue = value;
+  }
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getElement() {
-        return element;
-    }
+  /**
+   * Gets the value of the element property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getElement() {
+    return element;
+  }
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setElement(String value) {
-        this.element = value;
-    }
+  /**
+   * Sets the value of the element property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setElement(String value) {
+    this.element = value;
+  }
 
-    /**
-     * Gets the value of the parameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getParameter() {
-        return parameter;
-    }
+  /**
+   * Gets the value of the parameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getParameter() {
+    return parameter;
+  }
 
-    /**
-     * Sets the value of the parameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setParameter(String value) {
-        this.parameter = value;
-    }
+  /**
+   * Sets the value of the parameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setParameter(String value) {
+    this.parameter = value;
+  }
 
 }

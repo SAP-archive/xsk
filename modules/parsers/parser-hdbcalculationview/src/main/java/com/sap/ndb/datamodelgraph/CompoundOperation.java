@@ -29,14 +29,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Operation with other operations as operands/arguments
- * 			
- * 
+ * Operation with other operations as operands/arguments
+ *
+ *
  * <p>Java class for CompoundOperation complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CompoundOperation"&gt;
  *   &lt;complexContent&gt;
@@ -49,73 +48,64 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CompoundOperation", propOrder = {
     "operation"
 })
 public class CompoundOperation
-    extends Operation
-{
+    extends Operation {
 
-    @XmlElement(required = true)
-    protected List<Operation> operation;
-    @XmlAttribute(name = "operator", required = true)
-    protected CompoundOperator operator;
+  @XmlElement(required = true)
+  protected List<Operation> operation;
+  @XmlAttribute(name = "operator", required = true)
+  protected CompoundOperator operator;
 
-    /**
-     * Gets the value of the operation property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the operation property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getOperation().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Operation }
-     * 
-     * 
-     */
-    public List<Operation> getOperation() {
-        if (operation == null) {
-            operation = new ArrayList<Operation>();
-        }
-        return this.operation;
+  /**
+   * Gets the value of the operation property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the operation property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getOperation().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Operation }
+   */
+  public List<Operation> getOperation() {
+    if (operation == null) {
+      operation = new ArrayList<Operation>();
     }
+    return this.operation;
+  }
 
-    /**
-     * Gets the value of the operator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CompoundOperator }
-     *     
-     */
-    public CompoundOperator getOperator() {
-        return operator;
-    }
+  /**
+   * Gets the value of the operator property.
+   *
+   * @return possible object is
+   * {@link CompoundOperator }
+   */
+  public CompoundOperator getOperator() {
+    return operator;
+  }
 
-    /**
-     * Sets the value of the operator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CompoundOperator }
-     *     
-     */
-    public void setOperator(CompoundOperator value) {
-        this.operator = value;
-    }
+  /**
+   * Sets the value of the operator property.
+   *
+   * @param value allowed object is
+   *              {@link CompoundOperator }
+   */
+  public void setOperator(CompoundOperator value) {
+    this.operator = value;
+  }
 
 }

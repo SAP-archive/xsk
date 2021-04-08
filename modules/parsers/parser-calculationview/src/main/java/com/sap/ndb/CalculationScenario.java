@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
@@ -66,8 +66,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -85,629 +83,533 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "CalculationScenario")
 public class CalculationScenario {
 
-    @XmlElement(required = true)
-    protected String origin;
-    @XmlElement(required = true)
-    protected Descriptions descriptions;
-    @XmlElement(required = true)
-    protected Metadata metadata;
-    @XmlElement(required = true)
-    protected DefaultSchema defaultSchema;
-    @XmlElement(required = true)
-    protected String localVariables;
-    @XmlElement(required = true)
-    protected String variableMappings;
-    @XmlElement(required = true)
-    protected DataSources dataSources;
-    @XmlElement(required = true)
-    protected CalculationViews calculationViews;
-    @XmlElement(required = true)
-    protected LogicalModel logicalModel;
-    @XmlElement(required = true)
-    protected Layout layout;
-    @XmlAttribute(name = "schemaVersion")
-    protected Float schemaVersion;
-    @XmlAttribute(name = "id")
-    protected String id;
-    @XmlAttribute(name = "applyPrivilegeType")
-    protected String applyPrivilegeType;
-    @XmlAttribute(name = "checkAnalyticPrivileges")
-    protected String checkAnalyticPrivileges;
-    @XmlAttribute(name = "defaultClient")
-    protected String defaultClient;
-    @XmlAttribute(name = "defaultLanguage")
-    protected String defaultLanguage;
-    @XmlAttribute(name = "hierarchiesSQLEnabled")
-    protected String hierarchiesSQLEnabled;
-    @XmlAttribute(name = "translationRelevant")
-    protected String translationRelevant;
-    @XmlAttribute(name = "visibility")
-    protected String visibility;
-    @XmlAttribute(name = "calculationScenarioType")
-    protected String calculationScenarioType;
-    @XmlAttribute(name = "dataCategory")
-    protected String dataCategory;
-    @XmlAttribute(name = "enforceSqlExecution")
-    protected String enforceSqlExecution;
-    @XmlAttribute(name = "executionSemantic")
-    protected String executionSemantic;
-    @XmlAttribute(name = "outputViewType")
-    protected String outputViewType;
+  @XmlElement(required = true)
+  protected String origin;
+  @XmlElement(required = true)
+  protected Descriptions descriptions;
+  @XmlElement(required = true)
+  protected Metadata metadata;
+  @XmlElement(required = true)
+  protected DefaultSchema defaultSchema;
+  @XmlElement(required = true)
+  protected String localVariables;
+  @XmlElement(required = true)
+  protected String variableMappings;
+  @XmlElement(required = true)
+  protected DataSources dataSources;
+  @XmlElement(required = true)
+  protected CalculationViews calculationViews;
+  @XmlElement(required = true)
+  protected LogicalModel logicalModel;
+  @XmlElement(required = true)
+  protected Layout layout;
+  @XmlAttribute(name = "schemaVersion")
+  protected Float schemaVersion;
+  @XmlAttribute(name = "id")
+  protected String id;
+  @XmlAttribute(name = "applyPrivilegeType")
+  protected String applyPrivilegeType;
+  @XmlAttribute(name = "checkAnalyticPrivileges")
+  protected String checkAnalyticPrivileges;
+  @XmlAttribute(name = "defaultClient")
+  protected String defaultClient;
+  @XmlAttribute(name = "defaultLanguage")
+  protected String defaultLanguage;
+  @XmlAttribute(name = "hierarchiesSQLEnabled")
+  protected String hierarchiesSQLEnabled;
+  @XmlAttribute(name = "translationRelevant")
+  protected String translationRelevant;
+  @XmlAttribute(name = "visibility")
+  protected String visibility;
+  @XmlAttribute(name = "calculationScenarioType")
+  protected String calculationScenarioType;
+  @XmlAttribute(name = "dataCategory")
+  protected String dataCategory;
+  @XmlAttribute(name = "enforceSqlExecution")
+  protected String enforceSqlExecution;
+  @XmlAttribute(name = "executionSemantic")
+  protected String executionSemantic;
+  @XmlAttribute(name = "outputViewType")
+  protected String outputViewType;
 
-    /**
-     * Gets the value of the origin property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOrigin() {
-        return origin;
-    }
+  /**
+   * Gets the value of the origin property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getOrigin() {
+    return origin;
+  }
 
-    /**
-     * Sets the value of the origin property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOrigin(String value) {
-        this.origin = value;
-    }
+  /**
+   * Sets the value of the origin property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setOrigin(String value) {
+    this.origin = value;
+  }
 
-    /**
-     * Gets the value of the descriptions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Descriptions }
-     *     
-     */
-    public Descriptions getDescriptions() {
-        return descriptions;
-    }
+  /**
+   * Gets the value of the descriptions property.
+   *
+   * @return possible object is
+   * {@link Descriptions }
+   */
+  public Descriptions getDescriptions() {
+    return descriptions;
+  }
 
-    /**
-     * Sets the value of the descriptions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Descriptions }
-     *     
-     */
-    public void setDescriptions(Descriptions value) {
-        this.descriptions = value;
-    }
+  /**
+   * Sets the value of the descriptions property.
+   *
+   * @param value allowed object is
+   *              {@link Descriptions }
+   */
+  public void setDescriptions(Descriptions value) {
+    this.descriptions = value;
+  }
 
-    /**
-     * Gets the value of the metadata property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Metadata }
-     *     
-     */
-    public Metadata getMetadata() {
-        return metadata;
-    }
+  /**
+   * Gets the value of the metadata property.
+   *
+   * @return possible object is
+   * {@link Metadata }
+   */
+  public Metadata getMetadata() {
+    return metadata;
+  }
 
-    /**
-     * Sets the value of the metadata property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Metadata }
-     *     
-     */
-    public void setMetadata(Metadata value) {
-        this.metadata = value;
-    }
+  /**
+   * Sets the value of the metadata property.
+   *
+   * @param value allowed object is
+   *              {@link Metadata }
+   */
+  public void setMetadata(Metadata value) {
+    this.metadata = value;
+  }
 
-    /**
-     * Gets the value of the defaultSchema property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DefaultSchema }
-     *     
-     */
-    public DefaultSchema getDefaultSchema() {
-        return defaultSchema;
-    }
+  /**
+   * Gets the value of the defaultSchema property.
+   *
+   * @return possible object is
+   * {@link DefaultSchema }
+   */
+  public DefaultSchema getDefaultSchema() {
+    return defaultSchema;
+  }
 
-    /**
-     * Sets the value of the defaultSchema property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DefaultSchema }
-     *     
-     */
-    public void setDefaultSchema(DefaultSchema value) {
-        this.defaultSchema = value;
-    }
+  /**
+   * Sets the value of the defaultSchema property.
+   *
+   * @param value allowed object is
+   *              {@link DefaultSchema }
+   */
+  public void setDefaultSchema(DefaultSchema value) {
+    this.defaultSchema = value;
+  }
 
-    /**
-     * Gets the value of the localVariables property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLocalVariables() {
-        return localVariables;
-    }
+  /**
+   * Gets the value of the localVariables property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLocalVariables() {
+    return localVariables;
+  }
 
-    /**
-     * Sets the value of the localVariables property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLocalVariables(String value) {
-        this.localVariables = value;
-    }
+  /**
+   * Sets the value of the localVariables property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLocalVariables(String value) {
+    this.localVariables = value;
+  }
 
-    /**
-     * Gets the value of the variableMappings property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getVariableMappings() {
-        return variableMappings;
-    }
+  /**
+   * Gets the value of the variableMappings property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getVariableMappings() {
+    return variableMappings;
+  }
 
-    /**
-     * Sets the value of the variableMappings property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVariableMappings(String value) {
-        this.variableMappings = value;
-    }
+  /**
+   * Sets the value of the variableMappings property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setVariableMappings(String value) {
+    this.variableMappings = value;
+  }
 
-    /**
-     * Gets the value of the dataSources property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DataSources }
-     *     
-     */
-    public DataSources getDataSources() {
-        return dataSources;
-    }
+  /**
+   * Gets the value of the dataSources property.
+   *
+   * @return possible object is
+   * {@link DataSources }
+   */
+  public DataSources getDataSources() {
+    return dataSources;
+  }
 
-    /**
-     * Sets the value of the dataSources property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DataSources }
-     *     
-     */
-    public void setDataSources(DataSources value) {
-        this.dataSources = value;
-    }
+  /**
+   * Sets the value of the dataSources property.
+   *
+   * @param value allowed object is
+   *              {@link DataSources }
+   */
+  public void setDataSources(DataSources value) {
+    this.dataSources = value;
+  }
 
-    /**
-     * Gets the value of the calculationViews property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CalculationViews }
-     *     
-     */
-    public CalculationViews getCalculationViews() {
-        return calculationViews;
-    }
+  /**
+   * Gets the value of the calculationViews property.
+   *
+   * @return possible object is
+   * {@link CalculationViews }
+   */
+  public CalculationViews getCalculationViews() {
+    return calculationViews;
+  }
 
-    /**
-     * Sets the value of the calculationViews property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CalculationViews }
-     *     
-     */
-    public void setCalculationViews(CalculationViews value) {
-        this.calculationViews = value;
-    }
+  /**
+   * Sets the value of the calculationViews property.
+   *
+   * @param value allowed object is
+   *              {@link CalculationViews }
+   */
+  public void setCalculationViews(CalculationViews value) {
+    this.calculationViews = value;
+  }
 
-    /**
-     * Gets the value of the logicalModel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link LogicalModel }
-     *     
-     */
-    public LogicalModel getLogicalModel() {
-        return logicalModel;
-    }
+  /**
+   * Gets the value of the logicalModel property.
+   *
+   * @return possible object is
+   * {@link LogicalModel }
+   */
+  public LogicalModel getLogicalModel() {
+    return logicalModel;
+  }
 
-    /**
-     * Sets the value of the logicalModel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link LogicalModel }
-     *     
-     */
-    public void setLogicalModel(LogicalModel value) {
-        this.logicalModel = value;
-    }
+  /**
+   * Sets the value of the logicalModel property.
+   *
+   * @param value allowed object is
+   *              {@link LogicalModel }
+   */
+  public void setLogicalModel(LogicalModel value) {
+    this.logicalModel = value;
+  }
 
-    /**
-     * Gets the value of the layout property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Layout }
-     *     
-     */
-    public Layout getLayout() {
-        return layout;
-    }
+  /**
+   * Gets the value of the layout property.
+   *
+   * @return possible object is
+   * {@link Layout }
+   */
+  public Layout getLayout() {
+    return layout;
+  }
 
-    /**
-     * Sets the value of the layout property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Layout }
-     *     
-     */
-    public void setLayout(Layout value) {
-        this.layout = value;
-    }
+  /**
+   * Sets the value of the layout property.
+   *
+   * @param value allowed object is
+   *              {@link Layout }
+   */
+  public void setLayout(Layout value) {
+    this.layout = value;
+  }
 
-    /**
-     * Gets the value of the schemaVersion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Float }
-     *     
-     */
-    public Float getSchemaVersion() {
-        return schemaVersion;
-    }
+  /**
+   * Gets the value of the schemaVersion property.
+   *
+   * @return possible object is
+   * {@link Float }
+   */
+  public Float getSchemaVersion() {
+    return schemaVersion;
+  }
 
-    /**
-     * Sets the value of the schemaVersion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Float }
-     *     
-     */
-    public void setSchemaVersion(Float value) {
-        this.schemaVersion = value;
-    }
+  /**
+   * Sets the value of the schemaVersion property.
+   *
+   * @param value allowed object is
+   *              {@link Float }
+   */
+  public void setSchemaVersion(Float value) {
+    this.schemaVersion = value;
+  }
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setId(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Gets the value of the applyPrivilegeType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getApplyPrivilegeType() {
-        return applyPrivilegeType;
-    }
+  /**
+   * Gets the value of the applyPrivilegeType property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getApplyPrivilegeType() {
+    return applyPrivilegeType;
+  }
 
-    /**
-     * Sets the value of the applyPrivilegeType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setApplyPrivilegeType(String value) {
-        this.applyPrivilegeType = value;
-    }
+  /**
+   * Sets the value of the applyPrivilegeType property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setApplyPrivilegeType(String value) {
+    this.applyPrivilegeType = value;
+  }
 
-    /**
-     * Gets the value of the checkAnalyticPrivileges property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCheckAnalyticPrivileges() {
-        return checkAnalyticPrivileges;
-    }
+  /**
+   * Gets the value of the checkAnalyticPrivileges property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getCheckAnalyticPrivileges() {
+    return checkAnalyticPrivileges;
+  }
 
-    /**
-     * Sets the value of the checkAnalyticPrivileges property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCheckAnalyticPrivileges(String value) {
-        this.checkAnalyticPrivileges = value;
-    }
+  /**
+   * Sets the value of the checkAnalyticPrivileges property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCheckAnalyticPrivileges(String value) {
+    this.checkAnalyticPrivileges = value;
+  }
 
-    /**
-     * Gets the value of the defaultClient property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultClient() {
-        return defaultClient;
-    }
+  /**
+   * Gets the value of the defaultClient property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultClient() {
+    return defaultClient;
+  }
 
-    /**
-     * Sets the value of the defaultClient property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultClient(String value) {
-        this.defaultClient = value;
-    }
+  /**
+   * Sets the value of the defaultClient property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultClient(String value) {
+    this.defaultClient = value;
+  }
 
-    /**
-     * Gets the value of the defaultLanguage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultLanguage() {
-        return defaultLanguage;
-    }
+  /**
+   * Gets the value of the defaultLanguage property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultLanguage() {
+    return defaultLanguage;
+  }
 
-    /**
-     * Sets the value of the defaultLanguage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultLanguage(String value) {
-        this.defaultLanguage = value;
-    }
+  /**
+   * Sets the value of the defaultLanguage property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultLanguage(String value) {
+    this.defaultLanguage = value;
+  }
 
-    /**
-     * Gets the value of the hierarchiesSQLEnabled property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHierarchiesSQLEnabled() {
-        return hierarchiesSQLEnabled;
-    }
+  /**
+   * Gets the value of the hierarchiesSQLEnabled property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHierarchiesSQLEnabled() {
+    return hierarchiesSQLEnabled;
+  }
 
-    /**
-     * Sets the value of the hierarchiesSQLEnabled property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHierarchiesSQLEnabled(String value) {
-        this.hierarchiesSQLEnabled = value;
-    }
+  /**
+   * Sets the value of the hierarchiesSQLEnabled property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHierarchiesSQLEnabled(String value) {
+    this.hierarchiesSQLEnabled = value;
+  }
 
-    /**
-     * Gets the value of the translationRelevant property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTranslationRelevant() {
-        return translationRelevant;
-    }
+  /**
+   * Gets the value of the translationRelevant property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTranslationRelevant() {
+    return translationRelevant;
+  }
 
-    /**
-     * Sets the value of the translationRelevant property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTranslationRelevant(String value) {
-        this.translationRelevant = value;
-    }
+  /**
+   * Sets the value of the translationRelevant property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTranslationRelevant(String value) {
+    this.translationRelevant = value;
+  }
 
-    /**
-     * Gets the value of the visibility property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getVisibility() {
-        return visibility;
-    }
+  /**
+   * Gets the value of the visibility property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getVisibility() {
+    return visibility;
+  }
 
-    /**
-     * Sets the value of the visibility property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVisibility(String value) {
-        this.visibility = value;
-    }
+  /**
+   * Sets the value of the visibility property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setVisibility(String value) {
+    this.visibility = value;
+  }
 
-    /**
-     * Gets the value of the calculationScenarioType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCalculationScenarioType() {
-        return calculationScenarioType;
-    }
+  /**
+   * Gets the value of the calculationScenarioType property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getCalculationScenarioType() {
+    return calculationScenarioType;
+  }
 
-    /**
-     * Sets the value of the calculationScenarioType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCalculationScenarioType(String value) {
-        this.calculationScenarioType = value;
-    }
+  /**
+   * Sets the value of the calculationScenarioType property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCalculationScenarioType(String value) {
+    this.calculationScenarioType = value;
+  }
 
-    /**
-     * Gets the value of the dataCategory property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDataCategory() {
-        return dataCategory;
-    }
+  /**
+   * Gets the value of the dataCategory property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDataCategory() {
+    return dataCategory;
+  }
 
-    /**
-     * Sets the value of the dataCategory property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDataCategory(String value) {
-        this.dataCategory = value;
-    }
+  /**
+   * Sets the value of the dataCategory property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDataCategory(String value) {
+    this.dataCategory = value;
+  }
 
-    /**
-     * Gets the value of the enforceSqlExecution property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEnforceSqlExecution() {
-        return enforceSqlExecution;
-    }
+  /**
+   * Gets the value of the enforceSqlExecution property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getEnforceSqlExecution() {
+    return enforceSqlExecution;
+  }
 
-    /**
-     * Sets the value of the enforceSqlExecution property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEnforceSqlExecution(String value) {
-        this.enforceSqlExecution = value;
-    }
+  /**
+   * Sets the value of the enforceSqlExecution property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setEnforceSqlExecution(String value) {
+    this.enforceSqlExecution = value;
+  }
 
-    /**
-     * Gets the value of the executionSemantic property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExecutionSemantic() {
-        return executionSemantic;
-    }
+  /**
+   * Gets the value of the executionSemantic property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExecutionSemantic() {
+    return executionSemantic;
+  }
 
-    /**
-     * Sets the value of the executionSemantic property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExecutionSemantic(String value) {
-        this.executionSemantic = value;
-    }
+  /**
+   * Sets the value of the executionSemantic property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExecutionSemantic(String value) {
+    this.executionSemantic = value;
+  }
 
-    /**
-     * Gets the value of the outputViewType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOutputViewType() {
-        return outputViewType;
-    }
+  /**
+   * Gets the value of the outputViewType property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getOutputViewType() {
+    return outputViewType;
+  }
 
-    /**
-     * Sets the value of the outputViewType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOutputViewType(String value) {
-        this.outputViewType = value;
-    }
+  /**
+   * Sets the value of the outputViewType property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setOutputViewType(String value) {
+    this.outputViewType = value;
+  }
 
 }

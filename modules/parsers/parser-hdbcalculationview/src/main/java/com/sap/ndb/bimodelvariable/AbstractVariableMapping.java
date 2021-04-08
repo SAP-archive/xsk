@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- *  Type for mapping the variable of an underlying model (target) to either a constant
- * 				or a variable of the current model via IVariableEnabled. In case the target view is a value help view the 
- * 				target variable name might also point to an attribute of the view.
- * 			
- * 
+ * Type for mapping the variable of an underlying model (target) to either a constant
+ * or a variable of the current model via IVariableEnabled. In case the target view is a value help view the
+ * target variable name might also point to an attribute of the view.
+ *
+ *
  * <p>Java class for AbstractVariableMapping complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AbstractVariableMapping"&gt;
  *   &lt;complexContent&gt;
@@ -52,8 +52,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractVariableMapping", propOrder = {
@@ -65,84 +63,72 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public abstract class AbstractVariableMapping {
 
-    @XmlElement(required = true)
-    protected TargetVariable targetVariable;
-    @XmlAttribute(name = "dataSource")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String dataSource;
-    @XmlAttribute(name = "forStarJoin")
-    protected Boolean forStarJoin;
+  @XmlElement(required = true)
+  protected TargetVariable targetVariable;
+  @XmlAttribute(name = "dataSource")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String dataSource;
+  @XmlAttribute(name = "forStarJoin")
+  protected Boolean forStarJoin;
 
-    /**
-     * Gets the value of the targetVariable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TargetVariable }
-     *     
-     */
-    public TargetVariable getTargetVariable() {
-        return targetVariable;
-    }
+  /**
+   * Gets the value of the targetVariable property.
+   *
+   * @return possible object is
+   * {@link TargetVariable }
+   */
+  public TargetVariable getTargetVariable() {
+    return targetVariable;
+  }
 
-    /**
-     * Sets the value of the targetVariable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TargetVariable }
-     *     
-     */
-    public void setTargetVariable(TargetVariable value) {
-        this.targetVariable = value;
-    }
+  /**
+   * Sets the value of the targetVariable property.
+   *
+   * @param value allowed object is
+   *              {@link TargetVariable }
+   */
+  public void setTargetVariable(TargetVariable value) {
+    this.targetVariable = value;
+  }
 
-    /**
-     * Gets the value of the dataSource property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDataSource() {
-        return dataSource;
-    }
+  /**
+   * Gets the value of the dataSource property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDataSource() {
+    return dataSource;
+  }
 
-    /**
-     * Sets the value of the dataSource property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDataSource(String value) {
-        this.dataSource = value;
-    }
+  /**
+   * Sets the value of the dataSource property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDataSource(String value) {
+    this.dataSource = value;
+  }
 
-    /**
-     * Gets the value of the forStarJoin property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isForStarJoin() {
-        return forStarJoin;
-    }
+  /**
+   * Gets the value of the forStarJoin property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isForStarJoin() {
+    return forStarJoin;
+  }
 
-    /**
-     * Sets the value of the forStarJoin property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setForStarJoin(Boolean value) {
-        this.forStarJoin = value;
-    }
+  /**
+   * Sets the value of the forStarJoin property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setForStarJoin(Boolean value) {
+    this.forStarJoin = value;
+  }
 
 }

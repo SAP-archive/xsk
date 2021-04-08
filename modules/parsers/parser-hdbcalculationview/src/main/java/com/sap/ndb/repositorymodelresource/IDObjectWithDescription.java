@@ -19,10 +19,6 @@
 
 package com.sap.ndb.repositorymodelresource;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
 import com.sap.ndb.basemodelbase.Descriptions;
 import com.sap.ndb.bimodelcalculation.Node;
 import com.sap.ndb.bimodeldatafoundation.LogicalColumn;
@@ -30,15 +26,19 @@ import com.sap.ndb.bimodeldimension.Hierarchy;
 import com.sap.ndb.bimodeldimension.LocalDimension;
 import com.sap.ndb.bimodelvariable.LocalVariable;
 import com.sap.ndb.bimodelvariable.ValueListEntry;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  * Base object for ID based model classes that allow multiple language descriptions
- * 
+ *
  * <p>Java class for IDObjectWithDescription complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="IDObjectWithDescription"&gt;
  *   &lt;complexContent&gt;
@@ -50,8 +50,6 @@ import com.sap.ndb.bimodelvariable.ValueListEntry;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "IDObjectWithDescription", propOrder = {
@@ -66,33 +64,28 @@ import com.sap.ndb.bimodelvariable.ValueListEntry;
     Hierarchy.class
 })
 public abstract class IDObjectWithDescription
-    extends IDObject
-{
+    extends IDObject {
 
-    protected Descriptions descriptions;
+  protected Descriptions descriptions;
 
-    /**
-     * Gets the value of the descriptions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Descriptions }
-     *     
-     */
-    public Descriptions getDescriptions() {
-        return descriptions;
-    }
+  /**
+   * Gets the value of the descriptions property.
+   *
+   * @return possible object is
+   * {@link Descriptions }
+   */
+  public Descriptions getDescriptions() {
+    return descriptions;
+  }
 
-    /**
-     * Sets the value of the descriptions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Descriptions }
-     *     
-     */
-    public void setDescriptions(Descriptions value) {
-        this.descriptions = value;
-    }
+  /**
+   * Sets the value of the descriptions property.
+   *
+   * @param value allowed object is
+   *              {@link Descriptions }
+   */
+  public void setDescriptions(Descriptions value) {
+    this.descriptions = value;
+  }
 
 }

@@ -10,11 +10,12 @@ import org.eclipse.xtext.generator.IGeneratorContext;
 
 /**
  * Generates code from your model files on save.
- * 
+ * <p>
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 @SuppressWarnings("all")
 public class XSODataGenerator extends AbstractGenerator {
+
   @Override
   public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
   }

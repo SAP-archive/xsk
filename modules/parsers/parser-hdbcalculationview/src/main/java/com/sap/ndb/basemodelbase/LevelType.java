@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LevelType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -49,34 +49,33 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "LevelType")
 @XmlEnum
 public enum LevelType {
 
-    MDLEVEL_TYPE_REGULAR,
-    MDLEVEL_TYPE_ALL,
-    MDLEVEL_TYPE_CALCULATED,
-    MDLEVEL_TYPE_TIME,
-    MDLEVEL_TYPE_TIME_YEARS,
-    MDLEVEL_TYPE_TIME_HALF_YEAR,
-    MDLEVEL_TYPE_TIME_QUARTERS,
-    MDLEVEL_TYPE_TIME_MONTHS,
-    MDLEVEL_TYPE_TIME_WEEKS,
-    MDLEVEL_TYPE_TIME_DAYS,
-    MDLEVEL_TYPE_TIME_HOURS,
-    MDLEVEL_TYPE_TIME_MINUTES,
-    MDLEVEL_TYPE_TIME_SECONDS,
-    MDLEVEL_TYPE_TIME_UNDEFINED,
-    MDLEVEL_TYPE_UNKNOWN;
+  MDLEVEL_TYPE_REGULAR,
+  MDLEVEL_TYPE_ALL,
+  MDLEVEL_TYPE_CALCULATED,
+  MDLEVEL_TYPE_TIME,
+  MDLEVEL_TYPE_TIME_YEARS,
+  MDLEVEL_TYPE_TIME_HALF_YEAR,
+  MDLEVEL_TYPE_TIME_QUARTERS,
+  MDLEVEL_TYPE_TIME_MONTHS,
+  MDLEVEL_TYPE_TIME_WEEKS,
+  MDLEVEL_TYPE_TIME_DAYS,
+  MDLEVEL_TYPE_TIME_HOURS,
+  MDLEVEL_TYPE_TIME_MINUTES,
+  MDLEVEL_TYPE_TIME_SECONDS,
+  MDLEVEL_TYPE_TIME_UNDEFINED,
+  MDLEVEL_TYPE_UNKNOWN;
 
-    public String value() {
-        return name();
-    }
+  public static LevelType fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static LevelType fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

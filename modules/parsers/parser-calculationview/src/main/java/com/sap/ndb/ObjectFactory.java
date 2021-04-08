@@ -26,422 +26,370 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the com.sap.ndb package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the com.sap.ndb package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
  */
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Origin_QNAME = new QName("", "origin");
-    private final static QName _LocalVariables_QNAME = new QName("", "localVariables");
-    private final static QName _VariableMappings_QNAME = new QName("", "variableMappings");
+  private final static QName _Origin_QNAME = new QName("", "origin");
+  private final static QName _LocalVariables_QNAME = new QName("", "localVariables");
+  private final static QName _VariableMappings_QNAME = new QName("", "variableMappings");
 
-    /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.sap.ndb
-     * 
-     */
-    public ObjectFactory() {
-    }
+  /**
+   * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.sap.ndb
+   */
+  public ObjectFactory() {
+  }
 
-    /**
-     * Create an instance of {@link DataSources }
-     * 
-     */
-    public DataSources createDataSources() {
-        return new DataSources();
-    }
+  /**
+   * Create an instance of {@link DataSources }
+   */
+  public DataSources createDataSources() {
+    return new DataSources();
+  }
 
-    /**
-     * Create an instance of {@link CalculationViews }
-     * 
-     */
-    public CalculationViews createCalculationViews() {
-        return new CalculationViews();
-    }
+  /**
+   * Create an instance of {@link CalculationViews }
+   */
+  public CalculationViews createCalculationViews() {
+    return new CalculationViews();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel }
-     * 
-     */
-    public LogicalModel createLogicalModel() {
-        return new LogicalModel();
-    }
+  /**
+   * Create an instance of {@link LogicalModel }
+   */
+  public LogicalModel createLogicalModel() {
+    return new LogicalModel();
+  }
 
-    /**
-     * Create an instance of {@link com.sap.ndb.Layout }
-     * 
-     */
-    public com.sap.ndb.Layout createLayout() {
-        return new com.sap.ndb.Layout();
-    }
+  /**
+   * Create an instance of {@link com.sap.ndb.Layout }
+   */
+  public com.sap.ndb.Layout createLayout() {
+    return new com.sap.ndb.Layout();
+  }
 
-    /**
-     * Create an instance of {@link com.sap.ndb.Layout.Shapes }
-     * 
-     */
-    public com.sap.ndb.Layout.Shapes createLayoutShapes() {
-        return new com.sap.ndb.Layout.Shapes();
-    }
+  /**
+   * Create an instance of {@link com.sap.ndb.Layout.Shapes }
+   */
+  public com.sap.ndb.Layout.Shapes createLayoutShapes() {
+    return new com.sap.ndb.Layout.Shapes();
+  }
 
-    /**
-     * Create an instance of {@link com.sap.ndb.Layout.Shapes.Shape }
-     * 
-     */
-    public com.sap.ndb.Layout.Shapes.Shape createLayoutShapesShape() {
-        return new com.sap.ndb.Layout.Shapes.Shape();
-    }
+  /**
+   * Create an instance of {@link com.sap.ndb.Layout.Shapes.Shape }
+   */
+  public com.sap.ndb.Layout.Shapes.Shape createLayoutShapesShape() {
+    return new com.sap.ndb.Layout.Shapes.Shape();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.LocalDimensions }
-     * 
-     */
-    public LogicalModel.LocalDimensions createLogicalModelLocalDimensions() {
-        return new LogicalModel.LocalDimensions();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.LocalDimensions }
+   */
+  public LogicalModel.LocalDimensions createLogicalModelLocalDimensions() {
+    return new LogicalModel.LocalDimensions();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension }
-     * 
-     */
-    public LogicalModel.LocalDimensions.LocalDimension createLogicalModelLocalDimensionsLocalDimension() {
-        return new LogicalModel.LocalDimensions.LocalDimension();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension }
+   */
+  public LogicalModel.LocalDimensions.LocalDimension createLogicalModelLocalDimensionsLocalDimension() {
+    return new LogicalModel.LocalDimensions.LocalDimension();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies }
-     * 
-     */
-    public LogicalModel.LocalDimensions.LocalDimension.Hierarchies createLogicalModelLocalDimensionsLocalDimensionHierarchies() {
-        return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies }
+   */
+  public LogicalModel.LocalDimensions.LocalDimension.Hierarchies createLogicalModelLocalDimensionsLocalDimensionHierarchies() {
+    return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy }
-     * 
-     */
-    public LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy createLogicalModelLocalDimensionsLocalDimensionHierarchiesHierarchy() {
-        return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy }
+   */
+  public LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy createLogicalModelLocalDimensionsLocalDimensionHierarchiesHierarchy() {
+    return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels }
-     * 
-     */
-    public LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels createLogicalModelLocalDimensionsLocalDimensionHierarchiesHierarchyLevels() {
-        return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels }
+   */
+  public LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels createLogicalModelLocalDimensionsLocalDimensionHierarchiesHierarchyLevels() {
+    return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.CalculatedMeasures }
-     * 
-     */
-    public LogicalModel.CalculatedMeasures createLogicalModelCalculatedMeasures() {
-        return new LogicalModel.CalculatedMeasures();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.CalculatedMeasures }
+   */
+  public LogicalModel.CalculatedMeasures createLogicalModelCalculatedMeasures() {
+    return new LogicalModel.CalculatedMeasures();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.CalculatedMeasures.Measure }
-     * 
-     */
-    public LogicalModel.CalculatedMeasures.Measure createLogicalModelCalculatedMeasuresMeasure() {
-        return new LogicalModel.CalculatedMeasures.Measure();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.CalculatedMeasures.Measure }
+   */
+  public LogicalModel.CalculatedMeasures.Measure createLogicalModelCalculatedMeasuresMeasure() {
+    return new LogicalModel.CalculatedMeasures.Measure();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation }
-     * 
-     */
-    public LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation createLogicalModelCalculatedMeasuresMeasureExceptionAggregation() {
-        return new LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation }
+   */
+  public LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation createLogicalModelCalculatedMeasuresMeasureExceptionAggregation() {
+    return new LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.BaseMeasures }
-     * 
-     */
-    public LogicalModel.BaseMeasures createLogicalModelBaseMeasures() {
-        return new LogicalModel.BaseMeasures();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.BaseMeasures }
+   */
+  public LogicalModel.BaseMeasures createLogicalModelBaseMeasures() {
+    return new LogicalModel.BaseMeasures();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.BaseMeasures.Measure }
-     * 
-     */
-    public LogicalModel.BaseMeasures.Measure createLogicalModelBaseMeasuresMeasure() {
-        return new LogicalModel.BaseMeasures.Measure();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.BaseMeasures.Measure }
+   */
+  public LogicalModel.BaseMeasures.Measure createLogicalModelBaseMeasuresMeasure() {
+    return new LogicalModel.BaseMeasures.Measure();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.PrivateDataFoundation }
-     * 
-     */
-    public LogicalModel.PrivateDataFoundation createLogicalModelPrivateDataFoundation() {
-        return new LogicalModel.PrivateDataFoundation();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.PrivateDataFoundation }
+   */
+  public LogicalModel.PrivateDataFoundation createLogicalModelPrivateDataFoundation() {
+    return new LogicalModel.PrivateDataFoundation();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.Attributes }
-     * 
-     */
-    public LogicalModel.Attributes createLogicalModelAttributes() {
-        return new LogicalModel.Attributes();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.Attributes }
+   */
+  public LogicalModel.Attributes createLogicalModelAttributes() {
+    return new LogicalModel.Attributes();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.Attributes.Attribute }
-     * 
-     */
-    public LogicalModel.Attributes.Attribute createLogicalModelAttributesAttribute() {
-        return new LogicalModel.Attributes.Attribute();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.Attributes.Attribute }
+   */
+  public LogicalModel.Attributes.Attribute createLogicalModelAttributesAttribute() {
+    return new LogicalModel.Attributes.Attribute();
+  }
 
-    /**
-     * Create an instance of {@link CalculationViews.CalculationView }
-     * 
-     */
-    public CalculationViews.CalculationView createCalculationViewsCalculationView() {
-        return new CalculationViews.CalculationView();
-    }
+  /**
+   * Create an instance of {@link CalculationViews.CalculationView }
+   */
+  public CalculationViews.CalculationView createCalculationViewsCalculationView() {
+    return new CalculationViews.CalculationView();
+  }
 
-    /**
-     * Create an instance of {@link CalculationViews.CalculationView.Input }
-     * 
-     */
-    public CalculationViews.CalculationView.Input createCalculationViewsCalculationViewInput() {
-        return new CalculationViews.CalculationView.Input();
-    }
+  /**
+   * Create an instance of {@link CalculationViews.CalculationView.Input }
+   */
+  public CalculationViews.CalculationView.Input createCalculationViewsCalculationViewInput() {
+    return new CalculationViews.CalculationView.Input();
+  }
 
-    /**
-     * Create an instance of {@link CalculationViews.CalculationView.ViewAttributes }
-     * 
-     */
-    public CalculationViews.CalculationView.ViewAttributes createCalculationViewsCalculationViewViewAttributes() {
-        return new CalculationViews.CalculationView.ViewAttributes();
-    }
+  /**
+   * Create an instance of {@link CalculationViews.CalculationView.ViewAttributes }
+   */
+  public CalculationViews.CalculationView.ViewAttributes createCalculationViewsCalculationViewViewAttributes() {
+    return new CalculationViews.CalculationView.ViewAttributes();
+  }
 
-    /**
-     * Create an instance of {@link DataSources.DataSource }
-     * 
-     */
-    public DataSources.DataSource createDataSourcesDataSource() {
-        return new DataSources.DataSource();
-    }
+  /**
+   * Create an instance of {@link DataSources.DataSource }
+   */
+  public DataSources.DataSource createDataSourcesDataSource() {
+    return new DataSources.DataSource();
+  }
 
-    /**
-     * Create an instance of {@link com.sap.ndb.Descriptions }
-     * 
-     */
-    public com.sap.ndb.Descriptions createDescriptions() {
-        return new com.sap.ndb.Descriptions();
-    }
+  /**
+   * Create an instance of {@link com.sap.ndb.Descriptions }
+   */
+  public com.sap.ndb.Descriptions createDescriptions() {
+    return new com.sap.ndb.Descriptions();
+  }
 
-    /**
-     * Create an instance of {@link Metadata }
-     * 
-     */
-    public Metadata createMetadata() {
-        return new Metadata();
-    }
+  /**
+   * Create an instance of {@link Metadata }
+   */
+  public Metadata createMetadata() {
+    return new Metadata();
+  }
 
-    /**
-     * Create an instance of {@link DefaultSchema }
-     * 
-     */
-    public DefaultSchema createDefaultSchema() {
-        return new DefaultSchema();
-    }
+  /**
+   * Create an instance of {@link DefaultSchema }
+   */
+  public DefaultSchema createDefaultSchema() {
+    return new DefaultSchema();
+  }
 
-    /**
-     * Create an instance of {@link InformationModelLayout }
-     * 
-     */
-    public InformationModelLayout createInformationModelLayout() {
-        return new InformationModelLayout();
-    }
+  /**
+   * Create an instance of {@link InformationModelLayout }
+   */
+  public InformationModelLayout createInformationModelLayout() {
+    return new InformationModelLayout();
+  }
 
-    /**
-     * Create an instance of {@link CalculationScenario }
-     * 
-     */
-    public CalculationScenario createCalculationScenario() {
-        return new CalculationScenario();
-    }
+  /**
+   * Create an instance of {@link CalculationScenario }
+   */
+  public CalculationScenario createCalculationScenario() {
+    return new CalculationScenario();
+  }
 
-    /**
-     * Create an instance of {@link com.sap.ndb.Layout.Shapes.Shape.UpperLeftCorner }
-     * 
-     */
-    public com.sap.ndb.Layout.Shapes.Shape.UpperLeftCorner createLayoutShapesShapeUpperLeftCorner() {
-        return new com.sap.ndb.Layout.Shapes.Shape.UpperLeftCorner();
-    }
+  /**
+   * Create an instance of {@link com.sap.ndb.Layout.Shapes.Shape.UpperLeftCorner }
+   */
+  public com.sap.ndb.Layout.Shapes.Shape.UpperLeftCorner createLayoutShapesShapeUpperLeftCorner() {
+    return new com.sap.ndb.Layout.Shapes.Shape.UpperLeftCorner();
+  }
 
-    /**
-     * Create an instance of {@link com.sap.ndb.Layout.Shapes.Shape.RectangleSize }
-     * 
-     */
-    public com.sap.ndb.Layout.Shapes.Shape.RectangleSize createLayoutShapesShapeRectangleSize() {
-        return new com.sap.ndb.Layout.Shapes.Shape.RectangleSize();
-    }
+  /**
+   * Create an instance of {@link com.sap.ndb.Layout.Shapes.Shape.RectangleSize }
+   */
+  public com.sap.ndb.Layout.Shapes.Shape.RectangleSize createLayoutShapesShapeRectangleSize() {
+    return new com.sap.ndb.Layout.Shapes.Shape.RectangleSize();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Descriptions }
-     * 
-     */
-    public LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Descriptions createLogicalModelLocalDimensionsLocalDimensionHierarchiesHierarchyDescriptions() {
-        return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Descriptions();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Descriptions }
+   */
+  public LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Descriptions createLogicalModelLocalDimensionsLocalDimensionHierarchiesHierarchyDescriptions() {
+    return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Descriptions();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels.Level }
-     * 
-     */
-    public LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels.Level createLogicalModelLocalDimensionsLocalDimensionHierarchiesHierarchyLevelsLevel() {
-        return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels.Level();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels.Level }
+   */
+  public LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels.Level createLogicalModelLocalDimensionsLocalDimensionHierarchiesHierarchyLevelsLevel() {
+    return new LogicalModel.LocalDimensions.LocalDimension.Hierarchies.Hierarchy.Levels.Level();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.CalculatedMeasures.Measure.Descriptions }
-     * 
-     */
-    public LogicalModel.CalculatedMeasures.Measure.Descriptions createLogicalModelCalculatedMeasuresMeasureDescriptions() {
-        return new LogicalModel.CalculatedMeasures.Measure.Descriptions();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.CalculatedMeasures.Measure.Descriptions }
+   */
+  public LogicalModel.CalculatedMeasures.Measure.Descriptions createLogicalModelCalculatedMeasuresMeasureDescriptions() {
+    return new LogicalModel.CalculatedMeasures.Measure.Descriptions();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation.Attribute }
-     * 
-     */
-    public LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation.Attribute createLogicalModelCalculatedMeasuresMeasureExceptionAggregationAttribute() {
-        return new LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation.Attribute();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation.Attribute }
+   */
+  public LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation.Attribute createLogicalModelCalculatedMeasuresMeasureExceptionAggregationAttribute() {
+    return new LogicalModel.CalculatedMeasures.Measure.ExceptionAggregation.Attribute();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.BaseMeasures.Measure.Descriptions }
-     * 
-     */
-    public LogicalModel.BaseMeasures.Measure.Descriptions createLogicalModelBaseMeasuresMeasureDescriptions() {
-        return new LogicalModel.BaseMeasures.Measure.Descriptions();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.BaseMeasures.Measure.Descriptions }
+   */
+  public LogicalModel.BaseMeasures.Measure.Descriptions createLogicalModelBaseMeasuresMeasureDescriptions() {
+    return new LogicalModel.BaseMeasures.Measure.Descriptions();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.BaseMeasures.Measure.MeasureMapping }
-     * 
-     */
-    public LogicalModel.BaseMeasures.Measure.MeasureMapping createLogicalModelBaseMeasuresMeasureMeasureMapping() {
-        return new LogicalModel.BaseMeasures.Measure.MeasureMapping();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.BaseMeasures.Measure.MeasureMapping }
+   */
+  public LogicalModel.BaseMeasures.Measure.MeasureMapping createLogicalModelBaseMeasuresMeasureMeasureMapping() {
+    return new LogicalModel.BaseMeasures.Measure.MeasureMapping();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.PrivateDataFoundation.Layout }
-     * 
-     */
-    public LogicalModel.PrivateDataFoundation.Layout createLogicalModelPrivateDataFoundationLayout() {
-        return new LogicalModel.PrivateDataFoundation.Layout();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.PrivateDataFoundation.Layout }
+   */
+  public LogicalModel.PrivateDataFoundation.Layout createLogicalModelPrivateDataFoundationLayout() {
+    return new LogicalModel.PrivateDataFoundation.Layout();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.Attributes.Attribute.Descriptions }
-     * 
-     */
-    public LogicalModel.Attributes.Attribute.Descriptions createLogicalModelAttributesAttributeDescriptions() {
-        return new LogicalModel.Attributes.Attribute.Descriptions();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.Attributes.Attribute.Descriptions }
+   */
+  public LogicalModel.Attributes.Attribute.Descriptions createLogicalModelAttributesAttributeDescriptions() {
+    return new LogicalModel.Attributes.Attribute.Descriptions();
+  }
 
-    /**
-     * Create an instance of {@link LogicalModel.Attributes.Attribute.KeyMapping }
-     * 
-     */
-    public LogicalModel.Attributes.Attribute.KeyMapping createLogicalModelAttributesAttributeKeyMapping() {
-        return new LogicalModel.Attributes.Attribute.KeyMapping();
-    }
+  /**
+   * Create an instance of {@link LogicalModel.Attributes.Attribute.KeyMapping }
+   */
+  public LogicalModel.Attributes.Attribute.KeyMapping createLogicalModelAttributesAttributeKeyMapping() {
+    return new LogicalModel.Attributes.Attribute.KeyMapping();
+  }
 
-    /**
-     * Create an instance of {@link CalculationViews.CalculationView.JoinAttribute }
-     * 
-     */
-    public CalculationViews.CalculationView.JoinAttribute createCalculationViewsCalculationViewJoinAttribute() {
-        return new CalculationViews.CalculationView.JoinAttribute();
-    }
+  /**
+   * Create an instance of {@link CalculationViews.CalculationView.JoinAttribute }
+   */
+  public CalculationViews.CalculationView.JoinAttribute createCalculationViewsCalculationViewJoinAttribute() {
+    return new CalculationViews.CalculationView.JoinAttribute();
+  }
 
-    /**
-     * Create an instance of {@link CalculationViews.CalculationView.Input.Mapping }
-     * 
-     */
-    public CalculationViews.CalculationView.Input.Mapping createCalculationViewsCalculationViewInputMapping() {
-        return new CalculationViews.CalculationView.Input.Mapping();
-    }
+  /**
+   * Create an instance of {@link CalculationViews.CalculationView.Input.Mapping }
+   */
+  public CalculationViews.CalculationView.Input.Mapping createCalculationViewsCalculationViewInputMapping() {
+    return new CalculationViews.CalculationView.Input.Mapping();
+  }
 
-    /**
-     * Create an instance of {@link CalculationViews.CalculationView.ViewAttributes.ViewAttribute }
-     * 
-     */
-    public CalculationViews.CalculationView.ViewAttributes.ViewAttribute createCalculationViewsCalculationViewViewAttributesViewAttribute() {
-        return new CalculationViews.CalculationView.ViewAttributes.ViewAttribute();
-    }
+  /**
+   * Create an instance of {@link CalculationViews.CalculationView.ViewAttributes.ViewAttribute }
+   */
+  public CalculationViews.CalculationView.ViewAttributes.ViewAttribute createCalculationViewsCalculationViewViewAttributesViewAttribute() {
+    return new CalculationViews.CalculationView.ViewAttributes.ViewAttribute();
+  }
 
-    /**
-     * Create an instance of {@link DataSources.DataSource.ViewAttributes }
-     * 
-     */
-    public DataSources.DataSource.ViewAttributes createDataSourcesDataSourceViewAttributes() {
-        return new DataSources.DataSource.ViewAttributes();
-    }
+  /**
+   * Create an instance of {@link DataSources.DataSource.ViewAttributes }
+   */
+  public DataSources.DataSource.ViewAttributes createDataSourcesDataSourceViewAttributes() {
+    return new DataSources.DataSource.ViewAttributes();
+  }
 
-    /**
-     * Create an instance of {@link DataSources.DataSource.ColumnObject }
-     * 
-     */
-    public DataSources.DataSource.ColumnObject createDataSourcesDataSourceColumnObject() {
-        return new DataSources.DataSource.ColumnObject();
-    }
+  /**
+   * Create an instance of {@link DataSources.DataSource.ColumnObject }
+   */
+  public DataSources.DataSource.ColumnObject createDataSourcesDataSourceColumnObject() {
+    return new DataSources.DataSource.ColumnObject();
+  }
 
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     */
-    @XmlElementDecl(namespace = "", name = "origin")
-    public JAXBElement<String> createOrigin(String value) {
-        return new JAXBElement<String>(_Origin_QNAME, String.class, null, value);
-    }
+  /**
+   * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   *
+   * @param value Java instance representing xml element's value.
+   * @return the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   */
+  @XmlElementDecl(namespace = "", name = "origin")
+  public JAXBElement<String> createOrigin(String value) {
+    return new JAXBElement<String>(_Origin_QNAME, String.class, null, value);
+  }
 
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     */
-    @XmlElementDecl(namespace = "", name = "localVariables")
-    public JAXBElement<String> createLocalVariables(String value) {
-        return new JAXBElement<String>(_LocalVariables_QNAME, String.class, null, value);
-    }
+  /**
+   * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   *
+   * @param value Java instance representing xml element's value.
+   * @return the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   */
+  @XmlElementDecl(namespace = "", name = "localVariables")
+  public JAXBElement<String> createLocalVariables(String value) {
+    return new JAXBElement<String>(_LocalVariables_QNAME, String.class, null, value);
+  }
 
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     */
-    @XmlElementDecl(namespace = "", name = "variableMappings")
-    public JAXBElement<String> createVariableMappings(String value) {
-        return new JAXBElement<String>(_VariableMappings_QNAME, String.class, null, value);
-    }
+  /**
+   * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   *
+   * @param value Java instance representing xml element's value.
+   * @return the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+   */
+  @XmlElementDecl(namespace = "", name = "variableMappings")
+  public JAXBElement<String> createVariableMappings(String value) {
+    return new JAXBElement<String>(_VariableMappings_QNAME, String.class, null, value);
+  }
 
 }

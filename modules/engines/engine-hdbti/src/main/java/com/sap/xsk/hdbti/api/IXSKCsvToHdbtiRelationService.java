@@ -11,20 +11,20 @@
  */
 package com.sap.xsk.hdbti.api;
 
+import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
+import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
 import java.sql.Connection;
 import java.util.List;
 
-import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
-import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
-
 public interface IXSKCsvToHdbtiRelationService {
-    void persistNewCsvAndHdbtiRelations(XSKTableImportArtifact tableImportArtifact, Connection connection);
 
-    void deleteCsvAndHdbtiRelations(String hdbtiFileName, Connection connection);
+  void persistNewCsvAndHdbtiRelations(XSKTableImportArtifact tableImportArtifact, Connection connection);
 
-    List<XSKTableImportToCsvRelation> getAllHdbtiToCsvRelations();
+  void deleteCsvAndHdbtiRelations(String hdbtiFileName, Connection connection);
 
-    boolean hasCsvChanged(XSKTableImportToCsvRelation tableImportToCsvRelation, String csvContent);
+  List<XSKTableImportToCsvRelation> getAllHdbtiToCsvRelations();
 
-    List<XSKTableImportToCsvRelation> getAffectedHdbtiToCsvRelations(String csvFilePath);
+  boolean hasCsvChanged(XSKTableImportToCsvRelation tableImportToCsvRelation, String csvContent);
+
+  List<XSKTableImportToCsvRelation> getAffectedHdbtiToCsvRelations(String csvFilePath);
 }

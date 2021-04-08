@@ -11,26 +11,28 @@
  */
 package com.sap.xsk.xsaccess.ds.api;
 
+import com.sap.xsk.xsaccess.ds.model.access.XSKAccessDefinition;
 import java.util.List;
 
-import com.sap.xsk.xsaccess.ds.model.access.XSKAccessDefinition;
-
 public interface IXSKAccessCoreService {
-    String XSK_FILE_EXTENSION_ACCESS = ".xsaccess";
 
-    XSKAccessDefinition createXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed, List<String> authorizationRolesAsList) throws XSKAccessException;
+  String XSK_FILE_EXTENSION_ACCESS = ".xsaccess";
 
-    XSKAccessDefinition updateXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed, List<String> authorizationRolesAsList) throws XSKAccessException;
+  XSKAccessDefinition createXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed,
+      List<String> authorizationRolesAsList) throws XSKAccessException;
 
-    XSKAccessDefinition getXSKAccessDefinition(String id) throws XSKAccessException;
+  XSKAccessDefinition updateXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed,
+      List<String> authorizationRolesAsList) throws XSKAccessException;
 
-    List<XSKAccessDefinition> getAccessXSKDefinitions() throws XSKAccessException;
+  XSKAccessDefinition getXSKAccessDefinition(String id) throws XSKAccessException;
 
-    void removeXSKAccessDefinition(String path) throws XSKAccessException;
+  List<XSKAccessDefinition> getAccessXSKDefinitions() throws XSKAccessException;
 
-    boolean existsXSKAccessDefinition(String path) throws XSKAccessException;
+  void removeXSKAccessDefinition(String path) throws XSKAccessException;
 
-    XSKAccessDefinition parseXSAccessArtifact(byte[] json);
+  boolean existsXSKAccessDefinition(String path) throws XSKAccessException;
 
-    void clearCache();
+  XSKAccessDefinition parseXSAccessArtifact(byte[] json);
+
+  void clearCache();
 }

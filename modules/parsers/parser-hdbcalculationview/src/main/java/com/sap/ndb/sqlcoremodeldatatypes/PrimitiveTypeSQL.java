@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PrimitiveTypeSQL.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -66,51 +66,50 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "PrimitiveTypeSQL", namespace = "http://www.sap.com/ndb/SQLCoreModelDataTypes.ecore")
 @XmlEnum
 public enum PrimitiveTypeSQL {
 
-    TABLE,
-    ARRAY,
-    BINTEXT,
-    CHAR,
-    VARCHAR,
-    NCHAR,
-    NVARCHAR,
-    TINYINT,
-    SMALLINT,
-    INTEGER,
-    BIGINT,
-    DECIMAL,
-    NUMERIC,
-    REAL,
-    FLOAT,
-    DOUBLE,
-    DATE,
-    TIME,
-    TIMESTAMP,
-    BLOB,
-    CLOB,
-    NCLOB,
-    BINARY,
-    VARBINARY,
-    SMALLDECIMAL,
-    TEXT,
-    SHORTTEXT,
-    ALPHANUM,
-    ST_POINT,
-    ST_GEOMETRY,
-    SECONDDATE,
-    BOOLEAN;
+  TABLE,
+  ARRAY,
+  BINTEXT,
+  CHAR,
+  VARCHAR,
+  NCHAR,
+  NVARCHAR,
+  TINYINT,
+  SMALLINT,
+  INTEGER,
+  BIGINT,
+  DECIMAL,
+  NUMERIC,
+  REAL,
+  FLOAT,
+  DOUBLE,
+  DATE,
+  TIME,
+  TIMESTAMP,
+  BLOB,
+  CLOB,
+  NCLOB,
+  BINARY,
+  VARBINARY,
+  SMALLDECIMAL,
+  TEXT,
+  SHORTTEXT,
+  ALPHANUM,
+  ST_POINT,
+  ST_GEOMETRY,
+  SECONDDATE,
+  BOOLEAN;
 
-    public String value() {
-        return name();
-    }
+  public static PrimitiveTypeSQL fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static PrimitiveTypeSQL fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

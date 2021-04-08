@@ -32,9 +32,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for SecuredModels complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SecuredModels"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +47,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SecuredModels", propOrder = {
@@ -56,63 +54,57 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class SecuredModels {
 
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected List<String> modelUri;
-    @XmlAttribute(name = "allInformationModels")
-    protected Boolean allInformationModels;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected List<String> modelUri;
+  @XmlAttribute(name = "allInformationModels")
+  protected Boolean allInformationModels;
 
-    /**
-     * Gets the value of the modelUri property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the modelUri property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getModelUri().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getModelUri() {
-        if (modelUri == null) {
-            modelUri = new ArrayList<String>();
-        }
-        return this.modelUri;
+  /**
+   * Gets the value of the modelUri property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the modelUri property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getModelUri().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link String }
+   */
+  public List<String> getModelUri() {
+    if (modelUri == null) {
+      modelUri = new ArrayList<String>();
     }
+    return this.modelUri;
+  }
 
-    /**
-     * Gets the value of the allInformationModels property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isAllInformationModels() {
-        return allInformationModels;
-    }
+  /**
+   * Gets the value of the allInformationModels property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isAllInformationModels() {
+    return allInformationModels;
+  }
 
-    /**
-     * Sets the value of the allInformationModels property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setAllInformationModels(Boolean value) {
-        this.allInformationModels = value;
-    }
+  /**
+   * Sets the value of the allInformationModels property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setAllInformationModels(Boolean value) {
+    this.allInformationModels = value;
+  }
 
 }

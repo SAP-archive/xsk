@@ -4,7 +4,6 @@
 package com.sap.xsk.models.xsodata.xsOData;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -25,12 +24,12 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.sap.xsk.models.xsodata.xsOData.Entity#getUpdate <em>Update</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity()
  * @model
  * @generated
+ * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity()
  */
-public interface Entity extends EObject
-{
+public interface Entity extends EObject {
+
   /**
    * Returns the value of the '<em><b>Namespace</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -39,11 +38,12 @@ public interface Entity extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Namespace</em>' attribute.
-   * @see #setNamespace(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Namespace()
    * @model
    * @generated
+   * @see #setNamespace(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Namespace()
    */
   String getNamespace();
 
@@ -51,9 +51,10 @@ public interface Entity extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getNamespace <em>Namespace</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Namespace</em>' attribute.
-   * @see #getNamespace()
    * @generated
+   * @see #getNamespace()
    */
   void setNamespace(String value);
 
@@ -65,11 +66,12 @@ public interface Entity extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Name()
    * @model
    * @generated
+   * @see #setName(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Name()
    */
   String getName();
 
@@ -77,9 +79,10 @@ public interface Entity extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
    * @generated
+   * @see #getName()
    */
   void setName(String value);
 
@@ -91,11 +94,12 @@ public interface Entity extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Alias</em>' attribute.
-   * @see #setAlias(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Alias()
    * @model
    * @generated
+   * @see #setAlias(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Alias()
    */
   String getAlias();
 
@@ -103,9 +107,10 @@ public interface Entity extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getAlias <em>Alias</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Alias</em>' attribute.
-   * @see #getAlias()
    * @generated
+   * @see #getAlias()
    */
   void setAlias(String value);
 
@@ -118,10 +123,11 @@ public interface Entity extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Navigates</em>' containment reference list.
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Navigates()
    * @model containment="true"
    * @generated
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Navigates()
    */
   EList<Navigation> getNavigates();
 
@@ -134,10 +140,11 @@ public interface Entity extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Create Events</em>' attribute list.
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_CreateEvents()
    * @model unique="false"
    * @generated
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_CreateEvents()
    */
   EList<String> getCreateEvents();
 
@@ -150,10 +157,11 @@ public interface Entity extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Delete Using</em>' attribute list.
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_DeleteUsing()
    * @model unique="false"
    * @generated
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_DeleteUsing()
    */
   EList<String> getDeleteUsing();
 
@@ -166,10 +174,11 @@ public interface Entity extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Update</em>' attribute list.
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Update()
    * @model unique="false"
    * @generated
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getEntity_Update()
    */
   EList<String> getUpdate();
 

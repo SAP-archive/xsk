@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ObjectType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -49,57 +49,56 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ObjectType")
 @XmlEnum
 public enum ObjectType {
 
-    @XmlEnumValue("attributeview")
-    ATTRIBUTEVIEW("attributeview"),
-    @XmlEnumValue("analyticview")
-    ANALYTICVIEW("analyticview"),
-    @XmlEnumValue("calculationview")
-    CALCULATIONVIEW("calculationview"),
-    @XmlEnumValue("hdbprocedure")
-    HDBPROCEDURE("hdbprocedure"),
-    @XmlEnumValue("hdbtablefunction")
-    HDBTABLEFUNCTION("hdbtablefunction"),
-    @XmlEnumValue("hdbscalarfunction")
-    HDBSCALARFUNCTION("hdbscalarfunction"),
-    @XmlEnumValue("hdbruldec")
-    HDBRULDEC("hdbruldec"),
-    @XmlEnumValue("hdbdd")
-    HDBDD("hdbdd"),
-    @XmlEnumValue("procedure")
-    PROCEDURE("procedure"),
-    @XmlEnumValue("table")
-    TABLE("table"),
-    @XmlEnumValue("view")
-    VIEW("view"),
-    @XmlEnumValue("columnview")
-    COLUMNVIEW("columnview"),
-    @XmlEnumValue("tableFunction")
-    TABLE_FUNCTION("tableFunction"),
-    @XmlEnumValue("scalarFunction")
-    SCALAR_FUNCTION("scalarFunction");
-    private final String value;
+  @XmlEnumValue("attributeview")
+  ATTRIBUTEVIEW("attributeview"),
+  @XmlEnumValue("analyticview")
+  ANALYTICVIEW("analyticview"),
+  @XmlEnumValue("calculationview")
+  CALCULATIONVIEW("calculationview"),
+  @XmlEnumValue("hdbprocedure")
+  HDBPROCEDURE("hdbprocedure"),
+  @XmlEnumValue("hdbtablefunction")
+  HDBTABLEFUNCTION("hdbtablefunction"),
+  @XmlEnumValue("hdbscalarfunction")
+  HDBSCALARFUNCTION("hdbscalarfunction"),
+  @XmlEnumValue("hdbruldec")
+  HDBRULDEC("hdbruldec"),
+  @XmlEnumValue("hdbdd")
+  HDBDD("hdbdd"),
+  @XmlEnumValue("procedure")
+  PROCEDURE("procedure"),
+  @XmlEnumValue("table")
+  TABLE("table"),
+  @XmlEnumValue("view")
+  VIEW("view"),
+  @XmlEnumValue("columnview")
+  COLUMNVIEW("columnview"),
+  @XmlEnumValue("tableFunction")
+  TABLE_FUNCTION("tableFunction"),
+  @XmlEnumValue("scalarFunction")
+  SCALAR_FUNCTION("scalarFunction");
+  private final String value;
 
-    ObjectType(String v) {
-        value = v;
-    }
+  ObjectType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static ObjectType fromValue(String v) {
+    for (ObjectType c : ObjectType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static ObjectType fromValue(String v) {
-        for (ObjectType c: ObjectType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

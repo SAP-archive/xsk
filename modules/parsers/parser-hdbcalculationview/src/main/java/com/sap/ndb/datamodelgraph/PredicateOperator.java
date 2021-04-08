@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PredicateOperator.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -40,55 +40,48 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "PredicateOperator")
 @XmlEnum
 public enum PredicateOperator {
 
 
-    /**
-     * Equal
-     * 
-     */
-    EQ,
+  /**
+   * Equal
+   */
+  EQ,
 
-    /**
-     * NotEqual
-     * 
-     */
-    NE,
+  /**
+   * NotEqual
+   */
+  NE,
 
-    /**
-     * GreaterThan
-     * 
-     */
-    GT,
+  /**
+   * GreaterThan
+   */
+  GT,
 
-    /**
-     * GreaterEqual
-     * 
-     */
-    GE,
+  /**
+   * GreaterEqual
+   */
+  GE,
 
-    /**
-     * LessThan
-     * 
-     */
-    LT,
+  /**
+   * LessThan
+   */
+  LT,
 
-    /**
-     * LessEqual
-     * 
-     */
-    LE;
+  /**
+   * LessEqual
+   */
+  LE;
 
-    public String value() {
-        return name();
-    }
+  public static PredicateOperator fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static PredicateOperator fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

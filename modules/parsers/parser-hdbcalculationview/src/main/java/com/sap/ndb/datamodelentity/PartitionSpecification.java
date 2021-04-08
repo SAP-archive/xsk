@@ -27,14 +27,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Base class for partitioning specification
- * 			
- * 
+ * Base class for partitioning specification
+ *
+ *
  * <p>Java class for PartitionSpecification complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PartitionSpecification"&gt;
  *   &lt;complexContent&gt;
@@ -44,8 +43,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PartitionSpecification")
@@ -55,31 +52,27 @@ import javax.xml.bind.annotation.XmlType;
 })
 public abstract class PartitionSpecification {
 
-    @XmlAttribute(name = "specificationString")
-    protected String specificationString;
+  @XmlAttribute(name = "specificationString")
+  protected String specificationString;
 
-    /**
-     * Gets the value of the specificationString property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSpecificationString() {
-        return specificationString;
-    }
+  /**
+   * Gets the value of the specificationString property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSpecificationString() {
+    return specificationString;
+  }
 
-    /**
-     * Sets the value of the specificationString property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSpecificationString(String value) {
-        this.specificationString = value;
-    }
+  /**
+   * Sets the value of the specificationString property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSpecificationString(String value) {
+    this.specificationString = value;
+  }
 
 }

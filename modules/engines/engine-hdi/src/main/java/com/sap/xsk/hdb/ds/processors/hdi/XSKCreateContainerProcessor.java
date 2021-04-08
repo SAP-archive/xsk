@@ -11,15 +11,15 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdi;
 
-import javax.inject.Singleton;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.inject.Singleton;
 
 @Singleton
 public class XSKCreateContainerProcessor extends XSKHDIAbstractProcessor {
-	
-	public final void execute(Connection connection, String group, String container) throws SQLException {
-		executeQuery(connection, "CALL _SYS_DI#" + group + ".CREATE_CONTAINER('" + container + "', _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);");
-	}
+
+  public final void execute(Connection connection, String group, String container) throws SQLException {
+    executeQuery(connection, "CALL _SYS_DI#" + group + ".CREATE_CONTAINER('" + container + "', _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);");
+  }
 
 }

@@ -17,13 +17,15 @@ import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.api.IResource;
 
 public interface IXSKHDBCoreFacade {
-    void handleResourceSynchronization(IResource resource) throws SynchronizationException, XSKDataStructuresException;
 
-    void handleResourceSynchronization(String fileExtension, XSKDataStructureModel dataStructureModel) throws SynchronizationException, XSKDataStructuresException;
+  void handleResourceSynchronization(IResource resource) throws SynchronizationException, XSKDataStructuresException;
 
-    void updateEntities();
+  void handleResourceSynchronization(String fileExtension, XSKDataStructureModel dataStructureModel)
+      throws SynchronizationException, XSKDataStructuresException;
 
-    void cleanup() throws XSKDataStructuresException;
+  void updateEntities();
 
-    void clearCache();
+  void cleanup() throws XSKDataStructuresException;
+
+  void clearCache();
 }

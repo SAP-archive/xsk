@@ -19,12 +19,12 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.sap.xsk.models.xsodata.xsOData.Service#getAssociations <em>Associations</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getService()
  * @model
  * @generated
+ * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getService()
  */
-public interface Service extends Type
-{
+public interface Service extends Type {
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -33,11 +33,12 @@ public interface Service extends Type
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getService_Name()
    * @model
    * @generated
+   * @see #setName(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getService_Name()
    */
   String getName();
 
@@ -45,9 +46,10 @@ public interface Service extends Type
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Service#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
    * @generated
+   * @see #getName()
    */
   void setName(String value);
 
@@ -60,10 +62,11 @@ public interface Service extends Type
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Entities</em>' containment reference list.
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getService_Entities()
    * @model containment="true"
    * @generated
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getService_Entities()
    */
   EList<Entity> getEntities();
 
@@ -76,10 +79,11 @@ public interface Service extends Type
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Associations</em>' containment reference list.
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getService_Associations()
    * @model containment="true"
    * @generated
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getService_Associations()
    */
   EList<Association> getAssociations();
 

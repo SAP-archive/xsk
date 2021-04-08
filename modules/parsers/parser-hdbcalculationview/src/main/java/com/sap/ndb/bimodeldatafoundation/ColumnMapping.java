@@ -19,26 +19,25 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.basemodelbase.QualifiedColumnObjectName;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.QualifiedColumnObjectName;
 
 
 /**
- * 
- * 				Type for mapping BI objects to a column of a catalog table.	A
- * 				ttention: When comparing to an instance of QualifiedSqlObjectName or QualifiedColumnObjectName it is considered equal 
- * 				if the name and the schema name are equal (the column name is ignored)
- * 			
- * 
+ * Type for mapping BI objects to a column of a catalog table.	A
+ * ttention: When comparing to an instance of QualifiedSqlObjectName or QualifiedColumnObjectName it is considered equal
+ * if the name and the schema name are equal (the column name is ignored)
+ *
+ *
  * <p>Java class for ColumnMapping complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ColumnMapping"&gt;
  *   &lt;complexContent&gt;
@@ -48,41 +47,34 @@ import com.sap.ndb.basemodelbase.QualifiedColumnObjectName;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ColumnMapping")
 public class ColumnMapping
-    extends QualifiedColumnObjectName
-{
+    extends QualifiedColumnObjectName {
 
-    @XmlAttribute(name = "columnName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String columnName;
+  @XmlAttribute(name = "columnName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String columnName;
 
-    /**
-     * Gets the value of the columnName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getColumnName() {
-        return columnName;
-    }
+  /**
+   * Gets the value of the columnName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getColumnName() {
+    return columnName;
+  }
 
-    /**
-     * Sets the value of the columnName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setColumnName(String value) {
-        this.columnName = value;
-    }
+  /**
+   * Sets the value of the columnName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setColumnName(String value) {
+    this.columnName = value;
+  }
 
 }

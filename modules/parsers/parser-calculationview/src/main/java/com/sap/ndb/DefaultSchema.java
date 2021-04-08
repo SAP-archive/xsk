@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlValue;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;simpleContent&gt;
@@ -41,8 +41,6 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/simpleContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -51,57 +49,49 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlRootElement(name = "defaultSchema")
 public class DefaultSchema {
 
-    @XmlValue
-    protected String value;
-    @XmlAttribute(name = "schemaName")
-    protected String schemaName;
+  @XmlValue
+  protected String value;
+  @XmlAttribute(name = "schemaName")
+  protected String schemaName;
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the schemaName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSchemaName() {
-        return schemaName;
-    }
+  /**
+   * Gets the value of the schemaName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSchemaName() {
+    return schemaName;
+  }
 
-    /**
-     * Sets the value of the schemaName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSchemaName(String value) {
-        this.schemaName = value;
-    }
+  /**
+   * Sets the value of the schemaName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSchemaName(String value) {
+    this.schemaName = value;
+  }
 
 }

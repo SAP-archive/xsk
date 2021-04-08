@@ -28,15 +28,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				A featured hierarchy reference is a reference to a shared hierarchy including additional features on the cube level 
- * 				like hierarchy join properties.	The hierarchyName is the pointer to the shared hierarchy.
- * 			
- * 
+ * A featured hierarchy reference is a reference to a shared hierarchy including additional features on the cube level
+ * like hierarchy join properties.	The hierarchyName is the pointer to the shared hierarchy.
+ *
+ *
  * <p>Java class for FeaturedHierarchyReference complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="FeaturedHierarchyReference"&gt;
  *   &lt;complexContent&gt;
@@ -49,8 +48,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FeaturedHierarchyReference", propOrder = {
@@ -58,57 +55,49 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class FeaturedHierarchyReference {
 
-    protected HierarchyJoinProperties joinProperties;
-    @XmlAttribute(name = "hierarchyName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String hierarchyName;
+  protected HierarchyJoinProperties joinProperties;
+  @XmlAttribute(name = "hierarchyName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String hierarchyName;
 
-    /**
-     * Gets the value of the joinProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyJoinProperties }
-     *     
-     */
-    public HierarchyJoinProperties getJoinProperties() {
-        return joinProperties;
-    }
+  /**
+   * Gets the value of the joinProperties property.
+   *
+   * @return possible object is
+   * {@link HierarchyJoinProperties }
+   */
+  public HierarchyJoinProperties getJoinProperties() {
+    return joinProperties;
+  }
 
-    /**
-     * Sets the value of the joinProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyJoinProperties }
-     *     
-     */
-    public void setJoinProperties(HierarchyJoinProperties value) {
-        this.joinProperties = value;
-    }
+  /**
+   * Sets the value of the joinProperties property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyJoinProperties }
+   */
+  public void setJoinProperties(HierarchyJoinProperties value) {
+    this.joinProperties = value;
+  }
 
-    /**
-     * Gets the value of the hierarchyName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHierarchyName() {
-        return hierarchyName;
-    }
+  /**
+   * Gets the value of the hierarchyName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHierarchyName() {
+    return hierarchyName;
+  }
 
-    /**
-     * Sets the value of the hierarchyName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHierarchyName(String value) {
-        this.hierarchyName = value;
-    }
+  /**
+   * Sets the value of the hierarchyName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHierarchyName(String value) {
+    this.hierarchyName = value;
+  }
 
 }

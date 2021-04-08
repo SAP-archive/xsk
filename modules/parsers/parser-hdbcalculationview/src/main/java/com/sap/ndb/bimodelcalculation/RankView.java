@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A view/node allows to rank rows and filter according to the rank
- * 			
- * 
+ * A view/node allows to rank rows and filter according to the rank
+ *
+ *
  * <p>Java class for RankView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RankView"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +46,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RankView", propOrder = {
@@ -56,84 +53,71 @@ import javax.xml.bind.annotation.XmlType;
     "rankingFilter"
 })
 public class RankView
-    extends CalculationView
-{
+    extends CalculationView {
 
-    protected WindowFunction windowFunction;
-    protected RankingFilter rankingFilter;
-    @XmlAttribute(name = "allowFilterPushdown")
-    protected Boolean allowFilterPushdown;
+  protected WindowFunction windowFunction;
+  protected RankingFilter rankingFilter;
+  @XmlAttribute(name = "allowFilterPushdown")
+  protected Boolean allowFilterPushdown;
 
-    /**
-     * Gets the value of the windowFunction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link WindowFunction }
-     *     
-     */
-    public WindowFunction getWindowFunction() {
-        return windowFunction;
-    }
+  /**
+   * Gets the value of the windowFunction property.
+   *
+   * @return possible object is
+   * {@link WindowFunction }
+   */
+  public WindowFunction getWindowFunction() {
+    return windowFunction;
+  }
 
-    /**
-     * Sets the value of the windowFunction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link WindowFunction }
-     *     
-     */
-    public void setWindowFunction(WindowFunction value) {
-        this.windowFunction = value;
-    }
+  /**
+   * Sets the value of the windowFunction property.
+   *
+   * @param value allowed object is
+   *              {@link WindowFunction }
+   */
+  public void setWindowFunction(WindowFunction value) {
+    this.windowFunction = value;
+  }
 
-    /**
-     * Gets the value of the rankingFilter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RankingFilter }
-     *     
-     */
-    public RankingFilter getRankingFilter() {
-        return rankingFilter;
-    }
+  /**
+   * Gets the value of the rankingFilter property.
+   *
+   * @return possible object is
+   * {@link RankingFilter }
+   */
+  public RankingFilter getRankingFilter() {
+    return rankingFilter;
+  }
 
-    /**
-     * Sets the value of the rankingFilter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RankingFilter }
-     *     
-     */
-    public void setRankingFilter(RankingFilter value) {
-        this.rankingFilter = value;
-    }
+  /**
+   * Sets the value of the rankingFilter property.
+   *
+   * @param value allowed object is
+   *              {@link RankingFilter }
+   */
+  public void setRankingFilter(RankingFilter value) {
+    this.rankingFilter = value;
+  }
 
-    /**
-     * Gets the value of the allowFilterPushdown property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isAllowFilterPushdown() {
-        return allowFilterPushdown;
-    }
+  /**
+   * Gets the value of the allowFilterPushdown property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isAllowFilterPushdown() {
+    return allowFilterPushdown;
+  }
 
-    /**
-     * Sets the value of the allowFilterPushdown property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setAllowFilterPushdown(Boolean value) {
-        this.allowFilterPushdown = value;
-    }
+  /**
+   * Sets the value of the allowFilterPushdown property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setAllowFilterPushdown(Boolean value) {
+    this.allowFilterPushdown = value;
+  }
 
 }

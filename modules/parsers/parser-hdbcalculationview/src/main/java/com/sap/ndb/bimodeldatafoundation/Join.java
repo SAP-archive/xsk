@@ -19,6 +19,8 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.basemodelbase.QualifiedColumnObjectName;
+import com.sap.ndb.basemodelbase.TemporalJoinProperties;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -26,15 +28,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.QualifiedColumnObjectName;
-import com.sap.ndb.basemodelbase.TemporalJoinProperties;
 
 
 /**
  * <p>Java class for Join complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Join"&gt;
  *   &lt;complexContent&gt;
@@ -52,8 +52,6 @@ import com.sap.ndb.basemodelbase.TemporalJoinProperties;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Join", propOrder = {
@@ -66,187 +64,159 @@ import com.sap.ndb.basemodelbase.TemporalJoinProperties;
 })
 public class Join {
 
-    @XmlElement(required = true)
-    protected QualifiedColumnObjectName leftTable;
-    @XmlElement(required = true)
-    protected QualifiedColumnObjectName rightTable;
-    @XmlElement(required = true)
-    protected Columns leftColumns;
-    @XmlElement(required = true)
-    protected Columns rightColumns;
-    @XmlElement(required = true)
-    protected JoinProperties properties;
-    protected TemporalJoinProperties temporalJoinProperties;
-    @XmlAttribute(name = "languageColumn")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String languageColumn;
+  @XmlElement(required = true)
+  protected QualifiedColumnObjectName leftTable;
+  @XmlElement(required = true)
+  protected QualifiedColumnObjectName rightTable;
+  @XmlElement(required = true)
+  protected Columns leftColumns;
+  @XmlElement(required = true)
+  protected Columns rightColumns;
+  @XmlElement(required = true)
+  protected JoinProperties properties;
+  protected TemporalJoinProperties temporalJoinProperties;
+  @XmlAttribute(name = "languageColumn")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String languageColumn;
 
-    /**
-     * Gets the value of the leftTable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedColumnObjectName }
-     *     
-     */
-    public QualifiedColumnObjectName getLeftTable() {
-        return leftTable;
-    }
+  /**
+   * Gets the value of the leftTable property.
+   *
+   * @return possible object is
+   * {@link QualifiedColumnObjectName }
+   */
+  public QualifiedColumnObjectName getLeftTable() {
+    return leftTable;
+  }
 
-    /**
-     * Sets the value of the leftTable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedColumnObjectName }
-     *     
-     */
-    public void setLeftTable(QualifiedColumnObjectName value) {
-        this.leftTable = value;
-    }
+  /**
+   * Sets the value of the leftTable property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedColumnObjectName }
+   */
+  public void setLeftTable(QualifiedColumnObjectName value) {
+    this.leftTable = value;
+  }
 
-    /**
-     * Gets the value of the rightTable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedColumnObjectName }
-     *     
-     */
-    public QualifiedColumnObjectName getRightTable() {
-        return rightTable;
-    }
+  /**
+   * Gets the value of the rightTable property.
+   *
+   * @return possible object is
+   * {@link QualifiedColumnObjectName }
+   */
+  public QualifiedColumnObjectName getRightTable() {
+    return rightTable;
+  }
 
-    /**
-     * Sets the value of the rightTable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedColumnObjectName }
-     *     
-     */
-    public void setRightTable(QualifiedColumnObjectName value) {
-        this.rightTable = value;
-    }
+  /**
+   * Sets the value of the rightTable property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedColumnObjectName }
+   */
+  public void setRightTable(QualifiedColumnObjectName value) {
+    this.rightTable = value;
+  }
 
-    /**
-     * Gets the value of the leftColumns property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Columns }
-     *     
-     */
-    public Columns getLeftColumns() {
-        return leftColumns;
-    }
+  /**
+   * Gets the value of the leftColumns property.
+   *
+   * @return possible object is
+   * {@link Columns }
+   */
+  public Columns getLeftColumns() {
+    return leftColumns;
+  }
 
-    /**
-     * Sets the value of the leftColumns property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Columns }
-     *     
-     */
-    public void setLeftColumns(Columns value) {
-        this.leftColumns = value;
-    }
+  /**
+   * Sets the value of the leftColumns property.
+   *
+   * @param value allowed object is
+   *              {@link Columns }
+   */
+  public void setLeftColumns(Columns value) {
+    this.leftColumns = value;
+  }
 
-    /**
-     * Gets the value of the rightColumns property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Columns }
-     *     
-     */
-    public Columns getRightColumns() {
-        return rightColumns;
-    }
+  /**
+   * Gets the value of the rightColumns property.
+   *
+   * @return possible object is
+   * {@link Columns }
+   */
+  public Columns getRightColumns() {
+    return rightColumns;
+  }
 
-    /**
-     * Sets the value of the rightColumns property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Columns }
-     *     
-     */
-    public void setRightColumns(Columns value) {
-        this.rightColumns = value;
-    }
+  /**
+   * Sets the value of the rightColumns property.
+   *
+   * @param value allowed object is
+   *              {@link Columns }
+   */
+  public void setRightColumns(Columns value) {
+    this.rightColumns = value;
+  }
 
-    /**
-     * Gets the value of the properties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JoinProperties }
-     *     
-     */
-    public JoinProperties getProperties() {
-        return properties;
-    }
+  /**
+   * Gets the value of the properties property.
+   *
+   * @return possible object is
+   * {@link JoinProperties }
+   */
+  public JoinProperties getProperties() {
+    return properties;
+  }
 
-    /**
-     * Sets the value of the properties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JoinProperties }
-     *     
-     */
-    public void setProperties(JoinProperties value) {
-        this.properties = value;
-    }
+  /**
+   * Sets the value of the properties property.
+   *
+   * @param value allowed object is
+   *              {@link JoinProperties }
+   */
+  public void setProperties(JoinProperties value) {
+    this.properties = value;
+  }
 
-    /**
-     * Gets the value of the temporalJoinProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TemporalJoinProperties }
-     *     
-     */
-    public TemporalJoinProperties getTemporalJoinProperties() {
-        return temporalJoinProperties;
-    }
+  /**
+   * Gets the value of the temporalJoinProperties property.
+   *
+   * @return possible object is
+   * {@link TemporalJoinProperties }
+   */
+  public TemporalJoinProperties getTemporalJoinProperties() {
+    return temporalJoinProperties;
+  }
 
-    /**
-     * Sets the value of the temporalJoinProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TemporalJoinProperties }
-     *     
-     */
-    public void setTemporalJoinProperties(TemporalJoinProperties value) {
-        this.temporalJoinProperties = value;
-    }
+  /**
+   * Sets the value of the temporalJoinProperties property.
+   *
+   * @param value allowed object is
+   *              {@link TemporalJoinProperties }
+   */
+  public void setTemporalJoinProperties(TemporalJoinProperties value) {
+    this.temporalJoinProperties = value;
+  }
 
-    /**
-     * Gets the value of the languageColumn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLanguageColumn() {
-        return languageColumn;
-    }
+  /**
+   * Gets the value of the languageColumn property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLanguageColumn() {
+    return languageColumn;
+  }
 
-    /**
-     * Sets the value of the languageColumn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLanguageColumn(String value) {
-        this.languageColumn = value;
-    }
+  /**
+   * Sets the value of the languageColumn property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLanguageColumn(String value) {
+    this.languageColumn = value;
+  }
 
 }

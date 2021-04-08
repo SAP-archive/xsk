@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ValueType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -42,43 +42,42 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ValueType")
 @XmlEnum
 public enum ValueType {
 
-    @XmlEnumValue("empty")
-    EMPTY("empty"),
-    @XmlEnumValue("Currency")
-    CURRENCY("Currency"),
-    @XmlEnumValue("UnitOfMeasure")
-    UNIT_OF_MEASURE("UnitOfMeasure"),
-    @XmlEnumValue("Date")
-    DATE("Date"),
-    @XmlEnumValue("AttributeValue")
-    ATTRIBUTE_VALUE("AttributeValue"),
-    @XmlEnumValue("StaticList")
-    STATIC_LIST("StaticList"),
-    @XmlEnumValue("FuzzyTextSearch")
-    FUZZY_TEXT_SEARCH("FuzzyTextSearch");
-    private final String value;
+  @XmlEnumValue("empty")
+  EMPTY("empty"),
+  @XmlEnumValue("Currency")
+  CURRENCY("Currency"),
+  @XmlEnumValue("UnitOfMeasure")
+  UNIT_OF_MEASURE("UnitOfMeasure"),
+  @XmlEnumValue("Date")
+  DATE("Date"),
+  @XmlEnumValue("AttributeValue")
+  ATTRIBUTE_VALUE("AttributeValue"),
+  @XmlEnumValue("StaticList")
+  STATIC_LIST("StaticList"),
+  @XmlEnumValue("FuzzyTextSearch")
+  FUZZY_TEXT_SEARCH("FuzzyTextSearch");
+  private final String value;
 
-    ValueType(String v) {
-        value = v;
-    }
+  ValueType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static ValueType fromValue(String v) {
+    for (ValueType c : ValueType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static ValueType fromValue(String v) {
-        for (ValueType c: ValueType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

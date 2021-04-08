@@ -15,12 +15,12 @@ import com.sap.xsk.xsodata.ds.model.XSKODataEntity;
 
 public class XSKODataUtils {
 
-    private XSKODataUtils() {
+  private XSKODataUtils() {
 
-    }
+  }
 
-    public static String getTableName(XSKODataEntity model) {
-        return new StringBuilder().append(model.getNamespace()).append("::").append(model.getName()).toString();
-    }
+  public static String getTableName(XSKODataEntity model) {
+    return new StringBuilder().append(model.getNamespace()).append("::").append(model.getName()).toString();
+  }
 
 }

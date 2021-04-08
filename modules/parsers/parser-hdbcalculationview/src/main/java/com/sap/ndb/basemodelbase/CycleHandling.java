@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CycleHandling.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,46 +37,36 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "CycleHandling")
 @XmlEnum
 public enum CycleHandling {
 
 
-    /**
-     * 
-     * 						(break up at load time): This is the default for new and old models. Cycles are broken up at load time.  
-     * 						They might be traversed incompletely if starting from within a cycle and not from the root node.  
-     * 						Which node is marked with IS_CYCLE = 1 depends on the initial traversal during the hierarchy instantiation.
-     * 					
-     * 
-     */
-    BREAKUP,
+  /**
+   * (break up at load time): This is the default for new and old models. Cycles are broken up at load time.
+   * They might be traversed incompletely if starting from within a cycle and not from the root node.
+   * Which node is marked with IS_CYCLE = 1 depends on the initial traversal during the hierarchy instantiation.
+   */
+  BREAKUP,
 
-    /**
-     * 
-     * 						(Traverse completely, then break up): Cycles are completely traversed once and then broken up.
-     * 						The duplicate node is marked with IS_CYCLE = 1 in the result
-     * 					
-     * 
-     */
-    TRAVERSE_COMPLETELY,
+  /**
+   * (Traverse completely, then break up): Cycles are completely traversed once and then broken up.
+   * The duplicate node is marked with IS_CYCLE = 1 in the result
+   */
+  TRAVERSE_COMPLETELY,
 
-    /**
-     * 
-     * 						Error in case the hierarchy navigation traverses a cycle
-     * 					
-     * 
-     */
-    ERROR;
+  /**
+   * Error in case the hierarchy navigation traverses a cycle
+   */
+  ERROR;
 
-    public String value() {
-        return name();
-    }
+  public static CycleHandling fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static CycleHandling fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

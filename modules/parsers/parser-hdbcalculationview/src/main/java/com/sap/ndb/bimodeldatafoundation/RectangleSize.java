@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for RectangleSize complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RectangleSize"&gt;
  *   &lt;complexContent&gt;
@@ -40,48 +40,42 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RectangleSize")
 public class RectangleSize {
 
-    @XmlAttribute(name = "width", required = true)
-    protected int width;
-    @XmlAttribute(name = "height", required = true)
-    protected int height;
+  @XmlAttribute(name = "width", required = true)
+  protected int width;
+  @XmlAttribute(name = "height", required = true)
+  protected int height;
 
-    /**
-     * Gets the value of the width property.
-     * 
-     */
-    public int getWidth() {
-        return width;
-    }
+  /**
+   * Gets the value of the width property.
+   */
+  public int getWidth() {
+    return width;
+  }
 
-    /**
-     * Sets the value of the width property.
-     * 
-     */
-    public void setWidth(int value) {
-        this.width = value;
-    }
+  /**
+   * Sets the value of the width property.
+   */
+  public void setWidth(int value) {
+    this.width = value;
+  }
 
-    /**
-     * Gets the value of the height property.
-     * 
-     */
-    public int getHeight() {
-        return height;
-    }
+  /**
+   * Gets the value of the height property.
+   */
+  public int getHeight() {
+    return height;
+  }
 
-    /**
-     * Sets the value of the height property.
-     * 
-     */
-    public void setHeight(int value) {
-        this.height = value;
-    }
+  /**
+   * Sets the value of the height property.
+   */
+  public void setHeight(int value) {
+    this.height = value;
+  }
 
 }

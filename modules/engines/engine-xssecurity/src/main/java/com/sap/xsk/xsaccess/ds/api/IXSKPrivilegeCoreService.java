@@ -11,25 +11,24 @@
  */
 package com.sap.xsk.xsaccess.ds.api;
 
+import com.sap.xsk.xsaccess.ds.model.privilege.XSKPrivilegeDefinition;
 import java.util.List;
 
-import com.sap.xsk.xsaccess.ds.model.privilege.XSKPrivilegeDefinition;
-
 public interface IXSKPrivilegeCoreService {
-	
-    String XSK_FILE_EXTENSION_PRIVILEGE = ".xsprivileges";
 
-    String XSK_PRIVILEGES_TABLE_NAME = "XSK_PRIVILEGES";
+  String XSK_FILE_EXTENSION_PRIVILEGE = ".xsprivileges";
 
-    XSKPrivilegeDefinition createXSKPrivilege(String name, String description) throws XSKPrivilegeException;
+  String XSK_PRIVILEGES_TABLE_NAME = "XSK_PRIVILEGES";
 
-    XSKPrivilegeDefinition updateXSKPrivileges(String name, String description) throws XSKPrivilegeException;
+  XSKPrivilegeDefinition createXSKPrivilege(String name, String description) throws XSKPrivilegeException;
 
-    List<XSKPrivilegeDefinition> getXSKPrivileges() throws XSKPrivilegeException;
+  XSKPrivilegeDefinition updateXSKPrivileges(String name, String description) throws XSKPrivilegeException;
 
-    void removeXSKPrivilegeByName(String name) throws XSKPrivilegeException;
+  List<XSKPrivilegeDefinition> getXSKPrivileges() throws XSKPrivilegeException;
 
-    XSKPrivilegeDefinition getXSKPrivilegeByName(String name) throws XSKPrivilegeException;
+  void removeXSKPrivilegeByName(String name) throws XSKPrivilegeException;
 
-    boolean xskPrivilegeExists(String name) throws XSKPrivilegeException;
+  XSKPrivilegeDefinition getXSKPrivilegeByName(String name) throws XSKPrivilegeException;
+
+  boolean xskPrivilegeExists(String name) throws XSKPrivilegeException;
 }

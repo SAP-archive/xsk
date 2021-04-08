@@ -27,14 +27,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				For defining a variable
- * 			
- * 
+ * For defining a variable
+ *
+ *
  * <p>Java class for PathVariable complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PathVariable"&gt;
  *   &lt;complexContent&gt;
@@ -45,66 +44,55 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PathVariable")
 public class PathVariable
-    extends EdgeVariable
-{
+    extends EdgeVariable {
 
-    @XmlAttribute(name = "minLenght", required = true)
-    protected BigInteger minLenght;
-    @XmlAttribute(name = "maxLength", required = true)
-    protected BigInteger maxLength;
+  @XmlAttribute(name = "minLenght", required = true)
+  protected BigInteger minLenght;
+  @XmlAttribute(name = "maxLength", required = true)
+  protected BigInteger maxLength;
 
-    /**
-     * Gets the value of the minLenght property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getMinLenght() {
-        return minLenght;
-    }
+  /**
+   * Gets the value of the minLenght property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getMinLenght() {
+    return minLenght;
+  }
 
-    /**
-     * Sets the value of the minLenght property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setMinLenght(BigInteger value) {
-        this.minLenght = value;
-    }
+  /**
+   * Sets the value of the minLenght property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setMinLenght(BigInteger value) {
+    this.minLenght = value;
+  }
 
-    /**
-     * Gets the value of the maxLength property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getMaxLength() {
-        return maxLength;
-    }
+  /**
+   * Gets the value of the maxLength property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getMaxLength() {
+    return maxLength;
+  }
 
-    /**
-     * Sets the value of the maxLength property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setMaxLength(BigInteger value) {
-        this.maxLength = value;
-    }
+  /**
+   * Sets the value of the maxLength property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setMaxLength(BigInteger value) {
+    this.maxLength = value;
+  }
 
 }

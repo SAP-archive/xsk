@@ -19,6 +19,13 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.basemodelbase.NameValuePair;
+import com.sap.ndb.bimodelcube.MeasureGroup;
+import com.sap.ndb.bimodeldatafoundation.InformationModel;
+import com.sap.ndb.bimodeldatafoundation.Layout;
+import com.sap.ndb.bimodeldimension.Hierarchy;
+import com.sap.ndb.datamodelentity.DataCategory;
+import com.sap.ndb.datamodelentity.DimensionType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,29 +35,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.NameValuePair;
-import com.sap.ndb.bimodelcube.MeasureGroup;
-import com.sap.ndb.bimodeldatafoundation.InformationModel;
-import com.sap.ndb.bimodeldatafoundation.Layout;
-import com.sap.ndb.bimodeldimension.Hierarchy;
-import com.sap.ndb.datamodelentity.DataCategory;
-import com.sap.ndb.datamodelentity.DimensionType;
 
 
 /**
- * 
- * 				A Calculation scenario scenario is a collection of calculation views. One of the calculation views is marked	
- * 				as defaultView. Therefore the calculation scenario is identified with the default view to the SQL layer.
- * 				Sometimes a calculation scenario is simply	addressed as calculation view meaning the default view. 
- * 				Constraints / validations: 1. Exactly one node (a DataSource or a Calculation view) is mapped to the	
- * 				logical model via it's ID 2. A JoinView must have exactly two inputs 3. A UnionView must have at least one 
- * 				input 4. A ProjectionView must have at exactly	one input
- * 			
- * 
+ * A Calculation scenario scenario is a collection of calculation views. One of the calculation views is marked
+ * as defaultView. Therefore the calculation scenario is identified with the default view to the SQL layer.
+ * Sometimes a calculation scenario is simply	addressed as calculation view meaning the default view.
+ * Constraints / validations: 1. Exactly one node (a DataSource or a Calculation view) is mapped to the
+ * logical model via it's ID 2. A JoinView must have exactly two inputs 3. A UnionView must have at least one
+ * input 4. A ProjectionView must have at exactly	one input
+ *
+ *
  * <p>Java class for CalculationScenario complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CalculationScenario"&gt;
  *   &lt;complexContent&gt;
@@ -80,8 +79,6 @@ import com.sap.ndb.datamodelentity.DimensionType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CalculationScenario", propOrder = {
@@ -94,515 +91,442 @@ import com.sap.ndb.datamodelentity.DimensionType;
 })
 @XmlRootElement
 public class CalculationScenario
-    extends InformationModel
-{
+    extends InformationModel {
 
-    protected List<NameValuePair> executionHints;
-    protected DataSources dataSources;
-    protected CalculationViews calculationViews;
-    protected List<Hierarchy> inlineHierarchy;
-    protected MeasureGroup logicalModel;
-    protected Layout layout;
-    @XmlAttribute(name = "runWithInvokerPrivileges")
-    protected Boolean runWithInvokerPrivileges;
-    @XmlAttribute(name = "rowCounterName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String rowCounterName;
-    @XmlAttribute(name = "enforceSqlExecution")
-    protected Boolean enforceSqlExecution;
-    @XmlAttribute(name = "alwaysAggregateResult")
-    protected Boolean alwaysAggregateResult;
-    @XmlAttribute(name = "outputViewType")
-    protected CalculationViewType outputViewType;
-    @XmlAttribute(name = "dataCategory")
-    protected DataCategory dataCategory;
-    @XmlAttribute(name = "dimensionType")
-    protected DimensionType dimensionType;
-    @XmlAttribute(name = "defaultMember")
-    protected String defaultMember;
-    @XmlAttribute(name = "pruningTable")
-    protected String pruningTable;
-    @XmlAttribute(name = "analyticViewCompatibilityMode")
-    protected Boolean analyticViewCompatibilityMode;
-    @XmlAttribute(name = "propagateInstantiation")
-    protected Boolean propagateInstantiation;
-    @XmlAttribute(name = "determineTextFuzzySearchEnablement")
-    protected Boolean determineTextFuzzySearchEnablement;
-    @XmlAttribute(name = "xscCompatibilityMode")
-    protected Boolean xscCompatibilityMode;
+  protected List<NameValuePair> executionHints;
+  protected DataSources dataSources;
+  protected CalculationViews calculationViews;
+  protected List<Hierarchy> inlineHierarchy;
+  protected MeasureGroup logicalModel;
+  protected Layout layout;
+  @XmlAttribute(name = "runWithInvokerPrivileges")
+  protected Boolean runWithInvokerPrivileges;
+  @XmlAttribute(name = "rowCounterName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String rowCounterName;
+  @XmlAttribute(name = "enforceSqlExecution")
+  protected Boolean enforceSqlExecution;
+  @XmlAttribute(name = "alwaysAggregateResult")
+  protected Boolean alwaysAggregateResult;
+  @XmlAttribute(name = "outputViewType")
+  protected CalculationViewType outputViewType;
+  @XmlAttribute(name = "dataCategory")
+  protected DataCategory dataCategory;
+  @XmlAttribute(name = "dimensionType")
+  protected DimensionType dimensionType;
+  @XmlAttribute(name = "defaultMember")
+  protected String defaultMember;
+  @XmlAttribute(name = "pruningTable")
+  protected String pruningTable;
+  @XmlAttribute(name = "analyticViewCompatibilityMode")
+  protected Boolean analyticViewCompatibilityMode;
+  @XmlAttribute(name = "propagateInstantiation")
+  protected Boolean propagateInstantiation;
+  @XmlAttribute(name = "determineTextFuzzySearchEnablement")
+  protected Boolean determineTextFuzzySearchEnablement;
+  @XmlAttribute(name = "xscCompatibilityMode")
+  protected Boolean xscCompatibilityMode;
 
-    /**
-     * Gets the value of the executionHints property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the executionHints property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getExecutionHints().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link NameValuePair }
-     * 
-     * 
-     */
-    public List<NameValuePair> getExecutionHints() {
-        if (executionHints == null) {
-            executionHints = new ArrayList<NameValuePair>();
-        }
-        return this.executionHints;
+  /**
+   * Gets the value of the executionHints property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the executionHints property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getExecutionHints().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link NameValuePair }
+   */
+  public List<NameValuePair> getExecutionHints() {
+    if (executionHints == null) {
+      executionHints = new ArrayList<NameValuePair>();
     }
+    return this.executionHints;
+  }
 
-    /**
-     * Gets the value of the dataSources property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DataSources }
-     *     
-     */
-    public DataSources getDataSources() {
-        return dataSources;
-    }
+  /**
+   * Gets the value of the dataSources property.
+   *
+   * @return possible object is
+   * {@link DataSources }
+   */
+  public DataSources getDataSources() {
+    return dataSources;
+  }
 
-    /**
-     * Sets the value of the dataSources property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DataSources }
-     *     
-     */
-    public void setDataSources(DataSources value) {
-        this.dataSources = value;
-    }
+  /**
+   * Sets the value of the dataSources property.
+   *
+   * @param value allowed object is
+   *              {@link DataSources }
+   */
+  public void setDataSources(DataSources value) {
+    this.dataSources = value;
+  }
 
-    /**
-     * Gets the value of the calculationViews property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CalculationViews }
-     *     
-     */
-    public CalculationViews getCalculationViews() {
-        return calculationViews;
-    }
+  /**
+   * Gets the value of the calculationViews property.
+   *
+   * @return possible object is
+   * {@link CalculationViews }
+   */
+  public CalculationViews getCalculationViews() {
+    return calculationViews;
+  }
 
-    /**
-     * Sets the value of the calculationViews property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CalculationViews }
-     *     
-     */
-    public void setCalculationViews(CalculationViews value) {
-        this.calculationViews = value;
-    }
+  /**
+   * Sets the value of the calculationViews property.
+   *
+   * @param value allowed object is
+   *              {@link CalculationViews }
+   */
+  public void setCalculationViews(CalculationViews value) {
+    this.calculationViews = value;
+  }
 
-    /**
-     * Gets the value of the inlineHierarchy property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the inlineHierarchy property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getInlineHierarchy().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Hierarchy }
-     * 
-     * 
-     */
-    public List<Hierarchy> getInlineHierarchy() {
-        if (inlineHierarchy == null) {
-            inlineHierarchy = new ArrayList<Hierarchy>();
-        }
-        return this.inlineHierarchy;
+  /**
+   * Gets the value of the inlineHierarchy property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the inlineHierarchy property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getInlineHierarchy().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Hierarchy }
+   */
+  public List<Hierarchy> getInlineHierarchy() {
+    if (inlineHierarchy == null) {
+      inlineHierarchy = new ArrayList<Hierarchy>();
     }
+    return this.inlineHierarchy;
+  }
 
-    /**
-     * Gets the value of the logicalModel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MeasureGroup }
-     *     
-     */
-    public MeasureGroup getLogicalModel() {
-        return logicalModel;
-    }
+  /**
+   * Gets the value of the logicalModel property.
+   *
+   * @return possible object is
+   * {@link MeasureGroup }
+   */
+  public MeasureGroup getLogicalModel() {
+    return logicalModel;
+  }
 
-    /**
-     * Sets the value of the logicalModel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MeasureGroup }
-     *     
-     */
-    public void setLogicalModel(MeasureGroup value) {
-        this.logicalModel = value;
-    }
+  /**
+   * Sets the value of the logicalModel property.
+   *
+   * @param value allowed object is
+   *              {@link MeasureGroup }
+   */
+  public void setLogicalModel(MeasureGroup value) {
+    this.logicalModel = value;
+  }
 
-    /**
-     * Gets the value of the layout property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Layout }
-     *     
-     */
-    public Layout getLayout() {
-        return layout;
-    }
+  /**
+   * Gets the value of the layout property.
+   *
+   * @return possible object is
+   * {@link Layout }
+   */
+  public Layout getLayout() {
+    return layout;
+  }
 
-    /**
-     * Sets the value of the layout property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Layout }
-     *     
-     */
-    public void setLayout(Layout value) {
-        this.layout = value;
-    }
+  /**
+   * Sets the value of the layout property.
+   *
+   * @param value allowed object is
+   *              {@link Layout }
+   */
+  public void setLayout(Layout value) {
+    this.layout = value;
+  }
 
-    /**
-     * Gets the value of the runWithInvokerPrivileges property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isRunWithInvokerPrivileges() {
-        return runWithInvokerPrivileges;
-    }
+  /**
+   * Gets the value of the runWithInvokerPrivileges property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isRunWithInvokerPrivileges() {
+    return runWithInvokerPrivileges;
+  }
 
-    /**
-     * Sets the value of the runWithInvokerPrivileges property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setRunWithInvokerPrivileges(Boolean value) {
-        this.runWithInvokerPrivileges = value;
-    }
+  /**
+   * Sets the value of the runWithInvokerPrivileges property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setRunWithInvokerPrivileges(Boolean value) {
+    this.runWithInvokerPrivileges = value;
+  }
 
-    /**
-     * Gets the value of the rowCounterName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRowCounterName() {
-        return rowCounterName;
-    }
+  /**
+   * Gets the value of the rowCounterName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getRowCounterName() {
+    return rowCounterName;
+  }
 
-    /**
-     * Sets the value of the rowCounterName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRowCounterName(String value) {
-        this.rowCounterName = value;
-    }
+  /**
+   * Sets the value of the rowCounterName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRowCounterName(String value) {
+    this.rowCounterName = value;
+  }
 
-    /**
-     * Gets the value of the enforceSqlExecution property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isEnforceSqlExecution() {
-        return enforceSqlExecution;
-    }
+  /**
+   * Gets the value of the enforceSqlExecution property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isEnforceSqlExecution() {
+    return enforceSqlExecution;
+  }
 
-    /**
-     * Sets the value of the enforceSqlExecution property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setEnforceSqlExecution(Boolean value) {
-        this.enforceSqlExecution = value;
-    }
+  /**
+   * Sets the value of the enforceSqlExecution property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setEnforceSqlExecution(Boolean value) {
+    this.enforceSqlExecution = value;
+  }
 
-    /**
-     * Gets the value of the alwaysAggregateResult property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isAlwaysAggregateResult() {
-        return alwaysAggregateResult;
-    }
+  /**
+   * Gets the value of the alwaysAggregateResult property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isAlwaysAggregateResult() {
+    return alwaysAggregateResult;
+  }
 
-    /**
-     * Sets the value of the alwaysAggregateResult property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setAlwaysAggregateResult(Boolean value) {
-        this.alwaysAggregateResult = value;
-    }
+  /**
+   * Sets the value of the alwaysAggregateResult property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setAlwaysAggregateResult(Boolean value) {
+    this.alwaysAggregateResult = value;
+  }
 
-    /**
-     * Gets the value of the outputViewType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CalculationViewType }
-     *     
-     */
-    public CalculationViewType getOutputViewType() {
-        if (outputViewType == null) {
-            return CalculationViewType.AGGREGATION;
-        } else {
-            return outputViewType;
-        }
+  /**
+   * Gets the value of the outputViewType property.
+   *
+   * @return possible object is
+   * {@link CalculationViewType }
+   */
+  public CalculationViewType getOutputViewType() {
+    if (outputViewType == null) {
+      return CalculationViewType.AGGREGATION;
+    } else {
+      return outputViewType;
     }
+  }
 
-    /**
-     * Sets the value of the outputViewType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CalculationViewType }
-     *     
-     */
-    public void setOutputViewType(CalculationViewType value) {
-        this.outputViewType = value;
-    }
+  /**
+   * Sets the value of the outputViewType property.
+   *
+   * @param value allowed object is
+   *              {@link CalculationViewType }
+   */
+  public void setOutputViewType(CalculationViewType value) {
+    this.outputViewType = value;
+  }
 
-    /**
-     * Gets the value of the dataCategory property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DataCategory }
-     *     
-     */
-    public DataCategory getDataCategory() {
-        return dataCategory;
-    }
+  /**
+   * Gets the value of the dataCategory property.
+   *
+   * @return possible object is
+   * {@link DataCategory }
+   */
+  public DataCategory getDataCategory() {
+    return dataCategory;
+  }
 
-    /**
-     * Sets the value of the dataCategory property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DataCategory }
-     *     
-     */
-    public void setDataCategory(DataCategory value) {
-        this.dataCategory = value;
-    }
+  /**
+   * Sets the value of the dataCategory property.
+   *
+   * @param value allowed object is
+   *              {@link DataCategory }
+   */
+  public void setDataCategory(DataCategory value) {
+    this.dataCategory = value;
+  }
 
-    /**
-     * Gets the value of the dimensionType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DimensionType }
-     *     
-     */
-    public DimensionType getDimensionType() {
-        if (dimensionType == null) {
-            return DimensionType.STANDARD;
-        } else {
-            return dimensionType;
-        }
+  /**
+   * Gets the value of the dimensionType property.
+   *
+   * @return possible object is
+   * {@link DimensionType }
+   */
+  public DimensionType getDimensionType() {
+    if (dimensionType == null) {
+      return DimensionType.STANDARD;
+    } else {
+      return dimensionType;
     }
+  }
 
-    /**
-     * Sets the value of the dimensionType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DimensionType }
-     *     
-     */
-    public void setDimensionType(DimensionType value) {
-        this.dimensionType = value;
-    }
+  /**
+   * Sets the value of the dimensionType property.
+   *
+   * @param value allowed object is
+   *              {@link DimensionType }
+   */
+  public void setDimensionType(DimensionType value) {
+    this.dimensionType = value;
+  }
 
-    /**
-     * Gets the value of the defaultMember property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultMember() {
-        return defaultMember;
-    }
+  /**
+   * Gets the value of the defaultMember property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultMember() {
+    return defaultMember;
+  }
 
-    /**
-     * Sets the value of the defaultMember property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultMember(String value) {
-        this.defaultMember = value;
-    }
+  /**
+   * Sets the value of the defaultMember property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultMember(String value) {
+    this.defaultMember = value;
+  }
 
-    /**
-     * Gets the value of the pruningTable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPruningTable() {
-        return pruningTable;
-    }
+  /**
+   * Gets the value of the pruningTable property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPruningTable() {
+    return pruningTable;
+  }
 
-    /**
-     * Sets the value of the pruningTable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPruningTable(String value) {
-        this.pruningTable = value;
-    }
+  /**
+   * Sets the value of the pruningTable property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPruningTable(String value) {
+    this.pruningTable = value;
+  }
 
-    /**
-     * Gets the value of the analyticViewCompatibilityMode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isAnalyticViewCompatibilityMode() {
-        return analyticViewCompatibilityMode;
-    }
+  /**
+   * Gets the value of the analyticViewCompatibilityMode property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isAnalyticViewCompatibilityMode() {
+    return analyticViewCompatibilityMode;
+  }
 
-    /**
-     * Sets the value of the analyticViewCompatibilityMode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setAnalyticViewCompatibilityMode(Boolean value) {
-        this.analyticViewCompatibilityMode = value;
-    }
+  /**
+   * Sets the value of the analyticViewCompatibilityMode property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setAnalyticViewCompatibilityMode(Boolean value) {
+    this.analyticViewCompatibilityMode = value;
+  }
 
-    /**
-     * Gets the value of the propagateInstantiation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isPropagateInstantiation() {
-        return propagateInstantiation;
-    }
+  /**
+   * Gets the value of the propagateInstantiation property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isPropagateInstantiation() {
+    return propagateInstantiation;
+  }
 
-    /**
-     * Sets the value of the propagateInstantiation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setPropagateInstantiation(Boolean value) {
-        this.propagateInstantiation = value;
-    }
+  /**
+   * Sets the value of the propagateInstantiation property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setPropagateInstantiation(Boolean value) {
+    this.propagateInstantiation = value;
+  }
 
-    /**
-     * Gets the value of the determineTextFuzzySearchEnablement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDetermineTextFuzzySearchEnablement() {
-        return determineTextFuzzySearchEnablement;
-    }
+  /**
+   * Gets the value of the determineTextFuzzySearchEnablement property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDetermineTextFuzzySearchEnablement() {
+    return determineTextFuzzySearchEnablement;
+  }
 
-    /**
-     * Sets the value of the determineTextFuzzySearchEnablement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDetermineTextFuzzySearchEnablement(Boolean value) {
-        this.determineTextFuzzySearchEnablement = value;
-    }
+  /**
+   * Sets the value of the determineTextFuzzySearchEnablement property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDetermineTextFuzzySearchEnablement(Boolean value) {
+    this.determineTextFuzzySearchEnablement = value;
+  }
 
-    /**
-     * Gets the value of the xscCompatibilityMode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isXscCompatibilityMode() {
-        return xscCompatibilityMode;
-    }
+  /**
+   * Gets the value of the xscCompatibilityMode property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isXscCompatibilityMode() {
+    return xscCompatibilityMode;
+  }
 
-    /**
-     * Sets the value of the xscCompatibilityMode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setXscCompatibilityMode(Boolean value) {
-        this.xscCompatibilityMode = value;
-    }
+  /**
+   * Sets the value of the xscCompatibilityMode property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setXscCompatibilityMode(Boolean value) {
+    this.xscCompatibilityMode = value;
+  }
 
 }

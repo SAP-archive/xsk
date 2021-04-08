@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for RangeValueFilter complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RangeValueFilter"&gt;
  *   &lt;complexContent&gt;
@@ -40,66 +40,55 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RangeValueFilter")
 public class RangeValueFilter
-    extends ValueFilter
-{
+    extends ValueFilter {
 
-    @XmlAttribute(name = "lowValue")
-    protected String lowValue;
-    @XmlAttribute(name = "highValue")
-    protected String highValue;
+  @XmlAttribute(name = "lowValue")
+  protected String lowValue;
+  @XmlAttribute(name = "highValue")
+  protected String highValue;
 
-    /**
-     * Gets the value of the lowValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLowValue() {
-        return lowValue;
-    }
+  /**
+   * Gets the value of the lowValue property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLowValue() {
+    return lowValue;
+  }
 
-    /**
-     * Sets the value of the lowValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLowValue(String value) {
-        this.lowValue = value;
-    }
+  /**
+   * Sets the value of the lowValue property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLowValue(String value) {
+    this.lowValue = value;
+  }
 
-    /**
-     * Gets the value of the highValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHighValue() {
-        return highValue;
-    }
+  /**
+   * Gets the value of the highValue property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHighValue() {
+    return highValue;
+  }
 
-    /**
-     * Sets the value of the highValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHighValue(String value) {
-        this.highValue = value;
-    }
+  /**
+   * Sets the value of the highValue property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHighValue(String value) {
+    this.highValue = value;
+  }
 
 }

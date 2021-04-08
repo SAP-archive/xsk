@@ -28,15 +28,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Models a link to an attribute that can either be in the local or an external resource.	
- * 				Could als be acheived by resource:QualifiedNameReference
- * 			
- * 
+ * Models a link to an attribute that can either be in the local or an external resource.
+ * Could als be acheived by resource:QualifiedNameReference
+ *
+ *
  * <p>Java class for QualifiedAttributeReference complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="QualifiedAttributeReference"&gt;
  *   &lt;complexContent&gt;
@@ -47,66 +46,56 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QualifiedAttributeReference")
 public class QualifiedAttributeReference {
 
-    @XmlAttribute(name = "attributeName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String attributeName;
-    @XmlAttribute(name = "dimensionUri")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String dimensionUri;
+  @XmlAttribute(name = "attributeName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String attributeName;
+  @XmlAttribute(name = "dimensionUri")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String dimensionUri;
 
-    /**
-     * Gets the value of the attributeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAttributeName() {
-        return attributeName;
-    }
+  /**
+   * Gets the value of the attributeName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAttributeName() {
+    return attributeName;
+  }
 
-    /**
-     * Sets the value of the attributeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAttributeName(String value) {
-        this.attributeName = value;
-    }
+  /**
+   * Sets the value of the attributeName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAttributeName(String value) {
+    this.attributeName = value;
+  }
 
-    /**
-     * Gets the value of the dimensionUri property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDimensionUri() {
-        return dimensionUri;
-    }
+  /**
+   * Gets the value of the dimensionUri property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDimensionUri() {
+    return dimensionUri;
+  }
 
-    /**
-     * Sets the value of the dimensionUri property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDimensionUri(String value) {
-        this.dimensionUri = value;
-    }
+  /**
+   * Sets the value of the dimensionUri property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDimensionUri(String value) {
+    this.dimensionUri = value;
+  }
 
 }

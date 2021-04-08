@@ -19,6 +19,7 @@
 
 package com.sap.ndb.bimodeldimension;
 
+import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,19 +30,17 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 
 
 /**
- * 
- * 				A local dimension refers to attributes and defines hierarchies inside of a logical model.
- * 				It has no own data foundation see Dimension.
- *     		
- * 
+ * A local dimension refers to attributes and defines hierarchies inside of a logical model.
+ * It has no own data foundation see Dimension.
+ *
+ *
  * <p>Java class for LocalDimension complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LocalDimension"&gt;
  *   &lt;complexContent&gt;
@@ -56,8 +55,6 @@ import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LocalDimension", propOrder = {
@@ -65,118 +62,103 @@ import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
     "hierarchies"
 })
 public class LocalDimension
-    extends IDObjectWithDescription
-{
+    extends IDObjectWithDescription {
 
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected List<String> attributeRef;
-    protected Hierarchies hierarchies;
-    @XmlAttribute(name = "dimensionType", required = true)
-    protected DimensionType dimensionType;
-    @XmlAttribute(name = "defaultMember")
-    protected String defaultMember;
+  @XmlElement(required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected List<String> attributeRef;
+  protected Hierarchies hierarchies;
+  @XmlAttribute(name = "dimensionType", required = true)
+  protected DimensionType dimensionType;
+  @XmlAttribute(name = "defaultMember")
+  protected String defaultMember;
 
-    /**
-     * Gets the value of the attributeRef property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the attributeRef property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getAttributeRef().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getAttributeRef() {
-        if (attributeRef == null) {
-            attributeRef = new ArrayList<String>();
-        }
-        return this.attributeRef;
+  /**
+   * Gets the value of the attributeRef property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the attributeRef property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getAttributeRef().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link String }
+   */
+  public List<String> getAttributeRef() {
+    if (attributeRef == null) {
+      attributeRef = new ArrayList<String>();
     }
+    return this.attributeRef;
+  }
 
-    /**
-     * Gets the value of the hierarchies property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Hierarchies }
-     *     
-     */
-    public Hierarchies getHierarchies() {
-        return hierarchies;
-    }
+  /**
+   * Gets the value of the hierarchies property.
+   *
+   * @return possible object is
+   * {@link Hierarchies }
+   */
+  public Hierarchies getHierarchies() {
+    return hierarchies;
+  }
 
-    /**
-     * Sets the value of the hierarchies property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Hierarchies }
-     *     
-     */
-    public void setHierarchies(Hierarchies value) {
-        this.hierarchies = value;
-    }
+  /**
+   * Sets the value of the hierarchies property.
+   *
+   * @param value allowed object is
+   *              {@link Hierarchies }
+   */
+  public void setHierarchies(Hierarchies value) {
+    this.hierarchies = value;
+  }
 
-    /**
-     * Gets the value of the dimensionType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DimensionType }
-     *     
-     */
-    public DimensionType getDimensionType() {
-        return dimensionType;
-    }
+  /**
+   * Gets the value of the dimensionType property.
+   *
+   * @return possible object is
+   * {@link DimensionType }
+   */
+  public DimensionType getDimensionType() {
+    return dimensionType;
+  }
 
-    /**
-     * Sets the value of the dimensionType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DimensionType }
-     *     
-     */
-    public void setDimensionType(DimensionType value) {
-        this.dimensionType = value;
-    }
+  /**
+   * Sets the value of the dimensionType property.
+   *
+   * @param value allowed object is
+   *              {@link DimensionType }
+   */
+  public void setDimensionType(DimensionType value) {
+    this.dimensionType = value;
+  }
 
-    /**
-     * Gets the value of the defaultMember property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultMember() {
-        return defaultMember;
-    }
+  /**
+   * Gets the value of the defaultMember property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultMember() {
+    return defaultMember;
+  }
 
-    /**
-     * Sets the value of the defaultMember property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultMember(String value) {
-        this.defaultMember = value;
-    }
+  /**
+   * Sets the value of the defaultMember property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultMember(String value) {
+    this.defaultMember = value;
+  }
 
 }

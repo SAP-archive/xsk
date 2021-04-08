@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Specification of hierarchy join properties.
- * 			
- * 
+ * Specification of hierarchy join properties.
+ *
+ *
  * <p>Java class for HierarchyJoinProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HierarchyJoinProperties"&gt;
  *   &lt;complexContent&gt;
@@ -48,120 +47,102 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HierarchyJoinProperties")
 public class HierarchyJoinProperties {
 
-    @XmlAttribute(name = "nodeElementName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String nodeElementName;
-    @XmlAttribute(name = "levelElementName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String levelElementName;
-    @XmlAttribute(name = "ordinalElementName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String ordinalElementName;
-    @XmlAttribute(name = "expressionParameterName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String expressionParameterName;
+  @XmlAttribute(name = "nodeElementName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String nodeElementName;
+  @XmlAttribute(name = "levelElementName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String levelElementName;
+  @XmlAttribute(name = "ordinalElementName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String ordinalElementName;
+  @XmlAttribute(name = "expressionParameterName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String expressionParameterName;
 
-    /**
-     * Gets the value of the nodeElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNodeElementName() {
-        return nodeElementName;
-    }
+  /**
+   * Gets the value of the nodeElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getNodeElementName() {
+    return nodeElementName;
+  }
 
-    /**
-     * Sets the value of the nodeElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNodeElementName(String value) {
-        this.nodeElementName = value;
-    }
+  /**
+   * Sets the value of the nodeElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setNodeElementName(String value) {
+    this.nodeElementName = value;
+  }
 
-    /**
-     * Gets the value of the levelElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLevelElementName() {
-        return levelElementName;
-    }
+  /**
+   * Gets the value of the levelElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLevelElementName() {
+    return levelElementName;
+  }
 
-    /**
-     * Sets the value of the levelElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLevelElementName(String value) {
-        this.levelElementName = value;
-    }
+  /**
+   * Sets the value of the levelElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLevelElementName(String value) {
+    this.levelElementName = value;
+  }
 
-    /**
-     * Gets the value of the ordinalElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOrdinalElementName() {
-        return ordinalElementName;
-    }
+  /**
+   * Gets the value of the ordinalElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getOrdinalElementName() {
+    return ordinalElementName;
+  }
 
-    /**
-     * Sets the value of the ordinalElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOrdinalElementName(String value) {
-        this.ordinalElementName = value;
-    }
+  /**
+   * Sets the value of the ordinalElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setOrdinalElementName(String value) {
+    this.ordinalElementName = value;
+  }
 
-    /**
-     * Gets the value of the expressionParameterName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExpressionParameterName() {
-        return expressionParameterName;
-    }
+  /**
+   * Gets the value of the expressionParameterName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExpressionParameterName() {
+    return expressionParameterName;
+  }
 
-    /**
-     * Sets the value of the expressionParameterName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExpressionParameterName(String value) {
-        this.expressionParameterName = value;
-    }
+  /**
+   * Sets the value of the expressionParameterName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExpressionParameterName(String value) {
+    this.expressionParameterName = value;
+  }
 
 }

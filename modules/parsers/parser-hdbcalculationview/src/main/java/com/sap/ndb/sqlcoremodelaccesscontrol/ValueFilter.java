@@ -28,9 +28,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ValueFilter complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ValueFilter"&gt;
  *   &lt;complexContent&gt;
@@ -41,8 +41,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ValueFilter")
@@ -53,61 +51,53 @@ import javax.xml.bind.annotation.XmlType;
 })
 public abstract class ValueFilter {
 
-    @XmlAttribute(name = "operator", required = true)
-    protected ValueFilterOperator operator;
-    @XmlAttribute(name = "including")
-    protected Boolean including;
+  @XmlAttribute(name = "operator", required = true)
+  protected ValueFilterOperator operator;
+  @XmlAttribute(name = "including")
+  protected Boolean including;
 
-    /**
-     * Gets the value of the operator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ValueFilterOperator }
-     *     
-     */
-    public ValueFilterOperator getOperator() {
-        return operator;
-    }
+  /**
+   * Gets the value of the operator property.
+   *
+   * @return possible object is
+   * {@link ValueFilterOperator }
+   */
+  public ValueFilterOperator getOperator() {
+    return operator;
+  }
 
-    /**
-     * Sets the value of the operator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ValueFilterOperator }
-     *     
-     */
-    public void setOperator(ValueFilterOperator value) {
-        this.operator = value;
-    }
+  /**
+   * Sets the value of the operator property.
+   *
+   * @param value allowed object is
+   *              {@link ValueFilterOperator }
+   */
+  public void setOperator(ValueFilterOperator value) {
+    this.operator = value;
+  }
 
-    /**
-     * Gets the value of the including property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public boolean isIncluding() {
-        if (including == null) {
-            return true;
-        } else {
-            return including;
-        }
+  /**
+   * Gets the value of the including property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public boolean isIncluding() {
+    if (including == null) {
+      return true;
+    } else {
+      return including;
     }
+  }
 
-    /**
-     * Sets the value of the including property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIncluding(Boolean value) {
-        this.including = value;
-    }
+  /**
+   * Sets the value of the including property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setIncluding(Boolean value) {
+    this.including = value;
+  }
 
 }

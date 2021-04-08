@@ -19,26 +19,25 @@
 
 package com.sap.ndb.bimodelvariable;
 
+import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 
 
 /**
- * 
- * 				A local variable is used to model a variable within the
- * 				resource of an Information Model Only upper case letters
- * 				and underscore is allowed for a variable name, since in
- * 				the engine the placeholder names are case insensitive.
- * 			
- * 
+ * A local variable is used to model a variable within the
+ * resource of an Information Model Only upper case letters
+ * and underscore is allowed for a variable name, since in
+ * the engine the placeholder names are case insensitive.
+ *
+ *
  * <p>Java class for LocalVariable complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LocalVariable"&gt;
  *   &lt;complexContent&gt;
@@ -53,120 +52,101 @@ import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LocalVariable", propOrder = {
     "variableProperties"
 })
 public class LocalVariable
-    extends IDObjectWithDescription
-{
+    extends IDObjectWithDescription {
 
-    @XmlElement(required = true)
-    protected VariableProperties variableProperties;
-    @XmlAttribute(name = "parameter")
-    protected Boolean parameter;
-    @XmlAttribute(name = "type")
-    protected String type;
-    @XmlAttribute(name = "deprecated")
-    protected Boolean deprecated;
+  @XmlElement(required = true)
+  protected VariableProperties variableProperties;
+  @XmlAttribute(name = "parameter")
+  protected Boolean parameter;
+  @XmlAttribute(name = "type")
+  protected String type;
+  @XmlAttribute(name = "deprecated")
+  protected Boolean deprecated;
 
-    /**
-     * Gets the value of the variableProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link VariableProperties }
-     *     
-     */
-    public VariableProperties getVariableProperties() {
-        return variableProperties;
-    }
+  /**
+   * Gets the value of the variableProperties property.
+   *
+   * @return possible object is
+   * {@link VariableProperties }
+   */
+  public VariableProperties getVariableProperties() {
+    return variableProperties;
+  }
 
-    /**
-     * Sets the value of the variableProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link VariableProperties }
-     *     
-     */
-    public void setVariableProperties(VariableProperties value) {
-        this.variableProperties = value;
-    }
+  /**
+   * Sets the value of the variableProperties property.
+   *
+   * @param value allowed object is
+   *              {@link VariableProperties }
+   */
+  public void setVariableProperties(VariableProperties value) {
+    this.variableProperties = value;
+  }
 
-    /**
-     * Gets the value of the parameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isParameter() {
-        return parameter;
-    }
+  /**
+   * Gets the value of the parameter property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isParameter() {
+    return parameter;
+  }
 
-    /**
-     * Sets the value of the parameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setParameter(Boolean value) {
-        this.parameter = value;
-    }
+  /**
+   * Sets the value of the parameter property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setParameter(Boolean value) {
+    this.parameter = value;
+  }
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getType() {
-        return type;
-    }
+  /**
+   * Gets the value of the type property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getType() {
+    return type;
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setType(String value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setType(String value) {
+    this.type = value;
+  }
 
-    /**
-     * Gets the value of the deprecated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDeprecated() {
-        return deprecated;
-    }
+  /**
+   * Gets the value of the deprecated property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDeprecated() {
+    return deprecated;
+  }
 
-    /**
-     * Sets the value of the deprecated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDeprecated(Boolean value) {
-        this.deprecated = value;
-    }
+  /**
+   * Sets the value of the deprecated property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDeprecated(Boolean value) {
+    this.deprecated = value;
+  }
 
 }

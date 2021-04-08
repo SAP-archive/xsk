@@ -11,30 +11,30 @@ import org.eclipse.xtext.parser.antlr.XtextTokenStream;
 
 public class XSODataParser extends AbstractAntlrParser {
 
-	@Inject
-	private XSODataGrammarAccess grammarAccess;
+  @Inject
+  private XSODataGrammarAccess grammarAccess;
 
-	@Override
-	protected void setInitialHiddenTokens(XtextTokenStream tokenStream) {
-		tokenStream.setInitialHiddenTokens("RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT");
-	}
-	
+  @Override
+  protected void setInitialHiddenTokens(XtextTokenStream tokenStream) {
+    tokenStream.setInitialHiddenTokens("RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT");
+  }
 
-	@Override
-	protected InternalXSODataParser createParser(XtextTokenStream stream) {
-		return new InternalXSODataParser(stream, getGrammarAccess());
-	}
 
-	@Override 
-	protected String getDefaultRuleName() {
-		return "XSOData";
-	}
+  @Override
+  protected InternalXSODataParser createParser(XtextTokenStream stream) {
+    return new InternalXSODataParser(stream, getGrammarAccess());
+  }
 
-	public XSODataGrammarAccess getGrammarAccess() {
-		return this.grammarAccess;
-	}
+  @Override
+  protected String getDefaultRuleName() {
+    return "XSOData";
+  }
 
-	public void setGrammarAccess(XSODataGrammarAccess grammarAccess) {
-		this.grammarAccess = grammarAccess;
-	}
+  public XSODataGrammarAccess getGrammarAccess() {
+    return this.grammarAccess;
+  }
+
+  public void setGrammarAccess(XSODataGrammarAccess grammarAccess) {
+    this.grammarAccess = grammarAccess;
+  }
 }

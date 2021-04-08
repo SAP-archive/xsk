@@ -25,14 +25,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				For defining a vertex variable (so far only the name is required)
- * 			
- * 
+ * For defining a vertex variable (so far only the name is required)
+ *
+ *
  * <p>Java class for VertexVariable complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="VertexVariable"&gt;
  *   &lt;complexContent&gt;
@@ -41,14 +40,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "VertexVariable")
 public class VertexVariable
-    extends Variable
-{
+    extends Variable {
 
 
 }

@@ -19,6 +19,8 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.basemodelbase.FeaturedHierarchyReference;
+import com.sap.ndb.basemodelbase.TemporalJoinProperties;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,19 +30,16 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.FeaturedHierarchyReference;
-import com.sap.ndb.basemodelbase.TemporalJoinProperties;
 
 
 /**
- * 
- * 				Models the join betweeb two logical objects - e.g. the measure group of a cube and a shared dimension
- * 			
- * 
+ * Models the join betweeb two logical objects - e.g. the measure group of a cube and a shared dimension
+ *
+ *
  * <p>Java class for LogicalJoin complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LogicalJoin"&gt;
  *   &lt;complexContent&gt;
@@ -60,8 +59,6 @@ import com.sap.ndb.basemodelbase.TemporalJoinProperties;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LogicalJoin", propOrder = {
@@ -74,243 +71,209 @@ import com.sap.ndb.basemodelbase.TemporalJoinProperties;
 })
 public class LogicalJoin {
 
-    @XmlElement(required = true)
-    protected AttributeRefs attributes;
-    @XmlElement(required = true)
-    protected AttributeNames associatedAttributeNames;
-    @XmlElement(required = true)
-    protected JoinProperties properties;
-    protected TemporalJoinProperties temporalJoinProperties;
-    protected FeaturedAttributeReferences associatedAttributeFeatures;
-    protected List<FeaturedHierarchyReference> associatedHierarchyFeature;
-    @XmlAttribute(name = "associatedObjectUri", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String associatedObjectUri;
-    @XmlAttribute(name = "languageAttributeName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String languageAttributeName;
-    @XmlAttribute(name = "useDimensionViewHierarchies")
-    protected Boolean useDimensionViewHierarchies;
+  @XmlElement(required = true)
+  protected AttributeRefs attributes;
+  @XmlElement(required = true)
+  protected AttributeNames associatedAttributeNames;
+  @XmlElement(required = true)
+  protected JoinProperties properties;
+  protected TemporalJoinProperties temporalJoinProperties;
+  protected FeaturedAttributeReferences associatedAttributeFeatures;
+  protected List<FeaturedHierarchyReference> associatedHierarchyFeature;
+  @XmlAttribute(name = "associatedObjectUri", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String associatedObjectUri;
+  @XmlAttribute(name = "languageAttributeName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String languageAttributeName;
+  @XmlAttribute(name = "useDimensionViewHierarchies")
+  protected Boolean useDimensionViewHierarchies;
 
-    /**
-     * Gets the value of the attributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AttributeRefs }
-     *     
-     */
-    public AttributeRefs getAttributes() {
-        return attributes;
-    }
+  /**
+   * Gets the value of the attributes property.
+   *
+   * @return possible object is
+   * {@link AttributeRefs }
+   */
+  public AttributeRefs getAttributes() {
+    return attributes;
+  }
 
-    /**
-     * Sets the value of the attributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AttributeRefs }
-     *     
-     */
-    public void setAttributes(AttributeRefs value) {
-        this.attributes = value;
-    }
+  /**
+   * Sets the value of the attributes property.
+   *
+   * @param value allowed object is
+   *              {@link AttributeRefs }
+   */
+  public void setAttributes(AttributeRefs value) {
+    this.attributes = value;
+  }
 
-    /**
-     * Gets the value of the associatedAttributeNames property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AttributeNames }
-     *     
-     */
-    public AttributeNames getAssociatedAttributeNames() {
-        return associatedAttributeNames;
-    }
+  /**
+   * Gets the value of the associatedAttributeNames property.
+   *
+   * @return possible object is
+   * {@link AttributeNames }
+   */
+  public AttributeNames getAssociatedAttributeNames() {
+    return associatedAttributeNames;
+  }
 
-    /**
-     * Sets the value of the associatedAttributeNames property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AttributeNames }
-     *     
-     */
-    public void setAssociatedAttributeNames(AttributeNames value) {
-        this.associatedAttributeNames = value;
-    }
+  /**
+   * Sets the value of the associatedAttributeNames property.
+   *
+   * @param value allowed object is
+   *              {@link AttributeNames }
+   */
+  public void setAssociatedAttributeNames(AttributeNames value) {
+    this.associatedAttributeNames = value;
+  }
 
-    /**
-     * Gets the value of the properties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JoinProperties }
-     *     
-     */
-    public JoinProperties getProperties() {
-        return properties;
-    }
+  /**
+   * Gets the value of the properties property.
+   *
+   * @return possible object is
+   * {@link JoinProperties }
+   */
+  public JoinProperties getProperties() {
+    return properties;
+  }
 
-    /**
-     * Sets the value of the properties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JoinProperties }
-     *     
-     */
-    public void setProperties(JoinProperties value) {
-        this.properties = value;
-    }
+  /**
+   * Sets the value of the properties property.
+   *
+   * @param value allowed object is
+   *              {@link JoinProperties }
+   */
+  public void setProperties(JoinProperties value) {
+    this.properties = value;
+  }
 
-    /**
-     * Gets the value of the temporalJoinProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TemporalJoinProperties }
-     *     
-     */
-    public TemporalJoinProperties getTemporalJoinProperties() {
-        return temporalJoinProperties;
-    }
+  /**
+   * Gets the value of the temporalJoinProperties property.
+   *
+   * @return possible object is
+   * {@link TemporalJoinProperties }
+   */
+  public TemporalJoinProperties getTemporalJoinProperties() {
+    return temporalJoinProperties;
+  }
 
-    /**
-     * Sets the value of the temporalJoinProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TemporalJoinProperties }
-     *     
-     */
-    public void setTemporalJoinProperties(TemporalJoinProperties value) {
-        this.temporalJoinProperties = value;
-    }
+  /**
+   * Sets the value of the temporalJoinProperties property.
+   *
+   * @param value allowed object is
+   *              {@link TemporalJoinProperties }
+   */
+  public void setTemporalJoinProperties(TemporalJoinProperties value) {
+    this.temporalJoinProperties = value;
+  }
 
-    /**
-     * Gets the value of the associatedAttributeFeatures property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link FeaturedAttributeReferences }
-     *     
-     */
-    public FeaturedAttributeReferences getAssociatedAttributeFeatures() {
-        return associatedAttributeFeatures;
-    }
+  /**
+   * Gets the value of the associatedAttributeFeatures property.
+   *
+   * @return possible object is
+   * {@link FeaturedAttributeReferences }
+   */
+  public FeaturedAttributeReferences getAssociatedAttributeFeatures() {
+    return associatedAttributeFeatures;
+  }
 
-    /**
-     * Sets the value of the associatedAttributeFeatures property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link FeaturedAttributeReferences }
-     *     
-     */
-    public void setAssociatedAttributeFeatures(FeaturedAttributeReferences value) {
-        this.associatedAttributeFeatures = value;
-    }
+  /**
+   * Sets the value of the associatedAttributeFeatures property.
+   *
+   * @param value allowed object is
+   *              {@link FeaturedAttributeReferences }
+   */
+  public void setAssociatedAttributeFeatures(FeaturedAttributeReferences value) {
+    this.associatedAttributeFeatures = value;
+  }
 
-    /**
-     * Gets the value of the associatedHierarchyFeature property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the associatedHierarchyFeature property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getAssociatedHierarchyFeature().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link FeaturedHierarchyReference }
-     * 
-     * 
-     */
-    public List<FeaturedHierarchyReference> getAssociatedHierarchyFeature() {
-        if (associatedHierarchyFeature == null) {
-            associatedHierarchyFeature = new ArrayList<FeaturedHierarchyReference>();
-        }
-        return this.associatedHierarchyFeature;
+  /**
+   * Gets the value of the associatedHierarchyFeature property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the associatedHierarchyFeature property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getAssociatedHierarchyFeature().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link FeaturedHierarchyReference }
+   */
+  public List<FeaturedHierarchyReference> getAssociatedHierarchyFeature() {
+    if (associatedHierarchyFeature == null) {
+      associatedHierarchyFeature = new ArrayList<FeaturedHierarchyReference>();
     }
+    return this.associatedHierarchyFeature;
+  }
 
-    /**
-     * Gets the value of the associatedObjectUri property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAssociatedObjectUri() {
-        return associatedObjectUri;
-    }
+  /**
+   * Gets the value of the associatedObjectUri property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAssociatedObjectUri() {
+    return associatedObjectUri;
+  }
 
-    /**
-     * Sets the value of the associatedObjectUri property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAssociatedObjectUri(String value) {
-        this.associatedObjectUri = value;
-    }
+  /**
+   * Sets the value of the associatedObjectUri property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAssociatedObjectUri(String value) {
+    this.associatedObjectUri = value;
+  }
 
-    /**
-     * Gets the value of the languageAttributeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLanguageAttributeName() {
-        return languageAttributeName;
-    }
+  /**
+   * Gets the value of the languageAttributeName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLanguageAttributeName() {
+    return languageAttributeName;
+  }
 
-    /**
-     * Sets the value of the languageAttributeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLanguageAttributeName(String value) {
-        this.languageAttributeName = value;
-    }
+  /**
+   * Sets the value of the languageAttributeName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLanguageAttributeName(String value) {
+    this.languageAttributeName = value;
+  }
 
-    /**
-     * Gets the value of the useDimensionViewHierarchies property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isUseDimensionViewHierarchies() {
-        return useDimensionViewHierarchies;
-    }
+  /**
+   * Gets the value of the useDimensionViewHierarchies property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isUseDimensionViewHierarchies() {
+    return useDimensionViewHierarchies;
+  }
 
-    /**
-     * Sets the value of the useDimensionViewHierarchies property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setUseDimensionViewHierarchies(Boolean value) {
-        this.useDimensionViewHierarchies = value;
-    }
+  /**
+   * Sets the value of the useDimensionViewHierarchies property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setUseDimensionViewHierarchies(Boolean value) {
+    this.useDimensionViewHierarchies = value;
+  }
 
 }

@@ -22,9 +22,10 @@ import org.junit.runner.RunWith;
 @InjectWith(HdbDDInjectorProvider.class)
 @SuppressWarnings("all")
 public class HdbDDParsingTest {
+
   @Inject
   private ParseHelper<HdbDD> parseHelper;
-  
+
   @Test
   public void loadModel() {
     try {

@@ -28,16 +28,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				An featured attribute reference is a reference to an existing attribute	including additional features like 
- * 				alias, descriptions or the	possibility to	hide the attribute.	The feature attribueName is the 
- * 				pointer to the original attribute.
- * 			
- * 
+ * An featured attribute reference is a reference to an existing attribute	including additional features like
+ * alias, descriptions or the	possibility to	hide the attribute.	The feature attribueName is the
+ * pointer to the original attribute.
+ *
+ *
  * <p>Java class for FeaturedAttributeReference complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="FeaturedAttributeReference"&gt;
  *   &lt;complexContent&gt;
@@ -50,119 +49,100 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FeaturedAttributeReference")
 public class FeaturedAttributeReference
-    extends AliasWithDescription
-{
+    extends AliasWithDescription {
 
-    @XmlAttribute(name = "attributeName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String attributeName;
-    @XmlAttribute(name = "hidden")
-    protected Boolean hidden;
-    @XmlAttribute(name = "transparentFilter")
-    protected Boolean transparentFilter;
-    @XmlAttribute(name = "keepFlag")
-    protected Boolean keepFlag;
+  @XmlAttribute(name = "attributeName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String attributeName;
+  @XmlAttribute(name = "hidden")
+  protected Boolean hidden;
+  @XmlAttribute(name = "transparentFilter")
+  protected Boolean transparentFilter;
+  @XmlAttribute(name = "keepFlag")
+  protected Boolean keepFlag;
 
-    /**
-     * Gets the value of the attributeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAttributeName() {
-        return attributeName;
-    }
+  /**
+   * Gets the value of the attributeName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAttributeName() {
+    return attributeName;
+  }
 
-    /**
-     * Sets the value of the attributeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAttributeName(String value) {
-        this.attributeName = value;
-    }
+  /**
+   * Sets the value of the attributeName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAttributeName(String value) {
+    this.attributeName = value;
+  }
 
-    /**
-     * Gets the value of the hidden property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isHidden() {
-        return hidden;
-    }
+  /**
+   * Gets the value of the hidden property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isHidden() {
+    return hidden;
+  }
 
-    /**
-     * Sets the value of the hidden property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setHidden(Boolean value) {
-        this.hidden = value;
-    }
+  /**
+   * Sets the value of the hidden property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setHidden(Boolean value) {
+    this.hidden = value;
+  }
 
-    /**
-     * Gets the value of the transparentFilter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isTransparentFilter() {
-        return transparentFilter;
-    }
+  /**
+   * Gets the value of the transparentFilter property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isTransparentFilter() {
+    return transparentFilter;
+  }
 
-    /**
-     * Sets the value of the transparentFilter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setTransparentFilter(Boolean value) {
-        this.transparentFilter = value;
-    }
+  /**
+   * Sets the value of the transparentFilter property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setTransparentFilter(Boolean value) {
+    this.transparentFilter = value;
+  }
 
-    /**
-     * Gets the value of the keepFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isKeepFlag() {
-        return keepFlag;
-    }
+  /**
+   * Gets the value of the keepFlag property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isKeepFlag() {
+    return keepFlag;
+  }
 
-    /**
-     * Sets the value of the keepFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setKeepFlag(Boolean value) {
-        this.keepFlag = value;
-    }
+  /**
+   * Sets the value of the keepFlag property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setKeepFlag(Boolean value) {
+    this.keepFlag = value;
+  }
 
 }

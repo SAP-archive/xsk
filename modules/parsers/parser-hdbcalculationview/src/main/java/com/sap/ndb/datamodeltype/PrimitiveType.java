@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PrimitiveType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -63,76 +63,63 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "PrimitiveType")
 @XmlEnum
 public enum PrimitiveType {
 
 
-    /**
-     * 
-     * 						@deprecated - Deprecated SAP HANA type
-     * 					
-     * 
-     */
-    CHAR,
-    VARCHAR,
+  /**
+   * @deprecated - Deprecated SAP HANA type
+   */
+  CHAR,
+  VARCHAR,
 
-    /**
-     * 
-     * 						@deprecated - Deprecated SAP HANA type
-     * 					
-     * 
-     */
-    NCHAR,
-    NVARCHAR,
-    TINYINT,
-    SMALLINT,
-    INTEGER,
-    BIGINT,
-    DECIMAL,
+  /**
+   * @deprecated - Deprecated SAP HANA type
+   */
+  NCHAR,
+  NVARCHAR,
+  TINYINT,
+  SMALLINT,
+  INTEGER,
+  BIGINT,
+  DECIMAL,
 
-    /**
-     * 
-     * 						@deprecated - Deprecated SAP HANA type
-     * 					
-     * 
-     */
-    NUMERIC,
-    REAL,
-    FLOAT,
-    DOUBLE,
-    DATE,
-    TIME,
-    TIMESTAMP,
-    SECONDDATE,
-    BLOB,
-    CLOB,
-    NCLOB,
+  /**
+   * @deprecated - Deprecated SAP HANA type
+   */
+  NUMERIC,
+  REAL,
+  FLOAT,
+  DOUBLE,
+  DATE,
+  TIME,
+  TIMESTAMP,
+  SECONDDATE,
+  BLOB,
+  CLOB,
+  NCLOB,
 
-    /**
-     * 
-     * 						@deprecated - Deprecated SAP HANA type
-     * 					
-     * 
-     */
-    BINARY,
-    VARBINARY,
-    SMALLDECIMAL,
-    TEXT,
-    SHORTTEXT,
-    ST_POINT,
-    ST_GEOMETRY,
-    ALPHANUM,
-    BOOLEAN;
+  /**
+   * @deprecated - Deprecated SAP HANA type
+   */
+  BINARY,
+  VARBINARY,
+  SMALLDECIMAL,
+  TEXT,
+  SHORTTEXT,
+  ST_POINT,
+  ST_GEOMETRY,
+  ALPHANUM,
+  BOOLEAN;
 
-    public String value() {
-        return name();
-    }
+  public static PrimitiveType fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static PrimitiveType fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

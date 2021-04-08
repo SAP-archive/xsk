@@ -19,6 +19,8 @@
 
 package com.sap.ndb.bimodelcube;
 
+import com.sap.ndb.bimodelprivilege.Restriction;
+import com.sap.ndb.datamodeltype.ExpressionLanguage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -27,15 +29,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.bimodelprivilege.Restriction;
-import com.sap.ndb.datamodeltype.ExpressionLanguage;
 
 
 /**
  * <p>Java class for RestrictedMeasure complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RestrictedMeasure"&gt;
  *   &lt;complexContent&gt;
@@ -50,8 +50,6 @@ import com.sap.ndb.datamodeltype.ExpressionLanguage;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RestrictedMeasure", propOrder = {
@@ -59,116 +57,101 @@ import com.sap.ndb.datamodeltype.ExpressionLanguage;
     "restrictionExpression"
 })
 public class RestrictedMeasure
-    extends Measure
-{
+    extends Measure {
 
-    protected List<Restriction> restriction;
-    protected String restrictionExpression;
-    @XmlAttribute(name = "restrictionExpressionLanguage")
-    protected ExpressionLanguage restrictionExpressionLanguage;
-    @XmlAttribute(name = "baseMeasure", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String baseMeasure;
+  protected List<Restriction> restriction;
+  protected String restrictionExpression;
+  @XmlAttribute(name = "restrictionExpressionLanguage")
+  protected ExpressionLanguage restrictionExpressionLanguage;
+  @XmlAttribute(name = "baseMeasure", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String baseMeasure;
 
-    /**
-     * Gets the value of the restriction property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the restriction property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getRestriction().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Restriction }
-     * 
-     * 
-     */
-    public List<Restriction> getRestriction() {
-        if (restriction == null) {
-            restriction = new ArrayList<Restriction>();
-        }
-        return this.restriction;
+  /**
+   * Gets the value of the restriction property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the restriction property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getRestriction().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Restriction }
+   */
+  public List<Restriction> getRestriction() {
+    if (restriction == null) {
+      restriction = new ArrayList<Restriction>();
     }
+    return this.restriction;
+  }
 
-    /**
-     * Gets the value of the restrictionExpression property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRestrictionExpression() {
-        return restrictionExpression;
-    }
+  /**
+   * Gets the value of the restrictionExpression property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getRestrictionExpression() {
+    return restrictionExpression;
+  }
 
-    /**
-     * Sets the value of the restrictionExpression property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRestrictionExpression(String value) {
-        this.restrictionExpression = value;
-    }
+  /**
+   * Sets the value of the restrictionExpression property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRestrictionExpression(String value) {
+    this.restrictionExpression = value;
+  }
 
-    /**
-     * Gets the value of the restrictionExpressionLanguage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ExpressionLanguage }
-     *     
-     */
-    public ExpressionLanguage getRestrictionExpressionLanguage() {
-        return restrictionExpressionLanguage;
-    }
+  /**
+   * Gets the value of the restrictionExpressionLanguage property.
+   *
+   * @return possible object is
+   * {@link ExpressionLanguage }
+   */
+  public ExpressionLanguage getRestrictionExpressionLanguage() {
+    return restrictionExpressionLanguage;
+  }
 
-    /**
-     * Sets the value of the restrictionExpressionLanguage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ExpressionLanguage }
-     *     
-     */
-    public void setRestrictionExpressionLanguage(ExpressionLanguage value) {
-        this.restrictionExpressionLanguage = value;
-    }
+  /**
+   * Sets the value of the restrictionExpressionLanguage property.
+   *
+   * @param value allowed object is
+   *              {@link ExpressionLanguage }
+   */
+  public void setRestrictionExpressionLanguage(ExpressionLanguage value) {
+    this.restrictionExpressionLanguage = value;
+  }
 
-    /**
-     * Gets the value of the baseMeasure property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getBaseMeasure() {
-        return baseMeasure;
-    }
+  /**
+   * Gets the value of the baseMeasure property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getBaseMeasure() {
+    return baseMeasure;
+  }
 
-    /**
-     * Sets the value of the baseMeasure property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setBaseMeasure(String value) {
-        this.baseMeasure = value;
-    }
+  /**
+   * Sets the value of the baseMeasure property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setBaseMeasure(String value) {
+    this.baseMeasure = value;
+  }
 
 }

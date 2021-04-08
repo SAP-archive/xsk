@@ -19,22 +19,21 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
 
 
 /**
- * 
- * 				This class just comprises the attributes used for simple data type
- * 			
- * 
+ * This class just comprises the attributes used for simple data type
+ *
+ *
  * <p>Java class for SimpleDataType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SimpleDataType"&gt;
  *   &lt;complexContent&gt;
@@ -46,90 +45,76 @@ import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SimpleDataType")
 public class SimpleDataType {
 
-    @XmlAttribute(name = "datatype")
-    protected PrimitiveTypeSQL datatype;
-    @XmlAttribute(name = "length")
-    protected Short length;
-    @XmlAttribute(name = "scale")
-    protected Short scale;
+  @XmlAttribute(name = "datatype")
+  protected PrimitiveTypeSQL datatype;
+  @XmlAttribute(name = "length")
+  protected Short length;
+  @XmlAttribute(name = "scale")
+  protected Short scale;
 
-    /**
-     * Gets the value of the datatype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PrimitiveTypeSQL }
-     *     
-     */
-    public PrimitiveTypeSQL getDatatype() {
-        return datatype;
-    }
+  /**
+   * Gets the value of the datatype property.
+   *
+   * @return possible object is
+   * {@link PrimitiveTypeSQL }
+   */
+  public PrimitiveTypeSQL getDatatype() {
+    return datatype;
+  }
 
-    /**
-     * Sets the value of the datatype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PrimitiveTypeSQL }
-     *     
-     */
-    public void setDatatype(PrimitiveTypeSQL value) {
-        this.datatype = value;
-    }
+  /**
+   * Sets the value of the datatype property.
+   *
+   * @param value allowed object is
+   *              {@link PrimitiveTypeSQL }
+   */
+  public void setDatatype(PrimitiveTypeSQL value) {
+    this.datatype = value;
+  }
 
-    /**
-     * Gets the value of the length property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getLength() {
-        return length;
-    }
+  /**
+   * Gets the value of the length property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getLength() {
+    return length;
+  }
 
-    /**
-     * Sets the value of the length property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setLength(Short value) {
-        this.length = value;
-    }
+  /**
+   * Sets the value of the length property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setLength(Short value) {
+    this.length = value;
+  }
 
-    /**
-     * Gets the value of the scale property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getScale() {
-        return scale;
-    }
+  /**
+   * Gets the value of the scale property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getScale() {
+    return scale;
+  }
 
-    /**
-     * Sets the value of the scale property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setScale(Short value) {
-        this.scale = value;
-    }
+  /**
+   * Sets the value of the scale property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setScale(Short value) {
+    this.scale = value;
+  }
 
 }

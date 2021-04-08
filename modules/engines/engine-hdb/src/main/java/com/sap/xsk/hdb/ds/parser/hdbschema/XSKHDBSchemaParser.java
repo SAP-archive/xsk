@@ -11,16 +11,15 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbschema;
 
-import java.sql.Timestamp;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import java.sql.Timestamp;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
 
 public class XSKHDBSchemaParser implements XSKDataStructureParser<XSKDataStructureHDBSchemaModel> {
+
   @Override
   public String getType() {
     return IXSKDataStructureModel.TYPE_HDB_SCHEMA;

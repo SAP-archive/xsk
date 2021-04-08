@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for AttributeRelationship complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AttributeRelationship"&gt;
  *   &lt;complexContent&gt;
@@ -42,69 +42,59 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AttributeRelationship")
 public class AttributeRelationship {
 
-    @XmlAttribute(name = "parentAttribute", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String parentAttribute;
-    @XmlAttribute(name = "type")
-    protected AttributeRelationshipType type;
+  @XmlAttribute(name = "parentAttribute", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String parentAttribute;
+  @XmlAttribute(name = "type")
+  protected AttributeRelationshipType type;
 
-    /**
-     * Gets the value of the parentAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getParentAttribute() {
-        return parentAttribute;
-    }
+  /**
+   * Gets the value of the parentAttribute property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getParentAttribute() {
+    return parentAttribute;
+  }
 
-    /**
-     * Sets the value of the parentAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setParentAttribute(String value) {
-        this.parentAttribute = value;
-    }
+  /**
+   * Sets the value of the parentAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setParentAttribute(String value) {
+    this.parentAttribute = value;
+  }
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AttributeRelationshipType }
-     *     
-     */
-    public AttributeRelationshipType getType() {
-        if (type == null) {
-            return AttributeRelationshipType.MANUAL;
-        } else {
-            return type;
-        }
+  /**
+   * Gets the value of the type property.
+   *
+   * @return possible object is
+   * {@link AttributeRelationshipType }
+   */
+  public AttributeRelationshipType getType() {
+    if (type == null) {
+      return AttributeRelationshipType.MANUAL;
+    } else {
+      return type;
     }
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AttributeRelationshipType }
-     *     
-     */
-    public void setType(AttributeRelationshipType value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link AttributeRelationshipType }
+   */
+  public void setType(AttributeRelationshipType value) {
+    this.type = value;
+  }
 
 }

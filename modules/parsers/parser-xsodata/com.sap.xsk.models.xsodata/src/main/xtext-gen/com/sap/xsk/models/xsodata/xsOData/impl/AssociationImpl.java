@@ -5,11 +5,8 @@ package com.sap.xsk.models.xsodata.xsOData.impl;
 
 import com.sap.xsk.models.xsodata.xsOData.Association;
 import com.sap.xsk.models.xsodata.xsOData.XsODataPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
@@ -32,340 +29,350 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class AssociationImpl extends MinimalEObjectImpl.Container implements Association
-{
+public class AssociationImpl extends MinimalEObjectImpl.Container implements Association {
+
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   *
    * @generated
    * @ordered
+   * @see #getName()
    */
   protected static final String NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected String name = NAME_EDEFAULT;
-
   /**
    * The default value of the '{@link #getPrincipal() <em>Principal</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPrincipal()
+   *
    * @generated
    * @ordered
+   * @see #getPrincipal()
    */
   protected static final String PRINCIPAL_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getPrincipal() <em>Principal</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPrincipal()
-   * @generated
-   * @ordered
-   */
-  protected String principal = PRINCIPAL_EDEFAULT;
-
   /**
    * The default value of the '{@link #getPrincipalKey() <em>Principal Key</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPrincipalKey()
+   *
    * @generated
    * @ordered
+   * @see #getPrincipalKey()
    */
   protected static final String PRINCIPAL_KEY_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getPrincipalKey() <em>Principal Key</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPrincipalKey()
-   * @generated
-   * @ordered
-   */
-  protected String principalKey = PRINCIPAL_KEY_EDEFAULT;
-
   /**
    * The default value of the '{@link #getPrincipalMultiplicity() <em>Principal Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPrincipalMultiplicity()
+   *
    * @generated
    * @ordered
+   * @see #getPrincipalMultiplicity()
    */
   protected static final String PRINCIPAL_MULTIPLICITY_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getPrincipalMultiplicity() <em>Principal Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPrincipalMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected String principalMultiplicity = PRINCIPAL_MULTIPLICITY_EDEFAULT;
-
   /**
    * The default value of the '{@link #getDependent() <em>Dependent</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDependent()
+   *
    * @generated
    * @ordered
+   * @see #getDependent()
    */
   protected static final String DEPENDENT_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getDependent() <em>Dependent</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getDependent()
-   * @generated
-   * @ordered
-   */
-  protected String dependent = DEPENDENT_EDEFAULT;
-
   /**
    * The default value of the '{@link #getDependentProperty() <em>Dependent Property</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDependentProperty()
+   *
    * @generated
    * @ordered
+   * @see #getDependentProperty()
    */
   protected static final String DEPENDENT_PROPERTY_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getDependentProperty() <em>Dependent Property</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getDependentProperty()
-   * @generated
-   * @ordered
-   */
-  protected String dependentProperty = DEPENDENT_PROPERTY_EDEFAULT;
-
   /**
    * The default value of the '{@link #getDependentMultiplicity() <em>Dependent Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDependentMultiplicity()
+   *
    * @generated
    * @ordered
+   * @see #getDependentMultiplicity()
    */
   protected static final String DEPENDENT_MULTIPLICITY_EDEFAULT = null;
-
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #getName()
+   */
+  protected String name = NAME_EDEFAULT;
+  /**
+   * The cached value of the '{@link #getPrincipal() <em>Principal</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #getPrincipal()
+   */
+  protected String principal = PRINCIPAL_EDEFAULT;
+  /**
+   * The cached value of the '{@link #getPrincipalKey() <em>Principal Key</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #getPrincipalKey()
+   */
+  protected String principalKey = PRINCIPAL_KEY_EDEFAULT;
+  /**
+   * The cached value of the '{@link #getPrincipalMultiplicity() <em>Principal Multiplicity</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #getPrincipalMultiplicity()
+   */
+  protected String principalMultiplicity = PRINCIPAL_MULTIPLICITY_EDEFAULT;
+  /**
+   * The cached value of the '{@link #getDependent() <em>Dependent</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #getDependent()
+   */
+  protected String dependent = DEPENDENT_EDEFAULT;
+  /**
+   * The cached value of the '{@link #getDependentProperty() <em>Dependent Property</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #getDependentProperty()
+   */
+  protected String dependentProperty = DEPENDENT_PROPERTY_EDEFAULT;
   /**
    * The cached value of the '{@link #getDependentMultiplicity() <em>Dependent Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDependentMultiplicity()
+   *
    * @generated
    * @ordered
+   * @see #getDependentMultiplicity()
    */
   protected String dependentMultiplicity = DEPENDENT_MULTIPLICITY_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  protected AssociationImpl()
-  {
+  protected AssociationImpl() {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass()
-  {
+  protected EClass eStaticClass() {
     return XsODataPackage.Literals.ASSOCIATION;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setName(String newName)
-  {
+  public void setName(String newName) {
     String oldName = name;
     name = newName;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__NAME, oldName, name));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getPrincipal()
-  {
+  public String getPrincipal() {
     return principal;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setPrincipal(String newPrincipal)
-  {
+  public void setPrincipal(String newPrincipal) {
     String oldPrincipal = principal;
     principal = newPrincipal;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__PRINCIPAL, oldPrincipal, principal));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getPrincipalKey()
-  {
+  public String getPrincipalKey() {
     return principalKey;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setPrincipalKey(String newPrincipalKey)
-  {
+  public void setPrincipalKey(String newPrincipalKey) {
     String oldPrincipalKey = principalKey;
     principalKey = newPrincipalKey;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__PRINCIPAL_KEY, oldPrincipalKey, principalKey));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getPrincipalMultiplicity()
-  {
+  public String getPrincipalMultiplicity() {
     return principalMultiplicity;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setPrincipalMultiplicity(String newPrincipalMultiplicity)
-  {
+  public void setPrincipalMultiplicity(String newPrincipalMultiplicity) {
     String oldPrincipalMultiplicity = principalMultiplicity;
     principalMultiplicity = newPrincipalMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__PRINCIPAL_MULTIPLICITY, oldPrincipalMultiplicity, principalMultiplicity));
+    if (eNotificationRequired()) {
+      eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__PRINCIPAL_MULTIPLICITY, oldPrincipalMultiplicity,
+          principalMultiplicity));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getDependent()
-  {
+  public String getDependent() {
     return dependent;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setDependent(String newDependent)
-  {
+  public void setDependent(String newDependent) {
     String oldDependent = dependent;
     dependent = newDependent;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__DEPENDENT, oldDependent, dependent));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getDependentProperty()
-  {
+  public String getDependentProperty() {
     return dependentProperty;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setDependentProperty(String newDependentProperty)
-  {
+  public void setDependentProperty(String newDependentProperty) {
     String oldDependentProperty = dependentProperty;
     dependentProperty = newDependentProperty;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__DEPENDENT_PROPERTY, oldDependentProperty, dependentProperty));
+    if (eNotificationRequired()) {
+      eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__DEPENDENT_PROPERTY, oldDependentProperty,
+          dependentProperty));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getDependentMultiplicity()
-  {
+  public String getDependentMultiplicity() {
     return dependentMultiplicity;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setDependentMultiplicity(String newDependentMultiplicity)
-  {
+  public void setDependentMultiplicity(String newDependentMultiplicity) {
     String oldDependentMultiplicity = dependentMultiplicity;
     dependentMultiplicity = newDependentMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__DEPENDENT_MULTIPLICITY, oldDependentMultiplicity, dependentMultiplicity));
+    if (eNotificationRequired()) {
+      eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ASSOCIATION__DEPENDENT_MULTIPLICITY, oldDependentMultiplicity,
+          dependentMultiplicity));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
-    switch (featureID)
-    {
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
       case XsODataPackage.ASSOCIATION__NAME:
         return getName();
       case XsODataPackage.ASSOCIATION__PRINCIPAL:
@@ -387,33 +394,32 @@ public class AssociationImpl extends MinimalEObjectImpl.Container implements Ass
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public void eSet(int featureID, Object newValue)
-  {
-    switch (featureID)
-    {
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
       case XsODataPackage.ASSOCIATION__NAME:
-        setName((String)newValue);
+        setName((String) newValue);
         return;
       case XsODataPackage.ASSOCIATION__PRINCIPAL:
-        setPrincipal((String)newValue);
+        setPrincipal((String) newValue);
         return;
       case XsODataPackage.ASSOCIATION__PRINCIPAL_KEY:
-        setPrincipalKey((String)newValue);
+        setPrincipalKey((String) newValue);
         return;
       case XsODataPackage.ASSOCIATION__PRINCIPAL_MULTIPLICITY:
-        setPrincipalMultiplicity((String)newValue);
+        setPrincipalMultiplicity((String) newValue);
         return;
       case XsODataPackage.ASSOCIATION__DEPENDENT:
-        setDependent((String)newValue);
+        setDependent((String) newValue);
         return;
       case XsODataPackage.ASSOCIATION__DEPENDENT_PROPERTY:
-        setDependentProperty((String)newValue);
+        setDependentProperty((String) newValue);
         return;
       case XsODataPackage.ASSOCIATION__DEPENDENT_MULTIPLICITY:
-        setDependentMultiplicity((String)newValue);
+        setDependentMultiplicity((String) newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -422,13 +428,12 @@ public class AssociationImpl extends MinimalEObjectImpl.Container implements Ass
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public void eUnset(int featureID)
-  {
-    switch (featureID)
-    {
+  public void eUnset(int featureID) {
+    switch (featureID) {
       case XsODataPackage.ASSOCIATION__NAME:
         setName(NAME_EDEFAULT);
         return;
@@ -457,13 +462,12 @@ public class AssociationImpl extends MinimalEObjectImpl.Container implements Ass
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID)
-  {
-    switch (featureID)
-    {
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
       case XsODataPackage.ASSOCIATION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case XsODataPackage.ASSOCIATION__PRINCIPAL:
@@ -471,13 +475,15 @@ public class AssociationImpl extends MinimalEObjectImpl.Container implements Ass
       case XsODataPackage.ASSOCIATION__PRINCIPAL_KEY:
         return PRINCIPAL_KEY_EDEFAULT == null ? principalKey != null : !PRINCIPAL_KEY_EDEFAULT.equals(principalKey);
       case XsODataPackage.ASSOCIATION__PRINCIPAL_MULTIPLICITY:
-        return PRINCIPAL_MULTIPLICITY_EDEFAULT == null ? principalMultiplicity != null : !PRINCIPAL_MULTIPLICITY_EDEFAULT.equals(principalMultiplicity);
+        return PRINCIPAL_MULTIPLICITY_EDEFAULT == null ? principalMultiplicity != null
+            : !PRINCIPAL_MULTIPLICITY_EDEFAULT.equals(principalMultiplicity);
       case XsODataPackage.ASSOCIATION__DEPENDENT:
         return DEPENDENT_EDEFAULT == null ? dependent != null : !DEPENDENT_EDEFAULT.equals(dependent);
       case XsODataPackage.ASSOCIATION__DEPENDENT_PROPERTY:
         return DEPENDENT_PROPERTY_EDEFAULT == null ? dependentProperty != null : !DEPENDENT_PROPERTY_EDEFAULT.equals(dependentProperty);
       case XsODataPackage.ASSOCIATION__DEPENDENT_MULTIPLICITY:
-        return DEPENDENT_MULTIPLICITY_EDEFAULT == null ? dependentMultiplicity != null : !DEPENDENT_MULTIPLICITY_EDEFAULT.equals(dependentMultiplicity);
+        return DEPENDENT_MULTIPLICITY_EDEFAULT == null ? dependentMultiplicity != null
+            : !DEPENDENT_MULTIPLICITY_EDEFAULT.equals(dependentMultiplicity);
     }
     return super.eIsSet(featureID);
   }
@@ -485,12 +491,14 @@ public class AssociationImpl extends MinimalEObjectImpl.Container implements Ass
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
+  public String toString() {
+    if (eIsProxy()) {
+      return super.toString();
+    }
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");

@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Holds the layout properties the whole InformationModel
- * 			
- * 
+ * Holds the layout properties the whole InformationModel
+ *
+ *
  * <p>Java class for InformationModelLayoutProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InformationModelLayoutProperties"&gt;
  *   &lt;complexContent&gt;
@@ -45,90 +44,76 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InformationModelLayoutProperties")
 public class InformationModelLayoutProperties {
 
-    @XmlAttribute(name = "relativeWidthScenario")
-    protected Integer relativeWidthScenario;
-    @XmlAttribute(name = "dataFoundationExpanded")
-    protected Boolean dataFoundationExpanded;
-    @XmlAttribute(name = "logicalJoinExpanded")
-    protected Boolean logicalJoinExpanded;
+  @XmlAttribute(name = "relativeWidthScenario")
+  protected Integer relativeWidthScenario;
+  @XmlAttribute(name = "dataFoundationExpanded")
+  protected Boolean dataFoundationExpanded;
+  @XmlAttribute(name = "logicalJoinExpanded")
+  protected Boolean logicalJoinExpanded;
 
-    /**
-     * Gets the value of the relativeWidthScenario property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getRelativeWidthScenario() {
-        return relativeWidthScenario;
-    }
+  /**
+   * Gets the value of the relativeWidthScenario property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getRelativeWidthScenario() {
+    return relativeWidthScenario;
+  }
 
-    /**
-     * Sets the value of the relativeWidthScenario property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setRelativeWidthScenario(Integer value) {
-        this.relativeWidthScenario = value;
-    }
+  /**
+   * Sets the value of the relativeWidthScenario property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setRelativeWidthScenario(Integer value) {
+    this.relativeWidthScenario = value;
+  }
 
-    /**
-     * Gets the value of the dataFoundationExpanded property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDataFoundationExpanded() {
-        return dataFoundationExpanded;
-    }
+  /**
+   * Gets the value of the dataFoundationExpanded property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDataFoundationExpanded() {
+    return dataFoundationExpanded;
+  }
 
-    /**
-     * Sets the value of the dataFoundationExpanded property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDataFoundationExpanded(Boolean value) {
-        this.dataFoundationExpanded = value;
-    }
+  /**
+   * Sets the value of the dataFoundationExpanded property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDataFoundationExpanded(Boolean value) {
+    this.dataFoundationExpanded = value;
+  }
 
-    /**
-     * Gets the value of the logicalJoinExpanded property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isLogicalJoinExpanded() {
-        return logicalJoinExpanded;
-    }
+  /**
+   * Gets the value of the logicalJoinExpanded property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isLogicalJoinExpanded() {
+    return logicalJoinExpanded;
+  }
 
-    /**
-     * Sets the value of the logicalJoinExpanded property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setLogicalJoinExpanded(Boolean value) {
-        this.logicalJoinExpanded = value;
-    }
+  /**
+   * Sets the value of the logicalJoinExpanded property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setLogicalJoinExpanded(Boolean value) {
+    this.logicalJoinExpanded = value;
+  }
 
 }

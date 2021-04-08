@@ -23,116 +23,103 @@ import javax.xml.bind.annotation.XmlRegistry;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the com.sap.ndb.bimodelvariable package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the com.sap.ndb.bimodelvariable package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
  */
 @XmlRegistry
 public class ObjectFactory {
 
 
-    /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.sap.ndb.bimodelvariable
-     * 
-     */
-    public ObjectFactory() {
-    }
+  /**
+   * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.sap.ndb.bimodelvariable
+   */
+  public ObjectFactory() {
+  }
 
-    /**
-     * Create an instance of {@link LocalVariable }
-     * 
-     */
-    public LocalVariable createLocalVariable() {
-        return new LocalVariable();
-    }
+  /**
+   * Create an instance of {@link LocalVariable }
+   */
+  public LocalVariable createLocalVariable() {
+    return new LocalVariable();
+  }
 
-    /**
-     * Create an instance of {@link VariableProperties }
-     * 
-     */
-    public VariableProperties createVariableProperties() {
-        return new VariableProperties();
-    }
+  /**
+   * Create an instance of {@link VariableProperties }
+   */
+  public VariableProperties createVariableProperties() {
+    return new VariableProperties();
+  }
 
-    /**
-     * Create an instance of {@link ValueDomain }
-     * 
-     */
-    public ValueDomain createValueDomain() {
-        return new ValueDomain();
-    }
+  /**
+   * Create an instance of {@link ValueDomain }
+   */
+  public ValueDomain createValueDomain() {
+    return new ValueDomain();
+  }
 
-    /**
-     * Create an instance of {@link Selection }
-     * 
-     */
-    public Selection createSelection() {
-        return new Selection();
-    }
+  /**
+   * Create an instance of {@link Selection }
+   */
+  public Selection createSelection() {
+    return new Selection();
+  }
 
-    /**
-     * Create an instance of {@link DerivationRule }
-     * 
-     */
-    public DerivationRule createDerivationRule() {
-        return new DerivationRule();
-    }
+  /**
+   * Create an instance of {@link DerivationRule }
+   */
+  public DerivationRule createDerivationRule() {
+    return new DerivationRule();
+  }
 
-    /**
-     * Create an instance of {@link ValueListEntry }
-     * 
-     */
-    public ValueListEntry createValueListEntry() {
-        return new ValueListEntry();
-    }
+  /**
+   * Create an instance of {@link ValueListEntry }
+   */
+  public ValueListEntry createValueListEntry() {
+    return new ValueListEntry();
+  }
 
-    /**
-     * Create an instance of {@link LocalVariables }
-     * 
-     */
-    public LocalVariables createLocalVariables() {
-        return new LocalVariables();
-    }
+  /**
+   * Create an instance of {@link LocalVariables }
+   */
+  public LocalVariables createLocalVariables() {
+    return new LocalVariables();
+  }
 
-    /**
-     * Create an instance of {@link TargetVariable }
-     * 
-     */
-    public TargetVariable createTargetVariable() {
-        return new TargetVariable();
-    }
+  /**
+   * Create an instance of {@link TargetVariable }
+   */
+  public TargetVariable createTargetVariable() {
+    return new TargetVariable();
+  }
 
-    /**
-     * Create an instance of {@link VariableMapping }
-     * 
-     */
-    public VariableMapping createVariableMapping() {
-        return new VariableMapping();
-    }
+  /**
+   * Create an instance of {@link VariableMapping }
+   */
+  public VariableMapping createVariableMapping() {
+    return new VariableMapping();
+  }
 
-    /**
-     * Create an instance of {@link ConstantVariableMapping }
-     * 
-     */
-    public ConstantVariableMapping createConstantVariableMapping() {
-        return new ConstantVariableMapping();
-    }
+  /**
+   * Create an instance of {@link ConstantVariableMapping }
+   */
+  public ConstantVariableMapping createConstantVariableMapping() {
+    return new ConstantVariableMapping();
+  }
 
-    /**
-     * Create an instance of {@link VariableMappings }
-     * 
-     */
-    public VariableMappings createVariableMappings() {
-        return new VariableMappings();
-    }
+  /**
+   * Create an instance of {@link VariableMappings }
+   */
+  public VariableMappings createVariableMappings() {
+    return new VariableMappings();
+  }
 
 }

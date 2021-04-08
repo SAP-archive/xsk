@@ -29,14 +29,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Specification of time dependent columns and parameters.
- * 			
- * 
+ * Specification of time dependent columns and parameters.
+ *
+ *
  * <p>Java class for HierarchyTimeProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HierarchyTimeProperties"&gt;
  *   &lt;complexContent&gt;
@@ -56,8 +55,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HierarchyTimeProperties", propOrder = {
@@ -69,142 +66,122 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class HierarchyTimeProperties {
 
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String validFromElement;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String validToElement;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String fromParameter;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String toParameter;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String pointInTimeParameter;
+  @XmlElement(required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String validFromElement;
+  @XmlElement(required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String validToElement;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String fromParameter;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String toParameter;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String pointInTimeParameter;
 
-    /**
-     * Gets the value of the validFromElement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValidFromElement() {
-        return validFromElement;
-    }
+  /**
+   * Gets the value of the validFromElement property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValidFromElement() {
+    return validFromElement;
+  }
 
-    /**
-     * Sets the value of the validFromElement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValidFromElement(String value) {
-        this.validFromElement = value;
-    }
+  /**
+   * Sets the value of the validFromElement property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValidFromElement(String value) {
+    this.validFromElement = value;
+  }
 
-    /**
-     * Gets the value of the validToElement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValidToElement() {
-        return validToElement;
-    }
+  /**
+   * Gets the value of the validToElement property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValidToElement() {
+    return validToElement;
+  }
 
-    /**
-     * Sets the value of the validToElement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValidToElement(String value) {
-        this.validToElement = value;
-    }
+  /**
+   * Sets the value of the validToElement property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValidToElement(String value) {
+    this.validToElement = value;
+  }
 
-    /**
-     * Gets the value of the fromParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFromParameter() {
-        return fromParameter;
-    }
+  /**
+   * Gets the value of the fromParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getFromParameter() {
+    return fromParameter;
+  }
 
-    /**
-     * Sets the value of the fromParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFromParameter(String value) {
-        this.fromParameter = value;
-    }
+  /**
+   * Sets the value of the fromParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFromParameter(String value) {
+    this.fromParameter = value;
+  }
 
-    /**
-     * Gets the value of the toParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getToParameter() {
-        return toParameter;
-    }
+  /**
+   * Gets the value of the toParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getToParameter() {
+    return toParameter;
+  }
 
-    /**
-     * Sets the value of the toParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setToParameter(String value) {
-        this.toParameter = value;
-    }
+  /**
+   * Sets the value of the toParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setToParameter(String value) {
+    this.toParameter = value;
+  }
 
-    /**
-     * Gets the value of the pointInTimeParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPointInTimeParameter() {
-        return pointInTimeParameter;
-    }
+  /**
+   * Gets the value of the pointInTimeParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPointInTimeParameter() {
+    return pointInTimeParameter;
+  }
 
-    /**
-     * Sets the value of the pointInTimeParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPointInTimeParameter(String value) {
-        this.pointInTimeParameter = value;
-    }
+  /**
+   * Sets the value of the pointInTimeParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPointInTimeParameter(String value) {
+    this.pointInTimeParameter = value;
+  }
 
 }

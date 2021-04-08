@@ -29,17 +29,16 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				A data source either maps a repository object or a data base object as input of the calculation scenario.	
- * 				Attention: Although it inherits from resource:EcoreIDObjectWithDescription texts are not yet used for data sources. 
- * 				For table function we are already using	the full qualified names in the resourceURI 
- * 				e.g. package.subpackage::MyFunction.hdbtablefunction
- * 			
- * 
+ * A data source either maps a repository object or a data base object as input of the calculation scenario.
+ * Attention: Although it inherits from resource:EcoreIDObjectWithDescription texts are not yet used for data sources.
+ * For table function we are already using	the full qualified names in the resourceURI
+ * e.g. package.subpackage::MyFunction.hdbtablefunction
+ *
+ *
  * <p>Java class for DataSource complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DataSource"&gt;
  *   &lt;complexContent&gt;
@@ -59,8 +58,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DataSource", propOrder = {
@@ -69,140 +66,119 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "partitionAttributeName"
 })
 public class DataSource
-    extends Node
-{
+    extends Node {
 
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String resourceUri;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String databaseName;
-    protected String partitionAttributeName;
-    @XmlAttribute(name = "clientColumn")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String clientColumn;
-    @XmlAttribute(name = "partitionedExecution")
-    protected Boolean partitionedExecution;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String resourceUri;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String databaseName;
+  protected String partitionAttributeName;
+  @XmlAttribute(name = "clientColumn")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String clientColumn;
+  @XmlAttribute(name = "partitionedExecution")
+  protected Boolean partitionedExecution;
 
-    /**
-     * Gets the value of the resourceUri property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getResourceUri() {
-        return resourceUri;
-    }
+  /**
+   * Gets the value of the resourceUri property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getResourceUri() {
+    return resourceUri;
+  }
 
-    /**
-     * Sets the value of the resourceUri property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setResourceUri(String value) {
-        this.resourceUri = value;
-    }
+  /**
+   * Sets the value of the resourceUri property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setResourceUri(String value) {
+    this.resourceUri = value;
+  }
 
-    /**
-     * Gets the value of the databaseName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDatabaseName() {
-        return databaseName;
-    }
+  /**
+   * Gets the value of the databaseName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDatabaseName() {
+    return databaseName;
+  }
 
-    /**
-     * Sets the value of the databaseName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDatabaseName(String value) {
-        this.databaseName = value;
-    }
+  /**
+   * Sets the value of the databaseName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDatabaseName(String value) {
+    this.databaseName = value;
+  }
 
-    /**
-     * Gets the value of the partitionAttributeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPartitionAttributeName() {
-        return partitionAttributeName;
-    }
+  /**
+   * Gets the value of the partitionAttributeName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPartitionAttributeName() {
+    return partitionAttributeName;
+  }
 
-    /**
-     * Sets the value of the partitionAttributeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPartitionAttributeName(String value) {
-        this.partitionAttributeName = value;
-    }
+  /**
+   * Sets the value of the partitionAttributeName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPartitionAttributeName(String value) {
+    this.partitionAttributeName = value;
+  }
 
-    /**
-     * Gets the value of the clientColumn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getClientColumn() {
-        return clientColumn;
-    }
+  /**
+   * Gets the value of the clientColumn property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getClientColumn() {
+    return clientColumn;
+  }
 
-    /**
-     * Sets the value of the clientColumn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setClientColumn(String value) {
-        this.clientColumn = value;
-    }
+  /**
+   * Sets the value of the clientColumn property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setClientColumn(String value) {
+    this.clientColumn = value;
+  }
 
-    /**
-     * Gets the value of the partitionedExecution property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isPartitionedExecution() {
-        return partitionedExecution;
-    }
+  /**
+   * Gets the value of the partitionedExecution property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isPartitionedExecution() {
+    return partitionedExecution;
+  }
 
-    /**
-     * Sets the value of the partitionedExecution property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setPartitionedExecution(Boolean value) {
-        this.partitionedExecution = value;
-    }
+  /**
+   * Sets the value of the partitionedExecution property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setPartitionedExecution(Boolean value) {
+    this.partitionedExecution = value;
+  }
 
 }

@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LogicalJoins complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LogicalJoins"&gt;
  *   &lt;complexContent&gt;
@@ -43,8 +43,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LogicalJoins", propOrder = {
@@ -52,36 +50,34 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class LogicalJoins {
 
-    @XmlElement(required = true)
-    protected List<LogicalJoin> logicalJoin;
+  @XmlElement(required = true)
+  protected List<LogicalJoin> logicalJoin;
 
-    /**
-     * Gets the value of the logicalJoin property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the logicalJoin property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getLogicalJoin().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link LogicalJoin }
-     * 
-     * 
-     */
-    public List<LogicalJoin> getLogicalJoin() {
-        if (logicalJoin == null) {
-            logicalJoin = new ArrayList<LogicalJoin>();
-        }
-        return this.logicalJoin;
+  /**
+   * Gets the value of the logicalJoin property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the logicalJoin property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getLogicalJoin().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link LogicalJoin }
+   */
+  public List<LogicalJoin> getLogicalJoin() {
+    if (logicalJoin == null) {
+      logicalJoin = new ArrayList<LogicalJoin>();
     }
+    return this.logicalJoin;
+  }
 
 }

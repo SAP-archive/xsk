@@ -12,7 +12,8 @@
 package com.sap.xsk.parser.hdbti.exception;
 
 public class XSKHDBTISyntaxErrorException extends Exception {
-    public XSKHDBTISyntaxErrorException(String message) {
-        super(message);
-    }
+
+  public XSKHDBTISyntaxErrorException(String message) {
+    super(message);
+  }
 }

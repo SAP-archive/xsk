@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Mapping of a variable element to a view attribute
- * 			
- * 
+ * Mapping of a variable element to a view attribute
+ *
+ *
  * <p>Java class for GraphVariableMapping complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GraphVariableMapping"&gt;
  *   &lt;complexContent&gt;
@@ -45,41 +44,34 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GraphVariableMapping")
 public class GraphVariableMapping
-    extends VariableElement
-{
+    extends VariableElement {
 
-    @XmlAttribute(name = "target", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String target;
+  @XmlAttribute(name = "target", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String target;
 
-    /**
-     * Gets the value of the target property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTarget() {
-        return target;
-    }
+  /**
+   * Gets the value of the target property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTarget() {
+    return target;
+  }
 
-    /**
-     * Sets the value of the target property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTarget(String value) {
-        this.target = value;
-    }
+  /**
+   * Sets the value of the target property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTarget(String value) {
+    this.target = value;
+  }
 
 }

@@ -12,7 +12,8 @@
 package com.sap.xsk.parser.hdbview.exceptions;
 
 public class XSKHDBViewMissingPropertyException extends RuntimeException {
-    public XSKHDBViewMissingPropertyException(String message) {
-        super(message);
-    }
+
+  public XSKHDBViewMissingPropertyException(String message) {
+    super(message);
+  }
 }

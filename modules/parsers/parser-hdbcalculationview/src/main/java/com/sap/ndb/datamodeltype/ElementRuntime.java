@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Runtime information stored on element level
- * 			
- * 
+ * Runtime information stored on element level
+ *
+ *
  * <p>Java class for ElementRuntime complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ElementRuntime"&gt;
  *   &lt;complexContent&gt;
@@ -43,38 +42,32 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ElementRuntime")
 public class ElementRuntime {
 
-    @XmlAttribute(name = "pruned")
-    protected Boolean pruned;
+  @XmlAttribute(name = "pruned")
+  protected Boolean pruned;
 
-    /**
-     * Gets the value of the pruned property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isPruned() {
-        return pruned;
-    }
+  /**
+   * Gets the value of the pruned property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isPruned() {
+    return pruned;
+  }
 
-    /**
-     * Sets the value of the pruned property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setPruned(Boolean value) {
-        this.pruned = value;
-    }
+  /**
+   * Sets the value of the pruned property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setPruned(Boolean value) {
+    this.pruned = value;
+  }
 
 }

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ExpressionLanguage.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -36,21 +36,20 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ExpressionLanguage")
 @XmlEnum
 public enum ExpressionLanguage {
 
-    COLUMN_ENGINE,
-    SQL;
+  COLUMN_ENGINE,
+  SQL;
 
-    public String value() {
-        return name();
-    }
+  public static ExpressionLanguage fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static ExpressionLanguage fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

@@ -19,6 +19,11 @@
 
 package com.sap.ndb.bimodelvariable;
 
+import com.sap.ndb.bimodelconversion.Parameterization;
+import com.sap.ndb.datamodelfilter.DefaultRange;
+import com.sap.ndb.datamodeltype.ExpressionLanguage;
+import com.sap.ndb.datamodeltype.InternalExternalConversion;
+import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,22 +31,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodelconversion.Parameterization;
-import com.sap.ndb.datamodelfilter.DefaultRange;
-import com.sap.ndb.datamodeltype.ExpressionLanguage;
-import com.sap.ndb.datamodeltype.InternalExternalConversion;
-import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
 
 
 /**
- *  
- * 				Common set of variable properties to be used with global and local variables 
- * 			
- * 
+ * Common set of variable properties to be used with global and local variables
+ *
+ *
  * <p>Java class for VariableProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="VariableProperties"&gt;
  *   &lt;complexContent&gt;
@@ -65,8 +64,6 @@ import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "VariableProperties", propOrder = {
@@ -80,335 +77,287 @@ import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
 })
 public class VariableProperties {
 
-    protected ValueDomain valueDomain;
-    protected Selection selection;
-    protected DerivationRule derivationRule;
-    @XmlElement(required = true)
-    protected String defaultExpression;
-    protected List<DefaultRange> defaultRange;
-    protected InternalExternalConversion internalExternalConversion;
-    @XmlElement(required = true)
-    protected Parameterization fuzzySimilarity;
-    @XmlAttribute(name = "defaultExpressionLanguage")
-    protected ExpressionLanguage defaultExpressionLanguage;
-    @XmlAttribute(name = "mandatory", required = true)
-    protected boolean mandatory;
-    @XmlAttribute(name = "defaultValue")
-    protected String defaultValue;
-    @XmlAttribute(name = "datatype")
-    protected PrimitiveTypeSQL datatype;
-    @XmlAttribute(name = "length")
-    protected Short length;
-    @XmlAttribute(name = "scale")
-    protected Short scale;
+  protected ValueDomain valueDomain;
+  protected Selection selection;
+  protected DerivationRule derivationRule;
+  @XmlElement(required = true)
+  protected String defaultExpression;
+  protected List<DefaultRange> defaultRange;
+  protected InternalExternalConversion internalExternalConversion;
+  @XmlElement(required = true)
+  protected Parameterization fuzzySimilarity;
+  @XmlAttribute(name = "defaultExpressionLanguage")
+  protected ExpressionLanguage defaultExpressionLanguage;
+  @XmlAttribute(name = "mandatory", required = true)
+  protected boolean mandatory;
+  @XmlAttribute(name = "defaultValue")
+  protected String defaultValue;
+  @XmlAttribute(name = "datatype")
+  protected PrimitiveTypeSQL datatype;
+  @XmlAttribute(name = "length")
+  protected Short length;
+  @XmlAttribute(name = "scale")
+  protected Short scale;
 
-    /**
-     * Gets the value of the valueDomain property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ValueDomain }
-     *     
-     */
-    public ValueDomain getValueDomain() {
-        return valueDomain;
-    }
+  /**
+   * Gets the value of the valueDomain property.
+   *
+   * @return possible object is
+   * {@link ValueDomain }
+   */
+  public ValueDomain getValueDomain() {
+    return valueDomain;
+  }
 
-    /**
-     * Sets the value of the valueDomain property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ValueDomain }
-     *     
-     */
-    public void setValueDomain(ValueDomain value) {
-        this.valueDomain = value;
-    }
+  /**
+   * Sets the value of the valueDomain property.
+   *
+   * @param value allowed object is
+   *              {@link ValueDomain }
+   */
+  public void setValueDomain(ValueDomain value) {
+    this.valueDomain = value;
+  }
 
-    /**
-     * Gets the value of the selection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Selection }
-     *     
-     */
-    public Selection getSelection() {
-        return selection;
-    }
+  /**
+   * Gets the value of the selection property.
+   *
+   * @return possible object is
+   * {@link Selection }
+   */
+  public Selection getSelection() {
+    return selection;
+  }
 
-    /**
-     * Sets the value of the selection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Selection }
-     *     
-     */
-    public void setSelection(Selection value) {
-        this.selection = value;
-    }
+  /**
+   * Sets the value of the selection property.
+   *
+   * @param value allowed object is
+   *              {@link Selection }
+   */
+  public void setSelection(Selection value) {
+    this.selection = value;
+  }
 
-    /**
-     * Gets the value of the derivationRule property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DerivationRule }
-     *     
-     */
-    public DerivationRule getDerivationRule() {
-        return derivationRule;
-    }
+  /**
+   * Gets the value of the derivationRule property.
+   *
+   * @return possible object is
+   * {@link DerivationRule }
+   */
+  public DerivationRule getDerivationRule() {
+    return derivationRule;
+  }
 
-    /**
-     * Sets the value of the derivationRule property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DerivationRule }
-     *     
-     */
-    public void setDerivationRule(DerivationRule value) {
-        this.derivationRule = value;
-    }
+  /**
+   * Sets the value of the derivationRule property.
+   *
+   * @param value allowed object is
+   *              {@link DerivationRule }
+   */
+  public void setDerivationRule(DerivationRule value) {
+    this.derivationRule = value;
+  }
 
-    /**
-     * Gets the value of the defaultExpression property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultExpression() {
-        return defaultExpression;
-    }
+  /**
+   * Gets the value of the defaultExpression property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultExpression() {
+    return defaultExpression;
+  }
 
-    /**
-     * Sets the value of the defaultExpression property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultExpression(String value) {
-        this.defaultExpression = value;
-    }
+  /**
+   * Sets the value of the defaultExpression property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultExpression(String value) {
+    this.defaultExpression = value;
+  }
 
-    /**
-     * Gets the value of the defaultRange property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the defaultRange property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDefaultRange().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link DefaultRange }
-     * 
-     * 
-     */
-    public List<DefaultRange> getDefaultRange() {
-        if (defaultRange == null) {
-            defaultRange = new ArrayList<DefaultRange>();
-        }
-        return this.defaultRange;
+  /**
+   * Gets the value of the defaultRange property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the defaultRange property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getDefaultRange().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link DefaultRange }
+   */
+  public List<DefaultRange> getDefaultRange() {
+    if (defaultRange == null) {
+      defaultRange = new ArrayList<DefaultRange>();
     }
+    return this.defaultRange;
+  }
 
-    /**
-     * Gets the value of the internalExternalConversion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link InternalExternalConversion }
-     *     
-     */
-    public InternalExternalConversion getInternalExternalConversion() {
-        return internalExternalConversion;
-    }
+  /**
+   * Gets the value of the internalExternalConversion property.
+   *
+   * @return possible object is
+   * {@link InternalExternalConversion }
+   */
+  public InternalExternalConversion getInternalExternalConversion() {
+    return internalExternalConversion;
+  }
 
-    /**
-     * Sets the value of the internalExternalConversion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link InternalExternalConversion }
-     *     
-     */
-    public void setInternalExternalConversion(InternalExternalConversion value) {
-        this.internalExternalConversion = value;
-    }
+  /**
+   * Sets the value of the internalExternalConversion property.
+   *
+   * @param value allowed object is
+   *              {@link InternalExternalConversion }
+   */
+  public void setInternalExternalConversion(InternalExternalConversion value) {
+    this.internalExternalConversion = value;
+  }
 
-    /**
-     * Gets the value of the fuzzySimilarity property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getFuzzySimilarity() {
-        return fuzzySimilarity;
-    }
+  /**
+   * Gets the value of the fuzzySimilarity property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getFuzzySimilarity() {
+    return fuzzySimilarity;
+  }
 
-    /**
-     * Sets the value of the fuzzySimilarity property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setFuzzySimilarity(Parameterization value) {
-        this.fuzzySimilarity = value;
-    }
+  /**
+   * Sets the value of the fuzzySimilarity property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setFuzzySimilarity(Parameterization value) {
+    this.fuzzySimilarity = value;
+  }
 
-    /**
-     * Gets the value of the defaultExpressionLanguage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ExpressionLanguage }
-     *     
-     */
-    public ExpressionLanguage getDefaultExpressionLanguage() {
-        return defaultExpressionLanguage;
-    }
+  /**
+   * Gets the value of the defaultExpressionLanguage property.
+   *
+   * @return possible object is
+   * {@link ExpressionLanguage }
+   */
+  public ExpressionLanguage getDefaultExpressionLanguage() {
+    return defaultExpressionLanguage;
+  }
 
-    /**
-     * Sets the value of the defaultExpressionLanguage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ExpressionLanguage }
-     *     
-     */
-    public void setDefaultExpressionLanguage(ExpressionLanguage value) {
-        this.defaultExpressionLanguage = value;
-    }
+  /**
+   * Sets the value of the defaultExpressionLanguage property.
+   *
+   * @param value allowed object is
+   *              {@link ExpressionLanguage }
+   */
+  public void setDefaultExpressionLanguage(ExpressionLanguage value) {
+    this.defaultExpressionLanguage = value;
+  }
 
-    /**
-     * Gets the value of the mandatory property.
-     * 
-     */
-    public boolean isMandatory() {
-        return mandatory;
-    }
+  /**
+   * Gets the value of the mandatory property.
+   */
+  public boolean isMandatory() {
+    return mandatory;
+  }
 
-    /**
-     * Sets the value of the mandatory property.
-     * 
-     */
-    public void setMandatory(boolean value) {
-        this.mandatory = value;
-    }
+  /**
+   * Sets the value of the mandatory property.
+   */
+  public void setMandatory(boolean value) {
+    this.mandatory = value;
+  }
 
-    /**
-     * Gets the value of the defaultValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultValue() {
-        return defaultValue;
-    }
+  /**
+   * Gets the value of the defaultValue property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultValue() {
+    return defaultValue;
+  }
 
-    /**
-     * Sets the value of the defaultValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultValue(String value) {
-        this.defaultValue = value;
-    }
+  /**
+   * Sets the value of the defaultValue property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultValue(String value) {
+    this.defaultValue = value;
+  }
 
-    /**
-     * Gets the value of the datatype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PrimitiveTypeSQL }
-     *     
-     */
-    public PrimitiveTypeSQL getDatatype() {
-        return datatype;
-    }
+  /**
+   * Gets the value of the datatype property.
+   *
+   * @return possible object is
+   * {@link PrimitiveTypeSQL }
+   */
+  public PrimitiveTypeSQL getDatatype() {
+    return datatype;
+  }
 
-    /**
-     * Sets the value of the datatype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PrimitiveTypeSQL }
-     *     
-     */
-    public void setDatatype(PrimitiveTypeSQL value) {
-        this.datatype = value;
-    }
+  /**
+   * Sets the value of the datatype property.
+   *
+   * @param value allowed object is
+   *              {@link PrimitiveTypeSQL }
+   */
+  public void setDatatype(PrimitiveTypeSQL value) {
+    this.datatype = value;
+  }
 
-    /**
-     * Gets the value of the length property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getLength() {
-        return length;
-    }
+  /**
+   * Gets the value of the length property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getLength() {
+    return length;
+  }
 
-    /**
-     * Sets the value of the length property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setLength(Short value) {
-        this.length = value;
-    }
+  /**
+   * Sets the value of the length property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setLength(Short value) {
+    this.length = value;
+  }
 
-    /**
-     * Gets the value of the scale property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getScale() {
-        return scale;
-    }
+  /**
+   * Gets the value of the scale property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getScale() {
+    return scale;
+  }
 
-    /**
-     * Sets the value of the scale property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setScale(Short value) {
-        this.scale = value;
-    }
+  /**
+   * Sets the value of the scale property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setScale(Short value) {
+    this.scale = value;
+  }
 
 }

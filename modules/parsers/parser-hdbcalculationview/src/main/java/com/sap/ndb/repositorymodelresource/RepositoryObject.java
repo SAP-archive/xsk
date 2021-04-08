@@ -19,6 +19,8 @@
 
 package com.sap.ndb.repositorymodelresource;
 
+import com.sap.ndb.basemodelbase.EndUserTexts;
+import com.sap.ndb.datamodeltype.DataType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -26,20 +28,17 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.EndUserTexts;
-import com.sap.ndb.datamodeltype.DataType;
 
 
 /**
- * 
- * 				Father object for EMF repository objects. The resource aspects of ResourceObject 
- * 				have been removed from this to separate concerns
- * 			
- * 
+ * Father object for EMF repository objects. The resource aspects of ResourceObject
+ * have been removed from this to separate concerns
+ *
+ *
  * <p>Java class for RepositoryObject complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RepositoryObject"&gt;
  *   &lt;complexContent&gt;
@@ -54,8 +53,6 @@ import com.sap.ndb.datamodeltype.DataType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RepositoryObject", propOrder = {
@@ -65,112 +62,95 @@ import com.sap.ndb.datamodeltype.DataType;
     DataType.class
 })
 public abstract class RepositoryObject
-    extends AbstractRepositoryObject
-{
+    extends AbstractRepositoryObject {
 
-    protected EndUserTexts endUserTexts;
-    @XmlAttribute(name = "name", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String name;
-    @XmlAttribute(name = "nameQualifier")
-    protected String nameQualifier;
-    @XmlAttribute(name = "deprecated")
-    protected Boolean deprecated;
+  protected EndUserTexts endUserTexts;
+  @XmlAttribute(name = "name", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String name;
+  @XmlAttribute(name = "nameQualifier")
+  protected String nameQualifier;
+  @XmlAttribute(name = "deprecated")
+  protected Boolean deprecated;
 
-    /**
-     * Gets the value of the endUserTexts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public EndUserTexts getEndUserTexts() {
-        return endUserTexts;
-    }
+  /**
+   * Gets the value of the endUserTexts property.
+   *
+   * @return possible object is
+   * {@link EndUserTexts }
+   */
+  public EndUserTexts getEndUserTexts() {
+    return endUserTexts;
+  }
 
-    /**
-     * Sets the value of the endUserTexts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public void setEndUserTexts(EndUserTexts value) {
-        this.endUserTexts = value;
-    }
+  /**
+   * Sets the value of the endUserTexts property.
+   *
+   * @param value allowed object is
+   *              {@link EndUserTexts }
+   */
+  public void setEndUserTexts(EndUserTexts value) {
+    this.endUserTexts = value;
+  }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets the value of the name property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 
-    /**
-     * Gets the value of the nameQualifier property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNameQualifier() {
-        return nameQualifier;
-    }
+  /**
+   * Gets the value of the nameQualifier property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getNameQualifier() {
+    return nameQualifier;
+  }
 
-    /**
-     * Sets the value of the nameQualifier property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNameQualifier(String value) {
-        this.nameQualifier = value;
-    }
+  /**
+   * Sets the value of the nameQualifier property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setNameQualifier(String value) {
+    this.nameQualifier = value;
+  }
 
-    /**
-     * Gets the value of the deprecated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDeprecated() {
-        return deprecated;
-    }
+  /**
+   * Gets the value of the deprecated property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDeprecated() {
+    return deprecated;
+  }
 
-    /**
-     * Sets the value of the deprecated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDeprecated(Boolean value) {
-        this.deprecated = value;
-    }
+  /**
+   * Sets the value of the deprecated property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDeprecated(Boolean value) {
+    this.deprecated = value;
+  }
 
 }

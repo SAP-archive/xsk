@@ -58,144 +58,147 @@ import org.eclipse.xtext.validation.ConfigurableIssueCodesProvider;
 @SuppressWarnings("all")
 public abstract class AbstractHdbDDRuntimeModule extends DefaultRuntimeModule {
 
-	protected Properties properties = null;
+  protected Properties properties = null;
 
-	@Override
-	public void configure(Binder binder) {
-		properties = tryBindProperties(binder, "com/sap/xsk/models/hdbdd/HdbDD.properties");
-		super.configure(binder);
-	}
-	
-	public void configureLanguageName(Binder binder) {
-		binder.bind(String.class).annotatedWith(Names.named(Constants.LANGUAGE_NAME)).toInstance("com.sap.xsk.models.hdbdd.HdbDD");
-	}
-	
-	public void configureFileExtensions(Binder binder) {
-		if (properties == null || properties.getProperty(Constants.FILE_EXTENSIONS) == null)
-			binder.bind(String.class).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("hdbdd");
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.grammarAccess.GrammarAccessFragment2
-	public ClassLoader bindClassLoaderToInstance() {
-		return getClass().getClassLoader();
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.grammarAccess.GrammarAccessFragment2
-	public Class<? extends IGrammarAccess> bindIGrammarAccess() {
-		return HdbDDGrammarAccess.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.serializer.SerializerFragment2
-	public Class<? extends ISemanticSequencer> bindISemanticSequencer() {
-		return HdbDDSemanticSequencer.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.serializer.SerializerFragment2
-	public Class<? extends ISyntacticSequencer> bindISyntacticSequencer() {
-		return HdbDDSyntacticSequencer.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.serializer.SerializerFragment2
-	public Class<? extends ISerializer> bindISerializer() {
-		return Serializer.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
-	public Class<? extends IParser> bindIParser() {
-		return HdbDDParser.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
-	public Class<? extends ITokenToStringConverter> bindITokenToStringConverter() {
-		return AntlrTokenToStringConverter.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
-	public Class<? extends IAntlrTokenFileProvider> bindIAntlrTokenFileProvider() {
-		return HdbDDAntlrTokenFileProvider.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
-	public Class<? extends Lexer> bindLexer() {
-		return InternalHdbDDLexer.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
-	public Class<? extends ITokenDefProvider> bindITokenDefProvider() {
-		return AntlrTokenDefProvider.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
-	public Provider<? extends InternalHdbDDLexer> provideInternalHdbDDLexer() {
-		return LexerProvider.create(InternalHdbDDLexer.class);
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
-	public void configureRuntimeLexer(Binder binder) {
-		binder.bind(Lexer.class)
-			.annotatedWith(Names.named(LexerBindings.RUNTIME))
-			.to(InternalHdbDDLexer.class);
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.validation.ValidatorFragment2
-	@SingletonBinding(eager=true)
-	public Class<? extends HdbDDValidator> bindHdbDDValidator() {
-		return HdbDDValidator.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.validation.ValidatorFragment2
-	public Class<? extends ConfigurableIssueCodesProvider> bindConfigurableIssueCodesProvider() {
-		return HdbDDConfigurableIssueCodesProvider.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
-	public Class<? extends IScopeProvider> bindIScopeProvider() {
-		return HdbDDScopeProvider.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
-	public void configureIScopeProviderDelegate(Binder binder) {
-		binder.bind(IScopeProvider.class).annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(ImportedNamespaceAwareLocalScopeProvider.class);
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
-	public Class<? extends IGlobalScopeProvider> bindIGlobalScopeProvider() {
-		return DefaultGlobalScopeProvider.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
-	public void configureIgnoreCaseLinking(Binder binder) {
-		binder.bindConstant().annotatedWith(IgnoreCaseLinking.class).to(false);
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
-	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
-		return DefaultDeclarativeQualifiedNameProvider.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
-	public Class<? extends IContainer.Manager> bindIContainer$Manager() {
-		return StateBasedContainerManager.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
-	public Class<? extends IAllContainersState.Provider> bindIAllContainersState$Provider() {
-		return ResourceSetBasedAllContainersStateProvider.class;
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
-	public void configureIResourceDescriptions(Binder binder) {
-		binder.bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
-	public void configureIResourceDescriptionsPersisted(Binder binder) {
-		binder.bind(IResourceDescriptions.class).annotatedWith(Names.named(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS)).to(ResourceSetBasedResourceDescriptions.class);
-	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.generator.GeneratorFragment2
-	public Class<? extends IGenerator2> bindIGenerator2() {
-		return HdbDDGenerator.class;
-	}
-	
+  @Override
+  public void configure(Binder binder) {
+    properties = tryBindProperties(binder, "com/sap/xsk/models/hdbdd/HdbDD.properties");
+    super.configure(binder);
+  }
+
+  public void configureLanguageName(Binder binder) {
+    binder.bind(String.class).annotatedWith(Names.named(Constants.LANGUAGE_NAME)).toInstance("com.sap.xsk.models.hdbdd.HdbDD");
+  }
+
+  public void configureFileExtensions(Binder binder) {
+    if (properties == null || properties.getProperty(Constants.FILE_EXTENSIONS) == null) {
+      binder.bind(String.class).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("hdbdd");
+    }
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.grammarAccess.GrammarAccessFragment2
+  public ClassLoader bindClassLoaderToInstance() {
+    return getClass().getClassLoader();
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.grammarAccess.GrammarAccessFragment2
+  public Class<? extends IGrammarAccess> bindIGrammarAccess() {
+    return HdbDDGrammarAccess.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.serializer.SerializerFragment2
+  public Class<? extends ISemanticSequencer> bindISemanticSequencer() {
+    return HdbDDSemanticSequencer.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.serializer.SerializerFragment2
+  public Class<? extends ISyntacticSequencer> bindISyntacticSequencer() {
+    return HdbDDSyntacticSequencer.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.serializer.SerializerFragment2
+  public Class<? extends ISerializer> bindISerializer() {
+    return Serializer.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+  public Class<? extends IParser> bindIParser() {
+    return HdbDDParser.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+  public Class<? extends ITokenToStringConverter> bindITokenToStringConverter() {
+    return AntlrTokenToStringConverter.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+  public Class<? extends IAntlrTokenFileProvider> bindIAntlrTokenFileProvider() {
+    return HdbDDAntlrTokenFileProvider.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+  public Class<? extends Lexer> bindLexer() {
+    return InternalHdbDDLexer.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+  public Class<? extends ITokenDefProvider> bindITokenDefProvider() {
+    return AntlrTokenDefProvider.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+  public Provider<? extends InternalHdbDDLexer> provideInternalHdbDDLexer() {
+    return LexerProvider.create(InternalHdbDDLexer.class);
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+  public void configureRuntimeLexer(Binder binder) {
+    binder.bind(Lexer.class)
+        .annotatedWith(Names.named(LexerBindings.RUNTIME))
+        .to(InternalHdbDDLexer.class);
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.validation.ValidatorFragment2
+  @SingletonBinding(eager = true)
+  public Class<? extends HdbDDValidator> bindHdbDDValidator() {
+    return HdbDDValidator.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.validation.ValidatorFragment2
+  public Class<? extends ConfigurableIssueCodesProvider> bindConfigurableIssueCodesProvider() {
+    return HdbDDConfigurableIssueCodesProvider.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
+  public Class<? extends IScopeProvider> bindIScopeProvider() {
+    return HdbDDScopeProvider.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
+  public void configureIScopeProviderDelegate(Binder binder) {
+    binder.bind(IScopeProvider.class).annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE))
+        .to(ImportedNamespaceAwareLocalScopeProvider.class);
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
+  public Class<? extends IGlobalScopeProvider> bindIGlobalScopeProvider() {
+    return DefaultGlobalScopeProvider.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
+  public void configureIgnoreCaseLinking(Binder binder) {
+    binder.bindConstant().annotatedWith(IgnoreCaseLinking.class).to(false);
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+  public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
+    return DefaultDeclarativeQualifiedNameProvider.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+  public Class<? extends IContainer.Manager> bindIContainer$Manager() {
+    return StateBasedContainerManager.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+  public Class<? extends IAllContainersState.Provider> bindIAllContainersState$Provider() {
+    return ResourceSetBasedAllContainersStateProvider.class;
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+  public void configureIResourceDescriptions(Binder binder) {
+    binder.bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+  public void configureIResourceDescriptionsPersisted(Binder binder) {
+    binder.bind(IResourceDescriptions.class).annotatedWith(Names.named(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS))
+        .to(ResourceSetBasedResourceDescriptions.class);
+  }
+
+  // contributed by org.eclipse.xtext.xtext.generator.generator.GeneratorFragment2
+  public Class<? extends IGenerator2> bindIGenerator2() {
+    return HdbDDGenerator.class;
+  }
+
 }

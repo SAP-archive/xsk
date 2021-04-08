@@ -15,17 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XSKHDBTIImportModel {
-    private List<XSKHDBTIImportConfigModel> configModels;
 
-    public XSKHDBTIImportModel() {
-        configModels = new ArrayList<>();
-    }
+  private List<XSKHDBTIImportConfigModel> configModels;
 
-    public List<XSKHDBTIImportConfigModel> getConfigModels() {
-        return configModels;
-    }
+  public XSKHDBTIImportModel() {
+    configModels = new ArrayList<>();
+  }
 
-    public void setConfigModels(List<XSKHDBTIImportConfigModel> configModels) {
-        this.configModels = configModels;
-    }
+  public List<XSKHDBTIImportConfigModel> getConfigModels() {
+    return configModels;
+  }
+
+  public void setConfigModels(List<XSKHDBTIImportConfigModel> configModels) {
+    this.configModels = configModels;
+  }
 }

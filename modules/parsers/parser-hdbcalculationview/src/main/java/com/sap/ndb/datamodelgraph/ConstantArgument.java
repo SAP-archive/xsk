@@ -19,18 +19,18 @@
 
 package com.sap.ndb.datamodelgraph;
 
+import com.sap.ndb.datamodeltype.PrimitiveType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.datamodeltype.PrimitiveType;
 
 
 /**
  * <p>Java class for ConstantArgument complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ConstantArgument"&gt;
  *   &lt;complexContent&gt;
@@ -41,64 +41,54 @@ import com.sap.ndb.datamodeltype.PrimitiveType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ConstantArgument")
 public class ConstantArgument {
 
-    @XmlAttribute(name = "value", required = true)
-    protected String value;
-    @XmlAttribute(name = "datatype", required = true)
-    protected PrimitiveType datatype;
+  @XmlAttribute(name = "value", required = true)
+  protected String value;
+  @XmlAttribute(name = "datatype", required = true)
+  protected PrimitiveType datatype;
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the datatype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PrimitiveType }
-     *     
-     */
-    public PrimitiveType getDatatype() {
-        return datatype;
-    }
+  /**
+   * Gets the value of the datatype property.
+   *
+   * @return possible object is
+   * {@link PrimitiveType }
+   */
+  public PrimitiveType getDatatype() {
+    return datatype;
+  }
 
-    /**
-     * Sets the value of the datatype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PrimitiveType }
-     *     
-     */
-    public void setDatatype(PrimitiveType value) {
-        this.datatype = value;
-    }
+  /**
+   * Sets the value of the datatype property.
+   *
+   * @param value allowed object is
+   *              {@link PrimitiveType }
+   */
+  public void setDatatype(PrimitiveType value) {
+    this.datatype = value;
+  }
 
 }

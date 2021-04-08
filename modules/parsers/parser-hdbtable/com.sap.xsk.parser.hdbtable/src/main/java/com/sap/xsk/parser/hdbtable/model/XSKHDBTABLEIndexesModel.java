@@ -15,51 +15,52 @@ import java.util.List;
 
 public class XSKHDBTABLEIndexesModel {
 
-    private String name;
-    private boolean unique;
-    private String order;
-    private List<String> indexColumns;
-    private String indexType;
+  private String name;
+  private boolean unique;
+  private String order;
+  private List<String> indexColumns;
+  private String indexType;
 
-    public XSKHDBTABLEIndexesModel() {}
+  public XSKHDBTABLEIndexesModel() {
+  }
 
-    public boolean isUnique() {
-        return unique;
-    }
+  public boolean isUnique() {
+    return unique;
+  }
 
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
 
-    public String getOrder() {
-        return order;
-    }
+  public String getOrder() {
+    return order;
+  }
 
-    public void setOrder(String order) {
-        this.order = order;
-    }
+  public void setOrder(String order) {
+    this.order = order;
+  }
 
-    public List<String> getIndexColumns() {
-        return indexColumns;
-    }
+  public List<String> getIndexColumns() {
+    return indexColumns;
+  }
 
-    public void setIndexColumns(List<String> indexColumns) {
-        this.indexColumns = indexColumns;
-    }
+  public void setIndexColumns(List<String> indexColumns) {
+    this.indexColumns = indexColumns;
+  }
 
-    public String getIndexType() {
-        return indexType;
-    }
+  public String getIndexType() {
+    return indexType;
+  }
 
-    public void setIndexType(String indexType) {
-        this.indexType = indexType;
-    }
+  public void setIndexType(String indexType) {
+    this.indexType = indexType;
+  }
 
-    public String getIndexName() {
-        return name;
-    }
+  public String getIndexName() {
+    return name;
+  }
 
-    public void setIndexName(String name) {
-        this.name = name;
-    }
+  public void setIndexName(String name) {
+    this.name = name;
+  }
 }

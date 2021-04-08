@@ -23,12 +23,12 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.sap.xsk.models.xsodata.xsOData.Association#getDependentMultiplicity <em>Dependent Multiplicity</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation()
  * @model
  * @generated
+ * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation()
  */
-public interface Association extends EObject
-{
+public interface Association extends EObject {
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -37,11 +37,12 @@ public interface Association extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_Name()
    * @model
    * @generated
+   * @see #setName(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_Name()
    */
   String getName();
 
@@ -49,9 +50,10 @@ public interface Association extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Association#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
    * @generated
+   * @see #getName()
    */
   void setName(String value);
 
@@ -63,11 +65,12 @@ public interface Association extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Principal</em>' attribute.
-   * @see #setPrincipal(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_Principal()
    * @model
    * @generated
+   * @see #setPrincipal(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_Principal()
    */
   String getPrincipal();
 
@@ -75,9 +78,10 @@ public interface Association extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Association#getPrincipal <em>Principal</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Principal</em>' attribute.
-   * @see #getPrincipal()
    * @generated
+   * @see #getPrincipal()
    */
   void setPrincipal(String value);
 
@@ -89,11 +93,12 @@ public interface Association extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Principal Key</em>' attribute.
-   * @see #setPrincipalKey(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_PrincipalKey()
    * @model
    * @generated
+   * @see #setPrincipalKey(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_PrincipalKey()
    */
   String getPrincipalKey();
 
@@ -101,9 +106,10 @@ public interface Association extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Association#getPrincipalKey <em>Principal Key</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Principal Key</em>' attribute.
-   * @see #getPrincipalKey()
    * @generated
+   * @see #getPrincipalKey()
    */
   void setPrincipalKey(String value);
 
@@ -115,11 +121,12 @@ public interface Association extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Principal Multiplicity</em>' attribute.
-   * @see #setPrincipalMultiplicity(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_PrincipalMultiplicity()
    * @model
    * @generated
+   * @see #setPrincipalMultiplicity(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_PrincipalMultiplicity()
    */
   String getPrincipalMultiplicity();
 
@@ -127,9 +134,10 @@ public interface Association extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Association#getPrincipalMultiplicity <em>Principal Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Principal Multiplicity</em>' attribute.
-   * @see #getPrincipalMultiplicity()
    * @generated
+   * @see #getPrincipalMultiplicity()
    */
   void setPrincipalMultiplicity(String value);
 
@@ -141,11 +149,12 @@ public interface Association extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Dependent</em>' attribute.
-   * @see #setDependent(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_Dependent()
    * @model
    * @generated
+   * @see #setDependent(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_Dependent()
    */
   String getDependent();
 
@@ -153,9 +162,10 @@ public interface Association extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Association#getDependent <em>Dependent</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Dependent</em>' attribute.
-   * @see #getDependent()
    * @generated
+   * @see #getDependent()
    */
   void setDependent(String value);
 
@@ -167,11 +177,12 @@ public interface Association extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Dependent Property</em>' attribute.
-   * @see #setDependentProperty(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_DependentProperty()
    * @model
    * @generated
+   * @see #setDependentProperty(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_DependentProperty()
    */
   String getDependentProperty();
 
@@ -179,9 +190,10 @@ public interface Association extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Association#getDependentProperty <em>Dependent Property</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Dependent Property</em>' attribute.
-   * @see #getDependentProperty()
    * @generated
+   * @see #getDependentProperty()
    */
   void setDependentProperty(String value);
 
@@ -193,11 +205,12 @@ public interface Association extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Dependent Multiplicity</em>' attribute.
-   * @see #setDependentMultiplicity(String)
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_DependentMultiplicity()
    * @model
    * @generated
+   * @see #setDependentMultiplicity(String)
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getAssociation_DependentMultiplicity()
    */
   String getDependentMultiplicity();
 
@@ -205,9 +218,10 @@ public interface Association extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.xsodata.xsOData.Association#getDependentMultiplicity <em>Dependent Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Dependent Multiplicity</em>' attribute.
-   * @see #getDependentMultiplicity()
    * @generated
+   * @see #getDependentMultiplicity()
    */
   void setDependentMultiplicity(String value);
 

@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for FeaturedAttributeReferences complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="FeaturedAttributeReferences"&gt;
  *   &lt;complexContent&gt;
@@ -43,8 +43,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FeaturedAttributeReferences", propOrder = {
@@ -52,36 +50,34 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class FeaturedAttributeReferences {
 
-    @XmlElement(required = true)
-    protected List<FeaturedAttributeReference> attributeReference;
+  @XmlElement(required = true)
+  protected List<FeaturedAttributeReference> attributeReference;
 
-    /**
-     * Gets the value of the attributeReference property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the attributeReference property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getAttributeReference().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link FeaturedAttributeReference }
-     * 
-     * 
-     */
-    public List<FeaturedAttributeReference> getAttributeReference() {
-        if (attributeReference == null) {
-            attributeReference = new ArrayList<FeaturedAttributeReference>();
-        }
-        return this.attributeReference;
+  /**
+   * Gets the value of the attributeReference property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the attributeReference property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getAttributeReference().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link FeaturedAttributeReference }
+   */
+  public List<FeaturedAttributeReference> getAttributeReference() {
+    if (attributeReference == null) {
+      attributeReference = new ArrayList<FeaturedAttributeReference>();
     }
+    return this.attributeReference;
+  }
 
 }

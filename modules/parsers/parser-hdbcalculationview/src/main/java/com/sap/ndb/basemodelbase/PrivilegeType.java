@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PrivilegeType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,22 +37,21 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "PrivilegeType")
 @XmlEnum
 public enum PrivilegeType {
 
-    NONE,
-    ANALYTIC_PRIVILEGE,
-    SQL_ANALYTIC_PRIVILEGE;
+  NONE,
+  ANALYTIC_PRIVILEGE,
+  SQL_ANALYTIC_PRIVILEGE;
 
-    public String value() {
-        return name();
-    }
+  public static PrivilegeType fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static PrivilegeType fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

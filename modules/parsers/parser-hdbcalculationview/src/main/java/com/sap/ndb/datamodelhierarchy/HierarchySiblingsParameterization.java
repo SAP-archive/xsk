@@ -25,15 +25,14 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Returns all siblings of a set of start nodes, including the start nodes, in a hierarchy. 
- * 				Docs: https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/ffc0d810a9274f789e6667cf0f73c388.html
- * 			
- * 
+ * Returns all siblings of a set of start nodes, including the start nodes, in a hierarchy.
+ * Docs: https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/ffc0d810a9274f789e6667cf0f73c388.html
+ *
+ *
  * <p>Java class for HierarchySiblingsParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HierarchySiblingsParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -46,8 +45,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HierarchySiblingsParameterization", propOrder = {
@@ -56,55 +53,47 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class HierarchySiblingsParameterization {
 
-    protected Start start;
-    protected String startWhere;
+  protected Start start;
+  protected String startWhere;
 
-    /**
-     * Gets the value of the start property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Start }
-     *     
-     */
-    public Start getStart() {
-        return start;
-    }
+  /**
+   * Gets the value of the start property.
+   *
+   * @return possible object is
+   * {@link Start }
+   */
+  public Start getStart() {
+    return start;
+  }
 
-    /**
-     * Sets the value of the start property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Start }
-     *     
-     */
-    public void setStart(Start value) {
-        this.start = value;
-    }
+  /**
+   * Sets the value of the start property.
+   *
+   * @param value allowed object is
+   *              {@link Start }
+   */
+  public void setStart(Start value) {
+    this.start = value;
+  }
 
-    /**
-     * Gets the value of the startWhere property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStartWhere() {
-        return startWhere;
-    }
+  /**
+   * Gets the value of the startWhere property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStartWhere() {
+    return startWhere;
+  }
 
-    /**
-     * Sets the value of the startWhere property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStartWhere(String value) {
-        this.startWhere = value;
-    }
+  /**
+   * Sets the value of the startWhere property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStartWhere(String value) {
+    this.startWhere = value;
+  }
 
 }

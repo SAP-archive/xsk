@@ -19,6 +19,11 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.bimodelconversion.CurrencyConversion;
+import com.sap.ndb.bimodelconversion.UnitConversion;
+import com.sap.ndb.bimodelcube.AggregationType;
+import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilter;
+import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,24 +34,18 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.bimodelconversion.CurrencyConversion;
-import com.sap.ndb.bimodelconversion.UnitConversion;
-import com.sap.ndb.bimodelcube.AggregationType;
-import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilter;
-import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
 
 
 /**
- * 
- * 				Models an attribute on a view inside the scenario. It has less features as the attribute in the logical model.	
- * 				The data type is already defined here because it is needed for script based nodes it should be empty (is ignored) 
- * 				for viewAttributes in union, join and projection nodes
- * 			
- * 
+ * Models an attribute on a view inside the scenario. It has less features as the attribute in the logical model.
+ * The data type is already defined here because it is needed for script based nodes it should be empty (is ignored)
+ * for viewAttributes in union, join and projection nodes
+ *
+ *
  * <p>Java class for ViewAttribute complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ViewAttribute"&gt;
  *   &lt;complexContent&gt;
@@ -75,8 +74,6 @@ import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ViewAttribute", propOrder = {
@@ -91,425 +88,363 @@ import com.sap.ndb.sqlcoremodeldatatypes.PrimitiveTypeSQL;
 })
 public class ViewAttribute {
 
-    protected List<ValueFilter> filter;
-    protected CurrencyConversion currencyConversion;
-    protected UnitConversion unitConversion;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String conversionReference;
-    @XmlAttribute(name = "id", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String id;
-    @XmlAttribute(name = "isMeasure")
-    protected Boolean isMeasure;
-    @XmlAttribute(name = "aggregationType")
-    protected AggregationType aggregationType;
-    @XmlAttribute(name = "order")
-    protected Integer order;
-    @XmlAttribute(name = "keepFlag")
-    protected Boolean keepFlag;
-    @XmlAttribute(name = "transparentFilter")
-    protected Boolean transparentFilter;
-    @XmlAttribute(name = "hidden")
-    protected Boolean hidden;
-    @XmlAttribute(name = "datatype")
-    protected PrimitiveTypeSQL datatype;
-    @XmlAttribute(name = "length")
-    protected Short length;
-    @XmlAttribute(name = "scale")
-    protected Short scale;
-    @XmlAttribute(name = "replaceNull")
-    protected Boolean replaceNull;
-    @XmlAttribute(name = "replaceNullBy")
-    protected String replaceNullBy;
+  protected List<ValueFilter> filter;
+  protected CurrencyConversion currencyConversion;
+  protected UnitConversion unitConversion;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String conversionReference;
+  @XmlAttribute(name = "id", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String id;
+  @XmlAttribute(name = "isMeasure")
+  protected Boolean isMeasure;
+  @XmlAttribute(name = "aggregationType")
+  protected AggregationType aggregationType;
+  @XmlAttribute(name = "order")
+  protected Integer order;
+  @XmlAttribute(name = "keepFlag")
+  protected Boolean keepFlag;
+  @XmlAttribute(name = "transparentFilter")
+  protected Boolean transparentFilter;
+  @XmlAttribute(name = "hidden")
+  protected Boolean hidden;
+  @XmlAttribute(name = "datatype")
+  protected PrimitiveTypeSQL datatype;
+  @XmlAttribute(name = "length")
+  protected Short length;
+  @XmlAttribute(name = "scale")
+  protected Short scale;
+  @XmlAttribute(name = "replaceNull")
+  protected Boolean replaceNull;
+  @XmlAttribute(name = "replaceNullBy")
+  protected String replaceNullBy;
 
-    /**
-     * Gets the value of the filter property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the filter property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getFilter().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link ValueFilter }
-     * 
-     * 
-     */
-    public List<ValueFilter> getFilter() {
-        if (filter == null) {
-            filter = new ArrayList<ValueFilter>();
-        }
-        return this.filter;
+  /**
+   * Gets the value of the filter property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the filter property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getFilter().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link ValueFilter }
+   */
+  public List<ValueFilter> getFilter() {
+    if (filter == null) {
+      filter = new ArrayList<ValueFilter>();
     }
+    return this.filter;
+  }
 
-    /**
-     * Gets the value of the currencyConversion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CurrencyConversion }
-     *     
-     */
-    public CurrencyConversion getCurrencyConversion() {
-        return currencyConversion;
-    }
+  /**
+   * Gets the value of the currencyConversion property.
+   *
+   * @return possible object is
+   * {@link CurrencyConversion }
+   */
+  public CurrencyConversion getCurrencyConversion() {
+    return currencyConversion;
+  }
 
-    /**
-     * Sets the value of the currencyConversion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CurrencyConversion }
-     *     
-     */
-    public void setCurrencyConversion(CurrencyConversion value) {
-        this.currencyConversion = value;
-    }
+  /**
+   * Sets the value of the currencyConversion property.
+   *
+   * @param value allowed object is
+   *              {@link CurrencyConversion }
+   */
+  public void setCurrencyConversion(CurrencyConversion value) {
+    this.currencyConversion = value;
+  }
 
-    /**
-     * Gets the value of the unitConversion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnitConversion }
-     *     
-     */
-    public UnitConversion getUnitConversion() {
-        return unitConversion;
-    }
+  /**
+   * Gets the value of the unitConversion property.
+   *
+   * @return possible object is
+   * {@link UnitConversion }
+   */
+  public UnitConversion getUnitConversion() {
+    return unitConversion;
+  }
 
-    /**
-     * Sets the value of the unitConversion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnitConversion }
-     *     
-     */
-    public void setUnitConversion(UnitConversion value) {
-        this.unitConversion = value;
-    }
+  /**
+   * Sets the value of the unitConversion property.
+   *
+   * @param value allowed object is
+   *              {@link UnitConversion }
+   */
+  public void setUnitConversion(UnitConversion value) {
+    this.unitConversion = value;
+  }
 
-    /**
-     * Gets the value of the conversionReference property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getConversionReference() {
-        return conversionReference;
-    }
+  /**
+   * Gets the value of the conversionReference property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getConversionReference() {
+    return conversionReference;
+  }
 
-    /**
-     * Sets the value of the conversionReference property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setConversionReference(String value) {
-        this.conversionReference = value;
-    }
+  /**
+   * Sets the value of the conversionReference property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setConversionReference(String value) {
+    this.conversionReference = value;
+  }
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setId(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Gets the value of the isMeasure property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isIsMeasure() {
-        return isMeasure;
-    }
+  /**
+   * Gets the value of the isMeasure property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isIsMeasure() {
+    return isMeasure;
+  }
 
-    /**
-     * Sets the value of the isMeasure property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIsMeasure(Boolean value) {
-        this.isMeasure = value;
-    }
+  /**
+   * Sets the value of the isMeasure property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setIsMeasure(Boolean value) {
+    this.isMeasure = value;
+  }
 
-    /**
-     * Gets the value of the aggregationType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AggregationType }
-     *     
-     */
-    public AggregationType getAggregationType() {
-        return aggregationType;
-    }
+  /**
+   * Gets the value of the aggregationType property.
+   *
+   * @return possible object is
+   * {@link AggregationType }
+   */
+  public AggregationType getAggregationType() {
+    return aggregationType;
+  }
 
-    /**
-     * Sets the value of the aggregationType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AggregationType }
-     *     
-     */
-    public void setAggregationType(AggregationType value) {
-        this.aggregationType = value;
-    }
+  /**
+   * Sets the value of the aggregationType property.
+   *
+   * @param value allowed object is
+   *              {@link AggregationType }
+   */
+  public void setAggregationType(AggregationType value) {
+    this.aggregationType = value;
+  }
 
-    /**
-     * Gets the value of the order property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getOrder() {
-        return order;
-    }
+  /**
+   * Gets the value of the order property.
+   *
+   * @return possible object is
+   * {@link Integer }
+   */
+  public Integer getOrder() {
+    return order;
+  }
 
-    /**
-     * Sets the value of the order property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setOrder(Integer value) {
-        this.order = value;
-    }
+  /**
+   * Sets the value of the order property.
+   *
+   * @param value allowed object is
+   *              {@link Integer }
+   */
+  public void setOrder(Integer value) {
+    this.order = value;
+  }
 
-    /**
-     * Gets the value of the keepFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isKeepFlag() {
-        return keepFlag;
-    }
+  /**
+   * Gets the value of the keepFlag property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isKeepFlag() {
+    return keepFlag;
+  }
 
-    /**
-     * Sets the value of the keepFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setKeepFlag(Boolean value) {
-        this.keepFlag = value;
-    }
+  /**
+   * Sets the value of the keepFlag property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setKeepFlag(Boolean value) {
+    this.keepFlag = value;
+  }
 
-    /**
-     * Gets the value of the transparentFilter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isTransparentFilter() {
-        return transparentFilter;
-    }
+  /**
+   * Gets the value of the transparentFilter property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isTransparentFilter() {
+    return transparentFilter;
+  }
 
-    /**
-     * Sets the value of the transparentFilter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setTransparentFilter(Boolean value) {
-        this.transparentFilter = value;
-    }
+  /**
+   * Sets the value of the transparentFilter property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setTransparentFilter(Boolean value) {
+    this.transparentFilter = value;
+  }
 
-    /**
-     * Gets the value of the hidden property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isHidden() {
-        return hidden;
-    }
+  /**
+   * Gets the value of the hidden property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isHidden() {
+    return hidden;
+  }
 
-    /**
-     * Sets the value of the hidden property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setHidden(Boolean value) {
-        this.hidden = value;
-    }
+  /**
+   * Sets the value of the hidden property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setHidden(Boolean value) {
+    this.hidden = value;
+  }
 
-    /**
-     * Gets the value of the datatype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PrimitiveTypeSQL }
-     *     
-     */
-    public PrimitiveTypeSQL getDatatype() {
-        return datatype;
-    }
+  /**
+   * Gets the value of the datatype property.
+   *
+   * @return possible object is
+   * {@link PrimitiveTypeSQL }
+   */
+  public PrimitiveTypeSQL getDatatype() {
+    return datatype;
+  }
 
-    /**
-     * Sets the value of the datatype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PrimitiveTypeSQL }
-     *     
-     */
-    public void setDatatype(PrimitiveTypeSQL value) {
-        this.datatype = value;
-    }
+  /**
+   * Sets the value of the datatype property.
+   *
+   * @param value allowed object is
+   *              {@link PrimitiveTypeSQL }
+   */
+  public void setDatatype(PrimitiveTypeSQL value) {
+    this.datatype = value;
+  }
 
-    /**
-     * Gets the value of the length property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getLength() {
-        return length;
-    }
+  /**
+   * Gets the value of the length property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getLength() {
+    return length;
+  }
 
-    /**
-     * Sets the value of the length property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setLength(Short value) {
-        this.length = value;
-    }
+  /**
+   * Sets the value of the length property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setLength(Short value) {
+    this.length = value;
+  }
 
-    /**
-     * Gets the value of the scale property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getScale() {
-        return scale;
-    }
+  /**
+   * Gets the value of the scale property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getScale() {
+    return scale;
+  }
 
-    /**
-     * Sets the value of the scale property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setScale(Short value) {
-        this.scale = value;
-    }
+  /**
+   * Sets the value of the scale property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setScale(Short value) {
+    this.scale = value;
+  }
 
-    /**
-     * Gets the value of the replaceNull property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isReplaceNull() {
-        return replaceNull;
-    }
+  /**
+   * Gets the value of the replaceNull property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isReplaceNull() {
+    return replaceNull;
+  }
 
-    /**
-     * Sets the value of the replaceNull property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setReplaceNull(Boolean value) {
-        this.replaceNull = value;
-    }
+  /**
+   * Sets the value of the replaceNull property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setReplaceNull(Boolean value) {
+    this.replaceNull = value;
+  }
 
-    /**
-     * Gets the value of the replaceNullBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getReplaceNullBy() {
-        return replaceNullBy;
-    }
+  /**
+   * Gets the value of the replaceNullBy property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getReplaceNullBy() {
+    return replaceNullBy;
+  }
 
-    /**
-     * Sets the value of the replaceNullBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setReplaceNullBy(String value) {
-        this.replaceNullBy = value;
-    }
+  /**
+   * Sets the value of the replaceNullBy property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setReplaceNullBy(String value) {
+    this.replaceNullBy = value;
+  }
 
 }

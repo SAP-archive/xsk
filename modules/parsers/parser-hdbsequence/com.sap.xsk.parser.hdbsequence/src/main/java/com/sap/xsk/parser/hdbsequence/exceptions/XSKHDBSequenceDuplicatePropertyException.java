@@ -12,7 +12,8 @@
 package com.sap.xsk.parser.hdbsequence.exceptions;
 
 public class XSKHDBSequenceDuplicatePropertyException extends RuntimeException {
-    public XSKHDBSequenceDuplicatePropertyException(String message) {
-        super(message);
-    }
+
+  public XSKHDBSequenceDuplicatePropertyException(String message) {
+    super(message);
+  }
 }

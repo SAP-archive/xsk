@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for SelectionType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -38,35 +38,34 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "SelectionType")
 @XmlEnum
 public enum SelectionType {
 
-    @XmlEnumValue("SingleValue")
-    SINGLE_VALUE("SingleValue"),
-    @XmlEnumValue("Interval")
-    INTERVAL("Interval"),
-    @XmlEnumValue("Range")
-    RANGE("Range");
-    private final String value;
+  @XmlEnumValue("SingleValue")
+  SINGLE_VALUE("SingleValue"),
+  @XmlEnumValue("Interval")
+  INTERVAL("Interval"),
+  @XmlEnumValue("Range")
+  RANGE("Range");
+  private final String value;
 
-    SelectionType(String v) {
-        value = v;
-    }
+  SelectionType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static SelectionType fromValue(String v) {
+    for (SelectionType c : SelectionType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static SelectionType fromValue(String v) {
-        for (SelectionType c: SelectionType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

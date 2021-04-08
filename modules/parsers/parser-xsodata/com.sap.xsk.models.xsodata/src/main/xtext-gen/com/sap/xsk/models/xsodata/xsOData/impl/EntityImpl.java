@@ -6,20 +6,14 @@ package com.sap.xsk.models.xsodata.xsOData.impl;
 import com.sap.xsk.models.xsodata.xsOData.Entity;
 import com.sap.xsk.models.xsodata.xsOData.Navigation;
 import com.sap.xsk.models.xsodata.xsOData.XsODataPackage;
-
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -43,65 +37,66 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
-{
+public class EntityImpl extends MinimalEObjectImpl.Container implements Entity {
+
   /**
    * The default value of the '{@link #getNamespace() <em>Namespace</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getNamespace()
+   *
    * @generated
    * @ordered
+   * @see #getNamespace()
    */
   protected static final String NAMESPACE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getNamespace() <em>Namespace</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getNamespace()
-   * @generated
-   * @ordered
-   */
-  protected String namespace = NAMESPACE_EDEFAULT;
-
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   *
    * @generated
    * @ordered
+   * @see #getName()
    */
   protected static final String NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected String name = NAME_EDEFAULT;
-
   /**
    * The default value of the '{@link #getAlias() <em>Alias</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getAlias()
+   *
    * @generated
    * @ordered
+   * @see #getAlias()
    */
   protected static final String ALIAS_EDEFAULT = null;
-
+  /**
+   * The cached value of the '{@link #getNamespace() <em>Namespace</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #getNamespace()
+   */
+  protected String namespace = NAMESPACE_EDEFAULT;
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   * @ordered
+   * @see #getName()
+   */
+  protected String name = NAME_EDEFAULT;
   /**
    * The cached value of the '{@link #getAlias() <em>Alias</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getAlias()
+   *
    * @generated
    * @ordered
+   * @see #getAlias()
    */
   protected String alias = ALIAS_EDEFAULT;
 
@@ -109,9 +104,10 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
    * The cached value of the '{@link #getNavigates() <em>Navigates</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getNavigates()
+   *
    * @generated
    * @ordered
+   * @see #getNavigates()
    */
   protected EList<Navigation> navigates;
 
@@ -119,9 +115,10 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
    * The cached value of the '{@link #getCreateEvents() <em>Create Events</em>}' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCreateEvents()
+   *
    * @generated
    * @ordered
+   * @see #getCreateEvents()
    */
   protected EList<String> createEvents;
 
@@ -129,9 +126,10 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
    * The cached value of the '{@link #getDeleteUsing() <em>Delete Using</em>}' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDeleteUsing()
+   *
    * @generated
    * @ordered
+   * @see #getDeleteUsing()
    */
   protected EList<String> deleteUsing;
 
@@ -139,111 +137,114 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
    * The cached value of the '{@link #getUpdate() <em>Update</em>}' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getUpdate()
+   *
    * @generated
    * @ordered
+   * @see #getUpdate()
    */
   protected EList<String> update;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  protected EntityImpl()
-  {
+  protected EntityImpl() {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass()
-  {
+  protected EClass eStaticClass() {
     return XsODataPackage.Literals.ENTITY;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getNamespace()
-  {
+  public String getNamespace() {
     return namespace;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setNamespace(String newNamespace)
-  {
+  public void setNamespace(String newNamespace) {
     String oldNamespace = namespace;
     namespace = newNamespace;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ENTITY__NAMESPACE, oldNamespace, namespace));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setName(String newName)
-  {
+  public void setName(String newName) {
     String oldName = name;
     name = newName;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ENTITY__NAME, oldName, name));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getAlias()
-  {
+  public String getAlias() {
     return alias;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setAlias(String newAlias)
-  {
+  public void setAlias(String newAlias) {
     String oldAlias = alias;
     alias = newAlias;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.ENTITY__ALIAS, oldAlias, alias));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<Navigation> getNavigates()
-  {
-    if (navigates == null)
-    {
+  public EList<Navigation> getNavigates() {
+    if (navigates == null) {
       navigates = new EObjectContainmentEList<Navigation>(Navigation.class, this, XsODataPackage.ENTITY__NAVIGATES);
     }
     return navigates;
@@ -252,12 +253,11 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<String> getCreateEvents()
-  {
-    if (createEvents == null)
-    {
+  public EList<String> getCreateEvents() {
+    if (createEvents == null) {
       createEvents = new EDataTypeEList<String>(String.class, this, XsODataPackage.ENTITY__CREATE_EVENTS);
     }
     return createEvents;
@@ -266,12 +266,11 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<String> getDeleteUsing()
-  {
-    if (deleteUsing == null)
-    {
+  public EList<String> getDeleteUsing() {
+    if (deleteUsing == null) {
       deleteUsing = new EDataTypeEList<String>(String.class, this, XsODataPackage.ENTITY__DELETE_USING);
     }
     return deleteUsing;
@@ -280,12 +279,11 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<String> getUpdate()
-  {
-    if (update == null)
-    {
+  public EList<String> getUpdate() {
+    if (update == null) {
       update = new EDataTypeEList<String>(String.class, this, XsODataPackage.ENTITY__UPDATE);
     }
     return update;
@@ -294,15 +292,14 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
-    switch (featureID)
-    {
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+    switch (featureID) {
       case XsODataPackage.ENTITY__NAVIGATES:
-        return ((InternalEList<?>)getNavigates()).basicRemove(otherEnd, msgs);
+        return ((InternalEList<?>) getNavigates()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -310,13 +307,12 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
-    switch (featureID)
-    {
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
       case XsODataPackage.ENTITY__NAMESPACE:
         return getNamespace();
       case XsODataPackage.ENTITY__NAME:
@@ -338,38 +334,37 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void eSet(int featureID, Object newValue)
-  {
-    switch (featureID)
-    {
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
       case XsODataPackage.ENTITY__NAMESPACE:
-        setNamespace((String)newValue);
+        setNamespace((String) newValue);
         return;
       case XsODataPackage.ENTITY__NAME:
-        setName((String)newValue);
+        setName((String) newValue);
         return;
       case XsODataPackage.ENTITY__ALIAS:
-        setAlias((String)newValue);
+        setAlias((String) newValue);
         return;
       case XsODataPackage.ENTITY__NAVIGATES:
         getNavigates().clear();
-        getNavigates().addAll((Collection<? extends Navigation>)newValue);
+        getNavigates().addAll((Collection<? extends Navigation>) newValue);
         return;
       case XsODataPackage.ENTITY__CREATE_EVENTS:
         getCreateEvents().clear();
-        getCreateEvents().addAll((Collection<? extends String>)newValue);
+        getCreateEvents().addAll((Collection<? extends String>) newValue);
         return;
       case XsODataPackage.ENTITY__DELETE_USING:
         getDeleteUsing().clear();
-        getDeleteUsing().addAll((Collection<? extends String>)newValue);
+        getDeleteUsing().addAll((Collection<? extends String>) newValue);
         return;
       case XsODataPackage.ENTITY__UPDATE:
         getUpdate().clear();
-        getUpdate().addAll((Collection<? extends String>)newValue);
+        getUpdate().addAll((Collection<? extends String>) newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -378,13 +373,12 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public void eUnset(int featureID)
-  {
-    switch (featureID)
-    {
+  public void eUnset(int featureID) {
+    switch (featureID) {
       case XsODataPackage.ENTITY__NAMESPACE:
         setNamespace(NAMESPACE_EDEFAULT);
         return;
@@ -413,13 +407,12 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID)
-  {
-    switch (featureID)
-    {
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
       case XsODataPackage.ENTITY__NAMESPACE:
         return NAMESPACE_EDEFAULT == null ? namespace != null : !NAMESPACE_EDEFAULT.equals(namespace);
       case XsODataPackage.ENTITY__NAME:
@@ -441,12 +434,14 @@ public class EntityImpl extends MinimalEObjectImpl.Container implements Entity
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
+  public String toString() {
+    if (eIsProxy()) {
+      return super.toString();
+    }
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (namespace: ");

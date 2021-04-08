@@ -19,21 +19,20 @@
 
 package com.sap.ndb.bimodelvariable;
 
+import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 
 
 /**
- *  
- * 				Type to define one entry in the static list of values 
- * 			
- * 
+ * Type to define one entry in the static list of values
+ *
+ *
  * <p>Java class for ValueListEntry complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ValueListEntry"&gt;
  *   &lt;complexContent&gt;
@@ -42,14 +41,11 @@ import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ValueListEntry")
 public class ValueListEntry
-    extends IDObjectWithDescription
-{
+    extends IDObjectWithDescription {
 
 
 }

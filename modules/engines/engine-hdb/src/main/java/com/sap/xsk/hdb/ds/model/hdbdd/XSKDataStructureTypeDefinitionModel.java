@@ -12,67 +12,66 @@
 package com.sap.xsk.hdb.ds.model.hdbdd;
 
 public class XSKDataStructureTypeDefinitionModel {
-	
-	private String name;
-	
-	private String type;
-	
-	private int length;
 
-	/**
-	 * @param name
-	 * @param type
-	 * @param length
-	 */
-	public XSKDataStructureTypeDefinitionModel(String name, String type, int length) {
-		super();
-		this.name = name;
-		this.type = type;
-		this.length = length;
-	}
+  private String name;
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  private String type;
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+  private int length;
 
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
+  /**
+   * @param name
+   * @param type
+   * @param length
+   */
+  public XSKDataStructureTypeDefinitionModel(String name, String type, int length) {
+    super();
+    this.name = name;
+    this.type = type;
+    this.length = length;
+  }
 
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * @return the length
-	 */
-	public int getLength() {
-		return length;
-	}
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * @param length the length to set
-	 */
-	public void setLength(int length) {
-		this.length = length;
-	}
-	
-	
+  /**
+   * @return the type
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * @param type the type to set
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  /**
+   * @return the length
+   */
+  public int getLength() {
+    return length;
+  }
+
+  /**
+   * @param length the length to set
+   */
+  public void setLength(int length) {
+    this.length = length;
+  }
+
 
 }

@@ -19,18 +19,18 @@
 
 package com.sap.ndb.bimodelcube;
 
+import com.sap.ndb.bimodeldatafoundation.ColumnMapping;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodeldatafoundation.ColumnMapping;
 
 
 /**
  * <p>Java class for BaseMeasure complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BaseMeasure"&gt;
  *   &lt;complexContent&gt;
@@ -42,42 +42,35 @@ import com.sap.ndb.bimodeldatafoundation.ColumnMapping;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BaseMeasure", propOrder = {
     "measureMapping"
 })
 public class BaseMeasure
-    extends Measure
-{
+    extends Measure {
 
-    @XmlElement(required = true)
-    protected ColumnMapping measureMapping;
+  @XmlElement(required = true)
+  protected ColumnMapping measureMapping;
 
-    /**
-     * Gets the value of the measureMapping property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ColumnMapping }
-     *     
-     */
-    public ColumnMapping getMeasureMapping() {
-        return measureMapping;
-    }
+  /**
+   * Gets the value of the measureMapping property.
+   *
+   * @return possible object is
+   * {@link ColumnMapping }
+   */
+  public ColumnMapping getMeasureMapping() {
+    return measureMapping;
+  }
 
-    /**
-     * Sets the value of the measureMapping property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ColumnMapping }
-     *     
-     */
-    public void setMeasureMapping(ColumnMapping value) {
-        this.measureMapping = value;
-    }
+  /**
+   * Sets the value of the measureMapping property.
+   *
+   * @param value allowed object is
+   *              {@link ColumnMapping }
+   */
+  public void setMeasureMapping(ColumnMapping value) {
+    this.measureMapping = value;
+  }
 
 }

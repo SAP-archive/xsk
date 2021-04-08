@@ -29,14 +29,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Type for referencing an SQL object by schema name and (column) object name
- * 			
- * 
+ * Type for referencing an SQL object by schema name and (column) object name
+ *
+ *
  * <p>Java class for QualifiedSQLObjectName complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="QualifiedSQLObjectName"&gt;
  *   &lt;complexContent&gt;
@@ -48,8 +47,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QualifiedSQLObjectName")
@@ -57,89 +54,76 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     QualifiedColumnObjectName.class
 })
 public class QualifiedSQLObjectName
-    extends SchemaMappingBasedObject
-{
+    extends SchemaMappingBasedObject {
 
-    @XmlAttribute(name = "columnObjectName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String columnObjectName;
-    @XmlAttribute(name = "concatenatedName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String concatenatedName;
-    @XmlAttribute(name = "sqlName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String sqlName;
+  @XmlAttribute(name = "columnObjectName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String columnObjectName;
+  @XmlAttribute(name = "concatenatedName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String concatenatedName;
+  @XmlAttribute(name = "sqlName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String sqlName;
 
-    /**
-     * Gets the value of the columnObjectName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getColumnObjectName() {
-        return columnObjectName;
-    }
+  /**
+   * Gets the value of the columnObjectName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getColumnObjectName() {
+    return columnObjectName;
+  }
 
-    /**
-     * Sets the value of the columnObjectName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setColumnObjectName(String value) {
-        this.columnObjectName = value;
-    }
+  /**
+   * Sets the value of the columnObjectName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setColumnObjectName(String value) {
+    this.columnObjectName = value;
+  }
 
-    /**
-     * Gets the value of the concatenatedName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getConcatenatedName() {
-        return concatenatedName;
-    }
+  /**
+   * Gets the value of the concatenatedName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getConcatenatedName() {
+    return concatenatedName;
+  }
 
-    /**
-     * Sets the value of the concatenatedName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setConcatenatedName(String value) {
-        this.concatenatedName = value;
-    }
+  /**
+   * Sets the value of the concatenatedName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setConcatenatedName(String value) {
+    this.concatenatedName = value;
+  }
 
-    /**
-     * Gets the value of the sqlName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSqlName() {
-        return sqlName;
-    }
+  /**
+   * Gets the value of the sqlName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSqlName() {
+    return sqlName;
+  }
 
-    /**
-     * Sets the value of the sqlName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSqlName(String value) {
-        this.sqlName = value;
-    }
+  /**
+   * Sets the value of the sqlName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSqlName(String value) {
+    this.sqlName = value;
+  }
 
 }

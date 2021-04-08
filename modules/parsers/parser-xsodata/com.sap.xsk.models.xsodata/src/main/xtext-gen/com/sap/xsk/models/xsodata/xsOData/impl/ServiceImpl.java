@@ -7,19 +7,13 @@ import com.sap.xsk.models.xsodata.xsOData.Association;
 import com.sap.xsk.models.xsodata.xsOData.Entity;
 import com.sap.xsk.models.xsodata.xsOData.Service;
 import com.sap.xsk.models.xsodata.xsOData.XsODataPackage;
-
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -38,15 +32,16 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class ServiceImpl extends TypeImpl implements Service
-{
+public class ServiceImpl extends TypeImpl implements Service {
+
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   *
    * @generated
    * @ordered
+   * @see #getName()
    */
   protected static final String NAME_EDEFAULT = null;
 
@@ -54,9 +49,10 @@ public class ServiceImpl extends TypeImpl implements Service
    * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   *
    * @generated
    * @ordered
+   * @see #getName()
    */
   protected String name = NAME_EDEFAULT;
 
@@ -64,9 +60,10 @@ public class ServiceImpl extends TypeImpl implements Service
    * The cached value of the '{@link #getEntities() <em>Entities</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getEntities()
+   *
    * @generated
    * @ordered
+   * @see #getEntities()
    */
   protected EList<Entity> entities;
 
@@ -74,65 +71,66 @@ public class ServiceImpl extends TypeImpl implements Service
    * The cached value of the '{@link #getAssociations() <em>Associations</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getAssociations()
+   *
    * @generated
    * @ordered
+   * @see #getAssociations()
    */
   protected EList<Association> associations;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  protected ServiceImpl()
-  {
+  protected ServiceImpl() {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass()
-  {
+  protected EClass eStaticClass() {
     return XsODataPackage.Literals.SERVICE;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void setName(String newName)
-  {
+  public void setName(String newName) {
     String oldName = name;
     name = newName;
-    if (eNotificationRequired())
+    if (eNotificationRequired()) {
       eNotify(new ENotificationImpl(this, Notification.SET, XsODataPackage.SERVICE__NAME, oldName, name));
+    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<Entity> getEntities()
-  {
-    if (entities == null)
-    {
+  public EList<Entity> getEntities() {
+    if (entities == null) {
       entities = new EObjectContainmentEList<Entity>(Entity.class, this, XsODataPackage.SERVICE__ENTITIES);
     }
     return entities;
@@ -141,12 +139,11 @@ public class ServiceImpl extends TypeImpl implements Service
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<Association> getAssociations()
-  {
-    if (associations == null)
-    {
+  public EList<Association> getAssociations() {
+    if (associations == null) {
       associations = new EObjectContainmentEList<Association>(Association.class, this, XsODataPackage.SERVICE__ASSOCIATIONS);
     }
     return associations;
@@ -155,17 +152,16 @@ public class ServiceImpl extends TypeImpl implements Service
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
-    switch (featureID)
-    {
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+    switch (featureID) {
       case XsODataPackage.SERVICE__ENTITIES:
-        return ((InternalEList<?>)getEntities()).basicRemove(otherEnd, msgs);
+        return ((InternalEList<?>) getEntities()).basicRemove(otherEnd, msgs);
       case XsODataPackage.SERVICE__ASSOCIATIONS:
-        return ((InternalEList<?>)getAssociations()).basicRemove(otherEnd, msgs);
+        return ((InternalEList<?>) getAssociations()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -173,13 +169,12 @@ public class ServiceImpl extends TypeImpl implements Service
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
-    switch (featureID)
-    {
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
       case XsODataPackage.SERVICE__NAME:
         return getName();
       case XsODataPackage.SERVICE__ENTITIES:
@@ -193,24 +188,23 @@ public class ServiceImpl extends TypeImpl implements Service
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void eSet(int featureID, Object newValue)
-  {
-    switch (featureID)
-    {
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
       case XsODataPackage.SERVICE__NAME:
-        setName((String)newValue);
+        setName((String) newValue);
         return;
       case XsODataPackage.SERVICE__ENTITIES:
         getEntities().clear();
-        getEntities().addAll((Collection<? extends Entity>)newValue);
+        getEntities().addAll((Collection<? extends Entity>) newValue);
         return;
       case XsODataPackage.SERVICE__ASSOCIATIONS:
         getAssociations().clear();
-        getAssociations().addAll((Collection<? extends Association>)newValue);
+        getAssociations().addAll((Collection<? extends Association>) newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -219,13 +213,12 @@ public class ServiceImpl extends TypeImpl implements Service
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public void eUnset(int featureID)
-  {
-    switch (featureID)
-    {
+  public void eUnset(int featureID) {
+    switch (featureID) {
       case XsODataPackage.SERVICE__NAME:
         setName(NAME_EDEFAULT);
         return;
@@ -242,13 +235,12 @@ public class ServiceImpl extends TypeImpl implements Service
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID)
-  {
-    switch (featureID)
-    {
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
       case XsODataPackage.SERVICE__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case XsODataPackage.SERVICE__ENTITIES:
@@ -262,12 +254,14 @@ public class ServiceImpl extends TypeImpl implements Service
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
+  public String toString() {
+    if (eIsProxy()) {
+      return super.toString();
+    }
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");

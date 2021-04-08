@@ -19,18 +19,18 @@
 
 package com.sap.ndb.datamodelhierarchy;
 
+import com.sap.ndb.bimodelcalculation.AbstractAttributeMapping;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodelcalculation.AbstractAttributeMapping;
 
 
 /**
  * <p>Java class for Start complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Start"&gt;
  *   &lt;complexContent&gt;
@@ -42,8 +42,6 @@ import com.sap.ndb.bimodelcalculation.AbstractAttributeMapping;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Start", propOrder = {
@@ -51,31 +49,27 @@ import com.sap.ndb.bimodelcalculation.AbstractAttributeMapping;
 })
 public class Start {
 
-    @XmlElement(required = true)
-    protected AbstractAttributeMapping mapping;
+  @XmlElement(required = true)
+  protected AbstractAttributeMapping mapping;
 
-    /**
-     * Gets the value of the mapping property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AbstractAttributeMapping }
-     *     
-     */
-    public AbstractAttributeMapping getMapping() {
-        return mapping;
-    }
+  /**
+   * Gets the value of the mapping property.
+   *
+   * @return possible object is
+   * {@link AbstractAttributeMapping }
+   */
+  public AbstractAttributeMapping getMapping() {
+    return mapping;
+  }
 
-    /**
-     * Sets the value of the mapping property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AbstractAttributeMapping }
-     *     
-     */
-    public void setMapping(AbstractAttributeMapping value) {
-        this.mapping = value;
-    }
+  /**
+   * Sets the value of the mapping property.
+   *
+   * @param value allowed object is
+   *              {@link AbstractAttributeMapping }
+   */
+  public void setMapping(AbstractAttributeMapping value) {
+    this.mapping = value;
+  }
 
 }

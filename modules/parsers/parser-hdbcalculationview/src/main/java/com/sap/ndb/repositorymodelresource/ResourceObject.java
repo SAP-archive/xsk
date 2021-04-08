@@ -19,6 +19,8 @@
 
 package com.sap.ndb.repositorymodelresource;
 
+import com.sap.ndb.basemodelbase.Descriptions;
+import com.sap.ndb.bimodeldatafoundation.BIResource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -30,17 +32,15 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.Descriptions;
-import com.sap.ndb.bimodeldatafoundation.BIResource;
 
 
 /**
  * Father object for EMF resources stored in the HANA repository
- * 
+ *
  * <p>Java class for ResourceObject complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ResourceObject"&gt;
  *   &lt;complexContent&gt;
@@ -57,8 +57,6 @@ import com.sap.ndb.bimodeldatafoundation.BIResource;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ResourceObject", propOrder = {
@@ -71,175 +69,154 @@ import com.sap.ndb.bimodeldatafoundation.BIResource;
     BIResource.class
 })
 public abstract class ResourceObject
-    extends AbstractRepositoryObject
-{
+    extends AbstractRepositoryObject {
 
-    protected Descriptions descriptions;
-    protected ResourceMetadata metadata;
-    @XmlElement(nillable = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected List<String> requiredResources;
-    @XmlSchemaType(name = "anyURI")
-    protected List<String> requiredSQLObjects;
-    @XmlAttribute(name = "id")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String id;
-    @XmlAttribute(name = "deprecated")
-    protected Boolean deprecated;
+  protected Descriptions descriptions;
+  protected ResourceMetadata metadata;
+  @XmlElement(nillable = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected List<String> requiredResources;
+  @XmlSchemaType(name = "anyURI")
+  protected List<String> requiredSQLObjects;
+  @XmlAttribute(name = "id")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String id;
+  @XmlAttribute(name = "deprecated")
+  protected Boolean deprecated;
 
-    /**
-     * Gets the value of the descriptions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Descriptions }
-     *     
-     */
-    public Descriptions getDescriptions() {
-        return descriptions;
+  /**
+   * Gets the value of the descriptions property.
+   *
+   * @return possible object is
+   * {@link Descriptions }
+   */
+  public Descriptions getDescriptions() {
+    return descriptions;
+  }
+
+  /**
+   * Sets the value of the descriptions property.
+   *
+   * @param value allowed object is
+   *              {@link Descriptions }
+   */
+  public void setDescriptions(Descriptions value) {
+    this.descriptions = value;
+  }
+
+  /**
+   * Gets the value of the metadata property.
+   *
+   * @return possible object is
+   * {@link ResourceMetadata }
+   */
+  public ResourceMetadata getMetadata() {
+    return metadata;
+  }
+
+  /**
+   * Sets the value of the metadata property.
+   *
+   * @param value allowed object is
+   *              {@link ResourceMetadata }
+   */
+  public void setMetadata(ResourceMetadata value) {
+    this.metadata = value;
+  }
+
+  /**
+   * Gets the value of the requiredResources property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the requiredResources property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getRequiredResources().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link String }
+   */
+  public List<String> getRequiredResources() {
+    if (requiredResources == null) {
+      requiredResources = new ArrayList<String>();
     }
+    return this.requiredResources;
+  }
 
-    /**
-     * Sets the value of the descriptions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Descriptions }
-     *     
-     */
-    public void setDescriptions(Descriptions value) {
-        this.descriptions = value;
+  /**
+   * Gets the value of the requiredSQLObjects property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the requiredSQLObjects property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getRequiredSQLObjects().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link String }
+   */
+  public List<String> getRequiredSQLObjects() {
+    if (requiredSQLObjects == null) {
+      requiredSQLObjects = new ArrayList<String>();
     }
+    return this.requiredSQLObjects;
+  }
 
-    /**
-     * Gets the value of the metadata property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ResourceMetadata }
-     *     
-     */
-    public ResourceMetadata getMetadata() {
-        return metadata;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the metadata property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ResourceMetadata }
-     *     
-     */
-    public void setMetadata(ResourceMetadata value) {
-        this.metadata = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setId(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Gets the value of the requiredResources property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the requiredResources property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getRequiredResources().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getRequiredResources() {
-        if (requiredResources == null) {
-            requiredResources = new ArrayList<String>();
-        }
-        return this.requiredResources;
-    }
+  /**
+   * Gets the value of the deprecated property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDeprecated() {
+    return deprecated;
+  }
 
-    /**
-     * Gets the value of the requiredSQLObjects property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the requiredSQLObjects property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getRequiredSQLObjects().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getRequiredSQLObjects() {
-        if (requiredSQLObjects == null) {
-            requiredSQLObjects = new ArrayList<String>();
-        }
-        return this.requiredSQLObjects;
-    }
-
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the deprecated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDeprecated() {
-        return deprecated;
-    }
-
-    /**
-     * Sets the value of the deprecated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDeprecated(Boolean value) {
-        this.deprecated = value;
-    }
+  /**
+   * Sets the value of the deprecated property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDeprecated(Boolean value) {
+    this.deprecated = value;
+  }
 
 }

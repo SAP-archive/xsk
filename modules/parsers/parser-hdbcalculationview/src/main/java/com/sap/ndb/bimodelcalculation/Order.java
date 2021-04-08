@@ -19,24 +19,23 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.basemodelbase.SortDirection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.SortDirection;
 
 
 /**
- * 
- * 				Defines the order of one column
- * 			
- * 
+ * Defines the order of one column
+ *
+ *
  * <p>Java class for Order complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Order"&gt;
  *   &lt;complexContent&gt;
@@ -47,65 +46,55 @@ import com.sap.ndb.basemodelbase.SortDirection;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Order")
 public class Order {
 
-    @XmlAttribute(name = "byViewAttributeName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String byViewAttributeName;
-    @XmlAttribute(name = "direction")
-    protected SortDirection direction;
+  @XmlAttribute(name = "byViewAttributeName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String byViewAttributeName;
+  @XmlAttribute(name = "direction")
+  protected SortDirection direction;
 
-    /**
-     * Gets the value of the byViewAttributeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getByViewAttributeName() {
-        return byViewAttributeName;
-    }
+  /**
+   * Gets the value of the byViewAttributeName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getByViewAttributeName() {
+    return byViewAttributeName;
+  }
 
-    /**
-     * Sets the value of the byViewAttributeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setByViewAttributeName(String value) {
-        this.byViewAttributeName = value;
-    }
+  /**
+   * Sets the value of the byViewAttributeName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setByViewAttributeName(String value) {
+    this.byViewAttributeName = value;
+  }
 
-    /**
-     * Gets the value of the direction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SortDirection }
-     *     
-     */
-    public SortDirection getDirection() {
-        return direction;
-    }
+  /**
+   * Gets the value of the direction property.
+   *
+   * @return possible object is
+   * {@link SortDirection }
+   */
+  public SortDirection getDirection() {
+    return direction;
+  }
 
-    /**
-     * Sets the value of the direction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SortDirection }
-     *     
-     */
-    public void setDirection(SortDirection value) {
-        this.direction = value;
-    }
+  /**
+   * Sets the value of the direction property.
+   *
+   * @param value allowed object is
+   *              {@link SortDirection }
+   */
+  public void setDirection(SortDirection value) {
+    this.direction = value;
+  }
 
 }

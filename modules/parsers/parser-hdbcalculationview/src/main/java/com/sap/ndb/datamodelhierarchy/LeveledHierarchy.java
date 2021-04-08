@@ -19,6 +19,7 @@
 
 package com.sap.ndb.datamodelhierarchy;
 
+import com.sap.ndb.basemodelbase.NodeStyle;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,19 +27,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.NodeStyle;
 
 
 /**
- * 
- * 				A Leveled Hierarchy is defined through a list of levels. Each level is the combination of a Level-Number and a reference
- * 				to an Element of the Entity. An example of a	leveled hierarchy is time: days, months and years
- * 			
- * 
+ * A Leveled Hierarchy is defined through a list of levels. Each level is the combination of a Level-Number and a reference
+ * to an Element of the Entity. An example of a	leveled hierarchy is time: days, months and years
+ *
+ *
  * <p>Java class for LeveledHierarchy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LeveledHierarchy"&gt;
  *   &lt;complexContent&gt;
@@ -52,99 +51,86 @@ import com.sap.ndb.basemodelbase.NodeStyle;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LeveledHierarchy", propOrder = {
     "level"
 })
 public class LeveledHierarchy
-    extends InlineHierarchy
-{
+    extends InlineHierarchy {
 
-    @XmlElement(required = true)
-    protected List<Level> level;
-    @XmlAttribute(name = "nodeStyle")
-    protected NodeStyle nodeStyle;
-    @XmlAttribute(name = "stepParentNodeID")
-    protected String stepParentNodeID;
+  @XmlElement(required = true)
+  protected List<Level> level;
+  @XmlAttribute(name = "nodeStyle")
+  protected NodeStyle nodeStyle;
+  @XmlAttribute(name = "stepParentNodeID")
+  protected String stepParentNodeID;
 
-    /**
-     * Gets the value of the level property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the level property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getLevel().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Level }
-     * 
-     * 
-     */
-    public List<Level> getLevel() {
-        if (level == null) {
-            level = new ArrayList<Level>();
-        }
-        return this.level;
+  /**
+   * Gets the value of the level property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the level property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getLevel().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Level }
+   */
+  public List<Level> getLevel() {
+    if (level == null) {
+      level = new ArrayList<Level>();
     }
+    return this.level;
+  }
 
-    /**
-     * Gets the value of the nodeStyle property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link NodeStyle }
-     *     
-     */
-    public NodeStyle getNodeStyle() {
-        return nodeStyle;
-    }
+  /**
+   * Gets the value of the nodeStyle property.
+   *
+   * @return possible object is
+   * {@link NodeStyle }
+   */
+  public NodeStyle getNodeStyle() {
+    return nodeStyle;
+  }
 
-    /**
-     * Sets the value of the nodeStyle property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link NodeStyle }
-     *     
-     */
-    public void setNodeStyle(NodeStyle value) {
-        this.nodeStyle = value;
-    }
+  /**
+   * Sets the value of the nodeStyle property.
+   *
+   * @param value allowed object is
+   *              {@link NodeStyle }
+   */
+  public void setNodeStyle(NodeStyle value) {
+    this.nodeStyle = value;
+  }
 
-    /**
-     * Gets the value of the stepParentNodeID property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStepParentNodeID() {
-        return stepParentNodeID;
-    }
+  /**
+   * Gets the value of the stepParentNodeID property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStepParentNodeID() {
+    return stepParentNodeID;
+  }
 
-    /**
-     * Sets the value of the stepParentNodeID property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStepParentNodeID(String value) {
-        this.stepParentNodeID = value;
-    }
+  /**
+   * Sets the value of the stepParentNodeID property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStepParentNodeID(String value) {
+    this.stepParentNodeID = value;
+  }
 
 }

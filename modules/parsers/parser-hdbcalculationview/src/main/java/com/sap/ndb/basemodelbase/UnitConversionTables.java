@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Root class for specifying tables for conversion (currency conversion and unit conversion)
- * 			
- * 
+ * Root class for specifying tables for conversion (currency conversion and unit conversion)
+ *
+ *
  * <p>Java class for UnitConversionTables complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UnitConversionTables"&gt;
  *   &lt;complexContent&gt;
@@ -46,66 +45,56 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UnitConversionTables")
 public class UnitConversionTables {
 
-    @XmlAttribute(name = "rates", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String rates;
-    @XmlAttribute(name = "dimension", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String dimension;
+  @XmlAttribute(name = "rates", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String rates;
+  @XmlAttribute(name = "dimension", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String dimension;
 
-    /**
-     * Gets the value of the rates property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRates() {
-        return rates;
-    }
+  /**
+   * Gets the value of the rates property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getRates() {
+    return rates;
+  }
 
-    /**
-     * Sets the value of the rates property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRates(String value) {
-        this.rates = value;
-    }
+  /**
+   * Sets the value of the rates property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRates(String value) {
+    this.rates = value;
+  }
 
-    /**
-     * Gets the value of the dimension property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDimension() {
-        return dimension;
-    }
+  /**
+   * Gets the value of the dimension property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDimension() {
+    return dimension;
+  }
 
-    /**
-     * Sets the value of the dimension property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDimension(String value) {
-        this.dimension = value;
-    }
+  /**
+   * Sets the value of the dimension property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDimension(String value) {
+    this.dimension = value;
+  }
 
 }

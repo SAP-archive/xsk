@@ -17,12 +17,12 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.sap.xsk.models.hdbdd.hdbDD.Field#getName <em>Name</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getField()
  * @model
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getField()
  */
-public interface Field extends EObject
-{
+public interface Field extends EObject {
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -31,11 +31,12 @@ public interface Field extends EObject
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getField_Name()
    * @model
    * @generated
+   * @see #setName(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getField_Name()
    */
   String getName();
 
@@ -43,9 +44,10 @@ public interface Field extends EObject
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.Field#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
    * @generated
+   * @see #getName()
    */
   void setName(String value);
 

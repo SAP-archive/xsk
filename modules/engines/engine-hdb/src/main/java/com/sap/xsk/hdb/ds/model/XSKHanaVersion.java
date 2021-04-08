@@ -12,6 +12,6 @@
 package com.sap.xsk.hdb.ds.model;
 
 public enum XSKHanaVersion {
-    VERSION_1,
-    VERSION_2
+  VERSION_1,
+  VERSION_2
 }

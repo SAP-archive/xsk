@@ -19,30 +19,29 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.basemodelbase.Cardinality;
+import com.sap.ndb.basemodelbase.JoinType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.Cardinality;
-import com.sap.ndb.basemodelbase.JoinType;
 
 
 /**
- * 
- * 				The NonEquiJoinView (NEJ) allows join conditions with various comparisons (EQ, NE, LT, GT, LE, GE) on several columns. 
- * 				It will not be	allowed as a join to a shared dimension (not part of a star join). 
- * 				Since the NEJ will be mapped to the predicate join in the calculation engine, no
- * 				customer-defined calculations or filters are allowed. 
- * 				The predicate join requires conditions on the input sources, 
- * 				not the targets as in other nodes. The	optimize join columns flag is not supported in the NEJ. 
- * 				There is also no support for the 'dynamic join property' or the 'ignore multiple outputs for filter	property'.
- * 			
- * 
+ * The NonEquiJoinView (NEJ) allows join conditions with various comparisons (EQ, NE, LT, GT, LE, GE) on several columns.
+ * It will not be	allowed as a join to a shared dimension (not part of a star join).
+ * Since the NEJ will be mapped to the predicate join in the calculation engine, no
+ * customer-defined calculations or filters are allowed.
+ * The predicate join requires conditions on the input sources,
+ * not the targets as in other nodes. The	optimize join columns flag is not supported in the NEJ.
+ * There is also no support for the 'dynamic join property' or the 'ignore multiple outputs for filter	property'.
+ *
+ *
  * <p>Java class for NonEquiJoinView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="NonEquiJoinView"&gt;
  *   &lt;complexContent&gt;
@@ -56,94 +55,79 @@ import com.sap.ndb.basemodelbase.JoinType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NonEquiJoinView", propOrder = {
     "joinAttribute"
 })
 public class NonEquiJoinView
-    extends CalculationView
-{
+    extends CalculationView {
 
-    @XmlElement(required = true)
-    protected NonEquiJoinAttribute joinAttribute;
-    @XmlAttribute(name = "joinType", required = true)
-    protected JoinType joinType;
-    @XmlAttribute(name = "cardinality")
-    protected Cardinality cardinality;
+  @XmlElement(required = true)
+  protected NonEquiJoinAttribute joinAttribute;
+  @XmlAttribute(name = "joinType", required = true)
+  protected JoinType joinType;
+  @XmlAttribute(name = "cardinality")
+  protected Cardinality cardinality;
 
-    /**
-     * Gets the value of the joinAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link NonEquiJoinAttribute }
-     *     
-     */
-    public NonEquiJoinAttribute getJoinAttribute() {
-        return joinAttribute;
-    }
+  /**
+   * Gets the value of the joinAttribute property.
+   *
+   * @return possible object is
+   * {@link NonEquiJoinAttribute }
+   */
+  public NonEquiJoinAttribute getJoinAttribute() {
+    return joinAttribute;
+  }
 
-    /**
-     * Sets the value of the joinAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link NonEquiJoinAttribute }
-     *     
-     */
-    public void setJoinAttribute(NonEquiJoinAttribute value) {
-        this.joinAttribute = value;
-    }
+  /**
+   * Sets the value of the joinAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link NonEquiJoinAttribute }
+   */
+  public void setJoinAttribute(NonEquiJoinAttribute value) {
+    this.joinAttribute = value;
+  }
 
-    /**
-     * Gets the value of the joinType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JoinType }
-     *     
-     */
-    public JoinType getJoinType() {
-        return joinType;
-    }
+  /**
+   * Gets the value of the joinType property.
+   *
+   * @return possible object is
+   * {@link JoinType }
+   */
+  public JoinType getJoinType() {
+    return joinType;
+  }
 
-    /**
-     * Sets the value of the joinType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JoinType }
-     *     
-     */
-    public void setJoinType(JoinType value) {
-        this.joinType = value;
-    }
+  /**
+   * Sets the value of the joinType property.
+   *
+   * @param value allowed object is
+   *              {@link JoinType }
+   */
+  public void setJoinType(JoinType value) {
+    this.joinType = value;
+  }
 
-    /**
-     * Gets the value of the cardinality property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Cardinality }
-     *     
-     */
-    public Cardinality getCardinality() {
-        return cardinality;
-    }
+  /**
+   * Gets the value of the cardinality property.
+   *
+   * @return possible object is
+   * {@link Cardinality }
+   */
+  public Cardinality getCardinality() {
+    return cardinality;
+  }
 
-    /**
-     * Sets the value of the cardinality property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Cardinality }
-     *     
-     */
-    public void setCardinality(Cardinality value) {
-        this.cardinality = value;
-    }
+  /**
+   * Sets the value of the cardinality property.
+   *
+   * @param value allowed object is
+   *              {@link Cardinality }
+   */
+  public void setCardinality(Cardinality value) {
+    this.cardinality = value;
+  }
 
 }

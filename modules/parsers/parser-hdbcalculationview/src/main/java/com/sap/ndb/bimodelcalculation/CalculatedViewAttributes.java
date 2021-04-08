@@ -27,14 +27,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				View Attributes Collection element for the calculated attributes of a Node
- * 			
- * 
+ * View Attributes Collection element for the calculated attributes of a Node
+ *
+ *
  * <p>Java class for CalculatedViewAttributes complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CalculatedViewAttributes"&gt;
  *   &lt;complexContent&gt;
@@ -46,8 +45,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CalculatedViewAttributes", propOrder = {
@@ -55,35 +52,33 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class CalculatedViewAttributes {
 
-    protected List<CalculatedViewAttribute> calculatedViewAttribute;
+  protected List<CalculatedViewAttribute> calculatedViewAttribute;
 
-    /**
-     * Gets the value of the calculatedViewAttribute property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the calculatedViewAttribute property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCalculatedViewAttribute().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link CalculatedViewAttribute }
-     * 
-     * 
-     */
-    public List<CalculatedViewAttribute> getCalculatedViewAttribute() {
-        if (calculatedViewAttribute == null) {
-            calculatedViewAttribute = new ArrayList<CalculatedViewAttribute>();
-        }
-        return this.calculatedViewAttribute;
+  /**
+   * Gets the value of the calculatedViewAttribute property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the calculatedViewAttribute property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getCalculatedViewAttribute().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link CalculatedViewAttribute }
+   */
+  public List<CalculatedViewAttribute> getCalculatedViewAttribute() {
+    if (calculatedViewAttribute == null) {
+      calculatedViewAttribute = new ArrayList<CalculatedViewAttribute>();
     }
+    return this.calculatedViewAttribute;
+  }
 
 }

@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,45 +38,22 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
         }
         logger.info("Processing Update HdbSequence: " + hdbSequenceName);
 
-        String sql =  (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
-                                ? getHanav1ModelSQL(hdbSequenceModel, hdbSequenceName)
-                                : XSKConstants.XSK_HDBSEQUENCE_ALTER + hdbSequenceModel.getRawContent();
+        String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
+                ? getHanav1ModelSQL(connection, hdbSequenceModel, hdbSequenceName)
+                : XSKConstants.XSK_HDBSEQUENCE_ALTER + hdbSequenceModel.getRawContent();
         executeSql(sql, connection);
 
     }
 
-    private String getHanav1ModelSQL(XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName){
-        Integer  startWith = hdbSequenceModel.getStart_with();
-        Integer incrementBy = hdbSequenceModel.getIncrement_by();
-        Integer maxvalue = hdbSequenceModel.getMaxvalue();
-        Boolean nomaxvalue = hdbSequenceModel.getNomaxvalue();
-        Integer minvalue = hdbSequenceModel.getMinvalue();
-        Boolean nominvalue = hdbSequenceModel.getNominvalue();
-        Boolean cycle = hdbSequenceModel.getCycles();
-        String resetBy = hdbSequenceModel.getReset_by();
-
-        String sequenceParameters = new StringBuilder()
-                .append((incrementBy!=null) ? String.format(" INCREMENT BY %d", incrementBy) :"")
-                .append((maxvalue!=null) ? String.format(" MAXVALUE %d", maxvalue) :"")
-                .append((nomaxvalue!=null&&nomaxvalue) ? " NO MAXVALUE" :"")
-                .append((minvalue!=null) ? String.format(" MINVALUE %d", minvalue) :"")
-                .append((nominvalue!=null&&nominvalue) ? " NO MINVALUE" :"")
-                .append((cycle!=null&&cycle) ? " CYCLE" :"")
-                .toString();
-
-        String sql = new StringBuilder()
-                .append("ALTER SEQUENCE")
-                .append(" ")
-                .append(modifiedSequenceName)
-                .append(" ")
-                .append((startWith!=null) ? String.format("RESTART WITH %s", startWith) :"")
-                .append(" ")
-                .append(sequenceParameters)
-                .append(" ")
-                .append((resetBy!=null) ? String.format("RESET BY %s", resetBy) :"")
-                .append(";")
-                .toString();
-
-        return sql;
+    private String getHanav1ModelSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName) {
+        return SqlFactory.getNative(connection).alter().sequence(modifiedSequenceName)
+                .start(hdbSequenceModel.getStart_with())
+                .increment(hdbSequenceModel.getIncrement_by())
+                .maxvalue(hdbSequenceModel.getMaxvalue())
+                .nomaxvalue(hdbSequenceModel.getNomaxvalue())
+                .minvalue(hdbSequenceModel.getMinvalue())
+                .nominvalue(hdbSequenceModel.getNominvalue())
+                .cycles(hdbSequenceModel.getCycles())
+                .resetBy(hdbSequenceModel.getReset_by()).build();
     }
 }

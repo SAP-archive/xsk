@@ -39,22 +39,15 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
         }
         logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
 
-        if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)){
+        if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)) {
             String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
-                                ? getHanav1ModelSQL(hdbSequenceName)
-                                : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
+                    ? getHanav1ModelSQL(connection, hdbSequenceName)
+                    : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
             executeSql(sql, connection);
         }
     }
 
-    private String getHanav1ModelSQL(String modifiedSequenceName){
-        return new StringBuilder()
-                .append("DROP SEQUENCE")
-                .append(" ")
-                .append(modifiedSequenceName)
-                .append(" ")
-                .append("RESTRICT")
-                .append(";")
-                .toString();
+    private String getHanav1ModelSQL(Connection connection, String modifiedSequenceName) {
+        return SqlFactory.getNative(connection).drop().sequence(modifiedSequenceName).build();
     }
 }

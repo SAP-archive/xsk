@@ -1,4 +1,4 @@
-// Generated from com\sap\xsk\parser\hdbti\core\Hdbti.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbti/core/Hdbti.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbti.core;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

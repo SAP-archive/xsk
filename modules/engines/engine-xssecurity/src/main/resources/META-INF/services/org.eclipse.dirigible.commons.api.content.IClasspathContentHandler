@@ -1,0 +1,2 @@
+com.sap.xsk.xssecurestore.ds.synchronizer.XSKSecureStoreClasspathContentHandler # XSK Secure Store Classpath Content Handler
+com.sap.xsk.xsaccess.ds.synchronizer.XSKSecurityClasspathContentHandler # XSK Access Content Handler

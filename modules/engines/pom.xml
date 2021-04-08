@@ -18,6 +18,13 @@
 	<modules>
 		<module>engine-all</module>
 		<module>engine-core</module>
+		<module>engine-hdb</module>
+		<module>engine-hdbti</module>
+		<module>engine-hdi</module>
+		<module>engine-xsjob</module>
+		<module>engine-xsjs</module>
+		<module>engine-xsodata</module>
+		<module>engine-xssecurity</module>
 	</modules>
 
 </project>

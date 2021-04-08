@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlValue;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;simpleContent&gt;
@@ -42,8 +42,6 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/simpleContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -52,83 +50,71 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlRootElement(name = "metadata")
 public class Metadata {
 
-    @XmlValue
-    protected String value;
-    @XmlAttribute(name = "changedAt")
-    protected String changedAt;
-    @XmlAttribute(name = "createdAt")
-    protected String createdAt;
+  @XmlValue
+  protected String value;
+  @XmlAttribute(name = "changedAt")
+  protected String changedAt;
+  @XmlAttribute(name = "createdAt")
+  protected String createdAt;
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the changedAt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getChangedAt() {
-        return changedAt;
-    }
+  /**
+   * Gets the value of the changedAt property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getChangedAt() {
+    return changedAt;
+  }
 
-    /**
-     * Sets the value of the changedAt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setChangedAt(String value) {
-        this.changedAt = value;
-    }
+  /**
+   * Sets the value of the changedAt property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setChangedAt(String value) {
+    this.changedAt = value;
+  }
 
-    /**
-     * Gets the value of the createdAt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCreatedAt() {
-        return createdAt;
-    }
+  /**
+   * Gets the value of the createdAt property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getCreatedAt() {
+    return createdAt;
+  }
 
-    /**
-     * Sets the value of the createdAt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCreatedAt(String value) {
-        this.createdAt = value;
-    }
+  /**
+   * Sets the value of the createdAt property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCreatedAt(String value) {
+    this.createdAt = value;
+  }
 
 }

@@ -19,26 +19,25 @@
 
 package com.sap.ndb.datamodelhierarchy;
 
+import com.sap.ndb.datamodeltype.UDFParameter;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.datamodeltype.UDFParameter;
 
 
 /**
- * 
- * 				Defines the reference to the element of the entities' key to link a child instance to a parent instance. 
- * 				Example: in an entity containing Employee attributes the	annotation is used at the Manager element Object 
- * 				references in the attributes because it might point to a column coming in via a selectAll input
- * 			
- * 
+ * Defines the reference to the element of the entities' key to link a child instance to a parent instance.
+ * Example: in an entity containing Employee attributes the	annotation is used at the Manager element Object
+ * references in the attributes because it might point to a column coming in via a selectAll input
+ *
+ *
  * <p>Java class for ParentDefinition complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ParentDefinition"&gt;
  *   &lt;complexContent&gt;
@@ -53,8 +52,6 @@ import com.sap.ndb.datamodeltype.UDFParameter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ParentDefinition", propOrder = {
@@ -62,110 +59,94 @@ import com.sap.ndb.datamodeltype.UDFParameter;
 })
 public class ParentDefinition {
 
-    protected UDFParameter rootNode;
-    @XmlAttribute(name = "element", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String element;
-    @XmlAttribute(name = "parent", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String parent;
-    @XmlAttribute(name = "stepParentNodeID")
-    protected String stepParentNodeID;
+  protected UDFParameter rootNode;
+  @XmlAttribute(name = "element", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String element;
+  @XmlAttribute(name = "parent", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String parent;
+  @XmlAttribute(name = "stepParentNodeID")
+  protected String stepParentNodeID;
 
-    /**
-     * Gets the value of the rootNode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UDFParameter }
-     *     
-     */
-    public UDFParameter getRootNode() {
-        return rootNode;
-    }
+  /**
+   * Gets the value of the rootNode property.
+   *
+   * @return possible object is
+   * {@link UDFParameter }
+   */
+  public UDFParameter getRootNode() {
+    return rootNode;
+  }
 
-    /**
-     * Sets the value of the rootNode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UDFParameter }
-     *     
-     */
-    public void setRootNode(UDFParameter value) {
-        this.rootNode = value;
-    }
+  /**
+   * Sets the value of the rootNode property.
+   *
+   * @param value allowed object is
+   *              {@link UDFParameter }
+   */
+  public void setRootNode(UDFParameter value) {
+    this.rootNode = value;
+  }
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getElement() {
-        return element;
-    }
+  /**
+   * Gets the value of the element property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getElement() {
+    return element;
+  }
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setElement(String value) {
-        this.element = value;
-    }
+  /**
+   * Sets the value of the element property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setElement(String value) {
+    this.element = value;
+  }
 
-    /**
-     * Gets the value of the parent property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getParent() {
-        return parent;
-    }
+  /**
+   * Gets the value of the parent property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getParent() {
+    return parent;
+  }
 
-    /**
-     * Sets the value of the parent property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setParent(String value) {
-        this.parent = value;
-    }
+  /**
+   * Sets the value of the parent property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setParent(String value) {
+    this.parent = value;
+  }
 
-    /**
-     * Gets the value of the stepParentNodeID property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStepParentNodeID() {
-        return stepParentNodeID;
-    }
+  /**
+   * Gets the value of the stepParentNodeID property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStepParentNodeID() {
+    return stepParentNodeID;
+  }
 
-    /**
-     * Sets the value of the stepParentNodeID property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStepParentNodeID(String value) {
-        this.stepParentNodeID = value;
-    }
+  /**
+   * Sets the value of the stepParentNodeID property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStepParentNodeID(String value) {
+    this.stepParentNodeID = value;
+  }
 
 }

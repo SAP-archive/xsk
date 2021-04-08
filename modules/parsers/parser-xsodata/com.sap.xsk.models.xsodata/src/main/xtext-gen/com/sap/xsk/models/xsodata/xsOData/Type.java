@@ -10,11 +10,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Type</b></em>'.
  * <!-- end-user-doc -->
  *
- *
- * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getType()
  * @model
  * @generated
+ * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getType()
  */
-public interface Type extends EObject
-{
+public interface Type extends EObject {
+
 } // Type

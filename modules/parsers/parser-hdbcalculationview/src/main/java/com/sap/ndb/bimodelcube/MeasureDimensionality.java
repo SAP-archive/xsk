@@ -19,6 +19,7 @@
 
 package com.sap.ndb.bimodelcube;
 
+import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,19 +27,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
 
 
 /**
- * 
- * 				This class describes the dimensionality of a measure. This means which (exception) aggregation is
- * 				used along a certain attribute (dimension)    
- * 			
- * 
+ * This class describes the dimensionality of a measure. This means which (exception) aggregation is
+ * used along a certain attribute (dimension)
+ *
+ *
  * <p>Java class for MeasureDimensionality complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="MeasureDimensionality"&gt;
  *   &lt;complexContent&gt;
@@ -51,8 +50,6 @@ import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MeasureDimensionality", propOrder = {
@@ -60,62 +57,56 @@ import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
 })
 public class MeasureDimensionality {
 
-    @XmlElement(required = true)
-    protected List<QualifiedAttributeReference> attribute;
-    @XmlAttribute(name = "exceptionAggregationType")
-    protected ExceptionAggregationType exceptionAggregationType;
+  @XmlElement(required = true)
+  protected List<QualifiedAttributeReference> attribute;
+  @XmlAttribute(name = "exceptionAggregationType")
+  protected ExceptionAggregationType exceptionAggregationType;
 
-    /**
-     * Gets the value of the attribute property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getAttribute().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link QualifiedAttributeReference }
-     * 
-     * 
-     */
-    public List<QualifiedAttributeReference> getAttribute() {
-        if (attribute == null) {
-            attribute = new ArrayList<QualifiedAttributeReference>();
-        }
-        return this.attribute;
+  /**
+   * Gets the value of the attribute property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the attribute property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getAttribute().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link QualifiedAttributeReference }
+   */
+  public List<QualifiedAttributeReference> getAttribute() {
+    if (attribute == null) {
+      attribute = new ArrayList<QualifiedAttributeReference>();
     }
+    return this.attribute;
+  }
 
-    /**
-     * Gets the value of the exceptionAggregationType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ExceptionAggregationType }
-     *     
-     */
-    public ExceptionAggregationType getExceptionAggregationType() {
-        return exceptionAggregationType;
-    }
+  /**
+   * Gets the value of the exceptionAggregationType property.
+   *
+   * @return possible object is
+   * {@link ExceptionAggregationType }
+   */
+  public ExceptionAggregationType getExceptionAggregationType() {
+    return exceptionAggregationType;
+  }
 
-    /**
-     * Sets the value of the exceptionAggregationType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ExceptionAggregationType }
-     *     
-     */
-    public void setExceptionAggregationType(ExceptionAggregationType value) {
-        this.exceptionAggregationType = value;
-    }
+  /**
+   * Sets the value of the exceptionAggregationType property.
+   *
+   * @param value allowed object is
+   *              {@link ExceptionAggregationType }
+   */
+  public void setExceptionAggregationType(ExceptionAggregationType value) {
+    this.exceptionAggregationType = value;
+  }
 
 }

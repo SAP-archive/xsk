@@ -15,53 +15,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XSKODataService {
-	
-	private String namespace;
-	
-	private List<XSKODataEntity> entities = new ArrayList<XSKODataEntity>();
-	
-	private List<XSKODataAssociation> associations = new ArrayList<XSKODataAssociation>();
 
-	/**
-	 * @return the namespace
-	 */
-	public String getNamespace() {
-		return namespace;
-	}
+  private String namespace;
 
-	/**
-	 * @param namespace the namespace to set
-	 */
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
+  private List<XSKODataEntity> entities = new ArrayList<XSKODataEntity>();
 
-	/**
-	 * @return the entities
-	 */
-	public List<XSKODataEntity> getEntities() {
-		return entities;
-	}
+  private List<XSKODataAssociation> associations = new ArrayList<XSKODataAssociation>();
 
-	/**
-	 * @param entities the entities to set
-	 */
-	public void setEntities(List<XSKODataEntity> entities) {
-		this.entities = entities;
-	}
+  /**
+   * @return the namespace
+   */
+  public String getNamespace() {
+    return namespace;
+  }
 
-	/**
-	 * @return the association
-	 */
-	public List<XSKODataAssociation> getAssociations() {
-		return associations;
-	}
+  /**
+   * @param namespace the namespace to set
+   */
+  public void setNamespace(String namespace) {
+    this.namespace = namespace;
+  }
 
-	/**
-	 * @param associations the associations to set
-	 */
-	public void setAssociations(List<XSKODataAssociation> associations) {
-		this.associations = associations;
-	}
+  /**
+   * @return the entities
+   */
+  public List<XSKODataEntity> getEntities() {
+    return entities;
+  }
+
+  /**
+   * @param entities the entities to set
+   */
+  public void setEntities(List<XSKODataEntity> entities) {
+    this.entities = entities;
+  }
+
+  /**
+   * @return the association
+   */
+  public List<XSKODataAssociation> getAssociations() {
+    return associations;
+  }
+
+  /**
+   * @param associations the associations to set
+   */
+  public void setAssociations(List<XSKODataAssociation> associations) {
+    this.associations = associations;
+  }
 
 }

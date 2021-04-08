@@ -22,9 +22,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @InjectWith(XSODataInjectorProvider.class)
 @SuppressWarnings("all")
 public class XSODataParsingTest {
+
   @Inject
   private ParseHelper<XSOData> parseHelper;
-  
+
   @Test
   public void loadModel() {
     try {

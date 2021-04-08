@@ -19,23 +19,22 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.bimodelprivilege.AnalyticPrivilege;
+import com.sap.ndb.repositorymodelresource.ResourceObject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodelprivilege.AnalyticPrivilege;
-import com.sap.ndb.repositorymodelresource.ResourceObject;
 
 
 /**
- * 
- * 				General base type for all BI resources
- * 			
- * 
+ * General base type for all BI resources
+ *
+ *
  * <p>Java class for BIResource complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BIResource"&gt;
  *   &lt;complexContent&gt;
@@ -44,8 +43,6 @@ import com.sap.ndb.repositorymodelresource.ResourceObject;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BIResource")
@@ -55,8 +52,7 @@ import com.sap.ndb.repositorymodelresource.ResourceObject;
     AnalyticPrivilege.class
 })
 public abstract class BIResource
-    extends ResourceObject
-{
+    extends ResourceObject {
 
 
 }

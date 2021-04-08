@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for GraphAction.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -40,25 +40,24 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "GraphAction")
 @XmlEnum
 public enum GraphAction {
 
-    PATTERN_MATCHING,
-    SCRIPT_PATTERN_MATCHING,
-    GET_NEIGHBORHOOD,
-    GET_SHORTEST_PATHS_ONE_TO_ALL,
-    GET_SHORTEST_PATHS_ONE_TO_ONE,
-    GET_STRONGLY_CONNECTED_COMPONENTS;
+  PATTERN_MATCHING,
+  SCRIPT_PATTERN_MATCHING,
+  GET_NEIGHBORHOOD,
+  GET_SHORTEST_PATHS_ONE_TO_ALL,
+  GET_SHORTEST_PATHS_ONE_TO_ONE,
+  GET_STRONGLY_CONNECTED_COMPONENTS;
 
-    public String value() {
-        return name();
-    }
+  public static GraphAction fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static GraphAction fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

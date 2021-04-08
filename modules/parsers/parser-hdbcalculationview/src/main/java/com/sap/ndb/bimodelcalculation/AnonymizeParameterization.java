@@ -33,9 +33,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for AnonymizeParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AnonymizeParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -58,8 +58,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AnonymizeParameterization", propOrder = {
@@ -74,200 +72,178 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class AnonymizeParameterization {
 
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String seqColumn;
-    @XmlElement(required = true)
-    protected BigInteger k;
-    protected double loss;
-    @XmlElement(required = true)
-    protected List<QidColumn> qidColumn;
-    @XmlElement(required = true)
-    protected List<QidColumnHierarchy> qidColumnHierarchy;
-    protected float epsilon;
-    protected float sensitivity;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String noisedColumn;
+  @XmlElement(required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String seqColumn;
+  @XmlElement(required = true)
+  protected BigInteger k;
+  protected double loss;
+  @XmlElement(required = true)
+  protected List<QidColumn> qidColumn;
+  @XmlElement(required = true)
+  protected List<QidColumnHierarchy> qidColumnHierarchy;
+  protected float epsilon;
+  protected float sensitivity;
+  @XmlElement(required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String noisedColumn;
 
-    /**
-     * Gets the value of the seqColumn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSeqColumn() {
-        return seqColumn;
-    }
+  /**
+   * Gets the value of the seqColumn property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSeqColumn() {
+    return seqColumn;
+  }
 
-    /**
-     * Sets the value of the seqColumn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSeqColumn(String value) {
-        this.seqColumn = value;
-    }
+  /**
+   * Sets the value of the seqColumn property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSeqColumn(String value) {
+    this.seqColumn = value;
+  }
 
-    /**
-     * Gets the value of the k property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getK() {
-        return k;
-    }
+  /**
+   * Gets the value of the k property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getK() {
+    return k;
+  }
 
-    /**
-     * Sets the value of the k property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setK(BigInteger value) {
-        this.k = value;
-    }
+  /**
+   * Sets the value of the k property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setK(BigInteger value) {
+    this.k = value;
+  }
 
-    /**
-     * Gets the value of the loss property.
-     * 
-     */
-    public double getLoss() {
-        return loss;
-    }
+  /**
+   * Gets the value of the loss property.
+   */
+  public double getLoss() {
+    return loss;
+  }
 
-    /**
-     * Sets the value of the loss property.
-     * 
-     */
-    public void setLoss(double value) {
-        this.loss = value;
-    }
+  /**
+   * Sets the value of the loss property.
+   */
+  public void setLoss(double value) {
+    this.loss = value;
+  }
 
-    /**
-     * Gets the value of the qidColumn property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the qidColumn property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getQidColumn().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link QidColumn }
-     * 
-     * 
-     */
-    public List<QidColumn> getQidColumn() {
-        if (qidColumn == null) {
-            qidColumn = new ArrayList<QidColumn>();
-        }
-        return this.qidColumn;
+  /**
+   * Gets the value of the qidColumn property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the qidColumn property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getQidColumn().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link QidColumn }
+   */
+  public List<QidColumn> getQidColumn() {
+    if (qidColumn == null) {
+      qidColumn = new ArrayList<QidColumn>();
     }
+    return this.qidColumn;
+  }
 
-    /**
-     * Gets the value of the qidColumnHierarchy property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the qidColumnHierarchy property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getQidColumnHierarchy().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link QidColumnHierarchy }
-     * 
-     * 
-     */
-    public List<QidColumnHierarchy> getQidColumnHierarchy() {
-        if (qidColumnHierarchy == null) {
-            qidColumnHierarchy = new ArrayList<QidColumnHierarchy>();
-        }
-        return this.qidColumnHierarchy;
+  /**
+   * Gets the value of the qidColumnHierarchy property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the qidColumnHierarchy property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getQidColumnHierarchy().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link QidColumnHierarchy }
+   */
+  public List<QidColumnHierarchy> getQidColumnHierarchy() {
+    if (qidColumnHierarchy == null) {
+      qidColumnHierarchy = new ArrayList<QidColumnHierarchy>();
     }
+    return this.qidColumnHierarchy;
+  }
 
-    /**
-     * Gets the value of the epsilon property.
-     * 
-     */
-    public float getEpsilon() {
-        return epsilon;
-    }
+  /**
+   * Gets the value of the epsilon property.
+   */
+  public float getEpsilon() {
+    return epsilon;
+  }
 
-    /**
-     * Sets the value of the epsilon property.
-     * 
-     */
-    public void setEpsilon(float value) {
-        this.epsilon = value;
-    }
+  /**
+   * Sets the value of the epsilon property.
+   */
+  public void setEpsilon(float value) {
+    this.epsilon = value;
+  }
 
-    /**
-     * Gets the value of the sensitivity property.
-     * 
-     */
-    public float getSensitivity() {
-        return sensitivity;
-    }
+  /**
+   * Gets the value of the sensitivity property.
+   */
+  public float getSensitivity() {
+    return sensitivity;
+  }
 
-    /**
-     * Sets the value of the sensitivity property.
-     * 
-     */
-    public void setSensitivity(float value) {
-        this.sensitivity = value;
-    }
+  /**
+   * Sets the value of the sensitivity property.
+   */
+  public void setSensitivity(float value) {
+    this.sensitivity = value;
+  }
 
-    /**
-     * Gets the value of the noisedColumn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNoisedColumn() {
-        return noisedColumn;
-    }
+  /**
+   * Gets the value of the noisedColumn property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getNoisedColumn() {
+    return noisedColumn;
+  }
 
-    /**
-     * Sets the value of the noisedColumn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNoisedColumn(String value) {
-        this.noisedColumn = value;
-    }
+  /**
+   * Sets the value of the noisedColumn property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setNoisedColumn(String value) {
+    this.noisedColumn = value;
+  }
 
 }

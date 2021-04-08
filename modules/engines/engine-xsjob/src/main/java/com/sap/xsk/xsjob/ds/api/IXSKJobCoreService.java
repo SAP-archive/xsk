@@ -11,37 +11,37 @@
  */
 package com.sap.xsk.xsjob.ds.api;
 
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
-
 import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
+import java.util.List;
+import java.util.Map;
+import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 
 public interface IXSKJobCoreService {
 
-    String XSK_DEFINED_GROUP = "xsk-defined";
+  String XSK_DEFINED_GROUP = "xsk-defined";
 
-    String XSK_JOB_PARAMETERS = "xsk-job-parameters";
+  String XSK_JOB_PARAMETERS = "xsk-job-parameters";
 
-    String XSK_JOB_FUNCTION = "xsk-job-function";
+  String XSK_JOB_FUNCTION = "xsk-job-function";
 
-    String XSK_JOB_MODULE = "xsk-jo-module";
+  String XSK_JOB_MODULE = "xsk-jo-module";
 
-    XSKJobDefinition createJob(String name, String group, String description, String module, String action, String cronExpression, Map<String, String> parametersAsMap) throws SchedulerException;
+  XSKJobDefinition createJob(String name, String group, String description, String module, String action, String cronExpression,
+      Map<String, String> parametersAsMap) throws SchedulerException;
 
-    XSKJobDefinition updateJob(String name, String group, String description, String module, String action, String cronExpression, Map<String, String> parametersAsMap) throws SchedulerException;
+  XSKJobDefinition updateJob(String name, String group, String description, String module, String action, String cronExpression,
+      Map<String, String> parametersAsMap) throws SchedulerException;
 
-    XSKJobDefinition getJob(String name) throws SchedulerException;
+  XSKJobDefinition getJob(String name) throws SchedulerException;
 
-    void removeJob(String name) throws SchedulerException;
+  void removeJob(String name) throws SchedulerException;
 
-    List<XSKJobDefinition> getJobs() throws SchedulerException;
+  List<XSKJobDefinition> getJobs() throws SchedulerException;
 
-    boolean existsJob(String name) throws SchedulerException;
+  boolean existsJob(String name) throws SchedulerException;
 
-    XSKJobArtifact parseJob(String json);
+  XSKJobArtifact parseJob(String json);
 
-    XSKJobArtifact parseJob(byte[] content);
+  XSKJobArtifact parseJob(byte[] content);
 }

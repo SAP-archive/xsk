@@ -13,31 +13,30 @@ package com.sap.xsk.hdb.ds.service.manager;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-
-import javax.naming.OperationNotSupportedException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import javax.naming.OperationNotSupportedException;
 
 
 public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
 
-	Map<String, T> getDataStructureModels();
+  Map<String, T> getDataStructureModels();
 
-	void synchronizeRuntimeMetadata(T tableModel) throws XSKDataStructuresException;
+  void synchronizeRuntimeMetadata(T tableModel) throws XSKDataStructuresException;
 
-	void createDataStructure(Connection connection, T tableModel) throws SQLException;
+  void createDataStructure(Connection connection, T tableModel) throws SQLException;
 
-	void dropDataStructure(Connection connection, T tableModel) throws SQLException;
+  void dropDataStructure(Connection connection, T tableModel) throws SQLException;
 
-	void updateDataStructure(Connection connection, T tableModel) throws SQLException, OperationNotSupportedException;
+  void updateDataStructure(Connection connection, T tableModel) throws SQLException, OperationNotSupportedException;
 
-	List<String> getDataStructureSynchronized();
+  List<String> getDataStructureSynchronized();
 
-	String getDataStructureType();
+  String getDataStructureType();
 
-	void cleanup() throws XSKDataStructuresException;
+  void cleanup() throws XSKDataStructuresException;
 
-	void clearCache();
+  void clearCache();
 }

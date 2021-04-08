@@ -19,35 +19,34 @@
 
 package com.sap.ndb.datamodelhierarchy;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
 import com.sap.ndb.basemodelbase.CycleHandling;
 import com.sap.ndb.basemodelbase.HierarchyJoinProperties;
 import com.sap.ndb.basemodelbase.OrphanedNodesHandling;
 import com.sap.ndb.basemodelbase.RootNodeVisibility;
 import com.sap.ndb.basemodelbase.UnassignedMemberProperties;
 import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A Hierarchy that is defined on top of a entity by simply specifying which columns make up the level or parent 
- * 				child columns. The data provided by the view must fulfill	some constraints to make the hierarchy consistent.
- * 				The following additional behavior applies: 1. Each hierarchy of a view having the data category DIMENSION becomes 
- * 				a	hierarchy of that dimension if the dimension is used in a view of dataCatefory CUBE. 2. Each hierarchy of 
- * 				a view that is joined via a dimensionJoin becomes a hierarchy	of that dimension 3. Each hierarchy that is defined 
- * 				on a view with dataCategory CUBE (aka local hierarchy) implicitly defines a dimension with just that hierarchy.
- * 				All	columns that are used in the hierarchy definition (including level attributes defined via element relationships) 
- * 				become attributes of that dimension. The concept of	local dimensions with several hierarchies is not supported.
- * 			
- * 
+ * A Hierarchy that is defined on top of a entity by simply specifying which columns make up the level or parent
+ * child columns. The data provided by the view must fulfill	some constraints to make the hierarchy consistent.
+ * The following additional behavior applies: 1. Each hierarchy of a view having the data category DIMENSION becomes
+ * a	hierarchy of that dimension if the dimension is used in a view of dataCatefory CUBE. 2. Each hierarchy of
+ * a view that is joined via a dimensionJoin becomes a hierarchy	of that dimension 3. Each hierarchy that is defined
+ * on a view with dataCategory CUBE (aka local hierarchy) implicitly defines a dimension with just that hierarchy.
+ * All	columns that are used in the hierarchy definition (including level attributes defined via element relationships)
+ * become attributes of that dimension. The concept of	local dimensions with several hierarchies is not supported.
+ *
+ *
  * <p>Java class for InlineHierarchy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InlineHierarchy"&gt;
  *   &lt;complexContent&gt;
@@ -69,8 +68,6 @@ import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InlineHierarchy", propOrder = {
@@ -82,292 +79,247 @@ import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
     ParentChildHierarchy.class
 })
 public abstract class InlineHierarchy
-    extends NamedObjectWithEndUserTexts
-{
+    extends NamedObjectWithEndUserTexts {
 
-    protected HierarchyJoinProperties joinProperties;
-    protected UnassignedMemberProperties unassignedMemberProperties;
-    @XmlAttribute(name = "rootNodeVisibility")
-    protected RootNodeVisibility rootNodeVisibility;
-    @XmlAttribute(name = "aggregateAllNodes")
-    protected Boolean aggregateAllNodes;
-    @XmlAttribute(name = "defaultMember")
-    protected String defaultMember;
-    @XmlAttribute(name = "multipleParents")
-    protected Boolean multipleParents;
-    @XmlAttribute(name = "orphanedNodesHandling")
-    protected OrphanedNodesHandling orphanedNodesHandling;
-    @XmlAttribute(name = "timeDependent")
-    protected Boolean timeDependent;
-    @XmlAttribute(name = "withHierarchyJoin")
-    protected Boolean withHierarchyJoin;
-    @XmlAttribute(name = "cycleHandling")
-    protected CycleHandling cycleHandling;
-    @XmlAttribute(name = "cacheEnabled")
-    protected Boolean cacheEnabled;
+  protected HierarchyJoinProperties joinProperties;
+  protected UnassignedMemberProperties unassignedMemberProperties;
+  @XmlAttribute(name = "rootNodeVisibility")
+  protected RootNodeVisibility rootNodeVisibility;
+  @XmlAttribute(name = "aggregateAllNodes")
+  protected Boolean aggregateAllNodes;
+  @XmlAttribute(name = "defaultMember")
+  protected String defaultMember;
+  @XmlAttribute(name = "multipleParents")
+  protected Boolean multipleParents;
+  @XmlAttribute(name = "orphanedNodesHandling")
+  protected OrphanedNodesHandling orphanedNodesHandling;
+  @XmlAttribute(name = "timeDependent")
+  protected Boolean timeDependent;
+  @XmlAttribute(name = "withHierarchyJoin")
+  protected Boolean withHierarchyJoin;
+  @XmlAttribute(name = "cycleHandling")
+  protected CycleHandling cycleHandling;
+  @XmlAttribute(name = "cacheEnabled")
+  protected Boolean cacheEnabled;
 
-    /**
-     * Gets the value of the joinProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyJoinProperties }
-     *     
-     */
-    public HierarchyJoinProperties getJoinProperties() {
-        return joinProperties;
-    }
+  /**
+   * Gets the value of the joinProperties property.
+   *
+   * @return possible object is
+   * {@link HierarchyJoinProperties }
+   */
+  public HierarchyJoinProperties getJoinProperties() {
+    return joinProperties;
+  }
 
-    /**
-     * Sets the value of the joinProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyJoinProperties }
-     *     
-     */
-    public void setJoinProperties(HierarchyJoinProperties value) {
-        this.joinProperties = value;
-    }
+  /**
+   * Sets the value of the joinProperties property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyJoinProperties }
+   */
+  public void setJoinProperties(HierarchyJoinProperties value) {
+    this.joinProperties = value;
+  }
 
-    /**
-     * Gets the value of the unassignedMemberProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnassignedMemberProperties }
-     *     
-     */
-    public UnassignedMemberProperties getUnassignedMemberProperties() {
-        return unassignedMemberProperties;
-    }
+  /**
+   * Gets the value of the unassignedMemberProperties property.
+   *
+   * @return possible object is
+   * {@link UnassignedMemberProperties }
+   */
+  public UnassignedMemberProperties getUnassignedMemberProperties() {
+    return unassignedMemberProperties;
+  }
 
-    /**
-     * Sets the value of the unassignedMemberProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnassignedMemberProperties }
-     *     
-     */
-    public void setUnassignedMemberProperties(UnassignedMemberProperties value) {
-        this.unassignedMemberProperties = value;
-    }
+  /**
+   * Sets the value of the unassignedMemberProperties property.
+   *
+   * @param value allowed object is
+   *              {@link UnassignedMemberProperties }
+   */
+  public void setUnassignedMemberProperties(UnassignedMemberProperties value) {
+    this.unassignedMemberProperties = value;
+  }
 
-    /**
-     * Gets the value of the rootNodeVisibility property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RootNodeVisibility }
-     *     
-     */
-    public RootNodeVisibility getRootNodeVisibility() {
-        return rootNodeVisibility;
-    }
+  /**
+   * Gets the value of the rootNodeVisibility property.
+   *
+   * @return possible object is
+   * {@link RootNodeVisibility }
+   */
+  public RootNodeVisibility getRootNodeVisibility() {
+    return rootNodeVisibility;
+  }
 
-    /**
-     * Sets the value of the rootNodeVisibility property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RootNodeVisibility }
-     *     
-     */
-    public void setRootNodeVisibility(RootNodeVisibility value) {
-        this.rootNodeVisibility = value;
-    }
+  /**
+   * Sets the value of the rootNodeVisibility property.
+   *
+   * @param value allowed object is
+   *              {@link RootNodeVisibility }
+   */
+  public void setRootNodeVisibility(RootNodeVisibility value) {
+    this.rootNodeVisibility = value;
+  }
 
-    /**
-     * Gets the value of the aggregateAllNodes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isAggregateAllNodes() {
-        return aggregateAllNodes;
-    }
+  /**
+   * Gets the value of the aggregateAllNodes property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isAggregateAllNodes() {
+    return aggregateAllNodes;
+  }
 
-    /**
-     * Sets the value of the aggregateAllNodes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setAggregateAllNodes(Boolean value) {
-        this.aggregateAllNodes = value;
-    }
+  /**
+   * Sets the value of the aggregateAllNodes property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setAggregateAllNodes(Boolean value) {
+    this.aggregateAllNodes = value;
+  }
 
-    /**
-     * Gets the value of the defaultMember property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultMember() {
-        return defaultMember;
-    }
+  /**
+   * Gets the value of the defaultMember property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDefaultMember() {
+    return defaultMember;
+  }
 
-    /**
-     * Sets the value of the defaultMember property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultMember(String value) {
-        this.defaultMember = value;
-    }
+  /**
+   * Sets the value of the defaultMember property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefaultMember(String value) {
+    this.defaultMember = value;
+  }
 
-    /**
-     * Gets the value of the multipleParents property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isMultipleParents() {
-        return multipleParents;
-    }
+  /**
+   * Gets the value of the multipleParents property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isMultipleParents() {
+    return multipleParents;
+  }
 
-    /**
-     * Sets the value of the multipleParents property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setMultipleParents(Boolean value) {
-        this.multipleParents = value;
-    }
+  /**
+   * Sets the value of the multipleParents property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setMultipleParents(Boolean value) {
+    this.multipleParents = value;
+  }
 
-    /**
-     * Gets the value of the orphanedNodesHandling property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link OrphanedNodesHandling }
-     *     
-     */
-    public OrphanedNodesHandling getOrphanedNodesHandling() {
-        return orphanedNodesHandling;
-    }
+  /**
+   * Gets the value of the orphanedNodesHandling property.
+   *
+   * @return possible object is
+   * {@link OrphanedNodesHandling }
+   */
+  public OrphanedNodesHandling getOrphanedNodesHandling() {
+    return orphanedNodesHandling;
+  }
 
-    /**
-     * Sets the value of the orphanedNodesHandling property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link OrphanedNodesHandling }
-     *     
-     */
-    public void setOrphanedNodesHandling(OrphanedNodesHandling value) {
-        this.orphanedNodesHandling = value;
-    }
+  /**
+   * Sets the value of the orphanedNodesHandling property.
+   *
+   * @param value allowed object is
+   *              {@link OrphanedNodesHandling }
+   */
+  public void setOrphanedNodesHandling(OrphanedNodesHandling value) {
+    this.orphanedNodesHandling = value;
+  }
 
-    /**
-     * Gets the value of the timeDependent property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isTimeDependent() {
-        return timeDependent;
-    }
+  /**
+   * Gets the value of the timeDependent property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isTimeDependent() {
+    return timeDependent;
+  }
 
-    /**
-     * Sets the value of the timeDependent property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setTimeDependent(Boolean value) {
-        this.timeDependent = value;
-    }
+  /**
+   * Sets the value of the timeDependent property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setTimeDependent(Boolean value) {
+    this.timeDependent = value;
+  }
 
-    /**
-     * Gets the value of the withHierarchyJoin property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isWithHierarchyJoin() {
-        return withHierarchyJoin;
-    }
+  /**
+   * Gets the value of the withHierarchyJoin property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isWithHierarchyJoin() {
+    return withHierarchyJoin;
+  }
 
-    /**
-     * Sets the value of the withHierarchyJoin property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setWithHierarchyJoin(Boolean value) {
-        this.withHierarchyJoin = value;
-    }
+  /**
+   * Sets the value of the withHierarchyJoin property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setWithHierarchyJoin(Boolean value) {
+    this.withHierarchyJoin = value;
+  }
 
-    /**
-     * Gets the value of the cycleHandling property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CycleHandling }
-     *     
-     */
-    public CycleHandling getCycleHandling() {
-        return cycleHandling;
-    }
+  /**
+   * Gets the value of the cycleHandling property.
+   *
+   * @return possible object is
+   * {@link CycleHandling }
+   */
+  public CycleHandling getCycleHandling() {
+    return cycleHandling;
+  }
 
-    /**
-     * Sets the value of the cycleHandling property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CycleHandling }
-     *     
-     */
-    public void setCycleHandling(CycleHandling value) {
-        this.cycleHandling = value;
-    }
+  /**
+   * Sets the value of the cycleHandling property.
+   *
+   * @param value allowed object is
+   *              {@link CycleHandling }
+   */
+  public void setCycleHandling(CycleHandling value) {
+    this.cycleHandling = value;
+  }
 
-    /**
-     * Gets the value of the cacheEnabled property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isCacheEnabled() {
-        return cacheEnabled;
-    }
+  /**
+   * Gets the value of the cacheEnabled property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isCacheEnabled() {
+    return cacheEnabled;
+  }
 
-    /**
-     * Sets the value of the cacheEnabled property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setCacheEnabled(Boolean value) {
-        this.cacheEnabled = value;
-    }
+  /**
+   * Sets the value of the cacheEnabled property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setCacheEnabled(Boolean value) {
+    this.cacheEnabled = value;
+  }
 
 }

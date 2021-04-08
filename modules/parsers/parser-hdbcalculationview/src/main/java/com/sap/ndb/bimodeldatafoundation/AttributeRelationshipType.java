@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for AttributeRelationshipType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,33 +37,32 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "AttributeRelationshipType")
 @XmlEnum
 public enum AttributeRelationshipType {
 
-    @XmlEnumValue("system")
-    SYSTEM("system"),
-    @XmlEnumValue("manual")
-    MANUAL("manual");
-    private final String value;
+  @XmlEnumValue("system")
+  SYSTEM("system"),
+  @XmlEnumValue("manual")
+  MANUAL("manual");
+  private final String value;
 
-    AttributeRelationshipType(String v) {
-        value = v;
-    }
+  AttributeRelationshipType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static AttributeRelationshipType fromValue(String v) {
+    for (AttributeRelationshipType c : AttributeRelationshipType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static AttributeRelationshipType fromValue(String v) {
-        for (AttributeRelationshipType c: AttributeRelationshipType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

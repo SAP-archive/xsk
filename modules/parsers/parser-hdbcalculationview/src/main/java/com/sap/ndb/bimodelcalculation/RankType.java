@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for RankType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -43,45 +43,44 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "RankType")
 @XmlEnum
 public enum RankType {
 
-    @XmlEnumValue("row_number")
-    ROW_NUMBER("row_number"),
-    @XmlEnumValue("row_number_percent")
-    ROW_NUMBER_PERCENT("row_number_percent"),
-    @XmlEnumValue("rank")
-    RANK("rank"),
-    @XmlEnumValue("rank_percent")
-    RANK_PERCENT("rank_percent"),
-    @XmlEnumValue("dense_rank")
-    DENSE_RANK("dense_rank"),
-    @XmlEnumValue("dense_rank_percent")
-    DENSE_RANK_PERCENT("dense_rank_percent"),
-    @XmlEnumValue("sum")
-    SUM("sum"),
-    @XmlEnumValue("sum_percent")
-    SUM_PERCENT("sum_percent");
-    private final String value;
+  @XmlEnumValue("row_number")
+  ROW_NUMBER("row_number"),
+  @XmlEnumValue("row_number_percent")
+  ROW_NUMBER_PERCENT("row_number_percent"),
+  @XmlEnumValue("rank")
+  RANK("rank"),
+  @XmlEnumValue("rank_percent")
+  RANK_PERCENT("rank_percent"),
+  @XmlEnumValue("dense_rank")
+  DENSE_RANK("dense_rank"),
+  @XmlEnumValue("dense_rank_percent")
+  DENSE_RANK_PERCENT("dense_rank_percent"),
+  @XmlEnumValue("sum")
+  SUM("sum"),
+  @XmlEnumValue("sum_percent")
+  SUM_PERCENT("sum_percent");
+  private final String value;
 
-    RankType(String v) {
-        value = v;
-    }
+  RankType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static RankType fromValue(String v) {
+    for (RankType c : RankType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static RankType fromValue(String v) {
-        for (RankType c: RankType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

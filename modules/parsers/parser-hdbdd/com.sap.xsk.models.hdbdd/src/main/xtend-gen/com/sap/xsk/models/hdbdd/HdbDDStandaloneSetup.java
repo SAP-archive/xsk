@@ -3,13 +3,12 @@
  */
 package com.sap.xsk.models.hdbdd;
 
-import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetupGenerated;
-
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */
 @SuppressWarnings("all")
 public class HdbDDStandaloneSetup extends HdbDDStandaloneSetupGenerated {
+
   public static void doSetup() {
     new HdbDDStandaloneSetup().createInjectorAndDoEMFRegistration();
   }

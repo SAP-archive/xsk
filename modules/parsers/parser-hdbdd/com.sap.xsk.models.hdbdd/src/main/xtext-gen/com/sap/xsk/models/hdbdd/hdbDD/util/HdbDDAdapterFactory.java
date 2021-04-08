@@ -3,13 +3,21 @@
  */
 package com.sap.xsk.models.hdbdd.hdbDD.util;
 
-import com.sap.xsk.models.hdbdd.hdbDD.*;
-
+import com.sap.xsk.models.hdbdd.hdbDD.Context;
+import com.sap.xsk.models.hdbdd.hdbDD.Entity;
+import com.sap.xsk.models.hdbdd.hdbDD.Field;
+import com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive;
+import com.sap.xsk.models.hdbdd.hdbDD.FieldReference;
+import com.sap.xsk.models.hdbdd.hdbDD.FieldType;
+import com.sap.xsk.models.hdbdd.hdbDD.HdbDD;
+import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
+import com.sap.xsk.models.hdbdd.hdbDD.Namespace;
+import com.sap.xsk.models.hdbdd.hdbDD.Schema;
+import com.sap.xsk.models.hdbdd.hdbDD.Type;
+import com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -17,29 +25,99 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage
+ *
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage
  */
-public class HdbDDAdapterFactory extends AdapterFactoryImpl
-{
+public class HdbDDAdapterFactory extends AdapterFactoryImpl {
+
   /**
    * The cached model package.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   protected static HdbDDPackage modelPackage;
+  /**
+   * The switch that delegates to the <code>createXXX</code> methods.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   */
+  protected HdbDDSwitch<Adapter> modelSwitch =
+      new HdbDDSwitch<Adapter>() {
+        @Override
+        public Adapter caseHdbDD(HdbDD object) {
+          return createHdbDDAdapter();
+        }
+
+        @Override
+        public Adapter caseType(Type object) {
+          return createTypeAdapter();
+        }
+
+        @Override
+        public Adapter caseNamespace(Namespace object) {
+          return createNamespaceAdapter();
+        }
+
+        @Override
+        public Adapter caseSchema(Schema object) {
+          return createSchemaAdapter();
+        }
+
+        @Override
+        public Adapter caseContext(Context object) {
+          return createContextAdapter();
+        }
+
+        @Override
+        public Adapter caseTypeDefinition(TypeDefinition object) {
+          return createTypeDefinitionAdapter();
+        }
+
+        @Override
+        public Adapter caseEntity(Entity object) {
+          return createEntityAdapter();
+        }
+
+        @Override
+        public Adapter caseField(Field object) {
+          return createFieldAdapter();
+        }
+
+        @Override
+        public Adapter caseFieldPrimitive(FieldPrimitive object) {
+          return createFieldPrimitiveAdapter();
+        }
+
+        @Override
+        public Adapter caseFieldType(FieldType object) {
+          return createFieldTypeAdapter();
+        }
+
+        @Override
+        public Adapter caseFieldReference(FieldReference object) {
+          return createFieldReferenceAdapter();
+        }
+
+        @Override
+        public Adapter defaultCase(EObject object) {
+          return createEObjectAdapter();
+        }
+      };
 
   /**
    * Creates an instance of the adapter factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public HdbDDAdapterFactory()
-  {
-    if (modelPackage == null)
-    {
+  public HdbDDAdapterFactory() {
+    if (modelPackage == null) {
       modelPackage = HdbDDPackage.eINSTANCE;
     }
   }
@@ -49,106 +127,33 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * <!-- begin-user-doc -->
    * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
    * <!-- end-user-doc -->
+   *
    * @return whether this factory is applicable for the type of the object.
    * @generated
    */
   @Override
-  public boolean isFactoryForType(Object object)
-  {
-    if (object == modelPackage)
-    {
+  public boolean isFactoryForType(Object object) {
+    if (object == modelPackage) {
       return true;
     }
-    if (object instanceof EObject)
-    {
-      return ((EObject)object).eClass().getEPackage() == modelPackage;
+    if (object instanceof EObject) {
+      return ((EObject) object).eClass().getEPackage() == modelPackage;
     }
     return false;
   }
 
   /**
-   * The switch that delegates to the <code>createXXX</code> methods.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected HdbDDSwitch<Adapter> modelSwitch =
-    new HdbDDSwitch<Adapter>()
-    {
-      @Override
-      public Adapter caseHdbDD(HdbDD object)
-      {
-        return createHdbDDAdapter();
-      }
-      @Override
-      public Adapter caseType(Type object)
-      {
-        return createTypeAdapter();
-      }
-      @Override
-      public Adapter caseNamespace(Namespace object)
-      {
-        return createNamespaceAdapter();
-      }
-      @Override
-      public Adapter caseSchema(Schema object)
-      {
-        return createSchemaAdapter();
-      }
-      @Override
-      public Adapter caseContext(Context object)
-      {
-        return createContextAdapter();
-      }
-      @Override
-      public Adapter caseTypeDefinition(TypeDefinition object)
-      {
-        return createTypeDefinitionAdapter();
-      }
-      @Override
-      public Adapter caseEntity(Entity object)
-      {
-        return createEntityAdapter();
-      }
-      @Override
-      public Adapter caseField(Field object)
-      {
-        return createFieldAdapter();
-      }
-      @Override
-      public Adapter caseFieldPrimitive(FieldPrimitive object)
-      {
-        return createFieldPrimitiveAdapter();
-      }
-      @Override
-      public Adapter caseFieldType(FieldType object)
-      {
-        return createFieldTypeAdapter();
-      }
-      @Override
-      public Adapter caseFieldReference(FieldReference object)
-      {
-        return createFieldReferenceAdapter();
-      }
-      @Override
-      public Adapter defaultCase(EObject object)
-      {
-        return createEObjectAdapter();
-      }
-    };
-
-  /**
    * Creates an adapter for the <code>target</code>.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param target the object to adapt.
    * @return the adapter for the <code>target</code>.
    * @generated
    */
   @Override
-  public Adapter createAdapter(Notifier target)
-  {
-    return modelSwitch.doSwitch((EObject)target);
+  public Adapter createAdapter(Notifier target) {
+    return modelSwitch.doSwitch((EObject) target);
   }
 
 
@@ -158,12 +163,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDD
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDD
    */
-  public Adapter createHdbDDAdapter()
-  {
+  public Adapter createHdbDDAdapter() {
     return null;
   }
 
@@ -173,12 +178,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.Type
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.Type
    */
-  public Adapter createTypeAdapter()
-  {
+  public Adapter createTypeAdapter() {
     return null;
   }
 
@@ -188,12 +193,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.Namespace
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.Namespace
    */
-  public Adapter createNamespaceAdapter()
-  {
+  public Adapter createNamespaceAdapter() {
     return null;
   }
 
@@ -203,12 +208,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.Schema
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.Schema
    */
-  public Adapter createSchemaAdapter()
-  {
+  public Adapter createSchemaAdapter() {
     return null;
   }
 
@@ -218,12 +223,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.Context
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.Context
    */
-  public Adapter createContextAdapter()
-  {
+  public Adapter createContextAdapter() {
     return null;
   }
 
@@ -233,12 +238,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition
    */
-  public Adapter createTypeDefinitionAdapter()
-  {
+  public Adapter createTypeDefinitionAdapter() {
     return null;
   }
 
@@ -248,12 +253,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.Entity
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.Entity
    */
-  public Adapter createEntityAdapter()
-  {
+  public Adapter createEntityAdapter() {
     return null;
   }
 
@@ -263,12 +268,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.Field
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.Field
    */
-  public Adapter createFieldAdapter()
-  {
+  public Adapter createFieldAdapter() {
     return null;
   }
 
@@ -278,12 +283,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive
    */
-  public Adapter createFieldPrimitiveAdapter()
-  {
+  public Adapter createFieldPrimitiveAdapter() {
     return null;
   }
 
@@ -293,12 +298,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.FieldType
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.FieldType
    */
-  public Adapter createFieldTypeAdapter()
-  {
+  public Adapter createFieldTypeAdapter() {
     return null;
   }
 
@@ -308,12 +313,12 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
-   * @see com.sap.xsk.models.hdbdd.hdbDD.FieldReference
    * @generated
+   * @see com.sap.xsk.models.hdbdd.hdbDD.FieldReference
    */
-  public Adapter createFieldReferenceAdapter()
-  {
+  public Adapter createFieldReferenceAdapter() {
     return null;
   }
 
@@ -322,11 +327,11 @@ public class HdbDDAdapterFactory extends AdapterFactoryImpl
    * <!-- begin-user-doc -->
    * This default implementation returns null.
    * <!-- end-user-doc -->
+   *
    * @return the new adapter.
    * @generated
    */
-  public Adapter createEObjectAdapter()
-  {
+  public Adapter createEObjectAdapter() {
     return null;
   }
 

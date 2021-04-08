@@ -15,47 +15,47 @@ import java.util.Map;
 
 public class XSKJobSchedule {
 
-    private String description;
+  private String description;
 
-    private String signature_version;
+  private String signature_version;
 
-    private String xscron;
+  private String xscron;
 
-    private Map<String, String> parameter;
+  private Map<String, String> parameter;
 
-    public XSKJobSchedule() {
+  public XSKJobSchedule() {
 
-    }
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public String getSignature_version() {
-        return signature_version;
-    }
+  public String getSignature_version() {
+    return signature_version;
+  }
 
-    public void setSignature_version(String signature_version) {
-        this.signature_version = signature_version;
-    }
+  public void setSignature_version(String signature_version) {
+    this.signature_version = signature_version;
+  }
 
-    public String getXscron() {
-        return xscron;
-    }
+  public String getXscron() {
+    return xscron;
+  }
 
-    public void setXscron(String xscron) {
-        this.xscron = xscron;
-    }
+  public void setXscron(String xscron) {
+    this.xscron = xscron;
+  }
 
-    public Map<String, String> getParameter() {
-        return parameter;
-    }
+  public Map<String, String> getParameter() {
+    return parameter;
+  }
 
-    public void setParameter(Map<String, String> parameter) {
-        this.parameter = parameter;
-    }
+  public void setParameter(Map<String, String> parameter) {
+    this.parameter = parameter;
+  }
 }

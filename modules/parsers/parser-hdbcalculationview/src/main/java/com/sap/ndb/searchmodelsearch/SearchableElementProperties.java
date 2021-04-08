@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Search specific properties of an Element
- * 			
- * 
+ * Search specific properties of an Element
+ *
+ *
  * <p>Java class for SearchableElementProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SearchableElementProperties"&gt;
  *   &lt;complexContent&gt;
@@ -48,8 +47,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SearchableElementProperties", propOrder = {
@@ -60,106 +57,90 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class SearchableElementProperties {
 
-    protected Boolean freestyleSearch;
-    @XmlElement(defaultValue = "0.5")
-    protected Float rankingWeight;
-    protected Boolean fuzzySearch;
-    protected Float fuzzinessThreshold;
+  protected Boolean freestyleSearch;
+  @XmlElement(defaultValue = "0.5")
+  protected Float rankingWeight;
+  protected Boolean fuzzySearch;
+  protected Float fuzzinessThreshold;
 
-    /**
-     * Gets the value of the freestyleSearch property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isFreestyleSearch() {
-        return freestyleSearch;
-    }
+  /**
+   * Gets the value of the freestyleSearch property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isFreestyleSearch() {
+    return freestyleSearch;
+  }
 
-    /**
-     * Sets the value of the freestyleSearch property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setFreestyleSearch(Boolean value) {
-        this.freestyleSearch = value;
-    }
+  /**
+   * Sets the value of the freestyleSearch property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setFreestyleSearch(Boolean value) {
+    this.freestyleSearch = value;
+  }
 
-    /**
-     * Gets the value of the rankingWeight property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Float }
-     *     
-     */
-    public Float getRankingWeight() {
-        return rankingWeight;
-    }
+  /**
+   * Gets the value of the rankingWeight property.
+   *
+   * @return possible object is
+   * {@link Float }
+   */
+  public Float getRankingWeight() {
+    return rankingWeight;
+  }
 
-    /**
-     * Sets the value of the rankingWeight property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Float }
-     *     
-     */
-    public void setRankingWeight(Float value) {
-        this.rankingWeight = value;
-    }
+  /**
+   * Sets the value of the rankingWeight property.
+   *
+   * @param value allowed object is
+   *              {@link Float }
+   */
+  public void setRankingWeight(Float value) {
+    this.rankingWeight = value;
+  }
 
-    /**
-     * Gets the value of the fuzzySearch property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isFuzzySearch() {
-        return fuzzySearch;
-    }
+  /**
+   * Gets the value of the fuzzySearch property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isFuzzySearch() {
+    return fuzzySearch;
+  }
 
-    /**
-     * Sets the value of the fuzzySearch property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setFuzzySearch(Boolean value) {
-        this.fuzzySearch = value;
-    }
+  /**
+   * Sets the value of the fuzzySearch property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setFuzzySearch(Boolean value) {
+    this.fuzzySearch = value;
+  }
 
-    /**
-     * Gets the value of the fuzzinessThreshold property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Float }
-     *     
-     */
-    public Float getFuzzinessThreshold() {
-        return fuzzinessThreshold;
-    }
+  /**
+   * Gets the value of the fuzzinessThreshold property.
+   *
+   * @return possible object is
+   * {@link Float }
+   */
+  public Float getFuzzinessThreshold() {
+    return fuzzinessThreshold;
+  }
 
-    /**
-     * Sets the value of the fuzzinessThreshold property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Float }
-     *     
-     */
-    public void setFuzzinessThreshold(Float value) {
-        this.fuzzinessThreshold = value;
-    }
+  /**
+   * Sets the value of the fuzzinessThreshold property.
+   *
+   * @param value allowed object is
+   *              {@link Float }
+   */
+  public void setFuzzinessThreshold(Float value) {
+    this.fuzzinessThreshold = value;
+  }
 
 }

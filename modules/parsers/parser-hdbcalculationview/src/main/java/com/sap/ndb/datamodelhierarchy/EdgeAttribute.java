@@ -28,15 +28,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Specification of a hierarchy edge attribute. Currently only a reference to the underlying (view) column is possible. 
- * 				Renaming might follow later.
- * 			
- * 
+ * Specification of a hierarchy edge attribute. Currently only a reference to the underlying (view) column is possible.
+ * Renaming might follow later.
+ *
+ *
  * <p>Java class for EdgeAttribute complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EdgeAttribute"&gt;
  *   &lt;complexContent&gt;
@@ -46,39 +45,33 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EdgeAttribute")
 public class EdgeAttribute {
 
-    @XmlAttribute(name = "element", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String element;
+  @XmlAttribute(name = "element", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String element;
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getElement() {
-        return element;
-    }
+  /**
+   * Gets the value of the element property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getElement() {
+    return element;
+  }
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setElement(String value) {
-        this.element = value;
-    }
+  /**
+   * Sets the value of the element property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setElement(String value) {
+    this.element = value;
+  }
 
 }

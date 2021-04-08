@@ -29,11 +29,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Models a link to a name / id based object within an external resource
- * 
+ *
  * <p>Java class for QualifiedNameReference complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="QualifiedNameReference"&gt;
  *   &lt;complexContent&gt;
@@ -44,66 +44,56 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QualifiedNameReference")
 public class QualifiedNameReference {
 
-    @XmlAttribute(name = "name", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String name;
-    @XmlAttribute(name = "resourceUri")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String resourceUri;
+  @XmlAttribute(name = "name", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String name;
+  @XmlAttribute(name = "resourceUri")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String resourceUri;
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets the value of the name property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 
-    /**
-     * Gets the value of the resourceUri property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getResourceUri() {
-        return resourceUri;
-    }
+  /**
+   * Gets the value of the resourceUri property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getResourceUri() {
+    return resourceUri;
+  }
 
-    /**
-     * Sets the value of the resourceUri property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setResourceUri(String value) {
-        this.resourceUri = value;
-    }
+  /**
+   * Sets the value of the resourceUri property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setResourceUri(String value) {
+    this.resourceUri = value;
+  }
 
 }

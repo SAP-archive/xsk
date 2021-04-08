@@ -27,14 +27,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A View node for Anonymization
- * 			
- * 
+ * A View node for Anonymization
+ *
+ *
  * <p>Java class for AnonymizeView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AnonymizeView"&gt;
  *   &lt;complexContent&gt;
@@ -47,68 +46,57 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AnonymizeView", propOrder = {
     "anonymizeParameterization"
 })
 public class AnonymizeView
-    extends CalculationView
-{
+    extends CalculationView {
 
-    @XmlElement(required = true)
-    protected AnonymizeParameterization anonymizeParameterization;
-    @XmlAttribute(name = "method")
-    protected AnonymizeMethod method;
+  @XmlElement(required = true)
+  protected AnonymizeParameterization anonymizeParameterization;
+  @XmlAttribute(name = "method")
+  protected AnonymizeMethod method;
 
-    /**
-     * Gets the value of the anonymizeParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AnonymizeParameterization }
-     *     
-     */
-    public AnonymizeParameterization getAnonymizeParameterization() {
-        return anonymizeParameterization;
-    }
+  /**
+   * Gets the value of the anonymizeParameterization property.
+   *
+   * @return possible object is
+   * {@link AnonymizeParameterization }
+   */
+  public AnonymizeParameterization getAnonymizeParameterization() {
+    return anonymizeParameterization;
+  }
 
-    /**
-     * Sets the value of the anonymizeParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AnonymizeParameterization }
-     *     
-     */
-    public void setAnonymizeParameterization(AnonymizeParameterization value) {
-        this.anonymizeParameterization = value;
-    }
+  /**
+   * Sets the value of the anonymizeParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link AnonymizeParameterization }
+   */
+  public void setAnonymizeParameterization(AnonymizeParameterization value) {
+    this.anonymizeParameterization = value;
+  }
 
-    /**
-     * Gets the value of the method property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AnonymizeMethod }
-     *     
-     */
-    public AnonymizeMethod getMethod() {
-        return method;
-    }
+  /**
+   * Gets the value of the method property.
+   *
+   * @return possible object is
+   * {@link AnonymizeMethod }
+   */
+  public AnonymizeMethod getMethod() {
+    return method;
+  }
 
-    /**
-     * Sets the value of the method property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AnonymizeMethod }
-     *     
-     */
-    public void setMethod(AnonymizeMethod value) {
-        this.method = value;
-    }
+  /**
+   * Sets the value of the method property.
+   *
+   * @param value allowed object is
+   *              {@link AnonymizeMethod }
+   */
+  public void setMethod(AnonymizeMethod value) {
+    this.method = value;
+  }
 
 }

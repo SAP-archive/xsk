@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for EmptyUnionBehavior.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -36,36 +36,29 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "EmptyUnionBehavior")
 @XmlEnum
 public enum EmptyUnionBehavior {
 
 
-    /**
-     * 
-     * 						No row form the source will be added to the result of the union - this  means the constant value defined for 
-     * 						any mapping is not returned for selects where only columns with a constant mapping are selected.
-     * 					
-     * 
-     */
-    NO_ROW,
+  /**
+   * No row form the source will be added to the result of the union - this  means the constant value defined for
+   * any mapping is not returned for selects where only columns with a constant mapping are selected.
+   */
+  NO_ROW,
 
-    /**
-     * 
-     * 						A row with the constant mapping values (and null for the other columns) is added to the result of the source.
-     * 					
-     * 
-     */
-    ROW_WITH_CONSTANTS;
+  /**
+   * A row with the constant mapping values (and null for the other columns) is added to the result of the source.
+   */
+  ROW_WITH_CONSTANTS;
 
-    public String value() {
-        return name();
-    }
+  public static EmptyUnionBehavior fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static EmptyUnionBehavior fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

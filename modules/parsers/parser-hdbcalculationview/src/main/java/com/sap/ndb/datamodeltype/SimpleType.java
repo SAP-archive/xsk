@@ -31,15 +31,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Data type including a semantic description. 
- * 				Replaces the ABAP data element in the CDS meta model 
- * 			
- * 
+ * Data type including a semantic description.
+ * Replaces the ABAP data element in the CDS meta model
+ *
+ *
  * <p>Java class for SimpleType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SimpleType"&gt;
  *   &lt;complexContent&gt;
@@ -61,8 +60,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SimpleType", propOrder = {
@@ -70,304 +67,263 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "dataElementName"
 })
 public class SimpleType
-    extends DataType
-{
+    extends DataType {
 
-    protected List<ValueRange> valueRange;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected List<String> dataElementName;
-    @XmlAttribute(name = "primitiveType", required = true)
-    protected PrimitiveType primitiveType;
-    @XmlAttribute(name = "length")
-    protected Short length;
-    @XmlAttribute(name = "precision")
-    protected Short precision;
-    @XmlAttribute(name = "scale")
-    protected Short scale;
-    @XmlAttribute(name = "checkEntity")
-    protected String checkEntity;
-    @XmlAttribute(name = "semanticType")
-    protected SemanticType semanticType;
-    @XmlAttribute(name = "derived")
-    protected Boolean derived;
-    @XmlAttribute(name = "defaultAggregationBehavior")
-    protected AggregationBehavior defaultAggregationBehavior;
-    @XmlAttribute(name = "globalElementName")
-    protected String globalElementName;
+  protected List<ValueRange> valueRange;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "NMTOKEN")
+  protected List<String> dataElementName;
+  @XmlAttribute(name = "primitiveType", required = true)
+  protected PrimitiveType primitiveType;
+  @XmlAttribute(name = "length")
+  protected Short length;
+  @XmlAttribute(name = "precision")
+  protected Short precision;
+  @XmlAttribute(name = "scale")
+  protected Short scale;
+  @XmlAttribute(name = "checkEntity")
+  protected String checkEntity;
+  @XmlAttribute(name = "semanticType")
+  protected SemanticType semanticType;
+  @XmlAttribute(name = "derived")
+  protected Boolean derived;
+  @XmlAttribute(name = "defaultAggregationBehavior")
+  protected AggregationBehavior defaultAggregationBehavior;
+  @XmlAttribute(name = "globalElementName")
+  protected String globalElementName;
 
-    /**
-     * Gets the value of the valueRange property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the valueRange property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getValueRange().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link ValueRange }
-     * 
-     * 
-     */
-    public List<ValueRange> getValueRange() {
-        if (valueRange == null) {
-            valueRange = new ArrayList<ValueRange>();
-        }
-        return this.valueRange;
+  /**
+   * Gets the value of the valueRange property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the valueRange property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getValueRange().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link ValueRange }
+   */
+  public List<ValueRange> getValueRange() {
+    if (valueRange == null) {
+      valueRange = new ArrayList<ValueRange>();
     }
+    return this.valueRange;
+  }
 
-    /**
-     * Gets the value of the dataElementName property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the dataElementName property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDataElementName().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getDataElementName() {
-        if (dataElementName == null) {
-            dataElementName = new ArrayList<String>();
-        }
-        return this.dataElementName;
+  /**
+   * Gets the value of the dataElementName property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the dataElementName property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getDataElementName().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link String }
+   */
+  public List<String> getDataElementName() {
+    if (dataElementName == null) {
+      dataElementName = new ArrayList<String>();
     }
+    return this.dataElementName;
+  }
 
-    /**
-     * Gets the value of the primitiveType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PrimitiveType }
-     *     
-     */
-    public PrimitiveType getPrimitiveType() {
-        return primitiveType;
-    }
+  /**
+   * Gets the value of the primitiveType property.
+   *
+   * @return possible object is
+   * {@link PrimitiveType }
+   */
+  public PrimitiveType getPrimitiveType() {
+    return primitiveType;
+  }
 
-    /**
-     * Sets the value of the primitiveType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PrimitiveType }
-     *     
-     */
-    public void setPrimitiveType(PrimitiveType value) {
-        this.primitiveType = value;
-    }
+  /**
+   * Sets the value of the primitiveType property.
+   *
+   * @param value allowed object is
+   *              {@link PrimitiveType }
+   */
+  public void setPrimitiveType(PrimitiveType value) {
+    this.primitiveType = value;
+  }
 
-    /**
-     * Gets the value of the length property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getLength() {
-        return length;
-    }
+  /**
+   * Gets the value of the length property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getLength() {
+    return length;
+  }
 
-    /**
-     * Sets the value of the length property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setLength(Short value) {
-        this.length = value;
-    }
+  /**
+   * Sets the value of the length property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setLength(Short value) {
+    this.length = value;
+  }
 
-    /**
-     * Gets the value of the precision property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getPrecision() {
-        return precision;
-    }
+  /**
+   * Gets the value of the precision property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getPrecision() {
+    return precision;
+  }
 
-    /**
-     * Sets the value of the precision property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setPrecision(Short value) {
-        this.precision = value;
-    }
+  /**
+   * Sets the value of the precision property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setPrecision(Short value) {
+    this.precision = value;
+  }
 
-    /**
-     * Gets the value of the scale property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getScale() {
-        return scale;
-    }
+  /**
+   * Gets the value of the scale property.
+   *
+   * @return possible object is
+   * {@link Short }
+   */
+  public Short getScale() {
+    return scale;
+  }
 
-    /**
-     * Sets the value of the scale property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setScale(Short value) {
-        this.scale = value;
-    }
+  /**
+   * Sets the value of the scale property.
+   *
+   * @param value allowed object is
+   *              {@link Short }
+   */
+  public void setScale(Short value) {
+    this.scale = value;
+  }
 
-    /**
-     * Gets the value of the checkEntity property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCheckEntity() {
-        return checkEntity;
-    }
+  /**
+   * Gets the value of the checkEntity property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getCheckEntity() {
+    return checkEntity;
+  }
 
-    /**
-     * Sets the value of the checkEntity property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCheckEntity(String value) {
-        this.checkEntity = value;
-    }
+  /**
+   * Sets the value of the checkEntity property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCheckEntity(String value) {
+    this.checkEntity = value;
+  }
 
-    /**
-     * Gets the value of the semanticType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SemanticType }
-     *     
-     */
-    public SemanticType getSemanticType() {
-        return semanticType;
-    }
+  /**
+   * Gets the value of the semanticType property.
+   *
+   * @return possible object is
+   * {@link SemanticType }
+   */
+  public SemanticType getSemanticType() {
+    return semanticType;
+  }
 
-    /**
-     * Sets the value of the semanticType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SemanticType }
-     *     
-     */
-    public void setSemanticType(SemanticType value) {
-        this.semanticType = value;
-    }
+  /**
+   * Sets the value of the semanticType property.
+   *
+   * @param value allowed object is
+   *              {@link SemanticType }
+   */
+  public void setSemanticType(SemanticType value) {
+    this.semanticType = value;
+  }
 
-    /**
-     * Gets the value of the derived property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDerived() {
-        return derived;
-    }
+  /**
+   * Gets the value of the derived property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDerived() {
+    return derived;
+  }
 
-    /**
-     * Sets the value of the derived property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDerived(Boolean value) {
-        this.derived = value;
-    }
+  /**
+   * Sets the value of the derived property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDerived(Boolean value) {
+    this.derived = value;
+  }
 
-    /**
-     * Gets the value of the defaultAggregationBehavior property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AggregationBehavior }
-     *     
-     */
-    public AggregationBehavior getDefaultAggregationBehavior() {
-        return defaultAggregationBehavior;
-    }
+  /**
+   * Gets the value of the defaultAggregationBehavior property.
+   *
+   * @return possible object is
+   * {@link AggregationBehavior }
+   */
+  public AggregationBehavior getDefaultAggregationBehavior() {
+    return defaultAggregationBehavior;
+  }
 
-    /**
-     * Sets the value of the defaultAggregationBehavior property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AggregationBehavior }
-     *     
-     */
-    public void setDefaultAggregationBehavior(AggregationBehavior value) {
-        this.defaultAggregationBehavior = value;
-    }
+  /**
+   * Sets the value of the defaultAggregationBehavior property.
+   *
+   * @param value allowed object is
+   *              {@link AggregationBehavior }
+   */
+  public void setDefaultAggregationBehavior(AggregationBehavior value) {
+    this.defaultAggregationBehavior = value;
+  }
 
-    /**
-     * Gets the value of the globalElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getGlobalElementName() {
-        return globalElementName;
-    }
+  /**
+   * Gets the value of the globalElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getGlobalElementName() {
+    return globalElementName;
+  }
 
-    /**
-     * Sets the value of the globalElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setGlobalElementName(String value) {
-        this.globalElementName = value;
-    }
+  /**
+   * Sets the value of the globalElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setGlobalElementName(String value) {
+    this.globalElementName = value;
+  }
 
 }

@@ -11,6 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.processors.entity;
 
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -20,9 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.DataTypeUtils;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -31,124 +31,121 @@ import org.eclipse.dirigible.database.sql.builders.table.AlterTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
-import com.sap.xsk.utils.XSKHDBUtils;
-
 /**
  * The Entity Alter Processor.
  */
 public class XSKEntityAlterProcessor {
 
-	private static final Logger logger = LoggerFactory.getLogger(XSKEntityAlterProcessor.class);
-	
-	private static final String INCOMPATIBLE_CHANGE_OF_ENTITY = "Incompatible change of entity [%s] by adding a column [%s] which is [%s]"; //$NON-NLS-1$
+  private static final Logger logger = LoggerFactory.getLogger(XSKEntityAlterProcessor.class);
 
-	/**
-	 * Execute the corresponding statement.
-	 *
-	 * @param connection the connection
-	 * @param entityModel the entity model
-	 * @throws SQLException the SQL exception
-	 */
-	public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-		String tableName = XSKHDBUtils.getTableName(entityModel);
-		logger.info("Processing Alter Entity: {}", tableName);
-		
-		String entityName = tableName;
-		
+  private static final String INCOMPATIBLE_CHANGE_OF_ENTITY = "Incompatible change of entity [%s] by adding a column [%s] which is [%s]"; //$NON-NLS-1$
+
+  /**
+   * Execute the corresponding statement.
+   *
+   * @param connection  the connection
+   * @param entityModel the entity model
+   * @throws SQLException the SQL exception
+   */
+  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+    String tableName = XSKHDBUtils.getTableName(entityModel);
+    logger.info("Processing Alter Entity: {}", tableName);
+
+    String entityName = tableName;
+
 //		ISqlDialect nativeDialect = SqlFactory.deriveDialect(connection);
-		
-		Map<String, String> columnDefinitions = new HashMap<String, String>();
-		DatabaseMetaData dmd = connection.getMetaData();
-		ResultSet rsColumns = dmd.getColumns(null, null, entityName, null);
-		while (rsColumns.next()) {
+
+    Map<String, String> columnDefinitions = new HashMap<String, String>();
+    DatabaseMetaData dmd = connection.getMetaData();
+    ResultSet rsColumns = dmd.getColumns(null, null, entityName, null);
+    while (rsColumns.next()) {
 //			String typeName = nativeDialect.getDataTypeName(DataTypeUtils.getDatabaseType(rsColumns.getInt(5)));
-			String typeName = DataTypeUtils.getDatabaseTypeName(rsColumns.getInt(5));
-			columnDefinitions.put(rsColumns.getString(4).toUpperCase(), typeName);
-		}
-		
-		List<String> modelColumnNames = new ArrayList<String>();
-		
-		// ADD iteration
-		for (XSKDataStructureHDBTableColumnModel columnModel : entityModel.getColumns()) {
-			String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
-			DataType type = DataType.valueOf(columnModel.getType());
-			String length = columnModel.getLength();
-			boolean isNullable = columnModel.isNullable();
-			boolean isPrimaryKey = columnModel.isPrimaryKey();
-			boolean isUnique = columnModel.isUnique();
-			String defaultValue = columnModel.getDefaultValue();
-			String precision = columnModel.getPrecision();
-			String scale = columnModel.getScale();
-			String args = "";
-			if (length != null) {
-				if (type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR)
-						|| columnModel.getType().equalsIgnoreCase("NVARCHAR")
-						|| columnModel.getType().equalsIgnoreCase("ALPHANUM")
-						|| columnModel.getType().equalsIgnoreCase("SHORTTEXT")) {
-					args = ISqlKeywords.OPEN + length + ISqlKeywords.CLOSE;
-				}
-			} else if ((precision != null) && (scale != null)) {
-				if (type.equals(DataType.DECIMAL)) {
-					args = ISqlKeywords.OPEN + precision + "," + scale + ISqlKeywords.CLOSE;
-				}
-			}
-			if (defaultValue != null) {
-				if ("".equals(defaultValue)) {
-					if ((type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR))) {
-						args += " DEFAULT '" + defaultValue + "' ";
-					}
-				} else {
-					args += " DEFAULT " + defaultValue + " ";
-				}
+      String typeName = DataTypeUtils.getDatabaseTypeName(rsColumns.getInt(5));
+      columnDefinitions.put(rsColumns.getString(4).toUpperCase(), typeName);
+    }
 
-			}
-			
-			modelColumnNames.add(name.toUpperCase());
+    List<String> modelColumnNames = new ArrayList<String>();
 
-			if (!columnDefinitions.containsKey(name.toUpperCase())) {
-				
-				AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
-				
-				alterTableBuilder.add().column(name, type, isPrimaryKey, isNullable, isUnique, args);
+    // ADD iteration
+    for (XSKDataStructureHDBTableColumnModel columnModel : entityModel.getColumns()) {
+      String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
+      DataType type = DataType.valueOf(columnModel.getType());
+      String length = columnModel.getLength();
+      boolean isNullable = columnModel.isNullable();
+      boolean isPrimaryKey = columnModel.isPrimaryKey();
+      boolean isUnique = columnModel.isUnique();
+      String defaultValue = columnModel.getDefaultValue();
+      String precision = columnModel.getPrecision();
+      String scale = columnModel.getScale();
+      String args = "";
+      if (length != null) {
+        if (type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR)
+            || columnModel.getType().equalsIgnoreCase("NVARCHAR")
+            || columnModel.getType().equalsIgnoreCase("ALPHANUM")
+            || columnModel.getType().equalsIgnoreCase("SHORTTEXT")) {
+          args = ISqlKeywords.OPEN + length + ISqlKeywords.CLOSE;
+        }
+      } else if ((precision != null) && (scale != null)) {
+        if (type.equals(DataType.DECIMAL)) {
+          args = ISqlKeywords.OPEN + precision + "," + scale + ISqlKeywords.CLOSE;
+        }
+      }
+      if (defaultValue != null) {
+        if ("".equals(defaultValue)) {
+          if ((type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR))) {
+            args += " DEFAULT '" + defaultValue + "' ";
+          }
+        } else {
+          args += " DEFAULT " + defaultValue + " ";
+        }
 
-				if (!isNullable) {
-					throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "NOT NULL"));
-				}
-				if (isPrimaryKey) {
-					throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "PRIMARY KEY"));
-				}
-				
-				executeAlterBuilder(connection, alterTableBuilder);
+      }
 
-			} else if (!columnDefinitions.get(name.toUpperCase()).equals(type.toString())) {
-				throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "of type " + columnDefinitions.get(name) + " to be changed to" + type));
-			}
-		}
-		
-		// DROP iteration
-		
-		for (String columnName : columnDefinitions.keySet()) {
-			if (!modelColumnNames.contains(columnName.toUpperCase())) {
-				AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
-				alterTableBuilder.drop().column(columnName, DataType.BOOLEAN);
-				executeAlterBuilder(connection, alterTableBuilder);
-			}
-		}
-		
-	}
+      modelColumnNames.add(name.toUpperCase());
 
-	private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
-			throws SQLException {
-		final String sql = alterTableBuilder.build();
-		try(PreparedStatement statement = connection.prepareStatement(sql);) {
-			logger.info(sql);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			logger.error(sql);
-			logger.error(e.getMessage(), e);
-			throw new SQLException(e.getMessage(), e);
-		}
-	}
+      if (!columnDefinitions.containsKey(name.toUpperCase())) {
+
+        AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
+
+        alterTableBuilder.add().column(name, type, isPrimaryKey, isNullable, isUnique, args);
+
+        if (!isNullable) {
+          throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "NOT NULL"));
+        }
+        if (isPrimaryKey) {
+          throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "PRIMARY KEY"));
+        }
+
+        executeAlterBuilder(connection, alterTableBuilder);
+
+      } else if (!columnDefinitions.get(name.toUpperCase()).equals(type.toString())) {
+        throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name,
+            "of type " + columnDefinitions.get(name) + " to be changed to" + type));
+      }
+    }
+
+    // DROP iteration
+
+    for (String columnName : columnDefinitions.keySet()) {
+      if (!modelColumnNames.contains(columnName.toUpperCase())) {
+        AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
+        alterTableBuilder.drop().column(columnName, DataType.BOOLEAN);
+        executeAlterBuilder(connection, alterTableBuilder);
+      }
+    }
+
+  }
+
+  private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
+      throws SQLException {
+    final String sql = alterTableBuilder.build();
+    try (PreparedStatement statement = connection.prepareStatement(sql);) {
+      logger.info(sql);
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      logger.error(sql);
+      logger.error(e.getMessage(), e);
+      throw new SQLException(e.getMessage(), e);
+    }
+  }
 }

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for UnassignedMemberMode.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,47 +37,37 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "UnassignedMemberMode")
 @XmlEnum
 public enum UnassignedMemberMode {
 
 
-    /**
-     * 
-     * 						No NotAssigned member (the default)
-     * 					
-     * 
-     */
-    FALSE,
+  /**
+   * No NotAssigned member (the default)
+   */
+  FALSE,
 
-    /**
-     * 
-     * 						Add a visible NotAssigned member 
-     * 					
-     * 
-     */
-    TRUE,
+  /**
+   * Add a visible NotAssigned member
+   */
+  TRUE,
 
-    /**
-     * 
-     * 						Automatically add a visible NotAssigned member only if necessary. NB use carefully.  Clearly, any access to 
-     * 						such a hierarchy (even for example in a request to BIMC_LEVELS)  must instantiate the hierarchy to determine 
-     * 						if the NotAssigned member needs adding to the hierarchy  so will increase processing and cache usage. 
-     * 						Normally for BIMC_LEVELS etc queries, if the results can be  obtained from deploy info alone, we do not need 
-     * 						to instantiate the hierarchy
-     * 					
-     * 
-     */
-    AUTO;
+  /**
+   * Automatically add a visible NotAssigned member only if necessary. NB use carefully.  Clearly, any access to
+   * such a hierarchy (even for example in a request to BIMC_LEVELS)  must instantiate the hierarchy to determine
+   * if the NotAssigned member needs adding to the hierarchy  so will increase processing and cache usage.
+   * Normally for BIMC_LEVELS etc queries, if the results can be  obtained from deploy info alone, we do not need
+   * to instantiate the hierarchy
+   */
+  AUTO;
 
-    public String value() {
-        return name();
-    }
+  public static UnassignedMemberMode fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static UnassignedMemberMode fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

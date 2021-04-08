@@ -26,15 +26,14 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A unit conversion comprises all model information that is required as input for the engine	for the unit 
- * 				conversion variant of the server conversion function
- * 			
- * 
+ * A unit conversion comprises all model information that is required as input for the engine	for the unit
+ * conversion variant of the server conversion function
+ *
+ *
  * <p>Java class for UnitConversion complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UnitConversion"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +46,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UnitConversion", propOrder = {
@@ -56,60 +53,51 @@ import javax.xml.bind.annotation.XmlType;
     "targetUnit"
 })
 public class UnitConversion
-    extends Conversion
-{
+    extends Conversion {
 
-    @XmlElement(required = true)
-    protected Parameterization sourceUnit;
-    @XmlElement(required = true)
-    protected Parameterization targetUnit;
+  @XmlElement(required = true)
+  protected Parameterization sourceUnit;
+  @XmlElement(required = true)
+  protected Parameterization targetUnit;
 
-    /**
-     * Gets the value of the sourceUnit property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getSourceUnit() {
-        return sourceUnit;
-    }
+  /**
+   * Gets the value of the sourceUnit property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getSourceUnit() {
+    return sourceUnit;
+  }
 
-    /**
-     * Sets the value of the sourceUnit property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setSourceUnit(Parameterization value) {
-        this.sourceUnit = value;
-    }
+  /**
+   * Sets the value of the sourceUnit property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setSourceUnit(Parameterization value) {
+    this.sourceUnit = value;
+  }
 
-    /**
-     * Gets the value of the targetUnit property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getTargetUnit() {
-        return targetUnit;
-    }
+  /**
+   * Gets the value of the targetUnit property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getTargetUnit() {
+    return targetUnit;
+  }
 
-    /**
-     * Sets the value of the targetUnit property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setTargetUnit(Parameterization value) {
-        this.targetUnit = value;
-    }
+  /**
+   * Sets the value of the targetUnit property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setTargetUnit(Parameterization value) {
+    this.targetUnit = value;
+  }
 
 }

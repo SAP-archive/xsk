@@ -19,6 +19,7 @@
 
 package com.sap.ndb.datamodeltype;
 
+import com.sap.ndb.datamodelfilter.ValueFilter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,19 +29,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.datamodelfilter.ValueFilter;
 
 
 /**
- * 
- * 				Models select option like filters on one element reference. 
- * 				Several valueFilters are combined by OR
- *             
- * 
+ * Models select option like filters on one element reference.
+ * Several valueFilters are combined by OR
+ *
+ *
  * <p>Java class for ElementRefFilter complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ElementRefFilter"&gt;
  *   &lt;complexContent&gt;
@@ -53,8 +52,6 @@ import com.sap.ndb.datamodelfilter.ValueFilter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ElementRefFilter", propOrder = {
@@ -62,63 +59,57 @@ import com.sap.ndb.datamodelfilter.ValueFilter;
 })
 public class ElementRefFilter {
 
-    @XmlElement(required = true)
-    protected List<ValueFilter> valueFilter;
-    @XmlAttribute(name = "element", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String element;
+  @XmlElement(required = true)
+  protected List<ValueFilter> valueFilter;
+  @XmlAttribute(name = "element", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String element;
 
-    /**
-     * Gets the value of the valueFilter property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the valueFilter property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getValueFilter().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link ValueFilter }
-     * 
-     * 
-     */
-    public List<ValueFilter> getValueFilter() {
-        if (valueFilter == null) {
-            valueFilter = new ArrayList<ValueFilter>();
-        }
-        return this.valueFilter;
+  /**
+   * Gets the value of the valueFilter property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the valueFilter property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getValueFilter().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link ValueFilter }
+   */
+  public List<ValueFilter> getValueFilter() {
+    if (valueFilter == null) {
+      valueFilter = new ArrayList<ValueFilter>();
     }
+    return this.valueFilter;
+  }
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getElement() {
-        return element;
-    }
+  /**
+   * Gets the value of the element property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getElement() {
+    return element;
+  }
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setElement(String value) {
-        this.element = value;
-    }
+  /**
+   * Sets the value of the element property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setElement(String value) {
+    this.element = value;
+  }
 
 }

@@ -26,22 +26,21 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A data foundation serves as basis for the mapping of logical objects to physical tables. It contains tableProxies,	
- * 				which link to physical data base	tables. You can define joins between these tables and in additions specify	
- * 				more semantics like which column of the table represents the client	column.
- * 				Constraints:
- * 					1. no loops are allowed among the joins	
- * 					2. joins are only allowed between compatible data types	
- * 					3. Each table referred to in a join must be contained in a tableProxy element	
- * 					4. Attributes having key="true" also need to have	displayAttribute=false	
- * 					5. join type = 'textTable' if and only if text column is filled	(should)
- * 			
- * 
+ * A data foundation serves as basis for the mapping of logical objects to physical tables. It contains tableProxies,
+ * which link to physical data base	tables. You can define joins between these tables and in additions specify
+ * more semantics like which column of the table represents the client	column.
+ * Constraints:
+ * 1. no loops are allowed among the joins
+ * 2. joins are only allowed between compatible data types
+ * 3. Each table referred to in a join must be contained in a tableProxy element
+ * 4. Attributes having key="true" also need to have	displayAttribute=false
+ * 5. join type = 'textTable' if and only if text column is filled	(should)
+ *
+ *
  * <p>Java class for DataFoundation complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DataFoundation"&gt;
  *   &lt;complexContent&gt;
@@ -55,8 +54,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DataFoundation", propOrder = {
@@ -65,84 +62,71 @@ import javax.xml.bind.annotation.XmlType;
     "layout"
 })
 public class DataFoundation
-    extends BIResource
-{
+    extends BIResource {
 
-    @XmlElement(required = true)
-    protected TableProxies tableProxies;
-    protected Joins joins;
-    protected Layout layout;
+  @XmlElement(required = true)
+  protected TableProxies tableProxies;
+  protected Joins joins;
+  protected Layout layout;
 
-    /**
-     * Gets the value of the tableProxies property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TableProxies }
-     *     
-     */
-    public TableProxies getTableProxies() {
-        return tableProxies;
-    }
+  /**
+   * Gets the value of the tableProxies property.
+   *
+   * @return possible object is
+   * {@link TableProxies }
+   */
+  public TableProxies getTableProxies() {
+    return tableProxies;
+  }
 
-    /**
-     * Sets the value of the tableProxies property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TableProxies }
-     *     
-     */
-    public void setTableProxies(TableProxies value) {
-        this.tableProxies = value;
-    }
+  /**
+   * Sets the value of the tableProxies property.
+   *
+   * @param value allowed object is
+   *              {@link TableProxies }
+   */
+  public void setTableProxies(TableProxies value) {
+    this.tableProxies = value;
+  }
 
-    /**
-     * Gets the value of the joins property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Joins }
-     *     
-     */
-    public Joins getJoins() {
-        return joins;
-    }
+  /**
+   * Gets the value of the joins property.
+   *
+   * @return possible object is
+   * {@link Joins }
+   */
+  public Joins getJoins() {
+    return joins;
+  }
 
-    /**
-     * Sets the value of the joins property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Joins }
-     *     
-     */
-    public void setJoins(Joins value) {
-        this.joins = value;
-    }
+  /**
+   * Sets the value of the joins property.
+   *
+   * @param value allowed object is
+   *              {@link Joins }
+   */
+  public void setJoins(Joins value) {
+    this.joins = value;
+  }
 
-    /**
-     * Gets the value of the layout property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Layout }
-     *     
-     */
-    public Layout getLayout() {
-        return layout;
-    }
+  /**
+   * Gets the value of the layout property.
+   *
+   * @return possible object is
+   * {@link Layout }
+   */
+  public Layout getLayout() {
+    return layout;
+  }
 
-    /**
-     * Sets the value of the layout property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Layout }
-     *     
-     */
-    public void setLayout(Layout value) {
-        this.layout = value;
-    }
+  /**
+   * Sets the value of the layout property.
+   *
+   * @param value allowed object is
+   *              {@link Layout }
+   */
+  public void setLayout(Layout value) {
+    this.layout = value;
+  }
 
 }

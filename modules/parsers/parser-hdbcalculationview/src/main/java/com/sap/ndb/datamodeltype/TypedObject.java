@@ -19,6 +19,7 @@
 
 package com.sap.ndb.datamodeltype;
 
+import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,18 +28,16 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
 
 
 /**
- * 
- * 				Common father class for typed objects e.g. Element, Parameter,...
- * 	   		
- * 
+ * Common father class for typed objects e.g. Element, Parameter,...
+ *
+ *
  * <p>Java class for TypedObject complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="TypedObject"&gt;
  *   &lt;complexContent&gt;
@@ -66,8 +65,6 @@ import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TypedObject", propOrder = {
@@ -84,240 +81,203 @@ import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
     Element.class
 })
 public abstract class TypedObject
-    extends NamedObjectWithEndUserTexts
-{
+    extends NamedObjectWithEndUserTexts {
 
-    protected String type;
-    protected StructureType inlineStructureType;
-    protected SimpleType inlineType;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String typeOfElement;
-    protected String externalTypeOfEntity;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String externalTypeOfElement;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String hierarchy;
-    protected InternalExternalConversion internalExternalConversion;
-    @XmlAttribute(name = "deprecated")
-    protected Boolean deprecated;
+  protected String type;
+  protected StructureType inlineStructureType;
+  protected SimpleType inlineType;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String typeOfElement;
+  protected String externalTypeOfEntity;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String externalTypeOfElement;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String hierarchy;
+  protected InternalExternalConversion internalExternalConversion;
+  @XmlAttribute(name = "deprecated")
+  protected Boolean deprecated;
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getType() {
-        return type;
-    }
+  /**
+   * Gets the value of the type property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getType() {
+    return type;
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setType(String value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setType(String value) {
+    this.type = value;
+  }
 
-    /**
-     * Gets the value of the inlineStructureType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link StructureType }
-     *     
-     */
-    public StructureType getInlineStructureType() {
-        return inlineStructureType;
-    }
+  /**
+   * Gets the value of the inlineStructureType property.
+   *
+   * @return possible object is
+   * {@link StructureType }
+   */
+  public StructureType getInlineStructureType() {
+    return inlineStructureType;
+  }
 
-    /**
-     * Sets the value of the inlineStructureType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link StructureType }
-     *     
-     */
-    public void setInlineStructureType(StructureType value) {
-        this.inlineStructureType = value;
-    }
+  /**
+   * Sets the value of the inlineStructureType property.
+   *
+   * @param value allowed object is
+   *              {@link StructureType }
+   */
+  public void setInlineStructureType(StructureType value) {
+    this.inlineStructureType = value;
+  }
 
-    /**
-     * Gets the value of the inlineType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SimpleType }
-     *     
-     */
-    public SimpleType getInlineType() {
-        return inlineType;
-    }
+  /**
+   * Gets the value of the inlineType property.
+   *
+   * @return possible object is
+   * {@link SimpleType }
+   */
+  public SimpleType getInlineType() {
+    return inlineType;
+  }
 
-    /**
-     * Sets the value of the inlineType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SimpleType }
-     *     
-     */
-    public void setInlineType(SimpleType value) {
-        this.inlineType = value;
-    }
+  /**
+   * Sets the value of the inlineType property.
+   *
+   * @param value allowed object is
+   *              {@link SimpleType }
+   */
+  public void setInlineType(SimpleType value) {
+    this.inlineType = value;
+  }
 
-    /**
-     * Gets the value of the typeOfElement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTypeOfElement() {
-        return typeOfElement;
-    }
+  /**
+   * Gets the value of the typeOfElement property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTypeOfElement() {
+    return typeOfElement;
+  }
 
-    /**
-     * Sets the value of the typeOfElement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTypeOfElement(String value) {
-        this.typeOfElement = value;
-    }
+  /**
+   * Sets the value of the typeOfElement property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTypeOfElement(String value) {
+    this.typeOfElement = value;
+  }
 
-    /**
-     * Gets the value of the externalTypeOfEntity property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExternalTypeOfEntity() {
-        return externalTypeOfEntity;
-    }
+  /**
+   * Gets the value of the externalTypeOfEntity property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExternalTypeOfEntity() {
+    return externalTypeOfEntity;
+  }
 
-    /**
-     * Sets the value of the externalTypeOfEntity property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExternalTypeOfEntity(String value) {
-        this.externalTypeOfEntity = value;
-    }
+  /**
+   * Sets the value of the externalTypeOfEntity property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExternalTypeOfEntity(String value) {
+    this.externalTypeOfEntity = value;
+  }
 
-    /**
-     * Gets the value of the externalTypeOfElement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExternalTypeOfElement() {
-        return externalTypeOfElement;
-    }
+  /**
+   * Gets the value of the externalTypeOfElement property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExternalTypeOfElement() {
+    return externalTypeOfElement;
+  }
 
-    /**
-     * Sets the value of the externalTypeOfElement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExternalTypeOfElement(String value) {
-        this.externalTypeOfElement = value;
-    }
+  /**
+   * Sets the value of the externalTypeOfElement property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExternalTypeOfElement(String value) {
+    this.externalTypeOfElement = value;
+  }
 
-    /**
-     * Gets the value of the hierarchy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHierarchy() {
-        return hierarchy;
-    }
+  /**
+   * Gets the value of the hierarchy property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHierarchy() {
+    return hierarchy;
+  }
 
-    /**
-     * Sets the value of the hierarchy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHierarchy(String value) {
-        this.hierarchy = value;
-    }
+  /**
+   * Sets the value of the hierarchy property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHierarchy(String value) {
+    this.hierarchy = value;
+  }
 
-    /**
-     * Gets the value of the internalExternalConversion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link InternalExternalConversion }
-     *     
-     */
-    public InternalExternalConversion getInternalExternalConversion() {
-        return internalExternalConversion;
-    }
+  /**
+   * Gets the value of the internalExternalConversion property.
+   *
+   * @return possible object is
+   * {@link InternalExternalConversion }
+   */
+  public InternalExternalConversion getInternalExternalConversion() {
+    return internalExternalConversion;
+  }
 
-    /**
-     * Sets the value of the internalExternalConversion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link InternalExternalConversion }
-     *     
-     */
-    public void setInternalExternalConversion(InternalExternalConversion value) {
-        this.internalExternalConversion = value;
-    }
+  /**
+   * Sets the value of the internalExternalConversion property.
+   *
+   * @param value allowed object is
+   *              {@link InternalExternalConversion }
+   */
+  public void setInternalExternalConversion(InternalExternalConversion value) {
+    this.internalExternalConversion = value;
+  }
 
-    /**
-     * Gets the value of the deprecated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDeprecated() {
-        return deprecated;
-    }
+  /**
+   * Gets the value of the deprecated property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDeprecated() {
+    return deprecated;
+  }
 
-    /**
-     * Sets the value of the deprecated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDeprecated(Boolean value) {
-        this.deprecated = value;
-    }
+  /**
+   * Sets the value of the deprecated property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDeprecated(Boolean value) {
+    this.deprecated = value;
+  }
 
 }

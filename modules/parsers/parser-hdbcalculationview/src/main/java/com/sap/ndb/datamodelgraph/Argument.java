@@ -25,14 +25,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Argument of a PredicateOperation i.e. one of the following 3 possibilities:Variable element, constant, parameter
- * 			
- * 
+ * Argument of a PredicateOperation i.e. one of the following 3 possibilities:Variable element, constant, parameter
+ *
+ *
  * <p>Java class for Argument complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Argument"&gt;
  *   &lt;complexContent&gt;
@@ -46,8 +45,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Argument", propOrder = {
@@ -57,80 +54,68 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Argument {
 
-    protected VariableElement variableElement;
-    protected ConstantArgument constant;
-    protected ParameterArgument parameter;
+  protected VariableElement variableElement;
+  protected ConstantArgument constant;
+  protected ParameterArgument parameter;
 
-    /**
-     * Gets the value of the variableElement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link VariableElement }
-     *     
-     */
-    public VariableElement getVariableElement() {
-        return variableElement;
-    }
+  /**
+   * Gets the value of the variableElement property.
+   *
+   * @return possible object is
+   * {@link VariableElement }
+   */
+  public VariableElement getVariableElement() {
+    return variableElement;
+  }
 
-    /**
-     * Sets the value of the variableElement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link VariableElement }
-     *     
-     */
-    public void setVariableElement(VariableElement value) {
-        this.variableElement = value;
-    }
+  /**
+   * Sets the value of the variableElement property.
+   *
+   * @param value allowed object is
+   *              {@link VariableElement }
+   */
+  public void setVariableElement(VariableElement value) {
+    this.variableElement = value;
+  }
 
-    /**
-     * Gets the value of the constant property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ConstantArgument }
-     *     
-     */
-    public ConstantArgument getConstant() {
-        return constant;
-    }
+  /**
+   * Gets the value of the constant property.
+   *
+   * @return possible object is
+   * {@link ConstantArgument }
+   */
+  public ConstantArgument getConstant() {
+    return constant;
+  }
 
-    /**
-     * Sets the value of the constant property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ConstantArgument }
-     *     
-     */
-    public void setConstant(ConstantArgument value) {
-        this.constant = value;
-    }
+  /**
+   * Sets the value of the constant property.
+   *
+   * @param value allowed object is
+   *              {@link ConstantArgument }
+   */
+  public void setConstant(ConstantArgument value) {
+    this.constant = value;
+  }
 
-    /**
-     * Gets the value of the parameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ParameterArgument }
-     *     
-     */
-    public ParameterArgument getParameter() {
-        return parameter;
-    }
+  /**
+   * Gets the value of the parameter property.
+   *
+   * @return possible object is
+   * {@link ParameterArgument }
+   */
+  public ParameterArgument getParameter() {
+    return parameter;
+  }
 
-    /**
-     * Sets the value of the parameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ParameterArgument }
-     *     
-     */
-    public void setParameter(ParameterArgument value) {
-        this.parameter = value;
-    }
+  /**
+   * Sets the value of the parameter property.
+   *
+   * @param value allowed object is
+   *              {@link ParameterArgument }
+   */
+  public void setParameter(ParameterArgument value) {
+    this.parameter = value;
+  }
 
 }

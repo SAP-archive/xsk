@@ -19,22 +19,21 @@
 
 package com.sap.ndb.datamodelgraph;
 
+import com.sap.ndb.basemodelbase.SortDirection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.SortDirection;
 
 
 /**
- * 
- * 				Specifying oder by according to a variable element
- * 			
- * 
+ * Specifying oder by according to a variable element
+ *
+ *
  * <p>Java class for GraphVariableOrderBy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GraphVariableOrderBy"&gt;
  *   &lt;complexContent&gt;
@@ -44,40 +43,33 @@ import com.sap.ndb.basemodelbase.SortDirection;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GraphVariableOrderBy")
 public class GraphVariableOrderBy
-    extends VariableElement
-{
+    extends VariableElement {
 
-    @XmlAttribute(name = "direction", required = true)
-    protected SortDirection direction;
+  @XmlAttribute(name = "direction", required = true)
+  protected SortDirection direction;
 
-    /**
-     * Gets the value of the direction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SortDirection }
-     *     
-     */
-    public SortDirection getDirection() {
-        return direction;
-    }
+  /**
+   * Gets the value of the direction property.
+   *
+   * @return possible object is
+   * {@link SortDirection }
+   */
+  public SortDirection getDirection() {
+    return direction;
+  }
 
-    /**
-     * Sets the value of the direction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SortDirection }
-     *     
-     */
-    public void setDirection(SortDirection value) {
-        this.direction = value;
-    }
+  /**
+   * Sets the value of the direction property.
+   *
+   * @param value allowed object is
+   *              {@link SortDirection }
+   */
+  public void setDirection(SortDirection value) {
+    this.direction = value;
+  }
 
 }

@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Hash partitioning specification
- * 			
- * 
+ * Hash partitioning specification
+ *
+ *
  * <p>Java class for HashPartitionSpecification complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HashPartitionSpecification"&gt;
  *   &lt;complexContent&gt;
@@ -47,47 +46,42 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HashPartitionSpecification", propOrder = {
     "expression"
 })
 public class HashPartitionSpecification
-    extends NumberedPartitionSpecification
-{
+    extends NumberedPartitionSpecification {
 
-    @XmlElement(required = true)
-    protected List<PartitionExpression> expression;
+  @XmlElement(required = true)
+  protected List<PartitionExpression> expression;
 
-    /**
-     * Gets the value of the expression property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the expression property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getExpression().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link PartitionExpression }
-     * 
-     * 
-     */
-    public List<PartitionExpression> getExpression() {
-        if (expression == null) {
-            expression = new ArrayList<PartitionExpression>();
-        }
-        return this.expression;
+  /**
+   * Gets the value of the expression property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the expression property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getExpression().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link PartitionExpression }
+   */
+  public List<PartitionExpression> getExpression() {
+    if (expression == null) {
+      expression = new ArrayList<PartitionExpression>();
     }
+    return this.expression;
+  }
 
 }

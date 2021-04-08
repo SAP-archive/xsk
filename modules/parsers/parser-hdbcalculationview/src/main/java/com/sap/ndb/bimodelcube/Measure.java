@@ -19,6 +19,9 @@
 
 package com.sap.ndb.bimodelcube;
 
+import com.sap.ndb.bimodelconversion.CurrencyConversion;
+import com.sap.ndb.bimodelconversion.UnitConversion;
+import com.sap.ndb.bimodeldatafoundation.LogicalColumn;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,16 +32,13 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.bimodelconversion.CurrencyConversion;
-import com.sap.ndb.bimodelconversion.UnitConversion;
-import com.sap.ndb.bimodeldatafoundation.LogicalColumn;
 
 
 /**
  * <p>Java class for Measure complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Measure"&gt;
  *   &lt;complexContent&gt;
@@ -59,8 +59,6 @@ import com.sap.ndb.bimodeldatafoundation.LogicalColumn;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Measure", propOrder = {
@@ -75,219 +73,188 @@ import com.sap.ndb.bimodeldatafoundation.LogicalColumn;
     RestrictedMeasure.class
 })
 public class Measure
-    extends LogicalColumn
-{
+    extends LogicalColumn {
 
-    protected CurrencyConversion currencyConversion;
-    protected UnitConversion unitConversion;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String conversionReference;
-    protected List<MeasureDimensionality> exceptionAggregation;
-    @XmlAttribute(name = "measureType")
-    protected MeasureType measureType;
-    @XmlAttribute(name = "aggregationType")
-    protected AggregationType aggregationType;
-    @XmlAttribute(name = "engineAggregation")
-    protected AggregationType engineAggregation;
-    @XmlAttribute(name = "unconverted")
-    protected Boolean unconverted;
+  protected CurrencyConversion currencyConversion;
+  protected UnitConversion unitConversion;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String conversionReference;
+  protected List<MeasureDimensionality> exceptionAggregation;
+  @XmlAttribute(name = "measureType")
+  protected MeasureType measureType;
+  @XmlAttribute(name = "aggregationType")
+  protected AggregationType aggregationType;
+  @XmlAttribute(name = "engineAggregation")
+  protected AggregationType engineAggregation;
+  @XmlAttribute(name = "unconverted")
+  protected Boolean unconverted;
 
-    /**
-     * Gets the value of the currencyConversion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CurrencyConversion }
-     *     
-     */
-    public CurrencyConversion getCurrencyConversion() {
-        return currencyConversion;
+  /**
+   * Gets the value of the currencyConversion property.
+   *
+   * @return possible object is
+   * {@link CurrencyConversion }
+   */
+  public CurrencyConversion getCurrencyConversion() {
+    return currencyConversion;
+  }
+
+  /**
+   * Sets the value of the currencyConversion property.
+   *
+   * @param value allowed object is
+   *              {@link CurrencyConversion }
+   */
+  public void setCurrencyConversion(CurrencyConversion value) {
+    this.currencyConversion = value;
+  }
+
+  /**
+   * Gets the value of the unitConversion property.
+   *
+   * @return possible object is
+   * {@link UnitConversion }
+   */
+  public UnitConversion getUnitConversion() {
+    return unitConversion;
+  }
+
+  /**
+   * Sets the value of the unitConversion property.
+   *
+   * @param value allowed object is
+   *              {@link UnitConversion }
+   */
+  public void setUnitConversion(UnitConversion value) {
+    this.unitConversion = value;
+  }
+
+  /**
+   * Gets the value of the conversionReference property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getConversionReference() {
+    return conversionReference;
+  }
+
+  /**
+   * Sets the value of the conversionReference property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setConversionReference(String value) {
+    this.conversionReference = value;
+  }
+
+  /**
+   * Gets the value of the exceptionAggregation property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the exceptionAggregation property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getExceptionAggregation().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link MeasureDimensionality }
+   */
+  public List<MeasureDimensionality> getExceptionAggregation() {
+    if (exceptionAggregation == null) {
+      exceptionAggregation = new ArrayList<MeasureDimensionality>();
     }
+    return this.exceptionAggregation;
+  }
 
-    /**
-     * Sets the value of the currencyConversion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CurrencyConversion }
-     *     
-     */
-    public void setCurrencyConversion(CurrencyConversion value) {
-        this.currencyConversion = value;
-    }
+  /**
+   * Gets the value of the measureType property.
+   *
+   * @return possible object is
+   * {@link MeasureType }
+   */
+  public MeasureType getMeasureType() {
+    return measureType;
+  }
 
-    /**
-     * Gets the value of the unitConversion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnitConversion }
-     *     
-     */
-    public UnitConversion getUnitConversion() {
-        return unitConversion;
-    }
+  /**
+   * Sets the value of the measureType property.
+   *
+   * @param value allowed object is
+   *              {@link MeasureType }
+   */
+  public void setMeasureType(MeasureType value) {
+    this.measureType = value;
+  }
 
-    /**
-     * Sets the value of the unitConversion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnitConversion }
-     *     
-     */
-    public void setUnitConversion(UnitConversion value) {
-        this.unitConversion = value;
-    }
+  /**
+   * Gets the value of the aggregationType property.
+   *
+   * @return possible object is
+   * {@link AggregationType }
+   */
+  public AggregationType getAggregationType() {
+    return aggregationType;
+  }
 
-    /**
-     * Gets the value of the conversionReference property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getConversionReference() {
-        return conversionReference;
-    }
+  /**
+   * Sets the value of the aggregationType property.
+   *
+   * @param value allowed object is
+   *              {@link AggregationType }
+   */
+  public void setAggregationType(AggregationType value) {
+    this.aggregationType = value;
+  }
 
-    /**
-     * Sets the value of the conversionReference property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setConversionReference(String value) {
-        this.conversionReference = value;
-    }
+  /**
+   * Gets the value of the engineAggregation property.
+   *
+   * @return possible object is
+   * {@link AggregationType }
+   */
+  public AggregationType getEngineAggregation() {
+    return engineAggregation;
+  }
 
-    /**
-     * Gets the value of the exceptionAggregation property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the exceptionAggregation property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getExceptionAggregation().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link MeasureDimensionality }
-     * 
-     * 
-     */
-    public List<MeasureDimensionality> getExceptionAggregation() {
-        if (exceptionAggregation == null) {
-            exceptionAggregation = new ArrayList<MeasureDimensionality>();
-        }
-        return this.exceptionAggregation;
-    }
+  /**
+   * Sets the value of the engineAggregation property.
+   *
+   * @param value allowed object is
+   *              {@link AggregationType }
+   */
+  public void setEngineAggregation(AggregationType value) {
+    this.engineAggregation = value;
+  }
 
-    /**
-     * Gets the value of the measureType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MeasureType }
-     *     
-     */
-    public MeasureType getMeasureType() {
-        return measureType;
-    }
+  /**
+   * Gets the value of the unconverted property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isUnconverted() {
+    return unconverted;
+  }
 
-    /**
-     * Sets the value of the measureType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MeasureType }
-     *     
-     */
-    public void setMeasureType(MeasureType value) {
-        this.measureType = value;
-    }
-
-    /**
-     * Gets the value of the aggregationType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AggregationType }
-     *     
-     */
-    public AggregationType getAggregationType() {
-        return aggregationType;
-    }
-
-    /**
-     * Sets the value of the aggregationType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AggregationType }
-     *     
-     */
-    public void setAggregationType(AggregationType value) {
-        this.aggregationType = value;
-    }
-
-    /**
-     * Gets the value of the engineAggregation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AggregationType }
-     *     
-     */
-    public AggregationType getEngineAggregation() {
-        return engineAggregation;
-    }
-
-    /**
-     * Sets the value of the engineAggregation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AggregationType }
-     *     
-     */
-    public void setEngineAggregation(AggregationType value) {
-        this.engineAggregation = value;
-    }
-
-    /**
-     * Gets the value of the unconverted property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isUnconverted() {
-        return unconverted;
-    }
-
-    /**
-     * Sets the value of the unconverted property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setUnconverted(Boolean value) {
-        this.unconverted = value;
-    }
+  /**
+   * Sets the value of the unconverted property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setUnconverted(Boolean value) {
+    this.unconverted = value;
+  }
 
 }

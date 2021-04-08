@@ -11,63 +11,84 @@ import com.sap.xsk.models.xsodata.xsOData.Type;
 import com.sap.xsk.models.xsodata.xsOData.XSOData;
 import com.sap.xsk.models.xsodata.xsOData.XsODataFactory;
 import com.sap.xsk.models.xsodata.xsOData.XsODataPackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
+ *
  * @generated
  */
-public class XsODataPackageImpl extends EPackageImpl implements XsODataPackage
-{
+public class XsODataPackageImpl extends EPackageImpl implements XsODataPackage {
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
+   * @generated
+   */
+  private static boolean isInited = false;
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass xsoDataEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass typeEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass serviceEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass entityEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass navigationEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass associationEClass = null;
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   */
+  private boolean isCreated = false;
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   */
+  private boolean isInitialized = false;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -79,41 +100,37 @@ public class XsODataPackageImpl extends EPackageImpl implements XsODataPackage
    * if one already exists.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
+   * @generated
    * @see org.eclipse.emf.ecore.EPackage.Registry
    * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#eNS_URI
    * @see #init()
-   * @generated
    */
-  private XsODataPackageImpl()
-  {
+  private XsODataPackageImpl() {
     super(eNS_URI, XsODataFactory.eINSTANCE);
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private static boolean isInited = false;
-
-  /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link XsODataPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
+   * @generated
    * @see #eNS_URI
    * @see #createPackageContents()
    * @see #initializePackageContents()
-   * @generated
    */
-  public static XsODataPackage init()
-  {
-    if (isInited) return (XsODataPackage)EPackage.Registry.INSTANCE.getEPackage(XsODataPackage.eNS_URI);
+  public static XsODataPackage init() {
+    if (isInited) {
+      return (XsODataPackage) EPackage.Registry.INSTANCE.getEPackage(XsODataPackage.eNS_URI);
+    }
 
     // Obtain or create and register package
-    XsODataPackageImpl theXsODataPackage = (XsODataPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof XsODataPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new XsODataPackageImpl());
+    XsODataPackageImpl theXsODataPackage = (XsODataPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof XsODataPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new XsODataPackageImpl());
 
     isInited = true;
 
@@ -126,7 +143,6 @@ public class XsODataPackageImpl extends EPackageImpl implements XsODataPackage
     // Mark meta-data to indicate it can't be changed
     theXsODataPackage.freeze();
 
-  
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(XsODataPackage.eNS_URI, theXsODataPackage);
     return theXsODataPackage;
@@ -135,290 +151,285 @@ public class XsODataPackageImpl extends EPackageImpl implements XsODataPackage
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getXSOData()
-  {
+  public EClass getXSOData() {
     return xsoDataEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EReference getXSOData_Elements()
-  {
-    return (EReference)xsoDataEClass.getEStructuralFeatures().get(0);
+  public EReference getXSOData_Elements() {
+    return (EReference) xsoDataEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getType()
-  {
+  public EClass getType() {
     return typeEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getService()
-  {
+  public EClass getService() {
     return serviceEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getService_Name()
-  {
-    return (EAttribute)serviceEClass.getEStructuralFeatures().get(0);
+  public EAttribute getService_Name() {
+    return (EAttribute) serviceEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EReference getService_Entities()
-  {
-    return (EReference)serviceEClass.getEStructuralFeatures().get(1);
+  public EReference getService_Entities() {
+    return (EReference) serviceEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EReference getService_Associations()
-  {
-    return (EReference)serviceEClass.getEStructuralFeatures().get(2);
+  public EReference getService_Associations() {
+    return (EReference) serviceEClass.getEStructuralFeatures().get(2);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getEntity()
-  {
+  public EClass getEntity() {
     return entityEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getEntity_Namespace()
-  {
-    return (EAttribute)entityEClass.getEStructuralFeatures().get(0);
+  public EAttribute getEntity_Namespace() {
+    return (EAttribute) entityEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getEntity_Name()
-  {
-    return (EAttribute)entityEClass.getEStructuralFeatures().get(1);
+  public EAttribute getEntity_Name() {
+    return (EAttribute) entityEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getEntity_Alias()
-  {
-    return (EAttribute)entityEClass.getEStructuralFeatures().get(2);
+  public EAttribute getEntity_Alias() {
+    return (EAttribute) entityEClass.getEStructuralFeatures().get(2);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EReference getEntity_Navigates()
-  {
-    return (EReference)entityEClass.getEStructuralFeatures().get(3);
+  public EReference getEntity_Navigates() {
+    return (EReference) entityEClass.getEStructuralFeatures().get(3);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getEntity_CreateEvents()
-  {
-    return (EAttribute)entityEClass.getEStructuralFeatures().get(4);
+  public EAttribute getEntity_CreateEvents() {
+    return (EAttribute) entityEClass.getEStructuralFeatures().get(4);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getEntity_DeleteUsing()
-  {
-    return (EAttribute)entityEClass.getEStructuralFeatures().get(5);
+  public EAttribute getEntity_DeleteUsing() {
+    return (EAttribute) entityEClass.getEStructuralFeatures().get(5);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getEntity_Update()
-  {
-    return (EAttribute)entityEClass.getEStructuralFeatures().get(6);
+  public EAttribute getEntity_Update() {
+    return (EAttribute) entityEClass.getEStructuralFeatures().get(6);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getNavigation()
-  {
+  public EClass getNavigation() {
     return navigationEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getNavigation_Association()
-  {
-    return (EAttribute)navigationEClass.getEStructuralFeatures().get(0);
+  public EAttribute getNavigation_Association() {
+    return (EAttribute) navigationEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getNavigation_Alias()
-  {
-    return (EAttribute)navigationEClass.getEStructuralFeatures().get(1);
+  public EAttribute getNavigation_Alias() {
+    return (EAttribute) navigationEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getAssociation()
-  {
+  public EClass getAssociation() {
     return associationEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getAssociation_Name()
-  {
-    return (EAttribute)associationEClass.getEStructuralFeatures().get(0);
+  public EAttribute getAssociation_Name() {
+    return (EAttribute) associationEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getAssociation_Principal()
-  {
-    return (EAttribute)associationEClass.getEStructuralFeatures().get(1);
+  public EAttribute getAssociation_Principal() {
+    return (EAttribute) associationEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getAssociation_PrincipalKey()
-  {
-    return (EAttribute)associationEClass.getEStructuralFeatures().get(2);
+  public EAttribute getAssociation_PrincipalKey() {
+    return (EAttribute) associationEClass.getEStructuralFeatures().get(2);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getAssociation_PrincipalMultiplicity()
-  {
-    return (EAttribute)associationEClass.getEStructuralFeatures().get(3);
+  public EAttribute getAssociation_PrincipalMultiplicity() {
+    return (EAttribute) associationEClass.getEStructuralFeatures().get(3);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getAssociation_Dependent()
-  {
-    return (EAttribute)associationEClass.getEStructuralFeatures().get(4);
+  public EAttribute getAssociation_Dependent() {
+    return (EAttribute) associationEClass.getEStructuralFeatures().get(4);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getAssociation_DependentProperty()
-  {
-    return (EAttribute)associationEClass.getEStructuralFeatures().get(5);
+  public EAttribute getAssociation_DependentProperty() {
+    return (EAttribute) associationEClass.getEStructuralFeatures().get(5);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getAssociation_DependentMultiplicity()
-  {
-    return (EAttribute)associationEClass.getEStructuralFeatures().get(6);
+  public EAttribute getAssociation_DependentMultiplicity() {
+    return (EAttribute) associationEClass.getEStructuralFeatures().get(6);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public XsODataFactory getXsODataFactory()
-  {
-    return (XsODataFactory)getEFactoryInstance();
+  public XsODataFactory getXsODataFactory() {
+    return (XsODataFactory) getEFactoryInstance();
   }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private boolean isCreated = false;
 
   /**
    * Creates the meta-model objects for the package.  This method is
    * guarded to have no affect on any invocation but its first.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void createPackageContents()
-  {
-    if (isCreated) return;
+  public void createPackageContents() {
+    if (isCreated) {
+      return;
+    }
     isCreated = true;
 
     // Create classes and their features
@@ -456,22 +467,17 @@ public class XsODataPackageImpl extends EPackageImpl implements XsODataPackage
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private boolean isInitialized = false;
-
-  /**
    * Complete the initialization of the package and its meta-model.  This
    * method is guarded to have no affect on any invocation but its first.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void initializePackageContents()
-  {
-    if (isInitialized) return;
+  public void initializePackageContents() {
+    if (isInitialized) {
+      return;
+    }
     isInitialized = true;
 
     // Initialize package
@@ -488,36 +494,56 @@ public class XsODataPackageImpl extends EPackageImpl implements XsODataPackage
 
     // Initialize classes and features; add operations and parameters
     initEClass(xsoDataEClass, XSOData.class, "XSOData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getXSOData_Elements(), this.getType(), null, "elements", null, 0, -1, XSOData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getXSOData_Elements(), this.getType(), null, "elements", null, 0, -1, XSOData.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(serviceEClass, Service.class, "Service", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getService_Name(), ecorePackage.getEString(), "name", null, 0, 1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getService_Entities(), this.getEntity(), null, "entities", null, 0, -1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getService_Associations(), this.getAssociation(), null, "associations", null, 0, -1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getService_Name(), ecorePackage.getEString(), "name", null, 0, 1, Service.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getService_Entities(), this.getEntity(), null, "entities", null, 0, -1, Service.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getService_Associations(), this.getAssociation(), null, "associations", null, 0, -1, Service.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(entityEClass, Entity.class, "Entity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getEntity_Namespace(), ecorePackage.getEString(), "namespace", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEntity_Name(), ecorePackage.getEString(), "name", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEntity_Alias(), ecorePackage.getEString(), "alias", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEntity_Navigates(), this.getNavigation(), null, "navigates", null, 0, -1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEntity_CreateEvents(), ecorePackage.getEString(), "createEvents", null, 0, -1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEntity_DeleteUsing(), ecorePackage.getEString(), "deleteUsing", null, 0, -1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEntity_Update(), ecorePackage.getEString(), "update", null, 0, -1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEntity_Namespace(), ecorePackage.getEString(), "namespace", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEntity_Name(), ecorePackage.getEString(), "name", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEntity_Alias(), ecorePackage.getEString(), "alias", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEntity_Navigates(), this.getNavigation(), null, "navigates", null, 0, -1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEntity_CreateEvents(), ecorePackage.getEString(), "createEvents", null, 0, -1, Entity.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEntity_DeleteUsing(), ecorePackage.getEString(), "deleteUsing", null, 0, -1, Entity.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEntity_Update(), ecorePackage.getEString(), "update", null, 0, -1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(navigationEClass, Navigation.class, "Navigation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getNavigation_Association(), ecorePackage.getEString(), "association", null, 0, 1, Navigation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getNavigation_Alias(), ecorePackage.getEString(), "alias", null, 0, 1, Navigation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getNavigation_Association(), ecorePackage.getEString(), "association", null, 0, 1, Navigation.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getNavigation_Alias(), ecorePackage.getEString(), "alias", null, 0, 1, Navigation.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(associationEClass, Association.class, "Association", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getAssociation_Name(), ecorePackage.getEString(), "name", null, 0, 1, Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAssociation_Principal(), ecorePackage.getEString(), "principal", null, 0, 1, Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAssociation_PrincipalKey(), ecorePackage.getEString(), "principalKey", null, 0, 1, Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAssociation_PrincipalMultiplicity(), ecorePackage.getEString(), "principalMultiplicity", null, 0, 1, Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAssociation_Dependent(), ecorePackage.getEString(), "dependent", null, 0, 1, Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAssociation_DependentProperty(), ecorePackage.getEString(), "dependentProperty", null, 0, 1, Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAssociation_DependentMultiplicity(), ecorePackage.getEString(), "dependentMultiplicity", null, 0, 1, Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAssociation_Name(), ecorePackage.getEString(), "name", null, 0, 1, Association.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAssociation_Principal(), ecorePackage.getEString(), "principal", null, 0, 1, Association.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAssociation_PrincipalKey(), ecorePackage.getEString(), "principalKey", null, 0, 1, Association.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAssociation_PrincipalMultiplicity(), ecorePackage.getEString(), "principalMultiplicity", null, 0, 1,
+        Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAssociation_Dependent(), ecorePackage.getEString(), "dependent", null, 0, 1, Association.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAssociation_DependentProperty(), ecorePackage.getEString(), "dependentProperty", null, 0, 1, Association.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAssociation_DependentMultiplicity(), ecorePackage.getEString(), "dependentMultiplicity", null, 0, 1,
+        Association.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

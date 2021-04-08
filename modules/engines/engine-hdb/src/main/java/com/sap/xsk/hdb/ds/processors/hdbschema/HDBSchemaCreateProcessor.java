@@ -13,19 +13,20 @@ package com.sap.xsk.hdb.ds.processors.hdbschema;
 
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import java.sql.Connection;
+import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSchemaModel> {
-    public HDBSchemaCreateProcessor() {}
 
-    private static final Logger logger = LoggerFactory.getLogger(HDBSchemaCreateProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(HDBSchemaCreateProcessor.class);
 
-    public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
-        String sql = "CREATE SCHEMA " + hdbSchema.getName();
-        executeSql(sql, connection);
-    }
+  public HDBSchemaCreateProcessor() {
+  }
+
+  public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
+    String sql = "CREATE SCHEMA " + hdbSchema.getName();
+    executeSql(sql, connection);
+  }
 }

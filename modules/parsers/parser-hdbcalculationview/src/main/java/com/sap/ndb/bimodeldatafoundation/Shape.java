@@ -28,9 +28,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Shape complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Shape"&gt;
  *   &lt;complexContent&gt;
@@ -49,8 +49,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Shape", propOrder = {
@@ -62,211 +60,179 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Shape {
 
-    protected Coordinates upperLeftCorner;
-    protected RectangleSize rectangleSize;
-    @XmlAttribute(name = "modelObjectType")
-    protected ModelObjectType modelObjectType;
-    @XmlAttribute(name = "modelObjectNameSpace")
-    protected String modelObjectNameSpace;
-    @XmlAttribute(name = "expanded")
-    protected Boolean expanded;
-    @XmlAttribute(name = "physicalModelObjectNameSpace")
-    protected String physicalModelObjectNameSpace;
-    @XmlAttribute(name = "modelObjectName", required = true)
-    protected String modelObjectName;
-    @XmlAttribute(name = "visibleInDetailPane")
-    protected Boolean visibleInDetailPane;
+  protected Coordinates upperLeftCorner;
+  protected RectangleSize rectangleSize;
+  @XmlAttribute(name = "modelObjectType")
+  protected ModelObjectType modelObjectType;
+  @XmlAttribute(name = "modelObjectNameSpace")
+  protected String modelObjectNameSpace;
+  @XmlAttribute(name = "expanded")
+  protected Boolean expanded;
+  @XmlAttribute(name = "physicalModelObjectNameSpace")
+  protected String physicalModelObjectNameSpace;
+  @XmlAttribute(name = "modelObjectName", required = true)
+  protected String modelObjectName;
+  @XmlAttribute(name = "visibleInDetailPane")
+  protected Boolean visibleInDetailPane;
 
-    /**
-     * Gets the value of the upperLeftCorner property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Coordinates }
-     *     
-     */
-    public Coordinates getUpperLeftCorner() {
-        return upperLeftCorner;
-    }
+  /**
+   * Gets the value of the upperLeftCorner property.
+   *
+   * @return possible object is
+   * {@link Coordinates }
+   */
+  public Coordinates getUpperLeftCorner() {
+    return upperLeftCorner;
+  }
 
-    /**
-     * Sets the value of the upperLeftCorner property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Coordinates }
-     *     
-     */
-    public void setUpperLeftCorner(Coordinates value) {
-        this.upperLeftCorner = value;
-    }
+  /**
+   * Sets the value of the upperLeftCorner property.
+   *
+   * @param value allowed object is
+   *              {@link Coordinates }
+   */
+  public void setUpperLeftCorner(Coordinates value) {
+    this.upperLeftCorner = value;
+  }
 
-    /**
-     * Gets the value of the rectangleSize property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RectangleSize }
-     *     
-     */
-    public RectangleSize getRectangleSize() {
-        return rectangleSize;
-    }
+  /**
+   * Gets the value of the rectangleSize property.
+   *
+   * @return possible object is
+   * {@link RectangleSize }
+   */
+  public RectangleSize getRectangleSize() {
+    return rectangleSize;
+  }
 
-    /**
-     * Sets the value of the rectangleSize property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RectangleSize }
-     *     
-     */
-    public void setRectangleSize(RectangleSize value) {
-        this.rectangleSize = value;
-    }
+  /**
+   * Sets the value of the rectangleSize property.
+   *
+   * @param value allowed object is
+   *              {@link RectangleSize }
+   */
+  public void setRectangleSize(RectangleSize value) {
+    this.rectangleSize = value;
+  }
 
-    /**
-     * Gets the value of the modelObjectType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ModelObjectType }
-     *     
-     */
-    public ModelObjectType getModelObjectType() {
-        return modelObjectType;
-    }
+  /**
+   * Gets the value of the modelObjectType property.
+   *
+   * @return possible object is
+   * {@link ModelObjectType }
+   */
+  public ModelObjectType getModelObjectType() {
+    return modelObjectType;
+  }
 
-    /**
-     * Sets the value of the modelObjectType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ModelObjectType }
-     *     
-     */
-    public void setModelObjectType(ModelObjectType value) {
-        this.modelObjectType = value;
-    }
+  /**
+   * Sets the value of the modelObjectType property.
+   *
+   * @param value allowed object is
+   *              {@link ModelObjectType }
+   */
+  public void setModelObjectType(ModelObjectType value) {
+    this.modelObjectType = value;
+  }
 
-    /**
-     * Gets the value of the modelObjectNameSpace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getModelObjectNameSpace() {
-        return modelObjectNameSpace;
-    }
+  /**
+   * Gets the value of the modelObjectNameSpace property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getModelObjectNameSpace() {
+    return modelObjectNameSpace;
+  }
 
-    /**
-     * Sets the value of the modelObjectNameSpace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setModelObjectNameSpace(String value) {
-        this.modelObjectNameSpace = value;
-    }
+  /**
+   * Sets the value of the modelObjectNameSpace property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setModelObjectNameSpace(String value) {
+    this.modelObjectNameSpace = value;
+  }
 
-    /**
-     * Gets the value of the expanded property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isExpanded() {
-        return expanded;
-    }
+  /**
+   * Gets the value of the expanded property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isExpanded() {
+    return expanded;
+  }
 
-    /**
-     * Sets the value of the expanded property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setExpanded(Boolean value) {
-        this.expanded = value;
-    }
+  /**
+   * Sets the value of the expanded property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setExpanded(Boolean value) {
+    this.expanded = value;
+  }
 
-    /**
-     * Gets the value of the physicalModelObjectNameSpace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPhysicalModelObjectNameSpace() {
-        return physicalModelObjectNameSpace;
-    }
+  /**
+   * Gets the value of the physicalModelObjectNameSpace property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPhysicalModelObjectNameSpace() {
+    return physicalModelObjectNameSpace;
+  }
 
-    /**
-     * Sets the value of the physicalModelObjectNameSpace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPhysicalModelObjectNameSpace(String value) {
-        this.physicalModelObjectNameSpace = value;
-    }
+  /**
+   * Sets the value of the physicalModelObjectNameSpace property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPhysicalModelObjectNameSpace(String value) {
+    this.physicalModelObjectNameSpace = value;
+  }
 
-    /**
-     * Gets the value of the modelObjectName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getModelObjectName() {
-        return modelObjectName;
-    }
+  /**
+   * Gets the value of the modelObjectName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getModelObjectName() {
+    return modelObjectName;
+  }
 
-    /**
-     * Sets the value of the modelObjectName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setModelObjectName(String value) {
-        this.modelObjectName = value;
-    }
+  /**
+   * Sets the value of the modelObjectName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setModelObjectName(String value) {
+    this.modelObjectName = value;
+  }
 
-    /**
-     * Gets the value of the visibleInDetailPane property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isVisibleInDetailPane() {
-        return visibleInDetailPane;
-    }
+  /**
+   * Gets the value of the visibleInDetailPane property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isVisibleInDetailPane() {
+    return visibleInDetailPane;
+  }
 
-    /**
-     * Sets the value of the visibleInDetailPane property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setVisibleInDetailPane(Boolean value) {
-        this.visibleInDetailPane = value;
-    }
+  /**
+   * Sets the value of the visibleInDetailPane property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setVisibleInDetailPane(Boolean value) {
+    this.visibleInDetailPane = value;
+  }
 
 }

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for DrillDownEnablement.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,22 +37,21 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "DrillDownEnablement")
 @XmlEnum
 public enum DrillDownEnablement {
 
-    NONE,
-    DRILL_DOWN,
-    DRILL_DOWN_WITH_HIERARCHY;
+  NONE,
+  DRILL_DOWN,
+  DRILL_DOWN_WITH_HIERARCHY;
 
-    public String value() {
-        return name();
-    }
+  public static DrillDownEnablement fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static DrillDownEnablement fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

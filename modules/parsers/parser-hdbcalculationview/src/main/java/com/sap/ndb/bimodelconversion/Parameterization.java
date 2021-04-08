@@ -19,21 +19,20 @@
 
 package com.sap.ndb.bimodelconversion;
 
+import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
 
 
 /**
- * 
- * 				Helper class to comprise several ways of parameterization (fixed value, variables, attribute/column))  
- * 			
- * 
+ * Helper class to comprise several ways of parameterization (fixed value, variables, attribute/column))
+ *
+ *
  * <p>Java class for Parameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Parameterization"&gt;
  *   &lt;complexContent&gt;
@@ -48,8 +47,6 @@ import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Parameterization", propOrder = {
@@ -58,55 +55,47 @@ import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
 })
 public class Parameterization {
 
-    protected String value;
-    protected QualifiedAttributeReference attribute;
+  protected String value;
+  protected QualifiedAttributeReference attribute;
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the attribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public QualifiedAttributeReference getAttribute() {
-        return attribute;
-    }
+  /**
+   * Gets the value of the attribute property.
+   *
+   * @return possible object is
+   * {@link QualifiedAttributeReference }
+   */
+  public QualifiedAttributeReference getAttribute() {
+    return attribute;
+  }
 
-    /**
-     * Sets the value of the attribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public void setAttribute(QualifiedAttributeReference value) {
-        this.attribute = value;
-    }
+  /**
+   * Sets the value of the attribute property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedAttributeReference }
+   */
+  public void setAttribute(QualifiedAttributeReference value) {
+    this.attribute = value;
+  }
 
 }

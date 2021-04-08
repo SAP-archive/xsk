@@ -11,108 +11,107 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbtable;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
 
 /**
  * The table model representation.
  */
 public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
-	private String tableType;
-	
-	private String description;
 
-	private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<XSKDataStructureHDBTableColumnModel>();
+  private String tableType;
 
-	private XSKDataStructureHDBTableConstraintsModel constraints = new XSKDataStructureHDBTableConstraintsModel();
+  private String description;
 
-	private Boolean publicProp;
+  private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<XSKDataStructureHDBTableColumnModel>();
 
-	private String loggingType;
+  private XSKDataStructureHDBTableConstraintsModel constraints = new XSKDataStructureHDBTableConstraintsModel();
 
-	private Boolean temporary;
+  private Boolean publicProp;
 
-	/**
-	 * Getter for the columns.
-	 *
-	 * @return the columns
-	 */
-	public List<XSKDataStructureHDBTableColumnModel> getColumns() {
-		return columns;
-	}
+  private String loggingType;
 
-	/**
-	 * Gets the constraints.
-	 *
-	 * @return the constraints
-	 */
-	public XSKDataStructureHDBTableConstraintsModel getConstraints() {
-		return constraints;
-	}
+  private Boolean temporary;
 
-	/**
-	 * @return the tableType
-	 */
-	public String getTableType() {
-		return tableType;
-	}
+  /**
+   * Getter for the columns.
+   *
+   * @return the columns
+   */
+  public List<XSKDataStructureHDBTableColumnModel> getColumns() {
+    return columns;
+  }
 
-	/**
-	 * @param tableType the tableType to set
-	 */
-	public void setTableType(String tableType) {
-		this.tableType = tableType;
-	}
+  /**
+   * @param columns the columns to set
+   */
+  public void setColumns(List<XSKDataStructureHDBTableColumnModel> columns) {
+    this.columns = columns;
+  }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+  /**
+   * Gets the constraints.
+   *
+   * @return the constraints
+   */
+  public XSKDataStructureHDBTableConstraintsModel getConstraints() {
+    return constraints;
+  }
 
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  /**
+   * @param constraints the constraints to set
+   */
+  public void setConstraints(XSKDataStructureHDBTableConstraintsModel constraints) {
+    this.constraints = constraints;
+  }
 
-	/**
-	 * @param columns the columns to set
-	 */
-	public void setColumns(List<XSKDataStructureHDBTableColumnModel> columns) {
-		this.columns = columns;
-	}
+  /**
+   * @return the tableType
+   */
+  public String getTableType() {
+    return tableType;
+  }
 
-	/**
-	 * @param constraints the constraints to set
-	 */
-	public void setConstraints(XSKDataStructureHDBTableConstraintsModel constraints) {
-		this.constraints = constraints;
-	}
+  /**
+   * @param tableType the tableType to set
+   */
+  public void setTableType(String tableType) {
+    this.tableType = tableType;
+  }
 
-	/**
-	 * @param publicProp the publicProp to set
-	 */
-	public void setPublicProp(Boolean publicProp) {
-		this.publicProp = publicProp;
-	}
+  /**
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
 
-	/**
-	 * @param loggingType the loggingType to set
-	 */
-	public void setLoggingType(String loggingType) {
-		this.loggingType = loggingType;
-	}
+  /**
+   * @param description the description to set
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	/**
-	 * @param temporary the temporary to set
-	 */
-	public void setTemporary(Boolean temporary) {
-		this.temporary = temporary;
-	}
+  /**
+   * @param publicProp the publicProp to set
+   */
+  public void setPublicProp(Boolean publicProp) {
+    this.publicProp = publicProp;
+  }
+
+  /**
+   * @param loggingType the loggingType to set
+   */
+  public void setLoggingType(String loggingType) {
+    this.loggingType = loggingType;
+  }
+
+  /**
+   * @param temporary the temporary to set
+   */
+  public void setTemporary(Boolean temporary) {
+    this.temporary = temporary;
+  }
 }

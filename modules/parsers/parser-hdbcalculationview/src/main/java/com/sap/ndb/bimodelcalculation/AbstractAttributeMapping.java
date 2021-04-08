@@ -30,9 +30,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for AbstractAttributeMapping complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AbstractAttributeMapping"&gt;
  *   &lt;complexContent&gt;
@@ -42,8 +42,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractAttributeMapping")
@@ -53,32 +51,28 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public abstract class AbstractAttributeMapping {
 
-    @XmlAttribute(name = "target", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String target;
+  @XmlAttribute(name = "target", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String target;
 
-    /**
-     * Gets the value of the target property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTarget() {
-        return target;
-    }
+  /**
+   * Gets the value of the target property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTarget() {
+    return target;
+  }
 
-    /**
-     * Sets the value of the target property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTarget(String value) {
-        this.target = value;
-    }
+  /**
+   * Sets the value of the target property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTarget(String value) {
+    this.target = value;
+  }
 
 }

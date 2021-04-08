@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for NodeStyle.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -40,73 +40,54 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "NodeStyle")
 @XmlEnum
 public enum NodeStyle {
 
 
-    /**
-     * 
-     * 						(default) the unique node ID is composed by level name and node name, for example "[Level 2].[B2]".
-     * 					
-     * 
-     */
-    LEVEL_NAME,
+  /**
+   * (default) the unique node ID is composed by level name and node name, for example "[Level 2].[B2]".
+   */
+  LEVEL_NAME,
 
-    /**
-     * 
-     * 						The result set value / node name is taken directly without any further decoration, for example "B2".
-     * 					
-     * 
-     */
-    NAME_ONLY,
+  /**
+   * The result set value / node name is taken directly without any further decoration, for example "B2".
+   */
+  NAME_ONLY,
 
-    /**
-     * 
-     * 						the unique node ID is composed by the result node name and the names of all ancestors apart from the (single physical) 
-     * 						root node. For example "[A1].[B2]" 	Please be aware that the value of this parameter affects which hierarchy source data is
-     * 						accepted as valid. 	For example, a leveled time hierarchy year / month / day results in unique and therefore valid node IDs 
-     * 						when choosing 	the "namePath" node style (e.g., "[2012].[Feb].[08]" and "[2011].[Feb].[08]"), whereas the nodeStyles "nameOnly" or 	
-     * 						"levelName" lead to a "duplicate successor node ID" source data error (both times node IDs "08" or "[day].[08]").  
-     * 						For the MDX handling the styles namePath and levelName are overwritten in certain cases by the engine during processing. 
-     * 					
-     * 
-     */
-    NAME_PATH,
+  /**
+   * the unique node ID is composed by the result node name and the names of all ancestors apart from the (single physical)
+   * root node. For example "[A1].[B2]" 	Please be aware that the value of this parameter affects which hierarchy source data is
+   * accepted as valid. 	For example, a leveled time hierarchy year / month / day results in unique and therefore valid node IDs
+   * when choosing 	the "namePath" node style (e.g., "[2012].[Feb].[08]" and "[2011].[Feb].[08]"), whereas the nodeStyles "nameOnly" or
+   * "levelName" lead to a "duplicate successor node ID" source data error (both times node IDs "08" or "[day].[08]").
+   * For the MDX handling the styles namePath and levelName are overwritten in certain cases by the engine during processing.
+   */
+  NAME_PATH,
 
-    /**
-     * 
-     * 						Same behavior as "LEVEL_NAME", but never overwritten by the engine. 
-     * 					
-     * 
-     */
-    LEVEL_NAME_ENFORCED,
+  /**
+   * Same behavior as "LEVEL_NAME", but never overwritten by the engine.
+   */
+  LEVEL_NAME_ENFORCED,
 
-    /**
-     * 
-     * 						Same behavior as "NAME_PATH", but never overwritten by the engine. The overwirte behavior for 
-     * 						LEVEL_NAME, NAME_PATH remains, but for new models we don't offer these values anymore.
-     * 					
-     * 
-     */
-    NAME_PATH_ENFORCED,
+  /**
+   * Same behavior as "NAME_PATH", but never overwritten by the engine. The overwirte behavior for
+   * LEVEL_NAME, NAME_PATH remains, but for new models we don't offer these values anymore.
+   */
+  NAME_PATH_ENFORCED,
 
-    /**
-     * 
-     * 						Same behavior as "NAME_ONLY", but never overwritten by the engine (only introduced with HANA2 SP02).
-     * 					
-     * 
-     */
-    NAME_ONLY_ENFORCED;
+  /**
+   * Same behavior as "NAME_ONLY", but never overwritten by the engine (only introduced with HANA2 SP02).
+   */
+  NAME_ONLY_ENFORCED;
 
-    public String value() {
-        return name();
-    }
+  public static NodeStyle fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static NodeStyle fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

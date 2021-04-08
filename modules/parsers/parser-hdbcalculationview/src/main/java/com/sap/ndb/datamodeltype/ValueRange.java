@@ -19,22 +19,21 @@
 
 package com.sap.ndb.datamodeltype;
 
+import com.sap.ndb.basemodelbase.EndUserTexts;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.EndUserTexts;
 
 
 /**
- * 
- * 				Models one value of a CDS enumeration
- * 			
- * 
+ * Models one value of a CDS enumeration
+ *
+ *
  * <p>Java class for ValueRange complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ValueRange"&gt;
  *   &lt;complexContent&gt;
@@ -48,8 +47,6 @@ import com.sap.ndb.basemodelbase.EndUserTexts;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ValueRange", propOrder = {
@@ -59,81 +56,69 @@ import com.sap.ndb.basemodelbase.EndUserTexts;
 })
 public class ValueRange {
 
-    @XmlElement(required = true)
-    protected String value;
-    protected String highValue;
-    protected EndUserTexts endUserTexts;
+  @XmlElement(required = true)
+  protected String value;
+  protected String highValue;
+  protected EndUserTexts endUserTexts;
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the highValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHighValue() {
-        return highValue;
-    }
+  /**
+   * Gets the value of the highValue property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHighValue() {
+    return highValue;
+  }
 
-    /**
-     * Sets the value of the highValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHighValue(String value) {
-        this.highValue = value;
-    }
+  /**
+   * Sets the value of the highValue property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHighValue(String value) {
+    this.highValue = value;
+  }
 
-    /**
-     * Gets the value of the endUserTexts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public EndUserTexts getEndUserTexts() {
-        return endUserTexts;
-    }
+  /**
+   * Gets the value of the endUserTexts property.
+   *
+   * @return possible object is
+   * {@link EndUserTexts }
+   */
+  public EndUserTexts getEndUserTexts() {
+    return endUserTexts;
+  }
 
-    /**
-     * Sets the value of the endUserTexts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public void setEndUserTexts(EndUserTexts value) {
-        this.endUserTexts = value;
-    }
+  /**
+   * Sets the value of the endUserTexts property.
+   *
+   * @param value allowed object is
+   *              {@link EndUserTexts }
+   */
+  public void setEndUserTexts(EndUserTexts value) {
+    this.endUserTexts = value;
+  }
 
 }

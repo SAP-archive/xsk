@@ -28,9 +28,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for SortAttributes complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SortAttributes"&gt;
  *   &lt;complexContent&gt;
@@ -42,8 +42,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SortAttributes", propOrder = {
@@ -51,35 +49,33 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class SortAttributes {
 
-    protected List<SortAttribute> sortAttribute;
+  protected List<SortAttribute> sortAttribute;
 
-    /**
-     * Gets the value of the sortAttribute property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the sortAttribute property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getSortAttribute().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link SortAttribute }
-     * 
-     * 
-     */
-    public List<SortAttribute> getSortAttribute() {
-        if (sortAttribute == null) {
-            sortAttribute = new ArrayList<SortAttribute>();
-        }
-        return this.sortAttribute;
+  /**
+   * Gets the value of the sortAttribute property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the sortAttribute property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getSortAttribute().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link SortAttribute }
+   */
+  public List<SortAttribute> getSortAttribute() {
+    if (sortAttribute == null) {
+      sortAttribute = new ArrayList<SortAttribute>();
     }
+    return this.sortAttribute;
+  }
 
 }

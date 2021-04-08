@@ -19,6 +19,11 @@
 
 package com.sap.ndb.bimodelconversion;
 
+import com.sap.ndb.basemodelbase.CurrencyConversionTables;
+import com.sap.ndb.basemodelbase.ErrorHandling;
+import com.sap.ndb.basemodelbase.SchemaMappingBasedObject;
+import com.sap.ndb.basemodelbase.UnitConversionTables;
+import com.sap.ndb.bimodeldatafoundation.SimpleDataType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,22 +32,16 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.CurrencyConversionTables;
-import com.sap.ndb.basemodelbase.ErrorHandling;
-import com.sap.ndb.basemodelbase.SchemaMappingBasedObject;
-import com.sap.ndb.basemodelbase.UnitConversionTables;
-import com.sap.ndb.bimodeldatafoundation.SimpleDataType;
 
 
 /**
- * 
- * 				General base for conversions
- * 			
- * 
+ * General base for conversions
+ *
+ *
  * <p>Java class for Conversion complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Conversion"&gt;
  *   &lt;complexContent&gt;
@@ -63,8 +62,6 @@ import com.sap.ndb.bimodeldatafoundation.SimpleDataType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Conversion", propOrder = {
@@ -80,210 +77,178 @@ import com.sap.ndb.bimodeldatafoundation.SimpleDataType;
 })
 public abstract class Conversion {
 
-    protected Parameterization client;
-    protected SchemaMappingBasedObject schema;
-    protected CurrencyConversionTables currencyConversionTables;
-    protected UnitConversionTables unitConversionTables;
-    @XmlElement(required = true)
-    protected SimpleDataType outputDataType;
-    @XmlAttribute(name = "errorHandling")
-    protected ErrorHandling errorHandling;
-    @XmlAttribute(name = "generateOutputUnitCurrencyAttribute")
-    protected Boolean generateOutputUnitCurrencyAttribute;
-    @XmlAttribute(name = "outputUnitCurrencyAttributeName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String outputUnitCurrencyAttributeName;
+  protected Parameterization client;
+  protected SchemaMappingBasedObject schema;
+  protected CurrencyConversionTables currencyConversionTables;
+  protected UnitConversionTables unitConversionTables;
+  @XmlElement(required = true)
+  protected SimpleDataType outputDataType;
+  @XmlAttribute(name = "errorHandling")
+  protected ErrorHandling errorHandling;
+  @XmlAttribute(name = "generateOutputUnitCurrencyAttribute")
+  protected Boolean generateOutputUnitCurrencyAttribute;
+  @XmlAttribute(name = "outputUnitCurrencyAttributeName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String outputUnitCurrencyAttributeName;
 
-    /**
-     * Gets the value of the client property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getClient() {
-        return client;
-    }
+  /**
+   * Gets the value of the client property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getClient() {
+    return client;
+  }
 
-    /**
-     * Sets the value of the client property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setClient(Parameterization value) {
-        this.client = value;
-    }
+  /**
+   * Sets the value of the client property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setClient(Parameterization value) {
+    this.client = value;
+  }
 
-    /**
-     * Gets the value of the schema property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SchemaMappingBasedObject }
-     *     
-     */
-    public SchemaMappingBasedObject getSchema() {
-        return schema;
-    }
+  /**
+   * Gets the value of the schema property.
+   *
+   * @return possible object is
+   * {@link SchemaMappingBasedObject }
+   */
+  public SchemaMappingBasedObject getSchema() {
+    return schema;
+  }
 
-    /**
-     * Sets the value of the schema property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SchemaMappingBasedObject }
-     *     
-     */
-    public void setSchema(SchemaMappingBasedObject value) {
-        this.schema = value;
-    }
+  /**
+   * Sets the value of the schema property.
+   *
+   * @param value allowed object is
+   *              {@link SchemaMappingBasedObject }
+   */
+  public void setSchema(SchemaMappingBasedObject value) {
+    this.schema = value;
+  }
 
-    /**
-     * Gets the value of the currencyConversionTables property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CurrencyConversionTables }
-     *     
-     */
-    public CurrencyConversionTables getCurrencyConversionTables() {
-        return currencyConversionTables;
-    }
+  /**
+   * Gets the value of the currencyConversionTables property.
+   *
+   * @return possible object is
+   * {@link CurrencyConversionTables }
+   */
+  public CurrencyConversionTables getCurrencyConversionTables() {
+    return currencyConversionTables;
+  }
 
-    /**
-     * Sets the value of the currencyConversionTables property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CurrencyConversionTables }
-     *     
-     */
-    public void setCurrencyConversionTables(CurrencyConversionTables value) {
-        this.currencyConversionTables = value;
-    }
+  /**
+   * Sets the value of the currencyConversionTables property.
+   *
+   * @param value allowed object is
+   *              {@link CurrencyConversionTables }
+   */
+  public void setCurrencyConversionTables(CurrencyConversionTables value) {
+    this.currencyConversionTables = value;
+  }
 
-    /**
-     * Gets the value of the unitConversionTables property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnitConversionTables }
-     *     
-     */
-    public UnitConversionTables getUnitConversionTables() {
-        return unitConversionTables;
-    }
+  /**
+   * Gets the value of the unitConversionTables property.
+   *
+   * @return possible object is
+   * {@link UnitConversionTables }
+   */
+  public UnitConversionTables getUnitConversionTables() {
+    return unitConversionTables;
+  }
 
-    /**
-     * Sets the value of the unitConversionTables property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnitConversionTables }
-     *     
-     */
-    public void setUnitConversionTables(UnitConversionTables value) {
-        this.unitConversionTables = value;
-    }
+  /**
+   * Sets the value of the unitConversionTables property.
+   *
+   * @param value allowed object is
+   *              {@link UnitConversionTables }
+   */
+  public void setUnitConversionTables(UnitConversionTables value) {
+    this.unitConversionTables = value;
+  }
 
-    /**
-     * Gets the value of the outputDataType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SimpleDataType }
-     *     
-     */
-    public SimpleDataType getOutputDataType() {
-        return outputDataType;
-    }
+  /**
+   * Gets the value of the outputDataType property.
+   *
+   * @return possible object is
+   * {@link SimpleDataType }
+   */
+  public SimpleDataType getOutputDataType() {
+    return outputDataType;
+  }
 
-    /**
-     * Sets the value of the outputDataType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SimpleDataType }
-     *     
-     */
-    public void setOutputDataType(SimpleDataType value) {
-        this.outputDataType = value;
-    }
+  /**
+   * Sets the value of the outputDataType property.
+   *
+   * @param value allowed object is
+   *              {@link SimpleDataType }
+   */
+  public void setOutputDataType(SimpleDataType value) {
+    this.outputDataType = value;
+  }
 
-    /**
-     * Gets the value of the errorHandling property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ErrorHandling }
-     *     
-     */
-    public ErrorHandling getErrorHandling() {
-        return errorHandling;
-    }
+  /**
+   * Gets the value of the errorHandling property.
+   *
+   * @return possible object is
+   * {@link ErrorHandling }
+   */
+  public ErrorHandling getErrorHandling() {
+    return errorHandling;
+  }
 
-    /**
-     * Sets the value of the errorHandling property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ErrorHandling }
-     *     
-     */
-    public void setErrorHandling(ErrorHandling value) {
-        this.errorHandling = value;
-    }
+  /**
+   * Sets the value of the errorHandling property.
+   *
+   * @param value allowed object is
+   *              {@link ErrorHandling }
+   */
+  public void setErrorHandling(ErrorHandling value) {
+    this.errorHandling = value;
+  }
 
-    /**
-     * Gets the value of the generateOutputUnitCurrencyAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isGenerateOutputUnitCurrencyAttribute() {
-        return generateOutputUnitCurrencyAttribute;
-    }
+  /**
+   * Gets the value of the generateOutputUnitCurrencyAttribute property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isGenerateOutputUnitCurrencyAttribute() {
+    return generateOutputUnitCurrencyAttribute;
+  }
 
-    /**
-     * Sets the value of the generateOutputUnitCurrencyAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setGenerateOutputUnitCurrencyAttribute(Boolean value) {
-        this.generateOutputUnitCurrencyAttribute = value;
-    }
+  /**
+   * Sets the value of the generateOutputUnitCurrencyAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setGenerateOutputUnitCurrencyAttribute(Boolean value) {
+    this.generateOutputUnitCurrencyAttribute = value;
+  }
 
-    /**
-     * Gets the value of the outputUnitCurrencyAttributeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOutputUnitCurrencyAttributeName() {
-        return outputUnitCurrencyAttributeName;
-    }
+  /**
+   * Gets the value of the outputUnitCurrencyAttributeName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getOutputUnitCurrencyAttributeName() {
+    return outputUnitCurrencyAttributeName;
+  }
 
-    /**
-     * Sets the value of the outputUnitCurrencyAttributeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOutputUnitCurrencyAttributeName(String value) {
-        this.outputUnitCurrencyAttributeName = value;
-    }
+  /**
+   * Sets the value of the outputUnitCurrencyAttributeName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setOutputUnitCurrencyAttributeName(String value) {
+    this.outputUnitCurrencyAttributeName = value;
+  }
 
 }

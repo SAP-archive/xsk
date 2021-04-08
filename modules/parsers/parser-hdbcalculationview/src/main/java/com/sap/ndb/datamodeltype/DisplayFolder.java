@@ -19,25 +19,24 @@
 
 package com.sap.ndb.datamodeltype;
 
+import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
 
 
 /**
- * 
- * 				Folder for grouping elements of the structure it is contained in.
- * 				The assignment of elements to folder is via the string typed attribute Element.displayFolder.
- * 				We need an extra model element to have (translateable text for the folders)
- * 				Nested folders are indicated by a backslash (\) e.g. root\secondLevelFolder\thirdLevelFolder. 
- * 				See http://msdn.microsoft.com/en-us/library/ms126250.aspx measure_display_folder.
- * 			
- * 
+ * Folder for grouping elements of the structure it is contained in.
+ * The assignment of elements to folder is via the string typed attribute Element.displayFolder.
+ * We need an extra model element to have (translateable text for the folders)
+ * Nested folders are indicated by a backslash (\) e.g. root\secondLevelFolder\thirdLevelFolder.
+ * See http://msdn.microsoft.com/en-us/library/ms126250.aspx measure_display_folder.
+ *
+ *
  * <p>Java class for DisplayFolder complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DisplayFolder"&gt;
  *   &lt;complexContent&gt;
@@ -46,14 +45,11 @@ import com.sap.ndb.repositorymodelresource.NamedObjectWithEndUserTexts;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DisplayFolder")
 public class DisplayFolder
-    extends NamedObjectWithEndUserTexts
-{
+    extends NamedObjectWithEndUserTexts {
 
 
 }

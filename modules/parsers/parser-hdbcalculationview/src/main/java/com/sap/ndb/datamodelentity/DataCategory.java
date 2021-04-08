@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for DataCategory.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -40,25 +40,24 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "DataCategory")
 @XmlEnum
 public enum DataCategory {
 
-    DEFAULT,
-    DIMENSION,
-    CUBE,
-    FACT,
-    TEXT,
-    HIERARCHY;
+  DEFAULT,
+  DIMENSION,
+  CUBE,
+  FACT,
+  TEXT,
+  HIERARCHY;
 
-    public String value() {
-        return name();
-    }
+  public static DataCategory fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static DataCategory fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

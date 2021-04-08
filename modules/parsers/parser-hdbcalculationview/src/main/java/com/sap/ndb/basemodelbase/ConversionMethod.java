@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ConversionMethod.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,41 +37,37 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ConversionMethod")
 @XmlEnum
 public enum ConversionMethod {
 
 
-    /**
-     * 
-     * 						Join type referential integrity means for each row in the left table there is a corresponding row in the right 
-     * 						table and vice versa.   If this join type is selected the engine can better optimize the queries, because the 
-     * 						join can be completely ignored if no fields are requested from the joined table.
-     * 					
-     * 
-     */
-    ERP("ERP"),
-    @XmlEnumValue("Banking")
-    BANKING("Banking");
-    private final String value;
+  /**
+   * Join type referential integrity means for each row in the left table there is a corresponding row in the right
+   * table and vice versa.   If this join type is selected the engine can better optimize the queries, because the
+   * join can be completely ignored if no fields are requested from the joined table.
+   */
+  ERP("ERP"),
+  @XmlEnumValue("Banking")
+  BANKING("Banking");
+  private final String value;
 
-    ConversionMethod(String v) {
-        value = v;
-    }
+  ConversionMethod(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static ConversionMethod fromValue(String v) {
+    for (ConversionMethod c : ConversionMethod.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static ConversionMethod fromValue(String v) {
-        for (ConversionMethod c: ConversionMethod.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

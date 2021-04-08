@@ -19,20 +19,20 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.basemodelbase.Cardinality;
+import com.sap.ndb.basemodelbase.JoinType;
+import com.sap.ndb.basemodelbase.ReferentialDirection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.Cardinality;
-import com.sap.ndb.basemodelbase.JoinType;
-import com.sap.ndb.basemodelbase.ReferentialDirection;
 
 
 /**
  * <p>Java class for JoinProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="JoinProperties"&gt;
  *   &lt;complexContent&gt;
@@ -46,142 +46,120 @@ import com.sap.ndb.basemodelbase.ReferentialDirection;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "JoinProperties")
 public class JoinProperties {
 
-    @XmlAttribute(name = "joinType", required = true)
-    protected JoinType joinType;
-    @XmlAttribute(name = "cardinality")
-    protected Cardinality cardinality;
-    @XmlAttribute(name = "joinOperator")
-    protected JoinOperator joinOperator;
-    @XmlAttribute(name = "referentialDirection")
-    protected ReferentialDirection referentialDirection;
-    @XmlAttribute(name = "optimizeJoinColumns")
-    protected Boolean optimizeJoinColumns;
+  @XmlAttribute(name = "joinType", required = true)
+  protected JoinType joinType;
+  @XmlAttribute(name = "cardinality")
+  protected Cardinality cardinality;
+  @XmlAttribute(name = "joinOperator")
+  protected JoinOperator joinOperator;
+  @XmlAttribute(name = "referentialDirection")
+  protected ReferentialDirection referentialDirection;
+  @XmlAttribute(name = "optimizeJoinColumns")
+  protected Boolean optimizeJoinColumns;
 
-    /**
-     * Gets the value of the joinType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JoinType }
-     *     
-     */
-    public JoinType getJoinType() {
-        return joinType;
-    }
+  /**
+   * Gets the value of the joinType property.
+   *
+   * @return possible object is
+   * {@link JoinType }
+   */
+  public JoinType getJoinType() {
+    return joinType;
+  }
 
-    /**
-     * Sets the value of the joinType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JoinType }
-     *     
-     */
-    public void setJoinType(JoinType value) {
-        this.joinType = value;
-    }
+  /**
+   * Sets the value of the joinType property.
+   *
+   * @param value allowed object is
+   *              {@link JoinType }
+   */
+  public void setJoinType(JoinType value) {
+    this.joinType = value;
+  }
 
-    /**
-     * Gets the value of the cardinality property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Cardinality }
-     *     
-     */
-    public Cardinality getCardinality() {
-        return cardinality;
-    }
+  /**
+   * Gets the value of the cardinality property.
+   *
+   * @return possible object is
+   * {@link Cardinality }
+   */
+  public Cardinality getCardinality() {
+    return cardinality;
+  }
 
-    /**
-     * Sets the value of the cardinality property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Cardinality }
-     *     
-     */
-    public void setCardinality(Cardinality value) {
-        this.cardinality = value;
-    }
+  /**
+   * Sets the value of the cardinality property.
+   *
+   * @param value allowed object is
+   *              {@link Cardinality }
+   */
+  public void setCardinality(Cardinality value) {
+    this.cardinality = value;
+  }
 
-    /**
-     * Gets the value of the joinOperator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JoinOperator }
-     *     
-     */
-    public JoinOperator getJoinOperator() {
-        return joinOperator;
-    }
+  /**
+   * Gets the value of the joinOperator property.
+   *
+   * @return possible object is
+   * {@link JoinOperator }
+   */
+  public JoinOperator getJoinOperator() {
+    return joinOperator;
+  }
 
-    /**
-     * Sets the value of the joinOperator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JoinOperator }
-     *     
-     */
-    public void setJoinOperator(JoinOperator value) {
-        this.joinOperator = value;
-    }
+  /**
+   * Sets the value of the joinOperator property.
+   *
+   * @param value allowed object is
+   *              {@link JoinOperator }
+   */
+  public void setJoinOperator(JoinOperator value) {
+    this.joinOperator = value;
+  }
 
-    /**
-     * Gets the value of the referentialDirection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ReferentialDirection }
-     *     
-     */
-    public ReferentialDirection getReferentialDirection() {
-        return referentialDirection;
-    }
+  /**
+   * Gets the value of the referentialDirection property.
+   *
+   * @return possible object is
+   * {@link ReferentialDirection }
+   */
+  public ReferentialDirection getReferentialDirection() {
+    return referentialDirection;
+  }
 
-    /**
-     * Sets the value of the referentialDirection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ReferentialDirection }
-     *     
-     */
-    public void setReferentialDirection(ReferentialDirection value) {
-        this.referentialDirection = value;
-    }
+  /**
+   * Sets the value of the referentialDirection property.
+   *
+   * @param value allowed object is
+   *              {@link ReferentialDirection }
+   */
+  public void setReferentialDirection(ReferentialDirection value) {
+    this.referentialDirection = value;
+  }
 
-    /**
-     * Gets the value of the optimizeJoinColumns property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isOptimizeJoinColumns() {
-        return optimizeJoinColumns;
-    }
+  /**
+   * Gets the value of the optimizeJoinColumns property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isOptimizeJoinColumns() {
+    return optimizeJoinColumns;
+  }
 
-    /**
-     * Sets the value of the optimizeJoinColumns property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setOptimizeJoinColumns(Boolean value) {
-        this.optimizeJoinColumns = value;
-    }
+  /**
+   * Sets the value of the optimizeJoinColumns property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setOptimizeJoinColumns(Boolean value) {
+    this.optimizeJoinColumns = value;
+  }
 
 }

@@ -32,9 +32,9 @@ import javax.xml.bind.annotation.XmlValue;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
@@ -111,8 +111,6 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -121,812 +119,724 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlRootElement(name = "calculationViews")
 public class CalculationViews {
 
-    protected List<CalculationViews.CalculationView> calculationView;
+  protected List<CalculationViews.CalculationView> calculationView;
+
+  /**
+   * Gets the value of the calculationView property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the calculationView property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getCalculationView().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link CalculationViews.CalculationView }
+   */
+  public List<CalculationViews.CalculationView> getCalculationView() {
+    if (calculationView == null) {
+      calculationView = new ArrayList<CalculationViews.CalculationView>();
+    }
+    return this.calculationView;
+  }
+
+
+  /**
+   * <p>Java class for anonymous complex type.
+   *
+   * <p>The following schema fragment specifies the expected content contained within this class.
+   *
+   * <pre>
+   * &lt;complexType&gt;
+   *   &lt;complexContent&gt;
+   *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+   *       &lt;sequence&gt;
+   *         &lt;element name="descriptions" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+   *         &lt;element name="viewAttributes"&gt;
+   *           &lt;complexType&gt;
+   *             &lt;complexContent&gt;
+   *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+   *                 &lt;sequence&gt;
+   *                   &lt;element name="viewAttribute" maxOccurs="unbounded" minOccurs="0"&gt;
+   *                     &lt;complexType&gt;
+   *                       &lt;simpleContent&gt;
+   *                         &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+   *                           &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *                         &lt;/extension&gt;
+   *                       &lt;/simpleContent&gt;
+   *                     &lt;/complexType&gt;
+   *                   &lt;/element&gt;
+   *                 &lt;/sequence&gt;
+   *               &lt;/restriction&gt;
+   *             &lt;/complexContent&gt;
+   *           &lt;/complexType&gt;
+   *         &lt;/element&gt;
+   *         &lt;element name="calculatedViewAttributes" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+   *         &lt;element name="input" maxOccurs="unbounded" minOccurs="0"&gt;
+   *           &lt;complexType&gt;
+   *             &lt;complexContent&gt;
+   *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+   *                 &lt;sequence&gt;
+   *                   &lt;element name="mapping" maxOccurs="unbounded" minOccurs="0"&gt;
+   *                     &lt;complexType&gt;
+   *                       &lt;simpleContent&gt;
+   *                         &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+   *                           &lt;attribute name="target" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *                           &lt;attribute name="source" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *                         &lt;/extension&gt;
+   *                       &lt;/simpleContent&gt;
+   *                     &lt;/complexType&gt;
+   *                   &lt;/element&gt;
+   *                 &lt;/sequence&gt;
+   *                 &lt;attribute name="node" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *               &lt;/restriction&gt;
+   *             &lt;/complexContent&gt;
+   *           &lt;/complexType&gt;
+   *         &lt;/element&gt;
+   *         &lt;element name="filter" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+   *         &lt;element name="joinAttribute" minOccurs="0"&gt;
+   *           &lt;complexType&gt;
+   *             &lt;simpleContent&gt;
+   *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+   *                 &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *               &lt;/extension&gt;
+   *             &lt;/simpleContent&gt;
+   *           &lt;/complexType&gt;
+   *         &lt;/element&gt;
+   *       &lt;/sequence&gt;
+   *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *       &lt;attribute name="filterExpressionLanguage" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *       &lt;attribute name="joinType" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *       &lt;attribute name="languageColumn" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+   *     &lt;/restriction&gt;
+   *   &lt;/complexContent&gt;
+   * &lt;/complexType&gt;
+   * </pre>
+   */
+  @XmlAccessorType(XmlAccessType.FIELD)
+  @XmlType(name = "", propOrder = {
+      "descriptions",
+      "viewAttributes",
+      "calculatedViewAttributes",
+      "input",
+      "filter",
+      "joinAttribute"
+  })
+  public static class CalculationView {
+
+    @XmlElement(required = true)
+    protected String descriptions;
+    @XmlElement(required = true)
+    protected CalculationViews.CalculationView.ViewAttributes viewAttributes;
+    @XmlElement(required = true)
+    protected String calculatedViewAttributes;
+    protected List<CalculationViews.CalculationView.Input> input;
+    protected String filter;
+    protected CalculationViews.CalculationView.JoinAttribute joinAttribute;
+    @XmlAttribute(name = "id")
+    protected String id;
+    @XmlAttribute(name = "filterExpressionLanguage")
+    protected String filterExpressionLanguage;
+    @XmlAttribute(name = "joinType")
+    protected String joinType;
+    @XmlAttribute(name = "languageColumn")
+    protected String languageColumn;
 
     /**
-     * Gets the value of the calculationView property.
-     * 
+     * Gets the value of the descriptions property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getDescriptions() {
+      return descriptions;
+    }
+
+    /**
+     * Sets the value of the descriptions property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setDescriptions(String value) {
+      this.descriptions = value;
+    }
+
+    /**
+     * Gets the value of the viewAttributes property.
+     *
+     * @return possible object is
+     * {@link CalculationViews.CalculationView.ViewAttributes }
+     */
+    public CalculationViews.CalculationView.ViewAttributes getViewAttributes() {
+      return viewAttributes;
+    }
+
+    /**
+     * Sets the value of the viewAttributes property.
+     *
+     * @param value allowed object is
+     *              {@link CalculationViews.CalculationView.ViewAttributes }
+     */
+    public void setViewAttributes(CalculationViews.CalculationView.ViewAttributes value) {
+      this.viewAttributes = value;
+    }
+
+    /**
+     * Gets the value of the calculatedViewAttributes property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getCalculatedViewAttributes() {
+      return calculatedViewAttributes;
+    }
+
+    /**
+     * Sets the value of the calculatedViewAttributes property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setCalculatedViewAttributes(String value) {
+      this.calculatedViewAttributes = value;
+    }
+
+    /**
+     * Gets the value of the input property.
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the calculationView property.
-     * 
+     * This is why there is not a <CODE>set</CODE> method for the input property.
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getCalculationView().add(newItem);
+     *    getInput().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CalculationViews.CalculationView }
-     * 
-     * 
+     * {@link CalculationViews.CalculationView.Input }
      */
-    public List<CalculationViews.CalculationView> getCalculationView() {
-        if (calculationView == null) {
-            calculationView = new ArrayList<CalculationViews.CalculationView>();
-        }
-        return this.calculationView;
+    public List<CalculationViews.CalculationView.Input> getInput() {
+      if (input == null) {
+        input = new ArrayList<CalculationViews.CalculationView.Input>();
+      }
+      return this.input;
+    }
+
+    /**
+     * Gets the value of the filter property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getFilter() {
+      return filter;
+    }
+
+    /**
+     * Sets the value of the filter property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setFilter(String value) {
+      this.filter = value;
+    }
+
+    /**
+     * Gets the value of the joinAttribute property.
+     *
+     * @return possible object is
+     * {@link CalculationViews.CalculationView.JoinAttribute }
+     */
+    public CalculationViews.CalculationView.JoinAttribute getJoinAttribute() {
+      return joinAttribute;
+    }
+
+    /**
+     * Sets the value of the joinAttribute property.
+     *
+     * @param value allowed object is
+     *              {@link CalculationViews.CalculationView.JoinAttribute }
+     */
+    public void setJoinAttribute(CalculationViews.CalculationView.JoinAttribute value) {
+      this.joinAttribute = value;
+    }
+
+    /**
+     * Gets the value of the id property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getId() {
+      return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setId(String value) {
+      this.id = value;
+    }
+
+    /**
+     * Gets the value of the filterExpressionLanguage property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getFilterExpressionLanguage() {
+      return filterExpressionLanguage;
+    }
+
+    /**
+     * Sets the value of the filterExpressionLanguage property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setFilterExpressionLanguage(String value) {
+      this.filterExpressionLanguage = value;
+    }
+
+    /**
+     * Gets the value of the joinType property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getJoinType() {
+      return joinType;
+    }
+
+    /**
+     * Sets the value of the joinType property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setJoinType(String value) {
+      this.joinType = value;
+    }
+
+    /**
+     * Gets the value of the languageColumn property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getLanguageColumn() {
+      return languageColumn;
+    }
+
+    /**
+     * Sets the value of the languageColumn property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setLanguageColumn(String value) {
+      this.languageColumn = value;
     }
 
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
      *       &lt;sequence&gt;
-     *         &lt;element name="descriptions" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
-     *         &lt;element name="viewAttributes"&gt;
-     *           &lt;complexType&gt;
-     *             &lt;complexContent&gt;
-     *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
-     *                 &lt;sequence&gt;
-     *                   &lt;element name="viewAttribute" maxOccurs="unbounded" minOccurs="0"&gt;
-     *                     &lt;complexType&gt;
-     *                       &lt;simpleContent&gt;
-     *                         &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-     *                           &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *                         &lt;/extension&gt;
-     *                       &lt;/simpleContent&gt;
-     *                     &lt;/complexType&gt;
-     *                   &lt;/element&gt;
-     *                 &lt;/sequence&gt;
-     *               &lt;/restriction&gt;
-     *             &lt;/complexContent&gt;
-     *           &lt;/complexType&gt;
-     *         &lt;/element&gt;
-     *         &lt;element name="calculatedViewAttributes" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
-     *         &lt;element name="input" maxOccurs="unbounded" minOccurs="0"&gt;
-     *           &lt;complexType&gt;
-     *             &lt;complexContent&gt;
-     *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
-     *                 &lt;sequence&gt;
-     *                   &lt;element name="mapping" maxOccurs="unbounded" minOccurs="0"&gt;
-     *                     &lt;complexType&gt;
-     *                       &lt;simpleContent&gt;
-     *                         &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-     *                           &lt;attribute name="target" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *                           &lt;attribute name="source" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *                         &lt;/extension&gt;
-     *                       &lt;/simpleContent&gt;
-     *                     &lt;/complexType&gt;
-     *                   &lt;/element&gt;
-     *                 &lt;/sequence&gt;
-     *                 &lt;attribute name="node" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *               &lt;/restriction&gt;
-     *             &lt;/complexContent&gt;
-     *           &lt;/complexType&gt;
-     *         &lt;/element&gt;
-     *         &lt;element name="filter" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
-     *         &lt;element name="joinAttribute" minOccurs="0"&gt;
+     *         &lt;element name="mapping" maxOccurs="unbounded" minOccurs="0"&gt;
      *           &lt;complexType&gt;
      *             &lt;simpleContent&gt;
      *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-     *                 &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+     *                 &lt;attribute name="target" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+     *                 &lt;attribute name="source" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
      *               &lt;/extension&gt;
      *             &lt;/simpleContent&gt;
      *           &lt;/complexType&gt;
      *         &lt;/element&gt;
      *       &lt;/sequence&gt;
-     *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *       &lt;attribute name="filterExpressionLanguage" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *       &lt;attribute name="joinType" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-     *       &lt;attribute name="languageColumn" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+     *       &lt;attribute name="node" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
      *     &lt;/restriction&gt;
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "descriptions",
-        "viewAttributes",
-        "calculatedViewAttributes",
-        "input",
-        "filter",
-        "joinAttribute"
+        "mapping"
     })
-    public static class CalculationView {
+    public static class Input {
 
-        @XmlElement(required = true)
-        protected String descriptions;
-        @XmlElement(required = true)
-        protected CalculationViews.CalculationView.ViewAttributes viewAttributes;
-        @XmlElement(required = true)
-        protected String calculatedViewAttributes;
-        protected List<CalculationViews.CalculationView.Input> input;
-        protected String filter;
-        protected CalculationViews.CalculationView.JoinAttribute joinAttribute;
+      protected List<CalculationViews.CalculationView.Input.Mapping> mapping;
+      @XmlAttribute(name = "node")
+      protected String node;
+
+      /**
+       * Gets the value of the mapping property.
+       *
+       * <p>
+       * This accessor method returns a reference to the live list,
+       * not a snapshot. Therefore any modification you make to the
+       * returned list will be present inside the JAXB object.
+       * This is why there is not a <CODE>set</CODE> method for the mapping property.
+       *
+       * <p>
+       * For example, to add a new item, do as follows:
+       * <pre>
+       *    getMapping().add(newItem);
+       * </pre>
+       *
+       *
+       * <p>
+       * Objects of the following type(s) are allowed in the list
+       * {@link CalculationViews.CalculationView.Input.Mapping }
+       */
+      public List<CalculationViews.CalculationView.Input.Mapping> getMapping() {
+        if (mapping == null) {
+          mapping = new ArrayList<CalculationViews.CalculationView.Input.Mapping>();
+        }
+        return this.mapping;
+      }
+
+      /**
+       * Gets the value of the node property.
+       *
+       * @return possible object is
+       * {@link String }
+       */
+      public String getNode() {
+        return node;
+      }
+
+      /**
+       * Sets the value of the node property.
+       *
+       * @param value allowed object is
+       *              {@link String }
+       */
+      public void setNode(String value) {
+        this.node = value;
+      }
+
+
+      /**
+       * <p>Java class for anonymous complex type.
+       *
+       * <p>The following schema fragment specifies the expected content contained within this class.
+       *
+       * <pre>
+       * &lt;complexType&gt;
+       *   &lt;simpleContent&gt;
+       *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+       *       &lt;attribute name="target" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+       *       &lt;attribute name="source" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+       *     &lt;/extension&gt;
+       *   &lt;/simpleContent&gt;
+       * &lt;/complexType&gt;
+       * </pre>
+       */
+      @XmlAccessorType(XmlAccessType.FIELD)
+      @XmlType(name = "", propOrder = {
+          "value"
+      })
+      public static class Mapping {
+
+        @XmlValue
+        protected String value;
+        @XmlAttribute(name = "target")
+        protected String target;
+        @XmlAttribute(name = "source")
+        protected String source;
+
+        /**
+         * Gets the value of the value property.
+         *
+         * @return possible object is
+         * {@link String }
+         */
+        public String getValue() {
+          return value;
+        }
+
+        /**
+         * Sets the value of the value property.
+         *
+         * @param value allowed object is
+         *              {@link String }
+         */
+        public void setValue(String value) {
+          this.value = value;
+        }
+
+        /**
+         * Gets the value of the target property.
+         *
+         * @return possible object is
+         * {@link String }
+         */
+        public String getTarget() {
+          return target;
+        }
+
+        /**
+         * Sets the value of the target property.
+         *
+         * @param value allowed object is
+         *              {@link String }
+         */
+        public void setTarget(String value) {
+          this.target = value;
+        }
+
+        /**
+         * Gets the value of the source property.
+         *
+         * @return possible object is
+         * {@link String }
+         */
+        public String getSource() {
+          return source;
+        }
+
+        /**
+         * Sets the value of the source property.
+         *
+         * @param value allowed object is
+         *              {@link String }
+         */
+        public void setSource(String value) {
+          this.source = value;
+        }
+
+      }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     *
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     *
+     * <pre>
+     * &lt;complexType&gt;
+     *   &lt;simpleContent&gt;
+     *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+     *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+     *     &lt;/extension&gt;
+     *   &lt;/simpleContent&gt;
+     * &lt;/complexType&gt;
+     * </pre>
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "value"
+    })
+    public static class JoinAttribute {
+
+      @XmlValue
+      protected String value;
+      @XmlAttribute(name = "name")
+      protected String name;
+
+      /**
+       * Gets the value of the value property.
+       *
+       * @return possible object is
+       * {@link String }
+       */
+      public String getValue() {
+        return value;
+      }
+
+      /**
+       * Sets the value of the value property.
+       *
+       * @param value allowed object is
+       *              {@link String }
+       */
+      public void setValue(String value) {
+        this.value = value;
+      }
+
+      /**
+       * Gets the value of the name property.
+       *
+       * @return possible object is
+       * {@link String }
+       */
+      public String getName() {
+        return name;
+      }
+
+      /**
+       * Sets the value of the name property.
+       *
+       * @param value allowed object is
+       *              {@link String }
+       */
+      public void setName(String value) {
+        this.name = value;
+      }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     *
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     *
+     * <pre>
+     * &lt;complexType&gt;
+     *   &lt;complexContent&gt;
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+     *       &lt;sequence&gt;
+     *         &lt;element name="viewAttribute" maxOccurs="unbounded" minOccurs="0"&gt;
+     *           &lt;complexType&gt;
+     *             &lt;simpleContent&gt;
+     *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+     *                 &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+     *               &lt;/extension&gt;
+     *             &lt;/simpleContent&gt;
+     *           &lt;/complexType&gt;
+     *         &lt;/element&gt;
+     *       &lt;/sequence&gt;
+     *     &lt;/restriction&gt;
+     *   &lt;/complexContent&gt;
+     * &lt;/complexType&gt;
+     * </pre>
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "viewAttribute"
+    })
+    public static class ViewAttributes {
+
+      protected List<CalculationViews.CalculationView.ViewAttributes.ViewAttribute> viewAttribute;
+
+      /**
+       * Gets the value of the viewAttribute property.
+       *
+       * <p>
+       * This accessor method returns a reference to the live list,
+       * not a snapshot. Therefore any modification you make to the
+       * returned list will be present inside the JAXB object.
+       * This is why there is not a <CODE>set</CODE> method for the viewAttribute property.
+       *
+       * <p>
+       * For example, to add a new item, do as follows:
+       * <pre>
+       *    getViewAttribute().add(newItem);
+       * </pre>
+       *
+       *
+       * <p>
+       * Objects of the following type(s) are allowed in the list
+       * {@link CalculationViews.CalculationView.ViewAttributes.ViewAttribute }
+       */
+      public List<CalculationViews.CalculationView.ViewAttributes.ViewAttribute> getViewAttribute() {
+        if (viewAttribute == null) {
+          viewAttribute = new ArrayList<CalculationViews.CalculationView.ViewAttributes.ViewAttribute>();
+        }
+        return this.viewAttribute;
+      }
+
+
+      /**
+       * <p>Java class for anonymous complex type.
+       *
+       * <p>The following schema fragment specifies the expected content contained within this class.
+       *
+       * <pre>
+       * &lt;complexType&gt;
+       *   &lt;simpleContent&gt;
+       *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
+       *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+       *     &lt;/extension&gt;
+       *   &lt;/simpleContent&gt;
+       * &lt;/complexType&gt;
+       * </pre>
+       */
+      @XmlAccessorType(XmlAccessType.FIELD)
+      @XmlType(name = "", propOrder = {
+          "value"
+      })
+      public static class ViewAttribute {
+
+        @XmlValue
+        protected String value;
         @XmlAttribute(name = "id")
         protected String id;
-        @XmlAttribute(name = "filterExpressionLanguage")
-        protected String filterExpressionLanguage;
-        @XmlAttribute(name = "joinType")
-        protected String joinType;
-        @XmlAttribute(name = "languageColumn")
-        protected String languageColumn;
 
         /**
-         * Gets the value of the descriptions property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         * Gets the value of the value property.
+         *
+         * @return possible object is
+         * {@link String }
          */
-        public String getDescriptions() {
-            return descriptions;
+        public String getValue() {
+          return value;
         }
 
         /**
-         * Sets the value of the descriptions property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         * Sets the value of the value property.
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
-        public void setDescriptions(String value) {
-            this.descriptions = value;
-        }
-
-        /**
-         * Gets the value of the viewAttributes property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link CalculationViews.CalculationView.ViewAttributes }
-         *     
-         */
-        public CalculationViews.CalculationView.ViewAttributes getViewAttributes() {
-            return viewAttributes;
-        }
-
-        /**
-         * Sets the value of the viewAttributes property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link CalculationViews.CalculationView.ViewAttributes }
-         *     
-         */
-        public void setViewAttributes(CalculationViews.CalculationView.ViewAttributes value) {
-            this.viewAttributes = value;
-        }
-
-        /**
-         * Gets the value of the calculatedViewAttributes property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getCalculatedViewAttributes() {
-            return calculatedViewAttributes;
-        }
-
-        /**
-         * Sets the value of the calculatedViewAttributes property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setCalculatedViewAttributes(String value) {
-            this.calculatedViewAttributes = value;
-        }
-
-        /**
-         * Gets the value of the input property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the input property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getInput().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link CalculationViews.CalculationView.Input }
-         * 
-         * 
-         */
-        public List<CalculationViews.CalculationView.Input> getInput() {
-            if (input == null) {
-                input = new ArrayList<CalculationViews.CalculationView.Input>();
-            }
-            return this.input;
-        }
-
-        /**
-         * Gets the value of the filter property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getFilter() {
-            return filter;
-        }
-
-        /**
-         * Sets the value of the filter property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setFilter(String value) {
-            this.filter = value;
-        }
-
-        /**
-         * Gets the value of the joinAttribute property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link CalculationViews.CalculationView.JoinAttribute }
-         *     
-         */
-        public CalculationViews.CalculationView.JoinAttribute getJoinAttribute() {
-            return joinAttribute;
-        }
-
-        /**
-         * Sets the value of the joinAttribute property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link CalculationViews.CalculationView.JoinAttribute }
-         *     
-         */
-        public void setJoinAttribute(CalculationViews.CalculationView.JoinAttribute value) {
-            this.joinAttribute = value;
+        public void setValue(String value) {
+          this.value = value;
         }
 
         /**
          * Gets the value of the id property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getId() {
-            return id;
+          return id;
         }
 
         /**
          * Sets the value of the id property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setId(String value) {
-            this.id = value;
+          this.id = value;
         }
 
-        /**
-         * Gets the value of the filterExpressionLanguage property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getFilterExpressionLanguage() {
-            return filterExpressionLanguage;
-        }
-
-        /**
-         * Sets the value of the filterExpressionLanguage property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setFilterExpressionLanguage(String value) {
-            this.filterExpressionLanguage = value;
-        }
-
-        /**
-         * Gets the value of the joinType property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getJoinType() {
-            return joinType;
-        }
-
-        /**
-         * Sets the value of the joinType property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setJoinType(String value) {
-            this.joinType = value;
-        }
-
-        /**
-         * Gets the value of the languageColumn property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getLanguageColumn() {
-            return languageColumn;
-        }
-
-        /**
-         * Sets the value of the languageColumn property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setLanguageColumn(String value) {
-            this.languageColumn = value;
-        }
-
-
-        /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
-         * <pre>
-         * &lt;complexType&gt;
-         *   &lt;complexContent&gt;
-         *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
-         *       &lt;sequence&gt;
-         *         &lt;element name="mapping" maxOccurs="unbounded" minOccurs="0"&gt;
-         *           &lt;complexType&gt;
-         *             &lt;simpleContent&gt;
-         *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-         *                 &lt;attribute name="target" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-         *                 &lt;attribute name="source" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-         *               &lt;/extension&gt;
-         *             &lt;/simpleContent&gt;
-         *           &lt;/complexType&gt;
-         *         &lt;/element&gt;
-         *       &lt;/sequence&gt;
-         *       &lt;attribute name="node" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-         *     &lt;/restriction&gt;
-         *   &lt;/complexContent&gt;
-         * &lt;/complexType&gt;
-         * </pre>
-         * 
-         * 
-         */
-        @XmlAccessorType(XmlAccessType.FIELD)
-        @XmlType(name = "", propOrder = {
-            "mapping"
-        })
-        public static class Input {
-
-            protected List<CalculationViews.CalculationView.Input.Mapping> mapping;
-            @XmlAttribute(name = "node")
-            protected String node;
-
-            /**
-             * Gets the value of the mapping property.
-             * 
-             * <p>
-             * This accessor method returns a reference to the live list,
-             * not a snapshot. Therefore any modification you make to the
-             * returned list will be present inside the JAXB object.
-             * This is why there is not a <CODE>set</CODE> method for the mapping property.
-             * 
-             * <p>
-             * For example, to add a new item, do as follows:
-             * <pre>
-             *    getMapping().add(newItem);
-             * </pre>
-             * 
-             * 
-             * <p>
-             * Objects of the following type(s) are allowed in the list
-             * {@link CalculationViews.CalculationView.Input.Mapping }
-             * 
-             * 
-             */
-            public List<CalculationViews.CalculationView.Input.Mapping> getMapping() {
-                if (mapping == null) {
-                    mapping = new ArrayList<CalculationViews.CalculationView.Input.Mapping>();
-                }
-                return this.mapping;
-            }
-
-            /**
-             * Gets the value of the node property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
-             */
-            public String getNode() {
-                return node;
-            }
-
-            /**
-             * Sets the value of the node property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
-             */
-            public void setNode(String value) {
-                this.node = value;
-            }
-
-
-            /**
-             * <p>Java class for anonymous complex type.
-             * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
-             * 
-             * <pre>
-             * &lt;complexType&gt;
-             *   &lt;simpleContent&gt;
-             *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-             *       &lt;attribute name="target" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-             *       &lt;attribute name="source" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-             *     &lt;/extension&gt;
-             *   &lt;/simpleContent&gt;
-             * &lt;/complexType&gt;
-             * </pre>
-             * 
-             * 
-             */
-            @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
-            public static class Mapping {
-
-                @XmlValue
-                protected String value;
-                @XmlAttribute(name = "target")
-                protected String target;
-                @XmlAttribute(name = "source")
-                protected String source;
-
-                /**
-                 * Gets the value of the value property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
-                 */
-                public String getValue() {
-                    return value;
-                }
-
-                /**
-                 * Sets the value of the value property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
-                 */
-                public void setValue(String value) {
-                    this.value = value;
-                }
-
-                /**
-                 * Gets the value of the target property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
-                 */
-                public String getTarget() {
-                    return target;
-                }
-
-                /**
-                 * Sets the value of the target property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
-                 */
-                public void setTarget(String value) {
-                    this.target = value;
-                }
-
-                /**
-                 * Gets the value of the source property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
-                 */
-                public String getSource() {
-                    return source;
-                }
-
-                /**
-                 * Sets the value of the source property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
-                 */
-                public void setSource(String value) {
-                    this.source = value;
-                }
-
-            }
-
-        }
-
-
-        /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
-         * <pre>
-         * &lt;complexType&gt;
-         *   &lt;simpleContent&gt;
-         *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-         *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-         *     &lt;/extension&gt;
-         *   &lt;/simpleContent&gt;
-         * &lt;/complexType&gt;
-         * </pre>
-         * 
-         * 
-         */
-        @XmlAccessorType(XmlAccessType.FIELD)
-        @XmlType(name = "", propOrder = {
-            "value"
-        })
-        public static class JoinAttribute {
-
-            @XmlValue
-            protected String value;
-            @XmlAttribute(name = "name")
-            protected String name;
-
-            /**
-             * Gets the value of the value property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
-             */
-            public String getValue() {
-                return value;
-            }
-
-            /**
-             * Sets the value of the value property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
-             */
-            public void setValue(String value) {
-                this.value = value;
-            }
-
-            /**
-             * Gets the value of the name property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
-             */
-            public String getName() {
-                return name;
-            }
-
-            /**
-             * Sets the value of the name property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
-             */
-            public void setName(String value) {
-                this.name = value;
-            }
-
-        }
-
-
-        /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
-         * <pre>
-         * &lt;complexType&gt;
-         *   &lt;complexContent&gt;
-         *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
-         *       &lt;sequence&gt;
-         *         &lt;element name="viewAttribute" maxOccurs="unbounded" minOccurs="0"&gt;
-         *           &lt;complexType&gt;
-         *             &lt;simpleContent&gt;
-         *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-         *                 &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-         *               &lt;/extension&gt;
-         *             &lt;/simpleContent&gt;
-         *           &lt;/complexType&gt;
-         *         &lt;/element&gt;
-         *       &lt;/sequence&gt;
-         *     &lt;/restriction&gt;
-         *   &lt;/complexContent&gt;
-         * &lt;/complexType&gt;
-         * </pre>
-         * 
-         * 
-         */
-        @XmlAccessorType(XmlAccessType.FIELD)
-        @XmlType(name = "", propOrder = {
-            "viewAttribute"
-        })
-        public static class ViewAttributes {
-
-            protected List<CalculationViews.CalculationView.ViewAttributes.ViewAttribute> viewAttribute;
-
-            /**
-             * Gets the value of the viewAttribute property.
-             * 
-             * <p>
-             * This accessor method returns a reference to the live list,
-             * not a snapshot. Therefore any modification you make to the
-             * returned list will be present inside the JAXB object.
-             * This is why there is not a <CODE>set</CODE> method for the viewAttribute property.
-             * 
-             * <p>
-             * For example, to add a new item, do as follows:
-             * <pre>
-             *    getViewAttribute().add(newItem);
-             * </pre>
-             * 
-             * 
-             * <p>
-             * Objects of the following type(s) are allowed in the list
-             * {@link CalculationViews.CalculationView.ViewAttributes.ViewAttribute }
-             * 
-             * 
-             */
-            public List<CalculationViews.CalculationView.ViewAttributes.ViewAttribute> getViewAttribute() {
-                if (viewAttribute == null) {
-                    viewAttribute = new ArrayList<CalculationViews.CalculationView.ViewAttributes.ViewAttribute>();
-                }
-                return this.viewAttribute;
-            }
-
-
-            /**
-             * <p>Java class for anonymous complex type.
-             * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
-             * 
-             * <pre>
-             * &lt;complexType&gt;
-             *   &lt;simpleContent&gt;
-             *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
-             *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
-             *     &lt;/extension&gt;
-             *   &lt;/simpleContent&gt;
-             * &lt;/complexType&gt;
-             * </pre>
-             * 
-             * 
-             */
-            @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
-            public static class ViewAttribute {
-
-                @XmlValue
-                protected String value;
-                @XmlAttribute(name = "id")
-                protected String id;
-
-                /**
-                 * Gets the value of the value property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
-                 */
-                public String getValue() {
-                    return value;
-                }
-
-                /**
-                 * Sets the value of the value property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
-                 */
-                public void setValue(String value) {
-                    this.value = value;
-                }
-
-                /**
-                 * Gets the value of the id property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
-                 */
-                public String getId() {
-                    return id;
-                }
-
-                /**
-                 * Sets the value of the id property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
-                 */
-                public void setId(String value) {
-                    this.id = value;
-                }
-
-            }
-
-        }
+      }
 
     }
+
+  }
 
 }

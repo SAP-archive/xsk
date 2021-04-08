@@ -27,14 +27,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Specification of the graph action PATTERN_MATCHING
- * 			
- * 
+ * Specification of the graph action PATTERN_MATCHING
+ *
+ *
  * <p>Java class for ScriptPatternMatching complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ScriptPatternMatching"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +46,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ScriptPatternMatching", propOrder = {
@@ -56,57 +53,49 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ScriptPatternMatching {
 
-    @XmlElement(required = true)
-    protected String expression;
-    @XmlAttribute(name = "language")
-    protected GraphLanguage language;
+  @XmlElement(required = true)
+  protected String expression;
+  @XmlAttribute(name = "language")
+  protected GraphLanguage language;
 
-    /**
-     * Gets the value of the expression property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExpression() {
-        return expression;
-    }
+  /**
+   * Gets the value of the expression property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExpression() {
+    return expression;
+  }
 
-    /**
-     * Sets the value of the expression property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExpression(String value) {
-        this.expression = value;
-    }
+  /**
+   * Sets the value of the expression property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExpression(String value) {
+    this.expression = value;
+  }
 
-    /**
-     * Gets the value of the language property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link GraphLanguage }
-     *     
-     */
-    public GraphLanguage getLanguage() {
-        return language;
-    }
+  /**
+   * Gets the value of the language property.
+   *
+   * @return possible object is
+   * {@link GraphLanguage }
+   */
+  public GraphLanguage getLanguage() {
+    return language;
+  }
 
-    /**
-     * Sets the value of the language property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GraphLanguage }
-     *     
-     */
-    public void setLanguage(GraphLanguage value) {
-        this.language = value;
-    }
+  /**
+   * Sets the value of the language property.
+   *
+   * @param value allowed object is
+   *              {@link GraphLanguage }
+   */
+  public void setLanguage(GraphLanguage value) {
+    this.language = value;
+  }
 
 }

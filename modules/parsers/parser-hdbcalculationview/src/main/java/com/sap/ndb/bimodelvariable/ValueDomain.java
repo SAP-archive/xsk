@@ -19,6 +19,7 @@
 
 package com.sap.ndb.bimodelvariable;
 
+import com.sap.ndb.repositorymodelresource.QualifiedNameReference;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,18 +29,16 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.repositorymodelresource.QualifiedNameReference;
 
 
 /**
- *  
- * 				Describes how the allowed values for the variable can be retrieved
- * 			
- * 
+ * Describes how the allowed values for the variable can be retrieved
+ *
+ *
  * <p>Java class for ValueDomain complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ValueDomain"&gt;
  *   &lt;complexContent&gt;
@@ -61,8 +60,6 @@ import com.sap.ndb.repositorymodelresource.QualifiedNameReference;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ValueDomain", propOrder = {
@@ -75,195 +72,171 @@ import com.sap.ndb.repositorymodelresource.QualifiedNameReference;
 })
 public class ValueDomain {
 
-    protected QualifiedNameReference attribute;
-    protected List<ValueListEntry> listEntry;
-    protected String externalLikeStructureName;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String externalLikeElementName;
-    protected List<AbstractVariableMapping> variableMapping;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String hierarchyName;
-    @XmlAttribute(name = "type", required = true)
-    protected ValueType type;
+  protected QualifiedNameReference attribute;
+  protected List<ValueListEntry> listEntry;
+  protected String externalLikeStructureName;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String externalLikeElementName;
+  protected List<AbstractVariableMapping> variableMapping;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String hierarchyName;
+  @XmlAttribute(name = "type", required = true)
+  protected ValueType type;
 
-    /**
-     * Gets the value of the attribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedNameReference }
-     *     
-     */
-    public QualifiedNameReference getAttribute() {
-        return attribute;
-    }
+  /**
+   * Gets the value of the attribute property.
+   *
+   * @return possible object is
+   * {@link QualifiedNameReference }
+   */
+  public QualifiedNameReference getAttribute() {
+    return attribute;
+  }
 
-    /**
-     * Sets the value of the attribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedNameReference }
-     *     
-     */
-    public void setAttribute(QualifiedNameReference value) {
-        this.attribute = value;
-    }
+  /**
+   * Sets the value of the attribute property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedNameReference }
+   */
+  public void setAttribute(QualifiedNameReference value) {
+    this.attribute = value;
+  }
 
-    /**
-     * Gets the value of the listEntry property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the listEntry property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getListEntry().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link ValueListEntry }
-     * 
-     * 
-     */
-    public List<ValueListEntry> getListEntry() {
-        if (listEntry == null) {
-            listEntry = new ArrayList<ValueListEntry>();
-        }
-        return this.listEntry;
+  /**
+   * Gets the value of the listEntry property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the listEntry property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getListEntry().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link ValueListEntry }
+   */
+  public List<ValueListEntry> getListEntry() {
+    if (listEntry == null) {
+      listEntry = new ArrayList<ValueListEntry>();
     }
+    return this.listEntry;
+  }
 
-    /**
-     * Gets the value of the externalLikeStructureName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExternalLikeStructureName() {
-        return externalLikeStructureName;
-    }
+  /**
+   * Gets the value of the externalLikeStructureName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExternalLikeStructureName() {
+    return externalLikeStructureName;
+  }
 
-    /**
-     * Sets the value of the externalLikeStructureName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExternalLikeStructureName(String value) {
-        this.externalLikeStructureName = value;
-    }
+  /**
+   * Sets the value of the externalLikeStructureName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExternalLikeStructureName(String value) {
+    this.externalLikeStructureName = value;
+  }
 
-    /**
-     * Gets the value of the externalLikeElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExternalLikeElementName() {
-        return externalLikeElementName;
-    }
+  /**
+   * Gets the value of the externalLikeElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExternalLikeElementName() {
+    return externalLikeElementName;
+  }
 
-    /**
-     * Sets the value of the externalLikeElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExternalLikeElementName(String value) {
-        this.externalLikeElementName = value;
-    }
+  /**
+   * Sets the value of the externalLikeElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExternalLikeElementName(String value) {
+    this.externalLikeElementName = value;
+  }
 
-    /**
-     * Gets the value of the variableMapping property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the variableMapping property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getVariableMapping().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link AbstractVariableMapping }
-     * 
-     * 
-     */
-    public List<AbstractVariableMapping> getVariableMapping() {
-        if (variableMapping == null) {
-            variableMapping = new ArrayList<AbstractVariableMapping>();
-        }
-        return this.variableMapping;
+  /**
+   * Gets the value of the variableMapping property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the variableMapping property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getVariableMapping().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link AbstractVariableMapping }
+   */
+  public List<AbstractVariableMapping> getVariableMapping() {
+    if (variableMapping == null) {
+      variableMapping = new ArrayList<AbstractVariableMapping>();
     }
+    return this.variableMapping;
+  }
 
-    /**
-     * Gets the value of the hierarchyName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHierarchyName() {
-        return hierarchyName;
-    }
+  /**
+   * Gets the value of the hierarchyName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHierarchyName() {
+    return hierarchyName;
+  }
 
-    /**
-     * Sets the value of the hierarchyName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHierarchyName(String value) {
-        this.hierarchyName = value;
-    }
+  /**
+   * Sets the value of the hierarchyName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHierarchyName(String value) {
+    this.hierarchyName = value;
+  }
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ValueType }
-     *     
-     */
-    public ValueType getType() {
-        return type;
-    }
+  /**
+   * Gets the value of the type property.
+   *
+   * @return possible object is
+   * {@link ValueType }
+   */
+  public ValueType getType() {
+    return type;
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ValueType }
-     *     
-     */
-    public void setType(ValueType value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link ValueType }
+   */
+  public void setType(ValueType value) {
+    this.type = value;
+  }
 
 }

@@ -7,5 +7,6 @@ package com.sap.xsk.models.hdbdd.web;
  * Use this class to register additional components to be used within the web application.
  */
 @SuppressWarnings("all")
-public class ModelWebModule /* implements AbstractModelWebModule  */{
+public class ModelWebModule /* implements AbstractModelWebModule  */ {
+
 }

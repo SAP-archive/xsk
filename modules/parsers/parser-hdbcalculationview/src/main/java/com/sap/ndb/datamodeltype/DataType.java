@@ -19,22 +19,21 @@
 
 package com.sap.ndb.datamodeltype;
 
+import com.sap.ndb.repositorymodelresource.RepositoryObject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.repositorymodelresource.RepositoryObject;
 
 
 /**
- * 
- * 				Base object for data types.
- * 			
- * 
+ * Base object for data types.
+ *
+ *
  * <p>Java class for DataType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DataType"&gt;
  *   &lt;complexContent&gt;
@@ -43,8 +42,6 @@ import com.sap.ndb.repositorymodelresource.RepositoryObject;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DataType")
@@ -53,8 +50,7 @@ import com.sap.ndb.repositorymodelresource.RepositoryObject;
     StructureType.class
 })
 public abstract class DataType
-    extends RepositoryObject
-{
+    extends RepositoryObject {
 
 
 }

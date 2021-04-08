@@ -21,26 +21,24 @@ import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
  */
 public class XSKDataStructuresSynchronizerJobDefinitionProvider implements IJobDefinitionProvider {
 
-	private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE = "DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE";
-	
-	private static final String DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB = "dirigible-internal-xsk-data-structures-synchronizer-job";
-	
-	static final String XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB = "XSK Data Structures Synchronizer Job";
+  static final String XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB = "XSK Data Structures Synchronizer Job";
+  private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE = "DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE";
+  private static final String DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB = "dirigible-internal-xsk-data-structures-synchronizer-job";
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.dirigible.core.scheduler.api.IJobDefinitionProvider#getJobDefinition()
-	 */
-	@Override
-	public JobDefinition getJobDefinition() {
-		JobDefinition jobDefinition = new JobDefinition();
-		jobDefinition.setName(DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB);
-		jobDefinition.setGroup(ISchedulerCoreService.JOB_GROUP_INTERNAL);
-		jobDefinition.setClazz(XSKDataStructuresSynchronizerJob.class.getCanonicalName());
-		jobDefinition.setDescription(XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB);
-		jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE ,"0/30 * * * * ?"));
-		jobDefinition.setSingleton(true);
-		return jobDefinition;
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.dirigible.core.scheduler.api.IJobDefinitionProvider#getJobDefinition()
+   */
+  @Override
+  public JobDefinition getJobDefinition() {
+    JobDefinition jobDefinition = new JobDefinition();
+    jobDefinition.setName(DIRIGIBLE_INTERNAL_XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB);
+    jobDefinition.setGroup(ISchedulerCoreService.JOB_GROUP_INTERNAL);
+    jobDefinition.setClazz(XSKDataStructuresSynchronizerJob.class.getCanonicalName());
+    jobDefinition.setDescription(XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB);
+    jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_DATA_STRUCTURE, "0/30 * * * * ?"));
+    jobDefinition.setSingleton(true);
+    return jobDefinition;
+  }
 
 }

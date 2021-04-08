@@ -25,16 +25,15 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A view/node that takes a subset of the attributes of one input, 
- * 				splits them into attributes and measures (the	latter have a not empty aggregation type) 
- * 				and then aggregates the measures according to their aggregation type - the attributes act as group by attributes.
- * 			
- * 
+ * A view/node that takes a subset of the attributes of one input,
+ * splits them into attributes and measures (the	latter have a not empty aggregation type)
+ * and then aggregates the measures according to their aggregation type - the attributes act as group by attributes.
+ *
+ *
  * <p>Java class for AggregationView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AggregationView"&gt;
  *   &lt;complexContent&gt;
@@ -46,41 +45,34 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AggregationView", propOrder = {
     "restrictedViewAttributes"
 })
 public class AggregationView
-    extends CalculationView
-{
+    extends CalculationView {
 
-    protected RestrictedViewAttributes restrictedViewAttributes;
+  protected RestrictedViewAttributes restrictedViewAttributes;
 
-    /**
-     * Gets the value of the restrictedViewAttributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RestrictedViewAttributes }
-     *     
-     */
-    public RestrictedViewAttributes getRestrictedViewAttributes() {
-        return restrictedViewAttributes;
-    }
+  /**
+   * Gets the value of the restrictedViewAttributes property.
+   *
+   * @return possible object is
+   * {@link RestrictedViewAttributes }
+   */
+  public RestrictedViewAttributes getRestrictedViewAttributes() {
+    return restrictedViewAttributes;
+  }
 
-    /**
-     * Sets the value of the restrictedViewAttributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RestrictedViewAttributes }
-     *     
-     */
-    public void setRestrictedViewAttributes(RestrictedViewAttributes value) {
-        this.restrictedViewAttributes = value;
-    }
+  /**
+   * Sets the value of the restrictedViewAttributes property.
+   *
+   * @param value allowed object is
+   *              {@link RestrictedViewAttributes }
+   */
+  public void setRestrictedViewAttributes(RestrictedViewAttributes value) {
+    this.restrictedViewAttributes = value;
+  }
 
 }

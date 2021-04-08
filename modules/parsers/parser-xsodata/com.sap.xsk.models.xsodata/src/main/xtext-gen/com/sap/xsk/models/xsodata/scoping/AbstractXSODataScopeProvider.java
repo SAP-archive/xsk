@@ -6,4 +6,5 @@ package com.sap.xsk.models.xsodata.scoping;
 import org.eclipse.xtext.scoping.impl.DelegatingScopeProvider;
 
 public abstract class AbstractXSODataScopeProvider extends DelegatingScopeProvider {
+
 }

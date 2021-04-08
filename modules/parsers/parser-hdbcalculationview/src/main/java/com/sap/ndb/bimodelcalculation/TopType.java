@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for TopType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -40,39 +40,38 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "TopType")
 @XmlEnum
 public enum TopType {
 
-    @XmlEnumValue("rows")
-    ROWS("rows"),
-    @XmlEnumValue("sum")
-    SUM("sum"),
-    @XmlEnumValue("percent")
-    PERCENT("percent"),
-    @XmlEnumValue("first")
-    FIRST("first"),
-    @XmlEnumValue("last")
-    LAST("last");
-    private final String value;
+  @XmlEnumValue("rows")
+  ROWS("rows"),
+  @XmlEnumValue("sum")
+  SUM("sum"),
+  @XmlEnumValue("percent")
+  PERCENT("percent"),
+  @XmlEnumValue("first")
+  FIRST("first"),
+  @XmlEnumValue("last")
+  LAST("last");
+  private final String value;
 
-    TopType(String v) {
-        value = v;
-    }
+  TopType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static TopType fromValue(String v) {
+    for (TopType c : TopType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static TopType fromValue(String v) {
-        for (TopType c: TopType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

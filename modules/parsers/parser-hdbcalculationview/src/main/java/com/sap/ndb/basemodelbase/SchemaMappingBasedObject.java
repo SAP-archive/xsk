@@ -29,16 +29,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Object containing a DB Schema, for which the schema mapping is enabled.  
- * 				I.e. in the authoring resource a schema is stored that might be different from the  physical DB schema.
- * 				This object is also used for modeling cross data base access.
- * 			
- * 
+ * Object containing a DB Schema, for which the schema mapping is enabled.
+ * I.e. in the authoring resource a schema is stored that might be different from the  physical DB schema.
+ * This object is also used for modeling cross data base access.
+ *
+ *
  * <p>Java class for SchemaMappingBasedObject complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SchemaMappingBasedObject"&gt;
  *   &lt;complexContent&gt;
@@ -50,8 +49,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SchemaMappingBasedObject")
@@ -60,86 +57,74 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class SchemaMappingBasedObject {
 
-    @XmlAttribute(name = "physicalSchemaName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String physicalSchemaName;
-    @XmlAttribute(name = "schemaName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String schemaName;
-    @XmlAttribute(name = "databaseName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String databaseName;
+  @XmlAttribute(name = "physicalSchemaName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String physicalSchemaName;
+  @XmlAttribute(name = "schemaName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String schemaName;
+  @XmlAttribute(name = "databaseName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String databaseName;
 
-    /**
-     * Gets the value of the physicalSchemaName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPhysicalSchemaName() {
-        return physicalSchemaName;
-    }
+  /**
+   * Gets the value of the physicalSchemaName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPhysicalSchemaName() {
+    return physicalSchemaName;
+  }
 
-    /**
-     * Sets the value of the physicalSchemaName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPhysicalSchemaName(String value) {
-        this.physicalSchemaName = value;
-    }
+  /**
+   * Sets the value of the physicalSchemaName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPhysicalSchemaName(String value) {
+    this.physicalSchemaName = value;
+  }
 
-    /**
-     * Gets the value of the schemaName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSchemaName() {
-        return schemaName;
-    }
+  /**
+   * Gets the value of the schemaName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSchemaName() {
+    return schemaName;
+  }
 
-    /**
-     * Sets the value of the schemaName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSchemaName(String value) {
-        this.schemaName = value;
-    }
+  /**
+   * Sets the value of the schemaName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSchemaName(String value) {
+    this.schemaName = value;
+  }
 
-    /**
-     * Gets the value of the databaseName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDatabaseName() {
-        return databaseName;
-    }
+  /**
+   * Gets the value of the databaseName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDatabaseName() {
+    return databaseName;
+  }
 
-    /**
-     * Sets the value of the databaseName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDatabaseName(String value) {
-        this.databaseName = value;
-    }
+  /**
+   * Sets the value of the databaseName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDatabaseName(String value) {
+    this.databaseName = value;
+  }
 
 }

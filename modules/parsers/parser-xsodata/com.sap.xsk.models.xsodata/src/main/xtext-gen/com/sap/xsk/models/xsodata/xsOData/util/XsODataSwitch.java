@@ -3,11 +3,15 @@
  */
 package com.sap.xsk.models.xsodata.xsOData.util;
 
-import com.sap.xsk.models.xsodata.xsOData.*;
-
+import com.sap.xsk.models.xsodata.xsOData.Association;
+import com.sap.xsk.models.xsodata.xsOData.Entity;
+import com.sap.xsk.models.xsodata.xsOData.Navigation;
+import com.sap.xsk.models.xsodata.xsOData.Service;
+import com.sap.xsk.models.xsodata.xsOData.Type;
+import com.sap.xsk.models.xsodata.xsOData.XSOData;
+import com.sap.xsk.models.xsodata.xsOData.XsODataPackage;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
 
 /**
@@ -20,15 +24,17 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage
+ *
  * @generated
+ * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage
  */
-public class XsODataSwitch<T> extends Switch<T>
-{
+public class XsODataSwitch<T> extends Switch<T> {
+
   /**
    * The cached model package
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   protected static XsODataPackage modelPackage;
@@ -37,12 +43,11 @@ public class XsODataSwitch<T> extends Switch<T>
    * Creates an instance of the switch.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public XsODataSwitch()
-  {
-    if (modelPackage == null)
-    {
+  public XsODataSwitch() {
+    if (modelPackage == null) {
       modelPackage = XsODataPackage.eINSTANCE;
     }
   }
@@ -51,13 +56,13 @@ public class XsODataSwitch<T> extends Switch<T>
    * Checks whether this is a switch for the given package.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param ePackage the package in question.
    * @return whether this is a switch for the given package.
    * @generated
    */
   @Override
-  protected boolean isSwitchFor(EPackage ePackage)
-  {
+  protected boolean isSwitchFor(EPackage ePackage) {
     return ePackage == modelPackage;
   }
 
@@ -65,58 +70,66 @@ public class XsODataSwitch<T> extends Switch<T>
    * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @return the first non-null result returned by a <code>caseXXX</code> call.
    * @generated
    */
   @Override
-  protected T doSwitch(int classifierID, EObject theEObject)
-  {
-    switch (classifierID)
-    {
-      case XsODataPackage.XSO_DATA:
-      {
-        XSOData xsoData = (XSOData)theEObject;
+  protected T doSwitch(int classifierID, EObject theEObject) {
+    switch (classifierID) {
+      case XsODataPackage.XSO_DATA: {
+        XSOData xsoData = (XSOData) theEObject;
         T result = caseXSOData(xsoData);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case XsODataPackage.TYPE:
-      {
-        Type type = (Type)theEObject;
+      case XsODataPackage.TYPE: {
+        Type type = (Type) theEObject;
         T result = caseType(type);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case XsODataPackage.SERVICE:
-      {
-        Service service = (Service)theEObject;
+      case XsODataPackage.SERVICE: {
+        Service service = (Service) theEObject;
         T result = caseService(service);
-        if (result == null) result = caseType(service);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = caseType(service);
+        }
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case XsODataPackage.ENTITY:
-      {
-        Entity entity = (Entity)theEObject;
+      case XsODataPackage.ENTITY: {
+        Entity entity = (Entity) theEObject;
         T result = caseEntity(entity);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case XsODataPackage.NAVIGATION:
-      {
-        Navigation navigation = (Navigation)theEObject;
+      case XsODataPackage.NAVIGATION: {
+        Navigation navigation = (Navigation) theEObject;
         T result = caseNavigation(navigation);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case XsODataPackage.ASSOCIATION:
-      {
-        Association association = (Association)theEObject;
+      case XsODataPackage.ASSOCIATION: {
+        Association association = (Association) theEObject;
         T result = caseAssociation(association);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      default: return defaultCase(theEObject);
+      default:
+        return defaultCase(theEObject);
     }
   }
 
@@ -126,13 +139,13 @@ public class XsODataSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>XSO Data</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseXSOData(XSOData object)
-  {
+  public T caseXSOData(XSOData object) {
     return null;
   }
 
@@ -142,13 +155,13 @@ public class XsODataSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Type</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseType(Type object)
-  {
+  public T caseType(Type object) {
     return null;
   }
 
@@ -158,13 +171,13 @@ public class XsODataSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Service</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseService(Service object)
-  {
+  public T caseService(Service object) {
     return null;
   }
 
@@ -174,13 +187,13 @@ public class XsODataSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Entity</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseEntity(Entity object)
-  {
+  public T caseEntity(Entity object) {
     return null;
   }
 
@@ -190,13 +203,13 @@ public class XsODataSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Navigation</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseNavigation(Navigation object)
-  {
+  public T caseNavigation(Navigation object) {
     return null;
   }
 
@@ -206,13 +219,13 @@ public class XsODataSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Association</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseAssociation(Association object)
-  {
+  public T caseAssociation(Association object) {
     return null;
   }
 
@@ -222,14 +235,14 @@ public class XsODataSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch, but this is the last case anyway.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject)
    */
   @Override
-  public T defaultCase(EObject object)
-  {
+  public T defaultCase(EObject object) {
     return null;
   }
 

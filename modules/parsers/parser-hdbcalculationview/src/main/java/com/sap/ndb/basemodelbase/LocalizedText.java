@@ -28,14 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				For storing a localized text with its language
- * 			
- * 
+ * For storing a localized text with its language
+ *
+ *
  * <p>Java class for LocalizedText complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LocalizedText"&gt;
  *   &lt;complexContent&gt;
@@ -46,65 +45,55 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LocalizedText")
 public class LocalizedText {
 
-    @XmlAttribute(name = "text", required = true)
-    protected String text;
-    @XmlAttribute(name = "language", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String language;
+  @XmlAttribute(name = "text", required = true)
+  protected String text;
+  @XmlAttribute(name = "language", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String language;
 
-    /**
-     * Gets the value of the text property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getText() {
-        return text;
-    }
+  /**
+   * Gets the value of the text property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getText() {
+    return text;
+  }
 
-    /**
-     * Sets the value of the text property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setText(String value) {
-        this.text = value;
-    }
+  /**
+   * Sets the value of the text property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setText(String value) {
+    this.text = value;
+  }
 
-    /**
-     * Gets the value of the language property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLanguage() {
-        return language;
-    }
+  /**
+   * Gets the value of the language property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLanguage() {
+    return language;
+  }
 
-    /**
-     * Sets the value of the language property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLanguage(String value) {
-        this.language = value;
-    }
+  /**
+   * Sets the value of the language property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLanguage(String value) {
+    this.language = value;
+  }
 
 }

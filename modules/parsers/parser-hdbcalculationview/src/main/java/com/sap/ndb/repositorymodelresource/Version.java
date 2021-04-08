@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Version.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -38,35 +38,34 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "Version")
 @XmlEnum
 public enum Version {
 
-    @XmlEnumValue("active")
-    ACTIVE("active"),
-    @XmlEnumValue("inactive")
-    INACTIVE("inactive"),
-    @XmlEnumValue("historical")
-    HISTORICAL("historical");
-    private final String value;
+  @XmlEnumValue("active")
+  ACTIVE("active"),
+  @XmlEnumValue("inactive")
+  INACTIVE("inactive"),
+  @XmlEnumValue("historical")
+  HISTORICAL("historical");
+  private final String value;
 
-    Version(String v) {
-        value = v;
-    }
+  Version(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static Version fromValue(String v) {
+    for (Version c : Version.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static Version fromValue(String v) {
-        for (Version c: Version.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

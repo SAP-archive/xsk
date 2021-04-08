@@ -28,23 +28,22 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Parameterization for the graph action GET_SHORTEST_PATHS_ONE_TO_ONE
- * 				This action returns the shortest path from the provided start vertex to the target vertex in the graph, 
- * 				also known as single-target shortest path (SSSTSP). 
- * 				The non-negative edge weights are read from the column provided in the edge table.
- * 				Output columns: 
- * 				-ORDERING (fixed name for ordering the result)
- * 				-KEY (fixed name - values from the key column of the vertices table)
- * 				-source column of the edges table
- * 				-target column of the edges table)
- * 				-WEIGHT (fixed name corresponds to input weight column)
- * 			
- * 
+ * Parameterization for the graph action GET_SHORTEST_PATHS_ONE_TO_ONE
+ * This action returns the shortest path from the provided start vertex to the target vertex in the graph,
+ * also known as single-target shortest path (SSSTSP).
+ * The non-negative edge weights are read from the column provided in the edge table.
+ * Output columns:
+ * -ORDERING (fixed name for ordering the result)
+ * -KEY (fixed name - values from the key column of the vertices table)
+ * -source column of the edges table
+ * -target column of the edges table)
+ * -WEIGHT (fixed name corresponds to input weight column)
+ *
+ *
  * <p>Java class for GetShortestPathParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetShortestPathParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -59,8 +58,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetShortestPathParameterization", propOrder = {
@@ -68,60 +65,51 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "targetVertexParameter"
 })
 public class GetShortestPathParameterization
-    extends GetShortestPathsParameterization
-{
+    extends GetShortestPathsParameterization {
 
-    protected String targetVertex;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String targetVertexParameter;
+  protected String targetVertex;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String targetVertexParameter;
 
-    /**
-     * Gets the value of the targetVertex property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTargetVertex() {
-        return targetVertex;
-    }
+  /**
+   * Gets the value of the targetVertex property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTargetVertex() {
+    return targetVertex;
+  }
 
-    /**
-     * Sets the value of the targetVertex property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTargetVertex(String value) {
-        this.targetVertex = value;
-    }
+  /**
+   * Sets the value of the targetVertex property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTargetVertex(String value) {
+    this.targetVertex = value;
+  }
 
-    /**
-     * Gets the value of the targetVertexParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTargetVertexParameter() {
-        return targetVertexParameter;
-    }
+  /**
+   * Gets the value of the targetVertexParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTargetVertexParameter() {
+    return targetVertexParameter;
+  }
 
-    /**
-     * Sets the value of the targetVertexParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTargetVertexParameter(String value) {
-        this.targetVertexParameter = value;
-    }
+  /**
+   * Sets the value of the targetVertexParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTargetVertexParameter(String value) {
+    this.targetVertexParameter = value;
+  }
 
 }

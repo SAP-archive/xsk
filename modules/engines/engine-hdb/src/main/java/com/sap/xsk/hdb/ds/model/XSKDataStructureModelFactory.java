@@ -21,7 +21,6 @@ import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
 import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,101 +29,101 @@ import java.util.Map;
  */
 public class XSKDataStructureModelFactory {
 
-    static Map<String, String> TYPES_MAP = new HashMap<String, String>();
+  static Map<String, String> TYPES_MAP = new HashMap<String, String>();
 
-    static {
-        TYPES_MAP.put("String", "VARCHAR");
-        TYPES_MAP.put("UTCTimestamp", "TIMESTAMP");
-    }
+  static {
+    TYPES_MAP.put("String", "VARCHAR");
+    TYPES_MAP.put("UTCTimestamp", "TIMESTAMP");
+  }
 
-    public XSKDataStructureModelFactory() {
-        setupParser();
-    }
+  public XSKDataStructureModelFactory() {
+    setupParser();
+  }
 
-    private void setupParser() {
-        Injector injector = new HdbDDStandaloneSetup().createInjectorAndDoEMFRegistration();
-        injector.injectMembers(this);
-    }
+  /**
+   * Creates a table model from the raw content.
+   *
+   * @param content the table definition
+   * @return the table model instance
+   */
+  public static XSKDataStructureHDBTableModel parseTable(String location, String content) throws Exception {
+    XSKTableParser parser = new XSKTableParser();
+    XSKDataStructureHDBTableModel result = parser.parse(location, content);
+    return result;
+  }
 
-    /**
-     * Creates a table model from the raw content.
-     *
-     * @param content the table definition
-     * @return the table model instance
-     */
-    public static XSKDataStructureHDBTableModel parseTable(String location, String content) throws Exception {
-        XSKTableParser parser = new XSKTableParser();
-        XSKDataStructureHDBTableModel result = parser.parse(location, content);
-        return result;
-    }
+  /**
+   * Creates a table model from the raw content.
+   *
+   * @param bytes the table definition
+   * @return the table model instance
+   */
+  public static XSKDataStructureHDBTableModel parseTable(String location, byte[] bytes) throws Exception {
+    return parseTable(location, new String(bytes));
+  }
 
-    /**
-     * Creates a table model from the raw content.
-     *
-     * @param bytes the table definition
-     * @return the table model instance
-     */
-    public static XSKDataStructureHDBTableModel parseTable(String location, byte[] bytes) throws Exception {
-        return parseTable(location, new String(bytes));
-    }
+  /**
+   * Creates a view model from the raw content.
+   *
+   * @param content the view definition
+   * @return the view model instance
+   */
+  public static XSKDataStructureHDBViewModel parseView(String location, String content) throws Exception {
+    XSKViewParser parser = new XSKViewParser();
+    XSKDataStructureHDBViewModel result = parser.parse(location, content);
+    return result;
+  }
 
-    /**
-     * Creates a view model from the raw content.
-     *
-     * @param content the view definition
-     * @return the view model instance
-     */
-    public static XSKDataStructureHDBViewModel parseView(String location, String content) throws Exception {
-        XSKViewParser parser = new XSKViewParser();
-        XSKDataStructureHDBViewModel result = parser.parse(location, content);
-        return result;
-    }
+  /**
+   * Creates a view model from the raw content.
+   *
+   * @param bytes the view definition
+   * @return the view model instance
+   */
+  public static XSKDataStructureHDBViewModel parseView(String location, byte[] bytes) throws Exception {
+    return parseView(location, new String(bytes));
+  }
 
-    /**
-     * Creates a view model from the raw content.
-     *
-     * @param bytes the view definition
-     * @return the view model instance
-     */
-    public static XSKDataStructureHDBViewModel parseView(String location, byte[] bytes) throws Exception {
-        return parseView(location, new String(bytes));
-    }
+  /**
+   * Creates a synonym model from the raw content.
+   *
+   * @param content the synonym definition
+   * @return the synonym model instance
+   */
+  public static XSKDataStructureHDBSynonymModel parseSynonym(String location, String content) throws Exception {
+    XSKSynonymParser parser = new XSKSynonymParser();
+    XSKDataStructureHDBSynonymModel result = parser.parse(location, content);
+    return result;
+  }
 
-    /**
-     * Creates a synonym model from the raw content.
-     *
-     * @param content the synonym definition
-     * @return the synonym model instance
-     */
-    public static XSKDataStructureHDBSynonymModel parseSynonym(String location, String content) throws Exception {
-        XSKSynonymParser parser = new XSKSynonymParser();
-        XSKDataStructureHDBSynonymModel result = parser.parse(location, content);
-        return result;
-    }
+  private void setupParser() {
+    Injector injector = new HdbDDStandaloneSetup().createInjectorAndDoEMFRegistration();
+    injector.injectMembers(this);
+  }
 
-    /**
-     * Creates a entities model from the raw content.
-     *
-     * @param content the entities definition
-     * @return the entities model instance
-     * @throws Exception
-     */
-    public XSKDataStructureEntitiesModel parseEntities(String location, String content) throws Exception {
-        XSKEntitiesParser parser = new XSKEntitiesParser();
-        XSKDataStructureEntitiesModel result = parser.parse(location, content);
-        return result;
-    }
+  /**
+   * Creates a entities model from the raw content.
+   *
+   * @param content the entities definition
+   * @return the entities model instance
+   * @throws Exception
+   */
+  public XSKDataStructureEntitiesModel parseEntities(String location, String content) throws Exception {
+    XSKEntitiesParser parser = new XSKEntitiesParser();
+    XSKDataStructureEntitiesModel result = parser.parse(location, content);
+    return result;
+  }
 
-    /**
-     * Creates a entities model from the raw content.
-     *
-     * @param bytes the entities definition
-     * @return the entities model instance
-     * @throws Exception
-     */
-    public XSKDataStructureEntitiesModel parseEntities(String location, byte[] bytes) throws Exception {
-        return parseEntities(location, new String(bytes));
-    }
+  /**
+   * Creates a entities model from the raw content.
+   *
+   * @param bytes the entities definition
+   * @return the entities model instance
+   * @throws Exception
+   */
+  public XSKDataStructureEntitiesModel parseEntities(String location, byte[] bytes) throws Exception {
+    return parseEntities(location, new String(bytes));
+  }
 
 //	/**
 //	 * Creates a calculation view model from the raw content.

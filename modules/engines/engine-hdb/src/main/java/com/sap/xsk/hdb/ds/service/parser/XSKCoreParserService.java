@@ -15,27 +15,27 @@ import com.google.inject.Inject;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-
 import java.io.IOException;
 import java.util.Map;
 
 public class XSKCoreParserService implements IXSKCoreParserService {
 
-    @Inject
-    private Map<String, XSKDataStructureParser> parsersByType;
+  @Inject
+  private Map<String, XSKDataStructureParser> parsersByType;
 
-    @Override
-    public XSKDataStructureModel parseDataStructure(String type, String location, String content) throws XSKDataStructuresException, IOException {
-        if (!parsersByType.containsKey(type)) {
-            return null;
-        }
-
-        XSKDataStructureParser<?> parser = parsersByType.get(type);
-        return parser.parse(location, content);
+  @Override
+  public XSKDataStructureModel parseDataStructure(String type, String location, String content)
+      throws XSKDataStructuresException, IOException {
+    if (!parsersByType.containsKey(type)) {
+      return null;
     }
 
-    @Override
-    public Class<XSKDataStructureModel> getDataStructureClass(String type) {
-        return (Class<XSKDataStructureModel>) parsersByType.get(type).getDataStructureClass();
-    }
+    XSKDataStructureParser<?> parser = parsersByType.get(type);
+    return parser.parse(location, content);
+  }
+
+  @Override
+  public Class<XSKDataStructureModel> getDataStructureClass(String type) {
+    return (Class<XSKDataStructureModel>) parsersByType.get(type).getDataStructureClass();
+  }
 }

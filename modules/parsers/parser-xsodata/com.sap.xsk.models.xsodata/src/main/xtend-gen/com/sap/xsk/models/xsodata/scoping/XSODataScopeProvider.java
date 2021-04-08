@@ -3,14 +3,13 @@
  */
 package com.sap.xsk.models.xsodata.scoping;
 
-import com.sap.xsk.models.xsodata.scoping.AbstractXSODataScopeProvider;
-
 /**
  * This class contains custom scoping description.
- * 
+ * <p>
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping
  * on how and when to use it.
  */
 @SuppressWarnings("all")
 public class XSODataScopeProvider extends AbstractXSODataScopeProvider {
+
 }

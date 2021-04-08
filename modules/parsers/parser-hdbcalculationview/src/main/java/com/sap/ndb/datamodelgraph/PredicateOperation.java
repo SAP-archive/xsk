@@ -29,14 +29,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Comparison operation with two arguments. At least one of the arguments must be a variable element
- * 			
- * 
+ * Comparison operation with two arguments. At least one of the arguments must be a variable element
+ *
+ *
  * <p>Java class for PredicateOperation complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PredicateOperation"&gt;
  *   &lt;complexContent&gt;
@@ -49,73 +48,64 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PredicateOperation", propOrder = {
     "argument"
 })
 public class PredicateOperation
-    extends Operation
-{
+    extends Operation {
 
-    @XmlElement(required = true)
-    protected List<Argument> argument;
-    @XmlAttribute(name = "operator", required = true)
-    protected PredicateOperator operator;
+  @XmlElement(required = true)
+  protected List<Argument> argument;
+  @XmlAttribute(name = "operator", required = true)
+  protected PredicateOperator operator;
 
-    /**
-     * Gets the value of the argument property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the argument property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getArgument().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Argument }
-     * 
-     * 
-     */
-    public List<Argument> getArgument() {
-        if (argument == null) {
-            argument = new ArrayList<Argument>();
-        }
-        return this.argument;
+  /**
+   * Gets the value of the argument property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the argument property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getArgument().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Argument }
+   */
+  public List<Argument> getArgument() {
+    if (argument == null) {
+      argument = new ArrayList<Argument>();
     }
+    return this.argument;
+  }
 
-    /**
-     * Gets the value of the operator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PredicateOperator }
-     *     
-     */
-    public PredicateOperator getOperator() {
-        return operator;
-    }
+  /**
+   * Gets the value of the operator property.
+   *
+   * @return possible object is
+   * {@link PredicateOperator }
+   */
+  public PredicateOperator getOperator() {
+    return operator;
+  }
 
-    /**
-     * Sets the value of the operator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PredicateOperator }
-     *     
-     */
-    public void setOperator(PredicateOperator value) {
-        this.operator = value;
-    }
+  /**
+   * Sets the value of the operator property.
+   *
+   * @param value allowed object is
+   *              {@link PredicateOperator }
+   */
+  public void setOperator(PredicateOperator value) {
+    this.operator = value;
+  }
 
 }

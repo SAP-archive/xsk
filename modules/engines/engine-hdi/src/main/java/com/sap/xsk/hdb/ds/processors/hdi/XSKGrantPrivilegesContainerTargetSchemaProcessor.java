@@ -11,18 +11,18 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdi;
 
-import javax.inject.Singleton;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.inject.Singleton;
 
 @Singleton
 public class XSKGrantPrivilegesContainerTargetSchemaProcessor extends XSKHDIAbstractProcessor {
-	
-	public final void execute(Connection connection, String container, String[] users) throws SQLException {
-    	for (String user : users) {
-    		executeUpdate(connection, "GRANT SELECT ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTION;");
-    		executeUpdate(connection, "GRANT EXECUTE ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTION;");
-    	}
-	}
+
+  public final void execute(Connection connection, String container, String[] users) throws SQLException {
+    for (String user : users) {
+      executeUpdate(connection, "GRANT SELECT ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTION;");
+      executeUpdate(connection, "GRANT EXECUTE ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTION;");
+    }
+  }
 
 }

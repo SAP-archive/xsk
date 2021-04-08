@@ -19,12 +19,12 @@ package com.sap.xsk.models.hdbdd.hdbDD;
  *   <li>{@link com.sap.xsk.models.hdbdd.hdbDD.FieldReference#getFieldReferenceEntityForeignId <em>Field Reference Entity Foreign Id</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference()
  * @model
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference()
  */
-public interface FieldReference extends Field
-{
+public interface FieldReference extends Field {
+
   /**
    * Returns the value of the '<em><b>Reference Type</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -33,11 +33,12 @@ public interface FieldReference extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Reference Type</em>' attribute.
-   * @see #setReferenceType(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference_ReferenceType()
    * @model
    * @generated
+   * @see #setReferenceType(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference_ReferenceType()
    */
   String getReferenceType();
 
@@ -45,9 +46,10 @@ public interface FieldReference extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldReference#getReferenceType <em>Reference Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Reference Type</em>' attribute.
-   * @see #getReferenceType()
    * @generated
+   * @see #getReferenceType()
    */
   void setReferenceType(String value);
 
@@ -59,11 +61,12 @@ public interface FieldReference extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Reference Entity</em>' attribute.
-   * @see #setFieldReferenceEntity(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference_FieldReferenceEntity()
    * @model
    * @generated
+   * @see #setFieldReferenceEntity(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference_FieldReferenceEntity()
    */
   String getFieldReferenceEntity();
 
@@ -71,9 +74,10 @@ public interface FieldReference extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldReference#getFieldReferenceEntity <em>Field Reference Entity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Reference Entity</em>' attribute.
-   * @see #getFieldReferenceEntity()
    * @generated
+   * @see #getFieldReferenceEntity()
    */
   void setFieldReferenceEntity(String value);
 
@@ -85,11 +89,12 @@ public interface FieldReference extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Reference Entity Local Id</em>' attribute.
-   * @see #setFieldReferenceEntityLocalId(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference_FieldReferenceEntityLocalId()
    * @model
    * @generated
+   * @see #setFieldReferenceEntityLocalId(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference_FieldReferenceEntityLocalId()
    */
   String getFieldReferenceEntityLocalId();
 
@@ -97,9 +102,10 @@ public interface FieldReference extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldReference#getFieldReferenceEntityLocalId <em>Field Reference Entity Local Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Reference Entity Local Id</em>' attribute.
-   * @see #getFieldReferenceEntityLocalId()
    * @generated
+   * @see #getFieldReferenceEntityLocalId()
    */
   void setFieldReferenceEntityLocalId(String value);
 
@@ -111,11 +117,12 @@ public interface FieldReference extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Reference Entity Foreign Id</em>' attribute.
-   * @see #setFieldReferenceEntityForeignId(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference_FieldReferenceEntityForeignId()
    * @model
    * @generated
+   * @see #setFieldReferenceEntityForeignId(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldReference_FieldReferenceEntityForeignId()
    */
   String getFieldReferenceEntityForeignId();
 
@@ -123,9 +130,10 @@ public interface FieldReference extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldReference#getFieldReferenceEntityForeignId <em>Field Reference Entity Foreign Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Reference Entity Foreign Id</em>' attribute.
-   * @see #getFieldReferenceEntityForeignId()
    * @generated
+   * @see #getFieldReferenceEntityForeignId()
    */
   void setFieldReferenceEntityForeignId(String value);
 

@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ConstantAttributeMapping complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ConstantAttributeMapping"&gt;
  *   &lt;complexContent&gt;
@@ -40,66 +40,55 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ConstantAttributeMapping")
 public class ConstantAttributeMapping
-    extends AbstractAttributeMapping
-{
+    extends AbstractAttributeMapping {
 
-    @XmlAttribute(name = "value")
-    protected String value;
-    @XmlAttribute(name = "null")
-    protected Boolean _null;
+  @XmlAttribute(name = "value")
+  protected String value;
+  @XmlAttribute(name = "null")
+  protected Boolean _null;
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the null property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isNull() {
-        return _null;
-    }
+  /**
+   * Gets the value of the null property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isNull() {
+    return _null;
+  }
 
-    /**
-     * Sets the value of the null property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setNull(Boolean value) {
-        this._null = value;
-    }
+  /**
+   * Sets the value of the null property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setNull(Boolean value) {
+    this._null = value;
+  }
 
 }

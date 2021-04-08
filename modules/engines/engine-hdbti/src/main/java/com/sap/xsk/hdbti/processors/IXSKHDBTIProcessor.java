@@ -11,13 +11,14 @@
  */
 package com.sap.xsk.hdbti.processors;
 
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
-
 public interface IXSKHDBTIProcessor {
-    void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection) throws IOException, SQLException, XSKDataStructuresException;
+
+  void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection)
+      throws IOException, SQLException, XSKDataStructuresException;
 }

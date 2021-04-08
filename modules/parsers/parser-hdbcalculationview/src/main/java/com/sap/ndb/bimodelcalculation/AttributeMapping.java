@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for AttributeMapping complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AttributeMapping"&gt;
  *   &lt;complexContent&gt;
@@ -41,41 +41,34 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AttributeMapping")
 public class AttributeMapping
-    extends AbstractAttributeMapping
-{
+    extends AbstractAttributeMapping {
 
-    @XmlAttribute(name = "source", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String source;
+  @XmlAttribute(name = "source", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String source;
 
-    /**
-     * Gets the value of the source property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSource() {
-        return source;
-    }
+  /**
+   * Gets the value of the source property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSource() {
+    return source;
+  }
 
-    /**
-     * Sets the value of the source property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSource(String value) {
-        this.source = value;
-    }
+  /**
+   * Sets the value of the source property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSource(String value) {
+    this.source = value;
+  }
 
 }

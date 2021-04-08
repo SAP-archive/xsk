@@ -19,20 +19,20 @@
 
 package com.sap.ndb.datamodeltype;
 
+import com.sap.ndb.basemodelbase.EndUserTexts;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.EndUserTexts;
 
 
 /**
  * <p>Java class for ElementMapping complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ElementMapping"&gt;
  *   &lt;complexContent&gt;
@@ -46,94 +46,79 @@ import com.sap.ndb.basemodelbase.EndUserTexts;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ElementMapping", propOrder = {
     "targetEndUserTexts"
 })
 public class ElementMapping
-    extends AbstractElementMapping
-{
+    extends AbstractElementMapping {
 
-    protected EndUserTexts targetEndUserTexts;
-    @XmlAttribute(name = "sourceName", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String sourceName;
-    @XmlAttribute(name = "transparentFilter")
-    protected Boolean transparentFilter;
+  protected EndUserTexts targetEndUserTexts;
+  @XmlAttribute(name = "sourceName", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String sourceName;
+  @XmlAttribute(name = "transparentFilter")
+  protected Boolean transparentFilter;
 
-    /**
-     * Gets the value of the targetEndUserTexts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public EndUserTexts getTargetEndUserTexts() {
-        return targetEndUserTexts;
-    }
+  /**
+   * Gets the value of the targetEndUserTexts property.
+   *
+   * @return possible object is
+   * {@link EndUserTexts }
+   */
+  public EndUserTexts getTargetEndUserTexts() {
+    return targetEndUserTexts;
+  }
 
-    /**
-     * Sets the value of the targetEndUserTexts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public void setTargetEndUserTexts(EndUserTexts value) {
-        this.targetEndUserTexts = value;
-    }
+  /**
+   * Sets the value of the targetEndUserTexts property.
+   *
+   * @param value allowed object is
+   *              {@link EndUserTexts }
+   */
+  public void setTargetEndUserTexts(EndUserTexts value) {
+    this.targetEndUserTexts = value;
+  }
 
-    /**
-     * Gets the value of the sourceName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSourceName() {
-        return sourceName;
-    }
+  /**
+   * Gets the value of the sourceName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSourceName() {
+    return sourceName;
+  }
 
-    /**
-     * Sets the value of the sourceName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSourceName(String value) {
-        this.sourceName = value;
-    }
+  /**
+   * Sets the value of the sourceName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSourceName(String value) {
+    this.sourceName = value;
+  }
 
-    /**
-     * Gets the value of the transparentFilter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isTransparentFilter() {
-        return transparentFilter;
-    }
+  /**
+   * Gets the value of the transparentFilter property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isTransparentFilter() {
+    return transparentFilter;
+  }
 
-    /**
-     * Sets the value of the transparentFilter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setTransparentFilter(Boolean value) {
-        this.transparentFilter = value;
-    }
+  /**
+   * Sets the value of the transparentFilter property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setTransparentFilter(Boolean value) {
+    this.transparentFilter = value;
+  }
 
 }

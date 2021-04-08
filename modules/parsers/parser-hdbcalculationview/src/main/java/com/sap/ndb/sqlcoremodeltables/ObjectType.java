@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ObjectType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -68,65 +68,64 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ObjectType", namespace = "http://www.sap.com/ndb/SQLCoreModelTables.ecore")
 @XmlEnum
 public enum ObjectType {
 
-    UNKNOWN("UNKNOWN"),
-    TABLE("TABLE"),
-    VIEW("VIEW"),
-    PROCEDURE("PROCEDURE"),
-    FUNCTION("FUNCTION"),
-    SCHEMA("SCHEMA"),
-    SEQUENCE("SEQUENCE"),
-    TABLE_SYNONYM("TABLE_SYNONYM"),
-    VIEW_SYNONYM("VIEW_SYNONYM"),
-    INDEX_SYNONYM("INDEX_SYNONYM"),
-    SEQUENCE_SYNONYM("SEQUENCE_SYNONYM"),
-    PROCEDURE_SYNONYM("PROCEDURE_SYNONYM"),
-    JOIN_VIEW("JOIN_VIEW"),
-    OLAP_VIEW("OLAP_VIEW"),
-    HIERARCHY_VIEW("HIERARCHY_VIEW"),
-    CALCULATED_VIEW("CALCULATED_VIEW"),
-    ACTIVATED_TABLE("ACTIVATED_TABLE"),
-    TRIGGER("TRIGGER"),
-    SYNONYM("SYNONYM"),
-    MONITORVIEW("MONITORVIEW"),
-    STRUCTUREDPRIVILEGE("STRUCTUREDPRIVILEGE"),
-    AUDIT_POLICY("AUDIT_POLICY"),
-    COLUMN_TABLE("COLUMN_TABLE"),
-    ROW_TABLE("ROW_TABLE"),
-    REMOTE_SOURCE("REMOTE_SOURCE"),
-    @XmlEnumValue("VIRTUAL TABLE")
-    VIRTUAL_TABLE("VIRTUAL TABLE"),
-    @XmlEnumValue("EXTENDED TABLE")
-    EXTENDED_TABLE("EXTENDED TABLE"),
-    EPMMODEL("EPMMODEL"),
-    EPMQUERYSOURCE("EPMQUERYSOURCE"),
-    @XmlEnumValue("REMOTE SUBSCRIPTION")
-    REMOTE_SUBSCRIPTION("REMOTE SUBSCRIPTION"),
-    PSE("PSE"),
-    TABLE_TYPE("TABLE_TYPE"),
-    AGENT("AGENT");
-    private final String value;
+  UNKNOWN("UNKNOWN"),
+  TABLE("TABLE"),
+  VIEW("VIEW"),
+  PROCEDURE("PROCEDURE"),
+  FUNCTION("FUNCTION"),
+  SCHEMA("SCHEMA"),
+  SEQUENCE("SEQUENCE"),
+  TABLE_SYNONYM("TABLE_SYNONYM"),
+  VIEW_SYNONYM("VIEW_SYNONYM"),
+  INDEX_SYNONYM("INDEX_SYNONYM"),
+  SEQUENCE_SYNONYM("SEQUENCE_SYNONYM"),
+  PROCEDURE_SYNONYM("PROCEDURE_SYNONYM"),
+  JOIN_VIEW("JOIN_VIEW"),
+  OLAP_VIEW("OLAP_VIEW"),
+  HIERARCHY_VIEW("HIERARCHY_VIEW"),
+  CALCULATED_VIEW("CALCULATED_VIEW"),
+  ACTIVATED_TABLE("ACTIVATED_TABLE"),
+  TRIGGER("TRIGGER"),
+  SYNONYM("SYNONYM"),
+  MONITORVIEW("MONITORVIEW"),
+  STRUCTUREDPRIVILEGE("STRUCTUREDPRIVILEGE"),
+  AUDIT_POLICY("AUDIT_POLICY"),
+  COLUMN_TABLE("COLUMN_TABLE"),
+  ROW_TABLE("ROW_TABLE"),
+  REMOTE_SOURCE("REMOTE_SOURCE"),
+  @XmlEnumValue("VIRTUAL TABLE")
+  VIRTUAL_TABLE("VIRTUAL TABLE"),
+  @XmlEnumValue("EXTENDED TABLE")
+  EXTENDED_TABLE("EXTENDED TABLE"),
+  EPMMODEL("EPMMODEL"),
+  EPMQUERYSOURCE("EPMQUERYSOURCE"),
+  @XmlEnumValue("REMOTE SUBSCRIPTION")
+  REMOTE_SUBSCRIPTION("REMOTE SUBSCRIPTION"),
+  PSE("PSE"),
+  TABLE_TYPE("TABLE_TYPE"),
+  AGENT("AGENT");
+  private final String value;
 
-    ObjectType(String v) {
-        value = v;
-    }
+  ObjectType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static ObjectType fromValue(String v) {
+    for (ObjectType c : ObjectType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static ObjectType fromValue(String v) {
-        for (ObjectType c: ObjectType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

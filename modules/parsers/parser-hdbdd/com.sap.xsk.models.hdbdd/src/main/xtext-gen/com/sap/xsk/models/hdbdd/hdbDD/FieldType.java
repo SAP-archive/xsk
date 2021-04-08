@@ -17,12 +17,12 @@ package com.sap.xsk.models.hdbdd.hdbDD;
  *   <li>{@link com.sap.xsk.models.hdbdd.hdbDD.FieldType#getFieldPredefinedType <em>Field Predefined Type</em>}</li>
  * </ul>
  *
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldType()
  * @model
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldType()
  */
-public interface FieldType extends Field
-{
+public interface FieldType extends Field {
+
   /**
    * Returns the value of the '<em><b>Key</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -31,11 +31,12 @@ public interface FieldType extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Key</em>' attribute.
-   * @see #setKey(boolean)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldType_Key()
    * @model
    * @generated
+   * @see #setKey(boolean)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldType_Key()
    */
   boolean isKey();
 
@@ -43,9 +44,10 @@ public interface FieldType extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldType#isKey <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Key</em>' attribute.
-   * @see #isKey()
    * @generated
+   * @see #isKey()
    */
   void setKey(boolean value);
 
@@ -57,11 +59,12 @@ public interface FieldType extends Field
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
+   *
    * @return the value of the '<em>Field Predefined Type</em>' attribute.
-   * @see #setFieldPredefinedType(String)
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldType_FieldPredefinedType()
    * @model
    * @generated
+   * @see #setFieldPredefinedType(String)
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldType_FieldPredefinedType()
    */
   String getFieldPredefinedType();
 
@@ -69,9 +72,10 @@ public interface FieldType extends Field
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldType#getFieldPredefinedType <em>Field Predefined Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param value the new value of the '<em>Field Predefined Type</em>' attribute.
-   * @see #getFieldPredefinedType()
    * @generated
+   * @see #getFieldPredefinedType()
    */
   void setFieldPredefinedType(String value);
 

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for DimensionType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -46,51 +46,50 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "DimensionType")
 @XmlEnum
 public enum DimensionType {
 
-    @XmlEnumValue("Unknown")
-    UNKNOWN("Unknown"),
-    @XmlEnumValue("Time")
-    TIME("Time"),
-    @XmlEnumValue("Measure")
-    MEASURE("Measure"),
-    @XmlEnumValue("Standard")
-    STANDARD("Standard"),
-    @XmlEnumValue("Geography")
-    GEOGRAPHY("Geography"),
-    @XmlEnumValue("Customer")
-    CUSTOMER("Customer"),
-    @XmlEnumValue("Product")
-    PRODUCT("Product"),
-    @XmlEnumValue("Organization")
-    ORGANIZATION("Organization"),
-    @XmlEnumValue("Employee")
-    EMPLOYEE("Employee"),
-    @XmlEnumValue("Currency")
-    CURRENCY("Currency"),
-    @XmlEnumValue("Channel")
-    CHANNEL("Channel");
-    private final String value;
+  @XmlEnumValue("Unknown")
+  UNKNOWN("Unknown"),
+  @XmlEnumValue("Time")
+  TIME("Time"),
+  @XmlEnumValue("Measure")
+  MEASURE("Measure"),
+  @XmlEnumValue("Standard")
+  STANDARD("Standard"),
+  @XmlEnumValue("Geography")
+  GEOGRAPHY("Geography"),
+  @XmlEnumValue("Customer")
+  CUSTOMER("Customer"),
+  @XmlEnumValue("Product")
+  PRODUCT("Product"),
+  @XmlEnumValue("Organization")
+  ORGANIZATION("Organization"),
+  @XmlEnumValue("Employee")
+  EMPLOYEE("Employee"),
+  @XmlEnumValue("Currency")
+  CURRENCY("Currency"),
+  @XmlEnumValue("Channel")
+  CHANNEL("Channel");
+  private final String value;
 
-    DimensionType(String v) {
-        value = v;
-    }
+  DimensionType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static DimensionType fromValue(String v) {
+    for (DimensionType c : DimensionType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static DimensionType fromValue(String v) {
-        for (DimensionType c: DimensionType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

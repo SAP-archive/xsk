@@ -29,14 +29,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				For defining a variable
- * 			
- * 
+ * For defining a variable
+ *
+ *
  * <p>Java class for EdgeVariable complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EdgeVariable"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +46,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EdgeVariable")
@@ -56,62 +53,53 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     PathVariable.class
 })
 public class EdgeVariable
-    extends Variable
-{
+    extends Variable {
 
-    @XmlAttribute(name = "sourceVariable", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String sourceVariable;
-    @XmlAttribute(name = "targetVariable", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String targetVariable;
+  @XmlAttribute(name = "sourceVariable", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String sourceVariable;
+  @XmlAttribute(name = "targetVariable", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String targetVariable;
 
-    /**
-     * Gets the value of the sourceVariable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSourceVariable() {
-        return sourceVariable;
-    }
+  /**
+   * Gets the value of the sourceVariable property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSourceVariable() {
+    return sourceVariable;
+  }
 
-    /**
-     * Sets the value of the sourceVariable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSourceVariable(String value) {
-        this.sourceVariable = value;
-    }
+  /**
+   * Sets the value of the sourceVariable property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSourceVariable(String value) {
+    this.sourceVariable = value;
+  }
 
-    /**
-     * Gets the value of the targetVariable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTargetVariable() {
-        return targetVariable;
-    }
+  /**
+   * Gets the value of the targetVariable property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTargetVariable() {
+    return targetVariable;
+  }
 
-    /**
-     * Sets the value of the targetVariable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTargetVariable(String value) {
-        this.targetVariable = value;
-    }
+  /**
+   * Sets the value of the targetVariable property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTargetVariable(String value) {
+    this.targetVariable = value;
+  }
 
 }

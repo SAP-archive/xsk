@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for SemanticType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -51,105 +51,86 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "SemanticType")
 @XmlEnum
 public enum SemanticType {
 
-    @XmlEnumValue("empty")
-    EMPTY("empty"),
-    @XmlEnumValue("amount")
-    AMOUNT("amount"),
-    @XmlEnumValue("quantity")
-    QUANTITY("quantity"),
-    @XmlEnumValue("currencyCode")
-    CURRENCY_CODE("currencyCode"),
-    @XmlEnumValue("unitOfMeasure")
-    UNIT_OF_MEASURE("unitOfMeasure"),
+  @XmlEnumValue("empty")
+  EMPTY("empty"),
+  @XmlEnumValue("amount")
+  AMOUNT("amount"),
+  @XmlEnumValue("quantity")
+  QUANTITY("quantity"),
+  @XmlEnumValue("currencyCode")
+  CURRENCY_CODE("currencyCode"),
+  @XmlEnumValue("unitOfMeasure")
+  UNIT_OF_MEASURE("unitOfMeasure"),
 
-    /**
-     * 
-     * 						Can be used for STRING typed fields (ABAP type TIMS) to indicate the additional semantic
-     * 						Not needed if the primitive type is already TIME
-     * 					
-     * 
-     */
-    @XmlEnumValue("time")
-    TIME("time"),
+  /**
+   * Can be used for STRING typed fields (ABAP type TIMS) to indicate the additional semantic
+   * Not needed if the primitive type is already TIME
+   */
+  @XmlEnumValue("time")
+  TIME("time"),
 
-    /**
-     * 
-     * 						Can be used for STRING typed fields (ABAP type DATS) to indicate the additional semantic
-     * 						Not needed if the primitive type is already DATE
-     * 					
-     * 
-     */
-    @XmlEnumValue("date")
-    DATE("date"),
+  /**
+   * Can be used for STRING typed fields (ABAP type DATS) to indicate the additional semantic
+   * Not needed if the primitive type is already DATE
+   */
+  @XmlEnumValue("date")
+  DATE("date"),
 
-    /**
-     * 
-     * 						Date field containing the from data for time dependent data 
-     * 					
-     * 
-     */
-    @XmlEnumValue("date.businessDateFrom")
-    DATE_BUSINESS_DATE_FROM("date.businessDateFrom"),
+  /**
+   * Date field containing the from data for time dependent data
+   */
+  @XmlEnumValue("date.businessDateFrom")
+  DATE_BUSINESS_DATE_FROM("date.businessDateFrom"),
 
-    /**
-     * 
-     * 						Date field containing the to data for time dependent data 
-     * 					
-     * 
-     */
-    @XmlEnumValue("date.businessDateTo")
-    DATE_BUSINESS_DATE_TO("date.businessDateTo"),
-    @XmlEnumValue("geoLocation.longitude")
-    GEO_LOCATION_LONGITUDE("geoLocation.longitude"),
-    @XmlEnumValue("geoLocation.latitude")
-    GEO_LOCATION_LATITUDE("geoLocation.latitude"),
-    @XmlEnumValue("geoLocation.cartoId")
-    GEO_LOCATION_CARTO_ID("geoLocation.cartoId"),
-    @XmlEnumValue("geoLocation.normalizedName")
-    GEO_LOCATION_NORMALIZED_NAME("geoLocation.normalizedName"),
+  /**
+   * Date field containing the to data for time dependent data
+   */
+  @XmlEnumValue("date.businessDateTo")
+  DATE_BUSINESS_DATE_TO("date.businessDateTo"),
+  @XmlEnumValue("geoLocation.longitude")
+  GEO_LOCATION_LONGITUDE("geoLocation.longitude"),
+  @XmlEnumValue("geoLocation.latitude")
+  GEO_LOCATION_LATITUDE("geoLocation.latitude"),
+  @XmlEnumValue("geoLocation.cartoId")
+  GEO_LOCATION_CARTO_ID("geoLocation.cartoId"),
+  @XmlEnumValue("geoLocation.normalizedName")
+  GEO_LOCATION_NORMALIZED_NAME("geoLocation.normalizedName"),
 
-    /**
-     * 
-     * 						APAP field to identify the client = MANDT
-     * 					
-     * 
-     */
-    @XmlEnumValue("client")
-    CLIENT("client"),
-    @XmlEnumValue("language")
-    LANGUAGE("language"),
+  /**
+   * APAP field to identify the client = MANDT
+   */
+  @XmlEnumValue("client")
+  CLIENT("client"),
+  @XmlEnumValue("language")
+  LANGUAGE("language"),
 
-    /**
-     *  
-     * 						A textual (one line) description of an object. Typically this will be multi language enabled.
-     * 					
-     * 
-     */
-    @XmlEnumValue("description")
-    DESCRIPTION("description");
-    private final String value;
+  /**
+   * A textual (one line) description of an object. Typically this will be multi language enabled.
+   */
+  @XmlEnumValue("description")
+  DESCRIPTION("description");
+  private final String value;
 
-    SemanticType(String v) {
-        value = v;
+  SemanticType(String v) {
+    value = v;
+  }
+
+  public static SemanticType fromValue(String v) {
+    for (SemanticType c : SemanticType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public String value() {
-        return value;
-    }
-
-    public static SemanticType fromValue(String v) {
-        for (SemanticType c: SemanticType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

@@ -19,10 +19,6 @@
 
 package com.sap.ndb.bimodelcalculation;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
 import com.sap.ndb.datamodelhierarchy.HierarchyAncestorsParameterization;
 import com.sap.ndb.datamodelhierarchy.HierarchyDescendantsParameterization;
 import com.sap.ndb.datamodelhierarchy.HierarchyFunction;
@@ -31,17 +27,20 @@ import com.sap.ndb.datamodelhierarchy.HierarchyParameterization;
 import com.sap.ndb.datamodelhierarchy.HierarchySiblingsParameterization;
 import com.sap.ndb.datamodelhierarchy.HierarchySpanTreeParameterization;
 import com.sap.ndb.datamodelhierarchy.HierarchyTemporalParameterization;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A View node for hierarchy generation functions and navigation functions.
- * 			
- * 
+ * A View node for hierarchy generation functions and navigation functions.
+ *
+ *
  * <p>Java class for HierarchyView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HierarchyView"&gt;
  *   &lt;complexContent&gt;
@@ -60,8 +59,6 @@ import com.sap.ndb.datamodelhierarchy.HierarchyTemporalParameterization;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HierarchyView", propOrder = {
@@ -74,209 +71,176 @@ import com.sap.ndb.datamodelhierarchy.HierarchyTemporalParameterization;
     "hierarchySiblingsParameterization"
 })
 public class HierarchyView
-    extends CalculationView
-{
+    extends CalculationView {
 
-    protected HierarchyParameterization hierarchyParameterization;
-    protected HierarchyLeveledParameterization hierarchyLeveledParameterization;
-    protected HierarchyTemporalParameterization hierarchyTemporalParameterization;
-    protected HierarchySpanTreeParameterization hierarchySpanTreeParameterization;
-    protected HierarchyDescendantsParameterization hierarchyDescendantsParameterization;
-    protected HierarchyAncestorsParameterization hierarchyAncestorsParameterization;
-    protected HierarchySiblingsParameterization hierarchySiblingsParameterization;
-    @XmlAttribute(name = "function")
-    protected HierarchyFunction function;
+  protected HierarchyParameterization hierarchyParameterization;
+  protected HierarchyLeveledParameterization hierarchyLeveledParameterization;
+  protected HierarchyTemporalParameterization hierarchyTemporalParameterization;
+  protected HierarchySpanTreeParameterization hierarchySpanTreeParameterization;
+  protected HierarchyDescendantsParameterization hierarchyDescendantsParameterization;
+  protected HierarchyAncestorsParameterization hierarchyAncestorsParameterization;
+  protected HierarchySiblingsParameterization hierarchySiblingsParameterization;
+  @XmlAttribute(name = "function")
+  protected HierarchyFunction function;
 
-    /**
-     * Gets the value of the hierarchyParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyParameterization }
-     *     
-     */
-    public HierarchyParameterization getHierarchyParameterization() {
-        return hierarchyParameterization;
-    }
+  /**
+   * Gets the value of the hierarchyParameterization property.
+   *
+   * @return possible object is
+   * {@link HierarchyParameterization }
+   */
+  public HierarchyParameterization getHierarchyParameterization() {
+    return hierarchyParameterization;
+  }
 
-    /**
-     * Sets the value of the hierarchyParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyParameterization }
-     *     
-     */
-    public void setHierarchyParameterization(HierarchyParameterization value) {
-        this.hierarchyParameterization = value;
-    }
+  /**
+   * Sets the value of the hierarchyParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyParameterization }
+   */
+  public void setHierarchyParameterization(HierarchyParameterization value) {
+    this.hierarchyParameterization = value;
+  }
 
-    /**
-     * Gets the value of the hierarchyLeveledParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyLeveledParameterization }
-     *     
-     */
-    public HierarchyLeveledParameterization getHierarchyLeveledParameterization() {
-        return hierarchyLeveledParameterization;
-    }
+  /**
+   * Gets the value of the hierarchyLeveledParameterization property.
+   *
+   * @return possible object is
+   * {@link HierarchyLeveledParameterization }
+   */
+  public HierarchyLeveledParameterization getHierarchyLeveledParameterization() {
+    return hierarchyLeveledParameterization;
+  }
 
-    /**
-     * Sets the value of the hierarchyLeveledParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyLeveledParameterization }
-     *     
-     */
-    public void setHierarchyLeveledParameterization(HierarchyLeveledParameterization value) {
-        this.hierarchyLeveledParameterization = value;
-    }
+  /**
+   * Sets the value of the hierarchyLeveledParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyLeveledParameterization }
+   */
+  public void setHierarchyLeveledParameterization(HierarchyLeveledParameterization value) {
+    this.hierarchyLeveledParameterization = value;
+  }
 
-    /**
-     * Gets the value of the hierarchyTemporalParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyTemporalParameterization }
-     *     
-     */
-    public HierarchyTemporalParameterization getHierarchyTemporalParameterization() {
-        return hierarchyTemporalParameterization;
-    }
+  /**
+   * Gets the value of the hierarchyTemporalParameterization property.
+   *
+   * @return possible object is
+   * {@link HierarchyTemporalParameterization }
+   */
+  public HierarchyTemporalParameterization getHierarchyTemporalParameterization() {
+    return hierarchyTemporalParameterization;
+  }
 
-    /**
-     * Sets the value of the hierarchyTemporalParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyTemporalParameterization }
-     *     
-     */
-    public void setHierarchyTemporalParameterization(HierarchyTemporalParameterization value) {
-        this.hierarchyTemporalParameterization = value;
-    }
+  /**
+   * Sets the value of the hierarchyTemporalParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyTemporalParameterization }
+   */
+  public void setHierarchyTemporalParameterization(HierarchyTemporalParameterization value) {
+    this.hierarchyTemporalParameterization = value;
+  }
 
-    /**
-     * Gets the value of the hierarchySpanTreeParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchySpanTreeParameterization }
-     *     
-     */
-    public HierarchySpanTreeParameterization getHierarchySpanTreeParameterization() {
-        return hierarchySpanTreeParameterization;
-    }
+  /**
+   * Gets the value of the hierarchySpanTreeParameterization property.
+   *
+   * @return possible object is
+   * {@link HierarchySpanTreeParameterization }
+   */
+  public HierarchySpanTreeParameterization getHierarchySpanTreeParameterization() {
+    return hierarchySpanTreeParameterization;
+  }
 
-    /**
-     * Sets the value of the hierarchySpanTreeParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchySpanTreeParameterization }
-     *     
-     */
-    public void setHierarchySpanTreeParameterization(HierarchySpanTreeParameterization value) {
-        this.hierarchySpanTreeParameterization = value;
-    }
+  /**
+   * Sets the value of the hierarchySpanTreeParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchySpanTreeParameterization }
+   */
+  public void setHierarchySpanTreeParameterization(HierarchySpanTreeParameterization value) {
+    this.hierarchySpanTreeParameterization = value;
+  }
 
-    /**
-     * Gets the value of the hierarchyDescendantsParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyDescendantsParameterization }
-     *     
-     */
-    public HierarchyDescendantsParameterization getHierarchyDescendantsParameterization() {
-        return hierarchyDescendantsParameterization;
-    }
+  /**
+   * Gets the value of the hierarchyDescendantsParameterization property.
+   *
+   * @return possible object is
+   * {@link HierarchyDescendantsParameterization }
+   */
+  public HierarchyDescendantsParameterization getHierarchyDescendantsParameterization() {
+    return hierarchyDescendantsParameterization;
+  }
 
-    /**
-     * Sets the value of the hierarchyDescendantsParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyDescendantsParameterization }
-     *     
-     */
-    public void setHierarchyDescendantsParameterization(HierarchyDescendantsParameterization value) {
-        this.hierarchyDescendantsParameterization = value;
-    }
+  /**
+   * Sets the value of the hierarchyDescendantsParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyDescendantsParameterization }
+   */
+  public void setHierarchyDescendantsParameterization(HierarchyDescendantsParameterization value) {
+    this.hierarchyDescendantsParameterization = value;
+  }
 
-    /**
-     * Gets the value of the hierarchyAncestorsParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyAncestorsParameterization }
-     *     
-     */
-    public HierarchyAncestorsParameterization getHierarchyAncestorsParameterization() {
-        return hierarchyAncestorsParameterization;
-    }
+  /**
+   * Gets the value of the hierarchyAncestorsParameterization property.
+   *
+   * @return possible object is
+   * {@link HierarchyAncestorsParameterization }
+   */
+  public HierarchyAncestorsParameterization getHierarchyAncestorsParameterization() {
+    return hierarchyAncestorsParameterization;
+  }
 
-    /**
-     * Sets the value of the hierarchyAncestorsParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyAncestorsParameterization }
-     *     
-     */
-    public void setHierarchyAncestorsParameterization(HierarchyAncestorsParameterization value) {
-        this.hierarchyAncestorsParameterization = value;
-    }
+  /**
+   * Sets the value of the hierarchyAncestorsParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyAncestorsParameterization }
+   */
+  public void setHierarchyAncestorsParameterization(HierarchyAncestorsParameterization value) {
+    this.hierarchyAncestorsParameterization = value;
+  }
 
-    /**
-     * Gets the value of the hierarchySiblingsParameterization property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchySiblingsParameterization }
-     *     
-     */
-    public HierarchySiblingsParameterization getHierarchySiblingsParameterization() {
-        return hierarchySiblingsParameterization;
-    }
+  /**
+   * Gets the value of the hierarchySiblingsParameterization property.
+   *
+   * @return possible object is
+   * {@link HierarchySiblingsParameterization }
+   */
+  public HierarchySiblingsParameterization getHierarchySiblingsParameterization() {
+    return hierarchySiblingsParameterization;
+  }
 
-    /**
-     * Sets the value of the hierarchySiblingsParameterization property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchySiblingsParameterization }
-     *     
-     */
-    public void setHierarchySiblingsParameterization(HierarchySiblingsParameterization value) {
-        this.hierarchySiblingsParameterization = value;
-    }
+  /**
+   * Sets the value of the hierarchySiblingsParameterization property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchySiblingsParameterization }
+   */
+  public void setHierarchySiblingsParameterization(HierarchySiblingsParameterization value) {
+    this.hierarchySiblingsParameterization = value;
+  }
 
-    /**
-     * Gets the value of the function property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyFunction }
-     *     
-     */
-    public HierarchyFunction getFunction() {
-        return function;
-    }
+  /**
+   * Gets the value of the function property.
+   *
+   * @return possible object is
+   * {@link HierarchyFunction }
+   */
+  public HierarchyFunction getFunction() {
+    return function;
+  }
 
-    /**
-     * Sets the value of the function property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyFunction }
-     *     
-     */
-    public void setFunction(HierarchyFunction value) {
-        this.function = value;
-    }
+  /**
+   * Sets the value of the function property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyFunction }
+   */
+  public void setFunction(HierarchyFunction value) {
+    this.function = value;
+  }
 
 }

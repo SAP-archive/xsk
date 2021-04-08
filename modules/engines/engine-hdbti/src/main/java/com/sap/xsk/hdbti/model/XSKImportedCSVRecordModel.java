@@ -11,94 +11,95 @@
  */
 package com.sap.xsk.hdbti.model;
 
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 
 @Table(name = "XSK_IMPORTED_CSV_RECORDS")
 public class XSKImportedCSVRecordModel {
-    @Id
-    @GeneratedValue
-    @Column(name = "ID", columnDefinition = "BIGINT", length = 32, nullable = false)
-    private Long id;
 
-    @Column(name = "CSV_RECORD_ID", columnDefinition = "VARCHAR", nullable = false)
-    private String rowId;
+  @Id
+  @GeneratedValue
+  @Column(name = "ID", columnDefinition = "BIGINT", length = 32, nullable = false)
+  private Long id;
 
-    @Column(name = "TABLE_NAME", columnDefinition = "VARCHAR", nullable = false)
-    private String tableName;
+  @Column(name = "CSV_RECORD_ID", columnDefinition = "VARCHAR", nullable = false)
+  private String rowId;
 
-    @Column(name = "CSV_LOCATION", columnDefinition = "VARCHAR", nullable = false)
-    private String csvLocation;
+  @Column(name = "TABLE_NAME", columnDefinition = "VARCHAR", nullable = false)
+  private String tableName;
 
-    @Column(name = "HDBTI_LOCATION", columnDefinition = "VARCHAR", nullable = false)
-    private String hdbtiLocation;
+  @Column(name = "CSV_LOCATION", columnDefinition = "VARCHAR", nullable = false)
+  private String csvLocation;
 
-    @Column(name = "HASH", columnDefinition = "VARCHAR", nullable = false)
-    private String hash;
+  @Column(name = "HDBTI_LOCATION", columnDefinition = "VARCHAR", nullable = false)
+  private String hdbtiLocation;
 
-    @Column(name = "DS_CREATED_AT", columnDefinition = "TIMESTAMP", nullable = false)
-    private Timestamp createdAt;
+  @Column(name = "HASH", columnDefinition = "VARCHAR", nullable = false)
+  private String hash;
+
+  @Column(name = "DS_CREATED_AT", columnDefinition = "TIMESTAMP", nullable = false)
+  private Timestamp createdAt;
 
 
-    public XSKImportedCSVRecordModel() {
-    }
+  public XSKImportedCSVRecordModel() {
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getRowId() {
-        return rowId;
-    }
+  public String getRowId() {
+    return rowId;
+  }
 
-    public void setRowId(String rowId) {
-        this.rowId = rowId;
-    }
+  public void setRowId(String rowId) {
+    this.rowId = rowId;
+  }
 
-    public String getTableName() {
-        return tableName;
-    }
+  public String getTableName() {
+    return tableName;
+  }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
+  public void setTableName(String tableName) {
+    this.tableName = tableName;
+  }
 
-    public String getHdbtiLocation() {
-        return hdbtiLocation;
-    }
+  public String getHdbtiLocation() {
+    return hdbtiLocation;
+  }
 
-    public void setHdbtiLocation(String hdbtiLocation) {
-        this.hdbtiLocation = hdbtiLocation;
-    }
+  public void setHdbtiLocation(String hdbtiLocation) {
+    this.hdbtiLocation = hdbtiLocation;
+  }
 
-    public String getCsvLocation() {
-        return csvLocation;
-    }
+  public String getCsvLocation() {
+    return csvLocation;
+  }
 
-    public void setCsvLocation(String csvLocation) {
-        this.csvLocation = csvLocation;
-    }
+  public void setCsvLocation(String csvLocation) {
+    this.csvLocation = csvLocation;
+  }
 
-    public String getHash() {
-        return hash;
-    }
+  public String getHash() {
+    return hash;
+  }
 
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
+  public void setHash(String hash) {
+    this.hash = hash;
+  }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
+  public Timestamp getCreatedAt() {
+    return createdAt;
+  }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setCreatedAt(Timestamp createdAt) {
+    this.createdAt = createdAt;
+  }
 }

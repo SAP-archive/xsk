@@ -20,24 +20,25 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
  */
 public class XSKDataStructuresSynchronizerJob extends AbstractSynchronizerJob {
 
-	private XSKDataStructuresSynchronizer dataStructureSynchronizer = StaticInjector.getInjector().getInstance(XSKDataStructuresSynchronizer.class);
+  private XSKDataStructuresSynchronizer dataStructureSynchronizer = StaticInjector.getInjector()
+      .getInstance(XSKDataStructuresSynchronizer.class);
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getSynchronizer()
-	 */
-	@Override
-	public ISynchronizer getSynchronizer() {
-		return dataStructureSynchronizer;
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getSynchronizer()
+   */
+  @Override
+  public ISynchronizer getSynchronizer() {
+    return dataStructureSynchronizer;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getName()
-	 */
-	@Override
-	public String getName() {
-		return XSKDataStructuresSynchronizerJobDefinitionProvider.XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB;
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getName()
+   */
+  @Override
+  public String getName() {
+    return XSKDataStructuresSynchronizerJobDefinitionProvider.XSK_DATA_STRUCTURES_SYNCHRONIZER_JOB;
+  }
 
 }

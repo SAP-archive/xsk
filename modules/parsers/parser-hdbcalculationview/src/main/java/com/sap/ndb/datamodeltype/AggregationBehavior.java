@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for AggregationBehavior.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -48,93 +48,71 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "AggregationBehavior")
 @XmlEnum
 public enum AggregationBehavior {
 
-    NONE("NONE"),
-    SUM("SUM"),
-    MIN("MIN"),
-    MAX("MAX"),
-    COUNT("COUNT"),
+  NONE("NONE"),
+  SUM("SUM"),
+  MIN("MIN"),
+  MAX("MAX"),
+  COUNT("COUNT"),
 
-    /**
-     * 
-     * 						Average defined as SUM( column ) / COUNT( column )
-     * 					
-     * 
-     */
-    AVG("AVG"),
+  /**
+   * Average defined as SUM( column ) / COUNT( column )
+   */
+  AVG("AVG"),
 
-    /**
-     * 
-     * 						Standard deviation: Sum over the squares of the differences to the average divided by (COUNT-1)
-     * 					
-     * 
-     */
-    VAR("VAR"),
+  /**
+   * Standard deviation: Sum over the squares of the differences to the average divided by (COUNT-1)
+   */
+  VAR("VAR"),
 
-    /**
-     * 
-     * 						Standard deviation: Square root of the variance
-     * 					
-     * 
-     */
-    STDDEV("STDDEV"),
-    FORMULA("FORMULA"),
+  /**
+   * Standard deviation: Square root of the variance
+   */
+  STDDEV("STDDEV"),
+  FORMULA("FORMULA"),
 
-    /**
-     * 
-     * 						No Aggregation (If More Than One Value unequal to 0 Occurs). Only needed by BW
-     *  				   	
-     * 
-     */
-    NOP("NOP"),
+  /**
+   * No Aggregation (If More Than One Value unequal to 0 Occurs). Only needed by BW
+   */
+  NOP("NOP"),
 
-    /**
-     * 
-     * 						No Aggregation (If More Than One Record Occurs). Only needed by BW
-     *  				   	
-     * 
-     */
-    @XmlEnumValue("NO1")
-    NO_1("NO1"),
+  /**
+   * No Aggregation (If More Than One Record Occurs). Only needed by BW
+   */
+  @XmlEnumValue("NO1")
+  NO_1("NO1"),
 
-    /**
-     * 
-     * 						No Aggregation (If More Than One Value Occurs). Only needed by BW
-     *  				   	
-     * 
-     */
-    @XmlEnumValue("NO2")
-    NO_2("NO2"),
+  /**
+   * No Aggregation (If More Than One Value Occurs). Only needed by BW
+   */
+  @XmlEnumValue("NO2")
+  NO_2("NO2"),
 
-    /**
-     * 
-     * 						Move - Only needed by BW transformations
-     *  				   	
-     * 
-     */
-    MOV("MOV");
-    private final String value;
+  /**
+   * Move - Only needed by BW transformations
+   */
+  MOV("MOV");
+  private final String value;
 
-    AggregationBehavior(String v) {
-        value = v;
+  AggregationBehavior(String v) {
+    value = v;
+  }
+
+  public static AggregationBehavior fromValue(String v) {
+    for (AggregationBehavior c : AggregationBehavior.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public String value() {
-        return value;
-    }
-
-    public static AggregationBehavior fromValue(String v) {
-        for (AggregationBehavior c: AggregationBehavior.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

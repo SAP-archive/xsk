@@ -29,23 +29,22 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Parameterization for the graph action GET_SHORTEST_PATHS_ONE_TO_ALL
- * 				This action returns the shortest paths from the provided start vertex to all reachable vertices in the graph 
- * 				also known as single-source shortest path (SSSP). The root of the tree is the start vertex. 
- * 				All other vertices carry the shortest distance information. 
- * 				The non-negative edge weights are read from the column provided in the edge table.
- * 				First output columns: 
- * 				-key of the vertices table
- * 				-weightColumn
- * 				Second output columns: 
- * 				-key of the edges table
- * 			
- * 
+ * Parameterization for the graph action GET_SHORTEST_PATHS_ONE_TO_ALL
+ * This action returns the shortest paths from the provided start vertex to all reachable vertices in the graph
+ * also known as single-source shortest path (SSSP). The root of the tree is the start vertex.
+ * All other vertices carry the shortest distance information.
+ * The non-negative edge weights are read from the column provided in the edge table.
+ * First output columns:
+ * -key of the vertices table
+ * -weightColumn
+ * Second output columns:
+ * -key of the edges table
+ *
+ *
  * <p>Java class for GetShortestPathsParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="GetShortestPathsParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -68,8 +67,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetShortestPathsParameterization", propOrder = {
@@ -84,167 +81,142 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     GetShortestPathParameterization.class
 })
 public class GetShortestPathsParameterization
-    extends GraphActionParameterization
-{
+    extends GraphActionParameterization {
 
-    protected String startVertex;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String startVertexParameter;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String inputWeightColumn;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String inputWeightColumnParameter;
-    @XmlSchemaType(name = "NMTOKEN")
-    protected Direction direction;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String directionParameter;
+  protected String startVertex;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String startVertexParameter;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String inputWeightColumn;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String inputWeightColumnParameter;
+  @XmlSchemaType(name = "NMTOKEN")
+  protected Direction direction;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String directionParameter;
 
-    /**
-     * Gets the value of the startVertex property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStartVertex() {
-        return startVertex;
-    }
+  /**
+   * Gets the value of the startVertex property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStartVertex() {
+    return startVertex;
+  }
 
-    /**
-     * Sets the value of the startVertex property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStartVertex(String value) {
-        this.startVertex = value;
-    }
+  /**
+   * Sets the value of the startVertex property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStartVertex(String value) {
+    this.startVertex = value;
+  }
 
-    /**
-     * Gets the value of the startVertexParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStartVertexParameter() {
-        return startVertexParameter;
-    }
+  /**
+   * Gets the value of the startVertexParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStartVertexParameter() {
+    return startVertexParameter;
+  }
 
-    /**
-     * Sets the value of the startVertexParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStartVertexParameter(String value) {
-        this.startVertexParameter = value;
-    }
+  /**
+   * Sets the value of the startVertexParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStartVertexParameter(String value) {
+    this.startVertexParameter = value;
+  }
 
-    /**
-     * Gets the value of the inputWeightColumn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getInputWeightColumn() {
-        return inputWeightColumn;
-    }
+  /**
+   * Gets the value of the inputWeightColumn property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getInputWeightColumn() {
+    return inputWeightColumn;
+  }
 
-    /**
-     * Sets the value of the inputWeightColumn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setInputWeightColumn(String value) {
-        this.inputWeightColumn = value;
-    }
+  /**
+   * Sets the value of the inputWeightColumn property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setInputWeightColumn(String value) {
+    this.inputWeightColumn = value;
+  }
 
-    /**
-     * Gets the value of the inputWeightColumnParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getInputWeightColumnParameter() {
-        return inputWeightColumnParameter;
-    }
+  /**
+   * Gets the value of the inputWeightColumnParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getInputWeightColumnParameter() {
+    return inputWeightColumnParameter;
+  }
 
-    /**
-     * Sets the value of the inputWeightColumnParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setInputWeightColumnParameter(String value) {
-        this.inputWeightColumnParameter = value;
-    }
+  /**
+   * Sets the value of the inputWeightColumnParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setInputWeightColumnParameter(String value) {
+    this.inputWeightColumnParameter = value;
+  }
 
-    /**
-     * Gets the value of the direction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Direction }
-     *     
-     */
-    public Direction getDirection() {
-        return direction;
-    }
+  /**
+   * Gets the value of the direction property.
+   *
+   * @return possible object is
+   * {@link Direction }
+   */
+  public Direction getDirection() {
+    return direction;
+  }
 
-    /**
-     * Sets the value of the direction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Direction }
-     *     
-     */
-    public void setDirection(Direction value) {
-        this.direction = value;
-    }
+  /**
+   * Sets the value of the direction property.
+   *
+   * @param value allowed object is
+   *              {@link Direction }
+   */
+  public void setDirection(Direction value) {
+    this.direction = value;
+  }
 
-    /**
-     * Gets the value of the directionParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDirectionParameter() {
-        return directionParameter;
-    }
+  /**
+   * Gets the value of the directionParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDirectionParameter() {
+    return directionParameter;
+  }
 
-    /**
-     * Sets the value of the directionParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDirectionParameter(String value) {
-        this.directionParameter = value;
-    }
+  /**
+   * Sets the value of the directionParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDirectionParameter(String value) {
+    this.directionParameter = value;
+  }
 
 }

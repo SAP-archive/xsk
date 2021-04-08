@@ -30,15 +30,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Returns all descendants of a set of start nodes in a hierarchy. 
- * 				Docs: https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/589208b0582245a782a1f3667a5b80c1.html
- * 			
- * 
+ * Returns all descendants of a set of start nodes in a hierarchy.
+ * Docs: https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/589208b0582245a782a1f3667a5b80c1.html
+ *
+ *
  * <p>Java class for HierarchyDescendantsParameterization complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HierarchyDescendantsParameterization"&gt;
  *   &lt;complexContent&gt;
@@ -61,8 +60,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HierarchyDescendantsParameterization", propOrder = {
@@ -80,211 +77,179 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class HierarchyDescendantsParameterization {
 
-    protected Start start;
-    protected String startWhere;
-    protected BigInteger distance;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String distanceParameter;
-    protected BigInteger distanceFrom;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String distanceFromParameter;
-    protected BigInteger distanceTo;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String distanceToParameter;
+  protected Start start;
+  protected String startWhere;
+  protected BigInteger distance;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String distanceParameter;
+  protected BigInteger distanceFrom;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String distanceFromParameter;
+  protected BigInteger distanceTo;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String distanceToParameter;
 
-    /**
-     * Gets the value of the start property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Start }
-     *     
-     */
-    public Start getStart() {
-        return start;
-    }
+  /**
+   * Gets the value of the start property.
+   *
+   * @return possible object is
+   * {@link Start }
+   */
+  public Start getStart() {
+    return start;
+  }
 
-    /**
-     * Sets the value of the start property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Start }
-     *     
-     */
-    public void setStart(Start value) {
-        this.start = value;
-    }
+  /**
+   * Sets the value of the start property.
+   *
+   * @param value allowed object is
+   *              {@link Start }
+   */
+  public void setStart(Start value) {
+    this.start = value;
+  }
 
-    /**
-     * Gets the value of the startWhere property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStartWhere() {
-        return startWhere;
-    }
+  /**
+   * Gets the value of the startWhere property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getStartWhere() {
+    return startWhere;
+  }
 
-    /**
-     * Sets the value of the startWhere property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStartWhere(String value) {
-        this.startWhere = value;
-    }
+  /**
+   * Sets the value of the startWhere property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStartWhere(String value) {
+    this.startWhere = value;
+  }
 
-    /**
-     * Gets the value of the distance property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getDistance() {
-        return distance;
-    }
+  /**
+   * Gets the value of the distance property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getDistance() {
+    return distance;
+  }
 
-    /**
-     * Sets the value of the distance property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setDistance(BigInteger value) {
-        this.distance = value;
-    }
+  /**
+   * Sets the value of the distance property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setDistance(BigInteger value) {
+    this.distance = value;
+  }
 
-    /**
-     * Gets the value of the distanceParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDistanceParameter() {
-        return distanceParameter;
-    }
+  /**
+   * Gets the value of the distanceParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDistanceParameter() {
+    return distanceParameter;
+  }
 
-    /**
-     * Sets the value of the distanceParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDistanceParameter(String value) {
-        this.distanceParameter = value;
-    }
+  /**
+   * Sets the value of the distanceParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDistanceParameter(String value) {
+    this.distanceParameter = value;
+  }
 
-    /**
-     * Gets the value of the distanceFrom property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getDistanceFrom() {
-        return distanceFrom;
-    }
+  /**
+   * Gets the value of the distanceFrom property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getDistanceFrom() {
+    return distanceFrom;
+  }
 
-    /**
-     * Sets the value of the distanceFrom property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setDistanceFrom(BigInteger value) {
-        this.distanceFrom = value;
-    }
+  /**
+   * Sets the value of the distanceFrom property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setDistanceFrom(BigInteger value) {
+    this.distanceFrom = value;
+  }
 
-    /**
-     * Gets the value of the distanceFromParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDistanceFromParameter() {
-        return distanceFromParameter;
-    }
+  /**
+   * Gets the value of the distanceFromParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDistanceFromParameter() {
+    return distanceFromParameter;
+  }
 
-    /**
-     * Sets the value of the distanceFromParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDistanceFromParameter(String value) {
-        this.distanceFromParameter = value;
-    }
+  /**
+   * Sets the value of the distanceFromParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDistanceFromParameter(String value) {
+    this.distanceFromParameter = value;
+  }
 
-    /**
-     * Gets the value of the distanceTo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getDistanceTo() {
-        return distanceTo;
-    }
+  /**
+   * Gets the value of the distanceTo property.
+   *
+   * @return possible object is
+   * {@link BigInteger }
+   */
+  public BigInteger getDistanceTo() {
+    return distanceTo;
+  }
 
-    /**
-     * Sets the value of the distanceTo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setDistanceTo(BigInteger value) {
-        this.distanceTo = value;
-    }
+  /**
+   * Sets the value of the distanceTo property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setDistanceTo(BigInteger value) {
+    this.distanceTo = value;
+  }
 
-    /**
-     * Gets the value of the distanceToParameter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDistanceToParameter() {
-        return distanceToParameter;
-    }
+  /**
+   * Gets the value of the distanceToParameter property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDistanceToParameter() {
+    return distanceToParameter;
+  }
 
-    /**
-     * Sets the value of the distanceToParameter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDistanceToParameter(String value) {
-        this.distanceToParameter = value;
-    }
+  /**
+   * Sets the value of the distanceToParameter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDistanceToParameter(String value) {
+    this.distanceToParameter = value;
+  }
 
 }

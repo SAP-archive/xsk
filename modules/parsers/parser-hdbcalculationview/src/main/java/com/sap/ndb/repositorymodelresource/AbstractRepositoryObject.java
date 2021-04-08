@@ -29,14 +29,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				Abstract father object for EMF repository objects containing generic implementations
- * 			
- * 
+ * Abstract father object for EMF repository objects containing generic implementations
+ *
+ *
  * <p>Java class for AbstractRepositoryObject complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AbstractRepositoryObject"&gt;
  *   &lt;complexContent&gt;
@@ -49,8 +48,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractRepositoryObject", propOrder = {
@@ -62,57 +59,49 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public abstract class AbstractRepositoryObject {
 
-    protected Origin origin;
-    @XmlAttribute(name = "schemaVersion")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String schemaVersion;
+  protected Origin origin;
+  @XmlAttribute(name = "schemaVersion")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String schemaVersion;
 
-    /**
-     * Gets the value of the origin property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Origin }
-     *     
-     */
-    public Origin getOrigin() {
-        return origin;
-    }
+  /**
+   * Gets the value of the origin property.
+   *
+   * @return possible object is
+   * {@link Origin }
+   */
+  public Origin getOrigin() {
+    return origin;
+  }
 
-    /**
-     * Sets the value of the origin property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Origin }
-     *     
-     */
-    public void setOrigin(Origin value) {
-        this.origin = value;
-    }
+  /**
+   * Sets the value of the origin property.
+   *
+   * @param value allowed object is
+   *              {@link Origin }
+   */
+  public void setOrigin(Origin value) {
+    this.origin = value;
+  }
 
-    /**
-     * Gets the value of the schemaVersion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSchemaVersion() {
-        return schemaVersion;
-    }
+  /**
+   * Gets the value of the schemaVersion property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSchemaVersion() {
+    return schemaVersion;
+  }
 
-    /**
-     * Sets the value of the schemaVersion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSchemaVersion(String value) {
-        this.schemaVersion = value;
-    }
+  /**
+   * Sets the value of the schemaVersion property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSchemaVersion(String value) {
+    this.schemaVersion = value;
+  }
 
 }

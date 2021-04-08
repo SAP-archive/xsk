@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for JoinOperator.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -43,45 +43,44 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "JoinOperator")
 @XmlEnum
 public enum JoinOperator {
 
-    @XmlEnumValue("Equal")
-    EQUAL("Equal"),
-    @XmlEnumValue("NotEqual")
-    NOT_EQUAL("NotEqual"),
-    @XmlEnumValue("Greater")
-    GREATER("Greater"),
-    @XmlEnumValue("GreaterOrEqual")
-    GREATER_OR_EQUAL("GreaterOrEqual"),
-    @XmlEnumValue("Less")
-    LESS("Less"),
-    @XmlEnumValue("LessOrEqual")
-    LESS_OR_EQUAL("LessOrEqual"),
-    @XmlEnumValue("Complex")
-    COMPLEX("Complex"),
-    @XmlEnumValue("Unknown")
-    UNKNOWN("Unknown");
-    private final String value;
+  @XmlEnumValue("Equal")
+  EQUAL("Equal"),
+  @XmlEnumValue("NotEqual")
+  NOT_EQUAL("NotEqual"),
+  @XmlEnumValue("Greater")
+  GREATER("Greater"),
+  @XmlEnumValue("GreaterOrEqual")
+  GREATER_OR_EQUAL("GreaterOrEqual"),
+  @XmlEnumValue("Less")
+  LESS("Less"),
+  @XmlEnumValue("LessOrEqual")
+  LESS_OR_EQUAL("LessOrEqual"),
+  @XmlEnumValue("Complex")
+  COMPLEX("Complex"),
+  @XmlEnumValue("Unknown")
+  UNKNOWN("Unknown");
+  private final String value;
 
-    JoinOperator(String v) {
-        value = v;
-    }
+  JoinOperator(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static JoinOperator fromValue(String v) {
+    for (JoinOperator c : JoinOperator.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static JoinOperator fromValue(String v) {
-        for (JoinOperator c: JoinOperator.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

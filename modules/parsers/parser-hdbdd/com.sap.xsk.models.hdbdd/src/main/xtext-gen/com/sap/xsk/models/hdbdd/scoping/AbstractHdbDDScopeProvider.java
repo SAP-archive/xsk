@@ -6,4 +6,5 @@ package com.sap.xsk.models.hdbdd.scoping;
 import org.eclipse.xtext.scoping.impl.DelegatingScopeProvider;
 
 public abstract class AbstractHdbDDScopeProvider extends DelegatingScopeProvider {
+
 }

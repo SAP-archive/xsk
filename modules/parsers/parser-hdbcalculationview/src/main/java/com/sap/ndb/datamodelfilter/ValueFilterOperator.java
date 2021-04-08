@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ValueFilterOperator.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -43,73 +43,63 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ValueFilterOperator")
 @XmlEnum
 public enum ValueFilterOperator {
 
 
-    /**
-     * Equal
-     * 
-     */
-    EQ,
+  /**
+   * Equal
+   */
+  EQ,
 
-    /**
-     * LessThan
-     * 
-     */
-    LT,
+  /**
+   * LessThan
+   */
+  LT,
 
-    /**
-     * LessEqual
-     * 
-     */
-    LE,
+  /**
+   * LessEqual
+   */
+  LE,
 
-    /**
-     * GreaterThan
-     * 
-     */
-    GT,
+  /**
+   * GreaterThan
+   */
+  GT,
 
-    /**
-     * GreaterEqual
-     * 
-     */
-    GE,
+  /**
+   * GreaterEqual
+   */
+  GE,
 
-    /**
-     * Between
-     * 
-     */
-    BT,
+  /**
+   * Between
+   */
+  BT,
 
-    /**
-     * In
-     * 
-     */
-    IN,
+  /**
+   * In
+   */
+  IN,
 
-    /**
-     * ContainsPattern
-     * 
-     */
-    CP,
+  /**
+   * ContainsPattern
+   */
+  CP,
 
-    /**
-     * IsNull
-     * 
-     */
-    NL;
+  /**
+   * IsNull
+   */
+  NL;
 
-    public String value() {
-        return name();
-    }
+  public static ValueFilterOperator fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static ValueFilterOperator fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

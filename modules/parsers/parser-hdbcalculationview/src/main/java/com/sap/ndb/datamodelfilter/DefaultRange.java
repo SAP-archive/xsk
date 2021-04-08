@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Range definition for default values
- * 			
- * 
+ * Range definition for default values
+ *
+ *
  * <p>Java class for DefaultRange complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DefaultRange"&gt;
  *   &lt;complexContent&gt;
@@ -44,66 +43,55 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DefaultRange")
 public class DefaultRange
-    extends RangeValueFilter
-{
+    extends RangeValueFilter {
 
-    @XmlAttribute(name = "lowExpression")
-    protected Boolean lowExpression;
-    @XmlAttribute(name = "highExpression")
-    protected Boolean highExpression;
+  @XmlAttribute(name = "lowExpression")
+  protected Boolean lowExpression;
+  @XmlAttribute(name = "highExpression")
+  protected Boolean highExpression;
 
-    /**
-     * Gets the value of the lowExpression property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isLowExpression() {
-        return lowExpression;
-    }
+  /**
+   * Gets the value of the lowExpression property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isLowExpression() {
+    return lowExpression;
+  }
 
-    /**
-     * Sets the value of the lowExpression property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setLowExpression(Boolean value) {
-        this.lowExpression = value;
-    }
+  /**
+   * Sets the value of the lowExpression property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setLowExpression(Boolean value) {
+    this.lowExpression = value;
+  }
 
-    /**
-     * Gets the value of the highExpression property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isHighExpression() {
-        return highExpression;
-    }
+  /**
+   * Gets the value of the highExpression property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isHighExpression() {
+    return highExpression;
+  }
 
-    /**
-     * Sets the value of the highExpression property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setHighExpression(Boolean value) {
-        this.highExpression = value;
-    }
+  /**
+   * Sets the value of the highExpression property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setHighExpression(Boolean value) {
+    this.highExpression = value;
+  }
 
 }

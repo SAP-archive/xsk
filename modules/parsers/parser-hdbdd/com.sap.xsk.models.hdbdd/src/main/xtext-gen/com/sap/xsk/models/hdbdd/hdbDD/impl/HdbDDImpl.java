@@ -6,18 +6,12 @@ package com.sap.xsk.models.hdbdd.hdbDD.impl;
 import com.sap.xsk.models.hdbdd.hdbDD.HdbDD;
 import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
 import com.sap.xsk.models.hdbdd.hdbDD.Type;
-
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -34,48 +28,48 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class HdbDDImpl extends MinimalEObjectImpl.Container implements HdbDD
-{
+public class HdbDDImpl extends MinimalEObjectImpl.Container implements HdbDD {
+
   /**
    * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getElements()
+   *
    * @generated
    * @ordered
+   * @see #getElements()
    */
   protected EList<Type> elements;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  protected HdbDDImpl()
-  {
+  protected HdbDDImpl() {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass()
-  {
+  protected EClass eStaticClass() {
     return HdbDDPackage.Literals.HDB_DD;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EList<Type> getElements()
-  {
-    if (elements == null)
-    {
+  public EList<Type> getElements() {
+    if (elements == null) {
       elements = new EObjectContainmentEList<Type>(Type.class, this, HdbDDPackage.HDB_DD__ELEMENTS);
     }
     return elements;
@@ -84,15 +78,14 @@ public class HdbDDImpl extends MinimalEObjectImpl.Container implements HdbDD
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
-    switch (featureID)
-    {
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+    switch (featureID) {
       case HdbDDPackage.HDB_DD__ELEMENTS:
-        return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
+        return ((InternalEList<?>) getElements()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -100,13 +93,12 @@ public class HdbDDImpl extends MinimalEObjectImpl.Container implements HdbDD
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
-    switch (featureID)
-    {
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
       case HdbDDPackage.HDB_DD__ELEMENTS:
         return getElements();
     }
@@ -116,17 +108,16 @@ public class HdbDDImpl extends MinimalEObjectImpl.Container implements HdbDD
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void eSet(int featureID, Object newValue)
-  {
-    switch (featureID)
-    {
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
       case HdbDDPackage.HDB_DD__ELEMENTS:
         getElements().clear();
-        getElements().addAll((Collection<? extends Type>)newValue);
+        getElements().addAll((Collection<? extends Type>) newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -135,13 +126,12 @@ public class HdbDDImpl extends MinimalEObjectImpl.Container implements HdbDD
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public void eUnset(int featureID)
-  {
-    switch (featureID)
-    {
+  public void eUnset(int featureID) {
+    switch (featureID) {
       case HdbDDPackage.HDB_DD__ELEMENTS:
         getElements().clear();
         return;
@@ -152,13 +142,12 @@ public class HdbDDImpl extends MinimalEObjectImpl.Container implements HdbDD
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID)
-  {
-    switch (featureID)
-    {
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
       case HdbDDPackage.HDB_DD__ELEMENTS:
         return elements != null && !elements.isEmpty();
     }

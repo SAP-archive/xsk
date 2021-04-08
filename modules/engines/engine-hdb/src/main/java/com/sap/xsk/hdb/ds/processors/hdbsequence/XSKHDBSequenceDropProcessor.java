@@ -11,11 +11,12 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
+import java.sql.Connection;
+import java.sql.SQLException;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -23,38 +24,36 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSequenceModel> {
-    private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceDropProcessor.class);
 
-    @Override
-    public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
+  private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceDropProcessor.class);
 
-        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-        String hdbSequenceName = hdbSequenceModel.getName();
-        if (caseSensitive) {
-            hdbSequenceName = "\"" + hdbSequenceName + "\"";
-        }
-        logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
+  @Override
+  public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
 
-        if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)){
-            String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
-                                ? getHanav1ModelSQL(hdbSequenceName)
-                                : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
-            executeSql(sql, connection);
-        }
+    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
+    String hdbSequenceName = hdbSequenceModel.getName();
+    if (caseSensitive) {
+      hdbSequenceName = "\"" + hdbSequenceName + "\"";
     }
+    logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
 
-    private String getHanav1ModelSQL(String modifiedSequenceName){
-        return new StringBuilder()
-                .append("DROP SEQUENCE")
-                .append(" ")
-                .append(modifiedSequenceName)
-                .append(" ")
-                .append("RESTRICT")
-                .append(";")
-                .toString();
+    if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)) {
+      String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
+          ? getHanav1ModelSQL(hdbSequenceName)
+          : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
+      executeSql(sql, connection);
     }
+  }
+
+  private String getHanav1ModelSQL(String modifiedSequenceName) {
+    return new StringBuilder()
+        .append("DROP SEQUENCE")
+        .append(" ")
+        .append(modifiedSequenceName)
+        .append(" ")
+        .append("RESTRICT")
+        .append(";")
+        .toString();
+  }
 }

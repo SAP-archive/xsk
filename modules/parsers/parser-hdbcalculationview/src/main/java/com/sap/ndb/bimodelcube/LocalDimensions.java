@@ -19,23 +19,22 @@
 
 package com.sap.ndb.bimodelcube;
 
+import com.sap.ndb.bimodeldimension.LocalDimension;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodeldimension.LocalDimension;
 
 
 /**
- * 
- * 				Local dimension of a measure group / information model
- * 			
- * 
+ * Local dimension of a measure group / information model
+ *
+ *
  * <p>Java class for LocalDimensions complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LocalDimensions"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +46,6 @@ import com.sap.ndb.bimodeldimension.LocalDimension;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LocalDimensions", propOrder = {
@@ -56,35 +53,33 @@ import com.sap.ndb.bimodeldimension.LocalDimension;
 })
 public class LocalDimensions {
 
-    protected List<LocalDimension> localDimension;
+  protected List<LocalDimension> localDimension;
 
-    /**
-     * Gets the value of the localDimension property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the localDimension property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getLocalDimension().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link LocalDimension }
-     * 
-     * 
-     */
-    public List<LocalDimension> getLocalDimension() {
-        if (localDimension == null) {
-            localDimension = new ArrayList<LocalDimension>();
-        }
-        return this.localDimension;
+  /**
+   * Gets the value of the localDimension property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the localDimension property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getLocalDimension().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link LocalDimension }
+   */
+  public List<LocalDimension> getLocalDimension() {
+    if (localDimension == null) {
+      localDimension = new ArrayList<LocalDimension>();
     }
+    return this.localDimension;
+  }
 
 }

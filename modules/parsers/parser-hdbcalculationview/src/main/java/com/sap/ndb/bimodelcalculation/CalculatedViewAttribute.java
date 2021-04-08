@@ -19,25 +19,24 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.basemodelbase.CommentProperties;
+import com.sap.ndb.datamodeltype.ExpressionLanguage;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.CommentProperties;
-import com.sap.ndb.datamodeltype.ExpressionLanguage;
 
 
 /**
- * 
- * 				A calculated view attribute - the aggregation type is not interpreted for calculated view attributes, because	
- * 				the calculation is always done after the aggregation
- * 			
- * 
+ * A calculated view attribute - the aggregation type is not interpreted for calculated view attributes, because
+ * the calculation is always done after the aggregation
+ *
+ *
  * <p>Java class for CalculatedViewAttribute complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CalculatedViewAttribute"&gt;
  *   &lt;complexContent&gt;
@@ -51,8 +50,6 @@ import com.sap.ndb.datamodeltype.ExpressionLanguage;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CalculatedViewAttribute", propOrder = {
@@ -60,85 +57,72 @@ import com.sap.ndb.datamodeltype.ExpressionLanguage;
     "comment"
 })
 public class CalculatedViewAttribute
-    extends ViewAttribute
-{
+    extends ViewAttribute {
 
-    @XmlElement(required = true)
-    protected String formula;
-    protected CommentProperties comment;
-    @XmlAttribute(name = "expressionLanguage")
-    protected ExpressionLanguage expressionLanguage;
+  @XmlElement(required = true)
+  protected String formula;
+  protected CommentProperties comment;
+  @XmlAttribute(name = "expressionLanguage")
+  protected ExpressionLanguage expressionLanguage;
 
-    /**
-     * Gets the value of the formula property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFormula() {
-        return formula;
-    }
+  /**
+   * Gets the value of the formula property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getFormula() {
+    return formula;
+  }
 
-    /**
-     * Sets the value of the formula property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFormula(String value) {
-        this.formula = value;
-    }
+  /**
+   * Sets the value of the formula property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFormula(String value) {
+    this.formula = value;
+  }
 
-    /**
-     * Gets the value of the comment property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CommentProperties }
-     *     
-     */
-    public CommentProperties getComment() {
-        return comment;
-    }
+  /**
+   * Gets the value of the comment property.
+   *
+   * @return possible object is
+   * {@link CommentProperties }
+   */
+  public CommentProperties getComment() {
+    return comment;
+  }
 
-    /**
-     * Sets the value of the comment property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CommentProperties }
-     *     
-     */
-    public void setComment(CommentProperties value) {
-        this.comment = value;
-    }
+  /**
+   * Sets the value of the comment property.
+   *
+   * @param value allowed object is
+   *              {@link CommentProperties }
+   */
+  public void setComment(CommentProperties value) {
+    this.comment = value;
+  }
 
-    /**
-     * Gets the value of the expressionLanguage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ExpressionLanguage }
-     *     
-     */
-    public ExpressionLanguage getExpressionLanguage() {
-        return expressionLanguage;
-    }
+  /**
+   * Gets the value of the expressionLanguage property.
+   *
+   * @return possible object is
+   * {@link ExpressionLanguage }
+   */
+  public ExpressionLanguage getExpressionLanguage() {
+    return expressionLanguage;
+  }
 
-    /**
-     * Sets the value of the expressionLanguage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ExpressionLanguage }
-     *     
-     */
-    public void setExpressionLanguage(ExpressionLanguage value) {
-        this.expressionLanguage = value;
-    }
+  /**
+   * Sets the value of the expressionLanguage property.
+   *
+   * @param value allowed object is
+   *              {@link ExpressionLanguage }
+   */
+  public void setExpressionLanguage(ExpressionLanguage value) {
+    this.expressionLanguage = value;
+  }
 
 }

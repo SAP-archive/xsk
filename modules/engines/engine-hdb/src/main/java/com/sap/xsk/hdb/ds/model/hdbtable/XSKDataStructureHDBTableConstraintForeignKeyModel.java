@@ -16,44 +16,44 @@ package com.sap.xsk.hdb.ds.model.hdbtable;
  */
 public class XSKDataStructureHDBTableConstraintForeignKeyModel extends XSKDataStructureHDBTableConstraintModel {
 
-	private String referencedTable;
-	
-	private String[] referencedColumns;
+  private String referencedTable;
 
-	/**
-	 * Gets the referenced table.
-	 *
-	 * @return the referenced table
-	 */
-	public String getReferencedTable() {
-		return referencedTable;
-	}
+  private String[] referencedColumns;
 
-	/**
-	 * Sets the referenced table.
-	 *
-	 * @param referencedTable the new referenced table
-	 */
-	public void setReferencedTable(String referencedTable) {
-		this.referencedTable = referencedTable;
-	}
+  /**
+   * Gets the referenced table.
+   *
+   * @return the referenced table
+   */
+  public String getReferencedTable() {
+    return referencedTable;
+  }
 
-	/**
-	 * Gets the referenced columns.
-	 *
-	 * @return the referenced columns
-	 */
-	public String[] getReferencedColumns() {
-		return (referencedColumns != null) ? referencedColumns.clone() : null;
-	}
+  /**
+   * Sets the referenced table.
+   *
+   * @param referencedTable the new referenced table
+   */
+  public void setReferencedTable(String referencedTable) {
+    this.referencedTable = referencedTable;
+  }
 
-	/**
-	 * Sets the referenced columns.
-	 *
-	 * @param referencedColumns the new referenced columns
-	 */
-	public void setReferencedColumns(String[] referencedColumns) {
-		this.referencedColumns = referencedColumns;
-	}
+  /**
+   * Gets the referenced columns.
+   *
+   * @return the referenced columns
+   */
+  public String[] getReferencedColumns() {
+    return (referencedColumns != null) ? referencedColumns.clone() : null;
+  }
+
+  /**
+   * Sets the referenced columns.
+   *
+   * @param referencedColumns the new referenced columns
+   */
+  public void setReferencedColumns(String[] referencedColumns) {
+    this.referencedColumns = referencedColumns;
+  }
 
 }

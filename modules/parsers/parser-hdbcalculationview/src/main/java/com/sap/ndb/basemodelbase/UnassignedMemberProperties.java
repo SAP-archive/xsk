@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Specification of unassigned member properties in hierarchies
- * 			
- * 
+ * Specification of unassigned member properties in hierarchies
+ *
+ *
  * <p>Java class for UnassignedMemberProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UnassignedMemberProperties"&gt;
  *   &lt;complexContent&gt;
@@ -51,8 +50,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UnassignedMemberProperties", propOrder = {
@@ -61,185 +58,157 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class UnassignedMemberProperties {
 
-    protected EndUserTexts caption;
-    protected EndUserTexts nullCaption;
-    @XmlAttribute(name = "mode")
-    protected UnassignedMemberMode mode;
-    @XmlAttribute(name = "name")
-    protected String name;
-    @XmlAttribute(name = "drillable")
-    protected Boolean drillable;
-    @XmlAttribute(name = "includeNulls")
-    protected Boolean includeNulls;
-    @XmlAttribute(name = "nullConvertValue")
-    protected String nullConvertValue;
+  protected EndUserTexts caption;
+  protected EndUserTexts nullCaption;
+  @XmlAttribute(name = "mode")
+  protected UnassignedMemberMode mode;
+  @XmlAttribute(name = "name")
+  protected String name;
+  @XmlAttribute(name = "drillable")
+  protected Boolean drillable;
+  @XmlAttribute(name = "includeNulls")
+  protected Boolean includeNulls;
+  @XmlAttribute(name = "nullConvertValue")
+  protected String nullConvertValue;
 
-    /**
-     * Gets the value of the caption property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public EndUserTexts getCaption() {
-        return caption;
-    }
+  /**
+   * Gets the value of the caption property.
+   *
+   * @return possible object is
+   * {@link EndUserTexts }
+   */
+  public EndUserTexts getCaption() {
+    return caption;
+  }
 
-    /**
-     * Sets the value of the caption property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public void setCaption(EndUserTexts value) {
-        this.caption = value;
-    }
+  /**
+   * Sets the value of the caption property.
+   *
+   * @param value allowed object is
+   *              {@link EndUserTexts }
+   */
+  public void setCaption(EndUserTexts value) {
+    this.caption = value;
+  }
 
-    /**
-     * Gets the value of the nullCaption property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public EndUserTexts getNullCaption() {
-        return nullCaption;
-    }
+  /**
+   * Gets the value of the nullCaption property.
+   *
+   * @return possible object is
+   * {@link EndUserTexts }
+   */
+  public EndUserTexts getNullCaption() {
+    return nullCaption;
+  }
 
-    /**
-     * Sets the value of the nullCaption property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EndUserTexts }
-     *     
-     */
-    public void setNullCaption(EndUserTexts value) {
-        this.nullCaption = value;
-    }
+  /**
+   * Sets the value of the nullCaption property.
+   *
+   * @param value allowed object is
+   *              {@link EndUserTexts }
+   */
+  public void setNullCaption(EndUserTexts value) {
+    this.nullCaption = value;
+  }
 
-    /**
-     * Gets the value of the mode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnassignedMemberMode }
-     *     
-     */
-    public UnassignedMemberMode getMode() {
-        return mode;
-    }
+  /**
+   * Gets the value of the mode property.
+   *
+   * @return possible object is
+   * {@link UnassignedMemberMode }
+   */
+  public UnassignedMemberMode getMode() {
+    return mode;
+  }
 
-    /**
-     * Sets the value of the mode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnassignedMemberMode }
-     *     
-     */
-    public void setMode(UnassignedMemberMode value) {
-        this.mode = value;
-    }
+  /**
+   * Sets the value of the mode property.
+   *
+   * @param value allowed object is
+   *              {@link UnassignedMemberMode }
+   */
+  public void setMode(UnassignedMemberMode value) {
+    this.mode = value;
+  }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets the value of the name property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 
-    /**
-     * Gets the value of the drillable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isDrillable() {
-        return drillable;
-    }
+  /**
+   * Gets the value of the drillable property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isDrillable() {
+    return drillable;
+  }
 
-    /**
-     * Sets the value of the drillable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setDrillable(Boolean value) {
-        this.drillable = value;
-    }
+  /**
+   * Sets the value of the drillable property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setDrillable(Boolean value) {
+    this.drillable = value;
+  }
 
-    /**
-     * Gets the value of the includeNulls property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isIncludeNulls() {
-        return includeNulls;
-    }
+  /**
+   * Gets the value of the includeNulls property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isIncludeNulls() {
+    return includeNulls;
+  }
 
-    /**
-     * Sets the value of the includeNulls property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIncludeNulls(Boolean value) {
-        this.includeNulls = value;
-    }
+  /**
+   * Sets the value of the includeNulls property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setIncludeNulls(Boolean value) {
+    this.includeNulls = value;
+  }
 
-    /**
-     * Gets the value of the nullConvertValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNullConvertValue() {
-        return nullConvertValue;
-    }
+  /**
+   * Gets the value of the nullConvertValue property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getNullConvertValue() {
+    return nullConvertValue;
+  }
 
-    /**
-     * Sets the value of the nullConvertValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNullConvertValue(String value) {
-        this.nullConvertValue = value;
-    }
+  /**
+   * Sets the value of the nullConvertValue property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setNullConvertValue(String value) {
+    this.nullConvertValue = value;
+  }
 
 }

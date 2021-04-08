@@ -19,23 +19,22 @@
 
 package com.sap.ndb.bimodelprivilege;
 
+import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilterOperator;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilterOperator;
 
 
 /**
- * 
- * 				For specifying a procedure (and a filter operator)
- * 				to determine the filter values dynamically at runtime.
- * 			
- * 
+ * For specifying a procedure (and a filter operator)
+ * to determine the filter values dynamically at runtime.
+ *
+ *
  * <p>Java class for ProcedureFilter complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ProcedureFilter"&gt;
  *   &lt;complexContent&gt;
@@ -46,64 +45,54 @@ import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilterOperator;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ProcedureFilter")
 public class ProcedureFilter {
 
-    @XmlAttribute(name = "operator", required = true)
-    protected ValueFilterOperator operator;
-    @XmlAttribute(name = "procedureName", required = true)
-    protected String procedureName;
+  @XmlAttribute(name = "operator", required = true)
+  protected ValueFilterOperator operator;
+  @XmlAttribute(name = "procedureName", required = true)
+  protected String procedureName;
 
-    /**
-     * Gets the value of the operator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ValueFilterOperator }
-     *     
-     */
-    public ValueFilterOperator getOperator() {
-        return operator;
-    }
+  /**
+   * Gets the value of the operator property.
+   *
+   * @return possible object is
+   * {@link ValueFilterOperator }
+   */
+  public ValueFilterOperator getOperator() {
+    return operator;
+  }
 
-    /**
-     * Sets the value of the operator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ValueFilterOperator }
-     *     
-     */
-    public void setOperator(ValueFilterOperator value) {
-        this.operator = value;
-    }
+  /**
+   * Sets the value of the operator property.
+   *
+   * @param value allowed object is
+   *              {@link ValueFilterOperator }
+   */
+  public void setOperator(ValueFilterOperator value) {
+    this.operator = value;
+  }
 
-    /**
-     * Gets the value of the procedureName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getProcedureName() {
-        return procedureName;
-    }
+  /**
+   * Gets the value of the procedureName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getProcedureName() {
+    return procedureName;
+  }
 
-    /**
-     * Sets the value of the procedureName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setProcedureName(String value) {
-        this.procedureName = value;
-    }
+  /**
+   * Sets the value of the procedureName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setProcedureName(String value) {
+    this.procedureName = value;
+  }
 
 }

@@ -19,18 +19,18 @@
 
 package com.sap.ndb.bimodeldimension;
 
+import com.sap.ndb.basemodelbase.QualifiedColumnObjectName;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.basemodelbase.QualifiedColumnObjectName;
 
 
 /**
  * <p>Java class for ExternalHierarchy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ExternalHierarchy"&gt;
  *   &lt;complexContent&gt;
@@ -42,42 +42,35 @@ import com.sap.ndb.basemodelbase.QualifiedColumnObjectName;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ExternalHierarchy", propOrder = {
     "hierarchyTableName"
 })
 public class ExternalHierarchy
-    extends Hierarchy
-{
+    extends Hierarchy {
 
-    @XmlElement(required = true)
-    protected QualifiedColumnObjectName hierarchyTableName;
+  @XmlElement(required = true)
+  protected QualifiedColumnObjectName hierarchyTableName;
 
-    /**
-     * Gets the value of the hierarchyTableName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedColumnObjectName }
-     *     
-     */
-    public QualifiedColumnObjectName getHierarchyTableName() {
-        return hierarchyTableName;
-    }
+  /**
+   * Gets the value of the hierarchyTableName property.
+   *
+   * @return possible object is
+   * {@link QualifiedColumnObjectName }
+   */
+  public QualifiedColumnObjectName getHierarchyTableName() {
+    return hierarchyTableName;
+  }
 
-    /**
-     * Sets the value of the hierarchyTableName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedColumnObjectName }
-     *     
-     */
-    public void setHierarchyTableName(QualifiedColumnObjectName value) {
-        this.hierarchyTableName = value;
-    }
+  /**
+   * Sets the value of the hierarchyTableName property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedColumnObjectName }
+   */
+  public void setHierarchyTableName(QualifiedColumnObjectName value) {
+    this.hierarchyTableName = value;
+  }
 
 }

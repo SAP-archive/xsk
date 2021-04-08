@@ -17,45 +17,42 @@ import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKHDBUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import java.sql.Connection;
+import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 public class XSKEntityUpdateProcessor extends AbstractXSKProcessor<XSKDataStructureEntityModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(XSKEntityUpdateProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKEntityUpdateProcessor.class);
 
-    @Inject
-    @Named("xskEntityDropProcessor")
-    private IXSKHdbProcessor xskEntityDropProcessor;
-    @Inject
-    @Named("xskEntityCreateProcessor")
-    private IXSKHdbProcessor xskEntityCreateProcessor;
+  @Inject
+  @Named("xskEntityDropProcessor")
+  private IXSKHdbProcessor xskEntityDropProcessor;
+  @Inject
+  @Named("xskEntityCreateProcessor")
+  private IXSKHdbProcessor xskEntityCreateProcessor;
 
-    /**
-     * Execute the corresponding statement.
-     *
-     * @param connection  the connection
-     * @param entityModel the entity model
-     * @throws SQLException the SQL exception
-     */
-    public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-        String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
-        logger.info("Processing Update Entity: {}", tableName);
-        if (SqlFactory.getNative(connection).exists(connection, tableName)) {
-            if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
-                xskEntityDropProcessor.execute(connection, entityModel);
-                xskEntityCreateProcessor.execute(connection, entityModel);
-            } else {
-                // XSKEntityAlterProcessor.execute(connection, entityModel);
-            }
-        } else {
-            xskEntityCreateProcessor.execute(connection, entityModel);
-        }
+  /**
+   * Execute the corresponding statement.
+   *
+   * @param connection  the connection
+   * @param entityModel the entity model
+   * @throws SQLException the SQL exception
+   */
+  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+    String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
+    logger.info("Processing Update Entity: {}", tableName);
+    if (SqlFactory.getNative(connection).exists(connection, tableName)) {
+      if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
+        xskEntityDropProcessor.execute(connection, entityModel);
+        xskEntityCreateProcessor.execute(connection, entityModel);
+      } else {
+        // XSKEntityAlterProcessor.execute(connection, entityModel);
+      }
+    } else {
+      xskEntityCreateProcessor.execute(connection, entityModel);
     }
+  }
 }

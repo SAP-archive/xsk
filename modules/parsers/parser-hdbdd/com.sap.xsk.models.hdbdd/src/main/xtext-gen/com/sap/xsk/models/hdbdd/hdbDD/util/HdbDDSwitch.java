@@ -3,11 +3,20 @@
  */
 package com.sap.xsk.models.hdbdd.hdbDD.util;
 
-import com.sap.xsk.models.hdbdd.hdbDD.*;
-
+import com.sap.xsk.models.hdbdd.hdbDD.Context;
+import com.sap.xsk.models.hdbdd.hdbDD.Entity;
+import com.sap.xsk.models.hdbdd.hdbDD.Field;
+import com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive;
+import com.sap.xsk.models.hdbdd.hdbDD.FieldReference;
+import com.sap.xsk.models.hdbdd.hdbDD.FieldType;
+import com.sap.xsk.models.hdbdd.hdbDD.HdbDD;
+import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
+import com.sap.xsk.models.hdbdd.hdbDD.Namespace;
+import com.sap.xsk.models.hdbdd.hdbDD.Schema;
+import com.sap.xsk.models.hdbdd.hdbDD.Type;
+import com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
 
 /**
@@ -20,15 +29,17 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage
+ *
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage
  */
-public class HdbDDSwitch<T> extends Switch<T>
-{
+public class HdbDDSwitch<T> extends Switch<T> {
+
   /**
    * The cached model package
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   protected static HdbDDPackage modelPackage;
@@ -37,12 +48,11 @@ public class HdbDDSwitch<T> extends Switch<T>
    * Creates an instance of the switch.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public HdbDDSwitch()
-  {
-    if (modelPackage == null)
-    {
+  public HdbDDSwitch() {
+    if (modelPackage == null) {
       modelPackage = HdbDDPackage.eINSTANCE;
     }
   }
@@ -51,13 +61,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * Checks whether this is a switch for the given package.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @param ePackage the package in question.
    * @return whether this is a switch for the given package.
    * @generated
    */
   @Override
-  protected boolean isSwitchFor(EPackage ePackage)
-  {
+  protected boolean isSwitchFor(EPackage ePackage) {
     return ePackage == modelPackage;
   }
 
@@ -65,98 +75,121 @@ public class HdbDDSwitch<T> extends Switch<T>
    * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @return the first non-null result returned by a <code>caseXXX</code> call.
    * @generated
    */
   @Override
-  protected T doSwitch(int classifierID, EObject theEObject)
-  {
-    switch (classifierID)
-    {
-      case HdbDDPackage.HDB_DD:
-      {
-        HdbDD hdbDD = (HdbDD)theEObject;
+  protected T doSwitch(int classifierID, EObject theEObject) {
+    switch (classifierID) {
+      case HdbDDPackage.HDB_DD: {
+        HdbDD hdbDD = (HdbDD) theEObject;
         T result = caseHdbDD(hdbDD);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.TYPE:
-      {
-        Type type = (Type)theEObject;
+      case HdbDDPackage.TYPE: {
+        Type type = (Type) theEObject;
         T result = caseType(type);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.NAMESPACE:
-      {
-        Namespace namespace = (Namespace)theEObject;
+      case HdbDDPackage.NAMESPACE: {
+        Namespace namespace = (Namespace) theEObject;
         T result = caseNamespace(namespace);
-        if (result == null) result = caseType(namespace);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = caseType(namespace);
+        }
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.SCHEMA:
-      {
-        Schema schema = (Schema)theEObject;
+      case HdbDDPackage.SCHEMA: {
+        Schema schema = (Schema) theEObject;
         T result = caseSchema(schema);
-        if (result == null) result = caseType(schema);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = caseType(schema);
+        }
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.CONTEXT:
-      {
-        Context context = (Context)theEObject;
+      case HdbDDPackage.CONTEXT: {
+        Context context = (Context) theEObject;
         T result = caseContext(context);
-        if (result == null) result = caseType(context);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = caseType(context);
+        }
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.TYPE_DEFINITION:
-      {
-        TypeDefinition typeDefinition = (TypeDefinition)theEObject;
+      case HdbDDPackage.TYPE_DEFINITION: {
+        TypeDefinition typeDefinition = (TypeDefinition) theEObject;
         T result = caseTypeDefinition(typeDefinition);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.ENTITY:
-      {
-        Entity entity = (Entity)theEObject;
+      case HdbDDPackage.ENTITY: {
+        Entity entity = (Entity) theEObject;
         T result = caseEntity(entity);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.FIELD:
-      {
-        Field field = (Field)theEObject;
+      case HdbDDPackage.FIELD: {
+        Field field = (Field) theEObject;
         T result = caseField(field);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.FIELD_PRIMITIVE:
-      {
-        FieldPrimitive fieldPrimitive = (FieldPrimitive)theEObject;
+      case HdbDDPackage.FIELD_PRIMITIVE: {
+        FieldPrimitive fieldPrimitive = (FieldPrimitive) theEObject;
         T result = caseFieldPrimitive(fieldPrimitive);
-        if (result == null) result = caseField(fieldPrimitive);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = caseField(fieldPrimitive);
+        }
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.FIELD_TYPE:
-      {
-        FieldType fieldType = (FieldType)theEObject;
+      case HdbDDPackage.FIELD_TYPE: {
+        FieldType fieldType = (FieldType) theEObject;
         T result = caseFieldType(fieldType);
-        if (result == null) result = caseField(fieldType);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = caseField(fieldType);
+        }
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      case HdbDDPackage.FIELD_REFERENCE:
-      {
-        FieldReference fieldReference = (FieldReference)theEObject;
+      case HdbDDPackage.FIELD_REFERENCE: {
+        FieldReference fieldReference = (FieldReference) theEObject;
         T result = caseFieldReference(fieldReference);
-        if (result == null) result = caseField(fieldReference);
-        if (result == null) result = defaultCase(theEObject);
+        if (result == null) {
+          result = caseField(fieldReference);
+        }
+        if (result == null) {
+          result = defaultCase(theEObject);
+        }
         return result;
       }
-      default: return defaultCase(theEObject);
+      default:
+        return defaultCase(theEObject);
     }
   }
 
@@ -166,13 +199,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Hdb DD</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseHdbDD(HdbDD object)
-  {
+  public T caseHdbDD(HdbDD object) {
     return null;
   }
 
@@ -182,13 +215,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Type</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseType(Type object)
-  {
+  public T caseType(Type object) {
     return null;
   }
 
@@ -198,13 +231,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Namespace</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseNamespace(Namespace object)
-  {
+  public T caseNamespace(Namespace object) {
     return null;
   }
 
@@ -214,13 +247,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Schema</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseSchema(Schema object)
-  {
+  public T caseSchema(Schema object) {
     return null;
   }
 
@@ -230,13 +263,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Context</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseContext(Context object)
-  {
+  public T caseContext(Context object) {
     return null;
   }
 
@@ -246,13 +279,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Type Definition</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseTypeDefinition(TypeDefinition object)
-  {
+  public T caseTypeDefinition(TypeDefinition object) {
     return null;
   }
 
@@ -262,13 +295,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Entity</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseEntity(Entity object)
-  {
+  public T caseEntity(Entity object) {
     return null;
   }
 
@@ -278,13 +311,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Field</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseField(Field object)
-  {
+  public T caseField(Field object) {
     return null;
   }
 
@@ -294,13 +327,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Field Primitive</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseFieldPrimitive(FieldPrimitive object)
-  {
+  public T caseFieldPrimitive(FieldPrimitive object) {
     return null;
   }
 
@@ -310,13 +343,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Field Type</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseFieldType(FieldType object)
-  {
+  public T caseFieldType(FieldType object) {
     return null;
   }
 
@@ -326,13 +359,13 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>Field Reference</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    */
-  public T caseFieldReference(FieldReference object)
-  {
+  public T caseFieldReference(FieldReference object) {
     return null;
   }
 
@@ -342,14 +375,14 @@ public class HdbDDSwitch<T> extends Switch<T>
    * This implementation returns null;
    * returning a non-null result will terminate the switch, but this is the last case anyway.
    * <!-- end-user-doc -->
+   *
    * @param object the target of the switch.
    * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject)
    * @generated
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject)
    */
   @Override
-  public T defaultCase(EObject object)
-  {
+  public T defaultCase(EObject object) {
     return null;
   }
 

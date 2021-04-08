@@ -9,11 +9,10 @@ package com.sap.xsk.models.hdbdd.hdbDD;
  * A representation of the model object '<em><b>Schema</b></em>'.
  * <!-- end-user-doc -->
  *
- *
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getSchema()
  * @model
  * @generated
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getSchema()
  */
-public interface Schema extends Type
-{
+public interface Schema extends Type {
+
 } // Schema

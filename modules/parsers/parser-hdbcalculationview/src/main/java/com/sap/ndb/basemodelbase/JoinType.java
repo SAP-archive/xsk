@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for JoinType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -41,58 +41,51 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "JoinType")
 @XmlEnum
 public enum JoinType {
 
 
-    /**
-     * 
-     * 						Join type referential integrity means for each row in the left table there is a corresponding row in the right table.
-     * 						If this join type is selected the engine can better optimize the queries, because the join can be completely 
-     * 						ignored if no fields are requested from the joined table.
-     * 					
-     * 
-     */
-    @XmlEnumValue("referential")
-    REFERENTIAL("referential"),
-    @XmlEnumValue("inner")
-    INNER("inner"),
-    @XmlEnumValue("leftOuter")
-    LEFT_OUTER("leftOuter"),
-    @XmlEnumValue("rightOuter")
-    RIGHT_OUTER("rightOuter"),
-    @XmlEnumValue("fullOuter")
-    FULL_OUTER("fullOuter"),
+  /**
+   * Join type referential integrity means for each row in the left table there is a corresponding row in the right table.
+   * If this join type is selected the engine can better optimize the queries, because the join can be completely
+   * ignored if no fields are requested from the joined table.
+   */
+  @XmlEnumValue("referential")
+  REFERENTIAL("referential"),
+  @XmlEnumValue("inner")
+  INNER("inner"),
+  @XmlEnumValue("leftOuter")
+  LEFT_OUTER("leftOuter"),
+  @XmlEnumValue("rightOuter")
+  RIGHT_OUTER("rightOuter"),
+  @XmlEnumValue("fullOuter")
+  FULL_OUTER("fullOuter"),
 
-    /**
-     * 
-     * 						TextTable indicates a join with a text table (as right table) having language as additional key. 
-     * 						During runtime the language key is filled with the user/logon language
-     * 					
-     * 
-     */
-    @XmlEnumValue("textTable")
-    TEXT_TABLE("textTable");
-    private final String value;
+  /**
+   * TextTable indicates a join with a text table (as right table) having language as additional key.
+   * During runtime the language key is filled with the user/logon language
+   */
+  @XmlEnumValue("textTable")
+  TEXT_TABLE("textTable");
+  private final String value;
 
-    JoinType(String v) {
-        value = v;
+  JoinType(String v) {
+    value = v;
+  }
+
+  public static JoinType fromValue(String v) {
+    for (JoinType c : JoinType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public String value() {
-        return value;
-    }
-
-    public static JoinType fromValue(String v) {
-        for (JoinType c: JoinType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

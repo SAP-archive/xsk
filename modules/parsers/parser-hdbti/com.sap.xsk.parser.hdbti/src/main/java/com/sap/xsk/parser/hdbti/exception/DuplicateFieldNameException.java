@@ -11,11 +11,11 @@
  */
 package com.sap.xsk.parser.hdbti.exception;
 
-public class DuplicateFieldNameException extends RuntimeException{
-	
-	private static final long serialVersionUID = -6378311157487445495L;
+public class DuplicateFieldNameException extends RuntimeException {
 
-	public DuplicateFieldNameException(String message) {
-        super(message);
-    }
+  private static final long serialVersionUID = -6378311157487445495L;
+
+  public DuplicateFieldNameException(String message) {
+    super(message);
+  }
 }

@@ -19,6 +19,9 @@
 
 package com.sap.ndb.datamodeltype;
 
+import com.sap.ndb.basemodelbase.CurrencyConversionTables;
+import com.sap.ndb.basemodelbase.SchemaMappingBasedObject;
+import com.sap.ndb.basemodelbase.UnitConversionTables;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,20 +30,16 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.CurrencyConversionTables;
-import com.sap.ndb.basemodelbase.SchemaMappingBasedObject;
-import com.sap.ndb.basemodelbase.UnitConversionTables;
 
 
 /**
- * 
- * 				Common father class for special user defined functions such as currency and unit conversion.
- * 			
- * 
+ * Common father class for special user defined functions such as currency and unit conversion.
+ *
+ *
  * <p>Java class for BaseUserDefinedFunction complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BaseUserDefinedFunction"&gt;
  *   &lt;complexContent&gt;
@@ -62,8 +61,6 @@ import com.sap.ndb.basemodelbase.UnitConversionTables;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BaseUserDefinedFunction", propOrder = {
@@ -81,234 +78,198 @@ import com.sap.ndb.basemodelbase.UnitConversionTables;
 })
 public abstract class BaseUserDefinedFunction {
 
-    protected UDFParameter client;
-    protected SchemaMappingBasedObject schema;
-    protected CurrencyConversionTables currencyConversionTables;
-    protected UnitConversionTables unitConversionTables;
-    protected UDFParameter errorHandling;
-    @XmlElement(required = true)
-    protected SimpleType outputDataType;
-    protected Element outputUnitCurrencyElement;
-    @XmlAttribute(name = "generateOutputUnitCurrencyElement")
-    protected Boolean generateOutputUnitCurrencyElement;
-    @XmlAttribute(name = "outputUnitCurrencyElementName")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String outputUnitCurrencyElementName;
+  protected UDFParameter client;
+  protected SchemaMappingBasedObject schema;
+  protected CurrencyConversionTables currencyConversionTables;
+  protected UnitConversionTables unitConversionTables;
+  protected UDFParameter errorHandling;
+  @XmlElement(required = true)
+  protected SimpleType outputDataType;
+  protected Element outputUnitCurrencyElement;
+  @XmlAttribute(name = "generateOutputUnitCurrencyElement")
+  protected Boolean generateOutputUnitCurrencyElement;
+  @XmlAttribute(name = "outputUnitCurrencyElementName")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String outputUnitCurrencyElementName;
 
-    /**
-     * Gets the value of the client property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UDFParameter }
-     *     
-     */
-    public UDFParameter getClient() {
-        return client;
-    }
+  /**
+   * Gets the value of the client property.
+   *
+   * @return possible object is
+   * {@link UDFParameter }
+   */
+  public UDFParameter getClient() {
+    return client;
+  }
 
-    /**
-     * Sets the value of the client property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UDFParameter }
-     *     
-     */
-    public void setClient(UDFParameter value) {
-        this.client = value;
-    }
+  /**
+   * Sets the value of the client property.
+   *
+   * @param value allowed object is
+   *              {@link UDFParameter }
+   */
+  public void setClient(UDFParameter value) {
+    this.client = value;
+  }
 
-    /**
-     * Gets the value of the schema property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SchemaMappingBasedObject }
-     *     
-     */
-    public SchemaMappingBasedObject getSchema() {
-        return schema;
-    }
+  /**
+   * Gets the value of the schema property.
+   *
+   * @return possible object is
+   * {@link SchemaMappingBasedObject }
+   */
+  public SchemaMappingBasedObject getSchema() {
+    return schema;
+  }
 
-    /**
-     * Sets the value of the schema property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SchemaMappingBasedObject }
-     *     
-     */
-    public void setSchema(SchemaMappingBasedObject value) {
-        this.schema = value;
-    }
+  /**
+   * Sets the value of the schema property.
+   *
+   * @param value allowed object is
+   *              {@link SchemaMappingBasedObject }
+   */
+  public void setSchema(SchemaMappingBasedObject value) {
+    this.schema = value;
+  }
 
-    /**
-     * Gets the value of the currencyConversionTables property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CurrencyConversionTables }
-     *     
-     */
-    public CurrencyConversionTables getCurrencyConversionTables() {
-        return currencyConversionTables;
-    }
+  /**
+   * Gets the value of the currencyConversionTables property.
+   *
+   * @return possible object is
+   * {@link CurrencyConversionTables }
+   */
+  public CurrencyConversionTables getCurrencyConversionTables() {
+    return currencyConversionTables;
+  }
 
-    /**
-     * Sets the value of the currencyConversionTables property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CurrencyConversionTables }
-     *     
-     */
-    public void setCurrencyConversionTables(CurrencyConversionTables value) {
-        this.currencyConversionTables = value;
-    }
+  /**
+   * Sets the value of the currencyConversionTables property.
+   *
+   * @param value allowed object is
+   *              {@link CurrencyConversionTables }
+   */
+  public void setCurrencyConversionTables(CurrencyConversionTables value) {
+    this.currencyConversionTables = value;
+  }
 
-    /**
-     * Gets the value of the unitConversionTables property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnitConversionTables }
-     *     
-     */
-    public UnitConversionTables getUnitConversionTables() {
-        return unitConversionTables;
-    }
+  /**
+   * Gets the value of the unitConversionTables property.
+   *
+   * @return possible object is
+   * {@link UnitConversionTables }
+   */
+  public UnitConversionTables getUnitConversionTables() {
+    return unitConversionTables;
+  }
 
-    /**
-     * Sets the value of the unitConversionTables property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnitConversionTables }
-     *     
-     */
-    public void setUnitConversionTables(UnitConversionTables value) {
-        this.unitConversionTables = value;
-    }
+  /**
+   * Sets the value of the unitConversionTables property.
+   *
+   * @param value allowed object is
+   *              {@link UnitConversionTables }
+   */
+  public void setUnitConversionTables(UnitConversionTables value) {
+    this.unitConversionTables = value;
+  }
 
-    /**
-     * Gets the value of the errorHandling property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UDFParameter }
-     *     
-     */
-    public UDFParameter getErrorHandling() {
-        return errorHandling;
-    }
+  /**
+   * Gets the value of the errorHandling property.
+   *
+   * @return possible object is
+   * {@link UDFParameter }
+   */
+  public UDFParameter getErrorHandling() {
+    return errorHandling;
+  }
 
-    /**
-     * Sets the value of the errorHandling property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UDFParameter }
-     *     
-     */
-    public void setErrorHandling(UDFParameter value) {
-        this.errorHandling = value;
-    }
+  /**
+   * Sets the value of the errorHandling property.
+   *
+   * @param value allowed object is
+   *              {@link UDFParameter }
+   */
+  public void setErrorHandling(UDFParameter value) {
+    this.errorHandling = value;
+  }
 
-    /**
-     * Gets the value of the outputDataType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SimpleType }
-     *     
-     */
-    public SimpleType getOutputDataType() {
-        return outputDataType;
-    }
+  /**
+   * Gets the value of the outputDataType property.
+   *
+   * @return possible object is
+   * {@link SimpleType }
+   */
+  public SimpleType getOutputDataType() {
+    return outputDataType;
+  }
 
-    /**
-     * Sets the value of the outputDataType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SimpleType }
-     *     
-     */
-    public void setOutputDataType(SimpleType value) {
-        this.outputDataType = value;
-    }
+  /**
+   * Sets the value of the outputDataType property.
+   *
+   * @param value allowed object is
+   *              {@link SimpleType }
+   */
+  public void setOutputDataType(SimpleType value) {
+    this.outputDataType = value;
+  }
 
-    /**
-     * Gets the value of the outputUnitCurrencyElement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Element }
-     *     
-     */
-    public Element getOutputUnitCurrencyElement() {
-        return outputUnitCurrencyElement;
-    }
+  /**
+   * Gets the value of the outputUnitCurrencyElement property.
+   *
+   * @return possible object is
+   * {@link Element }
+   */
+  public Element getOutputUnitCurrencyElement() {
+    return outputUnitCurrencyElement;
+  }
 
-    /**
-     * Sets the value of the outputUnitCurrencyElement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Element }
-     *     
-     */
-    public void setOutputUnitCurrencyElement(Element value) {
-        this.outputUnitCurrencyElement = value;
-    }
+  /**
+   * Sets the value of the outputUnitCurrencyElement property.
+   *
+   * @param value allowed object is
+   *              {@link Element }
+   */
+  public void setOutputUnitCurrencyElement(Element value) {
+    this.outputUnitCurrencyElement = value;
+  }
 
-    /**
-     * Gets the value of the generateOutputUnitCurrencyElement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isGenerateOutputUnitCurrencyElement() {
-        return generateOutputUnitCurrencyElement;
-    }
+  /**
+   * Gets the value of the generateOutputUnitCurrencyElement property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isGenerateOutputUnitCurrencyElement() {
+    return generateOutputUnitCurrencyElement;
+  }
 
-    /**
-     * Sets the value of the generateOutputUnitCurrencyElement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setGenerateOutputUnitCurrencyElement(Boolean value) {
-        this.generateOutputUnitCurrencyElement = value;
-    }
+  /**
+   * Sets the value of the generateOutputUnitCurrencyElement property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setGenerateOutputUnitCurrencyElement(Boolean value) {
+    this.generateOutputUnitCurrencyElement = value;
+  }
 
-    /**
-     * Gets the value of the outputUnitCurrencyElementName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOutputUnitCurrencyElementName() {
-        return outputUnitCurrencyElementName;
-    }
+  /**
+   * Gets the value of the outputUnitCurrencyElementName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getOutputUnitCurrencyElementName() {
+    return outputUnitCurrencyElementName;
+  }
 
-    /**
-     * Sets the value of the outputUnitCurrencyElementName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOutputUnitCurrencyElementName(String value) {
-        this.outputUnitCurrencyElementName = value;
-    }
+  /**
+   * Sets the value of the outputUnitCurrencyElementName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setOutputUnitCurrencyElementName(String value) {
+    this.outputUnitCurrencyElementName = value;
+  }
 
 }

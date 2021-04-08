@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Coordinates complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Coordinates"&gt;
  *   &lt;complexContent&gt;
@@ -40,48 +40,42 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Coordinates")
 public class Coordinates {
 
-    @XmlAttribute(name = "x", required = true)
-    protected int x;
-    @XmlAttribute(name = "y", required = true)
-    protected int y;
+  @XmlAttribute(name = "x", required = true)
+  protected int x;
+  @XmlAttribute(name = "y", required = true)
+  protected int y;
 
-    /**
-     * Gets the value of the x property.
-     * 
-     */
-    public int getX() {
-        return x;
-    }
+  /**
+   * Gets the value of the x property.
+   */
+  public int getX() {
+    return x;
+  }
 
-    /**
-     * Sets the value of the x property.
-     * 
-     */
-    public void setX(int value) {
-        this.x = value;
-    }
+  /**
+   * Sets the value of the x property.
+   */
+  public void setX(int value) {
+    this.x = value;
+  }
 
-    /**
-     * Gets the value of the y property.
-     * 
-     */
-    public int getY() {
-        return y;
-    }
+  /**
+   * Gets the value of the y property.
+   */
+  public int getY() {
+    return y;
+  }
 
-    /**
-     * Sets the value of the y property.
-     * 
-     */
-    public void setY(int value) {
-        this.y = value;
-    }
+  /**
+   * Sets the value of the y property.
+   */
+  public void setY(int value) {
+    this.y = value;
+  }
 
 }

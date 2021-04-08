@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ModelObjectType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,33 +37,32 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ModelObjectType")
 @XmlEnum
 public enum ModelObjectType {
 
-    @XmlEnumValue("catalog")
-    CATALOG("catalog"),
-    @XmlEnumValue("repository")
-    REPOSITORY("repository");
-    private final String value;
+  @XmlEnumValue("catalog")
+  CATALOG("catalog"),
+  @XmlEnumValue("repository")
+  REPOSITORY("repository");
+  private final String value;
 
-    ModelObjectType(String v) {
-        value = v;
-    }
+  ModelObjectType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static ModelObjectType fromValue(String v) {
+    for (ModelObjectType c : ModelObjectType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static ModelObjectType fromValue(String v) {
-        for (ModelObjectType c: ModelObjectType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

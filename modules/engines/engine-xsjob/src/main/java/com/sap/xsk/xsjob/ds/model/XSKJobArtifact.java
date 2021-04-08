@@ -15,36 +15,36 @@ import java.util.List;
 
 public class XSKJobArtifact {
 
-    private String description;
+  private String description;
 
-    private String action;
+  private String action;
 
-    private List<XSKJobSchedule> schedules;
+  private List<XSKJobSchedule> schedules;
 
-    public XSKJobArtifact() {
-    }
+  public XSKJobArtifact() {
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public String getAction() {
-        return action;
-    }
+  public String getAction() {
+    return action;
+  }
 
-    public void setAction(String action) {
-        this.action = action;
-    }
+  public void setAction(String action) {
+    this.action = action;
+  }
 
-    public List<XSKJobSchedule> getSchedules() {
-        return schedules;
-    }
+  public List<XSKJobSchedule> getSchedules() {
+    return schedules;
+  }
 
-    public void setSchedules(List<XSKJobSchedule> schedules) {
-        this.schedules = schedules;
-    }
+  public void setSchedules(List<XSKJobSchedule> schedules) {
+    this.schedules = schedules;
+  }
 }

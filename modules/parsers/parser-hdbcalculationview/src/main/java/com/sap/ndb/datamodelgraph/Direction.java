@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Direction.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -38,35 +38,34 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "Direction")
 @XmlEnum
 public enum Direction {
 
-    @XmlEnumValue("outgoing")
-    OUTGOING("outgoing"),
-    @XmlEnumValue("incoming")
-    INCOMING("incoming"),
-    @XmlEnumValue("any")
-    ANY("any");
-    private final String value;
+  @XmlEnumValue("outgoing")
+  OUTGOING("outgoing"),
+  @XmlEnumValue("incoming")
+  INCOMING("incoming"),
+  @XmlEnumValue("any")
+  ANY("any");
+  private final String value;
 
-    Direction(String v) {
-        value = v;
-    }
+  Direction(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static Direction fromValue(String v) {
+    for (Direction c : Direction.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static Direction fromValue(String v) {
-        for (Direction c: Direction.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

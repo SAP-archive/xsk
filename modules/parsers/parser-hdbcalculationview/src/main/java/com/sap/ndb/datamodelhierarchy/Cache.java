@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Cache.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -37,44 +37,34 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "Cache")
 @XmlEnum
 public enum Cache {
 
 
-    /**
-     * 
-     * 						The	generated hierarchy is cached if the system assesses the source to be reliably deterministic. 
-     * 						This is the default behavior.
-     * 					
-     * 
-     */
-    CACHE,
+  /**
+   * The	generated hierarchy is cached if the system assesses the source to be reliably deterministic.
+   * This is the default behavior.
+   */
+  CACHE,
 
-    /**
-     * 
-     * 						The generated hierarchy is not cached.
-     * 					
-     * 
-     */
-    NO_CACHE,
+  /**
+   * The generated hierarchy is not cached.
+   */
+  NO_CACHE,
 
-    /**
-     * 
-     * 						The generated hierarchy is cached even if the source cannot be assessed to be reliably deterministic.
-     * 					
-     * 
-     */
-    CACHE_FORCE;
+  /**
+   * The generated hierarchy is cached even if the source cannot be assessed to be reliably deterministic.
+   */
+  CACHE_FORCE;
 
-    public String value() {
-        return name();
-    }
+  public static Cache fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static Cache fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

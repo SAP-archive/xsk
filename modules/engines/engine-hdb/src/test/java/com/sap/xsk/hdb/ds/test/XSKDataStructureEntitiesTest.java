@@ -16,34 +16,10 @@ package com.sap.xsk.hdb.ds.test;
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * <p>
  * Contributors:
- *   SAP - initial API and implementation
+ * SAP - initial API and implementation
  */
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
-import org.eclipse.dirigible.database.persistence.PersistenceManager;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 
 /**
  * The Class DataStructureSchemaTest.

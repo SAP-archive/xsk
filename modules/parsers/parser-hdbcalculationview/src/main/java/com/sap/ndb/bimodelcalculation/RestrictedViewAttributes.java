@@ -27,14 +27,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Collection element for the restricted view attributes of an aggregation node
- * 			
- * 
+ * Collection element for the restricted view attributes of an aggregation node
+ *
+ *
  * <p>Java class for RestrictedViewAttributes complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RestrictedViewAttributes"&gt;
  *   &lt;complexContent&gt;
@@ -46,8 +45,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RestrictedViewAttributes", propOrder = {
@@ -55,35 +52,33 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class RestrictedViewAttributes {
 
-    protected List<RestrictedViewAttribute> restrictedViewAttribute;
+  protected List<RestrictedViewAttribute> restrictedViewAttribute;
 
-    /**
-     * Gets the value of the restrictedViewAttribute property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the restrictedViewAttribute property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getRestrictedViewAttribute().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link RestrictedViewAttribute }
-     * 
-     * 
-     */
-    public List<RestrictedViewAttribute> getRestrictedViewAttribute() {
-        if (restrictedViewAttribute == null) {
-            restrictedViewAttribute = new ArrayList<RestrictedViewAttribute>();
-        }
-        return this.restrictedViewAttribute;
+  /**
+   * Gets the value of the restrictedViewAttribute property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the restrictedViewAttribute property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getRestrictedViewAttribute().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link RestrictedViewAttribute }
+   */
+  public List<RestrictedViewAttribute> getRestrictedViewAttribute() {
+    if (restrictedViewAttribute == null) {
+      restrictedViewAttribute = new ArrayList<RestrictedViewAttribute>();
     }
+    return this.restrictedViewAttribute;
+  }
 
 }

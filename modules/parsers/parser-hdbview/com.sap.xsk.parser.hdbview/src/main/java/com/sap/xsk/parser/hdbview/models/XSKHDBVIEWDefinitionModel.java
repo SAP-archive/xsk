@@ -12,86 +12,86 @@
 package com.sap.xsk.parser.hdbview.models;
 
 import com.sap.xsk.parser.hdbview.exceptions.XSKHDBViewMissingPropertyException;
-
 import java.util.List;
 import java.util.Objects;
 
 public class XSKHDBVIEWDefinitionModel {
-    private String schema;
-    private String query;
-    private boolean publicProp = true;
-    private List<String> dependsOn;
-    private List<String> dependsOnTable;
-    private List<String> dependsOnView;
 
-    public String getSchema() {
-        return schema;
-    }
+  private String schema;
+  private String query;
+  private boolean publicProp = true;
+  private List<String> dependsOn;
+  private List<String> dependsOnTable;
+  private List<String> dependsOnView;
 
-    public void setSchema(String schema) {
-        this.schema = schema;
-    }
+  public String getSchema() {
+    return schema;
+  }
 
-    public String getQuery() {
-        return query;
-    }
+  public void setSchema(String schema) {
+    this.schema = schema;
+  }
 
-    public void setQuery(String query) {
-        this.query = query;
-    }
+  public String getQuery() {
+    return query;
+  }
 
-    public boolean isPublic() {
-        return publicProp;
-    }
+  public void setQuery(String query) {
+    this.query = query;
+  }
 
-    public void setPublic(boolean publicProp) {
-        this.publicProp = publicProp;
-    }
+  public boolean isPublic() {
+    return publicProp;
+  }
 
-    public List<String> getDependsOn() {
-        return dependsOn;
-    }
+  public void setPublic(boolean publicProp) {
+    this.publicProp = publicProp;
+  }
 
-    public void setDependsOn(List<String> dependsOn) {
-        this.dependsOn = dependsOn;
-    }
+  public List<String> getDependsOn() {
+    return dependsOn;
+  }
 
-    public List<String> getDependsOnTable() {
-        return dependsOnTable;
-    }
+  public void setDependsOn(List<String> dependsOn) {
+    this.dependsOn = dependsOn;
+  }
 
-    public void setDependsOnTable(List<String> dependsOnTable) {
-        this.dependsOnTable = dependsOnTable;
-    }
+  public List<String> getDependsOnTable() {
+    return dependsOnTable;
+  }
 
-    public List<String> getDependsOnView() {
-        return dependsOnView;
-    }
+  public void setDependsOnTable(List<String> dependsOnTable) {
+    this.dependsOnTable = dependsOnTable;
+  }
 
-    public void setDependsOnView(List<String> dependsOnView) {
-        this.dependsOnView = dependsOnView;
-    }
+  public List<String> getDependsOnView() {
+    return dependsOnView;
+  }
 
-    public void checkForAllMandatoryFieldsPresence() throws Exception {
-        checkPresence(schema, "schema");
-        checkPresence(query, "query");
-    }
+  public void setDependsOnView(List<String> dependsOnView) {
+    this.dependsOnView = dependsOnView;
+  }
 
-    private <T> void checkPresence(T field, String fieldName) {
-        if (Objects.isNull(field)) {
-            throw new XSKHDBViewMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
-        }
-    }
+  public void checkForAllMandatoryFieldsPresence() throws Exception {
+    checkPresence(schema, "schema");
+    checkPresence(query, "query");
+  }
 
-    @Override
-    public String toString() {
-        return "HdbviewDefinitionModel{" +
-                "schema='" + schema + '\'' +
-                ", query='" + query + '\'' +
-                ", publicProp=" + publicProp +
-                ", dependsOn=" + dependsOn +
-                ", dependsOnTable=" + dependsOnTable +
-                ", dependsOnView=" + dependsOnView +
-                '}';
+  private <T> void checkPresence(T field, String fieldName) {
+    if (Objects.isNull(field)) {
+      throw new XSKHDBViewMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
     }
+  }
+
+  @Override
+  public String toString() {
+    return "HdbviewDefinitionModel{" +
+        "schema='" + schema + '\'' +
+        ", query='" + query + '\'' +
+        ", publicProp=" + publicProp +
+        ", dependsOn=" + dependsOn +
+        ", dependsOnTable=" + dependsOnTable +
+        ", dependsOnView=" + dependsOnView +
+        '}';
+  }
 }

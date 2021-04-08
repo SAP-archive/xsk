@@ -27,16 +27,15 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Attribute (aka physhical attriubute) is an attribute containing a mapping to a physical column	
- * 				only these Attributes can be defined as key and	principal key and only these attributes can be	
- * 				used in a logical join as of now
- * 			
- * 
+ * Attribute (aka physhical attriubute) is an attribute containing a mapping to a physical column
+ * only these Attributes can be defined as key and	principal key and only these attributes can be
+ * used in a logical join as of now
+ *
+ *
  * <p>Java class for Attribute complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Attribute"&gt;
  *   &lt;complexContent&gt;
@@ -51,120 +50,101 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Attribute", propOrder = {
     "keyMapping"
 })
 public class Attribute
-    extends AbstractAttribute
-{
+    extends AbstractAttribute {
 
-    @XmlElement(required = true)
-    protected ColumnMapping keyMapping;
-    @XmlAttribute(name = "principalKey")
-    protected Boolean principalKey;
-    @XmlAttribute(name = "keepFlag")
-    protected Boolean keepFlag;
-    @XmlAttribute(name = "transparentFilter")
-    protected Boolean transparentFilter;
+  @XmlElement(required = true)
+  protected ColumnMapping keyMapping;
+  @XmlAttribute(name = "principalKey")
+  protected Boolean principalKey;
+  @XmlAttribute(name = "keepFlag")
+  protected Boolean keepFlag;
+  @XmlAttribute(name = "transparentFilter")
+  protected Boolean transparentFilter;
 
-    /**
-     * Gets the value of the keyMapping property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ColumnMapping }
-     *     
-     */
-    public ColumnMapping getKeyMapping() {
-        return keyMapping;
-    }
+  /**
+   * Gets the value of the keyMapping property.
+   *
+   * @return possible object is
+   * {@link ColumnMapping }
+   */
+  public ColumnMapping getKeyMapping() {
+    return keyMapping;
+  }
 
-    /**
-     * Sets the value of the keyMapping property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ColumnMapping }
-     *     
-     */
-    public void setKeyMapping(ColumnMapping value) {
-        this.keyMapping = value;
-    }
+  /**
+   * Sets the value of the keyMapping property.
+   *
+   * @param value allowed object is
+   *              {@link ColumnMapping }
+   */
+  public void setKeyMapping(ColumnMapping value) {
+    this.keyMapping = value;
+  }
 
-    /**
-     * Gets the value of the principalKey property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isPrincipalKey() {
-        return principalKey;
-    }
+  /**
+   * Gets the value of the principalKey property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isPrincipalKey() {
+    return principalKey;
+  }
 
-    /**
-     * Sets the value of the principalKey property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setPrincipalKey(Boolean value) {
-        this.principalKey = value;
-    }
+  /**
+   * Sets the value of the principalKey property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setPrincipalKey(Boolean value) {
+    this.principalKey = value;
+  }
 
-    /**
-     * Gets the value of the keepFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isKeepFlag() {
-        return keepFlag;
-    }
+  /**
+   * Gets the value of the keepFlag property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isKeepFlag() {
+    return keepFlag;
+  }
 
-    /**
-     * Sets the value of the keepFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setKeepFlag(Boolean value) {
-        this.keepFlag = value;
-    }
+  /**
+   * Sets the value of the keepFlag property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setKeepFlag(Boolean value) {
+    this.keepFlag = value;
+  }
 
-    /**
-     * Gets the value of the transparentFilter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isTransparentFilter() {
-        return transparentFilter;
-    }
+  /**
+   * Gets the value of the transparentFilter property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isTransparentFilter() {
+    return transparentFilter;
+  }
 
-    /**
-     * Sets the value of the transparentFilter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setTransparentFilter(Boolean value) {
-        this.transparentFilter = value;
-    }
+  /**
+   * Sets the value of the transparentFilter property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setTransparentFilter(Boolean value) {
+    this.transparentFilter = value;
+  }
 
 }

@@ -19,25 +19,24 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.bimodelcube.MeasureGroup;
+import com.sap.ndb.bimodeldimension.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.bimodelcube.MeasureGroup;
-import com.sap.ndb.bimodeldimension.Dimension;
 
 
 /**
- * 
- * 				Common base for objects having attributes and data foundations
- * 			
- * 
+ * Common base for objects having attributes and data foundations
+ *
+ *
  * <p>Java class for LogicalObject complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LogicalObject"&gt;
  *   &lt;complexContent&gt;
@@ -52,8 +51,6 @@ import com.sap.ndb.bimodeldimension.Dimension;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LogicalObject", propOrder = {
@@ -67,113 +64,98 @@ import com.sap.ndb.bimodeldimension.Dimension;
     Dimension.class
 })
 public class LogicalObject
-    extends InformationModel
-{
+    extends InformationModel {
 
-    protected Attributes attributes;
-    protected CalculatedAttributes calculatedAttributes;
-    protected List<AbstractAttribute> allAttributes;
-    protected DataFoundation privateDataFoundation;
+  protected Attributes attributes;
+  protected CalculatedAttributes calculatedAttributes;
+  protected List<AbstractAttribute> allAttributes;
+  protected DataFoundation privateDataFoundation;
 
-    /**
-     * Gets the value of the attributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Attributes }
-     *     
-     */
-    public Attributes getAttributes() {
-        return attributes;
+  /**
+   * Gets the value of the attributes property.
+   *
+   * @return possible object is
+   * {@link Attributes }
+   */
+  public Attributes getAttributes() {
+    return attributes;
+  }
+
+  /**
+   * Sets the value of the attributes property.
+   *
+   * @param value allowed object is
+   *              {@link Attributes }
+   */
+  public void setAttributes(Attributes value) {
+    this.attributes = value;
+  }
+
+  /**
+   * Gets the value of the calculatedAttributes property.
+   *
+   * @return possible object is
+   * {@link CalculatedAttributes }
+   */
+  public CalculatedAttributes getCalculatedAttributes() {
+    return calculatedAttributes;
+  }
+
+  /**
+   * Sets the value of the calculatedAttributes property.
+   *
+   * @param value allowed object is
+   *              {@link CalculatedAttributes }
+   */
+  public void setCalculatedAttributes(CalculatedAttributes value) {
+    this.calculatedAttributes = value;
+  }
+
+  /**
+   * Gets the value of the allAttributes property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the allAttributes property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getAllAttributes().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link AbstractAttribute }
+   */
+  public List<AbstractAttribute> getAllAttributes() {
+    if (allAttributes == null) {
+      allAttributes = new ArrayList<AbstractAttribute>();
     }
+    return this.allAttributes;
+  }
 
-    /**
-     * Sets the value of the attributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Attributes }
-     *     
-     */
-    public void setAttributes(Attributes value) {
-        this.attributes = value;
-    }
+  /**
+   * Gets the value of the privateDataFoundation property.
+   *
+   * @return possible object is
+   * {@link DataFoundation }
+   */
+  public DataFoundation getPrivateDataFoundation() {
+    return privateDataFoundation;
+  }
 
-    /**
-     * Gets the value of the calculatedAttributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CalculatedAttributes }
-     *     
-     */
-    public CalculatedAttributes getCalculatedAttributes() {
-        return calculatedAttributes;
-    }
-
-    /**
-     * Sets the value of the calculatedAttributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CalculatedAttributes }
-     *     
-     */
-    public void setCalculatedAttributes(CalculatedAttributes value) {
-        this.calculatedAttributes = value;
-    }
-
-    /**
-     * Gets the value of the allAttributes property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the allAttributes property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getAllAttributes().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link AbstractAttribute }
-     * 
-     * 
-     */
-    public List<AbstractAttribute> getAllAttributes() {
-        if (allAttributes == null) {
-            allAttributes = new ArrayList<AbstractAttribute>();
-        }
-        return this.allAttributes;
-    }
-
-    /**
-     * Gets the value of the privateDataFoundation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DataFoundation }
-     *     
-     */
-    public DataFoundation getPrivateDataFoundation() {
-        return privateDataFoundation;
-    }
-
-    /**
-     * Sets the value of the privateDataFoundation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DataFoundation }
-     *     
-     */
-    public void setPrivateDataFoundation(DataFoundation value) {
-        this.privateDataFoundation = value;
-    }
+  /**
+   * Sets the value of the privateDataFoundation property.
+   *
+   * @param value allowed object is
+   *              {@link DataFoundation }
+   */
+  public void setPrivateDataFoundation(DataFoundation value) {
+    this.privateDataFoundation = value;
+  }
 
 }

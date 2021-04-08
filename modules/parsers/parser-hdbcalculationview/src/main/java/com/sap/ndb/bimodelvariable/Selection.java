@@ -26,13 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- *  Describes which format/complexity is allowed when entering value for a variable
- * 			
- * 
+ * Describes which format/complexity is allowed when entering value for a variable
+ *
+ *
  * <p>Java class for Selection complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Selection"&gt;
  *   &lt;complexContent&gt;
@@ -43,56 +43,48 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Selection")
 public class Selection {
 
-    @XmlAttribute(name = "type", required = true)
-    protected SelectionType type;
-    @XmlAttribute(name = "multiLine", required = true)
-    protected boolean multiLine;
+  @XmlAttribute(name = "type", required = true)
+  protected SelectionType type;
+  @XmlAttribute(name = "multiLine", required = true)
+  protected boolean multiLine;
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SelectionType }
-     *     
-     */
-    public SelectionType getType() {
-        return type;
-    }
+  /**
+   * Gets the value of the type property.
+   *
+   * @return possible object is
+   * {@link SelectionType }
+   */
+  public SelectionType getType() {
+    return type;
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SelectionType }
-     *     
-     */
-    public void setType(SelectionType value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link SelectionType }
+   */
+  public void setType(SelectionType value) {
+    this.type = value;
+  }
 
-    /**
-     * Gets the value of the multiLine property.
-     * 
-     */
-    public boolean isMultiLine() {
-        return multiLine;
-    }
+  /**
+   * Gets the value of the multiLine property.
+   */
+  public boolean isMultiLine() {
+    return multiLine;
+  }
 
-    /**
-     * Sets the value of the multiLine property.
-     * 
-     */
-    public void setMultiLine(boolean value) {
-        this.multiLine = value;
-    }
+  /**
+   * Sets the value of the multiLine property.
+   */
+  public void setMultiLine(boolean value) {
+    this.multiLine = value;
+  }
 
 }

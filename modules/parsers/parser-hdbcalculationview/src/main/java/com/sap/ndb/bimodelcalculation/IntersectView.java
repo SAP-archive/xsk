@@ -25,17 +25,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				A view/node that calculates the set operation intersect. 
- * 				It must have exactly 2 inputs having the same	structure - i.e. 
- * 				the same number of fields with matching data types (after the mapping). 
- * 				The result consists of all rows that occur in the first and the	second input.
- * 			
- * 
+ * A view/node that calculates the set operation intersect.
+ * It must have exactly 2 inputs having the same	structure - i.e.
+ * the same number of fields with matching data types (after the mapping).
+ * The result consists of all rows that occur in the first and the	second input.
+ *
+ *
  * <p>Java class for IntersectView complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="IntersectView"&gt;
  *   &lt;complexContent&gt;
@@ -44,14 +43,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "IntersectView")
 public class IntersectView
-    extends CalculationView
-{
+    extends CalculationView {
 
 
 }

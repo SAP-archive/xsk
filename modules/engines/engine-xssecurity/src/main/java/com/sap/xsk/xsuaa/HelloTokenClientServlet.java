@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServlet;
 //@WebServlet("/hello-token-client")
 //@ServletSecurity(@HttpConstraint(rolesAllowed = { "Display" }))
 public class HelloTokenClientServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
+  private static final long serialVersionUID = 1L;
 
 //	/**
 //	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse

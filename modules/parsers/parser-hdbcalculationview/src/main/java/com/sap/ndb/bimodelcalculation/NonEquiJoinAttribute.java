@@ -19,20 +19,20 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilterOperator;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilterOperator;
 
 
 /**
  * <p>Java class for NonEquiJoinAttribute complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="NonEquiJoinAttribute"&gt;
  *   &lt;complexContent&gt;
@@ -46,144 +46,122 @@ import com.sap.ndb.sqlcoremodelaccesscontrol.ValueFilterOperator;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NonEquiJoinAttribute")
 public class NonEquiJoinAttribute {
 
-    @XmlAttribute(name = "leftColumn")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String leftColumn;
-    @XmlAttribute(name = "leftValue")
-    protected String leftValue;
-    @XmlAttribute(name = "rightColumn")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String rightColumn;
-    @XmlAttribute(name = "rightValue")
-    protected String rightValue;
-    @XmlAttribute(name = "operator", required = true)
-    protected ValueFilterOperator operator;
+  @XmlAttribute(name = "leftColumn")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String leftColumn;
+  @XmlAttribute(name = "leftValue")
+  protected String leftValue;
+  @XmlAttribute(name = "rightColumn")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String rightColumn;
+  @XmlAttribute(name = "rightValue")
+  protected String rightValue;
+  @XmlAttribute(name = "operator", required = true)
+  protected ValueFilterOperator operator;
 
-    /**
-     * Gets the value of the leftColumn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLeftColumn() {
-        return leftColumn;
-    }
+  /**
+   * Gets the value of the leftColumn property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLeftColumn() {
+    return leftColumn;
+  }
 
-    /**
-     * Sets the value of the leftColumn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLeftColumn(String value) {
-        this.leftColumn = value;
-    }
+  /**
+   * Sets the value of the leftColumn property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLeftColumn(String value) {
+    this.leftColumn = value;
+  }
 
-    /**
-     * Gets the value of the leftValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLeftValue() {
-        return leftValue;
-    }
+  /**
+   * Gets the value of the leftValue property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLeftValue() {
+    return leftValue;
+  }
 
-    /**
-     * Sets the value of the leftValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLeftValue(String value) {
-        this.leftValue = value;
-    }
+  /**
+   * Sets the value of the leftValue property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLeftValue(String value) {
+    this.leftValue = value;
+  }
 
-    /**
-     * Gets the value of the rightColumn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRightColumn() {
-        return rightColumn;
-    }
+  /**
+   * Gets the value of the rightColumn property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getRightColumn() {
+    return rightColumn;
+  }
 
-    /**
-     * Sets the value of the rightColumn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRightColumn(String value) {
-        this.rightColumn = value;
-    }
+  /**
+   * Sets the value of the rightColumn property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRightColumn(String value) {
+    this.rightColumn = value;
+  }
 
-    /**
-     * Gets the value of the rightValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRightValue() {
-        return rightValue;
-    }
+  /**
+   * Gets the value of the rightValue property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getRightValue() {
+    return rightValue;
+  }
 
-    /**
-     * Sets the value of the rightValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRightValue(String value) {
-        this.rightValue = value;
-    }
+  /**
+   * Sets the value of the rightValue property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRightValue(String value) {
+    this.rightValue = value;
+  }
 
-    /**
-     * Gets the value of the operator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ValueFilterOperator }
-     *     
-     */
-    public ValueFilterOperator getOperator() {
-        return operator;
-    }
+  /**
+   * Gets the value of the operator property.
+   *
+   * @return possible object is
+   * {@link ValueFilterOperator }
+   */
+  public ValueFilterOperator getOperator() {
+    return operator;
+  }
 
-    /**
-     * Sets the value of the operator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ValueFilterOperator }
-     *     
-     */
-    public void setOperator(ValueFilterOperator value) {
-        this.operator = value;
-    }
+  /**
+   * Sets the value of the operator property.
+   *
+   * @param value allowed object is
+   *              {@link ValueFilterOperator }
+   */
+  public void setOperator(ValueFilterOperator value) {
+    this.operator = value;
+  }
 
 }

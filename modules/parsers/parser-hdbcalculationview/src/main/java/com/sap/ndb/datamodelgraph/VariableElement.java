@@ -29,14 +29,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				For referencing an element of a variable
- * 			
- * 
+ * For referencing an element of a variable
+ *
+ *
  * <p>Java class for VariableElement complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="VariableElement"&gt;
  *   &lt;complexContent&gt;
@@ -47,8 +46,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "VariableElement")
@@ -58,59 +55,51 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class VariableElement {
 
-    @XmlAttribute(name = "variable", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String variable;
-    @XmlAttribute(name = "element", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String element;
+  @XmlAttribute(name = "variable", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String variable;
+  @XmlAttribute(name = "element", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String element;
 
-    /**
-     * Gets the value of the variable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getVariable() {
-        return variable;
-    }
+  /**
+   * Gets the value of the variable property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getVariable() {
+    return variable;
+  }
 
-    /**
-     * Sets the value of the variable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVariable(String value) {
-        this.variable = value;
-    }
+  /**
+   * Sets the value of the variable property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setVariable(String value) {
+    this.variable = value;
+  }
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getElement() {
-        return element;
-    }
+  /**
+   * Gets the value of the element property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getElement() {
+    return element;
+  }
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setElement(String value) {
-        this.element = value;
-    }
+  /**
+   * Sets the value of the element property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setElement(String value) {
+    this.element = value;
+  }
 
 }

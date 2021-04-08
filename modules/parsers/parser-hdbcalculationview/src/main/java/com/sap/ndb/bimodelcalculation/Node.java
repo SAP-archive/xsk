@@ -19,18 +19,18 @@
 
 package com.sap.ndb.bimodelcalculation;
 
+import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
 
 
 /**
  * <p>Java class for Node complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Node"&gt;
  *   &lt;complexContent&gt;
@@ -43,8 +43,6 @@ import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Node", propOrder = {
@@ -57,58 +55,49 @@ import com.sap.ndb.repositorymodelresource.IDObjectWithDescription;
     CalculationView.class
 })
 public abstract class Node
-    extends IDObjectWithDescription
-{
+    extends IDObjectWithDescription {
 
-    protected ViewAttributes viewAttributes;
-    protected CalculatedViewAttributes calculatedViewAttributes;
+  protected ViewAttributes viewAttributes;
+  protected CalculatedViewAttributes calculatedViewAttributes;
 
-    /**
-     * Gets the value of the viewAttributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ViewAttributes }
-     *     
-     */
-    public ViewAttributes getViewAttributes() {
-        return viewAttributes;
-    }
+  /**
+   * Gets the value of the viewAttributes property.
+   *
+   * @return possible object is
+   * {@link ViewAttributes }
+   */
+  public ViewAttributes getViewAttributes() {
+    return viewAttributes;
+  }
 
-    /**
-     * Sets the value of the viewAttributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ViewAttributes }
-     *     
-     */
-    public void setViewAttributes(ViewAttributes value) {
-        this.viewAttributes = value;
-    }
+  /**
+   * Sets the value of the viewAttributes property.
+   *
+   * @param value allowed object is
+   *              {@link ViewAttributes }
+   */
+  public void setViewAttributes(ViewAttributes value) {
+    this.viewAttributes = value;
+  }
 
-    /**
-     * Gets the value of the calculatedViewAttributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CalculatedViewAttributes }
-     *     
-     */
-    public CalculatedViewAttributes getCalculatedViewAttributes() {
-        return calculatedViewAttributes;
-    }
+  /**
+   * Gets the value of the calculatedViewAttributes property.
+   *
+   * @return possible object is
+   * {@link CalculatedViewAttributes }
+   */
+  public CalculatedViewAttributes getCalculatedViewAttributes() {
+    return calculatedViewAttributes;
+  }
 
-    /**
-     * Sets the value of the calculatedViewAttributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CalculatedViewAttributes }
-     *     
-     */
-    public void setCalculatedViewAttributes(CalculatedViewAttributes value) {
-        this.calculatedViewAttributes = value;
-    }
+  /**
+   * Sets the value of the calculatedViewAttributes property.
+   *
+   * @param value allowed object is
+   *              {@link CalculatedViewAttributes }
+   */
+  public void setCalculatedViewAttributes(CalculatedViewAttributes value) {
+    this.calculatedViewAttributes = value;
+  }
 
 }

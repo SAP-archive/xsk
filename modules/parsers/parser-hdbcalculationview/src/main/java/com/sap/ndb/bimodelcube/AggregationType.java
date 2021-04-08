@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for AggregationType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -42,64 +42,54 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "AggregationType")
 @XmlEnum
 public enum AggregationType {
 
-    @XmlEnumValue("sum")
-    SUM("sum"),
-    @XmlEnumValue("min")
-    MIN("min"),
-    @XmlEnumValue("max")
-    MAX("max"),
-    @XmlEnumValue("count")
-    COUNT("count"),
+  @XmlEnumValue("sum")
+  SUM("sum"),
+  @XmlEnumValue("min")
+  MIN("min"),
+  @XmlEnumValue("max")
+  MAX("max"),
+  @XmlEnumValue("count")
+  COUNT("count"),
 
-    /**
-     * 
-     * 						Average defined as SUM( column ) / COUNT( column )
-     * 					
-     * 
-     */
-    @XmlEnumValue("avg")
-    AVG("avg"),
+  /**
+   * Average defined as SUM( column ) / COUNT( column )
+   */
+  @XmlEnumValue("avg")
+  AVG("avg"),
 
-    /**
-     * 
-     * 						Standard deviation: Sum over the squares of the differences to the average divided by (COUNT-1)
-     * 					
-     * 
-     */
-    @XmlEnumValue("var")
-    VAR("var"),
+  /**
+   * Standard deviation: Sum over the squares of the differences to the average divided by (COUNT-1)
+   */
+  @XmlEnumValue("var")
+  VAR("var"),
 
-    /**
-     * 
-     * 						Standard deviation: Square root of the variance
-     * 					
-     * 
-     */
-    @XmlEnumValue("stddev")
-    STDDEV("stddev");
-    private final String value;
+  /**
+   * Standard deviation: Square root of the variance
+   */
+  @XmlEnumValue("stddev")
+  STDDEV("stddev");
+  private final String value;
 
-    AggregationType(String v) {
-        value = v;
+  AggregationType(String v) {
+    value = v;
+  }
+
+  public static AggregationType fromValue(String v) {
+    for (AggregationType c : AggregationType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public String value() {
-        return value;
-    }
-
-    public static AggregationType fromValue(String v) {
-        for (AggregationType c: AggregationType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

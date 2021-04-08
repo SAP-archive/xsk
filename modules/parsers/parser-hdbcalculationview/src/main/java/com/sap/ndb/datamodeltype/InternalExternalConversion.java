@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Properties needed for defining an internal/external conversion of
- * 			
- * 
+ * Properties needed for defining an internal/external conversion of
+ *
+ *
  * <p>Java class for InternalExternalConversion complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InternalExternalConversion"&gt;
  *   &lt;complexContent&gt;
@@ -45,90 +44,76 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InternalExternalConversion")
 public class InternalExternalConversion {
 
-    @XmlAttribute(name = "convertToExternalFunction", required = true)
-    protected String convertToExternalFunction;
-    @XmlAttribute(name = "convertToInternalFunction", required = true)
-    protected String convertToInternalFunction;
-    @XmlAttribute(name = "orderPreserving")
-    protected Boolean orderPreserving;
+  @XmlAttribute(name = "convertToExternalFunction", required = true)
+  protected String convertToExternalFunction;
+  @XmlAttribute(name = "convertToInternalFunction", required = true)
+  protected String convertToInternalFunction;
+  @XmlAttribute(name = "orderPreserving")
+  protected Boolean orderPreserving;
 
-    /**
-     * Gets the value of the convertToExternalFunction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getConvertToExternalFunction() {
-        return convertToExternalFunction;
-    }
+  /**
+   * Gets the value of the convertToExternalFunction property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getConvertToExternalFunction() {
+    return convertToExternalFunction;
+  }
 
-    /**
-     * Sets the value of the convertToExternalFunction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setConvertToExternalFunction(String value) {
-        this.convertToExternalFunction = value;
-    }
+  /**
+   * Sets the value of the convertToExternalFunction property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setConvertToExternalFunction(String value) {
+    this.convertToExternalFunction = value;
+  }
 
-    /**
-     * Gets the value of the convertToInternalFunction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getConvertToInternalFunction() {
-        return convertToInternalFunction;
-    }
+  /**
+   * Gets the value of the convertToInternalFunction property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getConvertToInternalFunction() {
+    return convertToInternalFunction;
+  }
 
-    /**
-     * Sets the value of the convertToInternalFunction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setConvertToInternalFunction(String value) {
-        this.convertToInternalFunction = value;
-    }
+  /**
+   * Sets the value of the convertToInternalFunction property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setConvertToInternalFunction(String value) {
+    this.convertToInternalFunction = value;
+  }
 
-    /**
-     * Gets the value of the orderPreserving property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isOrderPreserving() {
-        return orderPreserving;
-    }
+  /**
+   * Gets the value of the orderPreserving property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isOrderPreserving() {
+    return orderPreserving;
+  }
 
-    /**
-     * Sets the value of the orderPreserving property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setOrderPreserving(Boolean value) {
-        this.orderPreserving = value;
-    }
+  /**
+   * Sets the value of the orderPreserving property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setOrderPreserving(Boolean value) {
+    this.orderPreserving = value;
+  }
 
 }

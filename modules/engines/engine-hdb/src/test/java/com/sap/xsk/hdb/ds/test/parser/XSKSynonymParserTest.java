@@ -11,25 +11,26 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import static org.junit.Assert.assertEquals;
+
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import java.nio.charset.StandardCharsets;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.Assert.assertEquals;
-
 public class XSKSynonymParserTest extends AbstractGuiceTest {
-    @Test
-    public void parseHdbsynonymFileWithoutErrorsSuccessfully() throws Exception {
-        String hdbsynonymSample = org.apache.commons.io.IOUtils.toString(XSKSynonymParserTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
-        XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdbsynonymSample);
-        assertEquals("TONI", model.getSynonymSchema());
-        assertEquals("hdb_view::Order", model.getTargetObject());
-        assertEquals("PUBLIC", model.getTargetSchema());
-        assertEquals("hdb_view::MySynonym", model.getName());
-        assertEquals(XSKHanaVersion.VERSION_1, model.getHanaVersion());
-    }
+
+  @Test
+  public void parseHdbsynonymFileWithoutErrorsSuccessfully() throws Exception {
+    String hdbsynonymSample = org.apache.commons.io.IOUtils
+        .toString(XSKSynonymParserTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
+    XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdbsynonymSample);
+    assertEquals("TONI", model.getSynonymSchema());
+    assertEquals("hdb_view::Order", model.getTargetObject());
+    assertEquals("PUBLIC", model.getTargetSchema());
+    assertEquals("hdb_view::MySynonym", model.getName());
+    assertEquals(XSKHanaVersion.VERSION_1, model.getHanaVersion());
+  }
 }

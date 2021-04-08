@@ -26,9 +26,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for RectangularShape complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RectangularShape"&gt;
  *   &lt;complexContent&gt;
@@ -40,41 +40,34 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RectangularShape", propOrder = {
     "size"
 })
 public class RectangularShape
-    extends Shape
-{
+    extends Shape {
 
-    protected RectangleSize size;
+  protected RectangleSize size;
 
-    /**
-     * Gets the value of the size property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RectangleSize }
-     *     
-     */
-    public RectangleSize getSize() {
-        return size;
-    }
+  /**
+   * Gets the value of the size property.
+   *
+   * @return possible object is
+   * {@link RectangleSize }
+   */
+  public RectangleSize getSize() {
+    return size;
+  }
 
-    /**
-     * Sets the value of the size property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RectangleSize }
-     *     
-     */
-    public void setSize(RectangleSize value) {
-        this.size = value;
-    }
+  /**
+   * Sets the value of the size property.
+   *
+   * @param value allowed object is
+   *              {@link RectangleSize }
+   */
+  public void setSize(RectangleSize value) {
+    this.size = value;
+  }
 
 }

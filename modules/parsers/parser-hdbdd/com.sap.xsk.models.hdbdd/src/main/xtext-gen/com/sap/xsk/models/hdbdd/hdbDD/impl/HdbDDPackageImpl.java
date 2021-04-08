@@ -16,98 +16,119 @@ import com.sap.xsk.models.hdbdd.hdbDD.Namespace;
 import com.sap.xsk.models.hdbdd.hdbDD.Schema;
 import com.sap.xsk.models.hdbdd.hdbDD.Type;
 import com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
+ *
  * @generated
  */
-public class HdbDDPackageImpl extends EPackageImpl implements HdbDDPackage
-{
+public class HdbDDPackageImpl extends EPackageImpl implements HdbDDPackage {
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
+   * @generated
+   */
+  private static boolean isInited = false;
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass hdbDDEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass typeEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass namespaceEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass schemaEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass contextEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass typeDefinitionEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass entityEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass fieldEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass fieldPrimitiveEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass fieldTypeEClass = null;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
   private EClass fieldReferenceEClass = null;
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   */
+  private boolean isCreated = false;
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated
+   */
+  private boolean isInitialized = false;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -119,41 +140,37 @@ public class HdbDDPackageImpl extends EPackageImpl implements HdbDDPackage
    * if one already exists.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
+   * @generated
    * @see org.eclipse.emf.ecore.EPackage.Registry
    * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#eNS_URI
    * @see #init()
-   * @generated
    */
-  private HdbDDPackageImpl()
-  {
+  private HdbDDPackageImpl() {
     super(eNS_URI, HdbDDFactory.eINSTANCE);
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private static boolean isInited = false;
-
-  /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link HdbDDPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
+   * @generated
    * @see #eNS_URI
    * @see #createPackageContents()
    * @see #initializePackageContents()
-   * @generated
    */
-  public static HdbDDPackage init()
-  {
-    if (isInited) return (HdbDDPackage)EPackage.Registry.INSTANCE.getEPackage(HdbDDPackage.eNS_URI);
+  public static HdbDDPackage init() {
+    if (isInited) {
+      return (HdbDDPackage) EPackage.Registry.INSTANCE.getEPackage(HdbDDPackage.eNS_URI);
+    }
 
     // Obtain or create and register package
-    HdbDDPackageImpl theHdbDDPackage = (HdbDDPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof HdbDDPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new HdbDDPackageImpl());
+    HdbDDPackageImpl theHdbDDPackage = (HdbDDPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof HdbDDPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new HdbDDPackageImpl());
 
     isInited = true;
 
@@ -166,7 +183,6 @@ public class HdbDDPackageImpl extends EPackageImpl implements HdbDDPackage
     // Mark meta-data to indicate it can't be changed
     theHdbDDPackage.freeze();
 
-  
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(HdbDDPackage.eNS_URI, theHdbDDPackage);
     return theHdbDDPackage;
@@ -175,340 +191,335 @@ public class HdbDDPackageImpl extends EPackageImpl implements HdbDDPackage
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getHdbDD()
-  {
+  public EClass getHdbDD() {
     return hdbDDEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EReference getHdbDD_Elements()
-  {
-    return (EReference)hdbDDEClass.getEStructuralFeatures().get(0);
+  public EReference getHdbDD_Elements() {
+    return (EReference) hdbDDEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getType()
-  {
+  public EClass getType() {
     return typeEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getType_Name()
-  {
-    return (EAttribute)typeEClass.getEStructuralFeatures().get(0);
+  public EAttribute getType_Name() {
+    return (EAttribute) typeEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getNamespace()
-  {
+  public EClass getNamespace() {
     return namespaceEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getSchema()
-  {
+  public EClass getSchema() {
     return schemaEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getContext()
-  {
+  public EClass getContext() {
     return contextEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EReference getContext_Types()
-  {
-    return (EReference)contextEClass.getEStructuralFeatures().get(0);
+  public EReference getContext_Types() {
+    return (EReference) contextEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EReference getContext_Entities()
-  {
-    return (EReference)contextEClass.getEStructuralFeatures().get(1);
+  public EReference getContext_Entities() {
+    return (EReference) contextEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getTypeDefinition()
-  {
+  public EClass getTypeDefinition() {
     return typeDefinitionEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getTypeDefinition_Name()
-  {
-    return (EAttribute)typeDefinitionEClass.getEStructuralFeatures().get(0);
+  public EAttribute getTypeDefinition_Name() {
+    return (EAttribute) typeDefinitionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getTypeDefinition_FieldType()
-  {
-    return (EAttribute)typeDefinitionEClass.getEStructuralFeatures().get(1);
+  public EAttribute getTypeDefinition_FieldType() {
+    return (EAttribute) typeDefinitionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getTypeDefinition_FieldLength()
-  {
-    return (EAttribute)typeDefinitionEClass.getEStructuralFeatures().get(2);
+  public EAttribute getTypeDefinition_FieldLength() {
+    return (EAttribute) typeDefinitionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getEntity()
-  {
+  public EClass getEntity() {
     return entityEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getEntity_Name()
-  {
-    return (EAttribute)entityEClass.getEStructuralFeatures().get(0);
+  public EAttribute getEntity_Name() {
+    return (EAttribute) entityEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EReference getEntity_Fields()
-  {
-    return (EReference)entityEClass.getEStructuralFeatures().get(1);
+  public EReference getEntity_Fields() {
+    return (EReference) entityEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getField()
-  {
+  public EClass getField() {
     return fieldEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getField_Name()
-  {
-    return (EAttribute)fieldEClass.getEStructuralFeatures().get(0);
+  public EAttribute getField_Name() {
+    return (EAttribute) fieldEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getFieldPrimitive()
-  {
+  public EClass getFieldPrimitive() {
     return fieldPrimitiveEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldPrimitive_Key()
-  {
-    return (EAttribute)fieldPrimitiveEClass.getEStructuralFeatures().get(0);
+  public EAttribute getFieldPrimitive_Key() {
+    return (EAttribute) fieldPrimitiveEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldPrimitive_FieldType()
-  {
-    return (EAttribute)fieldPrimitiveEClass.getEStructuralFeatures().get(1);
+  public EAttribute getFieldPrimitive_FieldType() {
+    return (EAttribute) fieldPrimitiveEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldPrimitive_FieldLength()
-  {
-    return (EAttribute)fieldPrimitiveEClass.getEStructuralFeatures().get(2);
+  public EAttribute getFieldPrimitive_FieldLength() {
+    return (EAttribute) fieldPrimitiveEClass.getEStructuralFeatures().get(2);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldPrimitive_FieldPredefinedType()
-  {
-    return (EAttribute)fieldPrimitiveEClass.getEStructuralFeatures().get(3);
+  public EAttribute getFieldPrimitive_FieldPredefinedType() {
+    return (EAttribute) fieldPrimitiveEClass.getEStructuralFeatures().get(3);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getFieldType()
-  {
+  public EClass getFieldType() {
     return fieldTypeEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldType_Key()
-  {
-    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(0);
+  public EAttribute getFieldType_Key() {
+    return (EAttribute) fieldTypeEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldType_FieldPredefinedType()
-  {
-    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(1);
+  public EAttribute getFieldType_FieldPredefinedType() {
+    return (EAttribute) fieldTypeEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EClass getFieldReference()
-  {
+  public EClass getFieldReference() {
     return fieldReferenceEClass;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldReference_ReferenceType()
-  {
-    return (EAttribute)fieldReferenceEClass.getEStructuralFeatures().get(0);
+  public EAttribute getFieldReference_ReferenceType() {
+    return (EAttribute) fieldReferenceEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldReference_FieldReferenceEntity()
-  {
-    return (EAttribute)fieldReferenceEClass.getEStructuralFeatures().get(1);
+  public EAttribute getFieldReference_FieldReferenceEntity() {
+    return (EAttribute) fieldReferenceEClass.getEStructuralFeatures().get(1);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldReference_FieldReferenceEntityLocalId()
-  {
-    return (EAttribute)fieldReferenceEClass.getEStructuralFeatures().get(2);
+  public EAttribute getFieldReference_FieldReferenceEntityLocalId() {
+    return (EAttribute) fieldReferenceEClass.getEStructuralFeatures().get(2);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public EAttribute getFieldReference_FieldReferenceEntityForeignId()
-  {
-    return (EAttribute)fieldReferenceEClass.getEStructuralFeatures().get(3);
+  public EAttribute getFieldReference_FieldReferenceEntityForeignId() {
+    return (EAttribute) fieldReferenceEClass.getEStructuralFeatures().get(3);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public HdbDDFactory getHdbDDFactory()
-  {
-    return (HdbDDFactory)getEFactoryInstance();
+  public HdbDDFactory getHdbDDFactory() {
+    return (HdbDDFactory) getEFactoryInstance();
   }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private boolean isCreated = false;
 
   /**
    * Creates the meta-model objects for the package.  This method is
    * guarded to have no affect on any invocation but its first.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void createPackageContents()
-  {
-    if (isCreated) return;
+  public void createPackageContents() {
+    if (isCreated) {
+      return;
+    }
     isCreated = true;
 
     // Create classes and their features
@@ -556,22 +567,17 @@ public class HdbDDPackageImpl extends EPackageImpl implements HdbDDPackage
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private boolean isInitialized = false;
-
-  /**
    * Complete the initialization of the package and its meta-model.  This
    * method is guarded to have no affect on any invocation but its first.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   *
    * @generated
    */
-  public void initializePackageContents()
-  {
-    if (isInitialized) return;
+  public void initializePackageContents() {
+    if (isInitialized) {
+      return;
+    }
     isInitialized = true;
 
     // Initialize package
@@ -593,46 +599,66 @@ public class HdbDDPackageImpl extends EPackageImpl implements HdbDDPackage
 
     // Initialize classes and features; add operations and parameters
     initEClass(hdbDDEClass, HdbDD.class, "HdbDD", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getHdbDD_Elements(), this.getType(), null, "elements", null, 0, -1, HdbDD.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getHdbDD_Elements(), this.getType(), null, "elements", null, 0, -1, HdbDD.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getType_Name(), ecorePackage.getEString(), "name", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getType_Name(), ecorePackage.getEString(), "name", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(namespaceEClass, Namespace.class, "Namespace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(schemaEClass, Schema.class, "Schema", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(contextEClass, Context.class, "Context", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getContext_Types(), this.getTypeDefinition(), null, "types", null, 0, -1, Context.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getContext_Entities(), this.getEntity(), null, "entities", null, 0, -1, Context.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getContext_Types(), this.getTypeDefinition(), null, "types", null, 0, -1, Context.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getContext_Entities(), this.getEntity(), null, "entities", null, 0, -1, Context.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(typeDefinitionEClass, TypeDefinition.class, "TypeDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTypeDefinition_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTypeDefinition_FieldType(), ecorePackage.getEString(), "fieldType", null, 0, 1, TypeDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTypeDefinition_FieldLength(), ecorePackage.getEInt(), "fieldLength", null, 0, 1, TypeDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTypeDefinition_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeDefinition.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTypeDefinition_FieldType(), ecorePackage.getEString(), "fieldType", null, 0, 1, TypeDefinition.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTypeDefinition_FieldLength(), ecorePackage.getEInt(), "fieldLength", null, 0, 1, TypeDefinition.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(entityEClass, Entity.class, "Entity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getEntity_Name(), ecorePackage.getEString(), "name", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEntity_Fields(), this.getField(), null, "fields", null, 0, -1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEntity_Name(), ecorePackage.getEString(), "name", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEntity_Fields(), this.getField(), null, "fields", null, 0, -1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(fieldEClass, Field.class, "Field", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getField_Name(), ecorePackage.getEString(), "name", null, 0, 1, Field.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getField_Name(), ecorePackage.getEString(), "name", null, 0, 1, Field.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(fieldPrimitiveEClass, FieldPrimitive.class, "FieldPrimitive", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFieldPrimitive_Key(), ecorePackage.getEBoolean(), "key", null, 0, 1, FieldPrimitive.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFieldPrimitive_FieldType(), ecorePackage.getEString(), "fieldType", null, 0, 1, FieldPrimitive.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFieldPrimitive_FieldLength(), ecorePackage.getEInt(), "fieldLength", null, 0, 1, FieldPrimitive.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFieldPrimitive_FieldPredefinedType(), ecorePackage.getEString(), "fieldPredefinedType", null, 0, 1, FieldPrimitive.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldPrimitive_Key(), ecorePackage.getEBoolean(), "key", null, 0, 1, FieldPrimitive.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldPrimitive_FieldType(), ecorePackage.getEString(), "fieldType", null, 0, 1, FieldPrimitive.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldPrimitive_FieldLength(), ecorePackage.getEInt(), "fieldLength", null, 0, 1, FieldPrimitive.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldPrimitive_FieldPredefinedType(), ecorePackage.getEString(), "fieldPredefinedType", null, 0, 1,
+        FieldPrimitive.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(fieldTypeEClass, FieldType.class, "FieldType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFieldType_Key(), ecorePackage.getEBoolean(), "key", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFieldType_FieldPredefinedType(), ecorePackage.getEString(), "fieldPredefinedType", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldType_Key(), ecorePackage.getEBoolean(), "key", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldType_FieldPredefinedType(), ecorePackage.getEString(), "fieldPredefinedType", null, 0, 1, FieldType.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(fieldReferenceEClass, FieldReference.class, "FieldReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFieldReference_ReferenceType(), ecorePackage.getEString(), "referenceType", null, 0, 1, FieldReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFieldReference_FieldReferenceEntity(), ecorePackage.getEString(), "fieldReferenceEntity", null, 0, 1, FieldReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFieldReference_FieldReferenceEntityLocalId(), ecorePackage.getEString(), "fieldReferenceEntityLocalId", null, 0, 1, FieldReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFieldReference_FieldReferenceEntityForeignId(), ecorePackage.getEString(), "fieldReferenceEntityForeignId", null, 0, 1, FieldReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldReference_ReferenceType(), ecorePackage.getEString(), "referenceType", null, 0, 1, FieldReference.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldReference_FieldReferenceEntity(), ecorePackage.getEString(), "fieldReferenceEntity", null, 0, 1,
+        FieldReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldReference_FieldReferenceEntityLocalId(), ecorePackage.getEString(), "fieldReferenceEntityLocalId", null, 0, 1,
+        FieldReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldReference_FieldReferenceEntityForeignId(), ecorePackage.getEString(), "fieldReferenceEntityForeignId", null, 0,
+        1, FieldReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

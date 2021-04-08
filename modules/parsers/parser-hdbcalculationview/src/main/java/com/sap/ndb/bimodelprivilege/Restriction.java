@@ -28,15 +28,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- * 				A restriction either applies to a dimension or to an attribute. In case several attributes of a dimension 
- * 				are filtered they must be put into the same Restriction.
- * 			
- * 
+ * A restriction either applies to a dimension or to an attribute. In case several attributes of a dimension
+ * are filtered they must be put into the same Restriction.
+ *
+ *
  * <p>Java class for Restriction complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Restriction"&gt;
  *   &lt;complexContent&gt;
@@ -52,8 +51,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Restriction", propOrder = {
@@ -62,89 +59,76 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "originInformationModelUri"
 })
 public class Restriction
-    extends RestrictionNode
-{
+    extends RestrictionNode {
 
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String dimensionUri;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String attributeName;
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String originInformationModelUri;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String dimensionUri;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String attributeName;
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "token")
+  protected String originInformationModelUri;
 
-    /**
-     * Gets the value of the dimensionUri property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDimensionUri() {
-        return dimensionUri;
-    }
+  /**
+   * Gets the value of the dimensionUri property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getDimensionUri() {
+    return dimensionUri;
+  }
 
-    /**
-     * Sets the value of the dimensionUri property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDimensionUri(String value) {
-        this.dimensionUri = value;
-    }
+  /**
+   * Sets the value of the dimensionUri property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDimensionUri(String value) {
+    this.dimensionUri = value;
+  }
 
-    /**
-     * Gets the value of the attributeName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAttributeName() {
-        return attributeName;
-    }
+  /**
+   * Gets the value of the attributeName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAttributeName() {
+    return attributeName;
+  }
 
-    /**
-     * Sets the value of the attributeName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAttributeName(String value) {
-        this.attributeName = value;
-    }
+  /**
+   * Sets the value of the attributeName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAttributeName(String value) {
+    this.attributeName = value;
+  }
 
-    /**
-     * Gets the value of the originInformationModelUri property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOriginInformationModelUri() {
-        return originInformationModelUri;
-    }
+  /**
+   * Gets the value of the originInformationModelUri property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getOriginInformationModelUri() {
+    return originInformationModelUri;
+  }
 
-    /**
-     * Sets the value of the originInformationModelUri property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOriginInformationModelUri(String value) {
-        this.originInformationModelUri = value;
-    }
+  /**
+   * Sets the value of the originInformationModelUri property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setOriginInformationModelUri(String value) {
+    this.originInformationModelUri = value;
+  }
 
 }

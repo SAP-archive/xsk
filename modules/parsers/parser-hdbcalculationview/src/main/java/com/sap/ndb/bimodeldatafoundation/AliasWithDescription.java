@@ -19,6 +19,7 @@
 
 package com.sap.ndb.bimodeldatafoundation;
 
+import com.sap.ndb.basemodelbase.Descriptions;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -26,19 +27,17 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.Descriptions;
 
 
 /**
- * 
- * 				Defines an aliasing including a description. Usually when aliasing a technical name in a	
- * 				BI model one also needs to adjust the descriptions. These	object comprises both features
- * 			
- * 
+ * Defines an aliasing including a description. Usually when aliasing a technical name in a
+ * BI model one also needs to adjust the descriptions. These	object comprises both features
+ *
+ *
  * <p>Java class for AliasWithDescription complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AliasWithDescription"&gt;
  *   &lt;complexContent&gt;
@@ -51,8 +50,6 @@ import com.sap.ndb.basemodelbase.Descriptions;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AliasWithDescription", propOrder = {
@@ -63,57 +60,49 @@ import com.sap.ndb.basemodelbase.Descriptions;
 })
 public class AliasWithDescription {
 
-    protected Descriptions descriptions;
-    @XmlAttribute(name = "alias")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String alias;
+  protected Descriptions descriptions;
+  @XmlAttribute(name = "alias")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String alias;
 
-    /**
-     * Gets the value of the descriptions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Descriptions }
-     *     
-     */
-    public Descriptions getDescriptions() {
-        return descriptions;
-    }
+  /**
+   * Gets the value of the descriptions property.
+   *
+   * @return possible object is
+   * {@link Descriptions }
+   */
+  public Descriptions getDescriptions() {
+    return descriptions;
+  }
 
-    /**
-     * Sets the value of the descriptions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Descriptions }
-     *     
-     */
-    public void setDescriptions(Descriptions value) {
-        this.descriptions = value;
-    }
+  /**
+   * Sets the value of the descriptions property.
+   *
+   * @param value allowed object is
+   *              {@link Descriptions }
+   */
+  public void setDescriptions(Descriptions value) {
+    this.descriptions = value;
+  }
 
-    /**
-     * Gets the value of the alias property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAlias() {
-        return alias;
-    }
+  /**
+   * Gets the value of the alias property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getAlias() {
+    return alias;
+  }
 
-    /**
-     * Sets the value of the alias property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAlias(String value) {
-        this.alias = value;
-    }
+  /**
+   * Sets the value of the alias property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAlias(String value) {
+    this.alias = value;
+  }
 
 }

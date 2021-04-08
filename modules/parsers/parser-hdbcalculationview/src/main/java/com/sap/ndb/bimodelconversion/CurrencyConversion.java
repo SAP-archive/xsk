@@ -19,6 +19,9 @@
 
 package com.sap.ndb.bimodelconversion;
 
+import com.sap.ndb.basemodelbase.ConversionMethod;
+import com.sap.ndb.basemodelbase.CurrencyConversionLookup;
+import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,25 +30,21 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import com.sap.ndb.basemodelbase.ConversionMethod;
-import com.sap.ndb.basemodelbase.CurrencyConversionLookup;
-import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
 
 
 /**
- * 
- * 				A currency conversion comprises all model information that is required as input for the engine currency 
- * 				conversion function. It defines how model artifacts like variables,	attributes, constants are mapped to 
- * 				the input parameters of the currency conversion The source currency is mandatory and then the conversion 
- * 				is either defined as only doing	the ERP decimal shift or a real currency conversion to a different target UNIT.
- * 				In the latter case one can choose to do the conversion with decimal shift (default) or	without decimal shift 
- * 				(erpDecimalShift="false")
- * 			
- * 
+ * A currency conversion comprises all model information that is required as input for the engine currency
+ * conversion function. It defines how model artifacts like variables,	attributes, constants are mapped to
+ * the input parameters of the currency conversion The source currency is mandatory and then the conversion
+ * is either defined as only doing	the ERP decimal shift or a real currency conversion to a different target UNIT.
+ * In the latter case one can choose to do the conversion with decimal shift (default) or	without decimal shift
+ * (erpDecimalShift="false")
+ *
+ *
  * <p>Java class for CurrencyConversion complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CurrencyConversion"&gt;
  *   &lt;complexContent&gt;
@@ -78,8 +77,6 @@ import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CurrencyConversion", propOrder = {
@@ -99,459 +96,388 @@ import com.sap.ndb.bimodeldatafoundation.QualifiedAttributeReference;
     "exchangeRateCalcAttribute"
 })
 public class CurrencyConversion
-    extends Conversion
-{
+    extends Conversion {
 
-    @XmlElement(required = true)
-    protected Parameterization sourceCurrency;
-    protected Boolean erpDecimalShift;
-    protected Boolean round;
-    @XmlElement(defaultValue = "true")
-    protected boolean erpDecimalShiftBack;
-    protected Parameterization targetCurrency;
-    protected Parameterization referenceDate;
-    protected Parameterization marketDataArea;
-    protected Parameterization bidAskType;
-    protected QualifiedAttributeReference steps;
-    protected Parameterization systemTime;
-    @XmlElement(defaultValue = "M")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected String exchangeRateType;
-    protected QualifiedAttributeReference exchangeRateTypeAttribute;
-    protected QualifiedAttributeReference exchangeRateAttribute;
-    protected QualifiedAttributeReference exchangeRateCalcAttribute;
-    @XmlAttribute(name = "convert")
-    protected Boolean convert;
-    @XmlAttribute(name = "lookup")
-    protected CurrencyConversionLookup lookup;
-    @XmlAttribute(name = "accuracy")
-    protected CurrencyConversionAccuracy accuracy;
-    @XmlAttribute(name = "method")
-    protected ConversionMethod method;
+  @XmlElement(required = true)
+  protected Parameterization sourceCurrency;
+  protected Boolean erpDecimalShift;
+  protected Boolean round;
+  @XmlElement(defaultValue = "true")
+  protected boolean erpDecimalShiftBack;
+  protected Parameterization targetCurrency;
+  protected Parameterization referenceDate;
+  protected Parameterization marketDataArea;
+  protected Parameterization bidAskType;
+  protected QualifiedAttributeReference steps;
+  protected Parameterization systemTime;
+  @XmlElement(defaultValue = "M")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "NMTOKEN")
+  protected String exchangeRateType;
+  protected QualifiedAttributeReference exchangeRateTypeAttribute;
+  protected QualifiedAttributeReference exchangeRateAttribute;
+  protected QualifiedAttributeReference exchangeRateCalcAttribute;
+  @XmlAttribute(name = "convert")
+  protected Boolean convert;
+  @XmlAttribute(name = "lookup")
+  protected CurrencyConversionLookup lookup;
+  @XmlAttribute(name = "accuracy")
+  protected CurrencyConversionAccuracy accuracy;
+  @XmlAttribute(name = "method")
+  protected ConversionMethod method;
 
-    /**
-     * Gets the value of the sourceCurrency property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getSourceCurrency() {
-        return sourceCurrency;
-    }
+  /**
+   * Gets the value of the sourceCurrency property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getSourceCurrency() {
+    return sourceCurrency;
+  }
 
-    /**
-     * Sets the value of the sourceCurrency property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setSourceCurrency(Parameterization value) {
-        this.sourceCurrency = value;
-    }
+  /**
+   * Sets the value of the sourceCurrency property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setSourceCurrency(Parameterization value) {
+    this.sourceCurrency = value;
+  }
 
-    /**
-     * Gets the value of the erpDecimalShift property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isErpDecimalShift() {
-        return erpDecimalShift;
-    }
+  /**
+   * Gets the value of the erpDecimalShift property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isErpDecimalShift() {
+    return erpDecimalShift;
+  }
 
-    /**
-     * Sets the value of the erpDecimalShift property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setErpDecimalShift(Boolean value) {
-        this.erpDecimalShift = value;
-    }
+  /**
+   * Sets the value of the erpDecimalShift property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setErpDecimalShift(Boolean value) {
+    this.erpDecimalShift = value;
+  }
 
-    /**
-     * Gets the value of the round property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isRound() {
-        return round;
-    }
+  /**
+   * Gets the value of the round property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isRound() {
+    return round;
+  }
 
-    /**
-     * Sets the value of the round property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setRound(Boolean value) {
-        this.round = value;
-    }
+  /**
+   * Sets the value of the round property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setRound(Boolean value) {
+    this.round = value;
+  }
 
-    /**
-     * Gets the value of the erpDecimalShiftBack property.
-     * 
-     */
-    public boolean isErpDecimalShiftBack() {
-        return erpDecimalShiftBack;
-    }
+  /**
+   * Gets the value of the erpDecimalShiftBack property.
+   */
+  public boolean isErpDecimalShiftBack() {
+    return erpDecimalShiftBack;
+  }
 
-    /**
-     * Sets the value of the erpDecimalShiftBack property.
-     * 
-     */
-    public void setErpDecimalShiftBack(boolean value) {
-        this.erpDecimalShiftBack = value;
-    }
+  /**
+   * Sets the value of the erpDecimalShiftBack property.
+   */
+  public void setErpDecimalShiftBack(boolean value) {
+    this.erpDecimalShiftBack = value;
+  }
 
-    /**
-     * Gets the value of the targetCurrency property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getTargetCurrency() {
-        return targetCurrency;
-    }
+  /**
+   * Gets the value of the targetCurrency property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getTargetCurrency() {
+    return targetCurrency;
+  }
 
-    /**
-     * Sets the value of the targetCurrency property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setTargetCurrency(Parameterization value) {
-        this.targetCurrency = value;
-    }
+  /**
+   * Sets the value of the targetCurrency property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setTargetCurrency(Parameterization value) {
+    this.targetCurrency = value;
+  }
 
-    /**
-     * Gets the value of the referenceDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getReferenceDate() {
-        return referenceDate;
-    }
+  /**
+   * Gets the value of the referenceDate property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getReferenceDate() {
+    return referenceDate;
+  }
 
-    /**
-     * Sets the value of the referenceDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setReferenceDate(Parameterization value) {
-        this.referenceDate = value;
-    }
+  /**
+   * Sets the value of the referenceDate property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setReferenceDate(Parameterization value) {
+    this.referenceDate = value;
+  }
 
-    /**
-     * Gets the value of the marketDataArea property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getMarketDataArea() {
-        return marketDataArea;
-    }
+  /**
+   * Gets the value of the marketDataArea property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getMarketDataArea() {
+    return marketDataArea;
+  }
 
-    /**
-     * Sets the value of the marketDataArea property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setMarketDataArea(Parameterization value) {
-        this.marketDataArea = value;
-    }
+  /**
+   * Sets the value of the marketDataArea property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setMarketDataArea(Parameterization value) {
+    this.marketDataArea = value;
+  }
 
-    /**
-     * Gets the value of the bidAskType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getBidAskType() {
-        return bidAskType;
-    }
+  /**
+   * Gets the value of the bidAskType property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getBidAskType() {
+    return bidAskType;
+  }
 
-    /**
-     * Sets the value of the bidAskType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setBidAskType(Parameterization value) {
-        this.bidAskType = value;
-    }
+  /**
+   * Sets the value of the bidAskType property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setBidAskType(Parameterization value) {
+    this.bidAskType = value;
+  }
 
-    /**
-     * Gets the value of the steps property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public QualifiedAttributeReference getSteps() {
-        return steps;
-    }
+  /**
+   * Gets the value of the steps property.
+   *
+   * @return possible object is
+   * {@link QualifiedAttributeReference }
+   */
+  public QualifiedAttributeReference getSteps() {
+    return steps;
+  }
 
-    /**
-     * Sets the value of the steps property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public void setSteps(QualifiedAttributeReference value) {
-        this.steps = value;
-    }
+  /**
+   * Sets the value of the steps property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedAttributeReference }
+   */
+  public void setSteps(QualifiedAttributeReference value) {
+    this.steps = value;
+  }
 
-    /**
-     * Gets the value of the systemTime property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Parameterization }
-     *     
-     */
-    public Parameterization getSystemTime() {
-        return systemTime;
-    }
+  /**
+   * Gets the value of the systemTime property.
+   *
+   * @return possible object is
+   * {@link Parameterization }
+   */
+  public Parameterization getSystemTime() {
+    return systemTime;
+  }
 
-    /**
-     * Sets the value of the systemTime property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Parameterization }
-     *     
-     */
-    public void setSystemTime(Parameterization value) {
-        this.systemTime = value;
-    }
+  /**
+   * Sets the value of the systemTime property.
+   *
+   * @param value allowed object is
+   *              {@link Parameterization }
+   */
+  public void setSystemTime(Parameterization value) {
+    this.systemTime = value;
+  }
 
-    /**
-     * Gets the value of the exchangeRateType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExchangeRateType() {
-        return exchangeRateType;
-    }
+  /**
+   * Gets the value of the exchangeRateType property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getExchangeRateType() {
+    return exchangeRateType;
+  }
 
-    /**
-     * Sets the value of the exchangeRateType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExchangeRateType(String value) {
-        this.exchangeRateType = value;
-    }
+  /**
+   * Sets the value of the exchangeRateType property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setExchangeRateType(String value) {
+    this.exchangeRateType = value;
+  }
 
-    /**
-     * Gets the value of the exchangeRateTypeAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public QualifiedAttributeReference getExchangeRateTypeAttribute() {
-        return exchangeRateTypeAttribute;
-    }
+  /**
+   * Gets the value of the exchangeRateTypeAttribute property.
+   *
+   * @return possible object is
+   * {@link QualifiedAttributeReference }
+   */
+  public QualifiedAttributeReference getExchangeRateTypeAttribute() {
+    return exchangeRateTypeAttribute;
+  }
 
-    /**
-     * Sets the value of the exchangeRateTypeAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public void setExchangeRateTypeAttribute(QualifiedAttributeReference value) {
-        this.exchangeRateTypeAttribute = value;
-    }
+  /**
+   * Sets the value of the exchangeRateTypeAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedAttributeReference }
+   */
+  public void setExchangeRateTypeAttribute(QualifiedAttributeReference value) {
+    this.exchangeRateTypeAttribute = value;
+  }
 
-    /**
-     * Gets the value of the exchangeRateAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public QualifiedAttributeReference getExchangeRateAttribute() {
-        return exchangeRateAttribute;
-    }
+  /**
+   * Gets the value of the exchangeRateAttribute property.
+   *
+   * @return possible object is
+   * {@link QualifiedAttributeReference }
+   */
+  public QualifiedAttributeReference getExchangeRateAttribute() {
+    return exchangeRateAttribute;
+  }
 
-    /**
-     * Sets the value of the exchangeRateAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public void setExchangeRateAttribute(QualifiedAttributeReference value) {
-        this.exchangeRateAttribute = value;
-    }
+  /**
+   * Sets the value of the exchangeRateAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedAttributeReference }
+   */
+  public void setExchangeRateAttribute(QualifiedAttributeReference value) {
+    this.exchangeRateAttribute = value;
+  }
 
-    /**
-     * Gets the value of the exchangeRateCalcAttribute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public QualifiedAttributeReference getExchangeRateCalcAttribute() {
-        return exchangeRateCalcAttribute;
-    }
+  /**
+   * Gets the value of the exchangeRateCalcAttribute property.
+   *
+   * @return possible object is
+   * {@link QualifiedAttributeReference }
+   */
+  public QualifiedAttributeReference getExchangeRateCalcAttribute() {
+    return exchangeRateCalcAttribute;
+  }
 
-    /**
-     * Sets the value of the exchangeRateCalcAttribute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QualifiedAttributeReference }
-     *     
-     */
-    public void setExchangeRateCalcAttribute(QualifiedAttributeReference value) {
-        this.exchangeRateCalcAttribute = value;
-    }
+  /**
+   * Sets the value of the exchangeRateCalcAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link QualifiedAttributeReference }
+   */
+  public void setExchangeRateCalcAttribute(QualifiedAttributeReference value) {
+    this.exchangeRateCalcAttribute = value;
+  }
 
-    /**
-     * Gets the value of the convert property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isConvert() {
-        return convert;
-    }
+  /**
+   * Gets the value of the convert property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isConvert() {
+    return convert;
+  }
 
-    /**
-     * Sets the value of the convert property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setConvert(Boolean value) {
-        this.convert = value;
-    }
+  /**
+   * Sets the value of the convert property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setConvert(Boolean value) {
+    this.convert = value;
+  }
 
-    /**
-     * Gets the value of the lookup property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CurrencyConversionLookup }
-     *     
-     */
-    public CurrencyConversionLookup getLookup() {
-        return lookup;
-    }
+  /**
+   * Gets the value of the lookup property.
+   *
+   * @return possible object is
+   * {@link CurrencyConversionLookup }
+   */
+  public CurrencyConversionLookup getLookup() {
+    return lookup;
+  }
 
-    /**
-     * Sets the value of the lookup property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CurrencyConversionLookup }
-     *     
-     */
-    public void setLookup(CurrencyConversionLookup value) {
-        this.lookup = value;
-    }
+  /**
+   * Sets the value of the lookup property.
+   *
+   * @param value allowed object is
+   *              {@link CurrencyConversionLookup }
+   */
+  public void setLookup(CurrencyConversionLookup value) {
+    this.lookup = value;
+  }
 
-    /**
-     * Gets the value of the accuracy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CurrencyConversionAccuracy }
-     *     
-     */
-    public CurrencyConversionAccuracy getAccuracy() {
-        return accuracy;
-    }
+  /**
+   * Gets the value of the accuracy property.
+   *
+   * @return possible object is
+   * {@link CurrencyConversionAccuracy }
+   */
+  public CurrencyConversionAccuracy getAccuracy() {
+    return accuracy;
+  }
 
-    /**
-     * Sets the value of the accuracy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CurrencyConversionAccuracy }
-     *     
-     */
-    public void setAccuracy(CurrencyConversionAccuracy value) {
-        this.accuracy = value;
-    }
+  /**
+   * Sets the value of the accuracy property.
+   *
+   * @param value allowed object is
+   *              {@link CurrencyConversionAccuracy }
+   */
+  public void setAccuracy(CurrencyConversionAccuracy value) {
+    this.accuracy = value;
+  }
 
-    /**
-     * Gets the value of the method property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ConversionMethod }
-     *     
-     */
-    public ConversionMethod getMethod() {
-        return method;
-    }
+  /**
+   * Gets the value of the method property.
+   *
+   * @return possible object is
+   * {@link ConversionMethod }
+   */
+  public ConversionMethod getMethod() {
+    return method;
+  }
 
-    /**
-     * Sets the value of the method property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ConversionMethod }
-     *     
-     */
-    public void setMethod(ConversionMethod value) {
-        this.method = value;
-    }
+  /**
+   * Sets the value of the method property.
+   *
+   * @param value allowed object is
+   *              {@link ConversionMethod }
+   */
+  public void setMethod(ConversionMethod value) {
+    this.method = value;
+  }
 
 }

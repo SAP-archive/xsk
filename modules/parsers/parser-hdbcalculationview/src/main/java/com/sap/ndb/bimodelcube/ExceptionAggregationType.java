@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ExceptionAggregationType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -36,31 +36,30 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "ExceptionAggregationType")
 @XmlEnum
 public enum ExceptionAggregationType {
 
-    @XmlEnumValue("countDistinct")
-    COUNT_DISTINCT("countDistinct");
-    private final String value;
+  @XmlEnumValue("countDistinct")
+  COUNT_DISTINCT("countDistinct");
+  private final String value;
 
-    ExceptionAggregationType(String v) {
-        value = v;
-    }
+  ExceptionAggregationType(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
+  public static ExceptionAggregationType fromValue(String v) {
+    for (ExceptionAggregationType c : ExceptionAggregationType.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
-    public static ExceptionAggregationType fromValue(String v) {
-        for (ExceptionAggregationType c: ExceptionAggregationType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+  public String value() {
+    return value;
+  }
 
 }

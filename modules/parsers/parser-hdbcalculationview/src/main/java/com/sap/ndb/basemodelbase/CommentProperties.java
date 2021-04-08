@@ -26,14 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * 				Comment properties like the mime type and the comment text
- * 			
- * 
+ * Comment properties like the mime type and the comment text
+ *
+ *
  * <p>Java class for CommentProperties complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CommentProperties"&gt;
  *   &lt;complexContent&gt;
@@ -44,64 +43,54 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CommentProperties")
 public class CommentProperties {
 
-    @XmlAttribute(name = "text", required = true)
-    protected String text;
-    @XmlAttribute(name = "mimetype")
-    protected Mimetype mimetype;
+  @XmlAttribute(name = "text", required = true)
+  protected String text;
+  @XmlAttribute(name = "mimetype")
+  protected Mimetype mimetype;
 
-    /**
-     * Gets the value of the text property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getText() {
-        return text;
-    }
+  /**
+   * Gets the value of the text property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getText() {
+    return text;
+  }
 
-    /**
-     * Sets the value of the text property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setText(String value) {
-        this.text = value;
-    }
+  /**
+   * Sets the value of the text property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setText(String value) {
+    this.text = value;
+  }
 
-    /**
-     * Gets the value of the mimetype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Mimetype }
-     *     
-     */
-    public Mimetype getMimetype() {
-        return mimetype;
-    }
+  /**
+   * Gets the value of the mimetype property.
+   *
+   * @return possible object is
+   * {@link Mimetype }
+   */
+  public Mimetype getMimetype() {
+    return mimetype;
+  }
 
-    /**
-     * Sets the value of the mimetype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Mimetype }
-     *     
-     */
-    public void setMimetype(Mimetype value) {
-        this.mimetype = value;
-    }
+  /**
+   * Sets the value of the mimetype property.
+   *
+   * @param value allowed object is
+   *              {@link Mimetype }
+   */
+  public void setMimetype(Mimetype value) {
+    this.mimetype = value;
+  }
 
 }

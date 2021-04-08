@@ -28,9 +28,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ParentChildHierarchy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ParentChildHierarchy"&gt;
  *   &lt;complexContent&gt;
@@ -45,8 +45,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ParentChildHierarchy", propOrder = {
@@ -56,123 +54,112 @@ import javax.xml.bind.annotation.XmlType;
     "edgeAttribute"
 })
 public class ParentChildHierarchy
-    extends Hierarchy
-{
+    extends Hierarchy {
 
-    protected List<AttributeParentPair> attributeParentPair;
-    protected List<SiblingOrder> siblingOrder;
-    protected HierarchyTimeProperties timeProperties;
-    protected List<EdgeAttribute> edgeAttribute;
+  protected List<AttributeParentPair> attributeParentPair;
+  protected List<SiblingOrder> siblingOrder;
+  protected HierarchyTimeProperties timeProperties;
+  protected List<EdgeAttribute> edgeAttribute;
 
-    /**
-     * Gets the value of the attributeParentPair property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the attributeParentPair property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getAttributeParentPair().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link AttributeParentPair }
-     * 
-     * 
-     */
-    public List<AttributeParentPair> getAttributeParentPair() {
-        if (attributeParentPair == null) {
-            attributeParentPair = new ArrayList<AttributeParentPair>();
-        }
-        return this.attributeParentPair;
+  /**
+   * Gets the value of the attributeParentPair property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the attributeParentPair property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getAttributeParentPair().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link AttributeParentPair }
+   */
+  public List<AttributeParentPair> getAttributeParentPair() {
+    if (attributeParentPair == null) {
+      attributeParentPair = new ArrayList<AttributeParentPair>();
     }
+    return this.attributeParentPair;
+  }
 
-    /**
-     * Gets the value of the siblingOrder property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the siblingOrder property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getSiblingOrder().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link SiblingOrder }
-     * 
-     * 
-     */
-    public List<SiblingOrder> getSiblingOrder() {
-        if (siblingOrder == null) {
-            siblingOrder = new ArrayList<SiblingOrder>();
-        }
-        return this.siblingOrder;
+  /**
+   * Gets the value of the siblingOrder property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the siblingOrder property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getSiblingOrder().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link SiblingOrder }
+   */
+  public List<SiblingOrder> getSiblingOrder() {
+    if (siblingOrder == null) {
+      siblingOrder = new ArrayList<SiblingOrder>();
     }
+    return this.siblingOrder;
+  }
 
-    /**
-     * Gets the value of the timeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HierarchyTimeProperties }
-     *     
-     */
-    public HierarchyTimeProperties getTimeProperties() {
-        return timeProperties;
-    }
+  /**
+   * Gets the value of the timeProperties property.
+   *
+   * @return possible object is
+   * {@link HierarchyTimeProperties }
+   */
+  public HierarchyTimeProperties getTimeProperties() {
+    return timeProperties;
+  }
 
-    /**
-     * Sets the value of the timeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HierarchyTimeProperties }
-     *     
-     */
-    public void setTimeProperties(HierarchyTimeProperties value) {
-        this.timeProperties = value;
-    }
+  /**
+   * Sets the value of the timeProperties property.
+   *
+   * @param value allowed object is
+   *              {@link HierarchyTimeProperties }
+   */
+  public void setTimeProperties(HierarchyTimeProperties value) {
+    this.timeProperties = value;
+  }
 
-    /**
-     * Gets the value of the edgeAttribute property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the edgeAttribute property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getEdgeAttribute().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link EdgeAttribute }
-     * 
-     * 
-     */
-    public List<EdgeAttribute> getEdgeAttribute() {
-        if (edgeAttribute == null) {
-            edgeAttribute = new ArrayList<EdgeAttribute>();
-        }
-        return this.edgeAttribute;
+  /**
+   * Gets the value of the edgeAttribute property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the edgeAttribute property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getEdgeAttribute().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link EdgeAttribute }
+   */
+  public List<EdgeAttribute> getEdgeAttribute() {
+    if (edgeAttribute == null) {
+      edgeAttribute = new ArrayList<EdgeAttribute>();
     }
+    return this.edgeAttribute;
+  }
 
 }

@@ -3,92 +3,74 @@
  */
 package com.sap.xsk.models.xsodata.xsOData.impl;
 
-import com.sap.xsk.models.xsodata.xsOData.Association;
-import com.sap.xsk.models.xsodata.xsOData.Entity;
-import com.sap.xsk.models.xsodata.xsOData.Navigation;
-import com.sap.xsk.models.xsodata.xsOData.Service;
-import com.sap.xsk.models.xsodata.xsOData.Type;
-import com.sap.xsk.models.xsodata.xsOData.XSOData;
-import com.sap.xsk.models.xsodata.xsOData.XsODataFactory;
-import com.sap.xsk.models.xsodata.xsOData.XsODataPackage;
+import com.sap.xsk.models.xsodata.xsOData.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
- *
  * @generated
  */
-public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory {
-
-  /**
-   * Creates an instance of the factory.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   */
-  public XsODataFactoryImpl() {
-    super();
-  }
-
+public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory
+{
   /**
    * Creates the default factory implementation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public static XsODataFactory init() {
-    try {
-      XsODataFactory theXsODataFactory = (XsODataFactory) EPackage.Registry.INSTANCE.getEFactory(XsODataPackage.eNS_URI);
-      if (theXsODataFactory != null) {
+  public static XsODataFactory init()
+  {
+    try
+    {
+      XsODataFactory theXsODataFactory = (XsODataFactory)EPackage.Registry.INSTANCE.getEFactory(XsODataPackage.eNS_URI);
+      if (theXsODataFactory != null)
+      {
         return theXsODataFactory;
       }
-    } catch (Exception exception) {
+    }
+    catch (Exception exception)
+    {
       EcorePlugin.INSTANCE.log(exception);
     }
     return new XsODataFactoryImpl();
   }
 
   /**
+   * Creates an instance of the factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
-   * @deprecated
    */
-  @Deprecated
-  public static XsODataPackage getPackage() {
-    return XsODataPackage.eINSTANCE;
+  public XsODataFactoryImpl()
+  {
+    super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public EObject create(EClass eClass) {
-    switch (eClass.getClassifierID()) {
-      case XsODataPackage.XSO_DATA:
-        return createXSOData();
-      case XsODataPackage.TYPE:
-        return createType();
-      case XsODataPackage.SERVICE:
-        return createService();
-      case XsODataPackage.ENTITY:
-        return createEntity();
-      case XsODataPackage.NAVIGATION:
-        return createNavigation();
-      case XsODataPackage.ASSOCIATION:
-        return createAssociation();
+  public EObject create(EClass eClass)
+  {
+    switch (eClass.getClassifierID())
+    {
+      case XsODataPackage.XSO_DATA: return createXSOData();
+      case XsODataPackage.TYPE: return createType();
+      case XsODataPackage.SERVICE: return createService();
+      case XsODataPackage.ENTITY: return createEntity();
+      case XsODataPackage.NAVIGATION: return createNavigation();
+      case XsODataPackage.ASSOCIATION: return createAssociation();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -97,10 +79,10 @@ public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public XSOData createXSOData() {
+  public XSOData createXSOData()
+  {
     XSODataImpl xsoData = new XSODataImpl();
     return xsoData;
   }
@@ -108,10 +90,10 @@ public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Type createType() {
+  public Type createType()
+  {
     TypeImpl type = new TypeImpl();
     return type;
   }
@@ -119,10 +101,10 @@ public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Service createService() {
+  public Service createService()
+  {
     ServiceImpl service = new ServiceImpl();
     return service;
   }
@@ -130,10 +112,10 @@ public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Entity createEntity() {
+  public Entity createEntity()
+  {
     EntityImpl entity = new EntityImpl();
     return entity;
   }
@@ -141,10 +123,10 @@ public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Navigation createNavigation() {
+  public Navigation createNavigation()
+  {
     NavigationImpl navigation = new NavigationImpl();
     return navigation;
   }
@@ -152,10 +134,10 @@ public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Association createAssociation() {
+  public Association createAssociation()
+  {
     AssociationImpl association = new AssociationImpl();
     return association;
   }
@@ -163,11 +145,23 @@ public class XsODataFactoryImpl extends EFactoryImpl implements XsODataFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public XsODataPackage getXsODataPackage() {
-    return (XsODataPackage) getEPackage();
+  public XsODataPackage getXsODataPackage()
+  {
+    return (XsODataPackage)getEPackage();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @deprecated
+   * @generated
+   */
+  @Deprecated
+  public static XsODataPackage getPackage()
+  {
+    return XsODataPackage.eINSTANCE;
   }
 
 } //XsODataFactoryImpl

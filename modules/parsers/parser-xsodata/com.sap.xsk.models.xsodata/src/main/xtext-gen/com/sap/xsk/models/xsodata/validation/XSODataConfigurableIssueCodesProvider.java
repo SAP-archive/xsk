@@ -10,14 +10,13 @@ import org.eclipse.xtext.validation.SeverityConverter;
 
 @SuppressWarnings("restriction")
 public class XSODataConfigurableIssueCodesProvider extends ConfigurableIssueCodesProvider {
+	protected static final String ISSUE_CODE_PREFIX = "com.sap.xsk.models.xsodata.";
 
-  protected static final String ISSUE_CODE_PREFIX = "com.sap.xsk.models.xsodata.";
+	public static final String DEPRECATED_MODEL_PART = ISSUE_CODE_PREFIX + "deprecatedModelPart";
 
-  public static final String DEPRECATED_MODEL_PART = ISSUE_CODE_PREFIX + "deprecatedModelPart";
-
-  @Override
-  protected void initialize(IAcceptor<PreferenceKey> acceptor) {
-    super.initialize(acceptor);
-    acceptor.accept(create(DEPRECATED_MODEL_PART, SeverityConverter.SEVERITY_WARNING));
-  }
+	@Override
+	protected void initialize(IAcceptor<PreferenceKey> acceptor) {
+		super.initialize(acceptor);
+		acceptor.accept(create(DEPRECATED_MODEL_PART, SeverityConverter.SEVERITY_WARNING));
+	}
 }

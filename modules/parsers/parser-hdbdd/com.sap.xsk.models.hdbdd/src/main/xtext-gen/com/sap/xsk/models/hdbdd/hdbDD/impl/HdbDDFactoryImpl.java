@@ -3,107 +3,79 @@
  */
 package com.sap.xsk.models.hdbdd.hdbDD.impl;
 
-import com.sap.xsk.models.hdbdd.hdbDD.Context;
-import com.sap.xsk.models.hdbdd.hdbDD.Entity;
-import com.sap.xsk.models.hdbdd.hdbDD.Field;
-import com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive;
-import com.sap.xsk.models.hdbdd.hdbDD.FieldReference;
-import com.sap.xsk.models.hdbdd.hdbDD.FieldType;
-import com.sap.xsk.models.hdbdd.hdbDD.HdbDD;
-import com.sap.xsk.models.hdbdd.hdbDD.HdbDDFactory;
-import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
-import com.sap.xsk.models.hdbdd.hdbDD.Namespace;
-import com.sap.xsk.models.hdbdd.hdbDD.Schema;
-import com.sap.xsk.models.hdbdd.hdbDD.Type;
-import com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition;
+import com.sap.xsk.models.hdbdd.hdbDD.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
- *
  * @generated
  */
-public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
-
-  /**
-   * Creates an instance of the factory.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   */
-  public HdbDDFactoryImpl() {
-    super();
-  }
-
+public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory
+{
   /**
    * Creates the default factory implementation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public static HdbDDFactory init() {
-    try {
-      HdbDDFactory theHdbDDFactory = (HdbDDFactory) EPackage.Registry.INSTANCE.getEFactory(HdbDDPackage.eNS_URI);
-      if (theHdbDDFactory != null) {
+  public static HdbDDFactory init()
+  {
+    try
+    {
+      HdbDDFactory theHdbDDFactory = (HdbDDFactory)EPackage.Registry.INSTANCE.getEFactory(HdbDDPackage.eNS_URI);
+      if (theHdbDDFactory != null)
+      {
         return theHdbDDFactory;
       }
-    } catch (Exception exception) {
+    }
+    catch (Exception exception)
+    {
       EcorePlugin.INSTANCE.log(exception);
     }
     return new HdbDDFactoryImpl();
   }
 
   /**
+   * Creates an instance of the factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
-   * @deprecated
    */
-  @Deprecated
-  public static HdbDDPackage getPackage() {
-    return HdbDDPackage.eINSTANCE;
+  public HdbDDFactoryImpl()
+  {
+    super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public EObject create(EClass eClass) {
-    switch (eClass.getClassifierID()) {
-      case HdbDDPackage.HDB_DD:
-        return createHdbDD();
-      case HdbDDPackage.TYPE:
-        return createType();
-      case HdbDDPackage.NAMESPACE:
-        return createNamespace();
-      case HdbDDPackage.SCHEMA:
-        return createSchema();
-      case HdbDDPackage.CONTEXT:
-        return createContext();
-      case HdbDDPackage.TYPE_DEFINITION:
-        return createTypeDefinition();
-      case HdbDDPackage.ENTITY:
-        return createEntity();
-      case HdbDDPackage.FIELD:
-        return createField();
-      case HdbDDPackage.FIELD_PRIMITIVE:
-        return createFieldPrimitive();
-      case HdbDDPackage.FIELD_TYPE:
-        return createFieldType();
-      case HdbDDPackage.FIELD_REFERENCE:
-        return createFieldReference();
+  public EObject create(EClass eClass)
+  {
+    switch (eClass.getClassifierID())
+    {
+      case HdbDDPackage.HDB_DD: return createHdbDD();
+      case HdbDDPackage.TYPE: return createType();
+      case HdbDDPackage.NAMESPACE: return createNamespace();
+      case HdbDDPackage.SCHEMA: return createSchema();
+      case HdbDDPackage.CONTEXT: return createContext();
+      case HdbDDPackage.TYPE_DEFINITION: return createTypeDefinition();
+      case HdbDDPackage.ENTITY: return createEntity();
+      case HdbDDPackage.FIELD: return createField();
+      case HdbDDPackage.FIELD_PRIMITIVE: return createFieldPrimitive();
+      case HdbDDPackage.FIELD_TYPE: return createFieldType();
+      case HdbDDPackage.FIELD_REFERENCE: return createFieldReference();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -112,10 +84,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public HdbDD createHdbDD() {
+  public HdbDD createHdbDD()
+  {
     HdbDDImpl hdbDD = new HdbDDImpl();
     return hdbDD;
   }
@@ -123,10 +95,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Type createType() {
+  public Type createType()
+  {
     TypeImpl type = new TypeImpl();
     return type;
   }
@@ -134,10 +106,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Namespace createNamespace() {
+  public Namespace createNamespace()
+  {
     NamespaceImpl namespace = new NamespaceImpl();
     return namespace;
   }
@@ -145,10 +117,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Schema createSchema() {
+  public Schema createSchema()
+  {
     SchemaImpl schema = new SchemaImpl();
     return schema;
   }
@@ -156,10 +128,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Context createContext() {
+  public Context createContext()
+  {
     ContextImpl context = new ContextImpl();
     return context;
   }
@@ -167,10 +139,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public TypeDefinition createTypeDefinition() {
+  public TypeDefinition createTypeDefinition()
+  {
     TypeDefinitionImpl typeDefinition = new TypeDefinitionImpl();
     return typeDefinition;
   }
@@ -178,10 +150,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Entity createEntity() {
+  public Entity createEntity()
+  {
     EntityImpl entity = new EntityImpl();
     return entity;
   }
@@ -189,10 +161,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public Field createField() {
+  public Field createField()
+  {
     FieldImpl field = new FieldImpl();
     return field;
   }
@@ -200,10 +172,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public FieldPrimitive createFieldPrimitive() {
+  public FieldPrimitive createFieldPrimitive()
+  {
     FieldPrimitiveImpl fieldPrimitive = new FieldPrimitiveImpl();
     return fieldPrimitive;
   }
@@ -211,10 +183,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public FieldType createFieldType() {
+  public FieldType createFieldType()
+  {
     FieldTypeImpl fieldType = new FieldTypeImpl();
     return fieldType;
   }
@@ -222,10 +194,10 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public FieldReference createFieldReference() {
+  public FieldReference createFieldReference()
+  {
     FieldReferenceImpl fieldReference = new FieldReferenceImpl();
     return fieldReference;
   }
@@ -233,11 +205,23 @@ public class HdbDDFactoryImpl extends EFactoryImpl implements HdbDDFactory {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public HdbDDPackage getHdbDDPackage() {
-    return (HdbDDPackage) getEPackage();
+  public HdbDDPackage getHdbDDPackage()
+  {
+    return (HdbDDPackage)getEPackage();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @deprecated
+   * @generated
+   */
+  @Deprecated
+  public static HdbDDPackage getPackage()
+  {
+    return HdbDDPackage.eINSTANCE;
   }
 
 } //HdbDDFactoryImpl

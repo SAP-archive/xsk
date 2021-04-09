@@ -4,6 +4,7 @@
 package com.sap.xsk.models.hdbdd.hdbDD;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -19,12 +20,12 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.sap.xsk.models.hdbdd.hdbDD.Entity#getFields <em>Fields</em>}</li>
  * </ul>
  *
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getEntity()
  * @model
  * @generated
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getEntity()
  */
-public interface Entity extends EObject {
-
+public interface Entity extends EObject
+{
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -33,12 +34,11 @@ public interface Entity extends EObject {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Name</em>' attribute.
-   * @model
-   * @generated
    * @see #setName(String)
    * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getEntity_Name()
+   * @model
+   * @generated
    */
   String getName();
 
@@ -46,10 +46,9 @@ public interface Entity extends EObject {
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.Entity#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @param value the new value of the '<em>Name</em>' attribute.
-   * @generated
    * @see #getName()
+   * @generated
    */
   void setName(String value);
 
@@ -62,11 +61,10 @@ public interface Entity extends EObject {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Fields</em>' containment reference list.
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getEntity_Fields()
    * @model containment="true"
    * @generated
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getEntity_Fields()
    */
   EList<Field> getFields();
 

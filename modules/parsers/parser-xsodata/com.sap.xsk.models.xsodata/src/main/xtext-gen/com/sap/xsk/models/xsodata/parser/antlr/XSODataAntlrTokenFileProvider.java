@@ -8,9 +8,9 @@ import org.eclipse.xtext.parser.antlr.IAntlrTokenFileProvider;
 
 public class XSODataAntlrTokenFileProvider implements IAntlrTokenFileProvider {
 
-  @Override
-  public InputStream getAntlrTokenFile() {
-    ClassLoader classLoader = getClass().getClassLoader();
-    return classLoader.getResourceAsStream("com/sap/xsk/models/xsodata/parser/antlr/internal/InternalXSOData.tokens");
-  }
+	@Override
+	public InputStream getAntlrTokenFile() {
+		ClassLoader classLoader = getClass().getClassLoader();
+		return classLoader.getResourceAsStream("com/sap/xsk/models/xsodata/parser/antlr/internal/InternalXSOData.tokens");
+	}
 }

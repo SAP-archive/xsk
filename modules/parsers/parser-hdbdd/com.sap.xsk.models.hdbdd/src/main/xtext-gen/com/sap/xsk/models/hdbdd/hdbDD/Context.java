@@ -18,12 +18,12 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.sap.xsk.models.hdbdd.hdbDD.Context#getEntities <em>Entities</em>}</li>
  * </ul>
  *
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getContext()
  * @model
  * @generated
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getContext()
  */
-public interface Context extends Type {
-
+public interface Context extends Type
+{
   /**
    * Returns the value of the '<em><b>Types</b></em>' containment reference list.
    * The list contents are of type {@link com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition}.
@@ -33,11 +33,10 @@ public interface Context extends Type {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Types</em>' containment reference list.
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getContext_Types()
    * @model containment="true"
    * @generated
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getContext_Types()
    */
   EList<TypeDefinition> getTypes();
 
@@ -50,11 +49,10 @@ public interface Context extends Type {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Entities</em>' containment reference list.
+   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getContext_Entities()
    * @model containment="true"
    * @generated
-   * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getContext_Entities()
    */
   EList<Entity> getEntities();
 

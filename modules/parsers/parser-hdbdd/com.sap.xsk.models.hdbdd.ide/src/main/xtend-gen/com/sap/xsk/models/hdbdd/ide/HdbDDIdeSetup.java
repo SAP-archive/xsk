@@ -15,7 +15,6 @@ import org.eclipse.xtext.util.Modules2;
  */
 @SuppressWarnings("all")
 public class HdbDDIdeSetup extends HdbDDStandaloneSetup {
-
   @Override
   public Injector createInjector() {
     HdbDDRuntimeModule _hdbDDRuntimeModule = new HdbDDRuntimeModule();

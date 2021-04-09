@@ -9,11 +9,11 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 
 public abstract class AbstractXSODataValidator extends AbstractDeclarativeValidator {
-
-  @Override
-  protected List<EPackage> getEPackages() {
-    List<EPackage> result = new ArrayList<EPackage>();
-    result.add(com.sap.xsk.models.xsodata.xsOData.XsODataPackage.eINSTANCE);
-    return result;
-  }
+	
+	@Override
+	protected List<EPackage> getEPackages() {
+		List<EPackage> result = new ArrayList<EPackage>();
+		result.add(com.sap.xsk.models.xsodata.xsOData.XsODataPackage.eINSTANCE);
+		return result;
+	}
 }

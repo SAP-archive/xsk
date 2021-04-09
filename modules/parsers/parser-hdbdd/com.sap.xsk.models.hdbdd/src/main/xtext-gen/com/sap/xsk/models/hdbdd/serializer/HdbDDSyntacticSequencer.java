@@ -17,29 +17,27 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 @SuppressWarnings("all")
 public class HdbDDSyntacticSequencer extends AbstractSyntacticSequencer {
 
-  protected HdbDDGrammarAccess grammarAccess;
-
-  @Inject
-  protected void init(IGrammarAccess access) {
-    grammarAccess = (HdbDDGrammarAccess) access;
-  }
-
-  @Override
-  protected String getUnassignedRuleCallToken(EObject semanticObject, RuleCall ruleCall, INode node) {
-    return "";
-  }
-
-
-  @Override
-  protected void emitUnassignedTokens(EObject semanticObject, ISynTransition transition, INode fromNode, INode toNode) {
-    if (transition.getAmbiguousSyntaxes().isEmpty()) {
-      return;
-    }
-    List<INode> transitionNodes = collectNodes(fromNode, toNode);
-    for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
-      List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
-      acceptNodes(getLastNavigableState(), syntaxNodes);
-    }
-  }
+	protected HdbDDGrammarAccess grammarAccess;
+	
+	@Inject
+	protected void init(IGrammarAccess access) {
+		grammarAccess = (HdbDDGrammarAccess) access;
+	}
+	
+	@Override
+	protected String getUnassignedRuleCallToken(EObject semanticObject, RuleCall ruleCall, INode node) {
+		return "";
+	}
+	
+	
+	@Override
+	protected void emitUnassignedTokens(EObject semanticObject, ISynTransition transition, INode fromNode, INode toNode) {
+		if (transition.getAmbiguousSyntaxes().isEmpty()) return;
+		List<INode> transitionNodes = collectNodes(fromNode, toNode);
+		for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
+			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
+			acceptNodes(getLastNavigableState(), syntaxNodes);
+		}
+	}
 
 }

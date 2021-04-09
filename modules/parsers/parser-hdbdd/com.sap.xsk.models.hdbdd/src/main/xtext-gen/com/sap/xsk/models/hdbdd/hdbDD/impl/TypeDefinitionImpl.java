@@ -5,8 +5,11 @@ package com.sap.xsk.models.hdbdd.hdbDD.impl;
 
 import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
 import com.sap.xsk.models.hdbdd.hdbDD.TypeDefinition;
+
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
@@ -25,171 +28,168 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class TypeDefinitionImpl extends MinimalEObjectImpl.Container implements TypeDefinition {
-
+public class TypeDefinitionImpl extends MinimalEObjectImpl.Container implements TypeDefinition
+{
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getName()
    * @generated
    * @ordered
-   * @see #getName()
    */
   protected static final String NAME_EDEFAULT = null;
-  /**
-   * The default value of the '{@link #getFieldType() <em>Field Type</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   * @see #getFieldType()
-   */
-  protected static final String FIELD_TYPE_EDEFAULT = null;
-  /**
-   * The default value of the '{@link #getFieldLength() <em>Field Length</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   * @see #getFieldLength()
-   */
-  protected static final int FIELD_LENGTH_EDEFAULT = 0;
+
   /**
    * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getName()
    * @generated
    * @ordered
-   * @see #getName()
    */
   protected String name = NAME_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getFieldType() <em>Field Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFieldType()
+   * @generated
+   * @ordered
+   */
+  protected static final String FIELD_TYPE_EDEFAULT = null;
+
   /**
    * The cached value of the '{@link #getFieldType() <em>Field Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getFieldType()
    * @generated
    * @ordered
-   * @see #getFieldType()
    */
   protected String fieldType = FIELD_TYPE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getFieldLength() <em>Field Length</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFieldLength()
+   * @generated
+   * @ordered
+   */
+  protected static final int FIELD_LENGTH_EDEFAULT = 0;
+
   /**
    * The cached value of the '{@link #getFieldLength() <em>Field Length</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getFieldLength()
    * @generated
    * @ordered
-   * @see #getFieldLength()
    */
   protected int fieldLength = FIELD_LENGTH_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  protected TypeDefinitionImpl() {
+  protected TypeDefinitionImpl()
+  {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass() {
+  protected EClass eStaticClass()
+  {
     return HdbDDPackage.Literals.TYPE_DEFINITION;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public String getName() {
+  public String getName()
+  {
     return name;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public void setName(String newName) {
+  public void setName(String newName)
+  {
     String oldName = name;
     name = newName;
-    if (eNotificationRequired()) {
+    if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.TYPE_DEFINITION__NAME, oldName, name));
-    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public String getFieldType() {
+  public String getFieldType()
+  {
     return fieldType;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public void setFieldType(String newFieldType) {
+  public void setFieldType(String newFieldType)
+  {
     String oldFieldType = fieldType;
     fieldType = newFieldType;
-    if (eNotificationRequired()) {
+    if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.TYPE_DEFINITION__FIELD_TYPE, oldFieldType, fieldType));
-    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public int getFieldLength() {
+  public int getFieldLength()
+  {
     return fieldLength;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public void setFieldLength(int newFieldLength) {
+  public void setFieldLength(int newFieldLength)
+  {
     int oldFieldLength = fieldLength;
     fieldLength = newFieldLength;
-    if (eNotificationRequired()) {
+    if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.TYPE_DEFINITION__FIELD_LENGTH, oldFieldLength, fieldLength));
-    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType) {
-    switch (featureID) {
+  public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
       case HdbDDPackage.TYPE_DEFINITION__NAME:
         return getName();
       case HdbDDPackage.TYPE_DEFINITION__FIELD_TYPE:
@@ -203,20 +203,21 @@ public class TypeDefinitionImpl extends MinimalEObjectImpl.Container implements 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public void eSet(int featureID, Object newValue) {
-    switch (featureID) {
+  public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
       case HdbDDPackage.TYPE_DEFINITION__NAME:
-        setName((String) newValue);
+        setName((String)newValue);
         return;
       case HdbDDPackage.TYPE_DEFINITION__FIELD_TYPE:
-        setFieldType((String) newValue);
+        setFieldType((String)newValue);
         return;
       case HdbDDPackage.TYPE_DEFINITION__FIELD_LENGTH:
-        setFieldLength((Integer) newValue);
+        setFieldLength((Integer)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -225,12 +226,13 @@ public class TypeDefinitionImpl extends MinimalEObjectImpl.Container implements 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public void eUnset(int featureID) {
-    switch (featureID) {
+  public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
       case HdbDDPackage.TYPE_DEFINITION__NAME:
         setName(NAME_EDEFAULT);
         return;
@@ -247,12 +249,13 @@ public class TypeDefinitionImpl extends MinimalEObjectImpl.Container implements 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID) {
-    switch (featureID) {
+  public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
       case HdbDDPackage.TYPE_DEFINITION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case HdbDDPackage.TYPE_DEFINITION__FIELD_TYPE:
@@ -266,14 +269,12 @@ public class TypeDefinitionImpl extends MinimalEObjectImpl.Container implements 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public String toString() {
-    if (eIsProxy()) {
-      return super.toString();
-    }
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");

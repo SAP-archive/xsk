@@ -10,5 +10,4 @@ import com.sap.xsk.models.hdbdd.ide.AbstractHdbDDIdeModule;
  */
 @SuppressWarnings("all")
 public class HdbDDIdeModule extends AbstractHdbDDIdeModule {
-
 }

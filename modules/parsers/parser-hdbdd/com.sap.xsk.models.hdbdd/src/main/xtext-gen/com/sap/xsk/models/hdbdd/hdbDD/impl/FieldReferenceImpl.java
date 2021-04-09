@@ -5,8 +5,11 @@ package com.sap.xsk.models.hdbdd.hdbDD.impl;
 
 import com.sap.xsk.models.hdbdd.hdbDD.FieldReference;
 import com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage;
+
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -25,218 +28,211 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class FieldReferenceImpl extends FieldImpl implements FieldReference {
-
+public class FieldReferenceImpl extends FieldImpl implements FieldReference
+{
   /**
    * The default value of the '{@link #getReferenceType() <em>Reference Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getReferenceType()
    * @generated
    * @ordered
-   * @see #getReferenceType()
    */
   protected static final String REFERENCE_TYPE_EDEFAULT = null;
-  /**
-   * The default value of the '{@link #getFieldReferenceEntity() <em>Field Reference Entity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   * @see #getFieldReferenceEntity()
-   */
-  protected static final String FIELD_REFERENCE_ENTITY_EDEFAULT = null;
-  /**
-   * The default value of the '{@link #getFieldReferenceEntityLocalId() <em>Field Reference Entity Local Id</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   * @see #getFieldReferenceEntityLocalId()
-   */
-  protected static final String FIELD_REFERENCE_ENTITY_LOCAL_ID_EDEFAULT = null;
-  /**
-   * The default value of the '{@link #getFieldReferenceEntityForeignId() <em>Field Reference Entity Foreign Id</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   * @see #getFieldReferenceEntityForeignId()
-   */
-  protected static final String FIELD_REFERENCE_ENTITY_FOREIGN_ID_EDEFAULT = null;
+
   /**
    * The cached value of the '{@link #getReferenceType() <em>Reference Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getReferenceType()
    * @generated
    * @ordered
-   * @see #getReferenceType()
    */
   protected String referenceType = REFERENCE_TYPE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getFieldReferenceEntity() <em>Field Reference Entity</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFieldReferenceEntity()
+   * @generated
+   * @ordered
+   */
+  protected static final String FIELD_REFERENCE_ENTITY_EDEFAULT = null;
+
   /**
    * The cached value of the '{@link #getFieldReferenceEntity() <em>Field Reference Entity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getFieldReferenceEntity()
    * @generated
    * @ordered
-   * @see #getFieldReferenceEntity()
    */
   protected String fieldReferenceEntity = FIELD_REFERENCE_ENTITY_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getFieldReferenceEntityLocalId() <em>Field Reference Entity Local Id</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFieldReferenceEntityLocalId()
+   * @generated
+   * @ordered
+   */
+  protected static final String FIELD_REFERENCE_ENTITY_LOCAL_ID_EDEFAULT = null;
+
   /**
    * The cached value of the '{@link #getFieldReferenceEntityLocalId() <em>Field Reference Entity Local Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getFieldReferenceEntityLocalId()
    * @generated
    * @ordered
-   * @see #getFieldReferenceEntityLocalId()
    */
   protected String fieldReferenceEntityLocalId = FIELD_REFERENCE_ENTITY_LOCAL_ID_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getFieldReferenceEntityForeignId() <em>Field Reference Entity Foreign Id</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFieldReferenceEntityForeignId()
+   * @generated
+   * @ordered
+   */
+  protected static final String FIELD_REFERENCE_ENTITY_FOREIGN_ID_EDEFAULT = null;
+
   /**
    * The cached value of the '{@link #getFieldReferenceEntityForeignId() <em>Field Reference Entity Foreign Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
+   * @see #getFieldReferenceEntityForeignId()
    * @generated
    * @ordered
-   * @see #getFieldReferenceEntityForeignId()
    */
   protected String fieldReferenceEntityForeignId = FIELD_REFERENCE_ENTITY_FOREIGN_ID_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  protected FieldReferenceImpl() {
+  protected FieldReferenceImpl()
+  {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass() {
+  protected EClass eStaticClass()
+  {
     return HdbDDPackage.Literals.FIELD_REFERENCE;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public String getReferenceType() {
+  public String getReferenceType()
+  {
     return referenceType;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public void setReferenceType(String newReferenceType) {
+  public void setReferenceType(String newReferenceType)
+  {
     String oldReferenceType = referenceType;
     referenceType = newReferenceType;
-    if (eNotificationRequired()) {
+    if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_REFERENCE__REFERENCE_TYPE, oldReferenceType, referenceType));
-    }
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public String getFieldReferenceEntity() {
+  public String getFieldReferenceEntity()
+  {
     return fieldReferenceEntity;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public void setFieldReferenceEntity(String newFieldReferenceEntity) {
+  public void setFieldReferenceEntity(String newFieldReferenceEntity)
+  {
     String oldFieldReferenceEntity = fieldReferenceEntity;
     fieldReferenceEntity = newFieldReferenceEntity;
-    if (eNotificationRequired()) {
-      eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY, oldFieldReferenceEntity,
-          fieldReferenceEntity));
-    }
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY, oldFieldReferenceEntity, fieldReferenceEntity));
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public String getFieldReferenceEntityLocalId() {
+  public String getFieldReferenceEntityLocalId()
+  {
     return fieldReferenceEntityLocalId;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public void setFieldReferenceEntityLocalId(String newFieldReferenceEntityLocalId) {
+  public void setFieldReferenceEntityLocalId(String newFieldReferenceEntityLocalId)
+  {
     String oldFieldReferenceEntityLocalId = fieldReferenceEntityLocalId;
     fieldReferenceEntityLocalId = newFieldReferenceEntityLocalId;
-    if (eNotificationRequired()) {
-      eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY_LOCAL_ID,
-          oldFieldReferenceEntityLocalId, fieldReferenceEntityLocalId));
-    }
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY_LOCAL_ID, oldFieldReferenceEntityLocalId, fieldReferenceEntityLocalId));
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public String getFieldReferenceEntityForeignId() {
+  public String getFieldReferenceEntityForeignId()
+  {
     return fieldReferenceEntityForeignId;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public void setFieldReferenceEntityForeignId(String newFieldReferenceEntityForeignId) {
+  public void setFieldReferenceEntityForeignId(String newFieldReferenceEntityForeignId)
+  {
     String oldFieldReferenceEntityForeignId = fieldReferenceEntityForeignId;
     fieldReferenceEntityForeignId = newFieldReferenceEntityForeignId;
-    if (eNotificationRequired()) {
-      eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY_FOREIGN_ID,
-          oldFieldReferenceEntityForeignId, fieldReferenceEntityForeignId));
-    }
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY_FOREIGN_ID, oldFieldReferenceEntityForeignId, fieldReferenceEntityForeignId));
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType) {
-    switch (featureID) {
+  public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
       case HdbDDPackage.FIELD_REFERENCE__REFERENCE_TYPE:
         return getReferenceType();
       case HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY:
@@ -252,23 +248,24 @@ public class FieldReferenceImpl extends FieldImpl implements FieldReference {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public void eSet(int featureID, Object newValue) {
-    switch (featureID) {
+  public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
       case HdbDDPackage.FIELD_REFERENCE__REFERENCE_TYPE:
-        setReferenceType((String) newValue);
+        setReferenceType((String)newValue);
         return;
       case HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY:
-        setFieldReferenceEntity((String) newValue);
+        setFieldReferenceEntity((String)newValue);
         return;
       case HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY_LOCAL_ID:
-        setFieldReferenceEntityLocalId((String) newValue);
+        setFieldReferenceEntityLocalId((String)newValue);
         return;
       case HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY_FOREIGN_ID:
-        setFieldReferenceEntityForeignId((String) newValue);
+        setFieldReferenceEntityForeignId((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -277,12 +274,13 @@ public class FieldReferenceImpl extends FieldImpl implements FieldReference {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public void eUnset(int featureID) {
-    switch (featureID) {
+  public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
       case HdbDDPackage.FIELD_REFERENCE__REFERENCE_TYPE:
         setReferenceType(REFERENCE_TYPE_EDEFAULT);
         return;
@@ -302,23 +300,21 @@ public class FieldReferenceImpl extends FieldImpl implements FieldReference {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID) {
-    switch (featureID) {
+  public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
       case HdbDDPackage.FIELD_REFERENCE__REFERENCE_TYPE:
         return REFERENCE_TYPE_EDEFAULT == null ? referenceType != null : !REFERENCE_TYPE_EDEFAULT.equals(referenceType);
       case HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY:
-        return FIELD_REFERENCE_ENTITY_EDEFAULT == null ? fieldReferenceEntity != null
-            : !FIELD_REFERENCE_ENTITY_EDEFAULT.equals(fieldReferenceEntity);
+        return FIELD_REFERENCE_ENTITY_EDEFAULT == null ? fieldReferenceEntity != null : !FIELD_REFERENCE_ENTITY_EDEFAULT.equals(fieldReferenceEntity);
       case HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY_LOCAL_ID:
-        return FIELD_REFERENCE_ENTITY_LOCAL_ID_EDEFAULT == null ? fieldReferenceEntityLocalId != null
-            : !FIELD_REFERENCE_ENTITY_LOCAL_ID_EDEFAULT.equals(fieldReferenceEntityLocalId);
+        return FIELD_REFERENCE_ENTITY_LOCAL_ID_EDEFAULT == null ? fieldReferenceEntityLocalId != null : !FIELD_REFERENCE_ENTITY_LOCAL_ID_EDEFAULT.equals(fieldReferenceEntityLocalId);
       case HdbDDPackage.FIELD_REFERENCE__FIELD_REFERENCE_ENTITY_FOREIGN_ID:
-        return FIELD_REFERENCE_ENTITY_FOREIGN_ID_EDEFAULT == null ? fieldReferenceEntityForeignId != null
-            : !FIELD_REFERENCE_ENTITY_FOREIGN_ID_EDEFAULT.equals(fieldReferenceEntityForeignId);
+        return FIELD_REFERENCE_ENTITY_FOREIGN_ID_EDEFAULT == null ? fieldReferenceEntityForeignId != null : !FIELD_REFERENCE_ENTITY_FOREIGN_ID_EDEFAULT.equals(fieldReferenceEntityForeignId);
     }
     return super.eIsSet(featureID);
   }
@@ -326,14 +322,12 @@ public class FieldReferenceImpl extends FieldImpl implements FieldReference {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  public String toString() {
-    if (eIsProxy()) {
-      return super.toString();
-    }
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (referenceType: ");

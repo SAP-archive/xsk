@@ -19,18 +19,16 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- *
+ * @see com.sap.xsk.models.xsodata.xsOData.XsODataFactory
  * @model kind="package"
  * @generated
- * @see com.sap.xsk.models.xsodata.xsOData.XsODataFactory
  */
-public interface XsODataPackage extends EPackage {
-
+public interface XsODataPackage extends EPackage
+{
   /**
    * The package name.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   String eNAME = "xsOData";
@@ -39,7 +37,6 @@ public interface XsODataPackage extends EPackage {
    * The package namespace URI.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   String eNS_URI = "http://www.sap.com/xsk/models/xsodata/XSOData";
@@ -48,308 +45,307 @@ public interface XsODataPackage extends EPackage {
    * The package namespace name.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   String eNS_PREFIX = "xsOData";
-  /**
-   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.XSODataImpl <em>XSO Data</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.XSODataImpl
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getXSOData()
-   */
-  int XSO_DATA = 0;
-  /**
-   * The feature id for the '<em><b>Elements</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int XSO_DATA__ELEMENTS = 0;
-  /**
-   * The number of structural features of the '<em>XSO Data</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int XSO_DATA_FEATURE_COUNT = 1;
-  /**
-   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.TypeImpl <em>Type</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.TypeImpl
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getType()
-   */
-  int TYPE = 1;
-  /**
-   * The number of structural features of the '<em>Type</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int TYPE_FEATURE_COUNT = 0;
-  /**
-   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.ServiceImpl <em>Service</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.ServiceImpl
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getService()
-   */
-  int SERVICE = 2;
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int SERVICE__NAME = TYPE_FEATURE_COUNT + 0;
-  /**
-   * The feature id for the '<em><b>Entities</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int SERVICE__ENTITIES = TYPE_FEATURE_COUNT + 1;
-  /**
-   * The feature id for the '<em><b>Associations</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int SERVICE__ASSOCIATIONS = TYPE_FEATURE_COUNT + 2;
-  /**
-   * The number of structural features of the '<em>Service</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int SERVICE_FEATURE_COUNT = TYPE_FEATURE_COUNT + 3;
-  /**
-   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.EntityImpl <em>Entity</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.EntityImpl
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getEntity()
-   */
-  int ENTITY = 3;
-  /**
-   * The feature id for the '<em><b>Namespace</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ENTITY__NAMESPACE = 0;
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ENTITY__NAME = 1;
-  /**
-   * The feature id for the '<em><b>Alias</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ENTITY__ALIAS = 2;
-  /**
-   * The feature id for the '<em><b>Navigates</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ENTITY__NAVIGATES = 3;
-  /**
-   * The feature id for the '<em><b>Create Events</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ENTITY__CREATE_EVENTS = 4;
-  /**
-   * The feature id for the '<em><b>Delete Using</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ENTITY__DELETE_USING = 5;
-  /**
-   * The feature id for the '<em><b>Update</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ENTITY__UPDATE = 6;
-  /**
-   * The number of structural features of the '<em>Entity</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ENTITY_FEATURE_COUNT = 7;
-  /**
-   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.NavigationImpl <em>Navigation</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.NavigationImpl
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getNavigation()
-   */
-  int NAVIGATION = 4;
-  /**
-   * The feature id for the '<em><b>Association</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int NAVIGATION__ASSOCIATION = 0;
-  /**
-   * The feature id for the '<em><b>Alias</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int NAVIGATION__ALIAS = 1;
-  /**
-   * The number of structural features of the '<em>Navigation</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int NAVIGATION_FEATURE_COUNT = 2;
-  /**
-   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.AssociationImpl <em>Association</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.AssociationImpl
-   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getAssociation()
-   */
-  int ASSOCIATION = 5;
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ASSOCIATION__NAME = 0;
-  /**
-   * The feature id for the '<em><b>Principal</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ASSOCIATION__PRINCIPAL = 1;
-  /**
-   * The feature id for the '<em><b>Principal Key</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ASSOCIATION__PRINCIPAL_KEY = 2;
-  /**
-   * The feature id for the '<em><b>Principal Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ASSOCIATION__PRINCIPAL_MULTIPLICITY = 3;
-  /**
-   * The feature id for the '<em><b>Dependent</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ASSOCIATION__DEPENDENT = 4;
-  /**
-   * The feature id for the '<em><b>Dependent Property</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ASSOCIATION__DEPENDENT_PROPERTY = 5;
-  /**
-   * The feature id for the '<em><b>Dependent Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   * @ordered
-   */
-  int ASSOCIATION__DEPENDENT_MULTIPLICITY = 6;
+
   /**
    * The singleton instance of the package.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   XsODataPackage eINSTANCE = com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl.init();
+
+  /**
+   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.XSODataImpl <em>XSO Data</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.XSODataImpl
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getXSOData()
+   * @generated
+   */
+  int XSO_DATA = 0;
+
+  /**
+   * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int XSO_DATA__ELEMENTS = 0;
+
+  /**
+   * The number of structural features of the '<em>XSO Data</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int XSO_DATA_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.TypeImpl <em>Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.TypeImpl
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getType()
+   * @generated
+   */
+  int TYPE = 1;
+
+  /**
+   * The number of structural features of the '<em>Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TYPE_FEATURE_COUNT = 0;
+
+  /**
+   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.ServiceImpl <em>Service</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.ServiceImpl
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getService()
+   * @generated
+   */
+  int SERVICE = 2;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SERVICE__NAME = TYPE_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Entities</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SERVICE__ENTITIES = TYPE_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Associations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SERVICE__ASSOCIATIONS = TYPE_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>Service</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SERVICE_FEATURE_COUNT = TYPE_FEATURE_COUNT + 3;
+
+  /**
+   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.EntityImpl <em>Entity</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.EntityImpl
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getEntity()
+   * @generated
+   */
+  int ENTITY = 3;
+
+  /**
+   * The feature id for the '<em><b>Namespace</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTITY__NAMESPACE = 0;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTITY__NAME = 1;
+
+  /**
+   * The feature id for the '<em><b>Alias</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTITY__ALIAS = 2;
+
+  /**
+   * The feature id for the '<em><b>Navigates</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTITY__NAVIGATES = 3;
+
+  /**
+   * The feature id for the '<em><b>Create Events</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTITY__CREATE_EVENTS = 4;
+
+  /**
+   * The feature id for the '<em><b>Delete Using</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTITY__DELETE_USING = 5;
+
+  /**
+   * The feature id for the '<em><b>Update</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTITY__UPDATE = 6;
+
+  /**
+   * The number of structural features of the '<em>Entity</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTITY_FEATURE_COUNT = 7;
+
+  /**
+   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.NavigationImpl <em>Navigation</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.NavigationImpl
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getNavigation()
+   * @generated
+   */
+  int NAVIGATION = 4;
+
+  /**
+   * The feature id for the '<em><b>Association</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int NAVIGATION__ASSOCIATION = 0;
+
+  /**
+   * The feature id for the '<em><b>Alias</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int NAVIGATION__ALIAS = 1;
+
+  /**
+   * The number of structural features of the '<em>Navigation</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int NAVIGATION_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.AssociationImpl <em>Association</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.AssociationImpl
+   * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getAssociation()
+   * @generated
+   */
+  int ASSOCIATION = 5;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSOCIATION__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Principal</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSOCIATION__PRINCIPAL = 1;
+
+  /**
+   * The feature id for the '<em><b>Principal Key</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSOCIATION__PRINCIPAL_KEY = 2;
+
+  /**
+   * The feature id for the '<em><b>Principal Multiplicity</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSOCIATION__PRINCIPAL_MULTIPLICITY = 3;
+
+  /**
+   * The feature id for the '<em><b>Dependent</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSOCIATION__DEPENDENT = 4;
+
+  /**
+   * The feature id for the '<em><b>Dependent Property</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSOCIATION__DEPENDENT_PROPERTY = 5;
+
+  /**
+   * The feature id for the '<em><b>Dependent Multiplicity</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSOCIATION__DEPENDENT_MULTIPLICITY = 6;
+
   /**
    * The number of structural features of the '<em>Association</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    * @ordered
    */
@@ -360,10 +356,9 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for class '{@link com.sap.xsk.models.xsodata.xsOData.XSOData <em>XSO Data</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for class '<em>XSO Data</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.XSOData
+   * @generated
    */
   EClass getXSOData();
 
@@ -371,11 +366,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the containment reference list '{@link com.sap.xsk.models.xsodata.xsOData.XSOData#getElements <em>Elements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the containment reference list '<em>Elements</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.XSOData#getElements()
    * @see #getXSOData()
+   * @generated
    */
   EReference getXSOData_Elements();
 
@@ -383,10 +377,9 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for class '{@link com.sap.xsk.models.xsodata.xsOData.Type <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for class '<em>Type</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Type
+   * @generated
    */
   EClass getType();
 
@@ -394,10 +387,9 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for class '{@link com.sap.xsk.models.xsodata.xsOData.Service <em>Service</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for class '<em>Service</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Service
+   * @generated
    */
   EClass getService();
 
@@ -405,11 +397,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Service#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Name</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Service#getName()
    * @see #getService()
+   * @generated
    */
   EAttribute getService_Name();
 
@@ -417,11 +408,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the containment reference list '{@link com.sap.xsk.models.xsodata.xsOData.Service#getEntities <em>Entities</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the containment reference list '<em>Entities</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Service#getEntities()
    * @see #getService()
+   * @generated
    */
   EReference getService_Entities();
 
@@ -429,11 +419,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the containment reference list '{@link com.sap.xsk.models.xsodata.xsOData.Service#getAssociations <em>Associations</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the containment reference list '<em>Associations</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Service#getAssociations()
    * @see #getService()
+   * @generated
    */
   EReference getService_Associations();
 
@@ -441,10 +430,9 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for class '{@link com.sap.xsk.models.xsodata.xsOData.Entity <em>Entity</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for class '<em>Entity</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity
+   * @generated
    */
   EClass getEntity();
 
@@ -452,11 +440,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getNamespace <em>Namespace</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Namespace</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity#getNamespace()
    * @see #getEntity()
+   * @generated
    */
   EAttribute getEntity_Namespace();
 
@@ -464,11 +451,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Name</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity#getName()
    * @see #getEntity()
+   * @generated
    */
   EAttribute getEntity_Name();
 
@@ -476,11 +462,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getAlias <em>Alias</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Alias</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity#getAlias()
    * @see #getEntity()
+   * @generated
    */
   EAttribute getEntity_Alias();
 
@@ -488,11 +473,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the containment reference list '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getNavigates <em>Navigates</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the containment reference list '<em>Navigates</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity#getNavigates()
    * @see #getEntity()
+   * @generated
    */
   EReference getEntity_Navigates();
 
@@ -500,11 +484,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute list '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getCreateEvents <em>Create Events</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute list '<em>Create Events</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity#getCreateEvents()
    * @see #getEntity()
+   * @generated
    */
   EAttribute getEntity_CreateEvents();
 
@@ -512,11 +495,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute list '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getDeleteUsing <em>Delete Using</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute list '<em>Delete Using</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity#getDeleteUsing()
    * @see #getEntity()
+   * @generated
    */
   EAttribute getEntity_DeleteUsing();
 
@@ -524,11 +506,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute list '{@link com.sap.xsk.models.xsodata.xsOData.Entity#getUpdate <em>Update</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute list '<em>Update</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity#getUpdate()
    * @see #getEntity()
+   * @generated
    */
   EAttribute getEntity_Update();
 
@@ -536,10 +517,9 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for class '{@link com.sap.xsk.models.xsodata.xsOData.Navigation <em>Navigation</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for class '<em>Navigation</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Navigation
+   * @generated
    */
   EClass getNavigation();
 
@@ -547,11 +527,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Navigation#getAssociation <em>Association</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Association</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Navigation#getAssociation()
    * @see #getNavigation()
+   * @generated
    */
   EAttribute getNavigation_Association();
 
@@ -559,11 +538,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Navigation#getAlias <em>Alias</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Alias</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Navigation#getAlias()
    * @see #getNavigation()
+   * @generated
    */
   EAttribute getNavigation_Alias();
 
@@ -571,10 +549,9 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for class '{@link com.sap.xsk.models.xsodata.xsOData.Association <em>Association</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for class '<em>Association</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association
+   * @generated
    */
   EClass getAssociation();
 
@@ -582,11 +559,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Association#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Name</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association#getName()
    * @see #getAssociation()
+   * @generated
    */
   EAttribute getAssociation_Name();
 
@@ -594,11 +570,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Association#getPrincipal <em>Principal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Principal</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association#getPrincipal()
    * @see #getAssociation()
+   * @generated
    */
   EAttribute getAssociation_Principal();
 
@@ -606,11 +581,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Association#getPrincipalKey <em>Principal Key</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Principal Key</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association#getPrincipalKey()
    * @see #getAssociation()
+   * @generated
    */
   EAttribute getAssociation_PrincipalKey();
 
@@ -618,11 +592,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Association#getPrincipalMultiplicity <em>Principal Multiplicity</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Principal Multiplicity</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association#getPrincipalMultiplicity()
    * @see #getAssociation()
+   * @generated
    */
   EAttribute getAssociation_PrincipalMultiplicity();
 
@@ -630,11 +603,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Association#getDependent <em>Dependent</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Dependent</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association#getDependent()
    * @see #getAssociation()
+   * @generated
    */
   EAttribute getAssociation_Dependent();
 
@@ -642,11 +614,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Association#getDependentProperty <em>Dependent Property</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Dependent Property</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association#getDependentProperty()
    * @see #getAssociation()
+   * @generated
    */
   EAttribute getAssociation_DependentProperty();
 
@@ -654,11 +625,10 @@ public interface XsODataPackage extends EPackage {
    * Returns the meta object for the attribute '{@link com.sap.xsk.models.xsodata.xsOData.Association#getDependentMultiplicity <em>Dependent Multiplicity</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the meta object for the attribute '<em>Dependent Multiplicity</em>'.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association#getDependentMultiplicity()
    * @see #getAssociation()
+   * @generated
    */
   EAttribute getAssociation_DependentMultiplicity();
 
@@ -666,7 +636,6 @@ public interface XsODataPackage extends EPackage {
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the factory that creates the instances of the model.
    * @generated
    */
@@ -682,19 +651,17 @@ public interface XsODataPackage extends EPackage {
    *   <li>and each data type</li>
    * </ul>
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  interface Literals {
-
+  interface Literals
+  {
     /**
      * The meta object literal for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.XSODataImpl <em>XSO Data</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
-     * @generated
      * @see com.sap.xsk.models.xsodata.xsOData.impl.XSODataImpl
      * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getXSOData()
+     * @generated
      */
     EClass XSO_DATA = eINSTANCE.getXSOData();
 
@@ -702,7 +669,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EReference XSO_DATA__ELEMENTS = eINSTANCE.getXSOData_Elements();
@@ -711,10 +677,9 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.TypeImpl <em>Type</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
-     * @generated
      * @see com.sap.xsk.models.xsodata.xsOData.impl.TypeImpl
      * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getType()
+     * @generated
      */
     EClass TYPE = eINSTANCE.getType();
 
@@ -722,10 +687,9 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.ServiceImpl <em>Service</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
-     * @generated
      * @see com.sap.xsk.models.xsodata.xsOData.impl.ServiceImpl
      * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getService()
+     * @generated
      */
     EClass SERVICE = eINSTANCE.getService();
 
@@ -733,7 +697,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute SERVICE__NAME = eINSTANCE.getService_Name();
@@ -742,7 +705,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Entities</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EReference SERVICE__ENTITIES = eINSTANCE.getService_Entities();
@@ -751,7 +713,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Associations</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EReference SERVICE__ASSOCIATIONS = eINSTANCE.getService_Associations();
@@ -760,10 +721,9 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.EntityImpl <em>Entity</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
-     * @generated
      * @see com.sap.xsk.models.xsodata.xsOData.impl.EntityImpl
      * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getEntity()
+     * @generated
      */
     EClass ENTITY = eINSTANCE.getEntity();
 
@@ -771,7 +731,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Namespace</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ENTITY__NAMESPACE = eINSTANCE.getEntity_Namespace();
@@ -780,7 +739,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ENTITY__NAME = eINSTANCE.getEntity_Name();
@@ -789,7 +747,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Alias</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ENTITY__ALIAS = eINSTANCE.getEntity_Alias();
@@ -798,7 +755,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Navigates</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EReference ENTITY__NAVIGATES = eINSTANCE.getEntity_Navigates();
@@ -807,7 +763,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Create Events</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ENTITY__CREATE_EVENTS = eINSTANCE.getEntity_CreateEvents();
@@ -816,7 +771,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Delete Using</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ENTITY__DELETE_USING = eINSTANCE.getEntity_DeleteUsing();
@@ -825,7 +779,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Update</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ENTITY__UPDATE = eINSTANCE.getEntity_Update();
@@ -834,10 +787,9 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.NavigationImpl <em>Navigation</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
-     * @generated
      * @see com.sap.xsk.models.xsodata.xsOData.impl.NavigationImpl
      * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getNavigation()
+     * @generated
      */
     EClass NAVIGATION = eINSTANCE.getNavigation();
 
@@ -845,7 +797,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Association</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute NAVIGATION__ASSOCIATION = eINSTANCE.getNavigation_Association();
@@ -854,7 +805,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Alias</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute NAVIGATION__ALIAS = eINSTANCE.getNavigation_Alias();
@@ -863,10 +813,9 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '{@link com.sap.xsk.models.xsodata.xsOData.impl.AssociationImpl <em>Association</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
-     * @generated
      * @see com.sap.xsk.models.xsodata.xsOData.impl.AssociationImpl
      * @see com.sap.xsk.models.xsodata.xsOData.impl.XsODataPackageImpl#getAssociation()
+     * @generated
      */
     EClass ASSOCIATION = eINSTANCE.getAssociation();
 
@@ -874,7 +823,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ASSOCIATION__NAME = eINSTANCE.getAssociation_Name();
@@ -883,7 +831,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Principal</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ASSOCIATION__PRINCIPAL = eINSTANCE.getAssociation_Principal();
@@ -892,7 +839,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Principal Key</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ASSOCIATION__PRINCIPAL_KEY = eINSTANCE.getAssociation_PrincipalKey();
@@ -901,7 +847,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Principal Multiplicity</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ASSOCIATION__PRINCIPAL_MULTIPLICITY = eINSTANCE.getAssociation_PrincipalMultiplicity();
@@ -910,7 +855,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Dependent</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ASSOCIATION__DEPENDENT = eINSTANCE.getAssociation_Dependent();
@@ -919,7 +863,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Dependent Property</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ASSOCIATION__DEPENDENT_PROPERTY = eINSTANCE.getAssociation_DependentProperty();
@@ -928,7 +871,6 @@ public interface XsODataPackage extends EPackage {
      * The meta object literal for the '<em><b>Dependent Multiplicity</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     *
      * @generated
      */
     EAttribute ASSOCIATION__DEPENDENT_MULTIPLICITY = eINSTANCE.getAssociation_DependentMultiplicity();

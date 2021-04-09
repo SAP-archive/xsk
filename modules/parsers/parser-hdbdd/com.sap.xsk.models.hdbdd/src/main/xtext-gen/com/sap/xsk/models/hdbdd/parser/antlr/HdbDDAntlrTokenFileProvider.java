@@ -8,9 +8,9 @@ import org.eclipse.xtext.parser.antlr.IAntlrTokenFileProvider;
 
 public class HdbDDAntlrTokenFileProvider implements IAntlrTokenFileProvider {
 
-  @Override
-  public InputStream getAntlrTokenFile() {
-    ClassLoader classLoader = getClass().getClassLoader();
-    return classLoader.getResourceAsStream("com/sap/xsk/models/hdbdd/parser/antlr/internal/InternalHdbDD.tokens");
-  }
+	@Override
+	public InputStream getAntlrTokenFile() {
+		ClassLoader classLoader = getClass().getClassLoader();
+		return classLoader.getResourceAsStream("com/sap/xsk/models/hdbdd/parser/antlr/internal/InternalHdbDD.tokens");
+	}
 }

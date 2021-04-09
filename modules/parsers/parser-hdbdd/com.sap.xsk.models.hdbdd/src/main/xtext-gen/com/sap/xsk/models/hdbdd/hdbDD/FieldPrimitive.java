@@ -19,12 +19,12 @@ package com.sap.xsk.models.hdbdd.hdbDD;
  *   <li>{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#getFieldPredefinedType <em>Field Predefined Type</em>}</li>
  * </ul>
  *
+ * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive()
  * @model
  * @generated
- * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive()
  */
-public interface FieldPrimitive extends Field {
-
+public interface FieldPrimitive extends Field
+{
   /**
    * Returns the value of the '<em><b>Key</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -33,12 +33,11 @@ public interface FieldPrimitive extends Field {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Key</em>' attribute.
-   * @model
-   * @generated
    * @see #setKey(boolean)
    * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_Key()
+   * @model
+   * @generated
    */
   boolean isKey();
 
@@ -46,10 +45,9 @@ public interface FieldPrimitive extends Field {
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#isKey <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @param value the new value of the '<em>Key</em>' attribute.
-   * @generated
    * @see #isKey()
+   * @generated
    */
   void setKey(boolean value);
 
@@ -61,12 +59,11 @@ public interface FieldPrimitive extends Field {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Field Type</em>' attribute.
-   * @model
-   * @generated
    * @see #setFieldType(String)
    * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldType()
+   * @model
+   * @generated
    */
   String getFieldType();
 
@@ -74,10 +71,9 @@ public interface FieldPrimitive extends Field {
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#getFieldType <em>Field Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @param value the new value of the '<em>Field Type</em>' attribute.
-   * @generated
    * @see #getFieldType()
+   * @generated
    */
   void setFieldType(String value);
 
@@ -89,12 +85,11 @@ public interface FieldPrimitive extends Field {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Field Length</em>' attribute.
-   * @model
-   * @generated
    * @see #setFieldLength(int)
    * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldLength()
+   * @model
+   * @generated
    */
   int getFieldLength();
 
@@ -102,10 +97,9 @@ public interface FieldPrimitive extends Field {
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#getFieldLength <em>Field Length</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @param value the new value of the '<em>Field Length</em>' attribute.
-   * @generated
    * @see #getFieldLength()
+   * @generated
    */
   void setFieldLength(int value);
 
@@ -117,12 +111,11 @@ public interface FieldPrimitive extends Field {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Field Predefined Type</em>' attribute.
-   * @model
-   * @generated
    * @see #setFieldPredefinedType(String)
    * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage#getFieldPrimitive_FieldPredefinedType()
+   * @model
+   * @generated
    */
   String getFieldPredefinedType();
 
@@ -130,10 +123,9 @@ public interface FieldPrimitive extends Field {
    * Sets the value of the '{@link com.sap.xsk.models.hdbdd.hdbDD.FieldPrimitive#getFieldPredefinedType <em>Field Predefined Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @param value the new value of the '<em>Field Predefined Type</em>' attribute.
-   * @generated
    * @see #getFieldPredefinedType()
+   * @generated
    */
   void setFieldPredefinedType(String value);
 

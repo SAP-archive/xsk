@@ -4,6 +4,7 @@
 package com.sap.xsk.models.xsodata.xsOData;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -18,12 +19,12 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.sap.xsk.models.xsodata.xsOData.XSOData#getElements <em>Elements</em>}</li>
  * </ul>
  *
+ * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getXSOData()
  * @model
  * @generated
- * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getXSOData()
  */
-public interface XSOData extends EObject {
-
+public interface XSOData extends EObject
+{
   /**
    * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
    * The list contents are of type {@link com.sap.xsk.models.xsodata.xsOData.Type}.
@@ -33,11 +34,10 @@ public interface XSOData extends EObject {
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   *
    * @return the value of the '<em>Elements</em>' containment reference list.
+   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getXSOData_Elements()
    * @model containment="true"
    * @generated
-   * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage#getXSOData_Elements()
    */
   EList<Type> getElements();
 

@@ -5,7 +5,9 @@ package com.sap.xsk.models.xsodata.xsOData.impl;
 
 import com.sap.xsk.models.xsodata.xsOData.Type;
 import com.sap.xsk.models.xsodata.xsOData.XsODataPackage;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
@@ -15,26 +17,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class TypeImpl extends MinimalEObjectImpl.Container implements Type {
-
+public class TypeImpl extends MinimalEObjectImpl.Container implements Type
+{
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  protected TypeImpl() {
+  protected TypeImpl()
+  {
     super();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   @Override
-  protected EClass eStaticClass() {
+  protected EClass eStaticClass()
+  {
     return XsODataPackage.Literals.TYPE;
   }
 

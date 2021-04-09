@@ -10,17 +10,15 @@ import org.eclipse.emf.ecore.EFactory;
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
  * <!-- end-user-doc -->
- *
- * @generated
  * @see com.sap.xsk.models.hdbdd.hdbDD.HdbDDPackage
+ * @generated
  */
-public interface HdbDDFactory extends EFactory {
-
+public interface HdbDDFactory extends EFactory
+{
   /**
    * The singleton instance of the factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   HdbDDFactory eINSTANCE = com.sap.xsk.models.hdbdd.hdbDD.impl.HdbDDFactoryImpl.init();
@@ -29,7 +27,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Hdb DD</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Hdb DD</em>'.
    * @generated
    */
@@ -39,7 +36,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Type</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Type</em>'.
    * @generated
    */
@@ -49,7 +45,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Namespace</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Namespace</em>'.
    * @generated
    */
@@ -59,7 +54,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Schema</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Schema</em>'.
    * @generated
    */
@@ -69,7 +63,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Context</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Context</em>'.
    * @generated
    */
@@ -79,7 +72,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Type Definition</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Type Definition</em>'.
    * @generated
    */
@@ -89,7 +81,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Entity</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Entity</em>'.
    * @generated
    */
@@ -99,7 +90,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Field</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Field</em>'.
    * @generated
    */
@@ -109,7 +99,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Field Primitive</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Field Primitive</em>'.
    * @generated
    */
@@ -119,7 +108,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Field Type</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Field Type</em>'.
    * @generated
    */
@@ -129,7 +117,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns a new object of class '<em>Field Reference</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return a new object of class '<em>Field Reference</em>'.
    * @generated
    */
@@ -139,7 +126,6 @@ public interface HdbDDFactory extends EFactory {
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @return the package supported by this factory.
    * @generated
    */

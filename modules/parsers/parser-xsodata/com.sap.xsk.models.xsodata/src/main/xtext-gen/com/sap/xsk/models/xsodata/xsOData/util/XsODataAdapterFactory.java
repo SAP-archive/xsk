@@ -3,16 +3,13 @@
  */
 package com.sap.xsk.models.xsodata.xsOData.util;
 
-import com.sap.xsk.models.xsodata.xsOData.Association;
-import com.sap.xsk.models.xsodata.xsOData.Entity;
-import com.sap.xsk.models.xsodata.xsOData.Navigation;
-import com.sap.xsk.models.xsodata.xsOData.Service;
-import com.sap.xsk.models.xsodata.xsOData.Type;
-import com.sap.xsk.models.xsodata.xsOData.XSOData;
-import com.sap.xsk.models.xsodata.xsOData.XsODataPackage;
+import com.sap.xsk.models.xsodata.xsOData.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -20,74 +17,29 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- *
- * @generated
  * @see com.sap.xsk.models.xsodata.xsOData.XsODataPackage
+ * @generated
  */
-public class XsODataAdapterFactory extends AdapterFactoryImpl {
-
+public class XsODataAdapterFactory extends AdapterFactoryImpl
+{
   /**
    * The cached model package.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
   protected static XsODataPackage modelPackage;
-  /**
-   * The switch that delegates to the <code>createXXX</code> methods.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   *
-   * @generated
-   */
-  protected XsODataSwitch<Adapter> modelSwitch =
-      new XsODataSwitch<Adapter>() {
-        @Override
-        public Adapter caseXSOData(XSOData object) {
-          return createXSODataAdapter();
-        }
-
-        @Override
-        public Adapter caseType(Type object) {
-          return createTypeAdapter();
-        }
-
-        @Override
-        public Adapter caseService(Service object) {
-          return createServiceAdapter();
-        }
-
-        @Override
-        public Adapter caseEntity(Entity object) {
-          return createEntityAdapter();
-        }
-
-        @Override
-        public Adapter caseNavigation(Navigation object) {
-          return createNavigationAdapter();
-        }
-
-        @Override
-        public Adapter caseAssociation(Association object) {
-          return createAssociationAdapter();
-        }
-
-        @Override
-        public Adapter defaultCase(EObject object) {
-          return createEObjectAdapter();
-        }
-      };
 
   /**
    * Creates an instance of the adapter factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @generated
    */
-  public XsODataAdapterFactory() {
-    if (modelPackage == null) {
+  public XsODataAdapterFactory()
+  {
+    if (modelPackage == null)
+    {
       modelPackage = XsODataPackage.eINSTANCE;
     }
   }
@@ -97,33 +49,81 @@ public class XsODataAdapterFactory extends AdapterFactoryImpl {
    * <!-- begin-user-doc -->
    * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
    * <!-- end-user-doc -->
-   *
    * @return whether this factory is applicable for the type of the object.
    * @generated
    */
   @Override
-  public boolean isFactoryForType(Object object) {
-    if (object == modelPackage) {
+  public boolean isFactoryForType(Object object)
+  {
+    if (object == modelPackage)
+    {
       return true;
     }
-    if (object instanceof EObject) {
-      return ((EObject) object).eClass().getEPackage() == modelPackage;
+    if (object instanceof EObject)
+    {
+      return ((EObject)object).eClass().getEPackage() == modelPackage;
     }
     return false;
   }
 
   /**
+   * The switch that delegates to the <code>createXXX</code> methods.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected XsODataSwitch<Adapter> modelSwitch =
+    new XsODataSwitch<Adapter>()
+    {
+      @Override
+      public Adapter caseXSOData(XSOData object)
+      {
+        return createXSODataAdapter();
+      }
+      @Override
+      public Adapter caseType(Type object)
+      {
+        return createTypeAdapter();
+      }
+      @Override
+      public Adapter caseService(Service object)
+      {
+        return createServiceAdapter();
+      }
+      @Override
+      public Adapter caseEntity(Entity object)
+      {
+        return createEntityAdapter();
+      }
+      @Override
+      public Adapter caseNavigation(Navigation object)
+      {
+        return createNavigationAdapter();
+      }
+      @Override
+      public Adapter caseAssociation(Association object)
+      {
+        return createAssociationAdapter();
+      }
+      @Override
+      public Adapter defaultCase(EObject object)
+      {
+        return createEObjectAdapter();
+      }
+    };
+
+  /**
    * Creates an adapter for the <code>target</code>.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   *
    * @param target the object to adapt.
    * @return the adapter for the <code>target</code>.
    * @generated
    */
   @Override
-  public Adapter createAdapter(Notifier target) {
-    return modelSwitch.doSwitch((EObject) target);
+  public Adapter createAdapter(Notifier target)
+  {
+    return modelSwitch.doSwitch((EObject)target);
   }
 
 
@@ -133,12 +133,12 @@ public class XsODataAdapterFactory extends AdapterFactoryImpl {
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
-   *
    * @return the new adapter.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.XSOData
+   * @generated
    */
-  public Adapter createXSODataAdapter() {
+  public Adapter createXSODataAdapter()
+  {
     return null;
   }
 
@@ -148,12 +148,12 @@ public class XsODataAdapterFactory extends AdapterFactoryImpl {
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
-   *
    * @return the new adapter.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Type
+   * @generated
    */
-  public Adapter createTypeAdapter() {
+  public Adapter createTypeAdapter()
+  {
     return null;
   }
 
@@ -163,12 +163,12 @@ public class XsODataAdapterFactory extends AdapterFactoryImpl {
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
-   *
    * @return the new adapter.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Service
+   * @generated
    */
-  public Adapter createServiceAdapter() {
+  public Adapter createServiceAdapter()
+  {
     return null;
   }
 
@@ -178,12 +178,12 @@ public class XsODataAdapterFactory extends AdapterFactoryImpl {
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
-   *
    * @return the new adapter.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Entity
+   * @generated
    */
-  public Adapter createEntityAdapter() {
+  public Adapter createEntityAdapter()
+  {
     return null;
   }
 
@@ -193,12 +193,12 @@ public class XsODataAdapterFactory extends AdapterFactoryImpl {
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
-   *
    * @return the new adapter.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Navigation
+   * @generated
    */
-  public Adapter createNavigationAdapter() {
+  public Adapter createNavigationAdapter()
+  {
     return null;
   }
 
@@ -208,12 +208,12 @@ public class XsODataAdapterFactory extends AdapterFactoryImpl {
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
-   *
    * @return the new adapter.
-   * @generated
    * @see com.sap.xsk.models.xsodata.xsOData.Association
+   * @generated
    */
-  public Adapter createAssociationAdapter() {
+  public Adapter createAssociationAdapter()
+  {
     return null;
   }
 
@@ -222,11 +222,11 @@ public class XsODataAdapterFactory extends AdapterFactoryImpl {
    * <!-- begin-user-doc -->
    * This default implementation returns null.
    * <!-- end-user-doc -->
-   *
    * @return the new adapter.
    * @generated
    */
-  public Adapter createEObjectAdapter() {
+  public Adapter createEObjectAdapter()
+  {
     return null;
   }
 

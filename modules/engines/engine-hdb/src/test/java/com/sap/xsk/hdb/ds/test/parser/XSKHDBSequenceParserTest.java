@@ -19,7 +19,6 @@ import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicateProperty
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceMissingPropertyException;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
@@ -27,9 +26,9 @@ import static org.junit.Assert.assertThrows;
 
 public class XSKHDBSequenceParserTest {
     @Test
-    public void parseHanav1Content() throws Exception {
-        String content = org.apache.commons.io.IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/SampleSequence_hanav1.hdbsequence"), StandardCharsets.UTF_8);
-        XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser().parse("/test/xsk/com/sap/SampleSequence_hanav1.hdbsequence", content);
+    public void parseHanaXSClassicContent() throws Exception {
+        String content = org.apache.commons.io.IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/SampleSequence_HanaXSClassic.hdbsequence"), StandardCharsets.UTF_8);
+        XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser().parse("/test/xsk/com/sap/SampleSequence_HanaXSClassic.hdbsequence", content);
 
         assertEquals("MYSCHEMA", model.getSchema());
         assertEquals(Integer.valueOf(10), model.getStart_with());
@@ -41,9 +40,9 @@ public class XSKHDBSequenceParserTest {
     }
 
     @Test
-    public void parseHanav2Content() throws Exception {
-        String content = org.apache.commons.io.IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/CustomerId_hanav2.hdbsequence"), StandardCharsets.UTF_8);
-        XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser().parse("/test/xsk/com/sap/CustomerId_hanav2.hdbsequence", content);
+    public void parseHanaXSAdvancedContent() throws Exception {
+        String content = org.apache.commons.io.IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence"), StandardCharsets.UTF_8);
+        XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser().parse("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence", content);
         assertEquals(XSKHanaVersion.VERSION_2, model.getHanaVersion());
         assertEquals(content, model.getRawContent());
     }

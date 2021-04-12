@@ -40,3 +40,4 @@ jobs:
         docker build -t dirigiblelabs/xsk-kyma .
         docker push dirigiblelabs/xsk-kyma
         cd ../../
+

@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
@@ -41,13 +40,13 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
 
         if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)) {
             String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
-                    ? getHanav1ModelSQL(connection, hdbSequenceName)
+                    ? getDatabaseSpecificSQL(connection, hdbSequenceName)
                     : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
             executeSql(sql, connection);
         }
     }
 
-    private String getHanav1ModelSQL(Connection connection, String modifiedSequenceName) {
+    private String getDatabaseSpecificSQL(Connection connection, String modifiedSequenceName) {
         return SqlFactory.getNative(connection).drop().sequence(modifiedSequenceName).build();
     }
 }

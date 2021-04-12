@@ -32,16 +32,12 @@ public class XSKHDBSEQUENCEModel {
   @SerializedName(value = HDBSequenceConstants.PUBLIC_PROPERTY)
   Boolean publicc;
 
-  String depends_on_table;
-  String depends_on_view;
-  List<String> depends_on;
-
   public XSKHDBSEQUENCEModel() {
   }
 
   public XSKHDBSEQUENCEModel(String schema, Integer increment_by, Integer start_with, Integer maxvalue,
       Boolean nomaxvalue, Integer minvalue, Boolean nominvalue, Boolean cycles, String reset_by,
-      Boolean publicc, String depends_on_table, String depends_on_view, List<String> depends_on)
+      Boolean publicc)
       throws XSKHDBSequenceMissingPropertyException {
     checkMandatoryFieldsPresence(schema, increment_by, start_with, nomaxvalue, nominvalue, publicc);
     this.schema = schema;
@@ -54,9 +50,6 @@ public class XSKHDBSEQUENCEModel {
     this.cycles = cycles;
     this.reset_by = reset_by;
     this.publicc = publicc;
-    this.depends_on_table = depends_on_table;
-    this.depends_on_view = depends_on_view;
-    this.depends_on = depends_on;
   }
 
   private void checkMandatoryFieldsPresence(String schema, Integer increment_by, Integer start_with,
@@ -155,29 +148,5 @@ public class XSKHDBSEQUENCEModel {
 
   public void setPublicc(Boolean publicc) {
     this.publicc = publicc;
-  }
-
-  public String getDepends_on_table() {
-    return depends_on_table;
-  }
-
-  public void setDepends_on_table(String depends_on_table) {
-    this.depends_on_table = depends_on_table;
-  }
-
-  public String getDepends_on_view() {
-    return depends_on_view;
-  }
-
-  public void setDepends_on_view(String depends_on_view) {
-    this.depends_on_view = depends_on_view;
-  }
-
-  public List<String> getDepends_on() {
-    return depends_on;
-  }
-
-  public void setDepends_on(List<String> depends_on) {
-    this.depends_on = depends_on;
   }
 }

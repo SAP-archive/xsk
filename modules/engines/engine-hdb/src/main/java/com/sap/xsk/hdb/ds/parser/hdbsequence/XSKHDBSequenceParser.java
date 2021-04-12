@@ -54,10 +54,10 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     logger.debug("Determine if the hdbsequence is Hana v1 or v2 by Comparing '" + receivedSyntax + "' with '" + expectedHana2Syntax + "'");
 
     return (receivedSyntax.equals(expectedHana2Syntax))
-        ? parseHANAv2Content(location, content)
-        : parseHANAv1Content(location, content);
+        ? parseHanaAdvancedContent(location, content)
+        : parseXSClassicContent(location, content);
   }
-
+  
   @Override
   public String getType() {
     return IXSKDataStructureModel.TYPE_HDB_SEQUENCE;
@@ -68,7 +68,7 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     return XSKDataStructureHDBSequenceModel.class;
   }
 
-  private XSKDataStructureModel parseHANAv1Content(String location, String content) throws XSKDataStructuresException, IOException {
+  private XSKDataStructureModel parseXSClassicContent(String location, String content) throws XSKDataStructuresException, IOException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     HdbsequenceLexer lexer = new HdbsequenceLexer(inputStream);
@@ -103,12 +103,14 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     return hdbSequenceModel;
   }
 
-  private XSKDataStructureModel parseHANAv2Content(String location, String content) {
+
+  private XSKDataStructureModel parseHanaAdvancedContent(String location, String content) {
     XSKDataStructureHDBSequenceModel hdbSequenceModel = new XSKDataStructureHDBSequenceModel();
     setXSKDataStructureHDBSequenceModelTrackingDetails(location, content, XSKHanaVersion.VERSION_2, hdbSequenceModel);
     hdbSequenceModel.setRawContent(content);
     return hdbSequenceModel;
   }
+
 
   private void setXSKDataStructureHDBSequenceModelTrackingDetails(String location, String content, XSKHanaVersion hanaVersion,
       XSKDataStructureHDBSequenceModel hdbSequenceModel) {

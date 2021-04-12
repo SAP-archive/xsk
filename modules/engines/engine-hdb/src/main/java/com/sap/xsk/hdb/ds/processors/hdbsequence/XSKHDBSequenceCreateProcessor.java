@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSequenceModel> {
 
-
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceCreateProcessor.class);
 
   @Override
@@ -38,13 +37,14 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
     logger.info("Processing Create HdbSequence: " + hdbSequenceName);
 
     String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
-        ? getHanav1ModelSQL(connection, hdbSequenceModel, hdbSequenceName)
+        ? getDatabaseSpecificSQL(connection, hdbSequenceModel, hdbSequenceName)
         : XSKConstants.XSK_HDBSEQUENCE_CREATE + hdbSequenceModel.getRawContent();
     executeSql(sql, connection);
   }
 
 
-  private String getHanav1ModelSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName) {
+  private String getDatabaseSpecificSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel,
+      String modifiedSequenceName) {
     return SqlFactory.getNative(connection).create().sequence(modifiedSequenceName)
         .start(hdbSequenceModel.getStart_with())
         .increment(hdbSequenceModel.getIncrement_by())
@@ -55,4 +55,5 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
         .cycles(hdbSequenceModel.getCycles())
         .resetBy(hdbSequenceModel.getReset_by()).build();
   }
+
 }

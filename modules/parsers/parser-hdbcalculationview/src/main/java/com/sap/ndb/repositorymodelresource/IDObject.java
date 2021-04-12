@@ -19,7 +19,7 @@
 
 package com.sap.ndb.repositorymodelresource;
 
-import com.sap.ndb.bimodeldatafoundation.Layout;
+import com.sap.ndb.bimodel.datafoundation.Layout;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;

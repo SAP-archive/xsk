@@ -14,10 +14,10 @@ package com.sap.xsk.models.hdbcalculationview.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import com.sap.ndb.bimodelcalculation.CalculationScenario;
-import com.sap.ndb.bimodelcalculation.CalculationViewType;
-import com.sap.ndb.bimodelcalculation.DataSource;
-import com.sap.ndb.bimodelcalculation.DataSources;
+import com.sap.ndb.bimodel.calculation.CalculationScenario;
+import com.sap.ndb.bimodel.calculation.CalculationViewType;
+import com.sap.ndb.bimodel.calculation.DataSource;
+import com.sap.ndb.bimodel.calculation.DataSources;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;

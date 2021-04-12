@@ -19,8 +19,8 @@
 
 package com.sap.ndb.repositorymodelresource;
 
-import com.sap.ndb.basemodelbase.Descriptions;
-import com.sap.ndb.bimodeldatafoundation.BIResource;
+import com.sap.ndb.modelbase.Descriptions;
+import com.sap.ndb.bimodel.datafoundation.BIResource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;

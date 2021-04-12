@@ -19,13 +19,13 @@
 
 package com.sap.ndb.repositorymodelresource;
 
-import com.sap.ndb.basemodelbase.Descriptions;
-import com.sap.ndb.bimodelcalculation.Node;
-import com.sap.ndb.bimodeldatafoundation.LogicalColumn;
-import com.sap.ndb.bimodeldimension.Hierarchy;
-import com.sap.ndb.bimodeldimension.LocalDimension;
-import com.sap.ndb.bimodelvariable.LocalVariable;
-import com.sap.ndb.bimodelvariable.ValueListEntry;
+import com.sap.ndb.modelbase.Descriptions;
+import com.sap.ndb.bimodel.calculation.Node;
+import com.sap.ndb.bimodel.datafoundation.LogicalColumn;
+import com.sap.ndb.bimodel.dimension.Hierarchy;
+import com.sap.ndb.bimodel.dimension.LocalDimension;
+import com.sap.ndb.bimodel.variable.LocalVariable;
+import com.sap.ndb.bimodel.variable.ValueListEntry;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;

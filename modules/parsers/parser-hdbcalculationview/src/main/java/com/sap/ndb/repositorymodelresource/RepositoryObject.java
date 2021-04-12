@@ -19,8 +19,8 @@
 
 package com.sap.ndb.repositorymodelresource;
 
-import com.sap.ndb.basemodelbase.EndUserTexts;
-import com.sap.ndb.datamodeltype.DataType;
+import com.sap.ndb.modelbase.EndUserTexts;
+import com.sap.ndb.datamodel.type.DataType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;

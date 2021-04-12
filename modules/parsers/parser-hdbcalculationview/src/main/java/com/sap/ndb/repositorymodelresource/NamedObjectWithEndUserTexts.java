@@ -19,10 +19,10 @@
 
 package com.sap.ndb.repositorymodelresource;
 
-import com.sap.ndb.basemodelbase.EndUserTexts;
-import com.sap.ndb.datamodelhierarchy.InlineHierarchy;
-import com.sap.ndb.datamodeltype.DisplayFolder;
-import com.sap.ndb.datamodeltype.TypedObject;
+import com.sap.ndb.modelbase.EndUserTexts;
+import com.sap.ndb.datamodel.hierarchy.InlineHierarchy;
+import com.sap.ndb.datamodel.type.DisplayFolder;
+import com.sap.ndb.datamodel.type.TypedObject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;

@@ -25,33 +25,43 @@ import java.util.List;
 import static com.sap.xsk.parser.hdbtable.constants.HdbtablePropertiesConstants.*;
 
 public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
-    private HashSet<String> uniqueTableProperties = new HashSet<>();
 
     @Override
     public JsonElement visitHdbtableDefinition(HdbtableParser.HdbtableDefinitionContext ctx) {
         JsonObject hdbtableObject = new JsonObject();
+        HashSet<String> uniqueTableProperties = new HashSet<>();
         List<ParseTree> ctxList = ctx.children;
 
         for(ParseTree tree : ctxList) {
             if(tree.getChild(0) instanceof HdbtableParser.SchemaNamePropContext){
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_SCHEMA_NAME, uniqueTableProperties);
                 hdbtableObject.add(HDBTABLE_PROPERTY_SCHEMA_NAME, visitSchemaNameProp((HdbtableParser.SchemaNamePropContext) tree.getChild(0)));
             }else if(tree.getChild(0) instanceof HdbtableParser.TableTypePropContext) {
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_TABLE_TYPE, uniqueTableProperties);
                 hdbtableObject.add(HDBTABLE_PROPERTY_TABLE_TYPE, visitTableTypeProp((HdbtableParser.TableTypePropContext) tree.getChild(0)));
             }else if (tree.getChild(0) instanceof HdbtableParser.TableColumnsPropContext) {
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_COLUMNS, uniqueTableProperties);
                 hdbtableObject.add (HDBTABLE_PROPERTY_COLUMNS, visitTableColumnsProp((HdbtableParser.TableColumnsPropContext) tree.getChild(0)));
             }else if (tree.getChild(0) instanceof HdbtableParser.TableIndexesPropContext){
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_INDEXES, uniqueTableProperties);
                 hdbtableObject.add (HDBTABLE_PROPERTY_INDEXES, visitTableIndexesProp((HdbtableParser.TableIndexesPropContext) tree.getChild(0)));
             }else if (tree.getChild(0) instanceof HdbtableParser.TablePrimaryKeyPropContext){
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_PKCOLUMNS, uniqueTableProperties);
                 hdbtableObject.add(HDBTABLE_PROPERTY_PKCOLUMNS, visitTablePrimaryKeyProp((HdbtableParser.TablePrimaryKeyPropContext) tree.getChild(0)));
             }else if (tree.getChild(0) instanceof HdbtableParser.DescriptionPropContext){
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_DESCRIPTION, uniqueTableProperties);
                 hdbtableObject.add(HDBTABLE_PROPERTY_DESCRIPTION, visitDescriptionProp((HdbtableParser.DescriptionPropContext) tree.getChild(0)));
             }else if(tree.getChild(0) instanceof HdbtableParser.TemporaryPropContext) {
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_TEMPORARY, uniqueTableProperties);
                 hdbtableObject.add(HDBTABLE_PROPERTY_TEMPORARY, visitTemporaryProp((HdbtableParser.TemporaryPropContext) tree.getChild(0)));
             }else if(tree.getChild(0) instanceof HdbtableParser.PublicPropContext) {
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_PUBLIC, uniqueTableProperties);
                 hdbtableObject.add(HDBTABLE_PROPERTY_PUBLIC, visitPublicProp((HdbtableParser.PublicPropContext) tree.getChild(0)));
             }else if(tree.getChild(0) instanceof HdbtableParser.LoggingTypePropContext) {
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_LOGGING_TYPE, uniqueTableProperties);
                 hdbtableObject.add (HDBTABLE_PROPERTY_LOGGING_TYPE, visitLoggingTypeProp((HdbtableParser.LoggingTypePropContext) tree.getChild(0)));
             }else if(tree.getChild(0) instanceof HdbtableParser.TablePrimaryKeyIndexTypePropContext) {
+                checkPropertyDeclarationUniqueness(HDBTABLE_PROPERTY_INDEX_TYPE, uniqueTableProperties);
                 hdbtableObject.add(HDBTABLE_PROPERTY_INDEX_TYPE, visitTablePrimaryKeyIndexTypeProp((HdbtableParser.TablePrimaryKeyIndexTypePropContext) tree.getChild(0)));
             }
         }
@@ -61,7 +71,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitTableColumnsProp(HdbtableParser.TableColumnsPropContext ctx) {
-       checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_COLUMNS);
        JsonArray tableColumns = new JsonArray();
         if(ctx!=null && ctx.columnsObject()!=null) {
             ctx.columnsObject().forEach(column -> {
@@ -78,19 +87,19 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
         HashSet<String> uniqueIndexProperties = new HashSet<>();
         for(ParseTree tree : ctxList) {
             if (tree.getChild(0) instanceof HdbtableParser.IndexAssignNameContext) {
-                checkIndexPropertyDeclarationUniqueness(INDEX_PROPERTY_NAME,uniqueIndexProperties);
+                checkPropertyDeclarationUniqueness(INDEX_PROPERTY_NAME,uniqueIndexProperties);
                 indexesObject.add(INDEX_PROPERTY_NAME, visitIndexAssignName((HdbtableParser.IndexAssignNameContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.IndexAssignUniqueContext) {
-                checkIndexPropertyDeclarationUniqueness(INDEX_PROPERTY_UNIQUE,uniqueIndexProperties);
+                checkPropertyDeclarationUniqueness(INDEX_PROPERTY_UNIQUE,uniqueIndexProperties);
                 indexesObject.add(INDEX_PROPERTY_UNIQUE, visitIndexAssignUnique((HdbtableParser.IndexAssignUniqueContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.IndexAssignOrderContext) {
-                checkIndexPropertyDeclarationUniqueness(INDEX_PROPERTY_ORDER,uniqueIndexProperties);
+                checkPropertyDeclarationUniqueness(INDEX_PROPERTY_ORDER,uniqueIndexProperties);
                 indexesObject.add(INDEX_PROPERTY_ORDER, visitIndexAssignOrder((HdbtableParser.IndexAssignOrderContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.IndexAssignIndexColumnsContext) {
-                checkIndexPropertyDeclarationUniqueness(INDEX_PROPERTY_INDEX_COLUMNS,uniqueIndexProperties);
+                checkPropertyDeclarationUniqueness(INDEX_PROPERTY_INDEX_COLUMNS,uniqueIndexProperties);
                 indexesObject.add(INDEX_PROPERTY_INDEX_COLUMNS, visitIndexAssignIndexColumns((HdbtableParser.IndexAssignIndexColumnsContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.IndexAssignIndexTypeContext) {
-                checkIndexPropertyDeclarationUniqueness(INDEX_PROPERTY_INDEX_TYPE,uniqueIndexProperties);
+                checkPropertyDeclarationUniqueness(INDEX_PROPERTY_INDEX_TYPE,uniqueIndexProperties);
                 indexesObject.add(INDEX_PROPERTY_INDEX_TYPE, visitIndexAssignIndexType((HdbtableParser.IndexAssignIndexTypeContext) tree.getChild(0)));
             }
         }
@@ -105,7 +114,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitTableIndexesProp(HdbtableParser.TableIndexesPropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_INDEXES);
         JsonArray tableIndexes = new JsonArray();
         if(ctx!=null && ctx.indexesObject()!=null){
             ctx.indexesObject().forEach(index -> {
@@ -143,31 +151,31 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
         HashSet<String> uniqueColumnProperties = new HashSet<>();
         for(ParseTree tree : ctxList) {
             if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignNameContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_NAME,uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_NAME,uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_NAME, visitColumnAssignName((HdbtableParser.ColumnAssignNameContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignSQLTypeContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_SQL_TYPE, uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_SQL_TYPE, uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_SQL_TYPE, visitColumnAssignSQLType((HdbtableParser.ColumnAssignSQLTypeContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignNullableContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_NULLABLE, uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_NULLABLE, uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_NULLABLE, visitColumnAssignNullable((HdbtableParser.ColumnAssignNullableContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignUniqueContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_UNIQUE, uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_UNIQUE, uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_UNIQUE, visitColumnAssignUnique((HdbtableParser.ColumnAssignUniqueContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignLengthContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_LENGTH, uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_LENGTH, uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_LENGTH, visitColumnAssignLength((HdbtableParser.ColumnAssignLengthContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignPrecisionContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_PRECISION, uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_PRECISION, uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_PRECISION, visitColumnAssignPrecision((HdbtableParser.ColumnAssignPrecisionContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignCommentContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_COMMENT, uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_COMMENT, uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_COMMENT, visitColumnAssignComment((HdbtableParser.ColumnAssignCommentContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignScaleContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_SCALE, uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_SCALE, uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_SCALE, visitColumnAssignScale((HdbtableParser.ColumnAssignScaleContext) tree.getChild(0)));
             } else if (tree.getChild(0) instanceof HdbtableParser.ColumnAssignDefaultValueContext) {
-                checkColumnPropertyDeclarationUniqueness(COLUMN_PROPERTY_DEFAULT_VALUE, uniqueColumnProperties);
+                checkPropertyDeclarationUniqueness(COLUMN_PROPERTY_DEFAULT_VALUE, uniqueColumnProperties);
                 columnsObject.add(COLUMN_PROPERTY_DEFAULT_VALUE, visitColumnAssignDefaultValue((HdbtableParser.ColumnAssignDefaultValueContext) tree.getChild(0)));
             }
         }
@@ -176,7 +184,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitTableTypeProp(HdbtableParser.TableTypePropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_TABLE_TYPE);
         return (ctx!=null && ctx.TABLETYPE()!=null)?new JsonPrimitive(ctx.TABLETYPE().getText()):null;
     }
 
@@ -203,7 +210,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitTablePrimaryKeyIndexTypeProp(HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_INDEX_TYPE);
         return (ctx!=null && ctx.INDEXTYPE()!=null)?new JsonPrimitive(ctx.INDEXTYPE().getText()):null;
     }
 
@@ -224,7 +230,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitLoggingTypeProp(HdbtableParser.LoggingTypePropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_LOGGING_TYPE);
         return (ctx!=null && ctx.TABLELOGGINGTYPE()!=null)?new JsonPrimitive(ctx.TABLELOGGINGTYPE().getText()):null;
     }
 
@@ -235,13 +240,11 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitTemporaryProp(HdbtableParser.TemporaryPropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_TEMPORARY);
         return (ctx != null && ctx.BOOLEAN() !=null) ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText())) : null;
     }
 
     @Override
     public JsonElement visitPublicProp(HdbtableParser.PublicPropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_PUBLIC);
         return (ctx != null && ctx.BOOLEAN() !=null) ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText())) : null;
     }
 
@@ -252,7 +255,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitTablePrimaryKeyProp(HdbtableParser.TablePrimaryKeyPropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_PKCOLUMNS);
         return (ctx!=null && ctx.tablePrimaryKeyColumnsProp()!=null)? visitTablePrimaryKeyColumnsProp(ctx.tablePrimaryKeyColumnsProp()): new JsonArray();
     }
 
@@ -263,7 +265,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitSchemaNameProp(HdbtableParser.SchemaNamePropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_SCHEMA_NAME);
         return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
     }
 
@@ -285,7 +286,6 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
 
     @Override
     public JsonElement visitDescriptionProp(HdbtableParser.DescriptionPropContext ctx) {
-        checkTablePropertyDeclarationUniqueness(HDBTABLE_PROPERTY_DESCRIPTION);
         return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
     }
 
@@ -294,24 +294,9 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
         return (ctx!=null && ctx.STRING()!=null)?new JsonPrimitive(handleStringLiteral(ctx.STRING().getText())):null;
     }
 
-    private void checkTablePropertyDeclarationUniqueness(String property) {
-        if (!uniqueTableProperties.contains(property)) {
-            uniqueTableProperties.add(property);
-        } else {
-            throw new XSKHDBTableDuplicatePropertyException(String.format("Property %s is already declared!", property));
-        }
-    }
-    private void checkColumnPropertyDeclarationUniqueness(String property, HashSet<String> uniqueColumnProperties) {
-        if (!uniqueColumnProperties.contains(property)) {
-            uniqueColumnProperties.add(property);
-        } else {
-            throw new XSKHDBTableDuplicatePropertyException(String.format("Property %s is already declared!", property));
-        }
-    }
-
-    private void checkIndexPropertyDeclarationUniqueness(String property, HashSet<String> uniqueIndexProperties) {
-        if (!uniqueIndexProperties.contains(property)) {
-            uniqueIndexProperties.add(property);
+    private void checkPropertyDeclarationUniqueness(String property, HashSet<String> uniqueProperties) {
+        if (!uniqueProperties.contains(property)) {
+            uniqueProperties.add(property);
         } else {
             throw new XSKHDBTableDuplicatePropertyException(String.format("Property %s is already declared!", property));
         }

@@ -8,17 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Download sapmachine JDK 11
+    - name: Setup sapmachine JDK 11
       run: |
         download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
-        wget -O ${RUNNER_TEMP}/java_package.tar.gz ${download_url}
-    - name: Setup sapmachine JDK 11
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'jdkfile'
-        jdkFile: ${{ runner.temp }}/java_package.tar.gz
-        java-version: '11.0.11'
-        architecture: x64
+        wget -O /jdk/sapmachine-jdk-11.0.11.tar.gz ${download_url}
+        tar -xzf /jdk/sapmachine-jdk-11.0.11.tar.gz
+        export JAVA_HOME="/jdk/sapmachine-jdk-11.0.11"
     - name: Maven Build
       run: mvn clean install
     - name: Dodcker Login
@@ -26,18 +21,18 @@ jobs:
     - name: Push XSK
       run: |
         cd releng/server
-        docker build -t dirigiblelabs/xsk .
+        docker build -t dirigiblelabs/xsk --build-arg ${JAVA_HOME} Dockerfile-external-jdk .
         docker push dirigiblelabs/xsk
         cd ../../
     - name: Push XSK for SAP Cloud Foundry
       run: |
         cd releng/sap-cf
-        docker build -t dirigiblelabs/xsk-cf .
+        docker build -t dirigiblelabs/xsk-cf --build-arg ${JAVA_HOME} -f Dockerfile-external-jdk .
         docker push dirigiblelabs/xsk-cf
         cd ../../
     - name: Push XSK for SAP Kyma
       run: |
         cd releng/sap-kyma
-        docker build -t dirigiblelabs/xsk-kyma .
+        docker build -t dirigiblelabs/xsk-kyma --build-arg ${JAVA_HOME} -f Dockerfile-external-jdk .
         docker push dirigiblelabs/xsk-kyma
         cd ../../

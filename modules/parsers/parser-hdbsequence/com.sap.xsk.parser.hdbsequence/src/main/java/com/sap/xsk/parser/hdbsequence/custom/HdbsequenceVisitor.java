@@ -63,9 +63,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
     parsedObj.add(HDBSequenceConstants.CYCLES_PROPERTY, null);
     parsedObj.add(HDBSequenceConstants.RESET_BY_PROPERTY, null);
     parsedObj.add(HDBSequenceConstants.PUBLIC_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.DEPENDS_ON_PROPERTY, null);
 
     return parsedObj;
   }
@@ -90,22 +87,14 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         parsedObj.add(HDBSequenceConstants.PUBLIC_PROPERTY, visitPublicc((HdbsequenceParser.PubliccContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.MaxvalueContext) {
         parsedObj.add(HDBSequenceConstants.MAXVALUE_PROPERTY, visitMaxvalue((HdbsequenceParser.MaxvalueContext) tree.getChild(0)));
-      } else if (tree.getChild(0) instanceof HdbsequenceParser.Depends_onContext) {
-        parsedObj.add(HDBSequenceConstants.DEPENDS_ON_PROPERTY, visitDepends_on((HdbsequenceParser.Depends_onContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.NomaxvalueContext) {
         parsedObj.add(HDBSequenceConstants.NOMAXVALUE_PROPERTY, visitNomaxvalue((HdbsequenceParser.NomaxvalueContext) tree.getChild(0)));
-      } else if (tree.getChild(0) instanceof HdbsequenceParser.Depends_on_tableContext) {
-        parsedObj.add(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY,
-            visitDepends_on_table((HdbsequenceParser.Depends_on_tableContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.NominvalueContext) {
         parsedObj.add(HDBSequenceConstants.NOMINVALUE_PROPERTY, visitNominvalue((HdbsequenceParser.NominvalueContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.CyclesContext) {
         parsedObj.add(HDBSequenceConstants.CYCLES_PROPERTY, visitCycles((HdbsequenceParser.CyclesContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.MinvalueContext) {
         parsedObj.add(HDBSequenceConstants.MINVALUE_PROPERTY, visitMinvalue((HdbsequenceParser.MinvalueContext) tree.getChild(0)));
-      } else if (tree.getChild(0) instanceof HdbsequenceParser.Depends_on_viewContext) {
-        parsedObj.add(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY,
-            visitDepends_on_view((HdbsequenceParser.Depends_on_viewContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.Reset_byContext) {
         parsedObj.add(HDBSequenceConstants.RESET_BY_PROPERTY, visitReset_by((HdbsequenceParser.Reset_byContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.Increment_byContext) {
@@ -118,7 +107,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
     return parsedObj;
   }
 
-
   @Override
   public JsonElement visitSchema(@NotNull HdbsequenceParser.SchemaContext ctx) {
     checkForPropertyRepetition(HDBSequenceConstants.SCHEMA_PROPERTY);
@@ -128,7 +116,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
 
   }
 
-
   @Override
   public JsonElement visitPublicc(@NotNull HdbsequenceParser.PubliccContext ctx) {
     checkForPropertyRepetition(HDBSequenceConstants.PUBLIC_PROPERTY);
@@ -136,7 +123,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText()))
         : new JsonPrimitive(HDBSequenceConstants.PUBLIC_DEFAULT_VALUE);
   }
-
 
   @Override
   public JsonElement visitMaxvalue(HdbsequenceParser.MaxvalueContext ctx) {
@@ -147,32 +133,13 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
   }
 
   @Override
-  public JsonElement visitDepends_on(HdbsequenceParser.Depends_onContext ctx) {
-    checkForPropertyRepetition(HDBSequenceConstants.DEPENDS_ON_PROPERTY);
-    return (ctx != null && ctx.depends_on_list() != null)
-        ? visitDepends_on_list(ctx.depends_on_list())
-        : null;
-  }
-
-
-  @Override
   public JsonElement visitNomaxvalue(HdbsequenceParser.NomaxvalueContext ctx) {
     checkForPropertyRepetition(HDBSequenceConstants.NOMAXVALUE_PROPERTY);
     return (ctx != null && ctx.BOOLEAN() != null)
         ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText()))
         : new JsonPrimitive(HDBSequenceConstants.NOMAXVALUE_DEFAULT_VALUE);
   }
-
-
-  @Override
-  public JsonElement visitDepends_on_table(HdbsequenceParser.Depends_on_tableContext ctx) throws XSKHDBSequenceDuplicatePropertyException {
-    checkForPropertyRepetition(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY);
-    return (ctx != null && ctx.STRING() != null)
-        ? new JsonPrimitive(ctx.STRING().getText())
-        : null;
-  }
-
-
+  
   @Override
   public JsonElement visitNominvalue(HdbsequenceParser.NominvalueContext ctx) throws XSKHDBSequenceDuplicatePropertyException {
     checkForPropertyRepetition(HDBSequenceConstants.NOMINVALUE_PROPERTY);
@@ -180,7 +147,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         ? new JsonPrimitive(Boolean.parseBoolean(ctx.BOOLEAN().getText()))
         : new JsonPrimitive(HDBSequenceConstants.NOMINVALUE_DEFAULT_VALUE);
   }
-
 
   @Override
   public JsonElement visitCycles(HdbsequenceParser.CyclesContext ctx) throws XSKHDBSequenceDuplicatePropertyException {
@@ -190,7 +156,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         : null;
   }
 
-
   @Override
   public JsonElement visitMinvalue(HdbsequenceParser.MinvalueContext ctx) throws XSKHDBSequenceDuplicatePropertyException {
     checkForPropertyRepetition(HDBSequenceConstants.MINVALUE_PROPERTY);
@@ -198,28 +163,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         ? new JsonPrimitive(Integer.parseInt(ctx.INT().getText()))
         : null;
   }
-
-
-  @Override
-  public JsonElement visitDepends_on_view(HdbsequenceParser.Depends_on_viewContext ctx) throws XSKHDBSequenceDuplicatePropertyException {
-    checkForPropertyRepetition(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY);
-    return (ctx != null && ctx.STRING() != null)
-        ? new JsonPrimitive(ctx.STRING().getText())
-        : null;
-  }
-
-
-  @Override
-  public JsonElement visitDepends_on_list(HdbsequenceParser.Depends_on_listContext ctx) {
-    JsonArray dependsOnList = new JsonArray();
-    if (ctx != null && ctx.STRING() != null) {
-      ctx.STRING().forEach(t -> {
-        dependsOnList.add(new JsonPrimitive(t.getText()));
-      });
-    }
-    return dependsOnList;
-  }
-
 
   @Override
   public JsonElement visitReset_by(HdbsequenceParser.Reset_byContext ctx) throws XSKHDBSequenceDuplicatePropertyException {
@@ -229,7 +172,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         : null;
   }
 
-
   @Override
   public JsonElement visitIncrement_by(HdbsequenceParser.Increment_byContext ctx) throws XSKHDBSequenceDuplicatePropertyException {
     checkForPropertyRepetition(HDBSequenceConstants.INCREMENT_BY_PROPERTY);
@@ -237,7 +179,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         ? new JsonPrimitive(Integer.parseInt(ctx.INT().getText()))
         : new JsonPrimitive(HDBSequenceConstants.INCREMENT_BY_DEFAULT_VALUE);
   }
-
 
   @Override
   public JsonElement visitStart_with(HdbsequenceParser.Start_withContext ctx) throws XSKHDBSequenceDuplicatePropertyException {

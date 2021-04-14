@@ -5,7 +5,7 @@ FROM tomcat:8.5.43-jdk11-openjdk
 RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/
 WORKDIR /usr/local
-RUN rm tomcat/conf/tomcat-users.xml
+RUN rm /usr/local/tomcat/conf/tomcat-users.xml
 RUN wget http://www.dirigible.io/help/conf/tomcat-users.xml -P tomcat/conf/
 RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P tomcat/lib/
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.4.63/ngdbc-2.4.63.jar -P tomcat/lib/

@@ -1,0 +1,22 @@
+service namespace "my.demo.namespace" {
+
+//Events
+   "sample.odata::table"
+               update events (before "sample.odata::beforeMethod", precommit "sample.odata::beforeMethod")
+               delete events (after "sample.odata::afterMethod")
+               create forbidden;
+      "sample.odata::table"
+               create using "sample.odata::createMethod"  events (after "sample.odata::afterMethod")
+               update using "sample.odata::updateMethod"
+               delete using "sample.odata::deleteMethod";
+
+     "sample.odata::table"
+             create using "sample.odata::createMethod"
+             update events (precommit "sample.odata::precommitMethod")
+             delete forbidden;
+
+     "sample.odata::table"
+             create forbidden
+             update forbidden
+             delete forbidden;
+}

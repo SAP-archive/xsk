@@ -1,0 +1,6 @@
+service {}
+
+settings {
+     hints
+           null;
+}

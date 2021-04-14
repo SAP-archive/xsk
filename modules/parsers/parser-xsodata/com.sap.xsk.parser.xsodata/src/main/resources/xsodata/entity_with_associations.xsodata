@@ -1,0 +1,38 @@
+service namespace "my.demo.namespace" {
+
+association "complex_atob"
+		principal "complex_a"("ID") multiplicity "*"
+		dependent "complex_b"("ID_A") multiplicity "*"
+		over "xsodata.test.tables::complex_assoc_atob" principal ("ID_A") dependent ("ID_B");
+
+association "complex_atob"
+		principal "complex_a"("ID") multiplicity "*"
+		dependent "complex_b"("ID_A") multiplicity "*"
+		over "xsodata.test.tables::complex_assoc_atob" principal ("ID_A") dependent ("ID_B")
+		    delete events (before "sample.odata::deleteMethod")
+            create events (before "sample.odata::createMethod")
+        	update events (before "sample.odata::updateMethod");
+
+association "complex_b_to_c"
+		principal "complex_b"("ID") multiplicity "1"
+		dependent "complex_c"("ID_A") multiplicity "*"
+		storage on dependent
+		    update using "sap.test:oDataExtendedRules.xsjslib::associationToConditions";
+
+association "complex_b_to_c"
+		principal "complex_b"("ID") multiplicity "0..1"
+		dependent "complex_c"("ID_B") multiplicity "1"
+		storage on principal;
+
+association "complex_b_to_c"
+		principal "complex_b"("ID") multiplicity "1..*"
+		dependent "complex_c"("ID_B") multiplicity "*"
+		no storage;
+
+association "complex_b_to_c" with referential constraint
+		principal "complex_b"("ID") multiplicity "1"
+		dependent "complex_c"("ID_B") multiplicity "*"
+		    delete events (before "sample.odata::deleteMethod")
+		    create events (before "sample.odata::createMethod")
+		    update events (before "sample.odata::updateMethod");
+}

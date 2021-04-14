@@ -5,6 +5,7 @@ dist/
 target/
 dirigible_local/
 bin/
+gen/
 
 # files
 .DS_Store
@@ -16,5 +17,4 @@ bin/
 derby.log
 *.versionsBackup
 *.fpr
-*.xtendbin
 *._trace

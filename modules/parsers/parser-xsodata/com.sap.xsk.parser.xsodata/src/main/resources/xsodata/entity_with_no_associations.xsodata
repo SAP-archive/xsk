@@ -1,0 +1,69 @@
+service namespace "my.demo.namespace" {
+
+//Object exposure
+    "XSODATA_TEST"."sample.odata::table" as "MyTable";
+    "test/AN_AGENCY.analyticView" as "Revenue";
+
+//Property Projection
+    entity "sample.odata::table" as "MyTable" with ("ID","Text");
+    "sample.odata::table" as "MyTable" without ("Text","Time");
+
+//Key Specification
+    "sample.odata::view" as "MyView" key ("ID","Text");
+    "sample.odata::view" as "MyView" key generate local "GenID";
+    "test/AN_AGENCY.analyticView" as "Revenue" keys generate local "GENERATED_ID";
+
+//Navigation
+    "sample.odata::customer" as "Customers"
+		navigates ("Customer_Orders" as "HisOrders","Customer_Recruit" as "Recruit" from principal);
+	"sample.odata::customer" as "Students"
+    		navigates ("Students_Grades" as "HisGrades", "Students_Recruit" as "Recruit" from principal);
+//Agregation
+    "sample.odata::revenues" as "Revenues" aggregates always (SUM of "Amount", AVG of "Amount");
+    "sample.odata::revenues" as "Revenues" aggregates always (MIN of "Amount");
+    "sample.odata::revenues" as "Revenues" aggregates always (MAX of "Amount");
+    "gbi-student-008.MVCHelloWorld::CUSTOMER_RAM_CV_008" as "Historycp"
+      keys generate local "ID"
+     aggregates always;
+
+//Parameters
+    "sample.odata::calc" as "CalcView"
+                                            keys generate local "ID"
+                                            parameters via entity "CVParams" results property "Execute";
+    "sap.test::calcview" key ("theKeyColumns") parameters via key and entity;
+
+//Events
+   "sample.odata::table"
+            update events (before "sample.odata::beforeupdate", before "sample.odata::somethingelse")
+            delete events (after "sample.odata::beforeupdate")
+            create forbidden
+            create forbidden;
+
+   "sample.odata::table"
+            create using "sample.odata::createmethod"
+            update using "sample.odata::createmethod"
+            delete using "sample.odata::createmethod";
+
+   "sample.odata::table"
+            create using "sample.odata::createmethod"
+            update events (precommit "sample.odata::beforeupdate")
+            delete forbidden;
+
+   "sample.odata::table"
+            create events (postcommit "sample.odata::beforeupdate")
+            update forbidden
+            delete forbidden;
+
+   "sample.odata::table"
+            create using "sample.test:jsexit.xsjslib::create_instead"
+            update events (
+                            before  "sample.test:jsexit.xsjslib::update_before",
+                            after   "sample.test:jsexit.xsjslib::update_after"
+                          )
+            delete forbidden;
+}
+
+annotations     {
+	enable      OData4SAP;
+	enable      OData4SAP;
+}

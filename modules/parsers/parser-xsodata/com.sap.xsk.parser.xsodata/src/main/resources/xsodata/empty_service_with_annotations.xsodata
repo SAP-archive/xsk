@@ -1,0 +1,7 @@
+service {}
+
+/* Required to show annotations in $metadata like: sap:filterable="false"  */
+annotations     {
+	enable      OData4SAP;
+	enable      OData4SAP;
+}

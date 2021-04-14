@@ -1,0 +1,8 @@
+service namespace "my.demo.namespace" {
+
+//Navigation
+    "sample.odata::customer" as "Customers"
+		navigates ("Customer_Orders" as "HisOrders","Customer_Recruit" as "Recruit" from dependent);
+	"sample.odata::student" as "Students"
+        navigates ("Students_Grades" as "HisGrades" from principal);
+}

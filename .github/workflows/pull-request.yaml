@@ -7,9 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 13
-      uses: actions/setup-java@v1
+    - name: Download sapmachine JDK 11
+      run: |
+        download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
+        wget -O "${RUNNER_TEMP}/sapmachine-jdk-11.0.11.tar.gz" "${download_url}"
+    - name: Setup sapmachine JDK 11
+      uses: actions/setup-java@v2
       with:
-        java-version: 13
+        distribution: 'jdkfile'
+        jdkFile: ${{ runner.temp }}/sapmachine-jdk-11.0.11.tar.gz
+        java-version: '11.0.11'
+        architecture: x64
     - name: Maven Build
       run: mvn clean install

@@ -3,6 +3,9 @@
 
 FROM tomcat:8.5.43-jdk11-openjdk
 
+# JDK_HOME is the path to the home directory of the jdk
+ARG JDK_HOME
+
 RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/
 
@@ -10,6 +13,10 @@ RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgre
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.4.63/ngdbc-2.4.63.jar -P /usr/local/tomcat/lib/
 
 ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
+
+COPY "${JDK_HOME}" /usr/local/jdk
+ENV JAVA_HOME=/usr/local/jdk
+ENV JRE_HOME=/usr/local/jdk
 
 EXPOSE 8080
 

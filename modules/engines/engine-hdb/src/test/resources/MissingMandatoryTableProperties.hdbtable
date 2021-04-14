@@ -1,0 +1,4 @@
+table.schemaName = "SPORTS";
+table.tableType = COLUMNSTORE;
+table.primaryKey.pkcolumns = ["MATCH_ID", "TEAM_ID", "PERSON_ID"];
+table.description = "Team players";

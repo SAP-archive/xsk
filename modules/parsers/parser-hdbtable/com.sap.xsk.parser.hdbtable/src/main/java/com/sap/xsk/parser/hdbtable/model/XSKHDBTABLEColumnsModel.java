@@ -11,6 +11,9 @@
  */
 package com.sap.xsk.parser.hdbtable.model;
 
+import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
+import java.util.Objects;
+
 public class XSKHDBTABLEColumnsModel {
 
   private String name;
@@ -96,5 +99,16 @@ public class XSKHDBTABLEColumnsModel {
 
   public void setUnique(boolean unique) {
     this.unique = unique;
+  }
+
+  public void checkForAllMandatoryColumnFieldsPresence() throws Exception {
+    checkPresence(name, "name");
+    checkPresence(sqlType, "sqlType");
+  }
+
+  private <T> void checkPresence(T field, String fieldName) {
+    if (Objects.isNull(field)) {
+      throw new XSKHDBTableMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+    }
   }
 }

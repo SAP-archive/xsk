@@ -27,7 +27,7 @@ jobs:
       run: |
         cd releng/server
         cp -r "${JAVA_HOME}" jdk
-        docker build -t dirigiblelabs/xsk --build-arg JDK_HOME="jdk" Dockerfile-external-jdk .
+        docker build -t dirigiblelabs/xsk --build-arg JDK_HOME="jdk" -f Dockerfile-external-jdk .
         docker push dirigiblelabs/xsk
         cd ../../
     - name: Push XSK for SAP Cloud Foundry

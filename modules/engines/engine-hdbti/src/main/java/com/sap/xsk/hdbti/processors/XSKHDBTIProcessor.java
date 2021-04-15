@@ -73,9 +73,13 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
 
     for (CSVRecord csvRecord : csvParser) {
       if (csvRecord.size() != tableMetadata.getColumns().size()) {
-        //TODO: Throw proper exception
-        return;
+        throw new XSKTableImportException(
+            String.format("Error while trying to process csv with id %s with location %s."
+                    + "The number of csv records should be equal to the number of columns of a db entity",
+                xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames()),
+                tableImportConfigurationDefinition.getFile()));
       }
+
       String pkForCSVRecord = xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames());
       String csvRecordHash = xskHdbtiCoreService.getCSVRecordHash(csvRecord);
       if (pkForCSVRecord != null && !allImportedRecordsByCsv.containsKey(pkForCSVRecord)) {

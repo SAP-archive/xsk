@@ -45,30 +45,35 @@ import org.slf4j.LoggerFactory;
 
 public class XSKHDBSequenceParser implements XSKDataStructureParser {
 
+
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceParser.class);
 
   @Override
   public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException {
-    String expectedHana2Syntax = XSKConstants.XSK_HDBSEQUENCE_SYNTAX + "\"" + XSKHDBUtils.getRepositoryBaseObjectName(location) + "\"";
+    String expectedHanaXSAdvancedSyntax =
+        XSKConstants.XSK_HDBSEQUENCE_SYNTAX + "\"" + XSKHDBUtils.getRepositoryBaseObjectName(location) + "\"";
     String receivedSyntax = XSKHDBUtils.extractRepositoryBaseObjectNameFromContent(XSKConstants.XSK_HDBSEQUENCE_SYNTAX, content);
-    logger.debug("Determine if the hdbsequence is Hana v1 or v2 by Comparing '" + receivedSyntax + "' with '" + expectedHana2Syntax + "'");
+    logger.debug("Determine if the hdbsequence is Hana XS Classic or Hana XS Advanced by Comparing '" + receivedSyntax + "' with '"
+        + expectedHanaXSAdvancedSyntax + "'");
 
-    return (receivedSyntax.equals(expectedHana2Syntax))
-        ? parseHANAv2Content(location, content)
-        : parseHANAv1Content(location, content);
+    return (receivedSyntax.equals(expectedHanaXSAdvancedSyntax))
+        ? parseHanaXSAdvancedContent(location, content)
+        : parseHanaXSClassicContent(location, content);
   }
+
 
   @Override
   public String getType() {
     return IXSKDataStructureModel.TYPE_HDB_SEQUENCE;
   }
 
+
   @Override
   public Class<XSKDataStructureHDBSequenceModel> getDataStructureClass() {
     return XSKDataStructureHDBSequenceModel.class;
   }
 
-  private XSKDataStructureModel parseHANAv1Content(String location, String content) throws XSKDataStructuresException, IOException {
+  private XSKDataStructureModel parseHanaXSClassicContent(String location, String content) throws XSKDataStructuresException, IOException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     HdbsequenceLexer lexer = new HdbsequenceLexer(inputStream);
@@ -103,12 +108,13 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     return hdbSequenceModel;
   }
 
-  private XSKDataStructureModel parseHANAv2Content(String location, String content) {
+  private XSKDataStructureModel parseHanaXSAdvancedContent(String location, String content) {
     XSKDataStructureHDBSequenceModel hdbSequenceModel = new XSKDataStructureHDBSequenceModel();
     setXSKDataStructureHDBSequenceModelTrackingDetails(location, content, XSKHanaVersion.VERSION_2, hdbSequenceModel);
     hdbSequenceModel.setRawContent(content);
     return hdbSequenceModel;
   }
+
 
   private void setXSKDataStructureHDBSequenceModelTrackingDetails(String location, String content, XSKHanaVersion hanaVersion,
       XSKDataStructureHDBSequenceModel hdbSequenceModel) {
@@ -120,4 +126,5 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     hdbSequenceModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
     hdbSequenceModel.setHanaVersion(hanaVersion);
   }
+
 }

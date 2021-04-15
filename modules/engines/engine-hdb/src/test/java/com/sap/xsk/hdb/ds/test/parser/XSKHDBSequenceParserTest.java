@@ -20,18 +20,21 @@ import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceMissingPropertyException;
-import java.nio.charset.StandardCharsets;
+
+
 import org.junit.Test;
+import java.nio.charset.StandardCharsets;
+
 
 public class XSKHDBSequenceParserTest {
 
   @Test
-  public void parseHanav1Content() throws Exception {
+  public void parseHanaXSClassicContent() throws Exception {
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/SampleSequence_hanav1.hdbsequence"),
+        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/SampleSequence_HanaXSClassic.hdbsequence"),
             StandardCharsets.UTF_8);
     XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
-        .parse("/test/xsk/com/sap/SampleSequence_hanav1.hdbsequence", content);
+        .parse("/test/xsk/com/sap/SampleSequence_HanaXSClassic.hdbsequence", content);
 
     assertEquals("MYSCHEMA", model.getSchema());
     assertEquals(Integer.valueOf(10), model.getStart_with());
@@ -42,15 +45,18 @@ public class XSKHDBSequenceParserTest {
     assertEquals(XSKHanaVersion.VERSION_1, model.getHanaVersion());
   }
 
+
   @Test
-  public void parseHanav2Content() throws Exception {
+  public void parseHanaXSAdvancedContent() throws Exception {
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/CustomerId_hanav2.hdbsequence"), StandardCharsets.UTF_8);
+        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence"),
+            StandardCharsets.UTF_8);
     XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
-        .parse("/test/xsk/com/sap/CustomerId_hanav2.hdbsequence", content);
+        .parse("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence", content);
     assertEquals(XSKHanaVersion.VERSION_2, model.getHanaVersion());
     assertEquals(content, model.getRawContent());
   }
+
 
   @Test
   public void parseGrammarUnreadableContent() throws Exception {
@@ -62,15 +68,6 @@ public class XSKHDBSequenceParserTest {
     });
   }
 
-  @Test
-  public void parseMissingMandatoryProperty() throws Exception {
-    String content = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/MissingPropSequence.hdbsequence"), StandardCharsets.UTF_8);
-
-    assertThrows(XSKHDBSequenceMissingPropertyException.class, () -> {
-      new XSKHDBSequenceParser().parse("/test/xsk/com/sap/MissingPropSequence.hdbsequence", content);
-    });
-  }
 
   @Test
   public void parseRepetitiveProperties() throws Exception {
@@ -101,5 +98,17 @@ public class XSKHDBSequenceParserTest {
     assertEquals(Integer.valueOf(-2), model.getIncrement_by());
     assertEquals(XSKHanaVersion.VERSION_1, model.getHanaVersion());
   }
+
+
+  @Test
+  public void parseMissingMandatoryProperty() throws Exception {
+    String content = org.apache.commons.io.IOUtils
+        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/MissingPropSequence.hdbsequence"), StandardCharsets.UTF_8);
+
+    assertThrows(XSKHDBSequenceMissingPropertyException.class, () -> {
+      new XSKHDBSequenceParser().parse("/test/xsk/com/sap/MissingPropSequence.hdbsequence", content);
+    });
+  }
+
 
 }

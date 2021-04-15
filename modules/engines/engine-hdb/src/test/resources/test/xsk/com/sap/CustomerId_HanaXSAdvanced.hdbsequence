@@ -1,3 +1,3 @@
-SEQUENCE "test.xsk.com.sap::CustomerId_hanav2"
+SEQUENCE "test.xsk.com.sap::CustomerId_HanaXSAdvanced"
 RESET BY
 SELECT IFNULL(MAX(ID), 0) + 1 FROM "com.sap.hana.example::CUSTOMERS"

@@ -1,0 +1,18 @@
+service {
+    "xsodata.test.tables::all_types" as "all_types_etag" concurrencytoken;
+
+    "xsodata.test.tables::BusinessPartner.BusinessPartner"
+    		as "BusinessPartner"
+    		without ("isContactPerson")
+    		concurrencytoken
+    		navigates (
+    			"BusinessPartner_To_N_BPRole" as "Roles");
+
+    entity "sap.test.odata.db.views::Etag" as "EtagAll"
+        key ("KEY_00", "KEY_01")
+        concurrencytoken;
+
+     entity "sap.test.odata.db.views::Etag" as "EtagAll"
+        key ("KEY_00", "KEY_01")
+        concurrencytoken ("NVARCHAR_01","INTEGER_02");
+}

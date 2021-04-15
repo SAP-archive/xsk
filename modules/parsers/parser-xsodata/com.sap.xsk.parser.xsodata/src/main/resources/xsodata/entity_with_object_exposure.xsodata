@@ -1,0 +1,6 @@
+service namespace "my.demo.namespace" {
+
+//Object exposure
+    "XSODATA_TEST"."sample.odata::table" as "MyTable";
+    "test/AN_AGENCY_REV.analyticView" as "Revenue";
+}

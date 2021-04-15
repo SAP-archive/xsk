@@ -1,0 +1,12 @@
+service {}
+
+settings {
+     support null;
+     content cache-control "no-store";
+     metadata cache-control "no-cache,no-store,max-age=86401,must-revalidate";
+     hints
+           "NO_CALC_VIEW_UNFOLDING", "ABC";
+     limits
+         max_records = 10,
+         max_expanded_records = 30;
+}

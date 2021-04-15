@@ -1,0 +1,7 @@
+service namespace "my.demo.namespace" {
+
+//Property Projection
+  entity "sample.odata::table" as "MyTable" with ("ID","Text");
+         "sample.odata::table" as "MyTable" without ("Text","Time");
+
+}

@@ -11,7 +11,9 @@
  */
 package com.sap.xsk.parser.hdbtable.model;
 
+import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import java.util.List;
+import java.util.Objects;
 
 public class XSKHDBTABLEIndexesModel {
 
@@ -62,5 +64,17 @@ public class XSKHDBTABLEIndexesModel {
 
   public void setIndexName(String name) {
     this.name = name;
+  }
+
+  public void checkForAllIndexMandatoryFieldsPresence() throws Exception {
+    checkPresence(name, "name");
+    checkPresence(unique, "unique");
+    checkPresence(indexColumns, "indexColumns");
+  }
+
+  private <T> void checkPresence(T field, String fieldName) {
+    if (Objects.isNull(field)) {
+      throw new XSKHDBTableMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+    }
   }
 }

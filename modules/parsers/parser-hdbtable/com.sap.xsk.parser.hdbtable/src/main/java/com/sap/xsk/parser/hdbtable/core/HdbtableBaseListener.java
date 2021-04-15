@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbtable\core\Hdbtable.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbtable.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -89,6 +89,19 @@ public class HdbtableBaseListener implements HdbtableListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitColumnAssignDefaultValue(@NotNull HdbtableParser.ColumnAssignDefaultValueContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIndexProperties(@NotNull HdbtableParser.IndexPropertiesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndexProperties(@NotNull HdbtableParser.IndexPropertiesContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -238,6 +251,19 @@ public class HdbtableBaseListener implements HdbtableListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHdbtableProperties(@NotNull HdbtableParser.HdbtablePropertiesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHdbtableProperties(@NotNull HdbtableParser.HdbtablePropertiesContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLoggingTypeProp(@NotNull HdbtableParser.LoggingTypePropContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -258,6 +284,19 @@ public class HdbtableBaseListener implements HdbtableListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitColumnAssignNullable(@NotNull HdbtableParser.ColumnAssignNullableContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterColumnsProperties(@NotNull HdbtableParser.ColumnsPropertiesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColumnsProperties(@NotNull HdbtableParser.ColumnsPropertiesContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

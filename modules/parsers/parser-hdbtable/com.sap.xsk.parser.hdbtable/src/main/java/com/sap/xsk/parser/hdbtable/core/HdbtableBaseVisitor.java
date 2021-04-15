@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbtable\core\Hdbtable.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbtable.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -59,6 +59,14 @@ public class HdbtableBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitColumnAssignDefaultValue(@NotNull HdbtableParser.ColumnAssignDefaultValueContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIndexProperties(@NotNull HdbtableParser.IndexPropertiesContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -154,6 +162,14 @@ public class HdbtableBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitHdbtableProperties(@NotNull HdbtableParser.HdbtablePropertiesContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitLoggingTypeProp(@NotNull HdbtableParser.LoggingTypePropContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -163,6 +179,14 @@ public class HdbtableBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitColumnAssignNullable(@NotNull HdbtableParser.ColumnAssignNullableContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitColumnsProperties(@NotNull HdbtableParser.ColumnsPropertiesContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

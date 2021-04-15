@@ -21,21 +21,23 @@ package com.sap.xsk.hdb.ds.test;
  * SAP - initial API and implementation
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import javax.inject.Inject;
 import javax.sql.DataSource;
+import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableDuplicatePropertyException;
+import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * The Class DataStructureSchemaTest.
@@ -103,6 +105,26 @@ public class XSKTableParserTest extends AbstractGuiceTest {
       e.printStackTrace();
       fail(e.getMessage());
     }
+  }
+
+  @Test
+  public void failIfParsingRepetitiveProperties() throws Exception {
+    InputStream in = XSKTableParserTest.class.getResourceAsStream("/DuplicateTableProperties.hdbtable");
+    String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+
+    assertThrows(XSKHDBTableDuplicatePropertyException.class, () -> {
+      new XSKTableParser().parse("/DuplicateTableProperties.hdbtable", content);
+    });
+  }
+
+  @Test
+  public void failIfParsingMissingMandatoryProperties() throws Exception {
+    InputStream in = XSKTableParserTest.class.getResourceAsStream("/MissingMandatoryTableProperties.hdbtable");
+    String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+
+    assertThrows(XSKHDBTableMissingPropertyException.class, () -> {
+      new XSKTableParser().parse("/MissingMandatoryTableProperties.hdbtable", content);
+    });
   }
 
 }

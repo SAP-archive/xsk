@@ -11,28 +11,23 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbtable;
 
-import com.google.gson.Gson;
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
-import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
-import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLECoreVisitor;
-import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLESyntaxErrorListener;
-import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
-import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
-import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
-import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.sap.xsk.hdb.ds.model.hdbtable.*;
+import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
+import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
+import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLECoreVisitor;
+import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLESyntaxErrorListener;
+import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
+import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -40,6 +35,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+
 
 public class XSKTableParser implements XSKDataStructureParser {
 
@@ -77,17 +77,26 @@ public class XSKTableParser implements XSKDataStructureParser {
 
     XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
 
-    xskhdbtableCoreVisitor.visit(parseTree);
+    JsonElement parsedResult = xskhdbtableCoreVisitor.visit(parseTree);
 
     Gson gson = new Gson();
 
-    XSKHDBTABLEDefinitionModel hdbtableDefinitionModel = gson
-        .fromJson(xskhdbtableCoreVisitor.getHdbtableDefinitionObject(), XSKHDBTABLEDefinitionModel.class);
+    XSKHDBTABLEDefinitionModel hdbtableDefinitionModel = gson.fromJson(parsedResult, XSKHDBTABLEDefinitionModel.class);
+    try {
+      hdbtableDefinitionModel.checkForAllMandatoryFieldsPresence();
+    } catch (Exception e) {
+      throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
+    }
 
     XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
 
     List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-    for (XSKHDBTABLEColumnsModel column : hdbtableDefinitionModel.getColumns()) {
+    for( XSKHDBTABLEColumnsModel column : hdbtableDefinitionModel.getColumns()) {
+      try {
+        column.checkForAllMandatoryColumnFieldsPresence();
+      } catch (Exception e) {
+        throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
+      }
       XSKDataStructureHDBTableColumnModel dataStructureHDBTableColumnModel = new XSKDataStructureHDBTableColumnModel();
       dataStructureHDBTableColumnModel.setLength(column.getLength());
       dataStructureHDBTableColumnModel.setName(column.getName());
@@ -119,19 +128,27 @@ public class XSKTableParser implements XSKDataStructureParser {
 
     XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
     primaryKey.setColumns(hdbtableDefinitionModel.getPkcolumns().toArray(String[]::new));
-    primaryKey.setName("PK_" + dataStructureHDBTableModel.getName());
+    primaryKey.setName("PK_"+ dataStructureHDBTableModel.getName());
     dataStructureHDBTableModel.getConstraints().setPrimaryKey(primaryKey);
+
 
     List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndices = new ArrayList<>();
 
-    for (XSKHDBTABLEIndexesModel index : hdbtableDefinitionModel.getIndexes()) {
-      XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex = new XSKDataStructureHDBTableConstraintUniqueModel();
-      uniqueIndex.setName(index.getIndexName());
-      uniqueIndex.setColumns(index.getIndexColumns().toArray(String[]::new));
-      uniqueIndices.add(uniqueIndex);
+    if(hdbtableDefinitionModel.getIndexes()!=null) {
+      for (XSKHDBTABLEIndexesModel index : hdbtableDefinitionModel.getIndexes()) {
+        try {
+          index.checkForAllIndexMandatoryFieldsPresence();
+        } catch (Exception e) {
+          throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
+        }
+        XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex = new XSKDataStructureHDBTableConstraintUniqueModel();
+        uniqueIndex.setName(index.getIndexName());
+        uniqueIndex.setColumns(index.getIndexColumns().toArray(String[]::new));
+        uniqueIndices.add(uniqueIndex);
+      }
+      dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
     }
-    dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
-
     return dataStructureHDBTableModel;
   }
 }
+

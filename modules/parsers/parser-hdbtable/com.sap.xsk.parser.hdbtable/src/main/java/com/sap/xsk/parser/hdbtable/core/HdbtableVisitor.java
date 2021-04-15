@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbtable\core\Hdbtable.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbtable.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -52,6 +52,13 @@ public interface HdbtableVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitColumnAssignDefaultValue(@NotNull HdbtableParser.ColumnAssignDefaultValueContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#indexProperties}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexProperties(@NotNull HdbtableParser.IndexPropertiesContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignName}.
@@ -131,6 +138,13 @@ public interface HdbtableVisitor<T> extends ParseTreeVisitor<T> {
 	T visitIndexAssignUnique(@NotNull HdbtableParser.IndexAssignUniqueContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#hdbtableProperties}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHdbtableProperties(@NotNull HdbtableParser.HdbtablePropertiesContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#loggingTypeProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -143,6 +157,13 @@ public interface HdbtableVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitColumnAssignNullable(@NotNull HdbtableParser.ColumnAssignNullableContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnsProperties}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnsProperties(@NotNull HdbtableParser.ColumnsPropertiesContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#temporaryProp}.

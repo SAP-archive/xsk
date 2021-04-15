@@ -236,11 +236,6 @@
   <profiles>
     <profile> <!--run-integration-tests -->
       <id>run-integration-tests</id>
-      <activation>
-        <property>
-          <name>!skipIntegrationTests</name>
-        </property>
-      </activation>
 
       <build>
         <plugins>

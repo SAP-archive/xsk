@@ -398,6 +398,41 @@ public class XSKHDBXSODATACoreListenerTest {
     }
 
     @Test
+    public void parseServiceWithETagsSuccessfully() throws Exception {
+        HdbxsodataParser parser = parseSampleFile("xsodata/empty_service_with_etag.xsodata");
+
+        XSKHDBXSODATAService model = listener.getServiceModel();
+        assertNotNull(model);
+        assertEquals(parser.getNumberOfSyntaxErrors(), 0);
+        assertEquals(model.getEntities().size(), 4);
+
+        XSKHDBXSODATAEntity actualEntity = new XSKHDBXSODATAEntity();
+        actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("xsodata.test.tables::all_types"));
+        actualEntity.setAlias("all_types_etag");
+        actualEntity.setConcurrencyToken(true);
+        assertEquals(model.getEntities().get(0), actualEntity);
+
+        actualEntity = new XSKHDBXSODATAEntity();
+        actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("xsodata.test.tables::BusinessPartner.BusinessPartner"));
+        actualEntity.setAlias("BusinessPartner");
+        actualEntity.setConcurrencyToken(true);
+        actualEntity.setWithoutPropertyProjections(Arrays.asList("isContactPerson"));
+        XSKHDBXSODATANavigation nav1 = new XSKHDBXSODATANavigation().setAssociation("BusinessPartner_To_N_BPRole").setAliasNavigation("Roles");
+        actualEntity.setNavigates(Arrays.asList(nav1));
+        assertEquals(model.getEntities().get(1), actualEntity);
+
+        actualEntity = new XSKHDBXSODATAEntity();
+        actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("sap.test.odata.db.views::Etag"));
+        actualEntity.setAlias("EtagAll");
+        actualEntity.setConcurrencyToken(true);
+        actualEntity.setKeyList(Arrays.asList("KEY_00", "KEY_01"));
+        assertEquals(model.getEntities().get(2), actualEntity);
+
+        actualEntity.setETags(Arrays.asList("NVARCHAR_01", "INTEGER_02"));
+        assertEquals(model.getEntities().get(3), actualEntity);
+    }
+
+    @Test
     public void parseServiceSuccessfully() throws Exception {
         HdbxsodataParser parser = parseSampleFile("xsodata/entity_with_no_associations.xsodata");
 

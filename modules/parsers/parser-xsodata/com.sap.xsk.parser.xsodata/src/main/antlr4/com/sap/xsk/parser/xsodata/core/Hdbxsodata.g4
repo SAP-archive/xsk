@@ -2,13 +2,13 @@ grammar Hdbxsodata;
 
 xsodataDefinition: service annotations? settings?;
 
-service             : 'service' namespace? body;
+service            : 'service' namespace? body;
 namespace           : 'namespace' QUATED_STRING;
 body                : '{' content? '}';
 content             : entry content?;
 entry               : ( entity | association) ;
 
-entity              : object entityset? with? keys? navigates? aggregates? parameters? modificationBody? SEMICOLON;//the order is fixed
+entity              : object entityset? with? keys? concurrencytoken? navigates? aggregates? parameters? modificationBody? SEMICOLON;//the order is fixed
 object              : 'entity'?  (catalogobjectschema '.')? catalogobjectname; //can't deferenciate repoobject here
 catalogobjectschema : QUATED_STRING;
 catalogobjectname   : QUATED_STRING;
@@ -22,6 +22,7 @@ columnname          : QUATED_STRING;
 keys                : ('keys'| 'key') ( keylist | keygenerated );
 keylist             : propertylist;
 keygenerated        : 'generate' 'local' columnname;
+concurrencytoken    : 'concurrencytoken' keylist?;
 
 navigates           : 'navigates' '(' navlist ')';
 navlist             : (naventry (',' navlist)*);

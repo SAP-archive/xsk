@@ -810,6 +810,19 @@ public class HdbxsodataBaseListener implements HdbxsodataListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConcurrencytoken(@NotNull HdbxsodataParser.ConcurrencytokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConcurrencytoken(@NotNull HdbxsodataParser.ConcurrencytokenContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLimits(@NotNull HdbxsodataParser.LimitsContext ctx) { }
 	/**
 	 * {@inheritDoc}

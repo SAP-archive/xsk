@@ -680,6 +680,17 @@ public interface HdbxsodataListener extends ParseTreeListener {
 	void exitEventlistElement(@NotNull HdbxsodataParser.EventlistElementContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link HdbxsodataParser#concurrencytoken}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcurrencytoken(@NotNull HdbxsodataParser.ConcurrencytokenContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbxsodataParser#concurrencytoken}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcurrencytoken(@NotNull HdbxsodataParser.ConcurrencytokenContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link HdbxsodataParser#limits}.
 	 * @param ctx the parse tree
 	 */

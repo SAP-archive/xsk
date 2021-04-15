@@ -439,6 +439,13 @@ public interface HdbxsodataVisitor<T> extends ParseTreeVisitor<T> {
 	T visitEventlistElement(@NotNull HdbxsodataParser.EventlistElementContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link HdbxsodataParser#concurrencytoken}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConcurrencytoken(@NotNull HdbxsodataParser.ConcurrencytokenContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link HdbxsodataParser#limits}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

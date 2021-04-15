@@ -506,6 +506,14 @@ public class HdbxsodataBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitConcurrencytoken(@NotNull HdbxsodataParser.ConcurrencytokenContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitLimits(@NotNull HdbxsodataParser.LimitsContext ctx) { return visitChildren(ctx); }
 
 	/**

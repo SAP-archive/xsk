@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 public class XSKHDBXSODATACoreListener extends HdbxsodataBaseListener {
 
+
     private final XSKHDBXSODATAService serviceModel = new XSKHDBXSODATAService();
     private ArrayList<HdbxsodataParser.NaventryContext> navEntries = new ArrayList<>();
 
@@ -128,6 +129,14 @@ public class XSKHDBXSODATACoreListener extends HdbxsodataBaseListener {
             }
             if (ctx.keys().keylist() != null) {
                 entity.setKeyList(ctx.keys().keylist().propertylist().columnname().stream().map(el -> handleStringLiteral(el.getText())).collect(Collectors.toList()));
+            }
+        }
+
+        //set Etag
+        if (ctx.concurrencytoken() != null) {
+            entity.setConcurrencyToken(true);
+            if (ctx.concurrencytoken().keylist() != null) {
+                entity.setETags(ctx.concurrencytoken().keylist().propertylist().columnname().stream().map(el -> handleStringLiteral(el.getText())).collect(Collectors.toList()));
             }
         }
 
@@ -321,5 +330,4 @@ public class XSKHDBXSODATACoreListener extends HdbxsodataBaseListener {
         });
         return modifications;
     }
-
 }

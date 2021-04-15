@@ -41,4 +41,7 @@ public class XSKHDBXSODATAEntity {
     private XSKHDBXSODATAParameter parameterEntitySet;
 
     private List<XSKHDBXSODATAModification> modifications = new ArrayList<>();
+
+    private boolean concurrencyToken;
+    private List<String> eTags = new ArrayList<>();
 }

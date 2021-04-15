@@ -11,17 +11,13 @@
  */
 package com.sap.xsk.hdbti.service;
 
-import static com.sap.xsk.hdbti.api.IXSKTableImportModel.TYPE_HDBTI;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.sap.xsk.hdbti.api.IXSKTableImportParser;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
-import com.sap.xsk.hdbti.transformer.XSKTableImportArtifactFactory;
+import com.sap.xsk.hdbti.api.IXSKTableImportArtifactFactory;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
-import java.io.File;
-import java.io.IOException;
-import java.sql.Timestamp;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -29,35 +25,34 @@ import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
-public class XSKTableImportParser {
+import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
 
-  private static final Logger logger = LoggerFactory.getLogger(XSKTableImportParser.class);
-  boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-  @Inject
-  private XSKTableImportArtifactFactory xskTableImportArtifactFactory;
+import static com.sap.xsk.hdbti.api.IXSKTableImportModel.TYPE_HDBTI;
 
-  public XSKTableImportArtifact parseTableImportArtifact(String location, String content) throws IOException, XSKHDBTISyntaxErrorException {
-    XSKTableImportArtifact parsedArtifact = xskTableImportArtifactFactory.parseTableImport(content, location);
-    parsedArtifact.setName(new File(location).getName());
-    parsedArtifact.setLocation(location);
-    parsedArtifact.setType(TYPE_HDBTI);
-    parsedArtifact.setHash(DigestUtils.md5Hex(content));
-    parsedArtifact.setCreatedBy(UserFacade.getName());
-    parsedArtifact.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+public class XSKTableImportParser implements IXSKTableImportParser {
 
-    for (XSKTableImportConfigurationDefinition configurationDefinition : parsedArtifact.getImportConfigurationDefinition()) {
-      configurationDefinition.setHdbtiFileName(location);
+    private static final Logger logger = LoggerFactory.getLogger(XSKTableImportParser.class);
+
+    @Inject
+    @Named("xskTableImportArtifactFactory")
+    private IXSKTableImportArtifactFactory xskTableImportArtifactFactory;
+
+    @Override
+    public XSKTableImportArtifact parseTableImportArtifact(String location, String content) throws IOException, XSKHDBTISyntaxErrorException {
+        XSKTableImportArtifact parsedArtifact = xskTableImportArtifactFactory.parseTableImport(content, location);
+        parsedArtifact.setName(new File(location).getName());
+        parsedArtifact.setLocation(location);
+        parsedArtifact.setType(TYPE_HDBTI);
+        parsedArtifact.setHash(DigestUtils.md5Hex(content));
+        parsedArtifact.setCreatedBy(UserFacade.getName());
+        parsedArtifact.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+
+        for (XSKTableImportConfigurationDefinition configurationDefinition : parsedArtifact.getImportConfigurationDefinition()) {
+            configurationDefinition.setHdbtiFileName(location);
+        }
+
+        return parsedArtifact;
     }
-
-    return parsedArtifact;
-  }
-
-  public String convertToActualTableName(String tableName) {
-    if (caseSensitive) {
-      tableName = "\"" + tableName + "\"";
-    }
-    return tableName;
-//        return tableName.substring(tableName.lastIndexOf(':') + 1).replace('.', '_').toUpperCase();
-  }
 }

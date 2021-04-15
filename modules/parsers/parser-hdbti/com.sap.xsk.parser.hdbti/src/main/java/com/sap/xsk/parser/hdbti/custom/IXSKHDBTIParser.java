@@ -9,19 +9,13 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdbti.api;
+package com.sap.xsk.parser.hdbti.custom;
 
-public interface IXSKTableImportModel {
+import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
+import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 
-  /**
-   * File extension for *.hdbti files
-   */
-  public static final String FILE_EXTENSION_TABLE_IMPORT = ".hdbti";
+import java.io.IOException;
 
-  public static final String FILE_EXTENSION_CSV = ".csv";
-
-  public static final String TYPE_CSV = "CSV";
-
-
-  public static final String TYPE_HDBTI = "HDBTI";
+public interface IXSKHDBTIParser {
+    XSKHDBTIImportModel parse(String content) throws IOException, XSKHDBTISyntaxErrorException;
 }

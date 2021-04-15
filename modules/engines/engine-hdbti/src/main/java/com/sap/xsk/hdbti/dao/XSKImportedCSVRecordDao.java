@@ -14,115 +14,103 @@ package com.sap.xsk.hdbti.dao;
 import static java.lang.String.format;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdbti.api.IXSKImportedCSVRecordDao;
 import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
 import com.sap.xsk.hdbti.processors.XSKHDBTIProcessor;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.builders.records.DeleteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
-public class XSKImportedCSVRecordDao {
+public class XSKImportedCSVRecordDao implements IXSKImportedCSVRecordDao {
+    private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIProcessor.class);
 
-  private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIProcessor.class);
+    @Inject
+    private DataSource dataSource;
 
-  @Inject
-  private DataSource dataSource;
+    @Inject
+    private PersistenceManager<XSKImportedCSVRecordModel> persistenceManager;
 
-  @Inject
-  private PersistenceManager<XSKImportedCSVRecordModel> persistenceManager;
+    @Override
+    public XSKImportedCSVRecordModel save(XSKImportedCSVRecordModel importedRowModel) throws XSKDataStructuresException {
+        try (Connection connection = dataSource.getConnection()) {
+            importedRowModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+            persistenceManager.insert(connection, importedRowModel);
+            logger.info(format("Entity with rowId: %s and tableName: %s was SAVED successfully in %s.", importedRowModel.getRowId(), importedRowModel.getTableName(), "XSK_IMPORTED_CSV_RECORDS"));
+            return importedRowModel;
+        } catch (SQLException e) {
+            throw new XSKDataStructuresException(e);
+        }
 
-  public XSKImportedCSVRecordModel save(XSKImportedCSVRecordModel importedRowModel) throws XSKDataStructuresException {
-    try (Connection connection = dataSource.getConnection()) {
-      importedRowModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-      persistenceManager.insert(connection, importedRowModel);
-      logger.info(format("Entity with rowId: %s and tableName: %s was SAVED successfully in %s.", importedRowModel.getRowId(),
-          importedRowModel.getTableName(), "XSK_IMPORTED_CSV_RECORDS"));
-      return importedRowModel;
-    } catch (SQLException e) {
-      throw new XSKDataStructuresException(e);
+
+    }
+
+    @Override
+    public XSKImportedCSVRecordModel update(XSKImportedCSVRecordModel importedRowModel) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            persistenceManager.update(connection, importedRowModel);
+            logger.info(format("Entity with rowId: %s and tableName: %s was UPDATED successfully in %s.", importedRowModel.getRowId(), importedRowModel.getTableName(), "XSK_IMPORTED_CSV_RECORDS"));
+            return importedRowModel;
+        }
     }
 
 
-  }
+    @Override
+    public void deleteAll(List<XSKImportedCSVRecordModel> importedCSVRecordModels) throws SQLException {
+        if (importedCSVRecordModels.isEmpty()) {
+            return;
+        }
 
-  public XSKImportedCSVRecordModel update(XSKImportedCSVRecordModel importedRowModel) throws SQLException {
-    try (Connection connection = dataSource.getConnection()) {
-      persistenceManager.update(connection, importedRowModel);
-      logger.info(format("Entity with rowId: %s and tableName: %s was UPDATED successfully in %s.", importedRowModel.getRowId(),
-          importedRowModel.getTableName(), "XSK_IMPORTED_CSV_RECORDS"));
-      return importedRowModel;
-    }
-  }
+        try (Connection connection = dataSource.getConnection()) {
+            importedCSVRecordModels.forEach(record -> {
+                persistenceManager.delete(connection, XSKImportedCSVRecordModel.class, record.getId());
+            });
 
-  public void deleteAll(List<String> rowIds, String tableName) throws SQLException {
-    if (rowIds.isEmpty()) {
-      return;
-    }
+            List<String> ids = importedCSVRecordModels.stream().map(record -> record.getId().toString()).collect(Collectors.toList());
+            logger.info(format("Entities with ids: %s were DELETED successfully in %s.", String.join(", ", ids), "XSK_IMPORTED_CSV_RECORDS"));
+        }
 
-    try (Connection connection = dataSource.getConnection()) {
-      DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
-      deleteBuilder.from("XSK_IMPORTED_CSV_RECORDS")
-          .where(String.format("CSV_RECORD_ID IN (%s) AND TABLE_NAME = \'%s\'", String.join(",", rowIds), tableName));
-      PreparedStatement statement = connection.prepareStatement(deleteBuilder.build());
-
-      statement.executeUpdate();
-      logger.info(format("Entities with ids: %s were DELETED successfully in %s.", String.join(", ", rowIds), "XSK_IMPORTED_CSV_RECORDS"));
-    }
-  }
-
-
-  public void deleteAll(List<XSKImportedCSVRecordModel> importedCSVRecordModels) throws SQLException {
-    if (importedCSVRecordModels.isEmpty()) {
-      return;
     }
 
-    try (Connection connection = dataSource.getConnection()) {
-      importedCSVRecordModels.forEach(record -> {
-        persistenceManager.delete(connection, XSKImportedCSVRecordModel.class, record.getId());
-      });
-
-      List<String> ids = importedCSVRecordModels.stream().map(record -> record.getId().toString()).collect(Collectors.toList());
-      logger.info(format("Entities with ids: %s were DELETED successfully in %s.", String.join(", ", ids), "XSK_IMPORTED_CSV_RECORDS"));
+    @Override
+    public List<XSKImportedCSVRecordModel> getImportedCSVRecordsByTableAndCSVLocation(String tableName, String csvLocation) throws XSKDataStructuresException {
+        try (Connection connection = dataSource.getConnection()) {
+            String sql = SqlFactory.getNative(connection).select().column("*").from("XSK_IMPORTED_CSV_RECORDS")
+                    .where("TABLE_NAME = ? AND CSV_LOCATION = ?").toString();
+            return persistenceManager.query(connection, XSKImportedCSVRecordModel.class, sql, tableName, csvLocation);
+        } catch (SQLException e) {
+            throw new XSKDataStructuresException(e);
+        }
     }
 
-  }
+    @Override
+    public List<XSKImportedCSVRecordModel> getImportedCSVsByHdbtiLocation(String hdbtiLocation) {
+        try (Connection connection = dataSource.getConnection()) {
+            String sql = SqlFactory.getNative(connection).select().column("*").from("XSK_IMPORTED_CSV_RECORDS")
+                    .where("HDBTI_LOCATION = ?").toString();
+            return persistenceManager.query(connection, XSKImportedCSVRecordModel.class, sql, hdbtiLocation);
+        } catch (SQLException e) {
+            logger.error("Error occurred while trying to retrieve imported csv records by HDBTI file location");
+        }
 
-  public Map<String, XSKImportedCSVRecordModel> getImportedCSVRecordsByTableAndCSVLocation(String tableName, String csvLocation)
-      throws XSKDataStructuresException {
-    try (Connection connection = dataSource.getConnection()) {
-      String sql = SqlFactory.getNative(connection).select().column("*").from("XSK_IMPORTED_CSV_RECORDS")
-          .where("TABLE_NAME = ? AND CSV_LOCATION = ?").toString();
-      List<XSKImportedCSVRecordModel> allRowsImportedByHdbtiImportConfig = persistenceManager
-          .query(connection, XSKImportedCSVRecordModel.class, sql, tableName, csvLocation);
-      return allRowsImportedByHdbtiImportConfig.stream()
-          .collect(Collectors.toMap(XSKImportedCSVRecordModel::getRowId, importModel -> importModel));
-    } catch (SQLException e) {
-      throw new XSKDataStructuresException(e);
-    }
-  }
-
-  public List<XSKImportedCSVRecordModel> getImportedCSVsByHdbtiLocation(String hdbtiLocation) {
-    try (Connection connection = dataSource.getConnection()) {
-      String sql = SqlFactory.getNative(connection).select().column("*").from("XSK_IMPORTED_CSV_RECORDS")
-          .where("HDBTI_LOCATION = ?").toString();
-      return persistenceManager.query(connection, XSKImportedCSVRecordModel.class, sql, hdbtiLocation);
-    } catch (SQLException e) {
-      logger.error("Error occurred while trying to retrieve imported csv records by HDBTI file location");
+        return new ArrayList<>();
     }
 
-    return new ArrayList<>();
-  }
+    @Override
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    @Override
+    public PersistenceManager<XSKImportedCSVRecordModel> getPersistenceManager() {
+        return persistenceManager;
+    }
 }

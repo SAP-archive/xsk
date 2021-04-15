@@ -61,10 +61,12 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
         : parseHanaXSClassicContent(location, content);
   }
 
+
   @Override
   public String getType() {
     return IXSKDataStructureModel.TYPE_HDB_SEQUENCE;
   }
+
 
   @Override
   public Class<XSKDataStructureHDBSequenceModel> getDataStructureClass() {
@@ -112,6 +114,7 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     hdbSequenceModel.setRawContent(content);
     return hdbSequenceModel;
   }
+
 
   private void setXSKDataStructureHDBSequenceModelTrackingDetails(String location, String content, XSKHanaVersion hanaVersion,
       XSKDataStructureHDBSequenceModel hdbSequenceModel) {

@@ -46,8 +46,7 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
     }
 
   }
-
-
+  
   private String getDatabaseSpecificSQL(Connection connection, String modifiedSequenceName) {
     return SqlFactory.getNative(connection).drop().sequence(modifiedSequenceName).build();
   }

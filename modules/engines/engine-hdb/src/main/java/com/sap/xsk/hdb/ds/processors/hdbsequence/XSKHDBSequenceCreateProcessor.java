@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSequenceModel> {
 
+
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceCreateProcessor.class);
 
   @Override
@@ -55,5 +56,6 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
         .cycles(hdbSequenceModel.getCycles())
         .resetBy(hdbSequenceModel.getReset_by()).build();
   }
+
 
 }

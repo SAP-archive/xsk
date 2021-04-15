@@ -22,7 +22,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-public class XSKHDBTIParser {
+public class XSKHDBTIParser implements IXSKHDBTIParser {
 
   public XSKHDBTIImportModel parse(String content) throws IOException, XSKHDBTISyntaxErrorException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());

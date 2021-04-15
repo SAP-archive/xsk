@@ -11,7 +11,7 @@
  */
 package com.sap.xsk.hdbti.dao;
 
-import com.sap.xsk.hdbti.api.IXSKCsvToHdbtiRelationService;
+import com.sap.xsk.hdbti.api.IXSKCsvToHdbtiRelationDao;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
 import com.sap.xsk.utils.XSKUtils;
@@ -22,69 +22,74 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.sql.DataSource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
-public class XSKCsvToHdbtiRelationDao implements IXSKCsvToHdbtiRelationService {
+public class XSKCsvToHdbtiRelationDao implements IXSKCsvToHdbtiRelationDao {
 
-  private static final Logger logger = LoggerFactory.getLogger(XSKCsvToHdbtiRelationDao.class);
+    private static final Logger logger = LoggerFactory.getLogger(XSKCsvToHdbtiRelationDao.class);
 
-  @Inject
-  private PersistenceManager<XSKTableImportToCsvRelation> xskTableImportToCsvRelationPersistenceManager;
+    @Inject
+    private PersistenceManager<XSKTableImportToCsvRelation> xskTableImportToCsvRelationPersistenceManager;
 
-  @Inject
-  private DataSource dataSource;
+    @Inject
+    private DataSource dataSource;
 
-  @Override
-  public void persistNewCsvAndHdbtiRelations(XSKTableImportArtifact tableImportArtifact, Connection connection) {
-    for (XSKTableImportToCsvRelation relation : tableImportArtifact.getTableImportToCsvRelations()) {
-      relation.setHdbti(XSKUtils.convertToFullPath(relation.getHdbti()));
-      xskTableImportToCsvRelationPersistenceManager.insert(connection, relation);
+    @Override
+    public void persistNewCsvAndHdbtiRelations(XSKTableImportArtifact tableImportArtifact) {
+        for(XSKTableImportToCsvRelation relation : tableImportArtifact.getTableImportToCsvRelations()){
+            relation.setHdbti(relation.getHdbti());
+            try (Connection connection = dataSource.getConnection()) {
+                xskTableImportToCsvRelationPersistenceManager.insert(connection, relation);
+            } catch (SQLException sqlException) {
+                logger.error(String.format("Something went wrong while trying to insert XSKTableImportArtifact located at: %s", tableImportArtifact.getLocation()), sqlException);
+            }
+        }
     }
-  }
 
-  @Override
-  public void deleteCsvAndHdbtiRelations(String hdbtiFileName, Connection connection) {
-    String sql = String
-        .format("DELETE FROM \"XSK_TABLE_IMPORT_TO_CSV\" WHERE \"HDBTI_LOCATION\"='%s'", XSKUtils.convertToFullPath(hdbtiFileName));
-    try (PreparedStatement statement = connection.prepareStatement(sql)) {
-      statement.execute();
-    } catch (SQLException e) {
-      logger.error("Error occurred while clearing the HdbtiToCsv relations from the DB", e);
+    @Override
+    public void deleteCsvAndHdbtiRelations(String hdbtiFileName) {
+        String sql = String.format("DELETE FROM \"XSK_TABLE_IMPORT_TO_CSV\" WHERE \"HDBTI_LOCATION\"='%s'", hdbtiFileName);
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.execute();
+        } catch (SQLException e) {
+            logger.error("Error occurred while clearing the HdbtiToCsv relations from the DB", e);
+        }
     }
-  }
 
-  @Override
-  public List<XSKTableImportToCsvRelation> getAllHdbtiToCsvRelations() {
-    List<XSKTableImportToCsvRelation> listOfcsvToHdbtiRelations = new ArrayList<>();
-    try (Connection connection = dataSource.getConnection()) {
-      listOfcsvToHdbtiRelations = xskTableImportToCsvRelationPersistenceManager.findAll(connection, XSKTableImportToCsvRelation.class);
-    } catch (SQLException e) {
-      logger.error("Error occured while retrieving the HdbtiToCsv relations from DB", e);
+    @Override
+    public List<XSKTableImportToCsvRelation> getAllHdbtiToCsvRelations() {
+        List<XSKTableImportToCsvRelation> listOfcsvToHdbtiRelations = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            listOfcsvToHdbtiRelations = xskTableImportToCsvRelationPersistenceManager.findAll(connection, XSKTableImportToCsvRelation.class);
+        } catch (SQLException e) {
+            logger.error("Error occured while retrieving the HdbtiToCsv relations from DB", e);
+        }
+        return listOfcsvToHdbtiRelations;
     }
-    return listOfcsvToHdbtiRelations;
-  }
 
-  @Override
-  public boolean hasCsvChanged(XSKTableImportToCsvRelation tableImportToCsvRelation, String csvContent) {
-    return !tableImportToCsvRelation.getCsvHash().equals(DigestUtils.md5Hex(csvContent));
-  }
+    @Override
+    public boolean hasCsvChanged(XSKTableImportToCsvRelation tableImportToCsvRelation, String csvContent) {
+        return !tableImportToCsvRelation.getCsvHash().equals(DigestUtils.md5Hex(csvContent));
+    }
 
-  @Override
-  public List<XSKTableImportToCsvRelation> getAffectedHdbtiToCsvRelations(String csvFilePath) {
-    List<XSKTableImportToCsvRelation> relations = getAllHdbtiToCsvRelations();
-    return relations.stream().filter(relation -> relation.getCsv().equals(XSKUtils.convertToFullPath(csvFilePath)))
-        .collect(Collectors.toList());
-  }
+    @Override
+    public List<XSKTableImportToCsvRelation> getAffectedHdbtiToCsvRelations(String csvFilePath) {
+        List<XSKTableImportToCsvRelation> relations = getAllHdbtiToCsvRelations();
+        return relations.stream().filter(relation -> relation.getCsv().equals(XSKUtils.convertToFullPath(csvFilePath))).collect(Collectors.toList());
+    }
 
-  public String convertToActualFileName(String fileNamePath) {
-    String fileName = fileNamePath.substring(fileNamePath.lastIndexOf(':') + 1);
+    @Override
+    public PersistenceManager<XSKTableImportToCsvRelation> getXskTableImportToCsvRelationPersistenceManager() {
+        return xskTableImportToCsvRelationPersistenceManager;
+    }
 
-    return "/registry/public/" + fileNamePath.substring(0, fileNamePath.indexOf(':')).replaceAll("\\.", "/") + "/" + fileName;
-  }
+    @Override
+    public DataSource getDataSource() {
+        return dataSource;
+    }
 }

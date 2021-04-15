@@ -11,17 +11,13 @@
  */
 package com.sap.xsk.hdbti.api;
 
-public interface IXSKTableImportModel {
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-  /**
-   * File extension for *.hdbti files
-   */
-  public static final String FILE_EXTENSION_TABLE_IMPORT = ".hdbti";
-
-  public static final String FILE_EXTENSION_CSV = ".csv";
-
-  public static final String TYPE_CSV = "CSV";
-
-
-  public static final String TYPE_HDBTI = "HDBTI";
+public interface IXSKHDBTIProcessor {
+    void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection)
+        throws IOException, SQLException, XSKDataStructuresException, XSKTableImportException;
 }

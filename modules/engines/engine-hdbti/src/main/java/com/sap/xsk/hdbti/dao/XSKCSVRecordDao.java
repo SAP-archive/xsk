@@ -13,22 +13,25 @@ package com.sap.xsk.hdbti.dao;
 
 import static java.lang.String.format;
 
+import com.sap.xsk.hdbti.api.IXSKCSVRecordDao;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.sql.DataSource;
+import com.sap.xsk.hdbti.utils.XSKCsvRecordMetadata;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.cxf.common.util.StringUtils;
 import org.eclipse.dirigible.commons.api.helpers.DateTimeUtils;
 import org.eclipse.dirigible.database.ds.model.transfer.TableColumn;
 import org.eclipse.dirigible.database.ds.model.transfer.TableMetadataHelper;
 import org.eclipse.dirigible.database.persistence.PersistenceException;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.records.DeleteBuilder;
 import org.eclipse.dirigible.database.sql.builders.records.InsertBuilder;
@@ -37,8 +40,7 @@ import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
-public class XSKCSVRecordDao {
+public class XSKCSVRecordDao implements IXSKCSVRecordDao {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKCSVRecordDao.class);
 
@@ -48,29 +50,33 @@ public class XSKCSVRecordDao {
   @Inject
   private DBMetadataUtil dbMetadataUtil;
 
-  public void save(CSVRecord csvRecord, String tableName, Boolean distinguishEmptyFromNull) throws SQLException {
+  @Override
+  public void save(XSKCsvRecordMetadata csvRecordMetadata) throws SQLException {
+    String tableName = csvRecordMetadata.getTableMetadataModel().getTableName();
     try (Connection connection = dataSource.getConnection()) {
       List<TableColumn> availableTableColumns = TableMetadataHelper.getColumns(connection, tableName);
-
-      for (TableColumn tableColumn : availableTableColumns) {
-        logger.debug("    {}: {}", tableColumn.getName(), tableColumn.getType());
+      for (TableColumn availableTableColumn : availableTableColumns) {
+        logger.debug("    {}: {}", availableTableColumn.getName(), availableTableColumn.getType());
       }
 
       InsertBuilder insertBuilder = new InsertBuilder(SqlFactory.deriveDialect(connection));
       insertBuilder.into(tableName);
+      CSVRecord csvRecord = csvRecordMetadata.getCsvRecord();
       for (int i = 0; i < csvRecord.size(); i++) {
         String columnName = availableTableColumns.get(i).getName();
         insertBuilder.column("\"" + columnName + "\"").value("?");
       }
 
       try (PreparedStatement statement = connection.prepareStatement(insertBuilder.generate())) {
-        executeInsertPreparedStatement(distinguishEmptyFromNull, csvRecord, availableTableColumns, statement);
+        executeInsertPreparedStatement(csvRecordMetadata, availableTableColumns, statement);
         logger.info(format("Table row with id: %s was CREATED successfully in %s.", csvRecord.get(0), tableName));
       }
     }
   }
 
-  public void update(CSVRecord csvRecord, String tableName, String pkValue, Boolean distinguishEmptyFromNull) throws SQLException {
+  @Override
+  public void update(XSKCsvRecordMetadata csvRecordMetadata) throws SQLException {
+    String tableName = csvRecordMetadata.getTableMetadataModel().getTableName();
     try (Connection connection = dataSource.getConnection()) {
       List<TableColumn> availableTableColumns = TableMetadataHelper.getColumns(connection, tableName);
       UpdateBuilder updateBuilder = new UpdateBuilder(SqlFactory.deriveDialect(connection));
@@ -79,21 +85,30 @@ public class XSKCSVRecordDao {
         logger.debug("    {}: {}", tableColumn.getName(), tableColumn.getType());
       }
 
-      for (int i = 1; i < csvRecord.size(); i++) {
+      CSVRecord csvRecord = csvRecordMetadata.getCsvRecord();
+      for (int i = 0; i < csvRecord.size(); i++) {
         String columnName = availableTableColumns.get(i).getName();
+        if (columnName.equals(csvRecordMetadata.getPkColumnName())) {
+          continue;
+        }
+
         updateBuilder.set("\"" + columnName + "\"", "?");
       }
 
-      String pkColumnName = availableTableColumns.get(0).getName();
-      updateBuilder.where(String.format("%s = ?", pkColumnName));
+      if (csvRecordMetadata.getHeaderNames().size() > 0) {
+        updateBuilder.where(String.format("%s = ?", csvRecordMetadata.getPkColumnName()));
+      } else {
+        updateBuilder.where(String.format("%s = ?", availableTableColumns.get(0).getName()));
+      }
 
       try (PreparedStatement statement = connection.prepareStatement(updateBuilder.generate())) {
-        executeUpdatePreparedStatement(distinguishEmptyFromNull, csvRecord, availableTableColumns, statement);
+        executeUpdatePreparedStatement(csvRecordMetadata, availableTableColumns, statement);
         logger.info(format("Table row with id: %s was UPDATED successfully in %s.", csvRecord.get(0), tableName));
       }
     }
   }
 
+  @Override
   public void deleteAll(List<String> ids, String tableName) throws SQLException {
     if (ids.isEmpty()) {
       return;
@@ -110,6 +125,7 @@ public class XSKCSVRecordDao {
     }
   }
 
+  @Override
   public void delete(String id, String tableName) throws SQLException {
     if (StringUtils.isEmpty(id) || StringUtils.isEmpty(tableName)) {
       return;
@@ -126,48 +142,98 @@ public class XSKCSVRecordDao {
     }
   }
 
-  private void executeInsertPreparedStatement(Boolean distinguishEmptyFromNull, CSVRecord csvRecord,
-      List<TableColumn> availableTableColumns, PreparedStatement statement) throws SQLException {
-    for (int i = 0; i < csvRecord.size(); i++) {
-      String value = csvRecord.get(i);
-      int columnType = availableTableColumns.get(i).getType();
-      if (!StringUtils.isEmpty(value)) {
-        setValue(statement, i + 1, columnType, value);
-      } else {
-        if (distinguishEmptyFromNull) {
-          setValue(statement, i + 1, columnType, "");
-        } else {
-          setValue(statement, i + 1, columnType, value);
-        }
-      }
+  @Override
+  public DataSource getDataSource() {
+    return dataSource;
+  }
 
+  @Override
+  public DBMetadataUtil getDbMetadataUtil() {
+    return dbMetadataUtil;
+  }
+
+  private void executeInsertPreparedStatement(XSKCsvRecordMetadata csvRecordMetadata, List<TableColumn> tableColumns, PreparedStatement statement) throws SQLException {
+    if (csvRecordMetadata.getHeaderNames().size() > 0) {
+      insertCsvWithHeader(csvRecordMetadata, tableColumns, statement);
+    } else {
+      insertCsvWithoutHeader(csvRecordMetadata, tableColumns, statement);
     }
 
     statement.execute();
   }
 
-  private void executeUpdatePreparedStatement(Boolean distinguishEmptyFromNull, CSVRecord csvRecord,
-      List<TableColumn> availableTableColumns, PreparedStatement statement) throws SQLException {
-    for (int i = 1; i < csvRecord.size(); i++) {
-      String value = csvRecord.get(i);
-      int columnType = availableTableColumns.get(i).getType();
-      if (!StringUtils.isEmpty(value)) {
-        setValue(statement, i, columnType, value);
-      } else {
-        if (distinguishEmptyFromNull) {
-          setValue(statement, i, columnType, "");
-        } else {
-          setValue(statement, i, columnType, value);
-        }
-      }
+  private void insertCsvWithHeader(XSKCsvRecordMetadata csvRecordMetadata, List<TableColumn> tableColumns, PreparedStatement statement) throws SQLException {
 
+    for (int i = 0; i < tableColumns.size(); i++) {
+      String columnName = tableColumns.get(i).getName();
+      int columnType = tableColumns.get(i).getType();
+      String value = csvRecordMetadata.getCsvValueForColumn(columnName);
+      setPreparedStatementValue(csvRecordMetadata.isDistinguishEmptyFromNull(), statement, i + 1, value, columnType);
+    }
+  }
+
+  private void insertCsvWithoutHeader(XSKCsvRecordMetadata csvRecordMetadata, List<TableColumn> tableColumns, PreparedStatement statement) throws SQLException {
+    for (int i = 0; i < csvRecordMetadata.getCsvRecord().size(); i++) {
+      String value = csvRecordMetadata.getCsvRecord().get(i);
+      int columnType = tableColumns.get(i).getType();
+
+      setPreparedStatementValue(csvRecordMetadata.isDistinguishEmptyFromNull(), statement, i + 1, value, columnType);
+    }
+  }
+
+  private void executeUpdatePreparedStatement(XSKCsvRecordMetadata csvRecordMetadata, List<TableColumn> tableColumns, PreparedStatement statement) throws SQLException {
+    if (csvRecordMetadata.getHeaderNames().size() > 0) {
+      updateCsvWithHeader(csvRecordMetadata, tableColumns, statement);
+    } else {
+      updateCsvWithoutHeader(csvRecordMetadata, tableColumns, statement);
     }
 
-    int pkColumnType = availableTableColumns.get(0).getType();
+    statement.execute();
+  }
+
+  private void updateCsvWithHeader(XSKCsvRecordMetadata csvRecordMetadata, List<TableColumn> tableColumns, PreparedStatement statement) throws SQLException {
+    CSVRecord csvRecord = csvRecordMetadata.getCsvRecord();
+
+    for (int i = 1; i < tableColumns.size(); i++) {
+      String columnName = tableColumns.get(i).getName();
+      String value = csvRecordMetadata.getCsvValueForColumn(columnName);
+
+      int columnType = tableColumns.get(i).getType();
+
+      setPreparedStatementValue(csvRecordMetadata.isDistinguishEmptyFromNull(), statement, i, value,
+          columnType);
+    }
+
+    int pkColumnType = tableColumns.get(0).getType();
+    int lastStatementPlaceholderIndex = csvRecord.size();
+
+    setValue(statement, lastStatementPlaceholderIndex, pkColumnType, csvRecordMetadata.getCsvRecordPkValue());
+  }
+
+  private void updateCsvWithoutHeader(XSKCsvRecordMetadata csvRecordMetadata, List<TableColumn> tableColumns, PreparedStatement statement) throws SQLException {
+    CSVRecord csvRecord = csvRecordMetadata.getCsvRecord();
+    for (int i = 1; i < csvRecord.size(); i++) {
+      String value = csvRecord.get(i);
+      int columnType = tableColumns.get(i).getType();
+      setPreparedStatementValue(csvRecordMetadata.isDistinguishEmptyFromNull(), statement, i, value, columnType);
+    }
+
+    int pkColumnType = tableColumns.get(0).getType();
     int lastStatementPlaceholderIndex = csvRecord.size();
     setValue(statement, lastStatementPlaceholderIndex, pkColumnType, csvRecord.get(0));
+  }
 
-    statement.execute();
+  private void setPreparedStatementValue(Boolean distinguishEmptyFromNull, PreparedStatement statement, int i, String value, int columnType)
+      throws SQLException {
+    if (!StringUtils.isEmpty(value)) {
+      setValue(statement, i, columnType, value);
+    } else {
+      if (distinguishEmptyFromNull) {
+        setValue(statement, i, columnType, "");
+      } else {
+        setValue(statement, i, columnType, value);
+      }
+    }
   }
 
   /**

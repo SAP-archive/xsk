@@ -131,18 +131,15 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
 
     if (resource.getProperty(RESOURCE_REF_NAME) == null) {
       resource.setProperty(RESOURCE_REF_NAME, resource.getName());
-      if (LOGGER.isLoggable(Level.FINE)) {
-        LOGGER.fine("Injecting resource ref name as property to " + resource);
-      }
+      LOGGER.log(Level.FINE, "Injecting resource ref name as property to " + resource);
+
     }
   }
 
   private void addFactoryClassAsResourceProperty(ResourceBase resource) {
     if (resource.getProperty(FACTORY_PROPERTY) == null || resource.getProperty(FACTORY_PROPERTY).equals(PERSISTENCE_FACTORY_CLASS_NAME)) {
       resource.setProperty(FACTORY_PROPERTY, getFactoryClassName());
-      if (LOGGER.isLoggable(Level.FINE)) {
-        LOGGER.fine("Injecting factory " + getFactoryClassName() + " to " + resource);
-      }
+      LOGGER.log(Level.FINE, "Injecting factory " + getFactoryClassName() + " to " + resource);
     }
   }
 
@@ -160,4 +157,5 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
     }
     return this.factoryClassName;
   }
+
 }

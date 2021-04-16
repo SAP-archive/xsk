@@ -3,7 +3,6 @@ package io.dirigible.smart.datasource.object.factory;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,14 +32,14 @@ public class SmartDatasourceObjectFactory implements ObjectFactory {
   private ObjectFactory tomcatObjectFactory;
 
   @Override
-    public Object getObjectInstance(Object obj, Name name, Context ctx, Hashtable<?, ?> environment) throws Exception {
-    logger.log(Level.FINE, "getObjectInstance method entry");
+  public Object getObjectInstance(Object obj, Name name, Context ctx, Hashtable<?, ?> environment) throws Exception {
+    logger.fine("getObjectInstance method entry");
 
     if (shouldProcessResourceRef(obj)) {
       enhanceResourceRef((ResourceRef) obj, name.toString());
     }
 
-    logger.log(Level.FINE, "getObjectInstance method exit - delegating to default tomcat OF");
+    logger.fine("getObjectInstance method exit - delegating to default tomcat OF");
     return getTomcatDefaultObjectFactory().getObjectInstance(obj, name, ctx, environment);
   }
 
@@ -50,11 +49,11 @@ public class SmartDatasourceObjectFactory implements ObjectFactory {
     }
     Reference ref = (Reference) obj;
     if (DataSource.class.getName().equals(ref.getClassName())) {
-      logger.log(Level.FINE, "Resource ref [ " + ref.getClassName() + "] will be processed.");
+      logger.fine("Resource ref [ " + ref.getClassName() + "] will be processed.");
       return true;
     }
-    logger.log(Level.FINE, "Resource ref [ " + ref.getClassName() + "] is discarded.");
-    logger.log(Level.FINE, ref.toString());
+    logger.fine("Resource ref [ " + ref.getClassName() + "] is discarded.");
+    logger.fine(ref.toString());
     return false;
   }
 
@@ -63,22 +62,22 @@ public class SmartDatasourceObjectFactory implements ObjectFactory {
       Class<?> factoryClass;
 
       String tomcatVersionString = ServerInfo.getServerNumber();
-      logger.log(Level.FINE, "Tomcat version string " + tomcatVersionString);
+      logger.fine("Tomcat version string " + tomcatVersionString);
       Pattern p = Pattern.compile("[0-9].[0-9].([0-9]+)");
       Matcher match = p.matcher(tomcatVersionString);
 
       try {
         if (match.find()) {
           int majorVersion = Integer.parseInt(match.group(0).substring(0, 1));
-          logger.log(Level.FINE, "Major version " + majorVersion);
+          logger.fine("Major version " + majorVersion);
           if (majorVersion <= 7) {
             factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT7_OF_CLASS_NAME);
           } else {
             factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT8_OF_CLASS_NAME);
-            logger.log(Level.FINE, "Major version " + majorVersion);
+            logger.fine("Major version " + majorVersion);
           }
         } else {
-          logger.log(Level.FINE, "Version not found,  trying to load " + DEFAULT_TOMCAT7_OF_CLASS_NAME);
+          logger.fine("Version not found,  trying to load " + DEFAULT_TOMCAT7_OF_CLASS_NAME);
           factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT7_OF_CLASS_NAME);
         }
         tomcatObjectFactory = (ObjectFactory) factoryClass.newInstance(); //is new instance ok? return tomcatObjectFactory;
@@ -94,7 +93,7 @@ public class SmartDatasourceObjectFactory implements ObjectFactory {
   }
 
   void enhanceResourceRef(ResourceRef ref, String name, Map<String, String> envVars) {
-    logger.log(Level.FINE, "Enhancing resource ref...");
+    logger.fine("Enhancing resource ref...");
 
     String prefix = name + getPrefixDelimiter();
 
@@ -115,7 +114,7 @@ public class SmartDatasourceObjectFactory implements ObjectFactory {
         ref.add(refAddr);
       }
     }
-    logger.log(Level.FINE, "Resource ref enhanced");
+    logger.fine("Resource ref enhanced");
   }
 
   String getPrefixDelimiter() {
@@ -125,13 +124,13 @@ public class SmartDatasourceObjectFactory implements ObjectFactory {
   String getPrefixDelimiter(Map<String, String> envVariables) {
     if (envPrefixDelimiter == null) {
       String value = envVariables.get(ENV_PREFIX_DELIMITER_KEY);
-      logger.log(Level.FINE, "Delimiter value read from env variables is [" + value + "]");
+      logger.fine("Delimiter value read from env variables is [" + value + "]");
       if (value == null || value.equals("")) {
         envPrefixDelimiter = ENV_PREFIX_DELIMITER_DEFAULT;
-        logger.log(Level.FINE, "Setting default delimiter " + ENV_PREFIX_DELIMITER_DEFAULT);
+        logger.fine("Setting default delimiter " + ENV_PREFIX_DELIMITER_DEFAULT);
       } else {
         envPrefixDelimiter = value;
-        logger.log(Level.FINE, "Setting custom delimiter " + value);
+        logger.fine("Setting custom delimiter " + value);
       }
     }
     return envPrefixDelimiter;

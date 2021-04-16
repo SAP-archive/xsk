@@ -32,9 +32,7 @@ public class DelegatingObjectFactory implements ObjectFactory {
 
       objectInstance = getObjectInstanceFromDefaults(obj, name, nameCtx, environment);
       if (objectInstance != null) {
-        if (LOGGER.isLoggable(Level.FINE)) {
-          LOGGER.fine("Object instance is obtained from default factory.");
-        }
+        LOGGER.fine("Object instance is obtained from default factory.");
         return objectInstance;
       }
     }
@@ -42,8 +40,7 @@ public class DelegatingObjectFactory implements ObjectFactory {
   }
 
   private Object getObjectInstanceFromFactory(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment,
-      final String referenceType)
-      throws NamingException {
+      final String referenceType) throws NamingException {
     final List<ObjectFactory> factories = getObjectFactories(referenceType);
     if (factories != null) {
       for (ObjectFactory factory : factories) {
@@ -51,29 +48,21 @@ public class DelegatingObjectFactory implements ObjectFactory {
         try {
           objectInstance = factory.getObjectInstance(obj, name, nameCtx, environment);
         } catch (NameNotFoundException nne) {
-          if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Will move to next factory as facroty [" + factory + "] could not retrieve object instance for name [" + name
-                + "]. NameNotFoundException was thrown. " + nne.getMessage());
-          }
+          LOGGER.fine("Will move to next factory as facroty [" + factory + "] could not retrieve object instance for name [" + name
+              + "]. NameNotFoundException was thrown. " + nne.getMessage());
         } catch (Exception e) {
-          if (LOGGER.isLoggable(Level.SEVERE)) {
-            LOGGER.severe("Exception is thrown by facroty [" + factory + "] during retrieving object instance. Exception is: " + e);
-          }
+          LOGGER.severe("Exception is thrown by facroty [" + factory + "] during retrieving object instance. Exception is: " + e);
           NamingException ne = new NamingException("Cannot create resource  object instance due to exception in the object factory");
           ne.initCause(e);
           throw ne;
         }
         if (objectInstance != null) {
-          if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Object instance with name [" + name + "]is created by factory [" + factory + "].");
-          }
+          LOGGER.fine("Object instance with name [" + name + "]is created by factory [" + factory + "].");
           return objectInstance;
         }
       }
     } else {
-      if (LOGGER.isLoggable(Level.FINE)) {
-        LOGGER.fine("No object factories are found for referenceType [" + referenceType + "].");
-      }
+      LOGGER.fine("No object factories are found for referenceType [" + referenceType + "].");
     }
     return null;
   }
@@ -91,23 +80,17 @@ public class DelegatingObjectFactory implements ObjectFactory {
         objectInstance = objectFactory.getObjectInstance(reference, name, nameCtx, environment);
       }
     } catch (NameNotFoundException nne) {
-      if (LOGGER.isLoggable(Level.FINE)) {
-        LOGGER.fine("Default object creation factory could not retrieve object instance for name [" + name
-            + "]. NameNotFoundException was thrown. " + nne.getMessage());
-      }
+      LOGGER.fine("Default object creation factory could not retrieve object instance for name [" + name
+          + "]. NameNotFoundException was thrown. " + nne.getMessage());
     } catch (Exception e) {
-      if (LOGGER.isLoggable(Level.SEVERE)) {
-        LOGGER.severe("Exception is thrown by default object creation facroty during retrieving object instance. Exception is: " + e);
-      }
+      LOGGER.severe("Exception is thrown by default object creation facroty during retrieving object instance. Exception is: " + e);
       NamingException ne = new NamingException("Cannot create resource  object instance due to exception in the object factory");
       ne.initCause(e);
       throw ne;
     } finally {
       if (removedFactory != null) {
         reference.add(removedFactory);
-        if (LOGGER.isLoggable(Level.FINE)) {
-          LOGGER.fine("Add [" + this.getClass().getName() + "] to the communication endpoits of reference object  [" + reference + "].");
-        }
+        LOGGER.fine("Add [" + this.getClass().getName() + "] to the communication endpoits of reference object  [" + reference + "].");
       }
     }
     return objectInstance;
@@ -121,10 +104,7 @@ public class DelegatingObjectFactory implements ObjectFactory {
       if (content != null && this.getClass().getName().equals(content.toString())) {
         reference.remove(i);
         removed = refAddr;
-        if (LOGGER.isLoggable(Level.FINE)) {
-          LOGGER
-              .fine("Remove [" + this.getClass().getName() + "] from the communication endpoits of reference object  [" + reference + "].");
-        }
+        LOGGER.fine("Remove [" + this.getClass().getName() + "] from the communication endpoits of reference object  [" + reference + "].");
         break;
       }
     }
@@ -132,21 +112,15 @@ public class DelegatingObjectFactory implements ObjectFactory {
   }
 
   protected List<ObjectFactory> getObjectFactories(final String referenceType) {
-    if (LOGGER.isLoggable(Level.FINE)) {
-      LOGGER.fine(this + " - Searching for object factories... ");
-    }
+    LOGGER.fine(this + " - Searching for object factories... ");
 
     ClassLoader appClassLoader = Thread.currentThread().getContextClassLoader();
-    if (LOGGER.isLoggable(Level.FINE)) {
-      LOGGER.fine("Context classloader is set, we expect to be app classloader " + appClassLoader);
-    }
+    LOGGER.fine("Context classloader is set, we expect to be app classloader " + appClassLoader);
     List<ObjectFactory> factoriesVisibleFromApp = getObjectFactories(referenceType, appClassLoader);
 
     List<ObjectFactory> result = new ArrayList<>(factoriesVisibleFromApp);
 
-    if (LOGGER.isLoggable(Level.FINE)) {
-      LOGGER.fine(this + " - Found object factories visible from app loader " + factoriesVisibleFromApp);
-    }
+    LOGGER.fine(this + " - Found object factories visible from app loader " + factoriesVisibleFromApp);
     return result;
   }
 

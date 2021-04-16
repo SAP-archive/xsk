@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dynamic-db
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dynamic-db
+  template:
+    metadata:
+      labels:
+        app: dynamic-db
+    spec:
+      containers:
+        - name: dynamic-db
+          image: radiatorspring/dynamic-db:latest
+          env:
+            - name: DefaultDB_url
+              value: jdbc:sap://43dcda2a-75aa-459f-928f-b92ca222c506.hana.trial-eu10.hanacloud.ondemand.com:443/db
+            - name: DefaultDB_username
+              value: DBADMIN
+            - name: DefaultDB_password
+              value: Abcd1234
+            - name: DefaultDB_driverClassName
+              value: com.sap.db.jdbc.Driver
+            - name: DefaultDB_maxWait
+              value: "10000"
+            - name: DefaultDB_maxIdle
+              value: "30"
+            - name: DefaultDB_maxActive
+              value: "100"
+          ports:
+            - containerPort: 8080
+              name: dynamic-db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dynamic-db
+  namespace: default
+  labels:
+    app: dynamic-db
+spec:
+  ports:
+    - port: 8080
+      name: dynamic-db
+  selector:
+    app: dynamic-db

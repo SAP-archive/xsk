@@ -28,11 +28,6 @@ public class XSKDataStructureHDBSequenceModel extends XSKDataStructureModel {
 
   private Boolean publicc;
 
-  private String depends_on_table;
-  private String depends_on_view;
-  private List<String> depends_on;
-
-
   public Integer getIncrement_by() {
     return increment_by;
   }
@@ -104,28 +99,5 @@ public class XSKDataStructureHDBSequenceModel extends XSKDataStructureModel {
   public void setPublicc(Boolean publicc) {
     this.publicc = publicc;
   }
-
-  public String getDepends_on_table() {
-    return depends_on_table;
-  }
-
-  public void setDepends_on_table(String depends_on_table) {
-    this.depends_on_table = depends_on_table;
-  }
-
-  public String getDepends_on_view() {
-    return depends_on_view;
-  }
-
-  public void setDepends_on_view(String depends_on_view) {
-    this.depends_on_view = depends_on_view;
-  }
-
-  public List<String> getDepends_on() {
-    return depends_on;
-  }
-
-  public void setDepends_on(List<String> depends_on) {
-    this.depends_on = depends_on;
-  }
+  
 }

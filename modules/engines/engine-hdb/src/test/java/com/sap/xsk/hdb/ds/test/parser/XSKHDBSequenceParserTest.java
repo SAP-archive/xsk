@@ -31,7 +31,7 @@ public class XSKHDBSequenceParserTest {
   @Test
   public void parseHanaXSClassicContent() throws Exception {
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/SampleSequence_HanaXSClassic.hdbsequence"),
+        .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/SampleSequence_HanaXSClassic.hdbsequence"),
             StandardCharsets.UTF_8);
     XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
         .parse("/test/xsk/com/sap/SampleSequence_HanaXSClassic.hdbsequence", content);
@@ -49,7 +49,7 @@ public class XSKHDBSequenceParserTest {
   @Test
   public void parseHanaXSAdvancedContent() throws Exception {
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence"),
+        .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence"),
             StandardCharsets.UTF_8);
     XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
         .parse("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence", content);
@@ -61,7 +61,8 @@ public class XSKHDBSequenceParserTest {
   @Test
   public void parseGrammarUnreadableContent() throws Exception {
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/InvalidContent.hdbsequence"), StandardCharsets.UTF_8);
+        .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/InvalidContent.hdbsequence"),
+            StandardCharsets.UTF_8);
 
     assertThrows(XSKDataStructuresException.class, () -> {
       new XSKHDBSequenceParser().parse("/test/xsk/com/sap/InvalidContent.hdbsequence", content);
@@ -72,7 +73,7 @@ public class XSKHDBSequenceParserTest {
   @Test
   public void parseRepetitiveProperties() throws Exception {
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/RepetitivePropsSequence.hdbsequence"),
+        .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/RepetitivePropsSequence.hdbsequence"),
             StandardCharsets.UTF_8);
 
     assertThrows(XSKHDBSequenceDuplicatePropertyException.class, () -> {
@@ -83,7 +84,7 @@ public class XSKHDBSequenceParserTest {
   @Test
   public void parseRandomlyOrderedContent() throws Exception {
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/test/xsk/com/sap/RandomlyOrderedSequence.hdbsequence"),
+        .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/RandomlyOrderedSequence.hdbsequence"),
             StandardCharsets.UTF_8);
     XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
         .parse("/test/xsk/com/sap/RandomlyOrderedSequence.hdbsequence", content);

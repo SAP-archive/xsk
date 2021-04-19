@@ -37,6 +37,11 @@ public class XSKHDBTestModule extends AbstractModule {
         .join();
   }
 
+
+  static {
+    startContainers();
+  }
+
   @Override
   protected void configure() {
     install(new XSKHDBModule());
@@ -44,7 +49,7 @@ public class XSKHDBTestModule extends AbstractModule {
 
   @Provides
   static DataSource getDataSource() {
-    startContainers();
+    //startContainers();
     BasicDataSource basicDataSource = new BasicDataSource();
     basicDataSource.setDriverClassName(postgresContainer.getDriverClassName());
     basicDataSource.setUrl(postgresContainer.getJdbcUrl());
@@ -52,7 +57,6 @@ public class XSKHDBTestModule extends AbstractModule {
     basicDataSource.setPassword(postgresContainer.getPassword());
     basicDataSource.setDefaultAutoCommit(true);
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
-   // To do: use diff data source so that driver can be set explicitly without new pom dependency --> postgresContainer.getJdbcDriverInstance().
     return basicDataSource;
 
   }

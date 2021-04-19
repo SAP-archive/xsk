@@ -32,8 +32,13 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class XSKHDBSequenceParserITCase {
 
@@ -49,7 +54,7 @@ public class XSKHDBSequenceParserITCase {
   }
 
   @Test
-  public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException {
+  public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     FileSystemRepository fileRepo = new LocalRepository("/usr/local/target/dirigible/repository/root");
     RepositoryPath path = new RepositoryPath("/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
     byte[] content = XSKHDBSequenceParserITCase.class
@@ -59,7 +64,14 @@ public class XSKHDBSequenceParserITCase {
     resource.setContent(content);
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
-    List<XSKDataStructureHDBSequenceModel> students = sequenceManager.findAll(connection, XSKDataStructureHDBSequenceModel.class);
-    students.size();
+
+    Statement stmt = connection.createStatement();
+    List<String> dbSequences = new ArrayList<>();
+    ResultSet rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
+    while (rs.next()) {
+      dbSequences.add(rs.getString("sequence_name"));
+    }
+    assertEquals(1, dbSequences.size());
+    assertEquals("sequence-itest::SampleSequence_HanaXSClassic", dbSequences.get(0));
   }
 }

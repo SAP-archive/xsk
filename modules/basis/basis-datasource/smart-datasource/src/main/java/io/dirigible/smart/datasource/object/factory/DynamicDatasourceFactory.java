@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import org.apache.catalina.util.ServerInfo;
 import org.apache.naming.ResourceRef;
 
-public class SmartDatasourceObjectFactory implements ObjectFactory {
+public class DynamicDataSourceFactory implements ObjectFactory {
 
   public static final String ENV_PREFIX_DELIMITER_DEFAULT = "_";
   public static final String ENV_PREFIX_DELIMITER_KEY = "smartobjectfactory_delimiter";
@@ -24,7 +24,7 @@ public class SmartDatasourceObjectFactory implements ObjectFactory {
   private static final String DEFAULT_TOMCAT7_OF_CLASS_NAME = "org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory";
   private static final String DEFAULT_TOMCAT8_OF_CLASS_NAME = "org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory";
 
-  private static final Logger logger = Logger.getLogger(SmartDatasourceObjectFactory.class.getName());
+  private static final Logger logger = Logger.getLogger(DynamicDataSourceFactory.class.getName());
   private String envPrefixDelimiter;
   private ObjectFactory tomcatObjectFactory;
 

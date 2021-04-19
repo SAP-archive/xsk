@@ -16,9 +16,6 @@ import javax.sql.DataSource;
 import org.apache.catalina.util.ServerInfo;
 import org.apache.naming.ResourceRef;
 
-/**
- * @author Katya Stoycheva
- */
 public class SmartDatasourceObjectFactory implements ObjectFactory {
 
   public static final String ENV_PREFIX_DELIMITER_DEFAULT = "_";
@@ -108,7 +105,6 @@ public class SmartDatasourceObjectFactory implements ObjectFactory {
         String refAddrKey = key.substring(prefix.length());
         String refAddrValue = envVars.get(key);
         StringRefAddr refAddr = new StringRefAddr(refAddrKey, refAddrValue);
-        //TODO: check for sensitive data?
         logger.info("Adding [" + refAddrKey + " / " + refAddrValue + "]");
 
         ref.add(refAddr);

@@ -12,11 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * 
- * @author Katya Stoycheva
- *
- */
 public class SmartDatasourceObjectFactoryTest {
 	private Map<String, String> testEnv; 
 	private SmartDatasourceObjectFactory factory = new SmartDatasourceObjectFactory();

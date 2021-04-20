@@ -17,10 +17,9 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
-import com.sap.xsk.hdb.ds.test.itest.hdbsequence.module.XSKHDBTestModule;
+import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
+import com.sap.xsk.hdb.ds.test.itest.hdbsequence.utils.TestContainerConstants;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
@@ -28,6 +27,8 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.testcontainers.containers.Network;
+import org.testcontainers.containers.PostgreSQLContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
@@ -47,20 +48,27 @@ import static org.junit.Assert.assertFalse;
  */
 public class XSKHDBSequenceParserPostgreSQLITCase {
 
+  private PostgreSQLContainer jdbcContainer;
   private Connection connection;
   private IXSKHDBCoreFacade facade;
-  private PersistenceManager<XSKDataStructureHDBSequenceModel> sequenceManager = new PersistenceManager<>();
+
 
   @Before
   public void setUp() throws SQLException {
-    Injector injector = Guice.createInjector(new XSKHDBTestModule());
+    Network network = Network.newNetwork();
+    jdbcContainer =
+        new PostgreSQLContainer<>(TestContainerConstants.POSTGRESQL_DOCKER_IMAGE)
+            .withNetwork(network)
+            .withNetworkAliases(TestContainerConstants.POSTGRESQL_DOCKER_NETWORK_ALIAS);
+    jdbcContainer.start();
+    Injector injector = Guice.createInjector(new XSKHDBTestModule(jdbcContainer));
     this.connection = injector.getInstance(DataSource.class).getConnection();
     this.facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
 
   @After
   public void cleanUp() {
-    XSKHDBTestModule.stopContainer();
+    jdbcContainer.stop();
   }
 
   @Test

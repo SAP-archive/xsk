@@ -222,7 +222,7 @@
 
   <profiles>
     <profile>
-      <id>integration-tests</id>
+      <id>itests</id>
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>

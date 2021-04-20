@@ -9,36 +9,21 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.test.itest.hdbsequence.module;
+package com.sap.xsk.hdb.ds.test.itest.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.JdbcDatabaseContainer;
 import javax.sql.DataSource;
 
 public class XSKHDBTestModule extends AbstractModule {
 
-  private static Network network = Network.newNetwork();
+  private JdbcDatabaseContainer jdbcContainer;
 
-  public static PostgreSQLContainer<?> postgresContainer =
-      new PostgreSQLContainer<>("postgres:alpine")
-          .withNetwork(network)
-          .withNetworkAliases("postgres");
-
-
-  public static void startContainer() {
-    postgresContainer.start();
-  }
-
-  public static void stopContainer() {
-    postgresContainer.stop();
-  }
-
-  static {
-    startContainer();
+  public XSKHDBTestModule(JdbcDatabaseContainer jdbcContainer) {
+    this.jdbcContainer = jdbcContainer;
   }
 
   @Override
@@ -47,12 +32,12 @@ public class XSKHDBTestModule extends AbstractModule {
   }
 
   @Provides
-  static DataSource getDataSource() {
+  public DataSource getDataSource() {
     BasicDataSource basicDataSource = new BasicDataSource();
-    basicDataSource.setDriverClassName(postgresContainer.getDriverClassName());
-    basicDataSource.setUrl(postgresContainer.getJdbcUrl());
-    basicDataSource.setUsername(postgresContainer.getUsername());
-    basicDataSource.setPassword(postgresContainer.getPassword());
+    basicDataSource.setDriverClassName(this.jdbcContainer.getDriverClassName());
+    basicDataSource.setUrl(this.jdbcContainer.getJdbcUrl());
+    basicDataSource.setUsername(this.jdbcContainer.getUsername());
+    basicDataSource.setPassword(this.jdbcContainer.getPassword());
     basicDataSource.setDefaultAutoCommit(true);
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
     return basicDataSource;

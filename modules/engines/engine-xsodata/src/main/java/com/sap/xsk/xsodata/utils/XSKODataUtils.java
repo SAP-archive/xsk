@@ -14,11 +14,6 @@ package com.sap.xsk.xsodata.utils;
 public class XSKODataUtils {
 
     private XSKODataUtils() {
-
     }
-
-//  public static String getTableName(XSKODataEntity model) {
-//    return new StringBuilder().append(model.getNamespace()).append("::").append(model.getName()).toString();
-//  }
 
 }

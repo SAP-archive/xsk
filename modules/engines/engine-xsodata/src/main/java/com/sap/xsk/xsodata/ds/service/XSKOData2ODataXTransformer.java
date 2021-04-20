@@ -44,44 +44,35 @@ public class XSKOData2ODataXTransformer {
         String[] result = new String[2];
         StringBuilder buff = new StringBuilder();
         String namespace = model.getService().getNamespace() != null ? model.getService().getNamespace() : "Default";
-        buff.append("<Schema Namespace=\"" + namespace + "\"\n")
-                .append("    xmlns=\"http://schemas.microsoft.com/ado/2008/09/edm\">\n");
+        buff.append("<Schema Namespace=\"").append(namespace).append("\"\n\t");
+        buff.append("xmlns=\"http://schemas.microsoft.com/ado/2008/09/edm\">\n");
 
         StringBuilder associations = new StringBuilder();
         StringBuilder entitySets = new StringBuilder();
         StringBuilder associationsSets = new StringBuilder();
         for (XSKHDBXSODATAEntity entity : model.getService().getEntities()) {
-            String tableName = entity.getRepositoryObject().getCatalogObjectName();//XSKODataUtils.getTableName(entity);
+            String tableName = entity.getRepositoryObject().getCatalogObjectName();
+            String entitySetName = entity.getAlias();
+
             PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName);
             List<PersistenceTableColumnModel> idColumns = tableMetadata.getColumns().stream().filter(PersistenceTableColumnModel::isPrimaryKey)
                     .collect(Collectors.toList());
-
-            if (idColumns == null || idColumns.isEmpty()) {
-                //logger.error("Table {} not available for entity {}, so it will be skipped.", tableName, entity.getName());
-                logger.error("Table {} not available for entity {}, so it will be skipped.", tableName, tableName);
+            if (idColumns.isEmpty()) {
+                logger.error("Table {} not available for entity {}, so it will be skipped.", tableName, entitySetName);
                 continue;
             }
 
-            buff.append("    <EntityType Name=\"" + entity.getAlias() + "Type\">\n").append("        <Key>\n");
-
-            idColumns.forEach(column -> buff.append("            <PropertyRef Name=\"" + column.getName() + "\" />\n"));
-
-            buff.append("        </Key>\n");
-            tableMetadata.getColumns().forEach(column -> buff.append("        <Property Name=\"" + column.getName() + "\"" +
-                    " Type=\"" + column.getType() + "\"" +
-                    " Nullable=\"" + column.isNullable() + "\"/>\n"
-
-            ));
+            buff.append("\t<EntityType Name=\"").append(entitySetName).append("Type\">\n");
+            buff.append("\t\t<Key>\n");
+            idColumns.forEach(column -> buff.append("\t\t\t<PropertyRef Name=\"").append(column.getName()).append("\" />\n"));
+            buff.append("\t\t</Key>\n");
+            tableMetadata.getColumns().forEach(column -> buff.append("\t\t<Property Name=\"").append(column.getName()).append("\"").append(" Type=\"").append(column.getType()).append("\"").append(" Nullable=\"").append(column.isNullable()).append("\"/>\n"));
 
             entity.getNavigates().forEach(relation -> {
                 XSKHDBXSODATAAssociation association = XSKODataCoreService.getAssociation(model, relation.getAssociation(), relation.getAliasNavigation());
                 String toRole = association.getPrincipal().getEntitySetName();
                 String fromRole = association.getDependent().getEntitySetName();
-                buff.append("        <NavigationProperty Name=\"" + relation.getAliasNavigation() + "\"" +
-                        " Relationship=\"" + getServiceNamespace(model) + relation.getAssociation() + "Type\"" +
-                        " FromRole=\"" + fromRole + "Dependent" + "\"" +
-                        " ToRole=\"" + toRole + "Principal" + "\"/>\n"
-                );
+                buff.append("\t\t<NavigationProperty Name=\"").append(relation.getAliasNavigation()).append("\"").append(" Relationship=\"").append(getServiceNamespace(model)).append(relation.getAssociation()).append("Type\"").append(" FromRole=\"").append(fromRole).append("Dependent").append("\"").append(" ToRole=\"").append(toRole).append("Principal").append("\"/>\n");
             });
 
             // keep associations for later use
@@ -91,48 +82,27 @@ public class XSKOData2ODataXTransformer {
                 String toRole = association.getDependent().getEntitySetName();
                 String fromMultiplicity = association.getPrincipal().getMultiplicityType().getText();
                 String toMultiplicity = association.getDependent().getMultiplicityType().getText();
-                associations.append("    <Association Name=\"" + relation.getAssociation() + "Type\">\n" +
-                        "        <End Type=\"" + getServiceNamespace(model) + fromRole + "Type\"" +
-                        " Role=\"" + fromRole + "Principal" + "\" Multiplicity=\"" + fromMultiplicity + "\"/>\n" +
-                        "        <End Type=\"" + getServiceNamespace(model) + toRole + "Type\"" +
-                        " Role=\"" + toRole + "Dependent" + "\" Multiplicity=\"" + toMultiplicity + "\"/>\n" +
-                        "    </Association>\n"
-                );
+                associations.append("\t<Association Name=\"").append(relation.getAssociation()).append("Type\">\n").append("\t\t<End Type=\"").append(getServiceNamespace(model)).append(fromRole).append("Type\"").append(" Role=\"").append(fromRole).append("Principal").append("\" Multiplicity=\"").append(fromMultiplicity).append("\"/>\n").append(" \t\t<End Type=\"").append(getServiceNamespace(model)).append(toRole).append("Type\"").append(" Role=\"").append(toRole).append("Dependent").append("\" Multiplicity=\"").append(toMultiplicity).append("\"/>\n").append("\t</Association>\n");
             });
 
             // keep entity sets for later use
-            entitySets.append("        <EntitySet Name=\"" + entity.getAlias() +
-                    "\" EntityType=\"" + getServiceNamespace(model) + entity.getAlias() + "Type\" />\n");
+            entitySets.append("\t\t<EntitySet Name=\"").append(entitySetName).append("\" EntityType=\"").append(getServiceNamespace(model)).append(entitySetName).append("Type\" />\n");
 
             // keep associations sets for later use
             entity.getNavigates().forEach(relation -> {
                 XSKHDBXSODATAAssociation association = XSKODataCoreService.getAssociation(model, relation.getAssociation(), relation.getAliasNavigation());
                 String fromRole = association.getPrincipal().getEntitySetName();
                 String toRole = association.getDependent().getEntitySetName();
-                //String fromSet = entity.getAlias();
-                //XSKHDBXSODATAEntity toSetEntity = XSKODataCoreService.getEntity(model, toRole, relation.getAliasNavigation());
-                //String toSet = toSetEntity.getAlias();
-                associationsSets.append("        <AssociationSet Name=\"" + relation.getAssociation() + "\"" +
-                        " Association=\"" + getServiceNamespace(model) + relation.getAssociation() + "Type\">\n" +
-                        "            <End Role=\"" + fromRole + "Principal" + "\"" +
-                        " EntitySet=\"" + fromRole + "\"/>\n" +
-                        "            <End Role=\"" + toRole + "Dependent" + "\"" +
-                        " EntitySet=\"" + toRole + "\"/>\n" +
-                        "        </AssociationSet>\n"
-                );
+                associationsSets.append("        <AssociationSet Name=\"").append(relation.getAssociation()).append("\"").append(" Association=\"").append(getServiceNamespace(model)).append(relation.getAssociation()).append("Type\">\n").append("\t\t\t<End Role=\"").append(fromRole).append("Principal").append("\"").append(" EntitySet=\"").append(fromRole).append("\"/>\n").append("\t\t\t<End Role=\"").append(toRole).append("Dependent").append("\"").append(" EntitySet=\"").append(toRole).append("\"/>\n").append("\t\t</AssociationSet>\n");
             });
-
-            buff.append("    </EntityType>\n");
+            buff.append("\t</EntityType>\n");
         }
 
         buff.append(associations.toString());
 
         StringBuilder container = new StringBuilder();
-//        buff.append("    <EntityContainer Name=\"" + FilenameUtils.getBaseName(model.getName()) + "EntityContainer\" m:IsDefaultEntityContainer=\"true\">\n");
         container.append(entitySets.toString());
         container.append(associationsSets.toString());
-//        buff.append("    </EntityContainer>\n");
-
         buff.append("</Schema>\n");
 
         result[0] = buff.toString();
@@ -146,7 +116,6 @@ public class XSKOData2ODataXTransformer {
         }
         return "";
     }
-
 }
 
 /**

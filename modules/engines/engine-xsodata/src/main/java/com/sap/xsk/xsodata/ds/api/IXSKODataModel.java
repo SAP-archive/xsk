@@ -13,14 +13,14 @@ package com.sap.xsk.xsodata.ds.api;
 
 public interface IXSKODataModel {
 
-  /**
-   * File extension for *.xsodata files
-   */
-  public static final String FILE_EXTENSION_XSODATA = ".xsodata";
+    /**
+     * File extension for *.xsodata files
+     */
+    String FILE_EXTENSION_XSODATA = ".xsodata";
 
-  /**
-   * Type OData
-   */
-  public static final String TYPE_ODATA = "XSODATA";
+    /**
+     * Type OData
+     */
+    String TYPE_ODATA = "XSODATA";
 
 }

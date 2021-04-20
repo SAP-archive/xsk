@@ -11,12 +11,14 @@
  */
 package com.sap.xsk.xsodata.ds.model;
 
-import java.sql.Timestamp;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAService;
+import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
+import java.sql.Timestamp;
 
 /**
  * The XS OData Model
@@ -41,7 +43,15 @@ public class XSKODataModel {
   private Timestamp createdAt;
 
   @Transient
-  private XSKODataService service;
+  private XSKHDBXSODATAService service;
+
+  public XSKHDBXSODATAService getService() {
+    return service;
+  }
+
+  public void setService(XSKHDBXSODATAService service) {
+    this.service = service;
+  }
 
   /**
    * Gets the location.
@@ -209,24 +219,6 @@ public class XSKODataModel {
       return false;
     }
     return true;
-  }
-
-  /**
-   * Getter for the Service
-   *
-   * @return the service
-   */
-  public XSKODataService getService() {
-    return service;
-  }
-
-  /**
-   * Setter for the Service
-   *
-   * @param service the service
-   */
-  public void setService(XSKODataService service) {
-    this.service = service;
   }
 
 }

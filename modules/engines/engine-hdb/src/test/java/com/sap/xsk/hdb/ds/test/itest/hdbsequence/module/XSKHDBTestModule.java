@@ -17,9 +17,7 @@ import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.lifecycle.Startables;
 import javax.sql.DataSource;
-import java.util.stream.Stream;
 
 public class XSKHDBTestModule extends AbstractModule {
 
@@ -31,15 +29,16 @@ public class XSKHDBTestModule extends AbstractModule {
           .withNetworkAliases("postgres");
 
 
-  public static void startContainers() {
-    Startables.deepStart(Stream.of(
-        postgresContainer))
-        .join();
+  public static void startContainer() {
+    postgresContainer.start();
   }
 
+  public static void stopContainer() {
+    postgresContainer.stop();
+  }
 
   static {
-    startContainers();
+    startContainer();
   }
 
   @Override
@@ -49,7 +48,6 @@ public class XSKHDBTestModule extends AbstractModule {
 
   @Provides
   static DataSource getDataSource() {
-    //startContainers();
     BasicDataSource basicDataSource = new BasicDataSource();
     basicDataSource.setDriverClassName(postgresContainer.getDriverClassName());
     basicDataSource.setUrl(postgresContainer.getJdbcUrl());

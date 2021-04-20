@@ -19,18 +19,17 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.test.itest.hdbsequence.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.eclipse.dirigible.repository.local.LocalResource;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,8 +38,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-public class XSKHDBSequenceParserITCase {
+/**
+ * XSKHDBSequenceParserITCase will test only sequence
+ * creation due existing sequence drop logic that is never invoked.
+ * Existing sequence alter logic is not checked due db limitations on retrieving sequence info.
+ */
+public class XSKHDBSequenceParserPostgreSQLITCase {
 
   private Connection connection;
   private IXSKHDBCoreFacade facade;
@@ -53,11 +58,18 @@ public class XSKHDBSequenceParserITCase {
     this.facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
 
+  @After
+  public void cleanUp() {
+    XSKHDBTestModule.stopContainer();
+  }
+
   @Test
   public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    final int EXPECTED_SEQUENCE_COUNT = 1;
+    final String EXPECTED_SEQUENCE_NAME = "sequence-itest::SampleSequence_HanaXSClassic";
     FileSystemRepository fileRepo = new LocalRepository("/usr/local/target/dirigible/repository/root");
     RepositoryPath path = new RepositoryPath("/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
-    byte[] content = XSKHDBSequenceParserITCase.class
+    byte[] content = XSKHDBSequenceParserPostgreSQLITCase.class
         .getResourceAsStream("/registry.public.sequence-itest/SampleSequence_HanaXSClassic.hdbsequence").readAllBytes();
 
     LocalResource resource = new LocalResource(fileRepo, path);
@@ -71,7 +83,13 @@ public class XSKHDBSequenceParserITCase {
     while (rs.next()) {
       dbSequences.add(rs.getString("sequence_name"));
     }
-    assertEquals(1, dbSequences.size());
-    assertEquals("sequence-itest::SampleSequence_HanaXSClassic", dbSequences.get(0));
+    assertEquals(EXPECTED_SEQUENCE_COUNT, dbSequences.size());
+    assertEquals(EXPECTED_SEQUENCE_NAME, dbSequences.get(0));
+
+    stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
+    rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
+    assertFalse(rs.next());
   }
+
+
 }

@@ -1,0 +1,5 @@
+COLUMN TABLE "::HdbtableHanaXSAdvancedContent" (
+   "ID" INTEGER COMMENT 'Customer ID' DEFAULT 555, "NAME" NVARCHAR(256),
+   "ACTIVE" TINYINT,
+   "COUNTRY" NVARCHAR(256),
+   PRIMARY KEY ("ID") )

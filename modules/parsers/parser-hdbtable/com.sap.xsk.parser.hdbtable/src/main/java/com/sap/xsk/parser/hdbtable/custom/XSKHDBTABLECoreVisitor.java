@@ -128,7 +128,7 @@ public class XSKHDBTABLECoreVisitor extends HdbtableBaseVisitor<JsonElement> {
         if(ctx!=null && ctx.STRING()!=null) {
             return new JsonPrimitive(handleStringLiteral(ctx.STRING().getText()));
         }else if(ctx!=null && ctx.INT()!=null) {
-            return new JsonPrimitive(handleStringLiteral(ctx.INT().getText()));
+            return new JsonPrimitive(Integer.parseInt(ctx.INT().getText()));
         } else {
             return null;
         }

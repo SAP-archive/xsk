@@ -12,9 +12,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SmartDatasourceObjectFactoryTest {
+public class DynamicDataSourceFactoryTest {
 	private Map<String, String> testEnv; 
-	private SmartDatasourceObjectFactory factory = new SmartDatasourceObjectFactory();
+	private DynamicDataSourceFactory factory = new DynamicDataSourceFactory();
 	private static final String DATASOURCE_NAME = "DefaultDB"; 
 	
 	@Before
@@ -25,22 +25,22 @@ public class SmartDatasourceObjectFactoryTest {
 	@Test
 	public void testPrefixDelimiterDefaultValueIfNoneSet() {
 		String result = factory.getPrefixDelimiter(testEnv);
-		Assert.assertEquals("Wrong default value", SmartDatasourceObjectFactory.ENV_PREFIX_DELIMITER_DEFAULT, result);
+		Assert.assertEquals("Wrong default value", DynamicDataSourceFactory.ENV_PREFIX_DELIMITER_DEFAULT, result);
 	}
 	
 	@Test
 	public void testPrefixDelimiterDefaultValueIfEmptyStringSet() {
 		String customValue = "";
-		testEnv.put(SmartDatasourceObjectFactory.ENV_PREFIX_DELIMITER_KEY, customValue);
+		testEnv.put(DynamicDataSourceFactory.ENV_PREFIX_DELIMITER_KEY, customValue);
 		
 		String result = factory.getPrefixDelimiter(testEnv);
-		Assert.assertEquals("Wrong default value", SmartDatasourceObjectFactory.ENV_PREFIX_DELIMITER_DEFAULT, result);
+		Assert.assertEquals("Wrong default value", DynamicDataSourceFactory.ENV_PREFIX_DELIMITER_DEFAULT, result);
 	}
 	
 	@Test
 	public void testPrefixDelimiterCustomValue() {
 		final String customValue = "#";
-		testEnv.put(SmartDatasourceObjectFactory.ENV_PREFIX_DELIMITER_KEY, customValue);
+		testEnv.put(DynamicDataSourceFactory.ENV_PREFIX_DELIMITER_KEY, customValue);
 		
 		String result = factory.getPrefixDelimiter(testEnv);
 		
@@ -51,10 +51,10 @@ public class SmartDatasourceObjectFactoryTest {
 	public void testPrefixDelimiterInitialisedOnce() {
 		factory.getPrefixDelimiter(testEnv);
 		
-		testEnv.put(SmartDatasourceObjectFactory.ENV_PREFIX_DELIMITER_KEY, "other_prefix");
+		testEnv.put(DynamicDataSourceFactory.ENV_PREFIX_DELIMITER_KEY, "other_prefix");
 		String result = factory.getPrefixDelimiter();
 		
-		Assert.assertEquals("Prefix value should not be reset", SmartDatasourceObjectFactory.ENV_PREFIX_DELIMITER_DEFAULT, result);
+		Assert.assertEquals("Prefix value should not be reset", DynamicDataSourceFactory.ENV_PREFIX_DELIMITER_DEFAULT, result);
 	}
 	
 	@Test(expected=NameNotFoundException.class)
@@ -72,7 +72,7 @@ public class SmartDatasourceObjectFactoryTest {
 	
 	@Test
 	public void testShouldProcessResourceObjNotDatasource() throws NameNotFoundException {
-		Reference ref = new Reference(SmartDatasourceObjectFactory.class.getName());
+		Reference ref = new Reference(DynamicDataSourceFactory.class.getName());
 		Assert.assertFalse("Only Datasource reference should be processed", factory.shouldProcessResourceRef(ref));
 	}
 	

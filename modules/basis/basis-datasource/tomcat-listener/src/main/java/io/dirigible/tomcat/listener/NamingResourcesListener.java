@@ -34,7 +34,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
 
   private boolean initialized = false;
 
-  private final String name = "/";
+  private static final String name = "/";
 
   private String factoryClassName;
 
@@ -52,7 +52,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
     if (source == this.namingResources) {
 
       // Setting the context in read/write mode
-      ContextAccessController.setWritable(getName(), this.container);
+      ContextAccessController.setWritable(name, this.container);
 
       final String name = event.getPropertyName();
       final Object newValue = event.getNewValue();
@@ -63,7 +63,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
       }
 
       // Setting the context in read only mode
-      ContextAccessController.setReadOnly(getName());
+      ContextAccessController.setReadOnly(name);
 
     }
   }
@@ -72,11 +72,11 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
   public void lifecycleEvent(LifecycleEvent event) {
     this.container = event.getLifecycle();
 
-    if (this.container instanceof Context) {
-      this.namingResources = ((Context) this.container).getNamingResources();
-    } else {
+    if (!(this.container instanceof Context)) {
       return;
     }
+
+    this.namingResources = ((Context) this.container).getNamingResources();
 
     if (Lifecycle.CONFIGURE_START_EVENT.equals(event.getType())) {
       if (this.initialized) {
@@ -120,7 +120,6 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
       if (resource.getType() != null && resource.getType().contains(DATA_SOURCE)) {
         addResourceNameAsProperty(resource);
       }
-
     }
   }
 
@@ -141,10 +140,6 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
       resource.setProperty(FACTORY_PROPERTY, getFactoryClassName());
       LOGGER.log(Level.FINE, "Injecting factory " + getFactoryClassName() + " to " + resource);
     }
-  }
-
-  private Object getName() {
-    return this.name;
   }
 
   public void setFactoryClassName(String factoryClassName) {

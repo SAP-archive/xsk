@@ -74,7 +74,7 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
   @Test
   public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     final int EXPECTED_SEQUENCE_COUNT = 1;
-    final String EXPECTED_SEQUENCE_NAME = "\"sequence-itest::SampleSequence_HanaXSClassic\"";
+    final String EXPECTED_SEQUENCE_NAME = "sequence-itest::SampleSequence_HanaXSClassic";
     FileSystemRepository fileRepo = new LocalRepository("/usr/local/target/dirigible/repository/root");
     RepositoryPath path = new RepositoryPath("/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
     byte[] content = XSKHDBSequenceParserPostgreSQLITCase.class
@@ -94,7 +94,7 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
     assertEquals(EXPECTED_SEQUENCE_COUNT, dbSequences.size());
     assertEquals(EXPECTED_SEQUENCE_NAME, dbSequences.get(0));
 
-    stmt.executeUpdate(String.format("DROP SEQUENCE %s", dbSequences.get(0)));
+    stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
     rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
     assertFalse(rs.next());
   }

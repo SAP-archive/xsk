@@ -24,6 +24,9 @@ public final class XSKConstants {
   public static final String XSK_HDBSEQUENCE_CREATE = "CREATE ";
   public static final String XSK_HDBSEQUENCE_ALTER = "ALTER ";
   public static final String XSK_HDBSEQUENCE_DROP = "DROP  ";
+  public static final String XSK_HDBTABLE_SYNTAX = "COLUMN TABLE ";
+  public static final String XSK_HDBTABLE_CREATE = "CREATE ";
+  public static final String XSK_HDBTABLE_DROP = "DROP ";
   /**
    * The Unix separator character.
    */

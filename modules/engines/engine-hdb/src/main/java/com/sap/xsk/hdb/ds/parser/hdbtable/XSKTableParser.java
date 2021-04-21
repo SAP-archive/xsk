@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbtable.*;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
@@ -27,6 +28,7 @@ import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLESyntaxErrorListener;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
+import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -57,6 +59,19 @@ public class XSKTableParser implements XSKDataStructureParser {
 
   @Override
   public XSKDataStructureHDBTableModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+    String expectedHanaXSAdvancedSyntax =
+        XSKConstants.XSK_HDBTABLE_SYNTAX + "\"" + XSKHDBUtils.getRepositoryBaseObjectName(location) + "\"";
+    String receivedSyntax = XSKHDBUtils.extractRepositoryBaseObjectNameFromContent(XSKConstants.XSK_HDBTABLE_SYNTAX, content);
+    logger.debug("Determine if the hdbtable is Hana XS Classic or Hana XS Advanced by Comparing '" + receivedSyntax + "' with '"
+        + expectedHanaXSAdvancedSyntax + "'");
+
+    return (receivedSyntax.equals(expectedHanaXSAdvancedSyntax))
+        ? parseHanaXSAdvancedContent(location, content)
+        : parseHanaXSClassicContent(location, content);
+  }
+
+  private XSKDataStructureHDBTableModel parseHanaXSClassicContent(String location, String content)
+      throws IOException, XSKDataStructuresException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     HdbtableLexer hdbtableLexer = new HdbtableLexer(inputStream);
@@ -110,12 +125,6 @@ public class XSKTableParser implements XSKDataStructureParser {
       columns.add(dataStructureHDBTableColumnModel);
     }
 
-    dataStructureHDBTableModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
-    dataStructureHDBTableModel.setLocation(location);
-    dataStructureHDBTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
-    dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
-    dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
-    dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
     dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName());
     dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription());
     dataStructureHDBTableModel.setLoggingType(hdbtableDefinitionModel.getLoggingType());
@@ -148,7 +157,26 @@ public class XSKTableParser implements XSKDataStructureParser {
       }
       dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
     }
+    setXSKDataStructureHDBTableModelDetails(location, content, XSKHanaVersion.VERSION_1, dataStructureHDBTableModel);
+
     return dataStructureHDBTableModel;
+  }
+
+  private XSKDataStructureHDBTableModel parseHanaXSAdvancedContent(String location, String content) {
+    XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
+    setXSKDataStructureHDBTableModelDetails(location, content, XSKHanaVersion.VERSION_2, dataStructureHDBTableModel);
+    dataStructureHDBTableModel.setRawContent(content);
+    return dataStructureHDBTableModel;
+  }
+
+  private void setXSKDataStructureHDBTableModelDetails(String location, String content, XSKHanaVersion hanaVersion, XSKDataStructureHDBTableModel dataStructureHDBTableModel) {
+    dataStructureHDBTableModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
+    dataStructureHDBTableModel.setLocation(location);
+    dataStructureHDBTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
+    dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
+    dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
+    dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    dataStructureHDBTableModel.setHanaVersion(hanaVersion);
   }
 }
 

@@ -16,6 +16,7 @@ import static java.text.MessageFormat.format;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,8 +44,19 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
     String tableName = XSKHDBUtils.escapeArtifactName(tableModel.getName());
     logger.info("Processing Drop Table: " + tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
-      String sql = SqlFactory.getNative(connection).select().column("COUNT(*)").from(tableName)
-          .build();
+      String sql = null;
+      switch (tableModel.getHanaVersion()) {
+        case VERSION_1: {
+          sql = SqlFactory.getNative(connection).select().column("COUNT(*)").from(tableName)
+              .build();
+          break;
+        }
+        case VERSION_2: {
+          sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
+          break;
+        }
+      }
+
       PreparedStatement statement = null;
       try {
         statement = connection.prepareStatement(sql);

@@ -17,6 +17,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForei
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -48,6 +49,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
     boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
     String tableName = XSKHDBUtils.escapeArtifactName(tableModel.getName());
+    String sql = null;
     logger.info("Processing Create Table: " + tableName);
     CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
     List<XSKDataStructureHDBTableColumnModel> columns = tableModel.getColumns();
@@ -163,7 +165,16 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
       }
     }
 
-    final String sql = createTableBuilder.build();
+    switch (tableModel.getHanaVersion()) {
+      case VERSION_1: {
+        sql = createTableBuilder.build();
+        break;
+      }
+      case VERSION_2: {
+        sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
+        break;
+      }
+    }
     executeSql(sql, connection);
   }
 

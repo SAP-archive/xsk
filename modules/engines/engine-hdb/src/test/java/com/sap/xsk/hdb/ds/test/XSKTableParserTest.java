@@ -22,6 +22,7 @@ package com.sap.xsk.hdb.ds.test;
  */
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
@@ -125,6 +126,15 @@ public class XSKTableParserTest extends AbstractGuiceTest {
     assertThrows(XSKHDBTableMissingPropertyException.class, () -> {
       new XSKTableParser().parse("/MissingMandatoryTableProperties.hdbtable", content);
     });
+  }
+
+  @Test
+  public void parseHanaXSAdvancedContent() throws Exception {
+      InputStream in = XSKTableParserTest.class.getResourceAsStream("/HdbtableHanaXSAdvancedContent.hdbtable");
+      String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+      XSKDataStructureHDBTableModel model = new XSKDataStructureModelFactory().parseTable("/HdbtableHanaXSAdvancedContent.hdbtable", content);
+      assertEquals(XSKHanaVersion.VERSION_2, model.getHanaVersion());
+      assertEquals(content, model.getRawContent());
   }
 
 }

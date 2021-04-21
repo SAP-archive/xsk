@@ -24,8 +24,8 @@ import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.eclipse.dirigible.repository.local.LocalResource;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -48,13 +48,13 @@ import static org.junit.Assert.assertFalse;
  */
 public class XSKHDBSequenceParserPostgreSQLITCase {
 
-  private PostgreSQLContainer jdbcContainer;
-  private Connection connection;
-  private IXSKHDBCoreFacade facade;
+  private static PostgreSQLContainer jdbcContainer;
+  private static Connection connection;
+  private static IXSKHDBCoreFacade facade;
 
 
-  @Before
-  public void setUp() throws SQLException {
+  @BeforeClass
+  public static void setUp() throws SQLException {
     Network network = Network.newNetwork();
     jdbcContainer =
         new PostgreSQLContainer<>(TestContainerConstants.POSTGRESQL_DOCKER_IMAGE)
@@ -62,19 +62,19 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
             .withNetworkAliases(TestContainerConstants.POSTGRESQL_DOCKER_NETWORK_ALIAS);
     jdbcContainer.start();
     Injector injector = Guice.createInjector(new XSKHDBTestModule(jdbcContainer));
-    this.connection = injector.getInstance(DataSource.class).getConnection();
-    this.facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
+    connection = injector.getInstance(DataSource.class).getConnection();
+    facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
 
-  @After
-  public void cleanUp() {
+  @AfterClass
+  public static void cleanUp() {
     jdbcContainer.stop();
   }
 
   @Test
   public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     final int EXPECTED_SEQUENCE_COUNT = 1;
-    final String EXPECTED_SEQUENCE_NAME = "sequence-itest::SampleSequence_HanaXSClassic";
+    final String EXPECTED_SEQUENCE_NAME = "\"sequence-itest::SampleSequence_HanaXSClassic\"";
     FileSystemRepository fileRepo = new LocalRepository("/usr/local/target/dirigible/repository/root");
     RepositoryPath path = new RepositoryPath("/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
     byte[] content = XSKHDBSequenceParserPostgreSQLITCase.class
@@ -94,7 +94,7 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
     assertEquals(EXPECTED_SEQUENCE_COUNT, dbSequences.size());
     assertEquals(EXPECTED_SEQUENCE_NAME, dbSequences.get(0));
 
-    stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
+    stmt.executeUpdate(String.format("DROP SEQUENCE %s", dbSequences.get(0)));
     rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
     assertFalse(rs.next());
   }

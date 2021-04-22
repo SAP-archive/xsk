@@ -15,14 +15,14 @@ spec:
     spec:
       containers:
         - name: dynamic-db
-          image: radiatorspring/dynamic-db:latest
+          image: dirigiblelabs/dynamic-db:latest
           env:
             - name: DefaultDB_url
-              value: jdbc:sap://43dcda2a-75aa-459f-928f-b92ca222c506.hana.trial-eu10.hanacloud.ondemand.com:443/db
+              value: jdbc:sap://<hana-db-url>/<your-db>
             - name: DefaultDB_username
-              value: DBADMIN
+              value: <db-username> # It is DBADMIN by default on HANA
             - name: DefaultDB_password
-              value: Abcd1234
+              value: <db-password>
             - name: DefaultDB_driverClassName
               value: com.sap.db.jdbc.Driver
             - name: DefaultDB_maxWait

@@ -1,4 +1,4 @@
-package io.dirigible.tomcat.listener;
+package com.sap.xsk.listener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -21,16 +21,16 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
 
   private static final String RESOURCE_ENV_REF_STR = "resourceEnvRef";
 
-  static final String FACTORY_CLASS_NAME = "io.dirigible.listener.DelegatingObjectFactory";
+  private static final String FACTORY_CLASS_NAME = "DelegatingObjectFactory";
 
   @Deprecated
-  static final String PERSISTENCE_FACTORY_CLASS_NAME = "com.sap.jpaas.service.persistence.core.JNDIDataSourceFactory";
+  private static final String PERSISTENCE_FACTORY_CLASS_NAME = "com.sap.jpaas.service.persistence.core.JNDIDataSourceFactory";
 
-  static final String FACTORY_PROPERTY = "factory";
+  private static final String FACTORY_PROPERTY = "factory";
 
-  private Object container = null;
+  private Object container;
 
-  private NamingResourcesImpl namingResources = null;
+  private NamingResourcesImpl namingResources;
 
   private boolean initialized = false;
 
@@ -49,7 +49,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
     }
 
     final Object source = event.getSource();
-    if (source == this.namingResources) {
+    if (source.equals(this.namingResources)) {
 
       // Setting the context in read/write mode
       ContextAccessController.setWritable(name, this.container);
@@ -78,11 +78,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
 
     this.namingResources = ((Context) this.container).getNamingResources();
 
-    if (Lifecycle.CONFIGURE_START_EVENT.equals(event.getType())) {
-      if (this.initialized) {
-        return;
-      }
-
+    if (Lifecycle.CONFIGURE_START_EVENT.equals(event.getType()) && !this.initialized) {
       this.namingResources.addPropertyChangeListener(this);
 
       // handle resource-ref
@@ -95,13 +91,9 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
       updateResources(resources);
 
       this.initialized = true;
-    } else if (Lifecycle.CONFIGURE_STOP_EVENT.equals(event.getType())) {
-      if (!this.initialized) {
-        return;
-      }
+    } else if (Lifecycle.CONFIGURE_STOP_EVENT.equals(event.getType()) && this.initialized) {
 
       this.namingResources.removePropertyChangeListener(this);
-
       this.initialized = false;
     }
   }

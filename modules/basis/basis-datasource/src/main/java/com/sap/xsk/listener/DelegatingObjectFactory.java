@@ -1,4 +1,4 @@
-package io.dirigible.tomcat.listener;
+package com.sap.xsk.listener;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -42,27 +42,21 @@ public class DelegatingObjectFactory implements ObjectFactory {
   private Object getObjectInstanceFromFactory(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment,
       final String referenceType) throws NamingException {
     final List<ObjectFactory> factories = getObjectFactories(referenceType);
-    if (factories != null) {
-      for (ObjectFactory factory : factories) {
-        Object objectInstance = null;
-        try {
-          objectInstance = factory.getObjectInstance(obj, name, nameCtx, environment);
-        } catch (NameNotFoundException nne) {
-          LOGGER.fine("Will move to next factory as facroty [" + factory + "] could not retrieve object instance for name [" + name
-              + "]. NameNotFoundException was thrown. " + nne.getMessage());
-        } catch (Exception e) {
-          LOGGER.severe("Exception is thrown by facroty [" + factory + "] during retrieving object instance. Exception is: " + e);
-          NamingException ne = new NamingException("Cannot create resource  object instance due to exception in the object factory");
-          ne.initCause(e);
-          throw ne;
-        }
-        if (objectInstance != null) {
-          LOGGER.fine("Object instance with name [" + name + "]is created by factory [" + factory + "].");
-          return objectInstance;
-        }
+    for (ObjectFactory factory : factories) {
+      Object objectInstance = null;
+      try {
+        objectInstance = factory.getObjectInstance(obj, name, nameCtx, environment);
+      } catch (NameNotFoundException nne) {
+        LOGGER.fine("Will move to next factory as facroty [" + factory + "] could not retrieve object instance for name [" + name
+            + "]. NameNotFoundException was thrown. " + nne.getMessage());
+      } catch (Exception e) {
+        LOGGER.severe("Exception is thrown by factory [" + factory + "] during retrieving object instance. Exception is: " + e);
+        throw new NamingException("Cannot create resource  object instance due to exception in the object factory");
       }
-    } else {
-      LOGGER.fine("No object factories are found for referenceType [" + referenceType + "].");
+      if (objectInstance != null) {
+        LOGGER.fine("Object instance with name [" + name + "]is created by factory [" + factory + "].");
+        return objectInstance;
+      }
     }
     return null;
   }
@@ -70,7 +64,6 @@ public class DelegatingObjectFactory implements ObjectFactory {
   private Object getObjectInstanceFromDefaults(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment) throws NamingException {
     final Reference reference = (Reference) obj;
     RefAddr removedFactory = removeDelegatingObjectFactoryFromReference(reference);
-
     Object objectInstance = null;
 
     try {
@@ -84,13 +77,11 @@ public class DelegatingObjectFactory implements ObjectFactory {
           + "]. NameNotFoundException was thrown. " + nne.getMessage());
     } catch (Exception e) {
       LOGGER.severe("Exception is thrown by default object creation facroty during retrieving object instance. Exception is: " + e);
-      NamingException ne = new NamingException("Cannot create resource  object instance due to exception in the object factory");
-      ne.initCause(e);
-      throw ne;
+      throw new NamingException("Cannot create resource  object instance due to exception in the object factory");
     } finally {
       if (removedFactory != null) {
         reference.add(removedFactory);
-        LOGGER.fine("Add [" + this.getClass().getName() + "] to the communication endpoits of reference object  [" + reference + "].");
+        LOGGER.fine("Add [" + this.getClass().getName() + "] to the communication endpoints of reference object  [" + reference + "].");
       }
     }
     return objectInstance;
@@ -101,7 +92,7 @@ public class DelegatingObjectFactory implements ObjectFactory {
     for (int i = 0; i < reference.size(); i++) {
       final RefAddr refAddr = reference.get(i);
       Object content = refAddr.getContent();
-      if (content != null && this.getClass().getName().equals(content.toString())) {
+      if (isDelegatedFactoryReference(content)) {
         reference.remove(i);
         removed = refAddr;
         LOGGER.fine("Remove [" + this.getClass().getName() + "] from the communication endpoits of reference object  [" + reference + "].");
@@ -109,6 +100,10 @@ public class DelegatingObjectFactory implements ObjectFactory {
       }
     }
     return removed;
+  }
+
+  private boolean isDelegatedFactoryReference(Object content){
+    return content != null && this.getClass().getName().equals(content.toString());
   }
 
   protected List<ObjectFactory> getObjectFactories(final String referenceType) {

@@ -1,4 +1,4 @@
-package io.dirigible.smart.datasource.object.factory;
+package com.sap.xsk.factory;
 
 import java.util.Hashtable;
 import java.util.Map;

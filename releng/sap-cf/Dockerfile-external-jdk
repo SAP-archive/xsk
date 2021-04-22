@@ -19,7 +19,6 @@ COPY "${JDK_HOME}" /usr/local/jdk
 ENV JAVA_HOME=/usr/local/jdk
 ENV JRE_HOME=/usr/local/jdk
 
-
 EXPOSE 8080
 
 CMD ["catalina.sh", "jpda", "run"]

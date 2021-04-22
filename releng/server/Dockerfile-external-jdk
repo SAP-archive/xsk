@@ -25,5 +25,6 @@ ENV JAVA_HOME=/usr/local/jdk
 ENV JRE_HOME=/usr/local/jdk
 
 EXPOSE 8080 8081 8000
+
 CMD ["catalina.sh", "jpda", "run"]
 

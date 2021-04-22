@@ -17,5 +17,6 @@ RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.4.63/ngdbc
 ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 
 EXPOSE 8080 8081 8000
+
 CMD ["catalina.sh", "jpda", "run"]
 

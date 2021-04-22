@@ -14,15 +14,21 @@ package com.sap.xsk.hdb.ds.test.itest.module;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
+import com.sap.xsk.hdb.ds.test.itest.hdbsequence.XSKHDBSequenceParserPostgreSQLITCase;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.eclipse.dirigible.repository.api.RepositoryPath;
+import org.eclipse.dirigible.repository.fs.FileSystemRepository;
+import org.eclipse.dirigible.repository.local.LocalRepository;
+import org.eclipse.dirigible.repository.local.LocalResource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import javax.sql.DataSource;
+import java.io.IOException;
 
-public class XSKHDBTestModule extends AbstractModule {
+public class XSKHDBTestContainersModule extends AbstractModule {
 
   private JdbcDatabaseContainer jdbcContainer;
 
-  public XSKHDBTestModule(JdbcDatabaseContainer jdbcContainer) {
+  public XSKHDBTestContainersModule(JdbcDatabaseContainer jdbcContainer) {
     this.jdbcContainer = jdbcContainer;
   }
 
@@ -42,5 +48,16 @@ public class XSKHDBTestModule extends AbstractModule {
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
     return basicDataSource;
 
+  }
+
+  public static LocalResource getResources(String rootFolder, String repoPath, String relativeResourcePath) throws IOException {
+    FileSystemRepository fileRepo = new LocalRepository(rootFolder);
+    RepositoryPath path = new RepositoryPath(repoPath);
+    byte[] content = XSKHDBSequenceParserPostgreSQLITCase.class
+        .getResourceAsStream(relativeResourcePath).readAllBytes();
+
+    LocalResource resource = new LocalResource(fileRepo, path);
+    resource.setContent(content);
+    return resource;
   }
 }

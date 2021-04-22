@@ -17,12 +17,9 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.test.itest.hdbsequence.utils.TestContainerConstants;
+import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestContainersModule;
+import com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.repository.api.RepositoryPath;
-import org.eclipse.dirigible.repository.fs.FileSystemRepository;
-import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -38,6 +35,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.POSTGRESQL_ROOT_FOLDER;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.POSTGRESQL_REPO_PATH;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.POSTGRESQL_RELATIVE_RESOURCES_PATH;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.POSTGRESQL_EXPECTED_SEQUENCE_COUNT;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.POSTGRESQL_EXPECTED_SEQUENCE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -61,7 +63,7 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
             .withNetwork(network)
             .withNetworkAliases(TestContainerConstants.POSTGRESQL_DOCKER_NETWORK_ALIAS);
     jdbcContainer.start();
-    Injector injector = Guice.createInjector(new XSKHDBTestModule(jdbcContainer));
+    Injector injector = Guice.createInjector(new XSKHDBTestContainersModule(jdbcContainer));
     connection = injector.getInstance(DataSource.class).getConnection();
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
@@ -73,15 +75,10 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
 
   @Test
   public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    final int EXPECTED_SEQUENCE_COUNT = 1;
-    final String EXPECTED_SEQUENCE_NAME = "sequence-itest::SampleSequence_HanaXSClassic";
-    FileSystemRepository fileRepo = new LocalRepository("/usr/local/target/dirigible/repository/root");
-    RepositoryPath path = new RepositoryPath("/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
-    byte[] content = XSKHDBSequenceParserPostgreSQLITCase.class
-        .getResourceAsStream("/registry.public.sequence-itest/SampleSequence_HanaXSClassic.hdbsequence").readAllBytes();
+    LocalResource resource = XSKHDBTestContainersModule.getResources( POSTGRESQL_ROOT_FOLDER,
+                                                                      POSTGRESQL_REPO_PATH,
+                                                                      POSTGRESQL_RELATIVE_RESOURCES_PATH);
 
-    LocalResource resource = new LocalResource(fileRepo, path);
-    resource.setContent(content);
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
@@ -91,8 +88,8 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
     while (rs.next()) {
       dbSequences.add(rs.getString("sequence_name"));
     }
-    assertEquals(EXPECTED_SEQUENCE_COUNT, dbSequences.size());
-    assertEquals(EXPECTED_SEQUENCE_NAME, dbSequences.get(0));
+    assertEquals(POSTGRESQL_EXPECTED_SEQUENCE_COUNT, dbSequences.size());
+    assertEquals(POSTGRESQL_EXPECTED_SEQUENCE_NAME, dbSequences.get(0));
 
     stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
     rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");

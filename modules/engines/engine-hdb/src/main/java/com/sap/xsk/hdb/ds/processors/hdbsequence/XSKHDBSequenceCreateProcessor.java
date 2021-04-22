@@ -30,7 +30,7 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
 
   @Override
   public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
-    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
+    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
     String hdbSequenceName = hdbSequenceModel.getName();
     if (caseSensitive) {
       hdbSequenceName = "\"" + hdbSequenceName + "\"";

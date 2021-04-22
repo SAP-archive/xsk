@@ -127,6 +127,13 @@ Prerequisites:
 mvn clean install
 ```
 
+Integration Tests:
+- Each integration test must end in ITCase as stated in the maven profile
+- The profile is to be run as follows:
+```
+mvn verify -Pitests
+```
+
 #### Environment Variables for Local Instance
 
     export DIRIGIBLE_DATABASE_PROVIDER=custom

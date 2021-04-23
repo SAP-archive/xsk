@@ -13,6 +13,7 @@ package com.sap.xsk.xsodata.ds.service;
 
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAModificationType;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
@@ -55,18 +56,51 @@ public class XSKOData2ODataXTransformer {
             String entitySetName = entity.getAlias();
 
             PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName);
+            //Views don't have primary keys or indexes
             List<PersistenceTableColumnModel> idColumns = tableMetadata.getColumns().stream().filter(PersistenceTableColumnModel::isPrimaryKey)
                     .collect(Collectors.toList());
-            if (idColumns.isEmpty()) {
+
+            // entity.getKeyList() can not exist for a table object.
+            if (idColumns.isEmpty() && entity.getKeyList().isEmpty() && tableMetadata.getColumns().isEmpty()) {
                 logger.error("Table {} not available for entity {}, so it will be skipped.", tableName, entitySetName);
                 continue;
             }
 
-            buff.append("\t<EntityType Name=\"").append(entitySetName).append("Type\">\n");
+            buff.append("\t<EntityType Name=\"").append(entitySetName).append("Type\"");
+            if (entity.getAggregationType() != null) {
+                buff.append(" sap:semantics=\"aggregate\"");
+            }
+            buff.append(">\n");
             buff.append("\t\t<Key>\n");
-            idColumns.forEach(column -> buff.append("\t\t\t<PropertyRef Name=\"").append(column.getName()).append("\" />\n"));
+            if (!entity.getKeyList().isEmpty()) {
+                entity.getKeyList().forEach(key -> buff.append("\t\t\t<PropertyRef Name=\"").append(key).append("\" />\n"));
+            } else if (entity.getKeyGenerated() != null) {
+                buff.append("\t\t\t<PropertyRef Name=\"").append(entity.getKeyGenerated()).append("\" />\n");
+            } else {
+                idColumns.forEach(column -> buff.append("\t\t\t<PropertyRef Name=\"").append(column.getName()).append("\" />\n"));
+            }
+
             buff.append("\t\t</Key>\n");
-            tableMetadata.getColumns().forEach(column -> buff.append("\t\t<Property Name=\"").append(column.getName()).append("\"").append(" Type=\"").append(column.getType()).append("\"").append(" Nullable=\"").append(column.isNullable()).append("\"/>\n"));
+            if (entity.getKeyGenerated() != null) {
+                buff.append("\t\t<Property Name=\"").append(entity.getKeyGenerated()).append("\"").append(" Type=\"").append("Edm.String").append("\"").append(" Nullable=\"").append("false").append("\" MaxLength=\"2147483647\"").append(" sap:filterable=\"false\"").append("/>\n");
+            }
+            if (!entity.getWithPropertyProjections().isEmpty()) {
+                entity.getWithPropertyProjections().forEach(prop -> {
+                    if (tableMetadata.getColumns().stream().anyMatch(x -> x.getName().equals(prop))) {
+                        PersistenceTableColumnModel column = tableMetadata.getColumns().stream().filter(x -> x.getName().equals(prop)).findAny().get();
+                        buff.append("\t\t<Property Name=\"").append(prop).append("\"").append(" Type=\"").append(column.getType()).append("\"").append(" Nullable=\"").append(column.isNullable()).append("\"/>\n");
+                    }
+                });
+            } else if (!entity.getWithoutPropertyProjections().isEmpty()) {
+                entity.getWithoutPropertyProjections().forEach(prop -> tableMetadata.getColumns().forEach(column ->
+                {
+                    if (!column.getName().equals(prop)) {
+                        buff.append("\t\t<Property Name=\"").append(column.getName()).append("\"").append(" Type=\"").append(column.getType()).append("\"").append(" Nullable=\"").append(column.isNullable()).append("\"/>\n");
+                    }
+                }));
+            } else {
+                tableMetadata.getColumns().forEach(column -> buff.append("\t\t<Property Name=\"").append(column.getName()).append("\"").append(" Type=\"").append(column.getType()).append("\"").append(" Nullable=\"").append(column.isNullable()).append("\"/>\n"));
+            }
 
             entity.getNavigates().forEach(relation -> {
                 XSKHDBXSODATAAssociation association = XSKODataCoreService.getAssociation(model, relation.getAssociation(), relation.getAliasNavigation());
@@ -82,18 +116,41 @@ public class XSKOData2ODataXTransformer {
                 String toRole = association.getDependent().getEntitySetName();
                 String fromMultiplicity = association.getPrincipal().getMultiplicityType().getText();
                 String toMultiplicity = association.getDependent().getMultiplicityType().getText();
-                associations.append("\t<Association Name=\"").append(relation.getAssociation()).append("Type\">\n").append("\t\t<End Type=\"").append(getServiceNamespace(model)).append(fromRole).append("Type\"").append(" Role=\"").append(fromRole).append("Principal").append("\" Multiplicity=\"").append(fromMultiplicity).append("\"/>\n").append(" \t\t<End Type=\"").append(getServiceNamespace(model)).append(toRole).append("Type\"").append(" Role=\"").append(toRole).append("Dependent").append("\" Multiplicity=\"").append(toMultiplicity).append("\"/>\n").append("\t</Association>\n");
+                associations.append("\t<Association Name=\"").append(relation.getAssociation()).append("Type\">\n").append("\t\t<End Type=\"").append(getServiceNamespace(model)).append(fromRole).append("Type\"").append(" Role=\"").append(fromRole).append("Principal").append("\" Multiplicity=\"").append(fromMultiplicity).append("\"/>\n").append(" \t\t<End Type=\"").append(getServiceNamespace(model)).append(toRole).append("Type\"").append(" Role=\"").append(toRole).append("Dependent").append("\" Multiplicity=\"").append(toMultiplicity).append("\"/>\n");
+                if (association.isWithReferentialConstraint()) {
+                    associations.append("\t<ReferentialConstraint>\n");
+                    associations.append("\t\t<Principal Role=\"").append(fromRole).append("Principal\">\n");
+                    association.getPrincipal().getBindingRole().getKeys().forEach(key -> associations.append("\t\t\t<PropertyRef Name=\"").append(key).append("\"/>\n"));
+                    associations.append("\t\t</Principal>\n");
+                    associations.append("\t\t<Dependent Role=\"").append(toRole).append("Dependent\">\n");
+                    association.getDependent().getBindingRole().getKeys().forEach(key -> associations.append("\t\t\t<PropertyRef Name=\"").append(key).append("\"/>\n"));
+                    associations.append("\t\t</Dependent>\n");
+                    associations.append("\t</ReferentialConstraint>\n");
+                }
+                associations.append("\t</Association>\n");
             });
 
             // keep entity sets for later use
-            entitySets.append("\t\t<EntitySet Name=\"").append(entitySetName).append("\" EntityType=\"").append(getServiceNamespace(model)).append(entitySetName).append("Type\" />\n");
+            entitySets.append("\t\t<EntitySet Name=\"").append(entitySetName).append("\" EntityType=\"").append(getServiceNamespace(model)).append(entitySetName).append("Type\"");
+            entity.getModifications().forEach(event -> {
+                if (event.getType().equals(XSKHDBXSODATAModificationType.CREATE) && event.getSpecification().isForbidden()) {
+                    entitySets.append(" sap:creatable=\"false\"");
+                }
+                if (event.getType().equals(XSKHDBXSODATAModificationType.UPDATE) && event.getSpecification().isForbidden()) {
+                    entitySets.append(" sap:updatable=\"false\"");
+                }
+                if (event.getType().equals(XSKHDBXSODATAModificationType.DELETE) && event.getSpecification().isForbidden()) {
+                    entitySets.append(" sap:deletable=\"false\"");
+                }
+            });
+            entitySets.append("/>\n");
 
             // keep associations sets for later use
             entity.getNavigates().forEach(relation -> {
                 XSKHDBXSODATAAssociation association = XSKODataCoreService.getAssociation(model, relation.getAssociation(), relation.getAliasNavigation());
                 String fromRole = association.getPrincipal().getEntitySetName();
                 String toRole = association.getDependent().getEntitySetName();
-                associationsSets.append("        <AssociationSet Name=\"").append(relation.getAssociation()).append("\"").append(" Association=\"").append(getServiceNamespace(model)).append(relation.getAssociation()).append("Type\">\n").append("\t\t\t<End Role=\"").append(fromRole).append("Principal").append("\"").append(" EntitySet=\"").append(fromRole).append("\"/>\n").append("\t\t\t<End Role=\"").append(toRole).append("Dependent").append("\"").append(" EntitySet=\"").append(toRole).append("\"/>\n").append("\t\t</AssociationSet>\n");
+                associationsSets.append("\t\t<AssociationSet Name=\"").append(relation.getAssociation()).append("\"").append(" Association=\"").append(getServiceNamespace(model)).append(relation.getAssociation()).append("Type\">\n").append("\t\t\t<End Role=\"").append(fromRole).append("Principal").append("\"").append(" EntitySet=\"").append(fromRole).append("\"/>\n").append("\t\t\t<End Role=\"").append(toRole).append("Dependent").append("\"").append(" EntitySet=\"").append(toRole).append("\"/>\n").append("\t\t</AssociationSet>\n");
             });
             buff.append("\t</EntityType>\n");
         }
@@ -117,72 +174,3 @@ public class XSKOData2ODataXTransformer {
         return "";
     }
 }
-
-/**
- * <Schema Namespace="org.apache.olingo.odata2.ODataCars"
- * xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
- * <EntityType Name="Car">
- * <Key>
- * <PropertyRef Name="Id" />
- * </Key>
- * <Property Name="Id" Type="Edm.Int32" Nullable="false" />
- * <Property Name="Model" Type="Edm.String" Nullable="false"
- * DefaultValue="Hugo" MaxLength="100"
- * m:FC_TargetPath="SyndicationTitle" />
- * <Property Name="ManufacturerId" Type="Edm.Int32" />
- * <Property Name="Price" Type="Edm.Decimal" />
- * <Property Name="Currency" Type="Edm.String" MaxLength="3" />
- * <Property Name="ModelYear" Type="Edm.String" MaxLength="4" />
- * <Property Name="Updated" Type="Edm.DateTime"
- * Nullable="false" ConcurrencyMode="Fixed"
- * m:FC_TargetPath="SyndicationUpdated" />
- * <Property Name="ImagePath" Type="Edm.String" />
- * <NavigationProperty Name="Manufacturer"
- * Relationship="org.apache.olingo.odata2.ODataCars.Car_Manufacturer_Manufacturer_Cars"
- * FromRole="Car_Manufacturer" ToRole="Manufacturer_Cars" />
- * </EntityType>
- * <EntityType Name="Manufacturer">
- * <Key>
- * <PropertyRef Name="Id" />
- * </Key>
- * <Property Name="Id" Type="Edm.Int32" Nullable="false" />
- * <Property Name="Name" Type="Edm.String" Nullable="false"
- * MaxLength="100" m:FC_TargetPath="SyndicationTitle" />
- * <!-- <Property Name="Address"
- * Type="org.apache.olingo.odata2.ODataCars.Address" /> -->
- * <Property Name="Updated" Type="Edm.DateTime"
- * Nullable="false" ConcurrencyMode="Fixed"
- * m:FC_TargetPath="SyndicationUpdated" />
- * <NavigationProperty Name="Cars"
- * Relationship="org.apache.olingo.odata2.ODataCars.Car_Manufacturer_Manufacturer_Cars"
- * FromRole="Manufacturer_Cars" ToRole="Car_Manufacturer" />
- * </EntityType>
- * <!-- <ComplexType Name="Address">
- * <Property Name="Street" Type="Edm.String" />
- * <Property Name="City" Type="Edm.String" />
- * <Property Name="ZipCode" Type="Edm.String" />
- * <Property Name="Country" Type="Edm.String" />
- * </ComplexType> -->
- * <Association Name="Car_Manufacturer_Manufacturer_Cars">
- * <End Type="org.apache.olingo.odata2.ODataCars.Car"
- * Multiplicity="*" Role="Car_Manufacturer" />
- * <End Type="org.apache.olingo.odata2.ODataCars.Manufacturer"
- * Multiplicity="1" Role="Manufacturer_Cars" />
- * </Association>
- * <EntityContainer Name="ODataCarsEntityContainer"
- * m:IsDefaultEntityContainer="true">
- * <EntitySet Name="Cars"
- * EntityType="org.apache.olingo.odata2.ODataCars.Car" />
- * <EntitySet Name="Manufacturers"
- * EntityType="org.apache.olingo.odata2.ODataCars.Manufacturer" />
- * <AssociationSet Name="Cars_Manufacturers"
- * Association="org.apache.olingo.odata2.ODataCars.Car_Manufacturer_Manufacturer_Cars">
- * <End EntitySet="Manufacturers" Role="Manufacturer_Cars" />
- * <End EntitySet="Cars" Role="Car_Manufacturer" />
- * </AssociationSet>
- * <!-- <FunctionImport Name="NumberOfCars"
- * ReturnType="Collection(org.apache.olingo.odata2.ODataCars.Car)"
- * m:HttpMethod="GET" /> -->
- * </EntityContainer>
- * </Schema>
- */

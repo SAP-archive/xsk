@@ -37,7 +37,7 @@ public class XSODataForwardFilter implements Filter {
                 if (uri.length() > index + (".xsodata".length() - 1)) {
                     parameters = uri.substring(index + ".xsodata".length());
                 }
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/odata/v2" + parameters);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/odata/v2/" + parameters);
                 dispatcher.forward(request, response);
             }
         }

@@ -12,6 +12,10 @@
 package com.sap.xsk.hdb.ds.model.hdi;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class XSKDataStructureHDIModel extends XSKDataStructureModel {
 
@@ -85,4 +89,26 @@ public class XSKDataStructureHDIModel extends XSKDataStructureModel {
     this.content = content;
   }
 
+  public boolean isMandatoryFieldMissing() {
+
+    return Objects.isNull(this.configuration)
+        || Objects.isNull(this.group)
+        || Objects.isNull(this.container);
+  }
+
+  public boolean hasDeploymentFile() {
+    return (Objects.nonNull(this.deploy) && Objects.nonNull(this.undeploy))
+        && this.deploy.length >= 1 || this.undeploy.length >= 1;
+  }
+
+  public boolean hasMisusedDeploymentFile() {
+    if ((Objects.nonNull(this.deploy) && Objects.nonNull(this.undeploy))) {
+      Set<String> deploy = new HashSet<>(Arrays.asList(this.deploy));
+      Set<String> undeploy = new HashSet<>(Arrays.asList(this.undeploy));
+      deploy.retainAll(undeploy);
+      return deploy.size() > 0;
+    }
+
+    return false;
+  }
 }

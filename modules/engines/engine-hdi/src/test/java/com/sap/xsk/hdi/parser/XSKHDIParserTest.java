@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.hdi.parser;
 
 import com.google.gson.JsonParseException;
@@ -30,7 +41,7 @@ public class XSKHDIParserTest {
   }
 
   @Test
-  public void parseNonStringProperties() throws IOException, XSKDataStructuresException {
+  public void parseNonStringProperties() throws IOException {
     String location = "/NonStringProperties.hdi";
     String content = org.apache.commons.io.IOUtils
         .toString(XSKHDIParserTest.class.getResourceAsStream(location), StandardCharsets.UTF_8);
@@ -38,7 +49,7 @@ public class XSKHDIParserTest {
   }
 
   @Test
-  public void parseMissingMandatoryProperties() throws IOException, XSKDataStructuresException {
+  public void parseMissingMandatoryProperties() throws IOException {
     String location = "/MissingMandatoryProperty.hdi";
     String content = org.apache.commons.io.IOUtils
         .toString(XSKHDIParserTest.class.getResourceAsStream(location), StandardCharsets.UTF_8);

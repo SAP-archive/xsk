@@ -157,14 +157,14 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
           .getAffectedHdbtiToCsvRelations(getRegistryPath(resource));
       if (!affectedHdbtiToCsvRelations.isEmpty()) {
         if (xskCsvToHdbtiRelationDao.hasCsvChanged(affectedHdbtiToCsvRelations.get(0), contentAsString)) {
-          affectedHdbtiToCsvRelations.forEach(relation -> reimportAffectedHdbtiFiles(XSKUtils.convertToFullPath(relation.getHdbti())));
+          affectedHdbtiToCsvRelations.forEach(relation -> reimportAffectedHdbtiFiles(relation.getHdbti()));
         }
       }
     }
   }
 
   private void reimportAffectedHdbtiFiles(String hdbtiFilePath) {
-    IResource hdbtiResource = getRepository().getResource(hdbtiFilePath);
+    IResource hdbtiResource = getRepository().getResource(XSKUtils.convertToFullPath(hdbtiFilePath));
     try (Connection connection = dataSource.getConnection()) {
       XSKTableImportArtifact xskTableImportArtifact = xskTableImportParser
           .parseTableImportArtifact(hdbtiFilePath, getContentFromResource(hdbtiResource));

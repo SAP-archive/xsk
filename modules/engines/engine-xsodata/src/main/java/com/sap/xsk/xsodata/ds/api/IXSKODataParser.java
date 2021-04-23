@@ -9,11 +9,10 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.xsodata.utils;
+package com.sap.xsk.xsodata.ds.api;
 
-public class XSKODataUtils {
+import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 
-    private XSKODataUtils() {
-    }
-
+public interface IXSKODataParser {
+    XSKODataModel parseXSODataArtifact(String location, String content) throws Exception;
 }

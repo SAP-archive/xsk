@@ -20,7 +20,7 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
  */
 public class XSKODataSynchronizerJob extends AbstractSynchronizerJob {
 
-  private XSKODataSynchronizer odataSynchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
+  private final XSKODataSynchronizer odataSynchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
 
   /*
    * (non-Javadoc)

@@ -24,7 +24,7 @@ public class XSKODataClasspathContentHandler extends AbstractClasspathContentHan
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataClasspathContentHandler.class);
 
-  private XSKODataSynchronizer odataSynchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
+  private final XSKODataSynchronizer odataSynchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
 
   /*
    * (non-Javadoc)

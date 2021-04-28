@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo "Building ..."
+
+echo "Projects to be imported:"
+ls -lah
+
+echo "Copy projects ..."
+mkdir -p /usr/local/tomcat/bin/target/dirigible/repository/root/registry/public/
+cp -R */ /usr/local/tomcat/bin/target/dirigible/repository/root/registry/public/
+
+echo "Imported Projects:"
+ls -lah /usr/local/tomcat/bin/target/dirigible/repository/root/registry/public/
+
+# 1. GET ARGS
+layersdir=$1
+
+cd /usr/local/tomcat/bin
+
+# ========== ADDED ===========
+# 8. SET DEFAULT START COMMAND
+cat > "$layersdir/launch.toml" <<EOL
+[[processes]]
+type = "web"
+command = "catalina.sh run"
+EOL
+

@@ -1,5 +1,5 @@
 # 1. Set a common base
-FROM tomcat:8.5-jdk8-openjdk as base
+FROM dirigiblelabs/dirigible-base-platform-sap-kyma:latest as base
 
 # ========== ADDED ===========
 # 2. Set required CNB information
@@ -7,8 +7,6 @@ ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000
 ENV CNB_STACK_ID="com.sap.kneo.xsk"
 LABEL io.buildpacks.stack.id="com.sap.kneo.xsk"
-
-ENV CATALINA_HOME=/workspace/tomcat
 
 # 3. Create the user
 RUN groupadd cnb --gid ${CNB_GROUP_ID} && \

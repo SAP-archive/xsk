@@ -1,5 +1,8 @@
 ### Prerequisites
 
+1. Install Pack
+1. Install Kpack
+
 1. Create Docker Registry Secret
 ```
 kubectl create secret docker-registry tutorial-registry-credentials \
@@ -9,12 +12,11 @@ kubectl create secret docker-registry tutorial-registry-credentials \
     --namespace default
 ```
 
+
 1. Create Service Account
 ```
 kubectl apply -f service-account.yaml
 ```
-
-1. Kpack installation
 
 1. Build `Kneo XSK Stack`:
 
@@ -45,9 +47,7 @@ docker push dirigiblelabs/kneo-xsk-buildpack
 ```
 cd kpack/
 
-kubectl apply -f store.yaml
-kubectl apply -f stack.yaml
-kubectl apply -f builder.yaml
+kubectl apply -f kpack.yaml
 ```
 
 1. Create Image:
@@ -66,11 +66,11 @@ spec:
     kind: Builder
   source:
     blob:
-      url: https://github.com/eclipse/dirigible/releases/download/v5.10.0/server-all.zip
+      url: https://github.com/SAP/xsk/raw/main/samples/xsjs-simple.zip
 ```
 
 1. Monitor Logs:
 
 ```
-logs -image tutorial-image -namespace default
+logs -image xsk-application -namespace default
 ```

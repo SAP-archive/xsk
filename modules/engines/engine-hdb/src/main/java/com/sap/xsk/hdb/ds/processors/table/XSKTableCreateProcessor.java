@@ -47,8 +47,12 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
 
-    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-    String tableName = XSKHDBUtils.escapeArtifactName(tableModel.getName());
+    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
+    //String tableName1 = XSKHDBUtils.escapeArtifactName(tableModel.getName());
+    String tableName = tableModel.getName();
+    if (caseSensitive) {
+      tableName = "\"" + tableName + "\"";
+    }
     String sql = null;
     logger.info("Processing Create Table: " + tableName);
     CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
@@ -94,11 +98,11 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         String[] primaryKeyColumns = new String[tableModel.getConstraints().getPrimaryKey().getColumns().length];
         int i = 0;
         for (String column : tableModel.getConstraints().getPrimaryKey().getColumns()) {
-          if (caseSensitive) {
-            primaryKeyColumns[i++] = "\"" + column + "\"";
-          } else {
-            primaryKeyColumns[i++] = column;
-          }
+          //if (caseSensitive) {
+          // primaryKeyColumns[i++] = "\"" + column + "\"";
+          //} else {
+          primaryKeyColumns[i++] = column;
+          // }
         }
 
         createTableBuilder.primaryKey(primaryKeyColumns);
@@ -125,11 +129,11 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           String[] foreignKeyReferencedColumns = new String[foreignKey.getReferencedColumns().length];
           i = 0;
           for (String column : foreignKey.getReferencedColumns()) {
-            if (caseSensitive) {
-              foreignKeyReferencedColumns[i++] = "\"" + column + "\"";
-            } else {
-              foreignKeyReferencedColumns[i++] = column;
-            }
+            //if (caseSensitive) {
+            // foreignKeyReferencedColumns[i++] = "\"" + column + "\"";
+            // } else {
+            foreignKeyReferencedColumns[i++] = column;
+            // }
           }
 
           createTableBuilder.foreignKey(foreignKeyName, foreignKeyColumns, foreignKeyReferencedTable,
@@ -145,11 +149,11 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           String[] uniqueIndexColumns = new String[uniqueIndex.getColumns().length];
           int i = 0;
           for (String column : uniqueIndex.getColumns()) {
-            if (caseSensitive) {
-              uniqueIndexColumns[i++] = "\"" + column + "\"";
-            } else {
-              uniqueIndexColumns[i++] = column;
-            }
+            // if (caseSensitive) {
+            //  uniqueIndexColumns[i++] = "\"" + column + "\"";
+            // } else {
+            uniqueIndexColumns[i++] = column;
+            //}
           }
           createTableBuilder.unique(uniqueIndexName, uniqueIndexColumns);
         }

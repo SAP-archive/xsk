@@ -1,5 +1,5 @@
 # 1. Set a common base
-FROM dirigiblelabs/dirigible-base-platform-sap-kyma:latest as base
+FROM dirigiblelabs/xsk-kyma:latest as base
 
 # ========== ADDED ===========
 # 2. Set required CNB information

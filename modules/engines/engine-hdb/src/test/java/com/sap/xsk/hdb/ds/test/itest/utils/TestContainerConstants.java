@@ -30,4 +30,11 @@ public class TestContainerConstants {
   public static final String HDBTABLE_POSTGRESQL_RELATIVE_RESOURCES_PATH = "/registry.public.hdbtable-itest/SamplePostgreXSClassicTable.hdbtable";
   public static final int HDBTABLE_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT = 0;
   public static final String HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME = "hdbtable-itest::SamplePostgreXSClassicTable";
+
+  public static final String HDBTABLE_MYSQL_DOCKER_IMAGE = "mysql:5.7";
+  public static final String HDBTABLE_MYSQL_ROOT_FOLDER = "/usr/local/target/dirigible/repository/root";
+  public static final String HDBTABLE_MYSQL_REPO_PATH = "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable";
+  public static final String HDBTABLE_MYSQL_RELATIVE_RESOURCES_PATH = "/registry.public.hdbtable-itest/SamplePostgreXSClassicTable.hdbtable";
+  public static final int HDBTABLE_MYSQL_EXPECTED_CREATED_RAWS_COUNT = 0;
+  public static final String HDBTABLE_MYSQL_EXPECTED_TABLE_NAME = "hdbtable-itest::SamplePostgreXSClassicTable";
 }

@@ -99,6 +99,78 @@ jobs:
           
           For more infromation go to [https://www.dirigible.io/help/setup/](https://www.dirigible.io/help/setup/).
           
+          ## XSK - ${{ env.XSK_VERSION }} - Buildpack
+
+          #### Prerequisites
+
+          - Install [Kpack](https://github.com/pivotal/kpack) on your Kubernetes/Kyma cluster
+          - Create `ClusterStore`, `ClusterStack` and `Builder`:
+
+          ```yaml
+          apiVersion: kpack.io/v1alpha1
+          kind: ClusterStore
+          metadata:
+            name: kneo-xsk-store
+          spec:
+            sources:
+            - image: dirigiblelabs/kneo-xsk-buildpack:${{ env.XSK_VERSION }}
+          ---
+          apiVersion: kpack.io/v1alpha1
+          kind: ClusterStack
+          metadata:
+            name: kneo-xsk-stack
+          spec:
+            id: "com.sap.kneo.xsk"
+            buildImage:
+              image: dirigiblelabs/kneo-xsk-stack-build:${{ env.XSK_VERSION }}
+            runImage:
+              image: dirigiblelabs/kneo-xsk-stack-run:${{ env.XSK_VERSION }}
+          ---
+          apiVersion: kpack.io/v1alpha1
+          kind: Builder
+          metadata:
+            name: kneo-xsk
+          spec:
+            serviceAccount: <your-service-account>
+            tag: <your-docker-organization>/<your-docker-builder-repository>
+            stack:
+              name: kneo-xsk-stack
+              kind: ClusterStack
+            store:
+              name: kneo-xsk-store
+              kind: ClusterStore
+            order:
+            - group:
+              - id: dirigiblelabs/kneo-xsk-buildpack
+          ```
+
+          > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
+
+          > _**Note**: Also replace `<your-docker-organization>/<your-docker-builder-repository>` with your Docker Repository, where the Docker Image Builder will be hosted (e.g. `my-organization/my-builder`)_
+
+          #### Usage
+
+          ```yaml
+          apiVersion: kpack.io/v1alpha1
+          kind: Image
+          metadata:
+            name: xsk-application
+            namespace: default
+          spec:
+            tag: <your-docker-organization>/<your-application-docker-image-repository>
+            serviceAccount: <your-service-account>
+            builder:
+              name: kneo-xsk
+              kind: Builder
+            source:
+              blob:
+                url: https://github.com/SAP/xsk/raw/main/samples/products.zip
+          ```
+
+          > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
+
+          > _**Note**: Also replace `<your-docker-organization>/<your-application-docker-image-repository>` with your Docker Repository, where the Docker Image Builder will be hosted (e.g. `my-organization/my-application`)_
+
     - name: Upload Server
       id: upload-server 
       uses: actions/upload-release-asset@v1

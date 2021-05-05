@@ -120,7 +120,7 @@ jobs:
           metadata:
             name: kneo-xsk-stack
           spec:
-            id: "com.sap.kneo.xsk"
+            id: com.sap.kneo.xsk
             buildImage:
               image: dirigiblelabs/kneo-xsk-stack-build:${{ env.XSK_VERSION }}
             runImage:

@@ -44,3 +44,17 @@ jobs:
         docker build -t dirigiblelabs/xsk-kyma --build-arg JDK_HOME="jdk" -f Dockerfile-external-jdk .
         docker push dirigiblelabs/xsk-kyma
         cd ../../
+    - uses: buildpacks/github-actions/setup-pack@v4.1.0
+    - name: XSK Buildpack
+      run: |
+        cd releng/buildpacks/xsk/stack/
+        docker build . -t dirigiblelabs/kneo-xsk-stack-base --target base
+        docker push dirigiblelabs/kneo-xsk-stack-base
+        docker build . -t dirigiblelabs/kneo-xsk-stack-run --target run
+        docker push dirigiblelabs/kneo-xsk-stack-run
+        docker build . -t dirigiblelabs/kneo-xsk-stack-build --target build
+        docker push dirigiblelabs/kneo-xsk-stack-build
+        cd ../buildpack/
+        pack buildpack package dirigiblelabs/kneo-xsk-buildpack --config ./package.toml
+        docker push dirigiblelabs/kneo-xsk-buildpack
+        cd ../../../../

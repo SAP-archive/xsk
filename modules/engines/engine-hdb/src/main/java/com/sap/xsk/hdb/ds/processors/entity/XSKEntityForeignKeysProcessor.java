@@ -23,6 +23,8 @@ import org.eclipse.dirigible.database.sql.builders.table.AlterTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
+
 /**
  * The Entity Create Processor.
  */
@@ -50,7 +52,7 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
 
       String sourceTable = XSKHDBUtils.getTableName(entityModel);
       String name = "FK_" + sourceTable + "_" + tableName;
-      sourceTable = XSKHDBUtils.escapeArtifactName(sourceTable);
+      sourceTable = XSKHDBUtils.escapeArtifactName(connection, sourceTable, SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
 
       boolean existing = SqlFactory.getNative(connection).exists(connection, sourceTable);
       if (existing) {

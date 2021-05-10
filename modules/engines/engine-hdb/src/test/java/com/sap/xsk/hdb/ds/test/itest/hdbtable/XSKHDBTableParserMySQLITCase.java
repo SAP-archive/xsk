@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.hdb.ds.test.itest.hdbtable;
 
 import com.google.inject.Guice;
@@ -21,8 +32,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.*;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.HDBTABLE_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class XSKHDBTableParserMySQLITCase {
@@ -53,8 +62,9 @@ public class XSKHDBTableParserMySQLITCase {
     this.facade.updateEntities();
 
     Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", HDBTABLE_MYSQL_EXPECTED_TABLE_NAME));
+    ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM `" + HDBTABLE_MYSQL_EXPECTED_TABLE_NAME + "`");
     assertTrue(rs.next());
-    assertEquals(HDBTABLE_MYSQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
+    assertTrue(HDBTABLE_MYSQL_EXPECTED_CREATED_RAWS_COUNT == rs.getInt("rawsCount"));
+    stmt.executeUpdate("DROP TABLE `" + HDBTABLE_MYSQL_EXPECTED_TABLE_NAME + "`");
   }
 }

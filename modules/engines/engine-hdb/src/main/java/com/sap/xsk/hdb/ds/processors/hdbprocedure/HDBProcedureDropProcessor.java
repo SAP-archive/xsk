@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbprocedure;
 
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
@@ -31,7 +32,7 @@ public class HDBProcedureDropProcessor extends AbstractXSKProcessor<XSKDataStruc
   public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
     logger.info("Processing Drop Procedure: " + hdbProcedure.getName());
 
-    String procedureName = XSKHDBUtils.escapeArtifactName(hdbProcedure.getName());
+    String procedureName = XSKHDBUtils.escapeArtifactName(connection, hdbProcedure.getName(), SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
     if (SqlFactory.getNative(connection).exists(connection, procedureName, DatabaseArtifactTypes.PROCEDURE)) {
       String sql = XSKConstants.XSK_HDBPROCEDURE_DROP + hdbProcedure.getName();
       executeSql(sql, connection);

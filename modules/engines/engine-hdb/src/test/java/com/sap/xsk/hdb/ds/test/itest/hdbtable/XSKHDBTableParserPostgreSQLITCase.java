@@ -71,5 +71,6 @@ public class XSKHDBTableParserPostgreSQLITCase {
     ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME));
     assertTrue(rs.next());
     assertEquals(HDBTABLE_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
+    stmt.executeUpdate(String.format("DROP TABLE \"%s\"", HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME));
   }
 }

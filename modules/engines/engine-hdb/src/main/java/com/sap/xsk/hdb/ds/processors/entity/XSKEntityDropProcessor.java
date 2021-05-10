@@ -23,6 +23,8 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
+
 /**
  * The Entity Drop Processor.
  */
@@ -39,7 +41,8 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel),
+        SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
     logger.info("Processing Drop Table: {}", tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
       String sql = SqlFactory.getNative(connection).select().column("COUNT(*)").from(tableName)
@@ -65,14 +68,13 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
         for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
           String foreignKeyName = "FK_" + foreignKey.getName();
           String[] fkColumns = foreignKey.getColumns();
-          String referencedTable = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
           String[] referencedColumns = foreignKey.getReferencedColumns();
-          foreignKeyName = XSKHDBUtils.escapeArtifactName(foreignKeyName);
+          foreignKeyName = XSKHDBUtils.escapeArtifactName(connection, foreignKeyName, SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
           for (int i = 0; i < fkColumns.length; i++) {
-            fkColumns[i] = XSKHDBUtils.escapeArtifactName(fkColumns[i]);
+            fkColumns[i] = XSKHDBUtils.escapeArtifactName(connection, fkColumns[i], SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
           }
           for (int i = 0; i < referencedColumns.length; i++) {
-            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(referencedColumns[i]);
+            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(connection, referencedColumns[i], SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
           }
           sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyName).fromTable(tableName).build();
           executeSql(sql, connection);

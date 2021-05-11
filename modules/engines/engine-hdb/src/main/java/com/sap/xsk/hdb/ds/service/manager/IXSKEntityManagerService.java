@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 import static java.text.MessageFormat.format;
 
 import com.google.inject.Inject;
@@ -85,8 +84,7 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
   public void createDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
     if (entitiesModel != null) {
       for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-        String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel),
-            SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+        String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
         if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
           this.xskEntityCreateProcessor.execute(connection, entityModel);
         } else {
@@ -101,8 +99,7 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
   public void dropDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
     if (entitiesModel != null) {
       for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-        String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel),
-            SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+        String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
         if (SqlFactory.getNative(connection).exists(connection, tableName)) {
           if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
             xskEntityDropProcessor.execute(connection, entityModel);
@@ -119,8 +116,7 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
       throws SQLException, OperationNotSupportedException {
     if (entitiesModel != null) {
       for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-        String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel),
-            SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+        String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
         if (SqlFactory.getNative(connection).exists(connection, tableName)) {
           if (SqlFactory.getNative(connection).count(connection, tableName) != 0) {
             this.xskEntityUpdateProcessor.execute(connection, entityModel);

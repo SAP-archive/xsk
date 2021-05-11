@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.view;
 
-import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
@@ -42,7 +41,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
   public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
     logger.info("Processing Create View: " + viewModel.getName());
 
-    String viewName = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+    String viewName = XSKHDBUtils.escapeArtifactName(viewModel.getName());
     if (!SqlFactory.getNative(connection).exists(connection, viewName, DatabaseArtifactTypes.VIEW)) {
       String sql = null;
       switch (viewModel.getHanaVersion()) {

@@ -27,8 +27,6 @@ import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
-
 /**
  * The Entity Create Processor.
  */
@@ -44,14 +42,13 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel),
-        SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+    String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Create Table: {}", tableName);
     CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
     List<XSKDataStructureHDBTableColumnModel> columns = entityModel.getColumns();
     List<String> primaryKeyColumns = new ArrayList<String>();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
-      String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName(), SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+      String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
       DataType type = DataType.valueOf(columnModel.getType());
       String length = columnModel.getLength();
       boolean isNullable = columnModel.isNullable();
@@ -99,16 +96,14 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
         for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
           String foreignKeyName = "FK_" + foreignKey.getName();
           String[] fkColumns = foreignKey.getColumns();
-          String referencedTable = XSKHDBUtils
-              .escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()),
-                  SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+          String referencedTable = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
           String[] referencedColumns = foreignKey.getReferencedColumns();
-          foreignKeyName = XSKHDBUtils.escapeArtifactName(connection, foreignKeyName, SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+          foreignKeyName = XSKHDBUtils.escapeArtifactName(foreignKeyName);
           for (int i = 0; i < fkColumns.length; i++) {
-            fkColumns[i] = XSKHDBUtils.escapeArtifactName(connection, fkColumns[i], SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+            fkColumns[i] = XSKHDBUtils.escapeArtifactName(fkColumns[i]);
           }
           for (int i = 0; i < referencedColumns.length; i++) {
-            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(connection, referencedColumns[i], SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(referencedColumns[i]);
           }
           createTableBuilder.foreignKey(foreignKeyName, fkColumns, referencedTable, referencedColumns);
         }

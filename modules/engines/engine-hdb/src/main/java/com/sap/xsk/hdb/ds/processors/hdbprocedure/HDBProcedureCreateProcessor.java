@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbprocedure;
 
-import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
@@ -32,7 +31,7 @@ public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStr
   public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
     logger.info("Processing Create Procedure: " + hdbProcedure.getName());
 
-    String procedureName = XSKHDBUtils.escapeArtifactName(connection, hdbProcedure.getName(), SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+    String procedureName = XSKHDBUtils.escapeArtifactName(hdbProcedure.getName());
     if (!SqlFactory.getNative(connection).exists(connection, procedureName, DatabaseArtifactTypes.PROCEDURE)) {
       String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getContent();
       executeSql(sql, connection);

@@ -43,7 +43,6 @@ public class XSKHDBTableParserMySQLITCase {
 
   @BeforeClass
   public static void setUp() throws SQLException {
-    Network network = Network.newNetwork();
     jdbcContainer =
         new MySQLContainer<>(HDBTABLE_MYSQL_DOCKER_IMAGE);
     jdbcContainer.start();

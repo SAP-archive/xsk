@@ -55,17 +55,20 @@ public class DynamicDataSourceFactory implements ObjectFactory {
   }
 
   ObjectFactory getTomcatDefaultObjectFactory() throws InstantiationException, IllegalAccessException {
-    if (tomcatObjectFactory == null) {
-      int tomcatVersion = getTomcatVersion();
-      setTomcatObjectFactory(tomcatVersion);
+    if (tomcatObjectFactory != null) {
+      return tomcatObjectFactory;
     }
+
+    int tomcatVersion = getTomcatVersion();
+    setTomcatObjectFactory(tomcatVersion);
     return tomcatObjectFactory;
   }
 
   private int getTomcatVersion() {
     String tomcatVersionString = ServerInfo.getServerNumber();
     logger.fine("Tomcat version string " + tomcatVersionString);
-    Pattern p = Pattern.compile("[0-9].[0-9].([0-9]+)");
+    String tomcatVersionPattern = "[0-9].[0-9].([0-9]+)";
+    Pattern p = Pattern.compile(tomcatVersionPattern);
     Matcher match = p.matcher(tomcatVersionString);
     int noVersion = Integer.MAX_VALUE;
 
@@ -78,13 +81,14 @@ public class DynamicDataSourceFactory implements ObjectFactory {
 
   private void setTomcatObjectFactory(int tomcatVersion) throws IllegalAccessException, InstantiationException {
     Class<?> factoryClass;
+    int maxTomcatSupportedVersion = 7;
     try {
-      if (tomcatVersion == 8) {
+      if (tomcatVersion <= maxTomcatSupportedVersion) {
         logger.fine("Major version " + tomcatVersion);
-        factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT8_OF_CLASS_NAME);
-      } else {
-        logger.fine("Version not found, trying to load " + DEFAULT_TOMCAT7_OF_CLASS_NAME);
         factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT7_OF_CLASS_NAME);
+      } else {
+        logger.fine("Version not found, trying to load " + DEFAULT_TOMCAT8_OF_CLASS_NAME);
+        factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT8_OF_CLASS_NAME);
       }
       tomcatObjectFactory = (ObjectFactory) factoryClass.newInstance();
     } catch (ClassNotFoundException e) {

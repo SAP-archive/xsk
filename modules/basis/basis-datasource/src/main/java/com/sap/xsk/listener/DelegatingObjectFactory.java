@@ -78,15 +78,16 @@ public class DelegatingObjectFactory implements ObjectFactory {
 
   private ObjectFactory createFactory(Reference reference) throws NamingException {
     String factoryClassName = reference.getFactoryClassName();
-    if (factoryClassName != null) {
-      try {
-        return (ObjectFactory) getClass().getClassLoader().loadClass(factoryClassName).newInstance();
-      } catch (Exception e) {
-        LOGGER.severe("Exception is thrown by factory [" + factoryClassName + "] during retrieving object instance. Exception is: " + e);
-        throw new NamingException("Cannot create resource  object instance due to exception in the object factory");
-      }
+    if (factoryClassName == null) {
+      return null;
     }
-    return null;
+
+    try {
+      return (ObjectFactory) getClass().getClassLoader().loadClass(factoryClassName).newInstance();
+    } catch (Exception e) {
+      LOGGER.severe("Exception is thrown by factory [" + factoryClassName + "] during retrieving object instance. Exception is: " + e);
+      throw new NamingException("Cannot create resource  object instance due to exception in the object factory");
+    }
   }
 
   private RefAddr removeDelegatingObjectFactoryFromReference(Reference reference) {

@@ -31,6 +31,8 @@ import org.eclipse.dirigible.database.sql.builders.table.AlterTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
+
 /**
  * The Entity Alter Processor.
  */
@@ -68,7 +70,7 @@ public class XSKEntityAlterProcessor {
 
     // ADD iteration
     for (XSKDataStructureHDBTableColumnModel columnModel : entityModel.getColumns()) {
-      String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
+      String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName(), SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
       DataType type = DataType.valueOf(columnModel.getType());
       String length = columnModel.getLength();
       boolean isNullable = columnModel.isNullable();

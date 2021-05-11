@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
@@ -41,7 +42,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(tableModel.getName());
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
     logger.info("Processing Drop Table: " + tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
       String sql = null;

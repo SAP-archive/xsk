@@ -28,8 +28,11 @@ import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
+import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 
 /**
  * The Table Create Processor.
@@ -47,14 +50,17 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
 
-    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-    String tableName = XSKHDBUtils.escapeArtifactName(tableModel.getName());
+    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+    boolean shouldEscapeArtefactPropertyName =
+        caseSensitive && !SqlFactory.deriveDialect(connection).getClass().equals(PostgresSqlDialect.class);
+
     String sql = null;
     logger.info("Processing Create Table: " + tableName);
     CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
     List<XSKDataStructureHDBTableColumnModel> columns = tableModel.getColumns();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
-      String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
+      String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName(), shouldEscapeArtefactPropertyName);
       DataType type = DataType.valueOf(columnModel.getType());
       String length = columnModel.getLength();
       boolean isNullable = columnModel.isNullable();
@@ -94,11 +100,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         String[] primaryKeyColumns = new String[tableModel.getConstraints().getPrimaryKey().getColumns().length];
         int i = 0;
         for (String column : tableModel.getConstraints().getPrimaryKey().getColumns()) {
-          if (caseSensitive) {
-            primaryKeyColumns[i++] = "\"" + column + "\"";
-          } else {
-            primaryKeyColumns[i++] = column;
-          }
+          primaryKeyColumns[i++] = column;
         }
 
         createTableBuilder.primaryKey(primaryKeyColumns);
@@ -107,29 +109,25 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : tableModel.getConstraints().getForeignKeys()) {
           String foreignKeyName = foreignKey.getName();
           if (caseSensitive) {
-            foreignKeyName = "\"" + foreignKeyName + "\"";
+            foreignKeyName = XSKHDBUtils.escapeArtifactName(connection, foreignKeyName, shouldEscapeArtefactPropertyName);
           }
           String[] foreignKeyColumns = new String[foreignKey.getColumns().length];
           int i = 0;
           for (String column : foreignKey.getColumns()) {
             if (caseSensitive) {
-              foreignKeyColumns[i++] = "\"" + column + "\"";
+              foreignKeyColumns[i++] = XSKHDBUtils.escapeArtifactName(connection, column, shouldEscapeArtefactPropertyName);
             } else {
               foreignKeyColumns[i++] = column;
             }
           }
           String foreignKeyReferencedTable = foreignKey.getReferencedTable();
           if (caseSensitive) {
-            foreignKeyReferencedTable = "\"" + foreignKeyReferencedTable + "\"";
+            foreignKeyReferencedTable = XSKHDBUtils.escapeArtifactName(connection, foreignKeyReferencedTable, shouldEscapeArtefactPropertyName);
           }
           String[] foreignKeyReferencedColumns = new String[foreignKey.getReferencedColumns().length];
           i = 0;
           for (String column : foreignKey.getReferencedColumns()) {
-            if (caseSensitive) {
-              foreignKeyReferencedColumns[i++] = "\"" + column + "\"";
-            } else {
-              foreignKeyReferencedColumns[i++] = column;
-            }
+            foreignKeyReferencedColumns[i++] = column;
           }
 
           createTableBuilder.foreignKey(foreignKeyName, foreignKeyColumns, foreignKeyReferencedTable,
@@ -140,16 +138,12 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         for (XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex : tableModel.getConstraints().getUniqueIndices()) {
           String uniqueIndexName = uniqueIndex.getName();
           if (caseSensitive) {
-            uniqueIndexName = "\"" + uniqueIndexName + "\"";
+            uniqueIndexName = XSKHDBUtils.escapeArtifactName(connection, uniqueIndexName, shouldEscapeArtefactPropertyName);
           }
           String[] uniqueIndexColumns = new String[uniqueIndex.getColumns().length];
           int i = 0;
           for (String column : uniqueIndex.getColumns()) {
-            if (caseSensitive) {
-              uniqueIndexColumns[i++] = "\"" + column + "\"";
-            } else {
-              uniqueIndexColumns[i++] = column;
-            }
+            uniqueIndexColumns[i++] = column;
           }
           createTableBuilder.unique(uniqueIndexName, uniqueIndexColumns);
         }
@@ -158,7 +152,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         for (XSKDataStructureHDBTableConstraintCheckModel check : tableModel.getConstraints().getChecks()) {
           String checkName = check.getName();
           if (caseSensitive) {
-            checkName = "\"" + checkName + "\"";
+            checkName = XSKHDBUtils.escapeArtifactName(connection, checkName, shouldEscapeArtefactPropertyName);
           }
           createTableBuilder.check(checkName, check.getExpression());
         }

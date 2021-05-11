@@ -35,6 +35,7 @@ public final class XSKConstants {
    * The Windows separator character.
    */
   public static final char WINDOWS_SEPARATOR = '\\';
+  public static final boolean SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE = true;
 
   private XSKConstants() {
   }

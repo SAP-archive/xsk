@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbtablefunction;
 
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
@@ -31,7 +32,8 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
   public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
     logger.info("Processing Create TableFunction: " + hdbTableFunction.getName());
 
-    String tableFunctionName = XSKHDBUtils.escapeArtifactName(hdbTableFunction.getName());
+    String tableFunctionName = XSKHDBUtils.escapeArtifactName(connection, hdbTableFunction.getName(),
+        SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
     if (!SqlFactory.getNative(connection).exists(connection, tableFunctionName, DatabaseArtifactTypes.FUNCTION)) {
       String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getContent();
       executeSql(sql, connection);

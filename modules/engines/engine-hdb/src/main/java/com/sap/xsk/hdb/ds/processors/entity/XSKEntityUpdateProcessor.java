@@ -23,6 +23,8 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
+
 public class XSKEntityUpdateProcessor extends AbstractXSKProcessor<XSKDataStructureEntityModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKEntityUpdateProcessor.class);
@@ -42,7 +44,8 @@ public class XSKEntityUpdateProcessor extends AbstractXSKProcessor<XSKDataStruct
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel),
+        SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
     logger.info("Processing Update Entity: {}", tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
       if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {

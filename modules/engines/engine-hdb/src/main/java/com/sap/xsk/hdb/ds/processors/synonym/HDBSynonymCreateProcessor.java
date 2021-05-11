@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.synonym;
 
+import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
@@ -40,8 +41,10 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
   public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
     logger.info("Processing Create Synonym: " + synonymModel.getName());
 
-    String synonymName = XSKHDBUtils.escapeArtifactName(synonymModel.getName());
-    String targetObjectName = XSKHDBUtils.escapeArtifactName(synonymModel.getTargetObject(), synonymModel.getTargetSchema());
+    String synonymName = XSKHDBUtils.escapeArtifactName(connection, synonymModel.getName(), SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+    String targetObjectName = XSKHDBUtils
+        .escapeArtifactName(connection, synonymModel.getTargetObject(), synonymModel.getTargetSchema(),
+            SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
     if (!SqlFactory.getNative(connection).exists(connection, synonymModel.getName(), DatabaseArtifactTypes.SYNONYM)) {
       String sql = SqlFactory.getNative(connection).create().synonym(synonymName).forSource(targetObjectName).build();
       executeSql(sql, connection);

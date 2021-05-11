@@ -31,7 +31,7 @@ public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStr
   public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
     logger.info("Processing Create Procedure: " + hdbProcedure.getName());
 
-    String procedureName = XSKHDBUtils.escapeArtifactName(hdbProcedure.getName());
+    String procedureName = XSKHDBUtils.escapeArtifactName(connection, hdbProcedure.getName());
     if (!SqlFactory.getNative(connection).exists(connection, procedureName, DatabaseArtifactTypes.PROCEDURE)) {
       String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getContent();
       executeSql(sql, connection);

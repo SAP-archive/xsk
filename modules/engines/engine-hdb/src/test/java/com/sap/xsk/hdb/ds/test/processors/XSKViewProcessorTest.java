@@ -53,8 +53,8 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
   private Connection mockConnection;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SqlFactory mockSqlfactory;
-  @Mock
-  private DefaultSqlDialect mockDefaultSqlDialect;
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private DefaultSqlDialect mockSqlDialect;
   @Mock
   private CreateBranchingBuilder create;
   @Mock
@@ -82,6 +82,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.VIEW)).thenReturn(false);
     when(SqlFactory.getNative(mockConnection).create()).thenReturn(create);
     when(SqlFactory.getNative(mockConnection).create().view(any())).thenReturn(mockCreateViewBuilder);
@@ -106,6 +107,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
 
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.VIEW)).thenReturn(false);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
@@ -125,6 +127,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
 
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.VIEW)).thenReturn(true);
     when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
     when(SqlFactory.getNative(mockConnection).drop().view(any())).thenReturn(mockDropViewBuilder);

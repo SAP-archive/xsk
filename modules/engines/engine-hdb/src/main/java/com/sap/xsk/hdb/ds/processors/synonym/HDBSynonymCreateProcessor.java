@@ -40,8 +40,9 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
   public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
     logger.info("Processing Create Synonym: " + synonymModel.getName());
 
-    String synonymName = XSKHDBUtils.escapeArtifactName(synonymModel.getName());
-    String targetObjectName = XSKHDBUtils.escapeArtifactName(synonymModel.getTargetObject(), synonymModel.getTargetSchema());
+    String synonymName = XSKHDBUtils.escapeArtifactName(connection, synonymModel.getName());
+    String targetObjectName = XSKHDBUtils
+        .escapeArtifactName(connection, synonymModel.getTargetObject(), synonymModel.getTargetSchema());
     if (!SqlFactory.getNative(connection).exists(connection, synonymModel.getName(), DatabaseArtifactTypes.SYNONYM)) {
       String sql = SqlFactory.getNative(connection).create().synonym(synonymName).forSource(targetObjectName).build();
       executeSql(sql, connection);

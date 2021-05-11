@@ -41,7 +41,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
   public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
     logger.info("Processing Create View: " + viewModel.getName());
 
-    String viewName = XSKHDBUtils.escapeArtifactName(viewModel.getName());
+    String viewName = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName());
     if (!SqlFactory.getNative(connection).exists(connection, viewName, DatabaseArtifactTypes.VIEW)) {
       String sql = null;
       switch (viewModel.getHanaVersion()) {

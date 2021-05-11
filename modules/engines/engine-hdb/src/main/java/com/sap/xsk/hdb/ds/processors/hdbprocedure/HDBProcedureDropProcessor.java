@@ -31,7 +31,7 @@ public class HDBProcedureDropProcessor extends AbstractXSKProcessor<XSKDataStruc
   public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
     logger.info("Processing Drop Procedure: " + hdbProcedure.getName());
 
-    String procedureName = XSKHDBUtils.escapeArtifactName(hdbProcedure.getName());
+    String procedureName = XSKHDBUtils.escapeArtifactName(connection, hdbProcedure.getName());
     if (SqlFactory.getNative(connection).exists(connection, procedureName, DatabaseArtifactTypes.PROCEDURE)) {
       String sql = XSKConstants.XSK_HDBPROCEDURE_DROP + hdbProcedure.getName();
       executeSql(sql, connection);

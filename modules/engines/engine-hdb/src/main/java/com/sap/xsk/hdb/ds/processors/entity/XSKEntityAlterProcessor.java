@@ -68,7 +68,7 @@ public class XSKEntityAlterProcessor {
 
     // ADD iteration
     for (XSKDataStructureHDBTableColumnModel columnModel : entityModel.getColumns()) {
-      String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
+      String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName());
       DataType type = DataType.valueOf(columnModel.getType());
       String length = columnModel.getLength();
       boolean isNullable = columnModel.isNullable();

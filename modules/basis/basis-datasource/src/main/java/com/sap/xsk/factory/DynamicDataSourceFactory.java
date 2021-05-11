@@ -44,47 +44,53 @@ public class DynamicDataSourceFactory implements ObjectFactory {
     if (!(obj instanceof Reference)) {
       throw new NameNotFoundException("Object [" + obj + "] is not instance of [" + Reference.class.getName() + "]");
     }
-    Reference ref = (Reference) obj;
-    if (DataSource.class.getName().equals(ref.getClassName())) {
-      logger.fine("Resource ref [ " + ref.getClassName() + "] will be processed.");
+    var ref = (Reference) obj;
+    var refClassName = ref.getClassName();
+    if (DataSource.class.getName().equals(refClassName)) {
+      logger.fine("Resource ref [ " + refClassName + "] will be processed.");
       return true;
     }
-    logger.fine("Resource ref [ " + ref.getClassName() + "] is discarded.");
-    logger.fine(ref.toString());
+    logger.fine("Resource ref [ " + refClassName + "] is discarded.");
     return false;
   }
 
   ObjectFactory getTomcatDefaultObjectFactory() throws InstantiationException, IllegalAccessException {
     if (tomcatObjectFactory == null) {
-      Class<?> factoryClass;
-
-      String tomcatVersionString = ServerInfo.getServerNumber();
-      logger.fine("Tomcat version string " + tomcatVersionString);
-      Pattern p = Pattern.compile("[0-9].[0-9].([0-9]+)");
-      Matcher match = p.matcher(tomcatVersionString);
-
-      try {
-        if (match.find()) {
-          int majorVersion = Integer.parseInt(match.group(0).substring(0, 1));
-          logger.fine("Major version " + majorVersion);
-          if (majorVersion <= 7) {
-            factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT7_OF_CLASS_NAME);
-          } else {
-            factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT8_OF_CLASS_NAME);
-            logger.fine("Major version " + majorVersion);
-          }
-        } else {
-          logger.fine("Version not found,  trying to load " + DEFAULT_TOMCAT7_OF_CLASS_NAME);
-          factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT7_OF_CLASS_NAME);
-        }
-        tomcatObjectFactory = (ObjectFactory) factoryClass.newInstance(); //is new instance ok? return tomcatObjectFactory;
-      } catch (ClassNotFoundException e) {
-        throw new IllegalStateException("Unable to load tomcat default object factory");
-      }
+      int tomcatVersion = getTomcatVersion();
+      setTomcatObjectFactory(tomcatVersion);
     }
     return tomcatObjectFactory;
   }
 
+  private int getTomcatVersion() {
+    String tomcatVersionString = ServerInfo.getServerNumber();
+    logger.fine("Tomcat version string " + tomcatVersionString);
+    Pattern p = Pattern.compile("[0-9].[0-9].([0-9]+)");
+    Matcher match = p.matcher(tomcatVersionString);
+    int noVersion = Integer.MAX_VALUE;
+
+    if (match.find()) {
+      return Integer.parseInt(match.group(0).substring(0, 1));
+    }
+
+    return noVersion;
+  }
+
+  private void setTomcatObjectFactory(int tomcatVersion) throws IllegalAccessException, InstantiationException {
+    Class<?> factoryClass;
+    try {
+      if (tomcatVersion == 8) {
+        logger.fine("Major version " + tomcatVersion);
+        factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT8_OF_CLASS_NAME);
+      } else {
+        logger.fine("Version not found, trying to load " + DEFAULT_TOMCAT7_OF_CLASS_NAME);
+        factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT7_OF_CLASS_NAME);
+      }
+      tomcatObjectFactory = (ObjectFactory) factoryClass.newInstance();
+    } catch (ClassNotFoundException e) {
+      throw new IllegalStateException("Unable to load tomcat default object factory");
+    }
+  }
   void enhanceResourceRef(ResourceRef ref, String name) {
     enhanceResourceRef(ref, name, System.getenv());
   }
@@ -98,7 +104,6 @@ public class DynamicDataSourceFactory implements ObjectFactory {
     logger.info(" environment variables " + allEnvVarKeys);
 
     for (String key : allEnvVarKeys) {
-
       if (key.startsWith(prefix)) {
         logger.info("Processing key [" + key + "]");
 
@@ -120,15 +125,13 @@ public class DynamicDataSourceFactory implements ObjectFactory {
   String getPrefixDelimiter(Map<String, String> envVariables) {
     if (envPrefixDelimiter == null) {
       String value = envVariables.get(ENV_PREFIX_DELIMITER_KEY);
-      logger.fine("Delimiter value read from env variables is [" + value + "]");
       if (value == null || value.equals("")) {
         envPrefixDelimiter = ENV_PREFIX_DELIMITER_DEFAULT;
-        logger.fine("Setting default delimiter " + ENV_PREFIX_DELIMITER_DEFAULT);
       } else {
         envPrefixDelimiter = value;
-        logger.fine("Setting custom delimiter " + value);
       }
     }
+    logger.fine("Setting delimiter " + envPrefixDelimiter);
     return envPrefixDelimiter;
   }
 }

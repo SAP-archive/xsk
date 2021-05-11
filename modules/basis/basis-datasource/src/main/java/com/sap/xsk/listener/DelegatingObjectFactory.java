@@ -1,5 +1,7 @@
 package com.sap.xsk.listener;
 
+import static java.text.MessageFormat.format;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -29,62 +31,62 @@ public class DelegatingObjectFactory implements ObjectFactory {
       if (objectInstance != null) {
         return objectInstance;
       }
-
-      objectInstance = getObjectInstanceFromDefaults(obj, name, nameCtx, environment);
-      if (objectInstance != null) {
-        LOGGER.fine("Object instance is obtained from default factory.");
-        return objectInstance;
-      }
     }
     throw new NamingException("Object instance with name [" + name + "] could not be created.");
   }
 
   private Object getObjectInstanceFromFactory(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment,
       final String referenceType) throws NamingException {
+
     final List<ObjectFactory> factories = getObjectFactories(referenceType);
     for (ObjectFactory factory : factories) {
-      Object objectInstance = null;
-      try {
-        objectInstance = factory.getObjectInstance(obj, name, nameCtx, environment);
-      } catch (NameNotFoundException nne) {
-        LOGGER.fine("Will move to next factory as facroty [" + factory + "] could not retrieve object instance for name [" + name
-            + "]. NameNotFoundException was thrown. " + nne.getMessage());
-      } catch (Exception e) {
-        LOGGER.severe("Exception is thrown by factory [" + factory + "] during retrieving object instance. Exception is: " + e);
-        throw new NamingException("Cannot create resource  object instance due to exception in the object factory");
-      }
-      if (objectInstance != null) {
-        LOGGER.fine("Object instance with name [" + name + "]is created by factory [" + factory + "].");
-        return objectInstance;
+      var res = createObject(obj, name, nameCtx, environment, factory);
+      if (res != null) {
+        LOGGER.fine(format("Object created for name {0} with factory {1}", name, factory));
+        return res;
       }
     }
-    return null;
+    return getObjectInstanceFromDefaults(obj, name, nameCtx, environment);
   }
 
   private Object getObjectInstanceFromDefaults(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment) throws NamingException {
     final Reference reference = (Reference) obj;
     RefAddr removedFactory = removeDelegatingObjectFactoryFromReference(reference);
-    Object objectInstance = null;
+    var factory = createFactory(reference);
 
+    if (removedFactory != null) {
+      LOGGER.info("Adding removed factory");
+      reference.add(removedFactory);
+    }
+
+    return createObject(obj, name, nameCtx, environment, factory);
+  }
+
+  private Object createObject(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment, ObjectFactory factory)
+      throws NamingException {
+    Object objectInstance = null;
     try {
-      String factoryClassName = reference.getFactoryClassName();
-      if (factoryClassName != null) {
-        ObjectFactory objectFactory = (ObjectFactory) getClass().getClassLoader().loadClass(factoryClassName).newInstance();
-        objectInstance = objectFactory.getObjectInstance(reference, name, nameCtx, environment);
-      }
+      objectInstance = factory.getObjectInstance(obj, name, nameCtx, environment);
     } catch (NameNotFoundException nne) {
-      LOGGER.fine("Default object creation factory could not retrieve object instance for name [" + name
-          + "]. NameNotFoundException was thrown. " + nne.getMessage());
+      LOGGER.fine(format("Factory {0} couldn't retrieve object {1}", factory, name));
     } catch (Exception e) {
-      LOGGER.severe("Exception is thrown by default object creation facroty during retrieving object instance. Exception is: " + e);
+      LOGGER.severe("Exception is thrown by factory [" + factory + "] during retrieving object instance. Exception is: " + e);
       throw new NamingException("Cannot create resource  object instance due to exception in the object factory");
-    } finally {
-      if (removedFactory != null) {
-        reference.add(removedFactory);
-        LOGGER.fine("Add [" + this.getClass().getName() + "] to the communication endpoints of reference object  [" + reference + "].");
-      }
     }
     return objectInstance;
+  }
+
+  private ObjectFactory createFactory(Reference reference) throws NamingException {
+    String factoryClassName = reference.getFactoryClassName();
+    if (factoryClassName != null) {
+      try {
+        return (ObjectFactory) getClass().getClassLoader().loadClass(factoryClassName).newInstance();
+      } catch (Exception e) {
+        LOGGER.severe("Exception is thrown by factory [" + factoryClassName + "] during retrieving object instance. Exception is: " + e);
+        throw new NamingException("Cannot create resource  object instance due to exception in the object factory");
+      }
+    }
+    return null;
   }
 
   private RefAddr removeDelegatingObjectFactoryFromReference(Reference reference) {
@@ -95,14 +97,13 @@ public class DelegatingObjectFactory implements ObjectFactory {
       if (isDelegatedFactoryReference(content)) {
         reference.remove(i);
         removed = refAddr;
-        LOGGER.fine("Remove [" + this.getClass().getName() + "] from the communication endpoits of reference object  [" + reference + "].");
         break;
       }
     }
     return removed;
   }
 
-  private boolean isDelegatedFactoryReference(Object content){
+  private boolean isDelegatedFactoryReference(Object content) {
     return content != null && this.getClass().getName().equals(content.toString());
   }
 
@@ -113,10 +114,8 @@ public class DelegatingObjectFactory implements ObjectFactory {
     LOGGER.fine("Context classloader is set, we expect to be app classloader " + appClassLoader);
     List<ObjectFactory> factoriesVisibleFromApp = getObjectFactories(referenceType, appClassLoader);
 
-    List<ObjectFactory> result = new ArrayList<>(factoriesVisibleFromApp);
-
     LOGGER.fine(this + " - Found object factories visible from app loader " + factoriesVisibleFromApp);
-    return result;
+    return factoriesVisibleFromApp;
   }
 
   static List<ObjectFactory> getObjectFactories(final String referenceType, ClassLoader classLoader) {

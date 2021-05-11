@@ -51,8 +51,8 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
   private Connection mockConnection;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SqlFactory mockSqlfactory;
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private DefaultSqlDialect mockSqlDialect;
+  @Mock
+  private DefaultSqlDialect mockDefaultSqlDialect;
   @Mock
   private CreateBranchingBuilder create;
   @Mock
@@ -85,7 +85,6 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     when(SqlFactory.getNative(mockConnection).create().synonym(any())).thenReturn(mockCreateSynonymBuilder);
     when(SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any())).thenReturn(mockCreateSynonymBuilder);
     when(SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any()).build()).thenReturn(mockSQL);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     processorSpy.execute(mockConnection, model);
@@ -108,7 +107,6 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
     when(SqlFactory.getNative(mockConnection).drop().synonym(any())).thenReturn(mockDropSynonymBuilder);
     when(SqlFactory.getNative(mockConnection).drop().synonym(any()).build()).thenReturn(mockSQL);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     processorSpy.execute(mockConnection, model);

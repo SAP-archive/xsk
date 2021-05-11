@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbtablefunction;
 
-import static com.sap.xsk.utils.XSKConstants.SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE;
 import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
@@ -32,8 +31,7 @@ public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataS
   public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
     logger.info("Processing Drop TableFunction: " + hdbTableFunction.getName());
 
-    String tableFunctionName = XSKHDBUtils.escapeArtifactName(connection, hdbTableFunction.getName(),
-        SHOULD_ADD_ESCAPE_SYMBOL_DEFAULT_VALUE);
+    String tableFunctionName = XSKHDBUtils.escapeArtifactName(hdbTableFunction.getName());
     if (SqlFactory.getNative(connection).exists(connection, tableFunctionName, DatabaseArtifactTypes.FUNCTION)) {
       String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + hdbTableFunction.getName();
       executeSql(sql, connection);

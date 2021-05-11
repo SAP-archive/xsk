@@ -32,7 +32,6 @@ import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.DefaultSqlDialect;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,8 +50,6 @@ public class HDBProcedureProcessorTest extends AbstractGuiceTest {
   private Connection mockConnection;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SqlFactory mockSqlfactory;
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private DefaultSqlDialect mockSqlDialect;
   @Mock
   private PreparedStatement mockStatement;
 
@@ -67,7 +64,6 @@ public class HDBProcedureProcessorTest extends AbstractGuiceTest {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
@@ -92,7 +88,6 @@ public class HDBProcedureProcessorTest extends AbstractGuiceTest {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);

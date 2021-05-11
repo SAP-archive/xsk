@@ -12,14 +12,11 @@
 package com.sap.xsk.utils;
 
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import java.sql.Connection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
 
 public class XSKHDBUtils {
 
@@ -98,19 +95,19 @@ public class XSKHDBUtils {
    * @param schemaName   name of teh schema that will be assembled to the artifact name
    * @return escaped in quotes artifact name
    */
-  public static String escapeArtifactName(Connection connection, String artifactName, String schemaName, boolean shouldEscapeName) {
-    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
-    String escapeSymbol = getEscapeSymbol(connection);
-    if (!artifactName.startsWith(escapeSymbol)) {
-      if (shouldEscapeName) {
-        artifactName = escapeSymbol + artifactName + escapeSymbol;
+  public static String escapeArtifactName(String artifactName, String schemaName) {
+    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
+
+    if (!artifactName.startsWith("\"")) {
+      if (caseSensitive) {
+        artifactName = "\"" + artifactName + "\"";
       }
     }
 
     if (schemaName != null && !schemaName.trim().isEmpty()) {
-      if (!schemaName.startsWith(escapeSymbol)) {
+      if (!schemaName.startsWith("\"")) {
         if (caseSensitive) {
-          schemaName = escapeSymbol + schemaName + escapeSymbol + ".";
+          schemaName = "\"" + schemaName + "\"" + ".";
         } else {
           schemaName = schemaName + ".";
         }
@@ -123,15 +120,11 @@ public class XSKHDBUtils {
   }
 
   /**
-   * See also {@link #escapeArtifactName(Connection, String, String, boolean)}.
+   * See also {@link #escapeArtifactName(String, String)}.
    */
-  public static String escapeArtifactName(Connection connection, String artifactName, boolean shouldEscapeName) {
-    return escapeArtifactName(connection, artifactName, null, shouldEscapeName);
+  public static String escapeArtifactName(String artifactName) {
+    return escapeArtifactName(artifactName, null);
   }
 
-  public static String getEscapeSymbol(Connection connection) {
-    return (SqlFactory.deriveDialect(connection).getClass().equals(MySQLSqlDialect.class))
-        ? "`"
-        : "\"";
-  }
+
 }

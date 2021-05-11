@@ -53,8 +53,8 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
   private Connection mockConnection;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SqlFactory mockSqlfactory;
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private DefaultSqlDialect mockSqlDialect;
+  @Mock
+  private DefaultSqlDialect mockDefaultSqlDialect;
   @Mock
   private CreateBranchingBuilder create;
   @Mock
@@ -87,7 +87,6 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
     when(SqlFactory.getNative(mockConnection).create().view(any())).thenReturn(mockCreateViewBuilder);
     when(SqlFactory.getNative(mockConnection).create().view(any()).asSelect(any())).thenReturn(mockCreateViewBuilder);
     when(SqlFactory.getNative(mockConnection).create().view(any()).asSelect(any()).build()).thenReturn(mockSQL);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     processorSpy.execute(mockConnection, model);
@@ -108,7 +107,6 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.VIEW)).thenReturn(false);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     processorSpy.execute(mockConnection, model);
@@ -131,7 +129,6 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
     when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
     when(SqlFactory.getNative(mockConnection).drop().view(any())).thenReturn(mockDropViewBuilder);
     when(SqlFactory.getNative(mockConnection).drop().view(any()).build()).thenReturn(mockSQL);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     processorSpy.execute(mockConnection, model);

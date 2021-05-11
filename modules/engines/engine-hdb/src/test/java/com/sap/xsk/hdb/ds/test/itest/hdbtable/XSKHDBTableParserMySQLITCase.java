@@ -23,7 +23,6 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.Network;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;

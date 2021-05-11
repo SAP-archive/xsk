@@ -103,8 +103,8 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         String[] primaryKeyColumns = new String[tableModel.getConstraints().getPrimaryKey().getColumns().length];
         int i = 0;
         for (String column : tableModel.getConstraints().getPrimaryKey().getColumns()) {
-          if (caseSensitive) {
-            primaryKeyColumns[i++] = "\"" + column + "\"";
+          if (caseSensitive && shouldEscapeArtefactPropertyName) {
+            primaryKeyColumns[i++] = XSKHDBUtils.escapeArtifactName(connection, column);
           } else {
             primaryKeyColumns[i++] = column;
           }
@@ -138,8 +138,9 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           String[] foreignKeyReferencedColumns = new String[foreignKey.getReferencedColumns().length];
           i = 0;
           for (String column : foreignKey.getReferencedColumns()) {
-            if (caseSensitive) {
-              foreignKeyReferencedColumns[i++] = "\"" + column + "\"";
+            if (caseSensitive && shouldEscapeArtefactPropertyName) {
+              foreignKeyReferencedColumns[i++] = XSKHDBUtils.escapeArtifactName(connection, column);
+
             } else {
               foreignKeyReferencedColumns[i++] = column;
             }
@@ -161,7 +162,9 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           int i = 0;
           for (String column : uniqueIndex.getColumns()) {
             if (caseSensitive) {
-              uniqueIndexColumns[i++] = "\"" + column + "\"";
+              uniqueIndexColumns[i++] = (shouldEscapeArtefactPropertyName)
+                  ? XSKHDBUtils.escapeArtifactName(connection, column)
+                  : column;
             } else {
               uniqueIndexColumns[i++] = column;
             }

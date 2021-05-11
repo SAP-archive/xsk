@@ -28,6 +28,7 @@ import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
+import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

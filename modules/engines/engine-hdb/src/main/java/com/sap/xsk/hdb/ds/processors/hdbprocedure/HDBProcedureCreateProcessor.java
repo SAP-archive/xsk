@@ -11,10 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbprocedure;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 7df2f63 (refactored XSKHDBUtils)
 import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;

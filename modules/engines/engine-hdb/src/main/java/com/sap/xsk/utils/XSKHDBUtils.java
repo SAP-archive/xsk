@@ -12,11 +12,14 @@
 package com.sap.xsk.utils;
 
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import java.sql.Connection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
 
 public class XSKHDBUtils {
 
@@ -103,9 +106,9 @@ public class XSKHDBUtils {
     }
 
     if (schemaName != null && !schemaName.trim().isEmpty()) {
-      if (!schemaName.startsWith("\"")) {
+      if (!schemaName.startsWith(escapeSymbol)) {
         if (caseSensitive) {
-          schemaName = "\"" + schemaName + "\"" + ".";
+          schemaName = escapeSymbol + schemaName + escapeSymbol + ".";
         } else {
           schemaName = schemaName + ".";
         }
@@ -124,5 +127,9 @@ public class XSKHDBUtils {
     return escapeArtifactName(connection, artifactName, null);
   }
 
-
+  public static String getEscapeSymbol(Connection connection) {
+    return (SqlFactory.deriveDialect(connection).getClass().equals(MySQLSqlDialect.class))
+        ? "`"
+        : "\"";
+  }
 }

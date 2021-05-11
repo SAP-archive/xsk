@@ -65,7 +65,6 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
         for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
           String foreignKeyName = "FK_" + foreignKey.getName();
           String[] fkColumns = foreignKey.getColumns();
-          String referencedTable = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
           String[] referencedColumns = foreignKey.getReferencedColumns();
           foreignKeyName = XSKHDBUtils.escapeArtifactName(connection, foreignKeyName);
           for (int i = 0; i < fkColumns.length; i++) {

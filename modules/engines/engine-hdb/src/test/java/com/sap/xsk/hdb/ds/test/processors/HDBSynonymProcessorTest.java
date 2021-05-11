@@ -51,8 +51,8 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
   private Connection mockConnection;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SqlFactory mockSqlfactory;
-  @Mock
-  private DefaultSqlDialect mockDefaultSqlDialect;
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private DefaultSqlDialect mockSqlDialect;
   @Mock
   private CreateBranchingBuilder create;
   @Mock
@@ -80,6 +80,7 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.SYNONYM)).thenReturn(false);
     when(SqlFactory.getNative(mockConnection).create()).thenReturn(create);
     when(SqlFactory.getNative(mockConnection).create().synonym(any())).thenReturn(mockCreateSynonymBuilder);
@@ -103,6 +104,7 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
 
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
     when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
     when(SqlFactory.getNative(mockConnection).drop().synonym(any())).thenReturn(mockDropSynonymBuilder);

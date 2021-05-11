@@ -50,7 +50,7 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
 
       String sourceTable = XSKHDBUtils.getTableName(entityModel);
       String name = "FK_" + sourceTable + "_" + tableName;
-      sourceTable = XSKHDBUtils.escapeArtifactName(sourceTable);
+      sourceTable = XSKHDBUtils.escapeArtifactName(connection, sourceTable);
 
       boolean existing = SqlFactory.getNative(connection).exists(connection, sourceTable);
       if (existing) {

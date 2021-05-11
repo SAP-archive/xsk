@@ -42,13 +42,21 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+<<<<<<< HEAD
     String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
+=======
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
+>>>>>>> 7df2f63 (refactored XSKHDBUtils)
     logger.info("Processing Create Table: {}", tableName);
     CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
     List<XSKDataStructureHDBTableColumnModel> columns = entityModel.getColumns();
     List<String> primaryKeyColumns = new ArrayList<String>();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
+<<<<<<< HEAD
       String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
+=======
+      String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName());
+>>>>>>> 7df2f63 (refactored XSKHDBUtils)
       DataType type = DataType.valueOf(columnModel.getType());
       String length = columnModel.getLength();
       boolean isNullable = columnModel.isNullable();
@@ -96,6 +104,7 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
         for (XSKDataStructureHDBTableConstraintForeignKeyModel foreignKey : entityModel.getConstraints().getForeignKeys()) {
           String foreignKeyName = "FK_" + foreignKey.getName();
           String[] fkColumns = foreignKey.getColumns();
+<<<<<<< HEAD
           String referencedTable = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
           String[] referencedColumns = foreignKey.getReferencedColumns();
           foreignKeyName = XSKHDBUtils.escapeArtifactName(foreignKeyName);
@@ -104,6 +113,17 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
           }
           for (int i = 0; i < referencedColumns.length; i++) {
             referencedColumns[i] = XSKHDBUtils.escapeArtifactName(referencedColumns[i]);
+=======
+          String referencedTable = XSKHDBUtils
+              .escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
+          String[] referencedColumns = foreignKey.getReferencedColumns();
+          foreignKeyName = XSKHDBUtils.escapeArtifactName(connection, foreignKeyName);
+          for (int i = 0; i < fkColumns.length; i++) {
+            fkColumns[i] = XSKHDBUtils.escapeArtifactName(connection, fkColumns[i]);
+          }
+          for (int i = 0; i < referencedColumns.length; i++) {
+            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(connection, referencedColumns[i]);
+>>>>>>> 7df2f63 (refactored XSKHDBUtils)
           }
           createTableBuilder.foreignKey(foreignKeyName, fkColumns, referencedTable, referencedColumns);
         }

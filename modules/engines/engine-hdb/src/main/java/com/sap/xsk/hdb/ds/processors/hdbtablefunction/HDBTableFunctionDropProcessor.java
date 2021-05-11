@@ -31,7 +31,7 @@ public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataS
   public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
     logger.info("Processing Drop TableFunction: " + hdbTableFunction.getName());
 
-    String tableFunctionName = XSKHDBUtils.escapeArtifactName(hdbTableFunction.getName());
+    String tableFunctionName = XSKHDBUtils.escapeArtifactName(connection, hdbTableFunction.getName());
     if (SqlFactory.getNative(connection).exists(connection, tableFunctionName, DatabaseArtifactTypes.FUNCTION)) {
       String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + hdbTableFunction.getName();
       executeSql(sql, connection);

@@ -39,7 +39,7 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Drop Table: {}", tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
       String sql = SqlFactory.getNative(connection).select().column("COUNT(*)").from(tableName)
@@ -67,12 +67,12 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
           String[] fkColumns = foreignKey.getColumns();
           String referencedTable = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
           String[] referencedColumns = foreignKey.getReferencedColumns();
-          foreignKeyName = XSKHDBUtils.escapeArtifactName(foreignKeyName);
+          foreignKeyName = XSKHDBUtils.escapeArtifactName(connection, foreignKeyName);
           for (int i = 0; i < fkColumns.length; i++) {
-            fkColumns[i] = XSKHDBUtils.escapeArtifactName(fkColumns[i]);
+            fkColumns[i] = XSKHDBUtils.escapeArtifactName(connection, fkColumns[i]);
           }
           for (int i = 0; i < referencedColumns.length; i++) {
-            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(referencedColumns[i]);
+            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(connection, referencedColumns[i]);
           }
           sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyName).fromTable(tableName).build();
           executeSql(sql, connection);

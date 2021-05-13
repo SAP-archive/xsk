@@ -81,15 +81,14 @@ public class DynamicDataSourceFactory implements ObjectFactory {
 
   private void setTomcatObjectFactory(int tomcatVersion) throws IllegalAccessException, InstantiationException {
     Class<?> factoryClass;
-    int maxTomcatSupportedVersion = 7;
+    int majorVersion7 = 7;
     try {
-      if (tomcatVersion <= maxTomcatSupportedVersion) {
-        logger.fine("Major version " + tomcatVersion);
+      if (tomcatVersion <= majorVersion7) {
         factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT7_OF_CLASS_NAME);
       } else {
-        logger.fine("Version not found, trying to load " + DEFAULT_TOMCAT8_OF_CLASS_NAME);
         factoryClass = this.getClass().getClassLoader().loadClass(DEFAULT_TOMCAT8_OF_CLASS_NAME);
       }
+      logger.fine("Major version " + tomcatVersion);
       tomcatObjectFactory = (ObjectFactory) factoryClass.newInstance();
     } catch (ClassNotFoundException e) {
       throw new IllegalStateException("Unable to load tomcat default object factory");

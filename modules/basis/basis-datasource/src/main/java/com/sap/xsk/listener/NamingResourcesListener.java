@@ -16,30 +16,17 @@ import org.apache.tomcat.util.descriptor.web.ResourceBase;
 public class NamingResourcesListener implements LifecycleListener, PropertyChangeListener {
 
   private static final Logger LOGGER = Logger.getLogger(NamingResourcesListener.class.getName());
-
   private static final String RESOURCE_STR = "resource";
-
   private static final String RESOURCE_ENV_REF_STR = "resourceEnvRef";
-
   private static final String FACTORY_CLASS_NAME = "DelegatingObjectFactory";
-
-  @Deprecated
   private static final String PERSISTENCE_FACTORY_CLASS_NAME = "com.sap.jpaas.service.persistence.core.JNDIDataSourceFactory";
-
   private static final String FACTORY_PROPERTY = "factory";
-
   private Object container;
-
   private NamingResourcesImpl namingResources;
-
   private boolean initialized = false;
-
   private static final String name = "/";
-
   private String factoryClassName;
-
   static final String RESOURCE_REF_NAME = "ResourceRefName";
-
   private static final String DATA_SOURCE = "DataSource";
 
   @Override
@@ -70,6 +57,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
 
   @Override
   public void lifecycleEvent(LifecycleEvent event) {
+
     this.container = event.getLifecycle();
 
     if (!(this.container instanceof Context)) {
@@ -82,7 +70,6 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
       this.namingResources.addPropertyChangeListener(this);
 
       // handle resource-ref
-
       ResourceBase[] resources = this.namingResources.findResources();
       updateResources(resources);
 
@@ -122,7 +109,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
 
     if (resource.getProperty(RESOURCE_REF_NAME) == null) {
       resource.setProperty(RESOURCE_REF_NAME, resource.getName());
-      LOGGER.log(Level.FINE, "Injecting resource ref name as property to " + resource);
+      LOGGER.fine("Injecting resource ref name as property to " + resource);
 
     }
   }
@@ -130,7 +117,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
   private void addFactoryClassAsResourceProperty(ResourceBase resource) {
     if (resource.getProperty(FACTORY_PROPERTY) == null || resource.getProperty(FACTORY_PROPERTY).equals(PERSISTENCE_FACTORY_CLASS_NAME)) {
       resource.setProperty(FACTORY_PROPERTY, getFactoryClassName());
-      LOGGER.log(Level.FINE, "Injecting factory " + getFactoryClassName() + " to " + resource);
+      LOGGER.fine("Injecting factory " + getFactoryClassName() + " to " + resource);
     }
   }
 
@@ -139,6 +126,7 @@ public class NamingResourcesListener implements LifecycleListener, PropertyChang
   }
 
   public String getFactoryClassName() {
+
     if (this.factoryClassName == null) {
       return FACTORY_CLASS_NAME;
     }

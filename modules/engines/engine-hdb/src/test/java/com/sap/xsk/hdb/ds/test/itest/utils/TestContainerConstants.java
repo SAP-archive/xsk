@@ -37,4 +37,26 @@ public class TestContainerConstants {
   public static final String HDBTABLE_MYSQL_RELATIVE_RESOURCES_PATH = "/registry.public.hdbtable-itest/SamplePostgreXSClassicTable.hdbtable";
   public static final int HDBTABLE_MYSQL_EXPECTED_CREATED_RAWS_COUNT = 0;
   public static final String HDBTABLE_MYSQL_EXPECTED_TABLE_NAME = "hdbtable-itest::SamplePostgreXSClassicTable";
+
+  public static final String HDBVIEW_POSTGRESQL_DOCKER_IMAGE = "postgres:alpine";
+  public static final String HDBVIEW_POSTGRESQL_ROOT_FOLDER = "/usr/local/target/dirigible/repository/root";
+  public static final String HDBVIEW_POSTGRESQL_REPO_PATH = "/registry/public/hdbview-itest/SamplePostgreXSClassicView.hdbview";
+  public static final String HDBVIEW_POSTGRESQL_RELATIVE_RESOURCES_PATH = "/registry.public.hdbview-itest/SamplePostgreXSClassicView.hdbview";
+  public static final int HDBVIEW_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT = 0;
+  public static final String HDBVIEW_POSTGRESQL_EXPECTED_VIEW_NAME = "hdbview-itest::SamplePostgreXSClassicView";
+  public static final String HDBVIEW_POSTGRESQL_CREATE_TABLE1_SQL = "create table \"public\".\"acme.com.test.tables::MY_TABLE1\"(Column1 integer,Column2 integer)";
+  public static final String HDBVIEW_POSTGRESQL_CREATE_MY_VIEW1_SQL = "create table \"public\".\"acme.com.test.views::MY_VIEW1\"(Column1 integer,Column2 integer)";
+  public static final String HDBVIEW_POSTGRESQL_DROP_TABLE1_SQL = "drop table \"public\".\"acme.com.test.tables::MY_TABLE1\"";
+  public static final String HDBVIEW_POSTGRESQL_DROP_MY_VIEW1_SQL = "drop table \"public\".\"acme.com.test.views::MY_VIEW1\"";
+
+  public static final String HDBVIEW_MYSQL_DOCKER_IMAGE = "mysql:5.7";
+  public static final String HDBVIEW_MYSQL_ROOT_FOLDER = "/usr/local/target/dirigible/repository/root";
+  public static final String HDBVIEW_MYSQL_REPO_PATH = "/registry/public/hdbview-itest/SampleMySQLXSClassicView.hdbview";
+  public static final String HDBVIEW_MYSQL_RELATIVE_RESOURCES_PATH = "/registry.public.hdbview-itest/SampleMySQLXSClassicView.hdbview";
+  public static final int HDBVIEW_MYSQL_EXPECTED_CREATED_RAWS_COUNT = 0;
+  public static final String HDBVIEW_MYSQL_EXPECTED_VIEW_NAME = "`hdbview-itest::SampleMySQLXSClassicView`";
+  public static final String HDBVIEW_MYSQL_CREATE_TABLE1_SQL = "create table `test`.`acme.com.test.tables::MY_TABLE1`(Column1 integer,Column2 integer)";
+  public static final String HDBVIEW_MYSQL_CREATE_MY_VIEW1_SQL = "create table `test`.`acme.com.test.views::MY_VIEW1`(Column1 integer,Column2 integer)";
+  public static final String HDBVIEW_MYSQL_DROP_TABLE1_SQL = "drop table `test`.`acme.com.test.tables::MY_TABLE1`";
+  public static final String HDBVIEW_MYSQL_DROP_MY_VIEW1_SQL = "drop table `test`.`acme.com.test.views::MY_VIEW1`";
 }

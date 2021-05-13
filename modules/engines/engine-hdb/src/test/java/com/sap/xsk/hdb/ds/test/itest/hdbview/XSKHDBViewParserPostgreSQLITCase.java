@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.test.itest.hdbtable;
+package com.sap.xsk.hdb.ds.test.itest.hdbview;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -18,6 +18,7 @@ import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestContainersModule;
+import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
@@ -32,9 +33,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class XSKHDBTableParserPostgreSQLITCase {
+public class XSKHDBViewParserPostgreSQLITCase {
 
   private static PostgreSQLContainer jdbcContainer;
   private static Connection connection;
@@ -44,7 +46,7 @@ public class XSKHDBTableParserPostgreSQLITCase {
   @BeforeClass
   public static void setUp() throws SQLException {
     jdbcContainer =
-        new PostgreSQLContainer<>(HDBTABLE_POSTGRESQL_DOCKER_IMAGE);
+        new PostgreSQLContainer<>(HDBVIEW_POSTGRESQL_DOCKER_IMAGE);
     jdbcContainer.start();
     Injector injector = Guice.createInjector(new XSKHDBTestContainersModule(jdbcContainer));
     connection = injector.getInstance(DataSource.class).getConnection();
@@ -52,23 +54,27 @@ public class XSKHDBTableParserPostgreSQLITCase {
   }
 
   @AfterClass
-  public static void cleanUp() {
-    jdbcContainer.stop();
+  public static void cleanUp() throws SQLException {
+    Statement stmt = connection.createStatement();
+    stmt.executeUpdate(HDBVIEW_POSTGRESQL_DROP_TABLE1_SQL);
+    stmt.executeUpdate(HDBVIEW_POSTGRESQL_DROP_MY_VIEW1_SQL);
   }
 
   @Test
-  public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBTABLE_POSTGRESQL_ROOT_FOLDER,
-        HDBTABLE_POSTGRESQL_REPO_PATH,
-        HDBTABLE_POSTGRESQL_RELATIVE_RESOURCES_PATH);
+  public void testHDBViewCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBVIEW_POSTGRESQL_ROOT_FOLDER,
+        HDBVIEW_POSTGRESQL_REPO_PATH,
+        HDBVIEW_POSTGRESQL_RELATIVE_RESOURCES_PATH);
+    Statement stmt = connection.createStatement();
+    stmt.executeUpdate(HDBVIEW_POSTGRESQL_CREATE_TABLE1_SQL);
+    stmt.executeUpdate(HDBVIEW_POSTGRESQL_CREATE_MY_VIEW1_SQL);
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
-    Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME));
+    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", HDBVIEW_POSTGRESQL_EXPECTED_VIEW_NAME));
     assertTrue(rs.next());
-    assertEquals(HDBTABLE_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP TABLE \"%s\"", HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME));
+    assertEquals(HDBVIEW_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
+    stmt.executeUpdate(String.format("DROP VIEW %s", XSKHDBUtils.escapeArtifactName(connection, HDBVIEW_POSTGRESQL_EXPECTED_VIEW_NAME)));
   }
 }

@@ -10,9 +10,9 @@ FROM tomcat:8.5.43-jdk11-openjdk AS base
 
 FROM base AS xsk-external-jdk
 RUN echo "Using external JDK"
-COPY "${JDK_HOME}" /usr/local/jdk;
-ENV JAVA_HOME=/usr/local/jdk;
-ENV JRE_HOME=/usr/local/jdk; 
+COPY "${JDK_HOME}" /usr/local/jdk
+ENV JAVA_HOME=/usr/local/jdk
+ENV JRE_HOME=/usr/local/jdk
 
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"

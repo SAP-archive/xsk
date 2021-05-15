@@ -2,15 +2,15 @@
 # License - http://www.eclipse.org/legal/epl-v20.html
 
 # (Optional) JDK_TYPE could be `default-jdk` or `external-jdk`
-# (Optional) JDK_HOME is the path to the home directory of the jdk
 ARG JDK_TYPE=default-jdk
-ARG JDK_HOME=""
 
 FROM tomcat:8.5.43-jdk11-openjdk AS base
 
 FROM base AS xsk-external-jdk
+# If JDK_TYPE is set to `external-jdk`, then the JDK_HOME is required and it should point to the home directory of the jdk
+ARG JDK_HOME
 RUN echo "Using external JDK"
-COPY "${JDK_HOME}" /usr/local/jdk
+COPY $JDK_HOME /usr/local/jdk
 ENV JAVA_HOME=/usr/local/jdk
 ENV JRE_HOME=/usr/local/jdk
 
@@ -18,7 +18,6 @@ FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
 FROM xsk-${JDK_TYPE} AS final
-RUN echo "JDK_TYPE is ${JDK_TYPE}"
 
 RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/

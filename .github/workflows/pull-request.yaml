@@ -23,15 +23,15 @@ jobs:
     - name: Docker Build XSK
       run: |
         cd releng/server
-        docker build -t dirigiblelabs/xsk --build-arg JDK_TYPE="external-jdk" --build-arg JDK_HOME="jdk" .
+        docker build -t dirigiblelabs/xsk --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         cd ../../
     - name: Docker Build XSK for SAP Cloud Foundry
       run: |
         cd releng/sap-cf
-        docker build -t dirigiblelabs/xsk-cf --build-arg JDK_TYPE="external-jdk" --build-arg JDK_HOME="jdk" .
+        docker build -t dirigiblelabs/xsk-cf --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         cd ../../
     - name: Docker Build XSK for SAP Kyma
       run: |
         cd releng/sap-kyma
-        docker build -t dirigiblelabs/xsk-kyma --build-arg JDK_TYPE="external-jdk" --build-arg JDK_HOME="jdk" .
+        docker build -t dirigiblelabs/xsk-kyma --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         cd ../../

@@ -187,7 +187,7 @@ docker build -t dirigiblelabs/xsk .
 ```
 cd releng/sap-cf
 
-docker build ../.. -t dirigiblelabs/xsk-cf -f Dockerfile
+docker build -t dirigiblelabs/xsk-cf .
 ```
 
 ##### Kyma
@@ -195,7 +195,7 @@ docker build ../.. -t dirigiblelabs/xsk-cf -f Dockerfile
 ```
 cd releng/sap-kyma
 
-docker build ../.. -t dirigiblelabs/xsk-kyma -f Dockerfile
+docker build -t dirigiblelabs/xsk-kyma .
 ```
 
 ### How to run

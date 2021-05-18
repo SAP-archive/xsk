@@ -26,6 +26,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
   - [Local](#local-tomcat-server-2)
   - [Cloud Foundry](#cloud-foundry-2)
   - [Kyma](#kyma-2)
+  - [Helm](#helm)
 - [Push to Docker Hub](#how-to-push-on-docker-hub)
 - [Configuration](#configuration)
   - [Environment Variables](#environment-variables)
@@ -622,6 +623,20 @@ spec:
 ```
 
 > _**Note**: Replace the `<your-kyma-cluster-host>` placeholder with your Kyma cluster host (e.g. `c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`)._
+
+### Helm
+
+```
+helm repo add dirigible https://eclipse.github.io/dirigible
+helm repo update
+
+helm install xsk dirigible/dirigible \
+--set kyma.enabled=true \
+--set kyma.apirule.host=<kyma-host> \
+--set dirigible.image=dirigiblelabs/xsk-kyma:latest
+```
+
+
 
 ### How to push on Docker Hub
 

@@ -503,7 +503,7 @@ spec:
     spec:
       containers:
       - name: xsk
-        image: dirigiblelabs/xsk-application:latest
+        image: dirigiblelabs/xsk-kyma:latest
         imagePullPolicy: Always
         envFrom:
         - secretRef:

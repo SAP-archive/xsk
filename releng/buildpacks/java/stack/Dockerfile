@@ -1,37 +1,38 @@
 # 1. Set a common base
-FROM tomcat:8.5-jdk8-openjdk as base
+FROM ubuntu:bionic as base
 
-# ========== ADDED ===========
 # 2. Set required CNB information
 ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000
-ENV CNB_STACK_ID="com.sap.kneo.xsk"
-LABEL io.buildpacks.stack.id="com.sap.kneo.xsk"
-
-ENV CATALINA_HOME=/workspace/tomcat
+ENV CNB_STACK_ID="io.buildpacks.stacks.bionic"
+LABEL io.buildpacks.stack.id="io.buildpacks.stacks.bionic"
+LABEL io.buildpacks.stack.mixins: ["build:unzip"]
 
 # 3. Create the user
 RUN groupadd cnb --gid ${CNB_GROUP_ID} && \
   useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash cnb
 
-RUN chmod -R 777 /usr/local/tomcat
+# 4. Install common packages
+RUN apt-get update && \
+  apt-get install -y xz-utils ca-certificates vim && \
+  rm -rf /var/lib/apt/lists/*
 
-# ========== ADDED ===========
 # 5. Start a new run stage
 FROM base as run
-
-RUN chmod -R 777 /usr/local/tomcat
 
 # 6. Set user and group (as declared in base image)
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
 
-# ========== ADDED ===========
 # 7. Start a new build stage
 FROM base as build
 
-RUN chmod -R 777 /usr/local/tomcat
+# 8. Install packages that we want to make available at build time
+RUN apt-get update && \
+  apt-get install -y git wget jq unzip zip && \
+  rm -rf /var/lib/apt/lists/* && \
+  wget https://github.com/sclevine/yj/releases/download/v5.0.0/yj-linux -O /usr/local/bin/yj && \
+  chmod +x /usr/local/bin/yj
 
 # ========== ADDED ===========
 # 9. Set user and group (as declared in base image)
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
-

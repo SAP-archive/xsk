@@ -24,7 +24,7 @@ table.columns = [
         sqlType = DECIMAL;
         nullable = false;
         precision = 2;
-        scale = 3;
+        scale = 2;
     }];
 table.indexes =  [
     {

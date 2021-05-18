@@ -128,12 +128,18 @@ mvn clean install
 ```
 
 Integration Tests:
-- Each integration test must end in ITCase as stated in the maven profile
-- The profile is to be run as follows:
+- There are two profiles for integration testing: one used to test against PostgreSQL and MySQL databases based on testcontainers, the other tests against using SAP HANA Cloud. 
+- The names of these profiles are as follows: itests and hana-itests.
+- There is specific name pattern for each integration test so that it is included in the proper profile(ending in ITCase/HanaCase respectively).
+- The itests profile is to be run as follows:
 ```
 mvn verify -Pitests
 ```
-
+- The hana-itests profile is to be run as follows:
+```
+mvn verify -Phana-itests "-Ddb.url=jdbcUrl" "-Ddb.username=jdbcUsername" "-Ddb.password=jdbcPassword"
+```
+Note that you have to provide the credentials of your own HANA Cloud instance and more importantly to wrap them in quotes! Otherwise you might not be able to connect to the db instance due some special characters in respective db properties. 
 #### Environment Variables for Local Instance
 
     export DIRIGIBLE_DATABASE_PROVIDER=custom

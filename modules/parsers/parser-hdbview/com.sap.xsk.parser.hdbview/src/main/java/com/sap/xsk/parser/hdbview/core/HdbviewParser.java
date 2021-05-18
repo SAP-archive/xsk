@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbview\core\Hdbview.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbview.core;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -18,11 +18,12 @@ public class HdbviewParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__7=1, T__6=2, T__5=3, T__4=4, T__3=5, T__2=6, T__1=7, T__0=8, BOOLEAN=9, 
-		STRING=10, EQ=11, SEMICOLON=12, COMMA=13, WS=14, ESC=15;
+		STRING=10, EQ=11, SEMICOLON=12, COMMA=13, WS=14, ESC=15, LINE_COMMENT=16, 
+		COMMENT=17;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'schema'", "'depends_on_table'", "'['", "'depends_on'", 
 		"'depends_on_view'", "']'", "'query'", "'public'", "BOOLEAN", "STRING", 
-		"'='", "';'", "','", "WS", "ESC"
+		"'='", "';'", "','", "WS", "ESC", "LINE_COMMENT", "COMMENT"
 	};
 	public static final int
 		RULE_hdbviewDefinition = 0, RULE_property = 1, RULE_schemaProp = 2, RULE_publicProp = 3, 
@@ -563,7 +564,7 @@ public class HdbviewParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\21_\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\23_\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\3\2\6\2\24\n\2\r\2"+
 		"\16\2\25\3\3\3\3\3\3\3\3\3\3\3\3\5\3\36\n\3\3\4\3\4\3\4\3\4\3\4\3\5\3"+
 		"\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\7\7\65\n\7"+

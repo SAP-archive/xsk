@@ -20,6 +20,7 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
 import com.sap.xsk.utils.XSKHDBUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.After;
@@ -43,25 +44,25 @@ public class XSKHDBViewParserHanaCase {
   private static IXSKHDBCoreFacade facade;
 
   @BeforeClass
-  public static void setUp() throws SQLException {
-    JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
-        HANA_PASSWORD);
+  public static void setUpBeforeClass() throws SQLException, IOException {
+    JDBCModel model = new JDBCModel(HANA_DRIVER, Configuration.get("db.url"), Configuration.get("db.username"),
+        Configuration.get("db.password"));
     Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
     connection = injector.getInstance(DataSource.class).getConnection();
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
 
   @After
-  public void cleanUp() throws SQLException {
+  public void cleanUpAfterTest() throws SQLException {
     Statement stmt = connection.createStatement();
     stmt.executeUpdate(HDBVIEW_HANA_DROP_TABLE1_SQL);
     stmt.executeUpdate(HDBVIEW_HANA_DROP_MY_VIEW1_SQL);
   }
 
   @Before
-  public void cleanXSKDataStructures() throws SQLException {
+  public void setUpBeforeTest() throws SQLException {
     Statement stmt = connection.createStatement();
-    stmt.executeUpdate("drop table \"DBADMIN\".\"XSK_DATA_STRUCTURES\"");
+    stmt.executeUpdate(HDBVIEW_HANA_DROP_XSK_DATASTRUCTURES);
     stmt.executeUpdate(HDBVIEW_HANA_CREATE_TABLE1_SQL);
     stmt.executeUpdate(HDBVIEW_HANA_CREATE_MY_VIEW1_SQL);
   }

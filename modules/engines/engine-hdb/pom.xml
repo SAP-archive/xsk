@@ -276,5 +276,50 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>hana-itests</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.0.0-M5</version>
+            <configuration>
+              <systemPropertyVariables>
+                <db.url>url</db.url>
+                <db.username>username</db.username>
+                <db.password>password</db.password>
+              </systemPropertyVariables>
+              <includes>
+                <include>**/*HanaCase</include>
+              </includes>
+            </configuration>
+            <executions>
+              <execution>
+                <id>integration-test-embedded</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>integration-test</goal>
+                </goals>
+                <inherited>false</inherited>
+              </execution>
+              <execution>
+                <id>integration-test-verify</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>verify</goal>
+                </goals>
+                <inherited>false</inherited>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
+
 </project>

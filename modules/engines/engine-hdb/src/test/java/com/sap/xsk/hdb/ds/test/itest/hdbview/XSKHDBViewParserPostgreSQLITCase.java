@@ -50,6 +50,9 @@ public class XSKHDBViewParserPostgreSQLITCase {
     jdbcContainer.start();
     Injector injector = Guice.createInjector(new XSKHDBTestContainersModule(jdbcContainer));
     connection = injector.getInstance(DataSource.class).getConnection();
+    Statement stmt = connection.createStatement();
+    stmt.executeUpdate(HDBVIEW_POSTGRESQL_CREATE_TABLE1_SQL);
+    stmt.executeUpdate(HDBVIEW_POSTGRESQL_CREATE_MY_VIEW1_SQL);
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
 
@@ -65,13 +68,11 @@ public class XSKHDBViewParserPostgreSQLITCase {
     LocalResource resource = XSKHDBTestContainersModule.getResources(HDBVIEW_POSTGRESQL_ROOT_FOLDER,
         HDBVIEW_POSTGRESQL_REPO_PATH,
         HDBVIEW_POSTGRESQL_RELATIVE_RESOURCES_PATH);
-    Statement stmt = connection.createStatement();
-    stmt.executeUpdate(HDBVIEW_POSTGRESQL_CREATE_TABLE1_SQL);
-    stmt.executeUpdate(HDBVIEW_POSTGRESQL_CREATE_MY_VIEW1_SQL);
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
+    Statement stmt = connection.createStatement();
     ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", HDBVIEW_POSTGRESQL_EXPECTED_VIEW_NAME));
     assertTrue(rs.next());
     assertEquals(HDBVIEW_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));

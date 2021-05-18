@@ -17,13 +17,16 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBHanaTestModule;
 import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestContainersModule;
+import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.testcontainers.containers.MySQLContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
@@ -31,50 +34,50 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.*;
+import static com.sap.xsk.hdb.ds.test.itest.utils.HanaConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class XSKHDBViewParserMySQLITCase {
+public class XSKHDBViewParserHanaCase {
 
-  private static MySQLContainer jdbcContainer;
   private static Connection connection;
   private static IXSKHDBCoreFacade facade;
 
-
   @BeforeClass
   public static void setUp() throws SQLException {
-    jdbcContainer =
-        new MySQLContainer<>(HDBVIEW_MYSQL_DOCKER_IMAGE);
-    jdbcContainer.start();
-    Injector injector = Guice.createInjector(new XSKHDBTestContainersModule(jdbcContainer));
+    Injector injector = Guice.createInjector(new XSKHDBHanaTestModule());
     connection = injector.getInstance(DataSource.class).getConnection();
-    Statement stmt = connection.createStatement();
-    stmt.executeUpdate(HDBVIEW_MYSQL_CREATE_TABLE1_SQL);
-    stmt.executeUpdate(HDBVIEW_MYSQL_CREATE_MY_VIEW1_SQL);
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
 
-  @AfterClass
-  public static void cleanUp() throws SQLException {
+  @After
+  public void cleanUp() throws SQLException {
     Statement stmt = connection.createStatement();
-    stmt.executeUpdate(HDBVIEW_MYSQL_DROP_TABLE1_SQL);
-    stmt.executeUpdate(HDBVIEW_MYSQL_DROP_MY_VIEW1_SQL);
+    stmt.executeUpdate(HDBVIEW_HANA_DROP_TABLE1_SQL);
+    stmt.executeUpdate(HDBVIEW_HANA_DROP_MY_VIEW1_SQL);
+  }
+
+  @Before
+  public void cleanXSKDataStructures() throws SQLException {
+    Statement stmt = connection.createStatement();
+    stmt.executeUpdate("drop table \"DBADMIN\".\"XSK_DATA_STRUCTURES\"");
+    stmt.executeUpdate(HDBVIEW_HANA_CREATE_TABLE1_SQL);
+    stmt.executeUpdate(HDBVIEW_HANA_CREATE_MY_VIEW1_SQL);
   }
 
   @Test
   public void testHDBViewCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBVIEW_MYSQL_ROOT_FOLDER,
-        HDBVIEW_MYSQL_REPO_PATH,
-        HDBVIEW_MYSQL_RELATIVE_RESOURCES_PATH);
+    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBVIEW_HANA_ROOT_FOLDER,
+        HDBVIEW_HANA_REPO_PATH,
+        HDBVIEW_HANA_RELATIVE_RESOURCES_PATH);
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
-
     Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM %s", HDBVIEW_MYSQL_EXPECTED_VIEW_NAME));
+    ResultSet rs = stmt.executeQuery(
+        String.format("SELECT COUNT(*) as rawsCount FROM %s", XSKHDBUtils.escapeArtifactName(connection, HDBVIEW_HANA_EXPECTED_VIEW_NAME)));
     assertTrue(rs.next());
-    assertEquals(HDBVIEW_MYSQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP VIEW %s", HDBVIEW_MYSQL_EXPECTED_VIEW_NAME));
+    assertEquals(HDBVIEW_HANA_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
+    stmt.executeUpdate(String.format("DROP VIEW %s", XSKHDBUtils.escapeArtifactName(connection, HDBVIEW_HANA_EXPECTED_VIEW_NAME)));
   }
 }

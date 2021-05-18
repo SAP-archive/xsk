@@ -460,7 +460,168 @@ spec:
 
 ##### With HANA Cloud instance
 
+Create `hana-cloud-database` secret:
+
+```
+kubectl create secret generic hana-cloud-database \
+--from-literal=DIRIGIBLE_DATABASE_PROVIDER=custom \
+--from-literal=DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
+--from-literal=DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
+--from-literal=HANA_DRIVER=com.sap.db.jdbc.Driver \
+--from-literal=HANA_URL='jdbc:sap://<hana-url>/?encrypt=true&validateCertificate=false' \
+--from-literal=HANA_USERNAME=<hana-username> \
+--from-literal=HANA_PASSWORD=<hana-password> \
+--from-literal=DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false \
+--from-literal=DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false \
+--from-literal=DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE=true \
+--from-literal=DIRIGIBLE_SCHEDULER_DATABASE_DRIVER=com.sap.db.jdbc.Driver \
+--from-literal=DIRIGIBLE_SCHEDULER_DATABASE_URL='jdbc:sap://<hana-url>/?encrypt=true&validateCertificate=false' \
+--from-literal=DIRIGIBLE_SCHEDULER_DATABASE_USER=<hana-username> \
+--from-literal=DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<hana-password>
+```
+
+> _**Note:** `HANA_URL` should be enclosed with `'`._
+
+Create `xsk` deployment:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xsk
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xsk
+  template:
+    metadata:
+      labels:
+        app: xsk
+    spec:
+      containers:
+      - name: xsk
+        image: dirigiblelabs/xsk-application:latest
+        imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: hana-cloud-database
+        env:
+        - name: DIRIGIBLE_THEME_DEFAULT
+          value: fiori
+        - name: DIRIGIBLE_HOST
+          value: https://xsk.<your-kyma-cluster-host>
+        ports:
+        - containerPort: 8080
+          name: xsk
+          protocol: TCP
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xsk
+  name: xsk
+  namespace: default
+spec:
+  ports:
+  - name: xsk
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: xsk
+  type: ClusterIP
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: xsk
+  namespace: default
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+  - accessStrategies:
+    - config: {}
+      handler: noop
+    methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - HEAD
+    path: /.*
+  service:
+    host: xsk.<your-kyma-cluster-host>
+    name: xsk
+    port: 8080
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: xsuaa-xsk
+spec:
+  clusterServiceClassExternalName: xsuaa
+  clusterServiceClassRef:
+    name: xsuaa
+  clusterServicePlanExternalName: broker
+  externalID: 03a337ea-ad74-11eb-8529-0242ac130003
+  parameters:
+    xsappname: xsk-xsuaa
+    oauth2-configuration:
+      redirect-uris:
+      - https://xsk.<your-kyma-cluster-host>
+      token-validity: 7200
+    role-collections:
+    - description: XSK Developer
+      name: xsk
+      role-template-references:
+      - $XSAPPNAME.Developer
+      - $XSAPPNAME.Operator
+    role-templates:
+    - description: Developer related roles
+      name: Developer
+      scope-references:
+      - $XSAPPNAME.Developer
+    - description: Operator related roles
+      name: Operator
+      scope-references:
+      - $XSAPPNAME.Operator
+    scopes:
+    - description: Developer scope
+      name: $XSAPPNAME.Developer
+    - description: Operator scope
+      name: $XSAPPNAME.Operator
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: xsuaa-xsk-binding
+spec:
+  externalID: e4196b42-ad73-11eb-8529-0242ac130003
+  instanceRef:
+    name: xsuaa-xsk
+  parameters: {}
+  secretName: xsuaa-xsk-binding
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: xsuaa-xsk-usage
+spec:
+  parameters:
+    envPrefix:
+      name: ""
+  serviceBindingRef:
+    name: xsuaa-xsk-binding
+  usedBy:
+    kind: deployment
+    name: xsk
+```
+
+> _**Note**: Replace the `<your-kyma-cluster-host>` placeholder with your Kyma cluster host (e.g. `c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`)._
 
 ### How to push on Docker Hub
 

@@ -17,7 +17,8 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestContainersModule;
+import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
@@ -31,7 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.*;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -47,7 +48,9 @@ public class XSKHDBViewParserMySQLITCase {
     jdbcContainer =
         new MySQLContainer<>(HDBVIEW_MYSQL_DOCKER_IMAGE);
     jdbcContainer.start();
-    Injector injector = Guice.createInjector(new XSKHDBTestContainersModule(jdbcContainer));
+    JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
+        jdbcContainer.getPassword());
+    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
     connection = injector.getInstance(DataSource.class).getConnection();
     Statement stmt = connection.createStatement();
     stmt.executeUpdate(HDBVIEW_MYSQL_CREATE_TABLE1_SQL);
@@ -64,7 +67,7 @@ public class XSKHDBViewParserMySQLITCase {
 
   @Test
   public void testHDBViewCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBVIEW_MYSQL_ROOT_FOLDER,
+    LocalResource resource = XSKHDBTestModule.getResources(HDBVIEW_MYSQL_ROOT_FOLDER,
         HDBVIEW_MYSQL_REPO_PATH,
         HDBVIEW_MYSQL_RELATIVE_RESOURCES_PATH);
 

@@ -17,13 +17,12 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBHanaTestModule;
-import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestContainersModule;
+import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,7 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.HanaConstants.*;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -45,7 +44,9 @@ public class XSKHDBViewParserHanaCase {
 
   @BeforeClass
   public static void setUp() throws SQLException {
-    Injector injector = Guice.createInjector(new XSKHDBHanaTestModule());
+    JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
+        HANA_PASSWORD);
+    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
     connection = injector.getInstance(DataSource.class).getConnection();
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
@@ -67,7 +68,7 @@ public class XSKHDBViewParserHanaCase {
 
   @Test
   public void testHDBViewCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBVIEW_HANA_ROOT_FOLDER,
+    LocalResource resource = XSKHDBTestModule.getResources(HDBVIEW_HANA_ROOT_FOLDER,
         HDBVIEW_HANA_REPO_PATH,
         HDBVIEW_HANA_RELATIVE_RESOURCES_PATH);
 

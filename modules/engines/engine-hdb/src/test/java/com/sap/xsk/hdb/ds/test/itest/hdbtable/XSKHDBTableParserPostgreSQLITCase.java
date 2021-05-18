@@ -17,7 +17,8 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestContainersModule;
+import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
@@ -31,7 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.*;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.*;
 import static org.junit.Assert.*;
 
 public class XSKHDBTableParserPostgreSQLITCase {
@@ -46,7 +47,9 @@ public class XSKHDBTableParserPostgreSQLITCase {
     jdbcContainer =
         new PostgreSQLContainer<>(HDBTABLE_POSTGRESQL_DOCKER_IMAGE);
     jdbcContainer.start();
-    Injector injector = Guice.createInjector(new XSKHDBTestContainersModule(jdbcContainer));
+    JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
+        jdbcContainer.getPassword());
+    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
     connection = injector.getInstance(DataSource.class).getConnection();
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
@@ -58,7 +61,7 @@ public class XSKHDBTableParserPostgreSQLITCase {
 
   @Test
   public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBTABLE_POSTGRESQL_ROOT_FOLDER,
+    LocalResource resource = XSKHDBTestModule.getResources(HDBTABLE_POSTGRESQL_ROOT_FOLDER,
         HDBTABLE_POSTGRESQL_REPO_PATH,
         HDBTABLE_POSTGRESQL_RELATIVE_RESOURCES_PATH);
 

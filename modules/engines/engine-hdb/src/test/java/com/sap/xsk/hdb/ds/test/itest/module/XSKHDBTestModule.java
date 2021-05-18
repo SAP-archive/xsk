@@ -15,6 +15,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.test.itest.hdbsequence.XSKHDBSequenceParserPostgreSQLITCase;
+import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
@@ -24,12 +25,12 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-public class XSKHDBTestContainersModule extends AbstractModule {
+public class XSKHDBTestModule extends AbstractModule {
 
-  private JdbcDatabaseContainer jdbcContainer;
+  private JDBCModel model;
 
-  public XSKHDBTestContainersModule(JdbcDatabaseContainer jdbcContainer) {
-    this.jdbcContainer = jdbcContainer;
+  public XSKHDBTestModule(JDBCModel model) {
+    this.model = model;
   }
 
   @Override
@@ -40,10 +41,10 @@ public class XSKHDBTestContainersModule extends AbstractModule {
   @Provides
   public DataSource getDataSource() {
     BasicDataSource basicDataSource = new BasicDataSource();
-    basicDataSource.setDriverClassName(this.jdbcContainer.getDriverClassName());
-    basicDataSource.setUrl(this.jdbcContainer.getJdbcUrl());
-    basicDataSource.setUsername(this.jdbcContainer.getUsername());
-    basicDataSource.setPassword(this.jdbcContainer.getPassword());
+    basicDataSource.setDriverClassName(this.model.getDriverClassName());
+    basicDataSource.setUrl(this.model.getJdbcUrl());
+    basicDataSource.setUsername(this.model.getUsername());
+    basicDataSource.setPassword(this.model.getPassword());
     basicDataSource.setDefaultAutoCommit(true);
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
     return basicDataSource;

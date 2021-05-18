@@ -17,8 +17,9 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestContainersModule;
-import com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants;
+import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
+import com.sap.xsk.hdb.ds.test.itest.utils.TestConstants;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
@@ -35,11 +36,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.HDBSEQUENCE_POSTGRESQL_ROOT_FOLDER;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.HDBSEQUENCE_POSTGRESQL_REPO_PATH;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.HDBSEQUENCE_POSTGRESQL_RELATIVE_RESOURCES_PATH;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.HDBSEQUENCE_POSTGRESQL_EXPECTED_SEQUENCE_COUNT;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.HDBSEQUENCE_POSTGRESQL_EXPECTED_SEQUENCE_NAME;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_ROOT_FOLDER;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_REPO_PATH;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_RELATIVE_RESOURCES_PATH;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_EXPECTED_SEQUENCE_COUNT;
+import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_EXPECTED_SEQUENCE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -59,11 +60,13 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
   public static void setUp() throws SQLException {
     Network network = Network.newNetwork();
     jdbcContainer =
-        new PostgreSQLContainer<>(TestContainerConstants.HDBSEQUENCE_POSTGRESQL_DOCKER_IMAGE)
+        new PostgreSQLContainer<>(TestConstants.HDBSEQUENCE_POSTGRESQL_DOCKER_IMAGE)
             .withNetwork(network)
-            .withNetworkAliases(TestContainerConstants.HDBSEQUENCE_POSTGRESQL_DOCKER_NETWORK_ALIAS);
+            .withNetworkAliases(TestConstants.HDBSEQUENCE_POSTGRESQL_DOCKER_NETWORK_ALIAS);
     jdbcContainer.start();
-    Injector injector = Guice.createInjector(new XSKHDBTestContainersModule(jdbcContainer));
+    JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
+        jdbcContainer.getPassword());
+    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
     connection = injector.getInstance(DataSource.class).getConnection();
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
@@ -75,7 +78,7 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
 
   @Test
   public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBSEQUENCE_POSTGRESQL_ROOT_FOLDER,
+    LocalResource resource = XSKHDBTestModule.getResources(HDBSEQUENCE_POSTGRESQL_ROOT_FOLDER,
         HDBSEQUENCE_POSTGRESQL_REPO_PATH,
         HDBSEQUENCE_POSTGRESQL_RELATIVE_RESOURCES_PATH);
 

@@ -1,0 +1,7 @@
+# Stack that will be used by the builder
+[stack]
+id = "io.buildpacks.stacks.bionic"
+# This image is used at runtime
+run-image = "neo-stack-run:bionic"
+# This image is used at build-time
+build-image = "neo-stack-build:bionic"

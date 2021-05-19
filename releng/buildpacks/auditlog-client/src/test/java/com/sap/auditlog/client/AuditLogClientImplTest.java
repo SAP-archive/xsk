@@ -84,6 +84,17 @@ public class AuditLogClientImplTest {
     Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + CONFIGURATION_CHANGE_ENDPOINT, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
   }
 
+  @Test
+  public void log_onBehalfOfSubscriber() throws Exception {
+    String subscriberTokenIssuerUrl = "subscriber-token-issuer-url";
+    Mockito.when(message.getCategory()).thenReturn(AuditLogCategory.CONFIGURATION_CHANGE);
+    Mockito.when(message.getSubscriberTokenIssuer()).thenReturn(subscriberTokenIssuerUrl);
+    Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
+    Mockito.when(auditLogComm.retrieveOAuthToken(subscriberTokenIssuerUrl)).thenReturn(DUMMY_OAUTH_TOKEN);
+    auditLogClient.log(message);
+    Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + CONFIGURATION_CHANGE_ENDPOINT, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+  }
+
   @Test(expected = JsonProcessingException.class)
   public void log_problemWithSerializationOfMessage() throws Exception {
     Mockito.when(jsonMapper.writeValueAsString(message)).thenThrow(JsonProcessingException.class);

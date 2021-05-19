@@ -9,4 +9,6 @@ public interface Communicator {
   String get(String apiUrl, String oauthToken) throws ServiceException;
 
   String retrieveOAuthToken() throws ServiceException;
+
+  String retrieveOAuthToken(String oauthUrl) throws ServiceException;
 }

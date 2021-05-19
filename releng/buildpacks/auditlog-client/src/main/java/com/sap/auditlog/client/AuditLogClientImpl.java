@@ -9,6 +9,7 @@ import com.sap.auditlog.client.messages.AuditLogCategory;
 import com.sap.auditlog.client.messages.AuditLogMessage;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 class AuditLogClientImpl implements AuditLogClient {
 
@@ -29,7 +30,14 @@ class AuditLogClientImpl implements AuditLogClient {
   public void log(AuditLogMessage message) throws ServiceException, JsonProcessingException {
     String payload = jsonMapper.writeValueAsString(message);
     String endpoint = getSendEndpoint(message.getCategory());
-    String token = auditLogService.retrieveOAuthToken();
+
+    String token = null;
+    if (Objects.isNull(message.getSubscriberTokenIssuer())) {
+      token = auditLogService.retrieveOAuthToken();
+    } else {
+      token = auditLogService.retrieveOAuthToken(message.getSubscriberTokenIssuer());
+    }
+
     auditLogService.send(BASE_SEND_AUDITLOG_API_PATH + endpoint, payload, token);
   }
 

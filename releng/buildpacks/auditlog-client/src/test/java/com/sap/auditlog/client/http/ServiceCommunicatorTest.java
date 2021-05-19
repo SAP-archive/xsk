@@ -110,6 +110,16 @@ public class ServiceCommunicatorTest {
     communicator.retrieveOAuthToken();
   }
 
+  @Test
+  public void retrieveOAuthToken_usingAnotherOAuthUrl() throws Exception {
+    String subscriberTokenIssuerUrl = "https://subscriber-token-issuer-url";
+    client.onPost(subscriberTokenIssuerUrl + OAUTH_RETRIEVAL_ENDPOINT).doReturnJSON(DUMMY_RESPONSE);
+    Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenReturn(node);
+    Mockito.when(node.get(PROPERTY_NAME)).thenReturn(node);
+    Mockito.when(node.asText()).thenReturn(OAUTH_TOKEN);
+    communicator.retrieveOAuthToken(subscriberTokenIssuerUrl);
+  }
+
   @Test(expected = UnauthorizedException.class)
   public void retrieveOAuthToken_invalidBasicAuth() throws Exception {
     client.onPost(OAUTH_URL + OAUTH_RETRIEVAL_ENDPOINT).doReturn(401, "");

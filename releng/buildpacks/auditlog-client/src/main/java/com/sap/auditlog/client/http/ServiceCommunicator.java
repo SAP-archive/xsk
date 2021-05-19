@@ -92,8 +92,12 @@ public class ServiceCommunicator implements Communicator {
   }
 
   public String retrieveOAuthToken() throws ServiceException {
+    return retrieveOAuthToken(config.getOauthURL());
+  }
+
+  public String retrieveOAuthToken(String oauthUrl) throws ServiceException {
     HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(config.getOauthURL() + ISSUE_OAUTH_TOKEN_PATH))
+        .uri(URI.create(oauthUrl + ISSUE_OAUTH_TOKEN_PATH))
         .header("Authorization", getAuthHeaderValueForBasicAuth())
         .POST(HttpRequest.BodyPublishers.noBody())
         .build();

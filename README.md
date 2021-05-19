@@ -137,7 +137,7 @@ mvn verify -Pitests
 ```
 - The hana-itests profile is to be run as follows:
 ```
-mvn verify -Phana-itests "-Ddb.url=jdbcUrl" "-Ddb.username=jdbcUsername" "-Ddb.password=jdbcPassword"
+mvn verify -Phana-itests "-Dhana.url=jdbcUrl" "-Dhana.username=jdbcUsername" "-Dhana.password=jdbcPassword"
 ```
 Note that you have to provide the credentials of your own HANA Cloud instance and more importantly to wrap them in quotes! Otherwise you might not be able to connect to the db instance due some special characters in respective db properties. 
 #### Environment Variables for Local Instance

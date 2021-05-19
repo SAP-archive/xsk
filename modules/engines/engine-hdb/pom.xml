@@ -208,6 +208,7 @@
       <groupId>com.sap.db.jdbc</groupId>
       <artifactId>ngdbc</artifactId>
       <version>2.4.63</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -290,9 +291,9 @@
             <version>3.0.0-M5</version>
             <configuration>
               <systemPropertyVariables>
-                <db.url>url</db.url>
-                <db.username>username</db.username>
-                <db.password>password</db.password>
+                <hana.url>url</hana.url>
+                <hana.username>username</hana.username>
+                <hana.password>password</hana.password>
               </systemPropertyVariables>
               <includes>
                 <include>**/*HanaCase</include>

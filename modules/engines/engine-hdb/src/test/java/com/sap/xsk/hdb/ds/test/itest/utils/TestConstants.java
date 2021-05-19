@@ -63,6 +63,9 @@ public class TestConstants {
   public static final String HDBVIEW_MYSQL_DROP_MY_VIEW1_SQL = "drop table `test`.`acme.com.test.views::MY_VIEW1`";
 
   public static final String HANA_DRIVER = "com.sap.db.jdbc.Driver";
+  public static final String HANA_URL = Configuration.get("hana.url");
+  public static final String HANA_USERNAME = Configuration.get("hana.username");
+  public static final String HANA_PASSWORD = Configuration.get("hana.password");
 
   public static final String HDBVIEW_HANA_ROOT_FOLDER = "/usr/local/target/dirigible/repository/root";
   public static final String HDBVIEW_HANA_REPO_PATH = "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview";
@@ -72,17 +75,17 @@ public class TestConstants {
 
   public static final String HDBVIEW_HANA_CREATE_TABLE1_SQL = String
       .format("create table \"%s\".\"acme.com.test.tables::MY_TABLE1\"(COLUMN1 integer,COLUMN2 integer)", Configuration
-          .get("db.username"));
+          .get("hana.username"));
   public static final String HDBVIEW_HANA_CREATE_MY_VIEW1_SQL = String
       .format("create table \"%s\".\"acme.com.test.views::MY_VIEW1\"(COLUMN1 integer,COLUMN2 integer)", Configuration
-          .get("db.username"));
+          .get("hana.username"));
   public static final String HDBVIEW_HANA_DROP_TABLE1_SQL = String
       .format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE1\"", Configuration
-          .get("db.username"));
+          .get("hana.username"));
   public static final String HDBVIEW_HANA_DROP_MY_VIEW1_SQL = String
       .format("drop table \"%s\".\"acme.com.test.views::MY_VIEW1\"", Configuration
-          .get("db.username"));
+          .get("hana.username"));
   public static final String HDBVIEW_HANA_DROP_XSK_DATASTRUCTURES = String
       .format("drop table \"%s\".\"XSK_DATA_STRUCTURES\"", Configuration
-          .get("db.username"));
+          .get("hana.username"));
 }

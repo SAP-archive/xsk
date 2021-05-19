@@ -45,8 +45,8 @@ public class XSKHDBViewParserHanaCase {
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException, IOException {
-    JDBCModel model = new JDBCModel(HANA_DRIVER, Configuration.get("db.url"), Configuration.get("db.username"),
-        Configuration.get("db.password"));
+    JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
+        HANA_PASSWORD);
     Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
     connection = injector.getInstance(DataSource.class).getConnection();
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));

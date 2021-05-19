@@ -213,7 +213,7 @@ jobs:
       run: |
         cp charts/* charts-temp/helm-charts/
         cd charts-temp/helm-charts/
-        helm package dirigible
+        helm package xsk
         cd ..
         helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
 

@@ -1,18 +1,11 @@
-# Eclipse Dirigible
+# XSK
 
-[Eclipse Dirigible](https://www.dirigible.io/) is Cloud Development platform, providing full-stack Web Application Development tools and runtime.
-Some of the key features are:
-- In-System development
-- Low-code/No-code development
-- Modeling and Generation from templates
-- In-app extensibility
-- Enterprise JavaScript APIs
-- Web IDE
+[XSK](https://github.com/SAP/xsk) is compatible environment for SAP HANA Extended Application Services (XS) based applications outside of SAP HANA instance running in a container deployed on Kubernetes
 
-Add Dirigible Helm repo:
+Add XSK Helm repo:
 
 ```console
-$ helm repo add dirigible https://eclipse.github.io/dirigible
+$ helm repo add xsk https://sap.github.io/xsk
 ```
 
 Update repo:
@@ -21,13 +14,14 @@ Update repo:
 $ helm repo update
 ```
 
-Install Dirigible with Helm:
+Install XSK with Helm:
 
 ```console
-$ helm install dirigible dirigible/dirigible
+$ helm install xsk xsk/xsk
 ```
 
 Resources:
+- [XSK](https://github.com/SAP/xsk)
 - [dirigible.io](https://www.dirigible.io)
 - [github.com/eclipse/dirigible](https://github.com/eclipse/dirigible)
 - [youtube.com/c/dirigibleio](https://www.youtube.com/c/dirigibleio)
@@ -39,17 +33,17 @@ Resources:
     ```
     cd releng/helm-charts/
     ```
-1. Set the Dirigible version in `dirigible/Chart.yaml`:
+1. Set the XSK version in `xsk/Chart.yaml`:
 
-    > Replace the `#{DirigibleVersion}#` placeholder.
+    > Replace the `#{XSKVersion}#` placeholder.
 
 1. Package Helm Chart:
 
     ```
-    helm package dirigible
+    helm package xsk
     ```
 
-1. Copy the `dirigible-5.8.4.tgz` somewhere outside the Git repository.
+1. Copy the `xsk-1.0.0.tgz` somewhere outside the Git repository.
 
 1. Reset all changes:
 
@@ -66,12 +60,12 @@ Resources:
     git pull origin gh-pages
     ```
 
-1. Paste the `dirigible-5.8.4.tgz` chart into the `charts` directory.
+1. Paste the `xsk-1.0.0.tgz` chart into the `charts` directory.
 
 1. Build Helm Index:
 
     ```
-    helm repo index charts/ --url https://eclipse.github.io/dirigible/charts
+    helm repo index charts/ --url https://sap.github.io/xsk/charts
     ```
 
 1. Move the `charts/index.yaml` to the root folder:

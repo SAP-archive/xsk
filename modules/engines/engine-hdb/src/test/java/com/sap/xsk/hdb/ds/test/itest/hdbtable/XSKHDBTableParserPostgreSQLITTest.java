@@ -34,7 +34,7 @@ import java.sql.Statement;
 
 import static org.junit.Assert.*;
 
-public class XSKHDBTableParserPostgreSQLITCase {
+public class XSKHDBTableParserPostgreSQLITTest {
 
   private static PostgreSQLContainer jdbcContainer;
   private static Connection connection;

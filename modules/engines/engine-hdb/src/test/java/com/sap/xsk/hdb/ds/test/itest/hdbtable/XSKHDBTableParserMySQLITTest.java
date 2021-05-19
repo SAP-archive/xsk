@@ -33,7 +33,7 @@ import java.sql.Statement;
 
 import static org.junit.Assert.assertTrue;
 
-public class XSKHDBTableParserMySQLITCase {
+public class XSKHDBTableParserMySQLITTest {
 
   private static MySQLContainer jdbcContainer;
   private static Connection connection;

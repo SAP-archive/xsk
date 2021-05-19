@@ -37,7 +37,7 @@ import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class XSKHDBViewParserHanaCase {
+public class XSKHDBViewParserHanaITTest {
 
   private static Connection connection;
   private static IXSKHDBCoreFacade facade;

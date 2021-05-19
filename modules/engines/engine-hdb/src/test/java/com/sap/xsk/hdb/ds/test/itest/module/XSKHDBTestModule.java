@@ -14,14 +14,13 @@ package com.sap.xsk.hdb.ds.test.itest.module;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
-import com.sap.xsk.hdb.ds.test.itest.hdbsequence.XSKHDBSequenceParserPostgreSQLITCase;
+import com.sap.xsk.hdb.ds.test.itest.hdbsequence.XSKHDBSequenceParserPostgreSQLITTest;
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.eclipse.dirigible.repository.local.LocalResource;
-import org.testcontainers.containers.JdbcDatabaseContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
 
@@ -54,7 +53,7 @@ public class XSKHDBTestModule extends AbstractModule {
   public static LocalResource getResources(String rootFolder, String repoPath, String relativeResourcePath) throws IOException {
     FileSystemRepository fileRepo = new LocalRepository(rootFolder);
     RepositoryPath path = new RepositoryPath(repoPath);
-    byte[] content = XSKHDBSequenceParserPostgreSQLITCase.class
+    byte[] content = XSKHDBSequenceParserPostgreSQLITTest.class
         .getResourceAsStream(relativeResourcePath).readAllBytes();
 
     LocalResource resource = new LocalResource(fileRepo, path);

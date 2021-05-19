@@ -43,9 +43,9 @@ public class ServiceCommunicator implements Communicator {
         .POST(HttpRequest.BodyPublishers.ofString(payload))
         .build();
 
-    HttpResponse<?> response = null;
+    HttpResponse<String> response = null;
     try {
-      response = client.send(request, HttpResponse.BodyHandlers.discarding());
+      response = client.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (Exception e) {
       throw new ServiceException(e.getMessage());
     }
@@ -56,6 +56,7 @@ public class ServiceCommunicator implements Communicator {
   }
 
   private void processErrorResponse(HttpResponse<?> response) throws ServiceException {
+    System.out.println(response.body());
     switch (response.statusCode()) {
       case HTTP_BAD_REQUEST:
         throw new InvalidMessageException("The message format is not valid. Reason: " + response.body());

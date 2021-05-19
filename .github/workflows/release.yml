@@ -46,7 +46,7 @@ jobs:
       run: |
         cd releng/sap-kyma
         cp -r "${JAVA_HOME}" jdk
-        docker build -t dirigiblelabs/xsk-kyma:$XSK_VERSION --build-arg JDK_TYPE=external-jdk -build-arg JDK_HOME=jdk .
+        docker build -t dirigiblelabs/xsk-kyma:$XSK_VERSION --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         docker push dirigiblelabs/xsk-kyma:$XSK_VERSION
         cd ../../
     - uses: buildpacks/github-actions/setup-pack@v4.1.0

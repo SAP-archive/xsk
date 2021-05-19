@@ -205,9 +205,9 @@ jobs:
         git checkout gh-pages
 
         cp charts/* .
-    - name: Helm Charts Release - Set Chart Version - Dirigible
+    - name: Helm Charts Release - Set Chart Version - XSK
       run: |
-        cd charts-temp/helm-charts/dirigible/
+        cd charts-temp/helm-charts/xsk/
         find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
     - name: Helm Charts Release
       run: |

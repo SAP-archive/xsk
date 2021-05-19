@@ -1,15 +1,16 @@
-package com.sap.auditlog.client;
+package com.sap.xsk.auditlog.client;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sap.auditlog.client.auditlogs.Log;
-import com.sap.auditlog.client.exceptions.ServiceException;
-import com.sap.auditlog.client.http.Communicator;
-import com.sap.auditlog.client.messages.AuditLogCategory;
-import com.sap.auditlog.client.messages.AuditLogMessage;
+import com.sap.xsk.auditlog.client.auditlogs.Log;
+import com.sap.xsk.auditlog.client.exceptions.ServiceException;
+import com.sap.xsk.auditlog.client.http.Communicator;
+import com.sap.xsk.auditlog.client.messages.AuditLogCategory;
+import com.sap.xsk.auditlog.client.messages.AuditLogMessage;
+import java.time.Instant;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
@@ -50,49 +51,29 @@ public class AuditLogClientImplTest {
 
   @Test
   public void log_dataAccessMessage() throws Exception {
-    Mockito.when(message.getCategory()).thenReturn(AuditLogCategory.DATA_ACCESS);
-    Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
-    Mockito.when(auditLogComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    auditLogClient.log(message);
-    Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + DATA_ACCESS_ENDPOINT, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+    testSendMessage(AuditLogCategory.DATA_ACCESS, DATA_ACCESS_ENDPOINT, null);
   }
 
   @Test
   public void log_dataModificationMessage() throws Exception {
-    Mockito.when(message.getCategory()).thenReturn(AuditLogCategory.DATA_MODIFICATION);
-    Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
-    Mockito.when(auditLogComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    auditLogClient.log(message);
-    Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + DATA_MODIFICATION_ENDPOINT, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+    testSendMessage(AuditLogCategory.DATA_MODIFICATION, DATA_MODIFICATION_ENDPOINT, null);
   }
 
   @Test
   public void log_securityEventMessage() throws Exception {
-    Mockito.when(message.getCategory()).thenReturn(AuditLogCategory.SECURITY_EVENT);
-    Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
-    Mockito.when(auditLogComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    auditLogClient.log(message);
-    Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + SECURITY_EVENT_ENDPOINT, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+    testSendMessage(AuditLogCategory.SECURITY_EVENT, SECURITY_EVENT_ENDPOINT, null);
   }
 
   @Test
   public void log_configurationChangeMessage() throws Exception {
-    Mockito.when(message.getCategory()).thenReturn(AuditLogCategory.CONFIGURATION_CHANGE);
-    Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
-    Mockito.when(auditLogComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    auditLogClient.log(message);
-    Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + CONFIGURATION_CHANGE_ENDPOINT, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+    testSendMessage(AuditLogCategory.CONFIGURATION_CHANGE, CONFIGURATION_CHANGE_ENDPOINT, null);
   }
 
   @Test
   public void log_onBehalfOfSubscriber() throws Exception {
     String subscriberTokenIssuerUrl = "subscriber-token-issuer-url";
-    Mockito.when(message.getCategory()).thenReturn(AuditLogCategory.CONFIGURATION_CHANGE);
     Mockito.when(message.getSubscriberTokenIssuer()).thenReturn(subscriberTokenIssuerUrl);
-    Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
-    Mockito.when(auditLogComm.retrieveOAuthToken(subscriberTokenIssuerUrl)).thenReturn(DUMMY_OAUTH_TOKEN);
-    auditLogClient.log(message);
-    Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + CONFIGURATION_CHANGE_ENDPOINT, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+    testSendMessage(AuditLogCategory.CONFIGURATION_CHANGE, CONFIGURATION_CHANGE_ENDPOINT, subscriberTokenIssuerUrl);
   }
 
   @Test(expected = JsonProcessingException.class)
@@ -125,6 +106,25 @@ public class AuditLogClientImplTest {
     Assert.assertEquals(expectedResponse[0], actualResponse.get(0));
   }
 
+  @Test
+  public void getLogs_inCertainPeriodOfTime() throws Exception {
+    final Instant startPeriod = Instant.EPOCH;
+    final Instant endPeriod = Instant.now();
+    final String logRetrievalInPeriodApi = RETRIEVE_AUDITLOG_PATH + "?time_from=" + startPeriod + "&time_to=" + endPeriod;
+
+    Log dummyLog = new Log();
+    Log[] expectedResponse = new Log[]{dummyLog};
+
+    Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
+    Mockito.when(auditLogManagerComm.get(logRetrievalInPeriodApi, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
+
+    Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenReturn(expectedResponse);
+    List<Log> actualResponse = auditLogClient.getLogs(startPeriod, endPeriod);
+
+    Assert.assertEquals(expectedResponse.length, actualResponse.size());
+    Assert.assertEquals(expectedResponse[0], actualResponse.get(0));
+  }
+
   @Test(expected = ServiceException.class)
   public void getLogs_problemWithTokenRetrieval() throws Exception {
     Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenThrow(ServiceException.class);
@@ -147,4 +147,18 @@ public class AuditLogClientImplTest {
 
     auditLogClient.getLogs();
   }
+
+  private void testSendMessage(AuditLogCategory category, String messageTypeEndpoint, String externalOAuthURL) throws Exception {
+    Mockito.when(message.getCategory()).thenReturn(category);
+    Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
+
+    if (externalOAuthURL == null) {
+      Mockito.when(auditLogComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
+    } else {
+      Mockito.when(auditLogComm.retrieveOAuthToken(externalOAuthURL)).thenReturn(DUMMY_OAUTH_TOKEN);
+    }
+    auditLogClient.log(message);
+    Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + messageTypeEndpoint, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+  }
+
 }

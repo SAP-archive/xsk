@@ -1,9 +1,9 @@
-package com.sap.auditlog.client.config;
+package com.sap.xsk.auditlog.client.config;
 
-import static com.sap.auditlog.client.config.AuditLogWriteConfig.OAUTH_API_URL_ENV;
-import static com.sap.auditlog.client.config.AuditLogWriteConfig.WRITE_API_CLIENT_ID_ENV;
-import static com.sap.auditlog.client.config.AuditLogWriteConfig.WRITE_API_CLIENT_SECRET_ENV;
-import static com.sap.auditlog.client.config.AuditLogWriteConfig.WRITE_API_URL_ENV;
+import static com.sap.xsk.auditlog.client.config.AuditLogWriteConfig.OAUTH_API_URL_ENV;
+import static com.sap.xsk.auditlog.client.config.AuditLogWriteConfig.WRITE_API_CLIENT_ID_ENV;
+import static com.sap.xsk.auditlog.client.config.AuditLogWriteConfig.WRITE_API_CLIENT_SECRET_ENV;
+import static com.sap.xsk.auditlog.client.config.AuditLogWriteConfig.WRITE_API_URL_ENV;
 
 import org.junit.After;
 import org.junit.Assert;

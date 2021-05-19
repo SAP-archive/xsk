@@ -1,4 +1,4 @@
-package com.sap.auditlog.client.http;
+package com.sap.xsk.auditlog.client.http;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -7,11 +7,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pgssoft.httpclient.HttpClientMock;
-import com.sap.auditlog.client.config.ServiceConfig;
-import com.sap.auditlog.client.exceptions.InvalidMessageException;
-import com.sap.auditlog.client.exceptions.ServiceException;
-import com.sap.auditlog.client.exceptions.UnauthorizedException;
+import com.pgssoft.httpclient.HttpClientMockBuilder;
+import com.sap.xsk.auditlog.client.config.ServiceConfig;
+import com.sap.xsk.auditlog.client.exceptions.InvalidMessageException;
+import com.sap.xsk.auditlog.client.exceptions.ServiceException;
+import com.sap.xsk.auditlog.client.exceptions.UnauthorizedException;
 import java.io.IOException;
+import java.util.Base64;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,9 +54,7 @@ public class ServiceCommunicatorTest {
 
   @Test
   public void send() throws Exception {
-    client.onPost(SERVICE_URL + "/test")
-        .withHeader("Authorization", containsString(OAUTH_TOKEN))
-        .withBody(equalTo(DUMMY_REQUEST_BODY))
+    getBaseMockBuilderForResponseToSendRequest("/test")
         .doReturnJSON(DUMMY_RESPONSE).withStatus(201);
 
     communicator.send("/test", DUMMY_REQUEST_BODY, OAUTH_TOKEN);
@@ -62,9 +62,7 @@ public class ServiceCommunicatorTest {
 
   @Test(expected = ServiceException.class)
   public void send_httpClientFailsOnSendLog() throws Exception {
-    client.onPost(SERVICE_URL + "/test")
-        .withHeader("Authorization", containsString(OAUTH_TOKEN))
-        .withBody(equalTo(DUMMY_REQUEST_BODY))
+    getBaseMockBuilderForResponseToSendRequest("/test")
         .doThrowException(new IOException());
 
     communicator.send("/test", DUMMY_REQUEST_BODY, OAUTH_TOKEN);
@@ -72,9 +70,7 @@ public class ServiceCommunicatorTest {
 
   @Test(expected = UnauthorizedException.class)
   public void send_invalidOAuthToken() throws Exception {
-    client.onPost(SERVICE_URL + "/test")
-        .withHeader("Authorization", containsString(OAUTH_TOKEN))
-        .withBody(equalTo(DUMMY_REQUEST_BODY))
+    getBaseMockBuilderForResponseToSendRequest("/test")
         .doReturn(401, "");
 
     communicator.send("/test", DUMMY_REQUEST_BODY, OAUTH_TOKEN);
@@ -82,9 +78,7 @@ public class ServiceCommunicatorTest {
 
   @Test(expected = InvalidMessageException.class)
   public void send_invalidMessageFormat() throws Exception {
-    client.onPost(SERVICE_URL + "/test")
-        .withHeader("Authorization", containsString(OAUTH_TOKEN))
-        .withBody(equalTo(DUMMY_REQUEST_BODY))
+    getBaseMockBuilderForResponseToSendRequest("/test")
         .doReturn(400, "");
 
     communicator.send("/test", DUMMY_REQUEST_BODY, OAUTH_TOKEN);
@@ -92,9 +86,7 @@ public class ServiceCommunicatorTest {
 
   @Test(expected = ServiceException.class)
   public void send_problemWithServer() throws Exception {
-    client.onPost(SERVICE_URL + "/test")
-        .withHeader("Authorization", containsString(OAUTH_TOKEN))
-        .withBody(equalTo(DUMMY_REQUEST_BODY))
+    getBaseMockBuilderForResponseToSendRequest("/test")
         .doReturn(500, "");
 
     communicator.send("/test", DUMMY_REQUEST_BODY, OAUTH_TOKEN);
@@ -102,7 +94,7 @@ public class ServiceCommunicatorTest {
 
   @Test
   public void retrieveOAuthToken() throws Exception {
-    client.onPost(OAUTH_URL + OAUTH_RETRIEVAL_ENDPOINT).doReturnJSON(DUMMY_RESPONSE);
+    mockBasicResponseFromOAuthServer(OAUTH_URL);
     Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenReturn(node);
     Mockito.when(node.get(PROPERTY_NAME)).thenReturn(node);
     Mockito.when(node.asText()).thenReturn(OAUTH_TOKEN);
@@ -113,7 +105,7 @@ public class ServiceCommunicatorTest {
   @Test
   public void retrieveOAuthToken_usingAnotherOAuthUrl() throws Exception {
     String subscriberTokenIssuerUrl = "https://subscriber-token-issuer-url";
-    client.onPost(subscriberTokenIssuerUrl + OAUTH_RETRIEVAL_ENDPOINT).doReturnJSON(DUMMY_RESPONSE);
+    mockBasicResponseFromOAuthServer(subscriberTokenIssuerUrl);
     Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenReturn(node);
     Mockito.when(node.get(PROPERTY_NAME)).thenReturn(node);
     Mockito.when(node.asText()).thenReturn(OAUTH_TOKEN);
@@ -122,20 +114,22 @@ public class ServiceCommunicatorTest {
 
   @Test(expected = UnauthorizedException.class)
   public void retrieveOAuthToken_invalidBasicAuth() throws Exception {
-    client.onPost(OAUTH_URL + OAUTH_RETRIEVAL_ENDPOINT).doReturn(401, "");
+    client.onPost(OAUTH_URL + OAUTH_RETRIEVAL_ENDPOINT)
+        .withHeader("Authorization", getBasicAuthHeader(CLIENT_ID, CLIENT_SECRET))
+        .doReturn(401, "");
     communicator.retrieveOAuthToken();
   }
 
   @Test(expected = ServiceException.class)
   public void retrieveOAuthToken_nonJsonResponse() throws Exception {
-    client.onPost(OAUTH_URL + OAUTH_RETRIEVAL_ENDPOINT).doReturnJSON(DUMMY_RESPONSE);
+    mockBasicResponseFromOAuthServer(OAUTH_URL);
     Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenThrow(JsonProcessingException.class);
     communicator.retrieveOAuthToken();
   }
 
   @Test(expected = ServiceException.class)
   public void retrieveOAuthToken_missingProperty() throws Exception {
-    client.onPost(OAUTH_URL + OAUTH_RETRIEVAL_ENDPOINT).doReturnJSON(DUMMY_RESPONSE);
+    mockBasicResponseFromOAuthServer(OAUTH_URL);
     Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenReturn(node);
     Mockito.when(node.get(PROPERTY_NAME)).thenReturn(null);
     communicator.retrieveOAuthToken();
@@ -186,5 +180,22 @@ public class ServiceCommunicatorTest {
     Mockito.when(config.getClientSecret()).thenReturn(CLIENT_SECRET);
     Mockito.when(config.getServiceURL()).thenReturn(SERVICE_URL);
     Mockito.when(config.getOauthURL()).thenReturn(OAUTH_URL);
+  }
+
+  private String getBasicAuthHeader(String username, String password) {
+    String credentials = username + ':' + password;
+    return "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
+  }
+
+  private void mockBasicResponseFromOAuthServer(String OAuthURL) {
+    client.onPost(OAuthURL + OAUTH_RETRIEVAL_ENDPOINT)
+        .withHeader("Authorization", getBasicAuthHeader(CLIENT_ID, CLIENT_SECRET))
+        .doReturnJSON(DUMMY_RESPONSE);
+  }
+
+  private HttpClientMockBuilder getBaseMockBuilderForResponseToSendRequest(String apiURL) {
+    return client.onPost(SERVICE_URL + apiURL)
+        .withHeader("Authorization", containsString(OAUTH_TOKEN))
+        .withBody(equalTo(DUMMY_REQUEST_BODY));
   }
 }

@@ -23,7 +23,6 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -52,34 +51,33 @@ public class XSKHDBViewParserHanaCase {
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
 
-  @After
-  public void cleanUpAfterTest() throws SQLException {
-    Statement stmt = connection.createStatement();
-    stmt.executeUpdate(HDBVIEW_HANA_DROP_TABLE1_SQL);
-    stmt.executeUpdate(HDBVIEW_HANA_DROP_MY_VIEW1_SQL);
-  }
-
   @Before
   public void setUpBeforeTest() throws SQLException {
     Statement stmt = connection.createStatement();
-    stmt.executeUpdate(HDBVIEW_HANA_DROP_XSK_DATASTRUCTURES);
-    stmt.executeUpdate(HDBVIEW_HANA_CREATE_TABLE1_SQL);
-    stmt.executeUpdate(HDBVIEW_HANA_CREATE_MY_VIEW1_SQL);
+    stmt.executeUpdate(String.format("drop table \"%s\".\"XSK_DATA_STRUCTURES\"", Configuration.get("hana.username")));
   }
 
   @Test
   public void testHDBViewCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestModule.getResources(HDBVIEW_HANA_ROOT_FOLDER,
-        HDBVIEW_HANA_REPO_PATH,
-        HDBVIEW_HANA_RELATIVE_RESOURCES_PATH);
+    Statement stmt = connection.createStatement();
+    stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE1\"(COLUMN1 integer,COLUMN2 integer)",
+        Configuration.get("hana.username")));
+    stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.views::MY_VIEW1\"(COLUMN1 integer,COLUMN2 integer)",
+        Configuration.get("hana.username")));
+    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+        "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
+        "/registry.public.hdbview-itest/SampleHANAXSClassicView.hdbview");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
-    Statement stmt = connection.createStatement();
+
     ResultSet rs = stmt.executeQuery(
-        String.format("SELECT COUNT(*) as rawsCount FROM %s", XSKHDBUtils.escapeArtifactName(connection, HDBVIEW_HANA_EXPECTED_VIEW_NAME)));
+        String.format("SELECT COUNT(*) as rawsCount FROM %s",
+            XSKHDBUtils.escapeArtifactName(connection, "hdbview-itest::SampleHANAXSClassicView")));
     assertTrue(rs.next());
-    assertEquals(HDBVIEW_HANA_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP VIEW %s", XSKHDBUtils.escapeArtifactName(connection, HDBVIEW_HANA_EXPECTED_VIEW_NAME)));
+    assertEquals(0, rs.getInt("rawsCount"));
+    stmt.executeUpdate(String.format("DROP VIEW %s", XSKHDBUtils.escapeArtifactName(connection, "hdbview-itest::SampleHANAXSClassicView")));
+    stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE1\"", Configuration.get("hana.username")));
+    stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.views::MY_VIEW1\"", Configuration.get("hana.username")));
   }
 }

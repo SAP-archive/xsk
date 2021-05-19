@@ -19,7 +19,6 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.test.itest.utils.TestConstants;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
@@ -36,11 +35,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_ROOT_FOLDER;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_REPO_PATH;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_RELATIVE_RESOURCES_PATH;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_EXPECTED_SEQUENCE_COUNT;
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.HDBSEQUENCE_POSTGRESQL_EXPECTED_SEQUENCE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -60,9 +54,7 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
   public static void setUp() throws SQLException {
     Network network = Network.newNetwork();
     jdbcContainer =
-        new PostgreSQLContainer<>(TestConstants.HDBSEQUENCE_POSTGRESQL_DOCKER_IMAGE)
-            .withNetwork(network)
-            .withNetworkAliases(TestConstants.HDBSEQUENCE_POSTGRESQL_DOCKER_NETWORK_ALIAS);
+        new PostgreSQLContainer<>("postgres:alpine");
     jdbcContainer.start();
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
@@ -78,9 +70,9 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
 
   @Test
   public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestModule.getResources(HDBSEQUENCE_POSTGRESQL_ROOT_FOLDER,
-        HDBSEQUENCE_POSTGRESQL_REPO_PATH,
-        HDBSEQUENCE_POSTGRESQL_RELATIVE_RESOURCES_PATH);
+    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+        "/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence",
+        "/registry.public.sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
@@ -91,8 +83,8 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
     while (rs.next()) {
       dbSequences.add(rs.getString("sequence_name"));
     }
-    assertEquals(HDBSEQUENCE_POSTGRESQL_EXPECTED_SEQUENCE_COUNT, dbSequences.size());
-    assertEquals(HDBSEQUENCE_POSTGRESQL_EXPECTED_SEQUENCE_NAME, dbSequences.get(0));
+    assertEquals(1, dbSequences.size());
+    assertEquals("sequence-itest::SampleSequence_HanaXSClassic", dbSequences.get(0));
 
     stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
     rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");

@@ -32,7 +32,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.*;
 import static org.junit.Assert.*;
 
 public class XSKHDBTableParserPostgreSQLITCase {
@@ -45,7 +44,7 @@ public class XSKHDBTableParserPostgreSQLITCase {
   @BeforeClass
   public static void setUp() throws SQLException {
     jdbcContainer =
-        new PostgreSQLContainer<>(HDBTABLE_POSTGRESQL_DOCKER_IMAGE);
+        new PostgreSQLContainer<>("postgres:alpine");
     jdbcContainer.start();
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
@@ -61,17 +60,18 @@ public class XSKHDBTableParserPostgreSQLITCase {
 
   @Test
   public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestModule.getResources(HDBTABLE_POSTGRESQL_ROOT_FOLDER,
-        HDBTABLE_POSTGRESQL_REPO_PATH,
-        HDBTABLE_POSTGRESQL_RELATIVE_RESOURCES_PATH);
+    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+        "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
+        "/registry.public.hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
     Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME));
+    ResultSet rs = stmt
+        .executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", "hdbtable-itest::SamplePostgreXSClassicTable"));
     assertTrue(rs.next());
-    assertEquals(HDBTABLE_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP TABLE \"%s\"", HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME));
+    assertEquals(0, rs.getInt("rawsCount"));
+    stmt.executeUpdate(String.format("DROP TABLE \"%s\"", "hdbtable-itest::SamplePostgreXSClassicTable"));
   }
 }

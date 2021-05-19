@@ -32,7 +32,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -46,38 +45,33 @@ public class XSKHDBViewParserMySQLITCase {
   @BeforeClass
   public static void setUp() throws SQLException {
     jdbcContainer =
-        new MySQLContainer<>(HDBVIEW_MYSQL_DOCKER_IMAGE);
+        new MySQLContainer<>("mysql:5.7");
     jdbcContainer.start();
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
     Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
     connection = injector.getInstance(DataSource.class).getConnection();
-    Statement stmt = connection.createStatement();
-    stmt.executeUpdate(HDBVIEW_MYSQL_CREATE_TABLE1_SQL);
-    stmt.executeUpdate(HDBVIEW_MYSQL_CREATE_MY_VIEW1_SQL);
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
-  }
-
-  @AfterClass
-  public static void cleanUp() throws SQLException {
-    Statement stmt = connection.createStatement();
-    stmt.executeUpdate(HDBVIEW_MYSQL_DROP_TABLE1_SQL);
-    stmt.executeUpdate(HDBVIEW_MYSQL_DROP_MY_VIEW1_SQL);
   }
 
   @Test
   public void testHDBViewCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestModule.getResources(HDBVIEW_MYSQL_ROOT_FOLDER,
-        HDBVIEW_MYSQL_REPO_PATH,
-        HDBVIEW_MYSQL_RELATIVE_RESOURCES_PATH);
+    Statement stmt = connection.createStatement();
+    stmt.executeUpdate("create table `test`.`acme.com.test.tables::MY_TABLE1`(Column1 integer,Column2 integer)");
+    stmt.executeUpdate("create table `test`.`acme.com.test.views::MY_VIEW1`(Column1 integer,Column2 integer)");
+
+    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+        "/registry/public/hdbview-itest/SampleMySQLXSClassicView.hdbview",
+        "/registry.public.hdbview-itest/SampleMySQLXSClassicView.hdbview");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
-    Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM %s", HDBVIEW_MYSQL_EXPECTED_VIEW_NAME));
+    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM %s", "`hdbview-itest::SampleMySQLXSClassicView`"));
     assertTrue(rs.next());
-    assertEquals(HDBVIEW_MYSQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP VIEW %s", HDBVIEW_MYSQL_EXPECTED_VIEW_NAME));
+    assertEquals(0, rs.getInt("rawsCount"));
+    stmt.executeUpdate(String.format("DROP VIEW %s", "`hdbview-itest::SampleMySQLXSClassicView`"));
+    stmt.executeUpdate("drop table `test`.`acme.com.test.tables::MY_TABLE1`");
+    stmt.executeUpdate("drop table `test`.`acme.com.test.views::MY_VIEW1`");
   }
 }

@@ -31,7 +31,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestConstants.*;
 import static org.junit.Assert.assertTrue;
 
 public class XSKHDBTableParserMySQLITCase {
@@ -44,7 +43,7 @@ public class XSKHDBTableParserMySQLITCase {
   @BeforeClass
   public static void setUp() throws SQLException {
     jdbcContainer =
-        new MySQLContainer<>(HDBTABLE_MYSQL_DOCKER_IMAGE);
+        new MySQLContainer<>("mysql:5.7");
     jdbcContainer.start();
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
@@ -55,17 +54,17 @@ public class XSKHDBTableParserMySQLITCase {
 
   @Test
   public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestModule.getResources(HDBTABLE_MYSQL_ROOT_FOLDER,
-        HDBTABLE_MYSQL_REPO_PATH,
-        HDBTABLE_MYSQL_RELATIVE_RESOURCES_PATH);
+    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+        "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
+        "/registry.public.hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
     Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM `" + HDBTABLE_MYSQL_EXPECTED_TABLE_NAME + "`");
+    ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM `hdbtable-itest::SamplePostgreXSClassicTable`");
     assertTrue(rs.next());
-    assertTrue(HDBTABLE_MYSQL_EXPECTED_CREATED_RAWS_COUNT == rs.getInt("rawsCount"));
-    stmt.executeUpdate("DROP TABLE `" + HDBTABLE_MYSQL_EXPECTED_TABLE_NAME + "`");
+    assertTrue(0 == rs.getInt("rawsCount"));
+    stmt.executeUpdate("DROP TABLE `hdbtable-itest::SamplePostgreXSClassicTable`");
   }
 }

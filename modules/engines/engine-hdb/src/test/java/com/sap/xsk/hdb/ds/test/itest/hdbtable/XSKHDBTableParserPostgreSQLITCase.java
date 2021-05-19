@@ -62,7 +62,7 @@ public class XSKHDBTableParserPostgreSQLITCase {
   public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
-        "/registry.public.hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
+        "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();

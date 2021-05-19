@@ -66,7 +66,7 @@ public class XSKHDBViewParserHanaCase {
         Configuration.get("hana.username")));
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
-        "/registry.public.hdbview-itest/SampleHANAXSClassicView.hdbview");
+        "/hdbview-itest/SampleHANAXSClassicView.hdbview");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();

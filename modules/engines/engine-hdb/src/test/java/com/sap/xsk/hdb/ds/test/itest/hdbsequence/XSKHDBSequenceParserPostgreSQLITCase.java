@@ -72,7 +72,7 @@ public class XSKHDBSequenceParserPostgreSQLITCase {
   public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence",
-        "/registry.public.sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
+        "/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();

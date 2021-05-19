@@ -21,7 +21,6 @@ import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestModule;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testcontainers.containers.MySQLContainer;
@@ -62,7 +61,7 @@ public class XSKHDBViewParserMySQLITCase {
 
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/hdbview-itest/SampleMySQLXSClassicView.hdbview",
-        "/registry.public.hdbview-itest/SampleMySQLXSClassicView.hdbview");
+        "/hdbview-itest/SampleMySQLXSClassicView.hdbview");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();

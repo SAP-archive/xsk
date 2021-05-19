@@ -62,7 +62,7 @@ public class XSKHDBViewParserPostgreSQLITCase {
     stmt.executeUpdate("create table \"public\".\"acme.com.test.views::MY_VIEW1\"(Column1 integer,Column2 integer)");
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/hdbview-itest/SamplePostgreXSClassicView.hdbview",
-        "/registry.public.hdbview-itest/SamplePostgreXSClassicView.hdbview");
+        "/hdbview-itest/SamplePostgreXSClassicView.hdbview");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();

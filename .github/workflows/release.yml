@@ -53,13 +53,13 @@ jobs:
     - name: XSK Buildpack
       run: |
         cd releng/buildpacks/xsk/stack/
-        docker build --build-arg DIRIGIBLE_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-base . --target base
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-base . --target base
         docker tag dirigiblelabs/kneo-xsk-stack-base dirigiblelabs/kneo-xsk-stack-base:$XSK_VERSION
         docker push dirigiblelabs/kneo-xsk-stack-base:$XSK_VERSION
-        docker build --build-arg DIRIGIBLE_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-run . --target run
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-run . --target run
         docker tag dirigiblelabs/kneo-xsk-stack-run dirigiblelabs/kneo-xsk-stack-run:$XSK_VERSION
         docker push dirigiblelabs/kneo-xsk-stack-run:$XSK_VERSION
-        docker build --build-arg DIRIGIBLE_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-build . --target build
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-build . --target build
         docker tag dirigiblelabs/kneo-xsk-stack-build dirigiblelabs/kneo-xsk-stack-build:$XSK_VERSION
         docker push dirigiblelabs/kneo-xsk-stack-build:$XSK_VERSION
         cd ../buildpack/
@@ -183,6 +183,53 @@ jobs:
         asset_content_type: application/zip
 
 #----------------Publish GitHub Release------------------#
+
+#----------------Publish Helm Release------------------#
+
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v1
+    - name: Helm Charts Release - Checkout gh-pages
+      run: |
+        mkdir charts-temp
+        cp -r releng/helm-charts/ charts-temp/
+        #### Git Checkout Workaround
+        git add .github/
+        git add .reuse/
+        git add LICENSES/
+        git add modules/
+        git add releng/
+        git add samples/
+        git reset --hard
+        ####
+        git fetch
+        git checkout gh-pages
+
+        cp charts/* .
+    - name: Helm Charts Release - Set Chart Version - Dirigible
+      run: |
+        cd charts-temp/helm-charts/dirigible/
+        find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+    - name: Helm Charts Release
+      run: |
+        cp charts/* charts-temp/helm-charts/
+        cd charts-temp/helm-charts/
+        helm package dirigible
+        cd ..
+        helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
+
+        cp helm-charts/index.yaml ../.
+        cp helm-charts/xsk-$XSK_VERSION.tgz ../charts/
+        cd ..
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+        git add index.yaml
+        git add charts/
+        git commit -m "Updates Helm Charts - Release $XSK_VERSION"
+        git push origin gh-pages
+        git add .
+        git reset --hard
+        git checkout master
+#----------------Publish Helm Release------------------#
 
 #-----------------Create GitHub Branch-------------------#
 

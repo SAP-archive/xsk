@@ -1,5 +1,6 @@
 package com.sap.auditlog.client.messages;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -47,6 +48,7 @@ public class DataAccess extends AuditLogMessage {
     return this.attachments;
   }
 
+  @JsonIgnore
   @Override
   public AuditLogCategory getCategory() {
     return AuditLogCategory.DATA_ACCESS;

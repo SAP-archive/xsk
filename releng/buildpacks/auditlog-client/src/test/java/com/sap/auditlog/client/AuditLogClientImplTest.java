@@ -4,14 +4,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sap.auditlog.client.auditlogs.Log;
 import com.sap.auditlog.client.exceptions.ServiceException;
 import com.sap.auditlog.client.http.Communicator;
 import com.sap.auditlog.client.messages.AuditLogCategory;
 import com.sap.auditlog.client.messages.AuditLogMessage;
-import java.util.Collections;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
@@ -104,18 +102,16 @@ public class AuditLogClientImplTest {
   @Test
   public void getLogs() throws Exception {
     Log dummyLog = new Log();
-    List<Log> expectedResponse = Collections.singletonList(dummyLog);
+    Log[] expectedResponse = new Log[]{dummyLog};
 
     Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
     Mockito.when(auditLogManagerComm.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
 
-    JavaType type = Mockito.mock(JavaType.class);
-    Mockito.when(jsonMapper.constructType(List.class)).thenReturn(type);
-    Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, type)).thenReturn(expectedResponse);
+    Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenReturn(expectedResponse);
     List<Log> actualResponse = auditLogClient.getLogs();
 
-    Assert.assertEquals(expectedResponse.size(), actualResponse.size());
-    Assert.assertEquals(expectedResponse.get(0), actualResponse.get(0));
+    Assert.assertEquals(expectedResponse.length, actualResponse.size());
+    Assert.assertEquals(expectedResponse[0], actualResponse.get(0));
   }
 
   @Test(expected = ServiceException.class)
@@ -131,14 +127,12 @@ public class AuditLogClientImplTest {
     auditLogClient.getLogs();
   }
 
-  @Test(expected = JsonProcessingException.class)
+  @Test(expected = ServiceException.class)
   public void getLogs_problemWithDeserializationOfResponse() throws Exception {
     Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
     Mockito.when(auditLogManagerComm.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
 
-    JavaType type = Mockito.mock(JavaType.class);
-    Mockito.when(jsonMapper.constructType(List.class)).thenReturn(type);
-    Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, type)).thenThrow(JsonProcessingException.class);
+    Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenThrow(JsonProcessingException.class);
 
     auditLogClient.getLogs();
   }

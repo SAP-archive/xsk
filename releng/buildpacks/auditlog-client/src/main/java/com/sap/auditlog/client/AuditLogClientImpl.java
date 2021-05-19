@@ -7,6 +7,7 @@ import com.sap.auditlog.client.exceptions.ServiceException;
 import com.sap.auditlog.client.http.Communicator;
 import com.sap.auditlog.client.messages.AuditLogCategory;
 import com.sap.auditlog.client.messages.AuditLogMessage;
+import java.util.Arrays;
 import java.util.List;
 
 class AuditLogClientImpl implements AuditLogClient {
@@ -34,10 +35,15 @@ class AuditLogClientImpl implements AuditLogClient {
 
 
   @Override
-  public List<Log> getLogs() throws ServiceException, JsonProcessingException {
+  public List<Log> getLogs() throws ServiceException {
     String token = auditLogManagementService.retrieveOAuthToken();
     String responseBody = auditLogManagementService.get(RETRIEVE_AUDITLOG_PATH, token);
-    return jsonMapper.readValue(responseBody, jsonMapper.constructType(List.class));
+
+    try {
+      return Arrays.asList(jsonMapper.readValue(responseBody, Log[].class));
+    } catch (JsonProcessingException ex) {
+      throw new ServiceException("Problem with the response from the server. Reason :" + ex);
+    }
   }
 
   private String getSendEndpoint(AuditLogCategory messageCategory) {

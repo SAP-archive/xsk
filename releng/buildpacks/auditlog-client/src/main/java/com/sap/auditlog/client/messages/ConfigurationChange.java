@@ -1,5 +1,6 @@
 package com.sap.auditlog.client.messages;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -31,6 +32,7 @@ public class ConfigurationChange extends AuditLogMessage {
     return this.object;
   }
 
+  @JsonIgnore
   @Override
   public AuditLogCategory getCategory() {
     return AuditLogCategory.CONFIGURATION_CHANGE;

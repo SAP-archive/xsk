@@ -59,6 +59,7 @@ public abstract class AuditLogMessage {
     return this.time;
   }
 
+  @JsonIgnore
   public abstract AuditLogCategory getCategory();
 
   public static class AuditLogDetail {

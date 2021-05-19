@@ -33,6 +33,7 @@ public class SecurityEvent extends AuditLogMessage {
     return new ArrayList<>(this.attributes);
   }
 
+
   @Override
   public AuditLogCategory getCategory() {
     return AuditLogCategory.SECURITY_EVENT;

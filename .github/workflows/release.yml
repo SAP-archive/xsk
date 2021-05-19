@@ -228,7 +228,7 @@ jobs:
         git push origin gh-pages
         git add .
         git reset --hard
-        git checkout master
+        git checkout main
 #----------------Publish Helm Release------------------#
 
 #-----------------Create GitHub Branch-------------------#

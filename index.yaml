@@ -3,9 +3,9 @@ entries:
   xsk:
   - apiVersion: v2
     appVersion: 0.4.2
-    created: "2021-05-20T18:55:10.256661+03:00"
+    created: "2021-05-20T19:04:04.987869+03:00"
     description: Compatible environment for SAP HANA Extended Application Services (XS) based applications outside of SAP HANA instance running in a container deployed on Kubernetes.
-    digest: afd91d4445c4263803306e3be9e49c8e3663fe3e12ca3bde57ba9f5b8b8ecc9e
+    digest: 86f5488f0aa9d8e216b9c7acf23caae7056e9a7a0ed9b74bc64ccc91847213cb
     home: https://github.com/sap/xsk
     icon: https://raw.githubusercontent.com/eclipse/dirigible/master/logo/dirigible-logo-symbol.png
     keywords:
@@ -30,4 +30,4 @@ entries:
     urls:
     - https://sap.github.io/xsk/charts/xsk-0.4.2.tgz
     version: 0.4.2
-generated: "2021-05-20T18:55:10.255719+03:00"
+generated: "2021-05-20T19:04:04.987071+03:00"

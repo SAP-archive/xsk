@@ -48,9 +48,9 @@ public class AuditLogClientImplTest {
   private static final String DUMMY_RESPONSE = "dummy_response";
 
   @Mock
-  private Communicator auditLogComm;
+  private Communicator writer;
   @Mock
-  private Communicator auditLogManagerComm;
+  private Communicator reader;
   @Mock
   private ObjectMapper jsonMapper;
   @Mock
@@ -60,7 +60,7 @@ public class AuditLogClientImplTest {
 
   @Before
   public void setUp() {
-    auditLogClient = new AuditLogClientImpl(auditLogComm, auditLogManagerComm, jsonMapper);
+    auditLogClient = new AuditLogClientImpl(writer, reader, jsonMapper);
   }
 
   @Test
@@ -94,15 +94,15 @@ public class AuditLogClientImplTest {
   public void log_problemWithSerializationOfMessage() throws Exception {
     Mockito.when(jsonMapper.writeValueAsString(message)).thenThrow(JsonProcessingException.class);
     auditLogClient.log(message);
-    Mockito.verify(auditLogComm, never()).send(anyString(), anyString(), anyString());
+    Mockito.verify(writer, never()).send(anyString(), anyString(), anyString());
   }
 
   @Test(expected = ServiceException.class)
   public void log_problemWithOAuthRetrieval() throws Exception {
     Mockito.when(message.getCategory()).thenReturn(AuditLogCategory.CONFIGURATION_CHANGE);
-    Mockito.when(auditLogComm.retrieveOAuthToken()).thenThrow(ServiceException.class);
+    Mockito.when(writer.retrieveOAuthToken()).thenThrow(ServiceException.class);
     auditLogClient.log(message);
-    Mockito.verify(auditLogComm, never()).send(anyString(), anyString(), anyString());
+    Mockito.verify(writer, never()).send(anyString(), anyString(), anyString());
   }
 
   @Test
@@ -110,8 +110,8 @@ public class AuditLogClientImplTest {
     Log dummyLog = new Log();
     Log[] expectedResponse = new Log[]{dummyLog};
 
-    Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    Mockito.when(auditLogManagerComm.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
+    Mockito.when(reader.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
+    Mockito.when(reader.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
 
     Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenReturn(expectedResponse);
     List<Log> actualResponse = auditLogClient.getLogs();
@@ -129,8 +129,8 @@ public class AuditLogClientImplTest {
     Log dummyLog = new Log();
     Log[] expectedResponse = new Log[]{dummyLog};
 
-    Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    Mockito.when(auditLogManagerComm.get(logRetrievalInPeriodApi, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
+    Mockito.when(reader.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
+    Mockito.when(reader.get(logRetrievalInPeriodApi, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
 
     Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenReturn(expectedResponse);
     List<Log> actualResponse = auditLogClient.getLogs(startPeriod, endPeriod);
@@ -141,21 +141,21 @@ public class AuditLogClientImplTest {
 
   @Test(expected = ServiceException.class)
   public void getLogs_problemWithTokenRetrieval() throws Exception {
-    Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenThrow(ServiceException.class);
+    Mockito.when(reader.retrieveOAuthToken()).thenThrow(ServiceException.class);
     auditLogClient.getLogs();
   }
 
   @Test(expected = ServiceException.class)
   public void getLogs_problemWithRetrievalOfLogs() throws Exception {
-    Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    Mockito.when(auditLogManagerComm.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenThrow(ServiceException.class);
+    Mockito.when(reader.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
+    Mockito.when(reader.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenThrow(ServiceException.class);
     auditLogClient.getLogs();
   }
 
   @Test(expected = ServiceException.class)
   public void getLogs_problemWithDeserializationOfResponse() throws Exception {
-    Mockito.when(auditLogManagerComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    Mockito.when(auditLogManagerComm.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
+    Mockito.when(reader.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
+    Mockito.when(reader.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
 
     Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenThrow(JsonProcessingException.class);
 
@@ -167,12 +167,12 @@ public class AuditLogClientImplTest {
     Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
 
     if (externalOAuthURL == null) {
-      Mockito.when(auditLogComm.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
+      Mockito.when(writer.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
     } else {
-      Mockito.when(auditLogComm.retrieveOAuthToken(externalOAuthURL)).thenReturn(DUMMY_OAUTH_TOKEN);
+      Mockito.when(writer.retrieveOAuthToken(externalOAuthURL)).thenReturn(DUMMY_OAUTH_TOKEN);
     }
     auditLogClient.log(message);
-    Mockito.verify(auditLogComm).send(BASE_SEND_AUDITLOG_API_PATH + messageTypeEndpoint, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+    Mockito.verify(writer).send(BASE_SEND_AUDITLOG_API_PATH + messageTypeEndpoint, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
   }
 
 }

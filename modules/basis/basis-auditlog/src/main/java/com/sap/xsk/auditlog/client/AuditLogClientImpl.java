@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.auditlog.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,19 +22,22 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 class AuditLogClientImpl implements AuditLogClient {
 
   private static final String BASE_SEND_AUDITLOG_API_PATH = "/audit-log/oauth2/v2";
   private static final String RETRIEVE_AUDITLOG_PATH = "/auditlog/v2/auditlogrecords";
 
-  private final ObjectMapper jsonMapper;
-  private final Communicator auditLogService;
-  private final Communicator auditLogManagementService;
+  private static final Logger logger = Logger.getLogger(AuditLogClientImpl.class.getName());
 
-  AuditLogClientImpl(Communicator auditLogService, Communicator auditLogManagementService, ObjectMapper jsonMapper) {
-    this.auditLogService = auditLogService;
-    this.auditLogManagementService = auditLogManagementService;
+  private final ObjectMapper jsonMapper;
+  private final Communicator writer;
+  private final Communicator reader;
+
+  AuditLogClientImpl(Communicator writer, Communicator reader, ObjectMapper jsonMapper) {
+    this.writer = writer;
+    this.reader = reader;
     this.jsonMapper = jsonMapper;
   }
 
@@ -34,12 +48,15 @@ class AuditLogClientImpl implements AuditLogClient {
 
     String token = null;
     if (Objects.isNull(message.getSubscriberTokenIssuer())) {
-      token = auditLogService.retrieveOAuthToken();
+      logger.fine("Retrieving OAuth token for the Write API");
+      token = writer.retrieveOAuthToken();
     } else {
-      token = auditLogService.retrieveOAuthToken(message.getSubscriberTokenIssuer());
+      logger.fine("Retrieving OAuth token for the Write API from the subscriber token issuer ["+message.getSubscriberTokenIssuer()+"]");
+      token = writer.retrieveOAuthToken(message.getSubscriberTokenIssuer());
     }
 
-    auditLogService.send(BASE_SEND_AUDITLOG_API_PATH + endpoint, payload, token);
+    logger.fine("Sending message to the Audit Log");
+    writer.send(BASE_SEND_AUDITLOG_API_PATH + endpoint, payload, token);
   }
 
   @Override
@@ -54,18 +71,22 @@ class AuditLogClientImpl implements AuditLogClient {
   }
 
   private List<Log> getLogs(String apiPath) throws ServiceException {
-    String token = auditLogManagementService.retrieveOAuthToken();
-    String responseBody = auditLogManagementService.get(apiPath, token);
+    logger.fine("Retrieving OAuth token for the Read API");
+    String token = reader.retrieveOAuthToken();
+
+    logger.fine("Requesting logs from the Audit Log");
+    String responseBody = reader.get(apiPath, token);
 
     try {
       return Arrays.asList(jsonMapper.readValue(responseBody, Log[].class));
     } catch (JsonProcessingException ex) {
+      logger.warning("Couldn't deserialize the response [" + responseBody +"] from the server");
       throw new ServiceException("Problem with the response from the server. Reason :" + ex);
     }
   }
 
   private String getLogRetrievalInPeriodPath(Instant from, Instant to) {
-    return RETRIEVE_AUDITLOG_PATH + "?time_from=" + from + "&time_to=" + to;
+    return String.format("%s?time_from=%s&time_to=%s",RETRIEVE_AUDITLOG_PATH,from,to);
   }
 
   private String getSendEndpoint(AuditLogCategory messageCategory) {

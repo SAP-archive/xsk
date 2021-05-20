@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.auditlog.client.http;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
@@ -17,10 +28,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.Provider.Service;
 import java.util.Base64;
+import java.util.logging.Logger;
 
 public class ServiceCommunicator implements Communicator {
 
+  private static final Logger logger = Logger.getLogger(ServiceCommunicator.class.getName());
   private static final String ISSUE_OAUTH_TOKEN_PATH = "/oauth/token?grant_type=client_credentials";
   private static final String OAUTH_TOKEN_PROPERTY_NAME = "access_token";
   private static final String JSON_CONTENT_TYPE = "application/json";
@@ -47,8 +61,10 @@ public class ServiceCommunicator implements Communicator {
 
     HttpResponse<String> response = null;
     try {
+      logger.info("Sending post request to service with url ["+url+"]");
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (Exception e) {
+      logger.warning("Problem with the http client during the post request. Reason :"+e);
       throw new ServiceException(e.getMessage());
     }
 
@@ -70,8 +86,10 @@ public class ServiceCommunicator implements Communicator {
 
     HttpResponse<String> response = null;
     try {
+      logger.info("Sending get request to service with url ["+url+"]");
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (Exception e) {
+      logger.warning("Problem with the http client during the post request. Reason :"+e);
       throw new ServiceException("Problem with http client. Reason:" + e);
     }
 
@@ -97,8 +115,10 @@ public class ServiceCommunicator implements Communicator {
 
     HttpResponse<String> response = null;
     try {
+      logger.info("Sending retrieval request to OAuth server with url ["+oauthUrl+"]");
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (Exception e) {
+      logger.warning("Problem with the http client during the OAuth token retrieval request. Reason :"+e);
       throw new ServiceException("Problem with http client. Reason:" + e);
     }
 
@@ -115,10 +135,12 @@ public class ServiceCommunicator implements Communicator {
       JsonNode root = jsonMapper.readTree(responseBody);
       tokenNode = root.get(OAUTH_TOKEN_PROPERTY_NAME);
     } catch (JsonProcessingException e) {
+      logger.info("Problem with the format of the response from the server. Reason :"+e);
       throw new ServiceException("Problem with the response from the server. Reason:" + e);
     }
 
     if (tokenNode == null) {
+      logger.info("Problem with the response from the server. The property, containing the OAuth token,is missing.");
       throw new ServiceException("Problem with the format of the response from the server.");
     }
     return tokenNode.asText();
@@ -137,6 +159,7 @@ public class ServiceCommunicator implements Communicator {
   }
 
   private void processErrorResponse(HttpResponse<?> response) throws ServiceException {
+    logger.info("Unexpected response from the server ["+response.statusCode()+"]");
     switch (response.statusCode()) {
       case HTTP_BAD_REQUEST:
         throw new InvalidMessageException("The message format is not valid. Reason: " + response.body());

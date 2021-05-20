@@ -27,6 +27,10 @@ imageBuilder:
   repository:
   buildpack: dirigiblelabs/kneo-xsk-buildpack
 
+image:
+  repository:
+  source:
+
 clusterBuilder:
   buildImage: dirigiblelabs/kneo-xsk-stack-build
   runImage: dirigiblelabs/kneo-xsk-stack-run

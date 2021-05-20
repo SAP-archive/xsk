@@ -70,3 +70,19 @@ spec:
   - group:
     - id: {{ .Values.imageBuilder.buildpack }}
 {{- end }}
+---
+{{- if .Values.create.image }}
+apiVersion: kpack.io/v1alpha1
+kind: Image
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  tag: {{ .Values.image.repository }}
+  serviceAccount: {{ .Values.docker.serviceAccountName }}
+  builder:
+    name: kneo-xsk
+    kind: Builder
+  source:
+    blob:
+      url: {{ .Values.image.source }}
+{{- end }}

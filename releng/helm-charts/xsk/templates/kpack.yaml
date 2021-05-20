@@ -1,4 +1,4 @@
-{{- if .Values.install.builder }}
+{{- if .Values.install.clusterBuilder }}
 {{- if .Values.create.secret }}
 {{- if .Values.docker.server }}
 apiVersion: v1
@@ -38,7 +38,7 @@ metadata:
   name: kneo-xsk-store
 spec:
   sources:
-  - image: {{ .Values.builder.buildpack }}
+  - image: {{ .Values.imageBuilder.buildpack }}
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack
@@ -47,17 +47,19 @@ metadata:
 spec:
   id: com.sap.kneo.xsk
   buildImage:
-    image: {{ .Values.builder.buildImage }}
+    image: {{ .Values.clusterBuilder.buildImage }}
   runImage:
-    image: {{ .Values.builder.runImage }}
+    image: {{ .Values.clusterBuilder.runImage }}
+{{- end }}
 ---
+{{- if .Values.install.imageBuilder }}
 apiVersion: kpack.io/v1alpha1
 kind: Builder
 metadata:
   name: kneo-xsk
 spec:
-  serviceAccount: {{ .Values.builder.serviceAccountName }}
-  tag: {{ .Values.builder.repository }}
+  serviceAccount: {{ .Values.clusterBuilder.serviceAccountName }}
+  tag: {{ .Values.imageBuilder.repository }}
   stack:
     name: kneo-xsk-stack
     kind: ClusterStack
@@ -66,5 +68,5 @@ spec:
     kind: ClusterStore
   order:
   - group:
-    - id: {{ .Values.builder.buildpack }}
+    - id: {{ .Values.imageBuilder.buildpack }}
 {{- end }}

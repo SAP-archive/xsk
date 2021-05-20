@@ -3,7 +3,8 @@
 # Declare variables to be passed into your templates.
 
 install:
-  builder: false
+  clusterBuilder: false
+  imageBuilder: false
 
 create:
   secret: false

@@ -15,6 +15,7 @@ docker:
   password:
   email:
   secretName: docker-registry-secret
+  serviceAccountName: docker-registry-service-account
 
 hana:
   url:

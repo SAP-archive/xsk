@@ -1,5 +1,6 @@
 {{- if .Values.install.builder }}
-# TODO: Add If-Else Clause, Also add ServiceAccount!
+{{- if .Values.create.secret }}
+{{- if .Values.docker.server }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -13,10 +14,23 @@ stringData:
             "username": "{{ .Values.docker.username }}",
             "password": "{{ .Values.docker.password }}",
             "email": "{{ .Values.docker.email }}",
-            "auth": "(printf "%s:%s" {{ .Values.docker.username }} {{ .Values.docker.password }} | b64enc)"
+            {{- with .Values.docker }}
+            {{- printf "\"auth\": \"%s\"" (printf "%s:%s" .username .password | b64enc) }}
+            {{- end }}
           }
       }
     }
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.docker.serviceAccountName }}
+imagePullSecrets:
+- name: {{ .Values.docker.secretName }}
+secrets:
+- name: {{ .Values.docker.secretName }}
+{{- end }}
+{{- end }}
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStore

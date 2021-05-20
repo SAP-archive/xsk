@@ -8,7 +8,7 @@ type: application
 # to the chart and its templates, including the app version.
 version: #{XSKVersion}#
 
-# Eclipse Dirigible version
+# XSK version
 appVersion: #{XSKVersion}#
 
 keywords:

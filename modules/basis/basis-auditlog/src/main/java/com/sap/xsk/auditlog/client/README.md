@@ -13,9 +13,7 @@ There are 4 types of logs:
 * security event logs
 * configuration change logs
 
-Every single type of log is derived directly from specific requirements of the standard. More about them could be found
-[here](https://github.wdf.sap.corp/xs-audit-log/sap-cp-audit-log-service-docs/wiki/Writing-Audit-Logs-in-CF#introduction)
-.
+Every single type of log is derived directly from specific requirements of the standard.
 
 ## Audit Log API
 
@@ -29,14 +27,13 @@ API. To create any type of service one should:
 
 Although the above-mentioned steps are enough for the creation of an instance of most of the offered services, this is not the case for
 the `Audit Log Service` service, because the `Write API` is reserved only for SAP services/applications. Therefore, special permission is
-needed to access it - a special entitlement, which is applied per global account. More about how to set the entitlement can be
-found [here](https://github.wdf.sap.corp/xs-audit-log/sap-cp-audit-log-service-docs/wiki/Adoption#enablement-of-audit-log-service)
+needed to access it - a special entitlement, which is applied per global account.
 
 So let's assume that you have all the needed permissions to create the instances of those services. When creating those instances a choice
 will be given to you, what type of service should be created - `standard` (deprecated) or `oauth2` (
 currently recommended). The latter uses `OAuth2` for Authentication/Authorization and additionally modifies/populates some properties of the
-log, like `tenant` and `user`. More about it can be
-found [here](https://github.wdf.sap.corp/xs-audit-log/sap-cp-audit-log-service-docs/wiki/%5BINTERNAL%5D-Auditlog-server-in-CF#message-enhancing)
+log, like `tenant` and `user`.
+
 Let's assume from now on that `oauth2` type is chosen for the oauth service.
 
 Given that we have to use OAuth token every time we use the service of type `oauth2`, how do we get this token? The answer is
@@ -53,22 +50,22 @@ The `service keys` configuration should look like this:
 
 ```JSON
 {
-    "url": "https://auditlog-management.cfapps.eu20.hana.ondemand.com",
+    "url": "<service_url>",
     "uaa": {
-        "clientid": "sb-a2d0497a-db3a-427b-a4a9-e3950c07062f!b2649|auditlog-management!b77",
-        "clientsecret": "da440fdd-c1e7-4f1e-82f7-5c15269987b3$MulmgfkBU9-e5PS6maIYDJyL3h3Yed9B4Wm_LceJ-Vs=",
-        "url": "https://kneoazure.authentication.eu20.hana.ondemand.com",
-        "identityzone": "kneoazure",
-        "identityzoneid": "f4211d17-2131-480a-a1e6-27b58076a343",
-        "tenantid": "f4211d17-2131-480a-a1e6-27b58076a343",
+        "clientid": "<randomly_generated_string>",
+        "clientsecret": "<randomly_generated_string>",
+        "url": "<oauth_token_issuer_url>",
+        "identityzone": "<name_of_identity_zone>",
+        "identityzoneid": "<some_identifier>",
+        "tenantid": "<some_identifier>",
         "tenantmode": "dedicated",
-        "sburl": "https://internal-xsuaa.authentication.eu20.hana.ondemand.com",
-        "apiurl": "https://api.authentication.eu20.hana.ondemand.com",
-        "verificationkey": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxdweazpJdWfw7uLw7hnaXmfBhzPaW7nfP/lfVhlXV16gDZ3CFp4lDFAOCjo9SHsvFkwAPC1ZehdacfwjyYy+ATgi4XSe2UO+qQ9SOGS1CIJ0Kta2W5EBACOzVZAJxDUJQSQraid6oHXGleqbiNT8WSjPIOFue/9MpYdXKD9g6NGuZbBIfin/p1NTC9zDNorbv7phWnrA5eSb3TSHK22rkeDvzMPSFWf6DW7RZ0N5i6MhFZhOtrHeLmXWCaHWCuRFiuOqax/zhazBqByAw5eFQ4fo4oCUZyklJ8tCppeKHGzGEZ72TW+mkka4cnT5sbDQJd9N//KwEi0zPocCv5zO2QIDAQAB-----END PUBLIC KEY-----",
-        "xsappname": "a2d0497a-db3a-427b-a4a9-e3950c07062f!b2649|auditlog-management!b77",
-        "subaccountid": "f4211d17-2131-480a-a1e6-27b58076a343",
-        "uaadomain": "authentication.eu20.hana.ondemand.com",
-        "zoneid": "f4211d17-2131-480a-a1e6-27b58076a343"
+        "sburl": "<internal_xsuaa_url>",
+        "apiurl": "<authentication_api>",
+        "verificationkey": "<certificate>",
+        "xsappname": "<name_of_application_instance>",
+        "subaccountid": "<id_of_subaccount>",
+        "uaadomain": "<domain_of_uaa>",
+        "zoneid": "<some_identifier>"
     },
     "vendor": "SAP"
 }
@@ -87,7 +84,8 @@ To generate an `OAuth` token, the request should contain:
 * the request url `https://<host_uaa_url>/oauth/token?grant_type=client_credentials`
 * the pair `clientid` and `clientsecret` as `Basic` authentication parameters
 
-The response is in `JSON` format, which includes the property `access_token`, whose value represents the token value.
+The response is in `JSON` format, which includes the property `access_token`, whose value represents the token value, which we are going to include
+in the requests to the `Audit Log` service.
 
 ### `Audit Log Service` service - Write API
 
@@ -100,9 +98,8 @@ where `<log_type>` can be:
 * `configuration-changes` - for configuration change logs
 
 The payload contains the log, you want to save in the `Audit Log`. Most of them have identical structures - the same properties, but a small
-subset of them require additional properties. More about the requirements for each log type can be
-found [here](https://github.wdf.sap.corp/xs-audit-log/audit-service/tree/master/audit-spec). The `Audit Log Service`
-service guarantees that if the log is successfully saved, then status code `201` with the id of the `log` will be returned.
+subset of them require additional properties. The `Audit Log Service` service guarantees that if the log is successfully saved, then status 
+code `201` with the id of the `log` will be returned.
 
 Two of the common log properties - `tenant` and `user`, are of a particular interest.
 
@@ -113,8 +110,7 @@ The value of the `tenant` should be set to one of these values:
 
 Regarding the value of `user` - it should be always set to `$USER` (special word) - the user who is actually writing the auditlog . When the
 log is sent to the audit log service, those template values will be dynamically modified according to what values for these properties were
-used. More about the those template values can be
-found [here](https://github.wdf.sap.corp/xs-audit-log/sap-cp-audit-log-service-docs/wiki/%5BINTERNAL%5D-Auditlog-server-in-CF#when-the-service-plan-is-oauth2)
+used.
 
 ### Audit Log Management service - Read API
 
@@ -137,5 +133,4 @@ immediately through the `Audit Log Management` service. This delay could last ho
 
 ## Resources
 
-* [Audit Log Service](https://github.wdf.sap.corp/xs-audit-log/sap-cp-audit-log-service-docs/wiki)
 * [Audit Logging in the Cloud Foundry Environment](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/f92c86ab11f6474ea5579d839051c334.html)

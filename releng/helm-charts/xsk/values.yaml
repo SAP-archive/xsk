@@ -22,8 +22,9 @@ hana:
   username:
   password:
 
-kpack:
+builder:
+  repository:
   buildImage: dirigiblelabs/kneo-xsk-stack-build
   runImage: dirigiblelabs/kneo-xsk-stack-run
-  serviceAccount: service-account-kpack
   buildpack: dirigiblelabs/kneo-xsk-buildpack
+  serviceAccountName: docker-registry-service-account

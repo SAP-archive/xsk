@@ -38,7 +38,7 @@ metadata:
   name: kneo-xsk-store
 spec:
   sources:
-  - image: {{ .Values.kpack.buildpack }}
+  - image: {{ .Values.builder.buildpack }}
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack
@@ -47,17 +47,17 @@ metadata:
 spec:
   id: com.sap.kneo.xsk
   buildImage:
-    image: {{ .Values.kpack.buildImage }}
+    image: {{ .Values.builder.buildImage }}
   runImage:
-    image: {{ .Values.kpack.runImage }}
+    image: {{ .Values.builder.runImage }}
 ---
 apiVersion: kpack.io/v1alpha1
 kind: Builder
 metadata:
   name: kneo-xsk
 spec:
-  serviceAccount: {{ .Values.kpack.serviceAccount }}
-  tag: dirigiblelabs/kneo-xsk-builder
+  serviceAccount: {{ .Values.builder.serviceAccountName }}
+  tag: {{ .Values.builder.repository }}
   stack:
     name: kneo-xsk-stack
     kind: ClusterStack
@@ -66,5 +66,5 @@ spec:
     kind: ClusterStore
   order:
   - group:
-    - id: {{ .Values.kpack.buildpack }}
+    - id: {{ .Values.builder.buildpack }}
 {{- end }}

@@ -1,4 +1,23 @@
 {{- if .Values.install.builder }}
+# TODO: Add If-Else Clause, Also add ServiceAccount!
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.docker.secretName }}
+type: kubernetes.io/dockerconfigjson
+stringData:
+  .dockerconfigjson: |
+    {
+      "auths": {
+          "{{ .Values.docker.server }}": {
+            "username": "{{ .Values.docker.username }}",
+            "password": "{{ .Values.docker.password }}",
+            "email": "{{ .Values.docker.email }}",
+            "auth": "(printf "%s:%s" {{ .Values.docker.username }} {{ .Values.docker.password }} | b64enc)"
+          }
+      }
+    }
+---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStore
 metadata:

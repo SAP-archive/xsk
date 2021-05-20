@@ -9,6 +9,13 @@ create:
   secret: false
   image: false
 
+docker:
+  server:
+  username:
+  password:
+  email:
+  secretName: docker-registry-secret
+
 hana:
   url:
   username:

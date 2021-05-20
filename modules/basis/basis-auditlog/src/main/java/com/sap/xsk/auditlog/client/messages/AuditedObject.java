@@ -24,7 +24,6 @@ import java.util.Map;
     ignoreUnknown = true
 )
 @JsonInclude(Include.NON_NULL)
-@JsonPropertyOrder({"type", "id"})
 public class AuditedObject {
 
   @JsonProperty("type")

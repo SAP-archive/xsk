@@ -40,7 +40,8 @@ spec:
       labels:
         {{- include "xsk.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ .Values.image.serviceAccountName }}
+      imagePullSecrets:
+        - name: {{ .Values.docker.secretName }}
       containers:
         - name: {{ .Chart.Name }}
           {{- if .Values.hana.secretName }}

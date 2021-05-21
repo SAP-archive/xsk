@@ -30,6 +30,7 @@ imageBuilder:
 image:
   repository:
   source:
+  serviceAccountName: docker-registry-service-account
 
 clusterBuilder:
   buildImage: dirigiblelabs/kneo-xsk-stack-build

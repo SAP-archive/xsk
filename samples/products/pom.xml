@@ -41,4 +41,8 @@
             </plugin>
 		</plugins>
 	</build>
+
+	<properties>
+		<license.header.location>../../license-header.txt</license.header.location>
+	</properties>
 </project>

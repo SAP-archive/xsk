@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.test.itest.hdbtable;
+package com.sap.xsk.hdb.ds.itest.hdbtable;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -17,13 +17,13 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.test.itest.module.XSKHDBTestContainersModule;
+import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
+import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -32,10 +32,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.hdb.ds.test.itest.utils.TestContainerConstants.*;
 import static org.junit.Assert.*;
 
-public class XSKHDBTableParserPostgreSQLITCase {
+public class XSKHDBTableParserPostgreSQLITTest {
 
   private static PostgreSQLContainer jdbcContainer;
   private static Connection connection;
@@ -44,11 +43,12 @@ public class XSKHDBTableParserPostgreSQLITCase {
 
   @BeforeClass
   public static void setUp() throws SQLException {
-    Network network = Network.newNetwork();
     jdbcContainer =
-        new PostgreSQLContainer<>(HDBTABLE_POSTGRESQL_DOCKER_IMAGE);
+        new PostgreSQLContainer<>("postgres:alpine");
     jdbcContainer.start();
-    Injector injector = Guice.createInjector(new XSKHDBTestContainersModule(jdbcContainer));
+    JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
+        jdbcContainer.getPassword());
+    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
     connection = injector.getInstance(DataSource.class).getConnection();
     facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
   }
@@ -60,17 +60,18 @@ public class XSKHDBTableParserPostgreSQLITCase {
 
   @Test
   public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestContainersModule.getResources(HDBTABLE_POSTGRESQL_ROOT_FOLDER,
-        HDBTABLE_POSTGRESQL_REPO_PATH,
-        HDBTABLE_POSTGRESQL_RELATIVE_RESOURCES_PATH);
+    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+        "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
+            "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
     Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME));
+    ResultSet rs = stmt
+        .executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", "hdbtable-itest::SamplePostgreXSClassicTable"));
     assertTrue(rs.next());
-    assertEquals(HDBTABLE_POSTGRESQL_EXPECTED_CREATED_RAWS_COUNT, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP TABLE \"%s\"", HDBTABLE_POSTGRESQL_EXPECTED_TABLE_NAME));
+    assertEquals(0, rs.getInt("rawsCount"));
+    stmt.executeUpdate(String.format("DROP TABLE \"%s\"", "hdbtable-itest::SamplePostgreXSClassicTable"));
   }
 }

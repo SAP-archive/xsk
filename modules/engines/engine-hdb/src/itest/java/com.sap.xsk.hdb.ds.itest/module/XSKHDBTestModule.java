@@ -9,27 +9,27 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.test.itest.module;
+package com.sap.xsk.hdb.ds.itest.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.sap.xsk.hdb.ds.itest.hdbsequence.XSKHDBSequenceParserPostgreSQLITTest;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
-import com.sap.xsk.hdb.ds.test.itest.hdbsequence.XSKHDBSequenceParserPostgreSQLITCase;
+import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.eclipse.dirigible.repository.local.LocalResource;
-import org.testcontainers.containers.JdbcDatabaseContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-public class XSKHDBTestContainersModule extends AbstractModule {
+public class XSKHDBTestModule extends AbstractModule {
 
-  private JdbcDatabaseContainer jdbcContainer;
+  private JDBCModel model;
 
-  public XSKHDBTestContainersModule(JdbcDatabaseContainer jdbcContainer) {
-    this.jdbcContainer = jdbcContainer;
+  public XSKHDBTestModule(JDBCModel model) {
+    this.model = model;
   }
 
   @Override
@@ -40,10 +40,10 @@ public class XSKHDBTestContainersModule extends AbstractModule {
   @Provides
   public DataSource getDataSource() {
     BasicDataSource basicDataSource = new BasicDataSource();
-    basicDataSource.setDriverClassName(this.jdbcContainer.getDriverClassName());
-    basicDataSource.setUrl(this.jdbcContainer.getJdbcUrl());
-    basicDataSource.setUsername(this.jdbcContainer.getUsername());
-    basicDataSource.setPassword(this.jdbcContainer.getPassword());
+    basicDataSource.setDriverClassName(this.model.getDriverClassName());
+    basicDataSource.setUrl(this.model.getJdbcUrl());
+    basicDataSource.setUsername(this.model.getUsername());
+    basicDataSource.setPassword(this.model.getPassword());
     basicDataSource.setDefaultAutoCommit(true);
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
     return basicDataSource;
@@ -53,7 +53,7 @@ public class XSKHDBTestContainersModule extends AbstractModule {
   public static LocalResource getResources(String rootFolder, String repoPath, String relativeResourcePath) throws IOException {
     FileSystemRepository fileRepo = new LocalRepository(rootFolder);
     RepositoryPath path = new RepositoryPath(repoPath);
-    byte[] content = XSKHDBSequenceParserPostgreSQLITCase.class
+    byte[] content = XSKHDBSequenceParserPostgreSQLITTest.class
         .getResourceAsStream(relativeResourcePath).readAllBytes();
 
     LocalResource resource = new LocalResource(fileRepo, path);

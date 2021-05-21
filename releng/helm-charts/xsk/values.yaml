@@ -2,13 +2,16 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+replicaCount: 1
+
 install:
   clusterBuilder: false
   imageBuilder: false
 
 create:
-  secret: false
   image: false
+  secret: false
+  application: false
 
 docker:
   server:
@@ -17,11 +20,6 @@ docker:
   email:
   secretName: docker-registry-secret
   serviceAccountName: docker-registry-service-account
-
-hana:
-  url:
-  username:
-  password:
 
 imageBuilder:
   repository:
@@ -36,3 +34,17 @@ clusterBuilder:
   buildImage: dirigiblelabs/kneo-xsk-stack-build
   runImage: dirigiblelabs/kneo-xsk-stack-run
   serviceAccountName: docker-registry-service-account
+
+kyma:
+  host:
+
+application:
+  image:
+  homeUrl:
+  imagePullPolicy: Always
+
+hana:
+  secretName: hana-secret
+  url:
+  username:
+  password:

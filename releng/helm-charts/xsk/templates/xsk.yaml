@@ -1,4 +1,29 @@
 {{- if .Values.create.application }}
+{{- if .Values.create.secret }}
+{{- if .Values.hana.url }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.docker.secretName }}
+type: Opaque
+stringData:
+  DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES: HANA
+  DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT: HANA
+  DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE: true
+  DIRIGIBLE_DATABASE_PROVIDER: custom
+  DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE: false
+  DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE: false
+  DIRIGIBLE_SCHEDULER_DATABASE_DRIVER: com.sap.db.jdbc.Driver
+  DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD: {{ .Values.hana.password }}
+  DIRIGIBLE_SCHEDULER_DATABASE_URL: jdbc:sap://{{ .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  DIRIGIBLE_SCHEDULER_DATABASE_USER: {{ .Values.hana.username }}
+  HANA_DRIVER: com.sap.db.jdbc.Driver
+  HANA_PASSWORD: {{ .Values.hana.password }}
+  HANA_URL: jdbc:sap://{{ .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  HANA_USERNAME: {{ .Values.hana.username }}
+---
+{{- end }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

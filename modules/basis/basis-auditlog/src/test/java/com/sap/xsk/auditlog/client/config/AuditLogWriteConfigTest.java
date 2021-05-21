@@ -11,6 +11,8 @@
  */
 package com.sap.xsk.auditlog.client.config;
 
+import com.sap.xsk.auditlog.client.config.AuditLogWriteConfig;
+import com.sap.xsk.auditlog.client.config.MissingEnvVariableException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

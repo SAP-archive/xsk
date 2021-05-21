@@ -27,17 +27,17 @@ public class AuditLogWriteConfig extends ServiceConfig {
   public static AuditLogWriteConfig create() throws MissingEnvVariableException {
     String serviceURL = System.getenv(WRITE_API_URL_ENV);
     if (Objects.isNull(serviceURL)) {
-      throw new MissingEnvVariableException("Audit Logg read api cannot be found");
+      throw new MissingEnvVariableException("Audit Log write api cannot be found");
     }
 
     String clientID = System.getenv(WRITE_API_CLIENT_ID_ENV);
     if (Objects.isNull(clientID)) {
-      throw new MissingEnvVariableException("The clientID for the read api of the Audit Log cannot be found");
+      throw new MissingEnvVariableException("The clientID for the write api of the Audit Log cannot be found");
     }
 
     String clientSecret = System.getenv(WRITE_API_CLIENT_SECRET_ENV);
     if (Objects.isNull(clientSecret)) {
-      throw new MissingEnvVariableException("The clientSecret for the read api of the Audit Log cannot be found");
+      throw new MissingEnvVariableException("The clientSecret for the write api of the Audit Log cannot be found");
     }
 
     String oauthURL = System.getenv(OAUTH_API_URL_ENV);

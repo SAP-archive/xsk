@@ -11,10 +11,15 @@
  */
 package com.sap.xsk.auditlog.client.http;
 
+import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_CREATED;
+import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT;
+import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static java.net.HttpURLConnection.HTTP_UNAVAILABLE;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -30,11 +35,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.Provider.Service;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class ServiceCommunicator implements Communicator {
 
   private static final Logger logger = Logger.getLogger(ServiceCommunicator.class.getName());
+  private static final Set<Integer> retryResponseCodes = Set
+      .of(HTTP_NOT_FOUND, HTTP_UNAVAILABLE, HTTP_INTERNAL_ERROR, HTTP_BAD_GATEWAY, HTTP_GATEWAY_TIMEOUT);
+  private static final int MAX_REQUEST_RETRY_COUNT = 3;
   private static final String ISSUE_OAUTH_TOKEN_PATH = "/oauth/token?grant_type=client_credentials";
   private static final String OAUTH_TOKEN_PROPERTY_NAME = "access_token";
   private static final String JSON_CONTENT_TYPE = "application/json";
@@ -61,10 +71,10 @@ public class ServiceCommunicator implements Communicator {
 
     HttpResponse<String> response = null;
     try {
-      logger.info("Sending post request to service with url ["+url+"]");
-      response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      logger.info("Sending post request to service with url [" + url + "]");
+      response = sendRequestWithRetry(request);
     } catch (Exception e) {
-      logger.warning("Problem with the http client during the post request. Reason :"+e);
+      logger.warning("Problem with the http client during the post request. Reason :" + e);
       throw new ServiceException(e.getMessage());
     }
 
@@ -86,10 +96,10 @@ public class ServiceCommunicator implements Communicator {
 
     HttpResponse<String> response = null;
     try {
-      logger.info("Sending get request to service with url ["+url+"]");
-      response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      logger.info("Sending get request to service with url [" + url + "]");
+      response = sendRequestWithRetry(request);//client.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (Exception e) {
-      logger.warning("Problem with the http client during the post request. Reason :"+e);
+      logger.warning("Problem with the http client during the post request. Reason :" + e);
       throw new ServiceException("Problem with http client. Reason:" + e);
     }
 
@@ -115,10 +125,10 @@ public class ServiceCommunicator implements Communicator {
 
     HttpResponse<String> response = null;
     try {
-      logger.info("Sending retrieval request to OAuth server with url ["+oauthUrl+"]");
-      response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      logger.info("Sending retrieval request to OAuth server with url [" + oauthUrl + "]");
+      response = sendRequestWithRetry(request);//client.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (Exception e) {
-      logger.warning("Problem with the http client during the OAuth token retrieval request. Reason :"+e);
+      logger.warning("Problem with the http client during the OAuth token retrieval request. Reason :" + e);
       throw new ServiceException("Problem with http client. Reason:" + e);
     }
 
@@ -129,13 +139,30 @@ public class ServiceCommunicator implements Communicator {
     return extractOAuthTokenValue(response.body());
   }
 
+  private HttpResponse<String> sendRequestWithRetry(HttpRequest request) throws Exception {
+    int retries = MAX_REQUEST_RETRY_COUNT;
+    HttpResponse<String> response = null;
+    while (retries > 0) {
+      response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      if (!shouldRetryRequest(response.statusCode())) {
+        break;
+      }
+      retries--;
+    }
+    return response;
+  }
+
+  private boolean shouldRetryRequest(int statusCode) {
+    return retryResponseCodes.contains(statusCode);
+  }
+
   private String extractOAuthTokenValue(String responseBody) throws ServiceException {
     JsonNode tokenNode = null;
     try {
       JsonNode root = jsonMapper.readTree(responseBody);
       tokenNode = root.get(OAUTH_TOKEN_PROPERTY_NAME);
     } catch (JsonProcessingException e) {
-      logger.info("Problem with the format of the response from the server. Reason :"+e);
+      logger.info("Problem with the format of the response from the server. Reason :" + e);
       throw new ServiceException("Problem with the response from the server. Reason:" + e);
     }
 
@@ -159,7 +186,7 @@ public class ServiceCommunicator implements Communicator {
   }
 
   private void processErrorResponse(HttpResponse<?> response) throws ServiceException {
-    logger.info("Unexpected response from the server ["+response.statusCode()+"]");
+    logger.info("Unexpected response from the server [" + response.statusCode() + "]");
     switch (response.statusCode()) {
       case HTTP_BAD_REQUEST:
         throw new InvalidMessageException("The message format is not valid. Reason: " + response.body());

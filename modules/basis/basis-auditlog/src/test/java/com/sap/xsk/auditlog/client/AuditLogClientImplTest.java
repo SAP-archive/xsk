@@ -29,7 +29,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -124,7 +123,7 @@ public class AuditLogClientImplTest {
   public void getLogs_inCertainPeriodOfTime() throws Exception {
     final Instant startPeriod = Instant.EPOCH;
     final Instant endPeriod = Instant.now();
-    final String logRetrievalInPeriodApi = RETRIEVE_AUDITLOG_PATH + "?time_from=" + startPeriod + "&time_to=" + endPeriod;
+    final String logRetrievalInPeriodApi = String.format("%s?time_from=%s&time_to=%s",RETRIEVE_AUDITLOG_PATH,startPeriod,endPeriod);
 
     Log dummyLog = new Log();
     Log[] expectedResponse = new Log[]{dummyLog};

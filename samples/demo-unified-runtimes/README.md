@@ -2,6 +2,10 @@
 
 This sample contains a single `xsjs` service using the [$.db](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/%24.db.html), [$.sessioon](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/%24.session.html) and [$.response](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.WebResponse.html) APIs.
 
+- [Kpack Configurations](#kpack-configurations)
+- [Building XSK Docker Image from Source](#building-xsk-docker-image-from-source)
+- [Deploying XSK Docker Image on Kyma](#deploying-xsk-docker-image-on-kyma)
+
 ### Kpack Configurations
 
 - Install [Kpack](https://github.com/pivotal/kpack) on your Kubernetes/Kyma cluster.

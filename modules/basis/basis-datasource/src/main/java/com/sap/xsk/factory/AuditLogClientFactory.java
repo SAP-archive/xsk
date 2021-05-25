@@ -6,9 +6,8 @@ import javax.naming.spi.ObjectFactory;
 import java.util.Hashtable;
 
 public class AuditLogClientFactory implements ObjectFactory {
-
   @Override
   public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment) throws Exception {
-    return null;
+    return com.sap.xsk.auditlog.client.AuditLogClientFactory.createClient();
   }
 }

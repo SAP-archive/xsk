@@ -51,15 +51,20 @@ public class DelegatingObjectFactory implements ObjectFactory {
 
   private Object getObjectInstanceFromDefaults(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment) throws NamingException {
     final Reference reference = (Reference) obj;
-    RefAddr removedFactory = removeDelegatingObjectFactoryFromReference(reference);
-    var factory = createFactory(reference);
+    RefAddr removedFactory = removeDelegatingFactoryFromRef(reference);
+    try {
+      var factory = createFactory(reference);
+      return createObject(obj, name, nameCtx, environment, factory);
+    } finally {
+      addRemovedFactoryToRed(reference, removedFactory);
+    }
+  }
 
+  private void addRemovedFactoryToRed(Reference reference, RefAddr removedFactory) {
     if (removedFactory != null) {
       LOGGER.info("Adding removed factory");
       reference.add(removedFactory);
     }
-
-    return createObject(obj, name, nameCtx, environment, factory);
   }
 
   private Object createObject(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment, ObjectFactory factory)
@@ -90,7 +95,7 @@ public class DelegatingObjectFactory implements ObjectFactory {
     }
   }
 
-  private RefAddr removeDelegatingObjectFactoryFromReference(Reference reference) {
+  private RefAddr removeDelegatingFactoryFromRef(Reference reference) {
     RefAddr removed = null;
     for (int i = 0; i < reference.size(); i++) {
       final RefAddr refAddr = reference.get(i);

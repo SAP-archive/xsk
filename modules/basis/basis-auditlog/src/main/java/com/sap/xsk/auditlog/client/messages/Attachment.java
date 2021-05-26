@@ -34,7 +34,7 @@ public class Attachment {
     this.successful = null;
   }
 
-  public Attachment(String id, String name, Boolean successful) {
+  public Attachment(String id, String name, boolean successful) {
     this.id = id;
     this.name = name;
     this.successful = successful;
@@ -51,5 +51,6 @@ public class Attachment {
   public Boolean getSuccessful() {
     return this.successful;
   }
+
 }
 

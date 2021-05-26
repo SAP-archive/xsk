@@ -26,11 +26,6 @@ public class AuditedObject {
   @SerializedName("id")
   private final Map<String, String> id;
 
-  public AuditedObject(String type) {
-    this.type = type;
-    this.id = new LinkedHashMap<>();
-  }
-
   public AuditedObject(String type, Map<String, String> identifiers) {
     this.type = type;
     this.id = new LinkedHashMap<>(identifiers);

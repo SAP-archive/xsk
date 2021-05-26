@@ -81,7 +81,7 @@ class AuditLogClientImpl implements AuditLogClient {
       return Arrays.asList(jsonMapper.fromJson(responseBody, Log[].class));
     } catch (JsonSyntaxException ex) {
       logger.warning("Couldn't deserialize the response [" + responseBody + "] from the server");
-      throw new ServiceException("Problem with the response from the server. Reason :" + ex);
+      throw new ServiceException("Problem with the response from the server.", ex);
     }
   }
 
@@ -89,7 +89,7 @@ class AuditLogClientImpl implements AuditLogClient {
     try {
       return jsonMapper.toJson(message);
     } catch (Exception ex) {
-      throw new ServiceException("Problem with the serialization of the message. Reason :" + ex);
+      throw new ServiceException("Problem with the serialization of the message.", ex);
     }
   }
 

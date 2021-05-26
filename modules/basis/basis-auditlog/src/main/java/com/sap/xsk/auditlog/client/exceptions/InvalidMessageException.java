@@ -17,7 +17,4 @@ public class InvalidMessageException extends ServiceException {
     super(message);
   }
 
-  public InvalidMessageException(String message, Exception e) {
-    super(message, e);
-  }
 }

@@ -17,7 +17,4 @@ public class UnauthorizedException extends ServiceException {
     super(message);
   }
 
-  public UnauthorizedException(String message, Exception e) {
-    super(message, e);
-  }
 }

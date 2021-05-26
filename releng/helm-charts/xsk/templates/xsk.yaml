@@ -31,7 +31,7 @@ metadata:
   name: fast-boostrap-secret
 type: Opaque
 stringData:
-  DIRIGIBLE_JOB_DEFAULT_TIMEOUT: 1
+  DIRIGIBLE_JOB_DEFAULT_TIMEOUT: "1"
   DIRIGIBLE_SCHEDULER_MEMORY_STORE: "true"
 ---
 {{- end }}

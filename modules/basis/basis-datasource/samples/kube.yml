@@ -31,6 +31,22 @@ spec:
               value: "30"
             - name: DefaultDB_maxActive
               value: "100"
+          # - name: AUDIT_LOG_MANAGEMENT_SERVICE_URL
+          #   value: "<service_url>"
+          # - name: AUDIT_LOG_MANAGEMENT_SERVICE_CLIENT_ID
+          #   value: "<service_client_id_for_oauth_token>"
+          # - name: AUDIT_LOG_MANAGEMENT_SERVICE_CLIENT_SECRET
+          #   value: "<service_client_secret_for_oauth_token>"
+          # - name: AUDIT_LOG_MANAGEMENT_SERVICE_OAUTH_URL
+          #   value: "<oauth_service_url>"
+          # - name: AUDIT_LOG_SERVICE_URL
+          #   value: "<service_url>"
+          # - name: AUDIT_LOG_SERVICE_CLIENT_ID
+          #   value: "<service_client_id_for_oauth_token>"
+          # - name: AUDIT_LOG_SERVICE_CLIENT_SECRET
+          #   value: "<service_client_secret_for_oauth_token>"
+          # - name: AUDIT_LOG_SERVICE_OAUTH_URL
+          #   value: "<oauth_service_url>"
           ports:
             - containerPort: 8080
               name: dynamic-db

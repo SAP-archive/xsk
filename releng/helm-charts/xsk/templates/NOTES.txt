@@ -18,3 +18,10 @@ Kpack XSK Builder installed. To trigger Docker image build, execute the followin
 Docker image will be published in the following repository: https://hub.docker.com/r/{{ .Values.image.repository }}
 
 {{- end }}
+
+
+{{- if .Values.create.application }}
+
+Application will be deployed and accessible via the following URL: https://{{ .Release.Name }}.{{ .Values.kyma.host }}
+
+{{- end }}

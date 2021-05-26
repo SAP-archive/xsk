@@ -14,6 +14,7 @@ package com.sap.xsk.hdb.ds.itest.module;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.sap.xsk.hdb.ds.itest.hdbsequence.XSKHDBSequenceParserPostgreSQLITTest;
+import com.sap.xsk.hdb.ds.itest.hdbsynonym.XSKHDBSynonymParserHanaITTest;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -53,7 +54,7 @@ public class XSKHDBTestModule extends AbstractModule {
   public static LocalResource getResources(String rootFolder, String repoPath, String relativeResourcePath) throws IOException {
     FileSystemRepository fileRepo = new LocalRepository(rootFolder);
     RepositoryPath path = new RepositoryPath(repoPath);
-    byte[] content = XSKHDBSequenceParserPostgreSQLITTest.class
+    byte[] content = XSKHDBTestModule.class
         .getResourceAsStream(relativeResourcePath).readAllBytes();
 
     LocalResource resource = new LocalResource(fileRepo, path);

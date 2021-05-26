@@ -19,6 +19,7 @@ import com.sap.xsk.auditlog.client.logs.Log;
 import com.sap.xsk.auditlog.client.messages.AuditLogCategory;
 import com.sap.xsk.auditlog.client.messages.AuditLogMessage;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -94,7 +95,15 @@ class AuditLogClientImpl implements AuditLogClient {
   }
 
   private String getLogRetrievalInPeriodPath(Instant from, Instant to) {
-    return String.format("%s?time_from=%s&time_to=%s", RETRIEVE_AUDITLOG_PATH, from, to);
+    String beginTimestamp = getFormattedTimestamp(from);
+    String endTimestamp = getFormattedTimestamp(to);
+    return String.format("%s?time_from=%s&time_to=%s", RETRIEVE_AUDITLOG_PATH, beginTimestamp, endTimestamp);
+  }
+
+  private String getFormattedTimestamp(Instant time) {
+    return time.truncatedTo(ChronoUnit.SECONDS)
+        .toString()
+        .replaceAll("[Z]", "");
   }
 
   private String getSendEndpoint(AuditLogCategory messageCategory) {

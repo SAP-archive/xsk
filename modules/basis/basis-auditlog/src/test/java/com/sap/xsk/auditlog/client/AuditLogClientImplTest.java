@@ -22,6 +22,7 @@ import com.sap.xsk.auditlog.client.logs.Log;
 import com.sap.xsk.auditlog.client.messages.AuditLogCategory;
 import com.sap.xsk.auditlog.client.messages.AuditLogMessage;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
@@ -121,7 +122,7 @@ public class AuditLogClientImplTest {
   public void getLogs_inCertainPeriodOfTime() throws Exception {
     final Instant startPeriod = Instant.EPOCH;
     final Instant endPeriod = Instant.now();
-    final String logRetrievalInPeriodApi = String.format("%s?time_from=%s&time_to=%s", RETRIEVE_AUDITLOG_PATH, startPeriod, endPeriod);
+    final String logRetrievalInPeriodApi = getLogRetrievalInPeriodApi(startPeriod, endPeriod);
 
     Log dummyLog = new Log();
     Log[] expectedResponse = new Log[]{dummyLog};
@@ -170,6 +171,12 @@ public class AuditLogClientImplTest {
     }
     auditLogClient.log(message);
     Mockito.verify(writer).send(BASE_SEND_AUDITLOG_API_PATH + messageTypeEndpoint, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
+  }
+
+  private String getLogRetrievalInPeriodApi(Instant from, Instant to) {
+    String fromTime = from.truncatedTo(ChronoUnit.SECONDS).toString().replaceFirst("Z", "");
+    String toTime = to.truncatedTo(ChronoUnit.SECONDS).toString().replaceFirst("Z", "");
+    return String.format("%s?time_from=%s&time_to=%s", RETRIEVE_AUDITLOG_PATH, fromTime, toTime);
   }
 
 }

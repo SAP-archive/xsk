@@ -25,12 +25,12 @@ import java.time.Instant;
 public class AuditLogClientFactory {
 
   public static AuditLogClient createClient() throws MissingEnvVariableException {
-
     AuditLogWriteConfig writeConfig = AuditLogWriteConfig.create();
     AuditLogReadConfig readConfig = AuditLogReadConfig.create();
-    Communicator auditLogService = new ServiceCommunicator(HttpClient.newHttpClient(), writeConfig, getJsonMapper());
-    Communicator auditLogManagementService = new ServiceCommunicator(HttpClient.newHttpClient(), readConfig, getJsonMapper());
-    return new AuditLogClientImpl(auditLogService, auditLogManagementService, getJsonMapper());
+    Gson mapper = getJsonMapper();
+    Communicator auditLogService = new ServiceCommunicator(HttpClient.newHttpClient(), writeConfig, mapper);
+    Communicator auditLogManagementService = new ServiceCommunicator(HttpClient.newHttpClient(), readConfig, mapper);
+    return new AuditLogClientImpl(auditLogService, auditLogManagementService, mapper);
   }
 
   public static Gson getJsonMapper() {

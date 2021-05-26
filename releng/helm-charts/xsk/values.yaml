@@ -42,6 +42,7 @@ application:
   image:
   homeUrl:
   imagePullPolicy: Always
+  fastBootstrap: false
 
 hana:
   secretName: hana-secret

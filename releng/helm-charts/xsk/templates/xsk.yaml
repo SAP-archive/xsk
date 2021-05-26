@@ -24,6 +24,17 @@ stringData:
 ---
 {{- end }}
 {{- end }}
+{{- if .Values.application.fastBootstrap }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fast-boostrap-secret
+type: Opaque
+stringData:
+  DIRIGIBLE_JOB_DEFAULT_TIMEOUT: 1
+  DIRIGIBLE_SCHEDULER_MEMORY_STORE: "true"
+---
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,10 +55,14 @@ spec:
         - name: {{ .Values.docker.secretName }}
       containers:
         - name: {{ .Chart.Name }}
-          {{- if .Values.hana.secretName }}
           envFrom:
+          {{- if .Values.hana.secretName }}
             - secretRef:
                 name: {{ .Values.hana.secretName }}
+          {{- end }}
+          {{- if .Values.application.fastBootstrap }}
+            - secretRef:
+                name: fast-boostrap-secret
           {{- end }}
           env:
             {{- if .Values.kyma.host }}

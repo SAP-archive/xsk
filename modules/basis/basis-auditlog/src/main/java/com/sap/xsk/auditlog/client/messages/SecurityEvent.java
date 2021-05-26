@@ -11,26 +11,23 @@
  */
 package com.sap.xsk.auditlog.client.messages;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(
-    ignoreUnknown = true
-)
-@JsonInclude(Include.NON_NULL)
 public class SecurityEvent extends AuditLogMessage {
 
-  @JsonProperty(value = "data", required = true)
+  @Expose
+  @SerializedName("data")
   private final String data;
 
-  @JsonProperty("ip")
+  @Expose
+  @SerializedName("ip")
   private final String ip;
-  @JsonProperty("attributes")
+
+  @Expose
+  @SerializedName("attributes")
   private final List<SecurityAttribute> attributes;
 
   public SecurityEvent(SecurityDetail securityConfig, AuditLogDetail logConfig) {

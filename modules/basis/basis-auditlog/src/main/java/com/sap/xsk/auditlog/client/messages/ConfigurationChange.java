@@ -11,21 +11,19 @@
  */
 package com.sap.xsk.auditlog.client.messages;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 public class ConfigurationChange extends AuditLogMessage {
 
-  @JsonProperty(value = "attributes", required = true)
+  @Expose
+  @SerializedName("attributes")
   private final List<Attribute> attributes;
-  @JsonProperty(value = "object", required = true)
+
+  @Expose
+  @SerializedName("object")
   private final AuditedObject object;
 
   public ConfigurationChange(ConfigurationChangeDetail changeDetails, AuditLogDetail logDetails) {
@@ -42,7 +40,6 @@ public class ConfigurationChange extends AuditLogMessage {
     return this.object;
   }
 
-  @JsonIgnore
   @Override
   public AuditLogCategory getCategory() {
     return AuditLogCategory.CONFIGURATION_CHANGE;

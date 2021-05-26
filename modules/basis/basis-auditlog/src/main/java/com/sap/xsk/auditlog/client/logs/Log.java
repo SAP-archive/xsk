@@ -11,41 +11,41 @@
  */
 package com.sap.xsk.auditlog.client.logs;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 public class Log {
 
-  @JsonProperty("message_uuid")
+  @SerializedName("message_uuid")
   private String uuid;
 
-  @JsonProperty("org_id")
+  @SerializedName("org_id")
   private String orgID;
 
-  @JsonProperty("space_id")
+  @SerializedName("space_id")
   private String spaceID;
 
-  @JsonProperty("app_or_service_id")
+  @SerializedName("app_or_service_id")
   private String appServiceID;
 
-  @JsonProperty("als_service_id")
+  @SerializedName("als_service_id")
   private String alsServiceID;
 
-  @JsonProperty("format_version")
+  @SerializedName("format_version")
   private String formatVersion;
 
-  @JsonProperty("tenant")
+  @SerializedName("tenant")
   private String tenant;
 
-  @JsonProperty("time")
+  @SerializedName("time")
   private String time;
 
-  @JsonProperty("user")
+  @SerializedName("user")
   private String user;
 
-  @JsonProperty("category")
+  @SerializedName("category")
   private String category;
 
-  @JsonProperty("message")
+  @SerializedName("message")
   private String message;
 
 

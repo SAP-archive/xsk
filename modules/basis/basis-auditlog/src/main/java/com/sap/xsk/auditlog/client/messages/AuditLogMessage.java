@@ -11,37 +11,33 @@
  */
 package com.sap.xsk.auditlog.client.messages;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.sap.xsk.auditlog.client.deserializers.InstantDeserializer;
-
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.time.Instant;
 import java.util.Objects;
 
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 public abstract class AuditLogMessage {
 
   private static final String SUBSCRIBER_TENANT = "$SUBSCRIBER";
   private static final String PROVIDER_TENANT = "$PROVIDER";
-  @JsonProperty(value = "user", required = true)
+
+  @Expose
+  @SerializedName("user")
   private final String user = "$USER";
-  @JsonProperty(value = "uuid", required = true)
+
+  @Expose
+  @SerializedName("uuid")
   private final String uuid;
-  @JsonProperty(value = "tenant", required = true)
+
+  @Expose
+  @SerializedName("tenant")
   private final String tenant;
-  @JsonProperty(value = "time", required = true)
-  @JsonSerialize(using = ToStringSerializer.class)
-  @JsonDeserialize(using = InstantDeserializer.class)
+
+  @Expose
+  @SerializedName("time")
   private final Instant time;
-  @JsonIgnore
+  
+  @Expose(serialize = false, deserialize = false)
   private final String subscriberTokenIssuer;
 
   public AuditLogMessage(AuditLogDetail config) {
@@ -71,7 +67,6 @@ public abstract class AuditLogMessage {
     return this.time;
   }
 
-  @JsonIgnore
   public abstract AuditLogCategory getCategory();
 
   public static class AuditLogDetail {

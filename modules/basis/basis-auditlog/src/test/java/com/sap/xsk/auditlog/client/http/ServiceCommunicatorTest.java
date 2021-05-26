@@ -14,9 +14,9 @@ package com.sap.xsk.auditlog.client.http;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.pgssoft.httpclient.HttpClientMock;
 import com.pgssoft.httpclient.HttpClientMockBuilder;
 import com.sap.xsk.auditlog.client.config.ServiceConfig;
@@ -49,10 +49,10 @@ public class ServiceCommunicatorTest {
   private static final String PROPERTY_NAME = "access_token";
 
   @Mock
-  JsonNode node;
+  JsonObject element;
   private HttpClientMock client;
   @Mock
-  private ObjectMapper mapper;
+  private Gson mapper;
   @Mock
   private ServiceConfig config;
   private Communicator communicator;
@@ -144,9 +144,9 @@ public class ServiceCommunicatorTest {
   @Test
   public void retrieveOAuthToken() throws Exception {
     mockBasicResponseFromOAuthServer(OAUTH_URL);
-    Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenReturn(node);
-    Mockito.when(node.get(PROPERTY_NAME)).thenReturn(node);
-    Mockito.when(node.asText()).thenReturn(OAUTH_TOKEN);
+    Mockito.when(mapper.fromJson(DUMMY_RESPONSE, JsonObject.class)).thenReturn(element);
+    Mockito.when(element.get(PROPERTY_NAME)).thenReturn(element);
+    Mockito.when(element.getAsString()).thenReturn(OAUTH_TOKEN);
 
     communicator.retrieveOAuthToken();
   }
@@ -155,9 +155,10 @@ public class ServiceCommunicatorTest {
   public void retrieveOAuthToken_usingAnotherOAuthUrl() throws Exception {
     String subscriberTokenIssuerUrl = "https://subscriber-token-issuer-url";
     mockBasicResponseFromOAuthServer(subscriberTokenIssuerUrl);
-    Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenReturn(node);
-    Mockito.when(node.get(PROPERTY_NAME)).thenReturn(node);
-    Mockito.when(node.asText()).thenReturn(OAUTH_TOKEN);
+    Mockito.when(mapper.fromJson(DUMMY_RESPONSE, JsonObject.class)).thenReturn(element);
+    Mockito.when(element.get(PROPERTY_NAME)).thenReturn(element);
+    Mockito.when(element.getAsString()).thenReturn(OAUTH_TOKEN);
+
     communicator.retrieveOAuthToken(subscriberTokenIssuerUrl);
   }
 
@@ -182,9 +183,9 @@ public class ServiceCommunicatorTest {
         .doReturn(500, "")
         .doReturnJSON(DUMMY_RESPONSE);
 
-    Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenReturn(node);
-    Mockito.when(node.get(PROPERTY_NAME)).thenReturn(node);
-    Mockito.when(node.asText()).thenReturn(OAUTH_TOKEN);
+    Mockito.when(mapper.fromJson(DUMMY_RESPONSE, JsonObject.class)).thenReturn(element);
+    Mockito.when(element.get(PROPERTY_NAME)).thenReturn(element);
+    Mockito.when(element.getAsString()).thenReturn(OAUTH_TOKEN);
 
     communicator.retrieveOAuthToken();
     client.verify().post(OAUTH_URL + OAUTH_RETRIEVAL_ENDPOINT).called(2);
@@ -208,15 +209,17 @@ public class ServiceCommunicatorTest {
   @Test(expected = ServiceException.class)
   public void retrieveOAuthToken_nonJsonResponse() throws Exception {
     mockBasicResponseFromOAuthServer(OAUTH_URL);
-    Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenThrow(JsonProcessingException.class);
+    Mockito.when(mapper.fromJson(DUMMY_RESPONSE, JsonObject.class)).thenThrow(JsonSyntaxException.class);
+
     communicator.retrieveOAuthToken();
   }
 
   @Test(expected = ServiceException.class)
   public void retrieveOAuthToken_missingProperty() throws Exception {
     mockBasicResponseFromOAuthServer(OAUTH_URL);
-    Mockito.when(mapper.readTree(DUMMY_RESPONSE)).thenReturn(node);
-    Mockito.when(node.get(PROPERTY_NAME)).thenReturn(null);
+    Mockito.when(mapper.fromJson(DUMMY_RESPONSE, JsonObject.class)).thenReturn(element);
+    Mockito.when(element.get(PROPERTY_NAME)).thenReturn(null);
+
     communicator.retrieveOAuthToken();
   }
 
@@ -279,7 +282,7 @@ public class ServiceCommunicatorTest {
   public void get_problemWithServerWithSuccessResponseOnRetry() throws ServiceException {
     client.onGet(SERVICE_URL + API_URL)
         .withHeader("Authorization", containsString(OAUTH_TOKEN))
-        .doReturn(500,"")
+        .doReturn(500, "")
         .doReturnJSON(DUMMY_RESPONSE)
         .withStatus(200);
 
@@ -287,16 +290,16 @@ public class ServiceCommunicatorTest {
     client.verify().get(SERVICE_URL + API_URL).called(2);
   }
 
-  @Test(expected=InvalidMessageException.class)
+  @Test(expected = InvalidMessageException.class)
   public void get_problemWithServerWithErrorResponseOnRetry() throws ServiceException {
     client.onGet(SERVICE_URL + API_URL)
         .withHeader("Authorization", containsString(OAUTH_TOKEN))
-        .doReturn(500,"")
+        .doReturn(500, "")
         .doReturnJSON(DUMMY_RESPONSE).withStatus(400);
 
-    try{
+    try {
       communicator.get(API_URL, OAUTH_TOKEN);
-    } catch(InvalidMessageException ex){
+    } catch (InvalidMessageException ex) {
       client.verify().get(SERVICE_URL + API_URL).called(2);
       throw ex;
     }

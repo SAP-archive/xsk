@@ -14,17 +14,15 @@ package com.sap.xsk.auditlog.client;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.time.Instant;
-import java.util.List;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.sap.xsk.auditlog.client.exceptions.ServiceException;
 import com.sap.xsk.auditlog.client.http.Communicator;
 import com.sap.xsk.auditlog.client.logs.Log;
 import com.sap.xsk.auditlog.client.messages.AuditLogCategory;
 import com.sap.xsk.auditlog.client.messages.AuditLogMessage;
+import java.time.Instant;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +49,7 @@ public class AuditLogClientImplTest {
   @Mock
   private Communicator reader;
   @Mock
-  private ObjectMapper jsonMapper;
+  private Gson jsonMapper;
   @Mock
   private AuditLogMessage message;
 
@@ -89,9 +87,9 @@ public class AuditLogClientImplTest {
     testSendMessage(AuditLogCategory.CONFIGURATION_CHANGE, CONFIGURATION_CHANGE_ENDPOINT, subscriberTokenIssuerUrl);
   }
 
-  @Test(expected = JsonProcessingException.class)
+  @Test(expected = ServiceException.class)
   public void log_problemWithSerializationOfMessage() throws Exception {
-    Mockito.when(jsonMapper.writeValueAsString(message)).thenThrow(JsonProcessingException.class);
+    Mockito.when(jsonMapper.toJson(message)).thenThrow(JsonSyntaxException.class);
     auditLogClient.log(message);
     Mockito.verify(writer, never()).send(anyString(), anyString(), anyString());
   }
@@ -112,7 +110,7 @@ public class AuditLogClientImplTest {
     Mockito.when(reader.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
     Mockito.when(reader.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
 
-    Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenReturn(expectedResponse);
+    Mockito.when(jsonMapper.fromJson(DUMMY_RESPONSE, Log[].class)).thenReturn(expectedResponse);
     List<Log> actualResponse = auditLogClient.getLogs();
 
     Assert.assertEquals(expectedResponse.length, actualResponse.size());
@@ -123,7 +121,7 @@ public class AuditLogClientImplTest {
   public void getLogs_inCertainPeriodOfTime() throws Exception {
     final Instant startPeriod = Instant.EPOCH;
     final Instant endPeriod = Instant.now();
-    final String logRetrievalInPeriodApi = String.format("%s?time_from=%s&time_to=%s",RETRIEVE_AUDITLOG_PATH,startPeriod,endPeriod);
+    final String logRetrievalInPeriodApi = String.format("%s?time_from=%s&time_to=%s", RETRIEVE_AUDITLOG_PATH, startPeriod, endPeriod);
 
     Log dummyLog = new Log();
     Log[] expectedResponse = new Log[]{dummyLog};
@@ -131,7 +129,7 @@ public class AuditLogClientImplTest {
     Mockito.when(reader.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
     Mockito.when(reader.get(logRetrievalInPeriodApi, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
 
-    Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenReturn(expectedResponse);
+    Mockito.when(jsonMapper.fromJson(DUMMY_RESPONSE, Log[].class)).thenReturn(expectedResponse);
     List<Log> actualResponse = auditLogClient.getLogs(startPeriod, endPeriod);
 
     Assert.assertEquals(expectedResponse.length, actualResponse.size());
@@ -156,14 +154,14 @@ public class AuditLogClientImplTest {
     Mockito.when(reader.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
     Mockito.when(reader.get(RETRIEVE_AUDITLOG_PATH, DUMMY_OAUTH_TOKEN)).thenReturn(DUMMY_RESPONSE);
 
-    Mockito.when(jsonMapper.readValue(DUMMY_RESPONSE, Log[].class)).thenThrow(JsonProcessingException.class);
+    Mockito.when(jsonMapper.fromJson(DUMMY_RESPONSE, Log[].class)).thenThrow(JsonSyntaxException.class);
 
     auditLogClient.getLogs();
   }
 
   private void testSendMessage(AuditLogCategory category, String messageTypeEndpoint, String externalOAuthURL) throws Exception {
     Mockito.when(message.getCategory()).thenReturn(category);
-    Mockito.when(jsonMapper.writeValueAsString(message)).thenReturn(DUMMY_PAYLOAD);
+    Mockito.when(jsonMapper.toJson(message)).thenReturn(DUMMY_PAYLOAD);
 
     if (externalOAuthURL == null) {
       Mockito.when(writer.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);

@@ -21,21 +21,19 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.net.HttpURLConnection.HTTP_UNAVAILABLE;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.sap.xsk.auditlog.client.config.ServiceConfig;
 import com.sap.xsk.auditlog.client.exceptions.InvalidMessageException;
 import com.sap.xsk.auditlog.client.exceptions.ServiceException;
 import com.sap.xsk.auditlog.client.exceptions.UnauthorizedException;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.security.Provider.Service;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -50,9 +48,9 @@ public class ServiceCommunicator implements Communicator {
   private static final String JSON_CONTENT_TYPE = "application/json";
   private final ServiceConfig config;
   private final HttpClient client;
-  private final ObjectMapper jsonMapper;
+  private final Gson jsonMapper;
 
-  public ServiceCommunicator(HttpClient client, ServiceConfig config, ObjectMapper jsonMapper) {
+  public ServiceCommunicator(HttpClient client, ServiceConfig config, Gson jsonMapper) {
     this.config = config;
     this.jsonMapper = jsonMapper;
     this.client = client;
@@ -97,7 +95,7 @@ public class ServiceCommunicator implements Communicator {
     HttpResponse<String> response = null;
     try {
       logger.info("Sending get request to service with url [" + url + "]");
-      response = sendRequestWithRetry(request);//client.send(request, HttpResponse.BodyHandlers.ofString());
+      response = sendRequestWithRetry(request);
     } catch (Exception e) {
       logger.warning("Problem with the http client during the post request. Reason :" + e);
       throw new ServiceException("Problem with http client. Reason:" + e);
@@ -126,7 +124,7 @@ public class ServiceCommunicator implements Communicator {
     HttpResponse<String> response = null;
     try {
       logger.info("Sending retrieval request to OAuth server with url [" + oauthUrl + "]");
-      response = sendRequestWithRetry(request);//client.send(request, HttpResponse.BodyHandlers.ofString());
+      response = sendRequestWithRetry(request);
     } catch (Exception e) {
       logger.warning("Problem with the http client during the OAuth token retrieval request. Reason :" + e);
       throw new ServiceException("Problem with http client. Reason:" + e);
@@ -157,11 +155,11 @@ public class ServiceCommunicator implements Communicator {
   }
 
   private String extractOAuthTokenValue(String responseBody) throws ServiceException {
-    JsonNode tokenNode = null;
+    JsonElement tokenNode = null;
     try {
-      JsonNode root = jsonMapper.readTree(responseBody);
+      JsonObject root = jsonMapper.fromJson(responseBody, JsonObject.class);
       tokenNode = root.get(OAUTH_TOKEN_PROPERTY_NAME);
-    } catch (JsonProcessingException e) {
+    } catch (JsonSyntaxException e) {
       logger.info("Problem with the format of the response from the server. Reason :" + e);
       throw new ServiceException("Problem with the response from the server. Reason:" + e);
     }
@@ -170,7 +168,7 @@ public class ServiceCommunicator implements Communicator {
       logger.info("Problem with the response from the server. The property, containing the OAuth token,is missing.");
       throw new ServiceException("Problem with the format of the response from the server.");
     }
-    return tokenNode.asText();
+    return tokenNode.getAsString();
   }
 
   private String getAuthHeaderValueForBasicAuth() {

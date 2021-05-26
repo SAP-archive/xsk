@@ -11,8 +11,8 @@
  */
 package com.sap.xsk.auditlog.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.sap.xsk.auditlog.client.exceptions.ServiceException;
 import com.sap.xsk.auditlog.client.http.Communicator;
 import com.sap.xsk.auditlog.client.logs.Log;
@@ -31,19 +31,19 @@ class AuditLogClientImpl implements AuditLogClient {
 
   private static final Logger logger = Logger.getLogger(AuditLogClientImpl.class.getName());
 
-  private final ObjectMapper jsonMapper;
+  private final Gson jsonMapper;
   private final Communicator writer;
   private final Communicator reader;
 
-  AuditLogClientImpl(Communicator writer, Communicator reader, ObjectMapper jsonMapper) {
+  AuditLogClientImpl(Communicator writer, Communicator reader, Gson jsonMapper) {
     this.writer = writer;
     this.reader = reader;
     this.jsonMapper = jsonMapper;
   }
 
   @Override
-  public void log(AuditLogMessage message) throws ServiceException, JsonProcessingException {
-    String payload = jsonMapper.writeValueAsString(message);
+  public void log(AuditLogMessage message) throws ServiceException {
+    String payload = serializeMessage(message);
     String endpoint = getSendEndpoint(message.getCategory());
 
     String token = null;
@@ -51,7 +51,7 @@ class AuditLogClientImpl implements AuditLogClient {
       logger.fine("Retrieving OAuth token for the Write API");
       token = writer.retrieveOAuthToken();
     } else {
-      logger.fine("Retrieving OAuth token for the Write API from the subscriber token issuer ["+message.getSubscriberTokenIssuer()+"]");
+      logger.fine("Retrieving OAuth token for the Write API from the subscriber token issuer [" + message.getSubscriberTokenIssuer() + "]");
       token = writer.retrieveOAuthToken(message.getSubscriberTokenIssuer());
     }
 
@@ -78,15 +78,23 @@ class AuditLogClientImpl implements AuditLogClient {
     String responseBody = reader.get(apiPath, token);
 
     try {
-      return Arrays.asList(jsonMapper.readValue(responseBody, Log[].class));
-    } catch (JsonProcessingException ex) {
-      logger.warning("Couldn't deserialize the response [" + responseBody +"] from the server");
+      return Arrays.asList(jsonMapper.fromJson(responseBody, Log[].class));
+    } catch (JsonSyntaxException ex) {
+      logger.warning("Couldn't deserialize the response [" + responseBody + "] from the server");
       throw new ServiceException("Problem with the response from the server. Reason :" + ex);
     }
   }
 
+  private String serializeMessage(AuditLogMessage message) throws ServiceException {
+    try {
+      return jsonMapper.toJson(message);
+    } catch (Exception ex) {
+      throw new ServiceException("Problem with the serialization of the message. Reason :" + ex);
+    }
+  }
+
   private String getLogRetrievalInPeriodPath(Instant from, Instant to) {
-    return String.format("%s?time_from=%s&time_to=%s",RETRIEVE_AUDITLOG_PATH,from,to);
+    return String.format("%s?time_from=%s&time_to=%s", RETRIEVE_AUDITLOG_PATH, from, to);
   }
 
   private String getSendEndpoint(AuditLogCategory messageCategory) {

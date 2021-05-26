@@ -11,22 +11,17 @@
  */
 package com.sap.xsk.auditlog.client.messages;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 public class Attribute {
 
-  @JsonProperty(value = "name", required = true)
+  @SerializedName("name")
   private final String name;
-  @JsonProperty("successful")
+  @SerializedName("successful")
   private Boolean successful;
-  @JsonProperty("old")
+  @SerializedName("old")
   private String oldValue;
-  @JsonProperty("new")
+  @SerializedName("new")
   private String newValue;
 
   public Attribute(Builder builder) {

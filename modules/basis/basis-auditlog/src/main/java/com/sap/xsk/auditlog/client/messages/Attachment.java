@@ -11,20 +11,21 @@
  */
 package com.sap.xsk.auditlog.client.messages;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 public class Attachment {
 
-  @JsonProperty(value = "id", required = true)
+  @Expose
+  @SerializedName("id")
   private final String id;
-  @JsonProperty(value = "name", required = true)
+
+  @Expose
+  @SerializedName("name")
   private final String name;
-  @JsonProperty("successful")
+
+  @Expose
+  @SerializedName("successful")
   private final Boolean successful;
 
   public Attachment(String id, String name) {

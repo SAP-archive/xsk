@@ -11,28 +11,31 @@
  */
 package com.sap.xsk.auditlog.client.messages;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 public class DataAccess extends AuditLogMessage {
 
-  @JsonProperty(value = "object", required = true)
+  @Expose
+  @SerializedName("object")
   private final AuditedObject object;
-  @JsonProperty(value = "data_subject", required = true)
+
+  @Expose
+  @SerializedName("data_subject")
   private final AuditedDataSubject subject;
-  @JsonProperty(value = "attributes", required = true)
+
+  @Expose
+  @SerializedName("attributes")
   private final List<Attribute> attributes;
-  @JsonProperty("attachments")
+
+  @Expose
+  @SerializedName("attachments")
   private final List<Attachment> attachments;
-  @JsonProperty(value = "channel")
+
+  @Expose
+  @SerializedName("channel")
   private final String channel;
 
   public DataAccess(DataAccessDetail accessDetails, AuditLogDetail logDetails) {
@@ -55,8 +58,7 @@ public class DataAccess extends AuditLogMessage {
   public List<Attachment> getAttachments() {
     return this.attachments;
   }
-
-  @JsonIgnore
+  
   @Override
   public AuditLogCategory getCategory() {
     return AuditLogCategory.DATA_ACCESS;

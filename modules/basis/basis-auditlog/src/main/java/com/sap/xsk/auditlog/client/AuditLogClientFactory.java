@@ -34,6 +34,9 @@ public class AuditLogClientFactory {
   }
 
   public static Gson getJsonMapper() {
-    return new GsonBuilder().registerTypeAdapter(Instant.class, new InstantConverter()).create();
+    return new GsonBuilder()
+        .registerTypeAdapter(Instant.class, new InstantConverter())
+        .excludeFieldsWithoutExposeAnnotation()
+        .create();
   }
 }

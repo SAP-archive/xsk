@@ -11,40 +11,52 @@
  */
 package com.sap.xsk.auditlog.client.logs;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Log {
 
+  @Expose
   @SerializedName("message_uuid")
   private String uuid;
 
+  @Expose
   @SerializedName("org_id")
   private String orgID;
 
+  @Expose
   @SerializedName("space_id")
   private String spaceID;
 
+  @Expose
   @SerializedName("app_or_service_id")
   private String appServiceID;
 
+  @Expose
   @SerializedName("als_service_id")
   private String alsServiceID;
 
+  @Expose
   @SerializedName("format_version")
   private String formatVersion;
 
+  @Expose
   @SerializedName("tenant")
   private String tenant;
 
+  @Expose
   @SerializedName("time")
   private String time;
 
+  @Expose
   @SerializedName("user")
   private String user;
 
+  @Expose
   @SerializedName("category")
   private String category;
 
+  @Expose
   @SerializedName("message")
   private String message;
 

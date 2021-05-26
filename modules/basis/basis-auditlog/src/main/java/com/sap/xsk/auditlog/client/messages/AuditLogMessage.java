@@ -37,7 +37,6 @@ public abstract class AuditLogMessage {
   @SerializedName("time")
   private final Instant time;
   
-  @Expose(serialize = false, deserialize = false)
   private final String subscriberTokenIssuer;
 
   public AuditLogMessage(AuditLogDetail config) {

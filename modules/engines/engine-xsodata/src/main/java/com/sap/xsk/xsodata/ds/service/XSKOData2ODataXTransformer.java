@@ -13,7 +13,7 @@ package com.sap.xsk.xsodata.ds.service;
 
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
-import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAModificationType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
@@ -133,13 +133,13 @@ public class XSKOData2ODataXTransformer {
             // keep entity sets for later use
             entitySets.append("\t\t<EntitySet Name=\"").append(entitySetName).append("\" EntityType=\"").append(getServiceNamespace(model)).append(entitySetName).append("Type\"");
             entity.getModifications().forEach(event -> {
-                if (event.getType().equals(XSKHDBXSODATAModificationType.CREATE) && event.getSpecification().isForbidden()) {
+                if (event.getMethod().equals(XSKHDBXSODATAHandlerMethod.CREATE) && event.getSpecification().isForbidden()) {
                     entitySets.append(" sap:creatable=\"false\"");
                 }
-                if (event.getType().equals(XSKHDBXSODATAModificationType.UPDATE) && event.getSpecification().isForbidden()) {
+                if (event.getMethod().equals(XSKHDBXSODATAHandlerMethod.UPDATE) && event.getSpecification().isForbidden()) {
                     entitySets.append(" sap:updatable=\"false\"");
                 }
-                if (event.getType().equals(XSKHDBXSODATAModificationType.DELETE) && event.getSpecification().isForbidden()) {
+                if (event.getMethod().equals(XSKHDBXSODATAHandlerMethod.DELETE) && event.getSpecification().isForbidden()) {
                     entitySets.append(" sap:deletable=\"false\"");
                 }
             });

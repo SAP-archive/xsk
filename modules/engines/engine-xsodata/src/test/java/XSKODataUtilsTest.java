@@ -17,6 +17,9 @@ import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnMo
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableRelationModel;
 import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
+import org.eclipse.dirigible.engine.odata2.definition.ODataEntityDefinition;
+import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerMethods;
+import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,29 +80,31 @@ public class XSKODataUtilsTest {
         assertNull(oDataDefinition.getHash());
         assertNull(oDataDefinition.getLocation());
 
-        assertEquals("Employees", oDataDefinition.getEntities().get(0).getName());
-        assertEquals("Employees", oDataDefinition.getEntities().get(0).getAlias());
-        assertEquals("kneo.test.helloodata.CompositeKey::employee", oDataDefinition.getEntities().get(0).getTable());
-        assertEquals(2, oDataDefinition.getEntities().get(0).getProperties().size());
-        assertEquals("COMPANY_ID", oDataDefinition.getEntities().get(0).getProperties().get(0).getName());
-        assertEquals("COMPANY_ID", oDataDefinition.getEntities().get(0).getProperties().get(0).getColumn());
-        assertFalse(oDataDefinition.getEntities().get(0).getProperties().get(0).isNullable());
-        assertEquals("Edm.Int32", oDataDefinition.getEntities().get(0).getProperties().get(0).getType());
-        assertEquals("EMPLOYEE_NUMBER", oDataDefinition.getEntities().get(0).getProperties().get(1).getName());
-        assertEquals("EMPLOYEE_NUMBER", oDataDefinition.getEntities().get(0).getProperties().get(1).getColumn());
-        assertFalse(oDataDefinition.getEntities().get(0).getProperties().get(1).isNullable());
-        assertEquals("Edm.Int32", oDataDefinition.getEntities().get(0).getProperties().get(1).getType());
-        assertEquals(0, oDataDefinition.getEntities().get(0).getHandlers().size());
-        assertEquals(1, oDataDefinition.getEntities().get(0).getNavigations().size());
-        assertEquals("HisPhones", oDataDefinition.getEntities().get(0).getNavigations().get(0).getName());
-        assertEquals("Employees_Phones", oDataDefinition.getEntities().get(0).getNavigations().get(0).getAssociation());
+        ODataEntityDefinition employeeEntity = oDataDefinition.getEntities().get(0);
+        assertEquals("Employees", employeeEntity.getName());
+        assertEquals("Employees", employeeEntity.getAlias());
+        assertEquals("kneo.test.helloodata.CompositeKey::employee", employeeEntity.getTable());
+        assertEquals(2, employeeEntity.getProperties().size());
+        assertEquals("COMPANY_ID", employeeEntity.getProperties().get(0).getName());
+        assertEquals("COMPANY_ID", employeeEntity.getProperties().get(0).getColumn());
+        assertFalse(employeeEntity.getProperties().get(0).isNullable());
+        assertEquals("Edm.Int32", employeeEntity.getProperties().get(0).getType());
+        assertEquals("EMPLOYEE_NUMBER", employeeEntity.getProperties().get(1).getName());
+        assertEquals("EMPLOYEE_NUMBER", employeeEntity.getProperties().get(1).getColumn());
+        assertFalse(employeeEntity.getProperties().get(1).isNullable());
+        assertEquals("Edm.Int32", employeeEntity.getProperties().get(1).getType());
+        assertEquals(0, employeeEntity.getHandlers().size());
+        assertEquals(1, employeeEntity.getNavigations().size());
+        assertEquals("HisPhones", employeeEntity.getNavigations().get(0).getName());
+        assertEquals("Employees_Phones", employeeEntity.getNavigations().get(0).getAssociation());
 
-        assertEquals("Phones", oDataDefinition.getEntities().get(1).getName());
-        assertEquals("Phones", oDataDefinition.getEntities().get(1).getAlias());
-        assertEquals("kneo.test.helloodata.CompositeKey::phones", oDataDefinition.getEntities().get(1).getTable());
-        assertEquals(0, oDataDefinition.getEntities().get(1).getProperties().size());
-        assertEquals(0, oDataDefinition.getEntities().get(1).getHandlers().size());
-        assertEquals(0, oDataDefinition.getEntities().get(1).getNavigations().size());
+        ODataEntityDefinition phoneEntity = oDataDefinition.getEntities().get(1);
+        assertEquals("Phones", phoneEntity.getName());
+        assertEquals("Phones", phoneEntity.getAlias());
+        assertEquals("kneo.test.helloodata.CompositeKey::phones", phoneEntity.getTable());
+        assertEquals(0, phoneEntity.getProperties().size());
+        assertEquals(0, phoneEntity.getHandlers().size());
+        assertEquals(0, phoneEntity.getNavigations().size());
 
         assertEquals("Employees_Phones", oDataDefinition.getAssociations().get(0).getName());
         assertEquals("Employees", oDataDefinition.getAssociations().get(0).getFrom().getEntity());
@@ -157,35 +162,37 @@ public class XSKODataUtilsTest {
         assertNull(oDataDefinition.getHash());
         assertNull(oDataDefinition.getLocation());
 
-        assertEquals("Employees", oDataDefinition.getEntities().get(0).getName());
-        assertEquals("Employees", oDataDefinition.getEntities().get(0).getAlias());
-        assertEquals("kneo.test.helloodata.CompositeKey::employee", oDataDefinition.getEntities().get(0).getTable());
+        ODataEntityDefinition employeeEntity = oDataDefinition.getEntities().get(0);
+        assertEquals("Employees",employeeEntity.getName());
+        assertEquals("Employees",employeeEntity.getAlias());
+        assertEquals("kneo.test.helloodata.CompositeKey::employee",employeeEntity.getTable());
 
-        assertEquals(3, oDataDefinition.getEntities().get(0).getProperties().size());
-        assertEquals("COMPANY_ID", oDataDefinition.getEntities().get(0).getProperties().get(0).getName());
-        assertEquals("COMPANY_ID", oDataDefinition.getEntities().get(0).getProperties().get(0).getColumn());
-        assertFalse(oDataDefinition.getEntities().get(0).getProperties().get(0).isNullable());
-        assertEquals("Edm.Int32", oDataDefinition.getEntities().get(0).getProperties().get(0).getType());
-        assertEquals("EMPLOYEE_NUMBER", oDataDefinition.getEntities().get(0).getProperties().get(1).getName());
-        assertEquals("EMPLOYEE_NUMBER", oDataDefinition.getEntities().get(0).getProperties().get(1).getColumn());
-        assertFalse(oDataDefinition.getEntities().get(0).getProperties().get(1).isNullable());
-        assertEquals("Edm.Int32", oDataDefinition.getEntities().get(0).getProperties().get(1).getType());
-        assertEquals("ORDER_ID", oDataDefinition.getEntities().get(0).getProperties().get(2).getName());
-        assertEquals("ORDER_ID", oDataDefinition.getEntities().get(0).getProperties().get(2).getColumn());
-        assertTrue(oDataDefinition.getEntities().get(0).getProperties().get(2).isNullable());
-        assertEquals("Edm.Int32", oDataDefinition.getEntities().get(0).getProperties().get(2).getType());
+        assertEquals(3,employeeEntity.getProperties().size());
+        assertEquals("COMPANY_ID",employeeEntity.getProperties().get(0).getName());
+        assertEquals("COMPANY_ID",employeeEntity.getProperties().get(0).getColumn());
+        assertFalse(employeeEntity.getProperties().get(0).isNullable());
+        assertEquals("Edm.Int32",employeeEntity.getProperties().get(0).getType());
+        assertEquals("EMPLOYEE_NUMBER",employeeEntity.getProperties().get(1).getName());
+        assertEquals("EMPLOYEE_NUMBER",employeeEntity.getProperties().get(1).getColumn());
+        assertFalse(employeeEntity.getProperties().get(1).isNullable());
+        assertEquals("Edm.Int32",employeeEntity.getProperties().get(1).getType());
+        assertEquals("ORDER_ID",employeeEntity.getProperties().get(2).getName());
+        assertEquals("ORDER_ID",employeeEntity.getProperties().get(2).getColumn());
+        assertTrue(employeeEntity.getProperties().get(2).isNullable());
+        assertEquals("Edm.Int32",employeeEntity.getProperties().get(2).getType());
 
-        assertEquals(0, oDataDefinition.getEntities().get(0).getHandlers().size());
-        assertEquals(1, oDataDefinition.getEntities().get(0).getNavigations().size());
-        assertEquals("HisPhones", oDataDefinition.getEntities().get(0).getNavigations().get(0).getName());
-        assertEquals("Employees_Phones", oDataDefinition.getEntities().get(0).getNavigations().get(0).getAssociation());
+        assertEquals(0,employeeEntity.getHandlers().size());
+        assertEquals(1,employeeEntity.getNavigations().size());
+        assertEquals("HisPhones",employeeEntity.getNavigations().get(0).getName());
+        assertEquals("Employees_Phones",employeeEntity.getNavigations().get(0).getAssociation());
 
-        assertEquals("Phones", oDataDefinition.getEntities().get(1).getName());
-        assertEquals("Phones", oDataDefinition.getEntities().get(1).getAlias());
-        assertEquals("kneo.test.helloodata.CompositeKey::phones", oDataDefinition.getEntities().get(1).getTable());
-        assertEquals(0, oDataDefinition.getEntities().get(1).getProperties().size());
-        assertEquals(0, oDataDefinition.getEntities().get(1).getHandlers().size());
-        assertEquals(0, oDataDefinition.getEntities().get(1).getNavigations().size());
+        ODataEntityDefinition phoneEntity = oDataDefinition.getEntities().get(1);
+        assertEquals("Phones", phoneEntity.getName());
+        assertEquals("Phones", phoneEntity.getAlias());
+        assertEquals("kneo.test.helloodata.CompositeKey::phones", phoneEntity.getTable());
+        assertEquals(0, phoneEntity.getProperties().size());
+        assertEquals(0, phoneEntity.getHandlers().size());
+        assertEquals(0, phoneEntity.getNavigations().size());
 
         assertEquals("Employees_Phones", oDataDefinition.getAssociations().get(0).getName());
         assertEquals("Employees", oDataDefinition.getAssociations().get(0).getFrom().getEntity());
@@ -201,6 +208,65 @@ public class XSKODataUtilsTest {
         assertEquals(2, oDataDefinition.getAssociations().get(0).getTo().getProperty().size());
         assertEquals("FK_COMPANY_ID", oDataDefinition.getAssociations().get(0).getTo().getProperty().get(0));
         assertEquals("FK_EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getTo().getProperty().get(1));
+    }
+
+    @Test
+    public void testConvertOfEvents() throws Exception {
+        XSKODataParser parser = new XSKODataParser();
+        String content = org.apache.commons.io.IOUtils
+                .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
+        XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_events.xsodata", content);
+
+        ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
+        assertEquals(4, oDataDefinition.getEntities().size());
+
+        ODataEntityDefinition entity1 = oDataDefinition.getEntities().get(0);
+        assertEquals(3,entity1.getHandlers().size());
+        assertEquals(ODataHandlerMethods.update.name(),entity1.getHandlers().get(0).getMethod());
+        assertEquals(ODataHandlerTypes.before.name(),entity1.getHandlers().get(0).getType());
+        assertEquals("sample.odata::beforeMethod",entity1.getHandlers().get(0).getHandler());
+        assertEquals(ODataHandlerMethods.delete.name(),entity1.getHandlers().get(1).getMethod());
+        assertEquals(ODataHandlerTypes.after.name(),entity1.getHandlers().get(1).getType());
+        assertEquals("sample.odata::afterMethod",entity1.getHandlers().get(1).getHandler());
+        assertEquals(ODataHandlerMethods.create.name(),entity1.getHandlers().get(2).getMethod());
+        assertEquals(ODataHandlerTypes.forbid.name(),entity1.getHandlers().get(2).getType());
+        assertEquals(null,entity1.getHandlers().get(2).getHandler());
+
+        ODataEntityDefinition entity2 = oDataDefinition.getEntities().get(1);
+        assertEquals(4,entity2.getHandlers().size());
+        assertEquals(ODataHandlerMethods.create.name(),entity2.getHandlers().get(0).getMethod());
+        assertEquals(ODataHandlerTypes.after.name(),entity2.getHandlers().get(0).getType());
+        assertEquals("sample.odata::afterMethod",entity2.getHandlers().get(0).getHandler());
+        assertEquals(ODataHandlerMethods.create.name(),entity2.getHandlers().get(1).getMethod());
+        assertEquals(ODataHandlerTypes.on.name(),entity2.getHandlers().get(1).getType());
+        assertEquals("sample.odata::createMethod",entity2.getHandlers().get(1).getHandler());
+        assertEquals(ODataHandlerMethods.update.name(),entity2.getHandlers().get(2).getMethod());
+        assertEquals(ODataHandlerTypes.on.name(),entity2.getHandlers().get(2).getType());
+        assertEquals("sample.odata::updateMethod",entity2.getHandlers().get(2).getHandler());
+        assertEquals(ODataHandlerMethods.delete.name(),entity2.getHandlers().get(3).getMethod());
+        assertEquals(ODataHandlerTypes.on.name(),entity2.getHandlers().get(3).getType());
+        assertEquals("sample.odata::deleteMethod",entity2.getHandlers().get(3).getHandler());
+
+        ODataEntityDefinition entity3 = oDataDefinition.getEntities().get(2);
+        assertEquals(2,entity3.getHandlers().size());
+        assertEquals(ODataHandlerMethods.create.name(),entity3.getHandlers().get(0).getMethod());
+        assertEquals(ODataHandlerTypes.on.name(),entity3.getHandlers().get(0).getType());
+        assertEquals("sample.odata::createMethod",entity3.getHandlers().get(0).getHandler());
+        assertEquals(ODataHandlerMethods.delete.name(),entity3.getHandlers().get(1).getMethod());
+        assertEquals(ODataHandlerTypes.forbid.name(),entity3.getHandlers().get(1).getType());
+        assertEquals(null,entity3.getHandlers().get(1).getHandler());
+
+        ODataEntityDefinition entity4 = oDataDefinition.getEntities().get(3);
+        assertEquals(3,entity4.getHandlers().size());
+        assertEquals(ODataHandlerMethods.create.name(),entity4.getHandlers().get(0).getMethod());
+        assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(0).getType());
+        assertEquals(null,entity4.getHandlers().get(0).getHandler());
+        assertEquals(ODataHandlerMethods.update.name(),entity4.getHandlers().get(1).getMethod());
+        assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(1).getType());
+        assertEquals(null,entity4.getHandlers().get(1).getHandler());
+        assertEquals(ODataHandlerMethods.delete.name(),entity4.getHandlers().get(2).getMethod());
+        assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(2).getType());
+        assertEquals(null,entity4.getHandlers().get(2).getHandler());
     }
 }
 

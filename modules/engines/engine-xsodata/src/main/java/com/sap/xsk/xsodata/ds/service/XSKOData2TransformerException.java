@@ -12,16 +12,16 @@
 package com.sap.xsk.xsodata.ds.service;
 
 /**
- * The {@link OData2TransformerException} is thrown in situations when there is an issue when transforming odata file
+ * The {@link XSKOData2TransformerException} is thrown in situations when there is an issue when transforming odata file
  */
-public class OData2TransformerException extends RuntimeException {
+public class XSKOData2TransformerException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Instantiates a new transformer exception.
      */
-    public OData2TransformerException() {
+    public XSKOData2TransformerException() {
         super();
     }
 
@@ -30,7 +30,7 @@ public class OData2TransformerException extends RuntimeException {
      *
      * @param message the message
      */
-    public OData2TransformerException(String message) {
+    public XSKOData2TransformerException(String message) {
         super(message);
     }
 
@@ -39,7 +39,7 @@ public class OData2TransformerException extends RuntimeException {
      *
      * @param ex the ex
      */
-    public OData2TransformerException(Throwable ex) {
+    public XSKOData2TransformerException(Throwable ex) {
         super(ex);
     }
 
@@ -49,7 +49,7 @@ public class OData2TransformerException extends RuntimeException {
      * @param message the message
      * @param ex      the ex
      */
-    public OData2TransformerException(String message, Throwable ex) {
+    public XSKOData2TransformerException(String message, Throwable ex) {
         super(message, ex);
     }
 

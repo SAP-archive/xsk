@@ -11,18 +11,19 @@
  */
 package com.sap.xsk.xsodata.utils;
 
-import com.google.common.base.CaseFormat;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
-import com.sap.xsk.xsodata.ds.service.OData2TransformerException;
+import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
-import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.engine.odata2.definition.*;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class XSKODataUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(XSKODataUtils.class);
 
     private XSKODataUtils() {
     }
@@ -107,9 +110,38 @@ public class XSKODataUtils {
                         });
                     }
                 } catch (SQLException e) {
-                    throw new OData2TransformerException(e);
+                    throw new XSKOData2TransformerException(e);
                 }
             });
+            List<ODataHandler> handlers = new ArrayList<>();
+            entity.getModifications().forEach(modification -> {
+                modification.getSpecification().getEvents().forEach(event -> {
+                    if (validateHandlerType(event.getType())) {
+                        ODataHandler oDataHandler = new ODataHandler();
+                        oDataHandler.setHandler(event.getAction());
+                        oDataHandler.setType(event.getType().getOdataHandlerType());
+                        oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+                        handlers.add(oDataHandler);
+                    }
+                });
+                if (modification.getSpecification().isForbidden()) {
+                    ODataHandler oDataHandler = new ODataHandler();
+                    oDataHandler.setType(ODataHandlerTypes.forbid.name());
+                    oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+                    handlers.add(oDataHandler);
+                }
+                if (modification.getSpecification().getModificationAction() != null) {
+                    ODataHandler oDataHandler = new ODataHandler();
+                    oDataHandler.setHandler(modification.getSpecification().getModificationAction());
+                    oDataHandler.setType(ODataHandlerTypes.on.name());
+                    oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+                    handlers.add(oDataHandler);
+                }
+            });
+            handlers.forEach(el -> {
+                oDataEntityDefinition.getHandlers().add(el);
+            });
+
             oDataDefinitionModel.getEntities().add(oDataEntityDefinition);
         }
         return oDataDefinitionModel;
@@ -122,7 +154,20 @@ public class XSKODataUtils {
         try {
             EdmMultiplicity.fromLiteral(actualValue);
         } catch (IllegalArgumentException ex) {
-            throw new OData2TransformerException(String.format("Unsupported multiplicity %s for association %s", actualValue, assName));
+            throw new XSKOData2TransformerException(String.format("Unsupported multiplicity %s for association %s", actualValue, assName));
         }
+    }
+
+    /**
+     * Validate if provided handler type is one of the org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes
+     */
+    public static boolean validateHandlerType(XSKHDBXSODATAEventType eventType) {
+        try {
+            ODataHandlerTypes.fromValue(eventType.getOdataHandlerType());
+        } catch (IllegalArgumentException ex) {
+            logger.error(String.format("%s type is not supported", eventType.name()));
+            return false;
+        }
+        return true;
     }
 }

@@ -63,29 +63,35 @@ public class AuditLogClientImplTest {
 
   @Test
   public void log_dataAccessMessage() throws Exception {
-    testSendMessage(AuditLogCategory.DATA_ACCESS, DATA_ACCESS_ENDPOINT, null);
+    testSendMessage(AuditLogCategory.DATA_ACCESS, DATA_ACCESS_ENDPOINT);
   }
 
   @Test
   public void log_dataModificationMessage() throws Exception {
-    testSendMessage(AuditLogCategory.DATA_MODIFICATION, DATA_MODIFICATION_ENDPOINT, null);
+    testSendMessage(AuditLogCategory.DATA_MODIFICATION, DATA_MODIFICATION_ENDPOINT);
   }
 
   @Test
   public void log_securityEventMessage() throws Exception {
-    testSendMessage(AuditLogCategory.SECURITY_EVENT, SECURITY_EVENT_ENDPOINT, null);
+    testSendMessage(AuditLogCategory.SECURITY_EVENT, SECURITY_EVENT_ENDPOINT);
   }
 
   @Test
   public void log_configurationChangeMessage() throws Exception {
-    testSendMessage(AuditLogCategory.CONFIGURATION_CHANGE, CONFIGURATION_CHANGE_ENDPOINT, null);
+    testSendMessage(AuditLogCategory.CONFIGURATION_CHANGE, CONFIGURATION_CHANGE_ENDPOINT);
   }
 
   @Test
   public void log_onBehalfOfSubscriber() throws Exception {
     String subscriberTokenIssuerUrl = "subscriber-token-issuer-url";
     Mockito.when(message.getSubscriberTokenIssuer()).thenReturn(subscriberTokenIssuerUrl);
-    testSendMessage(AuditLogCategory.CONFIGURATION_CHANGE, CONFIGURATION_CHANGE_ENDPOINT, subscriberTokenIssuerUrl);
+
+    Mockito.when(message.getCategory()).thenReturn(AuditLogCategory.CONFIGURATION_CHANGE);
+    Mockito.when(jsonMapper.toJson(message)).thenReturn(DUMMY_PAYLOAD);
+    Mockito.when(writer.retrieveOAuthToken(subscriberTokenIssuerUrl)).thenReturn(DUMMY_OAUTH_TOKEN);
+
+    auditLogClient.log(message);
+    Mockito.verify(writer).send(BASE_SEND_AUDITLOG_API_PATH + CONFIGURATION_CHANGE_ENDPOINT, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
   }
 
   @Test(expected = ServiceException.class)
@@ -160,15 +166,11 @@ public class AuditLogClientImplTest {
     auditLogClient.getLogs();
   }
 
-  private void testSendMessage(AuditLogCategory category, String messageTypeEndpoint, String externalOAuthURL) throws Exception {
+  private void testSendMessage(AuditLogCategory category, String messageTypeEndpoint) throws Exception {
     Mockito.when(message.getCategory()).thenReturn(category);
     Mockito.when(jsonMapper.toJson(message)).thenReturn(DUMMY_PAYLOAD);
+    Mockito.when(writer.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
 
-    if (externalOAuthURL == null) {
-      Mockito.when(writer.retrieveOAuthToken()).thenReturn(DUMMY_OAUTH_TOKEN);
-    } else {
-      Mockito.when(writer.retrieveOAuthToken(externalOAuthURL)).thenReturn(DUMMY_OAUTH_TOKEN);
-    }
     auditLogClient.log(message);
     Mockito.verify(writer).send(BASE_SEND_AUDITLOG_API_PATH + messageTypeEndpoint, DUMMY_PAYLOAD, DUMMY_OAUTH_TOKEN);
   }

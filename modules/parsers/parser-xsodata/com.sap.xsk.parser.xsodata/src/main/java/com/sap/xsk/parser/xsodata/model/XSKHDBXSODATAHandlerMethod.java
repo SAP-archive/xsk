@@ -11,16 +11,25 @@
  */
 package com.sap.xsk.parser.xsodata.model;
 
-public enum XSKHDBXSODATAModificationType {
-    CREATE,
-    UPDATE,
-    DELETE;
+/**
+ * The text should reflect the values from org.eclipse.dirigible.engine.odata2.definition.ODataHandlerMethods
+ */
+public enum XSKHDBXSODATAHandlerMethod {
+    CREATE("create"),
+    UPDATE("update"),
+    DELETE("delete");
+
+    private final String odataHandlerType;
+
+    XSKHDBXSODATAHandlerMethod(String odataHandlerType) {
+        this.odataHandlerType = odataHandlerType;
+    }
+
+    public String getOdataHandlerType() {
+        return odataHandlerType;
+    }
 
     public String value() {
         return name();
-    }
-
-    public static XSKHDBXSODATAModificationType fromValue(String v) {
-        return valueOf(v);
     }
 }

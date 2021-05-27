@@ -300,13 +300,13 @@ public class XSKHDBXSODATACoreListener extends HdbxsodataBaseListener {
             XSKHDBXSODATAModificationSpec modificationSpec = new XSKHDBXSODATAModificationSpec();
             HdbxsodataParser.ModificationspecContext spec = null;
             if (el.update() != null) {
-                modification.setType(XSKHDBXSODATAModificationType.UPDATE);
+                modification.setMethod(XSKHDBXSODATAHandlerMethod.UPDATE);
                 spec = el.update().modificationspec();
             } else if (el.create() != null) {
-                modification.setType(XSKHDBXSODATAModificationType.CREATE);
+                modification.setMethod(XSKHDBXSODATAHandlerMethod.CREATE);
                 spec = el.create().modificationspec();
             } else if (el.delete() != null) {
-                modification.setType(XSKHDBXSODATAModificationType.DELETE);
+                modification.setMethod(XSKHDBXSODATAHandlerMethod.DELETE);
                 spec = el.delete().modificationspec();
             }
 

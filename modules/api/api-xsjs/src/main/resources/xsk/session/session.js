@@ -11,6 +11,8 @@
  */
 var securityUser = require('security/v4/user');
 
+this.authType = securityUser.getAuthType();
+git
 exports.getUsername = function () {
     return securityUser.getName();
 }
@@ -39,10 +41,6 @@ exports.assertAppPrivilege = function (privilegeName) {
 
 exports.getTimeout = function () {
   return securityUser.getTimeout()
-}
-
-exports.getAuthType = function () {
-  return securityUser.getAuthType()
 }
 
 exports.getSecurityToken = function () {

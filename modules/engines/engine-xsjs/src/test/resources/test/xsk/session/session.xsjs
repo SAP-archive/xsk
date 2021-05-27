@@ -11,7 +11,7 @@ if (sysPrivileges) {
 
 var timeout = $.session.getTimeout()
 var token = "None"
-var authType = $.session.getAuthType()
+var authType = $.session.authType
 if (authType) {
   token = $.session.getSecurityToken()
 } else {

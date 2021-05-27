@@ -23,6 +23,7 @@
 		<module>products</module>
 		<module>xsjs-simple</module>
 		<module>hdb-view</module>
+		<module>demo-unified-runtimes</module>
 	</modules>
 	
 	<properties>

@@ -1,0 +1,9 @@
+{
+  "hdbsynonym-itest::SampleHanaXSClassicSysonym": {
+    "schema": "TEST_SYNONYM",
+    "target": {
+      "schema": "DBADMIN",
+      "object": "hdbsynonym-itest::SampleHanaTable"
+    }
+  }
+}

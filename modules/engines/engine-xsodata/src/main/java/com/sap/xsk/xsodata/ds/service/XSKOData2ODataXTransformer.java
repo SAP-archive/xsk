@@ -104,9 +104,9 @@ public class XSKOData2ODataXTransformer {
 
             entity.getNavigates().forEach(relation -> {
                 XSKHDBXSODATAAssociation association = XSKODataCoreService.getAssociation(model, relation.getAssociation(), relation.getAliasNavigation());
-                String toRole = association.getPrincipal().getEntitySetName();
-                String fromRole = association.getDependent().getEntitySetName();
-                buff.append("\t\t<NavigationProperty Name=\"").append(relation.getAliasNavigation()).append("\"").append(" Relationship=\"").append(getServiceNamespace(model)).append(relation.getAssociation()).append("Type\"").append(" FromRole=\"").append(fromRole).append("Dependent").append("\"").append(" ToRole=\"").append(toRole).append("Principal").append("\"/>\n");
+                String toRole = association.getDependent().getEntitySetName();
+                String fromRole = association.getPrincipal().getEntitySetName();
+                buff.append("\t\t<NavigationProperty Name=\"").append(relation.getAliasNavigation()).append("\"").append(" Relationship=\"").append(getServiceNamespace(model)).append(relation.getAssociation()).append("Type\"").append(" FromRole=\"").append(fromRole).append("Principal").append("\"").append(" ToRole=\"").append(toRole).append("Dependent").append("\"/>\n");
             });
 
             // keep associations for later use

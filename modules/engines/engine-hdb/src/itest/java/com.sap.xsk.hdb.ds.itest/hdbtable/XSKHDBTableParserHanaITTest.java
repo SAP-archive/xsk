@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.hdb.ds.itest.hdbtable;
 
 import com.google.inject.Guice;
@@ -8,7 +19,7 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.utils.TestConstants;
-import com.sap.xsk.utils.XSKHDBUtils;
+import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -23,16 +34,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class XSKHDBTableParserHanaITTest {
+
   private static Connection connection;
   private static IXSKHDBCoreFacade facade;
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException, IOException {
-    com.sap.xsk.hdb.ds.test.itest.model.JDBCModel model = new com.sap.xsk.hdb.ds.test.itest.model.JDBCModel(TestConstants.HANA_DRIVER,
+    JDBCModel model = new JDBCModel(TestConstants.HANA_DRIVER,
         TestConstants.HANA_URL,
         TestConstants.HANA_USERNAME,
         TestConstants.HANA_PASSWORD);

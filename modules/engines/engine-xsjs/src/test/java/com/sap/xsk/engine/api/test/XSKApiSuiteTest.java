@@ -65,6 +65,7 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
   @Before
   public void registerModules() {
     TEST_MODULES.add("test/xsk/response.xsjs");
+    TEST_MODULES.add("test/xsk/session.xsjs");
   }
 
   /**

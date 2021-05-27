@@ -41,6 +41,14 @@ exports.getTimeout = function () {
   return securityUser.getTimeout()
 }
 
+exports.getAuthType = function () {
+  return securityUser.getAuthType()
+}
+
+exports.getSecurityToken = function () {
+  return securityUser.getSecurityToken()
+}
+
 function NoSuchPrivilegeException(privilegeToCheck) {
     this.privilege = privilegeToCheck;
 }

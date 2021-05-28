@@ -1,17 +1,17 @@
-var username = $.session.getUsername()
-var appPrivileges = $.session.hasAppPrivilege("Developer")
+let username = $.session.getUsername()
+let appPrivileges = $.session.hasAppPrivilege("Developer")
 if (appPrivileges) {
   $.session.assertAppPrivilege("Developer")
 }
 
-var sysPrivileges = $.session.hasSystemPrivilege("All")
+let sysPrivileges = $.session.hasSystemPrivilege("All")
 if (sysPrivileges) {
   $.session.assertSystemPrivilege("All")
 }
 
-var timeout = $.session.getTimeout()
-var token = "None"
-var authType = $.session.authType
+let timeout = $.session.getTimeout()
+let token = "None"
+let authType = $.session.authType
 if (authType) {
   token = $.session.getSecurityToken()
 } else {

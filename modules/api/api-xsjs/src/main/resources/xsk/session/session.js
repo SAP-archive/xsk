@@ -12,7 +12,7 @@
 var securityUser = require('security/v4/user');
 
 this.authType = securityUser.getAuthType();
-git
+
 exports.getUsername = function () {
     return securityUser.getName();
 }

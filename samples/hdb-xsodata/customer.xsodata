@@ -1,0 +1,35 @@
+service namespace "np"{
+	
+"toni::customer" as "Customers" with ("ID", "OrderID","OrderID2")
+	navigates ("Orders_Customers" as "HisOrders")
+	create events (after "kneo.test.xsjs:auditlog.xsjslib::logCreateConfigAfter"); 
+	"toni::order" as "Orders"  
+	    create forbidden
+	    update forbidden
+        delete forbidden;
+	 
+	association "Orders_Customers" with referential constraint 
+	 principal "Orders"("ID", "ID2") multiplicity "1"
+     dependent  "Customers"("OrderID", "OrderID2") multiplicity "*" 
+   
+     update using  "kneo.test.xsjs:auditlog.xsjslib::logCreateConfigAfter";
+
+"toni::customer" as "CustomersWithoutKey" without ("OrderID");
+"toni::customer" as "CustomersWithAllKeys"
+        aggregates always (SUM of "OrderID3") ;
+"toni::customer" as "CustomersWithGenID" key generate local "GenID";
+
+"toni::orderView" as "orderView" key ("ID");
+"toni::orderView" as "orderViewKeyGen" key generate local "ViewGenID";
+
+}
+annotations     {
+	enable      OData4SAP;
+	enable      OData4SAP;
+}
+
+settings {
+     support null;
+     content cache-control "no-store";
+     metadata cache-control "no-cache,no-store,max-age=86401,must-revalidate";
+}

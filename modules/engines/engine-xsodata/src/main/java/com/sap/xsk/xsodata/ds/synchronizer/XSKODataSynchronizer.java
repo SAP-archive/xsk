@@ -16,14 +16,20 @@ import com.sap.xsk.xsodata.ds.api.IXSKODataCoreService;
 import com.sap.xsk.xsodata.ds.api.IXSKODataModel;
 import com.sap.xsk.xsodata.ds.api.XSKODataException;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
+import com.sap.xsk.xsodata.ds.service.XSKOData2ODataHTransformer;
 import com.sap.xsk.xsodata.ds.service.XSKOData2ODataMTransformer;
 import com.sap.xsk.xsodata.ds.service.XSKOData2ODataXTransformer;
+import com.sap.xsk.xsodata.utils.XSKODataUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.module.StaticInjector;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
+import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerDefinition;
 import org.eclipse.dirigible.engine.odata2.service.ODataCoreService;
+import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +72,10 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
     private XSKOData2ODataMTransformer xskOData2ODataMTransformer;
     @Inject
     private XSKOData2ODataXTransformer xskOData2ODataXTransformer;
+    @Inject
+    private XSKOData2ODataHTransformer xskOData2ODataHTransformer;
+    @Inject
+    private DBMetadataUtil dbMetadataUtil;
 
     /**
      * Force synchronization.
@@ -294,6 +304,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
                 odataCoreService.removeSchema(model.getLocation());
                 odataCoreService.removeContainer(model.getLocation());
                 odataCoreService.removeMappings(model.getLocation());
+                odataCoreService.removeHandlers(model.getLocation());
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 errors.add(e.getMessage());
@@ -305,17 +316,32 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
             XSKODataModel model = ODATA_MODELS.get(dsName);
             try {
                 // METADATA AND MAPPINGS GENERATION LOGIC
+
+                //The xsk classic generate the odata properties without prettying them
+                String oldValuePretty = Configuration.get(DBMetadataUtil.DIRIGIBLE_GENERATE_PRETTY_NAMES);
+                Configuration.set(DBMetadataUtil.DIRIGIBLE_GENERATE_PRETTY_NAMES, "false");
+                ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(model, dbMetadataUtil);
+
                 String[] odataxc = generateODataX(model);
                 String odatax = odataxc[0];
                 String odatac = odataxc[1];
                 odataCoreService.createSchema(model.getLocation(), odatax.getBytes());
                 odataCoreService.createContainer(model.getLocation(), odatac.getBytes());
 
-                String[] odatams = generateODataMs(model);
+                String[] odatams = generateODataMs(oDataDefinition);
                 int i = 1;
                 for (String odatam : odatams) {
                     odataCoreService.createMapping(model.getLocation() + "#" + i++, odatam.getBytes());
                 }
+
+                List<ODataHandlerDefinition> odatahs = generateODataHs(oDataDefinition);
+                for (ODataHandlerDefinition odatah : odatahs) {
+                    odataCoreService.createHandler(model.getLocation(), odatah.getNamespace(), odatah.getName(),
+                            odatah.getMethod(), odatah.getType(), odatah.getHandler());
+                }
+
+                if (oldValuePretty != null) Configuration.set(DBMetadataUtil.DIRIGIBLE_GENERATE_PRETTY_NAMES, oldValuePretty);
+
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 errors.add(e.getMessage());
@@ -331,8 +357,12 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
         return xskOData2ODataXTransformer.transform(model);
     }
 
-    private String[] generateODataMs(XSKODataModel model) throws SQLException {
-        return xskOData2ODataMTransformer.transform(model);
+    private String[] generateODataMs(ODataDefinition oDataDefinition) throws SQLException {
+        return xskOData2ODataMTransformer.transform(oDataDefinition);
+    }
+
+    private List<ODataHandlerDefinition> generateODataHs(ODataDefinition oDataDefinition) throws SQLException {
+        return xskOData2ODataHTransformer.transform(oDataDefinition);
     }
 
 }

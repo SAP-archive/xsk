@@ -13,7 +13,7 @@ package com.sap.xsk.xsodata.ds.service;
 
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
-import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAModificationType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
@@ -104,9 +104,9 @@ public class XSKOData2ODataXTransformer {
 
             entity.getNavigates().forEach(relation -> {
                 XSKHDBXSODATAAssociation association = XSKODataCoreService.getAssociation(model, relation.getAssociation(), relation.getAliasNavigation());
-                String toRole = association.getPrincipal().getEntitySetName();
-                String fromRole = association.getDependent().getEntitySetName();
-                buff.append("\t\t<NavigationProperty Name=\"").append(relation.getAliasNavigation()).append("\"").append(" Relationship=\"").append(getServiceNamespace(model)).append(relation.getAssociation()).append("Type\"").append(" FromRole=\"").append(fromRole).append("Dependent").append("\"").append(" ToRole=\"").append(toRole).append("Principal").append("\"/>\n");
+                String toRole = association.getDependent().getEntitySetName();
+                String fromRole = association.getPrincipal().getEntitySetName();
+                buff.append("\t\t<NavigationProperty Name=\"").append(relation.getAliasNavigation()).append("\"").append(" Relationship=\"").append(getServiceNamespace(model)).append(relation.getAssociation()).append("Type\"").append(" FromRole=\"").append(fromRole).append("Principal").append("\"").append(" ToRole=\"").append(toRole).append("Dependent").append("\"/>\n");
             });
 
             // keep associations for later use
@@ -133,13 +133,13 @@ public class XSKOData2ODataXTransformer {
             // keep entity sets for later use
             entitySets.append("\t\t<EntitySet Name=\"").append(entitySetName).append("\" EntityType=\"").append(getServiceNamespace(model)).append(entitySetName).append("Type\"");
             entity.getModifications().forEach(event -> {
-                if (event.getType().equals(XSKHDBXSODATAModificationType.CREATE) && event.getSpecification().isForbidden()) {
+                if (event.getMethod().equals(XSKHDBXSODATAHandlerMethod.CREATE) && event.getSpecification().isForbidden()) {
                     entitySets.append(" sap:creatable=\"false\"");
                 }
-                if (event.getType().equals(XSKHDBXSODATAModificationType.UPDATE) && event.getSpecification().isForbidden()) {
+                if (event.getMethod().equals(XSKHDBXSODATAHandlerMethod.UPDATE) && event.getSpecification().isForbidden()) {
                     entitySets.append(" sap:updatable=\"false\"");
                 }
-                if (event.getType().equals(XSKHDBXSODATAModificationType.DELETE) && event.getSpecification().isForbidden()) {
+                if (event.getMethod().equals(XSKHDBXSODATAHandlerMethod.DELETE) && event.getSpecification().isForbidden()) {
                     entitySets.append(" sap:deletable=\"false\"");
                 }
             });

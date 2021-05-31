@@ -1,0 +1,26 @@
+service namespace "np"{
+
+"kneo.test.helloodata.CompositeKey::employee" as "Employees"
+	navigates ("Employees_Phones" as "HisPhones")
+	create events (after "kneo.test.xsjs:auditlog.xsjslib::logCreateConfigAfter");
+
+"kneo.test.helloodata.CompositeKey::phones" as "Phones"
+	 create forbidden
+	 update forbidden
+     delete forbidden;
+
+"kneo.test.helloodata.CompositeKey::address" as "Address"
+	 	navigates ("Address_Phones" as "HisAddressPhones");
+
+	association "Employees_Phones" with referential constraint
+	    principal "Employees"("COMPANY_ID", "EMPLOYEE_NUMBER") multiplicity "1"
+        dependent "Phones"("FK_COMPANY_ID", "FK_EMPLOYEE_NUMBER") multiplicity "*" ;
+
+    association "Address_Phones"
+        principal "Address"("FK_PHONE") multiplicity "1"
+        dependent "Phones"("ID") multiplicity "1" ;
+}
+annotations     {
+	enable      OData4SAP;
+	enable      OData4SAP;
+}

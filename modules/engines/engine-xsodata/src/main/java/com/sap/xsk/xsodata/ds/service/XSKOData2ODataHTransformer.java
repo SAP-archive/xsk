@@ -12,19 +12,20 @@
 package com.sap.xsk.xsodata.ds.service;
 
 import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
-import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataMTransformer;
+import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerDefinition;
+import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataHTransformer;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.sql.SQLException;
+import java.util.List;
 
 @Singleton
-public class XSKOData2ODataMTransformer {
-
+public class XSKOData2ODataHTransformer {
     @Inject
-    private OData2ODataMTransformer oData2ODataMTransformer;
+    private OData2ODataHTransformer oData2ODataHTransformer;
 
-    public String[] transform(ODataDefinition oDataDefinition) throws SQLException {
-        return oData2ODataMTransformer.transform(oDataDefinition);
+    public List<ODataHandlerDefinition> transform(ODataDefinition oDataDefinition) throws SQLException {
+        return oData2ODataHTransformer.transform(oDataDefinition);
     }
 }

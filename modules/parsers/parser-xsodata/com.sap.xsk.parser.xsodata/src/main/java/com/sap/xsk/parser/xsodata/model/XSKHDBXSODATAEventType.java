@@ -13,21 +13,29 @@ package com.sap.xsk.parser.xsodata.model;
 
 import java.util.Arrays;
 import java.util.Optional;
-
+/**
+ * The text should reflect the values from org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes
+ */
 public enum XSKHDBXSODATAEventType {
-    BEFORE("before"),
-    AFTER("after"),
-    PRECOMMIT("precommit"),
-    POSTCOMMIT("postcommit");
+    BEFORE("before", "before"),
+    AFTER("after", "after"),
+    PRECOMMIT("precommit", ""),
+    POSTCOMMIT("postcommit", "");
 
     private final String text;
+    private final String odataHandlerType;
 
-    XSKHDBXSODATAEventType(String text) {
+    XSKHDBXSODATAEventType(String text, String odataHandlerType) {
         this.text = text;
+        this.odataHandlerType = odataHandlerType;
     }
 
     public String getText() {
         return this.text;
+    }
+
+    public String getOdataHandlerType() {
+        return odataHandlerType;
     }
 
     public static Optional<XSKHDBXSODATAEventType> fromValue(String text) {

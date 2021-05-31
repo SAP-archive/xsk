@@ -1,0 +1,4 @@
+schema="HELLO_ODATA";
+query="SELECT * FROM \"toni::order\"";
+depends_on= ["toni::order"];
+

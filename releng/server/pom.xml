@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-releng-parent</artifactId>
-		<version>0.5.0-SNAPSHOT</version>
+		<version>0.5.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Releng - Server</name>
 	<artifactId>xsk-releng-server</artifactId>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.5.0</version>
 	<packaging>war</packaging>
 
 	<build>

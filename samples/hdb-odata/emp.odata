@@ -1,10 +1,10 @@
 {
-  "namespace": "np",
+  "namespace": "np_odata",
   "entities": [
     {
       "name": "employee",
       "alias": "Employees",
-      "table": "toni::employee",
+      "table": "employee",
       "navigations": [
         {
           "name": "HisPhones",
@@ -21,7 +21,7 @@
     {
       "name": "phone",
       "alias": "Phones",
-      "table": "toni::phone",
+      "table": "phone",
       "navigations": [
         {
           "name": "HisAddress",
@@ -32,7 +32,7 @@
     {
       "name": "address",
       "alias": "Address",
-      "table": "toni::address"
+      "table": "address"
     }
   ],
   "associations": [
@@ -58,11 +58,12 @@
       },
       "to": {
         "entity": "address",
-        "property": ["FK_PHONE_1"],
+        "property": ["FK_PHONE"],
         "multiplicity": "1"
       }
     }
   ]
 }
+
 
 

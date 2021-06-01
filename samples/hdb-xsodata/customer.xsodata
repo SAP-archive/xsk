@@ -1,12 +1,10 @@
 service namespace "np"{
 	
-"toni::customer" as "Customers" with ("ID", "OrderID","OrderID2")
+"hdb-xsodata::customer" as "Customers" with ("ID", "OrderID","OrderID2")
 	navigates ("Orders_Customers" as "HisOrders")
 	create events (after "kneo.test.xsjs:auditlog.xsjslib::logCreateConfigAfter"); 
-	"toni::order" as "Orders"  
-	    create forbidden
-	    update forbidden
-        delete forbidden;
+	
+	"hdb-xsodata::order" as "Orders";
 	 
 	association "Orders_Customers" with referential constraint 
 	 principal "Orders"("ID", "ID2") multiplicity "1"
@@ -14,19 +12,20 @@ service namespace "np"{
    
      update using  "kneo.test.xsjs:auditlog.xsjslib::logCreateConfigAfter";
 
-"toni::customer" as "CustomersWithoutKey" without ("OrderID");
-"toni::customer" as "CustomersWithAllKeys"
+"hdb-xsodata::customer" as "CustomersWithoutKey" without ("OrderID");
+"hdb-xsodata::customer" as "CustomersWithAllKeys"
         aggregates always (SUM of "OrderID3") ;
-"toni::customer" as "CustomersWithGenID" key generate local "GenID";
+"hdb-xsodata::customer" as "CustomersWithGenID" key generate local "GenID";
 
-"toni::orderView" as "orderView" key ("ID");
-"toni::orderView" as "orderViewKeyGen" key generate local "ViewGenID";
+"hdb-xsodata::orderView" as "orderView" key ("ID");
+"hdb-xsodata::orderView" as "orderViewKeyGen" key generate local "ViewGenID";
 
 }
 annotations     {
 	enable      OData4SAP;
 	enable      OData4SAP;
 }
+
 
 settings {
      support null;

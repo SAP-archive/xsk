@@ -2,6 +2,6 @@
 [stack]
 id = "io.buildpacks.stacks.bionic"
 # This image is used at runtime
-run-image = "neo-stack-run:bionic"
+run-image = "radiatorspring/neo-stack-run"
 # This image is used at build-time
-build-image = "neo-stack-build:bionic"
+build-image = "radiatorspring/neo-stack-build"

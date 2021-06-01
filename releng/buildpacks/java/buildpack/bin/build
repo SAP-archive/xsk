@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -ex
 set -o pipefail
 
 readonly SCRIPT_DIR=$(realpath "$( dirname "${BASH_SOURCE[0]}" )")
@@ -7,70 +7,26 @@ readonly SCRIPT_DIR=$(realpath "$( dirname "${BASH_SOURCE[0]}" )")
 echo "Building ..."
 
 echo "Create Tomcat dir in working dir"
+#
+## 1. GET ARGS
+readonly layersdir=$1
+readonly tomcatdir=/usr/local/tomcat
+readonly tomcatlayer=${layersdir}/tomcat
 
-# 1. GET ARGS
-layersdir=$1
+mkdir -p ${tomcatlayer}
+cp -R  /usr/local/tomcat/* ${tomcatlayer}
 
-# 2. CREATE THE LAYER DIRECTORY
-tomcatlayer="$layersdir"/tomcat
+zip -r ROOT.war .
 
-
-# Download sapjvm
-wget --quiet http://nexus.wdf.sap.corp:8081/nexus/content/repositories/deploy.releases.sapmake/com/sap/jvm/linuxx86_64/optU/com.sap.jvm.jdk/81.75.75/com.sap.jvm.jdk-81.75.75.zip -O sapjvm-8.zip
-unzip -q sapjvm-8.zip -d "$tomcatlayer"
-rm sapjvm-8.zip
-chmod -R 777 "$tomcatlayer"
-
-export PATH=${tomcatlayer}/sapjvm-8/bin:$PATH
-
-
-mkdir -p "${tomcatlayer}"/profile.d
-  cat > "${tomcatlayer}/profile.d/jdk.sh" << EOF
-export JAVA_HOME="$tomcatlayer"/sapjvm_8
-export PATH="$tomcatlayer/sapjvm_8/bin:$PATH"
-export CATALINA_HOME=$tomcatlayer
-EOF
-
-echo "Copy Tomcat from SAP nexus"
-
-# When accessing the zip on local machine:
-# wget --quiet host.docker.internal:8000/com.sap.cloud.runtime.kotyo-2.174.1.zip
-wget --quiet https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.65/bin/apache-tomcat-8.5.65.zip
-unzip -qo apache-tomcat-8.5.65 -d "$tomcatlayer"
-rm apache-tomcat-8.5.65.zip
-chmod -R 777 "$tomcatlayer"
-mv "$tomcatlayer"/apache-tomcat-8.5.65/* "$tomcatlayer"
-
-
-ls -lah "$tomcatlayer"
-
-echo "Copy the war file to the Tomcat copy"
-
-cp ./*.war "$tomcatlayer"/webapps/
-
-echo "List what we have in webapps folder of Tomcat copy"
-
-ls -lah "$tomcatlayer"/webapps
-
-# Download jdbc driver
-wget --quiet -O "$tomcatlayer"/lib/ngdbc-2.8.12.jar https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar
-wget --quiet -O "$tomcatlayer"/lib/slf4j-api-1.7.5.jar https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar
-
-cp "${SCRIPT_DIR}"/../lib/* "$tomcatlayer"/lib/
-
-# Register Listener
-sed -i /'<Context>'/c'<Context>\n<Listener className=\"com.sap.xsk.listener.NamingResourcesListener\" factoryClassName=\"com.sap.xsk.factory.DynamicDataSourceFactory\"/>' "$tomcatlayer"/conf/context.xml
-
-echo "List libs for tomcat"
-
-ls -lah "$tomcatlayer"/lib
+# find all war files in workspace and copy them to webapps
+find /workspace  -name '*.war' -exec cp -prv '{}' ${layersdir}/tomcat/webapps  ';'
+chmod -R 777 $layersdir
 
 echo -e 'launch = true' > "$layersdir/tomcat.toml"
-
-# ========== ADDED ===========
-# 8. SET DEFAULT START COMMAND
+## ========== ADDED ===========
+## 8. SET DEFAULT START COMMAND
 cat > "$layersdir/launch.toml" <<EOL
 [[processes]]
 type = "web"
-command = "$tomcatlayer/bin/catalina.sh run"
+command = "${layersdir}/tomcat/bin/catalina.sh run"
 EOL

@@ -1,7 +1,7 @@
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStore
 metadata:
-  name: kneo-xsk-store
+  name: kneo-generic-store
 spec:
   sources:
-  - image: dirigiblelabs/kneo-xsk-buildpack
+  - image: radiatorspring/neo-buildpack

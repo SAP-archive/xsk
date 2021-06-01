@@ -1,10 +1,10 @@
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack
 metadata:
-  name: kneo-xsk-stack
+  name: kneo-generic-stack
 spec:
   id: "com.sap.kneo.xsk"
   buildImage:
-    image: "dirigiblelabs/kneo-xsk-stack-build"
+    image: "radiatorspring/neo-stack-build"
   runImage:
-    image: "dirigiblelabs/kneo-xsk-stack-run"
+    image: "radiatorspring/neo-stack-run"

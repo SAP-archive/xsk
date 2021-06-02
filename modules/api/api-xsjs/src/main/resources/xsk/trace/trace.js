@@ -29,23 +29,23 @@ exports.warning = function(message) {
 	console.warn(message);
 }
 
-exports.isDebugEnabled = function(message) {
+exports.isDebugEnabled = function() {
 	return true;
 }
 
-exports.isErrorEnabled = function(message) {
+exports.isErrorEnabled = function() {
 	return true;
 }
 
-exports.isFatalEnabled = function(message) {
+exports.isFatalEnabled = function() {
 	return true;
 }
 
-exports.isInfoEnabled = function(message) {
+exports.isInfoEnabled = function() {
 	return true;
 }
 
-exports.isWarningEnabled = function(message) {
+exports.isWarningEnabled = function() {
 	return true;
 }
 

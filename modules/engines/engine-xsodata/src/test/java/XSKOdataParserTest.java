@@ -29,7 +29,7 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
         XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_all_set_of_navigations.xsodata", content);
         assertEquals("entity_with_all_set_of_navigations.xsodata", xskoDataModel.getName());
         assertEquals("np/entity_with_all_set_of_navigations.xsodata", xskoDataModel.getLocation());
-        assertEquals("6c4554b83fed2cf3afce34badaaa02da", xskoDataModel.getHash());
+        assertNotNull( xskoDataModel.getHash());
         assertEquals("guest", xskoDataModel.getCreatedBy());
         assertNotNull(xskoDataModel.getCreatedAt());
         assertNotNull(xskoDataModel.getService());

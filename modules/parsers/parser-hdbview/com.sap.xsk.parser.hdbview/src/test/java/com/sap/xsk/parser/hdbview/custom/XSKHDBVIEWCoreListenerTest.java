@@ -30,7 +30,7 @@ import org.junit.Test;
 public class XSKHDBVIEWCoreListenerTest {
 
   @Test
-  public void parseHdbviewFileWithoutErrorsSuccessfully() throws Exception {
+  public void parseHdbviewFileSuccessfully() throws Exception {
     String hdbviewSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sample.hdbview"), StandardCharsets.UTF_8);
 

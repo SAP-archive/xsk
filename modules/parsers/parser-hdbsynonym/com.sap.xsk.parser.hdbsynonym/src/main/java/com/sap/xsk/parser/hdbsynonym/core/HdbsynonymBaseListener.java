@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbsynonym/core/Hdbsynonym.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbsynonym\core\Hdbsynonym.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbsynonym.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -12,6 +12,19 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * of the available methods.
  */
 public class HdbsynonymBaseListener implements HdbsynonymListener {
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSynonymElement(@NotNull HdbsynonymParser.SynonymElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSynonymElement(@NotNull HdbsynonymParser.SynonymElementContext ctx) { }
+
 	/**
 	 * {@inheritDoc}
 	 *

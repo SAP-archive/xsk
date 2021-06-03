@@ -1,0 +1,11 @@
+COMMA=5
+ESC=7
+SEMICOLON=4
+STRING=2
+T__0=1
+EQ=3
+WS=6
+'='=3
+','=5
+';'=4
+'schema'=1

@@ -31,7 +31,8 @@
 		<module>modules</module>
 		<module>releng</module>
 		<module>samples</module>
-	</modules>
+    <module>modules/parsers/parser-hdbschema</module>
+  </modules>
 
 	<profiles>
 		<profile>

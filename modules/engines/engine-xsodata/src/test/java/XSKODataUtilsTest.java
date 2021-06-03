@@ -10,7 +10,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
+import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
 import com.sap.xsk.xsodata.utils.XSKODataUtils;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
@@ -230,7 +232,7 @@ public class XSKODataUtilsTest {
         assertEquals("sample.odata::afterMethod",entity1.getHandlers().get(1).getHandler());
         assertEquals(ODataHandlerMethods.create.name(),entity1.getHandlers().get(2).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity1.getHandlers().get(2).getType());
-        assertEquals(null,entity1.getHandlers().get(2).getHandler());
+        assertNull(entity1.getHandlers().get(2).getHandler());
 
         ODataEntityDefinition entity2 = oDataDefinition.getEntities().get(1);
         assertEquals(4,entity2.getHandlers().size());
@@ -254,19 +256,43 @@ public class XSKODataUtilsTest {
         assertEquals("sample.odata::createMethod",entity3.getHandlers().get(0).getHandler());
         assertEquals(ODataHandlerMethods.delete.name(),entity3.getHandlers().get(1).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity3.getHandlers().get(1).getType());
-        assertEquals(null,entity3.getHandlers().get(1).getHandler());
+        assertNull(entity3.getHandlers().get(1).getHandler());
 
         ODataEntityDefinition entity4 = oDataDefinition.getEntities().get(3);
         assertEquals(3,entity4.getHandlers().size());
         assertEquals(ODataHandlerMethods.create.name(),entity4.getHandlers().get(0).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(0).getType());
-        assertEquals(null,entity4.getHandlers().get(0).getHandler());
+        assertNull(entity4.getHandlers().get(0).getHandler());
         assertEquals(ODataHandlerMethods.update.name(),entity4.getHandlers().get(1).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(1).getType());
-        assertEquals(null,entity4.getHandlers().get(1).getHandler());
+        assertNull(entity4.getHandlers().get(1).getHandler());
         assertEquals(ODataHandlerMethods.delete.name(),entity4.getHandlers().get(2).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(2).getType());
-        assertEquals(null,entity4.getHandlers().get(2).getHandler());
+        assertNull(entity4.getHandlers().get(2).getHandler());
+    }
+
+    @Test(expected = XSKOData2TransformerException.class)
+    public void testValidateEdmMultiplicityFailed() {
+        XSKODataUtils.validateEdmMultiplicity("1..*", "ass_name");
+    }
+
+    @Test
+    public void testValidateEdmMultiplicitySuccessfully() {
+        XSKODataUtils.validateEdmMultiplicity("0..1", "ass_name");
+        XSKODataUtils.validateEdmMultiplicity("*", "ass_name");
+        XSKODataUtils.validateEdmMultiplicity("1", "ass_name");
+    }
+
+    @Test
+    public void testValidateHandlerTypeFailed() {
+        assertFalse(XSKODataUtils.validateHandlerType(XSKHDBXSODATAEventType.POSTCOMMIT));
+        assertFalse(XSKODataUtils.validateHandlerType(XSKHDBXSODATAEventType.PRECOMMIT));
+    }
+
+    @Test
+    public void testValidateHandlerTypeSuccessfully() {
+        assertTrue(XSKODataUtils.validateHandlerType(XSKHDBXSODATAEventType.AFTER));
+        assertTrue(XSKODataUtils.validateHandlerType(XSKHDBXSODATAEventType.BEFORE));
     }
 }
 

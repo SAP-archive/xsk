@@ -11,13 +11,13 @@
  */
 package com.sap.xsk.xsodata.ds.service;
 
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataLexer;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataParser;
 import com.sap.xsk.parser.xsodata.custom.XSKHDBXSODATACoreListener;
 import com.sap.xsk.parser.xsodata.custom.XSKHDBXSODATASyntaxErrorListener;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAService;
 import com.sap.xsk.xsodata.ds.api.IXSKODataParser;
-import com.sap.xsk.xsodata.ds.api.XSKODataException;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -28,6 +28,7 @@ import org.eclipse.dirigible.api.v3.security.UserFacade;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 
 /**
@@ -39,9 +40,9 @@ public class XSKODataParser implements IXSKODataParser {
      *
      * @param content the odata definition
      * @return the odata model instance
-     * @throws Exception exception during parsing
+     * @throws IOException exception during parsing
      */
-    public XSKODataModel parseXSODataArtifact(String location, String content) throws Exception {
+    public XSKODataModel parseXSODataArtifact(String location, String content) throws IOException {
 
         XSKODataModel odataModel = new XSKODataModel();
         odataModel.setName(new File(location).getName());
@@ -65,7 +66,7 @@ public class XSKODataParser implements IXSKODataParser {
 
         if (parser.getNumberOfSyntaxErrors() > 0) {
             String syntaxError = errorListener.getErrorMessage();
-            throw new XSKODataException(String.format(
+            throw new IllegalIcuArgumentException(String.format(
                     "Wrong format of XSODATA: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version. [%s]",
                     location, syntaxError));
         }
@@ -74,34 +75,6 @@ public class XSKODataParser implements IXSKODataParser {
         parseTreeWalker.walk(coreListener, parseTree);
 
         XSKHDBXSODATAService antlr4Model = coreListener.getServiceModel();
-
-//        XSKODataService odataService = new XSKODataService();
-//        odataService.setNamespace(antlr4Model.getNamespace());
-//        odataService.getEntities().forEach(entry -> {
-//            XSKODataEntity odataEntity = new XSKODataEntity();
-//            odataEntity.setNamespace(entry.getNamespace());
-//            odataEntity.setName(entry.getName());
-//            odataEntity.setAlias(entry.getAlias());
-//            entry.getNavigates().forEach(nav -> {
-//                XSKODataNavigation odataNavigation = new XSKODataNavigation();
-//                odataNavigation.setAssociation(nav.getAssociation());
-//                odataNavigation.setAlias(nav.getAlias());
-//                odataEntity.getNavigates().add(odataNavigation);
-//            });
-//            odataService.getEntities().add(odataEntity);
-//        });
-//        odataService.getAssociations().forEach(association -> {
-//            XSKODataAssociation odataAssociation = new XSKODataAssociation();
-//            odataAssociation.setName(association.getName());
-//            odataAssociation.setPrincipal(association.getPrincipal());
-//            odataAssociation.setPrincipalKey(association.getPrincipalKey());
-//            odataAssociation.setPrincipalMultiplicity(association.getPrincipalMultiplicity());
-//            odataAssociation.setDependent(association.getDependent());
-//            odataAssociation.setDependentProperty(association.getDependentProperty());
-//            odataAssociation.setDependentMultiplicity(association.getDependentMultiplicity());
-//            odataService.getAssociations().add(odataAssociation);
-//        });
-
         odataModel.setService(antlr4Model);
         return odataModel;
     }

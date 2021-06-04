@@ -14,105 +14,49 @@ package com.sap.xsk.parser.hdbview.custom;
 import com.sap.xsk.parser.hdbview.core.HdbviewBaseListener;
 import com.sap.xsk.parser.hdbview.core.HdbviewParser;
 import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.stream.Collectors;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 public class XSKHDBVIEWCoreListener extends HdbviewBaseListener {
 
-  private XSKHDBVIEWDefinitionModel model = new XSKHDBVIEWDefinitionModel();
-  private ParseTreeProperty<Object> tokens = new ParseTreeProperty<>();
+    private XSKHDBVIEWDefinitionModel model = new XSKHDBVIEWDefinitionModel();
 
-  @Override
-  public void exitHdbviewDefinition(HdbviewParser.HdbviewDefinitionContext ctx) {
-    List<ParseTree> ctxList = ctx.children;
-    for (ParseTree tree : ctxList) {
-      if (tree.getChild(0) instanceof HdbviewParser.SchemaPropContext) {
-        model.setSchema(handleStringLiteral((String) tokens.get((HdbviewParser.SchemaPropContext) tree.getChild(0))));
-      }
-      if (tree.getChild(0) instanceof HdbviewParser.QueryPropContext) {
-        model.setQuery(handleStringLiteral((String) tokens.get((HdbviewParser.QueryPropContext) tree.getChild(0))));
-      }
-      if (tree.getChild(0) instanceof HdbviewParser.DependsOnPropContext) {
-        model.setDependsOn((ArrayList) tokens.get((HdbviewParser.DependsOnPropContext) tree.getChild(0)));
-      }
-      if (tree.getChild(0) instanceof HdbviewParser.DependsOnTableContext) {
-        model.setDependsOnTable((ArrayList) tokens.get((HdbviewParser.DependsOnTableContext) tree.getChild(0)));
-      }
-      if (tree.getChild(0) instanceof HdbviewParser.DependsOnViewContext) {
-        model.setDependsOnView((ArrayList) tokens.get((HdbviewParser.DependsOnViewContext) tree.getChild(0)));
-      }
-      if (tree.getChild(0) instanceof HdbviewParser.PublicPropContext) {
-        Object publicProp = tokens.get((HdbviewParser.PublicPropContext) tree.getChild(0));
-        if (publicProp != null) {
-          model.setPublic((Boolean) publicProp);
-        } else {
-          model.setPublic(true);
+    @Override
+    public void exitHdbviewDefinition(HdbviewParser.HdbviewDefinitionContext ctx) {
+        ctx.property().forEach(node -> {
+            if (node.schemaProp() != null) {
+                model.setSchema(handleStringLiteral(node.schemaProp().STRING().getText()));
+            }
+            if (node.queryProp() != null) {
+                model.setQuery(handleStringLiteral(node.queryProp().STRING().getText()));
+            }
+            if (node.dependsOnProp() != null) {
+                model.setDependsOn(node.dependsOnProp().STRING().stream().map(el -> handleStringLiteral(el.getText())).collect(Collectors.toList()));
+            }
+            if (node.dependsOnTable() != null) {
+                model.setDependsOnTable(node.dependsOnTable().STRING().stream().map(el -> handleStringLiteral(el.getText())).collect(Collectors.toList()));
+            }
+            if (node.dependsOnView() != null) {
+                model.setDependsOnView(node.dependsOnView().STRING().stream().map(el -> handleStringLiteral(el.getText())).collect(Collectors.toList()));
+            }
+            if (node.publicProp() != null) {
+                model.setPublic(Boolean.parseBoolean(node.publicProp().getText()));
+            } else {
+                model.setPublic(true);
+            }
+        });
+    }
+
+    private String handleStringLiteral(String value) {
+        if (value != null && value.length() > 1) {
+            String subStr = value.substring(1, value.length() - 1);
+            String escapedQuote = subStr.replace("\\\"", "\"");
+            return escapedQuote.replace("\\\\", "\\");
         }
-      }
+        return null;
     }
-  }
 
-  @Override
-  public void exitQueryProp(HdbviewParser.QueryPropContext ctx) {
-    if (ctx != null && ctx.STRING() != null) {
-      tokens.put(ctx, ctx.STRING().getText());
+    public XSKHDBVIEWDefinitionModel getModel() {
+        return model;
     }
-  }
-
-  @Override
-  public void exitDependsOnProp(HdbviewParser.DependsOnPropContext ctx) {
-    if (ctx != null && ctx.STRING() != null) {
-      List<String> dependsOnPropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
-      ).collect(Collectors.toList());
-      tokens.put(ctx, dependsOnPropList);
-    }
-  }
-
-  @Override
-  public void exitDependsOnView(HdbviewParser.DependsOnViewContext ctx) {
-    if (ctx != null && ctx.STRING() != null) {
-      List<String> dependsOnViewPropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
-      ).collect(Collectors.toList());
-      tokens.put(ctx, dependsOnViewPropList);
-    }
-  }
-
-  @Override
-  public void exitDependsOnTable(HdbviewParser.DependsOnTableContext ctx) {
-    if (ctx != null && ctx.STRING() != null) {
-      List<String> dependsOnTablePropList = ctx.STRING().stream().map(el -> handleStringLiteral(el.getText())
-      ).collect(Collectors.toList());
-      tokens.put(ctx, dependsOnTablePropList);
-    }
-  }
-
-  @Override
-  public void exitSchemaProp(HdbviewParser.SchemaPropContext ctx) {
-    if (ctx != null && ctx.STRING() != null) {
-      tokens.put(ctx, ctx.STRING().getText());
-    }
-  }
-
-  @Override
-  public void exitPublicProp(HdbviewParser.PublicPropContext ctx) {
-    if (ctx != null && ctx.BOOLEAN() != null) {
-      tokens.put(ctx, Boolean.valueOf(ctx.BOOLEAN().getText()));
-    }
-  }
-
-  private String handleStringLiteral(String value) {
-    if (value != null && value.length() > 1) {
-      String subStr = value.substring(1, value.length() - 1);
-      String escapedQuote = subStr.replace("\\\"", "\"");
-      return escapedQuote.replace("\\\\", "\\");
-    }
-    return null;
-  }
-
-  public XSKHDBVIEWDefinitionModel getModel() {
-    return model;
-  }
 }

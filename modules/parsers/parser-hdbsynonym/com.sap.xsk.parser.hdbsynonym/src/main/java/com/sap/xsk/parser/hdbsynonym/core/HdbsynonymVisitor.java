@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbsynonym/core/Hdbsynonym.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbsynonym\core\Hdbsynonym.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbsynonym.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -11,6 +11,13 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  * operations with no return type.
  */
 public interface HdbsynonymVisitor<T> extends ParseTreeVisitor<T> {
+	/**
+	 * Visit a parse tree produced by {@link HdbsynonymParser#synonymElement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSynonymElement(@NotNull HdbsynonymParser.SynonymElementContext ctx);
+
 	/**
 	 * Visit a parse tree produced by {@link HdbsynonymParser#synonymTargetProp}.
 	 * @param ctx the parse tree

@@ -14,6 +14,7 @@ package com.sap.xsk.xsodata.utils;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAMultiplicityType;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
@@ -65,14 +66,21 @@ public class XSKODataUtils {
                 ODataAssiciationEndDefinition fromDef = new ODataAssiciationEndDefinition();
                 fromDef.setEntity(xsOdataAssoc.getPrincipal().getEntitySetName());
 
+                //The Multiplicity of the Principal role must be 1 or 0..1
                 validateEdmMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText(), navigate.getAssociation());
                 fromDef.setMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText());
                 fromDef.setProperty((ArrayList<String>) xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
                 ODataAssiciationEndDefinition toDef = new ODataAssiciationEndDefinition();
                 toDef.setEntity(xsOdataAssoc.getDependent().getEntitySetName());
 
-                validateEdmMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText(), navigate.getAssociation());
-                toDef.setMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText());
+                //The Multiplicity of the Principal role must be 1, 0..1, 1..*, *
+                //convert 1..* to *, because odata do not support it
+                if(xsOdataAssoc.getDependent().getMultiplicityType().getText().equals(XSKHDBXSODATAMultiplicityType.ONE_TO_MANY.getText())){
+                    toDef.setMultiplicity(EdmMultiplicity.MANY.toString());
+                }else{
+                    validateEdmMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText(), navigate.getAssociation());
+                    toDef.setMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText());
+                }
 
                 toDef.setProperty((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
                 oDataAssociationDefinition.setFrom(fromDef);

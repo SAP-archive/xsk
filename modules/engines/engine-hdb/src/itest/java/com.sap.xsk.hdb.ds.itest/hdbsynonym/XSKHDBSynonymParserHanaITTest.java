@@ -17,7 +17,7 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -35,7 +35,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.*;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

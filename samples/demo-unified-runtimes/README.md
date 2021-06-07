@@ -71,6 +71,7 @@ helm install my-application xsk/xsk \
 --set create.application=true \
 --set application.image=<docker-application-image> \
 --set application.homeUrl=<xsk-application-home-url> \
+--set application.fastBootstrap=true \
 --set create.secret=true \
 --set hana.url=<hana-url> \
 --set hana.username=<hana-username> \

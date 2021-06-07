@@ -70,7 +70,7 @@ helm install xsk-image-application xsk/xsk \
 helm install my-application xsk/xsk \
 --set create.application=true \
 --set application.image=<docker-application-image> \
---set application.homeUrl=<xsk-application-home-url> \
+--set application.homeUrl=/services/v4/xsk/demo-unified-runtimes/demo.xsjs \
 --set application.fastBootstrap=true \
 --set create.secret=true \
 --set hana.url=<hana-url> \

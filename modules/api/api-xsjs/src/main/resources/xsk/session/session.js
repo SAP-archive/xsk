@@ -12,6 +12,7 @@
 var securityUser = require('security/v4/user');
 
 this.authType = securityUser.getAuthType();
+this.language = securityUser.getLanguage();
 
 exports.getUsername = function () {
     return securityUser.getName();
@@ -45,6 +46,10 @@ exports.getTimeout = function () {
 
 exports.getSecurityToken = function () {
   return securityUser.getSecurityToken()
+}
+
+exports.getInvocationCount = function () {
+  return securityUser.getInvocationCount()
 }
 
 function NoSuchPrivilegeException(privilegeToCheck) {

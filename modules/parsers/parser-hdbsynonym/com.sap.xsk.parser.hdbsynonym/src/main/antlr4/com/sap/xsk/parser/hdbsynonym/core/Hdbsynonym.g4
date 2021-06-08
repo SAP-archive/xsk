@@ -2,10 +2,11 @@ grammar Hdbsynonym;
 
 hdbsynonymDefinition:'{' location COLON synonymBody '}';
 location: STRING;
-synonymBody:'{' (synonymTarget | synonymSchema)+ '}';
-synonymTarget : '"target"' COLON  '{' synonymTargetProp+ '}' ','?;
+synonymBody:'{' synonymElement COMMA synonymElement'}';
+synonymElement: (synonymTarget | synonymSchema);
+synonymTarget : '"target"' COLON  '{' synonymTargetProp+ '}' COMMA?;
 synonymTargetProp:  ('"object"'|'"schema"') COLON  STRING COMMA?;
-synonymSchema: '"schema"' COLON  STRING ','?;
+synonymSchema: '"schema"' COLON  STRING COMMA?;
 
 STRING : '"' (ESC | ~[{}])*? '"' ;
 COMMA : ',' ;

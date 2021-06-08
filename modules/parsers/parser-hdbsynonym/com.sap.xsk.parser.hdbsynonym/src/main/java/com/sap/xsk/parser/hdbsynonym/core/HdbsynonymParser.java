@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbsynonym/core/Hdbsynonym.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbsynonym\core\Hdbsynonym.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbsynonym.core;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -25,10 +25,11 @@ public class HdbsynonymParser extends Parser {
 	};
 	public static final int
 		RULE_hdbsynonymDefinition = 0, RULE_location = 1, RULE_synonymBody = 2, 
-		RULE_synonymTarget = 3, RULE_synonymTargetProp = 4, RULE_synonymSchema = 5;
+		RULE_synonymElement = 3, RULE_synonymTarget = 4, RULE_synonymTargetProp = 5, 
+		RULE_synonymSchema = 6;
 	public static final String[] ruleNames = {
-		"hdbsynonymDefinition", "location", "synonymBody", "synonymTarget", "synonymTargetProp", 
-		"synonymSchema"
+		"hdbsynonymDefinition", "location", "synonymBody", "synonymElement", "synonymTarget", 
+		"synonymTargetProp", "synonymSchema"
 	};
 
 	@Override
@@ -83,11 +84,11 @@ public class HdbsynonymParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(12); match(T__2);
-			setState(13); location();
-			setState(14); match(COLON);
-			setState(15); synonymBody();
-			setState(16); match(T__1);
+			setState(14); match(T__2);
+			setState(15); location();
+			setState(16); match(COLON);
+			setState(17); synonymBody();
+			setState(18); match(T__1);
 			}
 		}
 		catch (RecognitionException re) {
@@ -128,7 +129,7 @@ public class HdbsynonymParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(18); match(STRING);
+			setState(20); match(STRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -143,17 +144,12 @@ public class HdbsynonymParser extends Parser {
 	}
 
 	public static class SynonymBodyContext extends ParserRuleContext {
-		public List<SynonymSchemaContext> synonymSchema() {
-			return getRuleContexts(SynonymSchemaContext.class);
+		public TerminalNode COMMA() { return getToken(HdbsynonymParser.COMMA, 0); }
+		public List<SynonymElementContext> synonymElement() {
+			return getRuleContexts(SynonymElementContext.class);
 		}
-		public List<SynonymTargetContext> synonymTarget() {
-			return getRuleContexts(SynonymTargetContext.class);
-		}
-		public SynonymSchemaContext synonymSchema(int i) {
-			return getRuleContext(SynonymSchemaContext.class,i);
-		}
-		public SynonymTargetContext synonymTarget(int i) {
-			return getRuleContext(SynonymTargetContext.class,i);
+		public SynonymElementContext synonymElement(int i) {
+			return getRuleContext(SynonymElementContext.class,i);
 		}
 		public SynonymBodyContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -177,37 +173,74 @@ public class HdbsynonymParser extends Parser {
 	public final SynonymBodyContext synonymBody() throws RecognitionException {
 		SynonymBodyContext _localctx = new SynonymBodyContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_synonymBody);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(20); match(T__2);
-			setState(23); 
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			do {
+			setState(22); match(T__2);
+			setState(23); synonymElement();
+			setState(24); match(COMMA);
+			setState(25); synonymElement();
+			setState(26); match(T__1);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class SynonymElementContext extends ParserRuleContext {
+		public SynonymSchemaContext synonymSchema() {
+			return getRuleContext(SynonymSchemaContext.class,0);
+		}
+		public SynonymTargetContext synonymTarget() {
+			return getRuleContext(SynonymTargetContext.class,0);
+		}
+		public SynonymElementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_synonymElement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof HdbsynonymListener ) ((HdbsynonymListener)listener).enterSynonymElement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof HdbsynonymListener ) ((HdbsynonymListener)listener).exitSynonymElement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof HdbsynonymVisitor ) return ((HdbsynonymVisitor<? extends T>)visitor).visitSynonymElement(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final SynonymElementContext synonymElement() throws RecognitionException {
+		SynonymElementContext _localctx = new SynonymElementContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_synonymElement);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(30);
+			switch (_input.LA(1)) {
+			case T__4:
 				{
-				setState(23);
-				switch (_input.LA(1)) {
-				case T__4:
-					{
-					setState(21); synonymTarget();
-					}
-					break;
-				case T__0:
-					{
-					setState(22); synonymSchema();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
+				setState(28); synonymTarget();
 				}
+				break;
+			case T__0:
+				{
+				setState(29); synonymSchema();
 				}
-				setState(25); 
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			} while ( _la==T__4 || _la==T__0 );
-			setState(27); match(T__1);
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -222,6 +255,7 @@ public class HdbsynonymParser extends Parser {
 	}
 
 	public static class SynonymTargetContext extends ParserRuleContext {
+		public TerminalNode COMMA() { return getToken(HdbsynonymParser.COMMA, 0); }
 		public TerminalNode COLON() { return getToken(HdbsynonymParser.COLON, 0); }
 		public SynonymTargetPropContext synonymTargetProp(int i) {
 			return getRuleContext(SynonymTargetPropContext.class,i);
@@ -250,36 +284,36 @@ public class HdbsynonymParser extends Parser {
 
 	public final SynonymTargetContext synonymTarget() throws RecognitionException {
 		SynonymTargetContext _localctx = new SynonymTargetContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_synonymTarget);
+		enterRule(_localctx, 8, RULE_synonymTarget);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(29); match(T__4);
-			setState(30); match(COLON);
-			setState(31); match(T__2);
-			setState(33); 
+			setState(32); match(T__4);
+			setState(33); match(COLON);
+			setState(34); match(T__2);
+			setState(36); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(32); synonymTargetProp();
+				setState(35); synonymTargetProp();
 				}
 				}
-				setState(35); 
+				setState(38); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==T__3 || _la==T__0 );
-			setState(37); match(T__1);
-			setState(39);
-			_la = _input.LA(1);
-			if (_la==COMMA) {
+			setState(40); match(T__1);
+			setState(42);
+			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
+			case 1:
 				{
-				setState(38); match(COMMA);
+				setState(41); match(COMMA);
 				}
+				break;
 			}
-
 			}
 		}
 		catch (RecognitionException re) {
@@ -318,24 +352,24 @@ public class HdbsynonymParser extends Parser {
 
 	public final SynonymTargetPropContext synonymTargetProp() throws RecognitionException {
 		SynonymTargetPropContext _localctx = new SynonymTargetPropContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_synonymTargetProp);
+		enterRule(_localctx, 10, RULE_synonymTargetProp);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(41);
+			setState(44);
 			_la = _input.LA(1);
 			if ( !(_la==T__3 || _la==T__0) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
-			setState(42); match(COLON);
-			setState(43); match(STRING);
-			setState(45);
+			setState(45); match(COLON);
+			setState(46); match(STRING);
+			setState(48);
 			_la = _input.LA(1);
 			if (_la==COMMA) {
 				{
-				setState(44); match(COMMA);
+				setState(47); match(COMMA);
 				}
 			}
 
@@ -353,6 +387,7 @@ public class HdbsynonymParser extends Parser {
 	}
 
 	public static class SynonymSchemaContext extends ParserRuleContext {
+		public TerminalNode COMMA() { return getToken(HdbsynonymParser.COMMA, 0); }
 		public TerminalNode COLON() { return getToken(HdbsynonymParser.COLON, 0); }
 		public TerminalNode STRING() { return getToken(HdbsynonymParser.STRING, 0); }
 		public SynonymSchemaContext(ParserRuleContext parent, int invokingState) {
@@ -376,22 +411,21 @@ public class HdbsynonymParser extends Parser {
 
 	public final SynonymSchemaContext synonymSchema() throws RecognitionException {
 		SynonymSchemaContext _localctx = new SynonymSchemaContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_synonymSchema);
-		int _la;
+		enterRule(_localctx, 12, RULE_synonymSchema);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(47); match(T__0);
-			setState(48); match(COLON);
-			setState(49); match(STRING);
-			setState(51);
-			_la = _input.LA(1);
-			if (_la==COMMA) {
+			setState(50); match(T__0);
+			setState(51); match(COLON);
+			setState(52); match(STRING);
+			setState(54);
+			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			case 1:
 				{
-				setState(50); match(COMMA);
+				setState(53); match(COMMA);
 				}
+				break;
 			}
-
 			}
 		}
 		catch (RecognitionException re) {
@@ -406,21 +440,21 @@ public class HdbsynonymParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\168\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\2\3\2\3\2\3\2\3\3\3\3\3\4"+
-		"\3\4\3\4\6\4\32\n\4\r\4\16\4\33\3\4\3\4\3\5\3\5\3\5\3\5\6\5$\n\5\r\5\16"+
-		"\5%\3\5\3\5\5\5*\n\5\3\6\3\6\3\6\3\6\5\6\60\n\6\3\7\3\7\3\7\3\7\5\7\66"+
-		"\n\7\3\7\2\2\b\2\4\6\b\n\f\2\3\4\2\4\4\7\7\67\2\16\3\2\2\2\4\24\3\2\2"+
-		"\2\6\26\3\2\2\2\b\37\3\2\2\2\n+\3\2\2\2\f\61\3\2\2\2\16\17\7\5\2\2\17"+
-		"\20\5\4\3\2\20\21\7\n\2\2\21\22\5\6\4\2\22\23\7\6\2\2\23\3\3\2\2\2\24"+
-		"\25\7\b\2\2\25\5\3\2\2\2\26\31\7\5\2\2\27\32\5\b\5\2\30\32\5\f\7\2\31"+
-		"\27\3\2\2\2\31\30\3\2\2\2\32\33\3\2\2\2\33\31\3\2\2\2\33\34\3\2\2\2\34"+
-		"\35\3\2\2\2\35\36\7\6\2\2\36\7\3\2\2\2\37 \7\3\2\2 !\7\n\2\2!#\7\5\2\2"+
-		"\"$\5\n\6\2#\"\3\2\2\2$%\3\2\2\2%#\3\2\2\2%&\3\2\2\2&\'\3\2\2\2\')\7\6"+
-		"\2\2(*\7\t\2\2)(\3\2\2\2)*\3\2\2\2*\t\3\2\2\2+,\t\2\2\2,-\7\n\2\2-/\7"+
-		"\b\2\2.\60\7\t\2\2/.\3\2\2\2/\60\3\2\2\2\60\13\3\2\2\2\61\62\7\7\2\2\62"+
-		"\63\7\n\2\2\63\65\7\b\2\2\64\66\7\t\2\2\65\64\3\2\2\2\65\66\3\2\2\2\66"+
-		"\r\3\2\2\2\b\31\33%)/\65";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\16;\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\3\2\3\2\3\2\3\2\3\2\3\2\3\3"+
+		"\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\5\5!\n\5\3\6\3\6\3\6\3\6\6\6\'\n"+
+		"\6\r\6\16\6(\3\6\3\6\5\6-\n\6\3\7\3\7\3\7\3\7\5\7\63\n\7\3\b\3\b\3\b\3"+
+		"\b\5\b9\n\b\3\b\2\2\t\2\4\6\b\n\f\16\2\3\4\2\4\4\7\78\2\20\3\2\2\2\4\26"+
+		"\3\2\2\2\6\30\3\2\2\2\b \3\2\2\2\n\"\3\2\2\2\f.\3\2\2\2\16\64\3\2\2\2"+
+		"\20\21\7\5\2\2\21\22\5\4\3\2\22\23\7\n\2\2\23\24\5\6\4\2\24\25\7\6\2\2"+
+		"\25\3\3\2\2\2\26\27\7\b\2\2\27\5\3\2\2\2\30\31\7\5\2\2\31\32\5\b\5\2\32"+
+		"\33\7\t\2\2\33\34\5\b\5\2\34\35\7\6\2\2\35\7\3\2\2\2\36!\5\n\6\2\37!\5"+
+		"\16\b\2 \36\3\2\2\2 \37\3\2\2\2!\t\3\2\2\2\"#\7\3\2\2#$\7\n\2\2$&\7\5"+
+		"\2\2%\'\5\f\7\2&%\3\2\2\2\'(\3\2\2\2(&\3\2\2\2()\3\2\2\2)*\3\2\2\2*,\7"+
+		"\6\2\2+-\7\t\2\2,+\3\2\2\2,-\3\2\2\2-\13\3\2\2\2./\t\2\2\2/\60\7\n\2\2"+
+		"\60\62\7\b\2\2\61\63\7\t\2\2\62\61\3\2\2\2\62\63\3\2\2\2\63\r\3\2\2\2"+
+		"\64\65\7\7\2\2\65\66\7\n\2\2\668\7\b\2\2\679\7\t\2\28\67\3\2\2\289\3\2"+
+		"\2\29\17\3\2\2\2\7 (,\628";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

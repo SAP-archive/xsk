@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.3</version>
+            <version>${antlr4-runtime.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -45,7 +45,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.3</version>
+                <version>${antlr4-maven-plugin.version}</version>
                 <configuration>
                     <visitor>true</visitor>
                     <outputDirectory>${basedir}/src/main/java</outputDirectory>

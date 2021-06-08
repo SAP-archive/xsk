@@ -99,7 +99,7 @@ public class XSKODataUtils {
 
                     if (!entity.getWithoutPropertyProjections().isEmpty()) {
                         allEntityDbColumns.forEach(el -> {
-                            if (entity.getWithoutPropertyProjections().stream().filter(x -> x.equals(el.getName())).count() == 0) {
+                            if (entity.getWithoutPropertyProjections().stream().noneMatch(x -> x.equals(el.getName()))) {
                                 ODataProperty oDataProperty = new ODataProperty();
                                 oDataProperty.setName(el.getName());
                                 oDataProperty.setColumn(el.getName());
@@ -138,9 +138,7 @@ public class XSKODataUtils {
                     handlers.add(oDataHandler);
                 }
             });
-            handlers.forEach(el -> {
-                oDataEntityDefinition.getHandlers().add(el);
-            });
+            handlers.forEach(el -> oDataEntityDefinition.getHandlers().add(el));
 
             oDataDefinitionModel.getEntities().add(oDataEntityDefinition);
         }
@@ -150,7 +148,7 @@ public class XSKODataUtils {
     /**
      * Validate if provided multiplicity from xsodata can be mapped to olingo ones.
      */
-    private static void validateEdmMultiplicity(String actualValue, String assName) {
+    public static void validateEdmMultiplicity(String actualValue, String assName) {
         try {
             EdmMultiplicity.fromLiteral(actualValue);
         } catch (IllegalArgumentException ex) {

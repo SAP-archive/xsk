@@ -17,14 +17,16 @@ public class HdbschemaParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, STRING=2, EQ=3, SEMICOLON=4, COMMA=5, WS=6, ESC=7;
+		T__0=1, STRING=2, EQ=3, SEMICOLON=4, COMMA=5, WS=6, ESC=7, LINE_COMMENT=8, 
+		COMMENT=9;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'schema'", "STRING", "'='", "';'", "','", "WS", "ESC"
+		"<INVALID>", "'schema_name'", "STRING", "'='", "';'", "','", "WS", "ESC", 
+		"LINE_COMMENT", "COMMENT"
 	};
 	public static final int
-		RULE_hdbschemaDefinition = 0, RULE_property = 1, RULE_schemaProp = 2;
+		RULE_hdbschemaDefinition = 0, RULE_schemaNameProp = 1;
 	public static final String[] ruleNames = {
-		"hdbschemaDefinition", "property", "schemaProp"
+		"hdbschemaDefinition", "schemaNameProp"
 	};
 
 	@Override
@@ -47,11 +49,8 @@ public class HdbschemaParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class HdbschemaDefinitionContext extends ParserRuleContext {
-		public PropertyContext property(int i) {
-			return getRuleContext(PropertyContext.class,i);
-		}
-		public List<PropertyContext> property() {
-			return getRuleContexts(PropertyContext.class);
+		public SchemaNamePropContext schemaNameProp() {
+			return getRuleContext(SchemaNamePropContext.class,0);
 		}
 		public HdbschemaDefinitionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -75,23 +74,10 @@ public class HdbschemaParser extends Parser {
 	public final HdbschemaDefinitionContext hdbschemaDefinition() throws RecognitionException {
 		HdbschemaDefinitionContext _localctx = new HdbschemaDefinitionContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_hdbschemaDefinition);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(7); 
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			do {
-				{
-				{
-				setState(6); property();
-				}
-				}
-				setState(9); 
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			} while ( _la==T__0 );
+			setState(4); schemaNameProp();
 			}
 		}
 		catch (RecognitionException re) {
@@ -105,82 +91,39 @@ public class HdbschemaParser extends Parser {
 		return _localctx;
 	}
 
-	public static class PropertyContext extends ParserRuleContext {
-		public SchemaPropContext schemaProp() {
-			return getRuleContext(SchemaPropContext.class,0);
-		}
-		public PropertyContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_property; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof HdbschemaListener ) ((HdbschemaListener)listener).enterProperty(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof HdbschemaListener ) ((HdbschemaListener)listener).exitProperty(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof HdbschemaVisitor ) return ((HdbschemaVisitor<? extends T>)visitor).visitProperty(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final PropertyContext property() throws RecognitionException {
-		PropertyContext _localctx = new PropertyContext(_ctx, getState());
-		enterRule(_localctx, 2, RULE_property);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(11); schemaProp();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class SchemaPropContext extends ParserRuleContext {
+	public static class SchemaNamePropContext extends ParserRuleContext {
 		public TerminalNode SEMICOLON() { return getToken(HdbschemaParser.SEMICOLON, 0); }
 		public TerminalNode EQ() { return getToken(HdbschemaParser.EQ, 0); }
 		public TerminalNode STRING() { return getToken(HdbschemaParser.STRING, 0); }
-		public SchemaPropContext(ParserRuleContext parent, int invokingState) {
+		public SchemaNamePropContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_schemaProp; }
+		@Override public int getRuleIndex() { return RULE_schemaNameProp; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof HdbschemaListener ) ((HdbschemaListener)listener).enterSchemaProp(this);
+			if ( listener instanceof HdbschemaListener ) ((HdbschemaListener)listener).enterSchemaNameProp(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof HdbschemaListener ) ((HdbschemaListener)listener).exitSchemaProp(this);
+			if ( listener instanceof HdbschemaListener ) ((HdbschemaListener)listener).exitSchemaNameProp(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof HdbschemaVisitor ) return ((HdbschemaVisitor<? extends T>)visitor).visitSchemaProp(this);
+			if ( visitor instanceof HdbschemaVisitor ) return ((HdbschemaVisitor<? extends T>)visitor).visitSchemaNameProp(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final SchemaPropContext schemaProp() throws RecognitionException {
-		SchemaPropContext _localctx = new SchemaPropContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_schemaProp);
+	public final SchemaNamePropContext schemaNameProp() throws RecognitionException {
+		SchemaNamePropContext _localctx = new SchemaNamePropContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_schemaNameProp);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(13); match(T__0);
-			setState(14); match(EQ);
-			setState(15); match(STRING);
-			setState(16); match(SEMICOLON);
+			setState(6); match(T__0);
+			setState(7); match(EQ);
+			setState(8); match(STRING);
+			setState(9); match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -195,12 +138,10 @@ public class HdbschemaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\t\25\4\2\t\2\4\3"+
-		"\t\3\4\4\t\4\3\2\6\2\n\n\2\r\2\16\2\13\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4"+
-		"\2\2\5\2\4\6\2\2\22\2\t\3\2\2\2\4\r\3\2\2\2\6\17\3\2\2\2\b\n\5\4\3\2\t"+
-		"\b\3\2\2\2\n\13\3\2\2\2\13\t\3\2\2\2\13\f\3\2\2\2\f\3\3\2\2\2\r\16\5\6"+
-		"\4\2\16\5\3\2\2\2\17\20\7\3\2\2\20\21\7\5\2\2\21\22\7\4\2\2\22\23\7\6"+
-		"\2\2\23\7\3\2\2\2\3\13";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\13\16\4\2\t\2\4\3"+
+		"\t\3\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\2\2\4\2\4\2\2\13\2\6\3\2\2\2\4\b"+
+		"\3\2\2\2\6\7\5\4\3\2\7\3\3\2\2\2\b\t\7\3\2\2\t\n\7\5\2\2\n\13\7\4\2\2"+
+		"\13\f\7\6\2\2\f\5\3\2\2\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

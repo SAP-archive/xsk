@@ -17,19 +17,6 @@ public class HdbschemaBaseListener implements HdbschemaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSchemaProp(@NotNull HdbschemaParser.SchemaPropContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSchemaProp(@NotNull HdbschemaParser.SchemaPropContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterHdbschemaDefinition(@NotNull HdbschemaParser.HdbschemaDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -43,13 +30,13 @@ public class HdbschemaBaseListener implements HdbschemaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProperty(@NotNull HdbschemaParser.PropertyContext ctx) { }
+	@Override public void enterSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProperty(@NotNull HdbschemaParser.PropertyContext ctx) { }
+	@Override public void exitSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

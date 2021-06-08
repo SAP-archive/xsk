@@ -7,25 +7,25 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-engines-parent</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.6.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>XSK - Modules - Engines - Core</name>
     <artifactId>xsk-modules-engines-core</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>0.6.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-all</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
+            <version>0.6.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-api-all</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
+            <version>0.6.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -50,7 +50,7 @@
             <version>67.1</version>
         </dependency>
 
-        <dependency>
+       <!--  <dependency>
             <groupId>org.eclipse.xtext</groupId>
             <artifactId>org.eclipse.xtext.testing</artifactId>
             <version>${xtextVersion}</version>
@@ -75,7 +75,7 @@
             <artifactId>org.eclipse.xtext.xtext.generator</artifactId>
             <version>${xtextVersion}</version>
             <optional>true</optional>
-        </dependency>
+        </dependency> -->
 
         <dependency>
             <groupId>org.eclipse.dirigible</groupId>
@@ -179,25 +179,25 @@
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-hdbti</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
+            <version>0.6.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-			<version>0.4.0-SNAPSHOT</version>
+			<version>0.6.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
         <dependency>
 			<groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-			<version>0.4.0-SNAPSHOT</version>
+			<version>0.6.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-engines-hdb</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
+            <version>0.6.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

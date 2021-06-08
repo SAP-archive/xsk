@@ -41,7 +41,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(tableModel.getName());
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName());
     logger.info("Processing Drop Table: " + tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
       String sql = null;

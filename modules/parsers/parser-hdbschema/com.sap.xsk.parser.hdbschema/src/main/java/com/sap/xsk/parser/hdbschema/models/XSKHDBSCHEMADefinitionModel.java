@@ -11,36 +11,22 @@
  */
 package com.sap.xsk.parser.hdbschema.models;
 
-import com.sap.xsk.parser.hdbschema.exceptions.XSKHDBSchemaMissingPropertyException;
-import java.util.List;
-import java.util.Objects;
-
 public class XSKHDBSCHEMADefinitionModel {
 
-  private String schema;
+  private String schemaName;
 
-  public String getSchema() {
-    return schema;
+  public String getSchemaName() {
+    return schemaName;
   }
 
-  public void setSchema(String schema) {
-    this.schema = schema;
-  }
-
-  public void checkForAllMandatoryFieldsPresence() throws Exception {
-    checkPresence(schema, "schema");
-  }
-
-  private <T> void checkPresence(T field, String fieldName) {
-    if (Objects.isNull(field)) {
-      throw new XSKHDBSchemaMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
-    }
+  public void setSchemaName(String schemaName) {
+    this.schemaName = schemaName;
   }
 
   @Override
   public String toString() {
     return "HdbschemaDefinitionModel{" +
-        "schema='" + schema + '\'' +
+        "schema_name='" + schemaName + '\'' +
         '}';
   }
 }

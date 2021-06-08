@@ -23,8 +23,8 @@ import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceBaseVisitor;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceLexer;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser;
-import com.sap.xsk.parser.hdbsequence.custom.CustomDeserializers;
 import com.sap.xsk.parser.hdbsequence.custom.HdbsequenceVisitor;
+import com.sap.xsk.parser.hdbsequence.custom.XSKHDBSEQUENCEModelAdapter;
 import com.sap.xsk.parser.hdbsequence.custom.XSKHDBSEQUENCESyntaxErrorListener;
 import com.sap.xsk.parser.hdbsequence.models.XSKHDBSEQUENCEModel;
 import com.sap.xsk.utils.XSKConstants;
@@ -93,7 +93,7 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     HdbsequenceBaseVisitor<JsonElement> visitor = new HdbsequenceVisitor();
     JsonElement parsedResult = visitor.visit(parseTree);
     Gson gson = new GsonBuilder()
-        .registerTypeAdapter(XSKHDBSEQUENCEModel.class, new CustomDeserializers.XSKHDBSEQUENCEModelAdapter())
+        .registerTypeAdapter(XSKHDBSEQUENCEModel.class, new XSKHDBSEQUENCEModelAdapter())
         .create();
     XSKHDBSEQUENCEModel antlr4Model = gson.fromJson(parsedResult, XSKHDBSEQUENCEModel.class);
     ModelMapper modelMapper = new ModelMapper();

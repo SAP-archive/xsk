@@ -11,14 +11,11 @@
  */
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import com.sap.xsk.parser.hdbschema.core.HdbschemaLexer;
 import com.sap.xsk.parser.hdbschema.core.HdbschemaParser;
 import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMACoreListener;
-import com.sap.xsk.parser.hdbschema.exceptions.XSKHDBSchemaMissingPropertyException;
 import com.sap.xsk.parser.hdbschema.models.XSKHDBSCHEMADefinitionModel;
 import java.nio.charset.StandardCharsets;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -46,13 +43,12 @@ public class XSKHDBSCHEMACoreListenerTest {
     parseTreeWalker.walk(hdbschemaCoreListener, parseTree);
 
     XSKHDBSCHEMADefinitionModel model = hdbschemaCoreListener.getModel();
-    model.checkForAllMandatoryFieldsPresence();
     assertNotNull(model);
     assertEquals(hdbschemaParser.getNumberOfSyntaxErrors(), 0);
-    assertEquals("MYSCHEMA", model.getSchema());
+    assertEquals("MYSCHEMA", model.getSchemaName());
   }
 
-  @Test(expected = XSKHDBSchemaMissingPropertyException.class)
+  @Test
   public void parseHdbschemaFileWithSyntaxErrorExceptionThrown() throws Exception {
     String hdbschemaSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBSCHEMACoreListenerTest.class.getResourceAsStream("/sample_with_errors.hdbschema"), StandardCharsets.UTF_8);
@@ -68,8 +64,7 @@ public class XSKHDBSCHEMACoreListenerTest {
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
     parseTreeWalker.walk(hdbschemaCoreListener, parseTree);
 
-    XSKHDBSCHEMADefinitionModel model = hdbschemaCoreListener.getModel();
+    System.out.println(hdbschemaParser.getNumberOfSyntaxErrors());
     assertEquals(hdbschemaParser.getNumberOfSyntaxErrors(), 1);
-    model.checkForAllMandatoryFieldsPresence();
   }
 }

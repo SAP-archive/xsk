@@ -12,13 +12,6 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface HdbschemaVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link HdbschemaParser#schemaProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSchemaProp(@NotNull HdbschemaParser.SchemaPropContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link HdbschemaParser#hdbschemaDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -26,9 +19,9 @@ public interface HdbschemaVisitor<T> extends ParseTreeVisitor<T> {
 	T visitHdbschemaDefinition(@NotNull HdbschemaParser.HdbschemaDefinitionContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link HdbschemaParser#property}.
+	 * Visit a parse tree produced by {@link HdbschemaParser#schemaNameProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProperty(@NotNull HdbschemaParser.PropertyContext ctx);
+	T visitSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx);
 }

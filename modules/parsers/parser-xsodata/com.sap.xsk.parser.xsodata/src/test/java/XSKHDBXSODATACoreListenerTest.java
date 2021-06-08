@@ -10,21 +10,43 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import com.sap.xsk.parser.xsodata.core.HdbxsodataLexer;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataParser;
 import com.sap.xsk.parser.xsodata.custom.XSKHDBXSODATACoreListener;
-import com.sap.xsk.parser.xsodata.model.*;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAggregation;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAggregationType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociationTable;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATABinding;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATABindingRole;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATABindingType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEvent;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAModification;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAModificationSpec;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAMultiplicityType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATANavigation;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATARepositoryObject;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAService;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATASetting;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAStorage;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAStorageType;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-
-import static org.junit.Assert.*;
 
 public class XSKHDBXSODATACoreListenerTest {
     private final XSKHDBXSODATACoreListener listener = new XSKHDBXSODATACoreListener();
@@ -245,41 +267,41 @@ public class XSKHDBXSODATACoreListenerTest {
 
         XSKHDBXSODATAEntity actualEntity = new XSKHDBXSODATAEntity();
         actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("sample.odata::table"));
-        XSKHDBXSODATAModification updateModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.UPDATE);
+        XSKHDBXSODATAModification updateModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.UPDATE);
         updateModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Arrays.asList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.BEFORE, "sample.odata::beforeMethod"), new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.PRECOMMIT, "sample.odata::beforeMethod"))));
-        XSKHDBXSODATAModification deleteModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.DELETE);
+        XSKHDBXSODATAModification deleteModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.DELETE);
         deleteModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.AFTER, "sample.odata::afterMethod"))));
-        XSKHDBXSODATAModification createModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.CREATE);
+        XSKHDBXSODATAModification createModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.CREATE);
         createModification.setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
         actualEntity.setModifications(Arrays.asList(updateModification, deleteModification, createModification));
         assertEquals(model.getEntities().get(0), actualEntity);
 
         actualEntity = new XSKHDBXSODATAEntity();
         actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("sample.odata::table"));
-        createModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.CREATE);
+        createModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.CREATE);
         createModification.setSpecification(new XSKHDBXSODATAModificationSpec().setModificationAction("sample.odata::createMethod").setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.AFTER, "sample.odata::afterMethod"))));
-        updateModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.UPDATE);
+        updateModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.UPDATE);
         updateModification.setSpecification(new XSKHDBXSODATAModificationSpec().setModificationAction("sample.odata::updateMethod"));
-        deleteModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.DELETE);
+        deleteModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.DELETE);
         deleteModification.setSpecification(new XSKHDBXSODATAModificationSpec().setModificationAction("sample.odata::deleteMethod"));
         actualEntity.setModifications(Arrays.asList(createModification, updateModification, deleteModification));
         assertEquals(model.getEntities().get(1), actualEntity);
 
         actualEntity = new XSKHDBXSODATAEntity();
         actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("sample.odata::table"));
-        createModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.CREATE);
+        createModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.CREATE);
         createModification.setSpecification(new XSKHDBXSODATAModificationSpec().setModificationAction("sample.odata::createMethod"));
-        updateModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.UPDATE);
+        updateModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.UPDATE);
         updateModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.PRECOMMIT, "sample.odata::precommitMethod"))));
-        deleteModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.DELETE).setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
+        deleteModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.DELETE).setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
         actualEntity.setModifications(Arrays.asList(createModification, updateModification, deleteModification));
         assertEquals(model.getEntities().get(2), actualEntity);
 
         actualEntity = new XSKHDBXSODATAEntity();
         actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("sample.odata::table"));
-        createModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.CREATE).setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
-        updateModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.UPDATE).setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
-        deleteModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.DELETE).setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
+        createModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.CREATE).setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
+        updateModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.UPDATE).setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
+        deleteModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.DELETE).setSpecification(new XSKHDBXSODATAModificationSpec().setForbidden(true));
         actualEntity.setModifications(Arrays.asList(createModification, updateModification, deleteModification));
         assertEquals(model.getEntities().get(3), actualEntity);
     }
@@ -314,11 +336,11 @@ public class XSKHDBXSODATACoreListenerTest {
         assertEquals(model.getAssociations().get(0), actualAssociation);
 
 
-        XSKHDBXSODATAModification updateModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.UPDATE);
+        XSKHDBXSODATAModification updateModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.UPDATE);
         updateModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.BEFORE, "sample.odata::updateMethod"))));
-        XSKHDBXSODATAModification deleteModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.DELETE);
+        XSKHDBXSODATAModification deleteModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.DELETE);
         deleteModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.BEFORE, "sample.odata::deleteMethod"))));
-        XSKHDBXSODATAModification createModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.CREATE);
+        XSKHDBXSODATAModification createModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.CREATE);
         createModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.BEFORE, "sample.odata::createMethod"))));
         table.setModifications(Arrays.asList(deleteModification, createModification, updateModification));
         actualAssociation.setAssociationTable(table);
@@ -337,7 +359,7 @@ public class XSKHDBXSODATACoreListenerTest {
         dependent.setBindingRole(new XSKHDBXSODATABindingRole().setBindingType(XSKHDBXSODATABindingType.DEPENDENT).setKeys(Collections.singletonList("ID_A")));
         dependent.setMultiplicityType(XSKHDBXSODATAMultiplicityType.MANY);
         actualAssociation.setDependent(dependent);
-        updateModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.UPDATE).setSpecification(new XSKHDBXSODATAModificationSpec().setModificationAction("sap.test:oDataExtendedRules.xsjslib::associationToConditions"));
+        updateModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.UPDATE).setSpecification(new XSKHDBXSODATAModificationSpec().setModificationAction("sap.test:oDataExtendedRules.xsjslib::associationToConditions"));
         table.setModifications(Arrays.asList(deleteModification, createModification, updateModification));
         actualAssociation.setStorage(new XSKHDBXSODATAStorage().setStorageType(XSKHDBXSODATAStorageType.STORAGE_ON_DEPENDENT).setModifications(Collections.singletonList(updateModification)));
         assertEquals(model.getAssociations().get(2), actualAssociation);
@@ -387,11 +409,11 @@ public class XSKHDBXSODATACoreListenerTest {
         dependent.setBindingRole(new XSKHDBXSODATABindingRole().setBindingType(XSKHDBXSODATABindingType.DEPENDENT).setKeys(Collections.singletonList("ID_B")));
         dependent.setMultiplicityType(XSKHDBXSODATAMultiplicityType.MANY);
         actualAssociation.setDependent(dependent);
-        updateModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.UPDATE);
+        updateModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.UPDATE);
         updateModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.BEFORE, "sample.odata::updateMethod"))));
-        deleteModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.DELETE);
+        deleteModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.DELETE);
         deleteModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.BEFORE, "sample.odata::deleteMethod"))));
-        createModification = new XSKHDBXSODATAModification().setType(XSKHDBXSODATAModificationType.CREATE);
+        createModification = new XSKHDBXSODATAModification().setMethod(XSKHDBXSODATAHandlerMethod.CREATE);
         createModification.setSpecification(new XSKHDBXSODATAModificationSpec().setEvents(Collections.singletonList(new XSKHDBXSODATAEvent(XSKHDBXSODATAEventType.BEFORE, "sample.odata::createMethod"))));
         actualAssociation.setModifications(Arrays.asList(deleteModification, createModification, updateModification));
         assertEquals(model.getAssociations().get(5), actualAssociation);

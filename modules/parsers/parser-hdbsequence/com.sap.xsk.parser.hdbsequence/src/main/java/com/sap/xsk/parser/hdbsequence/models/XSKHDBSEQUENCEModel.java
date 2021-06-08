@@ -12,12 +12,14 @@
 package com.sap.xsk.parser.hdbsequence.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceMissingPropertyException;
 import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class XSKHDBSEQUENCEModel {
+
+  Set<String> missingProps = new HashSet<>();
 
   String schema;
   Integer increment_by;
@@ -32,42 +34,21 @@ public class XSKHDBSEQUENCEModel {
   @SerializedName(value = HDBSequenceConstants.PUBLIC_PROPERTY)
   Boolean publicc;
 
-  public XSKHDBSEQUENCEModel() {
-  }
-
-  public XSKHDBSEQUENCEModel(String schema, Integer increment_by, Integer start_with, Integer maxvalue,
-      Boolean nomaxvalue, Integer minvalue, Boolean nominvalue, Boolean cycles, String reset_by,
-      Boolean publicc)
-      throws XSKHDBSequenceMissingPropertyException {
-    checkMandatoryFieldsPresence(schema, increment_by, start_with, nomaxvalue, nominvalue, publicc);
-    this.schema = schema;
-    this.increment_by = increment_by;
-    this.start_with = start_with;
-    this.maxvalue = maxvalue;
-    this.nomaxvalue = nomaxvalue;
-    this.minvalue = minvalue;
-    this.nominvalue = nominvalue;
-    this.cycles = cycles;
-    this.reset_by = reset_by;
-    this.publicc = publicc;
-  }
-
-  private void checkMandatoryFieldsPresence(String schema, Integer increment_by, Integer start_with,
-      Boolean nomaxvalue, Boolean nominvalue, Boolean publicc) throws XSKHDBSequenceMissingPropertyException {
-    checkPresence(schema, HDBSequenceConstants.SCHEMA_PROPERTY);
-    checkPresence(increment_by, HDBSequenceConstants.INCREMENT_BY_PROPERTY);
-    checkPresence(start_with, HDBSequenceConstants.START_WITH_PROPERTY);
-    checkPresence(nomaxvalue, HDBSequenceConstants.NOMAXVALUE_PROPERTY);
-    checkPresence(nominvalue, HDBSequenceConstants.NOMINVALUE_PROPERTY);
-    checkPresence(publicc, HDBSequenceConstants.PUBLIC_PROPERTY);
-
-  }
-
-  private <T> void checkPresence(T field, String fieldName) throws XSKHDBSequenceMissingPropertyException {
+  private <T> void checkPresence(T field, String fieldName) {
     if (Objects.isNull(field)) {
-      throw new XSKHDBSequenceMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
-
+      this.missingProps.add(fieldName);
     }
+  }
+
+  public boolean hasMandatoryFieldsMissing() {
+
+    checkPresence(this.schema, HDBSequenceConstants.SCHEMA_PROPERTY);
+    checkPresence(this.increment_by, HDBSequenceConstants.INCREMENT_BY_PROPERTY);
+    checkPresence(this.start_with, HDBSequenceConstants.START_WITH_PROPERTY);
+    checkPresence(this.nomaxvalue, HDBSequenceConstants.NOMAXVALUE_PROPERTY);
+    checkPresence(this.nominvalue, HDBSequenceConstants.NOMINVALUE_PROPERTY);
+    checkPresence(this.publicc, HDBSequenceConstants.PUBLIC_PROPERTY);
+    return (this.missingProps.size() > 0) ? true : false;
   }
 
   public String getSchema() {
@@ -148,5 +129,9 @@ public class XSKHDBSEQUENCEModel {
 
   public void setPublicc(Boolean publicc) {
     this.publicc = publicc;
+  }
+
+  public Set<String> getMissingProps() {
+    return missingProps;
   }
 }

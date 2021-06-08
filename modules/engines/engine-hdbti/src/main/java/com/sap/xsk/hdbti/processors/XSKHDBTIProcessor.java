@@ -130,8 +130,8 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
 
   private CSVFormat createCSVFormat(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition)
       throws XSKTableImportException {
-    if (tableImportConfigurationDefinition.getDelimField() != null && (tableImportConfigurationDefinition.getDelimField() != ","
-        && tableImportConfigurationDefinition.getDelimField() != ";")) {
+    if (tableImportConfigurationDefinition.getDelimField() != null && (!tableImportConfigurationDefinition.getDelimField().equals(",")
+        && !tableImportConfigurationDefinition.getDelimField().equals(";"))) {
       throw new XSKTableImportException("Only ';' or ',' characters are supported as delimiters for csv files.");
     } else if (tableImportConfigurationDefinition.getDelimEnclosing() != null
         && tableImportConfigurationDefinition.getDelimEnclosing().length() > 1) {

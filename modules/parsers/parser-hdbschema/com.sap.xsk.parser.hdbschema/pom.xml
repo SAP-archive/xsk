@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.3</version>
+            <version>${antlr4-runtime.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

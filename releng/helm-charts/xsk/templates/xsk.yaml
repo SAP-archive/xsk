@@ -1,0 +1,198 @@
+{{- if .Values.create.application }}
+{{- if .Values.create.secret }}
+{{- if .Values.hana.url }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.hana.secretName }}
+type: Opaque
+stringData:
+  DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES: HANA
+  DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT: HANA
+  DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE: "true"
+  DIRIGIBLE_DATABASE_PROVIDER: custom
+  DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE: "false"
+  DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE: "false"
+  DIRIGIBLE_SCHEDULER_DATABASE_DRIVER: com.sap.db.jdbc.Driver
+  DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD: {{ .Values.hana.password }}
+  DIRIGIBLE_SCHEDULER_DATABASE_URL: jdbc:sap://{{ .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  DIRIGIBLE_SCHEDULER_DATABASE_USER: {{ .Values.hana.username }}
+  HANA_DRIVER: com.sap.db.jdbc.Driver
+  HANA_PASSWORD: {{ .Values.hana.password }}
+  HANA_URL: jdbc:sap://{{ .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  HANA_USERNAME: {{ .Values.hana.username }}
+---
+{{- end }}
+{{- end }}
+{{- if .Values.application.fastBootstrap }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fast-boostrap-secret
+type: Opaque
+stringData:
+  DIRIGIBLE_JOB_DEFAULT_TIMEOUT: "1"
+  DIRIGIBLE_SCHEDULER_MEMORY_STORE: "true"
+---
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "xsk.fullname" . }}
+  labels:
+    {{- include "xsk.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "xsk.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "xsk.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.docker.secretName }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+          {{- if .Values.hana.secretName }}
+            - secretRef:
+                name: {{ .Values.hana.secretName }}
+          {{- end }}
+          {{- if .Values.application.fastBootstrap }}
+            - secretRef:
+                name: fast-boostrap-secret
+          {{- end }}
+          env:
+            {{- if .Values.kyma.host }}
+            - name: DIRIGIBLE_HOST
+              value: https://{{ .Release.Name }}.{{ .Values.kyma.host }}
+            {{- end }}
+            {{- if .Values.application.homeUrl }}
+            - name: DIRIGIBLE_HOME_URL
+              value: {{ .Values.application.homeUrl }}
+            {{- end }}
+          image: {{ .Values.application.image }}
+          imagePullPolicy: {{ .Values.application.imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 10
+            periodSeconds: 10
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            failureThreshold: 10
+            periodSeconds: 10
+            httpGet:
+              path: /services/v4/healthcheck
+              port: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "xsk.fullname" . }}
+  labels:
+    {{- include "xsk.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "xsk.selectorLabels" . | nindent 4 }}
+---
+
+{{- if .Values.kyma.host }}
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: {{ include "xsk.fullname" . }}
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+  - accessStrategies:
+    - config: {}
+      handler: noop
+    methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - HEAD
+    path: /.*
+  service:
+    host: {{ .Release.Name }}
+    name: {{ include "xsk.fullname" . }}
+    port: 8080
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: xsuaa-{{ include "xsk.fullname" . }}
+spec:
+  clusterServiceClassExternalName: xsuaa
+  clusterServiceClassRef:
+    name: xsuaa
+  clusterServicePlanExternalName: broker
+  externalID: {{ uuidv4 }}
+  parameters:
+    xsappname: {{ include "xsk.fullname" . }}-xsuaa
+    oauth2-configuration:
+      redirect-uris:
+      - https://{{ .Release.Name }}.{{ .Values.kyma.host }}
+      token-validity: 7200
+    role-collections:
+    - description: XSK Developer
+      name: {{ include "xsk.fullname" . }}
+      role-template-references:
+      - $XSAPPNAME.Developer
+      - $XSAPPNAME.Operator
+    role-templates:
+    - description: Developer related roles
+      name: Developer
+      scope-references:
+      - $XSAPPNAME.Developer
+    - description: Operator related roles
+      name: Operator
+      scope-references:
+      - $XSAPPNAME.Operator
+    scopes:
+    - description: Developer scope
+      name: $XSAPPNAME.Developer
+    - description: Operator scope
+      name: $XSAPPNAME.Operator
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: xsuaa-{{ include "xsk.fullname" . }}-binding
+spec:
+  externalID: {{ uuidv4 }}
+  instanceRef:
+    name: xsuaa-{{ include "xsk.fullname" . }}
+  parameters: {}
+  secretName: xsuaa-{{ include "xsk.fullname" . }}-binding
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: xsuaa-{{ include "xsk.fullname" . }}-usage
+spec:
+  parameters:
+    envPrefix:
+      name: ""
+  serviceBindingRef:
+    name: xsuaa-{{ include "xsk.fullname" . }}-binding
+  usedBy:
+    kind: deployment
+    name: {{ include "xsk.fullname" . }}
+{{- end }}
+{{- end }}

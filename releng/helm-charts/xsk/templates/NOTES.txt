@@ -1,0 +1,27 @@
+{{- if .Values.install.clusterBuilder }}
+Kpack XSK ClusterStore and ClusterStack installed. To create image Builder execute the following command:
+
+    helm install xsk-image-builder xsk/xsk \
+    --set install.imageBuilder=true \
+    --set imageBuilder.repository=<your-image-builder-docker-repository>
+
+{{- end }}
+
+{{- if .Values.install.imageBuilder }}
+
+Kpack XSK Builder installed. To trigger Docker image build, execute the following command: https://github.com/SAP/xsk/tree/main/releng/buildpacks/xsk
+
+{{- end }}
+
+{{- if .Values.create.image }}
+
+Docker image will be published in the following repository: https://hub.docker.com/r/{{ .Values.image.repository }}
+
+{{- end }}
+
+
+{{- if .Values.create.application }}
+
+Application will be deployed and accessible via the following URL: https://{{ .Release.Name }}.{{ .Values.kyma.host }}
+
+{{- end }}

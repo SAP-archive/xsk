@@ -1,0 +1,39 @@
+#!/bin/bash
+
+echo "Building ..."
+
+echo "List what we have in the working directory ..."
+
+ls -lah
+
+echo "Create Tomcat dir in working dir"
+
+mkdir ./tomcat
+
+echo "Copy Tomcat that comes from the stack to the current directory"
+
+cp -r /usr/local/tomcat/* ./tomcat/
+
+echo "List what we have in the newly copied Tomcat dir"
+
+ls -lah ./tomcat/
+
+echo "Copy the war file to the Tomcat copy"
+
+cp *.war ./tomcat/webapps/
+
+echo "List what we have in webapps folder of Tomcat copy"
+
+ls -lah ./tomcat/webapps
+
+# 1. GET ARGS
+layersdir=$1
+
+# ========== ADDED ===========
+# 8. SET DEFAULT START COMMAND
+cat > "$layersdir/launch.toml" <<EOL
+[[processes]]
+type = "web"
+command = "./tomcat/bin/catalina.sh run"
+EOL
+

@@ -18,14 +18,6 @@ public class HdbschemaBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSchemaProp(@NotNull HdbschemaParser.SchemaPropContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitHdbschemaDefinition(@NotNull HdbschemaParser.HdbschemaDefinitionContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -34,5 +26,5 @@ public class HdbschemaBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProperty(@NotNull HdbschemaParser.PropertyContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx) { return visitChildren(ctx); }
 }

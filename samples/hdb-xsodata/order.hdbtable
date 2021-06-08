@@ -1,0 +1,8 @@
+table.schemaName = "HELLO_ODATA";
+table.tableType = COLUMNSTORE; 
+table.columns = [
+	{name = "ID"; sqlType = INTEGER; nullable = false;},
+	{name = "ID2"; sqlType = INTEGER; nullable = false;},
+	{name = "CustomerID"; sqlType = INTEGER; nullable = true;}];
+table.primaryKey.pkcolumns = ["ID", "ID2"];
+

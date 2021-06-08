@@ -1,11 +1,13 @@
 COMMA=5
+LINE_COMMENT=8
 ESC=7
 SEMICOLON=4
 STRING=2
 T__0=1
 EQ=3
 WS=6
+COMMENT=9
 '='=3
 ','=5
 ';'=4
-'schema'=1
+'schema_name'=1

@@ -9,17 +9,6 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface HdbschemaListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link HdbschemaParser#schemaProp}.
-	 * @param ctx the parse tree
-	 */
-	void enterSchemaProp(@NotNull HdbschemaParser.SchemaPropContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HdbschemaParser#schemaProp}.
-	 * @param ctx the parse tree
-	 */
-	void exitSchemaProp(@NotNull HdbschemaParser.SchemaPropContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link HdbschemaParser#hdbschemaDefinition}.
 	 * @param ctx the parse tree
 	 */
@@ -31,13 +20,13 @@ public interface HdbschemaListener extends ParseTreeListener {
 	void exitHdbschemaDefinition(@NotNull HdbschemaParser.HdbschemaDefinitionContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link HdbschemaParser#property}.
+	 * Enter a parse tree produced by {@link HdbschemaParser#schemaNameProp}.
 	 * @param ctx the parse tree
 	 */
-	void enterProperty(@NotNull HdbschemaParser.PropertyContext ctx);
+	void enterSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HdbschemaParser#property}.
+	 * Exit a parse tree produced by {@link HdbschemaParser#schemaNameProp}.
 	 * @param ctx the parse tree
 	 */
-	void exitProperty(@NotNull HdbschemaParser.PropertyContext ctx);
+	void exitSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx);
 }

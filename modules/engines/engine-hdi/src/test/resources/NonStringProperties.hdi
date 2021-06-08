@@ -1,0 +1,11 @@
+{
+    "configuration": 12,
+    "users": [5],
+    "group": ["XSK_HDI_EXT_GROUP"],
+    "container": "XSK_HDI_EXT",
+    "deploy": [
+    	"/hdi-ext/Customers.hdbsynonym",
+    	"/hdi-ext/CustomersCalcView.hdbcalculationview"
+    ],
+    "undeploy": 12
+}

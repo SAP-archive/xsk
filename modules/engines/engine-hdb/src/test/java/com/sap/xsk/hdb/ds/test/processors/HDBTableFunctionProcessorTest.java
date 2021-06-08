@@ -56,8 +56,6 @@ public class HDBTableFunctionProcessorTest extends AbstractGuiceTest {
   private Connection mockConnection;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SqlFactory mockSqlfactory;
-//  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-//  private DefaultSqlDialect mockSqlDialect;
 
   @Mock
   private PreparedStatement mockStatement;

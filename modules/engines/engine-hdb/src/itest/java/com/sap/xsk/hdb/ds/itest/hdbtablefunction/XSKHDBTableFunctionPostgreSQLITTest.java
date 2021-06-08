@@ -71,13 +71,6 @@ public class XSKHDBTableFunctionPostgreSQLITTest {
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
-//    List<String> synonyms = new ArrayList<>();
-//    ResultSet rs = stmt.executeQuery("SELECT  * FROM  pg_class WHERE  relname = 'hdbtablefunction-itest::SampleHanaTableFunction'");
-//    while (rs.next()) {
-//      synonyms.add(rs.getString("hdbtablefunction-itest::SampleHanaTableFunction"));
-//    }
-//    assertEquals(0, synonyms.size());
-//    stmt.executeUpdate("DROP TABLE \"public\".\"hdbtablefunction-itest::SampleHanaTable\"");
   }
 
 }

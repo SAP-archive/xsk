@@ -33,6 +33,8 @@ import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.DefaultSqlDialect;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
+import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,7 +69,7 @@ public class HDBProcedureProcessorTest extends AbstractGuiceTest {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
@@ -87,12 +89,32 @@ public class HDBProcedureProcessorTest extends AbstractGuiceTest {
     verify(processorSpy, times(1)).executeSql(sql, mockConnection);
   }
 
+  @Test(expected = IllegalStateException.class)
+  public void executeCreateProcedurePostgresFailed() throws IOException, SQLException {
+    //PowerMock do not support deep stub calls
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+
+    HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
+    String hdbprocedureSample = org.apache.commons.io.IOUtils
+        .toString(XSKViewParserTest.class.getResourceAsStream("/OrderProcedure.hdbprocedure"), StandardCharsets.UTF_8);
+
+    XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
+    model.setContent(hdbprocedureSample);
+    model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.PROCEDURE)).thenReturn(false);
+
+    processorSpy.execute(mockConnection, model);
+
+  }
+
   @Test
   public void executeDropProcedureSuccessfully() throws SQLException {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(mockSqlDialect);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);
@@ -107,5 +129,22 @@ public class HDBProcedureProcessorTest extends AbstractGuiceTest {
     processorSpy.execute(mockConnection, model);
 
     verify(processorSpy, times(1)).executeSql(sql, mockConnection);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void executeDropProcedurePostgresFailed() throws SQLException {
+    //PowerMock do not support deep stub calls
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+
+    HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);
+
+    XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
+    model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.PROCEDURE)).thenReturn(true);
+
+    processorSpy.execute(mockConnection, model);
   }
 }

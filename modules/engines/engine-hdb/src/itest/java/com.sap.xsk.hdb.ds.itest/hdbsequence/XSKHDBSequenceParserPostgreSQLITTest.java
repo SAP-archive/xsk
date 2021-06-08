@@ -18,7 +18,7 @@ import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;

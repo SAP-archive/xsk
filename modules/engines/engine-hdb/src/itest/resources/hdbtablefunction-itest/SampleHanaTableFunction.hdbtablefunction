@@ -1,0 +1,12 @@
+FUNCTION "DBADMIN"."hdbtablefunction-itest::SampleHanaTableFunction" ()
+	RETURNS TABLE (
+		"ID" INTEGER,
+		"NAME" NVARCHAR
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER AS
+BEGIN
+
+RETURN  SELECT "ID", "NAME" FROM "hdbtablefunction-itest::SampleHanaTable";
+
+END;

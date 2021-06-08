@@ -1,7 +1,7 @@
 # Stack that will be used by the builder
 [stack]
-id = "io.buildpacks.stacks.bionic"
+id = "com.sap.kneo.java"
 # This image is used at runtime
-run-image = "radiatorspring/neo-stack-run"
+run-image = "dirigiblelabs/kneo-java-stack-run"
 # This image is used at build-time
-build-image = "radiatorspring/neo-stack-build"
+build-image = "dirigiblelabs/kneo-java-stack-build"

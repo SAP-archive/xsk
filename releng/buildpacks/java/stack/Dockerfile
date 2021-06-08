@@ -4,8 +4,8 @@ FROM tomcat:8.5-jdk8-openjdk-slim as base
 # 2. Set required CNB information
 ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000
-ENV CNB_STACK_ID="io.buildpacks.stacks.bionic"
-LABEL io.buildpacks.stack.id="io.buildpacks.stacks.bionic"
+ENV CNB_STACK_ID="com.sap.kneo.java"
+LABEL io.buildpacks.stack.id="com.sap.kneo.java"
 LABEL io.buildpacks.stack.mixins: ["build:unzip"]
 ARG TMP=/tmp
 ARG tomcatdir=/usr/local/tomcat
@@ -47,7 +47,7 @@ RUN mkdir -p ${TMP} \
 ENV PATH=${TMP}/sapmachine-jdk-11.0.11/bin:$PATH
 ENV JAVA_HOME="${TMP}"/sapmachine-jdk-11.0.11
 RUN chmod -R 777 /usr/local/tomcat
-ENV CATALINA_HOME="/layers/radiatorspring_neo-buildpack/tomcat"
+ENV CATALINA_HOME="/layers/dirigiblelabs_kneo-java-buildpack/tomcat"
 
 # 6. Set user and group (as declared in base image)
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
@@ -71,17 +71,9 @@ RUN sed -i /'<Context>'/c'<Context>\n<Listener className=\"com.sap.xsk.listener.
 
 RUN wget --quiet -O "${tomcatdir}"/lib/ngdbc-2.8.12.jar https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar
 RUN wget --quiet -O "${tomcatdir}"/lib/slf4j-api-1.7.5.jar https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar
-RUN wget --quiet -O "${tomcatdir}"/lib/main.zip https://github.com/SAP/xsk/archive/refs/heads/main.zip
 
-RUN unzip -qo "${tomcatdir}"/lib/main.zip -d "${tomcatdir}"/lib/
+COPY xsk-modules-basis-datasource-0.4.0-SNAPSHOT.jar "${tomcatdir}"/lib
 
-RUN cd "${tomcatdir}"/lib/xsk-main/modules/basis/basis-datasource \
-      && mvn clean install -DskipTests \
-      && mv target/xsk-modules-basis-datasource-0.4.0-SNAPSHOT.jar ../../../.. \
-    && cd -
-
-RUN rm "${tomcatdir}"/lib/main.zip
-RUN rm -rf "${tomcatlayer}"/lib/xsk-main
 # ========== ADDED ===========
 # 9. Set user and group (as declared in base image)
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}

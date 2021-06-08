@@ -5,6 +5,6 @@ metadata:
 spec:
   id: "com.sap.kneo.xsk"
   buildImage:
-    image: "radiatorspring/neo-stack-build"
+    image: "dirigiblelabs/kneo-java-stack-build"
   runImage:
-    image: "radiatorspring/neo-stack-run"
+    image: "dirigiblelabs/kneo-java-stack-run"

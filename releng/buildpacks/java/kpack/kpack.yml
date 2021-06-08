@@ -5,27 +5,27 @@ metadata:
   name: kneo-generic-store
 spec:
   sources:
-    - image: radiatorspring/neo-buildpack
+    - image: dirigiblelabs/kneo-java-buildpack
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack
 metadata:
   name: kneo-generic-stack
 spec:
-  id: "io.buildpacks.stacks.bionic"
+  id: "com.sap.kneo.java"
   buildImage:
-    image: "radiatorspring/neo-stack-build"
+    image: "dirigiblelabs/kneo-java-stack-build"
   runImage:
-    image: "radiatorspring/neo-stack-run"
+    image: "dirigiblelabs/kneo-java-stack-run"
 ---
 apiVersion: kpack.io/v1alpha1
 kind: Builder
 metadata:
-  name: neo-builder
+  name: kneo-builder
   namespace: default
 spec:
   serviceAccount: tutorial-service-account
-  tag: radiatorspring/neo-app
+  tag: dirigiblelabs/neo-builder
   stack:
     name: kneo-generic-stack
     kind: ClusterStack
@@ -34,4 +34,4 @@ spec:
     kind: ClusterStore
   order:
     - group:
-        - id: radiatorspring/neo-buildpack
+        - id: dirigiblelabs/kneo-java-buildpack

@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.hdb.ds.itest.hdbprocedure;
 
 import com.google.inject.Guice;
@@ -68,10 +79,9 @@ public class XSKHDBProcedureParserHanaITTest {
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
-
-    ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('hdbprocedure-itest::SampleHanaProcedure')");
+    ResultSet rs = metaData.getProcedures(null,null, "hdbprocedure-itest::SampleHanaProcedure");
     assertTrue(rs.next());
-    assertEquals(1, rs.getInt("rawsCount"));
+
     stmt.executeUpdate(String.format("DROP PROCEDURE %s", XSKHDBUtils
         .escapeArtifactName(connection, "hdbprocedure-itest::SampleHanaProcedure")));
     stmt.executeUpdate(String.format("DROP TABLE \"%s\".\"hdbprocedure-itest::SampleHanaTable\"", Configuration.get("hana.username")));

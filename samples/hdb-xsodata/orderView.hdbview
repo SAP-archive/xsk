@@ -1,4 +1,4 @@
 schema="HELLO_ODATA";
-query="SELECT * FROM \"toni::order\"";
-depends_on= ["toni::order"];
+query="SELECT * FROM \"hdb-xsodata::order\"";
+depends_on= ["hdb-xsodata::order"];
 

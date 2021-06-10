@@ -11,6 +11,7 @@
  */
 
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
@@ -270,6 +271,9 @@ public class XSKODataUtilsTest {
         assertEquals(ODataHandlerMethods.create.name(),entity1.getHandlers().get(2).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity1.getHandlers().get(2).getType());
         assertNull(entity1.getHandlers().get(2).getHandler());
+        assertEquals("false",entity1.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.CREATE.getOdataSAPAnnotation()));
+        assertNull(entity1.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.UPDATE.getOdataSAPAnnotation()));
+        assertNull(entity1.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
 
         ODataEntityDefinition entity2 = oDataDefinition.getEntities().get(1);
         assertEquals(4,entity2.getHandlers().size());
@@ -285,6 +289,9 @@ public class XSKODataUtilsTest {
         assertEquals(ODataHandlerMethods.delete.name(),entity2.getHandlers().get(3).getMethod());
         assertEquals(ODataHandlerTypes.on.name(),entity2.getHandlers().get(3).getType());
         assertEquals("sample.odata::deleteMethod",entity2.getHandlers().get(3).getHandler());
+        assertNull(entity2.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.CREATE.getOdataSAPAnnotation()));
+        assertNull(entity2.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.UPDATE.getOdataSAPAnnotation()));
+        assertNull(entity2.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
 
         ODataEntityDefinition entity3 = oDataDefinition.getEntities().get(2);
         assertEquals(2,entity3.getHandlers().size());
@@ -294,6 +301,9 @@ public class XSKODataUtilsTest {
         assertEquals(ODataHandlerMethods.delete.name(),entity3.getHandlers().get(1).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity3.getHandlers().get(1).getType());
         assertNull(entity3.getHandlers().get(1).getHandler());
+        assertNull(entity3.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.CREATE.getOdataSAPAnnotation()));
+        assertNull(entity3.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.UPDATE.getOdataSAPAnnotation()));
+        assertEquals("false",entity3.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
 
         ODataEntityDefinition entity4 = oDataDefinition.getEntities().get(3);
         assertEquals(3,entity4.getHandlers().size());
@@ -306,6 +316,9 @@ public class XSKODataUtilsTest {
         assertEquals(ODataHandlerMethods.delete.name(),entity4.getHandlers().get(2).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(2).getType());
         assertNull(entity4.getHandlers().get(2).getHandler());
+        assertEquals("false",entity4.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.CREATE.getOdataSAPAnnotation()));
+        assertEquals("false",entity4.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.UPDATE.getOdataSAPAnnotation()));
+        assertEquals("false",entity4.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
     }
 
     @Test(expected = XSKOData2TransformerException.class)

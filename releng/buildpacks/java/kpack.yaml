@@ -22,7 +22,7 @@ kind: Builder
 metadata:
   name: kneo-java
 spec:
-  serviceAccount: tutorial-service-account
+  serviceAccount: docker-registry-service-account
   tag: dirigiblelabs/kneo-java-builder
   stack:
     name: kneo-java-stack

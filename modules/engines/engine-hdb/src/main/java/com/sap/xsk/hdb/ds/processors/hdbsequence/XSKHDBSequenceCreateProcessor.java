@@ -11,7 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
+import com.sap.xsk.hdb.ds.model.XSKDBContent;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
@@ -37,7 +37,7 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
     }
     logger.info("Processing Create HdbSequence: " + hdbSequenceName);
 
-    String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
+    String sql = (hdbSequenceModel.getDBContentVersion() == XSKDBContent.XS_CLASSIC)
         ? getDatabaseSpecificSQL(connection, hdbSequenceModel, hdbSequenceName)
         : XSKConstants.XSK_HDBSEQUENCE_CREATE + hdbSequenceModel.getRawContent();
     executeSql(sql, connection);

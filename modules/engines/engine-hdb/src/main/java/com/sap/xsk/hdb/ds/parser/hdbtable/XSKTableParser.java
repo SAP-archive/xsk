@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
+import com.sap.xsk.hdb.ds.model.XSKDBContent;
 import com.sap.xsk.hdb.ds.model.hdbtable.*;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
@@ -157,26 +157,26 @@ public class XSKTableParser implements XSKDataStructureParser {
       }
       dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
     }
-    setXSKDataStructureHDBTableModelDetails(location, content, XSKHanaVersion.VERSION_1, dataStructureHDBTableModel);
+    setXSKDataStructureHDBTableModelDetails(location, content, XSKDBContent.XS_CLASSIC, dataStructureHDBTableModel);
 
     return dataStructureHDBTableModel;
   }
 
   private XSKDataStructureHDBTableModel parseHanaXSAdvancedContent(String location, String content) {
     XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
-    setXSKDataStructureHDBTableModelDetails(location, content, XSKHanaVersion.VERSION_2, dataStructureHDBTableModel);
+    setXSKDataStructureHDBTableModelDetails(location, content, XSKDBContent.OTHERS, dataStructureHDBTableModel);
     dataStructureHDBTableModel.setRawContent(content);
     return dataStructureHDBTableModel;
   }
 
-  private void setXSKDataStructureHDBTableModelDetails(String location, String content, XSKHanaVersion hanaVersion, XSKDataStructureHDBTableModel dataStructureHDBTableModel) {
+  private void setXSKDataStructureHDBTableModelDetails(String location, String content, XSKDBContent dbContentVersion, XSKDataStructureHDBTableModel dataStructureHDBTableModel) {
     dataStructureHDBTableModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
     dataStructureHDBTableModel.setLocation(location);
     dataStructureHDBTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
     dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
     dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
     dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    dataStructureHDBTableModel.setHanaVersion(hanaVersion);
+    dataStructureHDBTableModel.setDbContentVersion(dbContentVersion);
   }
 }
 

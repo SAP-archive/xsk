@@ -11,7 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
+import com.sap.xsk.hdb.ds.model.XSKDBContent;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
@@ -39,7 +39,7 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
     logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
 
     if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)) {
-      String sql = (hdbSequenceModel.getHanaVersion() == XSKHanaVersion.VERSION_1)
+      String sql = (hdbSequenceModel.getDBContentVersion() == XSKDBContent.XS_CLASSIC)
           ? getDatabaseSpecificSQL(connection, hdbSequenceName)
           : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
       executeSql(sql, connection);

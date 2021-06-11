@@ -45,12 +45,12 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
     XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, tableModel);
 
-    switch (tableModel.getHanaVersion()) {
-      case VERSION_1: {
+    switch (tableModel.getDBContentVersion()) {
+      case XS_CLASSIC: {
         sql = escapeService.getDatabaseSpecificSQL();
         break;
       }
-      case VERSION_2: {
+      case OTHERS: {
         sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
         break;
       }

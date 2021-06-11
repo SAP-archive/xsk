@@ -14,7 +14,7 @@ package com.sap.xsk.hdb.ds.test.parser;
 import static org.junit.Assert.assertEquals;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
+import com.sap.xsk.hdb.ds.model.XSKDBContent;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import java.nio.charset.StandardCharsets;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
@@ -40,7 +40,7 @@ public class XSKViewParserTest extends AbstractGuiceTest {
     assertEquals(
         "SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"acme.com.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"MYSCHEMA\".\"acme.com.test.views::MY_VIEW1\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"",
         model.getQuery());
-    assertEquals(XSKHanaVersion.VERSION_1, model.getHanaVersion());
+    assertEquals(XSKDBContent.XS_CLASSIC, model.getDBContentVersion());
   }
 
   @Test
@@ -48,7 +48,7 @@ public class XSKViewParserTest extends AbstractGuiceTest {
     String hdbviewSample = org.apache.commons.io.IOUtils
         .toString(XSKViewParserTest.class.getResourceAsStream("/ItemsByOrderHANAv2.hdbview"), StandardCharsets.UTF_8);
     XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view/db/ItemsByOrderHANAv2.hdbview", hdbviewSample);
-    assertEquals(XSKHanaVersion.VERSION_2, model.getHanaVersion());
+    assertEquals(XSKDBContent.OTHERS, model.getDBContentVersion());
     assertEquals(hdbviewSample, model.getRawContent());
   }
 }

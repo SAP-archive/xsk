@@ -20,7 +20,9 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +35,13 @@ public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStr
 
     String procedureName = XSKHDBUtils.escapeArtifactName(connection, hdbProcedure.getName());
     if (!SqlFactory.getNative(connection).exists(connection, procedureName, DatabaseArtifactTypes.PROCEDURE)) {
-      String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getContent();
-      executeSql(sql, connection);
+      ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+      if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+        throw new IllegalStateException(String.format("Procedures are not supported for %s", dialect.getDatabaseName(connection)));
+      } else {
+        String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getContent();
+        executeSql(sql, connection);
+      }
     } else {
       logger.warn(format("Procedure [{0}] already exists during the create process", hdbProcedure.getName()));
     }

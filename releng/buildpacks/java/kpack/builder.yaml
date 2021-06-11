@@ -1,10 +1,10 @@
 apiVersion: kpack.io/v1alpha1
 kind: Builder
 metadata:
-  name: kneo-xsk
+  name: kneo-builder
 spec:
   serviceAccount: tutorial-service-account
-  tag: dirigiblelabs/kneo-xsk-builder
+  tag: dirigiblelabs/kneo-builder
   stack:
     name: kneo-xsk-stack
     kind: ClusterStack
@@ -13,4 +13,4 @@ spec:
     kind: ClusterStore
   order:
   - group:
-    - id: dirigiblelabs/kneo-xsk-buildpack
+    - id: dirigiblelabs/kneo-java-buildpack

@@ -19,7 +19,9 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +43,13 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
 
     String synonymName = XSKHDBUtils.escapeArtifactName(connection, synonymModel.getName());
     if (SqlFactory.getNative(connection).exists(connection, synonymName, DatabaseArtifactTypes.SYNONYM)) {
-      String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();
-      executeSql(sql, connection);
+      ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+      if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+        throw new IllegalStateException(String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection)));
+      } else {
+        String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();
+        executeSql(sql, connection);
+      }
     } else {
       logger.warn(format("Synonym [{0}] does not exists during the drop process", synonymModel.getName()));
     }

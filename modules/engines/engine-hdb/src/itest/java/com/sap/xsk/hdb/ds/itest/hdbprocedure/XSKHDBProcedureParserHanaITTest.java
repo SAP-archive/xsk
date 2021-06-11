@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.itest.hdbsynonym;
+package com.sap.xsk.hdb.ds.itest.hdbprocedure;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -35,11 +35,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.*;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class XSKHDBSynonymParserHanaITTest {
-
+public class XSKHDBProcedureParserHanaITTest {
   private static Connection connection;
   private static IXSKHDBCoreFacade facade;
 
@@ -64,28 +64,27 @@ public class XSKHDBSynonymParserHanaITTest {
   }
 
   @Test
-  public void testHDBSynonymCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBTableFunctionCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     Statement stmt = connection.createStatement();
     DatabaseMetaData metaData = connection.getMetaData();
-    ResultSet tables = metaData.getTables(null,null, "hdbsynonym-itest::SampleHanaTable", null);
+    ResultSet tables = metaData.getTables(null,null, "hdbprocedure-itest::SampleHanaTable", null);
     if(!tables.next()){
-      stmt.executeUpdate(String.format("create table \"%s\".\"hdbsynonym-itest::SampleHanaTable\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create table \"%s\".\"hdbprocedure-itest::SampleHanaTable\"(Id INTEGER,Name NVARCHAR)",
           Configuration.get("hana.username")));
     }
 
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-        "/registry/public/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym",
-        "/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym");
+        "/registry/public/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure",
+        "/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
-
-    ResultSet rs = stmt.executeQuery(
-        String.format("SELECT COUNT(*) as rawsCount FROM %s",
-            XSKHDBUtils.escapeArtifactName(connection, "hdbsynonym-itest::SampleHanaXSClassicSynonym")));
+    ResultSet rs = metaData.getProcedures(null,null, "hdbprocedure-itest::SampleHanaProcedure");
     assertTrue(rs.next());
-    assertEquals(0, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP SYNONYM %s", XSKHDBUtils.escapeArtifactName(connection, "hdbsynonym-itest::SampleHanaXSClassicSynonym")));
-    stmt.executeUpdate(String.format("DROP TABLE \"%s\".\"hdbsynonym-itest::SampleHanaTable\"", Configuration.get("hana.username")));
+
+    stmt.executeUpdate(String.format("DROP PROCEDURE %s", XSKHDBUtils
+        .escapeArtifactName(connection, "hdbprocedure-itest::SampleHanaProcedure")));
+    stmt.executeUpdate(String.format("DROP TABLE \"%s\".\"hdbprocedure-itest::SampleHanaTable\"", Configuration.get("hana.username")));
   }
+
 }

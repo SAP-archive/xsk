@@ -1,0 +1,7 @@
+# Stack that will be used by the builder
+[stack]
+id = "com.sap.kneo.java"
+# This image is used at runtime
+run-image = "dirigiblelabs/kneo-java-stack-run"
+# This image is used at build-time
+build-image = "dirigiblelabs/kneo-java-stack-build"

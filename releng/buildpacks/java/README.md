@@ -65,7 +65,7 @@
         kind: Builder
       source:
         blob:
-          url: https://github.com/SAP/xsk/raw/main/samples/test_db.war
+          url: https://github.com/SAP/xsk/raw/main/samples/java-jdbc.war.zip
     ```
 
 1. Monitor Logs:

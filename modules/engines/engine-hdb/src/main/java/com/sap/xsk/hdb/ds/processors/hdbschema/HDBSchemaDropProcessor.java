@@ -23,7 +23,7 @@ public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructur
   private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
   public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
-    String sql = "DROP SCHEMA " + hdbSchema.getName();
+    String sql = "DROP SCHEMA " + hdbSchema.getSchemaName();
     executeSql(sql, connection);
   }
 }

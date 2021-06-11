@@ -12,9 +12,23 @@
 package com.sap.xsk.hdb.ds.parser.hdbschema;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.parser.hdbschema.core.HdbschemaLexer;
+import com.sap.xsk.parser.hdbschema.core.HdbschemaParser;
+import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMACoreListener;
+import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMASyntaxErrorListener;
+import com.sap.xsk.parser.hdbschema.models.XSKHDBSCHEMADefinitionModel;
+import com.sap.xsk.utils.XSKHDBUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 
@@ -31,20 +45,47 @@ public class XSKHDBSchemaParser implements XSKDataStructureParser<XSKDataStructu
   }
 
   @Override
-  public XSKDataStructureHDBSchemaModel parse(String location, String content) {
-    XSKDataStructureHDBSchemaModel hdbProcedure = new XSKDataStructureHDBSchemaModel();
-    hdbProcedure.setName(extractSchemaNameFromContent(content));
-    hdbProcedure.setLocation(location);
-    hdbProcedure.setType(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
-    hdbProcedure.setHash(DigestUtils.md5Hex(content));
-    hdbProcedure.setCreatedBy(UserFacade.getName());
-    hdbProcedure.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    return hdbProcedure;
+  public XSKDataStructureHDBSchemaModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+    XSKDataStructureHDBSchemaModel hdbSchemaModel = new XSKDataStructureHDBSchemaModel();
+    populateXSKDataStructureHDBSchemaModel(location, content, hdbSchemaModel);
+    hdbSchemaModel.setHanaVersion(XSKHanaVersion.VERSION_1);
+
+    ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
+    ANTLRInputStream inputStream = new ANTLRInputStream(is);
+    HdbschemaLexer hdbschemaLexer = new HdbschemaLexer(inputStream);
+    CommonTokenStream tokenStream = new CommonTokenStream(hdbschemaLexer);
+
+    HdbschemaParser hdbschemaParser = new HdbschemaParser(tokenStream);
+    hdbschemaParser.setBuildParseTree(true);
+    hdbschemaParser.removeErrorListeners();
+
+    XSKHDBSCHEMASyntaxErrorListener xskhdbschemaSyntaxErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
+    hdbschemaParser.addErrorListener(xskhdbschemaSyntaxErrorListener);
+    ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
+
+    if (hdbschemaParser.getNumberOfSyntaxErrors() > 0) {
+      String syntaxError = xskhdbschemaSyntaxErrorListener.getErrorMessage();
+      throw new XSKDataStructuresException(String.format(
+          "Wrong format of HDB Schema: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version. [%s]",
+          location, syntaxError));
+    }
+
+    XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
+    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+    parseTreeWalker.walk(XSKHDBSCHEMACoreListener, parseTree);
+
+    XSKHDBSCHEMADefinitionModel antlr4Model = XSKHDBSCHEMACoreListener.getModel();
+    hdbSchemaModel.setSchemaName(antlr4Model.getSchemaName());
+
+    return hdbSchemaModel;
   }
 
-  private String extractSchemaNameFromContent(String content) {
-    Integer indexOfEquals = content.indexOf('=');
-    String schemaName = content.substring(indexOfEquals + 1);
-    return schemaName.replaceAll("\\s", "");
+  private void populateXSKDataStructureHDBSchemaModel(String location, String content, XSKDataStructureHDBSchemaModel hdbSchemaModel) {
+    hdbSchemaModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
+    hdbSchemaModel.setLocation(location);
+    hdbSchemaModel.setType(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
+    hdbSchemaModel.setHash(DigestUtils.md5Hex(content));
+    hdbSchemaModel.setCreatedBy(UserFacade.getName());
+    hdbSchemaModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
   }
 }

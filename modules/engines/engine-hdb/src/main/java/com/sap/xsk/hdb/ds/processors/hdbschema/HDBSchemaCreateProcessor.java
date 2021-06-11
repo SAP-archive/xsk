@@ -26,7 +26,7 @@ public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
   }
 
   public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
-    String sql = "CREATE SCHEMA " + hdbSchema.getName();
+    String sql = "CREATE SCHEMA " + hdbSchema.getSchemaName();
     executeSql(sql, connection);
   }
 }

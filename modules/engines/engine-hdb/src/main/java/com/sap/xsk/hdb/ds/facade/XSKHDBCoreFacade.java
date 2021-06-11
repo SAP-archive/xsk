@@ -300,7 +300,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
           IXSKDataStructureManager<XSKDataStructureModel> xskSchemaManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
-          // executeHDBSchemasDrop(connection, hdbSchemasToUpdate);
           for (XSKDataStructureHDBSchemaModel schemaModel :
               hdbSchemasToUpdate) {
             xskSchemaManagerService.dropDataStructure(connection, schemaModel);
@@ -366,6 +365,23 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                   xskViewManagerService.createDataStructure(connection, model);
                 } else {
                   logger.warn(format("View [{0}] already exists during the update process", dsName));
+                }
+              }
+            } catch (Exception e) {
+              logger.error(e.getMessage(), e);
+              errors.add(e.getMessage());
+            }
+          }
+
+          // process schemas in the proper order
+          for (String dsName : sorted) {
+            XSKDataStructureHDBSchemaModel model = (XSKDataStructureHDBSchemaModel) dataStructureSchemasModel.get(dsName);
+            try {
+              if (model != null) {
+                if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
+                  xskSchemaManagerService.createDataStructure(connection, model);
+                } else {
+                  logger.warn(format("Schema [{0}] already exists during the update process", dsName));
                 }
               }
             } catch (Exception e) {

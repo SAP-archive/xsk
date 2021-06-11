@@ -1,7 +1,8 @@
 ### Prerequisites
 
-1. Install Pack
-1. Install Kpack
+1. [Install Pack](https://buildpacks.io/docs/tools/pack/#install)
+1. [Install Kpack](https://github.com/pivotal/kpack/blob/main/docs/install.md)
+1. [Install logging tool](https://github.com/pivotal/kpack/blob/main/docs/logs.md)
 
 1. Create Docker Registry Secret
 ```
@@ -21,15 +22,13 @@ kubectl apply -f service-account.yaml
 1. Build `Kneo XSK Stack`:
 
 ```
-cd stack/
-
-docker build . -t dirigiblelabs/kneo-xsk-stack-base --target base
+docker build -t dirigiblelabs/kneo-xsk-stack-base . --target base
 docker push dirigiblelabs/kneo-xsk-stack-base
 
-docker build . -t dirigiblelabs/kneo-xsk-stack-run --target run
+docker build -t dirigiblelabs/kneo-xsk-stack-run . --target run
 docker push dirigiblelabs/kneo-xsk-stack-run
 
-docker build . -t dirigiblelabs/kneo-xsk-stack-build --target build
+docker build -t dirigiblelabs/kneo-xsk-stack-build . --target build
 docker push dirigiblelabs/kneo-xsk-stack-build
 ```
 

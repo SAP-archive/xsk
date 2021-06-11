@@ -52,7 +52,7 @@ jobs:
     - uses: buildpacks/github-actions/setup-pack@v4.1.0
     - name: XSK Buildpack
       run: |
-        cd releng/buildpacks/xsk/stack/
+        cd releng/buildpacks/xsk/
         docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-base . --target base
         docker tag dirigiblelabs/kneo-xsk-stack-base dirigiblelabs/kneo-xsk-stack-base:$XSK_VERSION
         docker push dirigiblelabs/kneo-xsk-stack-base:$XSK_VERSION
@@ -62,10 +62,26 @@ jobs:
         docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-build . --target build
         docker tag dirigiblelabs/kneo-xsk-stack-build dirigiblelabs/kneo-xsk-stack-build:$XSK_VERSION
         docker push dirigiblelabs/kneo-xsk-stack-build:$XSK_VERSION
-        cd ../buildpack/
+        cd buildpack/
         pack buildpack package dirigiblelabs/kneo-xsk-buildpack --config ./package.toml
         docker tag dirigiblelabs/kneo-xsk-buildpack dirigiblelabs/kneo-xsk-buildpack:$XSK_VERSION
         docker push dirigiblelabs/kneo-xsk-buildpack:$XSK_VERSION
+        cd ../../../../
+    - name: Java Buildpack
+      run: |
+        cd releng/buildpacks/java/
+        docker build -t dirigiblelabs/kneo-java-stack-base . --target base
+        docker tag dirigiblelabs/kneo-java-stack-base dirigiblelabs/kneo-java-stack-base:$XSK_VERSION
+        docker push dirigiblelabs/kneo-java-stack-base:$XSK_VERSION
+        docker build -t dirigiblelabs/kneo-java-stack-run . --target run
+        docker tag dirigiblelabs/kneo-java-stack-run dirigiblelabs/kneo-java-stack-run:$XSK_VERSION
+        docker push dirigiblelabs/kneo-java-stack-run:$XSK_VERSION
+        docker build -t dirigiblelabs/kneo-java-stack-build . --target build
+        docker tag dirigiblelabs/kneo-java-stack-build dirigiblelabs/kneo-java-stack-build:$XSK_VERSION
+        docker push dirigiblelabs/kneo-java-stack-build:$XSK_VERSION
+        cd buildpack/
+        pack buildpack package dirigiblelabs/kneo-java-buildpack --config ./package.toml
+        docker push dirigiblelabs/kneo-java-buildpack
         cd ../../../../
 
 #----------------Publish GitHub Release------------------#

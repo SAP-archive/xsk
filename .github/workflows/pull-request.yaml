@@ -38,3 +38,22 @@ jobs:
         cp -r "${JAVA_HOME}" jdk
         docker build -t dirigiblelabs/xsk-kyma --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         cd ../../
+    - uses: buildpacks/github-actions/setup-pack@v4.1.0
+    - name: XSK Buildpack
+      run: |
+        cd releng/buildpacks/xsk/
+        docker build -t dirigiblelabs/kneo-xsk-stack-base . --target base
+        docker build -t dirigiblelabs/kneo-xsk-stack-run . --target run
+        docker build -t dirigiblelabs/kneo-xsk-stack-build . --target build
+        cd buildpack/
+        pack buildpack package dirigiblelabs/kneo-xsk-buildpack --config ./package.toml
+        cd ../../../../
+    - name: Java Buildpack
+      run: |
+        cd releng/buildpacks/java/
+        docker build -t dirigiblelabs/kneo-java-stack-base . --target base
+        docker build -t dirigiblelabs/kneo-java-stack-run . --target run
+        docker build -t dirigiblelabs/kneo-java-stack-build . --target build
+        cd buildpack/
+        pack buildpack package dirigiblelabs/kneo-java-buildpack --config ./package.toml
+        cd ../../../../

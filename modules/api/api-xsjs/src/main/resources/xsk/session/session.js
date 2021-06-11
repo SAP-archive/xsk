@@ -11,8 +11,8 @@
  */
 var securityUser = require('security/v4/user');
 
-this.authType = securityUser.getAuthType();
-this.language = securityUser.getLanguage();
+exports.authType = securityUser.getAuthType();
+exports.language = securityUser.getLanguage();
 
 exports.getUsername = function () {
     return securityUser.getName();

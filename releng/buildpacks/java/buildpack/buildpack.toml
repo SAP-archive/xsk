@@ -5,7 +5,7 @@ api = "0.5"
 [buildpack]
 id = "dirigiblelabs/kneo-java-buildpack"
 version = "0.0.1"
-name = "Neo Buildpack"
+name = "Kneo Java Buildpack"
 
 # Stacks that the buildpack will work with
 [[stacks]]

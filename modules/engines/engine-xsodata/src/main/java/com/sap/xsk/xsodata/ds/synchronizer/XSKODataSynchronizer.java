@@ -173,8 +173,6 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
 
     /**
      * Synchronize predelivered.
-     *
-     * @throws SynchronizationException the synchronization exception
      */
     private void synchronizePredelivered() {
         logger.trace("Synchronizing predelivered XSOData...");
@@ -322,7 +320,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
                 Configuration.set(DBMetadataUtil.DIRIGIBLE_GENERATE_PRETTY_NAMES, "false");
                 ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(model, dbMetadataUtil);
 
-                String[] odataxc = generateODataX(model);
+                String[] odataxc = generateODataX(oDataDefinition);
                 String odatax = odataxc[0];
                 String odatac = odataxc[1];
                 odataCoreService.createSchema(model.getLocation(), odatax.getBytes());
@@ -353,8 +351,8 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
         }
     }
 
-    private String[] generateODataX(XSKODataModel model) throws SQLException {
-        return xskOData2ODataXTransformer.transform(model);
+    private String[] generateODataX(ODataDefinition oDataDefinition) throws SQLException {
+        return xskOData2ODataXTransformer.transform(oDataDefinition);
     }
 
     private String[] generateODataMs(ODataDefinition oDataDefinition) throws SQLException {

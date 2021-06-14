@@ -1,0 +1,20 @@
+service namespace "np_xsodata"{
+ 
+	"hdb-xsodata::orderView"  as "MyView1" key ("ID","ID2")
+	 create forbidden
+	 update forbidden
+     delete forbidden;
+	"hdb-xsodata::orderView"  as "MyView2" without ("CustomerID") key ("ID","ID2"); 
+	
+	"hdb-xsodata::orderView"  as "MyView3"  key ("CustomerID"); 
+	"hdb-xsodata::orderView"  as "MyView4" with ("CustomerID", "ProductID") key ("CustomerID"); 
+	
+	"hdb-xsodata::orderView"  as "MyView5" key generate local "GenID"; 
+	
+	//keys can not be defined for table
+	"hdb-xsodata::order" as "MyTable";
+}
+annotations     {
+	enable      OData4SAP;
+	enable      OData4SAP;
+}

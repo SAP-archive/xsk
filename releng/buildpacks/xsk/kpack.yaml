@@ -22,7 +22,7 @@ kind: Builder
 metadata:
   name: kneo-xsk
 spec:
-  serviceAccount: tutorial-service-account
+  serviceAccount: docker-registry-service-account
   tag: dirigiblelabs/kneo-xsk-builder
   stack:
     name: kneo-xsk-stack

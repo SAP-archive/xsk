@@ -17,7 +17,7 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -61,7 +61,7 @@ public class XSKHDBViewParserMySQLITTest {
 
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/hdbview-itest/SampleMySQLXSClassicView.hdbview",
-            "/hdbview-itest/SampleMySQLXSClassicView.hdbview");
+        "/hdbview-itest/SampleMySQLXSClassicView.hdbview");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();

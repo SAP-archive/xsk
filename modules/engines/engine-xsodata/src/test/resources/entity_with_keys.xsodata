@@ -1,0 +1,9 @@
+service namespace "my.demo.namespace" {
+
+//Key Specification
+    "sample.odata::view" as "MyView" key ("ID","Text");
+    "sample.odata::view" as "MyView" keys ("ID","Text");
+    "sample.odata::view" as "MyView" key generate local "GenID";
+    "test/AN_AGENCY.analyticView" as "Revenue" keys generate local "GENERATED_ID";
+}
+

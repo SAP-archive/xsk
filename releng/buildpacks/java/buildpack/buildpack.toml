@@ -3,10 +3,10 @@ api = "0.5"
 
 # Buildpack ID and metadata
 [buildpack]
-id = "dirigiblelabs/kneo-xsk-buildpack"
+id = "dirigiblelabs/kneo-java-buildpack"
 version = "0.0.1"
-name = "Kneo XSK Buildpack"
+name = "Kneo Java Buildpack"
 
 # Stacks that the buildpack will work with
 [[stacks]]
-id = "com.sap.kneo.xsk"
+id = "com.sap.kneo.java"

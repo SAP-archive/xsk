@@ -17,6 +17,9 @@ import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,8 +54,13 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         break;
       }
       case OTHERS: {
-        sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
-        break;
+        ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+        if (dialect.getClass().equals(HanaSqlDialect.class)) {
+          sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
+          break;
+        } else {
+          throw new IllegalStateException(String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection)));
+        }
       }
     }
     executeSql(sql, connection);

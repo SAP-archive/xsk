@@ -22,7 +22,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +54,13 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
           break;
         }
         case OTHERS: {
-          sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
-          break;
+          ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+          if (dialect.getClass().equals(HanaSqlDialect.class)) {
+            sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
+            break;
+          } else {
+            throw new IllegalStateException(String.format("Views are not supported for %s !", dialect.getDatabaseName(connection)));
+          }
         }
       }
 

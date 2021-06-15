@@ -11,7 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.test.processors;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -19,6 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sap.xsk.hdb.ds.model.XSKDBContent;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceDropProcessor;
@@ -30,6 +31,15 @@ import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.builders.AlterBranchingBuilder;
+import org.eclipse.dirigible.database.sql.builders.CreateBranchingBuilder;
+import org.eclipse.dirigible.database.sql.builders.DropBranchingBuilder;
+import org.eclipse.dirigible.database.sql.builders.sequence.AlterSequenceBuilder;
+import org.eclipse.dirigible.database.sql.builders.sequence.CreateSequenceBuilder;
+import org.eclipse.dirigible.database.sql.builders.sequence.DropSequenceBuilder;
+import org.eclipse.dirigible.database.sql.builders.synonym.CreateSynonymBuilder;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
+import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,44 +60,136 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SqlFactory mockSqlFactory;
 
+  @Mock
+  private CreateBranchingBuilder create;
+
+  @Mock
+  private AlterBranchingBuilder alter;
+
+  @Mock
+  private DropBranchingBuilder drop;
+
+  @Mock
+  private CreateSequenceBuilder mockCreateSequenceBuilder;
+
+  @Mock
+  private AlterSequenceBuilder mockAlterSequenceBuilder;
+
+  @Mock
+  private DropSequenceBuilder mockDropSequenceBuilder;
+
   @Before
   public void openMocks() {
     MockitoAnnotations.initMocks(this);
   }
 
   @Test
-  public void executeCreate() throws Exception {
+  public void executeCreateSuccessfully() throws Exception {
     XSKHDBSequenceCreateProcessor spyProccessor = spy(XSKHDBSequenceCreateProcessor.class);
 
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
+    String sql = "TestExecuteCreateSuccessfully";
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+
+    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.XS_CLASSIC);
+    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
+    when(SqlFactory.getNative(mockConnection).create()).thenReturn(create);
+    when(SqlFactory.getNative(mockConnection).create().sequence(any())).thenReturn(mockCreateSequenceBuilder);
+    when(mockModel.getReset_by()).thenReturn("LL");
+    when(mockCreateSequenceBuilder.start(anyInt())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString()).build()).thenReturn(sql);
     spyProccessor.execute(mockConnection, mockModel);
 
-    verify(spyProccessor, times(1)).executeSql(anyString(), any());
+    verify(spyProccessor, times(1)).executeSql(sql, mockConnection);
   }
 
   @Test
-  public void executeUpdate() throws SQLException {
+  public void executeUpdateSuccessfully() throws SQLException {
     XSKHDBSequenceUpdateProcessor spyProccessor = spy(XSKHDBSequenceUpdateProcessor.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
+    String sql = "TestExecuteUpdateSuccessfully";
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+
+    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.XS_CLASSIC);
+    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
+    when(SqlFactory.getNative(mockConnection).alter()).thenReturn(alter);
+    when(SqlFactory.getNative(mockConnection).alter().sequence(any())).thenReturn(mockAlterSequenceBuilder);
+    when(mockModel.getReset_by()).thenReturn("LL");
+    when(mockAlterSequenceBuilder.start(anyInt())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString()).build()).thenReturn(sql);
     spyProccessor.execute(mockConnection, mockModel);
 
-    verify(spyProccessor, times(1)).executeSql(anyString(), any());
+    verify(spyProccessor, times(1)).executeSql(sql, mockConnection);
   }
 
   @Test
-  public void executeDrop() throws SQLException {
+  public void executeDropSuccessfully() throws SQLException {
+    XSKHDBSequenceDropProcessor spyProccessor = spy(XSKHDBSequenceDropProcessor.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
+    String sql = "TestExecuteDropSuccessfully";
+    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("false");
+    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
+
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, mockModel.getName(), DatabaseArtifactTypes.SEQUENCE)).thenReturn(true);
+    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.XS_CLASSIC);
+    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
+    when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
+    when(SqlFactory.getNative(mockConnection).drop().sequence(any())).thenReturn(mockDropSequenceBuilder);
+    when(SqlFactory.getNative(mockConnection).drop().sequence(any()).build()).thenReturn(sql);
+
+    spyProccessor.execute(mockConnection, mockModel);
+
+    verify(spyProccessor, times(1)).executeSql(sql, mockConnection);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void executeCreateFailed() throws Exception {
+    XSKHDBSequenceCreateProcessor spyProccessor = spy(XSKHDBSequenceCreateProcessor.class);
+
+    XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.OTHERS);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+    spyProccessor.execute(mockConnection, mockModel);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void executeUpdateFailed() throws SQLException {
+    XSKHDBSequenceUpdateProcessor spyProccessor = spy(XSKHDBSequenceUpdateProcessor.class);
+    XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.OTHERS);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+    spyProccessor.execute(mockConnection, mockModel);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void executeDropFailed() throws SQLException {
     XSKHDBSequenceDropProcessor spyProccessor = spy(XSKHDBSequenceDropProcessor.class);
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
 
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("false");
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
-
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, mockModel.getName(), DatabaseArtifactTypes.SEQUENCE)).thenReturn(true);
-
+    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.OTHERS);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     spyProccessor.execute(mockConnection, mockModel);
-
-    verify(spyProccessor, times(1)).executeSql(anyString(), any());
   }
 
 }

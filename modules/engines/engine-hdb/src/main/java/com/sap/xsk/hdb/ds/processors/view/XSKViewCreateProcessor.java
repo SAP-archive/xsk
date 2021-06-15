@@ -20,7 +20,9 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +52,13 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
           break;
         }
         case OTHERS: {
-          sql = XSKConstants.XSK_HDBVIEW_CREATE + viewModel.getRawContent();
-          break;
+          ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+          if (dialect.getClass().equals(HanaSqlDialect.class)) {
+            sql = XSKConstants.XSK_HDBVIEW_CREATE + viewModel.getRawContent();
+            break;
+          } else {
+            throw new IllegalStateException(String.format("Views are not supported for %s !", dialect.getDatabaseName(connection)));
+          }
         }
       }
       executeSql(sql, connection);

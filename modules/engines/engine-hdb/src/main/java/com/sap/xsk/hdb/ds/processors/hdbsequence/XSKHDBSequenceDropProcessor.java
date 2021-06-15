@@ -20,7 +20,9 @@ import java.sql.SQLException;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,12 +41,24 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
     logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
 
     if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)) {
-      String sql = (hdbSequenceModel.getDBContentVersion() == XSKDBContent.XS_CLASSIC)
-          ? getDatabaseSpecificSQL(connection, hdbSequenceName)
-          : XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
+      String sql = null;
+      switch (hdbSequenceModel.getDBContentVersion()) {
+        case XS_CLASSIC: {
+          sql = getDatabaseSpecificSQL(connection, hdbSequenceName);
+          break;
+        }
+        case OTHERS: {
+          ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+          if (dialect.getClass().equals(HanaSqlDialect.class)) {
+            sql = XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
+            break;
+          } else {
+            throw new IllegalStateException(String.format("Sequences are not supported for %s !", dialect.getDatabaseName(connection)));
+          }
+        }
+      }
       executeSql(sql, connection);
     }
-
   }
   
   private String getDatabaseSpecificSQL(Connection connection, String modifiedSequenceName) {

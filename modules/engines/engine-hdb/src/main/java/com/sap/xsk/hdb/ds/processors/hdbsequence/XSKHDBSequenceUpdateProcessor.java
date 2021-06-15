@@ -20,7 +20,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +39,24 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
     }
     logger.info("Processing Update HdbSequence: " + hdbSequenceName);
 
-    String sql = (hdbSequenceModel.getDBContentVersion() == XSKDBContent.XS_CLASSIC)
-        ? getDatabaseSpecificSQL(connection, hdbSequenceModel, hdbSequenceName)
-        : XSKConstants.XSK_HDBSEQUENCE_ALTER + hdbSequenceModel.getRawContent();
+    String sql = null;
+    switch (hdbSequenceModel.getDBContentVersion()) {
+      case XS_CLASSIC: {
+        sql = getDatabaseSpecificSQL(connection, hdbSequenceModel, hdbSequenceName);
+        break;
+      }
+      case OTHERS: {
+        ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+        if (dialect.getClass().equals(HanaSqlDialect.class)) {
+          sql = XSKConstants.XSK_HDBSEQUENCE_ALTER + hdbSequenceModel.getRawContent();
+          break;
+        } else {
+          throw new IllegalStateException(String.format("Sequences are not supported for %s !", dialect.getDatabaseName(connection)));
+        }
+      }
+    }
     executeSql(sql, connection);
   }
-
 
   private String getDatabaseSpecificSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel,
       String modifiedSequenceName) {

@@ -22,6 +22,7 @@
 		<module>engines</module>
 		<module>basis</module>
 		<module>ide</module>
+    	<module>migration</module>
 	</modules>
 
 	<properties>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+    Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
 
     All rights reserved. This program and the accompanying materials
     are made available under the terms of the Apache License, v2.0
     which accompanies this distribution, and is available at
     http://www.apache.org/licenses/LICENSE-2.0
 
-    SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+    SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
     SPDX-License-Identifier: Apache-2.0
 
 -->
@@ -177,11 +177,13 @@
 	        <url-pattern>/services/v3/wiki/*</url-pattern>
 	        <url-pattern>/services/v3/command/*</url-pattern>
 	        <url-pattern>/services/v3/xsk/*</url-pattern>
+          <url-pattern>/services/v3/migration/*</url-pattern>
 	        <url-pattern>/services/v4/web/*</url-pattern>
 	        <url-pattern>/services/v4/js/*</url-pattern>
 	        <url-pattern>/services/v4/wiki/*</url-pattern>
 	        <url-pattern>/services/v4/command/*</url-pattern>
 	        <url-pattern>/services/v4/xsk/*</url-pattern>
+          <url-pattern>/services/v4/migration/*</url-pattern>
 	    </web-resource-collection>
 	    <auth-constraint>
 	        <role-name>Everyone</role-name>
@@ -196,11 +198,13 @@
 	        <url-pattern>/public/v3/wiki/*</url-pattern>
 	        <url-pattern>/public/v3/command/*</url-pattern>
 	        <url-pattern>/public/v3/xsk/*</url-pattern>
+          <url-pattern>/public/v3/migration/*</url-pattern>
 	        <url-pattern>/public/v4/web/*</url-pattern>
 	        <url-pattern>/public/v4/js/*</url-pattern>
 	        <url-pattern>/public/v4/wiki/*</url-pattern>
 	        <url-pattern>/public/v4/command/*</url-pattern>
 	        <url-pattern>/public/v4/xsk/*</url-pattern>
+          <url-pattern>/public/v4/migration/*</url-pattern>
 	    </web-resource-collection>
 	</security-constraint>
 

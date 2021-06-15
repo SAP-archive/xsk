@@ -18,23 +18,4 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
  */
 public class XSKDataStructureHDBSchemaModel extends XSKDataStructureModel {
 
-  private String schemaName;
-
-  /**
-   * Getter for the schema_name field.
-   *
-   * @return the schema_name field
-   */
-  public String getSchemaName() {
-    return schemaName;
-  }
-
-  /**
-   * Setter for the schema_name field.
-   *
-   * @param schemaName the schema_name field
-   */
-  public void setSchemaName(String schemaName) {
-    this.schemaName = schemaName;
-  }
 }

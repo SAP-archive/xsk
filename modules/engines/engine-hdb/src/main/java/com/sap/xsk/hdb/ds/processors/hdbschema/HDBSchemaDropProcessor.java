@@ -26,13 +26,13 @@ public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructur
   private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
   public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
-    logger.info("Processing Drop Schema: " + hdbSchema.getSchemaName());
+    logger.info("Processing Drop Schema: " + hdbSchema.getSchema());
 
     ISqlDialect dialect = SqlFactory.deriveDialect(connection);
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
       throw new IllegalStateException(String.format("%s does not support Schema", dialect.getDatabaseName(connection)));
     } else {
-      String sql = "DROP SCHEMA " + hdbSchema.getSchemaName();
+      String sql = "DROP SCHEMA " + hdbSchema.getSchema();
       executeSql(sql, connection);
     }
   }

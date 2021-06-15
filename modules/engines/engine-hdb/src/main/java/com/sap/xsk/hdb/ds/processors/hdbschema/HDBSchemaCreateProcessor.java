@@ -29,13 +29,13 @@ public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
   }
 
   public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
-    logger.info("Processing Create Schema: " + hdbSchema.getSchemaName());
+    logger.info("Processing Create Schema: " + hdbSchema.getSchema());
 
     ISqlDialect dialect = SqlFactory.deriveDialect(connection);
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
       throw new IllegalStateException(String.format("%s does not support Schema", dialect.getDatabaseName(connection)));
     } else {
-      String sql = "CREATE SCHEMA " + hdbSchema.getSchemaName();
+      String sql = "CREATE SCHEMA " + hdbSchema.getSchema();
       executeSql(sql, connection);
     }
   }

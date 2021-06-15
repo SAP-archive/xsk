@@ -75,7 +75,7 @@ public class XSKHDBSchemaParser implements XSKDataStructureParser<XSKDataStructu
     parseTreeWalker.walk(XSKHDBSCHEMACoreListener, parseTree);
 
     XSKHDBSCHEMADefinitionModel antlr4Model = XSKHDBSCHEMACoreListener.getModel();
-    hdbSchemaModel.setSchemaName(antlr4Model.getSchemaName());
+    hdbSchemaModel.setSchema(antlr4Model.getSchemaName());
 
     return hdbSchemaModel;
   }

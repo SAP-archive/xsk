@@ -29,6 +29,7 @@ RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgre
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
 COPY target/*.jar $CATALINA_HOME/lib/
+COPY target/migration-tools $CATALINA_HOME/migration-tools
 RUN sed -i /'<Context>'/c'<Context>\n<Listener className=\"com.sap.xsk.listener.NamingResourcesListener\" factoryClassName=\"com.sap.xsk.factory.DynamicDataSourceFactory\"/>' $CATALINA_HOME/conf/context.xml
 
 #Activate DEBUG mode

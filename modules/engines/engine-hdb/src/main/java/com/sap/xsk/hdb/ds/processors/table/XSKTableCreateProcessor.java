@@ -48,7 +48,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
     XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, tableModel);
 
-    switch (tableModel.getDBContentVersion()) {
+    switch (tableModel.getDBContentType()) {
       case XS_CLASSIC: {
         sql = escapeService.getDatabaseSpecificSQL();
         break;

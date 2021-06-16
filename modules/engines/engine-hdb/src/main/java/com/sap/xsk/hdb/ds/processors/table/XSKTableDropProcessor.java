@@ -47,7 +47,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
     logger.info("Processing Drop Table: " + tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
       String sql = null;
-      switch (tableModel.getDBContentVersion()) {
+      switch (tableModel.getDBContentType()) {
         case XS_CLASSIC: {
           sql = SqlFactory.getNative(connection).select().column("COUNT(*)").from(tableName)
               .build();

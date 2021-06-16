@@ -13,7 +13,7 @@ package com.sap.xsk.hdb.ds.parser.hdbsynonym;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKDBContent;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbsynonym.core.HdbsynonymLexer;
@@ -44,7 +44,7 @@ public class XSKSynonymParser implements XSKDataStructureParser {
     hdbSynonymModel.setCreatedBy(UserFacade.getName());
     hdbSynonymModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
 
-    hdbSynonymModel.setDbContentVersion(XSKDBContent.XS_CLASSIC);
+    hdbSynonymModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
 
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);

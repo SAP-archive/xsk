@@ -46,7 +46,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
     String viewName = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName());
     if (!SqlFactory.getNative(connection).exists(connection, viewName, DatabaseArtifactTypes.VIEW)) {
       String sql = null;
-      switch (viewModel.getDBContentVersion()) {
+      switch (viewModel.getDBContentType()) {
         case XS_CLASSIC: {
           sql = SqlFactory.getNative(connection).create().view(viewName).asSelect(viewModel.getQuery()).build();
           break;

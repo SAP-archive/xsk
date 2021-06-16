@@ -12,7 +12,6 @@
 package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
 
-import com.sap.xsk.hdb.ds.model.XSKDBContent;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKConstants;
@@ -40,7 +39,7 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
     logger.info("Processing Update HdbSequence: " + hdbSequenceName);
 
     String sql = null;
-    switch (hdbSequenceModel.getDBContentVersion()) {
+    switch (hdbSequenceModel.getDBContentType()) {
       case XS_CLASSIC: {
         sql = getDatabaseSpecificSQL(connection, hdbSequenceModel, hdbSequenceName);
         break;

@@ -19,7 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sap.xsk.hdb.ds.model.XSKDBContent;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceDropProcessor;
@@ -37,8 +37,6 @@ import org.eclipse.dirigible.database.sql.builders.DropBranchingBuilder;
 import org.eclipse.dirigible.database.sql.builders.sequence.AlterSequenceBuilder;
 import org.eclipse.dirigible.database.sql.builders.sequence.CreateSequenceBuilder;
 import org.eclipse.dirigible.database.sql.builders.sequence.DropSequenceBuilder;
-import org.eclipse.dirigible.database.sql.builders.synonym.CreateSynonymBuilder;
-import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 import org.junit.Before;
 import org.junit.Test;
@@ -91,7 +89,7 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
     String sql = "TestExecuteCreateSuccessfully";
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
 
-    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.XS_CLASSIC);
+    when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.XS_CLASSIC);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
     when(SqlFactory.getNative(mockConnection).create()).thenReturn(create);
     when(SqlFactory.getNative(mockConnection).create().sequence(any())).thenReturn(mockCreateSequenceBuilder);
@@ -117,7 +115,7 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
     String sql = "TestExecuteUpdateSuccessfully";
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
 
-    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.XS_CLASSIC);
+    when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.XS_CLASSIC);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
     when(SqlFactory.getNative(mockConnection).alter()).thenReturn(alter);
     when(SqlFactory.getNative(mockConnection).alter().sequence(any())).thenReturn(mockAlterSequenceBuilder);
@@ -146,7 +144,7 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
 
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, mockModel.getName(), DatabaseArtifactTypes.SEQUENCE)).thenReturn(true);
-    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.XS_CLASSIC);
+    when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.XS_CLASSIC);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
     when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
     when(SqlFactory.getNative(mockConnection).drop().sequence(any())).thenReturn(mockDropSequenceBuilder);
@@ -163,7 +161,7 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
 
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.OTHERS);
+    when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     spyProccessor.execute(mockConnection, mockModel);
   }
@@ -173,7 +171,7 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
     XSKHDBSequenceUpdateProcessor spyProccessor = spy(XSKHDBSequenceUpdateProcessor.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.OTHERS);
+    when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     spyProccessor.execute(mockConnection, mockModel);
   }
@@ -187,7 +185,7 @@ public class HDBSequenceProcessorsTest extends AbstractGuiceTest {
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("false");
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, mockModel.getName(), DatabaseArtifactTypes.SEQUENCE)).thenReturn(true);
-    when(mockModel.getDBContentVersion()).thenReturn(XSKDBContent.OTHERS);
+    when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     spyProccessor.execute(mockConnection, mockModel);
   }

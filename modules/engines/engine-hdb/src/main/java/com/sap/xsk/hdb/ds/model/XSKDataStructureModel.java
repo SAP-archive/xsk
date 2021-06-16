@@ -53,7 +53,7 @@ public class XSKDataStructureModel {
   private transient String rawContent;
 
   @Transient
-  private transient XSKDBContent dbContentVersion;
+  private transient XSKDBContentType dbContentType;
 
   /**
    * Gets the location.
@@ -211,12 +211,12 @@ public class XSKDataStructureModel {
     this.rawContent = rawContent;
   }
 
-  public XSKDBContent getDBContentVersion() {
-    return dbContentVersion;
+  public XSKDBContentType getDBContentType() {
+    return dbContentType;
   }
 
-  public void setDbContentVersion(XSKDBContent dbContentVersion) {
-    this.dbContentVersion = dbContentVersion;
+  public void setDbContentType(XSKDBContentType dbContentType) {
+    this.dbContentType = dbContentType;
   }
 
   /**

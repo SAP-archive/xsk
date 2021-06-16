@@ -11,7 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.model;
 
-public enum XSKDBContent {
+public enum XSKDBContentType {
   XS_CLASSIC,
   OTHERS
 }

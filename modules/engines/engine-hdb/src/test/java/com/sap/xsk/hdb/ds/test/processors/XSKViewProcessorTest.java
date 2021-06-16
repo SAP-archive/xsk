@@ -12,10 +12,9 @@
 package com.sap.xsk.hdb.ds.test.processors;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-import com.sap.xsk.hdb.ds.model.XSKDBContent;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
@@ -24,20 +23,16 @@ import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
 import com.sap.xsk.utils.XSKConstants;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.CreateBranchingBuilder;
 import org.eclipse.dirigible.database.sql.builders.DropBranchingBuilder;
 import org.eclipse.dirigible.database.sql.builders.view.CreateViewBuilder;
 import org.eclipse.dirigible.database.sql.builders.view.DropViewBuilder;
-import org.eclipse.dirigible.database.sql.dialects.DefaultSqlDialect;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
-import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
 import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,7 +74,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
         .toString(XSKViewParserTest.class.getResourceAsStream("/ItemsByOrderHANAv1.hdbview"), StandardCharsets.UTF_8);
     XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view.db/ItemsByOrderHANAv1.hdbview", hdbviewSample);
     model.setName("\"MYSCHEMA\".\"hdb_view::ItemsByOrderHANAv1\"");
-    model.setDbContentVersion(XSKDBContent.XS_CLASSIC);
+    model.setDbContentType(XSKDBContentType.XS_CLASSIC);
     String mockSQL = "testSQLScript";
 
     //PowerMock do not support deep stub calls
@@ -107,7 +102,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
     XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view.db/ItemsByOrderHANAv2.hdbview", hdbviewSample);
     model.setRawContent(hdbviewSample);
     model.setName("\"MYSCHEMA\".\"hdb_view::ItemsByOrderHANAv2\"");
-    model.setDbContentVersion(XSKDBContent.OTHERS);
+    model.setDbContentType(XSKDBContentType.OTHERS);
     String sql = XSKConstants.XSK_HDBVIEW_CREATE + model.getRawContent();
 
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
@@ -129,7 +124,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
     XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view.db/ItemsByOrderHANAv2.hdbview", hdbviewSample);
     model.setRawContent(hdbviewSample);
     model.setName("\"MYSCHEMA\".\"hdb_view::ItemsByOrderHANAv2\"");
-    model.setDbContentVersion(XSKDBContent.OTHERS);
+    model.setDbContentType(XSKDBContentType.OTHERS);
 
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);

@@ -14,7 +14,7 @@ package com.sap.xsk.hdb.ds.test.parser;
 import static org.junit.Assert.assertEquals;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.XSKDBContent;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import java.nio.charset.StandardCharsets;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
@@ -31,6 +31,6 @@ public class XSKSynonymParserTest extends AbstractGuiceTest {
     assertEquals("hdb_view::Order", model.getTargetObject());
     assertEquals("PUBLIC", model.getTargetSchema());
     assertEquals("hdb_view::MySynonym", model.getName());
-    assertEquals(XSKDBContent.XS_CLASSIC, model.getDBContentVersion());
+    assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
   }
 }

@@ -17,7 +17,7 @@ import com.google.gson.JsonElement;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceBaseVisitor;
@@ -103,20 +103,20 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
         .setMatchingStrategy(MatchingStrategies.STRICT);
 
     XSKDataStructureHDBSequenceModel hdbSequenceModel = modelMapper.map(antlr4Model, XSKDataStructureHDBSequenceModel.class);
-    setXSKDataStructureHDBSequenceModelTrackingDetails(location, content, XSKHanaVersion.VERSION_1, hdbSequenceModel);
+    setXSKDataStructureHDBSequenceModelTrackingDetails(location, content, XSKDBContentType.XS_CLASSIC, hdbSequenceModel);
 
     return hdbSequenceModel;
   }
 
   private XSKDataStructureModel parseHanaXSAdvancedContent(String location, String content) {
     XSKDataStructureHDBSequenceModel hdbSequenceModel = new XSKDataStructureHDBSequenceModel();
-    setXSKDataStructureHDBSequenceModelTrackingDetails(location, content, XSKHanaVersion.VERSION_2, hdbSequenceModel);
+    setXSKDataStructureHDBSequenceModelTrackingDetails(location, content, XSKDBContentType.OTHERS, hdbSequenceModel);
     hdbSequenceModel.setRawContent(content);
     return hdbSequenceModel;
   }
 
 
-  private void setXSKDataStructureHDBSequenceModelTrackingDetails(String location, String content, XSKHanaVersion hanaVersion,
+  private void setXSKDataStructureHDBSequenceModelTrackingDetails(String location, String content, XSKDBContentType dbContentType,
       XSKDataStructureHDBSequenceModel hdbSequenceModel) {
     hdbSequenceModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
     hdbSequenceModel.setLocation(location);
@@ -124,7 +124,7 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     hdbSequenceModel.setHash(DigestUtils.md5Hex(content));
     hdbSequenceModel.setCreatedBy(UserFacade.getName());
     hdbSequenceModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    hdbSequenceModel.setHanaVersion(hanaVersion);
+    hdbSequenceModel.setDbContentType(dbContentType);
   }
 
 }

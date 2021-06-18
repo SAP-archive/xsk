@@ -40,6 +40,9 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
   @Inject
   @Named("xskTableDropProcessor")
   private IXSKHdbProcessor xskTableDropProcessor;
+  @Inject
+  @Named("xskTableAlterProcessor")
+  private IXSKHdbProcessor xskTableAlterProcessor;
 
 
   public IXSKTableManagerService() {
@@ -82,6 +85,7 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
     //TODO: Create logic for updating hdb table
     logger.error("Altering of a non-empty table is not implemented yet.");
     // TableAlterProcessor.execute(connection, tableModel);
+    xskTableAlterProcessor.execute(connection, tableModel);
   }
 
   public Map<String, XSKDataStructureHDBTableModel> getDataStructureModels() {

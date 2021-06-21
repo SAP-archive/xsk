@@ -48,6 +48,22 @@
 							</resources>
 						</configuration>
 					</execution>
+          <execution>
+            <id>copy-migration-tools</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/migration-tools</outputDirectory>
+              <overwrite>true</overwrite>
+              <resources>
+                <resource>
+                  <directory>../../modules/migration/target/migration-tools</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
 				</executions>
 			</plugin>
 		</plugins>

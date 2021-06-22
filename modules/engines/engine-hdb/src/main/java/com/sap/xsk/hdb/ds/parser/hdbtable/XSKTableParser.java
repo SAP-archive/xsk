@@ -11,22 +11,20 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbtable;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbtable.*;
+import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
 import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLECoreVisitor;
 import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLESyntaxErrorListener;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
+import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -37,10 +35,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class XSKTableParser implements XSKDataStructureParser {
@@ -59,13 +59,7 @@ public class XSKTableParser implements XSKDataStructureParser {
 
   @Override
   public XSKDataStructureHDBTableModel parse(String location, String content) throws XSKDataStructuresException, IOException {
-    String expectedHanaXSAdvancedSyntax =
-        XSKConstants.XSK_HDBTABLE_SYNTAX + "\"" + XSKHDBUtils.getRepositoryBaseObjectName(location) + "\"";
-    String receivedSyntax = XSKHDBUtils.extractRepositoryBaseObjectNameFromContent(XSKConstants.XSK_HDBTABLE_SYNTAX, content);
-    logger.debug("Determine if the hdbtable is Hana XS Classic or Hana XS Advanced by Comparing '" + receivedSyntax + "' with '"
-        + expectedHanaXSAdvancedSyntax + "'");
-
-    return (receivedSyntax.equals(expectedHanaXSAdvancedSyntax))
+    return (content.trim().startsWith(XSKConstants.XSK_HDBTABLE_SYNTAX))
         ? parseHanaXSAdvancedContent(location, content)
         : parseHanaXSClassicContent(location, content);
   }

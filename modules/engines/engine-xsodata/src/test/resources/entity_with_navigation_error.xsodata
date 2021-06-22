@@ -1,0 +1,18 @@
+service namespace "my.demo.namespace" {
+
+//Navigation
+   "sample.odata::address" as "Address"
+    	navigates (
+    	 	 "Address_Phones" as "HisPhones",
+    	 	 "A_Self" as "ARef"
+    	);
+
+   "sample.odata::phone" as "Phones"
+        navigates (
+            "Address_Phones" as "HisAddress"
+       );
+
+   association "A_Self"
+    		principal "Address"("SelfID") multiplicity "1"
+    		dependent "Address"("ID") multiplicity "0..1";
+}

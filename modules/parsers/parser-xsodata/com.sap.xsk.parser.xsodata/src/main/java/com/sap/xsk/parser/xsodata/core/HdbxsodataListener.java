@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/xsodata/core/Hdbxsodata.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\xsodata\core\Hdbxsodata.g4 by ANTLR 4.3
 package com.sap.xsk.parser.xsodata.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -183,6 +183,17 @@ public interface HdbxsodataListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParameterentitysetname(@NotNull HdbxsodataParser.ParameterentitysetnameContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbxsodataParser#dependent}.
+	 * @param ctx the parse tree
+	 */
+	void enterDependent(@NotNull HdbxsodataParser.DependentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbxsodataParser#dependent}.
+	 * @param ctx the parse tree
+	 */
+	void exitDependent(@NotNull HdbxsodataParser.DependentContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link HdbxsodataParser#modificationaction}.
@@ -612,6 +623,17 @@ public interface HdbxsodataListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAggregate(@NotNull HdbxsodataParser.AggregateContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbxsodataParser#principal}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbxsodataParser#principal}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link HdbxsodataParser#eventlist}.

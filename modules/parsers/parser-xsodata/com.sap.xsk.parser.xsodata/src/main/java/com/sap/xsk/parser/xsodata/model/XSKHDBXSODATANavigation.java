@@ -38,4 +38,5 @@ public class XSKHDBXSODATANavigation {
 
     private String association;
     private String aliasNavigation;
+    private XSKHDBXSODATABindingType fromBindingType;
 }

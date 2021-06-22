@@ -155,6 +155,12 @@ public class XSKODataUtils {
             } else if (entity.getKeyGenerated() != null) {
                 oDataEntityDefinition.getKeys().add(entity.getKeyGenerated());
             }
+
+            //process Aggregations
+            if (entity.getAggregations().size() > 0) {
+                oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
+            }
+
             oDataDefinitionModel.getEntities().add(oDataEntityDefinition);
         }
         return oDataDefinitionModel;

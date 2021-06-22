@@ -1,0 +1,12 @@
+service namespace "my.demo.namespace" {
+
+    "tables::A" navigates ("B_A_linktab" as "linkedBs");
+    "tables::B" navigates ("B_A_linktab" as "linkedAs");
+
+    association "B_A_linktab"
+            principal "A"("ID") multiplicity "*"
+            dependent "B"("ID1") multiplicity "*"
+            over "tables::linktab"
+                principal ("AID")
+                dependent ("BID1","BID2");
+}

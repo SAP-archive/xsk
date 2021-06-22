@@ -1,0 +1,16 @@
+service namespace "my.demo.namespace" {
+
+//Parameters
+     "sap.test::calcview" as "CalcView"
+                        key ("theKeyColumns")
+                        parameters via key and entity;
+    "sap.test::calcview" as "CalcView2"
+                        keys generate local "ID"
+                        parameters via entity "CVParams" results property "Execute";
+    "sap.test::calcview" as "Alerts1"
+                        key generate local "ALERTID"
+                        parameters via entity "ScenarioAlerts" results property "Results";
+    "sap.test::calcview" as "Alerts2"
+                        key generate local "ALERTID"
+                        parameters via entity "ScenarioAlerts";
+}

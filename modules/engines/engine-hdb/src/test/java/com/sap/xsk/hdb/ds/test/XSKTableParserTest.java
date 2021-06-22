@@ -137,4 +137,13 @@ public class XSKTableParserTest extends AbstractGuiceTest {
       assertEquals(content, model.getRawContent());
   }
 
+  @Test
+  public void parseHanaXSAdvancedContent2() throws Exception {
+    InputStream in = XSKTableParserTest.class.getResourceAsStream("/HdbtableHanaXSAdvancedContent2.hdbtable");
+    String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+    XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/HdbtableHanaXSAdvancedContent2.hdbtable", content);
+    assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
+    assertEquals(content, model.getRawContent());
+  }
+
 }

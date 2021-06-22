@@ -14,6 +14,7 @@ package com.sap.xsk.xsjob.ds.tronsformer;
 import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -25,28 +26,29 @@ public class XSKJobToXSKJobDefinitionTransformer {
   @Inject
   private XSKCronToQuartzCronTransformer xskCronToQuartzCronTransformer;
 
-  public XSKJobDefinition transform(XSKJobArtifact xskJobArtifact) throws ParseException {
-    XSKJobDefinition xskJobDefinition = new XSKJobDefinition();
+  public ArrayList<XSKJobDefinition> transform(XSKJobArtifact xskJobArtifact) throws ParseException {
+    ArrayList<XSKJobDefinition> jobDefinitions = new ArrayList<>();
+
     String[] parseAction = xskJobArtifact.getAction().split("::");
-
-    for (int i = 0; i < xskJobArtifact.getSchedules().size(); i++) {
-      String xskJobDefinitionName = xskJobArtifact.getAction() + "-" + i;
-      xskJobDefinition.setName(xskJobDefinitionName);
-      xskJobDefinition.setParametersAsMap(xskJobArtifact.getSchedules().get(i).getParameter());
-      xskJobDefinition.setDescription(xskJobArtifact.getDescription() + " " + xskJobArtifact.getSchedules().get(i).getDescription());
-    }
-
     String filePath = parseAction[0];
     String functionName = parseAction[1];
     filePath = xskPathToDirigiblePath(filePath);
-    xskJobDefinition.setModule(filePath);
-    xskJobDefinition.setFunction(functionName);
 
-    String xskCronExpression = xskJobArtifact.getSchedules().get(0).getXscron();
-    String quartzCronExpression = xskCronToQuartzCronTransformer.transform(xskCronExpression);
-    xskJobDefinition.setCronExpression(quartzCronExpression);
+      for (int i = 0; i < xskJobArtifact.getSchedules().size(); i++) {
+        XSKJobDefinition xskJobDefinition = new XSKJobDefinition();
+        String xskJobDefinitionName = xskJobArtifact.getAction() + "-" + i;
+        String xskCronExpression = xskJobArtifact.getSchedules().get(i).getXscron();
+        String quartzCronExpression = xskCronToQuartzCronTransformer.transform(xskCronExpression);
 
-    return xskJobDefinition;
+        xskJobDefinition.setName(xskJobDefinitionName);
+        xskJobDefinition.setParametersAsMap(xskJobArtifact.getSchedules().get(i).getParameter());
+        xskJobDefinition.setDescription(xskJobArtifact.getDescription() + " " + xskJobArtifact.getSchedules().get(i).getDescription());
+        xskJobDefinition.setCronExpression(quartzCronExpression);
+        xskJobDefinition.setModule(filePath);
+        xskJobDefinition.setFunction(functionName);
+        jobDefinitions.add(xskJobDefinition);
+      }
+    return jobDefinitions;
   }
 
   public String xskPathToDirigiblePath(String xskFilePath) {

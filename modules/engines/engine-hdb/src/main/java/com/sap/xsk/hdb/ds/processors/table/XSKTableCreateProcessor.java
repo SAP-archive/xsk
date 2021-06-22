@@ -16,6 +16,7 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableCreateEscapeService;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -52,10 +53,10 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         logger.info("Processing Create Table: " + tableModel.getName());
 
     String sql = null;
-        String tableNameWithoutSchema = tableModel.getName();
-        String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
+    String tableNameWithoutSchema = tableModel.getName();
+    String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
 
-        tableModel.setName(tableNameWithSchema);
+    tableModel.setName(tableNameWithSchema);
     XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, tableModel);
 
     switch (tableModel.getDBContentType()) {
@@ -75,10 +76,10 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     }
     executeSql(sql, connection);
 
-        //Create public synonym
-        if (SqlFactory.getNative(connection).exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE)) {
-            XSKHDBUtils.createPublicSynonymForArtifact(managerServices
-                    .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
-        }
+    boolean shouldCreatePublicSynonym = SqlFactory.getNative(connection).exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE);
+    if (shouldCreatePublicSynonym) {
+        XSKHDBUtils.createPublicSynonymForArtifact(managerServices
+                .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
+    }
   }
 }

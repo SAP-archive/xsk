@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.processors.table;
+package com.sap.xsk.hdb.ds.processors.table.utils;
 
 import com.sap.xsk.hdb.ds.model.hdbtable.*;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -25,7 +25,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Objects;
 
-public class XSKTableEscapeService {
+public class XSKTableCreateEscapeService {
 
     private XSKDataStructureHDBTableModel tableModel;
     private CreateTableBuilder createTableBuilder;

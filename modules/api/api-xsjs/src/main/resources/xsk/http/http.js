@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 var dClient = require("http/v4/client");
@@ -81,18 +81,18 @@ exports.readDestination = function(destinationPackage, destinationName) {
 
 	var destResourceLineArray = destResourceContent.split(";");
 
-	var destinationObject = {};
+  var destination = new exports.Destination();
 
 	destResourceLineArray.forEach(destResourceLine =>  {
 		var splitKeyValueArray = destResourceLine.split("=");
 
 		var processedDestValue = processDestValue(splitKeyValueArray[1]);
 		var destKey = splitKeyValueArray[0].trim();
-		destinationObject[destKey] = processedDestValue;
+    destination[destKey] = processedDestValue;
 
 	});
 
-	return destinationObject;
+	return destination;
 };
 
 exports.Client = function() {
@@ -113,7 +113,7 @@ exports.Client = function() {
 	};
 
 	this.close = function() {
-		// TODO No dirigible functionality
+		// Empty. Called automatically inside HttpClientFacade
 	};
 
 	this.getResponse = function() {
@@ -333,4 +333,8 @@ function parseDestValue(destValue) {
 	}
 
 	return destValue;
+}
+
+exports.Destination = function() {
+
 }

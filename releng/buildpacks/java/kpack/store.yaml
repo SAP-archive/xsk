@@ -1,7 +1,0 @@
-apiVersion: kpack.io/v1alpha1
-kind: ClusterStore
-metadata:
-  name: kneo-generic-store
-spec:
-  sources:
-  - image: dirigiblelabs/kneo-java-buildpack

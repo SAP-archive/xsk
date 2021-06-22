@@ -11,7 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.model;
 
-public enum XSKHanaVersion {
-  VERSION_1,
-  VERSION_2
+public enum XSKDBContentType {
+  XS_CLASSIC,
+  OTHERS
 }

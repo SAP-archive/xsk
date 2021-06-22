@@ -5,6 +5,8 @@ ENV CNB_GROUP_ID=1000
 ENV CNB_STACK_ID="com.sap.kneo.java"
 LABEL io.buildpacks.stack.id="com.sap.kneo.java"
 
+ENV CATALINA_HOME=/workspace/tomcat
+
 RUN groupadd cnb --gid ${CNB_GROUP_ID} && \
   useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash cnb
 

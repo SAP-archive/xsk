@@ -1,8 +1,7 @@
----
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStore
 metadata:
-  name: kneo-generic-store
+  name: kneo-java-store
 spec:
   sources:
     - image: dirigiblelabs/kneo-java-buildpack
@@ -10,7 +9,7 @@ spec:
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack
 metadata:
-  name: kneo-generic-stack
+  name: kneo-java-stack
 spec:
   id: "com.sap.kneo.java"
   buildImage:
@@ -21,16 +20,15 @@ spec:
 apiVersion: kpack.io/v1alpha1
 kind: Builder
 metadata:
-  name: kneo-builder
-  namespace: default
+  name: kneo-java
 spec:
-  serviceAccount: tutorial-service-account
-  tag: dirigiblelabs/neo-builder
+  serviceAccount: docker-registry-service-account
+  tag: dirigiblelabs/kneo-java-builder
   stack:
-    name: kneo-generic-stack
+    name: kneo-java-stack
     kind: ClusterStack
   store:
-    name: kneo-generic-store
+    name: kneo-java-store
     kind: ClusterStore
   order:
     - group:

@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbtable.*;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
@@ -45,133 +45,132 @@ import java.util.List;
 
 public class XSKTableParser implements XSKDataStructureParser {
 
-    private static final Logger logger = LoggerFactory.getLogger(XSKTableParser.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKTableParser.class);
 
-    @Override
-    public String getType() {
-        return IXSKDataStructureModel.TYPE_HDB_TABLE;
+  @Override
+  public String getType() {
+    return IXSKDataStructureModel.TYPE_HDB_TABLE;
+  }
+
+  @Override
+  public Class<XSKDataStructureHDBTableModel> getDataStructureClass() {
+    return XSKDataStructureHDBTableModel.class;
+  }
+
+  @Override
+  public XSKDataStructureHDBTableModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+    return (content.trim().startsWith(XSKConstants.XSK_HDBTABLE_SYNTAX))
+        ? parseHanaXSAdvancedContent(location, content)
+        : parseHanaXSClassicContent(location, content);
+  }
+
+  private XSKDataStructureHDBTableModel parseHanaXSClassicContent(String location, String content)
+      throws IOException, XSKDataStructuresException {
+    ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
+    ANTLRInputStream inputStream = new ANTLRInputStream(is);
+    HdbtableLexer hdbtableLexer = new HdbtableLexer(inputStream);
+    CommonTokenStream tokenStream = new CommonTokenStream(hdbtableLexer);
+
+    HdbtableParser hdbtableParser = new HdbtableParser(tokenStream);
+    hdbtableParser.setBuildParseTree(true);
+    hdbtableParser.removeErrorListeners();
+
+    XSKHDBTABLESyntaxErrorListener xskhdbtableSyntaxErrorListener = new XSKHDBTABLESyntaxErrorListener();
+    hdbtableParser.addErrorListener(xskhdbtableSyntaxErrorListener);
+    ParseTree parseTree = hdbtableParser.hdbtableDefinition();
+
+    if (hdbtableParser.getNumberOfSyntaxErrors() > 0) {
+      String errorMessage = xskhdbtableSyntaxErrorListener.getErrorMessage();
+      throw new XSKDataStructuresException(errorMessage);
     }
 
-    @Override
-    public Class<XSKDataStructureHDBTableModel> getDataStructureClass() {
-        return XSKDataStructureHDBTableModel.class;
+    XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
+
+    JsonElement parsedResult = xskhdbtableCoreVisitor.visit(parseTree);
+
+    Gson gson = new Gson();
+
+    XSKHDBTABLEDefinitionModel hdbtableDefinitionModel = gson.fromJson(parsedResult, XSKHDBTABLEDefinitionModel.class);
+    try {
+      hdbtableDefinitionModel.checkForAllMandatoryFieldsPresence();
+    } catch (Exception e) {
+      throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
     }
 
-    @Override
-    public XSKDataStructureHDBTableModel parse(String location, String content) throws XSKDataStructuresException, IOException {
-        logger.debug("Determine if the hdbtable is Hana XS Classic or Hana XS Advanced'");
-        return (content.trim().startsWith(XSKConstants.XSK_HDBTABLE_SYNTAX))
-                ? parseHanaXSAdvancedContent(location, content)
-                : parseHanaXSClassicContent(location, content);
+    XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
+
+    List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
+    for( XSKHDBTABLEColumnsModel column : hdbtableDefinitionModel.getColumns()) {
+      try {
+        column.checkForAllMandatoryColumnFieldsPresence();
+      } catch (Exception e) {
+        throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
+      }
+      XSKDataStructureHDBTableColumnModel dataStructureHDBTableColumnModel = new XSKDataStructureHDBTableColumnModel();
+      dataStructureHDBTableColumnModel.setLength(column.getLength());
+      dataStructureHDBTableColumnModel.setName(column.getName());
+      dataStructureHDBTableColumnModel.setType(column.getSqlType());
+      dataStructureHDBTableColumnModel.setComment(column.getComment());
+      dataStructureHDBTableColumnModel.setNullable(column.isNullable());
+      dataStructureHDBTableColumnModel.setDefaultValue(column.getDefaultValue());
+      dataStructureHDBTableColumnModel.setPrecision(column.getPrecision());
+      dataStructureHDBTableColumnModel.setScale(column.getScale());
+      dataStructureHDBTableColumnModel.setUnique(column.isUnique());
+      columns.add(dataStructureHDBTableColumnModel);
     }
 
-    private XSKDataStructureHDBTableModel parseHanaXSClassicContent(String location, String content)
-            throws IOException, XSKDataStructuresException {
-        ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
-        ANTLRInputStream inputStream = new ANTLRInputStream(is);
-        HdbtableLexer hdbtableLexer = new HdbtableLexer(inputStream);
-        CommonTokenStream tokenStream = new CommonTokenStream(hdbtableLexer);
+    dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName());
+    dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription());
+    dataStructureHDBTableModel.setLoggingType(hdbtableDefinitionModel.getLoggingType());
+    dataStructureHDBTableModel.setPublicProp(hdbtableDefinitionModel.getPublicProp());
+    dataStructureHDBTableModel.setTemporary(hdbtableDefinitionModel.getTemporary());
+    dataStructureHDBTableModel.setTableType(hdbtableDefinitionModel.getTableType());
 
-        HdbtableParser hdbtableParser = new HdbtableParser(tokenStream);
-        hdbtableParser.setBuildParseTree(true);
-        hdbtableParser.removeErrorListeners();
+    dataStructureHDBTableModel.setColumns(columns);
+    dataStructureHDBTableModel.setConstraints(new XSKDataStructureHDBTableConstraintsModel());
 
-        XSKHDBTABLESyntaxErrorListener xskhdbtableSyntaxErrorListener = new XSKHDBTABLESyntaxErrorListener();
-        hdbtableParser.addErrorListener(xskhdbtableSyntaxErrorListener);
-        ParseTree parseTree = hdbtableParser.hdbtableDefinition();
+    XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
+    primaryKey.setColumns(hdbtableDefinitionModel.getPkcolumns().toArray(String[]::new));
+    primaryKey.setName("PK_"+ dataStructureHDBTableModel.getName());
+    dataStructureHDBTableModel.getConstraints().setPrimaryKey(primaryKey);
 
-        if (hdbtableParser.getNumberOfSyntaxErrors() > 0) {
-            String errorMessage = xskhdbtableSyntaxErrorListener.getErrorMessage();
-            throw new XSKDataStructuresException(errorMessage);
-        }
 
-        XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
+    List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndices = new ArrayList<>();
 
-        JsonElement parsedResult = xskhdbtableCoreVisitor.visit(parseTree);
-
-        Gson gson = new Gson();
-
-        XSKHDBTABLEDefinitionModel hdbtableDefinitionModel = gson.fromJson(parsedResult, XSKHDBTABLEDefinitionModel.class);
+    if(hdbtableDefinitionModel.getIndexes()!=null) {
+      for (XSKHDBTABLEIndexesModel index : hdbtableDefinitionModel.getIndexes()) {
         try {
-            hdbtableDefinitionModel.checkForAllMandatoryFieldsPresence();
+          index.checkForAllIndexMandatoryFieldsPresence();
         } catch (Exception e) {
-            throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
+          throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
         }
-
-        XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
-
-        List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-        for (XSKHDBTABLEColumnsModel column : hdbtableDefinitionModel.getColumns()) {
-            try {
-                column.checkForAllMandatoryColumnFieldsPresence();
-            } catch (Exception e) {
-                throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
-            }
-            XSKDataStructureHDBTableColumnModel dataStructureHDBTableColumnModel = new XSKDataStructureHDBTableColumnModel();
-            dataStructureHDBTableColumnModel.setLength(column.getLength());
-            dataStructureHDBTableColumnModel.setName(column.getName());
-            dataStructureHDBTableColumnModel.setType(column.getSqlType());
-            dataStructureHDBTableColumnModel.setComment(column.getComment());
-            dataStructureHDBTableColumnModel.setNullable(column.isNullable());
-            dataStructureHDBTableColumnModel.setDefaultValue(column.getDefaultValue());
-            dataStructureHDBTableColumnModel.setPrecision(column.getPrecision());
-            dataStructureHDBTableColumnModel.setScale(column.getScale());
-            dataStructureHDBTableColumnModel.setUnique(column.isUnique());
-            columns.add(dataStructureHDBTableColumnModel);
-        }
-
-        dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName());
-        dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription());
-        dataStructureHDBTableModel.setLoggingType(hdbtableDefinitionModel.getLoggingType());
-        dataStructureHDBTableModel.setPublicProp(hdbtableDefinitionModel.getPublicProp());
-        dataStructureHDBTableModel.setTemporary(hdbtableDefinitionModel.getTemporary());
-        dataStructureHDBTableModel.setTableType(hdbtableDefinitionModel.getTableType());
-
-        dataStructureHDBTableModel.setColumns(columns);
-        dataStructureHDBTableModel.setConstraints(new XSKDataStructureHDBTableConstraintsModel());
-
-        XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
-        primaryKey.setColumns(hdbtableDefinitionModel.getPkcolumns().toArray(String[]::new));
-        primaryKey.setName("PK_" + dataStructureHDBTableModel.getName());
-        dataStructureHDBTableModel.getConstraints().setPrimaryKey(primaryKey);
-
-
-        List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndices = new ArrayList<>();
-
-        if (hdbtableDefinitionModel.getIndexes() != null) {
-            for (XSKHDBTABLEIndexesModel index : hdbtableDefinitionModel.getIndexes()) {
-                try {
-                    index.checkForAllIndexMandatoryFieldsPresence();
-                } catch (Exception e) {
-                    throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
-                }
-                XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex = new XSKDataStructureHDBTableConstraintUniqueModel();
-                uniqueIndex.setName(index.getIndexName());
-                uniqueIndex.setColumns(index.getIndexColumns().toArray(String[]::new));
-                uniqueIndices.add(uniqueIndex);
-            }
-            dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
-        }
-        setXSKDataStructureHDBTableModelDetails(location, content, XSKHanaVersion.VERSION_1, dataStructureHDBTableModel);
-
-        return dataStructureHDBTableModel;
+        XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex = new XSKDataStructureHDBTableConstraintUniqueModel();
+        uniqueIndex.setName(index.getIndexName());
+        uniqueIndex.setColumns(index.getIndexColumns().toArray(String[]::new));
+        uniqueIndices.add(uniqueIndex);
+      }
+      dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
     }
+    setXSKDataStructureHDBTableModelDetails(location, content, XSKDBContentType.XS_CLASSIC, dataStructureHDBTableModel);
 
-    private XSKDataStructureHDBTableModel parseHanaXSAdvancedContent(String location, String content) {
-        XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
-        setXSKDataStructureHDBTableModelDetails(location, content, XSKHanaVersion.VERSION_2, dataStructureHDBTableModel);
-        dataStructureHDBTableModel.setRawContent(content);
-        return dataStructureHDBTableModel;
-    }
+    return dataStructureHDBTableModel;
+  }
 
-    private void setXSKDataStructureHDBTableModelDetails(String location, String content, XSKHanaVersion hanaVersion, XSKDataStructureHDBTableModel dataStructureHDBTableModel) {
-        dataStructureHDBTableModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
-        dataStructureHDBTableModel.setLocation(location);
-        dataStructureHDBTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
-        dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
-        dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
-        dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-        dataStructureHDBTableModel.setHanaVersion(hanaVersion);
-    }
+  private XSKDataStructureHDBTableModel parseHanaXSAdvancedContent(String location, String content) {
+    XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
+    setXSKDataStructureHDBTableModelDetails(location, content, XSKDBContentType.OTHERS, dataStructureHDBTableModel);
+    dataStructureHDBTableModel.setRawContent(content);
+    return dataStructureHDBTableModel;
+  }
+
+  private void setXSKDataStructureHDBTableModelDetails(String location, String content, XSKDBContentType dbContentType, XSKDataStructureHDBTableModel dataStructureHDBTableModel) {
+    dataStructureHDBTableModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
+    dataStructureHDBTableModel.setLocation(location);
+    dataStructureHDBTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
+    dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
+    dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
+    dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    dataStructureHDBTableModel.setDbContentType(dbContentType);
+  }
 }
 

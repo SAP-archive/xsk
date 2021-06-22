@@ -1,32 +1,26 @@
 #!/bin/bash
-set -ex
-set -o pipefail
-
-readonly SCRIPT_DIR=$(realpath "$( dirname "${BASH_SOURCE[0]}" )")
-
 echo "Building ..."
 
-echo "Create Tomcat dir in working dir"
-#
-## 1. GET ARGS
-readonly layersdir=$1
-readonly tomcatdir=/usr/local/tomcat
-readonly tomcatlayer=${layersdir}/tomcat
+mkdir ./tomcat
+cp -r /usr/local/tomcat/* ./tomcat/
 
-mkdir -p ${tomcatlayer}
-cp -R  /usr/local/tomcat/* ${tomcatlayer}
+ls -lah ./tomcat/
 
-zip -r ROOT.war .
+rm -rf ./tomcat/webapps/ROOT/
+rm -rf ./tomcat/webapps/docs/
+rm -rf ./tomcat/webapps/examples/
+rm -rf ./tomcat/webapps/host-manager/
+rm -rf ./tomcat/webapps/manager/
 
-# find all war files in workspace and copy them to webapps
-find /workspace  -name '*.war' -exec cp -prv '{}' ${layersdir}/tomcat/webapps  ';'
-chmod -R 777 $layersdir
+cp *.war ./tomcat/webapps/
 
-echo -e 'launch = true' > "$layersdir/tomcat.toml"
-## ========== ADDED ===========
-## 8. SET DEFAULT START COMMAND
+echo "Listing webapps"
+ls -lah ./tomcat/webapps/
+
+layersdir=$1
+
 cat > "$layersdir/launch.toml" <<EOL
 [[processes]]
 type = "web"
-command = "${layersdir}/tomcat/bin/catalina.sh run"
+command = "./tomcat/bin/catalina.sh run"
 EOL

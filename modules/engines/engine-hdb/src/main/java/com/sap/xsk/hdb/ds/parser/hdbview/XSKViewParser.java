@@ -13,7 +13,7 @@ package com.sap.xsk.hdb.ds.parser.hdbview;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbview.core.HdbviewLexer;
@@ -54,7 +54,7 @@ public class XSKViewParser implements XSKDataStructureParser {
   private XSKDataStructureHDBViewModel parseHANAv2Content(String location, String content) {
     XSKDataStructureHDBViewModel hdbViewModel = new XSKDataStructureHDBViewModel();
     populateXSKDataStructureHDBViewModel(location, content, hdbViewModel);
-    hdbViewModel.setHanaVersion(XSKHanaVersion.VERSION_2);
+    hdbViewModel.setDbContentType(XSKDBContentType.OTHERS);
     hdbViewModel.setRawContent(content);
     return hdbViewModel;
   }
@@ -63,7 +63,7 @@ public class XSKViewParser implements XSKDataStructureParser {
   private XSKDataStructureHDBViewModel parseHANAv1Content(String location, String content) throws XSKDataStructuresException, IOException {
     XSKDataStructureHDBViewModel hdbViewModel = new XSKDataStructureHDBViewModel();
     populateXSKDataStructureHDBViewModel(location, content, hdbViewModel);
-    hdbViewModel.setHanaVersion(XSKHanaVersion.VERSION_1);
+    hdbViewModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
 
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);

@@ -64,7 +64,7 @@ function XscCallableStatement(callableStatement) {
 	};
 
 	this.getInteger = function(index) {
-		return callableStatement.getInteger(index);
+		return callableStatement.getInt(index);
 	};
 
 	this.getMoreResults = function() {
@@ -278,14 +278,10 @@ function XscParameterMetaData(dParameterMetaData) {
 
 	};
 
-	// although I put not null constraints, this method always returns 2 for all
-	// columns which is strange
 	this.isNullable = function(paramIndex) {
 		return dParameterMetaData.isNullable(paramIndex);
 	};
 
-	// although I set some integer fields to be unsigned, this method always
-	// returns true, which is also strange
 	this.isSigned = function(paramIndex) {
 		return dParameterMetaData.isSigned(paramIndex);
 	};

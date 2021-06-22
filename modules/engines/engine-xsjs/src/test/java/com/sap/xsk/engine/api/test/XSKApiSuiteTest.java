@@ -63,7 +63,12 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
   }
 
   @Before
-  public void registerModules() {
+  public void registerModules()
+  {
+//    TEST_MODULES.add("test/xsk/db/api/db.xsjs");
+//    TEST_MODULES.add("test/xsk/db/api/connection.xsjs");
+//    TEST_MODULES.add("test/xsk/db/api/parameter-metadata.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/callable-statement.xsjs");
     TEST_MODULES.add("test/xsk/response.xsjs");
   }
 

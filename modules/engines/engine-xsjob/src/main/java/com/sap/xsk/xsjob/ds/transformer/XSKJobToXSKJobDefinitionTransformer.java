@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.xsjob.ds.tronsformer;
+package com.sap.xsk.xsjob.ds.transformer;
 
 import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
@@ -28,11 +28,13 @@ public class XSKJobToXSKJobDefinitionTransformer {
 
   public ArrayList<XSKJobDefinition> transform(XSKJobArtifact xskJobArtifact) throws ParseException {
     ArrayList<XSKJobDefinition> jobDefinitions = new ArrayList<>();
-
     String[] parseAction = xskJobArtifact.getAction().split("::");
-    String filePath = parseAction[0];
-    String functionName = parseAction[1];
-    filePath = xskPathToDirigiblePath(filePath);
+    final int PARTS_OF_ACTION_PROPERTY = 2;
+
+    if(parseAction.length == PARTS_OF_ACTION_PROPERTY){
+      String filePath = parseAction[0];
+      String functionName = parseAction[1];
+      filePath = xskPathToDirigiblePath(filePath);
 
       for (int i = 0; i < xskJobArtifact.getSchedules().size(); i++) {
         XSKJobDefinition xskJobDefinition = new XSKJobDefinition();
@@ -48,6 +50,10 @@ public class XSKJobToXSKJobDefinitionTransformer {
         xskJobDefinition.setFunction(functionName);
         jobDefinitions.add(xskJobDefinition);
       }
+    }else {
+      throw new IllegalStateException("Invalid xsjob artifact definition!");
+    }
+
     return jobDefinitions;
   }
 

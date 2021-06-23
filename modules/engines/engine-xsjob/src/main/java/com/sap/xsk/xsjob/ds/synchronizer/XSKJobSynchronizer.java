@@ -19,7 +19,7 @@ import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.XSKSchedulerManager;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
-import com.sap.xsk.xsjob.ds.tronsformer.XSKJobToXSKJobDefinitionTransformer;
+import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

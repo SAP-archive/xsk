@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2020 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 exports.http = require("xsk/http/http");
@@ -20,6 +20,7 @@ exports.Mail = function (mailObject) {
     this.parts = mailObject.parts || [];
 
     this.subject = mailObject.subject;
+    this.sender = mailObject.sender || { name: "", address: "", nameEncoding: "" };
     this.subjectEncoding = mailObject.subjectEncoding;
 
 
@@ -63,6 +64,32 @@ exports.Mail.Part.TYPE_TEXT = "ToDO";
 exports.Mail.Part.TYPE_ATTACHMENT = "ToDO";
 exports.Mail.Part.TYPE_INLINE = "ToDO";
 
+exports.Destination = function(packageName, objectName) {
+  let destination = exports.http.readDestination(packageName, objectName);
+  this.host = destination.host || "";
+  this.port = destination.port || "";
+}
 
+exports.SMTPConnection = function() {
+  this.send = function(mailClass) {
+    let mailConfig = {
+      "mail.transport.protocol": "smtp",
+      "mail.smtp.port": "587"
+    };
+    let mailClient = mail.getClient(mailConfig);
+    let recipients = {
+      to: mailClass.to || [],
+      cc: mailClass.cc || [],
+      bcc: mailClass.bcc || []
+    };
 
-
+    mailClient.send(mailClass.sender.address, recipients, mailClass.subject, mailClass.parts[0].text, mailClass.adaptMailContentType(mailClass.parts[0]));
+  }
+  this.close = function() {
+    // Empty. Called automatically inside MailFacade
+  }
+  this.isClosed = function() {
+    // The connection is being closed automatically
+    return true;
+  }
+}

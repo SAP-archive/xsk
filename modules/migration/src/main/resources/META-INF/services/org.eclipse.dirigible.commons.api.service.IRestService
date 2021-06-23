@@ -1,1 +1,1 @@
-com.sap.xsk.migration.XSKMigrationRestService	# HANA XS Classic Migration Service
+com.sap.xsk.migration.api.XSKMigrationRestService	# HANA XS Classic Migration Service

@@ -10,140 +10,139 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.test;
-/**
- * Copyright (c) 2010-2018 SAP and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * <p>
- * Contributors:
- * SAP - initial API and implementation
- */
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import javax.inject.Inject;
-import javax.sql.DataSource;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableDuplicatePropertyException;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
-import org.junit.Before;
 import org.junit.Test;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.*;
 
-/**
- * The Class DataStructureSchemaTest.
- */
 public class XSKTableParserTest extends AbstractGuiceTest {
-
-  /**
-   * The data structure core service.
-   */
-  @Inject
-  private XSKDataStructuresSynchronizer dataStructuresSynchronizer;
-
-  /**
-   * The datasource
-   */
-  @Inject
-  private DataSource dataSource;
-
-  /**
-   * Sets the up.
-   *
-   * @throws Exception the exception
-   */
-  @Before
-  public void setUp() throws Exception {
-    this.dataStructuresSynchronizer = getInjector().getInstance(XSKDataStructuresSynchronizer.class);
-    this.dataSource = getInjector().getInstance(DataSource.class);
-  }
-
-  /**
-   * Parses the entities
-   */
-  @Test
-  public void parseTable() {
-//		Configuration.set("DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE", "true");
-    try {
-      InputStream in = XSKTableParserTest.class.getResourceAsStream("/Sports.hdbtable");
-      try {
+    @Test
+    public void parseTable() throws Exception {
+        InputStream in = XSKTableParserTest.class.getResourceAsStream("/Sports.hdbtable");
         String contents = IOUtils.toString(in, StandardCharsets.UTF_8);
-        XSKDataStructureHDBTableModel model = new XSKDataStructureModelFactory().parseTable("/Sports.hdbtable", contents);
+        XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/Sports.hdbtable", contents);
+
+        assertEquals(6, model.getColumns().size());
+        assertEquals("Sports", model.getName());
         assertEquals("SPORTS", model.getSchema());
         assertEquals("COLUMNSTORE", model.getTableType());
         assertEquals("Team players", model.getDescription());
-        for (XSKDataStructureHDBTableColumnModel column : model.getColumns()) {
-          if ("MATCH_ID".equals(column.getName())) {
-            assertEquals("NVARCHAR", column.getType());
-            assertEquals("32", column.getLength());
-//						assertEquals("test", column.getComment());
-            assertEquals(false, column.isNullable());
-//						assertEquals(true, column.isPrimaryKey());
-          }
-          if ("PERSON_RATE".equals(column.getName())) {
-            assertEquals("DECIMAL", column.getType());
-            assertEquals("2", column.getPrecision());
-            assertEquals("3", column.getScale());
-          }
-        }
-      } finally {
-        if (in != null) {
-          in.close();
-        }
-      }
+        assertEquals("/Sports.hdbtable", model.getLocation());
+        assertEquals("HDBTABLE", model.getType());
+        assertNotNull(model.getCreatedBy());
+        assertNotNull(model.getCreatedAt());
+        assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
+        assertEquals(contents, model.getRawContent());
 
-    } catch (Exception e) {
-      e.printStackTrace();
-      fail(e.getMessage());
+        XSKDataStructureHDBTableColumnModel matchId = model.getColumns().get(0);
+        assertEquals("MATCH_ID", matchId.getName());
+        assertEquals("NVARCHAR", matchId.getType());
+        assertEquals("32", matchId.getLength());
+        assertFalse(matchId.isNullable());
+        assertTrue(matchId.isPrimaryKey());
+        assertEquals("D1", matchId.getDefaultValue());
+        assertEquals("test", matchId.getComment());
+        assertTrue(matchId.isUnique());
+
+        assertTrue(model.getColumns().get(1).isPrimaryKey());
+        assertTrue(model.getColumns().get(2).isPrimaryKey());
+
+        XSKDataStructureHDBTableColumnModel personRate = model.getColumns().get(3);
+        assertEquals("PERSON_RATE", personRate.getName());
+        assertEquals("DECIMAL", personRate.getType());
+        assertFalse(personRate.isNullable());
+        assertFalse(personRate.isPrimaryKey());
+        assertNull(personRate.getDefaultValue());
+        assertEquals("2", personRate.getPrecision());
+        assertEquals("3", personRate.getScale());
+        assertFalse(personRate.isNullable());
+        assertNull(personRate.getComment());
+
+        XSKDataStructureHDBTableColumnModel changedBy = model.getColumns().get(4);
+        assertEquals("CHANGED_BY", changedBy.getName());
+        assertEquals("NVARCHAR", changedBy.getType());
+        assertEquals("256", changedBy.getLength());
+        assertTrue(changedBy.isNullable());
+        assertFalse(changedBy.isPrimaryKey());
+        assertFalse(changedBy.isUnique());
+
+        XSKDataStructureHDBTableColumnModel changedAt = model.getColumns().get(5);
+        assertEquals("CHANGED_AT", changedAt.getName());
+        assertEquals("TIMESTAMP", changedAt.getType());
+        assertTrue(changedAt.isNullable());
+        assertFalse(changedAt.isPrimaryKey());
+        assertFalse(changedAt.isUnique());
+
+        assertEquals("PK_Sports", model.getConstraints().getPrimaryKey().getName());
+        assertEquals(3, model.getConstraints().getPrimaryKey().getColumns().length);
+        assertNull(model.getConstraints().getPrimaryKey().getModifiers());
+        assertEquals(0, model.getConstraints().getForeignKeys().size());
+        assertEquals(0, model.getConstraints().getUniqueIndices().size());
+        assertEquals(0, model.getConstraints().getChecks().size());
     }
-  }
 
-  @Test
-  public void failIfParsingRepetitiveProperties() throws Exception {
-    InputStream in = XSKTableParserTest.class.getResourceAsStream("/DuplicateTableProperties.hdbtable");
-    String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+    @Test
+    public void failIfParsingRepetitiveProperties() throws Exception {
+        InputStream in = XSKTableParserTest.class.getResourceAsStream("/DuplicateTableProperties.hdbtable");
+        String content = IOUtils.toString(in, StandardCharsets.UTF_8);
 
-    assertThrows(XSKHDBTableDuplicatePropertyException.class, () -> {
-      new XSKTableParser().parse("/DuplicateTableProperties.hdbtable", content);
-    });
-  }
+        assertThrows(XSKHDBTableDuplicatePropertyException.class, () -> new XSKTableParser().parse("/DuplicateTableProperties.hdbtable", content));
+    }
 
-  @Test
-  public void failIfParsingMissingMandatoryProperties() throws Exception {
-    InputStream in = XSKTableParserTest.class.getResourceAsStream("/MissingMandatoryTableProperties.hdbtable");
-    String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+    @Test
+    public void failIfParsingMissingMandatoryProperties() throws Exception {
+        InputStream in = XSKTableParserTest.class.getResourceAsStream("/MissingMandatoryTableProperties.hdbtable");
+        String content = IOUtils.toString(in, StandardCharsets.UTF_8);
 
-    assertThrows(XSKHDBTableMissingPropertyException.class, () -> {
-      new XSKTableParser().parse("/MissingMandatoryTableProperties.hdbtable", content);
-    });
-  }
+        assertThrows(XSKHDBTableMissingPropertyException.class, () -> new XSKTableParser().parse("/MissingMandatoryTableProperties.hdbtable", content));
+    }
 
-  @Test
-  public void parseHanaXSAdvancedContent() throws Exception {
-      InputStream in = XSKTableParserTest.class.getResourceAsStream("/HdbtableHanaXSAdvancedContent.hdbtable");
-      String content = IOUtils.toString(in, StandardCharsets.UTF_8);
-      XSKDataStructureHDBTableModel model = new XSKDataStructureModelFactory().parseTable("/HdbtableHanaXSAdvancedContent.hdbtable", content);
-      assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
-      assertEquals(content, model.getRawContent());
-  }
+    @Test
+    public void failIfParsingWrongPKDefinition() {
+        String content = "table.schemaName = \"SPORTS\";\n" +
+                "table.tableType = COLUMNSTORE;\n" +
+                "table.columns = [\n" +
+                "\t{ name = \"MATCH_ID\";\tsqlType = NVARCHAR;},\n" +
+                "\t{ name = \"TEAM_ID\";\t\tsqlType = NVARCHAR;}\n" +
+                "];\n" +
+                "table.primaryKey.pkcolumns = [\"MATCH_ID_WRONG\", \"TEAM_ID\"];";
 
-  @Test
-  public void parseHanaXSAdvancedContent2() throws Exception {
-    InputStream in = XSKTableParserTest.class.getResourceAsStream("/HdbtableHanaXSAdvancedContent2.hdbtable");
-    String content = IOUtils.toString(in, StandardCharsets.UTF_8);
-    XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/HdbtableHanaXSAdvancedContent2.hdbtable", content);
-    assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
-    assertEquals(content, model.getRawContent());
-  }
+        assertThrows(IllegalStateException.class, () -> new XSKTableParser().parse("/someFileName.hdbtable", content));
+    }
 
+    @Test
+    public void parseHanaXSAdvancedContentWithAdditionalSpaces() throws Exception {
+        String content = " COLUMN TABLE      XSK_HDI_SIMPLE_TABLE COLUMN1 INTEGER )";
+        XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/HdbtableHanaXSAdvancedContent.hdbtable", content);
+        assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
+        assertEquals(content, model.getRawContent());
+    }
+
+    @Test
+    public void parseHanaXSAdvancedContentWithNewLines() throws Exception {
+        String content = "COLUMN TABLE \r\n XSK_HDI_SIMPLE_TABLE (COLUMN1 INTEGER)";
+        XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/testFileName.hdbtable", content);
+        assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
+        assertEquals(content, model.getRawContent());
+    }
+
+    @Test
+    public void parseHanaXSAdvancedContentWithLowerCase() throws Exception {
+        String content = "column table XSK_HDI_SIMPLE_TABLE ( COLUMN1 INTEGER )";
+        XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/testFileName.hdbtable", content);
+        assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
+        assertEquals(content, model.getRawContent());
+    }
 }

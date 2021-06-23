@@ -1,12 +1,12 @@
 table.schemaName = "SPORTS";
 table.tableType = COLUMNSTORE;
 table.columns = [
-	{ name = "MATCH_ID";	sqlType = NVARCHAR;		length = 32;	nullable = false;   comment="test"; },
-	{ name = "TEAM_ID";		sqlType = NVARCHAR;		length = 32;						nullable = false; },
-	{ name = "PERSON_ID";	sqlType = NVARCHAR;		length = 32;						nullable = false; },
-	{ name = "PERSON_RATE";	sqlType = DECIMAL; nullable = false; precision = 2; scale = 3; },
-	{ name = "CHANGED_BY";	sqlType = NVARCHAR; 	length = 256;						nullable = true; },
-	{ name = "CHANGED_AT";	sqlType = TIMESTAMP; 										nullable = true; }
+	{ name = "MATCH_ID";	sqlType = NVARCHAR;		length = 32;	nullable = false;   comment="test"; defaultValue="D1"; unique=true;},
+	{ name = "TEAM_ID";		sqlType = NVARCHAR;		length = 32;	nullable = false;                   },
+	{ name = "PERSON_ID";	sqlType = NVARCHAR;		length = 32;	nullable = false;                   },
+	{ name = "PERSON_RATE";	sqlType = DECIMAL;      nullable = false; precision = 2; scale = 3;         },
+	{ name = "CHANGED_BY";	sqlType = NVARCHAR; 	length = 256;	nullable = true;                    },
+	{ name = "CHANGED_AT";	sqlType = TIMESTAMP; 					nullable = true;                    }
 ];
 table.primaryKey.pkcolumns = ["MATCH_ID", "TEAM_ID", "PERSON_ID"];
 table.description = "Team players";

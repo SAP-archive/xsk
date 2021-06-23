@@ -89,7 +89,10 @@ public class XSKTableParserTest extends AbstractGuiceTest {
         assertEquals(3, model.getConstraints().getPrimaryKey().getColumns().length);
         assertNull(model.getConstraints().getPrimaryKey().getModifiers());
         assertEquals(0, model.getConstraints().getForeignKeys().size());
-        assertEquals(0, model.getConstraints().getUniqueIndices().size());
+        assertEquals(1, model.getConstraints().getUniqueIndices().size());
+        assertEquals("INDEX1", model.getConstraints().getUniqueIndices().get(0).getName());
+        assertEquals(1, model.getConstraints().getUniqueIndices().get(0).getColumns().length);
+        assertEquals("MATCH_ID", model.getConstraints().getUniqueIndices().get(0).getColumns()[0]);
         assertEquals(0, model.getConstraints().getChecks().size());
     }
 
@@ -118,6 +121,20 @@ public class XSKTableParserTest extends AbstractGuiceTest {
                 "\t{ name = \"TEAM_ID\";\t\tsqlType = NVARCHAR;}\n" +
                 "];\n" +
                 "table.primaryKey.pkcolumns = [\"MATCH_ID_WRONG\", \"TEAM_ID\"];";
+
+        assertThrows(IllegalStateException.class, () -> new XSKTableParser().parse("/someFileName.hdbtable", content));
+    }
+
+    @Test
+    public void failIfParsingWrongIndexDefinition() {
+        String content = "table.schemaName = \"SPORTS\";\n" +
+                "table.tableType = COLUMNSTORE;\n" +
+                "table.columns = [\n" +
+                "\t{ name = \"MATCH_ID\";\tsqlType = NVARCHAR;},\n" +
+                "\t{ name = \"TEAM_ID\";\t\tsqlType = NVARCHAR;}\n" +
+                "];\n" +
+                "table.primaryKey.pkcolumns = [\"MATCH_ID\", \"TEAM_ID\"];" +
+                "table.indexes = [ {name = \"INDEX1\"; unique = true; indexColumns = [\"MATCH_ID_WRONG\"];}];";
 
         assertThrows(IllegalStateException.class, () -> new XSKTableParser().parse("/someFileName.hdbtable", content));
     }

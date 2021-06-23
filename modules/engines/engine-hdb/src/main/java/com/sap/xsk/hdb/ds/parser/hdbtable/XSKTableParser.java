@@ -164,6 +164,14 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
                 XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex = new XSKDataStructureHDBTableConstraintUniqueModel();
                 uniqueIndex.setName(index.getIndexName());
                 uniqueIndex.setColumns(index.getIndexColumns().toArray(String[]::new));
+
+                index.getIndexColumns().forEach(col -> {
+                    List<XSKHDBTABLEColumnsModel> foundMatch = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(col)).collect(Collectors.toList());
+                    if (foundMatch.size() != 1) {
+                        throw new IllegalStateException(String.format("%s: the column does not have a definition but is specified as an index", col));
+                    }
+                });
+
                 uniqueIndices.add(uniqueIndex);
             }
             dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);

@@ -177,13 +177,13 @@
 	        <url-pattern>/services/v3/wiki/*</url-pattern>
 	        <url-pattern>/services/v3/command/*</url-pattern>
 	        <url-pattern>/services/v3/xsk/*</url-pattern>
-          <url-pattern>/services/v3/migration/*</url-pattern>
+          <url-pattern>/services/v3/migration-operations/*</url-pattern>
 	        <url-pattern>/services/v4/web/*</url-pattern>
 	        <url-pattern>/services/v4/js/*</url-pattern>
 	        <url-pattern>/services/v4/wiki/*</url-pattern>
 	        <url-pattern>/services/v4/command/*</url-pattern>
 	        <url-pattern>/services/v4/xsk/*</url-pattern>
-          <url-pattern>/services/v4/migration/*</url-pattern>
+          <url-pattern>/services/v4/migration-operations/*</url-pattern>
 	    </web-resource-collection>
 	    <auth-constraint>
 	        <role-name>Everyone</role-name>
@@ -198,13 +198,13 @@
 	        <url-pattern>/public/v3/wiki/*</url-pattern>
 	        <url-pattern>/public/v3/command/*</url-pattern>
 	        <url-pattern>/public/v3/xsk/*</url-pattern>
-          <url-pattern>/public/v3/migration/*</url-pattern>
+          <url-pattern>/public/v3/migration-operations/*</url-pattern>
 	        <url-pattern>/public/v4/web/*</url-pattern>
 	        <url-pattern>/public/v4/js/*</url-pattern>
 	        <url-pattern>/public/v4/wiki/*</url-pattern>
 	        <url-pattern>/public/v4/command/*</url-pattern>
 	        <url-pattern>/public/v4/xsk/*</url-pattern>
-          <url-pattern>/public/v4/migration/*</url-pattern>
+          <url-pattern>/public/v4/migration-operations/*</url-pattern>
 	    </web-resource-collection>
 	</security-constraint>
 

@@ -61,7 +61,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
 
     @Override
     public XSKDataStructureHDBTableModel parse(String location, String content) throws XSKDataStructuresException, IOException {
-        Pattern pattern = Pattern.compile("(COLUMN)(\\t\\n)*(\\s)*(TABLE)", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*(COLUMN)(\\t\\n)*(\\s)*(TABLE)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
         boolean matchFound = matcher.find();
         return (matchFound)

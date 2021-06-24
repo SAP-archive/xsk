@@ -72,6 +72,54 @@ public class XSKMigrationRestService extends AbstractRestService {
   @Inject
   private SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> listDatabasesSdkCommand;
 
+  @Inject
+  private TransportProcessor processor;
+
+  @POST
+  @Path("/")
+  public Response doPost(@FormParam("workspace") String workspace, @FormParam("du") String du, @FormParam("vendor") String vendor) {
+    try {
+      String fileURL = System.getenv("CATALINA_HOME") + "/" + System.getenv("ZIP_OUTPUT_URL");
+      File file = new File(fileURL);
+
+      file.createNewFile();
+
+      ProcessBuilder pb = new ProcessBuilder("node", System.getenv("CATALINA_HOME") + "/migration-tools/xs-migration-cloud/xs-migration.js", du + "," + vendor);
+      pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+      pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+      Process p = pb.start();
+      Future<Boolean> identical = p.onExit().thenApply(p1 -> p1.exitValue() == 0);
+      if (identical.get()) {
+        BufferedReader reader;
+        try {
+          reader = new BufferedReader(new FileReader(fileURL));
+          String line = reader.readLine();
+          while (line != null) {
+            String fullPath = System.getenv("CATALINA_HOME") + "/" + line;
+            File zipFile = new File(fullPath);
+            byte[] project = FileUtils.readFileToByteArray(zipFile);
+            processor.importProject(workspace, project);
+            line = reader.readLine();
+          }
+          reader.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+          return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error reading results file").build();
+        }
+
+        file.delete();
+        return Response.ok().build();
+      } else {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Script failure").build();
+      }
+
+    } catch (Throwable e) {
+      String message = e.getMessage();
+      createErrorResponseInternalServerError(message);
+      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).build();
+    }
+  }
+
   @POST
   @Path("setup-migration")
   public Response setupMigration(MigrationRequestBody migrationRequestBody) {

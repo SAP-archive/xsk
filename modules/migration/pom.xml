@@ -89,6 +89,18 @@
       <version>${hamcrest.all.version}</version>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-service-transport</artifactId>
+          <version>5.11.1</version>
+          <scope>compile</scope>
+      </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-service-transport</artifactId>
+      <version>5.11.1</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>

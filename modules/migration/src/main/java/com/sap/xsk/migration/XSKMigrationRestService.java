@@ -11,42 +11,71 @@
  */
 package com.sap.xsk.migration;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Authorization;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.dirigible.commons.api.service.AbstractRestService;
 import org.eclipse.dirigible.commons.api.service.IRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.concurrent.Future;
+import org.eclipse.dirigible.runtime.transport.processor.TransportProcessor;
 
 @Singleton
 @Path("/migration")
-@Api(value = "JavaScript Engine - HANA XS Classic", authorizations = {@Authorization(value = "basicAuth", scopes = {})})
-@ApiResponses({@ApiResponse(code = 401, message = "Unauthorized"), @ApiResponse(code = 403, message = "Forbidden"),
-    @ApiResponse(code = 404, message = "Not Found"), @ApiResponse(code = 500, message = "Internal Server Error")})
 public class XSKMigrationRestService extends AbstractRestService {
+
+  @Inject
+  private TransportProcessor processor;
 
   private static final Logger logger = LoggerFactory.getLogger(XSKMigrationRestService.class);
 
-  @Context
-  private HttpServletResponse response;
-
-  @GET
-  @Path("/{path:.*}")
-  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
-  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response doGet(@PathParam("path") String path) {
+  @POST
+  @Path("/")
+  public Response doPost(@FormParam("workspace") String workspace, @FormParam("du") String du, @FormParam("vendor") String vendor) {
     try {
-      return Response.ok().build();
+      String fileURL = System.getenv("CATALINA_HOME") + "/" + System.getenv("ZIP_OUTPUT_URL");
+      File file = new File(fileURL);
+
+      file.createNewFile();
+
+      ProcessBuilder pb = new ProcessBuilder("node", System.getenv("CATALINA_HOME") + "/migration-tools/xs-migration-cloud/xs-migration.js", du + "," + vendor);
+      pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+      pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+      Process p = pb.start();
+      Future<Boolean> identical = p.onExit().thenApply(p1 -> p1.exitValue() == 0);
+      if (identical.get()) {
+        BufferedReader reader;
+        try {
+          reader = new BufferedReader(new FileReader(fileURL));
+          String line = reader.readLine();
+          while (line != null) {
+            String fullPath = System.getenv("CATALINA_HOME") + "/" + line;
+            File zipFile = new File(fullPath);
+            byte[] project = FileUtils.readFileToByteArray(zipFile);
+            processor.importProject(workspace, project);
+            line = reader.readLine();
+          }
+          reader.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+          return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error reading results file").build();
+        }
+
+        file.delete();
+        return Response.ok().build();
+      } else {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Script failure").build();
+      }
+
     } catch (Throwable e) {
       String message = e.getMessage();
       createErrorResponseInternalServerError(message);

@@ -188,6 +188,8 @@
 		</profile>
 	</profiles>
 
-	<dependencies>
-	</dependencies>
+	<properties>
+		<license.header.location>../../../license-header.txt</license.header.location>
+	</properties>
+
 </project>

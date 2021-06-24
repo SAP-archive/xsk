@@ -11,9 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableAlterColumnHandler;
@@ -26,12 +23,6 @@ public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructur
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableAlterProcessor.class);
 
-  private static final String INCOMPATIBLE_CHANGE_OF_TABLE = "Incompatible change of table [%s] by adding a column [%s] which is [%s]"; //$NON-NLS-1$
-
-  @Inject
-  @Named("xskTableCreateProcessor")
-  private IXSKHdbProcessor xskTableCreateProcessor;
-
   /**
    * Execute the corresponding statement.
    *
@@ -42,9 +33,9 @@ public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructur
   @Override
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
     XSKTableAlterColumnHandler handler = new XSKTableAlterColumnHandler(connection, tableModel);
-    handler.addColumns(connection, tableModel);
+    handler.addColumns(connection);
     handler.removeColumns(connection);
-
+    handler.updateColumns(connection);
   }
 
 

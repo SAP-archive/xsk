@@ -50,77 +50,14 @@
 
     kubectl apply -f kpack.yaml
     ```
+    
+    > _**Note:** Before creating the Kpack resources, replace the **`<tag>`** placeholder with a valid XSK version (e.g. 0.5.0, 0.6.0, ...). All available XSK versions could be found [here](https://github.com/SAP/xsk/releases) and the respective Docker images [here](https://hub.docker.com/r/dirigiblelabs/kneo-xsk-buildpack/tags?page=1&ordering=last_updated)._
 
 ### Image Building
 
 1. Create Image:
 
     ```yaml
-    apiVersion: kpack.io/v1alpha1
-    kind: Image
-    metadata:
-      name: xsk-application
-      namespace: default
-    spec:
-      tag: dirigiblelabs/xsk-application
-      serviceAccount: docker-registry-service-account
-      builder:
-        name: kneo-xsk
-        kind: Builder
-      source:
-        blob:
-          url: https://github.com/SAP/xsk/raw/main/samples/xsjs-simple.zip
-    ```
-
-1. Monitor Logs:
-
-    ```
-    logs -image xsk-application -namespace default
-    ```
-### Image Building with different version
-
-1. Change the version for ClusterStore, ClusterStack, Builder
-
-```yaml
-apiVersion: kpack.io/v1alpha1
-kind: ClusterStore
-metadata:
-  name: kneo-xsk-store
-spec:
-  sources:
-  - image: dirigiblelabs/kneo-xsk-buildpack:<tag>
----
-apiVersion: kpack.io/v1alpha1
-kind: ClusterStack
-metadata:
-  name: kneo-xsk-stack
-spec:
-  id: "com.sap.kneo.xsk"
-  buildImage:
-    image: "dirigiblelabs/kneo-xsk-stack-build:<tag>"
-  runImage:
-    image: "dirigiblelabs/kneo-xsk-stack-run:<tag>"
----
-apiVersion: kpack.io/v1alpha1
-kind: Builder
-metadata:
-  name: kneo-xsk
-spec:
-  serviceAccount: docker-registry-service-account
-  tag: dirigiblelabs/kneo-xsk-builder:<tag>
-  stack:
-    name: kneo-xsk-stack
-    kind: ClusterStack
-  store:
-    name: kneo-xsk-store
-    kind: ClusterStore
-  order:
-  - group:
-    - id: dirigiblelabs/kneo-xsk-buildpack
-```
-2. Change the version for the build image - add field _imageTaggingStrategy_
-
-```yaml
     apiVersion: kpack.io/v1alpha1
     kind: Image
     metadata:
@@ -136,4 +73,12 @@ spec:
       source:
         blob:
           url: https://github.com/SAP/xsk/raw/main/samples/xsjs-simple.zip
+    ```
+
+    > _**Note:** Replace the **`<tag>`** placeholder with your Docker image tag._
+
+1. Monitor Logs:
+
+    ```
+    logs -image xsk-application -namespace default
     ```

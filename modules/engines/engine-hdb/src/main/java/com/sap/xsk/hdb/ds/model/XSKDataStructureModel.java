@@ -53,7 +53,7 @@ public class XSKDataStructureModel {
   private transient String rawContent;
 
   @Transient
-  private transient XSKHanaVersion hanaVersion;
+  private transient XSKDBContentType dbContentType;
 
   /**
    * Gets the location.
@@ -211,12 +211,12 @@ public class XSKDataStructureModel {
     this.rawContent = rawContent;
   }
 
-  public XSKHanaVersion getHanaVersion() {
-    return hanaVersion;
+  public XSKDBContentType getDBContentType() {
+    return dbContentType;
   }
 
-  public void setHanaVersion(XSKHanaVersion hanaVersion) {
-    this.hanaVersion = hanaVersion;
+  public void setDbContentType(XSKDBContentType dbContentType) {
+    this.dbContentType = dbContentType;
   }
 
   /**

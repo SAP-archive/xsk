@@ -150,7 +150,7 @@
 		<xtextVersion>2.18.0</xtextVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dirigible.version>5.11.1</dirigible.version>
+		<dirigible.version>5.11.2</dirigible.version>
 
 		<maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
 		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
@@ -191,6 +191,8 @@
 		<license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
 		<org.projectlombok.version>1.18.20</org.projectlombok.version>
 		<antlr4-runtime.version>4.3</antlr4-runtime.version>
+		<antlr4-maven-plugin.version>4.3</antlr4-maven-plugin.version>
+		<org.testcontainers.version>1.15.2</org.testcontainers.version>
 
 		<license.header.location>license-header.txt</license.header.location>
 

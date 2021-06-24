@@ -11,52 +11,32 @@
  */
 package com.sap.xsk.parser.hdbsynonym.models;
 
+import com.sap.xsk.parser.hdbsynonym.exceptions.XSKHDBSYNONYMMissingPropertyException;
+import lombok.*;
+
+import java.util.Objects;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class XSKHDBSYNONYMDefinitionModel {
 
-  private String location;
-  private String targetObject;
-  private String targetSchema;
-  private String synonymSchema;
+    private String location;
+    private String targetObject;
+    private String targetSchema;
+    private String synonymSchema;
 
-  public String getLocation() {
-    return location;
-  }
+    public void checkForAllMandatoryFieldsPresence() {
+        checkPresence(targetObject, "targetObject");
+        checkPresence(targetSchema, "targetSchema");
+        checkPresence(synonymSchema, "synonymSchema");
+    }
 
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
-  public String getTargetObject() {
-    return targetObject;
-  }
-
-  public void setTargetObject(String targetObject) {
-    this.targetObject = targetObject;
-  }
-
-  public String getTargetSchema() {
-    return targetSchema;
-  }
-
-  public void setTargetSchema(String targetSchema) {
-    this.targetSchema = targetSchema;
-  }
-
-  public String getSynonymSchema() {
-    return synonymSchema;
-  }
-
-  public void setSynonymSchema(String synonymSchema) {
-    this.synonymSchema = synonymSchema;
-  }
-
-  @Override
-  public String toString() {
-    return "XSKHDBSYNONYMDefinitionModel{" +
-        "location='" + location + '\'' +
-        ", targetObject='" + targetObject + '\'' +
-        ", targetSchema='" + targetSchema + '\'' +
-        ", synonymSchema='" + synonymSchema + '\'' +
-        '}';
-  }
+    private <T> void checkPresence(T field, String fieldName) {
+        if (Objects.isNull(field)) {
+            throw new XSKHDBSYNONYMMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+        }
+    }
 }

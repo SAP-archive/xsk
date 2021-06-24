@@ -15,11 +15,14 @@ import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +47,13 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
     String targetObjectName = XSKHDBUtils
         .escapeArtifactName(connection, synonymModel.getTargetObject(), synonymModel.getTargetSchema());
     if (!SqlFactory.getNative(connection).exists(connection, synonymModel.getName(), DatabaseArtifactTypes.SYNONYM)) {
-      String sql = SqlFactory.getNative(connection).create().synonym(synonymName).forSource(targetObjectName).build();
-      executeSql(sql, connection);
+      ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+      if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+        throw new IllegalStateException(String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection)));
+      } else {
+        String sql = SqlFactory.getNative(connection).create().synonym(synonymName).forSource(targetObjectName).build();
+        executeSql(sql, connection);
+      }
     } else {
       logger.warn(format("Synonym [{0}] already exists during the create process", synonymModel.getName()));
     }

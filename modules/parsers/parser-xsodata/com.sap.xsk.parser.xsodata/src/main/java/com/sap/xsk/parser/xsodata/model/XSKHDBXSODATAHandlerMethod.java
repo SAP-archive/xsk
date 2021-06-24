@@ -15,18 +15,25 @@ package com.sap.xsk.parser.xsodata.model;
  * The text should reflect the values from org.eclipse.dirigible.engine.odata2.definition.ODataHandlerMethods
  */
 public enum XSKHDBXSODATAHandlerMethod {
-    CREATE("create"),
-    UPDATE("update"),
-    DELETE("delete");
+    CREATE("create", "sap:creatable"),
+    UPDATE("update", "sap:updatable"),
+    DELETE("delete", "sap:deletable");
 
     private final String odataHandlerType;
 
-    XSKHDBXSODATAHandlerMethod(String odataHandlerType) {
+    private final String odataSAPAnnotation;
+
+    XSKHDBXSODATAHandlerMethod(String odataHandlerType, String odataSAPAnnotation) {
         this.odataHandlerType = odataHandlerType;
+        this.odataSAPAnnotation = odataSAPAnnotation;
     }
 
     public String getOdataHandlerType() {
         return odataHandlerType;
+    }
+
+    public String getOdataSAPAnnotation() {
+        return odataSAPAnnotation;
     }
 
     public String value() {

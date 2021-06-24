@@ -10,7 +10,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
+import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
 import com.sap.xsk.xsodata.utils.XSKODataUtils;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
@@ -40,6 +43,43 @@ public class XSKODataUtilsTest {
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private DBMetadataUtil dbMetadataUtil;
+
+
+    @Test
+    public void testConvertMultiplicityOneToMany() throws Exception {
+        XSKODataParser parser = new XSKODataParser();
+        String content = org.apache.commons.io.IOUtils
+                .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_multiplicity_one_to_many.xsodata"), StandardCharsets.UTF_8);
+        XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_multiplicity_one_to_many.xsodata", content);
+
+        PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", true);
+        PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("EMPLOYEE_NUMBER", "Edm.Int32", true);
+        PersistenceTableColumnModel column9 = new PersistenceTableColumnModel("ORDER_ID", "Edm.Int32", true);
+        column9.setNullable(true);
+        PersistenceTableModel model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::employee", Arrays.asList(column1, column2, column9), new ArrayList<>());
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee")).thenReturn(model);
+
+        PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", true);
+        PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", false);
+        PersistenceTableRelationModel relPhone = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::address", "PHONES", "FK_PHONE", "ID", "CONSTRAINT_8C9F7", "CONSTRAINT_INDEX_E67");
+        model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::address", Arrays.asList(column7, column8), Collections.singletonList(relPhone));
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address")).thenReturn(model);
+
+        PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", true);
+        PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", false);
+        PersistenceTableColumnModel column5 = new PersistenceTableColumnModel("FK_EMPLOYEE_NUMBER", "Edm.Int32", false);
+        PersistenceTableColumnModel column6 = new PersistenceTableColumnModel("FK_ADDRESS_ID", "Edm.Int32", false);
+        PersistenceTableRelationModel rel = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones", "kneo.test.helloodata.CompositeKey::employee", "FK_COMPANY_ID", "COMPANY_ID", "CONSTRAINT_8C", "CONSTRAINT_INDEX_4");
+        PersistenceTableRelationModel rel2 = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones", "kneo.test.helloodata.CompositeKey::employee", "FK_EMPLOYEE_NUMBER", "EMPLOYEE_NUMBER", "CONSTRAINT_8C9", "CONSTRAINT_INDEX_43");
+        PersistenceTableRelationModel rel3 = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones", "kneo.test.helloodata.CompositeKey::address", "FK_ADDRESS_ID", "ID", "CONSTRAINT_8C9F", "CONSTRAINT_INDEX_E6");
+        model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::phones", Arrays.asList(column3, column4, column5, column6), Arrays.asList(rel, rel2, rel3));
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::phones")).thenReturn(model);
+
+        ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
+
+        assertEquals("1", oDataDefinition.getAssociations().get(0).getFrom().getMultiplicity());
+        assertEquals("*", oDataDefinition.getAssociations().get(0).getTo().getMultiplicity());
+    }
 
     @Test
     public void testConvertWithoutSetOfPropAndLimitedExposedNavigations() throws Exception {
@@ -230,7 +270,10 @@ public class XSKODataUtilsTest {
         assertEquals("sample.odata::afterMethod",entity1.getHandlers().get(1).getHandler());
         assertEquals(ODataHandlerMethods.create.name(),entity1.getHandlers().get(2).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity1.getHandlers().get(2).getType());
-        assertEquals(null,entity1.getHandlers().get(2).getHandler());
+        assertNull(entity1.getHandlers().get(2).getHandler());
+        assertEquals("false",entity1.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.CREATE.getOdataSAPAnnotation()));
+        assertNull(entity1.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.UPDATE.getOdataSAPAnnotation()));
+        assertNull(entity1.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
 
         ODataEntityDefinition entity2 = oDataDefinition.getEntities().get(1);
         assertEquals(4,entity2.getHandlers().size());
@@ -246,6 +289,9 @@ public class XSKODataUtilsTest {
         assertEquals(ODataHandlerMethods.delete.name(),entity2.getHandlers().get(3).getMethod());
         assertEquals(ODataHandlerTypes.on.name(),entity2.getHandlers().get(3).getType());
         assertEquals("sample.odata::deleteMethod",entity2.getHandlers().get(3).getHandler());
+        assertNull(entity2.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.CREATE.getOdataSAPAnnotation()));
+        assertNull(entity2.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.UPDATE.getOdataSAPAnnotation()));
+        assertNull(entity2.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
 
         ODataEntityDefinition entity3 = oDataDefinition.getEntities().get(2);
         assertEquals(2,entity3.getHandlers().size());
@@ -254,19 +300,49 @@ public class XSKODataUtilsTest {
         assertEquals("sample.odata::createMethod",entity3.getHandlers().get(0).getHandler());
         assertEquals(ODataHandlerMethods.delete.name(),entity3.getHandlers().get(1).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity3.getHandlers().get(1).getType());
-        assertEquals(null,entity3.getHandlers().get(1).getHandler());
+        assertNull(entity3.getHandlers().get(1).getHandler());
+        assertNull(entity3.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.CREATE.getOdataSAPAnnotation()));
+        assertNull(entity3.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.UPDATE.getOdataSAPAnnotation()));
+        assertEquals("false",entity3.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
 
         ODataEntityDefinition entity4 = oDataDefinition.getEntities().get(3);
         assertEquals(3,entity4.getHandlers().size());
         assertEquals(ODataHandlerMethods.create.name(),entity4.getHandlers().get(0).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(0).getType());
-        assertEquals(null,entity4.getHandlers().get(0).getHandler());
+        assertNull(entity4.getHandlers().get(0).getHandler());
         assertEquals(ODataHandlerMethods.update.name(),entity4.getHandlers().get(1).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(1).getType());
-        assertEquals(null,entity4.getHandlers().get(1).getHandler());
+        assertNull(entity4.getHandlers().get(1).getHandler());
         assertEquals(ODataHandlerMethods.delete.name(),entity4.getHandlers().get(2).getMethod());
         assertEquals(ODataHandlerTypes.forbid.name(),entity4.getHandlers().get(2).getType());
-        assertEquals(null,entity4.getHandlers().get(2).getHandler());
+        assertNull(entity4.getHandlers().get(2).getHandler());
+        assertEquals("false",entity4.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.CREATE.getOdataSAPAnnotation()));
+        assertEquals("false",entity4.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.UPDATE.getOdataSAPAnnotation()));
+        assertEquals("false",entity4.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
+    }
+
+    @Test(expected = XSKOData2TransformerException.class)
+    public void testValidateEdmMultiplicityFailed() {
+        XSKODataUtils.validateEdmMultiplicity("1..*", "ass_name");
+    }
+
+    @Test
+    public void testValidateEdmMultiplicitySuccessfully() {
+        XSKODataUtils.validateEdmMultiplicity("0..1", "ass_name");
+        XSKODataUtils.validateEdmMultiplicity("*", "ass_name");
+        XSKODataUtils.validateEdmMultiplicity("1", "ass_name");
+    }
+
+    @Test
+    public void testValidateHandlerTypeFailed() {
+        assertFalse(XSKODataUtils.validateHandlerType(XSKHDBXSODATAEventType.POSTCOMMIT));
+        assertFalse(XSKODataUtils.validateHandlerType(XSKHDBXSODATAEventType.PRECOMMIT));
+    }
+
+    @Test
+    public void testValidateHandlerTypeSuccessfully() {
+        assertTrue(XSKODataUtils.validateHandlerType(XSKHDBXSODATAEventType.AFTER));
+        assertTrue(XSKODataUtils.validateHandlerType(XSKHDBXSODATAEventType.BEFORE));
     }
 }
 

@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
@@ -42,7 +42,7 @@ public class XSKHDBSequenceParserTest {
     assertEquals(false, model.getNomaxvalue());
     assertEquals(true, model.getNominvalue());
     assertEquals(false, model.getCycles());
-    assertEquals(XSKHanaVersion.VERSION_1, model.getHanaVersion());
+    assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
   }
 
 
@@ -53,7 +53,7 @@ public class XSKHDBSequenceParserTest {
             StandardCharsets.UTF_8);
     XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
         .parse("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence", content);
-    assertEquals(XSKHanaVersion.VERSION_2, model.getHanaVersion());
+    assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
     assertEquals(content, model.getRawContent());
   }
 
@@ -97,7 +97,7 @@ public class XSKHDBSequenceParserTest {
     assertEquals(false, model.getCycles());
     assertEquals(false, model.getPublicc());
     assertEquals(Integer.valueOf(-2), model.getIncrement_by());
-    assertEquals(XSKHanaVersion.VERSION_1, model.getHanaVersion());
+    assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
   }
 
 

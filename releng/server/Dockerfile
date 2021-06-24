@@ -48,9 +48,17 @@ RUN apt-get update && \
 ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA8_HOME
 
+# Install NodeJS
+RUN apt-get install -y curl \
+  && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+  && apt-get install -y nodejs \
+  && curl -L https://www.npmjs.com/install.sh | sh
+
 #Activate DEBUG mode
 #ENV JPDA_ADDRESS=0.0.0.0:8000
 #ENV JPDA_TRANSPORT=dt_socket
+
+RUN cd $CATALINA_HOME/migration-tools/xs-migration-cloud && npm install
 
 ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 

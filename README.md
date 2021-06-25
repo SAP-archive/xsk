@@ -233,7 +233,7 @@ docker build -t dirigiblelabs/xsk-kyma .
     -e DIRIGIBLE_CMS_DATABASE_DATASOURCE_TYPE=custom \
     -e DIRIGIBLE_CMS_DATABASE_DATASOURCE_NAME=HANA
     
-##### With HANA Cloud instance(Windows)
+##### With HANA Cloud instance(Windows/Mac)
     docker run -p 8080:8080 --env-file env-variables.env dirigiblelabs/xsk
 ##### DEBIG With HANA Cloud instance(Windows)
     docker run --name dirigible --rm -e JPDA_ADDRESS=0.0.0.0:8000 -e JPDA_TRANSPORT=dt_socket -p 8000:8000 -p 8080:8080 -p 8081:8081 --env-file env-variables.env dirigiblelabs/xsk![image](https://user-images.githubusercontent.com/44926767/123221345-876c2200-d4d7-11eb-9f1b-b162e86adf82.png)

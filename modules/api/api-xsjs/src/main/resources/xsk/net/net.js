@@ -37,14 +37,6 @@ exports.Mail = function (mailObject) {
         //Mocked in order to avoid null exceptions.
         return {"finalReply": "NOT SUPPORTED", "messageId": 1};
     }
-
-    function adaptMailContentType(part){
-        switch(part.contentType){
-            case "text/html" : return "html";
-            case "text/plain": return "plain"
-        }
-        return part.contentType;
-    }
 }
 exports.Mail.Part = function (partObject) {
     this.alternative = partObject && partObject.alternative;
@@ -78,12 +70,12 @@ exports.SMTPConnection = function() {
     };
     let mailClient = mail.getClient(mailConfig);
     let recipients = {
-      to: mailClass.to || [],
-      cc: mailClass.cc || [],
-      bcc: mailClass.bcc || []
+      to: mailClass.to.map(e => e.address),
+      cc: mailClass.cc.map(e => e.address),
+      bcc: mailClass.bcc.map(e => e.address)
     };
 
-    mailClient.send(mailClass.sender.address, recipients, mailClass.subject, mailClass.parts[0].text, mailClass.adaptMailContentType(mailClass.parts[0]));
+    mailClient.send(mailClass.sender.address, recipients, mailClass.subject, mailClass.parts[0].text, adaptMailContentType(mailClass.parts[0]));
   }
   this.close = function() {
     // Empty. Called automatically inside MailFacade
@@ -92,4 +84,12 @@ exports.SMTPConnection = function() {
     // The connection is being closed automatically
     return true;
   }
+}
+
+function adaptMailContentType(part){
+  switch(part.contentType){
+    case "text/html" : return "html";
+    case "text/plain": return "plain"
+  }
+  return part.contentType;
 }

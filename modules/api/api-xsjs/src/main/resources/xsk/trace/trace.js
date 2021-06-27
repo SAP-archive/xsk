@@ -40,22 +40,22 @@ exports.warning = function(message) {
 }
 
 exports.isDebugEnabled = function() {
-	return com.sap.xsk.api.TraceFacade.isDebugEnabled();
+	return com.sap.xsk.api.TraceFacade.isDebugEnabled().toLowerCase() === "true";
 }
 
 exports.isErrorEnabled = function() {
-  return com.sap.xsk.api.TraceFacade.isErrorEnabled();
+  return com.sap.xsk.api.TraceFacade.isErrorEnabled().toLowerCase() === "true";
 }
 
 exports.isFatalEnabled = function() {
-  return com.sap.xsk.api.TraceFacade.isFatalEnabled();
+  return com.sap.xsk.api.TraceFacade.isFatalEnabled().toLowerCase() === "true";
 }
 
 exports.isInfoEnabled = function() {
-  return com.sap.xsk.api.TraceFacade.isInfoEnabled();
+  return com.sap.xsk.api.TraceFacade.isInfoEnabled().toLowerCase() === "true";
 }
 
 exports.isWarningEnabled = function() {
-  return com.sap.xsk.api.TraceFacade.isWarningEnabled();
+  return com.sap.xsk.api.TraceFacade.isWarningEnabled().toLowerCase() === "true";
 }
 

@@ -122,4 +122,9 @@
 			<version>${xtextVersion}</version>
 		</dependency>
 	</dependencies>
+
+	<properties>
+		<license.header.location>../../../../license-header.txt</license.header.location>
+	</properties>
+
 </project>

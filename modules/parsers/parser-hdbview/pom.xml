@@ -17,4 +17,9 @@
 	<modules>
 		<module>com.sap.xsk.parser.hdbview</module>
 	</modules>
+
+	<properties>
+		<license.header.location>../../../license-header.txt</license.header.location>
+	</properties>
+
 </project>

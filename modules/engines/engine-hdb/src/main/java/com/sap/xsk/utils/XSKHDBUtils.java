@@ -67,7 +67,11 @@ public class XSKHDBUtils {
      */
     public static String getRepositoryBaseObjectName(String location) {
         String objBaseName = FilenameUtils.getBaseName(location);
-        return new StringBuilder().append(getRepositoryNamespace(location)).append("::").append(objBaseName).toString();
+        String namespace = getRepositoryNamespace(location);
+        if (namespace.length() > 0) {
+            return new StringBuilder().append(namespace).append("::").append(objBaseName).toString();
+        }
+        return objBaseName;
     }
 
     /**

@@ -11,28 +11,39 @@
  */
 package com.sap.xsk.migration.neo.sdk.command.tunnel;
 
+import com.google.gson.reflect.TypeToken;
+import com.sap.xsk.migration.neo.sdk.command.AbstractSdkCommand;
 import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommandArgs;
 import com.sap.xsk.migration.neo.sdk.parse.SdkCommandParsedOutput;
 import com.sap.xsk.migration.neo.sdk.parse.SdkCommandOutputParser;
 import com.sap.xsk.migration.tooling.MigrationToolExecutor;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
-public class OpenDatabaseTunnelSdkCommand implements SdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes> {
+class OpenDatabaseTunnelSdkCommand extends AbstractSdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes> {
 
   private static final String OPEN_DATABASE_TUNNEL_COMMAND_NAME = "open-db-tunnel";
 
-  private final MigrationToolExecutor migrationToolExecutor;
-  private final SdkCommandOutputParser sdkCommandOutputParser;
-
-  public OpenDatabaseTunnelSdkCommand(MigrationToolExecutor migrationToolExecutor,
-      SdkCommandOutputParser sdkCommandOutputParser) {
-    this.migrationToolExecutor = migrationToolExecutor;
-    this.sdkCommandOutputParser = sdkCommandOutputParser;
+  @Inject
+  public OpenDatabaseTunnelSdkCommand(MigrationToolExecutor migrationToolExecutor, SdkCommandOutputParser sdkCommandOutputParser) {
+    super(migrationToolExecutor, sdkCommandOutputParser);
   }
 
   @Override
   public OpenDatabaseTunnelSdkCommandRes execute(OpenDatabaseTunnelSdkCommandArgs commandArgs) {
-    String rawCommandOutput = migrationToolExecutor.executeMigrationTool(NEO_SDK_DIRECTORY, NEO_SDK_NAME, OPEN_DATABASE_TUNNEL_COMMAND_NAME, commandArgs.commandLineArgs());
-    SdkCommandParsedOutput<OpenDatabaseTunnelSdkCommandRes> parsedCommandOutput = sdkCommandOutputParser.parse(rawCommandOutput);
+    List<String> commandAndArguments = createProcessCommandAndArguments(commandArgs);
+    String rawCommandOutput = migrationToolExecutor.executeMigrationTool(NEO_SDK_DIRECTORY, commandAndArguments);
+    SdkCommandParsedOutput<OpenDatabaseTunnelSdkCommandRes> parsedCommandOutput = sdkCommandOutputParser
+        .parse(rawCommandOutput, new TypeToken<>(){});
     return parsedCommandOutput.getResult();
+  }
+
+  private List<String> createProcessCommandAndArguments(SdkCommandArgs commandArgs) {
+    var commandAndArguments = new ArrayList<>(NEO_SDK_JAVA8_COMMAND_AND_ARGUMENTS);
+    commandAndArguments.add(OPEN_DATABASE_TUNNEL_COMMAND_NAME);
+    commandAndArguments.addAll(commandArgs.commandLineArgs());
+    return commandAndArguments;
   }
 }

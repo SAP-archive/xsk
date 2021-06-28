@@ -11,18 +11,18 @@
  */
 package com.sap.xsk.migration.neo.sdk.parse;
 
+//import com.google.gson.reflect.TypeToken;
+
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
+import java.lang.reflect.Type;
 
-public class SdkCommandJsonOutputParser implements SdkCommandOutputParser {
+class SdkCommandJsonOutputParser implements SdkCommandOutputParser {
 
   @Override
-  public <TCommandRes> SdkCommandParsedOutput<TCommandRes> parse(String output) {
-    SdkCommandParsedOutput<TCommandRes> res = GsonHelper.GSON.fromJson(
-        output,
-        new TypeToken<SdkCommandParsedOutput<TCommandRes>>() {
-        }.getType()
-    );
+  public <TCommandRes> SdkCommandParsedOutput<TCommandRes> parse(String output, TypeToken<SdkCommandParsedOutput<TCommandRes>> commandResultType) {
+    SdkCommandParsedOutput<TCommandRes> res = new Gson().fromJson(output, commandResultType.getType());
     return res;
   }
 }

@@ -9,25 +9,25 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.module;
+package com.sap.xsk.migration.neo.sdk.command.tunnel;
 
-import com.sap.xsk.migration.neo.db.hana.HanaModule;
-import com.sap.xsk.migration.neo.sdk.NeoSdkModule;
-import com.sap.xsk.migration.tooling.ToolingModule;
+import com.google.inject.TypeLiteral;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
-public class XSKMigrationModule extends AbstractDirigibleModule {
+public class TunnelSdkCommandModule extends AbstractDirigibleModule {
 
   @Override
   protected void configure() {
-//    bind(IRestService.class).to(XSKMigrationRestService.class); // TODO: see why binding here does not work and needs a 'services' file
-    install(new ToolingModule());
-    install(new NeoSdkModule());
-    install(new HanaModule());
+    bind(new TypeLiteral<SdkCommand<CloseDatabaseTunnelSdkCommandArgs, CloseDatabaseTunnelSdkCommandRes>>() {
+    }).to(CloseDatabaseTunnelSdkCommand.class);
+
+    bind(new TypeLiteral<SdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes>>() {
+    }).to(OpenDatabaseTunnelSdkCommand.class);
   }
 
   @Override
   public String getName() {
-    return "XSK Migration Module";
+    return "XSK Migration Tunnel SDK Command Module";
   }
 }

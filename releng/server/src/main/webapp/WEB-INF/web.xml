@@ -168,6 +168,8 @@
 			<url-pattern>/services/v4/web/resources/*</url-pattern>
 		</web-resource-collection>
 	</security-constraint>
+
+
 	
 	<security-constraint>
 	    <web-resource-collection>

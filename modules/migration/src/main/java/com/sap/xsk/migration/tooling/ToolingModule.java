@@ -11,11 +11,17 @@
  */
 package com.sap.xsk.migration.tooling;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
-public interface MigrationToolExecutor {
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs);
+public class ToolingModule extends AbstractDirigibleModule {
 
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs, long timeout, TimeUnit timeoutUnit);
+  @Override
+  protected void configure() {
+    bind(MigrationToolExecutor.class).to(CommandLineMigrationToolExecutor.class);
+  }
+
+  @Override
+  public String getName() {
+    return "XSK Migration Tooling Module";
+  }
 }

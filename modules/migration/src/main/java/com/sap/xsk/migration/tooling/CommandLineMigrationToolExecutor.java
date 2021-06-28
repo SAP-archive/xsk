@@ -21,36 +21,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class CommandLineMigrationToolExecutor implements MigrationToolExecutor {
+class CommandLineMigrationToolExecutor implements MigrationToolExecutor {
 
   protected static final long DEFAULT_TIMEOUT = 2;
   protected static final TimeUnit DEFAULT_TIMEOUT_UNIT = TimeUnit.MINUTES;
   private static final String MIGRATION_TOOLS_DIRECTORY = "migration-tools";
 
   @Override
-  public String executeMigrationTool(String migrationToolDirectory, String migrationToolName, String command, List<String> args) {
-    return executeMigrationTool(migrationToolDirectory, migrationToolName, command, args, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_UNIT);
+  public String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs) {
+    return executeMigrationTool(migrationToolDirectory, commandAndArgs, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_UNIT);
   }
 
   @Override
-  public String executeMigrationTool(String migrationToolDirectory, String migrationToolName, String command, List<String> args, long timeout, TimeUnit timeoutUnit) {
-    var allArgs = new ArrayList<String>();
-    allArgs.add(command);
-    allArgs.addAll(args);
-    return executeMigrationTool(migrationToolDirectory, migrationToolName, allArgs, timeout, timeoutUnit);
-  }
+  public String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs, long timeout, TimeUnit timeoutUnit) {
+    var processBuilder = new ProcessBuilder(commandAndArgs);
 
-  @Override
-  public String executeMigrationTool(String migrationToolDirectory, String migrationToolName, List<String> args) {
-    return executeMigrationTool(migrationToolDirectory, migrationToolName, args, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_UNIT);
-  }
-
-  @Override
-  public String executeMigrationTool(String migrationToolDirectory, String migrationToolName, List<String> args, long timeout, TimeUnit timeoutUnit) {
-    var processBuilder = new ProcessBuilder();
-
-    processBuilder.directory(createToolDirectoryFile(migrationToolDirectory));
-    processBuilder.command(args);
+    processBuilder.directory(createProcessDirectory(migrationToolDirectory));
 
     try {
       var process = processBuilder.start();
@@ -75,7 +61,7 @@ public class CommandLineMigrationToolExecutor implements MigrationToolExecutor {
     }
   }
 
-  private File createToolDirectoryFile(String toolDirectory) {
+  private File createProcessDirectory(String toolDirectory) {
     String catalinaHome = System.getenv("CATALINA_HOME");
     if (catalinaHome == null) {
       throw new ShellExecutorException("Could not create process directory! CATALINA_HOME not found!");

@@ -9,25 +9,22 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.module;
+package com.sap.xsk.migration.neo.sdk;
 
-import com.sap.xsk.migration.neo.db.hana.HanaModule;
-import com.sap.xsk.migration.neo.sdk.NeoSdkModule;
-import com.sap.xsk.migration.tooling.ToolingModule;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommandModule;
+import com.sap.xsk.migration.neo.sdk.parse.SdkOutputParseModule;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
-public class XSKMigrationModule extends AbstractDirigibleModule {
+public class NeoSdkModule extends AbstractDirigibleModule {
 
   @Override
   protected void configure() {
-//    bind(IRestService.class).to(XSKMigrationRestService.class); // TODO: see why binding here does not work and needs a 'services' file
-    install(new ToolingModule());
-    install(new NeoSdkModule());
-    install(new HanaModule());
+    install(new SdkCommandModule());
+    install(new SdkOutputParseModule());
   }
 
   @Override
   public String getName() {
-    return "XSK Migration Module";
+    return "XSK Migration Neo SDK Module";
   }
 }

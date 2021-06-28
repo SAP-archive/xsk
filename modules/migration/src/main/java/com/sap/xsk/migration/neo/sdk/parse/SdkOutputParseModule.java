@@ -9,13 +9,19 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.tooling;
+package com.sap.xsk.migration.neo.sdk.parse;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
-public interface MigrationToolExecutor {
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs);
+public class SdkOutputParseModule extends AbstractDirigibleModule {
 
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs, long timeout, TimeUnit timeoutUnit);
+  @Override
+  protected void configure() {
+    bind(SdkCommandOutputParser.class).to(SdkCommandJsonOutputParser.class);
+  }
+
+  @Override
+  public String getName() {
+    return "XSK Migration SDK Output Parse Module";
+  }
 }

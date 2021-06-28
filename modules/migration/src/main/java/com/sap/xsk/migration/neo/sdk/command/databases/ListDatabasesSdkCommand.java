@@ -11,49 +11,53 @@
  */
 package com.sap.xsk.migration.neo.sdk.command.databases;
 
+import com.google.gson.reflect.TypeToken;
+import com.sap.xsk.migration.neo.sdk.command.AbstractSdkCommand;
 import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommandArgs;
 import com.sap.xsk.migration.neo.sdk.command.SdkCommandGenericArgs;
 import com.sap.xsk.migration.neo.sdk.parse.SdkCommandOutputParser;
 import com.sap.xsk.migration.neo.sdk.parse.SdkCommandParsedOutput;
 import com.sap.xsk.migration.tooling.MigrationToolExecutor;
+import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListDatabasesSdkCommand implements SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> {
+class ListDatabasesSdkCommand extends AbstractSdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> {
 
   private static final String LIST_DATABASES_COMMAND_NAME = "list-dbs";
 
-  private final MigrationToolExecutor migrationToolExecutor;
-  private final SdkCommandOutputParser sdkCommandOutputParser;
-
-  public ListDatabasesSdkCommand(MigrationToolExecutor migrationToolExecutor,
-      SdkCommandOutputParser sdkCommandOutputParser) {
-    this.migrationToolExecutor = migrationToolExecutor;
-    this.sdkCommandOutputParser = sdkCommandOutputParser;
+  @Inject
+  public ListDatabasesSdkCommand(MigrationToolExecutor migrationToolExecutor, SdkCommandOutputParser sdkCommandOutputParser) {
+    super(migrationToolExecutor, sdkCommandOutputParser);
   }
 
   @Override
   public ListDatabasesSdkCommandRes execute(SdkCommandGenericArgs commandArgs) {
-    String rawCommandOutput = migrationToolExecutor
-        .executeMigrationTool(NEO_SDK_DIRECTORY, NEO_SDK_NAME, LIST_DATABASES_COMMAND_NAME, commandArgs.commandLineArgs());
-    SdkCommandParsedOutput<Object> parsedCommandOutput = sdkCommandOutputParser.parse(rawCommandOutput);
+    List<String> commandAndArgs = createProcessCommandAndArguments(commandArgs);
+    String rawCommandOutput = migrationToolExecutor.executeMigrationTool(NEO_SDK_DIRECTORY, commandAndArgs);
+    SdkCommandParsedOutput<Object> parsedCommandOutput = sdkCommandOutputParser.parse(rawCommandOutput, new TypeToken<>(){});
     return parseCommandOutput(parsedCommandOutput.getCommandOutput());
   }
 
+  private List<String> createProcessCommandAndArguments(SdkCommandArgs commandArgs) {
+    var commandAndArguments = new ArrayList<>(NEO_SDK_JAVA8_COMMAND_AND_ARGUMENTS);
+    commandAndArguments.add(LIST_DATABASES_COMMAND_NAME);
+    commandAndArguments.addAll(commandArgs.commandLineArgs());
+    return commandAndArguments;
+  }
+
   private ListDatabasesSdkCommandRes parseCommandOutput(String commandOutput) {
-    // "\nDatabase ID  DB System  DB Type   DB Version                DB State \n  slbinno      slbinno    hanaxs    1.00.122.33.1602166441    CREATED\n"
     var outputLines = commandOutput.split("\\r?\\n");
 
     var dbIds = Arrays
         .stream(outputLines)
-        .skip(1)
-        .map(this::getDbIdFromDbInfoLine)
+        .skip(2)
+        .map(x -> x.replace(" ",""))
         .collect(Collectors.toList());
 
     return new ListDatabasesSdkCommandRes(dbIds);
-  }
-
-  private String getDbIdFromDbInfoLine(String dbInfoLine) {
-    return dbInfoLine.split("\\s*")[0];
   }
 }

@@ -11,7 +11,9 @@
  */
 package com.sap.xsk.migration.neo.sdk.parse;
 
+import com.google.gson.reflect.TypeToken;
+
 public interface SdkCommandOutputParser {
-  <TRes> SdkCommandParsedOutput<TRes> parse(String output);
+  <TRes> SdkCommandParsedOutput<TRes> parse(String output, TypeToken<SdkCommandParsedOutput<TRes>> commandResultType);
 }
 

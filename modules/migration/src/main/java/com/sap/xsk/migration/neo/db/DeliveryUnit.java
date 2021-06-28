@@ -11,9 +11,21 @@
  */
 package com.sap.xsk.migration.neo.db;
 
-import java.util.List;
+public class DeliveryUnit {
 
-public interface DeliveryUnitsNamesProvider {
+  private final String name;
+  private final String vendor;
 
-  List<String> getDeliveryUnitsNames();
+  public DeliveryUnit(String name, String vendor) {
+    this.name = name;
+    this.vendor = vendor;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getVendor() {
+    return vendor;
+  }
 }

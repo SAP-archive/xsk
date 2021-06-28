@@ -30,6 +30,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 - [Push to Docker Hub](#how-to-push-on-docker-hub)
 - [Configuration](#configuration)
   - [Environment Variables](#environment-variables)
+  - [Chrome Extentions](#chrome-extentions)
 - [Limitations](#limitations)
 - [Known Issues](#known-issues)
 - [Support](#how-to-obtain-support)
@@ -660,6 +661,11 @@ helm install xsk dirigible/dirigible \
 
 * **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
 * **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
+
+### Chrome Extentions
+
+To Visualize XML insatll chrome extention [xml-tree](https://chrome.google.com/webstore/detail/xml-tree/gbammbheopgpmaagmckhpjbfgdfkpadb)
+It will be used when showing xml related data, for example as xsodata
 
 ---
 

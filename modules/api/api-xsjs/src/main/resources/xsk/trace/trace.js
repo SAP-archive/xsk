@@ -10,42 +10,52 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 exports.debug = function(message) {
-	console.debug(message);
+  if(this.isDebugEnabled()) {
+    console.debug(message);
+  }
 }
 
 exports.error = function(message) {
-	console.error(message);
+  if(this.isErrorEnabled()) {
+    console.error(message);
+  }
 }
 
 exports.fatal = function(message) {
-	console.error(message);
+  if(this.isFatalEnabled()) {
+    console.error(message);
+  }
 }
 
 exports.info = function(message) {
-	console.info(message);
+  if(this.isInfoEnabled()) {
+    console.info(message);
+  }
 }
 
 exports.warning = function(message) {
-	console.warn(message);
+  if(this.isWarningEnabled()) {
+    console.warn(message);
+  }
 }
 
 exports.isDebugEnabled = function() {
-	return true;
+	return com.sap.xsk.api.TraceFacade.isDebugEnabled();
 }
 
 exports.isErrorEnabled = function() {
-	return true;
+  return com.sap.xsk.api.TraceFacade.isErrorEnabled();
 }
 
 exports.isFatalEnabled = function() {
-	return true;
+  return com.sap.xsk.api.TraceFacade.isFatalEnabled();
 }
 
 exports.isInfoEnabled = function() {
-	return true;
+  return com.sap.xsk.api.TraceFacade.isInfoEnabled();
 }
 
 exports.isWarningEnabled = function() {
-	return true;
+  return com.sap.xsk.api.TraceFacade.isWarningEnabled();
 }
 

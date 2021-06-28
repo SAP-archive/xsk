@@ -14,9 +14,7 @@ package com.sap.xsk.migration.api;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -24,28 +22,34 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sap.xsk.migration.api.database.HanaDatabaseDeliveryUnitsResponseBody;
 import com.sap.xsk.migration.api.database.HanaDatabaseIdsRequestBody;
 import com.sap.xsk.migration.api.database.HanaDatabaseIdsResponseBody;
-import com.sap.xsk.migration.api.database.connection.HanaConnectionRequestBody;
-import com.sap.xsk.migration.api.database.connection.HanaConnectionResponseBody;
-import com.sap.xsk.migration.neo.db.DeliveryUnitsNamesProvider;
+import com.sap.xsk.migration.api.dto.DeliveryUnitData;
+import com.sap.xsk.migration.api.dto.ExecuteMigrationRequestBody;
+import com.sap.xsk.migration.api.dto.MigrationRequestBody;
+import com.sap.xsk.migration.api.dto.MigrationResponseBody;
+import com.sap.xsk.migration.neo.db.DeliveryUnit;
+import com.sap.xsk.migration.neo.db.DeliveryUnitsProvider;
 import com.sap.xsk.migration.neo.db.hana.connectivity.HanaConnector;
 import com.sap.xsk.migration.neo.db.hana.connectivity.HanaConnectorArgs;
-import com.sap.xsk.migration.neo.sdk.command.SdkCommandFactory;
+import com.sap.xsk.migration.neo.db.hana.connectivity.HanaConnectorRes;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
 import com.sap.xsk.migration.neo.sdk.command.SdkCommandGenericArgs;
-import com.sap.xsk.migration.neo.sdk.command.databases.ListDatabasesSdkCommand;
 import com.sap.xsk.migration.neo.sdk.command.databases.ListDatabasesSdkCommandRes;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
+import org.eclipse.dirigible.api.v3.platform.WorkspaceFacade;
 import org.eclipse.dirigible.commons.api.service.AbstractRestService;
 import org.eclipse.dirigible.commons.api.service.IRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Singleton
 @Path("/migration-operations")
@@ -63,44 +67,61 @@ public class XSKMigrationRestService extends AbstractRestService {
   private HanaConnector hanaConnector;
 
   @Inject
-  private DeliveryUnitsNamesProvider deliveryUnitsNamesProvider;
+  private DeliveryUnitsProvider deliveryUnitsProvider;
 
   @Inject
-  private SdkCommandFactory sdkCommandFactory;
-
-  @GET
-  @Path("/{path:.*}")
-  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
-  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response doGet(@PathParam("path") String path) {
-    try {
-      return Response.ok().build();
-    } catch (Throwable e) {
-      String message = e.getMessage();
-      createErrorResponseInternalServerError(message);
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).build();
-    }
-  }
+  private SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> listDatabasesSdkCommand;
 
   @POST
-  @Path("hana-connection")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response createHanaConnection(HanaConnectionRequestBody hanaConnectionRequestBody) {
-    var hanaConnectorArgs = toHanaConnectorArgs(hanaConnectionRequestBody);
-    var hanaConnectorRes = hanaConnector.connect(hanaConnectorArgs);
-    var responseBody = new HanaConnectionResponseBody(hanaConnectorRes.getSessionId());
+  @Path("setup-migration")
+  public Response setupMigration(MigrationRequestBody migrationRequestBody) {
+    HanaConnectorRes hanaConnectorRes = createHanaConnection(migrationRequestBody);
+    List<DeliveryUnitData> deliveryUnits = getDeliveryUnits(migrationRequestBody);
+    List<String> workspacesNames = getWorkspaceNames();
+
+    var responseBody = new MigrationResponseBody(hanaConnectorRes.getSessionId(), workspacesNames, deliveryUnits);
+
     return Response.ok(responseBody).build();
   }
 
-  private HanaConnectorArgs toHanaConnectorArgs(HanaConnectionRequestBody hanaConnectionRequestBody) {
+  private HanaConnectorRes createHanaConnection(MigrationRequestBody migrationRequestBody) {
+    var hanaConnectorArgs = toHanaConnectorArgs(migrationRequestBody);
+    return hanaConnector.connect(hanaConnectorArgs);
+  }
+
+  private HanaConnectorArgs toHanaConnectorArgs(MigrationRequestBody migrationRequestBody) {
+    var hanaData = migrationRequestBody.getHana();
+    var neoData = migrationRequestBody.getNeo();
     return new HanaConnectorArgs(
-        hanaConnectionRequestBody.getDatabaseId(),
-        hanaConnectionRequestBody.getSubaccountTechnicalName(),
-        hanaConnectionRequestBody.getHost(),
-        hanaConnectionRequestBody.getUser(),
-        hanaConnectionRequestBody.getPassword()
+        hanaData.getDatabaseSchema(),
+        neoData.getSubaccount(),
+        neoData.getHostName(),
+        neoData.getUsername(),
+        neoData.getPassword()
     );
+  }
+
+  private List<String> getWorkspaceNames() {
+    var stringListTypeToken = new TypeToken<List<String>>() {
+    }.getType();
+    String workspacesNamesJson = WorkspaceFacade.getWorkspacesNames();
+    return new Gson().fromJson(workspacesNamesJson, stringListTypeToken);
+  }
+
+  private List<DeliveryUnitData> getDeliveryUnits(MigrationRequestBody migrationRequestBody) {
+    var hanaData = migrationRequestBody.getHana();
+    return deliveryUnitsProvider
+        .getDeliveryUnitsNames(hanaData.getUsername(), hanaData.getPassword())
+        .stream()
+        .map(deliveryUnit -> new DeliveryUnitData(deliveryUnit.getName(), deliveryUnit.getVendor()))
+        .collect(Collectors.toList());
+  }
+
+  @POST
+  @Path("execute-migration")
+  public Response executeMigration(ExecuteMigrationRequestBody executeMigrationRequestBody) {
+    hanaConnector.disconnect(executeMigrationRequestBody.getConnectionId());
+    return Response.ok().build();
   }
 
   @DELETE
@@ -110,20 +131,10 @@ public class XSKMigrationRestService extends AbstractRestService {
     return Response.noContent().build();
   }
 
-  @GET
-  @Path("list-delivery-units")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getDeliveryUnits() {
-    List<String> deliveryUnitsNames = deliveryUnitsNamesProvider.getDeliveryUnitsNames();
-    var responseBody = new HanaDatabaseDeliveryUnitsResponseBody(deliveryUnitsNames);
-    return Response.ok(responseBody).build();
-  }
-
   @POST
   @Path("list-databases")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDatabaseIds(HanaDatabaseIdsRequestBody hanaDatabaseIdsRequestBody) {
-    ListDatabasesSdkCommand listDatabasesSdkCommand = sdkCommandFactory.createListDatabasesSdkCommand();
     var sdkCommandArgs = toSdkCommandGenericArgs(hanaDatabaseIdsRequestBody);
     ListDatabasesSdkCommandRes listDatabasesSdkCommandRes = listDatabasesSdkCommand.execute(sdkCommandArgs);
     var databasesIds = listDatabasesSdkCommandRes.getDatabaseIds();
@@ -138,12 +149,6 @@ public class XSKMigrationRestService extends AbstractRestService {
         hanaDatabaseIdsRequestBody.getUser(),
         hanaDatabaseIdsRequestBody.getPassword()
     );
-  }
-
-  @POST
-  @Path("migrate")
-  public Response executeMigration() {
-    return Response.ok().build();
   }
 
   @Override

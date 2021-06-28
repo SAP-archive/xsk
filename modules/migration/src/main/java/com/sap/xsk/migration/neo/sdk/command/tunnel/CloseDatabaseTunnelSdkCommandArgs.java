@@ -27,6 +27,7 @@ public class CloseDatabaseTunnelSdkCommandArgs implements SdkCommandArgs {
   public List<String> commandLineArgs() {
     var commandLineArgs = new ArrayList<String>();
     commandLineArgs.add("--session-id " + sessionId);
+    commandLineArgs.add("--output json");
     return commandLineArgs;
   }
 }

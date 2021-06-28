@@ -32,21 +32,21 @@ COPY target/*.jar $CATALINA_HOME/lib/
 COPY target/migration-tools $CATALINA_HOME/migration-tools
 RUN sed -i /'<Context>'/c'<Context>\n<Listener className=\"com.sap.xsk.listener.NamingResourcesListener\" factoryClassName=\"com.sap.xsk.factory.DynamicDataSourceFactory\"/>' $CATALINA_HOME/conf/context.xml
 
-# # Install OpenJDK-8
-# RUN apt-get update && \
-#     apt-get install -y openjdk-8-jdk && \
-#     apt-get install -y ant && \
-#     apt-get clean;
+# Install OpenJDK-8
+RUN apt-get update && \
+    apt-get install -y openjdk-8-jdk && \
+    apt-get install -y ant && \
+    apt-get clean;
 
-# # Fix certificate issues
-# RUN apt-get update && \
-#     apt-get install ca-certificates-java && \
-#     apt-get clean && \
-#     update-ca-certificates -f;
+# Fix certificate issues
+RUN apt-get update && \
+    apt-get install ca-certificates-java && \
+    apt-get clean && \
+    update-ca-certificates -f;
 
-# # Setup JAVA_HOME -- useful for docker commandline
-# ENV JAVA_HOME8 /usr/lib/jvm/java-8-openjdk-amd64/
-# RUN export JAVA_HOME8
+# Setup JAVA_HOME -- useful for docker commandline
+ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+RUN export JAVA8_HOME
 
 #Activate DEBUG mode
 #ENV JPDA_ADDRESS=0.0.0.0:8000

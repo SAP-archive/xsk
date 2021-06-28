@@ -26,12 +26,23 @@
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-database-dynamic</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-commons-api</artifactId>
       <version>${dirigible.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -46,36 +57,42 @@
       <version>${dirigible.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-database-derby</artifactId>
       <version>${dirigible.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-repository-local</artifactId>
       <version>${dirigible.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-module-junit4</artifactId>
       <version>${powermock-module-junit4.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-api-mockito2</artifactId>
       <version>${powermock-api-mockito2.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
@@ -88,6 +105,12 @@
       <artifactId>hamcrest-all</artifactId>
       <version>${hamcrest.all.version}</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.6</version>
     </dependency>
   </dependencies>
 
@@ -111,7 +134,7 @@
                   <artifactId>neo-java-web-sdk</artifactId>
                   <version>4.2.4</version>
                   <type>zip</type>
-                  <outputDirectory>tools/neo-sdk/</outputDirectory>
+                  <outputDirectory>tools/neo/neo-sdk/</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
               </artifactItems>

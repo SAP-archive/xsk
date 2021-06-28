@@ -9,13 +9,11 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.tooling;
+package com.sap.xsk.migration.neo.db;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public interface MigrationToolExecutor {
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs);
+public interface DeliveryUnitsProvider {
 
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs, long timeout, TimeUnit timeoutUnit);
+  List<DeliveryUnit> getDeliveryUnitsNames(String user, String password);
 }

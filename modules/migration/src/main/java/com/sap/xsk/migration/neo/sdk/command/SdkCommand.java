@@ -11,10 +11,14 @@
  */
 package com.sap.xsk.migration.neo.sdk.command;
 
+import java.util.Arrays;
+import java.util.List;
+
 public interface SdkCommand<TArgs extends SdkCommandArgs, TRes extends SdkCommandRes> {
 
-  String NEO_SDK_NAME = "JAVA_HOME=JAVA_HOME8 neo.sh";
-  String NEO_SDK_DIRECTORY = "neo-sdk/tools";
+  List<String> NEO_SDK_JAVA8_COMMAND_AND_ARGUMENTS = Arrays.asList("/bin/bash", "./neo-java8.sh");
+
+  String NEO_SDK_DIRECTORY = "neo";
 
   TRes execute(TArgs commandArgs);
 }

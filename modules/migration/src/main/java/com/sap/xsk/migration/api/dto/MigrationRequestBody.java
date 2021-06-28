@@ -9,13 +9,23 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.tooling;
+package com.sap.xsk.migration.api.dto;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+public class MigrationRequestBody {
 
-public interface MigrationToolExecutor {
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs);
+  private final NeoData neo;
+  private final HanaData hana;
 
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs, long timeout, TimeUnit timeoutUnit);
+  public MigrationRequestBody(NeoData neo, HanaData hana) {
+    this.neo = neo;
+    this.hana = hana;
+  }
+
+  public NeoData getNeo() {
+    return neo;
+  }
+
+  public HanaData getHana() {
+    return hana;
+  }
 }

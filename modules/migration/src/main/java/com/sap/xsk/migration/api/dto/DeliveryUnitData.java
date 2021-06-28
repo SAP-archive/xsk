@@ -9,13 +9,23 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.tooling;
+package com.sap.xsk.migration.api.dto;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+public class DeliveryUnitData {
 
-public interface MigrationToolExecutor {
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs);
+  private final String name;
+  private final String vendor;
 
-  String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs, long timeout, TimeUnit timeoutUnit);
+  public DeliveryUnitData(String name, String vendor) {
+    this.name = name;
+    this.vendor = vendor;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getVendor() {
+    return vendor;
+  }
 }

@@ -28,7 +28,6 @@ import java.sql.PreparedStatement;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.DefaultSqlDialect;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
@@ -77,7 +76,6 @@ public class XSKSchemaProcessorTest extends AbstractGuiceTest {
     XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("hdb_schema/Myschema.hdbschema", hdbschemaSample);
 
     String sql = "CREATE SCHEMA \"MYSCHEMA\"";
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.PROCEDURE)).thenReturn(false);
 
     when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
     when(mockStatement.executeUpdate(any())).thenReturn(1);
@@ -117,7 +115,6 @@ public class XSKSchemaProcessorTest extends AbstractGuiceTest {
     XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("hdb_schema/Myschema.hdbschema", hdbschemaSample);
 
     String sql = "DROP SCHEMA \"MYSCHEMA\"";
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.PROCEDURE)).thenReturn(false);
 
     when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
     when(mockStatement.executeUpdate(any())).thenReturn(1);

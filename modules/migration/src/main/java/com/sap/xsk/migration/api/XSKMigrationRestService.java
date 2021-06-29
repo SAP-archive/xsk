@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -24,7 +25,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sap.xsk.migration.api.database.HanaDatabaseDeliveryUnitsResponseBody;
 import com.sap.xsk.migration.api.database.HanaDatabaseIdsRequestBody;
 import com.sap.xsk.migration.api.database.HanaDatabaseIdsResponseBody;
 import com.sap.xsk.migration.api.dto.DeliveryUnitData;
@@ -32,6 +32,7 @@ import com.sap.xsk.migration.api.dto.ExecuteMigrationRequestBody;
 import com.sap.xsk.migration.api.dto.MigrationRequestBody;
 import com.sap.xsk.migration.api.dto.MigrationResponseBody;
 import com.sap.xsk.migration.neo.db.DeliveryUnit;
+import com.sap.xsk.migration.neo.db.DeliveryUnitsExporter;
 import com.sap.xsk.migration.neo.db.DeliveryUnitsProvider;
 import com.sap.xsk.migration.neo.db.hana.connectivity.HanaConnector;
 import com.sap.xsk.migration.neo.db.hana.connectivity.HanaConnectorArgs;
@@ -43,12 +44,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.dirigible.api.v3.platform.WorkspaceFacade;
 import org.eclipse.dirigible.commons.api.service.AbstractRestService;
 import org.eclipse.dirigible.commons.api.service.IRestService;
+import org.eclipse.dirigible.runtime.transport.processor.TransportProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Singleton
@@ -73,7 +81,10 @@ public class XSKMigrationRestService extends AbstractRestService {
   private SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> listDatabasesSdkCommand;
 
   @Inject
-  private TransportProcessor processor;
+  private TransportProcessor transportProcessor;
+
+  @Inject
+  private DeliveryUnitsExporter deliveryUnitsExporter;
 
   @POST
   @Path("/")
@@ -84,7 +95,8 @@ public class XSKMigrationRestService extends AbstractRestService {
 
       file.createNewFile();
 
-      ProcessBuilder pb = new ProcessBuilder("node", System.getenv("CATALINA_HOME") + "/migration-tools/xs-migration-cloud/xs-migration.js", du + "," + vendor);
+      ProcessBuilder pb = new ProcessBuilder("node", System.getenv("CATALINA_HOME") + "/migration-tools/xs-migration-cloud/xs-migration.js",
+          du + "," + vendor);
       pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
       pb.redirectError(ProcessBuilder.Redirect.INHERIT);
       Process p = pb.start();
@@ -98,7 +110,7 @@ public class XSKMigrationRestService extends AbstractRestService {
             String fullPath = System.getenv("CATALINA_HOME") + "/" + line;
             File zipFile = new File(fullPath);
             byte[] project = FileUtils.readFileToByteArray(zipFile);
-            processor.importProject(workspace, project);
+            transportProcessor.importProject(workspace, project);
             line = reader.readLine();
           }
           reader.close();
@@ -168,8 +180,21 @@ public class XSKMigrationRestService extends AbstractRestService {
   @POST
   @Path("execute-migration")
   public Response executeMigration(ExecuteMigrationRequestBody executeMigrationRequestBody) {
+    migrateDeliveryUnits(
+        executeMigrationRequestBody.getDu(),
+        executeMigrationRequestBody.getVendor(),
+        executeMigrationRequestBody.getWorkspace()
+    );
     hanaConnector.disconnect(executeMigrationRequestBody.getConnectionId());
     return Response.ok().build();
+  }
+
+  private void migrateDeliveryUnits(String deliveryUnitName, String deliveryUnitVendor, String workspaceName) {
+    List<byte[]> deliveryUnits = deliveryUnitsExporter.exportDeliveryUnits(deliveryUnitName, deliveryUnitVendor);
+
+    for (var deliveryUnit : deliveryUnits) {
+      transportProcessor.importProject(workspaceName, deliveryUnit);
+    }
   }
 
   @DELETE

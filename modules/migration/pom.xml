@@ -109,13 +109,7 @@
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-service-transport</artifactId>
-      <version>5.11.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-service-transport</artifactId>
-      <version>5.11.1</version>
+      <version>5.11.2</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

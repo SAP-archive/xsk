@@ -30,6 +30,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 - [Push to Docker Hub](#how-to-push-on-docker-hub)
 - [Configuration](#configuration)
   - [Environment Variables](#environment-variables)
+  - [Chrome Extentions](#chrome-extentions)
 - [Limitations](#limitations)
 - [Known Issues](#known-issues)
 - [Support](#how-to-obtain-support)
@@ -233,8 +234,11 @@ docker build -t dirigiblelabs/xsk-kyma .
     -e DIRIGIBLE_CMS_DATABASE_DATASOURCE_TYPE=custom \
     -e DIRIGIBLE_CMS_DATABASE_DATASOURCE_NAME=HANA
     
-##### With HANA Cloud instance(Windows)
+##### With HANA Cloud instance(Windows/Mac)
     docker run -p 8080:8080 --env-file env-variables.env dirigiblelabs/xsk
+##### DEBIG With HANA Cloud instance(Windows)
+    docker run --name dirigible --rm -e JPDA_ADDRESS=0.0.0.0:8000 -e JPDA_TRANSPORT=dt_socket -p 8000:8000 -p 8080:8080 -p 8081:8081 --env-file env-variables.env dirigiblelabs/xsk![image](https://user-images.githubusercontent.com/44926767/123221345-876c2200-d4d7-11eb-9f1b-b162e86adf82.png)
+   
 
 ##### Go to:
 
@@ -657,6 +661,11 @@ helm install xsk dirigible/dirigible \
 
 * **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
 * **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
+
+### Chrome Extentions
+
+To Visualize XML insatll chrome extention [xml-tree](https://chrome.google.com/webstore/detail/xml-tree/gbammbheopgpmaagmckhpjbfgdfkpadb)
+It will be used when showing xml related data, for example as xsodata
 
 ---
 

@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/xsodata/core/Hdbxsodata.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\xsodata\core\Hdbxsodata.g4 by ANTLR 4.3
 package com.sap.xsk.parser.xsodata.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -219,6 +219,19 @@ public class HdbxsodataBaseListener implements HdbxsodataListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParameterentitysetname(@NotNull HdbxsodataParser.ParameterentitysetnameContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDependent(@NotNull HdbxsodataParser.DependentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDependent(@NotNull HdbxsodataParser.DependentContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -726,6 +739,19 @@ public class HdbxsodataBaseListener implements HdbxsodataListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAggregate(@NotNull HdbxsodataParser.AggregateContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

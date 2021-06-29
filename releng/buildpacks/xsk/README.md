@@ -50,6 +50,8 @@
 
     kubectl apply -f kpack.yaml
     ```
+    
+    > _**Note:** Before creating the Kpack resources, replace the **`<tag>`** placeholder with a valid XSK version (e.g. 0.5.0, 0.6.0, ...). All available XSK versions could be found [here](https://github.com/SAP/xsk/releases) and the respective Docker images [here](https://hub.docker.com/r/dirigiblelabs/kneo-xsk-buildpack/tags?page=1&ordering=last_updated)._
 
 ### Image Building
 
@@ -62,8 +64,9 @@
       name: xsk-application
       namespace: default
     spec:
-      tag: dirigiblelabs/xsk-application
+      tag: dirigiblelabs/xsk-application:<tag>
       serviceAccount: docker-registry-service-account
+      imageTaggingStrategy: <tag>
       builder:
         name: kneo-xsk
         kind: Builder
@@ -71,6 +74,8 @@
         blob:
           url: https://github.com/SAP/xsk/raw/main/samples/xsjs-simple.zip
     ```
+
+    > _**Note:** Replace the **`<tag>`** placeholder with your Docker image tag._
 
 1. Monitor Logs:
 

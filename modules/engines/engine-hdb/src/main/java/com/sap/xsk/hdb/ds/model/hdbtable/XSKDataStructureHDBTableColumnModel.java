@@ -243,4 +243,7 @@ public class XSKDataStructureHDBTableColumnModel {
     this.comment = comment;
   }
 
+  public String getComment() {
+    return comment;
+  }
 }

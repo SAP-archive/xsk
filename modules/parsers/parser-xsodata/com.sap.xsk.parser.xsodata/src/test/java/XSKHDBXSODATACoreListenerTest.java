@@ -203,20 +203,20 @@ public class XSKHDBXSODATACoreListenerTest {
         XSKHDBXSODATAService model = listener.getServiceModel();
         assertNotNull(model);
         assertEquals(parser.getNumberOfSyntaxErrors(), 0);
-        assertEquals(model.getEntities().size(), 2);
+        assertEquals(5, model.getEntities().size());
 
         XSKHDBXSODATAEntity actualEntity = new XSKHDBXSODATAEntity();
         actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("sample.odata::customer"));
         actualEntity.setAlias("Customers");
         XSKHDBXSODATANavigation nav1 = new XSKHDBXSODATANavigation().setAssociation("Customer_Orders").setAliasNavigation("HisOrders");
-        XSKHDBXSODATANavigation nav2 = new XSKHDBXSODATANavigation().setAssociation("Customer_Recruit").setAliasNavigation("Recruit");
+        XSKHDBXSODATANavigation nav2 = new XSKHDBXSODATANavigation().setAssociation("Customer_Recruit").setAliasNavigation("Recruit").setFromBindingType(XSKHDBXSODATABindingType.DEPENDENT);
         actualEntity.setNavigates(Arrays.asList(nav1, nav2));
         assertEquals(model.getEntities().get(0), actualEntity);
 
         actualEntity = new XSKHDBXSODATAEntity();
         actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("sample.odata::student"));
         actualEntity.setAlias("Students");
-        actualEntity.setNavigates(Collections.singletonList(new XSKHDBXSODATANavigation().setAssociation("Students_Grades").setAliasNavigation("HisGrades")));
+        actualEntity.setNavigates(Collections.singletonList(new XSKHDBXSODATANavigation().setAssociation("Students_Grades").setAliasNavigation("HisGrades").setFromBindingType(XSKHDBXSODATABindingType.PRINCIPAL)));
         assertEquals(model.getEntities().get(1), actualEntity);
     }
 
@@ -438,9 +438,9 @@ public class XSKHDBXSODATACoreListenerTest {
         actualEntity.setRepositoryObject(new XSKHDBXSODATARepositoryObject().setCatalogObjectName("xsodata.test.tables::BusinessPartner.BusinessPartner"));
         actualEntity.setAlias("BusinessPartner");
         actualEntity.setConcurrencyToken(true);
-        actualEntity.setWithoutPropertyProjections(Arrays.asList("isContactPerson"));
+        actualEntity.setWithoutPropertyProjections(Collections.singletonList("isContactPerson"));
         XSKHDBXSODATANavigation nav1 = new XSKHDBXSODATANavigation().setAssociation("BusinessPartner_To_N_BPRole").setAliasNavigation("Roles");
-        actualEntity.setNavigates(Arrays.asList(nav1));
+        actualEntity.setNavigates(Collections.singletonList(nav1));
         assertEquals(model.getEntities().get(1), actualEntity);
 
         actualEntity = new XSKHDBXSODATAEntity();

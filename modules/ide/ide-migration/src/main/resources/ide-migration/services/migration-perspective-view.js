@@ -9,9 +9,12 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.model;
-
-public enum XSKHanaVersion {
-  VERSION_1,
-  VERSION_2
+exports.getPerspective = function () {
+    var perspective = {
+        "name": "XS Migration",
+        "link": "../ide-migration/migration-perspective.html",
+        "order": "820",
+        "image": "exchange"
+    };
+    return perspective;
 }

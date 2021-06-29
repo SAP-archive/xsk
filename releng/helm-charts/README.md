@@ -5,19 +5,19 @@
 Add XSK Helm repo:
 
 ```console
-$ helm repo add xsk https://sap.github.io/xsk
+helm repo add xsk https://sap.github.io/xsk
 ```
 
 Update repo:
 
 ```console
-$ helm repo update
+helm repo update
 ```
 
 Install XSK with Helm:
 
 ```console
-$ helm install xsk xsk/xsk
+helm install xsk xsk/xsk
 ```
 
 Resources:

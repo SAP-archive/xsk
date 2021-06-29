@@ -1,0 +1,13 @@
+{
+	"description": "My Job configuration",
+	"action": "XSJOB:bugXsjob.xsjs",
+	"schedules": [
+		{
+			"description": "My Schedule configuration for execution every second",
+			"xscron": "* * * * * * */5",
+			"parameter": {
+				"myJobParamter": "paramterValue"
+			}
+		}
+	]
+}

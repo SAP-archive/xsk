@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/xsodata/core/Hdbxsodata.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\xsodata\core\Hdbxsodata.g4 by ANTLR 4.3
 package com.sap.xsk.parser.xsodata.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -139,6 +139,14 @@ public class HdbxsodataBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitParameterentitysetname(@NotNull HdbxsodataParser.ParameterentitysetnameContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDependent(@NotNull HdbxsodataParser.DependentContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -451,6 +459,14 @@ public class HdbxsodataBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitAggregate(@NotNull HdbxsodataParser.AggregateContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

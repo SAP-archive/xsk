@@ -13,7 +13,6 @@ package com.sap.xsk.hdb.ds.parser.hdbschema;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKHanaVersion;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbschema.core.HdbschemaLexer;
@@ -48,7 +47,6 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
   public XSKDataStructureHDBSchemaModel parse(String location, String content) throws XSKDataStructuresException, IOException {
     XSKDataStructureHDBSchemaModel hdbSchemaModel = new XSKDataStructureHDBSchemaModel();
     populateXSKDataStructureHDBSchemaModel(location, content, hdbSchemaModel);
-    hdbSchemaModel.setHanaVersion(XSKHanaVersion.VERSION_1);
 
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);

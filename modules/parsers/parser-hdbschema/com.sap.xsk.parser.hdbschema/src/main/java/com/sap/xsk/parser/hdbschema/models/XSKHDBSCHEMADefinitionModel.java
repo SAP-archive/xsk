@@ -11,22 +11,14 @@
  */
 package com.sap.xsk.parser.hdbschema.models;
 
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class XSKHDBSCHEMADefinitionModel {
 
   private String schemaName;
-
-  public String getSchemaName() {
-    return schemaName;
-  }
-
-  public void setSchemaName(String schemaName) {
-    this.schemaName = schemaName;
-  }
-
-  @Override
-  public String toString() {
-    return "HdbschemaDefinitionModel{" +
-        "schema_name='" + schemaName + '\'' +
-        '}';
-  }
 }

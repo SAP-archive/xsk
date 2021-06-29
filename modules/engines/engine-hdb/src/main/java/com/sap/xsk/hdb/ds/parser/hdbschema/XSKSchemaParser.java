@@ -32,7 +32,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 
-public class XSKHDBSchemaParser implements XSKDataStructureParser<XSKDataStructureHDBSchemaModel> {
+public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureHDBSchemaModel> {
 
   @Override
   public String getType() {

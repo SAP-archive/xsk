@@ -139,6 +139,8 @@ public class XSKMigrationRestService extends AbstractRestService {
     List<DeliveryUnitData> deliveryUnits = getDeliveryUnits(migrationRequestBody);
     List<String> workspacesNames = getWorkspaceNames();
 
+    hanaConnector.disconnect(hanaConnectorRes.getSessionId());
+
     var responseBody = new MigrationResponseBody(hanaConnectorRes.getSessionId(), workspacesNames, deliveryUnits);
 
     return Response.ok(responseBody).build();
@@ -190,11 +192,11 @@ public class XSKMigrationRestService extends AbstractRestService {
   }
 
   private void migrateDeliveryUnits(String deliveryUnitName, String deliveryUnitVendor, String workspaceName) {
-    List<byte[]> deliveryUnits = deliveryUnitsExporter.exportDeliveryUnits(deliveryUnitName, deliveryUnitVendor);
+    deliveryUnitsExporter.exportDeliveryUnits(workspaceName, deliveryUnitName, deliveryUnitVendor);
 
-    for (var deliveryUnit : deliveryUnits) {
-      transportProcessor.importProject(workspaceName, deliveryUnit);
-    }
+//    for (var deliveryUnit : deliveryUnits) {
+//      transportProcessor.importProject(workspaceName, deliveryUnit);
+//    }
   }
 
   @DELETE

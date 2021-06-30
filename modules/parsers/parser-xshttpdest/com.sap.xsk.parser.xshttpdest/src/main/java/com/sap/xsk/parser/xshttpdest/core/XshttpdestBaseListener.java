@@ -1,4 +1,15 @@
-// Generated from /Users/C5322976/Desktop/Workspace/Dirigible/xsk/modules/parsers/xsk-modules-parsers-xshttpdest-parent/xsk-modules-parsers-xshttpdest/src/main/antlr4/Xshttpdest.g4 by ANTLR 4.9.1
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// Generated from /Users/C5322976/Desktop/Workspace/Dirigible/xsk/modules/parsers/parser-xshttpdest/com.sap.xsk.parser.xshttpdest/src/main/antlr4/Xshttpdest.g4 by ANTLR 4.9.1
 package com.sap.xsk.parser.xshttpdest.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;

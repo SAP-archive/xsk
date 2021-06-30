@@ -1,13 +1,21 @@
-// Generated from /Users/C5322976/Desktop/Workspace/Dirigible/xsk/modules/parsers/xsk-modules-parsers-xshttpdest-parent/xsk-modules-parsers-xshttpdest/src/main/antlr4/Xshttpdest.g4 by ANTLR 4.9.1
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// Generated from /Users/C5322976/Desktop/Workspace/Dirigible/xsk/modules/parsers/parser-xshttpdest/com.sap.xsk.parser.xshttpdest/src/main/antlr4/Xshttpdest.g4 by ANTLR 4.9.1
 package com.sap.xsk.parser.xshttpdest.core;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class XshttpdestParser extends Parser {
@@ -133,11 +141,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitXshttpdest(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitXshttpdest(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final XshttpdestContext xshttpdest() throws RecognitionException {
@@ -246,11 +249,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitProperty(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitProperty(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -432,11 +430,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitHost(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitHost(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final HostContext host() throws RecognitionException {
@@ -481,11 +474,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitPort(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitPort(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -532,11 +520,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitDescription(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitDescription(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final DescriptionContext description() throws RecognitionException {
@@ -581,11 +564,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitUseSSL(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitUseSSL(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -634,11 +612,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitSslAuth(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitSslAuth(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SslAuthContext sslAuth() throws RecognitionException {
@@ -684,11 +657,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitSslHostCheck(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitSslHostCheck(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SslHostCheckContext sslHostCheck() throws RecognitionException {
@@ -733,11 +701,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitPathPrefix(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitPathPrefix(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -786,11 +749,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitAuthType(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitAuthType(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final AuthTypeContext authType() throws RecognitionException {
@@ -835,11 +793,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitSamlProvider(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitSamlProvider(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -886,11 +839,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitSamlACS(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitSamlACS(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SamlACSContext samlACS() throws RecognitionException {
@@ -935,11 +883,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitSamlAttributes(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitSamlAttributes(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -988,11 +931,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitSamlNameId(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitSamlNameId(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SamlNameIdContext samlNameId() throws RecognitionException {
@@ -1040,11 +978,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitProxyType(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitProxyType(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ProxyTypeContext proxyType() throws RecognitionException {
@@ -1090,11 +1023,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitProxyHost(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitProxyHost(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ProxyHostContext proxyHost() throws RecognitionException {
@@ -1139,11 +1067,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitProxyPort(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitProxyPort(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1192,11 +1115,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitTimeout(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitTimeout(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final TimeoutContext timeout() throws RecognitionException {
@@ -1241,11 +1159,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitRemoteSID(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitRemoteSID(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1292,11 +1205,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitRemoteClient(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitRemoteClient(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final RemoteClientContext remoteClient() throws RecognitionException {
@@ -1341,11 +1249,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitOAuthAppConfigPackage(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitOAuthAppConfigPackage(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1392,11 +1295,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitOAuthAppConfig(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitOAuthAppConfig(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final OAuthAppConfigContext oAuthAppConfig() throws RecognitionException {
@@ -1438,11 +1336,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitSslAuthValue(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitSslAuthValue(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1492,11 +1385,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitSamlNameIdList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitSamlNameIdList(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1555,11 +1443,6 @@ public class XshttpdestParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitAuthTypeValue(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitAuthTypeValue(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final AuthTypeValueContext authTypeValue() throws RecognitionException {
@@ -1604,11 +1487,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitProxyTypeValue(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitProxyTypeValue(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1655,11 +1533,6 @@ public class XshttpdestParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof XshttpdestListener ) ((XshttpdestListener)listener).exitUnsignedInt(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof XshttpdestVisitor ) return ((XshttpdestVisitor<? extends T>)visitor).visitUnsignedInt(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 

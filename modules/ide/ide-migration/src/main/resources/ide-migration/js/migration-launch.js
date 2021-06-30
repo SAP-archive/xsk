@@ -13,6 +13,18 @@ var migrationLaunchView = angular.module('migration-launch', []);
 
 migrationLaunchView.factory('$messageHub', [function () {
     var messageHub = new FramesMessageHub();
+    var announceAlert = function (title, message, type) {
+        messageHub.post({
+            data: {
+                title: title,
+                message: message,
+                type: type
+            }
+        }, 'ide.alert');
+    };
+    var announceAlertError = function (title, message) {
+        announceAlert(title, message, "error");
+    };
     var message = function (evtName, data) {
         messageHub.post({ data: data }, evtName);
     };
@@ -20,6 +32,8 @@ migrationLaunchView.factory('$messageHub', [function () {
         messageHub.subscribe(callback, topic);
     };
     return {
+        announceAlert: announceAlert,
+        announceAlertError: announceAlertError,
         message: message,
         on: on
     };

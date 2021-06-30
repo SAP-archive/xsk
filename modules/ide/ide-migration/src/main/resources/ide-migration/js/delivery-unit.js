@@ -9,32 +9,88 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$messageHub', function ($scope, $messageHub) {
+migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http', '$messageHub', function ($scope, $http, $messageHub) {
     $scope.isVisible = false;
     $scope.duDropdownDisabled = true;
     $scope.duDropdownText = "---Please select---";
     $scope.workspacesDropdownText = "---Please select---";
-    $scope.workspaces = ["W1", "W2", "W3", "W4", "W5", "W6"];
+    $scope.workspaces = [];
     $scope.workspacesList = $scope.workspaces;
-    $scope.deliveryUnits = ["DU1", "DU2", "DU3", "DU4", "DU5", "DU6", "DU7", "FO1", "LO2"];
+    $scope.deliveryUnits = [];
     $scope.deliveryUnitList = $scope.deliveryUnits;
     $scope.dataLoaded = false;
     let selectedDeliveyUnit = undefined;
+    let selectedWorkspace = undefined;
     let descriptionList = [
         "Please wait while we get all delivery units...",
         "Provide the target workspace and delivery unit"
     ];
     $scope.descriptionText = descriptionList[0];
+    let connectionId = undefined;
+    let neoData = undefined;
+    let hanaData = undefined;
+    let defaultErrorTitle = "Error loading delivery units";
+    let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
 
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    function getDUData() {
+        body = {
+            neo: neoData,
+            hana: hanaData
+        }
+        $http.post(
+            "/public/v4/migration-operations/setup-migration",
+            JSON.stringify(body),
+            { headers: { 'Content-Type': 'application/json' } }
+        ).then(function (response) {
+            connectionId = response.data.connectionId;
+            $scope.workspaces = response.data.workspaces;
+            $scope.workspacesList = $scope.workspaces;
+            $scope.deliveryUnits = response.data.du;
+            $scope.deliveryUnitList = $scope.deliveryUnits;
+            $scope.$parent.setBottomNavEnabled(true);
+            $scope.descriptionText = descriptionList[1];
+            $scope.dataLoaded = true;
+        }, function (response) {
+            if (response.data) {
+                if ("error" in response.data) {
+                    if ("message" in response.data.error) {
+                        $messageHub.announceAlertError(
+                            defaultErrorTitle,
+                            response.data.error.message
+                        );
+                    } else {
+                        $messageHub.announceAlertError(
+                            defaultErrorTitle,
+                            defaultErrorDesc
+                        );
+                    }
+                    console.error(`HTTP $response.status`, response.data.error);
+                } else {
+                    $messageHub.announceAlertError(
+                        defaultErrorTitle,
+                        defaultErrorDesc
+                    );
+                }
+            } else {
+                $messageHub.announceAlertError(
+                    defaultErrorTitle,
+                    defaultErrorDesc
+                );
+            }
+            errorOccurred();
+        });
     };
+
+    function errorOccurred() {
+        $scope.$parent.previousClicked();
+        $scope.$parent.setBottomNavEnabled(true);
+    }
 
     $scope.filterDU = function () {
         if ($scope.duSearch) {
             let filtered = [];
             for (let i = 0; i < $scope.deliveryUnits.length; i++) {
-                if ($scope.deliveryUnits[i].toLowerCase().includes($scope.duSearch.toLowerCase())) {
+                if ($scope.deliveryUnits[i].name.toLowerCase().includes($scope.duSearch.toLowerCase())) {
                     filtered.push($scope.deliveryUnits[i]);
                 }
             }
@@ -66,7 +122,7 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$messag
 
     $scope.duSelected = function (deliveryUnit) {
         selectedDeliveyUnit = deliveryUnit;
-        $scope.duDropdownText = deliveryUnit;
+        $scope.duDropdownText = deliveryUnit.name;
         $scope.$parent.setFinishEnabled(true);
     };
 
@@ -93,12 +149,25 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$messag
                 }
             });
             if (msg.data.isVisible) {
-                sleep(4000).then(() => {
-                    $scope.$apply(function () {
-                        $scope.dataLoaded = true;
-                        $scope.descriptionText = descriptionList[1];
-                        $scope.$parent.setBottomNavEnabled(true);
-                    });
+                $messageHub.message('migration.neo-credentials', { controller: "migration.delivery-unit", getData: "all" });
+                $messageHub.message('migration.hana-credentials', { controller: "migration.delivery-unit", getData: "all" });
+            }
+        }
+        if ("neoData" in msg.data) {
+            neoData = msg.data.neoData;
+        }
+        if ("hanaData" in msg.data) {
+            hanaData = msg.data.hanaData;
+            getDUData();
+        }
+        if ("getData" in msg.data) {
+            if (msg.data.getData === "all") {
+                $messageHub.message(msg.data.controller, {
+                    duData: {
+                        "connectionId": connectionId,
+                        "workspace": selectedWorkspace,
+                        "du": selectedDeliveyUnit,
+                    }
                 });
             }
         }

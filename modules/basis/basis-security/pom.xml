@@ -7,13 +7,13 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-basis-parent</artifactId>
-        <version>0.6.0-SNAPSHOT</version>
+        <version>0.6.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>XSK - Modules - Basis - Security</name>
     <artifactId>xsk-modules-basis-security</artifactId>
-    <version>0.6.0-SNAPSHOT</version>
+    <version>0.6.0</version>
     <packaging>jar</packaging>
 
 	<properties>

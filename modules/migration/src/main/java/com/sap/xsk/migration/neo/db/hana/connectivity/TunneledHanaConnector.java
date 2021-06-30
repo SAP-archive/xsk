@@ -12,6 +12,7 @@
 package com.sap.xsk.migration.neo.db.hana.connectivity;
 
 import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
+import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseAllDatabaseTunnelsSdkCommandArgs;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseDatabaseTunnelSdkCommandArgs;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseDatabaseTunnelSdkCommandRes;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommandArgs;
@@ -66,5 +67,11 @@ class TunneledHanaConnector implements HanaConnector {
   public void disconnect(String connectionId) {
     var closeDatabaseTunnelSdkCommandArgs = new CloseDatabaseTunnelSdkCommandArgs(connectionId);
     closeDatabaseTunnelSdkCommand.execute(closeDatabaseTunnelSdkCommandArgs);
+  }
+
+  @Override
+  public void disconnectAll() {
+    var args = new CloseAllDatabaseTunnelsSdkCommandArgs();
+    closeDatabaseTunnelSdkCommand.execute(args);
   }
 }

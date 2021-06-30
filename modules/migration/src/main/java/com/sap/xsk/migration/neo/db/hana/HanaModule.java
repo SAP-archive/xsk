@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.migration.neo.db.hana;
 
+import com.sap.xsk.migration.neo.db.DeliveryUnitsExporter;
 import com.sap.xsk.migration.neo.db.DeliveryUnitsProvider;
 import com.sap.xsk.migration.neo.db.hana.connectivity.HanaConnectorModule;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
@@ -21,6 +22,7 @@ public class HanaModule extends AbstractDirigibleModule {
   protected void configure() {
     install(new HanaConnectorModule());
     bind(DeliveryUnitsProvider.class).to(HanaXSDeliveryUnitsProvider.class);
+    bind(DeliveryUnitsExporter.class).to(HanaXSDeliveryUnitsExporter.class);
   }
 
   @Override

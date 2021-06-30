@@ -14,27 +14,35 @@ package com.sap.xsk.migration.neo.db.hana;
 import com.sap.xsk.migration.neo.db.DeliveryUnit;
 import com.sap.xsk.migration.neo.db.DeliveryUnitsExporter;
 import org.apache.commons.io.FileUtils;
+import org.eclipse.dirigible.runtime.transport.processor.TransportProcessor;
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
 public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
 
+  private final TransportProcessor transportProcessor;
+
+  @Inject
+  public HanaXSDeliveryUnitsExporter(TransportProcessor transportProcessor){
+    this.transportProcessor = transportProcessor;
+  }
+
   @Override
-  public List<byte[]> exportDeliveryUnits(String deliveryUnitName, String deliveryUnitVendor) {
+  public void exportDeliveryUnits(String workspace, String deliveryUnitName, String deliveryUnitVendor) {
     try {
-      var projects = new ArrayList<byte[]>();
       String fileURL = System.getenv("CATALINA_HOME") + "/" + System.getenv("ZIP_OUTPUT_URL");
       File file = new File(fileURL);
 
       file.createNewFile();
 
-      ProcessBuilder pb = new ProcessBuilder("node", System.getenv("CATALINA_HOME") + "/migration-tools/xs-migration-cloud/xs-migration.js",
-          deliveryUnitName + "," + deliveryUnitVendor);
+      ProcessBuilder pb = new ProcessBuilder(createProcessArguments(deliveryUnitName, deliveryUnitVendor));
       pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
       pb.redirectError(ProcessBuilder.Redirect.INHERIT);
       Process p = pb.start();
@@ -48,8 +56,8 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
             String fullPath = System.getenv("CATALINA_HOME") + "/" + line;
             File zipFile = new File(fullPath);
             byte[] project = FileUtils.readFileToByteArray(zipFile);
-            projects.add(project);
-//            processor.importProject(workspace, project);
+//            projects.add(project);
+            transportProcessor.importProject(workspace, project);
             line = reader.readLine();
           }
           reader.close();
@@ -59,7 +67,7 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
         }
 
         file.delete();
-        return projects;
+//        return projects;
       } else {
         throw new RuntimeException("Migration script failure!");
       }
@@ -67,5 +75,23 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
     } catch (Throwable e) {
       throw new RuntimeException("Migration script failure!", e);
     }
+  }
+
+  private List<String> createProcessArguments(String deliveryUnitName, String deliveryUnitVendor) {
+    var commandArgs = new ArrayList<String>();
+    commandArgs.add("node");
+
+    if (shouldEnableNodeDebug()) {
+      commandArgs.add("--inspect-brk=0.0.0.0");
+    }
+
+    commandArgs.add(System.getenv("CATALINA_HOME") + "/migration-tools/xs-migration-cloud/xs-migration.js");
+    commandArgs.add(deliveryUnitName + "," + deliveryUnitVendor);
+
+    return commandArgs;
+  }
+
+  private boolean shouldEnableNodeDebug() {
+    return "1".equals(System.getenv("NODE_INSPECT_BRK"));
   }
 }

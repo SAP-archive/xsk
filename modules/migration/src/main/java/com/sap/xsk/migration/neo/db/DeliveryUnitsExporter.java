@@ -15,5 +15,5 @@ import java.util.List;
 
 public interface DeliveryUnitsExporter {
 
-  List<byte[]> exportDeliveryUnits(String deliveryUnitName, String deliveryUnitVendor);
+  void exportDeliveryUnits(String workspace, String deliveryUnitName, String deliveryUnitVendor);
 }

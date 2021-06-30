@@ -26,6 +26,7 @@ import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.engine.odata2.api.ODataException;
 import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerDefinition;
 import org.eclipse.dirigible.engine.odata2.service.ODataCoreService;
@@ -274,7 +275,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
         logger.trace("Done cleaning up XSOData.");
     }
 
-    private void updateXSOData() {
+    private void updateXSOData() throws ODataException {
         // Update XSOData
 
         if (ODATA_MODELS.isEmpty()) {
@@ -282,6 +283,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
             return;
         }
 
+        odataCoreService.handlerDefinitionTableCheck();
         List<String> errors = new ArrayList<>();
         // topology sort of dependencies
         List<String> sorted = new ArrayList<>();

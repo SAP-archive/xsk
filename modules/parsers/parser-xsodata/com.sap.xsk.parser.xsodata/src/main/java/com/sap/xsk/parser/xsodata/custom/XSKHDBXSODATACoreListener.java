@@ -109,6 +109,14 @@ public class XSKHDBXSODATACoreListener extends HdbxsodataBaseListener {
             XSKHDBXSODATANavigation navProp = new XSKHDBXSODATANavigation();
             navProp.setAssociation(handleStringLiteral(el.assocname().getText()));
             navProp.setAliasNavigation(handleStringLiteral(el.navpropname().getText()));
+            if(el.fromend()!=null){
+                if(el.fromend().principal()!=null){
+                    navProp.setFromBindingType(XSKHDBXSODATABindingType.fromValue(el.fromend().principal().getText()).get());
+                }
+                if(el.fromend().dependent()!=null){
+                    navProp.setFromBindingType(XSKHDBXSODATABindingType.fromValue(el.fromend().dependent().getText()).get());
+                }
+            }
             entity.getNavigates().add(navProp);
         });
 
@@ -300,13 +308,13 @@ public class XSKHDBXSODATACoreListener extends HdbxsodataBaseListener {
             XSKHDBXSODATAModificationSpec modificationSpec = new XSKHDBXSODATAModificationSpec();
             HdbxsodataParser.ModificationspecContext spec = null;
             if (el.update() != null) {
-                modification.setType(XSKHDBXSODATAModificationType.UPDATE);
+                modification.setMethod(XSKHDBXSODATAHandlerMethod.UPDATE);
                 spec = el.update().modificationspec();
             } else if (el.create() != null) {
-                modification.setType(XSKHDBXSODATAModificationType.CREATE);
+                modification.setMethod(XSKHDBXSODATAHandlerMethod.CREATE);
                 spec = el.create().modificationspec();
             } else if (el.delete() != null) {
-                modification.setType(XSKHDBXSODATAModificationType.DELETE);
+                modification.setMethod(XSKHDBXSODATAHandlerMethod.DELETE);
                 spec = el.delete().modificationspec();
             }
 

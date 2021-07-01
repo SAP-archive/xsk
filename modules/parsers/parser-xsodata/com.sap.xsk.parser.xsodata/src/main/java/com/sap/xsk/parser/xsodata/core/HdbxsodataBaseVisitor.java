@@ -146,6 +146,14 @@ public class HdbxsodataBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitDependent(@NotNull HdbxsodataParser.DependentContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitModificationaction(@NotNull HdbxsodataParser.ModificationactionContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -451,6 +459,14 @@ public class HdbxsodataBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitAggregate(@NotNull HdbxsodataParser.AggregateContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

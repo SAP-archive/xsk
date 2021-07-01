@@ -17,13 +17,13 @@ public class HdbviewParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__7=1, T__6=2, T__5=3, T__4=4, T__3=5, T__2=6, T__1=7, T__0=8, BOOLEAN=9, 
-		STRING=10, EQ=11, SEMICOLON=12, COMMA=13, WS=14, ESC=15, LINE_COMMENT=16, 
+		T__8=1, T__7=2, T__6=3, T__5=4, T__4=5, T__3=6, T__2=7, T__1=8, T__0=9, 
+		BOOLEAN=10, STRING=11, EQ=12, SEMICOLON=13, WS=14, ESC=15, LINE_COMMENT=16, 
 		COMMENT=17;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'schema'", "'depends_on_table'", "'['", "'depends_on'", 
-		"'depends_on_view'", "']'", "'query'", "'public'", "BOOLEAN", "STRING", 
-		"'='", "';'", "','", "WS", "ESC", "LINE_COMMENT", "COMMENT"
+		"','", "'depends_on_view'", "']'", "'query'", "'public'", "BOOLEAN", "STRING", 
+		"'='", "';'", "WS", "ESC", "LINE_COMMENT", "COMMENT"
 	};
 	public static final int
 		RULE_hdbviewDefinition = 0, RULE_property = 1, RULE_schemaProp = 2, RULE_publicProp = 3, 
@@ -97,7 +97,7 @@ public class HdbviewParser extends Parser {
 				setState(19); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__7) | (1L << T__6) | (1L << T__4) | (1L << T__3) | (1L << T__1) | (1L << T__0))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__8) | (1L << T__7) | (1L << T__5) | (1L << T__3) | (1L << T__1) | (1L << T__0))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -155,7 +155,7 @@ public class HdbviewParser extends Parser {
 		try {
 			setState(27);
 			switch (_input.LA(1)) {
-			case T__7:
+			case T__8:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(21); schemaProp();
@@ -173,13 +173,13 @@ public class HdbviewParser extends Parser {
 				setState(23); queryProp();
 				}
 				break;
-			case T__4:
+			case T__5:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(24); dependsOnProp();
 				}
 				break;
-			case T__6:
+			case T__7:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(25); dependsOnTable();
@@ -235,7 +235,7 @@ public class HdbviewParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(29); match(T__7);
+			setState(29); match(T__8);
 			setState(30); match(EQ);
 			setState(31); match(STRING);
 			setState(32); match(SEMICOLON);
@@ -377,9 +377,9 @@ public class HdbviewParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(44); match(T__4);
+			setState(44); match(T__5);
 			setState(45); match(EQ);
-			setState(46); match(T__5);
+			setState(46); match(T__6);
 			setState(55);
 			_la = _input.LA(1);
 			if (_la==STRING) {
@@ -388,10 +388,10 @@ public class HdbviewParser extends Parser {
 				setState(52);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==COMMA) {
+				while (_la==T__4) {
 					{
 					{
-					setState(48); match(COMMA);
+					setState(48); match(T__4);
 					setState(49); match(STRING);
 					}
 					}
@@ -450,9 +450,9 @@ public class HdbviewParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(60); match(T__6);
+			setState(60); match(T__7);
 			setState(61); match(EQ);
-			setState(62); match(T__5);
+			setState(62); match(T__6);
 			setState(71);
 			_la = _input.LA(1);
 			if (_la==STRING) {
@@ -461,10 +461,10 @@ public class HdbviewParser extends Parser {
 				setState(68);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==COMMA) {
+				while (_la==T__4) {
 					{
 					{
-					setState(64); match(COMMA);
+					setState(64); match(T__4);
 					setState(65); match(STRING);
 					}
 					}
@@ -525,7 +525,7 @@ public class HdbviewParser extends Parser {
 			{
 			setState(76); match(T__3);
 			setState(77); match(EQ);
-			setState(78); match(T__5);
+			setState(78); match(T__6);
 			setState(87);
 			_la = _input.LA(1);
 			if (_la==STRING) {
@@ -534,10 +534,10 @@ public class HdbviewParser extends Parser {
 				setState(84);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==COMMA) {
+				while (_la==T__4) {
 					{
 					{
-					setState(80); match(COMMA);
+					setState(80); match(T__4);
 					setState(81); match(STRING);
 					}
 					}
@@ -576,18 +576,18 @@ public class HdbviewParser extends Parser {
 		"\23\3\2\2\2\25\26\3\2\2\2\26\3\3\2\2\2\27\36\5\6\4\2\30\36\5\b\5\2\31"+
 		"\36\5\n\6\2\32\36\5\f\7\2\33\36\5\16\b\2\34\36\5\20\t\2\35\27\3\2\2\2"+
 		"\35\30\3\2\2\2\35\31\3\2\2\2\35\32\3\2\2\2\35\33\3\2\2\2\35\34\3\2\2\2"+
-		"\36\5\3\2\2\2\37 \7\3\2\2 !\7\r\2\2!\"\7\f\2\2\"#\7\16\2\2#\7\3\2\2\2"+
-		"$%\7\n\2\2%&\7\r\2\2&\'\7\13\2\2\'(\7\16\2\2(\t\3\2\2\2)*\7\t\2\2*+\7"+
-		"\r\2\2+,\7\f\2\2,-\7\16\2\2-\13\3\2\2\2./\7\6\2\2/\60\7\r\2\2\609\7\5"+
-		"\2\2\61\66\7\f\2\2\62\63\7\17\2\2\63\65\7\f\2\2\64\62\3\2\2\2\658\3\2"+
+		"\36\5\3\2\2\2\37 \7\3\2\2 !\7\16\2\2!\"\7\r\2\2\"#\7\17\2\2#\7\3\2\2\2"+
+		"$%\7\13\2\2%&\7\16\2\2&\'\7\f\2\2\'(\7\17\2\2(\t\3\2\2\2)*\7\n\2\2*+\7"+
+		"\16\2\2+,\7\r\2\2,-\7\17\2\2-\13\3\2\2\2./\7\6\2\2/\60\7\16\2\2\609\7"+
+		"\5\2\2\61\66\7\r\2\2\62\63\7\7\2\2\63\65\7\r\2\2\64\62\3\2\2\2\658\3\2"+
 		"\2\2\66\64\3\2\2\2\66\67\3\2\2\2\67:\3\2\2\28\66\3\2\2\29\61\3\2\2\29"+
-		":\3\2\2\2:;\3\2\2\2;<\7\b\2\2<=\7\16\2\2=\r\3\2\2\2>?\7\4\2\2?@\7\r\2"+
-		"\2@I\7\5\2\2AF\7\f\2\2BC\7\17\2\2CE\7\f\2\2DB\3\2\2\2EH\3\2\2\2FD\3\2"+
-		"\2\2FG\3\2\2\2GJ\3\2\2\2HF\3\2\2\2IA\3\2\2\2IJ\3\2\2\2JK\3\2\2\2KL\7\b"+
-		"\2\2LM\7\16\2\2M\17\3\2\2\2NO\7\7\2\2OP\7\r\2\2PY\7\5\2\2QV\7\f\2\2RS"+
-		"\7\17\2\2SU\7\f\2\2TR\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2WZ\3\2\2\2"+
-		"XV\3\2\2\2YQ\3\2\2\2YZ\3\2\2\2Z[\3\2\2\2[\\\7\b\2\2\\]\7\16\2\2]\21\3"+
-		"\2\2\2\n\25\35\669FIVY";
+		":\3\2\2\2:;\3\2\2\2;<\7\t\2\2<=\7\17\2\2=\r\3\2\2\2>?\7\4\2\2?@\7\16\2"+
+		"\2@I\7\5\2\2AF\7\r\2\2BC\7\7\2\2CE\7\r\2\2DB\3\2\2\2EH\3\2\2\2FD\3\2\2"+
+		"\2FG\3\2\2\2GJ\3\2\2\2HF\3\2\2\2IA\3\2\2\2IJ\3\2\2\2JK\3\2\2\2KL\7\t\2"+
+		"\2LM\7\17\2\2M\17\3\2\2\2NO\7\b\2\2OP\7\16\2\2PY\7\5\2\2QV\7\r\2\2RS\7"+
+		"\7\2\2SU\7\r\2\2TR\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2WZ\3\2\2\2XV\3"+
+		"\2\2\2YQ\3\2\2\2YZ\3\2\2\2Z[\3\2\2\2[\\\7\t\2\2\\]\7\17\2\2]\21\3\2\2"+
+		"\2\n\25\35\669FIVY";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

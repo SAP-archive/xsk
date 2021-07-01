@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-samples-parent</artifactId>
-		<version>0.5.0-SNAPSHOT</version>
+		<version>0.7.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Samples - demo-unified-runtimes</name>
 	<artifactId>xsk-samples-demo-unified-runtimes</artifactId>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.7.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<build>

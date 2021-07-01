@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class XSKHDBXSODATAModification {
 
-    private XSKHDBXSODATAModificationType type;
+    private XSKHDBXSODATAHandlerMethod method;
     private XSKHDBXSODATAModificationSpec specification;
 
 }

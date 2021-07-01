@@ -15,6 +15,9 @@ import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +29,14 @@ public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
   }
 
   public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
-    String sql = "CREATE SCHEMA " + hdbSchema.getName();
-    executeSql(sql, connection);
+    logger.info("Processing Create Schema: " + hdbSchema.getName());
+
+    ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+    if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+      throw new IllegalStateException(String.format("%s does not support Schema", dialect.getDatabaseName(connection)));
+    } else {
+      String sql = "CREATE SCHEMA " + hdbSchema.getName();
+      executeSql(sql, connection);
+    }
   }
 }

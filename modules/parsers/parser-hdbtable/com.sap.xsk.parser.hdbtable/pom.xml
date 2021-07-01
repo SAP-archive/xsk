@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-parsers-hdbtable-parent</artifactId>
-        <version>0.5.0-SNAPSHOT</version>
+        <version>0.7.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -15,12 +15,13 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <license.header.location>../../../../license-header.txt</license.header.location>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.3</version>
+            <version>${antlr4-runtime.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -33,7 +34,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.3</version>
+                <version>${antlr4-maven-plugin.version}</version>
                 <configuration>
                     <visitor>true</visitor>
                     <outputDirectory>${basedir}/src/main/java</outputDirectory>

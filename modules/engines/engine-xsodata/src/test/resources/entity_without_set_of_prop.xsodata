@@ -1,0 +1,14 @@
+service namespace "np"{
+
+"kneo.test.helloodata.CompositeKey::employee" as "Employees" without ("ORDER_ID")
+	navigates ("Employees_Phones" as "HisPhones");
+
+"kneo.test.helloodata.CompositeKey::phones" as "Phones";
+
+association "Employees_Phones" with referential constraint
+	 principal "Employees"("COMPANY_ID", "EMPLOYEE_NUMBER") multiplicity "1"
+     dependent "Phones"("FK_COMPANY_ID", "FK_EMPLOYEE_NUMBER") multiplicity "*" ;
+}
+annotations     {
+	enable      OData4SAP;
+}

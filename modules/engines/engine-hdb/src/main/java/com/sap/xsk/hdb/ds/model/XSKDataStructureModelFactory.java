@@ -20,7 +20,7 @@ import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
-import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
+//import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,8 +97,8 @@ public class XSKDataStructureModelFactory {
   }
 
   private void setupParser() {
-    Injector injector = new HdbDDStandaloneSetup().createInjectorAndDoEMFRegistration();
-    injector.injectMembers(this);
+//    Injector injector = new HdbDDStandaloneSetup().createInjectorAndDoEMFRegistration();
+//    injector.injectMembers(this);
   }
 
   /**

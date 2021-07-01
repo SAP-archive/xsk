@@ -26,6 +26,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.cxf.helpers.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ContextException;
 import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
@@ -70,6 +71,15 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
 //    TEST_MODULES.add("test/xsk/db/api/parameter-metadata.xsjs");
     TEST_MODULES.add("test/xsk/db/api/callable-statement.xsjs");
     TEST_MODULES.add("test/xsk/response.xsjs");
+    TEST_MODULES.add("test/xsk/response/response.xsjs");
+    TEST_MODULES.add("test/xsk/session/session.xsjs");
+    TEST_MODULES.add("test/xsk/trace/trace.xsjs");
+    TEST_MODULES.add("test/xsk/import/import.xsjs");
+    TEST_MODULES.add("test/xsk/util/util.xsjs");
+    TEST_MODULES.add("test/xsk/util/codec/codec.xsjs");
+    TEST_MODULES.add("test/xsk/http/http.xsjs");
+    // TODO rework net.xsjs's test after upgrading mockito's versions in dirigible and xsk
+    TEST_MODULES.add("test/xsk/net/net.xsjs");
   }
 
   /**
@@ -93,7 +103,8 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
       try {
         HttpServletRequest mockedRequest = Mockito.mock(HttpServletRequest.class);
         HttpServletResponse mockedResponse = Mockito.mock(HttpServletResponse.class);
-        mockRequest(mockedRequest);
+        HttpSession mockedSession = Mockito.mock(HttpSession.class);
+        mockRequest(mockedRequest, mockedSession);
         mockResponse(mockedResponse);
 
         ThreadContextFacade.setUp();
@@ -118,13 +129,14 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
     }
   }
 
-  private void mockRequest(HttpServletRequest mockedRequest) {
+  private void mockRequest(HttpServletRequest mockedRequest, HttpSession httpSession) {
     when(mockedRequest.getMethod()).thenReturn("GET");
     when(mockedRequest.getRemoteUser()).thenReturn("tester");
     when(mockedRequest.getHeader("header1")).thenReturn("header1");
     when(mockedRequest.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("header1", "header2")));
     when(mockedRequest.getHeader("header1")).thenReturn("header1");
     when(mockedRequest.getRequestURI()).thenReturn("/services/v3/js/test/test.xsjs");
+    when(mockedRequest.getSession(true)).thenReturn(httpSession);
   }
 
   private void mockResponse(HttpServletResponse mockedResponse) throws IOException {

@@ -124,6 +124,13 @@ public interface HdbxsodataVisitor<T> extends ParseTreeVisitor<T> {
 	T visitParameterentitysetname(@NotNull HdbxsodataParser.ParameterentitysetnameContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link HdbxsodataParser#dependent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDependent(@NotNull HdbxsodataParser.DependentContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link HdbxsodataParser#modificationaction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -395,6 +402,13 @@ public interface HdbxsodataVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAggregate(@NotNull HdbxsodataParser.AggregateContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbxsodataParser#principal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link HdbxsodataParser#eventlist}.

@@ -185,6 +185,17 @@ public interface HdbxsodataListener extends ParseTreeListener {
 	void exitParameterentitysetname(@NotNull HdbxsodataParser.ParameterentitysetnameContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link HdbxsodataParser#dependent}.
+	 * @param ctx the parse tree
+	 */
+	void enterDependent(@NotNull HdbxsodataParser.DependentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbxsodataParser#dependent}.
+	 * @param ctx the parse tree
+	 */
+	void exitDependent(@NotNull HdbxsodataParser.DependentContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link HdbxsodataParser#modificationaction}.
 	 * @param ctx the parse tree
 	 */
@@ -612,6 +623,17 @@ public interface HdbxsodataListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAggregate(@NotNull HdbxsodataParser.AggregateContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbxsodataParser#principal}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbxsodataParser#principal}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link HdbxsodataParser#eventlist}.

@@ -20,7 +20,9 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,14 +46,19 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
     String viewName = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName());
     if (!SqlFactory.getNative(connection).exists(connection, viewName, DatabaseArtifactTypes.VIEW)) {
       String sql = null;
-      switch (viewModel.getHanaVersion()) {
-        case VERSION_1: {
+      switch (viewModel.getDBContentType()) {
+        case XS_CLASSIC: {
           sql = SqlFactory.getNative(connection).create().view(viewName).asSelect(viewModel.getQuery()).build();
           break;
         }
-        case VERSION_2: {
-          sql = XSKConstants.XSK_HDBVIEW_CREATE + viewModel.getRawContent();
-          break;
+        case OTHERS: {
+          ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+          if (dialect.getClass().equals(HanaSqlDialect.class)) {
+            sql = XSKConstants.XSK_HDBVIEW_CREATE + viewModel.getRawContent();
+            break;
+          } else {
+            throw new IllegalStateException(String.format("Views are not supported for %s !", dialect.getDatabaseName(connection)));
+          }
         }
       }
       executeSql(sql, connection);

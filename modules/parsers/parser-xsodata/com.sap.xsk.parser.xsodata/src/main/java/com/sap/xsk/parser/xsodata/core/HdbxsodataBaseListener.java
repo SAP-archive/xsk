@@ -225,6 +225,19 @@ public class HdbxsodataBaseListener implements HdbxsodataListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDependent(@NotNull HdbxsodataParser.DependentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDependent(@NotNull HdbxsodataParser.DependentContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterModificationaction(@NotNull HdbxsodataParser.ModificationactionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -726,6 +739,19 @@ public class HdbxsodataBaseListener implements HdbxsodataListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAggregate(@NotNull HdbxsodataParser.AggregateContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrincipal(@NotNull HdbxsodataParser.PrincipalContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

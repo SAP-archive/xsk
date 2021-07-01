@@ -12,12 +12,14 @@
 package com.sap.xsk.parser.xsodata.model;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Accessors(chain = true)
 public class XSKHDBXSODATAParameter {
 
     private String parameterEntitySetName;

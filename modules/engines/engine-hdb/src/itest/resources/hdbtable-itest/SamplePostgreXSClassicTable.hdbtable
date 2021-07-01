@@ -7,8 +7,5 @@ table.columns = [
  {name = "NAME"; sqlType = VARCHAR; length = 20; nullable = false; },
  {name = "JOB"; sqlType = VARCHAR; length = 20; nullable = false;},
  {name = "NUMBER"; sqlType = INTEGER; length = 20; nullable = false; defaultValue = 444;}];
-table.indexes =  [
- {name = "MYINDEX"; unique = false; indexColumns = ["ID"];},
- {name = "MYINDEX10"; unique = true; indexColumns = ["JOB", "NAME"];}];
 table.primaryKey.pkcolumns = ["ID"];
 table.description = "test table test";

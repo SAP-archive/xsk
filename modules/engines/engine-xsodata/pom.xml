@@ -7,30 +7,30 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-engines-parent</artifactId>
-        <version>0.5.0-SNAPSHOT</version>
+        <version>0.7.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>XSK - Modules - Engines - XS OData</name>
     <artifactId>xsk-modules-engines-xsodata</artifactId>
-    <version>0.5.0-SNAPSHOT</version>
+    <version>0.7.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-all</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
+            <version>0.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-api-all</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
+            <version>0.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-engines-hdb</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
+            <version>0.7.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -174,7 +174,6 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
@@ -182,21 +181,40 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${org.testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${org.testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.2.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-hdbti</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
+            <version>0.7.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-			<version>0.5.0-SNAPSHOT</version>
+			<version>0.7.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
         <dependency>
 			<groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-			<version>0.5.0-SNAPSHOT</version>
+			<version>0.7.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
         <dependency>
@@ -206,5 +224,9 @@
             <scope>provided</scope>
         </dependency>
 	</dependencies>
+
+    <properties>
+		<license.header.location>../../../license-header.txt</license.header.location>
+	</properties>
 
 </project>

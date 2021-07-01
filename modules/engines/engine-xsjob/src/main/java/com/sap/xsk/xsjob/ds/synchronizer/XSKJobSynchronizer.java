@@ -19,7 +19,7 @@ import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.XSKSchedulerManager;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
-import com.sap.xsk.xsjob.ds.tronsformer.XSKJobToXSKJobDefinitionTransformer;
+import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -118,9 +118,11 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
     try {
       String json = IOUtils.toString(in, StandardCharsets.UTF_8);
       XSKJobArtifact xskJobArtifact = schedulerCoreService.parseJob(json);
-      XSKJobDefinition jobDefinition = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
-      jobDefinition.setName(jobPath);
-      JOBS_PREDELIVERED.put(jobPath, jobDefinition);
+      ArrayList<XSKJobDefinition> xskJobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
+      for (XSKJobDefinition jobDefinition:xskJobDefinitions) {
+        jobDefinition.setName(jobPath);
+        JOBS_PREDELIVERED.put(jobPath, jobDefinition);
+      }
     } finally {
       if (in != null) {
         in.close();
@@ -152,9 +154,11 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
     if (resourceName.endsWith(IXSKJobModel.XSK_JOB_FILE_EXTENSION)) {
       XSKJobArtifact xskJobArtifact = schedulerCoreService.parseJob(resource.getContent());
       try {
-        XSKJobDefinition xskJobDefinition = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
-        xskJobDefinition.setGroup(IXSKJobCoreService.XSK_DEFINED_GROUP);
-        synchronizeJob(xskJobDefinition);
+        ArrayList<XSKJobDefinition> xskJobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
+        for (XSKJobDefinition xskJobDefinition : xskJobDefinitions) {
+          xskJobDefinition.setGroup(IXSKJobCoreService.XSK_DEFINED_GROUP);
+          synchronizeJob(xskJobDefinition);
+        }
       } catch (ParseException e) {
         throw new SynchronizationException();
       }

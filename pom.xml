@@ -31,7 +31,7 @@
 		<module>modules</module>
 		<module>releng</module>
 		<module>samples</module>
-	</modules>
+  </modules>
 
 	<profiles>
 		<profile>

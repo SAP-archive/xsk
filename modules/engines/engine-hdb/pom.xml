@@ -289,6 +289,12 @@
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-modules-parsers-hdbschema</artifactId>
+      <version>0.6.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbtable</artifactId>
       <version>0.7.0-SNAPSHOT</version>
       <scope>compile</scope>

@@ -26,7 +26,7 @@
 		<module>parser-hdbcalculationview</module>
 		<module>parser-calculationview</module>
 		<module>parser-hdbsynonym</module>
-    <module>parser-hdbschema</module>
+		<module>parser-hdbschema</module>
   </modules>
 
 	<properties>

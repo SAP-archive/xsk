@@ -26,7 +26,8 @@
 		<module>parser-hdbcalculationview</module>
 		<module>parser-calculationview</module>
 		<module>parser-hdbsynonym</module>
-	</modules>
+		<module>parser-hdbschema</module>
+  </modules>
 
 	<properties>
 		<license.header.location>../../license-header.txt</license.header.location>

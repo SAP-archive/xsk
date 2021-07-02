@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.processors.hdbschema;
 
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
@@ -26,13 +27,14 @@ public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructur
   private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
   public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
-    logger.info("Processing Drop Schema: " + hdbSchema.getName());
+    logger.info("Processing Drop Schema: " + hdbSchema.getSchema());
 
     ISqlDialect dialect = SqlFactory.deriveDialect(connection);
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
       throw new IllegalStateException(String.format("%s does not support Schema", dialect.getDatabaseName(connection)));
     } else {
-      String sql = "DROP SCHEMA " + hdbSchema.getName();
+      String schemaName = XSKHDBUtils.escapeArtifactName(connection, hdbSchema.getSchema());
+      String sql = "DROP SCHEMA " + schemaName;
       executeSql(sql, connection);
     }
   }

@@ -38,7 +38,7 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
             hana: hanaData
         }
         $http.post(
-            "/public/v4/migration-operations/setup-migration",
+            "/services/v4/migration-operations/setup-migration",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {

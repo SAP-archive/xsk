@@ -1,5 +1,5 @@
 com.sap.xsk.hdb.ds.parser.entities.XSKEntitiesParser
 com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser
-com.sap.xsk.hdb.ds.parser.hdbschema.XSKHDBSchemaParser
+com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser
 com.sap.xsk.hdb.ds.parser.table.XSKTableParser
 com.sap.xsk.hdb.ds.parser.view.XSKViewParser

@@ -10,21 +10,43 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import com.sap.xsk.parser.xsodata.core.HdbxsodataLexer;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataParser;
 import com.sap.xsk.parser.xsodata.custom.XSKHDBXSODATACoreListener;
-import com.sap.xsk.parser.xsodata.model.*;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAggregation;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAggregationType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociationTable;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATABinding;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATABindingRole;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATABindingType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEvent;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAModification;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAModificationSpec;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAMultiplicityType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATANavigation;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATARepositoryObject;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAService;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATASetting;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAStorage;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAStorageType;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-
-import static org.junit.Assert.*;
 
 public class XSKHDBXSODATACoreListenerTest {
     private final XSKHDBXSODATACoreListener listener = new XSKHDBXSODATACoreListener();

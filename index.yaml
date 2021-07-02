@@ -2,8 +2,39 @@ apiVersion: v1
 entries:
   xsk:
   - apiVersion: v2
+    appVersion: 0.6.1
+    created: "2021-07-02T07:40:36.197465396Z"
+    description: Compatible environment for SAP HANA Extended Application Services
+      (XS) based applications outside of SAP HANA instance running in a container
+      deployed on Kubernetes.
+    digest: ec16dc55367863cd06e5028de0f495d8ae20da6bd497a59ab5ed955686c6d2bf
+    home: https://github.com/sap/xsk
+    icon: https://raw.githubusercontent.com/eclipse/dirigible/master/logo/dirigible-logo-symbol.png
+    keywords:
+    - sap
+    - xsc
+    - hana
+    - neo
+    - xsk
+    - kyma
+    - platform
+    - development
+    - applications
+    - in-system
+    maintainers:
+    - email: yordan.pavlov@sap.com
+      name: Yordan Pavlov
+      url: https://github.com/ThuF
+    name: xsk
+    sources:
+    - https://github.com/sap/xsk
+    type: application
+    urls:
+    - https://sap.github.io/xsk/charts/xsk-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v2
     appVersion: 0.6.0
-    created: "2021-06-30T07:53:22.293111995Z"
+    created: "2021-07-02T07:40:36.196816147Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -34,7 +65,7 @@ entries:
     version: 0.6.0
   - apiVersion: v2
     appVersion: 0.5.0
-    created: "2021-06-30T07:53:22.292505795Z"
+    created: "2021-07-02T07:40:36.196124096Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -65,7 +96,7 @@ entries:
     version: 0.5.0
   - apiVersion: v2
     appVersion: 0.4.2
-    created: "2021-06-30T07:53:22.291851595Z"
+    created: "2021-07-02T07:40:36.195472347Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -94,4 +125,4 @@ entries:
     urls:
     - https://sap.github.io/xsk/charts/xsk-0.4.2.tgz
     version: 0.4.2
-generated: "2021-06-30T07:53:22.291058594Z"
+generated: "2021-07-02T07:40:36.194500574Z"

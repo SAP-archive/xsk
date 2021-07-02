@@ -89,6 +89,7 @@ jobs:
     - name: Package WAR files
       run: |
         zip --junk-paths server releng/server/target/ROOT.war
+        zip --junk-paths sap-cf releng/sap-cf/target/ROOT.war
 
     - name: Create Release
       id: create_release
@@ -110,11 +111,30 @@ jobs:
 
           #### Available for download `*.war` packages:
             - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server.zip) - XSK Server.
+            - [sap-cf](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/sap-cf.zip) - XSK Cloud Foundry.
             
           > _**Note:** Unzip the downloaded file to extract the `ROOT.war` binary._
           
           For more information go to [https://www.dirigible.io/help/setup/](https://www.dirigible.io/help/setup/).
-          
+
+          ## XSK - ${{ env.XSK_VERSION }} - SAP Java Buildpack Usage
+
+          **manifest.yaml**
+
+          ```yaml
+          applications:
+          - name: <application-name>
+            host: <host>
+            memory: 2G
+            buildpack: sap_java_buildpack
+            path: ROOT.war
+            env:
+              JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jdk.SAPMachineJDK']"
+              JBP_CONFIG_SAP_MACHINE_JRE: 'jre: { version: 11.+ }'
+            services:
+              - <service-binding>
+          ```
+
           ## XSK - ${{ env.XSK_VERSION }} - Buildpack
 
           #### Prerequisites
@@ -198,6 +218,16 @@ jobs:
         asset_name: server.zip
         asset_content_type: application/zip
 
+    - name: Upload SAP CF
+      id: upload-sap-cf 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./sap-cf.zip
+        asset_name: sap-cf.zip
+        asset_content_type: application/zip
 #----------------Publish GitHub Release------------------#
 
 #----------------Publish Helm Release------------------#

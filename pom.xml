@@ -30,7 +30,6 @@
 	<modules>
 		<module>modules</module>
 		<module>releng</module>
-		<module>samples</module>
   </modules>
 
 	<profiles>

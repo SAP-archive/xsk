@@ -1,10 +1,11 @@
-## demo-unified-runtimes
+## XSJS
 
 This sample contains a single `xsjs` service using the [$.db](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/%24.db.html), [$.sessioon](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/%24.session.html) and [$.response](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.WebResponse.html) APIs.
 
-- [Kpack Configurations](#kpack-configurations)
-- [Building XSK Docker Image from Source](#building-xsk-docker-image-from-source)
-- [Deploying XSK Docker Image on Kyma](#deploying-xsk-docker-image-on-kyma)
+- [XSJS](#xsjs)
+  - [Kpack Configurations](#kpack-configurations)
+  - [Building XSK Docker Image from Source](#building-xsk-docker-image-from-source)
+  - [Deploying XSK Docker Image on Kyma](#deploying-xsk-docker-image-on-kyma)
 
 ### Kpack Configurations
 
@@ -48,7 +49,7 @@ helm install xsk-image-application xsk/xsk \
 --set image.source=<zipped-application-content-url>
 ```
 
-> _**Note:** Before running the command, replace the `<zipped-application-content-url>` placeholder with URL to your XSK application content (e.g. https://github.com/SAP/xsk/raw/main/samples/demo-unified-runtimes.zip)_
+> _**Note:** Before running the command, replace the `<zipped-application-content-url>` placeholder with URL to your XSK application content (e.g. https://github.com/SAP/xsk/releases/download/v0.6.2/xsjs.zip)_
 
 - To monitor the build log execute the following command:
 
@@ -70,7 +71,7 @@ helm install xsk-image-application xsk/xsk \
 helm install my-application xsk/xsk \
 --set create.application=true \
 --set application.image=<docker-application-image> \
---set application.homeUrl=/services/v4/xsk/demo-unified-runtimes/demo.xsjs \
+--set application.homeUrl=/services/v4/xsk/xsjs/demo.xsjs \
 --set application.fastBootstrap=true \
 --set create.secret=true \
 --set hana.url=<hana-url> \

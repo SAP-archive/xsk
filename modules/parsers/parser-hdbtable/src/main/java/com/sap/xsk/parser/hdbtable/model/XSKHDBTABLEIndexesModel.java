@@ -12,69 +12,47 @@
 package com.sap.xsk.parser.hdbtable.model;
 
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class XSKHDBTABLEIndexesModel {
 
-  private String name;
-  private boolean unique;
-  private String order;
-  private List<String> indexColumns;
-  private String indexType;
+    @Getter(AccessLevel.NONE)
+    private String name;
+    private boolean unique;
+    private String order;
+    private List<String> indexColumns;
+    private String indexType;
 
-  public XSKHDBTABLEIndexesModel() {
-  }
-
-  public boolean isUnique() {
-    return unique;
-  }
-
-  public void setUnique(boolean unique) {
-    this.unique = unique;
-  }
-
-  public String getOrder() {
-    return order;
-  }
-
-  public void setOrder(String order) {
-    this.order = order;
-  }
-
-  public List<String> getIndexColumns() {
-    return indexColumns;
-  }
-
-  public void setIndexColumns(List<String> indexColumns) {
-    this.indexColumns = indexColumns;
-  }
-
-  public String getIndexType() {
-    return indexType;
-  }
-
-  public void setIndexType(String indexType) {
-    this.indexType = indexType;
-  }
-
-  public String getIndexName() {
-    return name;
-  }
-
-  public void setIndexName(String name) {
-    this.name = name;
-  }
-
-  public void checkForAllIndexMandatoryFieldsPresence() throws Exception {
-    checkPresence(name, "name");
-    checkPresence(unique, "unique");
-    checkPresence(indexColumns, "indexColumns");
-  }
-
-  private <T> void checkPresence(T field, String fieldName) {
-    if (Objects.isNull(field)) {
-      throw new XSKHDBTableMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+    public String getIndexName() {
+        return name;
     }
-  }
+
+    public void setIndexName(String name) {
+        this.name = name;
+    }
+
+    public void checkForAllIndexMandatoryFieldsPresence() {
+        checkPresence(name, "name");
+        checkPresence(unique, "unique");
+        checkPresence(indexColumns, "indexColumns");
+    }
+
+    private <T> void checkPresence(T field, String fieldName) {
+        if (Objects.isNull(field)) {
+            throw new XSKHDBTableMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+        }
+        if ((field instanceof ArrayList) && ((ArrayList) field).isEmpty()) {
+            throw new XSKHDBTableMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+        }
+    }
 }

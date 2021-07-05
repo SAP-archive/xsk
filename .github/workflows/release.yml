@@ -95,16 +95,16 @@ jobs:
     - name: Package Samples
       run: |
         cd samples/
-        zip products products/*
-        zip xsjs-simple xsjs-simple/*
-        zip xsjs xsjs/*
-        zip hdb-simple hdb-simple/*
-        zip hdb-view hdb-view/*
-        zip hdb-odata hdb-odata/*
-        zip hdb-xsodata hdb-xsodata/*
-        zip hdi-simple hdi-simple/*
-        zip hdi-ext hdi-ext/*
-        zip hdi-cube hdi-cube/*
+        zip -r products products/*
+        zip -r xsjs-simple xsjs-simple/*
+        zip -r xsjs xsjs/*
+        zip -r hdb-simple hdb-simple/*
+        zip -r hdb-view hdb-view/*
+        zip -r hdb-odata hdb-odata/*
+        zip -r hdb-xsodata hdb-xsodata/*
+        zip -r hdi-simple hdi-simple/*
+        zip -r hdi-ext hdi-ext/*
+        zip -r hdi-cube hdi-cube/*
 
     - name: Create Release
       id: create_release

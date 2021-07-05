@@ -23,7 +23,7 @@ jobs:
         architecture: x64
     - name: Maven Build
       run: mvn clean install
-    - name: Dodcker Login
+    - name: Docker Login
       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Push XSK
       run: |

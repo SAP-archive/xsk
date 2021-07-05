@@ -93,16 +93,17 @@ jobs:
 
     - name: Package Samples
       run: |
-        zip --junk-paths products samples/products/*
-        zip --junk-paths xsjs-simple samples/xsjs-simple/*
-        zip --junk-paths xsjs samples/xsjs/*
-        zip --junk-paths hdb-simple samples/hdb-simple/*
-        zip --junk-paths hdb-view samples/hdb-view/*
-        zip --junk-paths hdb-odata samples/hdb-odata/*
-        zip --junk-paths hdb-xsodata samples/hdb-xsodata/*
-        zip --junk-paths hdi-simple samples/hdi-simple/*
-        zip --junk-paths hdi-ext samples/hdi-ext/*
-        zip --junk-paths hdi-cube samples/hdi-cube/*
+        cd samples/
+        zip products products/*
+        zip xsjs-simple xsjs-simple/*
+        zip xsjs xsjs/*
+        zip hdb-simple hdb-simple/*
+        zip hdb-view hdb-view/*
+        zip hdb-odata hdb-odata/*
+        zip hdb-xsodata hdb-xsodata/*
+        zip hdi-simple hdi-simple/*
+        zip hdi-ext hdi-ext/*
+        zip hdi-cube hdi-cube/*
 
     - name: Create Release
       id: create_release
@@ -261,7 +262,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./products.zip
+        asset_path: ./samples/products.zip
         asset_name: products.zip
         asset_content_type: application/zip
 
@@ -272,7 +273,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./xsjs-simple.zip
+        asset_path: ./samples/xsjs-simple.zip
         asset_name: xsjs-simple.zip
         asset_content_type: application/zip
 
@@ -283,7 +284,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./xsjs.zip
+        asset_path: ./samples/xsjs.zip
         asset_name: xsjs.zip
         asset_content_type: application/zip
 
@@ -294,7 +295,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hdb-simple.zip
+        asset_path: ./samples/hdb-simple.zip
         asset_name: hdb-simple.zip
         asset_content_type: application/zip
 
@@ -305,7 +306,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hdb-view.zip
+        asset_path: ./samples/hdb-view.zip
         asset_name: hdb-view.zip
         asset_content_type: application/zip
 
@@ -316,7 +317,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hdb-odata.zip
+        asset_path: ./samples/hdb-odata.zip
         asset_name: hdb-odata.zip
         asset_content_type: application/zip
 
@@ -327,7 +328,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hdb-xsodata.zip
+        asset_path: ./samples/hdb-xsodata.zip
         asset_name: hdb-xsodata.zip
         asset_content_type: application/zip
 
@@ -338,7 +339,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hdi-simple.zip
+        asset_path: ./samples/hdi-simple.zip
         asset_name: hdi-simple.zip
         asset_content_type: application/zip
 
@@ -349,7 +350,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hdi-ext.zip
+        asset_path: ./samples/hdi-ext.zip
         asset_name: hdi-ext.zip
         asset_content_type: application/zip
 
@@ -360,7 +361,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hdi-cube.zip
+        asset_path: ./samples/hdi-cube.zip
         asset_name: hdi-cube.zip
         asset_content_type: application/zip
 

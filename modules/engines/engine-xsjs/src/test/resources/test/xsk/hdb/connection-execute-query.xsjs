@@ -1,4 +1,4 @@
-var database = require('xsk/hdb');
+var database = $.hdb;
 var response = require('http/v4/response');
 
 try {

@@ -1,4 +1,4 @@
-table.schemaName = "DBADMIN";
+table.schemaName = "SAP_INO";
 table.temporary = true;
 table.tableType = COLUMNSTORE;
 table.loggingType = NOLOGGING;

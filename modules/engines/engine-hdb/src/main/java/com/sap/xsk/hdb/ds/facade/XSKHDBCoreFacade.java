@@ -91,7 +91,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         return;
       }
     } catch (XSKDataStructuresException e) {
-      logger.error("Synchronized artifact is not valid");
+      logger.error("Synchronized artifact with path "+registryPath+" is not valid");
       logger.error(e.getMessage());
       return;
     } catch (Exception e) {

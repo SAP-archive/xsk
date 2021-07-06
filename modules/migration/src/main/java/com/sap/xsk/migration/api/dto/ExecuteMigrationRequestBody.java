@@ -11,7 +11,10 @@
  */
 package com.sap.xsk.migration.api.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class ExecuteMigrationRequestBody extends MigrationRequestBody {
+
   private final String connectionId;
   private final String vendor;
   private final String workspace;
@@ -25,18 +28,22 @@ public class ExecuteMigrationRequestBody extends MigrationRequestBody {
     this.du = du;
   }
 
+  @NotBlank
   public String getConnectionId() {
     return connectionId;
   }
 
+  @NotBlank
   public String getVendor() {
     return vendor;
   }
 
+  @NotBlank
   public String getWorkspace() {
     return workspace;
   }
 
+  @NotBlank
   public String getDu() {
     return du;
   }

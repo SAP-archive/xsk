@@ -11,9 +11,7 @@
  */
 package com.sap.xsk.migration.neo.db;
 
-import java.util.List;
-
 public interface DeliveryUnitsExporter {
 
-  void exportDeliveryUnits(String workspace, String deliveryUnitName, String deliveryUnitVendor);
+  void exportDeliveryUnits(DeliveryUnitsExportConfig config);
 }

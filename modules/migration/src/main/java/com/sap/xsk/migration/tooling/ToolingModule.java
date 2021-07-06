@@ -18,6 +18,9 @@ public class ToolingModule extends AbstractDirigibleModule {
   @Override
   protected void configure() {
     bind(MigrationToolExecutor.class).to(CommandLineMigrationToolExecutor.class);
+    bind(SystemEnvironment.class);
+    bind(SystemProcessBuilder.class);
+    bind(InputStreamStringReader.class);
   }
 
   @Override

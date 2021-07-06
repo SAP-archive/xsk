@@ -12,6 +12,7 @@
 package com.sap.xsk.migration.neo.db.hana;
 
 import com.sap.xsk.migration.neo.db.DeliveryUnit;
+import com.sap.xsk.migration.neo.db.DeliveryUnitsExportConfig;
 import com.sap.xsk.migration.neo.db.DeliveryUnitsExporter;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.dirigible.runtime.transport.processor.TransportProcessor;
@@ -20,6 +21,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +39,14 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
   }
 
   @Override
-  public void exportDeliveryUnits(String workspace, String deliveryUnitName, String deliveryUnitVendor) {
+  public void exportDeliveryUnits(DeliveryUnitsExportConfig config) {
     try {
       String fileURL = System.getenv("CATALINA_HOME") + "/" + System.getenv("ZIP_OUTPUT_URL");
       File file = new File(fileURL);
 
       file.createNewFile();
 
-      ProcessBuilder pb = new ProcessBuilder(createProcessArguments(deliveryUnitName, deliveryUnitVendor));
+      ProcessBuilder pb = new ProcessBuilder(createProcessArguments(config));
       pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
       pb.redirectError(ProcessBuilder.Redirect.INHERIT);
       Process p = pb.start();
@@ -57,7 +61,8 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
             File zipFile = new File(fullPath);
             byte[] project = FileUtils.readFileToByteArray(zipFile);
 //            projects.add(project);
-            transportProcessor.importProject(workspace, project);
+            byte[] project2 = Files.readAllBytes(Paths.get(fullPath));
+            transportProcessor.importProject(config.getWorkspace(), project);
             line = reader.readLine();
           }
           reader.close();
@@ -77,7 +82,7 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
     }
   }
 
-  private List<String> createProcessArguments(String deliveryUnitName, String deliveryUnitVendor) {
+  private List<String> createProcessArguments(DeliveryUnitsExportConfig config) {
     var commandArgs = new ArrayList<String>();
     commandArgs.add("node");
 
@@ -86,7 +91,11 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
     }
 
     commandArgs.add(System.getenv("CATALINA_HOME") + "/migration-tools/xs-migration-cloud/xs-migration.js");
-    commandArgs.add(deliveryUnitName + "," + deliveryUnitVendor);
+    commandArgs.add(config.getDeliveryUnitName() + "," + config.getDeliveryUnitVendor());
+    commandArgs.add(config.getDbHost());
+    commandArgs.add(config.getDbPort());
+    commandArgs.add(config.getDbUser());
+    commandArgs.add(config.getDbPassword());
 
     return commandArgs;
   }

@@ -11,6 +11,8 @@
  */
 package com.sap.xsk.migration.api.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class MigrationRequestBody {
 
   private final NeoData neo;
@@ -21,10 +23,12 @@ public class MigrationRequestBody {
     this.hana = hana;
   }
 
+  @NotNull
   public NeoData getNeo() {
     return neo;
   }
 
+  @NotNull
   public HanaData getHana() {
     return hana;
   }

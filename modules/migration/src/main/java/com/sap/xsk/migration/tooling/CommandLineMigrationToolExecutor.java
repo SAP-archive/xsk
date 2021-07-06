@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +25,21 @@ class CommandLineMigrationToolExecutor implements MigrationToolExecutor {
   protected static final long DEFAULT_TIMEOUT = 2;
   protected static final TimeUnit DEFAULT_TIMEOUT_UNIT = TimeUnit.MINUTES;
   private static final String MIGRATION_TOOLS_DIRECTORY = "migration-tools";
+  private static final String PROCESS_NOT_FINISHED_ON_TIME = "Process did not finish on time!";
+  private static final String PROCESS_WAITING_THREAD_INTERRUPTED = "Process waiting thread interrupted!";
+  private static final String PROCESS_COULD_NOT_BE_EXECUTED = "Could not execute process!";
+  private static final String PROCESS_DIRECTORY_COULD_NOT_BE_CREATED = "Could not create process directory! CATALINA_HOME not found!";
+
+  private final SystemProcessBuilder systemProcessBuilder;
+  private final SystemEnvironment systemEnvironment;
+  private final InputStreamStringReader inputStreamStringReader;
+
+  CommandLineMigrationToolExecutor(SystemProcessBuilder systemProcessBuilder, SystemEnvironment systemEnvironment,
+      InputStreamStringReader inputStreamStringReader) {
+    this.systemProcessBuilder = systemProcessBuilder;
+    this.systemEnvironment = systemEnvironment;
+    this.inputStreamStringReader = inputStreamStringReader;
+  }
 
   @Override
   public String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs) {
@@ -34,16 +48,14 @@ class CommandLineMigrationToolExecutor implements MigrationToolExecutor {
 
   @Override
   public String executeMigrationTool(String migrationToolDirectory, List<String> commandAndArgs, long timeout, TimeUnit timeoutUnit) {
-    var processBuilder = new ProcessBuilder(commandAndArgs);
-
-    processBuilder.directory(createProcessDirectory(migrationToolDirectory));
+    File processDirectory = createProcessDirectory(migrationToolDirectory);
 
     try {
-      var process = processBuilder.start();
+      var process = systemProcessBuilder.startProcess(processDirectory, commandAndArgs);
       var hasProcessFinished = process.waitFor(timeout, timeoutUnit);
 
       if (!hasProcessFinished) {
-        throw new ShellExecutorException("Process did not finish on time!");
+        throw new ShellExecutorException(PROCESS_NOT_FINISHED_ON_TIME);
       }
 
       var processExitCode = process.exitValue();
@@ -54,35 +66,33 @@ class CommandLineMigrationToolExecutor implements MigrationToolExecutor {
       }
 
       var processOutput = process.getInputStream();
-      return IOUtils.toString(processOutput, StandardCharsets.UTF_8);
+      return inputStreamStringReader.readToString(processOutput, StandardCharsets.UTF_8);
 
-    } catch (IOException | InterruptedException e) {
-      throw new ShellExecutorException("Could not execute process!", e);
+    } catch (IOException e) {
+      throw new ShellExecutorException(PROCESS_COULD_NOT_BE_EXECUTED, e);
+    } catch (InterruptedException e) {
+      throw new ShellExecutorException(PROCESS_WAITING_THREAD_INTERRUPTED, e);
     }
   }
 
   private File createProcessDirectory(String toolDirectory) {
-    String catalinaHome = System.getenv("CATALINA_HOME");
+    String catalinaHome = systemEnvironment.getEnvironmentVariableValue("CATALINA_HOME");
     if (catalinaHome == null) {
-      throw new ShellExecutorException("Could not create process directory! CATALINA_HOME not found!");
+      throw new ShellExecutorException(PROCESS_DIRECTORY_COULD_NOT_BE_CREATED);
     }
 
     var toolsDirectoryPath = Paths.get(catalinaHome, MIGRATION_TOOLS_DIRECTORY, toolDirectory);
     return new File(toolsDirectoryPath.toString());
   }
 
-  private String createProcessErrorString(int exitCode, InputStream errorStream) {
+  private String createProcessErrorString(int exitCode, InputStream errorStream) throws IOException {
     var errorBuilder = new StringBuilder();
     errorBuilder.append("Process exit code: ");
     errorBuilder.append(exitCode);
 
-    try {
-      var errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
-      errorBuilder.append(" Process error: ");
-      errorBuilder.append(errorString);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    var errorString = inputStreamStringReader.readToString(errorStream, StandardCharsets.UTF_8);
+    errorBuilder.append(" Process error: ");
+    errorBuilder.append(errorString);
 
     return errorBuilder.toString();
   }

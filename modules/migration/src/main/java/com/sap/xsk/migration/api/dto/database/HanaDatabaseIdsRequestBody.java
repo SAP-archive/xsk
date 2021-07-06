@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.api.database;
+package com.sap.xsk.migration.api.dto.database;
 
 public class HanaDatabaseIdsRequestBody {
   private final String account;

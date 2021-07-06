@@ -11,6 +11,8 @@
  */
 package com.sap.xsk.migration.api.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class HanaData {
 
   private final String databaseSchema;
@@ -23,14 +25,17 @@ public class HanaData {
     this.password = password;
   }
 
+  @NotBlank
   public String getDatabaseSchema() {
     return databaseSchema;
   }
 
+  @NotBlank
   public String getUsername() {
     return username;
   }
 
+  @NotBlank
   public String getPassword() {
     return password;
   }

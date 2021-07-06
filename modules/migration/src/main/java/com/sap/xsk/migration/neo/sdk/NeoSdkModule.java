@@ -12,7 +12,6 @@
 package com.sap.xsk.migration.neo.sdk;
 
 import com.sap.xsk.migration.neo.sdk.command.SdkCommandModule;
-import com.sap.xsk.migration.neo.sdk.parse.SdkOutputParseModule;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
 public class NeoSdkModule extends AbstractDirigibleModule {
@@ -20,7 +19,6 @@ public class NeoSdkModule extends AbstractDirigibleModule {
   @Override
   protected void configure() {
     install(new SdkCommandModule());
-    install(new SdkOutputParseModule());
   }
 
   @Override

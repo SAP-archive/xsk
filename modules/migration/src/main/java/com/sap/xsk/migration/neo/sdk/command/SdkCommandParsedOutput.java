@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.neo.sdk.parse;
+package com.sap.xsk.migration.neo.sdk.command;
 
 public class SdkCommandParsedOutput<TCommandRes> {
   private final String command;

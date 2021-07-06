@@ -17,6 +17,4 @@ public interface HanaConnector  {
 
   void disconnect(String connectionId);
 
-  void disconnectAll();
-
 }

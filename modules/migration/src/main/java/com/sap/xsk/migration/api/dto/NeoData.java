@@ -11,6 +11,9 @@
  */
 package com.sap.xsk.migration.api.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class NeoData {
 
   private final String hostName;
@@ -25,18 +28,23 @@ public class NeoData {
     this.password = password;
   }
 
+  @NotBlank
   public String getHostName() {
     return hostName;
   }
 
+  @NotBlank
   public String getSubaccount() {
     return subaccount;
   }
 
+  @NotBlank
+  @Email
   public String getUsername() {
     return username;
   }
 
+  @NotBlank
   public String getPassword() {
     return password;
   }

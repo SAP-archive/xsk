@@ -11,16 +11,13 @@
  */
 package com.sap.xsk.migration.neo.sdk.command.databases;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sap.xsk.migration.neo.sdk.command.AbstractSdkCommand;
-import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
-import com.sap.xsk.migration.neo.sdk.command.SdkCommandArgs;
 import com.sap.xsk.migration.neo.sdk.command.SdkCommandGenericArgs;
-import com.sap.xsk.migration.neo.sdk.parse.SdkCommandOutputParser;
-import com.sap.xsk.migration.neo.sdk.parse.SdkCommandParsedOutput;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommandParsedOutput;
 import com.sap.xsk.migration.tooling.MigrationToolExecutor;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,23 +27,17 @@ class ListDatabasesSdkCommand extends AbstractSdkCommand<SdkCommandGenericArgs, 
   private static final String LIST_DATABASES_COMMAND_NAME = "list-dbs";
 
   @Inject
-  public ListDatabasesSdkCommand(MigrationToolExecutor migrationToolExecutor, SdkCommandOutputParser sdkCommandOutputParser) {
-    super(migrationToolExecutor, sdkCommandOutputParser);
+  public ListDatabasesSdkCommand(MigrationToolExecutor migrationToolExecutor) {
+    super(migrationToolExecutor);
   }
 
   @Override
   public ListDatabasesSdkCommandRes execute(SdkCommandGenericArgs commandArgs) {
-    List<String> commandAndArgs = createProcessCommandAndArguments(commandArgs);
+    List<String> commandAndArgs = createProcessCommandAndArguments(commandArgs, LIST_DATABASES_COMMAND_NAME);
     String rawCommandOutput = migrationToolExecutor.executeMigrationTool(NEO_SDK_DIRECTORY, commandAndArgs);
-    SdkCommandParsedOutput<Object> parsedCommandOutput = sdkCommandOutputParser.parse(rawCommandOutput, new TypeToken<>(){});
+    SdkCommandParsedOutput<Void> parsedCommandOutput = new Gson().fromJson(rawCommandOutput, new TypeToken<SdkCommandParsedOutput<Void>>() {
+    }.getType());
     return parseCommandOutput(parsedCommandOutput.getCommandOutput());
-  }
-
-  private List<String> createProcessCommandAndArguments(SdkCommandArgs commandArgs) {
-    var commandAndArguments = new ArrayList<>(NEO_SDK_JAVA8_COMMAND_AND_ARGUMENTS);
-    commandAndArguments.add(LIST_DATABASES_COMMAND_NAME);
-    commandAndArguments.addAll(commandArgs.commandLineArgs());
-    return commandAndArguments;
   }
 
   private ListDatabasesSdkCommandRes parseCommandOutput(String commandOutput) {
@@ -55,7 +46,7 @@ class ListDatabasesSdkCommand extends AbstractSdkCommand<SdkCommandGenericArgs, 
     var dbIds = Arrays
         .stream(outputLines)
         .skip(2)
-        .map(x -> x.replace(" ",""))
+        .map(x -> x.replace(" ", ""))
         .collect(Collectors.toList());
 
     return new ListDatabasesSdkCommandRes(dbIds);

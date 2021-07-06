@@ -23,6 +23,7 @@ public class HanaModule extends AbstractDirigibleModule {
     install(new HanaConnectorModule());
     bind(DeliveryUnitsProvider.class).to(HanaXSDeliveryUnitsProvider.class);
     bind(DeliveryUnitsExporter.class).to(HanaXSDeliveryUnitsExporter.class);
+    bind(HanaConnectionProvider.class);
   }
 
   @Override

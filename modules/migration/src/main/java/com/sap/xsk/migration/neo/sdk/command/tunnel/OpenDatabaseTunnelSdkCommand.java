@@ -11,15 +11,12 @@
  */
 package com.sap.xsk.migration.neo.sdk.command.tunnel;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sap.xsk.migration.neo.sdk.command.AbstractSdkCommand;
-import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
-import com.sap.xsk.migration.neo.sdk.command.SdkCommandArgs;
-import com.sap.xsk.migration.neo.sdk.parse.SdkCommandParsedOutput;
-import com.sap.xsk.migration.neo.sdk.parse.SdkCommandOutputParser;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommandParsedOutput;
 import com.sap.xsk.migration.tooling.MigrationToolExecutor;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 class OpenDatabaseTunnelSdkCommand extends AbstractSdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes> {
@@ -27,23 +24,16 @@ class OpenDatabaseTunnelSdkCommand extends AbstractSdkCommand<OpenDatabaseTunnel
   private static final String OPEN_DATABASE_TUNNEL_COMMAND_NAME = "open-db-tunnel";
 
   @Inject
-  public OpenDatabaseTunnelSdkCommand(MigrationToolExecutor migrationToolExecutor, SdkCommandOutputParser sdkCommandOutputParser) {
-    super(migrationToolExecutor, sdkCommandOutputParser);
+  public OpenDatabaseTunnelSdkCommand(MigrationToolExecutor migrationToolExecutor) {
+    super(migrationToolExecutor);
   }
 
   @Override
   public OpenDatabaseTunnelSdkCommandRes execute(OpenDatabaseTunnelSdkCommandArgs commandArgs) {
-    List<String> commandAndArguments = createProcessCommandAndArguments(commandArgs);
+    List<String> commandAndArguments = createProcessCommandAndArguments(commandArgs, OPEN_DATABASE_TUNNEL_COMMAND_NAME);
     String rawCommandOutput = migrationToolExecutor.executeMigrationTool(NEO_SDK_DIRECTORY, commandAndArguments);
-    SdkCommandParsedOutput<OpenDatabaseTunnelSdkCommandRes> parsedCommandOutput = sdkCommandOutputParser
-        .parse(rawCommandOutput, new TypeToken<>(){});
+    SdkCommandParsedOutput<OpenDatabaseTunnelSdkCommandRes> parsedCommandOutput = new Gson().fromJson(rawCommandOutput, new TypeToken<SdkCommandParsedOutput<OpenDatabaseTunnelSdkCommandRes>>() {
+    }.getType());
     return parsedCommandOutput.getResult();
-  }
-
-  private List<String> createProcessCommandAndArguments(SdkCommandArgs commandArgs) {
-    var commandAndArguments = new ArrayList<>(NEO_SDK_JAVA8_COMMAND_AND_ARGUMENTS);
-    commandAndArguments.add(OPEN_DATABASE_TUNNEL_COMMAND_NAME);
-    commandAndArguments.addAll(commandArgs.commandLineArgs());
-    return commandAndArguments;
   }
 }

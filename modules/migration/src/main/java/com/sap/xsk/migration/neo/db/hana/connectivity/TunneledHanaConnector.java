@@ -68,10 +68,4 @@ class TunneledHanaConnector implements HanaConnector {
     var closeDatabaseTunnelSdkCommandArgs = new CloseDatabaseTunnelSdkCommandArgs(connectionId);
     closeDatabaseTunnelSdkCommand.execute(closeDatabaseTunnelSdkCommandArgs);
   }
-
-  @Override
-  public void disconnectAll() {
-    var args = new CloseAllDatabaseTunnelsSdkCommandArgs();
-    closeDatabaseTunnelSdkCommand.execute(args);
-  }
 }

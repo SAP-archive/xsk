@@ -11,15 +11,12 @@
  */
 package com.sap.xsk.migration.neo.sdk.command.tunnel;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sap.xsk.migration.neo.sdk.command.AbstractSdkCommand;
-import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
-import com.sap.xsk.migration.neo.sdk.command.SdkCommandArgs;
-import com.sap.xsk.migration.neo.sdk.parse.SdkCommandParsedOutput;
-import com.sap.xsk.migration.neo.sdk.parse.SdkCommandOutputParser;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommandParsedOutput;
 import com.sap.xsk.migration.tooling.MigrationToolExecutor;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 class CloseDatabaseTunnelSdkCommand extends AbstractSdkCommand<CloseDatabaseTunnelSdkCommandArgs, CloseDatabaseTunnelSdkCommandRes> {
@@ -27,22 +24,16 @@ class CloseDatabaseTunnelSdkCommand extends AbstractSdkCommand<CloseDatabaseTunn
   private static final String CLOSE_DATABASE_TUNNEL_COMMAND_NAME = "close-db-tunnel";
 
   @Inject
-  public CloseDatabaseTunnelSdkCommand(MigrationToolExecutor migrationToolExecutor, SdkCommandOutputParser sdkCommandOutputParser) {
-    super(migrationToolExecutor, sdkCommandOutputParser);
+  public CloseDatabaseTunnelSdkCommand(MigrationToolExecutor migrationToolExecutor) {
+    super(migrationToolExecutor);
   }
 
   @Override
   public CloseDatabaseTunnelSdkCommandRes execute(CloseDatabaseTunnelSdkCommandArgs commandArgs) {
-    List<String> commandAndArgs = createProcessCommandAndArguments(commandArgs);
+    List<String> commandAndArgs = createProcessCommandAndArguments(commandArgs, CLOSE_DATABASE_TUNNEL_COMMAND_NAME);
     String rawCommandOutput = migrationToolExecutor.executeMigrationTool(NEO_SDK_DIRECTORY, commandAndArgs);
-    SdkCommandParsedOutput<CloseDatabaseTunnelSdkCommandRes> parsedCommandOutput = sdkCommandOutputParser.parse(rawCommandOutput, new TypeToken<>(){});
+    SdkCommandParsedOutput<CloseDatabaseTunnelSdkCommandRes> parsedCommandOutput = new Gson().fromJson(rawCommandOutput, new TypeToken<SdkCommandParsedOutput<CloseDatabaseTunnelSdkCommandRes>>() {
+    }.getType());
     return parsedCommandOutput.getResult();
-  }
-
-  private List<String> createProcessCommandAndArguments(SdkCommandArgs commandArgs) {
-    var commandAndArguments = new ArrayList<>(NEO_SDK_JAVA8_COMMAND_AND_ARGUMENTS);
-    commandAndArguments.add(CLOSE_DATABASE_TUNNEL_COMMAND_NAME);
-    commandAndArguments.addAll(commandArgs.commandLineArgs());
-    return commandAndArguments;
   }
 }

@@ -9,19 +9,18 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.neo.sdk.parse;
+package com.sap.xsk.migration.api.dto.database;
 
-import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+import java.util.List;
 
-public class SdkOutputParseModule extends AbstractDirigibleModule {
+public class HanaDatabaseIdsResponseBody {
+  private final List<String> databaseIds;
 
-  @Override
-  protected void configure() {
-    bind(SdkCommandOutputParser.class).to(SdkCommandJsonOutputParser.class);
+  public HanaDatabaseIdsResponseBody(List<String> databaseIds) {
+    this.databaseIds = databaseIds;
   }
 
-  @Override
-  public String getName() {
-    return "XSK Migration SDK Output Parse Module";
+  public List<String> getDatabaseIds() {
+    return databaseIds;
   }
 }

@@ -39,19 +39,25 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
    */
   @Override
   public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
-    logger.info("Processing Drop Synonym: " + synonymModel.getName());
+    synonymModel.getSynonymDefinitions().forEach((key, value) -> {
+      logger.info("Processing Drop Synonym: " + key);
 
-    String synonymName = XSKHDBUtils.escapeArtifactName(connection, synonymModel.getName());
-    if (SqlFactory.getNative(connection).exists(connection, synonymName, DatabaseArtifactTypes.SYNONYM)) {
-      ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-      if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-        throw new IllegalStateException(String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection)));
-      } else {
-        String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();
-        executeSql(sql, connection);
+      String synonymName = XSKHDBUtils.escapeArtifactName(connection, key);
+      try {
+        if (SqlFactory.getNative(connection).exists(connection, synonymName, DatabaseArtifactTypes.SYNONYM)) {
+          ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+          if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+            throw new IllegalStateException(String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection)));
+          } else {
+            String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();
+            executeSql(sql, connection);
+          }
+        } else {
+          logger.warn(format("Synonym [{0}] does not exists during the drop process", key));
+        }
+      } catch (SQLException exception) {
+        exception.printStackTrace();
       }
-    } else {
-      logger.warn(format("Synonym [{0}] does not exists during the drop process", synonymModel.getName()));
-    }
+    });
   }
 }

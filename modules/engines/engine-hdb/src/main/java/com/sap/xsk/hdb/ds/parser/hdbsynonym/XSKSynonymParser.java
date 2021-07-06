@@ -11,62 +11,52 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbsynonym;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.exceptions.XSKHDBSYNONYMMissingPropertyException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import com.sap.xsk.parser.hdbsynonym.core.HdbsynonymLexer;
-import com.sap.xsk.parser.hdbsynonym.core.HdbsynonymParser;
-import com.sap.xsk.parser.hdbsynonym.custom.XSKHDBSYNONYMCoreListener;
-import com.sap.xsk.parser.hdbsynonym.custom.XSKHDBSYNONYMSyntaxErrorListener;
-import com.sap.xsk.parser.hdbsynonym.models.XSKHDBSYNONYMDefinitionModel;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKSynonymParser implements XSKDataStructureParser {
+  private static final Logger logger = LoggerFactory.getLogger(XSKSynonymParser.class);
 
   @Override
   public XSKDataStructureHDBSynonymModel parse(String location, String content) throws XSKDataStructuresException, IOException {
     XSKDataStructureHDBSynonymModel hdbSynonymModel = new XSKDataStructureHDBSynonymModel();
     XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSynonymModel, IXSKDataStructureModel.TYPE_HDB_SYNONYM, XSKDBContentType.XS_CLASSIC);
 
-    ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
-    ANTLRInputStream inputStream = new ANTLRInputStream(is);
-    HdbsynonymLexer lexer = new HdbsynonymLexer(inputStream);
-    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+    Gson gson = new Gson();
+    JsonParser jsonParser = new JsonParser();
+    JsonObject jsonObject = jsonParser.parse(content).getAsJsonObject();
 
-    HdbsynonymParser hdbsynonymParser = new HdbsynonymParser(tokenStream);
-    hdbsynonymParser.setBuildParseTree(true);
-    hdbsynonymParser.removeErrorListeners();
-
-    XSKHDBSYNONYMSyntaxErrorListener errorListener = new XSKHDBSYNONYMSyntaxErrorListener();
-    hdbsynonymParser.addErrorListener(errorListener);
-    ParseTree parseTree = hdbsynonymParser.hdbsynonymDefinition();
-
-    if (hdbsynonymParser.getNumberOfSyntaxErrors() > 0) {
-      String syntaxError = errorListener.getErrorMessage();
-      throw new XSKDataStructuresException(String.format(
-          "Wrong format of HDB Synonym: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version. [%s]",
-          location, syntaxError));
+    Map<String, XSKHDBSYNONYMDefinitionModel> synonymDefinitions = new HashMap<>();
+    for (Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+      XSKHDBSYNONYMDefinitionModel definitionModel = gson.fromJson(entry.getValue(),
+          XSKHDBSYNONYMDefinitionModel.class);
+      try {
+        definitionModel.getTarget().checkForAllMandatoryFieldsPresence();
+        synonymDefinitions.put(entry.getKey(), definitionModel);
+      } catch (XSKHDBSYNONYMMissingPropertyException exception) {
+        logger.error(String.format("Missing mandatory field for synonym %s!", entry.getKey()));
+      }
     }
-    XSKHDBSYNONYMCoreListener coreListener = new XSKHDBSYNONYMCoreListener();
-    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-    parseTreeWalker.walk(coreListener, parseTree);
-
-    XSKHDBSYNONYMDefinitionModel antlr4Model = coreListener.getModel();
-    hdbSynonymModel.setTargetSchema(antlr4Model.getTargetSchema());
-    hdbSynonymModel.setTargetObject(antlr4Model.getTargetObject());
-    hdbSynonymModel.setSynonymSchema(antlr4Model.getSynonymSchema());
-
+    hdbSynonymModel.setSynonymDefinitions(synonymDefinitions);
     return hdbSynonymModel;
   }
 

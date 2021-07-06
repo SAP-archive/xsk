@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.migration.delivery.units.service;
 
 import java.sql.*;
@@ -7,43 +18,48 @@ import java.util.List;
 public class XSKDeliveryUnitService implements DeliveryUnitsService {
 
   private static final String TUNNELED_HANA_CONNECTION_URL = "jdbc:sap://localhost:30015/";
+  private final DatabaseDriverManager databaseDriverManager;
 
-  public List<DeliveryUnit> getDeliveryUnits(String userName, String password){
-    Connection connection = null;
-    connection = openConnection(connection, userName, password);
-
-    if (connection != null) {
-      return listDeliveryUnits(connection);
-    }
-    throw new DeliveryUnitsException("Connection to database failed!");
+  public XSKDeliveryUnitService(DatabaseDriverManager databaseDriverManager) {
+    this.databaseDriverManager = databaseDriverManager;
   }
 
-  private Connection openConnection(Connection con, String userName, String password) {
+  public List<DeliveryUnit> getDeliveryUnits(String userName, String password) {
+    var connection = openConnection(userName, password);
+    return listDeliveryUnits(connection);
+  }
+
+  private Connection openConnection(String userName, String password) {
     try {
-      con = DriverManager.getConnection(TUNNELED_HANA_CONNECTION_URL, userName, password);
+      var connection = databaseDriverManager.getConnection(TUNNELED_HANA_CONNECTION_URL, userName, password);
+
+      if (connection == null) {
+        throw new DeliveryUnitsException("Connection to database failed! Connection was null");
+      }
+
+      return connection;
     } catch (SQLException e) {
-      System.err.println("Connection Failed:");
-      System.err.println(e);
+      throw new DeliveryUnitsException("Connection to database failed!", e);
     }
-    return con;
   }
 
-  private List<DeliveryUnit> listDeliveryUnits(Connection con){
-    List<DeliveryUnit> dUnitList = new ArrayList<DeliveryUnit>();
+  private List<DeliveryUnit> listDeliveryUnits(Connection connection) {
+    var deliveryUnits = new ArrayList<DeliveryUnit>();
     try {
-      Statement stmt = con.createStatement();
-      ResultSet resultSet = stmt.executeQuery("SELECT DELIVERY_UNIT,VENDOR FROM \"_SYS_REPO\".\"DELIVERY_UNITS\"");
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery("SELECT DELIVERY_UNIT,VENDOR FROM \"_SYS_REPO\".\"DELIVERY_UNITS\"");
 
       while (resultSet.next()) {
         String deliveryUnitName = resultSet.getString(1);
         String vendor = resultSet.getString(2);
-        dUnitList.add(new DeliveryUnit(deliveryUnitName, vendor));
+        deliveryUnits.add(new DeliveryUnit(deliveryUnitName, vendor));
       }
+    } catch(SQLTimeoutException e){
+      throw new DeliveryUnitsException("Extraction of data from delivery unit table timeout!", e);
     } catch (SQLException e) {
-      System.err.println("Query failed!");
-      System.err.println(e);
-      throw new DeliveryUnitsException("Extraction of data from delivery unit table failed!");
+      throw new DeliveryUnitsException("Extraction of data from delivery unit table failed!", e);
     }
-    return dUnitList;
+
+    return deliveryUnits;
   }
 }

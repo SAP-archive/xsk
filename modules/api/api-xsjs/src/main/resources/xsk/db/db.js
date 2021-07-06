@@ -144,7 +144,7 @@ function XscCallableStatement(callableStatement) {
 		callableStatement.setDate(index, value);
 	};
 
-	this.setDecimal = function(index, value) {
+	this.setBigDecimal = function(index, value) {
 		callableStatement.setBigDecimal(index, value);
 	};
 

@@ -165,6 +165,7 @@ function setParamByType(dPreparedStatement, paramType, paramValue, paramIndex) {
 			break;
 
 		case 'SMALLDECIMAL':
+		  dPreparedStatement.setBigDecimal(paramIndex,paramValue);
 		case 'DECIMAL':
 			//TODO setBigDecimal doesn't exist
 			dPreparedStatement.setDouble(paramIndex, paramValue);

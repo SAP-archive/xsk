@@ -39,6 +39,7 @@ import org.eclipse.dirigible.engine.js.api.IJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.eclipse.dirigible.repository.api.RepositoryWriteException;
+import org.eclipse.xtext.common.parser.packrat.consumers.TerminalsSTRINGConsumer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -72,7 +73,12 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
     TEST_MODULES.add("test/xsk/util/util.xsjs");
     TEST_MODULES.add("test/xsk/util/codec/codec.xsjs");
     TEST_MODULES.add("test/xsk/http/http.xsjs");
+    // HDB tests
     TEST_MODULES.add("test/xsk/hdb/column-metadata.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/connection-execute-query.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/connection-execute-update.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/result-set.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/resultset-metadata.xsjs");
   }
 
   /**

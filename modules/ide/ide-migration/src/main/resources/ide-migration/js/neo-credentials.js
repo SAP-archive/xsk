@@ -11,6 +11,7 @@
  */
 migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$messageHub', function ($scope, $messageHub) {
     $scope.isVisible = true;
+    $scope.passwordVisible = false;
 
     $scope.userInput = function () {
         if ($scope.hostName && $scope.subaccount && $scope.username && $scope.password) {
@@ -18,6 +19,10 @@ migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$mess
         } else {
             $scope.$parent.setNextEnabled(false);
         };
+    };
+
+    $scope.showPassword = function () {
+        $scope.passwordVisible = !$scope.passwordVisible;
     };
 
     $messageHub.on('migration.neo-credentials', function (msg) {
@@ -32,6 +37,18 @@ migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$mess
                     $scope.$parent.setFinishVisible(false);
                 }
             });
+        }
+        if ("getData" in msg.data) {
+            if (msg.data.getData === "all") {
+                $messageHub.message(msg.data.controller, {
+                    neoData: {
+                        "hostName": $scope.hostName,
+                        "subaccount": $scope.subaccount,
+                        "username": $scope.username,
+                        "password": $scope.password
+                    }
+                });
+            }
         }
     }.bind(this));
 }]);

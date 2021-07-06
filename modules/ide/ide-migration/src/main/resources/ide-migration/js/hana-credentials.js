@@ -11,6 +11,7 @@
  */
 migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$messageHub', function ($scope, $messageHub) {
     $scope.isVisible = false;
+    $scope.passwordVisible = false;
 
     $scope.userInput = function () {
         if ($scope.schemaName && $scope.username && $scope.password) {
@@ -18,6 +19,10 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$mes
         } else {
             $scope.$parent.setNextEnabled(false);
         };
+    };
+
+    $scope.showPassword = function () {
+        $scope.passwordVisible = !$scope.passwordVisible;
     };
 
     $messageHub.on('migration.hana-credentials', function (msg) {
@@ -32,6 +37,17 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$mes
                     $scope.$parent.setFinishVisible(false);
                 }
             });
+        }
+        if ("getData" in msg.data) {
+            if (msg.data.getData === "all") {
+                $messageHub.message(msg.data.controller, {
+                    hanaData: {
+                        "databaseSchema": $scope.schemaName,
+                        "username": $scope.username,
+                        "password": $scope.password
+                    }
+                });
+            }
         }
     }.bind(this));
 }]);

@@ -97,7 +97,7 @@ html, body {
     display: table-cell;
     vertical-align: middle;
 }
-.sectionTitle {
+.section-title {
     font-size: 24px;
 }
 .form-control {
@@ -120,6 +120,13 @@ html, body {
 label {
     margin-top: 14px;
     margin-bottom: 10px;
+}
+.input-group-addon {
+    min-width: 42px;
+    padding: 0 10px 0 10px;
+}
+.input-group-addon * {
+    vertical-align: middle;
 }
 .margin-top-bottom-sm {
     margin-top: 16px;

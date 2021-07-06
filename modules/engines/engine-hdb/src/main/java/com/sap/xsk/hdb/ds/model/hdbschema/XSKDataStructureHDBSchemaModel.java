@@ -13,6 +13,9 @@ package com.sap.xsk.hdb.ds.model.hdbschema;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
+/**
+ * The schema model representation.
+ */
 public class XSKDataStructureHDBSchemaModel extends XSKDataStructureModel {
 
 }

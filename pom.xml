@@ -13,7 +13,7 @@
 	<description>XSK - HANA XS Classic Compatibility Environment</description>
 	<groupId>com.sap.xsk</groupId>
 	<artifactId>xsk-parent</artifactId>
-	<version>0.6.0-SNAPSHOT</version>
+	<version>0.7.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<inceptionYear>2019</inceptionYear>
@@ -30,8 +30,7 @@
 	<modules>
 		<module>modules</module>
 		<module>releng</module>
-		<module>samples</module>
-	</modules>
+  </modules>
 
 	<profiles>
 		<profile>
@@ -155,7 +154,7 @@
 		<xtextVersion>2.18.0</xtextVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dirigible.version>5.11.2</dirigible.version>
+		<dirigible.version>5.12.0</dirigible.version>
 
 		<maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
 		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>

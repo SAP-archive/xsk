@@ -1,0 +1,24 @@
+service namespace "my.demo.namespace" {
+
+//Navigation
+    "sample.odata::customer" as "Customers"
+		navigates ("Customer_Orders" as "HisOrders","Customer_Recruit" as "Recruit" from dependent);
+	"sample.odata::student" as "Students"
+        navigates ("Students_Grades" as "HisGrades" from principal);
+
+    "sample.odata::Company" as "sap_vean__Company"
+    	key ("UID")
+    	navigates ("sap_vean__Company__Person" as "Person" from dependent);
+    "sample.odata::Person" as "sap_bc_ar__Person"
+    	key ("UID")
+    	navigates ("sap_vean__Company__Person" as "sap_vean__Company" from principal);
+    association "sap_vean__Company__Person"
+    		principal "sap_bc_ar__Person"("UID") multiplicity "0..1"
+    		dependent "sap_vean__Company"("Person.UID") multiplicity "0..1";
+
+	"sample.odata::address" as "Address"
+	 	navigates ("A_Self" as "ARef" from principal);
+	association "A_Self"
+		principal "Address"("SelfID") multiplicity "1"
+		dependent "Address"("ID") multiplicity "0..1";
+}

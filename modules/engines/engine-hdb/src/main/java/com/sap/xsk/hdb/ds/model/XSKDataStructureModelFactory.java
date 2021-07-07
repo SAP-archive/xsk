@@ -11,18 +11,20 @@
  */
 package com.sap.xsk.hdb.ds.model;
 
-import com.google.inject.Injector;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
+import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
-//import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
 import java.util.HashMap;
 import java.util.Map;
+
+//import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
 
 /**
  * The factory for creation of the data structure models from source content.
@@ -125,13 +127,35 @@ public class XSKDataStructureModelFactory {
     return parseEntities(location, new String(bytes));
   }
 
+  /**
+   * Creates a schema model from the raw content.
+   *
+   * @param content the schema definition
+   * @return the schema model instance
+   */
+  public static XSKDataStructureHDBSchemaModel parseSchema(String location, String content) throws Exception {
+    XSKSchemaParser parser = new XSKSchemaParser();
+    XSKDataStructureHDBSchemaModel result = parser.parse(location, content);
+    return result;
+  }
+
+  /**
+   * Creates a schema model from the raw content.
+   *
+   * @param bytes the schema definition
+   * @return the schema model instance
+   */
+  public static XSKDataStructureHDBSchemaModel parseSchema(String location, byte[] bytes) throws Exception {
+    return parseSchema(location, new String(bytes));
+  }
+
 //	/**
 //	 * Creates a calculation view model from the raw content.
 //	 *
 //	 * @param xml
 //	 *            the XML definition
 //	 * @return the calculation view model instance
-//	 * @throws Exception 
+//	 * @throws Exception
 //	 */
 //	public static XSKDataStructureCalculationViewModel parseCalcView(String location, String xml) {
 //		XSKDataStructureCalculationViewModel calcviewModel = new XSKDataStructureCalculationViewModel();
@@ -151,7 +175,7 @@ public class XSKDataStructureModelFactory {
 //	 * @param xml
 //	 *            the XML definition
 //	 * @return the calculation view model instance
-//	 * @throws Exception 
+//	 * @throws Exception
 //	 */
 //	public static XSKDataStructureCalculationViewModel parseCalcView(String location, byte[] xml) {
 //		return parseCalcView(location, new String(xml));

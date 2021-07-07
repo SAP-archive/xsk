@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-parent</artifactId>
-		<version>0.6.0-SNAPSHOT</version>
+		<version>0.7.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Modules - Parsers - Parent</name>
 	<artifactId>xsk-modules-parsers-parent</artifactId>
-	<version>0.6.0-SNAPSHOT</version>
+	<version>0.7.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -26,6 +26,11 @@
 		<module>parser-hdbcalculationview</module>
 		<module>parser-calculationview</module>
 		<module>parser-hdbsynonym</module>
-	</modules>
+		<module>parser-hdbschema</module>
+  </modules>
+
+	<properties>
+		<license.header.location>../../license-header.txt</license.header.location>
+	</properties>
 
 </project>

@@ -22,7 +22,7 @@ import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
 import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
-import com.sap.xsk.hdb.ds.parser.hdbschema.XSKHDBSchemaParser;
+import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
@@ -101,7 +101,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_VIEW).to(XSKViewParser.class).asEagerSingleton();
     mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM).to(XSKSynonymParser.class).asEagerSingleton();
     mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION).to(XSKHDBTableFunctionParser.class).asEagerSingleton();
-    mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA).to(XSKHDBSchemaParser.class).asEagerSingleton();
+    mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA).to(XSKSchemaParser.class).asEagerSingleton();
     mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE).to(XSKHDBProcedureParser.class).asEagerSingleton();
     mapBinder.addBinding(IXSKDataStructureModel.FILE_EXTENSION_HDBSEQUENCE).to(XSKHDBSequenceParser.class).asEagerSingleton();
 
@@ -110,7 +110,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_VIEW).to(XSKViewParser.class).asEagerSingleton();
     mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SYNONYM).to(XSKSynonymParser.class).asEagerSingleton();
     mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION).to(XSKHDBTableFunctionParser.class).asEagerSingleton();
-    mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SCHEMA).to(XSKHDBSchemaParser.class).asEagerSingleton();
+    mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SCHEMA).to(XSKSchemaParser.class).asEagerSingleton();
     mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_PROCEDURE).to(XSKHDBProcedureParser.class).asEagerSingleton();
     mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDB_SEQUENCE).to(XSKHDBSequenceParser.class).asEagerSingleton();
   }

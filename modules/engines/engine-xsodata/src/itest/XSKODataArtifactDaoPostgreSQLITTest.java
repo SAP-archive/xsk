@@ -64,14 +64,14 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
         stmt.executeUpdate("DELETE FROM public.XSK_ODATA");
     }
 
-    public static XSKODataModel parseXSKODataModel() throws IOException {
+    public static XSKODataModel parseXSKODataModel() throws IOException, SQLException {
         XSKODataParser parser = new XSKODataParser();
         String content = org.apache.commons.io.IOUtils
                 .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_all_set_of_navigations.xsodata"), StandardCharsets.UTF_8);
         return parser.parseXSODataArtifact("np/entity_with_all_set_of_navigations.xsodata", content);
     }
 
-    public static XSKODataModel parseSecondXSKODataModel() throws IOException {
+    public static XSKODataModel parseSecondXSKODataModel() throws IOException, SQLException {
         XSKODataParser parser = new XSKODataParser();
         String content = org.apache.commons.io.IOUtils
                 .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);

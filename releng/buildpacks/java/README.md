@@ -1,3 +1,10 @@
+### Prerequisites
+
+```bash
+cd <root-xsk>
+mvn clean install -DskipTests=true
+```
+
 ### Manual Build
 
 1. Build `Kneo Java Stack`:

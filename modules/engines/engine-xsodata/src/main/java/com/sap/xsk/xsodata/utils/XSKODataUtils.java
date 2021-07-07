@@ -94,6 +94,17 @@ public class XSKODataUtils {
                 PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName);
                 List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
 
+                if ("CALC VIEW".equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity.getWithoutPropertyProjections().isEmpty()) {
+                    allEntityDbColumns.forEach(el -> {
+                        ODataProperty oDataProperty = new ODataProperty();
+                        oDataProperty.setName(el.getName());
+                        oDataProperty.setColumn(el.getName());
+                        oDataProperty.setNullable(el.isNullable());
+                        oDataProperty.setType(el.getType());
+                        oDataEntityDefinition.getProperties().add(oDataProperty);
+                    });
+                }
+
                 entity.getWithPropertyProjections().forEach(prop -> {
                     ODataProperty oDataProperty = new ODataProperty();
                     oDataProperty.setName(prop);
@@ -155,6 +166,12 @@ public class XSKODataUtils {
             } else if (entity.getKeyGenerated() != null) {
                 oDataEntityDefinition.getKeys().add(entity.getKeyGenerated());
             }
+
+            //process Aggregations
+            if (entity.getAggregations().size() > 0) {
+                oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
+            }
+
             oDataDefinitionModel.getEntities().add(oDataEntityDefinition);
         }
         return oDataDefinitionModel;

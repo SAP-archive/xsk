@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.GH_TOKEN }}
+        fetch-depth: 0
     - name: Download sapmachine JDK 11
       run: |
         download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
@@ -26,7 +27,7 @@ jobs:
       run: echo XSK_VERSION=${GITHUB_REF#refs/*/} | tr v " " | sed 's/ //'  >> $GITHUB_ENV
     - name: Maven Build
       run: mvn clean install
-    - name: Dodcker Login
+    - name: Docker Login
       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Push XSK
       run: |
@@ -89,6 +90,21 @@ jobs:
     - name: Package WAR files
       run: |
         zip --junk-paths server releng/server/target/ROOT.war
+        zip --junk-paths sap-cf releng/sap-cf/target/ROOT.war
+
+    - name: Package Samples
+      run: |
+        cd samples/
+        zip -r products products/*
+        zip -r xsjs-simple xsjs-simple/*
+        zip -r xsjs xsjs/*
+        zip -r hdb-simple hdb-simple/*
+        zip -r hdb-view hdb-view/*
+        zip -r hdb-odata hdb-odata/*
+        zip -r hdb-xsodata hdb-xsodata/*
+        zip -r hdi-simple hdi-simple/*
+        zip -r hdi-ext hdi-ext/*
+        zip -r hdi-cube hdi-cube/*
 
     - name: Create Release
       id: create_release
@@ -110,12 +126,43 @@ jobs:
 
           #### Available for download `*.war` packages:
             - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server.zip) - XSK Server.
+            - [sap-cf](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/sap-cf.zip) - XSK Cloud Foundry.
             
           > _**Note:** Unzip the downloaded file to extract the `ROOT.war` binary._
           
           For more information go to [https://www.dirigible.io/help/setup/](https://www.dirigible.io/help/setup/).
-          
-          ## XSK - ${{ env.XSK_VERSION }} - Buildpack
+
+          #### Available for download `*.zip` samples:
+            - _**[products](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/products.zip) - Products Sample Application.**_
+            - [xsjs-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs-simple.zip) - XSJS Hello World.
+            - [xsjs](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs.zip) - XSJS APIs.
+            - [hdb-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-simple.zip) - HDB Table.
+            - [hdb-view](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-view.zip) - HDB View.
+            - [hdb-odata](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-odata.zip) - HDB OData.
+            - [hdb-xsodata](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-xsodata.zip) - HDB XSOData.
+            - [hdi-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-simple.zip) - HDI.
+            - [hdi-ext](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-ext.zip) - HDI Ext.
+            - [hdi-cube](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-cube.zip) - HDI Cube.
+
+          ### SAP Java Buildpack Usage
+
+          **manifest.yaml**
+
+          ```yaml
+          applications:
+          - name: <application-name>
+            host: <host>
+            memory: 2G
+            buildpack: sap_java_buildpack
+            path: ROOT.war
+            env:
+              JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jdk.SAPMachineJDK']"
+              JBP_CONFIG_SAP_MACHINE_JRE: 'jre: { version: 11.+ }'
+            services:
+              - <service-binding>
+          ```
+
+          ### Buildpack
 
           #### Prerequisites
 
@@ -196,6 +243,127 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./server.zip
         asset_name: server.zip
+        asset_content_type: application/zip
+
+    - name: Upload SAP CF
+      id: upload-sap-cf 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./sap-cf.zip
+        asset_name: sap-cf.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - products
+      id: upload-sample-products 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/products.zip
+        asset_name: products.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - xsjs-simple
+      id: upload-sample-xsjs-simple 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/xsjs-simple.zip
+        asset_name: xsjs-simple.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - xsjs
+      id: upload-sample-xsjs 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/xsjs.zip
+        asset_name: xsjs.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdb-simple
+      id: upload-sample-hdb-simple 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-simple.zip
+        asset_name: hdb-simple.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdb-view
+      id: upload-sample-hdb-view 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-view.zip
+        asset_name: hdb-view.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdb-odata
+      id: upload-sample-hdb-odata 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-odata.zip
+        asset_name: hdb-odata.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdb-xsodata
+      id: upload-sample-hdb-xsodata 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-xsodata.zip
+        asset_name: hdb-xsodata.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdi-simple
+      id: upload-sample-hdi-simple 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdi-simple.zip
+        asset_name: hdi-simple.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdi-ext
+      id: upload-sample-hdi-ext 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdi-ext.zip
+        asset_name: hdi-ext.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdi-cube
+      id: upload-sample-hdi-cube 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdi-cube.zip
+        asset_name: hdi-cube.zip
         asset_content_type: application/zip
 
 #----------------Publish GitHub Release------------------#

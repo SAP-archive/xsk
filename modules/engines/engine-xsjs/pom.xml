@@ -4,29 +4,29 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.sap.xsk</groupId>
-    <artifactId>xsk-modules-engines-parent</artifactId>
-    <version>0.6.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+    <parent>
+        <groupId>com.sap.xsk</groupId>
+        <artifactId>xsk-modules-engines-parent</artifactId>
+        <version>0.7.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-  <name>XSK - Modules - Engines - XS JS</name>
-  <artifactId>xsk-modules-engines-xsjs</artifactId>
-  <version>0.6.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+    <name>XSK - Modules - Engines - XS JS</name>
+    <artifactId>xsk-modules-engines-xsjs</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.sap.xsk</groupId>
-      <artifactId>xsk-modules-parsers-all</artifactId>
-      <version>0.6.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sap.xsk</groupId>
-      <artifactId>xsk-modules-api-all</artifactId>
-      <version>0.6.0-SNAPSHOT</version>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.sap.xsk</groupId>
+            <artifactId>xsk-modules-parsers-all</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sap.xsk</groupId>
+            <artifactId>xsk-modules-api-all</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+        </dependency>
 
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
@@ -170,31 +170,31 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-all</artifactId>
-      <version>${hamcrest.all.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sap.xsk</groupId>
-      <artifactId>xsk-modules-parsers-hdbti</artifactId>
-      <version>0.6.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sap.xsk</groupId>
-      <artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-      <version>0.6.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sap.xsk</groupId>
-      <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-      <version>0.6.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>${hamcrest.all.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sap.xsk</groupId>
+            <artifactId>xsk-modules-parsers-hdbti</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+		<dependency>
+			<groupId>com.sap.xsk</groupId>
+			<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
+			<version>0.7.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+        <dependency>
+			<groupId>com.sap.xsk</groupId>
+            <artifactId>xsk-modules-parsers-hdbtable</artifactId>
+			<version>0.7.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
 
     <properties>
 		<license.header.location>../../../license-header.txt</license.header.location>

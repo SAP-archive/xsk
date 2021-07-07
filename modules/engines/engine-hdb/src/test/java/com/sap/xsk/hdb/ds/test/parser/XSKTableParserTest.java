@@ -104,12 +104,12 @@ public class XSKTableParserTest extends AbstractGuiceTest {
         assertThrows(XSKHDBTableDuplicatePropertyException.class, () -> new XSKTableParser().parse("/DuplicateTableProperties.hdbtable", content));
     }
 
-    @Test
+    @Test(expected = XSKHDBTableMissingPropertyException.class)
     public void failIfParsingMissingMandatoryProperties() throws Exception {
         InputStream in = XSKTableParserTest.class.getResourceAsStream("/MissingMandatoryTableProperties.hdbtable");
         String content = IOUtils.toString(in, StandardCharsets.UTF_8);
 
-        assertThrows(XSKHDBTableMissingPropertyException.class, () -> new XSKTableParser().parse("/MissingMandatoryTableProperties.hdbtable", content));
+        new XSKTableParser().parse("/MissingMandatoryTableProperties.hdbtable", content);
     }
 
     @Test
@@ -160,6 +160,20 @@ public class XSKTableParserTest extends AbstractGuiceTest {
         String content = "column table XSK_HDI_SIMPLE_TABLE ( COLUMN1 INTEGER )";
         XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/testFileName.hdbtable", content);
         assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
+        assertEquals(content, model.getRawContent());
+    }
+
+    @Test
+    public  void parseTableWithoutPK() throws Exception {
+        String content = "table.schemaName  = \"SAP_DEMO\";\n" +
+                "table.tableType   = COLUMNSTORE;\n" +
+                "table.temporary   = true;\n" +
+                "table.description = \"nvarchar(4000)\";\n" +
+                "table.columns = [\n" +
+                "    {name = \"TEXT\"; sqlType = NVARCHAR; length = 4000; nullable = true; comment = \"nvarchar(4000)\";}\n" +
+                "];";
+        XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/test.hdbtable", content);
+        assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
         assertEquals(content, model.getRawContent());
     }
 }

@@ -1,7 +1,5 @@
 package com.sap.xsk.migration.neo.db.hana;
 
-import com.sap.xsk.migration.neo.db.DeliveryUnit;
-import com.sap.xsk.migration.neo.db.DeliveryUnitsProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,7 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-public class HanaXSDeliveryUnitsProviderTest {
+public class DeliveryUnitsProviderTest {
 
   private static final String TEST_DB_HOST = "jdbc:sap://localhost:30015";
   private static final String TEST_DB_USER = "testDbUser";
@@ -40,14 +38,14 @@ public class HanaXSDeliveryUnitsProviderTest {
   private ResultSet mockResultSet;
 
   @Mock
-  private HanaConnectionProvider databaseConnectionProvider;
+  private ConnectionProvider databaseConnectionProvider;
 
   private DeliveryUnitsProvider deliveryUnitsProvider;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    deliveryUnitsProvider = new HanaXSDeliveryUnitsProvider(databaseConnectionProvider);
+    deliveryUnitsProvider = new DeliveryUnitsProvider(databaseConnectionProvider);
   }
 
   @Test

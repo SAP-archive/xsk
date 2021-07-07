@@ -1,6 +1,6 @@
-package com.sap.xsk.migration.neo.db;
+package com.sap.xsk.migration.neo.db.hana;
 
-import com.sap.xsk.migration.neo.db.DeliveryUnitsExportConfig.Builder;
+import com.sap.xsk.migration.neo.db.hana.DeliveryUnitsExportConfig.Builder;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

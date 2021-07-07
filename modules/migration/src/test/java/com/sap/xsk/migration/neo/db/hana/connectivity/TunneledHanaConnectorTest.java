@@ -2,7 +2,6 @@ package com.sap.xsk.migration.neo.db.hana.connectivity;
 
 import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseDatabaseTunnelSdkCommandArgs;
-import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseDatabaseTunnelSdkCommandRes;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommandArgs;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommandRes;
 import org.junit.Before;
@@ -40,7 +39,7 @@ public class TunneledHanaConnectorTest {
   private SdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes> mockOpenDatabaseTunnelSdkCommand;
 
   @Mock
-  private SdkCommand<CloseDatabaseTunnelSdkCommandArgs, CloseDatabaseTunnelSdkCommandRes> mockCloseDatabaseTunnelSdkCommand;
+  private SdkCommand<CloseDatabaseTunnelSdkCommandArgs, Void> mockCloseDatabaseTunnelSdkCommand;
 
   private HanaConnector hanaConnector;
 

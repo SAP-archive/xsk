@@ -11,14 +11,22 @@
  */
 package com.sap.xsk.migration.neo.sdk.command;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public interface SdkCommand<TArgs extends SdkCommandArgs, TRes extends SdkCommandRes> {
+public interface SdkCommand<TArgs extends SdkCommandArgs, TRes> {
 
   List<String> NEO_SDK_JAVA8_COMMAND_AND_ARGUMENTS = Arrays.asList("/bin/bash", "./neo-java8.sh");
 
   String NEO_SDK_DIRECTORY = "neo";
 
   TRes execute(TArgs commandArgs);
+
+  default List<String> createProcessCommandAndArguments(SdkCommandArgs commandArgs, String concreteCommandName) {
+    var commandAndArguments = new ArrayList<>(NEO_SDK_JAVA8_COMMAND_AND_ARGUMENTS);
+    commandAndArguments.add(concreteCommandName);
+    commandAndArguments.addAll(commandArgs.commandLineArgs());
+    return commandAndArguments;
+  }
 }

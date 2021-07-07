@@ -1,8 +1,6 @@
 package com.sap.xsk.migration.neo.sdk.command;
 
-import com.sap.xsk.migration.neo.sdk.command.SdkCommandArgs;
 import com.sap.xsk.migration.tooling.MigrationToolExecutor;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

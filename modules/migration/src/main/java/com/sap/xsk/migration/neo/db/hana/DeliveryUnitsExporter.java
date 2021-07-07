@@ -11,9 +11,6 @@
  */
 package com.sap.xsk.migration.neo.db.hana;
 
-import com.sap.xsk.migration.neo.db.DeliveryUnit;
-import com.sap.xsk.migration.neo.db.DeliveryUnitsExportConfig;
-import com.sap.xsk.migration.neo.db.DeliveryUnitsExporter;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.dirigible.runtime.transport.processor.TransportProcessor;
 import javax.inject.Inject;
@@ -21,24 +18,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
+public class DeliveryUnitsExporter {
 
   private final TransportProcessor transportProcessor;
 
   @Inject
-  public HanaXSDeliveryUnitsExporter(TransportProcessor transportProcessor){
+  public DeliveryUnitsExporter(TransportProcessor transportProcessor){
     this.transportProcessor = transportProcessor;
   }
 
-  @Override
   public void exportDeliveryUnits(DeliveryUnitsExportConfig config) {
     try {
       String fileURL = System.getenv("CATALINA_HOME") + "/" + System.getenv("ZIP_OUTPUT_URL");

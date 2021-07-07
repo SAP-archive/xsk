@@ -39,7 +39,7 @@ public class CloseDatabaseTunnelSdkCommandTest extends BaseSdkCommandTest {
         createProcessCommandAndArguments(TEST_COMMAND_ARGS, TEST_CLOSE_DATABASE_TUNNEL_COMMAND_NAME))
     ).thenReturn(TEST_COMMAND_OUTPUT);
 
-    CloseDatabaseTunnelSdkCommandRes closeDatabaseTunnelSdkCommandRes = closeDatabaseTunnelSdkCommand.execute(TEST_COMMAND_ARGS);
+    Void closeDatabaseTunnelSdkCommandRes = closeDatabaseTunnelSdkCommand.execute(TEST_COMMAND_ARGS);
 
     assertNull("Unexpected command result", closeDatabaseTunnelSdkCommandRes);
   }

@@ -9,22 +9,23 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.migration.tooling;
+package com.sap.xsk.migration.neo.db.hana;
 
-import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+public class DeliveryUnit {
 
-public class ToolingModule extends AbstractDirigibleModule {
+  private final String name;
+  private final String vendor;
 
-  @Override
-  protected void configure() {
-    bind(MigrationToolExecutor.class).to(CommandLineMigrationToolExecutor.class);
-    bind(SystemEnvironment.class);
-    bind(SystemProcessBuilder.class);
-    bind(InputStreamStringReader.class);
+  public DeliveryUnit(String name, String vendor) {
+    this.name = name;
+    this.vendor = vendor;
   }
 
-  @Override
   public String getName() {
-    return "XSK Migration Tooling Module";
+    return name;
+  }
+
+  public String getVendor() {
+    return vendor;
   }
 }

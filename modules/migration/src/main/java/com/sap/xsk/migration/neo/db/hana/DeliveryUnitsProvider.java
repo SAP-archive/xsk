@@ -11,8 +11,6 @@
  */
 package com.sap.xsk.migration.neo.db.hana;
 
-import com.sap.xsk.migration.neo.db.DeliveryUnit;
-import com.sap.xsk.migration.neo.db.DeliveryUnitsProvider;
 import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -20,21 +18,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-class HanaXSDeliveryUnitsProvider implements DeliveryUnitsProvider {
+public class DeliveryUnitsProvider {
 
   private static final String HANA_JDBC_URL = "jdbc:sap://localhost:30015";
   private static final String HANA_DELIVERY_UNITS_QUERY = "SELECT DELIVERY_UNIT, VENDOR FROM \"_SYS_REPO\".\"DELIVERY_UNITS\"";
   private static final String NO_DB_CONNECTION_EXCEPTION_MESSAGE = "Couldn't connect to database!";
   private static final String COULD_NOT_QUERY_DELIVERY_UNITS_EXCEPTION_MESSAGE = "Couldn't execute query!";
 
-  private final HanaConnectionProvider databaseConnectionProvider;
+  private final ConnectionProvider databaseConnectionProvider;
 
   @Inject
-  public HanaXSDeliveryUnitsProvider(HanaConnectionProvider databaseConnectionProvider) {
+  public DeliveryUnitsProvider(ConnectionProvider databaseConnectionProvider) {
     this.databaseConnectionProvider = databaseConnectionProvider;
   }
 
-  @Override
   public List<DeliveryUnit> getDeliveryUnitsNames(String user, String password) {
     Connection connection = createHanaConnection(user, password);
 

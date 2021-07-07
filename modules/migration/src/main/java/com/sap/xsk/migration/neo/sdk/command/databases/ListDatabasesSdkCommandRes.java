@@ -11,10 +11,9 @@
  */
 package com.sap.xsk.migration.neo.sdk.command.databases;
 
-import com.sap.xsk.migration.neo.sdk.command.SdkCommandRes;
 import java.util.List;
 
-public class ListDatabasesSdkCommandRes implements SdkCommandRes {
+public class ListDatabasesSdkCommandRes {
   private final List<String> databaseIds;
 
   public ListDatabasesSdkCommandRes(List<String> databaseIds) {

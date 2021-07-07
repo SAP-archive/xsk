@@ -1,4 +1,4 @@
-package com.sap.xsk.migration.neo.db;
+package com.sap.xsk.migration.neo.db.hana;
 
 public class DeliveryUnitsExportConfig {
 

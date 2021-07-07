@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-class SystemProcessBuilder {
+public class SystemProcessBuilder {
 
   public Process startProcess(File directory, List<String> command) throws IOException {
     var processBuilder = new ProcessBuilder();

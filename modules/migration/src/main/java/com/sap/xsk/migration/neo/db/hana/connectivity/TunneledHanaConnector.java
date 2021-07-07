@@ -12,22 +12,20 @@
 package com.sap.xsk.migration.neo.db.hana.connectivity;
 
 import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
-import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseAllDatabaseTunnelsSdkCommandArgs;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseDatabaseTunnelSdkCommandArgs;
-import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseDatabaseTunnelSdkCommandRes;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommandArgs;
 import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommandRes;
 import javax.inject.Inject;
 
-class TunneledHanaConnector implements HanaConnector {
+public class TunneledHanaConnector implements HanaConnector {
 
   private final SdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes> openDatabaseTunnelSdkCommand;
-  private final SdkCommand<CloseDatabaseTunnelSdkCommandArgs, CloseDatabaseTunnelSdkCommandRes> closeDatabaseTunnelSdkCommand;
+  private final SdkCommand<CloseDatabaseTunnelSdkCommandArgs, Void> closeDatabaseTunnelSdkCommand;
 
   @Inject
   public TunneledHanaConnector(
       SdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes> openDatabaseTunnelSdkCommand,
-      SdkCommand<CloseDatabaseTunnelSdkCommandArgs, CloseDatabaseTunnelSdkCommandRes> closeDatabaseTunnelSdkCommand
+      SdkCommand<CloseDatabaseTunnelSdkCommandArgs, Void> closeDatabaseTunnelSdkCommand
   ) {
     this.openDatabaseTunnelSdkCommand = openDatabaseTunnelSdkCommand;
     this.closeDatabaseTunnelSdkCommand = closeDatabaseTunnelSdkCommand;

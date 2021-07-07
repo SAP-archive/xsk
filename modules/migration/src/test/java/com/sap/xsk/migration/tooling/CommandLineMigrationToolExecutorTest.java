@@ -1,9 +1,12 @@
 package com.sap.xsk.migration.tooling;
 
+import org.apache.kerby.config.Conf;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,29 +53,23 @@ public class CommandLineMigrationToolExecutorTest {
   @Mock
   private Process mockProcess;
 
-  @Mock
-  private SystemEnvironment mockSystemEnvironment;
-
-  @Mock
-  private InputStreamStringReader inputStreamStringReader;
-
-  @Mock
   private InputStream mockProcessOutput;
-
-  @Mock
   private InputStream mockProcessErrorOutput;
-
   private MigrationToolExecutor migrationToolExecutor;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    migrationToolExecutor = new CommandLineMigrationToolExecutor(mockSystemProcessBuilder, mockSystemEnvironment, inputStreamStringReader);
+
+    mockProcessOutput = IOUtils.toInputStream(TEST_PROCESS_OUTPUT, StandardCharsets.UTF_8);
+    mockProcessErrorOutput = IOUtils.toInputStream(TEST_PROCESS_ERROR_OUTPUT, StandardCharsets.UTF_8);
+    Configuration.set(TEST_CATALINA_HOME_ENV_VAR_NAME, TEST_CATALINA_HOME);
+
+    migrationToolExecutor = new MigrationToolExecutor(mockSystemProcessBuilder);
   }
 
   @Test
   public void testExecuteMigrationToolWithDefaultTimeoutConfig() throws IOException, InterruptedException {
-    when(mockSystemEnvironment.getEnvironmentVariableValue(TEST_CATALINA_HOME_ENV_VAR_NAME)).thenReturn(TEST_CATALINA_HOME);
     when(mockSystemProcessBuilder.startProcess(
         argThat(dir -> TEST_DIRECTORY_ABSOLUTE_PATH.equals(dir.getAbsolutePath())),
         eq(TEST_MIGRATION_TOOL_COMMAND_AND_ARGS))
@@ -80,7 +77,6 @@ public class CommandLineMigrationToolExecutorTest {
     when(mockProcess.waitFor(TEST_DEFAULT_TIMEOUT, TEST_DEFAULT_TIMEOUT_UNIT)).thenReturn(true);
     when(mockProcess.exitValue()).thenReturn(TEST_PROCESS_SUCCESS_EXIT_CODE);
     when(mockProcess.getInputStream()).thenReturn(mockProcessOutput);
-    when(inputStreamStringReader.readToString(mockProcessOutput, StandardCharsets.UTF_8)).thenReturn(TEST_PROCESS_OUTPUT);
 
     String processOutput = migrationToolExecutor.executeMigrationTool(
         TEST_MIGRATION_TOOL_DIRECTORY,
@@ -92,7 +88,6 @@ public class CommandLineMigrationToolExecutorTest {
 
   @Test
   public void testExecuteMigrationToolWithNonDefaultTimeoutConfig() throws IOException, InterruptedException {
-    when(mockSystemEnvironment.getEnvironmentVariableValue(TEST_CATALINA_HOME_ENV_VAR_NAME)).thenReturn(TEST_CATALINA_HOME);
     when(mockSystemProcessBuilder.startProcess(
         argThat(dir -> TEST_DIRECTORY_ABSOLUTE_PATH.equals(dir.getAbsolutePath())),
         eq(TEST_MIGRATION_TOOL_COMMAND_AND_ARGS))
@@ -100,7 +95,6 @@ public class CommandLineMigrationToolExecutorTest {
     when(mockProcess.waitFor(TEST_TIMEOUT, TEST_TIMEOUT_UNIT)).thenReturn(true);
     when(mockProcess.exitValue()).thenReturn(TEST_PROCESS_SUCCESS_EXIT_CODE);
     when(mockProcess.getInputStream()).thenReturn(mockProcessOutput);
-    when(inputStreamStringReader.readToString(mockProcessOutput, StandardCharsets.UTF_8)).thenReturn(TEST_PROCESS_OUTPUT);
 
     String processOutput = migrationToolExecutor.executeMigrationTool(
         TEST_MIGRATION_TOOL_DIRECTORY,
@@ -114,7 +108,6 @@ public class CommandLineMigrationToolExecutorTest {
 
   @Test
   public void testExecuteMigrationToolThreadInterrupted() throws IOException, InterruptedException {
-    when(mockSystemEnvironment.getEnvironmentVariableValue(TEST_CATALINA_HOME_ENV_VAR_NAME)).thenReturn(TEST_CATALINA_HOME);
     when(mockSystemProcessBuilder.startProcess(
         argThat(dir -> TEST_DIRECTORY_ABSOLUTE_PATH.equals(dir.getAbsolutePath())),
         eq(TEST_MIGRATION_TOOL_COMMAND_AND_ARGS))
@@ -137,7 +130,6 @@ public class CommandLineMigrationToolExecutorTest {
 
   @Test
   public void testExecuteMigrationToolTimeouts() throws IOException, InterruptedException {
-    when(mockSystemEnvironment.getEnvironmentVariableValue(TEST_CATALINA_HOME_ENV_VAR_NAME)).thenReturn(TEST_CATALINA_HOME);
     when(mockSystemProcessBuilder.startProcess(
         argThat(dir -> TEST_DIRECTORY_ABSOLUTE_PATH.equals(dir.getAbsolutePath())),
         eq(TEST_MIGRATION_TOOL_COMMAND_AND_ARGS))
@@ -159,8 +151,7 @@ public class CommandLineMigrationToolExecutorTest {
   }
 
   @Test
-  public void testExecuteMigrationCouldNotBeStarted() throws IOException, InterruptedException {
-    when(mockSystemEnvironment.getEnvironmentVariableValue(TEST_CATALINA_HOME_ENV_VAR_NAME)).thenReturn(TEST_CATALINA_HOME);
+  public void testExecuteMigrationCouldNotBeStarted() throws IOException {
     when(mockSystemProcessBuilder.startProcess(any(), any())).thenThrow(IOException.class);
 
     ShellExecutorException caughtException = assertThrows(
@@ -179,7 +170,6 @@ public class CommandLineMigrationToolExecutorTest {
 
   @Test
   public void testExecuteMigrationToolExitsWithNonZero() throws IOException, InterruptedException {
-    when(mockSystemEnvironment.getEnvironmentVariableValue(TEST_CATALINA_HOME_ENV_VAR_NAME)).thenReturn(TEST_CATALINA_HOME);
     when(mockSystemProcessBuilder.startProcess(
         argThat(dir -> TEST_DIRECTORY_ABSOLUTE_PATH.equals(dir.getAbsolutePath())),
         eq(TEST_MIGRATION_TOOL_COMMAND_AND_ARGS))
@@ -187,7 +177,6 @@ public class CommandLineMigrationToolExecutorTest {
     when(mockProcess.waitFor(TEST_TIMEOUT, TEST_TIMEOUT_UNIT)).thenReturn(true);
     when(mockProcess.exitValue()).thenReturn(TEST_PROCESS_ERROR_EXIT_CODE);
     when(mockProcess.getErrorStream()).thenReturn(mockProcessErrorOutput);
-    when(inputStreamStringReader.readToString(mockProcessErrorOutput, StandardCharsets.UTF_8)).thenReturn(TEST_PROCESS_ERROR_OUTPUT);
 
     ShellExecutorException caughtException = assertThrows(
         "Unexpected exception caught",
@@ -213,7 +202,7 @@ public class CommandLineMigrationToolExecutorTest {
 
   @Test
   public void testExecuteMigrationToolCouldNotCreateProcessDirectory() throws IOException, InterruptedException {
-    when(mockSystemEnvironment.getEnvironmentVariableValue(TEST_CATALINA_HOME_ENV_VAR_NAME)).thenReturn(null);
+    Configuration.remove(TEST_CATALINA_HOME_ENV_VAR_NAME);
 
     ShellExecutorException caughtException = assertThrows(
         "Unexpected exception caught",

@@ -13,19 +13,22 @@ package com.sap.xsk.migration.neo.sdk.command.tunnel;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sap.xsk.migration.neo.sdk.command.AbstractSdkCommand;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
 import com.sap.xsk.migration.neo.sdk.command.SdkCommandParsedOutput;
 import com.sap.xsk.migration.tooling.MigrationToolExecutor;
+
 import javax.inject.Inject;
 import java.util.List;
 
-class OpenDatabaseTunnelSdkCommand extends AbstractSdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes> {
+public class OpenDatabaseTunnelSdkCommand implements SdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes> {
 
   private static final String OPEN_DATABASE_TUNNEL_COMMAND_NAME = "open-db-tunnel";
 
+  private final MigrationToolExecutor migrationToolExecutor;
+
   @Inject
   public OpenDatabaseTunnelSdkCommand(MigrationToolExecutor migrationToolExecutor) {
-    super(migrationToolExecutor);
+    this.migrationToolExecutor = migrationToolExecutor;
   }
 
   @Override

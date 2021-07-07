@@ -11,9 +11,7 @@
  */
 package com.sap.xsk.migration.neo.sdk.command.tunnel;
 
-import com.sap.xsk.migration.neo.sdk.command.SdkCommandRes;
-
-public class OpenDatabaseTunnelSdkCommandRes implements SdkCommandRes {
+public class OpenDatabaseTunnelSdkCommandRes {
 
   private final String host;
   private final int port;

@@ -11,19 +11,46 @@
  */
 package com.sap.xsk.migration.module;
 
-import com.sap.xsk.migration.neo.db.hana.HanaModule;
-import com.sap.xsk.migration.neo.sdk.NeoSdkModule;
-import com.sap.xsk.migration.tooling.ToolingModule;
+import com.google.inject.TypeLiteral;
+import com.sap.xsk.migration.neo.db.hana.ConnectionProvider;
+import com.sap.xsk.migration.neo.db.hana.DeliveryUnitsExporter;
+import com.sap.xsk.migration.neo.db.hana.DeliveryUnitsProvider;
+import com.sap.xsk.migration.neo.db.hana.connectivity.HanaConnector;
+import com.sap.xsk.migration.neo.db.hana.connectivity.TunneledHanaConnector;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommand;
+import com.sap.xsk.migration.neo.sdk.command.SdkCommandGenericArgs;
+import com.sap.xsk.migration.neo.sdk.command.databases.ListDatabasesSdkCommand;
+import com.sap.xsk.migration.neo.sdk.command.databases.ListDatabasesSdkCommandRes;
+import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseDatabaseTunnelSdkCommand;
+import com.sap.xsk.migration.neo.sdk.command.tunnel.CloseDatabaseTunnelSdkCommandArgs;
+import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommand;
+import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommandArgs;
+import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommandRes;
+import com.sap.xsk.migration.tooling.MigrationToolExecutor;
+import com.sap.xsk.migration.tooling.SystemProcessBuilder;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
 public class XSKMigrationModule extends AbstractDirigibleModule {
 
   @Override
   protected void configure() {
-//    bind(IRestService.class).to(XSKMigrationRestService.class); // TODO: see why binding here does not work and needs a 'services' file
-    install(new ToolingModule());
-    install(new NeoSdkModule());
-    install(new HanaModule());
+    // Neo SDK commands
+    bind(new TypeLiteral<SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes>>() {
+    }).to(ListDatabasesSdkCommand.class);
+    bind(new TypeLiteral<SdkCommand<CloseDatabaseTunnelSdkCommandArgs, Void>>() {
+    }).to(CloseDatabaseTunnelSdkCommand.class);
+    bind(new TypeLiteral<SdkCommand<OpenDatabaseTunnelSdkCommandArgs, OpenDatabaseTunnelSdkCommandRes>>() {
+    }).to(OpenDatabaseTunnelSdkCommand.class);
+
+    // Migration tooling
+    bind(MigrationToolExecutor.class);
+    bind(SystemProcessBuilder.class);
+
+    // HANA
+    bind(HanaConnector.class).to(TunneledHanaConnector.class);
+    bind(DeliveryUnitsProvider.class);
+    bind(DeliveryUnitsExporter.class);
+    bind(ConnectionProvider.class);
   }
 
   @Override

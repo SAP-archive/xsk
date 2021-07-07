@@ -40,7 +40,7 @@ public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureH
   public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
     logger.info("Processing Drop View: " + viewModel.getName());
 
-    String viewName = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName());
+    String viewName = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), viewModel.getSchema());
     if (SqlFactory.getNative(connection).exists(connection, viewName, DatabaseArtifactTypes.VIEW)) {
       String sql = SqlFactory.getNative(connection).drop().view(viewName).build();
       executeSql(sql, connection);

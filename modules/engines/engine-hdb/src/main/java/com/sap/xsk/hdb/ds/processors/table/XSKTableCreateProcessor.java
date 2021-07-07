@@ -36,15 +36,13 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
    * @param connection the connection
    * @param tableModel the table model
    * @throws SQLException the SQL exception
+   * @see <a href="https://github.com/SAP/xsk/wiki/Parser-hdbtable">hdbtable against postgresql itest</a>
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
-    /**
-     * @see <a href="https://github.com/SAP/xsk/wiki/Parser-hdbtable">hdbtable against postgresql itest</a>
-     */
-
     String sql = null;
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName());
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
     logger.info("Processing Create Table: " + tableName);
+    tableModel.setName(tableName);
 
     XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, tableModel);
 

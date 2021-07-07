@@ -42,7 +42,7 @@ public class XSKHDBTableParserHanaITTest {
   private static IXSKHDBCoreFacade facade;
 
   @BeforeClass
-  public static void setUpBeforeClass() throws SQLException, IOException {
+  public static void setUpBeforeClass() throws SQLException {
     JDBCModel model = new JDBCModel(TestConstants.HANA_DRIVER,
         TestConstants.HANA_URL,
         TestConstants.HANA_USERNAME,
@@ -75,11 +75,10 @@ public class XSKHDBTableParserHanaITTest {
     Statement stmt = connection.createStatement();
     DatabaseMetaData metaData = connection.getMetaData();
     String hanaUserName = Configuration.get("hana.username");
-    ResultSet table = metaData.getTables(null, hanaUserName, "hdbtable-itest::SamplePostgreXSClassicTable", null);
+    ResultSet table = metaData.getTables(null, "SAP_INO", "hdbtable-itest::SamplePostgreXSClassicTable", null);
     assertTrue(table.next());
 
-    stmt.executeUpdate(String.format("drop table \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", hanaUserName));
-
+    stmt.executeUpdate(String.format("drop table \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", "SAP_INO"));
   }
 
 }

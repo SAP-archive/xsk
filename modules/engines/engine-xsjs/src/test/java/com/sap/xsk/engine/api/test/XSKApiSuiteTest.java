@@ -74,6 +74,13 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
     TEST_MODULES.add("test/xsk/http/http.xsjs");
     // TODO rework net.xsjs's test after upgrading mockito's versions in dirigible and xsk
     TEST_MODULES.add("test/xsk/net/net.xsjs");
+
+    // HDB tests
+    TEST_MODULES.add("test/xsk/hdb/column-metadata.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/connection-execute-query.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/connection-execute-update.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/result-set.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/resultset-metadata.xsjs");
   }
 
   /**

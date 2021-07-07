@@ -39,6 +39,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
+import org.apache.commons.lang3.SystemUtils;
 import org.eclipse.dirigible.commons.api.service.AbstractRestService;
 import org.eclipse.dirigible.commons.api.service.IRestService;
 import org.eclipse.dirigible.core.workspace.service.WorkspacesCoreService;
@@ -60,13 +61,25 @@ public class XSKMigrationRestService extends AbstractRestService {
   @Context
   private HttpServletResponse response;
 
-  private final HanaConnector hanaConnector;
-  private final DeliveryUnitsProvider deliveryUnitsProvider;
-  private final SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> listDatabasesSdkCommand;
-  private final DeliveryUnitsExporter deliveryUnitsExporter;
-  private final WorkspacesCoreService workspacesCoreService;
+  @Inject
+  private HanaConnector hanaConnector;
 
   @Inject
+  private DeliveryUnitsProvider deliveryUnitsProvider;
+
+  @Inject
+  private SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> listDatabasesSdkCommand;
+
+  @Inject
+  private DeliveryUnitsExporter deliveryUnitsExporter;
+
+  @Inject
+  private WorkspacesCoreService workspacesCoreService;
+
+  public XSKMigrationRestService() {
+    // for Guice
+  }
+
   public XSKMigrationRestService(HanaConnector hanaConnector, DeliveryUnitsProvider deliveryUnitsProvider,
       SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> listDatabasesSdkCommand,
       DeliveryUnitsExporter deliveryUnitsExporter, WorkspacesCoreService workspacesCoreService) {

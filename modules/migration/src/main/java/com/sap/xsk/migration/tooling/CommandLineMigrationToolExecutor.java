@@ -12,6 +12,7 @@
 package com.sap.xsk.migration.tooling;
 
 import org.apache.commons.io.IOUtils;
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +35,7 @@ class CommandLineMigrationToolExecutor implements MigrationToolExecutor {
   private final SystemEnvironment systemEnvironment;
   private final InputStreamStringReader inputStreamStringReader;
 
+  @Inject
   CommandLineMigrationToolExecutor(SystemProcessBuilder systemProcessBuilder, SystemEnvironment systemEnvironment,
       InputStreamStringReader inputStreamStringReader) {
     this.systemProcessBuilder = systemProcessBuilder;

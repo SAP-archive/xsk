@@ -60,8 +60,6 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
             String fullPath = System.getenv("CATALINA_HOME") + "/" + line;
             File zipFile = new File(fullPath);
             byte[] project = FileUtils.readFileToByteArray(zipFile);
-//            projects.add(project);
-            byte[] project2 = Files.readAllBytes(Paths.get(fullPath));
             transportProcessor.importProject(config.getWorkspace(), project);
             line = reader.readLine();
           }
@@ -72,7 +70,6 @@ public class HanaXSDeliveryUnitsExporter implements DeliveryUnitsExporter {
         }
 
         file.delete();
-//        return projects;
       } else {
         throw new RuntimeException("Migration script failure!");
       }

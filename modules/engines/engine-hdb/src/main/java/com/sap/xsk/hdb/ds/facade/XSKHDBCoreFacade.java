@@ -11,8 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.facade;
 
-import static java.text.MessageFormat.format;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
@@ -29,16 +27,6 @@ import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctio
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -48,6 +36,19 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static java.text.MessageFormat.format;
 
 public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
@@ -239,17 +240,18 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             try {
               boolean caseSensitive = Boolean
                   .parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-              String modelName = model.getName();
-              if (caseSensitive) {
-                modelName = "\"" + modelName + "\"";
-              }
-              if (model != null && SqlFactory.getNative(connection).exists(connection, modelName)) {
-                if (SqlFactory.getNative(connection).count(connection, modelName) == 0) {
-                  xskTableManagerService.dropDataStructure(connection, model);
-                } else {
-                  logger.warn(format("Table [{0}] cannot be deleted during the update process, because it is not empty", dsName));
+              if (model != null) {
+                String modelName = model.getName();
+                if (caseSensitive) {
+                  modelName = "\"" + modelName + "\"";
                 }
-
+                if (SqlFactory.getNative(connection).exists(connection, modelName)) {
+                  if (SqlFactory.getNative(connection).count(connection, modelName) == 0) {
+                    xskTableManagerService.dropDataStructure(connection, model);
+                  } else {
+                    logger.warn(format("Table [{0}] cannot be deleted during the update process, because it is not empty", dsName));
+                  }
+                }
               }
             } catch (Exception e) {
               logger.error(e.getMessage(), e);

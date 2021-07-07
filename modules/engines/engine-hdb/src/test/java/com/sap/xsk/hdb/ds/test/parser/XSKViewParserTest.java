@@ -39,7 +39,7 @@ public class XSKViewParserTest extends AbstractGuiceTest {
         assertEquals("acme.com.test.tables::MY_VIEW1", model.getDependsOnView().get(0));
         assertEquals("acme.com.test.views::MY_VIEW2", model.getDependsOnView().get(1));
         assertEquals(
-                "SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"acme.com.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"MYSCHEMA\".\"acme.com.test.views::MY_VIEW1\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"",
+                "SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"acme.com.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"acme.com.test.views::MY_VIEW1\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"",
                 model.getQuery());
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
     }

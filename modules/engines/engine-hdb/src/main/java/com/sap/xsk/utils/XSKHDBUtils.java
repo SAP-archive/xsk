@@ -11,21 +11,22 @@
  */
 package com.sap.xsk.utils;
 
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
+import org.slf4j.Logger;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class XSKHDBUtils {
-
     private XSKHDBUtils() {
-
     }
 
     public static String getTableName(XSKDataStructureEntityModel model) {
@@ -152,5 +153,18 @@ public class XSKHDBUtils {
         return (SqlFactory.deriveDialect(connection).getClass().equals(MySQLSqlDialect.class))
                 ? "`"
                 : "\"";
+    }
+
+    public static void logParserErrors(ArrayList<String> errorMessages, String location, String artifactType, Logger logger) throws XSKDataStructuresException {
+        if (errorMessages.size() > 0) {
+            for (String errorMessage : errorMessages) {
+                logger.error(String.format(
+                        "Wrong format of %s: [%s] during parsing.: %s",
+                        artifactType, location, errorMessage));
+            }
+            throw new XSKDataStructuresException(String.format(
+                    "Wrong format of HDB View: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version.",
+                    location));
+        }
     }
 }

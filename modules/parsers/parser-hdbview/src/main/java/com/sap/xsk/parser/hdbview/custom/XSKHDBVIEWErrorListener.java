@@ -15,18 +15,20 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
-public class XSKHDBVIEWSyntaxErrorListener extends BaseErrorListener {
+import java.util.ArrayList;
 
-  private String errorMessage;
+public class XSKHDBVIEWErrorListener extends BaseErrorListener {
 
-  @Override
-  public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg,
-      RecognitionException e) {
-    this.errorMessage = "line " + line + ":" + charPositionInLine + " at " +
-        offendingSymbol + ": " + msg;
-  }
+    private final ArrayList<String> errorMessages = new ArrayList<>();
 
-  public String getErrorMessage() {
-    return errorMessage;
-  }
+    @Override
+    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg,
+                            RecognitionException e) {
+        this.errorMessages.add("line " + line + ":" + charPositionInLine + " at " +
+                offendingSymbol + ": " + msg);
+    }
+
+    public ArrayList<String> getErrorMessages() {
+        return errorMessages;
+    }
 }

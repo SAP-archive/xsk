@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
@@ -59,5 +60,21 @@ public class XSKViewParserTest extends AbstractGuiceTest {
         XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view/db/ItemsByOrderHANAv2.hdbview", content);
         assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
         assertEquals(content, model.getRawContent());
+    }
+
+    @Test(expected = XSKDataStructuresException.class)
+    public void parseHanaXSClassicContentWithLexerErrorFail() throws Exception {
+        String content = "schema = \"MY_SCHEMA\";\n" +
+                "query = \"\";" +
+                "depends_on_table = [SAEWQ.\"sap.test.db.basis::t_table_name\"];";
+        XSKDataStructureModelFactory.parseView("hdb_view/db/test.hdbview", content);
+    }
+
+    @Test(expected = XSKDataStructuresException.class)
+    public void parseHanaXSClassicContentWithSyntaxErrorFail() throws Exception {
+        String content = "schema = ;\n" +
+                "query = \"\";" +
+                "depends_on_table = [\"sap.test.db.basis::t_table_name\"];";
+        XSKDataStructureModelFactory.parseView("hdb_view/db/test.hdbview", content);
     }
 }

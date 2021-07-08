@@ -19,7 +19,7 @@ import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbview.core.HdbviewLexer;
 import com.sap.xsk.parser.hdbview.core.HdbviewParser;
 import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWCoreListener;
-import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWSyntaxErrorListener;
+import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWErrorListener;
 import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -69,23 +69,22 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
 
         ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
-        HdbviewLexer hdbviewLexer = new HdbviewLexer(inputStream);
-        CommonTokenStream tokenStream = new CommonTokenStream(hdbviewLexer);
 
+        HdbviewLexer hdbviewLexer = new HdbviewLexer(inputStream);
+        XSKHDBVIEWErrorListener lexerErrorListener = new XSKHDBVIEWErrorListener();
+        hdbviewLexer.removeErrorListeners();//remove the ConsoleErrorListener
+        hdbviewLexer.addErrorListener(lexerErrorListener);
+
+        XSKHDBVIEWErrorListener parserErrorListener = new XSKHDBVIEWErrorListener();
+        CommonTokenStream tokenStream = new CommonTokenStream(hdbviewLexer);
         HdbviewParser hdbviewParser = new HdbviewParser(tokenStream);
         hdbviewParser.setBuildParseTree(true);
         hdbviewParser.removeErrorListeners();
+        hdbviewParser.addErrorListener(parserErrorListener);
 
-        XSKHDBVIEWSyntaxErrorListener xskhdbviewSyntaxErrorListener = new XSKHDBVIEWSyntaxErrorListener();
-        hdbviewParser.addErrorListener(xskhdbviewSyntaxErrorListener);
         ParseTree parseTree = hdbviewParser.hdbviewDefinition();
-
-        if (hdbviewParser.getNumberOfSyntaxErrors() > 0) {
-            String syntaxError = xskhdbviewSyntaxErrorListener.getErrorMessage();
-            throw new XSKDataStructuresException(String.format(
-                    "Wrong format of HDB View: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version. [%s]",
-                    location, syntaxError));
-        }
+        XSKHDBUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB View", logger);
+        XSKHDBUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB View", logger);
 
         XSKHDBVIEWCoreListener XSKHDBVIEWCoreListener = new XSKHDBVIEWCoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
@@ -125,4 +124,5 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
     public Class<XSKDataStructureHDBViewModel> getDataStructureClass() {
         return XSKDataStructureHDBViewModel.class;
     }
+
 }

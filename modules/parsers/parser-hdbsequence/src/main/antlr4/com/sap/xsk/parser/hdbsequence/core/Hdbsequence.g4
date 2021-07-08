@@ -10,7 +10,10 @@ property: schema
         | nominvalue
         | cycles
         | reset_by
-        | publicc;
+        | publicc
+        | dependsOnProp
+        | dependsOnTable
+        | dependsOnView;
 schema: 'schema' EQ STRING SC;
 increment_by: 'increment_by' EQ  INT SC;
 
@@ -22,6 +25,9 @@ nominvalue:'nominvalue' EQ BOOLEAN SC;
 cycles:'cycles' EQ BOOLEAN SC;
 reset_by:'reset_by' EQ STRING SC;
 publicc:'public' EQ BOOLEAN SC;
+dependsOnProp:  'depends_on' EQ '[' (STRING (',' STRING)*)? ']' SC ;
+dependsOnTable: 'depends_on_table' EQ '[' (STRING (',' STRING)*)? ']' SC ;
+dependsOnView:  'depends_on_view'  EQ '[' (STRING (',' STRING)*)? ']' SC ;
 
 STRING: '"' (~["\\\r\n] | EscapeSequence)* '"';
 INT :  SIGNED_INT? [0-9]+;

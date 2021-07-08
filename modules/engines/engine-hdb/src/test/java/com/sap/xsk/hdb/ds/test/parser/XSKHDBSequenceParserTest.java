@@ -44,6 +44,30 @@ public class XSKHDBSequenceParserTest {
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
     }
 
+    @Test
+    public void parseDefaultValues() throws Exception {
+      String content = org.apache.commons.io.IOUtils
+          .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/SchemaOnlySequence.hdbsequence"),
+              StandardCharsets.UTF_8);
+      XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
+          .parse("/test/xsk/com/sap/SchemaOnlySequence.hdbsequence", content);
+      assertEquals(false, model.getPublicc());
+      assertEquals(Integer.valueOf(-1), model.getStart_with());
+      assertEquals(Integer.valueOf(1), model.getIncrement_by());
+      assertEquals(Integer.valueOf(1), model.getMinvalue());
+    }
+
+    @Test
+    public void parseDependsOnContent() throws Exception {
+      String content = org.apache.commons.io.IOUtils
+          .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/DependsOnSequence.hdbsequence"),
+              StandardCharsets.UTF_8);
+      XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
+          .parse("/test/xsk/com/sap/DependsOnSequence.hdbsequence", content);
+      assertEquals("com.acme.test.tables::MY_TABLE2", model.getDepends_on().get(1));
+      assertEquals("sap.ino.db.iam::t_identity", model.getDepends_on_table().get(0));
+      assertEquals("sap.ino.db.iam::t_view", model.getDepends_on_view().get(0));
+    }
 
     @Test
     public void parseHanaXSAdvancedContent() throws Exception {

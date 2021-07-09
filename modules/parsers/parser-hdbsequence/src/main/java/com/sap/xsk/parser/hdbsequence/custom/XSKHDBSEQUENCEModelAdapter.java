@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class XSKHDBSEQUENCEModelAdapter implements JsonDeserializer<XSKHDBSEQUENCEModel> {
 
-  private String handleStringLiteral(String value) {
+  protected static String handleStringLiteral(String value) {
     if (value != null && value.length() > 1) {
       String subStr = value.substring(1, value.length() - 1);
       String escapedQuote = subStr.replace("\\\"", "\"");

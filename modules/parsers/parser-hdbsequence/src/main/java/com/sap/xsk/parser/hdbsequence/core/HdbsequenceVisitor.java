@@ -40,6 +40,48 @@ public interface HdbsequenceVisitor<T> extends ParseTreeVisitor<T> {
 	T visitNomaxvalue(@NotNull HdbsequenceParser.NomaxvalueContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link HdbsequenceParser#nominvalue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbsequenceParser#cycles}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCycles(@NotNull HdbsequenceParser.CyclesContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbsequenceParser#dependsOnTable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDependsOnTable(@NotNull HdbsequenceParser.DependsOnTableContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbsequenceParser#minvalue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbsequenceParser#dependsOnProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDependsOnProp(@NotNull HdbsequenceParser.DependsOnPropContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link HdbsequenceParser#dependsOnView}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDependsOnView(@NotNull HdbsequenceParser.DependsOnViewContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link HdbsequenceParser#property}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -61,20 +103,6 @@ public interface HdbsequenceVisitor<T> extends ParseTreeVisitor<T> {
 	T visitIncrement_by(@NotNull HdbsequenceParser.Increment_byContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link HdbsequenceParser#nominvalue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbsequenceParser#cycles}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCycles(@NotNull HdbsequenceParser.CyclesContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link HdbsequenceParser#hdbsequence}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -87,11 +115,4 @@ public interface HdbsequenceVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStart_with(@NotNull HdbsequenceParser.Start_withContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbsequenceParser#minvalue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx);
 }

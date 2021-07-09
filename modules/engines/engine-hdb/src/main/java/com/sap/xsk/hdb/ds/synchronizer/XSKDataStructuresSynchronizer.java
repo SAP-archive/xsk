@@ -15,6 +15,7 @@ import static java.text.MessageFormat.format;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
@@ -141,7 +142,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @throws IOException                in case of an error
    * @throws XSKDataStructuresException in case of an error
    */
-  public void registerPredeliveredHDBProcedure(String contentPath) throws IOException, XSKDataStructuresException {
+  public void registerPredeliveredHDBProcedure(String contentPath) throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBProcedureModel model;
     model = (XSKDataStructureHDBProcedureModel) xskCoreParserService
@@ -155,7 +156,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @param contentPath the data path
    * @throws IOException in case of an error
    */
-  public void registerPredeliveredHDBTableFunction(String contentPath) throws IOException, XSKDataStructuresException {
+  public void registerPredeliveredHDBTableFunction(String contentPath) throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBTableFunctionModel model;
     model = (XSKDataStructureHDBTableFunctionModel) xskCoreParserService
@@ -170,7 +171,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @throws IOException                in case of an error
    * @throws XSKDataStructuresException in case of an error
    */
-  public void registerPredeliveredHDBSchema(String contentPath) throws IOException, XSKDataStructuresException {
+  public void registerPredeliveredHDBSchema(String contentPath) throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBSchemaModel model;
     model = (XSKDataStructureHDBSchemaModel) xskCoreParserService

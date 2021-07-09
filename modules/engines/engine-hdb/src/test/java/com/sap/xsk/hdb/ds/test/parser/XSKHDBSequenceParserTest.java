@@ -11,8 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
@@ -88,7 +90,7 @@ public class XSKHDBSequenceParserTest {
                 .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/InvalidContent.hdbsequence"),
                         StandardCharsets.UTF_8);
 
-        assertThrows(XSKDataStructuresException.class, () -> new XSKHDBSequenceParser().parse("/test/xsk/com/sap/InvalidContent.hdbsequence", content));
+        assertThrows(XSKArtifactParserException.class, () -> new XSKHDBSequenceParser().parse("/test/xsk/com/sap/InvalidContent.hdbsequence", content));
     }
 
 
@@ -135,6 +137,20 @@ public class XSKHDBSequenceParserTest {
         XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
                 .parse("/test/xsk/com/sap/someFileName.hdbsequence", content);
         assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithLexerErrorFail() throws Exception {
+        String content = "start_with= 10;\n" +
+                "nomaxvalue=dddddfalse;";
+        XSKDataStructureModelFactory.parseView("db/test.hdbsequence", content);
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithSyntaxErrorFail() throws Exception {
+        String content = "start_with= 10;\n" +
+                "nomaxvalue=";
+        XSKDataStructureModelFactory.parseView("db/test.hdbsequence", content);
     }
 
 }

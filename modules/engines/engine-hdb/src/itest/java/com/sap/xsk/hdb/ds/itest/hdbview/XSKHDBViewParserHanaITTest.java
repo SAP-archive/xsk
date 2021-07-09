@@ -55,7 +55,7 @@ public class XSKHDBViewParserHanaITTest {
   private static IXSKHDBCoreFacade facade;
 
   @BeforeClass
-  public static void setUpBeforeClass() throws SQLException, IOException {
+  public static void setUpBeforeClass() throws SQLException {
     JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
         HANA_PASSWORD);
     Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
@@ -85,14 +85,13 @@ public class XSKHDBViewParserHanaITTest {
         "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
         "/hdbview-itest/SampleHANAXSClassicView.hdbview");
 
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
+    facade.handleResourceSynchronization(resource);
+    facade.updateEntities();
 
-    ResultSet rs = stmt.executeQuery(
-        String.format("SELECT COUNT(*) as rawsCount FROM %s",
-            XSKHDBUtils.escapeArtifactName(connection, "hdbview-itest::SampleHANAXSClassicView")));
-    assertTrue(rs.next());
-    assertEquals(0, rs.getInt("rawsCount"));
+    DatabaseMetaData metaData = connection.getMetaData();
+    ResultSet table = metaData.getTables(null, "DBADMIN", "hdbview-itest::SampleHANAXSClassicView", new String[] {"VIEW"});
+    assertTrue(table.next());
+
     stmt.executeUpdate(String.format("DROP VIEW %s", XSKHDBUtils.escapeArtifactName(connection, "hdbview-itest::SampleHANAXSClassicView")));
     stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE1\"", Configuration.get("hana.username")));
     stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.views::MY_VIEW1\"", Configuration.get("hana.username")));

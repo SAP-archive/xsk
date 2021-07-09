@@ -25,7 +25,8 @@
 		<module>engine-xsjs</module>
 		<module>engine-xsodata</module>
 		<module>engine-xssecurity</module>
-	</modules>
+        <module>engine-commons</module>
+    </modules>
 
 	<properties>
 		<license.header.location>../../license-header.txt</license.header.location>

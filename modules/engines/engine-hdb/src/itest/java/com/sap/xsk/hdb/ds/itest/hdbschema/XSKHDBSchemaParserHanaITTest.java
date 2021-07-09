@@ -57,7 +57,7 @@ public class XSKHDBSchemaParserHanaITTest {
   private static IXSKHDBCoreFacade facade;
 
   @BeforeClass
-  public static void setUpBeforeClass() throws SQLException, IOException {
+  public static void setUpBeforeClass() throws SQLException {
     JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
         HANA_PASSWORD);
     Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
@@ -79,15 +79,14 @@ public class XSKHDBSchemaParserHanaITTest {
   @Test
   public void testHDBSchemaCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     Statement stmt = connection.createStatement();
-
     DatabaseMetaData metaData = connection.getMetaData();
 
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/hdbschema-itest/SampleHANAXSClassicSchema.hdbschema",
         "/hdbschema-itest/SampleHANAXSClassicSchema.hdbschema");
 
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
+    facade.handleResourceSynchronization(resource);
+    facade.updateEntities();
 
     ResultSet rs = metaData.getSchemas(null, "MYSCHEMA");
     assertTrue(rs.next());

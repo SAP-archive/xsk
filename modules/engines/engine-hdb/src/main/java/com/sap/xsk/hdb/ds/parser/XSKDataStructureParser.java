@@ -11,13 +11,14 @@
  */
 package com.sap.xsk.hdb.ds.parser;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.io.IOException;
 
 public interface XSKDataStructureParser<T extends XSKDataStructureModel> {
 
-  T parse(String location, String content) throws XSKDataStructuresException, IOException;
+  T parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException;
 
   String getType();
 

@@ -12,6 +12,7 @@
 package com.sap.xsk.hdb.ds.service.parser;
 
 import com.google.inject.Inject;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
@@ -25,7 +26,7 @@ public class XSKCoreParserService implements IXSKCoreParserService {
 
   @Override
   public XSKDataStructureModel parseDataStructure(String type, String location, String content)
-      throws XSKDataStructuresException, IOException {
+          throws XSKDataStructuresException, IOException, XSKArtifactParserException {
     if (!parsersByType.containsKey(type)) {
       return null;
     }

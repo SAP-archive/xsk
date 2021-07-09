@@ -37,14 +37,7 @@ public class XSKSynonymParser implements XSKDataStructureParser {
   @Override
   public XSKDataStructureHDBSynonymModel parse(String location, String content) throws XSKDataStructuresException, IOException {
     XSKDataStructureHDBSynonymModel hdbSynonymModel = new XSKDataStructureHDBSynonymModel();
-    hdbSynonymModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
-    hdbSynonymModel.setLocation(location);
-    hdbSynonymModel.setType(getType());
-    hdbSynonymModel.setHash(DigestUtils.md5Hex(content));
-    hdbSynonymModel.setCreatedBy(UserFacade.getName());
-    hdbSynonymModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-
-    hdbSynonymModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
+    XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSynonymModel, IXSKDataStructureModel.TYPE_HDB_SYNONYM, XSKDBContentType.XS_CLASSIC);
 
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);

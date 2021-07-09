@@ -11,7 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbview;
 
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+
 import java.util.List;
 
 /**
@@ -19,99 +21,99 @@ import java.util.List;
  */
 public class XSKDataStructureHDBViewModel extends XSKDataStructureModel {
 
-  private String query;
-  private boolean publicProp;
-  private List<String> dependsOn;
-  private List<String> dependsOnTable;
-  private List<String> dependsOnView;
+    private String query;
+    private boolean publicProp;
+    private List<String> dependsOn;
+    private List<String> dependsOnTable;
+    private List<String> dependsOnView;
 
-  /**
-   * Getter for the query field.
-   *
-   * @return the SQL query
-   */
-  public String getQuery() {
-    return query;
-  }
+    /**
+     * Getter for the query field.
+     *
+     * @return the SQL query
+     */
+    public String getQuery() {
+        return query;
+    }
 
-  /**
-   * Setter for the query field.
-   *
-   * @param query the SQL query
-   */
-  public void setQuery(String query) {
-    this.query = query;
-  }
+    /**
+     * Setter for the query field.
+     *
+     * @param query the SQL query
+     */
+    public void setQuery(String query) {
+        this.query = query;
+    }
 
-  /**
-   * Getter for the 'public' field.
-   *
-   * @return the 'public' field
-   */
-  public boolean isPublic() {
-    return publicProp;
-  }
+    /**
+     * Getter for the 'public' field.
+     *
+     * @return the 'public' field
+     */
+    public boolean isPublic() {
+        return publicProp;
+    }
 
-  /**
-   * Setter for the 'public' field.
-   *
-   * @param publicProp the 'public' field
-   */
-  public void setPublic(boolean publicProp) {
-    this.publicProp = publicProp;
-  }
+    /**
+     * Setter for the 'public' field.
+     *
+     * @param publicProp the 'public' field
+     */
+    public void setPublic(boolean publicProp) {
+        this.publicProp = publicProp;
+    }
 
-  /**
-   * Getter for the 'depends_on' field.
-   *
-   * @return the 'depends_on' field
-   */
-  public List<String> getDependsOn() {
-    return dependsOn;
-  }
+    /**
+     * Getter for the 'depends_on' field.
+     *
+     * @return the 'depends_on' field
+     */
+    public List<String> getDependsOn() {
+        return dependsOn;
+    }
 
-  /**
-   * Setter for the 'depends_on' field.
-   *
-   * @param dependsOn the list of 'depends_on'
-   */
-  public void setDependsOn(List<String> dependsOn) {
-    this.dependsOn = dependsOn;
-  }
+    /**
+     * Setter for the 'depends_on' field.
+     *
+     * @param dependsOn the list of 'depends_on'
+     */
+    public void setDependsOn(List<String> dependsOn) {
+        this.dependsOn = dependsOn;
+    }
 
-  /**
-   * Getter for the 'depends_on_table' field.
-   *
-   * @return the 'depends_on_table' field
-   */
-  public List<String> getDependsOnTable() {
-    return dependsOnTable;
-  }
+    /**
+     * Getter for the 'depends_on_table' field.
+     *
+     * @return the 'depends_on_table' field
+     */
+    public List<String> getDependsOnTable() {
+        return dependsOnTable;
+    }
 
-  /**
-   * Setter for the 'depends_on_table' field.
-   *
-   * @param dependsOnTable the list of 'depends_on_table'
-   */
-  public void setDependsOnTable(List<String> dependsOnTable) {
-    this.dependsOnTable = dependsOnTable;
-  }
+    /**
+     * Setter for the 'depends_on_table' field.
+     *
+     * @param dependsOnTable the list of 'depends_on_table'
+     */
+    public void setDependsOnTable(List<String> dependsOnTable) {
+        this.dependsOnTable = dependsOnTable;
+    }
 
-  /**
-   * Getter for the 'depends_on_view' field.
-   *
-   * @return the 'depends_on_view' field
-   */
-  public List<String> getDependsOnView() {
-    return dependsOnView;
-  }
+    /**
+     * Getter for the 'depends_on_view' field.
+     *
+     * @return the 'depends_on_view' field
+     */
+    public List<String> getDependsOnView() {
+        return dependsOnView;
+    }
 
-  /**
-   * Setter for the 'depends_on_view' field.
-   *
-   * @param dependsOnView the 'depends_on_view'
-   */
-  public void setDependsOnView(List<String> dependsOnView) {
-    this.dependsOnView = dependsOnView;
-  }
+    /**
+     * Setter for the 'depends_on_view' field.
+     *
+     * @param dependsOnView the 'depends_on_view'
+     */
+    public void setDependsOnView(List<String> dependsOnView) {
+        this.dependsOnView = dependsOnView;
+    }
 }

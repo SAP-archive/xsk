@@ -9,19 +9,18 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.test.itest.model;
+package com.sap.xsk.utils;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class JDBCModel {
-
-    private String driverClassName;
-    private String jdbcUrl;
-    private String username;
-    private String password;
+@NoArgsConstructor
+public final class XSKCommonsConstants {
+    /**
+     * The Unix separator character.
+     */
+    public static final char UNIX_SEPARATOR = '/';
+    /**
+     * The Windows separator character.
+     */
+    public static final char WINDOWS_SEPARATOR = '\\';
 }

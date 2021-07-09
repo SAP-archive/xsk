@@ -11,21 +11,35 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
-import static org.junit.Assert.assertEquals;
-
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-import java.nio.charset.StandardCharsets;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.Assert.assertEquals;
+
 public class XSKSchemaParserTest extends AbstractGuiceTest {
 
-  @Test
-  public void parseHdbschemaFileWithoutErrorsSuccessfully() throws Exception {
-    String hdbschemaSample = org.apache.commons.io.IOUtils
-        .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
-    XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("/Myschema.hdbschema", hdbschemaSample);
-    assertEquals("MYSCHEMA", model.getSchema());
-  }
+    @Test
+    public void parseHdbschemaFileWithoutErrorsSuccessfully() throws Exception {
+        String hdbschemaSample = org.apache.commons.io.IOUtils
+                .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
+        XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("/Myschema.hdbschema", hdbschemaSample);
+        assertEquals("MYSCHEMA", model.getSchema());
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithLexerErrorFail() throws Exception {
+        String content = "schema_name='';";
+        XSKDataStructureModelFactory.parseView("db/test.hdbschema", content);
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithSyntaxErrorFail() throws Exception {
+        String content = "schema_name=";
+        XSKDataStructureModelFactory.parseView("db/test.hdbschema", content);
+    }
 }

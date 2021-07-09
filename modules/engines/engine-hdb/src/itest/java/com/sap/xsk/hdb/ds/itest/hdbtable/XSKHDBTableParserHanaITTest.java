@@ -26,59 +26,57 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static org.junit.Assert.assertTrue;
 
 public class XSKHDBTableParserHanaITTest {
 
-  private static Connection connection;
-  private static IXSKHDBCoreFacade facade;
+    private static Connection connection;
+    private static IXSKHDBCoreFacade facade;
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws SQLException {
-    JDBCModel model = new JDBCModel(TestConstants.HANA_DRIVER,
-        TestConstants.HANA_URL,
-        TestConstants.HANA_USERNAME,
-        TestConstants.HANA_PASSWORD);
-    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
-    connection = injector.getInstance(DataSource.class).getConnection();
-    facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
-  }
-
-  @Before
-  public void setUpBeforeTest() throws SQLException {
-    Statement stmt = connection.createStatement();
-    DatabaseMetaData metaData = connection.getMetaData();
-    String hanaUserName = Configuration.get("hana.username");
-    ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-    if (table.next()) {
-      stmt.executeUpdate(String.format("drop table \"%s\".\"XSK_DATA_STRUCTURES\"", hanaUserName));
+    @BeforeClass
+    public static void setUpBeforeClass() throws SQLException {
+        JDBCModel model = new JDBCModel(TestConstants.HANA_DRIVER,
+                TestConstants.HANA_URL,
+                TestConstants.HANA_USERNAME,
+                TestConstants.HANA_PASSWORD);
+        Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
+        connection = injector.getInstance(DataSource.class).getConnection();
+        facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
     }
-  }
 
-  @Test
-  public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-        "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
-        "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
+    @Before
+    public void setUpBeforeTest() throws SQLException {
+        Statement stmt = connection.createStatement();
+        DatabaseMetaData metaData = connection.getMetaData();
+        String hanaUserName = Configuration.get("hana.username");
+        ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
+        if (table.next()) {
+            stmt.executeUpdate(String.format("drop table \"%s\".\"XSK_DATA_STRUCTURES\"", hanaUserName));
+        }
+    }
 
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
+    @Test
+    public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate("CREATE SCHEMA \"test\"");
 
-    Statement stmt = connection.createStatement();
-    DatabaseMetaData metaData = connection.getMetaData();
-    String hanaUserName = Configuration.get("hana.username");
-    ResultSet table = metaData.getTables(null, "SAP_INO", "hdbtable-itest::SamplePostgreXSClassicTable", null);
-    assertTrue(table.next());
+        LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+                "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
+                "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
 
-    stmt.executeUpdate(String.format("drop table \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", "SAP_INO"));
-  }
+        facade.handleResourceSynchronization(resource);
+        facade.updateEntities();
 
+        DatabaseMetaData metaData = connection.getMetaData();
+        ResultSet table = metaData.getTables(null, "test", "hdbtable-itest::SamplePostgreXSClassicTable", null);
+        assertTrue(table.next());
+
+        stmt.executeUpdate("drop table \"test\".\"hdbtable-itest::SamplePostgreXSClassicTable\"");
+        stmt.executeUpdate("DROP SCHEMA \"test\"");
+    }
 }

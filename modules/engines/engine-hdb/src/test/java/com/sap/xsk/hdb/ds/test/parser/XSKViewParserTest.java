@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
@@ -62,7 +63,7 @@ public class XSKViewParserTest extends AbstractGuiceTest {
         assertEquals(content, model.getRawContent());
     }
 
-    @Test(expected = XSKDataStructuresException.class)
+    @Test(expected = XSKArtifactParserException.class)
     public void parseHanaXSClassicContentWithLexerErrorFail() throws Exception {
         String content = "schema = \"MY_SCHEMA\";\n" +
                 "query = \"\";" +
@@ -70,7 +71,7 @@ public class XSKViewParserTest extends AbstractGuiceTest {
         XSKDataStructureModelFactory.parseView("hdb_view/db/test.hdbview", content);
     }
 
-    @Test(expected = XSKDataStructuresException.class)
+    @Test(expected = XSKArtifactParserException.class)
     public void parseHanaXSClassicContentWithSyntaxErrorFail() throws Exception {
         String content = "schema = ;\n" +
                 "query = \"\";" +

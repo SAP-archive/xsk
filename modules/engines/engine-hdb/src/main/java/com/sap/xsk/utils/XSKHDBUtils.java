@@ -11,9 +11,15 @@
  */
 package com.sap.xsk.utils;
 
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -21,6 +27,7 @@ import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
 import org.slf4j.Logger;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -166,5 +173,15 @@ public class XSKHDBUtils {
                     "Wrong format of HDB View: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version.",
                     location));
         }
+    }
+
+    public static void populateXSKDataStructureModel(String location, String content, XSKDataStructureModel model, String artifactType, XSKDBContentType DbContentType) {
+        model.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
+        model.setLocation(location);
+        model.setType(artifactType);
+        model.setHash(DigestUtils.md5Hex(content));
+        model.setCreatedBy(UserFacade.getName());
+        model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+        model.setDbContentType(DbContentType);
     }
 }

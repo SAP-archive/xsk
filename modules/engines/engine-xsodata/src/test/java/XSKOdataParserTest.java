@@ -10,6 +10,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
@@ -70,7 +71,7 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
         //no need to check the service content the parser module unit tests cover it
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = XSKArtifactParserException.class)
     public void testValidateEdmMultiplicity() throws Exception {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_wrong_syntax.xsodata"), StandardCharsets.UTF_8);
@@ -78,7 +79,7 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
     }
 
     @Test
-    public void testApplyEmptyNamespaceCondition() throws IOException, SQLException {
+    public void testApplyEmptyNamespaceCondition() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_no_namespace.xsodata"), StandardCharsets.UTF_8);
         XSKODataModel xskoDataModel = parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
@@ -86,21 +87,21 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
     }
 
     @Test
-    public void testApplyKeysConditionSuccessfully() throws IOException, SQLException {
+    public void testApplyKeysConditionSuccessfully() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
         parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
     }
 
     @Test(expected = XSKOData2TransformerException.class)
-    public void testApplyKeysConditionFail() throws IOException, SQLException {
+    public void testApplyKeysConditionFail() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesFail();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
         parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
     }
 
     @Test
-    public void testApplyEntitySetCondition() throws IOException, SQLException {
+    public void testApplyEntitySetCondition() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_no_namespace.xsodata"), StandardCharsets.UTF_8);
         XSKODataModel xskoDataModel =  parser.parseXSODataArtifact("/entity_with_no_namespace.xsodata", content);
@@ -111,7 +112,7 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
     }
 
     @Test
-    public void testApplyNavEntryFromEndConditionSuccessfully() throws IOException, SQLException {
+    public void testApplyNavEntryFromEndConditionSuccessfully() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_navigation.xsodata"), StandardCharsets.UTF_8);
         XSKODataModel xskoDataModel =  parser.parseXSODataArtifact("/entity_with_navigation.xsodata", content);
@@ -120,48 +121,48 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
     }
 
     @Test(expected = XSKOData2TransformerException.class)
-    public void testApplyNavEntryFromEndConditionFail() throws IOException, SQLException {
+    public void testApplyNavEntryFromEndConditionFail() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_navigation_error.xsodata"), StandardCharsets.UTF_8);
         parser.parseXSODataArtifact("/entity_with_navigation_error.xsodata", content);
     }
 
     @Test(expected = XSKOData2TransformerException.class)
-    public void testApplyNumberOfJoinPropertiesConditionFail() throws IOException, SQLException {
+    public void testApplyNumberOfJoinPropertiesConditionFail() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_wrong_join_prop.xsodata"), StandardCharsets.UTF_8);
         parser.parseXSODataArtifact("/entity_with_wrong_join_prop.xsodata", content);
     }
 
     @Test(expected = XSKOData2TransformerException.class)
-    public void testApplyOrderOfJoinPropertiesCondition() throws IOException, SQLException {
+    public void testApplyOrderOfJoinPropertiesCondition() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_wrong_over_join_prop.xsodata"), StandardCharsets.UTF_8);
         parser.parseXSODataArtifact("/entity_with_wrong_over_join_prop.xsodata", content);
     }
     @Test(expected = XSKOData2TransformerException.class)
-    public void testApplyImplicitAggregatesWithKeyGeneratedCondition() throws IOException, SQLException {
+    public void testApplyImplicitAggregatesWithKeyGeneratedCondition() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_wrong_implicit_aggregation.xsodata"), StandardCharsets.UTF_8);
         parser.parseXSODataArtifact("/entity_with_wrong_implicit_aggregation.xsodata", content);
     }
 
     @Test(expected = XSKOData2TransformerException.class)
-    public void testApplyExplicitAggregatesWithKeyGeneratedCondition() throws IOException, SQLException {
+    public void testApplyExplicitAggregatesWithKeyGeneratedCondition() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_wrong_explicit_aggregation.xsodata"), StandardCharsets.UTF_8);
         parser.parseXSODataArtifact("/entity_with_wrong_explicit_aggregation.xsodata", content);
     }
 
     @Test(expected = XSKOData2TransformerException.class)
-    public void testApplyParametersToViewsCondition() throws IOException, SQLException {
+    public void testApplyParametersToViewsCondition() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesFail();
         String content = IOUtils.toString(XSKOdataParserTest.class.getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
         parser.parseXSODataArtifact("/entity_with_params.xsodata", content);
     }
 
     @Test
-    public void testApplyOmittedParamResultCondition() throws IOException, SQLException {
+    public void testApplyOmittedParamResultCondition() throws IOException, SQLException, XSKArtifactParserException {
         mockGetTablesSuccessfully();
         String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
         XSKODataModel xskoDataModel =  parser.parseXSODataArtifact("/entity_with_params.xsodata", content);

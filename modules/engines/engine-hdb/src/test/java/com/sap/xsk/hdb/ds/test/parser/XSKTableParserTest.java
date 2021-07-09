@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
@@ -175,5 +176,22 @@ public class XSKTableParserTest extends AbstractGuiceTest {
         XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/test.hdbtable", content);
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
         assertEquals(content, model.getRawContent());
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithLexerErrorFail() throws Exception {
+        String content = "table.schemaName = \"SPORTS\";\n" +
+                "table.tableType = COLUMNSTORE;\n" +
+                "table.columns = [dd\n" +
+                "\t{ name = \"MATCH_ID\";sqlType = NVARCHAR;\tlength = 32;nullable = false;}\n" +
+                "];";
+        XSKDataStructureModelFactory.parseView("db/test.hdbtable", content);
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithSyntaxErrorFail() throws Exception {
+        String content = "table.schemaName = \"SPORTS;\n" +
+                "table.tableType = COLUMNSTORE;";
+        XSKDataStructureModelFactory.parseView("db/test.hdbtable", content);
     }
 }

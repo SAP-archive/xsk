@@ -26,10 +26,7 @@ import org.junit.Test;
 import org.testcontainers.containers.MySQLContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -63,12 +60,13 @@ public class XSKHDBViewParserMySQLITTest {
         "/registry/public/hdbview-itest/SampleMySQLXSClassicView.hdbview",
         "/hdbview-itest/SampleMySQLXSClassicView.hdbview");
 
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
+    facade.handleResourceSynchronization(resource);
+    facade.updateEntities();
 
-    ResultSet rs = stmt.executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM %s", "`hdbview-itest::SampleMySQLXSClassicView`"));
-    assertTrue(rs.next());
-    assertEquals(0, rs.getInt("rawsCount"));
+    DatabaseMetaData metaData = connection.getMetaData();
+    ResultSet table = metaData.getTables(null, "`test`", "`hdbview-itest::SampleMySQLXSClassicView`", new String[] {"VIEW"});
+    assertTrue(table.next());
+
     stmt.executeUpdate(String.format("DROP VIEW %s", "`hdbview-itest::SampleMySQLXSClassicView`"));
     stmt.executeUpdate("drop table `test`.`acme.com.test.tables::MY_TABLE1`");
     stmt.executeUpdate("drop table `test`.`acme.com.test.views::MY_VIEW1`");

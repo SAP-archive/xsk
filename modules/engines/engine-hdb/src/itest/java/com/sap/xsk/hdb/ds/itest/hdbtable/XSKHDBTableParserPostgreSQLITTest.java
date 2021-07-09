@@ -27,10 +27,7 @@ import org.junit.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static org.junit.Assert.*;
 
@@ -60,18 +57,20 @@ public class XSKHDBTableParserPostgreSQLITTest {
 
   @Test
   public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    Statement stmt = connection.createStatement();
+    stmt.executeUpdate("CREATE SCHEMA \"test\"");
+
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
         "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
 
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
+    facade.handleResourceSynchronization(resource);
+    facade.updateEntities();
 
-    Statement stmt = connection.createStatement();
-    ResultSet rs = stmt
-        .executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", "hdbtable-itest::SamplePostgreXSClassicTable"));
-    assertTrue(rs.next());
-    assertEquals(0, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP TABLE \"%s\"", "hdbtable-itest::SamplePostgreXSClassicTable"));
+    DatabaseMetaData metaData = connection.getMetaData();
+    ResultSet table = metaData.getTables(null, "test", "hdbtable-itest::SamplePostgreXSClassicTable", null);
+    assertTrue(table.next());
+
+    stmt.executeUpdate("DROP TABLE \"test\".\"hdbtable-itest::SamplePostgreXSClassicTable\"");
   }
 }

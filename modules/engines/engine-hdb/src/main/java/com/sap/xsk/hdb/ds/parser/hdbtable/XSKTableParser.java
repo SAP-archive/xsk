@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.parser.hdbtable;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
@@ -26,18 +27,17 @@ import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyExceptio
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
+import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWErrorListener;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +60,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
     }
 
     @Override
-    public XSKDataStructureHDBTableModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+    public XSKDataStructureHDBTableModel parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException {
         Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*(COLUMN)(\\t\\n)*(\\s)*(TABLE)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
         boolean matchFound = matcher.find();
@@ -70,25 +70,25 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
     }
 
     private XSKDataStructureHDBTableModel parseHanaXSClassicContent(String location, String content)
-            throws IOException, XSKDataStructuresException {
+            throws IOException, XSKArtifactParserException {
         logger.debug("Parsing hdbtable as Hana XS Classic format");
         ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
-        HdbtableLexer hdbtableLexer = new HdbtableLexer(inputStream);
-        CommonTokenStream tokenStream = new CommonTokenStream(hdbtableLexer);
+        HdbtableLexer lexer = new HdbtableLexer(inputStream);
+        XSKHDBTABLESyntaxErrorListener lexerErrorListener = new XSKHDBTABLESyntaxErrorListener();
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(lexerErrorListener);
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
         HdbtableParser hdbtableParser = new HdbtableParser(tokenStream);
         hdbtableParser.setBuildParseTree(true);
         hdbtableParser.removeErrorListeners();
 
-        XSKHDBTABLESyntaxErrorListener xskhdbtableSyntaxErrorListener = new XSKHDBTABLESyntaxErrorListener();
-        hdbtableParser.addErrorListener(xskhdbtableSyntaxErrorListener);
+        XSKHDBTABLESyntaxErrorListener parserErrorListener = new XSKHDBTABLESyntaxErrorListener();
+        hdbtableParser.addErrorListener(parserErrorListener);
         ParseTree parseTree = hdbtableParser.hdbtableDefinition();
-
-        if (hdbtableParser.getNumberOfSyntaxErrors() > 0) {
-            String errorMessage = xskhdbtableSyntaxErrorListener.getErrorMessage();
-            throw new XSKDataStructuresException(errorMessage);
-        }
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB Table", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB Table", logger);
 
         XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
 
@@ -176,27 +176,17 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
             }
             dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
         }
-        setXSKDataStructureHDBTableModelDetails(location, content, XSKDBContentType.XS_CLASSIC, dataStructureHDBTableModel);
-
+        XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableModel, IXSKDataStructureModel.TYPE_HDB_TABLE, XSKDBContentType.XS_CLASSIC);
         return dataStructureHDBTableModel;
     }
 
     private XSKDataStructureHDBTableModel parseHanaXSAdvancedContent(String location, String content) {
         logger.debug("Parsing hdbtable as Hana XS Advanced format");
         XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
-        setXSKDataStructureHDBTableModelDetails(location, content, XSKDBContentType.OTHERS, dataStructureHDBTableModel);
+        XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableModel, IXSKDataStructureModel.TYPE_HDB_TABLE, XSKDBContentType.OTHERS);
         dataStructureHDBTableModel.setRawContent(content);
         return dataStructureHDBTableModel;
     }
 
-    private void setXSKDataStructureHDBTableModelDetails(String location, String content, XSKDBContentType dbContentType, XSKDataStructureHDBTableModel dataStructureHDBTableModel) {
-        dataStructureHDBTableModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
-        dataStructureHDBTableModel.setLocation(location);
-        dataStructureHDBTableModel.setType(IXSKDataStructureModel.TYPE_HDB_TABLE);
-        dataStructureHDBTableModel.setHash(DigestUtils.md5Hex(content));
-        dataStructureHDBTableModel.setCreatedBy(UserFacade.getName());
-        dataStructureHDBTableModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-        dataStructureHDBTableModel.setDbContentType(dbContentType);
-    }
 }
 

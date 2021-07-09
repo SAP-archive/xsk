@@ -14,6 +14,7 @@ package com.sap.xsk.hdb.ds.parser.hdbsequence;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
@@ -27,6 +28,7 @@ import com.sap.xsk.parser.hdbsequence.custom.HdbsequenceVisitor;
 import com.sap.xsk.parser.hdbsequence.custom.XSKHDBSEQUENCEModelAdapter;
 import com.sap.xsk.parser.hdbsequence.custom.XSKHDBSEQUENCESyntaxErrorListener;
 import com.sap.xsk.parser.hdbsequence.models.XSKHDBSEQUENCEModel;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -52,7 +54,7 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceParser.class);
 
     @Override
-    public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+    public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException {
         Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*SEQUENCE", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
         boolean matchFound = matcher.find();
@@ -73,23 +75,27 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
         return XSKDataStructureHDBSequenceModel.class;
     }
 
-    private XSKDataStructureModel parseHanaXSClassicContent(String location, String content) throws XSKDataStructuresException, IOException {
+    private XSKDataStructureModel parseHanaXSClassicContent(String location, String content) throws IOException, XSKArtifactParserException {
         logger.debug("Parsing hdbsequence as Hana XS Classic format");
         ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
+
         HdbsequenceLexer lexer = new HdbsequenceLexer(inputStream);
+        XSKHDBSEQUENCESyntaxErrorListener lexerErrorListener = new XSKHDBSEQUENCESyntaxErrorListener();
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(lexerErrorListener);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
         HdbsequenceParser parser = new HdbsequenceParser((tokenStream));
         parser.setBuildParseTree(true);
         parser.removeErrorListeners();
-        XSKHDBSEQUENCESyntaxErrorListener errorListener = new XSKHDBSEQUENCESyntaxErrorListener();
-        parser.addErrorListener(errorListener);
+        XSKHDBSEQUENCESyntaxErrorListener parserErrorListener = new XSKHDBSEQUENCESyntaxErrorListener();
+        parser.removeErrorListeners();
+        parser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = parser.hdbsequence();
-        if (parser.getNumberOfSyntaxErrors() > 0) {
-            throw new XSKDataStructuresException(errorListener.getErrorMessage());
-        }
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB Sequence", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB Sequence", logger);
 
         HdbsequenceBaseVisitor<JsonElement> visitor = new HdbsequenceVisitor();
         JsonElement parsedResult = visitor.visit(parseTree);

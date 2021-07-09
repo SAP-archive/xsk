@@ -14,6 +14,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import com.sap.xsk.xsodata.ds.api.IXSKODataArtifactDao;
@@ -64,14 +65,14 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
         stmt.executeUpdate("DELETE FROM public.XSK_ODATA");
     }
 
-    public static XSKODataModel parseXSKODataModel() throws IOException, SQLException {
+    public static XSKODataModel parseXSKODataModel() throws IOException, SQLException, XSKArtifactParserException {
         XSKODataParser parser = new XSKODataParser();
         String content = org.apache.commons.io.IOUtils
                 .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_all_set_of_navigations.xsodata"), StandardCharsets.UTF_8);
         return parser.parseXSODataArtifact("np/entity_with_all_set_of_navigations.xsodata", content);
     }
 
-    public static XSKODataModel parseSecondXSKODataModel() throws IOException, SQLException {
+    public static XSKODataModel parseSecondXSKODataModel() throws IOException, SQLException, XSKArtifactParserException {
         XSKODataParser parser = new XSKODataParser();
         String content = org.apache.commons.io.IOUtils
                 .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
@@ -79,7 +80,7 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testCreateXSKODataArtifact() throws IOException, SQLException, XSKODataException {
+    public void testCreateXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
         XSKODataModel xskoDataModel = parseXSKODataModel();
 
         dao.createXSKODataArtifact(xskoDataModel);
@@ -100,7 +101,7 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testGetXSKODataArtifact() throws IOException, SQLException, XSKODataException {
+    public void testGetXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
         XSKODataModel xskoDataModel = parseXSKODataModel();
 
         dao.createXSKODataArtifact(xskoDataModel);
@@ -110,7 +111,7 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testGetXSKODataArtifactByName() throws IOException, SQLException, XSKODataException {
+    public void testGetXSKODataArtifactByName() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
         XSKODataModel xskoDataModel = parseXSKODataModel();
 
         dao.createXSKODataArtifact(xskoDataModel);
@@ -120,7 +121,7 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testRemoveXSKODataArtifact() throws IOException, SQLException, XSKODataException {
+    public void testRemoveXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
         XSKODataModel xskoDataModel = parseXSKODataModel();
 
         dao.createXSKODataArtifact(xskoDataModel);
@@ -135,7 +136,7 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testGetAllXSKODataArtifacts() throws IOException, SQLException, XSKODataException {
+    public void testGetAllXSKODataArtifacts() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
         XSKODataModel xskoDataModel = parseXSKODataModel();
         dao.createXSKODataArtifact(xskoDataModel);
 
@@ -151,10 +152,9 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testUpdateXSKODataArtifact() throws IOException, SQLException, XSKODataException {
+    public void testUpdateXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
         XSKODataModel xskoDataModel = parseXSKODataModel();
         dao.createXSKODataArtifact(xskoDataModel);
-
         dao.updateXSKODataArtifact(xskoDataModel.getLocation(), xskoDataModel.getName() + "_new", "new_hash");
 
         Statement stmt = connection.createStatement();

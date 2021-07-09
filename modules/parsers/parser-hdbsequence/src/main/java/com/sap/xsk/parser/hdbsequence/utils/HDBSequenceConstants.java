@@ -27,7 +27,7 @@ public final class HDBSequenceConstants {
   public static final String DEPENDS_ON_VIEW_PROPERTY = "depends_on_view";
   public static final String DEPENDS_ON_PROPERTY = "depends_on";
   public static final int INCREMENT_BY_DEFAULT_VALUE = 1;
-  public static final int START_WITH_DEFAULT_VALUE = -1;
+  public static final int START_WITH_DEFAULT_VALUE = 1;
   public static final int MIN_DEFAULT_VALUE = 1;
   public static final boolean NOMAXVALUE_DEFAULT_VALUE = false;
   public static final boolean NOMINVALUE_DEFAULT_VALUE = false;

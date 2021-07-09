@@ -33,11 +33,11 @@ public class XSKHDBSEQUENCEModel {
   Set<String> missingProps = new HashSet<>();
 
   String schema;
-  Integer increment_by;
-  Integer start_with;
+  Integer increment_by = HDBSequenceConstants.INCREMENT_BY_DEFAULT_VALUE;
+  Integer start_with = HDBSequenceConstants.START_WITH_DEFAULT_VALUE;
   Integer maxvalue;
   Boolean nomaxvalue;
-  Integer minvalue;
+  Integer minvalue = HDBSequenceConstants.MIN_DEFAULT_VALUE;
   Boolean nominvalue;
   Boolean cycles;
   String reset_by;
@@ -46,7 +46,7 @@ public class XSKHDBSEQUENCEModel {
   List<String> depends_on_view;
 
   @SerializedName(value = HDBSequenceConstants.PUBLIC_PROPERTY)
-  Boolean publicc;
+  Boolean publicc = HDBSequenceConstants.PUBLIC_DEFAULT_VALUE;
 
   private <T> void checkPresence(T field, String fieldName) {
     if (Objects.isNull(field)) {
@@ -55,14 +55,7 @@ public class XSKHDBSEQUENCEModel {
   }
 
   public boolean hasMandatoryFieldsMissing() {
-
     checkPresence(this.schema, HDBSequenceConstants.SCHEMA_PROPERTY);
-//    Removed for backwards compatibility
-//    checkPresence(this.increment_by, HDBSequenceConstants.INCREMENT_BY_PROPERTY);
-//    checkPresence(this.start_with, HDBSequenceConstants.START_WITH_PROPERTY);
-//    checkPresence(this.nomaxvalue, HDBSequenceConstants.NOMAXVALUE_PROPERTY);
-//    checkPresence(this.nominvalue, HDBSequenceConstants.NOMINVALUE_PROPERTY);
-//    checkPresence(this.publicc, HDBSequenceConstants.PUBLIC_PROPERTY);
     return (this.missingProps.size() > 0) ? true : false;
   }
 }

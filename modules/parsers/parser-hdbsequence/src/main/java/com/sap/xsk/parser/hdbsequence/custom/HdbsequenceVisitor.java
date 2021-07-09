@@ -56,22 +56,6 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
 
   private HashSet<String> visitedProperties = new HashSet<>();
 
-  private JsonObject getDefaultParsedObj() {
-    JsonObject parsedObj = new JsonObject();
-    parsedObj.add(HDBSequenceConstants.SCHEMA_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.INCREMENT_BY_PROPERTY, new JsonPrimitive(HDBSequenceConstants.INCREMENT_BY_DEFAULT_VALUE));
-    parsedObj.add(HDBSequenceConstants.START_WITH_PROPERTY, new JsonPrimitive(HDBSequenceConstants.START_WITH_DEFAULT_VALUE));
-    parsedObj.add(HDBSequenceConstants.MAXVALUE_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.NOMAXVALUE_PROPERTY, null); //boolean
-    parsedObj.add(HDBSequenceConstants.MINVALUE_PROPERTY, new JsonPrimitive(HDBSequenceConstants.MIN_DEFAULT_VALUE));
-    parsedObj.add(HDBSequenceConstants.NOMINVALUE_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.CYCLES_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.RESET_BY_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.PUBLIC_PROPERTY, new JsonPrimitive(HDBSequenceConstants.PUBLIC_DEFAULT_VALUE));
-
-    return parsedObj;
-  }
-
   private void checkForPropertyRepetition(String property) throws XSKHDBSequenceDuplicatePropertyException {
     if (!visitedProperties.contains(property)) {
       visitedProperties.add(property);
@@ -83,7 +67,7 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
 
   @Override
   public JsonElement visitHdbsequence(@NotNull HdbsequenceParser.HdbsequenceContext ctx) {
-    JsonObject parsedObj = this.getDefaultParsedObj();
+    JsonObject parsedObj = new JsonObject();
     List<ParseTree> ctxList = ctx.children;
     for (ParseTree tree : ctxList) {
       if (tree.getChild(0) instanceof HdbsequenceParser.SchemaContext) {

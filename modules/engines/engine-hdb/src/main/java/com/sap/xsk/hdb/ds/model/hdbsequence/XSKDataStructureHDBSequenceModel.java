@@ -12,6 +12,8 @@
 package com.sap.xsk.hdb.ds.model.hdbsequence;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,11 +26,11 @@ import java.util.List;
 @ToString
 public class XSKDataStructureHDBSequenceModel extends XSKDataStructureModel {
 
-  private Integer increment_by;
-  private Integer start_with;
+  private Integer increment_by = HDBSequenceConstants.INCREMENT_BY_DEFAULT_VALUE;
+  private Integer start_with = HDBSequenceConstants.START_WITH_DEFAULT_VALUE;
   private Integer maxvalue;
   private Boolean nomaxvalue;
-  private Integer minvalue;
+  private Integer minvalue = HDBSequenceConstants.MIN_DEFAULT_VALUE;
   private Boolean nominvalue;
   private Boolean cycles;
   private String reset_by;
@@ -36,5 +38,14 @@ public class XSKDataStructureHDBSequenceModel extends XSKDataStructureModel {
   private List<String> depends_on_table;
   private List<String> depends_on_view;
 
-  private Boolean publicc;
+  @Getter(AccessLevel.NONE)
+  private Boolean publicc = HDBSequenceConstants.PUBLIC_DEFAULT_VALUE;
+
+  public boolean isPublic() {
+    return publicc;
+  }
+
+  public void setPublic(boolean publicc) {
+    this.publicc = publicc;
+  }
 }

@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 
 
@@ -51,8 +52,8 @@ public class XSKHDBSequenceParserTest {
               StandardCharsets.UTF_8);
       XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
           .parse("/test/xsk/com/sap/SchemaOnlySequence.hdbsequence", content);
-      assertEquals(false, model.getPublicc());
-      assertEquals(Integer.valueOf(-1), model.getStart_with());
+      assertFalse(model.isPublic());
+      assertEquals(Integer.valueOf(1), model.getStart_with());
       assertEquals(Integer.valueOf(1), model.getIncrement_by());
       assertEquals(Integer.valueOf(1), model.getMinvalue());
     }
@@ -78,6 +79,9 @@ public class XSKHDBSequenceParserTest {
                 .parse("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence", content);
         assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
         assertEquals(content, model.getRawContent());
+        assertEquals(Integer.valueOf(1), model.getStart_with());
+        assertEquals(Integer.valueOf(1), model.getIncrement_by());
+        assertEquals(Integer.valueOf(1), model.getMinvalue());
     }
 
 
@@ -114,7 +118,7 @@ public class XSKHDBSequenceParserTest {
         assertEquals(false, model.getNomaxvalue());
         assertEquals(true, model.getNominvalue());
         assertEquals(false, model.getCycles());
-        assertEquals(false, model.getPublicc());
+        assertFalse(model.isPublic());
         assertEquals(Integer.valueOf(-2), model.getIncrement_by());
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
     }

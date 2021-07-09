@@ -12,11 +12,12 @@
 package com.sap.xsk.utils;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
-
-import java.util.ArrayList;
-
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class XSKCommonsUtils {
 
@@ -40,6 +41,26 @@ public class XSKCommonsUtils {
     }
 
     /**
+     * Assemble the catalog name of a Repository Base Object(e.g hdbtable, hdbview, hdbsequence, hdbstructure, hdbprocedure)
+     * The catalog name includes the package path, the separating dots, and the object base name, as NAMESPACE::OBJECT_BASE_NAME
+     * For example: Given location "/projectname/com/sap/hana/example/ItemsByOrder.hdbview",
+     * the method will return "com.sap.hana.example::ItemsByOrder"
+     *
+     * @param location String representing file location path
+     * @return String representing assemble catalog name in format "NAMESPACE::OBJECT_BASE_NAME"
+     * @implNote Do not apply for CDS Objects
+     * @see <a href="https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/016a60fe929a4e9e89bbb3b6f7aad409.html">SAP HANA Repository Packages and Namespaces</a>
+     */
+    public static String getRepositoryBaseObjectName(String location) {
+        String objBaseName = FilenameUtils.getBaseName(location);
+        String namespace = getRepositoryNamespace(location);
+        if (namespace.length() > 0) {
+            return new StringBuilder().append(namespace).append("::").append(objBaseName).toString();
+        }
+        return objBaseName;
+    }
+
+    /**
      * Assemble Repository Package name from file location.
      * For example "com.sap.test.hana.db"
      *
@@ -58,12 +79,27 @@ public class XSKCommonsUtils {
     }
 
     /**
-     * User to log errors from antl4 parsers
-     * @param errorMessages
-     * @param location
-     * @param artifactType
-     * @param logger
-     * @throws XSKArtifactParserException
+     * Extraxt corret RepositoryBaseObject definition from content, by removing tabs or spaces between the
+     * syntax word and the Object name.
+     * For example "VIEW              "hdb_view::ItemsByOrderHANAv2" should be return as "VIEW "hdb_view::ItemsByOrderHANAv2"
+     *
+     * @param repositoryObjectSyntax syntax as VIEW, TABLE ..etc
+     * @param content                String representing file content of a Repository Object
+     * @return normalized definition of a Repository Object, consisting of 'SYNTAX_WORD "NAMESPACE::OBJECT_BASE_NAME"'
+     */
+    public static String extractRepositoryBaseObjectNameFromContent(String repositoryObjectSyntax, String content) {
+        Pattern pattern = Pattern.compile("(" + repositoryObjectSyntax + ")(\\t\\n)*(\\s)*(\".+\")", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(content.trim());
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            return matcher.group(1) + matcher.group(4);
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Use to log errors from antl4 parsers
      */
     public static void logParserErrors(ArrayList<String> errorMessages, String location, String artifactType, Logger logger) throws XSKArtifactParserException {
         if (errorMessages.size() > 0) {

@@ -129,7 +129,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
             columns.add(dataStructureHDBTableColumnModel);
         }
 
-        dataStructureHDBTableModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
+        XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableModel, IXSKDataStructureModel.TYPE_HDB_TABLE, XSKDBContentType.XS_CLASSIC);
         dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName());
         dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription());
         dataStructureHDBTableModel.setLoggingType(hdbtableDefinitionModel.getLoggingType());
@@ -176,7 +176,6 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
             }
             dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
         }
-        XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableModel, IXSKDataStructureModel.TYPE_HDB_TABLE, XSKDBContentType.XS_CLASSIC);
         return dataStructureHDBTableModel;
     }
 

@@ -33,8 +33,6 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
@@ -43,7 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,7 +107,7 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
                 .setMatchingStrategy(MatchingStrategies.STRICT);
 
         XSKDataStructureHDBSequenceModel hdbSequenceModel = modelMapper.map(antlr4Model, XSKDataStructureHDBSequenceModel.class);
-        setXSKDataStructureHDBSequenceModelTrackingDetails(location, content, XSKDBContentType.XS_CLASSIC, hdbSequenceModel);
+        XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSequenceModel, IXSKDataStructureModel.TYPE_HDB_SEQUENCE, XSKDBContentType.XS_CLASSIC);
 
         return hdbSequenceModel;
     }
@@ -118,20 +115,8 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     private XSKDataStructureModel parseHanaXSAdvancedContent(String location, String content) {
         logger.debug("Parsing hdbsequence as Hana XS Advanced format");
         XSKDataStructureHDBSequenceModel hdbSequenceModel = new XSKDataStructureHDBSequenceModel();
-        setXSKDataStructureHDBSequenceModelTrackingDetails(location, content, XSKDBContentType.OTHERS, hdbSequenceModel);
+        XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSequenceModel, IXSKDataStructureModel.TYPE_HDB_SEQUENCE, XSKDBContentType.OTHERS);
         hdbSequenceModel.setRawContent(content);
         return hdbSequenceModel;
     }
-
-    private void setXSKDataStructureHDBSequenceModelTrackingDetails(String location, String content, XSKDBContentType dbContentType,
-                                                                    XSKDataStructureHDBSequenceModel hdbSequenceModel) {
-        hdbSequenceModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
-        hdbSequenceModel.setLocation(location);
-        hdbSequenceModel.setType(IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
-        hdbSequenceModel.setHash(DigestUtils.md5Hex(content));
-        hdbSequenceModel.setCreatedBy(UserFacade.getName());
-        hdbSequenceModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-        hdbSequenceModel.setDbContentType(dbContentType);
-    }
-
 }

@@ -79,9 +79,6 @@ public class XSKHDBSequenceParserTest {
                 .parse("/test/xsk/com/sap/CustomerId_HanaXSAdvanced.hdbsequence", content);
         assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
         assertEquals(content, model.getRawContent());
-        assertEquals(Integer.valueOf(1), model.getStart_with());
-        assertEquals(Integer.valueOf(1), model.getIncrement_by());
-        assertEquals(Integer.valueOf(1), model.getMinvalue());
     }
 
 

@@ -68,6 +68,13 @@ public interface HdbtiVisitor<T> extends ParseTreeVisitor<T> {
 	T visitPair(@NotNull HdbtiParser.PairContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link HdbtiParser#tableName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTableName(@NotNull HdbtiParser.TableNameContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link HdbtiParser#assignFile}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

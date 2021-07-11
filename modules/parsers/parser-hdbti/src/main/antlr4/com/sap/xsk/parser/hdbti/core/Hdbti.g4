@@ -7,7 +7,7 @@ objConfig: '{'
             '}';
 
 assignExpression: assignTable | assignSchema | assignFile | assignHeader | assignUseHeaderNames | assignDelimField | assignDelimEnclosing | assignDistinguishEmptyFromNull | assignKeys;
-assignTable: 'table' '=' STRING ';';
+assignTable: tableName '=' STRING ';';
 assignSchema: 'schema' '=' STRING ';';
 assignFile: 'file' '=' STRING ';';
 assignHeader: 'header' '=' BOOLEAN ';';
@@ -21,6 +21,7 @@ keyArr: '[' (pair (',' pair)*)? ']' ';';
 pair: pairKey ':' pairValue;
 pairKey: STRING;
 pairValue: STRING;
+tableName: 'table'|'hdbtable';
 
 STRING:     '"' (~["\\\r\n] | EscapeSequence)* '"';
 fragment EscapeSequence
@@ -40,7 +41,7 @@ BOOLEAN: TRUE | FALSE;
 TRUE: 'true';
 FALSE: 'false';
 
-WS  :   [ \t\\]+ -> skip ; // toss out whitespace
+WS  :   [ \t\\\r\n]+ -> skip ; // toss out whitespace
 RB: '[';
 LB: ']';
 EQ: '=';

@@ -121,6 +121,19 @@ public class HdbtiBaseListener implements HdbtiListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTableName(@NotNull HdbtiParser.TableNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTableName(@NotNull HdbtiParser.TableNameContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAssignFile(@NotNull HdbtiParser.AssignFileContext ctx) { }
 	/**
 	 * {@inheritDoc}

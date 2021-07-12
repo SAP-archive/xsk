@@ -17,14 +17,15 @@ public class HdbtiParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__15=1, T__14=2, T__13=3, T__12=4, T__11=5, T__10=6, T__9=7, T__8=8, 
-		T__7=9, T__6=10, T__5=11, T__4=12, T__3=13, T__2=14, T__1=15, T__0=16, 
-		STRING=17, BOOLEAN=18, TRUE=19, FALSE=20, WS=21, RB=22, LB=23, EQ=24;
+		T__16=1, T__15=2, T__14=3, T__13=4, T__12=5, T__11=6, T__10=7, T__9=8, 
+		T__8=9, T__7=10, T__6=11, T__5=12, T__4=13, T__3=14, T__2=15, T__1=16, 
+		T__0=17, STRING=18, BOOLEAN=19, TRUE=20, FALSE=21, WS=22, RB=23, LB=24, 
+		EQ=25;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'file'", "'delimField'", "'useHeaderNames'", "'hdbtable'", 
 		"':'", "'{'", "';'", "'}'", "'keys'", "'schema'", "'table'", "'delimEnclosing'", 
-		"'header'", "','", "'import'", "'distinguishEmptyFromNull'", "STRING", 
-		"BOOLEAN", "'true'", "'false'", "WS", "'['", "']'", "'='"
+		"'header'", "'cdstable'", "','", "'import'", "'distinguishEmptyFromNull'", 
+		"STRING", "BOOLEAN", "'true'", "'false'", "WS", "'['", "']'", "'='"
 	};
 	public static final int
 		RULE_importArr = 0, RULE_objConfig = 1, RULE_assignExpression = 2, RULE_assignTable = 3, 
@@ -96,7 +97,7 @@ public class HdbtiParser extends Parser {
 			setState(36); match(RB);
 			setState(45);
 			_la = _input.LA(1);
-			if (_la==T__10) {
+			if (_la==T__11) {
 				{
 				setState(37); objConfig();
 				setState(42);
@@ -117,7 +118,7 @@ public class HdbtiParser extends Parser {
 			}
 
 			setState(47); match(LB);
-			setState(48); match(T__9);
+			setState(48); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -164,11 +165,11 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(50); match(T__10);
+			setState(50); match(T__11);
 			setState(54);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__14) | (1L << T__13) | (1L << T__12) | (1L << T__7) | (1L << T__6) | (1L << T__5) | (1L << T__4) | (1L << T__3) | (1L << T__0))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__16) | (1L << T__15) | (1L << T__14) | (1L << T__13) | (1L << T__8) | (1L << T__7) | (1L << T__6) | (1L << T__5) | (1L << T__4) | (1L << T__3) | (1L << T__0))) != 0)) {
 				{
 				{
 				setState(51); assignExpression();
@@ -178,7 +179,7 @@ public class HdbtiParser extends Parser {
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(57); match(T__8);
+			setState(57); match(T__9);
 			}
 		}
 		catch (RecognitionException re) {
@@ -245,44 +246,45 @@ public class HdbtiParser extends Parser {
 		try {
 			setState(68);
 			switch (_input.LA(1)) {
-			case T__12:
-			case T__5:
+			case T__13:
+			case T__6:
+			case T__3:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(59); assignTable();
 				}
 				break;
-			case T__6:
+			case T__7:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(60); assignSchema();
 				}
 				break;
-			case T__15:
+			case T__16:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(61); assignFile();
 				}
 				break;
-			case T__3:
+			case T__4:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(62); assignHeader();
 				}
 				break;
-			case T__13:
+			case T__14:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(63); assignUseHeaderNames();
 				}
 				break;
-			case T__14:
+			case T__15:
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(64); assignDelimField();
 				}
 				break;
-			case T__4:
+			case T__5:
 				enterOuterAlt(_localctx, 7);
 				{
 				setState(65); assignDelimEnclosing();
@@ -294,7 +296,7 @@ public class HdbtiParser extends Parser {
 				setState(66); assignDistinguishEmptyFromNull();
 				}
 				break;
-			case T__7:
+			case T__8:
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(67); assignKeys();
@@ -348,7 +350,7 @@ public class HdbtiParser extends Parser {
 			setState(70); tableName();
 			setState(71); match(EQ);
 			setState(72); match(STRING);
-			setState(73); match(T__9);
+			setState(73); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -389,10 +391,10 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(75); match(T__6);
+			setState(75); match(T__7);
 			setState(76); match(EQ);
 			setState(77); match(STRING);
-			setState(78); match(T__9);
+			setState(78); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -433,10 +435,10 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(80); match(T__15);
+			setState(80); match(T__16);
 			setState(81); match(EQ);
 			setState(82); match(STRING);
-			setState(83); match(T__9);
+			setState(83); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -477,10 +479,10 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(85); match(T__3);
+			setState(85); match(T__4);
 			setState(86); match(EQ);
 			setState(87); match(BOOLEAN);
-			setState(88); match(T__9);
+			setState(88); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -521,10 +523,10 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(90); match(T__13);
+			setState(90); match(T__14);
 			setState(91); match(EQ);
 			setState(92); match(BOOLEAN);
-			setState(93); match(T__9);
+			setState(93); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -565,10 +567,10 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(95); match(T__14);
+			setState(95); match(T__15);
 			setState(96); match(EQ);
 			setState(97); match(STRING);
-			setState(98); match(T__9);
+			setState(98); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -609,10 +611,10 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(100); match(T__4);
+			setState(100); match(T__5);
 			setState(101); match(EQ);
 			setState(102); match(STRING);
-			setState(103); match(T__9);
+			setState(103); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -656,7 +658,7 @@ public class HdbtiParser extends Parser {
 			setState(105); match(T__0);
 			setState(106); match(EQ);
 			setState(107); match(BOOLEAN);
-			setState(108); match(T__9);
+			setState(108); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -699,7 +701,7 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(110); match(T__7);
+			setState(110); match(T__8);
 			setState(111); match(EQ);
 			setState(112); keyArr();
 			}
@@ -772,7 +774,7 @@ public class HdbtiParser extends Parser {
 			}
 
 			setState(125); match(LB);
-			setState(126); match(T__9);
+			setState(126); match(T__10);
 			}
 		}
 		catch (RecognitionException re) {
@@ -819,7 +821,7 @@ public class HdbtiParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(128); pairKey();
-			setState(129); match(T__11);
+			setState(129); match(T__12);
 			setState(130); pairValue();
 			}
 		}
@@ -945,7 +947,7 @@ public class HdbtiParser extends Parser {
 			{
 			setState(136);
 			_la = _input.LA(1);
-			if ( !(_la==T__12 || _la==T__5) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__13) | (1L << T__6) | (1L << T__3))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -963,7 +965,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\32\u008d\4\2\t\2"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\33\u008d\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\3\2\3\2\3\2\3\2\3\2\3\2\7\2+\n\2\f\2\16\2.\13\2\5\2\60\n\2\3\2\3\2\3"+
@@ -973,30 +975,30 @@ public class HdbtiParser extends Parser {
 		"\3\13\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\16\3\16"+
 		"\3\16\3\16\7\16y\n\16\f\16\16\16|\13\16\5\16~\n\16\3\16\3\16\3\16\3\17"+
 		"\3\17\3\17\3\17\3\20\3\20\3\21\3\21\3\22\3\22\3\22\2\2\23\2\4\6\b\n\f"+
-		"\16\20\22\24\26\30\32\34\36 \"\2\3\4\2\6\6\r\r\u0088\2$\3\2\2\2\4\64\3"+
-		"\2\2\2\6F\3\2\2\2\bH\3\2\2\2\nM\3\2\2\2\fR\3\2\2\2\16W\3\2\2\2\20\\\3"+
-		"\2\2\2\22a\3\2\2\2\24f\3\2\2\2\26k\3\2\2\2\30p\3\2\2\2\32t\3\2\2\2\34"+
-		"\u0082\3\2\2\2\36\u0086\3\2\2\2 \u0088\3\2\2\2\"\u008a\3\2\2\2$%\7\21"+
-		"\2\2%&\7\32\2\2&/\7\30\2\2\',\5\4\3\2()\7\20\2\2)+\5\4\3\2*(\3\2\2\2+"+
-		".\3\2\2\2,*\3\2\2\2,-\3\2\2\2-\60\3\2\2\2.,\3\2\2\2/\'\3\2\2\2/\60\3\2"+
-		"\2\2\60\61\3\2\2\2\61\62\7\31\2\2\62\63\7\t\2\2\63\3\3\2\2\2\648\7\b\2"+
-		"\2\65\67\5\6\4\2\66\65\3\2\2\2\67:\3\2\2\28\66\3\2\2\289\3\2\2\29;\3\2"+
-		"\2\2:8\3\2\2\2;<\7\n\2\2<\5\3\2\2\2=G\5\b\5\2>G\5\n\6\2?G\5\f\7\2@G\5"+
-		"\16\b\2AG\5\20\t\2BG\5\22\n\2CG\5\24\13\2DG\5\26\f\2EG\5\30\r\2F=\3\2"+
-		"\2\2F>\3\2\2\2F?\3\2\2\2F@\3\2\2\2FA\3\2\2\2FB\3\2\2\2FC\3\2\2\2FD\3\2"+
-		"\2\2FE\3\2\2\2G\7\3\2\2\2HI\5\"\22\2IJ\7\32\2\2JK\7\23\2\2KL\7\t\2\2L"+
-		"\t\3\2\2\2MN\7\f\2\2NO\7\32\2\2OP\7\23\2\2PQ\7\t\2\2Q\13\3\2\2\2RS\7\3"+
-		"\2\2ST\7\32\2\2TU\7\23\2\2UV\7\t\2\2V\r\3\2\2\2WX\7\17\2\2XY\7\32\2\2"+
-		"YZ\7\24\2\2Z[\7\t\2\2[\17\3\2\2\2\\]\7\5\2\2]^\7\32\2\2^_\7\24\2\2_`\7"+
-		"\t\2\2`\21\3\2\2\2ab\7\4\2\2bc\7\32\2\2cd\7\23\2\2de\7\t\2\2e\23\3\2\2"+
-		"\2fg\7\16\2\2gh\7\32\2\2hi\7\23\2\2ij\7\t\2\2j\25\3\2\2\2kl\7\22\2\2l"+
-		"m\7\32\2\2mn\7\24\2\2no\7\t\2\2o\27\3\2\2\2pq\7\13\2\2qr\7\32\2\2rs\5"+
-		"\32\16\2s\31\3\2\2\2t}\7\30\2\2uz\5\34\17\2vw\7\20\2\2wy\5\34\17\2xv\3"+
-		"\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{~\3\2\2\2|z\3\2\2\2}u\3\2\2\2}~\3"+
-		"\2\2\2~\177\3\2\2\2\177\u0080\7\31\2\2\u0080\u0081\7\t\2\2\u0081\33\3"+
-		"\2\2\2\u0082\u0083\5\36\20\2\u0083\u0084\7\7\2\2\u0084\u0085\5 \21\2\u0085"+
-		"\35\3\2\2\2\u0086\u0087\7\23\2\2\u0087\37\3\2\2\2\u0088\u0089\7\23\2\2"+
-		"\u0089!\3\2\2\2\u008a\u008b\t\2\2\2\u008b#\3\2\2\2\b,/8Fz}";
+		"\16\20\22\24\26\30\32\34\36 \"\2\3\5\2\6\6\r\r\20\20\u0088\2$\3\2\2\2"+
+		"\4\64\3\2\2\2\6F\3\2\2\2\bH\3\2\2\2\nM\3\2\2\2\fR\3\2\2\2\16W\3\2\2\2"+
+		"\20\\\3\2\2\2\22a\3\2\2\2\24f\3\2\2\2\26k\3\2\2\2\30p\3\2\2\2\32t\3\2"+
+		"\2\2\34\u0082\3\2\2\2\36\u0086\3\2\2\2 \u0088\3\2\2\2\"\u008a\3\2\2\2"+
+		"$%\7\22\2\2%&\7\33\2\2&/\7\31\2\2\',\5\4\3\2()\7\21\2\2)+\5\4\3\2*(\3"+
+		"\2\2\2+.\3\2\2\2,*\3\2\2\2,-\3\2\2\2-\60\3\2\2\2.,\3\2\2\2/\'\3\2\2\2"+
+		"/\60\3\2\2\2\60\61\3\2\2\2\61\62\7\32\2\2\62\63\7\t\2\2\63\3\3\2\2\2\64"+
+		"8\7\b\2\2\65\67\5\6\4\2\66\65\3\2\2\2\67:\3\2\2\28\66\3\2\2\289\3\2\2"+
+		"\29;\3\2\2\2:8\3\2\2\2;<\7\n\2\2<\5\3\2\2\2=G\5\b\5\2>G\5\n\6\2?G\5\f"+
+		"\7\2@G\5\16\b\2AG\5\20\t\2BG\5\22\n\2CG\5\24\13\2DG\5\26\f\2EG\5\30\r"+
+		"\2F=\3\2\2\2F>\3\2\2\2F?\3\2\2\2F@\3\2\2\2FA\3\2\2\2FB\3\2\2\2FC\3\2\2"+
+		"\2FD\3\2\2\2FE\3\2\2\2G\7\3\2\2\2HI\5\"\22\2IJ\7\33\2\2JK\7\24\2\2KL\7"+
+		"\t\2\2L\t\3\2\2\2MN\7\f\2\2NO\7\33\2\2OP\7\24\2\2PQ\7\t\2\2Q\13\3\2\2"+
+		"\2RS\7\3\2\2ST\7\33\2\2TU\7\24\2\2UV\7\t\2\2V\r\3\2\2\2WX\7\17\2\2XY\7"+
+		"\33\2\2YZ\7\25\2\2Z[\7\t\2\2[\17\3\2\2\2\\]\7\5\2\2]^\7\33\2\2^_\7\25"+
+		"\2\2_`\7\t\2\2`\21\3\2\2\2ab\7\4\2\2bc\7\33\2\2cd\7\24\2\2de\7\t\2\2e"+
+		"\23\3\2\2\2fg\7\16\2\2gh\7\33\2\2hi\7\24\2\2ij\7\t\2\2j\25\3\2\2\2kl\7"+
+		"\23\2\2lm\7\33\2\2mn\7\25\2\2no\7\t\2\2o\27\3\2\2\2pq\7\13\2\2qr\7\33"+
+		"\2\2rs\5\32\16\2s\31\3\2\2\2t}\7\31\2\2uz\5\34\17\2vw\7\21\2\2wy\5\34"+
+		"\17\2xv\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{~\3\2\2\2|z\3\2\2\2}u\3"+
+		"\2\2\2}~\3\2\2\2~\177\3\2\2\2\177\u0080\7\32\2\2\u0080\u0081\7\t\2\2\u0081"+
+		"\33\3\2\2\2\u0082\u0083\5\36\20\2\u0083\u0084\7\7\2\2\u0084\u0085\5 \21"+
+		"\2\u0085\35\3\2\2\2\u0086\u0087\7\24\2\2\u0087\37\3\2\2\2\u0088\u0089"+
+		"\7\24\2\2\u0089!\3\2\2\2\u008a\u008b\t\2\2\2\u008b#\3\2\2\2\b,/8Fz}";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

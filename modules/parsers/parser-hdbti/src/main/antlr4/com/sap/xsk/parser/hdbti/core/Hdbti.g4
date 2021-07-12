@@ -21,7 +21,7 @@ keyArr: '[' (pair (',' pair)*)? ']' ';';
 pair: pairKey ':' pairValue;
 pairKey: STRING;
 pairValue: STRING;
-tableName: 'table'|'hdbtable';
+tableName: 'table' | 'hdbtable' | 'cdstable';
 
 STRING:     '"' (~["\\\r\n] | EscapeSequence)* '"';
 fragment EscapeSequence

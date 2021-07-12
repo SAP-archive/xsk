@@ -9,11 +9,11 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.parser.hdbsynonym.models;
+package com.sap.xsk.hdb.ds.model.hdbsynonym;
 
-import com.sap.xsk.parser.hdbsynonym.exceptions.XSKHDBSYNONYMMissingPropertyException;
+import com.google.gson.annotations.SerializedName;
+import com.sap.xsk.hdb.ds.exceptions.XSKHDBSYNONYMMissingPropertyException;
 import lombok.*;
-
 import java.util.Objects;
 
 @Getter
@@ -23,20 +23,26 @@ import java.util.Objects;
 @EqualsAndHashCode
 public class XSKHDBSYNONYMDefinitionModel {
 
-    private String location;
-    private String targetObject;
-    private String targetSchema;
-    private String synonymSchema;
+  private Target target;
+  @SerializedName(value = "schema")
+  String synonymSchema;
+
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  public static class Target {
+    String object;
+    String schema;
 
     public void checkForAllMandatoryFieldsPresence() {
-        checkPresence(targetObject, "targetObject");
-        checkPresence(targetSchema, "targetSchema");
-        checkPresence(synonymSchema, "synonymSchema");
+      checkPresence(object, "object");
+      checkPresence(schema, "schema");
     }
 
     private <T> void checkPresence(T field, String fieldName) {
-        if (Objects.isNull(field)) {
-            throw new XSKHDBSYNONYMMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
-        }
+      if (Objects.isNull(field)) {
+        throw new XSKHDBSYNONYMMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+      }
     }
+  }
 }

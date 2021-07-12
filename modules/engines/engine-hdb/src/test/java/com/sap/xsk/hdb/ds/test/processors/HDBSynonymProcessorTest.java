@@ -88,7 +88,7 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     processorSpy.execute(mockConnection, model);
-    verify(processorSpy, times(1)).executeSql(mockSQL, mockConnection);
+    verify(processorSpy, times(3)).executeSql(mockSQL, mockConnection);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -121,14 +121,16 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"SY_DUMMY\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"PAL_TRIPLE_EXPSMOOTH\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"PROCEDURES\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
     when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
     when(SqlFactory.getNative(mockConnection).drop().synonym(any())).thenReturn(mockDropSynonymBuilder);
     when(SqlFactory.getNative(mockConnection).drop().synonym(any()).build()).thenReturn(mockSQL);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
     processorSpy.execute(mockConnection, model);
-    verify(processorSpy, times(1)).executeSql(mockSQL, mockConnection);
+    verify(processorSpy, times(3)).executeSql(mockSQL, mockConnection);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -143,7 +145,9 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"SY_DUMMY\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"PAL_TRIPLE_EXPSMOOTH\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"PROCEDURES\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
 
     processorSpy.execute(mockConnection, model);
   }

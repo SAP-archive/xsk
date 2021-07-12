@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.parser.hdbsynonym.exceptions;
+package com.sap.xsk.hdb.ds.exceptions;
 
 public class XSKHDBSYNONYMMissingPropertyException extends RuntimeException {
 

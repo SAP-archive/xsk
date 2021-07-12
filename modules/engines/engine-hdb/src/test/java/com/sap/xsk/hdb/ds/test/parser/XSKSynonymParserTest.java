@@ -18,18 +18,13 @@ import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
 import nl.altindag.log.LogCaptor;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Answers;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class XSKSynonymParserTest extends AbstractGuiceTest{
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private Connection connection;
 
   @Before
   public void openMocks() {

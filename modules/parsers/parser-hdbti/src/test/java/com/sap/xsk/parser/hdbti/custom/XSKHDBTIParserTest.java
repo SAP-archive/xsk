@@ -15,6 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.parser.hdbti.exception.DuplicateFieldNameException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
@@ -27,12 +28,13 @@ import org.junit.Test;
 public class XSKHDBTIParserTest {
 
   @Test
-  public void testValidInputAllFieldsAssignedProperlyParseSuccessfully() throws IOException, XSKHDBTISyntaxErrorException {
+  public void testValidInputAllFieldsAssignedProperlyParseSuccessfully()
+      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/sample.hdbti"), StandardCharsets.UTF_8);
 
     XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
-    XSKHDBTIImportModel importModel = xskhdbtiParser.parse(hdbtiSample);
+    XSKHDBTIImportModel importModel = xskhdbtiParser.parse("/test/xsk/com/sap/sample.hdbti", hdbtiSample);
     XSKHDBTIImportConfigModel configModel = importModel.getConfigModels().get(0);
 
     int expectedConfigsSize = 1;
@@ -63,8 +65,8 @@ public class XSKHDBTIParserTest {
     XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
 
     try {
-      xskhdbtiParser.parse(hdbtiSample);
-    } catch (XSKHDBTISyntaxErrorException syntaxErrorException) {
+      xskhdbtiParser.parse("/test/xsk/com/sap/invalidSyntax.hdbti", hdbtiSample);
+    } catch (XSKArtifactParserException parseErrorException) {
       assertTrue(true);
     } catch (Exception e) {
       fail();
@@ -78,7 +80,7 @@ public class XSKHDBTIParserTest {
     XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
 
     try {
-      xskhdbtiParser.parse(hdbtiSample);
+      xskhdbtiParser.parse("/test/xsk/com/sap/duplicateKeys.hdbti", hdbtiSample);
     } catch (DuplicateFieldNameException duplicateFieldNameException) {
       assertTrue(true);
     } catch (Exception e) {
@@ -87,11 +89,28 @@ public class XSKHDBTIParserTest {
   }
 
   @Test
-  public void testParseConfigObjectFieldsRandomOrderShouldPass() throws IOException, XSKHDBTISyntaxErrorException {
+  public void testParseConfigObjectFieldsRandomOrderShouldPass()
+      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
     XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
 
-    xskhdbtiParser.parse(hdbtiSample);
+    xskhdbtiParser.parse("/test/xsk/com/sap/randomOrder.hdbti", hdbtiSample);
+  }
+
+  @Test(expected = XSKArtifactParserException.class)
+  public void parseHDBTIContentWithLexerErrorFail() throws Exception {
+    String content = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIParserTest.class.getResourceAsStream("/lexerError.hdbti"), StandardCharsets.UTF_8);
+    XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
+    xskhdbtiParser.parse("/test/xsk/com/sap/lexerError.hdbti", content);
+  }
+
+  @Test(expected = XSKArtifactParserException.class)
+  public void parseHDBTIContentWithSyntaxErrorFail() throws Exception {
+    String content = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIParserTest.class.getResourceAsStream("/parserError.hdbti"), StandardCharsets.UTF_8);
+    XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
+    xskhdbtiParser.parse("/test/xsk/com/sap/syntaxError.hdbti", content);
   }
 }

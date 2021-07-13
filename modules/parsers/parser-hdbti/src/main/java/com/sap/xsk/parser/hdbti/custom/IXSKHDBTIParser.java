@@ -11,11 +11,12 @@
  */
 package com.sap.xsk.parser.hdbti.custom;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 
 import java.io.IOException;
 
 public interface IXSKHDBTIParser {
-    XSKHDBTIImportModel parse(String content) throws IOException, XSKHDBTISyntaxErrorException;
+    XSKHDBTIImportModel parse(String location, String content) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException;
 }

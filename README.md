@@ -180,11 +180,23 @@ docker pull dirigiblelabs/xsk-kyma
 
 ##### Local (Tomcat Server)
 
+###### If you want to use the default container JDK:
 ```
 cd releng/server
 
 docker build -t dirigiblelabs/xsk .
 ```
+
+###### If you want to use a HotSwap enabled JDK:
+```
+cd releng/server
+
+docker build -t dirigiblelabs/xsk --build-arg JDK_TYPE=hotswap-jdk --build-arg USE_HOTSWAP_JDK .
+```
+
+Using a HotSwap enabled JVM like TravaOpenJDK enables you to patch Java code while still debugging. 
+Additional info if using IntelliJ could be found [here](https://www.jetbrains.com/help/idea/altering-the-program-s-execution-flow.html#reload_classes). Have in mind the HotSwap limitations described there should not exist in the XSK as the hotswap-jdk configuration in Docker uses a Dynamic Code Evolution VM by default.
+
 ##### Cloud Foundry
 
 ```

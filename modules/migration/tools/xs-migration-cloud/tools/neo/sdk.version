@@ -1,0 +1,5 @@
+sdk.name=Java Web Tomcat 8
+runtime.id=neo-java-web
+release.version=3.117.9
+runtime.version=3.117.9
+structure.version=9.0.0

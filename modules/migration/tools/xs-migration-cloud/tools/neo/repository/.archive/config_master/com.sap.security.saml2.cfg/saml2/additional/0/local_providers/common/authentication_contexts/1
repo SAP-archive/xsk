@@ -1,0 +1,7 @@
+#Tue Jan 26 14:49:07 EET 2010
+isHTTP=true
+name=urn\:oasis\:names\:tc\:SAML\:2.0\:ac\:classes\:Password
+isCustom=false
+isHTTPS=false
+alias=Password
+isInteractive=true

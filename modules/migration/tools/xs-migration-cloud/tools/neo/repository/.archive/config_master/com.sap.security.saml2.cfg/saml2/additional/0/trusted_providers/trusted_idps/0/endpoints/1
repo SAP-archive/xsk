@@ -1,0 +1,4 @@
+#Tue Jan 26 14:49:12 EET 2010
+service=SingleSignOnService
+location=https\://idm-ngp.dhcp.wdf.sap.corp\:50001/saml2/idp/sso
+binding=urn\:oasis\:names\:tc\:SAML\:2.0\:bindings\:HTTP-Redirect

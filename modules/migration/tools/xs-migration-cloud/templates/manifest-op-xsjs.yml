@@ -1,0 +1,7 @@
+  - name: ${app-name}-xsjs-service
+    port: [xsjs-service-port]
+    path: xsjs
+    memory: 128M
+    services:
+      - uaa
+      ${db-service}

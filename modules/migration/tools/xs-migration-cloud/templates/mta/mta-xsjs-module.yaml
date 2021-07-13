@@ -1,0 +1,11 @@
+  - name: ${name}-xsjs-service
+    path: xsjs
+    type: nodejs
+    requires:
+      {{xsjs-db}}
+      {{xsjs-jobs}}
+      - name: uaa
+    provides:
+      - name: xsjs
+        properties:
+           url: ${default-url}

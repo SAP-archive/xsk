@@ -1,0 +1,3 @@
+user_provider_name=local
+configuration_cache_validity_period=120
+configuration_cache_last_access_timeout=600

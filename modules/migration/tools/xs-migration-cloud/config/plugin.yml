@@ -1,0 +1,316 @@
+---
+plugins:
+- name: xsjs
+  extensions:
+  - xsjs
+  - xsjslib
+  - xsjob
+  - mustache
+  - xshttpdest
+  container-type: xsjs
+  command: null
+  handlers:
+  - file: xsjs-handler
+    ext:
+    - xsjs
+    - xsjslib
+    method: handleFile
+- name: odata
+  extensions:
+  - xsodata
+  container-type: odata
+  command: null
+  handlers:
+  - file: xsodata-handler
+    ext:
+    - xsodata
+    method: handleFile
+
+- name: db
+  extensions:
+  - hdbdd
+  - hdbtable
+  - hdbprocedure
+  - procedure
+  - hdbscalarfunction
+  - hdbtablefunction
+  - hdbsequence
+  - hdbview
+  - view
+  - hdbsynonym
+  - calculationview
+  - hdbstructure
+  - hdbti
+  - csv
+  - hdbafllangprocedure
+  - analyticview
+  - attributeview
+  - analyticprivilege
+  - hdbrole
+  - hdbflowgraph
+  - hdbreptask
+  - hdbschema
+
+  container-type: db
+  command: null
+  handlers:
+  - file: calculationview-handler
+    ext:
+    - calculationview
+    - analyticprivilege
+    method: handleFile
+  - file: hdbtable-handler
+    ext:
+    - hdbtable
+    method: handleFile
+  - file: hdbprocedure-handler
+    ext:
+    - hdbprocedure
+    - procedure
+    method: handleFile
+  - file: hdbscalarfunction-handler
+    ext:
+    - hdbscalarfunction
+    - hdbtablefunction
+    method: handleFile
+  - file: hdbdd-handler
+    ext:
+    - hdbdd
+    method: handleFile
+  - file: hdbsequence-handler
+    ext:
+    - hdbsequence
+    method: handleFile
+  - file: hdbview-handler
+    ext:
+    - hdbview
+    - view
+    method: handleFile
+  - file: hdbti-handler
+    ext:
+    - hdbti
+    method: handleFile
+  - file: hdbstructure-handler
+    ext:
+    - hdbstructure
+    method: handleFile
+  - file: analytic-handler
+    ext:
+    - analyticview
+    - attributeview
+    method: handleFile
+  - file: hdbrole-handler
+    ext:
+     - hdbrole
+    method: handleFile
+  - file: hdbflowgraph-handler
+    ext:
+     - hdbflowgraph
+    method: handleFile
+  - file: hdbschema-handler
+    ext:
+      - hdbschema
+    method: handleFile
+  - file: csv-handler
+    ext:
+      - csv
+    method: handleFile  
+
+- name: web
+  extensions:
+  - html
+  - htm
+  - txt
+  - js
+  - jpg
+  - JPG
+  - gif
+  - jpeg
+  - png
+  - PNG
+  - css
+  - ico
+  - svg
+  - less
+  # UI5
+  - type
+  - control
+  - library
+  - theming
+  # assume this is Web Open Font Format (WOFF)
+  # http://en.wikipedia.org/wiki/Web_Open_Font_Format
+  - WOFF
+  - woff
+  - woff2
+  # assume this is TrueType
+  # http://en.wikipedia.org/wiki/TrueType
+  - ttf
+  # assume this is Embedded Open Type
+  # http://en.wikipedia.org/wiki/Embedded_OpenType
+  - eot
+  # eclipse update site files
+  - jar
+  # Android app
+  - apk
+  # word & co
+  - rtf
+  - doc
+  - docx
+  # pdf
+  - pdf
+  # animated cursor
+  - cur
+  # flash
+  - swf
+  # OpenType Font
+  - otf
+  container-type: web
+  command: null
+  handlers:
+  - file: theming-handler
+    ext:
+    - theming
+    method: handleFile
+  - file: webfile-handler
+    ext:
+    - htm
+    - html
+    method: handleFile
+  - file: js-handler
+    ext:
+    - js
+    method: handleFile
+
+- name: delete
+  extensions:
+  - xsapp
+  - project
+  # compiled python files
+  - pyc
+  - regiignore
+  # mac
+  - DS_Store
+  # MS DOS
+  - bat
+  - db
+  # security schema change, new files generated, and not relevent to old ones
+  - xsprivileges
+  - xssecurestore
+  - xssqlcc
+  # Java / Eclipse
+  - classpath
+  container-type: delete
+  command: null
+  handlers: 
+  - file: xs-security-handler
+    ext:
+    - xsprivileges
+    - xssecurestore
+    - xssqlcc
+    method: handleFile
+  - file: delete-handler
+    ext:
+    - xsapp
+    - project
+    - pyc
+    - regiignore
+    - DS_Store
+    - bat
+    - classpath
+    - jsdtscope
+    - gitignore
+    method: handleFile
+    # content specific
+  - file: maybedelete-handler
+    ext:
+    - db
+    method: handleFile
+
+- name: content-deps
+  extensions:
+  - xml
+  - json
+  - properties
+  - xsaccess
+  handlers:
+  - file: xml-handler
+    ext:
+    - xml
+    method: handleFile
+  - file: xsaccess-handler
+    ext:
+    - xsaccess
+    method: handleFile
+  - file: json-handler
+    ext:
+    - json
+    method: handleFile
+  - file: properties-handler
+    ext:
+    - properties
+    method: handleFile
+
+- name: unsupported
+  extensions:
+  - xscfgd
+  - xscfgm
+  - xsrtcfgd
+  - xscfunc
+  - aflpmml
+  - xswidget
+  - xsappsite
+  - hdbtextconfig
+  - hdbtextdict
+  - hdbtextrule
+  - hdbtextinclude
+  - hdbtextlexicon
+  - hdbreptask
+  - halmservice
+  - hprrule
+  - hprvocabulary
+  - hprruletemplate
+  - hprruleservice
+  - hrfrule
+  - hrfvocabulary
+  - hrfruletemplate
+  - hrfruleservice
+  - hdbruldec
+  handlers:
+  - file: unsupported-handler
+    ext:
+    - xscfgd
+    - aflpmml
+    - xscfgm
+    - xsrtcfgd
+    - xscfunc
+    - xswidget
+    - xsappsite
+    - hdbtextconfig
+    - hdbtextdict
+    - hdbtextrule
+    - hdbtextinclude
+    - hdbtextlexicon
+    - hdbreptask
+    - halmservice
+    - hprrule
+    - hprvocabulary
+    - hprruletemplate
+    - hprruleservice
+    - hrfrule
+    - hrfvocabulary
+    - hrfruletemplate
+    - hrfruleservice
+    - hdbruldec
+    method: handleFile
+
+- name: todo
+  container-type: todo
+
+- name: translation
+  extensions:
+  - hdbtextbundle
+  handlers:
+  - file: hdbtextbundle-handler
+    ext:
+    - hdbtextbundle
+    method: handleFile

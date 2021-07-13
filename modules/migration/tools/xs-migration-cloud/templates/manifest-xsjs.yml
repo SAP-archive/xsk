@@ -1,0 +1,7 @@
+  - name: ${app-name}-xsjs-service
+    host: [c/d/i-user]-${app-name}-xsjs-service
+    path: xsjs
+    memory: 128M
+    services:
+      - uaa
+      ${db-service}

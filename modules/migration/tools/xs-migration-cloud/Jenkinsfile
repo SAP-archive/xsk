@@ -1,0 +1,358 @@
+#!/usr/bin/env groovy
+@Library(['piper-lib', 'piper-lib-os']) _
+try {
+    // pull request voting
+    if (env.BRANCH_NAME.startsWith('PR')) {
+        stage('Pull-request voting') {
+            node {
+                deleteDir()
+                checkout scm
+
+                setupPipelineEnvironment script: this
+
+                measureDuration(script: this, measurementName: 'voter_duration') {
+
+                    dockerExecute(script: this, dockerImage: 'docker.wdf.sap.corp:51229/system-node-java:openjdk') {
+                        sh "npm config set registry=http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.milestones.npm"
+                        sh "npm install && npm run install-dev && npm run test-jenkins"
+                    }
+                }
+            }
+        }
+
+    // master pipeline
+    } else if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'release') {
+
+        properties([
+            parameters([
+                booleanParam(defaultValue: true, description: 'Run tests?', name: 'runTests'), 
+                booleanParam(defaultValue: true, description: 'Run IPScan?', name: 'runIPScan'),
+                booleanParam(defaultValue: true, description: 'Run CheckMarxScan?', name: 'runCheckMarxScan'),
+                booleanParam(defaultValue: true, description: 'Run PPMSCompliance?', name: 'runPPMSCompliance'),
+                booleanParam(defaultValue: true, description: 'Deploy to prod NPM registry?', name: 'prodRegistryDeploy'), 
+                booleanParam(defaultValue: true, description: 'Deploy to Prod BAS?', name: 'prodBASDeploy')
+            ])
+        ])
+
+        // set variables for further stages status check
+        def testsSuccess = true
+        def ipScanSuccess = true
+        def cxScanSuccess = true
+        def ppmsComplianceSuccess = true
+        def prodRegistryDeploySuccess = true
+        def prodBASDeploySuccess = true
+
+        if(params.runTests == true) {
+            try {
+                stage('Central Build') {
+                    lock(resource: "${env.JOB_NAME}/10", inversePrecedence: true) {
+                        milestone 10
+                        node {
+                            deleteDir()
+                            checkout scm
+
+                            setupPipelineEnvironment script: this
+
+                            measureDuration(script: this, measurementName: 'build_duration') {
+
+                                dockerExecute(script: this, dockerImage: 'docker.wdf.sap.corp:51229/system-node-java:openjdk') {
+                                    sh "npm config set registry=http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.milestones.npm"
+                                    sh "npm install && npm run install-dev && npm run test-jenkins"
+                                    testsPublishResults(junit: [pattern: '**/xunit.xml'])
+                                    archiveArtifacts artifacts: '**/xunit.xml'
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                testsSuccess = false
+                echo e.toString()
+            }
+        }
+
+        if(params.runIPScan == true) {
+            try {
+                stage('IPScan and PPMS') {
+                    lock(resource: "${env.JOB_NAME}/20", inversePrecedence: true) {
+                        milestone 20
+                        node {
+                            deleteDir()
+                            checkout scm
+                            measureDuration(script: this, measurementName: 'whitesource_duration') {
+                                whitesourceExecuteScan script: this
+                                // whitesourceExecuteScan script: this, buildTool: 'npm', userToken: 'c19323374edb44ecb3ea729eedb9a7506182a58a5567444189b9af5e0858f126', orgToken: '6971b2eec2d3420bad0caf173ec629f6a3c7d3ba63f3445ab99ffdbf1acfb1d0', productToken: 'e6eb944901c3446e92729a2eab372c66e00306e90cec41878621806c87b04b87', createProductFromPipeline: false, defaultNpmRegistry: 'http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.releases.npm/'
+                                // whitesourceExecuteScan script: this, buildTool: 'npm', userTokenCredentialsId: 'WhitesourceTechUserToken', orgAdminUserTokenCredentialsId: 'WhitesourceOrgToken', productName: 'DIST - XS MIGRATION TOOL OD 1.0', createProductFromPipeline: false
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                ipScanSuccess = false
+                echo e.toString()
+            }
+        }
+
+        if(params.runCheckMarxScan == true) {
+            try {
+                stage('Checkmarx Scan') {
+                    lock(resource: "${env.JOB_NAME}/30", inversePrecedence: true) {
+                        milestone 20
+                        node {
+                            deleteDir()
+                            checkout scm
+                            measureDuration(script: this, measurementName: 'checkmarx_duration') {
+                                checkmarxExecuteScan script: this,  filterPattern: """!**/node_modules/**, !**/test/**, !**/customer_report/report/main.js, !**/.xmake/**, !**/*_test.go, !**/vendor/**/*.go, **/*.html, **/*.xml, **/*.go, **/*.py, **/*.js, **/*.scala, **/*.ts"""
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                cxScanSuccess = false
+                echo e.toString()
+            }
+        }
+
+        if(params.runPPMSCompliance == true) {
+            try {
+                stage('PPMSCompliance') {
+                    lock(resource: "${env.JOB_NAME}/40", inversePrecedence: true) {
+                        milestone 20
+                        node {
+                            deleteDir()
+                            checkout scm
+                            measureDuration(script: this, measurementName: 'step_data') {
+                                sapCheckPPMSCompliance script: this
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                ppmsComplianceSuccess = false
+                echo e.toString()
+            }
+        }
+
+        if(params.prodRegistryDeploy == true) {
+            try {
+                stage('Deploy to npm prod registry') {
+                    lock(resource: "${env.JOB_NAME}/50", inversePrecedence: true) {
+                        milestone 30
+                        node {
+                            deleteDir()
+                            def gitCommit = checkout(scm).GIT_COMMIT
+                            artifactPrepareVersion script: this, buildTool: 'npm', versioningTemplate: '${version}'
+                            executeBuild script: this, gitCommitId: "${gitCommit}", xMakeJobName: 'xsa-migration-xs-migration-cloud-SP-REL-common_indirectshipment'
+                            executeBuild script: this, gitCommitId: "${gitCommit}", buildType: 'xMakePromote', xMakeJobName: 'xsa-migration-xs-migration-cloud-SP-REL-common_indirectshipment'
+                        }
+                    }
+                }
+            } catch(e) {
+                prodRegistryDeploySuccess = false
+                echo e.toString()
+            }
+        }
+
+        if(params.prodBASDeploy == true) {
+            try {
+                stage('Deploy to Prod BAS') {
+                    lock(resource: "${env.JOB_NAME}/60", inversePrecedence: true) {
+                        milestone 40
+                        node {
+                            deleteDir()
+                            checkout scm
+
+                            setupPipelineEnvironment script: this
+
+                            withEnv(['HOST=migrateprod.cry10cf.int.applicationstudio.cloud.sap', 'EXTENSION_FILE=extension-prod.json', 'TEST_EXTENSION_NAME=xs-migration-cloud', 'SUBACCOUNT_SUBDOMAIN=migrateprod']) {
+                                withCredentials([usernamePassword(credentialsId: 'BASDeploymentTechUser', passwordVariable: 'WING_PASSWORD', usernameVariable: 'WING_USER')]) {
+                                    dockerExecute(script: this, dockerImage: 'docker.wdf.sap.corp:50000/com.sap.devx.wing/docker-node-chrome-snapshot', dockerWorkspace: '/home/node') {
+                                        sh """
+                                            sed -i "s/<SUBACCOUNT_SUBDOMAIN>/$SUBACCOUNT_SUBDOMAIN/g" $EXTENSION_FILE
+                                            npm config set registry "http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.releases.npm"
+                                            npm install @sapse/business-application-studio-extension-management
+                                            npm run deploy-extension 
+                                        """
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                prodBASDeploySuccess = false
+                echo e.toString()
+            }
+        }
+
+        // fail pipeline build if any single stage failed
+        if(params.runTests == true) {
+            if(testsSuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+        if(params.runIPScan == true) {
+            if(ipScanSuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+        if(params.runCheckMarxScan == true) {
+            if(cxScanSuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+        if(params.runPPMSCompliance == true) {
+            if(ppmsComplianceSuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+        if(params.prodRegistryDeploy == true) {
+            if(prodRegistryDeploySuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+        if(params.prodBASDeploy == true) {
+            if(prodBASDeploySuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+
+    // dev pipeline
+    } else if (env.BRANCH_NAME == 'dev') {
+
+        properties([
+            parameters([
+                booleanParam(defaultValue: true, description: 'Run tests?', name: 'runTests'), 
+                booleanParam(defaultValue: true, description: 'Deploy to development NPM registry?', name: 'devRegistryDeploy'), 
+                booleanParam(defaultValue: true, description: 'Deploy to Dev BAS?', name: 'devBASDeploy')
+            ])
+        ])
+
+        // set variables for further stages status check
+        def testsSuccess = true
+        def devRegistryDeploySuccess = true
+        def devBASDeploySuccess = true
+
+        if(params.runTests == true) {
+            try {
+                stage('Central Build') {
+                    lock(resource: "${env.JOB_NAME}/10", inversePrecedence: true) {
+                        milestone 10
+                        node {
+                            deleteDir()
+                            checkout scm
+
+                            setupPipelineEnvironment script: this
+
+                            measureDuration(script: this, measurementName: 'build_duration') {
+
+                                dockerExecute(script: this, dockerImage: 'docker.wdf.sap.corp:51229/system-node-java:openjdk') {
+                                    sh "npm config set registry=http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.milestones.npm"
+                                    sh "npm install && npm run install-dev && npm run test-jenkins"
+                                    testsPublishResults(junit: [pattern: '**/xunit.xml'])
+                                    archiveArtifacts artifacts: '**/xunit.xml'
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                testsSuccess = false
+                echo e.toString()
+            }
+        }
+
+        if(params.devRegistryDeploy == true) {
+            try {
+                stage('Deploy to npm development registry') {
+                    lock(resource: "${env.JOB_NAME}/20", inversePrecedence: true) {
+                        milestone 20
+                        node {
+                            deleteDir()
+                            checkout scm
+
+                            setupPipelineEnvironment script: this
+
+                            withEnv(['DEVELOPMENT_REGISTRY=https://docker.repositories.sap.ondemand.com/api/npm/xs-migration-cloud-dev/']) {
+                                withCredentials([string(credentialsId: "DevelopmentRegistryToken", variable: 'REGISTRY_TOKEN')]) {
+                                    dockerExecute(script: this, dockerImage: 'node:10-alpine', dockerWorkspace: '/home/node') {
+                                        sh """
+                                            npm config set registry "http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.releases.npm"
+                                            npm i
+                                            npm run build-ext
+                                            npm publish --registry ${DEVELOPMENT_REGISTRY} --always-auth --_authToken=${REGISTRY_TOKEN}
+                                        """
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                devRegistryDeploySuccess = false
+                echo e.toString()
+            }
+        }
+
+        if(params.devBASDeploy == true) {
+            try {
+                stage('Deploy to Dev BAS') {
+                    lock(resource: "${env.JOB_NAME}/30", inversePrecedence: true) {
+                        milestone 30
+                        node {
+                            deleteDir()
+                            checkout scm
+
+                            setupPipelineEnvironment script: this
+
+                            withEnv(['HOST=migrate.cry10cf.int.applicationstudio.cloud.sap', 'EXTENSION_FILE=extension-dev.json', 'TEST_EXTENSION_NAME=xs-migration-cloud', 'SUBACCOUNT_SUBDOMAIN=migrate']) {
+                                withCredentials([usernamePassword(credentialsId: 'BASDeploymentTechUser', passwordVariable: 'WING_PASSWORD', usernameVariable: 'WING_USER')]) {
+                                    dockerExecute(script: this, dockerImage: 'node:10-alpine', dockerWorkspace: '/home/node') {
+                                        sh """
+                                            sed -i "s/<SUBACCOUNT_SUBDOMAIN>/$SUBACCOUNT_SUBDOMAIN/g" $EXTENSION_FILE
+                                            npm config set registry "http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.releases.npm"
+                                            npm install @sapse/business-application-studio-extension-management
+                                            npm run deploy-extension 
+                                        """
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                devBASDeploySuccess = false
+                echo e.toString()
+            }
+        }
+
+        // fail pipeline build if any single stage failed
+        if(params.runTests == true) {
+            if(testsSuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+        if(params.devRegistryDeploy == true) {
+            if(devRegistryDeploySuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+        if(params.devBASDeploy == true) {
+            if(devBASDeploySuccess == false) {
+                currentBuild.result = "FAILURE"
+            }
+        }
+
+    }
+} catch (Throwable err) { // catch all exceptions
+    globalPipelineEnvironment.addError(this, err)
+    throw err
+} finally {
+    try {
+        node{
+            archiveArtifacts artifacts: '**/xunit.xml'
+        }
+    } catch(e) {
+        echo "Artifact '**/xunit.xml' not found"
+    }
+}

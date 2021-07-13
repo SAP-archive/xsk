@@ -1,0 +1,8 @@
+_schema-version: 2.0
+ID: ${name}
+description: ${description}
+version: ${version}
+
+modules:
+{{modules}}
+{{resources}}

@@ -1,0 +1,2 @@
+      - name: ${name}-hdi
+      - name: ${name}-db

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- docBase path is relative to the corresponding appBase folder -->
+<Context docBase="../systemapps/com.sap.cloud.security.oauth2.as.local.war">
+    <Resources>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.security.core.server.csi.jar" webAppMount="/WEB-INF/classes"/>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.cloud.security.oauth2.commons.jar" webAppMount="/WEB-INF/classes"/>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.cloud.security.oauth2.domain.jar" webAppMount="/WEB-INF/classes"/>
+    </Resources>
+</Context>

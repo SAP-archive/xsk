@@ -1,0 +1,4 @@
+
+  - name: uaa
+    type: com.sap.xs.uaa-space
+    {{security-json}}

@@ -17,7 +17,34 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
-FROM xsk-${JDK_TYPE} AS final
+FROM xsk-${JDK_TYPE} AS dependencies-base
+# Install OpenJDK-8
+RUN apt-get update && \
+    apt-get install -y openjdk-8-jdk && \
+    apt-get install -y ant && \
+    apt-get clean;
+
+# Fix certificate issues
+RUN apt-get update && \
+    apt-get install ca-certificates-java && \
+    apt-get clean && \
+    update-ca-certificates -f;
+
+# Install NodeJS
+RUN apt-get install -y curl \
+  && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+  && apt-get install -y nodejs \
+  && curl -L https://www.npmjs.com/install.sh | sh
+
+FROM dependencies-base AS migration-tools-tooling-setup
+COPY target/migration-tools/neo $CATALINA_HOME/migration-tools/neo
+COPY target/migration-tools/xs-migration-cloud/package.json $CATALINA_HOME/migration-tools/xs-migration-cloud/
+RUN cd $CATALINA_HOME/migration-tools/xs-migration-cloud && npm install
+
+FROM migration-tools-tooling-setup AS migration-tools-node-app-copy-code
+COPY target/migration-tools/xs-migration-cloud $CATALINA_HOME/migration-tools/xs-migration-cloud/
+
+FROM migration-tools-node-app-copy-code AS war-setup
 
 RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/
@@ -27,6 +54,8 @@ RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc
 
 COPY target/*.jar $CATALINA_HOME/lib/
 RUN sed -i /'<Context>'/c'<Context>\n<Listener className=\"com.sap.xsk.listener.NamingResourcesListener\" factoryClassName=\"com.sap.xsk.factory.DynamicDataSourceFactory\"/>' $CATALINA_HOME/conf/context.xml
+
+FROM war-setup AS final
 
 ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 

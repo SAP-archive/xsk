@@ -193,7 +193,7 @@
 		<antlr4-maven-plugin.version>4.3</antlr4-maven-plugin.version>
 		<org.testcontainers.version>1.15.2</org.testcontainers.version>
 
-		<license.header.location>license-header.txt</license.header.location>
+		<license.header.location>licensing-header.txt</license.header.location>
 
 	</properties>
 </project>

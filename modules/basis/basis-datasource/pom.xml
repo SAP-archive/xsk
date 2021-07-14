@@ -16,7 +16,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <logback.version>1.2.3</logback.version>
     <slf4jVersion>1.7.5</slf4jVersion>
-    <license.header.location>../../../license-header.txt</license.header.location>
+    <license.header.location>../../../licensing-header.txt</license.header.location>
   </properties>
 
   <dependencies>

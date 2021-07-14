@@ -17,21 +17,7 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
-FROM xsk-${JDK_TYPE} AS final
-
-RUN rm -R /usr/local/tomcat/webapps/*
-COPY target/ROOT.war $CATALINA_HOME/webapps/
-
-RUN rm /usr/local/tomcat/conf/tomcat-users.xml
-RUN wget http://www.dirigible.io/help/conf/tomcat-users.xml -P /usr/local/tomcat/conf/
-
-RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
-RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
-
-COPY target/*.jar $CATALINA_HOME/lib/
-COPY target/migration-tools $CATALINA_HOME/migration-tools
-RUN sed -i /'<Context>'/c'<Context>\n<Listener className=\"com.sap.xsk.listener.NamingResourcesListener\" factoryClassName=\"com.sap.xsk.factory.DynamicDataSourceFactory\"/>' $CATALINA_HOME/conf/context.xml
-
+FROM xsk-${JDK_TYPE} AS dependencies-base
 # Install OpenJDK-8
 RUN apt-get update && \
     apt-get install -y openjdk-8-jdk && \
@@ -44,21 +30,43 @@ RUN apt-get update && \
     apt-get clean && \
     update-ca-certificates -f;
 
-# Setup JAVA_HOME -- useful for docker commandline
-ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-amd64/
-RUN export JAVA8_HOME
-
 # Install NodeJS
 RUN apt-get install -y curl \
   && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && apt-get install -y nodejs \
   && curl -L https://www.npmjs.com/install.sh | sh
 
+FROM dependencies-base AS migration-tools-tooling-setup
+COPY target/migration-tools/neo $CATALINA_HOME/migration-tools/neo
+COPY target/migration-tools/xs-migration-cloud/package.json $CATALINA_HOME/migration-tools/xs-migration-cloud/
+RUN cd $CATALINA_HOME/migration-tools/xs-migration-cloud && npm install
+
+FROM migration-tools-tooling-setup AS migration-tools-node-app-copy-code
+COPY target/migration-tools/xs-migration-cloud $CATALINA_HOME/migration-tools/xs-migration-cloud/
+
+FROM migration-tools-node-app-copy-code AS war-setup
+
+RUN rm -R /usr/local/tomcat/webapps/*
+COPY target/ROOT.war $CATALINA_HOME/webapps/
+
+RUN rm /usr/local/tomcat/conf/tomcat-users.xml
+RUN wget http://www.dirigible.io/help/conf/tomcat-users.xml -P /usr/local/tomcat/conf/
+
+RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
+RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
+
+COPY target/*.jar $CATALINA_HOME/lib/
+RUN sed -i /'<Context>'/c'<Context>\n<Listener className=\"com.sap.xsk.listener.NamingResourcesListener\" factoryClassName=\"com.sap.xsk.factory.DynamicDataSourceFactory\"/>' $CATALINA_HOME/conf/context.xml
+
+FROM war-setup AS final
+
 #Activate DEBUG mode
 #ENV JPDA_ADDRESS=0.0.0.0:8000
 #ENV JPDA_TRANSPORT=dt_socket
 
-RUN cd $CATALINA_HOME/migration-tools/xs-migration-cloud && npm install
+# Setup JAVA8_HOME for Neo SDK
+ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+RUN export JAVA8_HOME
 
 ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 

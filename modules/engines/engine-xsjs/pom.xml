@@ -126,7 +126,6 @@
       <scope>provided</scope>
     </dependency>
 
-
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-commons-test</artifactId>

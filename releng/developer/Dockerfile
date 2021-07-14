@@ -14,6 +14,16 @@ COPY $JDK_HOME /usr/local/jdk
 ENV JAVA_HOME=/usr/local/jdk
 ENV JRE_HOME=/usr/local/jdk
 
+FROM base AS xsk-hotswap-jdk
+ARG USE_HOTSWAP_JDK
+RUN echo "Using HotSwap enabled JDK"
+RUN mkdir /usr/local/tomcat/hotswap-jdk
+RUN wget https://github.com/TravaOpenJDK/trava-jdk-11-dcevm/releases/download/dcevm-11.0.11%2B1/Openjdk11u-dcevm-linux-x64.tar.gz -P /usr/local/hotswap-jdk/
+RUN tar -xf /usr/local/hotswap-jdk/Openjdk11u-dcevm-linux-x64.tar.gz -C /usr/local/tomcat/hotswap-jdk
+ENV JAVA_HOME=/usr/local/tomcat/hotswap-jdk/dcevm-11.0.11+1
+ENV JRE_HOME=/usr/local/tomcat/hotswap-jdk/dcevm-11.0.11+1
+ENV PATH=/usr/local/tomcat/hotswap-jdk/dcevm-11.0.11+1/bin:$PATH
+
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 

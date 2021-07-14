@@ -13,6 +13,7 @@ package com.sap.xsk.hdbti.service;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdbti.api.IXSKTableImportParser;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
@@ -40,7 +41,8 @@ public class XSKTableImportParser implements IXSKTableImportParser {
     private IXSKTableImportArtifactFactory xskTableImportArtifactFactory;
 
     @Override
-    public XSKTableImportArtifact parseTableImportArtifact(String location, String content) throws IOException, XSKHDBTISyntaxErrorException {
+    public XSKTableImportArtifact parseTableImportArtifact(String location, String content)
+        throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
         XSKTableImportArtifact parsedArtifact = xskTableImportArtifactFactory.parseTableImport(content, location);
         parsedArtifact.setName(new File(location).getName());
         parsedArtifact.setLocation(location);

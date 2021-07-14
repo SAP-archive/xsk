@@ -13,6 +13,7 @@ package com.sap.xsk.hdbti.transformer;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdbti.api.IXSKHDBTICoreService;
 import com.sap.xsk.hdbti.api.IXSKTableImportArtifactFactory;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
@@ -52,7 +53,7 @@ public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFac
     private IXSKHDBTIParser xskHdbtiParser;
 
     @Override
-    public XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException {
+    public XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
         XSKTableImportArtifact tableImportArtifact = new XSKTableImportArtifact();
         List<XSKTableImportConfigurationDefinition> importConfigurationDefinitions = new ArrayList<>();
         List<XSKTableImportToCsvRelation> tableImportToCsvRelations = new ArrayList<>();
@@ -60,7 +61,7 @@ public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFac
         tableImportArtifact.setImportConfigurationDefinition(importConfigurationDefinitions);
         tableImportArtifact.setTableImportToCsvRelations(tableImportToCsvRelations);
 
-        XSKHDBTIImportModel importObject = xskHdbtiParser.parse(content);
+        XSKHDBTIImportModel importObject = xskHdbtiParser.parse(location, content);
 
         for (XSKHDBTIImportConfigModel configuration : importObject.getConfigModels()) {
             addHdbtiToCsvRelation(tableImportArtifact, configuration, location);

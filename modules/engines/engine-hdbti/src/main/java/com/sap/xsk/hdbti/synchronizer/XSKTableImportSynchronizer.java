@@ -15,6 +15,7 @@ import static java.text.MessageFormat.format;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
@@ -151,6 +152,8 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
         throw new SynchronizationException();
       } catch (XSKHDBTISyntaxErrorException syntaxErrorException) {
         logger.error(syntaxErrorException.getMessage(), syntaxErrorException);
+      } catch (XSKArtifactParserException parserException) {
+        logger.error(parserException.getMessage(), parserException);
       }
     } else if (resourceName.endsWith(IXSKTableImportModel.FILE_EXTENSION_CSV)) {
       List<XSKTableImportToCsvRelation> affectedHdbtiToCsvRelations = xskCsvToHdbtiRelationDao
@@ -173,6 +176,8 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
       logger.error("Error during the force reimport of an HDBTI file due to a linked csv file change", e);
     } catch (XSKHDBTISyntaxErrorException syntaxErrorException) {
       logger.error(syntaxErrorException.getMessage());
+    } catch (XSKArtifactParserException parserException) {
+      logger.error(parserException.getMessage(), parserException);
     }
 
   }

@@ -11,36 +11,43 @@
  */
 package com.sap.xsk.parser.hdbti.custom;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.parser.hdbti.core.HdbtiLexer;
 import com.sap.xsk.parser.hdbti.core.HdbtiParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKHDBTIParser implements IXSKHDBTIParser {
 
-  public XSKHDBTIImportModel parse(String content) throws IOException, XSKHDBTISyntaxErrorException {
+  private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIParser.class);
+
+  public XSKHDBTIImportModel parse(String location, String content) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     HdbtiLexer hdbtiLexer = new HdbtiLexer(inputStream);
+    XSKHDBTISyntaxErrorListener lexerErrorListener = new XSKHDBTISyntaxErrorListener();
+    hdbtiLexer.removeErrorListeners();
+    hdbtiLexer.addErrorListener(lexerErrorListener);
     CommonTokenStream tokenStream = new CommonTokenStream(hdbtiLexer);
 
     HdbtiParser hdbtiParser = new HdbtiParser(tokenStream);
     hdbtiParser.setBuildParseTree(true);
+    XSKHDBTISyntaxErrorListener parseErrorListener = new XSKHDBTISyntaxErrorListener();
     hdbtiParser.removeErrorListeners();
+    hdbtiParser.addErrorListener(parseErrorListener);
 
-    XSKHDBTISyntaxErrorListener xskhdbtiSyntaxErrorListener = new XSKHDBTISyntaxErrorListener();
-    hdbtiParser.addErrorListener(xskhdbtiSyntaxErrorListener);
     ParseTree parseTree = hdbtiParser.importArr();
-
-    if (hdbtiParser.getNumberOfSyntaxErrors() > 0) {
-      throw new XSKHDBTISyntaxErrorException(xskhdbtiSyntaxErrorListener.getErrorMessage());
-    }
+    XSKCommonsUtils.logParserErrors(parseErrorListener.getErrorMessages(), location, "HDBTI", logger);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDBTI", logger);
 
     XSKHDBTICoreListener XSKHDBTICoreListener = new XSKHDBTICoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

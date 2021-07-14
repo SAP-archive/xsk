@@ -1,0 +1,22 @@
+{
+  "name": "${app-name}-xsjs-service",
+  "description": "",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "stop": ""
+  },
+  "files": [],
+  "dependencies": {
+    "@sap/xsenv": "1.2.8",
+    "@sap/xsjs": "3.3.2",
+    "@sap/cds": "1.14.1"
+  },
+  "devDependencies": {
+     "@sap/xsjs-test": "2.0.13"
+  },
+  "engines": {
+      "node": "8.x"
+  }
+}

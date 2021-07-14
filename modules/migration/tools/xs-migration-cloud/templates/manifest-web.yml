@@ -1,0 +1,11 @@
+  - name: ${app-name}-app
+    host: [c/d/i-user]-${app-name}-app
+    path: web
+    memory: 128M
+    services:
+      - uaa
+    env:
+      destinations: >
+        [
+            {"name":"xsjs", "url": "http://[c/d/i-user]-${app-name}-xsjs-service.cfapps.neo.ondemand.com", "forwardAuthToken": true}
+        ]

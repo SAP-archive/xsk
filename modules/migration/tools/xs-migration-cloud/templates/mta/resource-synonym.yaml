@@ -1,0 +1,4 @@
+  - name: {{grantor-service-name}}
+    type: org.cloudfoundry.existing-service
+    parameters:
+        service-name: {{grantor-service-name}}

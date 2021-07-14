@@ -1,0 +1,11 @@
+  - name: ${app-name}-app
+    path: web
+    memory: 128M
+    services:
+      - uaa
+    env:
+      destinations: >
+        [
+            {"name":"ui5", "url":"https://sapui5.netweaver.ondemand.com"},
+            {"name":"xsjs", "url": "[http/https]://[server URL]:[xsjs-service-port]", "forwardAuthToken": true}
+        ]

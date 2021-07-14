@@ -1,0 +1,32 @@
+#!/bin/bash
+
+NODE_MIN_VERSION=6
+
+args=()
+for i in "$@" 
+do
+    args+=("$i")
+done
+
+DIRNAME="$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )"
+JAVA_EXE="$DIRNAME/sapjvm_8_jre/bin/java"
+
+path_to_executable=$(which node 2>/dev/null)
+if [ -x "$path_to_executable" ] ; then
+    FOUND_NODE="$path_to_executable"
+elif [[ -n "$NODE_HOME" && -x $NODE_HOME/bin/node ]] ; then
+    FOUND_NODE=$NODE_HOME/bin/node
+fi
+
+found_node_version=$($FOUND_NODE --version 2>/dev/null | cut -d 'v' -f 2 | cut -d '.' -f 1)
+if [[ -z "$found_node_version" || $found_node_version -lt $NODE_MIN_VERSION ]] ; then
+    echo initializing...
+    TMPDIR=$(mktemp -d)
+    trap "rm -rf $TMPDIR" EXIT
+    $JAVA_EXE -cp $DIRNAME/init Unzip $DIRNAME/init/java.dat $TMPDIR
+    NODE_EXE="$TMPDIR/$(ls -1 $TMPDIR)/bin/node"
+else
+    NODE_EXE=$FOUND_NODE
+fi
+
+"$NODE_EXE" "$DIRNAME/xs-migration.js" "${args[@]}"

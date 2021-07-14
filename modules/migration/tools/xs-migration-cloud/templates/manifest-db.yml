@@ -1,0 +1,9 @@
+  - name: ${app-name}-db
+    path: db
+    memory: 256M
+    no-route: true
+    services:
+      - ${app-name}-hdi
+      ${grantor-service}
+    env:
+      TARGET_CONTAINER: ${app-name}-hdi

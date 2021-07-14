@@ -1,0 +1,8 @@
+  - name: ${name}-db
+    type: hdb
+    path: db
+    requires:
+      - name: ${name}-hdi
+        properties:
+            TARGET_CONTAINER: ~{service-name}
+      {{db-synonyms}}

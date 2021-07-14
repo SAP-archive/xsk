@@ -1,0 +1,5 @@
+      - name: xsjs
+        group: destinations
+        properties:
+          name: xsjs
+          url: ~{url}

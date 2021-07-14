@@ -1,0 +1,11 @@
+  - name: ${name}-app
+    path: web
+    type: html5
+    requires:
+      - name: uaa
+      {{web-xsjs}}
+      - name: ui5
+        group: destinations
+        properties:
+          name: ui5
+          url: ~{url}

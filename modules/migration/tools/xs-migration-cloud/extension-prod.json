@@ -1,0 +1,35 @@
+{
+  "apiVersion": "1",
+  "name": "xs-migration-cloud",
+  "namespace": "ext-<SUBACCOUNT_SUBDOMAIN>",
+  "about": {
+    "description": "Allows you to migrate SAP HANA XS projects from Neo to the Cloud Foundry environment.",
+    "author": "",
+    "thumbnail": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MCA5MCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNiM2UwZjY7fS5jbHMtMntmaWxsOiM5MmQ0ZjU7fS5jbHMtM3tmaWxsOm5vbmU7c3Ryb2tlLXdpZHRoOjJweDt9LmNscy0zLC5jbHMtNCwuY2xzLTV7c3Ryb2tlOiMxMzIwMzQ7c3Ryb2tlLW1pdGVybGltaXQ6MTA7fS5jbHMtMywuY2xzLTR7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7fS5jbHMtNHtmaWxsOiNmYmQwOWQ7c3Ryb2tlLXdpZHRoOjEuNXB4O30uY2xzLTV7ZmlsbDojZDhkNWQzO3N0cm9rZS13aWR0aDoxLjhweDt9PC9zdHlsZT48L2RlZnM+PGcgaWQ9IkxheWVyXzEiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzcuNjksMTJBMTksMTksMCwwLDEsNTQuNTgsMjIuMzQsMi41LDIuNSwwLDAsMCw1NywyMy43MiwxNi44OCwxNi44OCwwLDAsMSw3NC44LDQwLjQ3YTE3LjA5LDE3LjA5LDAsMCwxLTE3LjA5LDE3SDE5LjA1QTE0Ljc4LDE0Ljc4LDAsMCwxLDE3LjIyLDI4YTIuNTMsMi41MywwLDAsMCwyLjE1LTEuODhBMTksMTksMCwwLDEsMzcuNjksMTJaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNTUuMjksMjNBMTguOTQsMTguOTQsMCwwLDAsMjIuMzUsMTlhMTguOTMsMTguOTMsMCwwLDEsMjcuMzgsNS43LDQuOTQsNC45NCwwLDAsMCw0LjE3LDIuNDJBMTYuODksMTYuODksMCwwLDEsNzAuNTUsNDRhMTYuNywxNi43LDAsMCwxLTMsOS41OUExNi44NSwxNi44NSwwLDAsMCw1NS4yOSwyM1oiLz48cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0zOC4zMiw1Ny40MkgxOC41M0ExNC43OCwxNC43OCwwLDAsMSwxNi43LDI4YTIuNTMsMi41MywwLDAsMCwyLjE1LTEuODgsMTguOTUsMTguOTUsMCwwLDEsMzUuMjEtMy43NCwyLjUsMi41LDAsMCwwLDIuMzksMS4zOCwxNi43MiwxNi43MiwwLDAsMSw5LjEzLDIuMiIvPjxwYXRoIGlkPSJQYXRoXzE1NDciIGRhdGEtbmFtZT0iUGF0aCAxNTQ3IiBjbGFzcz0iY2xzLTQiIGQ9Ik02MS4xOCw0MS42MWwtNy44Nyw0Ljg0djkuNDFsLTcuODYtNC43NVY0MS42OWw3Ljg2LTQuNzVaTTQ1LjQ1LDU0LjMxLDUzLjMxLDU5djkuNTFsLTcuODYtNC43NVpNNjQuMzcsNDAuMDVsLTcuOTQtNC42Niw3Ljk1LTQuNzYsNy44Niw0Ljc2Wk04My4yMSw0MS43djkuNDJsLTcuODYsNC43NVY0Ni40NWwtNy44Ny00Ljc2LDcuODctNC43NVpNNzUuMzUsNTlsNy44Ni00LjY2djkuNDFsLTcuODYsNC43NloiLz48cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik02OC40NCw2Ny4yVjgzLjU5YTIuMjIsMi4yMiwwLDAsMS0yLDIuMzloLTQuMmEyLjIyLDIuMjIsMCwwLDEtMi0yLjM5VjY3LjJhMSwxLDAsMCwwLS45NC0xLjExSDU4Yy0uODMsMC0xLjI0LTEuMTktLjY2LTEuODlsNS40NC02LjU3YTIsMiwwLDAsMSwzLjE0LDBsNS40NCw2LjU3Yy41OS43LjE3LDEuODktLjY2LDEuODlINjkuMzdhMSwxLDAsMCwwLS45MywxLjExWiIvPjxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTU5Ljg1LDU0LjYzYTUuNzQsNS43NCwwLDAsMSw5LDBsMy4zNyw0LjA2LjgxLS40OFY0Ny44NWwtOC42MS01LjExLTguNyw1LjExVjU4LjIxbC44MS40N1oiLz48L2c+PC9zdmc+",
+    "tagline": "XS Migration Tool - Cloud Edition"
+  },
+  "version": "0.4.1",
+  "npmConfig": {
+    "registries": {
+      "sapmigrgen": "https://common.repositories.sap.ondemand.com/artifactory/api/npm/deploy.releases.npm/",
+      "sapmigr": "https://common.repositories.sap.ondemand.com/artifactory/api/npm/deploy.releases.npm/"
+    }
+  },
+  "yeomanPackages": [
+    {
+      "name": "@sapmigrgen/generator-migration",
+      "versionRange": "0.0.1"
+    }
+  ],
+  "vscodeExtensions": [
+    {
+      "name": "@sapmigr/xs-migration-cloud",
+      "versionRange": "1.1.47",
+      "source": "npm"
+    }
+  ],
+  "autoSelectExtensions": [
+    "mta-tools/mta-tools",
+    "java-dev-tools/java-dev-tools"
+  ]
+}

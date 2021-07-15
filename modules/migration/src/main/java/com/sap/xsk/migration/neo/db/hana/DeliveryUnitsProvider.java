@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class DeliveryUnitsProvider {
   private static final String HANA_JDBC_URL = "jdbc:sap://localhost:30015";
   private static final String HANA_DELIVERY_UNITS_QUERY = "SELECT DELIVERY_UNIT, VENDOR FROM \"_SYS_REPO\".\"DELIVERY_UNITS\"";
   private static final String NO_DB_CONNECTION_EXCEPTION_MESSAGE = "Couldn't connect to database!";
+  private static final String COULD_NOT_QUERY_DELIVERY_UNITS_TIMEOUT_EXCEPTION_MESSAGE = "Couldn't execute query due to a timeout!";
   private static final String COULD_NOT_QUERY_DELIVERY_UNITS_EXCEPTION_MESSAGE = "Couldn't execute query!";
 
   private final ConnectionProvider databaseConnectionProvider;
@@ -32,13 +34,15 @@ public class DeliveryUnitsProvider {
     this.databaseConnectionProvider = databaseConnectionProvider;
   }
 
-  public List<DeliveryUnit> getDeliveryUnitsNames(String user, String password) {
+  public List<DeliveryUnit> getDeliveryUnits(String user, String password) {
     Connection connection = createHanaConnection(user, password);
 
     try {
       var statement = connection.createStatement();
       ResultSet resultSet = statement.executeQuery(HANA_DELIVERY_UNITS_QUERY);
       return readDeliveryUnitsResultSet(resultSet);
+    } catch (SQLTimeoutException e) {
+      throw new DeliveryUnitsException(COULD_NOT_QUERY_DELIVERY_UNITS_TIMEOUT_EXCEPTION_MESSAGE, e);
     } catch (SQLException e) {
       throw new DeliveryUnitsException(COULD_NOT_QUERY_DELIVERY_UNITS_EXCEPTION_MESSAGE, e);
     }

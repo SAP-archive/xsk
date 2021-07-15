@@ -122,7 +122,7 @@ public class XSKMigrationRestService extends AbstractRestService {
   private List<DeliveryUnitData> getDeliveryUnits(MigrationRequestBody migrationRequestBody) {
     var hanaData = migrationRequestBody.getHana();
     return deliveryUnitsProvider
-        .getDeliveryUnitsNames(hanaData.getUsername(), hanaData.getPassword())
+        .getDeliveryUnits(hanaData.getUsername(), hanaData.getPassword())
         .stream()
         .map(deliveryUnit -> new DeliveryUnitData(deliveryUnit.getName(), deliveryUnit.getVendor()))
         .collect(Collectors.toList());

@@ -105,7 +105,7 @@ public class XSKMigrationRestServiceTest {
     when(mockWorkspace.getName()).thenReturn(TEST_WORKSPACE_NAME);
     when(mockWorkspacesCoreService.getWorkspaces()).thenReturn(Collections.singletonList(mockWorkspace));
 
-    when(mockDeliveryUnitsProvider.getDeliveryUnitsNames(TEST_DATABASE_USERNAME, TEST_DATABASE_PASSWORD))
+    when(mockDeliveryUnitsProvider.getDeliveryUnits(TEST_DATABASE_USERNAME, TEST_DATABASE_PASSWORD))
         .thenReturn(Collections.singletonList(new DeliveryUnit(TEST_DELIVERY_UNIT_NAME, TEST_DELIVERY_UNIT_VENDOR)));
 
     Response response = migrationRestService.setupMigration(new MigrationRequestBody(TEST_NEO_DATA, TEST_HANA_DATA));

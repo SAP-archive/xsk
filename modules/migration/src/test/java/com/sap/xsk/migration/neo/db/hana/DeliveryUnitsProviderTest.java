@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class DeliveryUnitsProviderTest {
   private static final String TEST_DELIVERY_UNIT_NAME = "testDeliveryUnitName";
   private static final String TEST_DELIVERY_UNIT_VENDOR = "testDeliveryUnitVendor";
   private static final String TEST_NO_DB_CONNECTION_EXCEPTION_MESSAGE = "Couldn't connect to database!";
+  private static final String TEST_COULD_NOT_QUERY_DELIVERY_UNITS_TIMEOUT_EXCEPTION_MESSAGE = "Couldn't execute query due to a timeout!";
   private static final String TEST_COULD_NOT_QUERY_DELIVERY_UNITS_EXCEPTION_MESSAGE = "Couldn't execute query!";
 
   @Mock
@@ -57,7 +59,7 @@ public class DeliveryUnitsProviderTest {
     when(mockResultSet.getString(1)).thenReturn(TEST_DELIVERY_UNIT_NAME);
     when(mockResultSet.getString(2)).thenReturn(TEST_DELIVERY_UNIT_VENDOR);
 
-    List<DeliveryUnit> deliveryUnits = deliveryUnitsProvider.getDeliveryUnitsNames(TEST_DB_USER, TEST_DB_PASSWORD);
+    List<DeliveryUnit> deliveryUnits = deliveryUnitsProvider.getDeliveryUnits(TEST_DB_USER, TEST_DB_PASSWORD);
 
     assertEquals("Unexpected delivery units list size", 1, deliveryUnits.size());
     assertEquals("Unexpected delivery unit name", TEST_DELIVERY_UNIT_NAME, deliveryUnits.get(0).getName());
@@ -73,7 +75,7 @@ public class DeliveryUnitsProviderTest {
     DeliveryUnitsException caughtException = assertThrows(
         "Unexpected exception caught",
         DeliveryUnitsException.class,
-        () -> deliveryUnitsProvider.getDeliveryUnitsNames(TEST_DB_USER, TEST_DB_PASSWORD)
+        () -> deliveryUnitsProvider.getDeliveryUnits(TEST_DB_USER, TEST_DB_PASSWORD)
     );
 
     assertEquals("Unexpected exception message", TEST_NO_DB_CONNECTION_EXCEPTION_MESSAGE, caughtException.getMessage());
@@ -87,7 +89,7 @@ public class DeliveryUnitsProviderTest {
     DeliveryUnitsException caughtException = assertThrows(
         "Unexpected exception caught",
         DeliveryUnitsException.class,
-        () -> deliveryUnitsProvider.getDeliveryUnitsNames(TEST_DB_USER, TEST_DB_PASSWORD)
+        () -> deliveryUnitsProvider.getDeliveryUnits(TEST_DB_USER, TEST_DB_PASSWORD)
     );
 
     assertEquals("Unexpected exception message", TEST_NO_DB_CONNECTION_EXCEPTION_MESSAGE, caughtException.getMessage());
@@ -102,10 +104,40 @@ public class DeliveryUnitsProviderTest {
     DeliveryUnitsException caughtException = assertThrows(
         "Unexpected exception caught",
         DeliveryUnitsException.class,
-        () -> deliveryUnitsProvider.getDeliveryUnitsNames(TEST_DB_USER, TEST_DB_PASSWORD)
+        () -> deliveryUnitsProvider.getDeliveryUnits(TEST_DB_USER, TEST_DB_PASSWORD)
     );
 
     assertEquals("Unexpected exception message", TEST_COULD_NOT_QUERY_DELIVERY_UNITS_EXCEPTION_MESSAGE, caughtException.getMessage());
     assertEquals("Unexpected exception cause class", SQLException.class, caughtException.getCause().getClass());
+  }
+
+  @Test
+  public void testGetDeliverUnitsFailsWhenExtractionTimeout() throws SQLException {
+    when(mockStatement.executeQuery(TEST_DB_QUERY)).thenThrow(SQLTimeoutException.class);
+    when(mockConnection.createStatement()).thenReturn(mockStatement);
+    when(databaseConnectionProvider.getConnection(TEST_DB_HOST, TEST_DB_USER, TEST_DB_PASSWORD)).thenReturn(mockConnection);
+
+    DeliveryUnitsException caughtException = assertThrows(
+        DeliveryUnitsException.class,
+        () -> deliveryUnitsProvider.getDeliveryUnits(TEST_DB_USER, TEST_DB_PASSWORD)
+    );
+
+    assertEquals("Unexpected exception message", TEST_COULD_NOT_QUERY_DELIVERY_UNITS_TIMEOUT_EXCEPTION_MESSAGE, caughtException.getMessage());
+    assertEquals("Unexpected exception cause class", SQLTimeoutException.class, caughtException.getCause().getClass());
+  }
+
+  @Test
+  public void testGetDeliverUnitsFailsWhenSQLQueryFails() throws SQLException {
+    when(mockStatement.executeQuery(TEST_DB_QUERY)).thenThrow(SQLException.class);
+    when(mockConnection.createStatement()).thenReturn(mockStatement);
+    when(databaseConnectionProvider.getConnection(TEST_DB_HOST, TEST_DB_USER, TEST_DB_PASSWORD)).thenReturn(mockConnection);
+
+    DeliveryUnitsException caughtException = assertThrows(
+        DeliveryUnitsException.class,
+        () -> deliveryUnitsProvider.getDeliveryUnits(TEST_DB_USER, TEST_DB_PASSWORD)
+    );
+
+    assertEquals("Unexpected exception message", TEST_COULD_NOT_QUERY_DELIVERY_UNITS_EXCEPTION_MESSAGE, caughtException.getMessage());
+    assertEquals("Unexpected exception cause", SQLException.class, caughtException.getCause().getClass());
   }
 }

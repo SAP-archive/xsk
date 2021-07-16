@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsodata.ds.service;
@@ -104,6 +104,7 @@ public class XSKODataParser implements IXSKODataParser {
 
     private void applyConditions(String location, XSKODataModel odataModel) throws SQLException {
         //the order of invocation matter, so do not change it
+        applyEmptyExistCondition(location, odataModel);
         applyEntitySetCondition(odataModel);
 
         applyEmptyNamespaceCondition(location, odataModel);
@@ -114,6 +115,15 @@ public class XSKODataParser implements IXSKODataParser {
         applyAggregatesWithKeyGeneratedCondition(odataModel);
         applyParametersToViewsCondition(odataModel);
         applyOmittedParamResultCondition(odataModel);
+    }
+
+    private void applyEmptyExistCondition(String location, XSKODataModel odataModel) throws SQLException {
+        for (XSKHDBXSODATAEntity entity : odataModel.getService().getEntities()) {
+            if (entity.getKeyList().size() > 0) {
+                if (!checkIfEntityExist(entity.getRepositoryObject().getCatalogObjectName()))
+                    throw new XSKOData2TransformerException(String.format("Entity: %s from %s don't exist. make sure the artifacts exist before processing the xsodata file", entity.getRepositoryObject().getCatalogObjectName(), location));
+            }
+        }
     }
 
     /**
@@ -304,6 +314,13 @@ public class XSKODataParser implements IXSKODataParser {
         Connection connection = dataSource.getConnection();
         DatabaseMetaData databaseMetaData = connection.getMetaData();
         ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, artifactName, dbTypes.toArray(String[]::new));
+        return rs.next();
+    }
+
+    private boolean checkIfEntityExist(String artifactName) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        DatabaseMetaData databaseMetaData = connection.getMetaData();
+        ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, artifactName, null);
         return rs.next();
     }
 }

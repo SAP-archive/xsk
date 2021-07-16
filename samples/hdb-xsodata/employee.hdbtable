@@ -1,4 +1,4 @@
-table.schemaName = "HELLO_ODATA";
+table.schemaName = "DBADMIN";
 table.tableType = COLUMNSTORE; 
 table.columns = [
 	{name = "COMPANY_ID"; sqlType = INTEGER; nullable = false;},

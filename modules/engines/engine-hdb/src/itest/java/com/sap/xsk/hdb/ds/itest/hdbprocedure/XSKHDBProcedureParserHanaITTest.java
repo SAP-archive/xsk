@@ -59,7 +59,7 @@ public class XSKHDBProcedureParserHanaITTest {
     String hanaUserName = Configuration.get("hana.username");
     ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
     if(table.next()){
-      stmt.executeUpdate(String.format("drop table \"%s\".\"XSK_DATA_STRUCTURES\"", hanaUserName));
+      stmt.executeUpdate(String.format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure'", hanaUserName));
     }
   }
 

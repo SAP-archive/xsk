@@ -16,6 +16,7 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.view.XSKViewDropProcessor;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
 import com.sap.xsk.utils.XSKConstants;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -33,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
@@ -41,6 +43,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,6 +66,12 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
     @Mock
     private DropViewBuilder mockDropViewBuilder;
 
+    @Mock
+    private Map<String, IXSKDataStructureManager> managerServices;
+
+    @InjectMocks
+    private XSKViewCreateProcessor processor = new XSKViewCreateProcessor();
+
     @Before
     public void openMocks() {
         MockitoAnnotations.initMocks(this);
@@ -70,19 +79,16 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
 
     @Test
     public void executeCreateViewHANAv1Successfully() throws Exception {
-
         XSKViewCreateProcessor processorSpy = spy(XSKViewCreateProcessor.class);
         String sample = org.apache.commons.io.IOUtils
                 .toString(XSKViewParserTest.class.getResourceAsStream("/ItemsByOrderHANAv1.hdbview"), StandardCharsets.UTF_8);
-        XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view.db/ItemsByOrderHANAv1.hdbview", sample);
+
+        XSKDataStructureHDBViewModel model = XSKDataStructureModelFactory.parseView("hdb_view.db.a1/path/ItemsByOrderHANAv1.hdbview", sample);
         String mockSQL = "testSQLScript";
-
-        //PowerMock do not support deep stub calls
         PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-
         when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
         when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-        when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.VIEW)).thenReturn(false);
+        when(SqlFactory.getNative(mockConnection).exists(mockConnection, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "MYSCHEMA.hdb_view::ItemsByOrderHANAv1", DatabaseArtifactTypes.VIEW)).thenReturn(false);
         when(SqlFactory.getNative(mockConnection).create()).thenReturn(create);
         when(SqlFactory.getNative(mockConnection).create().view(any())).thenReturn(mockCreateViewBuilder);
         when(SqlFactory.getNative(mockConnection).create().view(any()).asSelect(any())).thenReturn(mockCreateViewBuilder);
@@ -142,7 +148,7 @@ public class XSKViewProcessorTest extends AbstractGuiceTest {
         PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
         when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
         when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-        when(SqlFactory.getNative(mockConnection).exists(mockConnection, "MYSCHEMA.\"hdb_view::ItemsByOrderHANAv1\"", DatabaseArtifactTypes.VIEW)).thenReturn(true);
+        when(SqlFactory.getNative(mockConnection).exists(mockConnection, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "MYSCHEMA.hdb_view::ItemsByOrderHANAv1", DatabaseArtifactTypes.VIEW)).thenReturn(true);
         when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
         when(SqlFactory.getNative(mockConnection).drop().view(any())).thenReturn(mockDropViewBuilder);
         when(SqlFactory.getNative(mockConnection).drop().view(any()).build()).thenReturn(mockSQL);

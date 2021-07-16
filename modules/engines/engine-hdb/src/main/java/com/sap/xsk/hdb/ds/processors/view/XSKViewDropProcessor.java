@@ -11,17 +11,23 @@
  */
 package com.sap.xsk.hdb.ds.processors.view;
 
-import static java.text.MessageFormat.format;
-
+import com.google.inject.Inject;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.sql.Connection;
-import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Map;
+
+import static java.text.MessageFormat.format;
 
 /**
  * The View Drop Processor.
@@ -29,6 +35,9 @@ import org.slf4j.LoggerFactory;
 public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBViewModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKViewDropProcessor.class);
+
+    @Inject
+    private Map<String, IXSKDataStructureManager> managerServices;
 
   /**
    * Execute the corresponding statement.
@@ -39,10 +48,16 @@ public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureH
    */
   public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
     logger.info("Processing Drop View: " + viewModel.getName());
+        String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), viewModel.getSchema());
 
-    String viewName = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), viewModel.getSchema());
-    if (SqlFactory.getNative(connection).exists(connection, viewName, DatabaseArtifactTypes.VIEW)) {
-      String sql = SqlFactory.getNative(connection).drop().view(viewName).build();
+        //Drop public synonym
+        if (managerServices != null)
+            XSKHDBUtils.dropPublicSynonymForArtifact(managerServices
+                    .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), viewModel.getName(), viewModel.getSchema(), connection);
+
+        //Drop view
+        if (SqlFactory.getNative(connection).exists(connection, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, viewNameWithSchema, DatabaseArtifactTypes.VIEW)) {
+            String sql = SqlFactory.getNative(connection).drop().view(viewNameWithSchema).build();
       executeSql(sql, connection);
     } else {
       logger.warn(format("View [{0}] does not exists during the drop process", viewModel.getName()));

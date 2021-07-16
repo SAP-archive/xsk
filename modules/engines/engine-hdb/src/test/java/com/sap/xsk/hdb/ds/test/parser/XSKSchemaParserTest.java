@@ -20,15 +20,14 @@ import org.junit.Test;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
-
 public class XSKSchemaParserTest extends AbstractGuiceTest {
 
     @Test
-    public void parseHdbschemaFileWithoutErrorsSuccessfully() throws Exception {
+    public void parseHdbschemaFileSuccessfully() throws Exception {
         String hdbschemaSample = org.apache.commons.io.IOUtils
                 .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
         XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("/Myschema.hdbschema", hdbschemaSample);
-        assertEquals("MYSCHEMA", model.getSchema());
+        assertEquals("MySchema", model.getSchema());
     }
 
     @Test(expected = XSKArtifactParserException.class)

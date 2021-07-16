@@ -64,6 +64,7 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
   @Before
   public void openMocks() {
     MockitoAnnotations.initMocks(this);
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
   }
 
   @Test
@@ -121,9 +122,9 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"SY_DUMMY\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"PAL_TRIPLE_EXPSMOOTH\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"PROCEDURES\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "LL","SY_DUMMY", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, null,"PAL_TRIPLE_EXPSMOOTH", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, null, "PROCEDURES", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
     when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
     when(SqlFactory.getNative(mockConnection).drop().synonym(any())).thenReturn(mockDropSynonymBuilder);
     when(SqlFactory.getNative(mockConnection).drop().synonym(any()).build()).thenReturn(mockSQL);
@@ -145,9 +146,9 @@ public class HDBSynonymProcessorTest extends AbstractGuiceTest {
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"SY_DUMMY\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"PAL_TRIPLE_EXPSMOOTH\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "\"PROCEDURES\"", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "LL","SY_DUMMY", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, null,"PAL_TRIPLE_EXPSMOOTH", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, null, "PROCEDURES", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
 
     processorSpy.execute(mockConnection, model);
   }

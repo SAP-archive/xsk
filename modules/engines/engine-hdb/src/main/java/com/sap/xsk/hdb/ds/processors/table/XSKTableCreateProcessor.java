@@ -11,17 +11,23 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
+import com.google.inject.Inject;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.sql.Connection;
-import java.sql.SQLException;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * The Table Create Processor.
@@ -30,8 +36,12 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableCreateProcessor.class);
 
+    @Inject
+    private Map<String, IXSKDataStructureManager> managerServices;
+
   /**
    * Execute the corresponding statement.
+     * The method will create a table and a public synonym in order this table to be accessed from other schemes.
    *
    * @param connection the connection
    * @param tableModel the table model
@@ -39,11 +49,13 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
    * @see <a href="https://github.com/SAP/xsk/wiki/Parser-hdbtable">hdbtable against postgresql itest</a>
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
-    String sql = null;
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
-    logger.info("Processing Create Table: " + tableName);
-    tableModel.setName(tableName);
+        logger.info("Processing Create Table: " + tableModel.getName());
 
+    String sql = null;
+        String tableNameWithoutSchema = tableModel.getName();
+        String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
+
+        tableModel.setName(tableNameWithSchema);
     XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, tableModel);
 
     switch (tableModel.getDBContentType()) {
@@ -62,5 +74,11 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
       }
     }
     executeSql(sql, connection);
+
+        //Create public synonym
+        if (SqlFactory.getNative(connection).exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE)) {
+            XSKHDBUtils.createPublicSynonymForArtifact(managerServices
+                    .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
+        }
   }
 }

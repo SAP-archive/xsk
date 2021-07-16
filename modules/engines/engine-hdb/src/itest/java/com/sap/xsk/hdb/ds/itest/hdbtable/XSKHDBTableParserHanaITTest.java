@@ -20,8 +20,10 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.utils.TestConstants;
+import com.sap.xsk.utils.XSKConstants;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -56,14 +58,15 @@ public class XSKHDBTableParserHanaITTest {
         String hanaUserName = Configuration.get("hana.username");
         ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
         if (table.next()) {
-            stmt.executeUpdate(String.format("drop table \"%s\".\"XSK_DATA_STRUCTURES\"", hanaUserName));
+            stmt.executeUpdate(String.format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable'", hanaUserName));
         }
     }
 
     @Test
-    public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    public void testHDBTableCreateOnSameSchema() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
         Statement stmt = connection.createStatement();
-        stmt.executeUpdate("CREATE SCHEMA \"test\"");
+        String schemaName = "test";
+        stmt.executeUpdate(String.format("CREATE SCHEMA \"%s\"", schemaName));
 
         LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
                 "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
@@ -73,10 +76,14 @@ public class XSKHDBTableParserHanaITTest {
         facade.updateEntities();
 
         DatabaseMetaData metaData = connection.getMetaData();
-        ResultSet table = metaData.getTables(null, "test", "hdbtable-itest::SamplePostgreXSClassicTable", null);
+        ResultSet table = metaData.getTables(null, schemaName, "hdbtable-itest::SamplePostgreXSClassicTable", new String[]{ISqlKeywords.KEYWORD_TABLE});
         assertTrue(table.next());
 
-        stmt.executeUpdate("drop table \"test\".\"hdbtable-itest::SamplePostgreXSClassicTable\"");
-        stmt.executeUpdate("DROP SCHEMA \"test\"");
+        ResultSet synonym = metaData.getTables(null, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "hdbtable-itest::SamplePostgreXSClassicTable", new String[]{ISqlKeywords.KEYWORD_SYNONYM});
+        assertTrue(synonym.next());
+
+        stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
+        stmt.executeUpdate(String.format("drop table \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", schemaName));
+        stmt.executeUpdate(String.format("DROP SCHEMA \"%s\"", schemaName));
     }
 }

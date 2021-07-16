@@ -11,22 +11,27 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
-import static java.text.MessageFormat.format;
-
+import com.google.inject.Inject;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
+
+import static java.text.MessageFormat.format;
 
 /**
  * The Table Drop Processor.
@@ -34,6 +39,9 @@ import org.slf4j.LoggerFactory;
 public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableDropProcessor.class);
+
+    @Inject
+    private Map<String, IXSKDataStructureManager> managerServices;
 
   /**
    * Execute the corresponding statement.
@@ -43,8 +51,15 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName());
-    logger.info("Processing Drop Table: " + tableName);
+        logger.info("Processing Drop Table: " + tableModel.getName());
+
+        String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
+        String tableNameWithoutSchema = tableModel.getName();
+
+        //Drop public synonym
+        XSKHDBUtils.dropPublicSynonymForArtifact(managerServices
+                .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
+
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
       String sql = null;
       switch (tableModel.getDBContentType()) {
@@ -56,10 +71,11 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
         case OTHERS: {
           ISqlDialect dialect = SqlFactory.deriveDialect(connection);
           if (dialect.getClass().equals(HanaSqlDialect.class)) {
-            sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
+                        sql = XSKConstants.XSK_HDBTABLE_DROP + tableModel.getRawContent();
+                        //SqlFactory.getNative(connection).drop().table(tableName).build();
             break;
           } else {
-            throw new IllegalStateException(String.format("Views are not supported for %s !", dialect.getDatabaseName(connection)));
+                        throw new IllegalStateException(String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection)));
           }
         }
       }

@@ -159,9 +159,9 @@ public class XSKODataParser implements IXSKODataParser {
      */
     private void applyEntitySetCondition(XSKODataModel odataModel) {
         odataModel.getService().getEntities().forEach(entity -> {
-            if (StringUtils.isEmpty(entity.getAlias())|| entity.getAlias()==null) {
+            if (StringUtils.isEmpty(entity.getAlias()) || entity.getAlias() == null) {
                 String baseObjName = XSKCommonsUtils.extractBaseObjectNameFromCatalogName(entity.getRepositoryObject().getCatalogObjectName());
-                if (!StringUtils.isEmpty(baseObjName) || baseObjName==null) {
+                if (!StringUtils.isEmpty(baseObjName) || baseObjName == null) {
                     entity.setAlias(baseObjName);
                 } else {
                     entity.setAlias(entity.getRepositoryObject().getCatalogObjectName());
@@ -311,16 +311,18 @@ public class XSKODataParser implements IXSKODataParser {
     }
 
     private boolean checkIfEntityIsFromAGivenDBType(String artifactName, List<String> dbTypes) throws SQLException {
-        Connection connection = dataSource.getConnection();
-        DatabaseMetaData databaseMetaData = connection.getMetaData();
-        ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, artifactName, dbTypes.toArray(String[]::new));
-        return rs.next();
+        try (Connection connection = dataSource.getConnection()) {
+            DatabaseMetaData databaseMetaData = connection.getMetaData();
+            ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, artifactName, dbTypes.toArray(String[]::new));
+            return rs.next();
+        }
     }
 
     private boolean checkIfEntityExist(String artifactName) throws SQLException {
-        Connection connection = dataSource.getConnection();
-        DatabaseMetaData databaseMetaData = connection.getMetaData();
-        ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, artifactName, null);
-        return rs.next();
+        try (Connection connection = dataSource.getConnection()) {
+            DatabaseMetaData databaseMetaData = connection.getMetaData();
+            ResultSet rs = databaseMetaData.getTables(null, null, artifactName, null);
+            return rs.next();
+        }
     }
 }

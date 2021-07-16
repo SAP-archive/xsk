@@ -1,15 +1,14 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
@@ -46,6 +45,8 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
     private DatabaseMetaData mockDatabaseMetaData;
     @Mock
     private ResultSet mockResultSet;
+    @Mock
+    private ResultSet mockResultSetEntityExist;
     @Mock
     private DataSource mockDataSource;
     @InjectMocks
@@ -172,11 +173,13 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
 
     private void mockGetTablesSuccessfully() throws SQLException {
         mockGetTable();
+        when(mockResultSetEntityExist.next()).thenReturn(true);
         when(mockResultSet.next()).thenReturn(true);
     }
 
     private void mockGetTablesFail() throws SQLException {
         mockGetTable();
+        when(mockResultSetEntityExist.next()).thenReturn(true);
         when(mockResultSet.next()).thenReturn(false);
     }
 
@@ -184,5 +187,6 @@ public class XSKOdataParserTest extends AbstractGuiceTest {
         when(mockDataSource.getConnection()).thenReturn(mockConnection);
         when(mockConnection.getMetaData()).thenReturn(mockDatabaseMetaData);
         when(mockDatabaseMetaData.getTables(isNull(), isNull(), anyString(), any(String[].class))).thenReturn(mockResultSet);
+        when(mockDatabaseMetaData.getTables(isNull(), isNull(), anyString(), isNull())).thenReturn(mockResultSetEntityExist);
     }
 }

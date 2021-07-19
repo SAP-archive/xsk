@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.processors.hdbprocedure;
 
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -33,9 +34,10 @@ public class HDBProcedureDropProcessor extends AbstractXSKProcessor<XSKDataStruc
 
     public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure) throws SQLException {
         logger.info("Processing Drop Procedure: " + hdbProcedure.getName());
+        String procedureNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[1];
+        hdbProcedure.setSchema(XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[0]);
 
-        String procedureName = XSKHDBUtils.escapeArtifactName(connection, hdbProcedure.getName());
-        if (SqlFactory.getNative(connection).exists(connection, procedureName, DatabaseArtifactTypes.PROCEDURE)) {
+        if (SqlFactory.getNative(connection).exists(connection, procedureNameWithoutSchema, DatabaseArtifactTypes.PROCEDURE)) {
             ISqlDialect dialect = SqlFactory.deriveDialect(connection);
             if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
                 throw new IllegalStateException(String.format("%s does not support Procedures", dialect.getDatabaseName(connection)));

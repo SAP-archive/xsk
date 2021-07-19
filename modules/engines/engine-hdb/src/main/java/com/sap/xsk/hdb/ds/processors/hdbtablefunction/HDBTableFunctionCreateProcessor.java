@@ -13,8 +13,8 @@ package com.sap.xsk.hdb.ds.processors.hdbtablefunction;
 
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
-import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -34,8 +34,9 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
     public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
         logger.info("Processing Create TableFunction: " + hdbTableFunction.getName());
 
-        String tableFunctionName = XSKHDBUtils.escapeArtifactName(connection, hdbTableFunction.getName());
-        if (!SqlFactory.getNative(connection).exists(connection, tableFunctionName, DatabaseArtifactTypes.FUNCTION)) {
+        String funcNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[1];
+        hdbTableFunction.setSchema(XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[0]);
+        if (!SqlFactory.getNative(connection).exists(connection, funcNameWithoutSchema, DatabaseArtifactTypes.FUNCTION)) {
             ISqlDialect dialect = SqlFactory.deriveDialect(connection);
             if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
                 throw new IllegalStateException(String.format("TableFunctions are not supported for %s", dialect.getDatabaseName(connection)));

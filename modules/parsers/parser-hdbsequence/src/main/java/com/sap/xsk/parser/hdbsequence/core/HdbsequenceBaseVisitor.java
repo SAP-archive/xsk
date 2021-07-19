@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbsequence/core/Hdbsequence.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbsequence\core\Hdbsequence.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbsequence.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -75,14 +75,6 @@ public class HdbsequenceBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitDependsOnProp(@NotNull HdbsequenceParser.DependsOnPropContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

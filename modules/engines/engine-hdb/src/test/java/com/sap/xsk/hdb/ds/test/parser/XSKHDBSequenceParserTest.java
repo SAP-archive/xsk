@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.test.parser;
@@ -67,9 +67,8 @@ public class XSKHDBSequenceParserTest {
               StandardCharsets.UTF_8);
       XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
           .parse("/test/xsk/com/sap/DependsOnSequence.hdbsequence", content);
-      assertEquals("com.acme.test.tables::MY_TABLE2", model.getDepends_on().get(1));
-      assertEquals("sap.ino.db.iam::t_identity", model.getDepends_on_table().get(0));
-      assertEquals("sap.ino.db.iam::t_view", model.getDepends_on_view().get(0));
+      assertEquals("sap.ino.db.iam::t_identity", model.getDepends_on_table());
+      assertEquals("sap.ino.db.iam::t_view", model.getDepends_on_view());
     }
 
     @Test
@@ -86,10 +85,7 @@ public class XSKHDBSequenceParserTest {
 
     @Test
     public void parseGrammarUnreadableContent() throws Exception {
-        String content = org.apache.commons.io.IOUtils
-                .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/InvalidContent.hdbsequence"),
-                        StandardCharsets.UTF_8);
-
+        String content = "Some invalid content.";
         assertThrows(XSKArtifactParserException.class, () -> new XSKHDBSequenceParser().parse("/test/xsk/com/sap/InvalidContent.hdbsequence", content));
     }
 

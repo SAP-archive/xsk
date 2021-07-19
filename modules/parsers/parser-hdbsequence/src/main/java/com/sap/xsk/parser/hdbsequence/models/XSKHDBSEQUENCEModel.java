@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.parser.hdbsequence.models;
@@ -41,9 +41,8 @@ public class XSKHDBSEQUENCEModel {
   Boolean nominvalue;
   Boolean cycles;
   String reset_by;
-  List<String> depends_on;
-  List<String> depends_on_table;
-  List<String> depends_on_view;
+  String depends_on_table;
+  String depends_on_view;
 
   @SerializedName(value = HDBSequenceConstants.PUBLIC_PROPERTY)
   Boolean publicc = HDBSequenceConstants.PUBLIC_DEFAULT_VALUE;

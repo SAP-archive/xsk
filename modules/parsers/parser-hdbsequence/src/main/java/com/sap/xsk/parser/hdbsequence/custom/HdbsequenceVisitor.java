@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 /*
@@ -33,23 +33,20 @@
  */
 package com.sap.xsk.parser.hdbsequence.custom;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceBaseVisitor;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser;
-import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser.DependsOnPropContext;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser.DependsOnTableContext;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser.DependsOnViewContext;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
 import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
-import java.util.HashSet;
-import java.util.List;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import static com.sap.xsk.parser.hdbsequence.custom.XSKHDBSEQUENCEModelAdapter.handleStringLiteral;
+
+import java.util.HashSet;
+import java.util.List;
 
 
 public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
@@ -91,9 +88,7 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
             .add(HDBSequenceConstants.INCREMENT_BY_PROPERTY, visitIncrement_by((HdbsequenceParser.Increment_byContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.Start_withContext) {
         parsedObj.add(HDBSequenceConstants.START_WITH_PROPERTY, visitStart_with((HdbsequenceParser.Start_withContext) tree.getChild(0)));
-      } else if (tree.getChild(0) instanceof HdbsequenceParser.DependsOnPropContext) {
-        parsedObj.add(HDBSequenceConstants.DEPENDS_ON_PROPERTY, visitDependsOnProp((HdbsequenceParser.DependsOnPropContext) tree.getChild(0)));
-      } else if (tree.getChild(0) instanceof HdbsequenceParser.DependsOnTableContext) {
+     } else if (tree.getChild(0) instanceof HdbsequenceParser.DependsOnTableContext) {
         parsedObj.add(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY, visitDependsOnTable((HdbsequenceParser.DependsOnTableContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.DependsOnViewContext) {
         parsedObj.add(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY, visitDependsOnView((HdbsequenceParser.DependsOnViewContext) tree.getChild(0)));
@@ -187,31 +182,15 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
   public JsonElement visitDependsOnTable(DependsOnTableContext ctx) {
     checkForPropertyRepetition(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY);
     return (ctx != null && ctx.STRING() != null)
-        ? dependsOnList(ctx.STRING())
-        : null;
-  }
-
-  @Override
-  public JsonElement visitDependsOnProp(DependsOnPropContext ctx) {
-    checkForPropertyRepetition(HDBSequenceConstants.DEPENDS_ON_PROPERTY);
-    return (ctx != null && ctx.STRING() != null)
-        ? dependsOnList(ctx.STRING())
-        : null;
+            ? new JsonPrimitive(ctx.STRING().getText())
+            : null;
   }
 
   @Override
   public JsonElement visitDependsOnView(DependsOnViewContext ctx) {
     checkForPropertyRepetition(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY);
     return (ctx != null && ctx.STRING() != null)
-        ? dependsOnList(ctx.STRING())
-        : null;
-  }
-
-  public JsonElement dependsOnList(List<TerminalNode> nodes) {
-    JsonArray dependsOnList = new JsonArray();
-    nodes.forEach(t -> {
-      dependsOnList.add(new JsonPrimitive(handleStringLiteral(t.getText())));
-    });
-    return dependsOnList;
+            ? new JsonPrimitive(ctx.STRING().getText())
+            : null;
   }
 }

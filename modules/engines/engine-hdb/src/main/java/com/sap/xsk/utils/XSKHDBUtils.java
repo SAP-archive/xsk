@@ -47,7 +47,7 @@ public class XSKHDBUtils {
      * Escape artifact name if DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE is activated
      *
      * @param artifactName name of the artifact
-     * @param schemaName   name of teh schema that will be assembled to the artifact name
+     * @param schemaName   name of the schema that will be assembled to the artifact name
      * @return escaped in quotes artifact name
      */
     public static String escapeArtifactName(Connection connection, String artifactName, String schemaName) {

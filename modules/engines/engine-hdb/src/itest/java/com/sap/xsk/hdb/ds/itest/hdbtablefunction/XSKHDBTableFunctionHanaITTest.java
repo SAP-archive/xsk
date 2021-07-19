@@ -82,7 +82,7 @@ public class XSKHDBTableFunctionHanaITTest {
     ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('hdbtablefunction-itest::SampleHanaTableFunction')");
     assertTrue(rs.next());
     assertEquals(1, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP FUNCTION %s", XSKHDBUtils.escapeArtifactName(connection, "hdbtablefunction-itest::SampleHanaTableFunction")));
+    //stmt.executeUpdate(String.format("DROP FUNCTION %s", XSKHDBUtils.escapeArtifactName(connection, "hdbtablefunction-itest::SampleHanaTableFunction")));
     stmt.executeUpdate(String.format("DROP TABLE \"%s\".\"hdbtablefunction-itest::SampleHanaTable\"", Configuration.get("hana.username")));
   }
 }

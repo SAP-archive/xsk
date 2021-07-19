@@ -113,4 +113,17 @@ public class XSKCommonsUtils {
                     artifactType, location));
         }
     }
+
+
+    public static String[] extractArtifactNameWhenSchemaIsProvided(String artifactName) {
+        Pattern pattern = Pattern.compile("\"?(.*?)\"?\\.\"(.*?)\"", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(artifactName.trim());
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            return new String[]{matcher.group(1), matcher.group(2)};
+        } else {
+            return new String[]{null,artifactName};
+        }
+    }
 }
+

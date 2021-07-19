@@ -1,6 +1,6 @@
 # Drumbeats
 
-## Week 28 (12.07 - 18.07)
+## 2021 Week 28 (12 July - 18 July)
 
 #### Focus topics:
 

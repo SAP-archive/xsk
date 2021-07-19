@@ -11,9 +11,13 @@
  */
 package com.sap.xsk.utils;
 
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -22,6 +26,7 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class XSKHDBUtils {
@@ -49,7 +54,9 @@ public class XSKHDBUtils {
         boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
         String escapeSymbol = getEscapeSymbol(connection);
         if (!artifactName.startsWith(escapeSymbol)) {
+            if (caseSensitive) {
             artifactName = escapeSymbol + artifactName + escapeSymbol;
+        }
         }
 
         if (schemaName != null && !schemaName.trim().isEmpty()) {
@@ -88,5 +95,30 @@ public class XSKHDBUtils {
         model.setCreatedBy(UserFacade.getName());
         model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
         model.setDbContentType(DbContentType);
+    }
+
+    public static void createPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService, String artifactName, String artifactSchema, Connection connection) throws SQLException {
+        xskSynonymManagerService.createDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
+    }
+
+    public static void dropPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService, String artifactName, String artifactSchema, Connection connection) throws SQLException {
+        xskSynonymManagerService.dropDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
+    }
+
+    public static XSKDataStructureHDBSynonymModel assemblePublicSynonym(String artifactName, String artifactSchema) {
+        XSKDataStructureHDBSynonymModel model = new XSKDataStructureHDBSynonymModel();
+
+        XSKHDBSYNONYMDefinitionModel defModel = new XSKHDBSYNONYMDefinitionModel();
+        defModel.setSynonymSchema(XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA);
+        XSKHDBSYNONYMDefinitionModel.Target target = new XSKHDBSYNONYMDefinitionModel.Target();
+        target.setObject(artifactName);
+        target.setSchema(artifactSchema);
+        defModel.setTarget(target);
+
+        model.getSynonymDefinitions().put(artifactName, defModel);
+        model.setType(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
+        model.setCreatedBy(UserFacade.getName());
+        model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+        return model;
     }
 }

@@ -12,6 +12,7 @@
 package com.sap.xsk.hdb.ds.test.processors;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -28,7 +29,13 @@ import java.sql.PreparedStatement;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractGuiceTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.builders.CreateBranchingBuilder;
+import org.eclipse.dirigible.database.sql.builders.DropBranchingBuilder;
+import org.eclipse.dirigible.database.sql.builders.schema.CreateSchemaBuilder;
+import org.eclipse.dirigible.database.sql.builders.schema.DropSchemaBuilder;
+import org.eclipse.dirigible.database.sql.builders.synonym.CreateSynonymBuilder;
 import org.eclipse.dirigible.database.sql.dialects.DefaultSqlDialect;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
@@ -54,73 +61,78 @@ public class XSKSchemaProcessorTest extends AbstractGuiceTest {
   private DefaultSqlDialect mockSqlDialect;
   @Mock
   private PreparedStatement mockStatement;
-
+  @Mock
+  private CreateBranchingBuilder create;
+  @Mock
+  private CreateSchemaBuilder mockCreateSchemaBuilder;
+  @Mock
+  private DropSchemaBuilder mockDropSchemaBuilder;
+  @Mock
+  private DropBranchingBuilder drop;
 
   @Before
   public void openMocks() {
     MockitoAnnotations.initMocks(this);
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
   }
 
   @Test
   public void executeCreateSchemaSuccessfully() throws Exception {
-    //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
-
     HDBSchemaCreateProcessor processorSpy = spy(HDBSchemaCreateProcessor.class);
     String hdbschemaSample = org.apache.commons.io.IOUtils
-        .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
+            .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
 
     XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("hdb_schema/Myschema.hdbschema", hdbschemaSample);
 
-    String sql = "CREATE SCHEMA \"MYSCHEMA\"";
+    //PowerMock do not support deep stub calls
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    String mockSQL = "testSQLScript";
+    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "MySchema", DatabaseArtifactTypes.SCHEMA)).thenReturn(false);
+    when(SqlFactory.getNative(mockConnection).create()).thenReturn(create);
+    when(SqlFactory.getNative(mockConnection).create().schema(anyString())).thenReturn(mockCreateSchemaBuilder);
+    when(SqlFactory.getNative(mockConnection).create().schema(anyString()).build()).thenReturn(mockSQL);
 
-    when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
-    when(mockStatement.executeUpdate(any())).thenReturn(1);
     processorSpy.execute(mockConnection, model);
-
-    verify(processorSpy, times(1)).executeSql(sql, mockConnection);
+    verify(processorSpy, times(1)).executeSql(mockSQL, mockConnection);
   }
 
   @Test(expected = IllegalStateException.class)
   public void executeCreateSchemaFail() throws Exception {
-    //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("false");
-
     HDBSchemaCreateProcessor processorSpy = spy(HDBSchemaCreateProcessor.class);
     String hdbschemaSample = org.apache.commons.io.IOUtils
         .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
 
     XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("hdb_schema/Myschema.hdbschema", hdbschemaSample);
+
+    //PowerMock do not support deep stub calls
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     processorSpy.execute(mockConnection, model);
   }
 
   @Test
   public void executeDropSchemaSuccessfully() throws Exception {
+    HDBSchemaDropProcessor processorSpy = spy(HDBSchemaDropProcessor.class);
+    String hdbschemaSample = org.apache.commons.io.IOUtils
+            .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
+
+    XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("hdb_schema/Myschema.hdbschema", hdbschemaSample);
+    String mockSQL = "testSQLScript";
+
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("false");
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "MySchema", DatabaseArtifactTypes.SCHEMA)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
+    when(SqlFactory.getNative(mockConnection).drop().schema(anyString())).thenReturn(mockDropSchemaBuilder);
+    when(SqlFactory.getNative(mockConnection).drop().schema(anyString()).build()).thenReturn(mockSQL);
 
-    HDBSchemaDropProcessor processorSpy = spy(HDBSchemaDropProcessor.class);
-    String hdbschemaSample = org.apache.commons.io.IOUtils
-        .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
-
-    XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("hdb_schema/Myschema.hdbschema", hdbschemaSample);
-
-    String sql = "DROP SCHEMA \"MYSCHEMA\"";
-
-    when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
-    when(mockStatement.executeUpdate(any())).thenReturn(1);
     processorSpy.execute(mockConnection, model);
-
-    verify(processorSpy, times(1)).executeSql(sql, mockConnection);
+    verify(processorSpy, times(1)).executeSql(mockSQL, mockConnection);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -129,7 +141,6 @@ public class XSKSchemaProcessorTest extends AbstractGuiceTest {
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("false");
 
     HDBSchemaDropProcessor processorSpy = spy(HDBSchemaDropProcessor.class);
     String hdbschemaSample = org.apache.commons.io.IOUtils

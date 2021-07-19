@@ -179,6 +179,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                         xskSequencesManagerService.dropDataStructure(connection, sequenceToUpdate);
                     } */
 
+
+
+          // ************** DROPPING ****************************************************************//
           // drop HDB Procedures
           List<XSKDataStructureHDBProcedureModel> hdbProceduresToUpdate = new ArrayList<>();
           for (int i = sorted.size() - 1; i >= 0; i--) {
@@ -188,7 +191,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
               hdbProceduresToUpdate.add(model);
             }
           }
-
           IXSKDataStructureManager<XSKDataStructureModel> xskProceduresManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDB_PROCEDURE);
           for (XSKDataStructureHDBProcedureModel procedureToUpdate :
@@ -206,7 +208,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
               hdbTableFunctionsToUpdate.add(model);
             }
           }
-
           IXSKDataStructureManager<XSKDataStructureModel> xskTableFunctionManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION);
           for (XSKDataStructureHDBTableFunctionModel tableFunctionModel :
@@ -214,9 +215,24 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             xskTableFunctionManagerService.dropDataStructure(connection, tableFunctionModel);
           }
 
-          // drop views in a reverse order
-          IXSKDataStructureManager<XSKDataStructureModel> xskViewManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW);
+          // drop Synonym in a reverse order
+          IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService = managerServices
+                  .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
+          for (int i = sorted.size() - 1; i >= 0; i--) {
+            String dsName = sorted.get(i);
+            XSKDataStructureHDBSynonymModel model = (XSKDataStructureHDBSynonymModel) dataStructureSynonymModel.get(dsName);
+            try {
+              if (model != null) {
+                xskSynonymManagerService.dropDataStructure(connection, model);
+              }
+            } catch (Exception e) {
+              logger.error(e.getMessage(), e);
+              errors.add(e.getMessage());
+            }
+          }
 
+          // drop HDB Views in a reverse order
+          IXSKDataStructureManager<XSKDataStructureModel> xskViewManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW);
           for (int i = sorted.size() - 1; i >= 0; i--) {
             String dsName = sorted.get(i);
             XSKDataStructureHDBViewModel model = (XSKDataStructureHDBViewModel) dataStructureViewsModel.get(dsName);
@@ -230,10 +246,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
+          // drop Tables in a reverse order
           IXSKDataStructureManager<XSKDataStructureModel> xskTableManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDB_TABLE);
-
-          // drop tables in a reverse order
           for (int i = sorted.size() - 1; i >= 0; i--) {
             String dsName = sorted.get(i);
             XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) dataStructureTablesModel.get(dsName);
@@ -259,10 +274,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
+          // drop Entities in a reverse order
           IXSKDataStructureManager<XSKDataStructureModel> xskEntityManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDB_ENTITIES);
-
-          // drop entities in a reverse order
           for (int i = sorted.size() - 1; i >= 0; i--) {
             String dsName = sorted.get(i);
             XSKDataStructureEntitiesModel entitiesModel = (XSKDataStructureEntitiesModel) dataStructureEntitiesModel.get(dsName);
@@ -274,51 +288,28 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
-          // drop Synonym in a reverse order
-          IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService = managerServices
-              .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
-          for (int i = sorted.size() - 1; i >= 0; i--) {
-            String dsName = sorted.get(i);
-            XSKDataStructureHDBSynonymModel model = (XSKDataStructureHDBSynonymModel) dataStructureSynonymModel.get(dsName);
-            try {
-              if (model != null) {
-                xskSynonymManagerService.dropDataStructure(connection, model);
-              }
-            } catch (Exception e) {
-              logger.error(e.getMessage(), e);
-              errors.add(e.getMessage());
-            }
-          }
-
           // drop HDB Schemas
+          IXSKDataStructureManager<XSKDataStructureModel> xskSchemaManagerService = managerServices
+                  .get(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
           List<XSKDataStructureHDBSchemaModel> hdbSchemasToUpdate = new ArrayList<>();
           for (int i = sorted.size() - 1; i >= 0; i--) {
             String dsName = sorted.get(i);
             XSKDataStructureHDBSchemaModel model = (XSKDataStructureHDBSchemaModel) dataStructureSchemasModel.get(dsName);
             if (model != null) {
-              hdbSchemasToUpdate.add(model);
+              xskSchemaManagerService.dropDataStructure(connection, model);
             }
           }
 
-          IXSKDataStructureManager<XSKDataStructureModel> xskSchemaManagerService = managerServices
-              .get(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
-          for (XSKDataStructureHDBSchemaModel schemaModel :
-              hdbSchemasToUpdate) {
-            xskSchemaManagerService.dropDataStructure(connection, schemaModel);
-          }
-
-          // process sequences in the proper order
-          IXSKDataStructureManager<XSKDataStructureModel> xskSequenceManagerService = managerServices
-              .get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
+          // ************** CREATING *************************************************************************//
+          // process schemas in the proper order
           for (String dsName : sorted) {
-            XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) dataStructureSequencesModel.get(dsName);
+            XSKDataStructureHDBSchemaModel model = (XSKDataStructureHDBSchemaModel) dataStructureSchemasModel.get(dsName);
             try {
               if (model != null) {
-                if (!SqlFactory.getNative(connection).exists(connection, model.getName(), DatabaseArtifactTypes.SEQUENCE)) {
-                  xskSequenceManagerService.createDataStructure(connection, model);
+                if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
+                  xskSchemaManagerService.createDataStructure(connection, model);
                 } else {
-                  xskSequenceManagerService.updateDataStructure(connection, model);
-
+                  logger.warn(format("Schema [{0}] already exists during the update process", dsName));
                 }
               }
             } catch (Exception e) {
@@ -327,7 +318,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
-          // process tables in the proper order
+          // process Tables in the proper order
           for (String dsName : sorted) {
             XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) dataStructureTablesModel.get(dsName);
             try {
@@ -341,17 +332,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                   }
                 }
               }
-            } catch (Exception e) {
-              logger.error(e.getMessage(), e);
-              errors.add(e.getMessage());
-            }
-          }
-
-          // process entities in the proper order
-          for (String dsName : sorted) {
-            XSKDataStructureEntitiesModel entitesModel = (XSKDataStructureEntitiesModel) dataStructureEntitiesModel.get(dsName);
-            try {
-              xskEntityManagerService.createDataStructure(connection, entitesModel);
             } catch (Exception e) {
               logger.error(e.getMessage(), e);
               errors.add(e.getMessage());
@@ -375,23 +355,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
-          // process schemas in the proper order
-          for (String dsName : sorted) {
-            XSKDataStructureHDBSchemaModel model = (XSKDataStructureHDBSchemaModel) dataStructureSchemasModel.get(dsName);
-            try {
-              if (model != null) {
-                if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
-                  xskSchemaManagerService.createDataStructure(connection, model);
-                } else {
-                  logger.warn(format("Schema [{0}] already exists during the update process", dsName));
-                }
-              }
-            } catch (Exception e) {
-              logger.error(e.getMessage(), e);
-              errors.add(e.getMessage());
-            }
-          }
-
           // process Synonym in the proper order
           for (String dsName : sorted) {
             XSKDataStructureHDBSynonymModel model = (XSKDataStructureHDBSynonymModel) dataStructureSynonymModel.get(dsName);
@@ -401,6 +364,37 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                   xskSynonymManagerService.createDataStructure(connection, model);
                 } else {
                   logger.warn(format("Synonym [{0}] already exists during the update process", dsName));
+                }
+              }
+            } catch (Exception e) {
+              logger.error(e.getMessage(), e);
+              errors.add(e.getMessage());
+            }
+          }
+
+          // process entities in the proper order
+          for (String dsName : sorted) {
+            XSKDataStructureEntitiesModel entitesModel = (XSKDataStructureEntitiesModel) dataStructureEntitiesModel.get(dsName);
+            try {
+              xskEntityManagerService.createDataStructure(connection, entitesModel);
+            } catch (Exception e) {
+              logger.error(e.getMessage(), e);
+              errors.add(e.getMessage());
+            }
+          }
+
+          // process sequences in the proper order
+          IXSKDataStructureManager<XSKDataStructureModel> xskSequenceManagerService = managerServices
+              .get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
+          for (String dsName : sorted) {
+            XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) dataStructureSequencesModel.get(dsName);
+            try {
+              if (model != null) {
+                if (!SqlFactory.getNative(connection).exists(connection, model.getName(), DatabaseArtifactTypes.SEQUENCE)) {
+                  xskSequenceManagerService.createDataStructure(connection, model);
+                } else {
+                  xskSequenceManagerService.updateDataStructure(connection, model);
+
                 }
               }
             } catch (Exception e) {

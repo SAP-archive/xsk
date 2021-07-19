@@ -14,13 +14,15 @@ package com.sap.xsk.hdb.ds.processors.hdbschema;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.sql.Connection;
-import java.sql.SQLException;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSchemaModel> {
 
@@ -33,9 +35,11 @@ public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructur
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
       throw new IllegalStateException(String.format("%s does not support Schema", dialect.getDatabaseName(connection)));
     } else {
+            if (SqlFactory.getNative(connection).exists(connection, hdbSchema.getSchema(), DatabaseArtifactTypes.SCHEMA)) {
       String schemaName = XSKHDBUtils.escapeArtifactName(connection, hdbSchema.getSchema());
-      String sql = "DROP SCHEMA " + schemaName;
+                String sql = SqlFactory.getNative(connection).drop().schema(schemaName).build();
       executeSql(sql, connection);
     }
   }
+}
 }

@@ -11,19 +11,20 @@
  */
 package com.sap.xsk.hdb.ds.processors.synonym;
 
-import static java.text.MessageFormat.format;
-
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.sql.Connection;
-import java.sql.SQLException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import static java.text.MessageFormat.format;
 
 public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSynonymModel> {
 
@@ -42,9 +43,9 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
     synonymModel.getSynonymDefinitions().forEach((key, value) -> {
       logger.info("Processing Drop Synonym: " + key);
 
-      String synonymName = XSKHDBUtils.escapeArtifactName(connection, key);
+            String synonymName = (value.getSynonymSchema() != null) ? (XSKHDBUtils.escapeArtifactName(connection, key, value.getSynonymSchema())) : (XSKHDBUtils.escapeArtifactName(connection, key));
       try {
-        if (SqlFactory.getNative(connection).exists(connection, synonymName, DatabaseArtifactTypes.SYNONYM)) {
+                if (SqlFactory.getNative(connection).exists(connection, value.getSynonymSchema(), key, DatabaseArtifactTypes.SYNONYM)) {
           ISqlDialect dialect = SqlFactory.deriveDialect(connection);
           if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
             throw new IllegalStateException(String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection)));
@@ -53,7 +54,7 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
             executeSql(sql, connection);
           }
         } else {
-          logger.warn(format("Synonym [{0}] does not exists during the drop process", key));
+                    logger.warn(format("Synonym [{0}] does not exists during the drop process", value.getSynonymSchema() + "." + key));
         }
       } catch (SQLException exception) {
         exception.printStackTrace();

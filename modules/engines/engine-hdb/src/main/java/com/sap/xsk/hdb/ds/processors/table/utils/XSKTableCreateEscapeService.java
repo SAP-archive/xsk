@@ -18,6 +18,7 @@ import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.builders.table.AbstractTableBuilder;
 import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
 import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 
@@ -64,27 +65,27 @@ public class XSKTableCreateEscapeService {
     }
 
     protected void escapedConstraintsModel() {
-        XSKDataStructureHDBTableConstraintsModel constraintsModel = this.tableModel.getConstraints();
-        if (Objects.nonNull(constraintsModel)) {
-            if (Objects.nonNull(constraintsModel.getPrimaryKey())) {
-                createTableBuilder
-                        .primaryKey(this.getEscapedColumns(constraintsModel.getPrimaryKey().getColumns()));
+      XSKDataStructureHDBTableConstraintsModel constraintsModel = this.tableModel.getConstraints();
+      if (Objects.nonNull(constraintsModel)) {
+        if (Objects.nonNull(constraintsModel.getPrimaryKey())) {
+          createTableBuilder
+              .primaryKey(this.getEscapedColumns(constraintsModel.getPrimaryKey().getColumns()));
+        }
+  
+        this.escapeTableBuilderForeignKeys();
+  
+        this.escapeTableBuilderUniqueIndices(this.createTableBuilder);
+  
+        List<XSKDataStructureHDBTableConstraintCheckModel> checks = constraintsModel.getChecks();
+        if (Objects.nonNull(checks)) {
+          for (XSKDataStructureHDBTableConstraintCheckModel check : checks) {
+            String checkName = check.getName();
+            if (caseSensitive) {
+              checkName = (shouldEscapeArtefactPropertyName)
+                  ? XSKHDBUtils.escapeArtifactName(connection, checkName)
+                  : checkName;
             }
-
-            this.escapeTableBuilderForeignKeys();
-
-            this.escapeTableBuilderUniqueIndices();
-
-            List<XSKDataStructureHDBTableConstraintCheckModel> checks = constraintsModel.getChecks();
-            if (Objects.nonNull(checks)) {
-                for (XSKDataStructureHDBTableConstraintCheckModel check : checks) {
-                    String checkName = check.getName();
-                    if (caseSensitive) {
-                        checkName = (shouldEscapeArtefactPropertyName)
-                                ? XSKHDBUtils.escapeArtifactName(connection, checkName)
-                                : checkName;
-                    }
-                    createTableBuilder.check(checkName, check.getExpression());
+            createTableBuilder.check(checkName, check.getExpression());
                 }
             }
         }
@@ -158,20 +159,20 @@ public class XSKTableCreateEscapeService {
             }
         }
     }
+  }
 
-    protected void escapeTableBuilderUniqueIndices() {
-        List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndices = this.tableModel.getConstraints().getUniqueIndices();
-        if (Objects.nonNull(uniqueIndices)) {
-            for (XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex : uniqueIndices) {
-                String uniqueIndexName = uniqueIndex.getName();
-                if (caseSensitive) {
-                    uniqueIndexName = (shouldEscapeArtefactPropertyName)
-                            ? XSKHDBUtils.escapeArtifactName(connection, uniqueIndexName)
-                            : uniqueIndexName;
-                }
-                String[] uniqueIndexColumns = this.getEscapedColumns(uniqueIndex.getColumns());
-                createTableBuilder.unique(uniqueIndexName, uniqueIndexColumns);
-            }
+  protected void escapeTableBuilderUniqueIndices(AbstractTableBuilder builder) {
+    List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndices = this.tableModel.getConstraints().getUniqueIndices();
+    if (Objects.nonNull(uniqueIndices)) {
+      for (XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex : uniqueIndices) {
+        String uniqueIndexName = uniqueIndex.getName();
+        if (this.caseSensitive) {
+          uniqueIndexName = (this.shouldEscapeArtefactPropertyName)
+              ? XSKHDBUtils.escapeArtifactName(this.connection, uniqueIndexName)
+              : uniqueIndexName;
         }
+        String[] uniqueIndexColumns = this.getEscapedColumns(uniqueIndex.getColumns());
+        builder.unique(uniqueIndexName, uniqueIndexColumns);
+      }
     }
 }

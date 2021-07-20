@@ -19,6 +19,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,15 +37,15 @@ import org.eclipse.dirigible.databases.helpers.DatabaseMetadataHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XSKTableAlterColumnHandler {
+public class XSKTableAlterHandler {
 
-  private static final Logger logger = LoggerFactory.getLogger(XSKTableAlterColumnHandler.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKTableAlterHandler.class);
   private static final String INCOMPATIBLE_CHANGE_OF_TABLE = "Incompatible change of table [%s] by adding a column [%s] which is [%s]"; //$NON-NLS-1$
   XSKDataStructureHDBTableModel tableModel;
   private Map<String, String> dbColumnTypes;
   private List<String> modelColumnNames;
 
-  public XSKTableAlterColumnHandler(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+  public XSKTableAlterHandler(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
     this.dbColumnTypes = new HashMap<>();
 
     DatabaseMetaData dmd = connection.getMetaData();
@@ -169,6 +171,45 @@ public class XSKTableAlterColumnHandler {
     }
   }
 
+  public void rebuildIndeces(Connection connection) throws SQLException {
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName());
+    AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
+
+    DatabaseMetaData dmd = connection.getMetaData();
+    ResultSet rsIndeces = dmd.getIndexInfo(null, null, this.tableModel.getName(), false, false);
+
+    Statement stmt = connection.createStatement();
+    Set<String> droppedIndices = new HashSet<>();
+    while (rsIndeces.next()) {
+      dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
+    }
+
+    XSKTableCreateEscapeService escapeService = new XSKTableCreateEscapeService(connection, this.tableModel);
+
+    escapeService.escapeTableBuilderUniqueIndices(alterTableBuilder);
+    executeAlterBuilder(connection, alterTableBuilder);
+
+
+  }
+
+  public void ensurePrimaryKeyIsUnchanged(Connection connection) throws SQLException {
+    DatabaseMetaData dmd = connection.getMetaData();
+    ResultSet rsPrimaryKeys = dmd.getPrimaryKeys(null, null, this.tableModel.getName());
+    Set<String> dbPrimaryKeys = new HashSet<>();
+    Set<String> modelPrimaryKeys = new HashSet<>(Arrays.asList(this.tableModel.getConstraints().getPrimaryKey().getColumns()));
+    while (rsPrimaryKeys.next()) {
+      dbPrimaryKeys.add(rsPrimaryKeys.getString("COLUMN_NAME"));
+    }
+    boolean isPKListUnchanged =
+        dbPrimaryKeys.size() == modelPrimaryKeys.size() && dbPrimaryKeys.removeAll(modelPrimaryKeys) && dbPrimaryKeys.isEmpty();
+    if (!isPKListUnchanged) {
+      throw new SQLException(String
+          .format(INCOMPATIBLE_CHANGE_OF_TABLE, this.tableModel.getName(),
+              ", primary key list cannot be changed."));
+    }
+  }
+
+
   private List<XSKDataStructureHDBTableColumnModel> getColumnsToUpdate() {
     Set<String> dbColumnNames = this.dbColumnTypes.keySet();
     Set<String> columnsToUpdate = new HashSet<String>(dbColumnNames);
@@ -180,21 +221,43 @@ public class XSKTableAlterColumnHandler {
         .collect(Collectors.toList());
   }
 
+  private void dropExistingIndex(Connection connection, Statement stmt, Set<String> droppedIndices, ResultSet rsIndeces)
+      throws SQLException {
+    if (!droppedIndices.contains(rsIndeces.getString("INDEX_NAME"))) {
+
+      String sql = String.format("DROP INDEX %s.%s",
+          XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getSchema()),
+          XSKHDBUtils.escapeArtifactName(connection, rsIndeces.getString("INDEX_NAME")));
+      logger.info(sql);
+      stmt.executeUpdate(sql);
+      if (droppedIndices.isEmpty()) {
+        droppedIndices.add(rsIndeces.getString("INDEX_NAME"));
+      }
+    } else {
+      droppedIndices.add(rsIndeces.getString("INDEX_NAME"));
+    }
+  }
+
   private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
       throws SQLException {
-    final String sql = alterTableBuilder.build();
-    logger.info(sql);
-    PreparedStatement statement = connection.prepareStatement(sql);
-    try {
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      logger.error(sql);
-      logger.error(e.getMessage(), e);
-      throw new SQLException(e.getMessage(), e);
-    } finally {
-      if (statement != null) {
-        statement.close();
+    final String multiSQL = alterTableBuilder.build();
+    String[] sqlStatements = multiSQL.split(ISqlKeywords.SEMICOLON);
+
+    for (String sql : sqlStatements) {
+      logger.info(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
+      try {
+        statement.executeUpdate();
+      } catch (SQLException e) {
+        logger.error(sql);
+        logger.error(e.getMessage(), e);
+        throw new SQLException(e.getMessage(), e);
+      } finally {
+        if (statement != null) {
+          statement.close();
+        }
       }
     }
+
   }
 }

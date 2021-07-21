@@ -34,6 +34,11 @@
             <version>${org.projectlombok.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.dirigible</groupId>
+            <artifactId>dirigible-database-api</artifactId>
+            <version>${dirigible.version}</version>
+        </dependency>
     </dependencies>
 
     <properties>

@@ -11,27 +11,15 @@
  */
 package com.sap.xsk.hdbti.dao;
 
-import static java.lang.String.format;
-
 import com.sap.xsk.hdbti.api.IXSKCSVRecordDao;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.JDBCType;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.List;
-import javax.inject.Inject;
-import javax.sql.DataSource;
 import com.sap.xsk.hdbti.utils.XSKCsvRecordMetadata;
+import com.sap.xsk.utils.XSKCommonsDBUtils;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.cxf.common.util.StringUtils;
 import org.eclipse.dirigible.commons.api.helpers.DateTimeUtils;
 import org.eclipse.dirigible.database.ds.model.transfer.TableColumn;
 import org.eclipse.dirigible.database.ds.model.transfer.TableMetadataHelper;
 import org.eclipse.dirigible.database.persistence.PersistenceException;
-import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.records.DeleteBuilder;
 import org.eclipse.dirigible.database.sql.builders.records.InsertBuilder;
@@ -39,6 +27,15 @@ import org.eclipse.dirigible.database.sql.builders.records.UpdateBuilder;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.sql.DataSource;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.*;
+import java.util.List;
+
+import static java.text.MessageFormat.format;
 
 public class XSKCSVRecordDao implements IXSKCSVRecordDao {
 
@@ -54,7 +51,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
   public void save(XSKCsvRecordMetadata csvRecordMetadata) throws SQLException {
     String tableName = csvRecordMetadata.getTableMetadataModel().getTableName();
     try (Connection connection = dataSource.getConnection()) {
-      List<TableColumn> availableTableColumns = TableMetadataHelper.getColumns(connection, tableName);
+      List<TableColumn> availableTableColumns = TableMetadataHelper.getColumns(connection, tableName, csvRecordMetadata.getTableMetadataModel().getSchemaName());
       for (TableColumn availableTableColumn : availableTableColumns) {
         logger.debug("    {}: {}", availableTableColumn.getName(), availableTableColumn.getType());
       }
@@ -78,7 +75,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
   public void update(XSKCsvRecordMetadata csvRecordMetadata) throws SQLException {
     String tableName = csvRecordMetadata.getTableMetadataModel().getTableName();
     try (Connection connection = dataSource.getConnection()) {
-      List<TableColumn> availableTableColumns = TableMetadataHelper.getColumns(connection, tableName);
+      List<TableColumn> availableTableColumns = TableMetadataHelper.getColumns(connection, tableName, csvRecordMetadata.getTableMetadataModel().getSchemaName());
       UpdateBuilder updateBuilder = new UpdateBuilder(SqlFactory.deriveDialect(connection));
       updateBuilder.table(tableName);
       for (TableColumn tableColumn : availableTableColumns) {
@@ -115,7 +112,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
     }
 
     try (Connection connection = dataSource.getConnection()) {
-      String pkColumnName = dbMetadataUtil.getTableMetadata(tableName).getColumns().get(0).getName();
+      String pkColumnName = dbMetadataUtil.getTableMetadata(tableName, XSKCommonsDBUtils.getTableSchema(dataSource, tableName)).getColumns().get(0).getName();
       DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
       deleteBuilder.from(tableName).where(String.format("%s IN (%s)", pkColumnName, String.join(",", ids)));
       try (PreparedStatement statement = connection.prepareStatement(deleteBuilder.build())) {
@@ -287,7 +284,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
       value = numberize(value);
       preparedStatement.setBigDecimal(i, new BigDecimal(value));
     } else {
-      throw new PersistenceException(format("Database type [{0}] not supported", dataType));
+      throw new PersistenceException(format("Database type [{0}] not supported", JDBCType.valueOf(dataType).getName()));
     }
   }
 

@@ -105,11 +105,10 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
   private PersistenceTableModel getTableMetadata(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) {
     String tableName = xskHdbtiCoreService.convertToActualTableName(tableImportConfigurationDefinition.getTable());
     try {
-      return dbMetadataUtil.getTableMetadata(tableName);
+      return dbMetadataUtil.getTableMetadata(tableName, tableImportConfigurationDefinition.getSchema());
     } catch (SQLException sqlException) {
       logger.error(String.format("Error occurred while trying to read table metadata for table with name: %s", tableName), sqlException);
     }
-
     return null;
   }
 

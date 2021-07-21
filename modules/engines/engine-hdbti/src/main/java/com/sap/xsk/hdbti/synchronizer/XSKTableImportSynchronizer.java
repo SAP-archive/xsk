@@ -154,6 +154,8 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
         logger.error(syntaxErrorException.getMessage(), syntaxErrorException);
       } catch (XSKArtifactParserException parserException) {
         logger.error(parserException.getMessage(), parserException);
+      } catch (SQLException throwables) {
+        throwables.printStackTrace();
       }
     } else if (resourceName.endsWith(IXSKTableImportModel.FILE_EXTENSION_CSV)) {
       List<XSKTableImportToCsvRelation> affectedHdbtiToCsvRelations = xskCsvToHdbtiRelationDao

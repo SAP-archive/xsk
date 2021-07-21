@@ -91,7 +91,7 @@ public class XSKODataUtils {
 
             //set properties
             try {
-                PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName);
+                PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName, dbMetadataUtil.getOdataArtifactTypeSchema(tableName));
                 List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
 
                 if ("CALC VIEW".equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity.getWithoutPropertyProjections().isEmpty()) {

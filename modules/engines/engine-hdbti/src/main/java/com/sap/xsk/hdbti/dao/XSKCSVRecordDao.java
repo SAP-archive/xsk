@@ -129,7 +129,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
     }
 
     try (Connection connection = dataSource.getConnection()) {
-      String pkColumnName = dbMetadataUtil.getTableMetadata(tableName).getColumns().get(0).getName();
+      String pkColumnName = dbMetadataUtil.getTableMetadata(tableName, XSKCommonsDBUtils.getTableSchema(dataSource,tableName)).getColumns().get(0).getName();
       DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
       deleteBuilder.from(tableName).where(String.format("%s='%s'", pkColumnName, id));
       try (PreparedStatement statement = connection.prepareStatement(deleteBuilder.build())) {

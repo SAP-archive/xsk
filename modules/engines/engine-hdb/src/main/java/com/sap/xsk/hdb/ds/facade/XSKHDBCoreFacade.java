@@ -27,6 +27,17 @@ import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctio
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.sql.DataSource;
+import com.sap.xsk.utils.XSKHDBUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -323,11 +334,12 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) dataStructureTablesModel.get(dsName);
             try {
               if (model != null) {
-                if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
+                String escapedName = XSKHDBUtils.escapeArtifactName(connection, model.getName());
+                if (!SqlFactory.getNative(connection).exists(connection, escapedName)) {
                   xskTableManagerService.createDataStructure(connection, model);
                 } else {
                   logger.warn(format("Table [{0}] already exists during the update process", dsName));
-                  if (SqlFactory.getNative(connection).count(connection, model.getName()) != 0) {
+                  if (SqlFactory.getNative(connection).count(connection,escapedName) != 0) {
                     xskTableManagerService.updateDataStructure(connection, model);
                   }
                 }

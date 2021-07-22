@@ -42,6 +42,7 @@ import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionCreateProc
 import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionDropProcessor;
 import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterProcessor;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableDropProcessor;
 import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
@@ -144,6 +145,8 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskTableCreateProcessor")).to(XSKTableCreateProcessor.class)
         .in(Scopes.SINGLETON);
     bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskTableDropProcessor")).to(XSKTableDropProcessor.class).in(Scopes.SINGLETON);
+    bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskTableAlterProcessor")).to(XSKTableAlterProcessor.class)
+        .in(Scopes.SINGLETON);
 
     // Hdb view processors instantiation
     bind(IXSKHdbProcessor.class).annotatedWith(Names.named("xskViewCreateProcessor")).to(XSKViewCreateProcessor.class).in(Scopes.SINGLETON);

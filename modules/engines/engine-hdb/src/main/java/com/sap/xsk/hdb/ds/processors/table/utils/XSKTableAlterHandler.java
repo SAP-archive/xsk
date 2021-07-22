@@ -228,10 +228,6 @@ public class XSKTableAlterHandler {
           XSKHDBUtils.escapeArtifactName(connection, rsIndeces.getString("INDEX_NAME")));
       logger.info(sql);
       stmt.executeUpdate(sql);
-      if (droppedIndices.isEmpty()) {
-        droppedIndices.add(rsIndeces.getString("INDEX_NAME"));
-      }
-    } else {
       droppedIndices.add(rsIndeces.getString("INDEX_NAME"));
     }
   }

@@ -3,9 +3,9 @@ api = "0.5"
 
 # Buildpack ID and metadata
 [buildpack]
-id = "dirigiblelabs/buildpacks-xsk"
+id = "dirigiblelabs/buildpacks-xsk-cf"
 version = "0.0.1"
-name = "XSK Buildpack"
+name = "XSK Cloud Foundry Buildpack"
 
 # Stacks that the buildpack will work with
 [[stacks]]

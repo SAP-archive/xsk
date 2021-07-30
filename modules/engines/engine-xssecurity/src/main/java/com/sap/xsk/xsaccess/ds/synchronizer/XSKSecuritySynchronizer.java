@@ -33,10 +33,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Inject;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -58,16 +56,16 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
 
   private static final Set<String> ACCESS_SYNCHRONIZED = Collections.synchronizedSet(new HashSet<>());
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
-  @Inject
-  private XSKAccessCoreService xskAccessCoreService;
-  @Inject
-  private XSKPrivilegeCoreService xskPrivilegeCoreService;
+
+  private XSKAccessCoreService xskAccessCoreService = new XSKAccessCoreService();
+
+  private XSKPrivilegeCoreService xskPrivilegeCoreService = new XSKPrivilegeCoreService();
 
   /**
    * Force synchronization.
    */
   public static final void forceSynchronization() {
-    SecuritySynchronizer synchronizer = StaticInjector.getInjector().getInstance(SecuritySynchronizer.class);
+    SecuritySynchronizer synchronizer = new SecuritySynchronizer();
     synchronizer.setForcedSynchronization(true);
     try {
       synchronizer.synchronize();

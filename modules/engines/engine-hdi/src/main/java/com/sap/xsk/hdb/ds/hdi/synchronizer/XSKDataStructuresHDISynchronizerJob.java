@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.hdi.synchronizer;
 
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
 
@@ -20,8 +19,7 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
  */
 public class XSKDataStructuresHDISynchronizerJob extends AbstractSynchronizerJob {
 
-  private XSKDataStructuresHDISynchronizer dataStructureHDISynchronizer = StaticInjector.getInjector()
-      .getInstance(XSKDataStructuresHDISynchronizer.class);
+  private XSKDataStructuresHDISynchronizer dataStructureHDISynchronizer = new XSKDataStructuresHDISynchronizer();
 
   /*
    * (non-Javadoc)

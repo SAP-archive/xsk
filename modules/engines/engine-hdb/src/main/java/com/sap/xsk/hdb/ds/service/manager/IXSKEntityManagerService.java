@@ -13,13 +13,14 @@ package com.sap.xsk.hdb.ds.service.manager;
 
 import static java.text.MessageFormat.format;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.processors.entity.XSKEntityCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.entity.XSKEntityDropProcessor;
+import com.sap.xsk.hdb.ds.processors.entity.XSKEntityUpdateProcessor;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -40,17 +41,11 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
   private final Map<String, XSKDataStructureEntitiesModel> dataStructureEntitiesModel;
   private final List<String> entitiesSynchronized;
 
-  @Inject
-  @Named("xskEntityUpdateProcessor")
-  private IXSKHdbProcessor xskEntityUpdateProcessor;
+  private IXSKHdbProcessor xskEntityUpdateProcessor = new XSKEntityUpdateProcessor();
 
-  @Inject
-  @Named("xskEntityDropProcessor")
-  private IXSKHdbProcessor xskEntityDropProcessor;
+  private IXSKHdbProcessor xskEntityDropProcessor = new XSKEntityDropProcessor();
 
-  @Inject
-  @Named("xskEntityCreateProcessor")
-  private IXSKHdbProcessor xskEntityCreateProcessor;
+  private IXSKHdbProcessor xskEntityCreateProcessor = new XSKEntityCreateProcessor();
 
   public IXSKEntityManagerService() {
     dataStructureEntitiesModel = Collections.synchronizedMap(new LinkedHashMap<>());

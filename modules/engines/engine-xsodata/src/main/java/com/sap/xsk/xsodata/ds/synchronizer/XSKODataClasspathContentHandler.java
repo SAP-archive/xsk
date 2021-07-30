@@ -13,7 +13,6 @@ package com.sap.xsk.xsodata.ds.synchronizer;
 
 import com.sap.xsk.xsodata.ds.api.IXSKODataModel;
 import org.eclipse.dirigible.commons.api.content.AbstractClasspathContentHandler;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,7 @@ public class XSKODataClasspathContentHandler extends AbstractClasspathContentHan
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataClasspathContentHandler.class);
 
-  private final XSKODataSynchronizer odataSynchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
+  private final XSKODataSynchronizer odataSynchronizer = new XSKODataSynchronizer();
 
   /*
    * (non-Javadoc)

@@ -11,12 +11,14 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterProcessor;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableDropProcessor;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,15 +36,9 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
   private final Map<String, XSKDataStructureHDBTableModel> dataStructureTableModels;
   private final List<String> tablesSynchronized;
 
-  @Inject
-  @Named("xskTableCreateProcessor")
-  private IXSKHdbProcessor xskTableCreateProcessor;
-  @Inject
-  @Named("xskTableDropProcessor")
-  private IXSKHdbProcessor xskTableDropProcessor;
-  @Inject
-  @Named("xskTableAlterProcessor")
-  private IXSKHdbProcessor xskTableAlterProcessor;
+  private IXSKHdbProcessor xskTableCreateProcessor = new XSKTableCreateProcessor();
+  private IXSKHdbProcessor xskTableDropProcessor = new XSKTableDropProcessor();
+  private IXSKHdbProcessor xskTableAlterProcessor = new XSKTableAlterProcessor();
 
 
   public IXSKTableManagerService() {

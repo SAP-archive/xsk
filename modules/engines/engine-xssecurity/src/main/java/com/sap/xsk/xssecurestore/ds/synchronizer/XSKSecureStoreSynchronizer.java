@@ -18,9 +18,6 @@ import com.sap.xsk.xssecurestore.ds.api.XSKSecureStoreException;
 import com.sap.xsk.xssecurestore.ds.model.XSKSecureStore;
 import com.sap.xsk.xssecurestore.ds.service.XSKSecureStoreCoreService;
 import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -29,19 +26,17 @@ import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
 public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKSecureStoreSynchronizer.class);
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
-  @Inject
-  private XSKSecureStoreCoreService xskSecureStoreCoreService;
+  private XSKSecureStoreCoreService xskSecureStoreCoreService = new XSKSecureStoreCoreService();
 
   /**
    * Force synchronization.
    */
   public static final void forceSynchronization() {
-    XSKSecureStoreSynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKSecureStoreSynchronizer.class);
+    XSKSecureStoreSynchronizer synchronizer = new XSKSecureStoreSynchronizer();
     synchronizer.setForcedSynchronization(true);
     try {
       synchronizer.synchronize();

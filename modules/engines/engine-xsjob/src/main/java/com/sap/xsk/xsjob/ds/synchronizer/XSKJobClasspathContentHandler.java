@@ -11,19 +11,20 @@
  */
 package com.sap.xsk.xsjob.ds.synchronizer;
 
-import com.sap.xsk.xsjob.ds.api.IXSKJobModel;
 import java.io.IOException;
 import java.text.ParseException;
+
 import org.eclipse.dirigible.commons.api.content.AbstractClasspathContentHandler;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sap.xsk.xsjob.ds.api.IXSKJobModel;
 
 public class XSKJobClasspathContentHandler extends AbstractClasspathContentHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKJobClasspathContentHandler.class);
 
-  private XSKJobSynchronizer jobSynchronizer = StaticInjector.getInjector().getInstance(XSKJobSynchronizer.class);
+  private XSKJobSynchronizer jobSynchronizer = new XSKJobSynchronizer();
 
   /*
    * (non-Javadoc)

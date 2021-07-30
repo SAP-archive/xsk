@@ -14,12 +14,13 @@ package com.sap.xsk.xsodata.ds.dao;
 import com.sap.xsk.xsodata.ds.api.IXSKODataArtifactDao;
 import com.sap.xsk.xsodata.ds.api.XSKODataException;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
+
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,11 +33,9 @@ import static java.text.MessageFormat.format;
 public class XSKODataArtifactDao implements IXSKODataArtifactDao {
     private static final Logger logger = LoggerFactory.getLogger(XSKODataArtifactDao.class);
 
-    @Inject
-    private DataSource dataSource;
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-    @Inject
-    private PersistenceManager<XSKODataModel> xskPersistenceManager;
+    private PersistenceManager<XSKODataModel> xskPersistenceManager = new PersistenceManager<XSKODataModel>();
 
     @Override
     public XSKODataModel createXSKODataArtifact(XSKODataModel tableModel) throws XSKODataException {

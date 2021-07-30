@@ -11,6 +11,20 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.junit.Test;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
@@ -19,16 +33,8 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableDuplicatePropertyException;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
-import org.junit.Test;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.Assert.*;
-
-public class XSKTableParserTest extends AbstractGuiceTest {
+public class XSKTableParserTest extends AbstractDirigibleTest {
     @Test
     public void parseTable() throws Exception {
         InputStream in = XSKTableParserTest.class.getResourceAsStream("/Sports.hdbtable");

@@ -11,13 +11,12 @@
  */
 package com.sap.xsk.xsjob.ds.synchronizer;
 
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
 
 public class XSKJobSynchronizerJob extends AbstractSynchronizerJob {
 
-  private XSKJobSynchronizer xskJobSynchronizer = StaticInjector.getInjector().getInstance(XSKJobSynchronizer.class);
+  private XSKJobSynchronizer xskJobSynchronizer = new XSKJobSynchronizer();
 
   /*
    * (non-Javadoc)

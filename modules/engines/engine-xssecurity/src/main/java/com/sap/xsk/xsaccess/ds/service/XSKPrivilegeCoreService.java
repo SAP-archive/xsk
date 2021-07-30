@@ -18,18 +18,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
-import javax.inject.Inject;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
 public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
 
-  @Inject
-  private DataSource dataSource;
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  @Inject
-  private PersistenceManager<XSKPrivilegeDefinition> xskPrivilegeDefinitionPersistenceManager;
+  private PersistenceManager<XSKPrivilegeDefinition> xskPrivilegeDefinitionPersistenceManager = new PersistenceManager<XSKPrivilegeDefinition>();
 
   @Override
   public XSKPrivilegeDefinition createXSKPrivilege(String name, String description) throws XSKPrivilegeException {

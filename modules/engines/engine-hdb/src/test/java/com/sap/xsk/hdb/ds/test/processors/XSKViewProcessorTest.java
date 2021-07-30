@@ -11,16 +11,19 @@
  */
 package com.sap.xsk.hdb.ds.test.processors;
 
-import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.view.XSKViewDropProcessor;
-import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
-import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
-import com.sap.xsk.utils.XSKConstants;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.util.Map;
+
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -41,17 +44,18 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.view.XSKViewDropProcessor;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
+import com.sap.xsk.utils.XSKConstants;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SqlFactory.class, Configuration.class})
-public class XSKViewProcessorTest extends AbstractGuiceTest {
+public class XSKViewProcessorTest extends AbstractDirigibleTest {
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Connection mockConnection;

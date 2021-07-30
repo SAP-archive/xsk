@@ -11,12 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbtable;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -34,7 +31,7 @@ import static org.junit.Assert.*;
 public class XSKHDBTableParserPostgreSQLITTest {
 
   private static PostgreSQLContainer jdbcContainer;
-  private static Connection connection;
+  private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
 
 
@@ -45,9 +42,9 @@ public class XSKHDBTableParserPostgreSQLITTest {
     jdbcContainer.start();
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
-    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
-    connection = injector.getInstance(DataSource.class).getConnection();
-    facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
+    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
+    datasource = xskhdbTestModule.getDataSource();
+    facade = new XSKHDBCoreFacade();
   }
 
   @AfterClass
@@ -57,20 +54,22 @@ public class XSKHDBTableParserPostgreSQLITTest {
 
   @Test
   public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    Statement stmt = connection.createStatement();
-    stmt.executeUpdate("CREATE SCHEMA \"test\"");
-
-    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-        "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
-        "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
-
-    facade.handleResourceSynchronization(resource);
-    facade.updateEntities();
-
-    DatabaseMetaData metaData = connection.getMetaData();
-    ResultSet table = metaData.getTables(null, "test", "hdbtable-itest::SamplePostgreXSClassicTable", null);
-    assertTrue(table.next());
-
-    stmt.executeUpdate("DROP TABLE \"test\".\"hdbtable-itest::SamplePostgreXSClassicTable\"");
+	  try (Connection connection = datasource.getConnection();
+	  			Statement stmt = connection.createStatement()) {
+	    stmt.executeUpdate("CREATE SCHEMA \"test\"");
+	
+	    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+	        "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
+	        "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
+	
+	    facade.handleResourceSynchronization(resource);
+	    facade.updateEntities();
+	
+	    DatabaseMetaData metaData = connection.getMetaData();
+	    ResultSet table = metaData.getTables(null, "test", "hdbtable-itest::SamplePostgreXSClassicTable", null);
+	    assertTrue(table.next());
+	
+	    stmt.executeUpdate("DROP TABLE \"test\".\"hdbtable-itest::SamplePostgreXSClassicTable\"");
+	  }
   }
 }

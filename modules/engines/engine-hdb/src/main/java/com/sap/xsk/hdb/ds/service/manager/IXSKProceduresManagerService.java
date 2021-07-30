@@ -11,12 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
+import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureDropProcessor;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,12 +37,8 @@ public class IXSKProceduresManagerService extends AbstractDataStructureManagerSe
   private final Map<String, XSKDataStructureHDBProcedureModel> dataStructureProceduresModels;
   private final List<String> proceduresSynchronized;
 
-  @Inject
-  @Named("hdbProcedureDropProcessor")
-  private IXSKHdbProcessor hdbProcedureDropProcessor;
-  @Inject
-  @Named("hdbProcedureCreateProcessor")
-  private IXSKHdbProcessor hdbProcedureCreateProcessor;
+  private IXSKHdbProcessor hdbProcedureDropProcessor = new HDBProcedureDropProcessor();
+  private IXSKHdbProcessor hdbProcedureCreateProcessor = new HDBProcedureCreateProcessor();
 
   public IXSKProceduresManagerService() {
     dataStructureProceduresModels = new LinkedHashMap<>();

@@ -16,13 +16,11 @@ import com.sap.xsk.xssecurestore.ds.api.XSKSecureStoreException;
 import com.sap.xsk.xssecurestore.ds.model.XSKSecureStoreContent;
 import com.sap.xsk.xssecurestore.ds.service.XSKSecureStoreCoreService;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.commons.api.scripting.IScriptingFacade;
 
 public class XSKSecureStoreFacade implements IScriptingFacade {
 
-  private static final XSKSecureStoreCoreService xskSecureStoreCoreService = StaticInjector.getInjector()
-      .getInstance(XSKSecureStoreCoreService.class);
+  private static final XSKSecureStoreCoreService xskSecureStoreCoreService = new XSKSecureStoreCoreService();
 
   public XSKSecureStoreFacade() {
   }

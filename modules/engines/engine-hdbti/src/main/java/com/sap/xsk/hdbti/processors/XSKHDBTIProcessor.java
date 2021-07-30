@@ -11,13 +11,14 @@
  */
 package com.sap.xsk.hdbti.processors;
 
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.api.IXSKHDBTICoreService;
 import com.sap.xsk.hdbti.api.IXSKHDBTIProcessor;
 import com.sap.xsk.hdbti.api.XSKTableImportException;
 import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
+import com.sap.xsk.hdbti.service.XSKHDBTICoreService;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,11 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import javax.inject.Inject;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.eclipse.dirigible.repository.api.IRepository;
@@ -43,15 +44,12 @@ import org.slf4j.LoggerFactory;
 public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIProcessor.class);
-  @Inject
-  private DBMetadataUtil dbMetadataUtil;
+  
+  private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
-  @Inject
-  private IRepository repository;
+  private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
 
-  @com.google.inject.Inject
-  @Named("xskHdbtiCoreService")
-  private IXSKHDBTICoreService xskHdbtiCoreService;
+  private IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
 
   @Override
   public void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection)

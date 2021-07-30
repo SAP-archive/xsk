@@ -18,7 +18,6 @@ import com.sap.xsk.xsaccess.ds.service.XSKAccessCoreService;
 import com.sap.xsk.xsaccess.ds.verifier.XSKAccessVerifier;
 import org.eclipse.dirigible.api.v3.http.HttpRequestFacade;
 import org.eclipse.dirigible.api.v3.utils.EscapeFacade;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.slf4j.Logger;
@@ -87,7 +86,7 @@ public class XSKSecurityFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKSecurityFilter.class);
     private static final Set<String> SECURED_PREFIXES = new HashSet<>();
-    private static final IXSKAccessCoreService xskAccessCoreService = StaticInjector.getInjector().getInstance(XSKAccessCoreService.class);
+    private static final IXSKAccessCoreService xskAccessCoreService = new XSKAccessCoreService();
 
     /*
      * (non-Javadoc)

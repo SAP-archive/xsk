@@ -15,15 +15,12 @@ import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerDefinition;
 import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataHTransformer;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.sql.SQLException;
 import java.util.List;
 
-@Singleton
 public class XSKOData2ODataHTransformer {
-    @Inject
-    private OData2ODataHTransformer oData2ODataHTransformer;
+
+	private OData2ODataHTransformer oData2ODataHTransformer = new OData2ODataHTransformer();
 
     public List<ODataHandlerDefinition> transform(ODataDefinition oDataDefinition) throws SQLException {
         return oData2ODataHTransformer.transform(oDataDefinition);

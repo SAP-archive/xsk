@@ -15,7 +15,6 @@ import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 import com.sap.xsk.xsjob.ds.api.IXSKJobCoreService;
 import java.util.HashMap;
 import java.util.Map;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -23,8 +22,7 @@ import org.quartz.JobExecutionException;
 
 public class XSKJobHandler implements Job {
 
-  private XSKJavascriptEngineExecutor xskJavascriptEngineExecutor = StaticInjector.getInjector()
-      .getInstance(XSKJavascriptEngineExecutor.class);
+  private XSKJavascriptEngineExecutor xskJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
 
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {

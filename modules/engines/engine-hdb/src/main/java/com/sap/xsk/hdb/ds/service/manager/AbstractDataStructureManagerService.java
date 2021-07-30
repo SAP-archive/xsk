@@ -11,19 +11,17 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AbstractDataStructureManagerService<T extends XSKDataStructureModel> implements IXSKDataStructureManager<T> {
 
-  @Inject
-  @Named("xskDataStructuresCoreService")
-  private IXSKDataStructuresCoreService xskDataStructuresCoreService;
+  private IXSKDataStructuresCoreService xskDataStructuresCoreService = new XSKDataStructuresCoreService();
 
   @Override
   public void cleanup() throws XSKDataStructuresException {

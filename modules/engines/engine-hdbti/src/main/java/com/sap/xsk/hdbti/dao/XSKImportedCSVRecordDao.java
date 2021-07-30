@@ -23,8 +23,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
 import javax.sql.DataSource;
+
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
@@ -33,11 +34,9 @@ import org.slf4j.LoggerFactory;
 public class XSKImportedCSVRecordDao implements IXSKImportedCSVRecordDao {
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIProcessor.class);
 
-    @Inject
-    private DataSource dataSource;
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-    @Inject
-    private PersistenceManager<XSKImportedCSVRecordModel> persistenceManager;
+    private PersistenceManager<XSKImportedCSVRecordModel> persistenceManager = new PersistenceManager<XSKImportedCSVRecordModel>();
 
     @Override
     public XSKImportedCSVRecordModel save(XSKImportedCSVRecordModel importedRowModel) throws XSKDataStructuresException {

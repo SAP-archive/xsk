@@ -17,6 +17,7 @@ import com.sap.xsk.utils.XSKCommonsDBUtils;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.cxf.common.util.StringUtils;
 import org.eclipse.dirigible.commons.api.helpers.DateTimeUtils;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.ds.model.transfer.TableColumn;
 import org.eclipse.dirigible.database.ds.model.transfer.TableMetadataHelper;
 import org.eclipse.dirigible.database.persistence.PersistenceException;
@@ -28,7 +29,6 @@ import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -41,11 +41,9 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKCSVRecordDao.class);
 
-    @Inject
-    private DataSource dataSource;
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-    @Inject
-    private DBMetadataUtil dbMetadataUtil;
+    private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
     @Override
     public void save(XSKCsvRecordMetadata csvRecordMetadata) throws SQLException {

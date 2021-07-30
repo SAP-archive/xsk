@@ -11,12 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
+import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaDropProcessor;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,12 +34,8 @@ public class IXSKSchemaManagerService extends AbstractDataStructureManagerServic
   private static final Logger logger = LoggerFactory.getLogger(IXSKSchemaManagerService.class);
   private final Map<String, XSKDataStructureHDBSchemaModel> dataStructureSchemasModels;
   private final List<String> schemasSynchronized;
-  @Inject
-  @Named("hdbSchemaCreateProcessor")
-  private IXSKHdbProcessor hdbSchemaCreateProcessor;
-  @Inject
-  @Named("hdbSchemaDropProcessor")
-  private IXSKHdbProcessor hdbSchemaDropProcessor;
+  private IXSKHdbProcessor hdbSchemaCreateProcessor = new HDBSchemaCreateProcessor();
+  private IXSKHdbProcessor hdbSchemaDropProcessor = new HDBSchemaDropProcessor();
 
   public IXSKSchemaManagerService() {
     dataStructureSchemasModels = new LinkedHashMap<>();

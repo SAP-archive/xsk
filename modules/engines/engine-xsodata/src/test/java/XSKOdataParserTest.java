@@ -9,12 +9,24 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.xsodata.ds.model.XSKODataModel;
-import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
-import com.sap.xsk.xsodata.ds.service.XSKODataParser;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
 import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,21 +36,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.xsodata.ds.model.XSKODataModel;
+import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
+import com.sap.xsk.xsodata.ds.service.XSKODataParser;
 
 @RunWith(PowerMockRunner.class)
-public class XSKOdataParserTest extends AbstractGuiceTest {
+public class XSKOdataParserTest extends AbstractDirigibleTest {
+	
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Connection mockConnection;
     @Mock

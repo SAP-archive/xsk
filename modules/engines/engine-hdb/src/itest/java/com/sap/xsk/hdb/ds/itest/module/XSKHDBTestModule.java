@@ -11,8 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.itest.module;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -23,7 +21,7 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-public class XSKHDBTestModule extends AbstractModule {
+public class XSKHDBTestModule {
 
   private JDBCModel model;
 
@@ -31,12 +29,6 @@ public class XSKHDBTestModule extends AbstractModule {
     this.model = model;
   }
 
-  @Override
-  protected void configure() {
-    install(new XSKHDBModule());
-  }
-
-  @Provides
   public DataSource getDataSource() {
     BasicDataSource basicDataSource = new BasicDataSource();
     basicDataSource.setDriverClassName(this.model.getDriverClassName());

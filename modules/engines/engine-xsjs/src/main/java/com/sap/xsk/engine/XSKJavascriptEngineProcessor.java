@@ -13,7 +13,6 @@ package com.sap.xsk.engine;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.inject.Inject;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.eclipse.dirigible.engine.js.api.IJavascriptEngineProcessor;
 
@@ -22,8 +21,7 @@ import org.eclipse.dirigible.engine.js.api.IJavascriptEngineProcessor;
  */
 public class XSKJavascriptEngineProcessor implements IJavascriptEngineProcessor {
 
-  @Inject
-  private XSKJavascriptEngineExecutor rhinoEngineExecutor;
+  private XSKJavascriptEngineExecutor rhinoEngineExecutor = new XSKJavascriptEngineExecutor();
 
   /*
    * (non-Javadoc)

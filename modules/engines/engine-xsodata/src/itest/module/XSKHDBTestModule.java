@@ -11,11 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.itest.module;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import com.sap.xsk.xsodata.ds.module.XSKODataModule;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
@@ -24,7 +23,7 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-public class XSKHDBTestModule extends AbstractModule {
+public class XSKHDBTestModule extends AbstractDirigibleModule {
 
     private JDBCModel model;
 
@@ -33,11 +32,10 @@ public class XSKHDBTestModule extends AbstractModule {
     }
 
     @Override
-    protected void configure() {
-        install(new XSKODataModule());
+    public void configure() {
+    	StaticObjects.set(StaticObjects.DATASOURCE, getDataSource); 
     }
 
-    @Provides
     public DataSource getDataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName(this.model.getDriverClassName());

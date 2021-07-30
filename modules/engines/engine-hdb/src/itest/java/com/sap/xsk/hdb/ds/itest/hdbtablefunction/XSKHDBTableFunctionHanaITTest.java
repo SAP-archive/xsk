@@ -11,12 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbtablefunction;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -39,50 +36,54 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class XSKHDBTableFunctionHanaITTest {
-  private static Connection connection;
+  private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException, IOException {
     JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
         HANA_PASSWORD);
-    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
-    connection = injector.getInstance(DataSource.class).getConnection();
-    facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
+    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
+    datasource = xskhdbTestModule.getDataSource();
+    facade = new XSKHDBCoreFacade();
   }
 
   @Before
   public void setUpBeforeTest() throws SQLException {
-    Statement stmt = connection.createStatement();
-    DatabaseMetaData metaData = connection.getMetaData();
-    String hanaUserName = Configuration.get("hana.username");
-    ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-    if(table.next()){
-      stmt.executeUpdate(String.format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction'", hanaUserName));
-    }
+	  try (Connection connection = datasource.getConnection();
+	  			Statement stmt = connection.createStatement()) {
+	    DatabaseMetaData metaData = connection.getMetaData();
+	    String hanaUserName = Configuration.get("hana.username");
+	    ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
+	    if(table.next()){
+	      stmt.executeUpdate(String.format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction'", hanaUserName));
+	    }
+	  }
   }
 
   @Test
   public void testHDBTableFunctionCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    Statement stmt = connection.createStatement();
-    DatabaseMetaData metaData = connection.getMetaData();
-    ResultSet tables = metaData.getTables(null,null, "hdbtablefunction-itest::SampleHanaTable", null);
-    if(!tables.next()){
-      stmt.executeUpdate(String.format("create table \"%s\".\"hdbtablefunction-itest::SampleHanaTable\"(Id INTEGER,Name NVARCHAR)",
-          Configuration.get("hana.username")));
-    }
-
-    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-        "/registry/public/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction",
-        "/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction");
-
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
-
-    ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('hdbtablefunction-itest::SampleHanaTableFunction')");
-    assertTrue(rs.next());
-    assertEquals(1, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP FUNCTION %s", XSKHDBUtils.escapeArtifactName(connection, "hdbtablefunction-itest::SampleHanaTableFunction")));
-    stmt.executeUpdate(String.format("DROP TABLE \"%s\".\"hdbtablefunction-itest::SampleHanaTable\"", Configuration.get("hana.username")));
+	  try (Connection connection = datasource.getConnection();
+	  			Statement stmt = connection.createStatement()) {
+	    DatabaseMetaData metaData = connection.getMetaData();
+	    ResultSet tables = metaData.getTables(null,null, "hdbtablefunction-itest::SampleHanaTable", null);
+	    if(!tables.next()){
+	      stmt.executeUpdate(String.format("create table \"%s\".\"hdbtablefunction-itest::SampleHanaTable\"(Id INTEGER,Name NVARCHAR)",
+	          Configuration.get("hana.username")));
+	    }
+	
+	    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+	        "/registry/public/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction",
+	        "/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction");
+	
+	    this.facade.handleResourceSynchronization(resource);
+	    this.facade.updateEntities();
+	
+	    ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('hdbtablefunction-itest::SampleHanaTableFunction')");
+	    assertTrue(rs.next());
+	    assertEquals(1, rs.getInt("rawsCount"));
+	    stmt.executeUpdate(String.format("DROP FUNCTION %s", XSKHDBUtils.escapeArtifactName(connection, "hdbtablefunction-itest::SampleHanaTableFunction")));
+	    stmt.executeUpdate(String.format("DROP TABLE \"%s\".\"hdbtablefunction-itest::SampleHanaTable\"", Configuration.get("hana.username")));
+	  }
   }
 }

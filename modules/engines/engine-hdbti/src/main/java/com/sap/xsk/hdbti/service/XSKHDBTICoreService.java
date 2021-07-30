@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdbti.service;
 
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.api.*;
 import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
@@ -24,6 +23,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.cxf.common.util.StringUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
@@ -32,7 +32,6 @@ import org.eclipse.dirigible.repository.api.IRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.Comparator;
@@ -46,24 +45,13 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBTICoreService.class);
 
-    @com.google.inject.Inject
-    @Named("xskcsvRecordDao")
-    private IXSKCSVRecordDao xskcsvRecordDao;
-    @com.google.inject.Inject
-    @Named("xskImportedCSVRecordDao")
-    private IXSKImportedCSVRecordDao xskImportedCSVRecordDao;
-    @com.google.inject.Inject
-    @Named("xskTableImportArtifactDao")
-    private IXSKTableImportArtifactDao xskTableImportArtifactDao;
-    @com.google.inject.Inject
-    @Named("xskCsvToHdbtiRelationDao")
-    private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao;
-    @Inject
-    private IRepository repository;
-    @Inject
-    private DBMetadataUtil dbMetadataUtil;
-    @Inject
-    private DataSource dataSource;
+    private IXSKCSVRecordDao xskcsvRecordDao = (IXSKCSVRecordDao) StaticObjects.get("xskcsvRecordDao");
+    private IXSKImportedCSVRecordDao xskImportedCSVRecordDao = (IXSKImportedCSVRecordDao) StaticObjects.get("xskImportedCSVRecordDao");
+    private IXSKTableImportArtifactDao xskTableImportArtifactDao = (IXSKTableImportArtifactDao) StaticObjects.get("xskTableImportArtifactDao");
+    private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = (IXSKCsvToHdbtiRelationDao) StaticObjects.get("xskCsvToHdbtiRelationDao");
+    private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+    private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
     @Override
     public void insertCsvRecords(List<CSVRecord> recordsToInsert, List<String> headerNames,

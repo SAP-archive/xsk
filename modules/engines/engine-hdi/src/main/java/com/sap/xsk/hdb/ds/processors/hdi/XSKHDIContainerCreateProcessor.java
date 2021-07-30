@@ -15,37 +15,24 @@ import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
 public class XSKHDIContainerCreateProcessor {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKHDIContainerCreateProcessor.class);
 
-  @Inject
-  private XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor;
-  @Inject
-  private XSKCreateContainerGroupProcessor createContainerGroupProcessor;
-  @Inject
-  private XSKGrantPrivilegesContainerGroupProcessor grantPrivilegesContainerGroupProcessor;
-  @Inject
-  private XSKCreateContainerProcessor createContainerProcessor;
-  @Inject
-  private XSKGrantPrivilegesContainerAPIProcessor grantPrivilegesContainerAPIProcessor;
-  @Inject
-  private XSKWriteContainerContentProcessor writeContainerContentProcessor;
-  @Inject
-  private XSKConfigureLibrariesProcessor configureLibrariesProcessor;
-  @Inject
-  private XSKDeployContainerContentProcessor deployContainerContentProcessor;
-  @Inject
-  private XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor;
-  @Inject
-  private XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor;
+  private XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor = new XSKGrantPrivilegesContainerGroupAPIProcessor();
+  private XSKCreateContainerGroupProcessor createContainerGroupProcessor = new XSKCreateContainerGroupProcessor();
+  private XSKGrantPrivilegesContainerGroupProcessor grantPrivilegesContainerGroupProcessor = new XSKGrantPrivilegesContainerGroupProcessor();
+  private XSKCreateContainerProcessor createContainerProcessor = new XSKCreateContainerProcessor();
+  private XSKGrantPrivilegesContainerAPIProcessor grantPrivilegesContainerAPIProcessor = new XSKGrantPrivilegesContainerAPIProcessor();
+  private XSKWriteContainerContentProcessor writeContainerContentProcessor = new XSKWriteContainerContentProcessor();
+  private XSKConfigureLibrariesProcessor configureLibrariesProcessor = new XSKConfigureLibrariesProcessor();
+  private XSKDeployContainerContentProcessor deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
+  private XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
+  private XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor = new XSKGrantPrivilegesContainerTargetSchemaProcessor();
 
   public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
     logger.info("Start processing HDI Containers...");

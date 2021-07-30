@@ -11,23 +11,35 @@
  */
 package com.sap.xsk.hdbti.module;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.sap.xsk.hdbti.repository.TestRepository;
 import javax.sql.DataSource;
+
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
+import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.repository.api.IRepository;
 
-public class HdbtiTestModule extends AbstractModule {
+import com.sap.xsk.hdbti.repository.TestRepository;
+
+public class HdbtiTestModule extends AbstractDirigibleModule {
     @Override
-    protected void configure() {
-        bind(IRepository.class).to(TestRepository.class);
-        bind(DBMetadataUtil.class);
-        install(new XSKHdbtiModule());
+	public String getName() {
+		return "HdbtiTestModule";
+	}
+
+	@Override
+	public int getPriority() {
+		return super.getPriority();
+	}
+
+	@Override
+    public void configure() {
+    	StaticObjects.set(StaticObjects.REPOSITORY, new TestRepository());
+    	StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
+    	
+    	XSKHdbtiModule xskHdbtiModule = new XSKHdbtiModule();
+    	xskHdbtiModule.configure();
     }
 
-    @Provides
     static DataSource getDataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName("org.h2.Driver");

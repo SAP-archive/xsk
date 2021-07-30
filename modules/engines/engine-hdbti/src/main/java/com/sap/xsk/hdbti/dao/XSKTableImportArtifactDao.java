@@ -17,8 +17,9 @@ import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import javax.inject.Inject;
 import javax.sql.DataSource;
+
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,9 @@ public class XSKTableImportArtifactDao implements IXSKTableImportArtifactDao {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKTableImportArtifactDao.class);
 
-    @Inject
-    private DataSource dataSource;
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-    @Inject
-    private PersistenceManager<XSKTableImportArtifact> xskPersistenceManager;
+    private PersistenceManager<XSKTableImportArtifact> xskPersistenceManager = new PersistenceManager<XSKTableImportArtifact>();
 
     @Override
     public XSKTableImportArtifact createTableImportArtifact(XSKTableImportArtifact xskTableImportArtifact) throws XSKTableImportException {

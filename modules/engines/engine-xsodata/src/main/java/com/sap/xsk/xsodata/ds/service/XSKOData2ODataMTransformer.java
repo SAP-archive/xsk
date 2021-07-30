@@ -14,15 +14,11 @@ package com.sap.xsk.xsodata.ds.service;
 import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
 import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataMTransformer;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.sql.SQLException;
 
-@Singleton
 public class XSKOData2ODataMTransformer {
 
-    @Inject
-    private OData2ODataMTransformer oData2ODataMTransformer;
+    private OData2ODataMTransformer oData2ODataMTransformer = new OData2ODataMTransformer();
 
     public String[] transform(ODataDefinition oDataDefinition) throws SQLException {
         return oData2ODataMTransformer.transform(oDataDefinition);

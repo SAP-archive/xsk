@@ -11,8 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.entity;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
@@ -27,12 +25,8 @@ public class XSKEntityUpdateProcessor extends AbstractXSKProcessor<XSKDataStruct
 
   private static final Logger logger = LoggerFactory.getLogger(XSKEntityUpdateProcessor.class);
 
-  @Inject
-  @Named("xskEntityDropProcessor")
-  private IXSKHdbProcessor xskEntityDropProcessor;
-  @Inject
-  @Named("xskEntityCreateProcessor")
-  private IXSKHdbProcessor xskEntityCreateProcessor;
+  private IXSKHdbProcessor xskEntityDropProcessor = new XSKEntityDropProcessor();
+  private IXSKHdbProcessor xskEntityCreateProcessor = new XSKEntityCreateProcessor();
 
   /**
    * Execute the corresponding statement.

@@ -11,16 +11,18 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
-import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertEquals;
-public class XSKSchemaParserTest extends AbstractGuiceTest {
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.junit.Test;
+
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
+
+public class XSKSchemaParserTest extends AbstractDirigibleTest {
 
     @Test
     public void parseHdbschemaFileSuccessfully() throws Exception {

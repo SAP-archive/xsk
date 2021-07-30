@@ -17,7 +17,7 @@
 
 	<modules>
 		<module>parser-all</module>
-		<module>parser-hdbdd</module>
+		<!-- <module>parser-hdbdd</module> -->
 		<module>parser-hdbsequence</module>
 		<module>parser-hdbtable</module>
 		<module>parser-hdbti</module>

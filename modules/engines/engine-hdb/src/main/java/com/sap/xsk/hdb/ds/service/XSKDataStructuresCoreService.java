@@ -13,33 +13,30 @@ package com.sap.xsk.hdb.ds.service;
 
 import static java.text.MessageFormat.format;
 
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
+import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-import javax.inject.Inject;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 
 public class XSKDataStructuresCoreService implements IXSKDataStructuresCoreService {
 
-  @Inject
-  private DataSource dataSource;
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  @Inject
-  private PersistenceManager<XSKDataStructureModel> persistenceManager;
+  private PersistenceManager<XSKDataStructureModel> persistenceManager = new PersistenceManager<XSKDataStructureModel>();
 
-  @com.google.inject.Inject
-  @Named("xskCoreParserService")
-  private IXSKCoreParserService xskCoreParserService;
+  private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
 
   /*
    * (non-Javadoc)

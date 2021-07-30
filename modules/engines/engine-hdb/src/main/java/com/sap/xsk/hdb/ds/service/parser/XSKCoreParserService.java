@@ -11,32 +11,33 @@
  */
 package com.sap.xsk.hdb.ds.service.parser;
 
-import com.google.inject.Inject;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.eclipse.dirigible.commons.config.StaticObjects;
 
 public class XSKCoreParserService implements IXSKCoreParserService {
 
-  @Inject
-  private Map<String, XSKDataStructureParser> parsersByType;
+  private Map<String, XSKDataStructureParser> parserServices = (Map<String, XSKDataStructureParser>) StaticObjects.get("parserServices");
 
   @Override
   public XSKDataStructureModel parseDataStructure(String type, String location, String content)
           throws XSKDataStructuresException, IOException, XSKArtifactParserException {
-    if (!parsersByType.containsKey(type)) {
+    if (!parserServices.containsKey(type)) {
       return null;
     }
 
-    XSKDataStructureParser<?> parser = parsersByType.get(type);
+    XSKDataStructureParser<?> parser = parserServices.get(type);
     return parser.parse(location, content);
   }
 
   @Override
   public Class<XSKDataStructureModel> getDataStructureClass(String type) {
-    return (Class<XSKDataStructureModel>) parsersByType.get(type).getDataStructureClass();
+    return (Class<XSKDataStructureModel>) parserServices.get(type).getDataStructureClass();
   }
 }

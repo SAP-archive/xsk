@@ -17,14 +17,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
-import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -44,9 +41,14 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SqlFactory.class, Configuration.class})
-public class HDBSynonymProcessorTest extends AbstractGuiceTest {
+public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private Connection mockConnection;

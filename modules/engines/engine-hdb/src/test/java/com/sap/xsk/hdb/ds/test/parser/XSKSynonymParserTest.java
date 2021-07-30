@@ -13,18 +13,21 @@ package com.sap.xsk.hdb.ds.test.parser;
 
 import static org.junit.Assert.assertEquals;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
-import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import java.nio.charset.StandardCharsets;
-import nl.altindag.log.LogCaptor;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
+
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-public class XSKSynonymParserTest extends AbstractGuiceTest{
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
+import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
+
+import nl.altindag.log.LogCaptor;
+
+public class XSKSynonymParserTest extends AbstractDirigibleTest {
 
   @Before
   public void openMocks() {

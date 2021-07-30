@@ -15,7 +15,6 @@ import com.sap.xsk.xsaccess.ds.api.IXSKAccessCoreService;
 import com.sap.xsk.xsaccess.ds.api.IXSKPrivilegeCoreService;
 import java.io.IOException;
 import org.eclipse.dirigible.commons.api.content.AbstractClasspathContentHandler;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +22,7 @@ public class XSKSecurityClasspathContentHandler extends AbstractClasspathContent
 
   private static final Logger logger = LoggerFactory.getLogger(XSKSecurityClasspathContentHandler.class);
 
-  private XSKSecuritySynchronizer extensionsSynchronizer = StaticInjector.getInjector().getInstance(XSKSecuritySynchronizer.class);
+  private XSKSecuritySynchronizer extensionsSynchronizer = new XSKSecuritySynchronizer();
 
   /*
    * (non-Javadoc)

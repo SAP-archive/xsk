@@ -11,13 +11,13 @@
  */
 package com.sap.xsk.xsodata.ds.service;
 
-import com.google.inject.name.Named;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.xsodata.ds.api.IXSKODataArtifactDao;
 import com.sap.xsk.xsodata.ds.api.IXSKODataCoreService;
 import com.sap.xsk.xsodata.ds.api.IXSKODataParser;
 import com.sap.xsk.xsodata.ds.api.XSKODataException;
+import com.sap.xsk.xsodata.ds.dao.XSKODataArtifactDao;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 
@@ -29,13 +29,9 @@ import java.util.List;
  */
 public class XSKODataCoreService implements IXSKODataCoreService {
 
-    @com.google.inject.Inject
-    @Named("xskXSODataArtifactDao")
-    private IXSKODataArtifactDao xskODataArtifactDao;
+    private IXSKODataArtifactDao xskODataArtifactDao = new XSKODataArtifactDao();
 
-    @com.google.inject.Inject
-    @Named("xskODataParser")
-    private IXSKODataParser xskODataParser;
+    private IXSKODataParser xskODataParser = new XSKODataParser();
 
     public static XSKHDBXSODATAEntity getEntity(XSKODataModel model, String alias, String navigation) {
         if (model != null && model.getService() != null) {

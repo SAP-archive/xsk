@@ -11,8 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.facade;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
@@ -27,6 +25,8 @@ import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctio
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
+import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,12 +34,14 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -65,15 +67,11 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBCoreFacade.class);
 
-  @javax.inject.Inject
-  private DataSource dataSource;
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  @Inject
-  private Map<String, IXSKDataStructureManager> managerServices;
+  private Map<String, IXSKDataStructureManager> managerServices = (Map<String, IXSKDataStructureManager>) StaticObjects.get("managerServices");
 
-  @Inject
-  @Named("xskCoreParserService")
-  private IXSKCoreParserService xskCoreParserService;
+  private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
 
   /**
    * Concatenate list of strings.

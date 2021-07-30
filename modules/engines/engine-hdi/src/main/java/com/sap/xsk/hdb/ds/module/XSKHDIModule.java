@@ -11,26 +11,30 @@
  */
 package com.sap.xsk.hdb.ds.module;
 
-import com.google.inject.multibindings.MapBinder;
+import java.util.Map;
+
+import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.parser.hdi.XSKHDIParser;
-import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
 
 public class XSKHDIModule extends AbstractDirigibleModule {
 
   @Override
-  protected void configure() {
+  public void configure() {
 
     bindParsersToFileExtension();
   }
 
   private void bindParsersToFileExtension() {
-    MapBinder<String, XSKDataStructureParser> mapBinder
-        = MapBinder.newMapBinder(binder(), String.class, XSKDataStructureParser.class);
+//    MapBinder<String, XSKDataStructureParser> mapBinder
+//        = MapBinder.newMapBinder(binder(), String.class, XSKDataStructureParser.class);
 
-    mapBinder.addBinding(IXSKDataStructureModel.TYPE_HDI).to(XSKHDIParser.class).asEagerSingleton();
+	  Map<String, XSKDataStructureParser> parserServices = (Map<String, XSKDataStructureParser>) StaticObjects.get("parserServices");
+      parserServices.put(IXSKDataStructureModel.TYPE_HDI, new XSKHDIParser());
   }
 
 

@@ -15,8 +15,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>com.sap.xsk.models.hdbdd</module>
-		<module>com.sap.xsk.models.hdbdd.ide</module>
+		<!-- <module>com.sap.xsk.models.hdbdd</module>
+		<module>com.sap.xsk.models.hdbdd.ide</module> -->
 		<!-- <module>com.sap.xsk.models.hdbdd.web</module> -->
 	</modules>
 	<dependencyManagement>

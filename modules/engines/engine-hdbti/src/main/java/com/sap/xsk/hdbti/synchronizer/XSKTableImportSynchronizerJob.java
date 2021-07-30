@@ -11,14 +11,12 @@
  */
 package com.sap.xsk.hdbti.synchronizer;
 
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
 
 public class XSKTableImportSynchronizerJob extends AbstractSynchronizerJob {
 
-  private XSKTableImportSynchronizer xskTableImportSynchronizer = StaticInjector.getInjector()
-      .getInstance(XSKTableImportSynchronizer.class);
+  private XSKTableImportSynchronizer xskTableImportSynchronizer = new XSKTableImportSynchronizer();
 
   /*
    * (non-Javadoc)

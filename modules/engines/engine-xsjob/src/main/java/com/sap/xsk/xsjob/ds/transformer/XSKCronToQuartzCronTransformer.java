@@ -13,9 +13,7 @@ package com.sap.xsk.xsjob.ds.transformer;
 
 import com.sap.xsk.xsjob.ds.api.XSKCronExpressionException;
 import java.text.ParseException;
-import javax.inject.Singleton;
 
-@Singleton
 public class XSKCronToQuartzCronTransformer {
 
   private static final int XSK_CRON_YEAR = 0;

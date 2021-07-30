@@ -11,12 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbsequence;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.utils.TestConstants;
@@ -40,7 +37,7 @@ import static org.junit.Assert.assertTrue;
 
 public class XSKHDBSequenceParserHanaITTest {
 
-  private static Connection connection;
+  private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
 
   @BeforeClass
@@ -49,20 +46,22 @@ public class XSKHDBSequenceParserHanaITTest {
         TestConstants.HANA_URL,
         TestConstants.HANA_USERNAME,
         TestConstants.HANA_PASSWORD);
-    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
-    connection = injector.getInstance(DataSource.class).getConnection();
-    facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
+    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
+    datasource = xskhdbTestModule.getDataSource();
+    facade = new XSKHDBCoreFacade();
   }
 
   @Before
   public void setUpBeforeTest() throws SQLException {
-    Statement stmt = connection.createStatement();
-    DatabaseMetaData metaData = connection.getMetaData();
-    String hanaUserName = Configuration.get("hana.username");
-    ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-    if (table.next()) {
-      stmt.executeUpdate(String.format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence'", hanaUserName));
-    }
+	  try (Connection connection = datasource.getConnection();
+	  			Statement stmt = connection.createStatement()) {
+	    DatabaseMetaData metaData = connection.getMetaData();
+	    String hanaUserName = Configuration.get("hana.username");
+	    ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
+	    if (table.next()) {
+	      stmt.executeUpdate(String.format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence'", hanaUserName));
+	    }
+	  }
   }
 
   @Test
@@ -72,16 +71,18 @@ public class XSKHDBSequenceParserHanaITTest {
         "/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
-    Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery(String
-        .format("SELECT COUNT(*) as rawsCount from Sequences WHERE SEQUENCE_NAME = '%s'", "sequence-itest::SampleSequence_HanaXSClassic"));
-    assertTrue(rs.next());
-    assertEquals(1, rs.getInt("rawsCount"));
-    stmt.executeUpdate(
-        String.format("DROP SEQUENCE %s", XSKHDBUtils.escapeArtifactName(connection, "sequence-itest::SampleSequence_HanaXSClassic")));
-    rs = stmt.executeQuery(String
-        .format("SELECT COUNT(*) as rawsCount from Sequences WHERE SEQUENCE_NAME = '%s'", "sequence-itest::SampleSequence_HanaXSClassic"));
-    assertTrue(rs.next());
-    assertEquals(0, rs.getInt("rawsCount"));
+    try (Connection connection = datasource.getConnection();
+  			Statement stmt = connection.createStatement()) {
+	    ResultSet rs = stmt.executeQuery(String
+	        .format("SELECT COUNT(*) as rawsCount from Sequences WHERE SEQUENCE_NAME = '%s'", "sequence-itest::SampleSequence_HanaXSClassic"));
+	    assertTrue(rs.next());
+	    assertEquals(1, rs.getInt("rawsCount"));
+	    stmt.executeUpdate(
+	        String.format("DROP SEQUENCE %s", XSKHDBUtils.escapeArtifactName(connection, "sequence-itest::SampleSequence_HanaXSClassic")));
+	    rs = stmt.executeQuery(String
+	        .format("SELECT COUNT(*) as rawsCount from Sequences WHERE SEQUENCE_NAME = '%s'", "sequence-itest::SampleSequence_HanaXSClassic"));
+	    assertTrue(rs.next());
+	    assertEquals(0, rs.getInt("rawsCount"));
+    }
   }
 }

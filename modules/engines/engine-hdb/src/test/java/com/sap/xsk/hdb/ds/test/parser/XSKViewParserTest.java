@@ -11,19 +11,19 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
-import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertEquals;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.junit.Test;
 
-public class XSKViewParserTest extends AbstractGuiceTest {
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+
+public class XSKViewParserTest extends AbstractDirigibleTest {
 
     @Test
     public void parseHanaXSClassicContentSuccessfully() throws Exception {

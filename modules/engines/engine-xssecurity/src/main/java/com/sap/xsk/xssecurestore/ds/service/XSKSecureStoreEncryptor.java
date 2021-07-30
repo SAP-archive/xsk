@@ -12,10 +12,8 @@
 package com.sap.xsk.xssecurestore.ds.service;
 
 import com.sap.xsk.xssecurestore.ds.api.IXSKSecureStoreEncryptor;
-import javax.inject.Singleton;
 import org.eclipse.dirigible.api.v3.utils.Base64Facade;
 
-@Singleton
 public class XSKSecureStoreEncryptor implements IXSKSecureStoreEncryptor {
 
   @Override

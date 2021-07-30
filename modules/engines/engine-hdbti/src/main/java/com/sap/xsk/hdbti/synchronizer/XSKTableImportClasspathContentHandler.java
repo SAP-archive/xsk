@@ -14,7 +14,6 @@ package com.sap.xsk.hdbti.synchronizer;
 import com.sap.xsk.hdbti.api.IXSKTableImportModel;
 import java.io.IOException;
 import org.eclipse.dirigible.commons.api.content.AbstractClasspathContentHandler;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,7 @@ public class XSKTableImportClasspathContentHandler extends AbstractClasspathCont
 
   private static final Logger logger = LoggerFactory.getLogger(com.sap.xsk.hdbti.synchronizer.XSKTableImportClasspathContentHandler.class);
 
-  private XSKTableImportSynchronizer tableImportSynchronizer = StaticInjector.getInjector().getInstance(XSKTableImportSynchronizer.class);
+  private XSKTableImportSynchronizer tableImportSynchronizer = new XSKTableImportSynchronizer();
 
   /*
    * (non-Javadoc)

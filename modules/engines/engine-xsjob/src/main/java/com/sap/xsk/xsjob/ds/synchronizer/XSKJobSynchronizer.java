@@ -30,10 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -42,7 +39,6 @@ import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
 public class XSKJobSynchronizer extends AbstractSynchronizer {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKJobSynchronizer.class);
@@ -52,19 +48,15 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
 
   private static final List<String> JOBS_SYNCHRONIZED = Collections.synchronizedList(new ArrayList<String>());
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
-  @Inject
-  private XSKJobCoreService schedulerCoreService;
+  private XSKJobCoreService schedulerCoreService = new XSKJobCoreService();
 
-  // @Inject
-  // private SchedulerManager schedulerManager;
-  @Inject
-  private XSKJobToXSKJobDefinitionTransformer xskJobToXSKJobDefinitionTransformer;
+  private XSKJobToXSKJobDefinitionTransformer xskJobToXSKJobDefinitionTransformer = new XSKJobToXSKJobDefinitionTransformer();
 
   /**
    * Force synchronization.
    */
   public static final void forceSynchronization() {
-    XSKJobSynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKJobSynchronizer.class);
+    XSKJobSynchronizer synchronizer = new XSKJobSynchronizer();
     synchronizer.setForcedSynchronization(true);
     try {
       synchronizer.synchronize();

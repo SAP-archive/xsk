@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
-import com.google.inject.Inject;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
@@ -19,6 +18,8 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
@@ -40,8 +41,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableDropProcessor.class);
 
-    @Inject
-    private Map<String, IXSKDataStructureManager> managerServices;
+    private Map<String, IXSKDataStructureManager> managerServices = (Map<String, IXSKDataStructureManager>) StaticObjects.get("managerServices");
 
   /**
    * Execute the corresponding statement.

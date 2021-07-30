@@ -13,9 +13,7 @@ package com.sap.xsk.hdb.ds.processors.hdi;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import javax.inject.Singleton;
 
-@Singleton
 public class XSKGrantPrivilegesContainerTargetSchemaProcessor extends XSKHDIAbstractProcessor {
 
   public final void execute(Connection connection, String container, String[] users) throws SQLException {

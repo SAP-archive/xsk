@@ -26,22 +26,17 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-@Singleton
 public class XSKAccessCoreService implements IXSKAccessCoreService {
 
   private static final List<XSKAccessDefinition> CACHE = Collections.synchronizedList(new ArrayList<>());
-  @Inject
-  private DataSource dataSource;
-  @Inject
-  private PersistenceManager<XSKAccessDefinition> xskAccessDefinitionPersistenceManager;
-  @Inject
-  private XSKPrivilegeCoreService xskPrivilegeCoreService;
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private PersistenceManager<XSKAccessDefinition> xskAccessDefinitionPersistenceManager = new PersistenceManager<XSKAccessDefinition>();
+  private XSKPrivilegeCoreService xskPrivilegeCoreService = new XSKPrivilegeCoreService();
 
   @Override
   public XSKAccessDefinition createXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed,

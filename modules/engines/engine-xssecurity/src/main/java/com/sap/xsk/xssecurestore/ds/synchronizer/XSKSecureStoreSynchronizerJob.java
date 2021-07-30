@@ -11,14 +11,12 @@
  */
 package com.sap.xsk.xssecurestore.ds.synchronizer;
 
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
 
 public class XSKSecureStoreSynchronizerJob extends AbstractSynchronizerJob {
 
-  private XSKSecureStoreSynchronizer xskSecureStoreSynchronizer = StaticInjector.getInjector()
-      .getInstance(XSKSecureStoreSynchronizer.class);
+  private XSKSecureStoreSynchronizer xskSecureStoreSynchronizer = new XSKSecureStoreSynchronizer();
 
   /*
    * (non-Javadoc)

@@ -11,12 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbprocedure;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -33,7 +30,7 @@ import java.sql.Statement;
 
 public class XSKHDBProcedureParserPostgreSQLITTest {
   private static PostgreSQLContainer jdbcContainer;
-  private static Connection connection;
+  private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
 
 
@@ -44,9 +41,9 @@ public class XSKHDBProcedureParserPostgreSQLITTest {
     jdbcContainer.start();
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
-    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
-    connection = injector.getInstance(DataSource.class).getConnection();
-    facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
+    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
+    datasource = xskhdbTestModule.getDataSource();
+    facade = new XSKHDBCoreFacade();
   }
 
   @AfterClass
@@ -56,15 +53,16 @@ public class XSKHDBProcedureParserPostgreSQLITTest {
 
   @Test(expected = IllegalStateException.class)
   public void testHDBTableFunctionCreateNotSupportedError() throws IOException, XSKDataStructuresException, SynchronizationException, SQLException {
-    Statement stmt = connection.createStatement();
+	  try (Connection connection = datasource.getConnection();
+  			Statement stmt = connection.createStatement()) {
 
-    stmt.executeUpdate("create table \"public\".\"hdbprocedure-itest::SampleHanaTable\"(COLUMN1 integer,COLUMN2 integer)");
-    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-        "/registry/public/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure",
-        "/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure");
-
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
-
+	    stmt.executeUpdate("create table \"public\".\"hdbprocedure-itest::SampleHanaTable\"(COLUMN1 integer,COLUMN2 integer)");
+	    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+	        "/registry/public/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure",
+	        "/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure");
+	
+	    this.facade.handleResourceSynchronization(resource);
+	    this.facade.updateEntities();
+	  }
   }
 }

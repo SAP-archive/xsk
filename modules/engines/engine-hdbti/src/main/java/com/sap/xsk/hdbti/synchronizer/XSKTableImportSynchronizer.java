@@ -13,8 +13,6 @@ package com.sap.xsk.hdbti.synchronizer;
 
 import static java.text.MessageFormat.format;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
@@ -44,10 +42,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Singleton;
 import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -55,7 +52,6 @@ import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
 public class XSKTableImportSynchronizer extends AbstractSynchronizer {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableImportSynchronizer.class);
@@ -70,23 +66,12 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
 
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
 
-  @javax.inject.Inject
-  private DataSource dataSource;
-  @Inject
-  @Named("xskTableImportParser")
-  private IXSKTableImportParser xskTableImportParser;
-  @Inject
-  @Named("xskHdbtiProcessor")
-  private IXSKHDBTIProcessor xskHdbtiProcessor;
-  @Inject
-  @Named("xskCsvToHdbtiRelationDao")
-  private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao;
-  @Inject
-  @Named("xskTableImportArtifactDao")
-  private IXSKTableImportArtifactDao xskTableImportArtifactDao;
-  @Inject
-  @Named("xskHdbtiCoreService")
-  private IXSKHDBTICoreService xskHdbtiCoreService;
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private IXSKTableImportParser xskTableImportParser = (IXSKTableImportParser) StaticObjects.get("xskTableImportParser");
+  private IXSKHDBTIProcessor xskHdbtiProcessor =  (IXSKHDBTIProcessor) StaticObjects.get("xskHdbtiProcessor");
+  private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = (IXSKCsvToHdbtiRelationDao) StaticObjects.get("xskCsvToHdbtiRelationDao");
+  private IXSKTableImportArtifactDao xskTableImportArtifactDao = (IXSKTableImportArtifactDao) StaticObjects.get("xskTableImportArtifactDao");
+  private IXSKHDBTICoreService xskHdbtiCoreService = (IXSKHDBTICoreService) StaticObjects.get("xskHdbtiCoreService");
 
   @Override
   public void synchronize() {
@@ -129,7 +114,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
    * Force synchronization.
    */
   public static final void forceSynchronization() {
-    XSKTableImportSynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKTableImportSynchronizer.class);
+    XSKTableImportSynchronizer synchronizer = new XSKTableImportSynchronizer();
     synchronizer.setForcedSynchronization(true);
     try {
       synchronizer.synchronize();

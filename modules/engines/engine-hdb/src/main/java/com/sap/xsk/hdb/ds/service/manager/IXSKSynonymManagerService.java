@@ -11,12 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,12 +34,8 @@ public class IXSKSynonymManagerService extends AbstractDataStructureManagerServi
   private static final Logger logger = LoggerFactory.getLogger(IXSKSynonymManagerService.class);
   private final Map<String, XSKDataStructureHDBSynonymModel> dataStructureSynonymModels = new LinkedHashMap<>();
   private final List<String> synonymsSynchronized = Collections.synchronizedList(new ArrayList<>());
-  @Inject
-  @Named("xskSynonymCreateProcessor")
-  private IXSKHdbProcessor xskSynonymCreateProcessor;
-  @Inject
-  @Named("xskSynonymDropProcessor")
-  private IXSKHdbProcessor xskSynonymDropProcessor;
+  private IXSKHdbProcessor xskSynonymCreateProcessor = new HDBSynonymCreateProcessor();
+  private IXSKHdbProcessor xskSynonymDropProcessor = new HDBSynonymDropProcessor();
 
   @Override
   public void synchronizeRuntimeMetadata(XSKDataStructureHDBSynonymModel synonymModel) throws XSKDataStructuresException {

@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.xsodata.ds.synchronizer;
 
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
 
@@ -20,7 +19,7 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
  */
 public class XSKODataSynchronizerJob extends AbstractSynchronizerJob {
 
-  private final XSKODataSynchronizer odataSynchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
+  private final XSKODataSynchronizer odataSynchronizer = new XSKODataSynchronizer();
 
   /*
    * (non-Javadoc)

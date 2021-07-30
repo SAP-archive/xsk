@@ -11,12 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
+import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionDropProcessor;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,12 +36,8 @@ public class IXSKTableFunctionManagerService extends AbstractDataStructureManage
   private final Map<String, XSKDataStructureHDBTableFunctionModel> dataStructureTableFunctionsModels;
   private final List<String> tableFunctionsSynchronized;
 
-  @Inject
-  @Named("hdbTableFunctionCreateProcessor")
-  private IXSKHdbProcessor hdbTableFunctionCreateProcessor;
-  @Inject
-  @Named("hdbTableFunctionDropProcessor")
-  private IXSKHdbProcessor hdbTableFunctionDropProcessor;
+  private IXSKHdbProcessor hdbTableFunctionCreateProcessor = new HDBTableFunctionCreateProcessor();
+  private IXSKHdbProcessor hdbTableFunctionDropProcessor = new HDBTableFunctionDropProcessor();
 
   public IXSKTableFunctionManagerService() {
     dataStructureTableFunctionsModels = new LinkedHashMap<>();

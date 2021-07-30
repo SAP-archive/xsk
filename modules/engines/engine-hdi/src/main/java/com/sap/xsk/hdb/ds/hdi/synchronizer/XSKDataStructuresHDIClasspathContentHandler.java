@@ -15,7 +15,6 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import org.eclipse.dirigible.commons.api.content.AbstractClasspathContentHandler;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +26,7 @@ public class XSKDataStructuresHDIClasspathContentHandler extends AbstractClasspa
 
   private static final Logger logger = LoggerFactory.getLogger(XSKDataStructuresHDIClasspathContentHandler.class);
 
-  private XSKDataStructuresHDISynchronizer dataStructuresHDISynchronizer = StaticInjector.getInjector()
-      .getInstance(XSKDataStructuresHDISynchronizer.class);
+  private XSKDataStructuresHDISynchronizer dataStructuresHDISynchronizer = new XSKDataStructuresHDISynchronizer();
 
   /*
    * (non-Javadoc)

@@ -17,14 +17,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 public class XSKJobToXSKJobDefinitionTransformer {
 
-  @Inject
-  private XSKCronToQuartzCronTransformer xskCronToQuartzCronTransformer;
+  private XSKCronToQuartzCronTransformer xskCronToQuartzCronTransformer = new XSKCronToQuartzCronTransformer();
 
   public ArrayList<XSKJobDefinition> transform(XSKJobArtifact xskJobArtifact) throws ParseException {
     ArrayList<XSKJobDefinition> jobDefinitions = new ArrayList<>();

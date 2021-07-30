@@ -15,26 +15,28 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.cxf.helpers.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ContextException;
 import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.extensions.api.ExtensionsException;
 import org.eclipse.dirigible.core.extensions.api.IExtensionsCoreService;
 import org.eclipse.dirigible.core.extensions.service.ExtensionsCoreService;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.engine.js.api.IJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
@@ -43,7 +45,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class XSKApiSuiteTest extends AbstractGuiceTest {
+import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
+
+public class XSKApiSuiteTest extends AbstractDirigibleTest {
 
   private static final List<String> TEST_MODULES = new ArrayList<>();
 
@@ -58,9 +62,9 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
 
   @Before
   public void setUp() throws Exception {
-    this.extensionsCoreService = getInjector().getInstance(ExtensionsCoreService.class);
-    this.repository = getInjector().getInstance(IRepository.class);
-    this.graaljsJavascriptEngineExecutor = getInjector().getInstance(XSKJavascriptEngineExecutor.class);
+    this.extensionsCoreService = new ExtensionsCoreService();
+    this.repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+    this.graaljsJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
   }
 
   @Before

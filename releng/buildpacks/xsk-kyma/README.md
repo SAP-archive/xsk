@@ -30,7 +30,7 @@
     ```
     pack build --builder dirigiblelabs/buildpacks-builder-xsk-kyma <my-org>/<my-repository>
     ```
-$$
+
 ## Kpack Installation
 
 1. [Install Pack](https://buildpacks.io/docs/tools/pack/#install)

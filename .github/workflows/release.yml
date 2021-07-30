@@ -111,22 +111,6 @@ jobs:
         docker tag dirigiblelabs/buildpacks-builder-xsk-cf dirigiblelabs/buildpacks-builder-xsk-cf:$XSK_VERSION
         docker push dirigiblelabs/buildpacks-builder-xsk-cf:$XSK_VERSION
         cd ../../../../
-    - name: Java Buildpack
-      run: |
-        cd releng/buildpacks/java/
-        docker build -t dirigiblelabs/kneo-java-stack-base . --target base
-        docker tag dirigiblelabs/kneo-java-stack-base dirigiblelabs/kneo-java-stack-base:$XSK_VERSION
-        docker push dirigiblelabs/kneo-java-stack-base:$XSK_VERSION
-        docker build -t dirigiblelabs/kneo-java-stack-run . --target run
-        docker tag dirigiblelabs/kneo-java-stack-run dirigiblelabs/kneo-java-stack-run:$XSK_VERSION
-        docker push dirigiblelabs/kneo-java-stack-run:$XSK_VERSION
-        docker build -t dirigiblelabs/kneo-java-stack-build . --target build
-        docker tag dirigiblelabs/kneo-java-stack-build dirigiblelabs/kneo-java-stack-build:$XSK_VERSION
-        docker push dirigiblelabs/kneo-java-stack-build:$XSK_VERSION
-        cd buildpack/
-        pack buildpack package dirigiblelabs/kneo-java-buildpack --config ./package.toml
-        docker push dirigiblelabs/kneo-java-buildpack
-        cd ../../../../
 
 #----------------Publish GitHub Release------------------#
 
@@ -216,38 +200,38 @@ jobs:
           apiVersion: kpack.io/v1alpha1
           kind: ClusterStore
           metadata:
-            name: kneo-xsk-store
+            name: xsk-store
           spec:
             sources:
-            - image: dirigiblelabs/kneo-xsk-buildpack:${{ env.XSK_VERSION }}
+            - image: dirigiblelabs/buildpacks-xsk:${{ env.XSK_VERSION }}
           ---
           apiVersion: kpack.io/v1alpha1
           kind: ClusterStack
           metadata:
-            name: kneo-xsk-stack
+            name: xsk-stack
           spec:
             id: com.sap.kneo.xsk
             buildImage:
-              image: dirigiblelabs/kneo-xsk-stack-build:${{ env.XSK_VERSION }}
+              image: dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
             runImage:
-              image: dirigiblelabs/kneo-xsk-stack-run:${{ env.XSK_VERSION }}
+              image: dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
           ---
           apiVersion: kpack.io/v1alpha1
           kind: Builder
           metadata:
-            name: kneo-xsk
+            name: xsk-builder
           spec:
             serviceAccount: <your-service-account>
             tag: <your-docker-organization>/<your-docker-builder-repository>
             stack:
-              name: kneo-xsk-stack
+              name: xsk-stack
               kind: ClusterStack
             store:
-              name: kneo-xsk-store
+              name: xsk-store
               kind: ClusterStore
             order:
             - group:
-              - id: dirigiblelabs/kneo-xsk-buildpack
+              - id: dirigiblelabs/buildpacks-xsk
           ```
 
           > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
@@ -266,7 +250,7 @@ jobs:
             tag: <your-docker-organization>/<your-application-docker-image-repository>
             serviceAccount: <your-service-account>
             builder:
-              name: kneo-xsk
+              name: xsk-builder
               kind: Builder
             source:
               blob:

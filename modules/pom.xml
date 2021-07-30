@@ -20,7 +20,6 @@
 		<module>api</module>
 		<module>parsers</module>
 		<module>engines</module>
-		<module>basis</module>
 		<module>ide</module>
 	</modules>
 

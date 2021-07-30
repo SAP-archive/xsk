@@ -14,7 +14,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>java</module>
 		<module>xsk</module>
 		<module>xsk-kyma</module>
 		<module>xsk-cf</module>

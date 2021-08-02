@@ -22,6 +22,11 @@
 - Updated ide-csv module [#994](https://github.com/eclipse/dirigible/pull/994)
 - Implementing Drop/Create Builder for TableTypе [#986](https://github.com/eclipse/dirigible/pull/986)
 
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-07-26..2021-08-01) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-07-26..2021-08-01) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-07-26..2021-08-01) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-07-26..2021-08-01) PRs
+
 ----
 
 ## 2021 Week 29 (19 July - 25 July)
@@ -45,6 +50,11 @@
 - Altering of an existing table now possible [#351](https://github.com/SAP/xsk/pull/351)
 - Missing processor for .hdbscalarfunction [#352](https://github.com/SAP/xsk/issues/352)
 - Deploy every new release on public cluster [#355](https://github.com/SAP/xsk/issues/355)
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-07-19..2021-07-25) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-07-19..2021-07-25) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-07-19..2021-07-25) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-07-19..2021-07-25) PRs
 
 ----
 

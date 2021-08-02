@@ -169,8 +169,8 @@ function XscCallableStatement(callableStatement) {
 	};
 
 	this.setNull = function(index, sqlTypeStr) {
-//		var sqlTypeStr = callableStatement.getResultSet().getMetaData()
-//				.getColumnTypeName(index);
+		var sqlTypeStr = callableStatement.getResultSet().getMetaData()
+				.getColumnTypeName(index);
 		callableStatement.setNull(index, sqlTypeStr);
 	};
 

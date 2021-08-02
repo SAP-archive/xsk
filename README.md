@@ -117,15 +117,16 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 
 ---
 
+## Requirements
 
-## Installation
-
-### How to build
-
-Prerequisites:
 - Java suported versions 11 - 13
 - Maven 3.6.2 or later
+
+## Download and Installation
+
 ```
+git clone https://github.com/SAP/xsk
+cd xsk
 mvn clean install
 ```
 

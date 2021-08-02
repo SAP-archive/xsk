@@ -1,0 +1,10 @@
+schema= "MYSCHEMA";
+start_with= 10;
+maxvalue= 30;
+nomaxvalue= false;
+minvalue= 1;
+nominvalue= true;
+cycles= false;
+reset_by= "SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"com.acme.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"MYSCHEMA\".\"com.acme.test.tables::MY_TABLE2\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"";
+depends_on_table = "sap.ino.db.iam::t_identity";
+depends_on_view = "sap.ino.db.iam::t_view";

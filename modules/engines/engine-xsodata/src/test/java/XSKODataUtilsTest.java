@@ -1,15 +1,14 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
@@ -59,14 +58,14 @@ public class XSKODataUtilsTest {
         column9.setNullable(true);
         PersistenceTableModel model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::employee", Arrays.asList(column1, column2, column9), new ArrayList<>());
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee", null)).thenReturn(model);
 
         PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", true);
         PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", false);
         PersistenceTableRelationModel relPhone = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::address", "PHONES", "FK_PHONE", "ID", "CONSTRAINT_8C9F7", "CONSTRAINT_INDEX_E67");
         model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::address", Arrays.asList(column7, column8), Collections.singletonList(relPhone));
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address", null)).thenReturn(model);
 
         PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", true);
         PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", false);
@@ -77,7 +76,7 @@ public class XSKODataUtilsTest {
         PersistenceTableRelationModel rel3 = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones", "kneo.test.helloodata.CompositeKey::address", "FK_ADDRESS_ID", "ID", "CONSTRAINT_8C9F", "CONSTRAINT_INDEX_E6");
         model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::phones", Arrays.asList(column3, column4, column5, column6), Arrays.asList(rel, rel2, rel3));
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::phones")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::phones", null)).thenReturn(model);
 
         ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 
@@ -98,14 +97,14 @@ public class XSKODataUtilsTest {
         column9.setNullable(true);
         PersistenceTableModel model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::employee", Arrays.asList(column1, column2, column9), new ArrayList<>());
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee", null)).thenReturn(model);
 
         PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", true);
         PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", false);
         PersistenceTableRelationModel relPhone = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::address", "PHONES", "FK_PHONE", "ID", "CONSTRAINT_8C9F7", "CONSTRAINT_INDEX_E67");
         model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::address", Arrays.asList(column7, column8), Collections.singletonList(relPhone));
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address", null)).thenReturn(model);
 
         PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", true);
         PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", false);
@@ -116,7 +115,7 @@ public class XSKODataUtilsTest {
         PersistenceTableRelationModel rel3 = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones", "kneo.test.helloodata.CompositeKey::address", "FK_ADDRESS_ID", "ID", "CONSTRAINT_8C9F", "CONSTRAINT_INDEX_E6");
         model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::phones", Arrays.asList(column3, column4, column5, column6), Arrays.asList(rel, rel2, rel3));
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::phones")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::phones", null)).thenReturn(model);
 
         ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 
@@ -184,14 +183,14 @@ public class XSKODataUtilsTest {
         column10.setNullable(true);
         PersistenceTableModel model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::employee", Arrays.asList(column1, column2, column9, column10), new ArrayList<>());
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee", null)).thenReturn(model);
 
         PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", true);
         PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", false);
         PersistenceTableRelationModel relPhone = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::address", "PHONES", "FK_PHONE", "ID", "CONSTRAINT_8C9F7", "CONSTRAINT_INDEX_E67");
         model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::address", Arrays.asList(column7, column8), Collections.singletonList(relPhone));
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address", null)).thenReturn(model);
 
         PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", true);
         PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", false);
@@ -202,7 +201,7 @@ public class XSKODataUtilsTest {
         PersistenceTableRelationModel rel3 = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones", "kneo.test.helloodata.CompositeKey::address", "FK_ADDRESS_ID", "ID", "CONSTRAINT_8C9F", "CONSTRAINT_INDEX_E6");
         model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::phones", Arrays.asList(column3, column4, column5, column6), Arrays.asList(rel, rel2, rel3));
         model.setTableType(ISqlKeywords.METADATA_TABLE);
-        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::phones")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::phones", null)).thenReturn(model);
 
         ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
         assertEquals(2, oDataDefinition.getEntities().size());
@@ -368,7 +367,7 @@ public class XSKODataUtilsTest {
         PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("COLUMN3", "Edm.Int32", false);
         PersistenceTableModel model = new PersistenceTableModel("kneo.test.calcviews::calc", Arrays.asList(column1, column2, column3), new ArrayList<>());
         model.setTableType("CALC VIEW");
-        when(dbMetadataUtil.getTableMetadata("kneo.test.calcviews::calc")).thenReturn(model);
+        when(dbMetadataUtil.getTableMetadata("kneo.test.calcviews::calc", null)).thenReturn(model);
 
         ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 
@@ -376,8 +375,6 @@ public class XSKODataUtilsTest {
         assertEquals(1, oDataDefinition.getEntities().get(1).getProperties().size());
         assertEquals(2, oDataDefinition.getEntities().get(2).getProperties().size());
     }
-
-
 }
 
 

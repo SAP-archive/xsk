@@ -1,22 +1,19 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.itest.hdbsequence;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -46,7 +43,7 @@ import static org.junit.Assert.assertFalse;
 public class XSKHDBSequenceParserPostgreSQLITTest {
 
   private static PostgreSQLContainer jdbcContainer;
-  private static Connection connection;
+  private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
 
 
@@ -58,9 +55,9 @@ public class XSKHDBSequenceParserPostgreSQLITTest {
     jdbcContainer.start();
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
-    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
-    connection = injector.getInstance(DataSource.class).getConnection();
-    facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
+    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
+    datasource = xskhdbTestModule.getDataSource();
+    facade = new XSKHDBCoreFacade();
   }
 
   @AfterClass
@@ -77,18 +74,20 @@ public class XSKHDBSequenceParserPostgreSQLITTest {
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
 
-    Statement stmt = connection.createStatement();
-    List<String> dbSequences = new ArrayList<>();
-    ResultSet rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
-    while (rs.next()) {
-      dbSequences.add(rs.getString("sequence_name"));
+    try (Connection connection = datasource.getConnection();
+  			Statement stmt = connection.createStatement()) {
+	    List<String> dbSequences = new ArrayList<>();
+	    ResultSet rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
+	    while (rs.next()) {
+	      dbSequences.add(rs.getString("sequence_name"));
+	    }
+	    assertEquals(1, dbSequences.size());
+	    assertEquals("sequence-itest::SampleSequence_HanaXSClassic", dbSequences.get(0));
+	
+	    stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
+	    rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
+	    assertFalse(rs.next());
     }
-    assertEquals(1, dbSequences.size());
-    assertEquals("sequence-itest::SampleSequence_HanaXSClassic", dbSequences.get(0));
-
-    stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
-    rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
-    assertFalse(rs.next());
   }
 
 

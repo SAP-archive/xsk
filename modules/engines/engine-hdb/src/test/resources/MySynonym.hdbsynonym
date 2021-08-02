@@ -1,11 +1,23 @@
 // we have some comment heree....
 /*we have some comment heree....*/
 {
-  "hdb_view::MySynonym": {
-    "schema": "TONI",
-    "target": {
-       "schema": "PUBLIC",
-      "object": "hdb_view::Order"
+    "SY_DUMMY": {
+        "target": {
+            "object": "TABLE::CUSTOMERS",
+            "schema": "DBADMIN"
+        },
+        "schema": "LL"
+    },
+    "PAL_TRIPLE_EXPSMOOTH": {
+        "target": {
+            "object": "PAL_TRIPLE_EXPSMOOTH",
+            "schema": "_SYS_AFL"
+        }
+    },
+    "PROCEDURES": {
+        "target": {
+            "schema": "SYS",
+            "object": "PROCEDURES"
+        }
     }
-  }
 }

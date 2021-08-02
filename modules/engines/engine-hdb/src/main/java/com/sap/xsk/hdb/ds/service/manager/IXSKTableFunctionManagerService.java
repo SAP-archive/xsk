@@ -1,22 +1,23 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
+import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbtablefunction.HDBTableFunctionDropProcessor;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,12 +36,8 @@ public class IXSKTableFunctionManagerService extends AbstractDataStructureManage
   private final Map<String, XSKDataStructureHDBTableFunctionModel> dataStructureTableFunctionsModels;
   private final List<String> tableFunctionsSynchronized;
 
-  @Inject
-  @Named("hdbTableFunctionCreateProcessor")
-  private IXSKHdbProcessor hdbTableFunctionCreateProcessor;
-  @Inject
-  @Named("hdbTableFunctionDropProcessor")
-  private IXSKHdbProcessor hdbTableFunctionDropProcessor;
+  private IXSKHdbProcessor hdbTableFunctionCreateProcessor = new HDBTableFunctionCreateProcessor();
+  private IXSKHdbProcessor hdbTableFunctionDropProcessor = new HDBTableFunctionDropProcessor();
 
   public IXSKTableFunctionManagerService() {
     dataStructureTableFunctionsModels = new LinkedHashMap<>();

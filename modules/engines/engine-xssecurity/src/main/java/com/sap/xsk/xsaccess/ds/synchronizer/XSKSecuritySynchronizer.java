@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsaccess.ds.synchronizer;
@@ -33,10 +33,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Inject;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -58,16 +56,16 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
 
   private static final Set<String> ACCESS_SYNCHRONIZED = Collections.synchronizedSet(new HashSet<>());
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
-  @Inject
-  private XSKAccessCoreService xskAccessCoreService;
-  @Inject
-  private XSKPrivilegeCoreService xskPrivilegeCoreService;
+
+  private XSKAccessCoreService xskAccessCoreService = new XSKAccessCoreService();
+
+  private XSKPrivilegeCoreService xskPrivilegeCoreService = new XSKPrivilegeCoreService();
 
   /**
    * Force synchronization.
    */
   public static final void forceSynchronization() {
-    SecuritySynchronizer synchronizer = StaticInjector.getInjector().getInstance(SecuritySynchronizer.class);
+    SecuritySynchronizer synchronizer = new SecuritySynchronizer();
     synchronizer.setForcedSynchronization(true);
     try {
       synchronizer.synchronize();

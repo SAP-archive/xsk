@@ -1,5 +1,5 @@
 ARG XSK_VERSION=latest
-FROM dirigiblelabs/xsk-kyma:$XSK_VERSION as base
+FROM dirigiblelabs/xsk:$XSK_VERSION as base
 
 ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000

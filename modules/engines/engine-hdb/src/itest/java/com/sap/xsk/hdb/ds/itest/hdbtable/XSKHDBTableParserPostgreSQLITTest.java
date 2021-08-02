@@ -1,22 +1,19 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.itest.hdbtable;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -27,17 +24,14 @@ import org.junit.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static org.junit.Assert.*;
 
 public class XSKHDBTableParserPostgreSQLITTest {
 
   private static PostgreSQLContainer jdbcContainer;
-  private static Connection connection;
+  private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
 
 
@@ -48,9 +42,9 @@ public class XSKHDBTableParserPostgreSQLITTest {
     jdbcContainer.start();
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
-    Injector injector = Guice.createInjector(new XSKHDBTestModule(model));
-    connection = injector.getInstance(DataSource.class).getConnection();
-    facade = injector.getInstance(Key.get(IXSKHDBCoreFacade.class, Names.named("xskHDBCoreFacade")));
+    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
+    datasource = xskhdbTestModule.getDataSource();
+    facade = new XSKHDBCoreFacade();
   }
 
   @AfterClass
@@ -60,18 +54,22 @@ public class XSKHDBTableParserPostgreSQLITTest {
 
   @Test
   public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-        "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
-        "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
-
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
-
-    Statement stmt = connection.createStatement();
-    ResultSet rs = stmt
-        .executeQuery(String.format("SELECT COUNT(*) as rawsCount FROM \"%s\"", "hdbtable-itest::SamplePostgreXSClassicTable"));
-    assertTrue(rs.next());
-    assertEquals(0, rs.getInt("rawsCount"));
-    stmt.executeUpdate(String.format("DROP TABLE \"%s\"", "hdbtable-itest::SamplePostgreXSClassicTable"));
+	  try (Connection connection = datasource.getConnection();
+	  			Statement stmt = connection.createStatement()) {
+	    stmt.executeUpdate("CREATE SCHEMA \"test\"");
+	
+	    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+	        "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
+	        "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
+	
+	    facade.handleResourceSynchronization(resource);
+	    facade.updateEntities();
+	
+	    DatabaseMetaData metaData = connection.getMetaData();
+	    ResultSet table = metaData.getTables(null, "test", "hdbtable-itest::SamplePostgreXSClassicTable", null);
+	    assertTrue(table.next());
+	
+	    stmt.executeUpdate("DROP TABLE \"test\".\"hdbtable-itest::SamplePostgreXSClassicTable\"");
+	  }
   }
 }

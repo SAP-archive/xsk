@@ -1,15 +1,27 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xssecurestore.ds.service;
+
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
 import com.google.gson.JsonSyntaxException;
 import com.sap.xsk.xssecurestore.ds.api.IXSKSecureStoreCoreService;
@@ -17,31 +29,16 @@ import com.sap.xsk.xssecurestore.ds.api.IXSKSecureStoreModel;
 import com.sap.xsk.xssecurestore.ds.api.XSKSecureStoreException;
 import com.sap.xsk.xssecurestore.ds.model.XSKSecureStore;
 import com.sap.xsk.xssecurestore.ds.model.XSKSecureStoreContent;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.sql.DataSource;
-import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
-import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-@Singleton
 public class XSKSecureStoreCoreService implements IXSKSecureStoreCoreService {
 
-  @Inject
-  private DataSource dataSource;
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  @Inject
-  private PersistenceManager<XSKSecureStore> secureStorePersistenceManager;
+  private PersistenceManager<XSKSecureStore> secureStorePersistenceManager = new PersistenceManager<XSKSecureStore>();
 
-  @Inject
-  private PersistenceManager<XSKSecureStoreContent> secureStoreContentPersistenceManager;
+  private PersistenceManager<XSKSecureStoreContent> secureStoreContentPersistenceManager = new PersistenceManager<XSKSecureStoreContent>();
 
-  @Inject
-  private XSKSecureStoreEncryptor xskSecureStoreEncryptor;
+  private XSKSecureStoreEncryptor xskSecureStoreEncryptor = new XSKSecureStoreEncryptor();
 
   @Override
   public XSKSecureStore createSecureStore(String location, String content) throws XSKSecureStoreException {

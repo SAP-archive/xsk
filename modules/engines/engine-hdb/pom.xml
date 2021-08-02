@@ -19,6 +19,11 @@
   <dependencies>
     <dependency>
       <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-modules-engines-commons</artifactId>
+      <version>0.7.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-all</artifactId>
       <version>0.7.0-SNAPSHOT</version>
       <exclusions>
@@ -68,63 +73,6 @@
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
       <version>67.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.xtext</groupId>
-      <artifactId>org.eclipse.xtext.testing</artifactId>
-      <version>${xtextVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.xtext</groupId>
-      <artifactId>org.eclipse.xtext.xbase.testing</artifactId>
-      <version>${xtextVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.xtext</groupId>
-      <artifactId>org.eclipse.xtext</artifactId>
-      <version>${xtextVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.xtext</groupId>
-      <artifactId>org.eclipse.xtext.xbase</artifactId>
-      <version>${xtextVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.xtext</groupId>
-      <artifactId>org.eclipse.xtext.xtext.generator</artifactId>
-      <version>${xtextVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -265,13 +213,20 @@
     <dependency>
       <groupId>com.sap.cloud.db.jdbc</groupId>
       <artifactId>ngdbc</artifactId>
-      <version>2.8.12</version>
+      <version>2.9.12</version>
+      <type>pom</type>
     </dependency>
-
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-dbcp2</artifactId>
       <version>2.2.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.hakky54</groupId>
+      <artifactId>logcaptor</artifactId>
+      <version>2.6.1</version>
       <scope>test</scope>
     </dependency>
 
@@ -284,6 +239,12 @@
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbsequence</artifactId>
+      <version>0.7.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-modules-parsers-hdbschema</artifactId>
       <version>0.7.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
@@ -376,7 +337,7 @@
   </profiles>
 
   <properties>
-		<license.header.location>../../../license-header.txt</license.header.location>
+		<license.header.location>../../../licensing-header.txt</license.header.location>
 	</properties>
 
 </project>

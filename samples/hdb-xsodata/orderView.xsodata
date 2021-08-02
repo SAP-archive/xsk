@@ -12,7 +12,7 @@ service namespace "np_xsodata"{
 	"hdb-xsodata::orderView"  as "MyView5" key generate local "GenID"; 
 	
 	//keys can not be defined for table
-	"hdb-xsodata::order" as "MyTable";
+	//"hdb-xsodata::order" as "MyTable";
 }
 annotations     {
 	enable      OData4SAP;

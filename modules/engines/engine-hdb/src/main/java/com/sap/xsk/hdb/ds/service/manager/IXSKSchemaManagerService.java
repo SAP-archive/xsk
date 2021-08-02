@@ -1,23 +1,23 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
+import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaDropProcessor;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,12 +34,8 @@ public class IXSKSchemaManagerService extends AbstractDataStructureManagerServic
   private static final Logger logger = LoggerFactory.getLogger(IXSKSchemaManagerService.class);
   private final Map<String, XSKDataStructureHDBSchemaModel> dataStructureSchemasModels;
   private final List<String> schemasSynchronized;
-  @Inject
-  @Named("hdbSchemaCreateProcessor")
-  private IXSKHdbProcessor hdbSchemaCreateProcessor;
-  @Inject
-  @Named("hdbSchemaDropProcessor")
-  private IXSKHdbProcessor hdbSchemaDropProcessor;
+  private IXSKHdbProcessor hdbSchemaCreateProcessor = new HDBSchemaCreateProcessor();
+  private IXSKHdbProcessor hdbSchemaDropProcessor = new HDBSchemaDropProcessor();
 
   public IXSKSchemaManagerService() {
     dataStructureSchemasModels = new LinkedHashMap<>();

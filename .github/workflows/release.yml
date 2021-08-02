@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.GH_TOKEN }}
+        fetch-depth: 0
     - name: Download sapmachine JDK 11
       run: |
         download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
@@ -26,7 +27,7 @@ jobs:
       run: echo XSK_VERSION=${GITHUB_REF#refs/*/} | tr v " " | sed 's/ //'  >> $GITHUB_ENV
     - name: Maven Build
       run: mvn clean install
-    - name: Dodcker Login
+    - name: Docker Login
       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Push XSK
       run: |
@@ -53,35 +54,62 @@ jobs:
     - name: XSK Buildpack
       run: |
         cd releng/buildpacks/xsk/
-        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-base . --target base
-        docker tag dirigiblelabs/kneo-xsk-stack-base dirigiblelabs/kneo-xsk-stack-base:$XSK_VERSION
-        docker push dirigiblelabs/kneo-xsk-stack-base:$XSK_VERSION
-        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-run . --target run
-        docker tag dirigiblelabs/kneo-xsk-stack-run dirigiblelabs/kneo-xsk-stack-run:$XSK_VERSION
-        docker push dirigiblelabs/kneo-xsk-stack-run:$XSK_VERSION
-        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/kneo-xsk-stack-build . --target build
-        docker tag dirigiblelabs/kneo-xsk-stack-build dirigiblelabs/kneo-xsk-stack-build:$XSK_VERSION
-        docker push dirigiblelabs/kneo-xsk-stack-build:$XSK_VERSION
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-base-xsk . --target base
+        docker tag dirigiblelabs/buildpacks-stack-base-xsk dirigiblelabs/buildpacks-stack-base-xsk:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-base-xsk:$XSK_VERSION
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
+        docker tag dirigiblelabs/buildpacks-stack-run-xsk dirigiblelabs/buildpacks-stack-run-xsk:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-run-xsk:$XSK_VERSION
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
+        docker tag dirigiblelabs/buildpacks-stack-build-xsk dirigiblelabs/buildpacks-stack-build-xsk:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-build-xsk:$XSK_VERSION
         cd buildpack/
-        pack buildpack package dirigiblelabs/kneo-xsk-buildpack --config ./package.toml
-        docker tag dirigiblelabs/kneo-xsk-buildpack dirigiblelabs/kneo-xsk-buildpack:$XSK_VERSION
-        docker push dirigiblelabs/kneo-xsk-buildpack:$XSK_VERSION
+        pack buildpack package dirigiblelabs/buildpacks-xsk --config ./package.toml
+        docker tag dirigiblelabs/buildpacks-xsk dirigiblelabs/buildpacks-xsk:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-xsk:$XSK_VERSION
+        pack builder create dirigiblelabs/buildpacks-builder-xsk --config ./builder.toml
+        docker tag dirigiblelabs/buildpacks-builder-xsk dirigiblelabs/buildpacks-builder-xsk:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-builder-xsk:$XSK_VERSION
         cd ../../../../
-    - name: Java Buildpack
+    - name: XSK Kyma Buildpack
       run: |
-        cd releng/buildpacks/java/
-        docker build -t dirigiblelabs/kneo-java-stack-base . --target base
-        docker tag dirigiblelabs/kneo-java-stack-base dirigiblelabs/kneo-java-stack-base:$XSK_VERSION
-        docker push dirigiblelabs/kneo-java-stack-base:$XSK_VERSION
-        docker build -t dirigiblelabs/kneo-java-stack-run . --target run
-        docker tag dirigiblelabs/kneo-java-stack-run dirigiblelabs/kneo-java-stack-run:$XSK_VERSION
-        docker push dirigiblelabs/kneo-java-stack-run:$XSK_VERSION
-        docker build -t dirigiblelabs/kneo-java-stack-build . --target build
-        docker tag dirigiblelabs/kneo-java-stack-build dirigiblelabs/kneo-java-stack-build:$XSK_VERSION
-        docker push dirigiblelabs/kneo-java-stack-build:$XSK_VERSION
+        cd releng/buildpacks/xsk-kyma/
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
+        docker tag dirigiblelabs/buildpacks-stack-base-xsk-kyma dirigiblelabs/buildpacks-stack-base-xsk-kyma:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma:$XSK_VERSION
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
+        docker tag dirigiblelabs/buildpacks-stack-run-xsk-kyma dirigiblelabs/buildpacks-stack-run-xsk-kyma:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma:$XSK_VERSION
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
+        docker tag dirigiblelabs/buildpacks-stack-build-xsk-kyma dirigiblelabs/buildpacks-stack-build-xsk-kyma:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma:$XSK_VERSION
         cd buildpack/
-        pack buildpack package dirigiblelabs/kneo-java-buildpack --config ./package.toml
-        docker push dirigiblelabs/kneo-java-buildpack
+        pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
+        docker tag dirigiblelabs/buildpacks-xsk-kyma dirigiblelabs/buildpacks-xsk-kyma:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-xsk-kyma:$XSK_VERSION
+        pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
+        docker tag dirigiblelabs/buildpacks-builder-xsk-kyma dirigiblelabs/buildpacks-builder-xsk-kyma:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-builder-xsk-kyma:$XSK_VERSION
+        cd ../../../../
+    - name: XSK Cloud Foundry Buildpack
+      run: |
+        cd releng/buildpacks/xsk-cf/
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
+        docker tag dirigiblelabs/buildpacks-stack-base-xsk-cf dirigiblelabs/buildpacks-stack-base-xsk-cf:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-base-xsk-cf:$XSK_VERSION
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
+        docker tag dirigiblelabs/buildpacks-stack-run-xsk-cf dirigiblelabs/buildpacks-stack-run-xsk-cf:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-run-xsk-cf:$XSK_VERSION
+        docker build --build-arg XSK_VERSION=$XSK_VERSION -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
+        docker tag dirigiblelabs/buildpacks-stack-build-xsk-cf dirigiblelabs/buildpacks-stack-build-xsk-cf:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-stack-build-xsk-cf:$XSK_VERSION
+        cd buildpack/
+        pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
+        docker tag dirigiblelabs/buildpacks-xsk-cf dirigiblelabs/buildpacks-xsk-cf:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-xsk-cf:$XSK_VERSION
+        pack builder create dirigiblelabs/buildpacks-builder-xsk-cf --config ./builder.toml
+        docker tag dirigiblelabs/buildpacks-builder-xsk-cf dirigiblelabs/buildpacks-builder-xsk-cf:$XSK_VERSION
+        docker push dirigiblelabs/buildpacks-builder-xsk-cf:$XSK_VERSION
         cd ../../../../
 
 #----------------Publish GitHub Release------------------#
@@ -89,6 +117,21 @@ jobs:
     - name: Package WAR files
       run: |
         zip --junk-paths server releng/server/target/ROOT.war
+        zip --junk-paths sap-cf releng/sap-cf/target/ROOT.war
+
+    - name: Package Samples
+      run: |
+        cd samples/
+        zip -r products products/*
+        zip -r xsjs-simple xsjs-simple/*
+        zip -r xsjs xsjs/*
+        zip -r hdb-simple hdb-simple/*
+        zip -r hdb-view hdb-view/*
+        zip -r hdb-odata hdb-odata/*
+        zip -r hdb-xsodata hdb-xsodata/*
+        zip -r hdi-simple hdi-simple/*
+        zip -r hdi-ext hdi-ext/*
+        zip -r hdi-cube hdi-cube/*
 
     - name: Create Release
       id: create_release
@@ -110,12 +153,43 @@ jobs:
 
           #### Available for download `*.war` packages:
             - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server.zip) - XSK Server.
+            - [sap-cf](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/sap-cf.zip) - XSK Cloud Foundry.
             
           > _**Note:** Unzip the downloaded file to extract the `ROOT.war` binary._
           
           For more information go to [https://www.dirigible.io/help/setup/](https://www.dirigible.io/help/setup/).
-          
-          ## XSK - ${{ env.XSK_VERSION }} - Buildpack
+
+          #### Available for download `*.zip` samples:
+            - _**[products](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/products.zip) - Products Sample Application.**_
+            - [xsjs-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs-simple.zip) - XSJS Hello World.
+            - [xsjs](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs.zip) - XSJS APIs.
+            - [hdb-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-simple.zip) - HDB Table.
+            - [hdb-view](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-view.zip) - HDB View.
+            - [hdb-odata](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-odata.zip) - HDB OData.
+            - [hdb-xsodata](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-xsodata.zip) - HDB XSOData.
+            - [hdi-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-simple.zip) - HDI.
+            - [hdi-ext](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-ext.zip) - HDI Ext.
+            - [hdi-cube](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-cube.zip) - HDI Cube.
+
+          ### SAP Java Buildpack Usage
+
+          **manifest.yaml**
+
+          ```yaml
+          applications:
+          - name: <application-name>
+            host: <host>
+            memory: 2G
+            buildpack: sap_java_buildpack
+            path: ROOT.war
+            env:
+              JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jdk.SAPMachineJDK']"
+              JBP_CONFIG_SAP_MACHINE_JRE: 'jre: { version: 11.+ }'
+            services:
+              - <service-binding>
+          ```
+
+          ### Buildpack
 
           #### Prerequisites
 
@@ -126,38 +200,38 @@ jobs:
           apiVersion: kpack.io/v1alpha1
           kind: ClusterStore
           metadata:
-            name: kneo-xsk-store
+            name: xsk-store
           spec:
             sources:
-            - image: dirigiblelabs/kneo-xsk-buildpack:${{ env.XSK_VERSION }}
+            - image: dirigiblelabs/buildpacks-xsk:${{ env.XSK_VERSION }}
           ---
           apiVersion: kpack.io/v1alpha1
           kind: ClusterStack
           metadata:
-            name: kneo-xsk-stack
+            name: xsk-stack
           spec:
             id: com.sap.kneo.xsk
             buildImage:
-              image: dirigiblelabs/kneo-xsk-stack-build:${{ env.XSK_VERSION }}
+              image: dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
             runImage:
-              image: dirigiblelabs/kneo-xsk-stack-run:${{ env.XSK_VERSION }}
+              image: dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
           ---
           apiVersion: kpack.io/v1alpha1
           kind: Builder
           metadata:
-            name: kneo-xsk
+            name: xsk-builder
           spec:
             serviceAccount: <your-service-account>
             tag: <your-docker-organization>/<your-docker-builder-repository>
             stack:
-              name: kneo-xsk-stack
+              name: xsk-stack
               kind: ClusterStack
             store:
-              name: kneo-xsk-store
+              name: xsk-store
               kind: ClusterStore
             order:
             - group:
-              - id: dirigiblelabs/kneo-xsk-buildpack
+              - id: dirigiblelabs/buildpacks-xsk
           ```
 
           > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
@@ -176,7 +250,7 @@ jobs:
             tag: <your-docker-organization>/<your-application-docker-image-repository>
             serviceAccount: <your-service-account>
             builder:
-              name: kneo-xsk
+              name: xsk-builder
               kind: Builder
             source:
               blob:
@@ -196,6 +270,127 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./server.zip
         asset_name: server.zip
+        asset_content_type: application/zip
+
+    - name: Upload SAP CF
+      id: upload-sap-cf 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./sap-cf.zip
+        asset_name: sap-cf.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - products
+      id: upload-sample-products 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/products.zip
+        asset_name: products.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - xsjs-simple
+      id: upload-sample-xsjs-simple 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/xsjs-simple.zip
+        asset_name: xsjs-simple.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - xsjs
+      id: upload-sample-xsjs 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/xsjs.zip
+        asset_name: xsjs.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdb-simple
+      id: upload-sample-hdb-simple 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-simple.zip
+        asset_name: hdb-simple.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdb-view
+      id: upload-sample-hdb-view 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-view.zip
+        asset_name: hdb-view.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdb-odata
+      id: upload-sample-hdb-odata 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-odata.zip
+        asset_name: hdb-odata.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdb-xsodata
+      id: upload-sample-hdb-xsodata 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-xsodata.zip
+        asset_name: hdb-xsodata.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdi-simple
+      id: upload-sample-hdi-simple 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdi-simple.zip
+        asset_name: hdi-simple.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdi-ext
+      id: upload-sample-hdi-ext 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdi-ext.zip
+        asset_name: hdi-ext.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - hdi-cube
+      id: upload-sample-hdi-cube 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdi-cube.zip
+        asset_name: hdi-cube.zip
         asset_content_type: application/zip
 
 #----------------Publish GitHub Release------------------#

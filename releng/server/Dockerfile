@@ -28,9 +28,6 @@ RUN wget http://www.dirigible.io/help/conf/tomcat-users.xml -P /usr/local/tomcat
 RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
-COPY target/*.jar $CATALINA_HOME/lib/
-RUN sed -i /'<Context>'/c'<Context>\n<Listener className=\"com.sap.xsk.listener.NamingResourcesListener\" factoryClassName=\"com.sap.xsk.factory.DynamicDataSourceFactory\"/>' $CATALINA_HOME/conf/context.xml
-
 #Activate DEBUG mode
 #ENV JPDA_ADDRESS=0.0.0.0:8000
 #ENV JPDA_TRANSPORT=dt_socket

@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.processors.hdi;
@@ -16,12 +16,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.inject.Singleton;
 import org.eclipse.dirigible.api.v3.platform.RegistryFacade;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 
-@Singleton
 public class XSKWriteContainerContentProcessor extends XSKHDIAbstractProcessor {
 
   protected static String[] enumerateFolders(String[] files) {

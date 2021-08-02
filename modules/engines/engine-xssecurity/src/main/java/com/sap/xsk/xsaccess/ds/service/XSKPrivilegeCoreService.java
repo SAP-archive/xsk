@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsaccess.ds.service;
@@ -18,18 +18,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
-import javax.inject.Inject;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
 public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
 
-  @Inject
-  private DataSource dataSource;
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  @Inject
-  private PersistenceManager<XSKPrivilegeDefinition> xskPrivilegeDefinitionPersistenceManager;
+  private PersistenceManager<XSKPrivilegeDefinition> xskPrivilegeDefinitionPersistenceManager = new PersistenceManager<XSKPrivilegeDefinition>();
 
   @Override
   public XSKPrivilegeDefinition createXSKPrivilege(String name, String description) throws XSKPrivilegeException {

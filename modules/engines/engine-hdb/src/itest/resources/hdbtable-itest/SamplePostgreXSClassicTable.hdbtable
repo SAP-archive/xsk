@@ -1,4 +1,4 @@
-table.schemaName = "DBADMIN";
+table.schemaName = "test";
 table.temporary = true;
 table.tableType = COLUMNSTORE;
 table.loggingType = NOLOGGING;

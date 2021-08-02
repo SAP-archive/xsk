@@ -17,7 +17,7 @@
 
 	<modules>
 		<module>parser-all</module>
-		<module>parser-hdbdd</module>
+		<!-- <module>parser-hdbdd</module> -->
 		<module>parser-hdbsequence</module>
 		<module>parser-hdbtable</module>
 		<module>parser-hdbti</module>
@@ -25,11 +25,11 @@
 		<module>parser-xsodata</module>
 		<module>parser-hdbcalculationview</module>
 		<module>parser-calculationview</module>
-		<module>parser-hdbsynonym</module>
-	</modules>
+		<module>parser-hdbschema</module>
+  </modules>
 
 	<properties>
-		<license.header.location>../../license-header.txt</license.header.location>
+		<license.header.location>../../licensing-header.txt</license.header.location>
 	</properties>
 
 </project>

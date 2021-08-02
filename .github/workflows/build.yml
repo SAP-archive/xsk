@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Download sapmachine JDK 11
       run: |
         download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
@@ -21,7 +23,7 @@ jobs:
         architecture: x64
     - name: Maven Build
       run: mvn clean install
-    - name: Dodcker Login
+    - name: Docker Login
       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Push XSK
       run: |
@@ -48,26 +50,45 @@ jobs:
     - name: XSK Buildpack
       run: |
         cd releng/buildpacks/xsk/
-        docker build -t dirigiblelabs/kneo-xsk-stack-base . --target base
-        docker push dirigiblelabs/kneo-xsk-stack-base
-        docker build -t dirigiblelabs/kneo-xsk-stack-run . --target run
-        docker push dirigiblelabs/kneo-xsk-stack-run
-        docker build -t dirigiblelabs/kneo-xsk-stack-build . --target build
-        docker push dirigiblelabs/kneo-xsk-stack-build
+        docker build -t dirigiblelabs/buildpacks-stack-base-xsk . --target base
+        docker push dirigiblelabs/buildpacks-stack-base-xsk
+        docker build -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
+        docker push dirigiblelabs/buildpacks-stack-run-xsk
+        docker build -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
+        docker push dirigiblelabs/buildpacks-stack-build-xsk
         cd buildpack/
-        pack buildpack package dirigiblelabs/kneo-xsk-buildpack --config ./package.toml
-        docker push dirigiblelabs/kneo-xsk-buildpack
+        pack buildpack package dirigiblelabs/buildpacks-xsk --config ./package.toml
+        docker push dirigiblelabs/buildpacks-xsk
+        pack builder create dirigiblelabs/buildpacks-builder-xsk --config ./builder.toml
+        docker push dirigiblelabs/buildpacks-builder-xsk
         cd ../../../../
-    - name: Java Buildpack
+    - name: XSK Kyma Buildpack
       run: |
-        cd releng/buildpacks/java/
-        docker build -t dirigiblelabs/kneo-java-stack-base . --target base
-        docker push dirigiblelabs/kneo-java-stack-base
-        docker build -t dirigiblelabs/kneo-java-stack-run . --target run
-        docker push dirigiblelabs/kneo-java-stack-run
-        docker build -t dirigiblelabs/kneo-java-stack-build . --target build
-        docker push dirigiblelabs/kneo-java-stack-build
+        cd releng/buildpacks/xsk-kyma/
+        docker build -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
+        docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma
+        docker build -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
+        docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma
+        docker build -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
+        docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma
         cd buildpack/
-        pack buildpack package dirigiblelabs/kneo-java-buildpack --config ./package.toml
-        docker push dirigiblelabs/kneo-java-buildpack
+        pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
+        docker push dirigiblelabs/buildpacks-xsk-kyma
+        pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
+        docker push dirigiblelabs/buildpacks-builder-xsk-kyma
+        cd ../../../../
+    - name: XSK Buildpack
+      run: |
+        cd releng/buildpacks/xsk-cf/
+        docker build -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
+        docker push dirigiblelabs/buildpacks-stack-base-xsk-cf
+        docker build -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
+        docker push dirigiblelabs/buildpacks-stack-run-xsk-cf
+        docker build -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
+        docker push dirigiblelabs/buildpacks-stack-build-xsk-cf
+        cd buildpack/
+        pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
+        docker push dirigiblelabs/buildpacks-xsk-cf
+        pack builder create dirigiblelabs/buildpacks-builder-xsk-cf --config ./builder.toml
+        docker push dirigiblelabs/buildpacks-builder-xsk-cf
         cd ../../../../

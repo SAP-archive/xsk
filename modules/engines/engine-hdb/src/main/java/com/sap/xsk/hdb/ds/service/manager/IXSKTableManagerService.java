@@ -1,22 +1,24 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterProcessor;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableDropProcessor;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,12 +36,9 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
   private final Map<String, XSKDataStructureHDBTableModel> dataStructureTableModels;
   private final List<String> tablesSynchronized;
 
-  @Inject
-  @Named("xskTableCreateProcessor")
-  private IXSKHdbProcessor xskTableCreateProcessor;
-  @Inject
-  @Named("xskTableDropProcessor")
-  private IXSKHdbProcessor xskTableDropProcessor;
+  private IXSKHdbProcessor xskTableCreateProcessor = new XSKTableCreateProcessor();
+  private IXSKHdbProcessor xskTableDropProcessor = new XSKTableDropProcessor();
+  private IXSKHdbProcessor xskTableAlterProcessor = new XSKTableAlterProcessor();
 
 
   public IXSKTableManagerService() {
@@ -82,6 +81,7 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
     //TODO: Create logic for updating hdb table
     logger.error("Altering of a non-empty table is not implemented yet.");
     // TableAlterProcessor.execute(connection, tableModel);
+    xskTableAlterProcessor.execute(connection, tableModel);
   }
 
   public Map<String, XSKDataStructureHDBTableModel> getDataStructureModels() {

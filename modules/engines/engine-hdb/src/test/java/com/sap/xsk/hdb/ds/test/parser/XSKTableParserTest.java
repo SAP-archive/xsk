@@ -1,16 +1,31 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.junit.Test;
+
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
@@ -18,16 +33,8 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableDuplicatePropertyException;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.core.test.AbstractGuiceTest;
-import org.junit.Test;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.Assert.*;
-
-public class XSKTableParserTest extends AbstractGuiceTest {
+public class XSKTableParserTest extends AbstractDirigibleTest {
     @Test
     public void parseTable() throws Exception {
         InputStream in = XSKTableParserTest.class.getResourceAsStream("/Sports.hdbtable");
@@ -104,12 +111,12 @@ public class XSKTableParserTest extends AbstractGuiceTest {
         assertThrows(XSKHDBTableDuplicatePropertyException.class, () -> new XSKTableParser().parse("/DuplicateTableProperties.hdbtable", content));
     }
 
-    @Test
+    @Test(expected = XSKHDBTableMissingPropertyException.class)
     public void failIfParsingMissingMandatoryProperties() throws Exception {
         InputStream in = XSKTableParserTest.class.getResourceAsStream("/MissingMandatoryTableProperties.hdbtable");
         String content = IOUtils.toString(in, StandardCharsets.UTF_8);
 
-        assertThrows(XSKHDBTableMissingPropertyException.class, () -> new XSKTableParser().parse("/MissingMandatoryTableProperties.hdbtable", content));
+        new XSKTableParser().parse("/MissingMandatoryTableProperties.hdbtable", content);
     }
 
     @Test
@@ -161,5 +168,36 @@ public class XSKTableParserTest extends AbstractGuiceTest {
         XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/testFileName.hdbtable", content);
         assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
         assertEquals(content, model.getRawContent());
+    }
+
+    @Test
+    public  void parseTableWithoutPK() throws Exception {
+        String content = "table.schemaName  = \"SAP_DEMO\";\n" +
+                "table.tableType   = COLUMNSTORE;\n" +
+                "table.temporary   = true;\n" +
+                "table.description = \"nvarchar(4000)\";\n" +
+                "table.columns = [\n" +
+                "    {name = \"TEXT\"; sqlType = NVARCHAR; length = 4000; nullable = true; comment = \"nvarchar(4000)\";}\n" +
+                "];";
+        XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/test.hdbtable", content);
+        assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
+        assertEquals(content, model.getRawContent());
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithLexerErrorFail() throws Exception {
+        String content = "table.schemaName = \"SPORTS\";\n" +
+                "table.tableType = COLUMNSTORE;\n" +
+                "table.columns = [dd\n" +
+                "\t{ name = \"MATCH_ID\";sqlType = NVARCHAR;\tlength = 32;nullable = false;}\n" +
+                "];";
+        XSKDataStructureModelFactory.parseView("db/test.hdbtable", content);
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithSyntaxErrorFail() throws Exception {
+        String content = "table.schemaName = \"SPORTS;\n" +
+                "table.tableType = COLUMNSTORE;";
+        XSKDataStructureModelFactory.parseView("db/test.hdbtable", content);
     }
 }

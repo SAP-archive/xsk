@@ -66,11 +66,15 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
   @Before
   public void registerModules()
   {
-//    TEST_MODULES.add("test/xsk/db/api/db.xsjs");
-//    TEST_MODULES.add("test/xsk/db/api/connection.xsjs");
-//    TEST_MODULES.add("test/xsk/db/api/parameter-metadata.xsjs");
+    // DB tests
+    TEST_MODULES.add("test/xsk/db/api/db.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/connection.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/parameter-metadata.xsjs");
     TEST_MODULES.add("test/xsk/db/api/callable-statement.xsjs");
-    TEST_MODULES.add("test/xsk/response.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/prepared-statement.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/result-set.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/resultset-metadata.xsjs");
+
     TEST_MODULES.add("test/xsk/response/response.xsjs");
     TEST_MODULES.add("test/xsk/session/session.xsjs");
     TEST_MODULES.add("test/xsk/trace/trace.xsjs");
@@ -80,6 +84,13 @@ public class XSKApiSuiteTest extends AbstractGuiceTest {
     TEST_MODULES.add("test/xsk/http/http.xsjs");
     // TODO rework net.xsjs's test after upgrading mockito's versions in dirigible and xsk
     TEST_MODULES.add("test/xsk/net/net.xsjs");
+
+    // HDB tests
+    TEST_MODULES.add("test/xsk/hdb/column-metadata.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/connection-execute-query.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/connection-execute-update.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/result-set.xsjs");
+    TEST_MODULES.add("test/xsk/hdb/resultset-metadata.xsjs");
   }
 
   /**

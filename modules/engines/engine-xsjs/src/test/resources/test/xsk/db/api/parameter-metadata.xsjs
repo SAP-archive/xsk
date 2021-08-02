@@ -6,10 +6,11 @@ var insert = "INSERT INTO TEST_USERS (NAME, STEPS, SALARY, RATING, IS_ADMIN, BIO
 
 var connection = db.getConnection();
 
-// the table could already exist
-try{
-  connection.prepareCall(createTable).execute();
-} catch (err) {}
+try {
+  connection.prepareCall("DROP TABLE TEST_USERS").execute();
+} catch{}
+
+connection.prepareCall(createTable).execute();
 
 var statement = connection.prepareStatement(insert);
 var parameterMetaData = statement.getParameterMetaData();

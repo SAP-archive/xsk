@@ -11,13 +11,15 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
 import javax.naming.OperationNotSupportedException;
+
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
 
 public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {

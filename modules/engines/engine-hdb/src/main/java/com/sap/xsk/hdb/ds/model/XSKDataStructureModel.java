@@ -14,10 +14,12 @@ package com.sap.xsk.hdb.ds.model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 
 /**

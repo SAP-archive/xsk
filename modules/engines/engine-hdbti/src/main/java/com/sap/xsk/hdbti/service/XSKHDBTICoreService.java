@@ -13,6 +13,10 @@ package com.sap.xsk.hdbti.service;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.api.*;
+import com.sap.xsk.hdbti.dao.XSKCSVRecordDao;
+import com.sap.xsk.hdbti.dao.XSKCsvToHdbtiRelationDao;
+import com.sap.xsk.hdbti.dao.XSKImportedCSVRecordDao;
+import com.sap.xsk.hdbti.dao.XSKTableImportArtifactDao;
 import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
@@ -45,10 +49,10 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBTICoreService.class);
 
-    private IXSKCSVRecordDao xskcsvRecordDao = (IXSKCSVRecordDao) StaticObjects.get("xskcsvRecordDao");
-    private IXSKImportedCSVRecordDao xskImportedCSVRecordDao = (IXSKImportedCSVRecordDao) StaticObjects.get("xskImportedCSVRecordDao");
-    private IXSKTableImportArtifactDao xskTableImportArtifactDao = (IXSKTableImportArtifactDao) StaticObjects.get("xskTableImportArtifactDao");
-    private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = (IXSKCsvToHdbtiRelationDao) StaticObjects.get("xskCsvToHdbtiRelationDao");
+    private IXSKCSVRecordDao xskcsvRecordDao = new XSKCSVRecordDao();
+    private IXSKImportedCSVRecordDao xskImportedCSVRecordDao = new XSKImportedCSVRecordDao();
+    private IXSKTableImportArtifactDao xskTableImportArtifactDao = new XSKTableImportArtifactDao();
+    private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = new XSKCsvToHdbtiRelationDao();
     private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
     private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
     private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);

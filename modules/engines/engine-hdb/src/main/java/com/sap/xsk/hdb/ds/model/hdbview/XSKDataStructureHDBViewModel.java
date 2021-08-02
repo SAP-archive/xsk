@@ -11,10 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbview;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-
 import java.util.List;
+
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
 /**
  * The view model representation.

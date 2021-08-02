@@ -11,10 +11,11 @@
  */
 package com.sap.xsk.hdb.ds.parser;
 
+import java.io.IOException;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import java.io.IOException;
 
 public interface XSKDataStructureParser<T extends XSKDataStructureModel> {
 

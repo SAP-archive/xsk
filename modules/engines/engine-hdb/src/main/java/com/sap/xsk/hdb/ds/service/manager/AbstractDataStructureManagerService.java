@@ -11,13 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class AbstractDataStructureManagerService<T extends XSKDataStructureModel> implements IXSKDataStructureManager<T> {
 

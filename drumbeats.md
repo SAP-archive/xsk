@@ -1,5 +1,51 @@
 # Drumbeats
 
+
+
+## 2021 Week 30 (26 July - 01 August)
+
+#### Focus topics:
+
+- Buildpack builders
+- Implemented the EntityList class which was required for parsing multipart POST requests using the upload dirigible API. Also added header parsing for the upload dirigible API.
+- Removing Guice dependency
+- Removing Xtext dependency
+- Enables csv and csvim file edit in monaco
+- Form based editor for csvim
+- Implemented hanarepository class which processes the queries to the HANA REST API
+- gVisor - Performance tests
+- Implementation of merge entity with reference id for OData
+
+#### Issues and PRs:
+
+- Add support for Create/Update Entity with Reference id [#1004](https://github.com/eclipse/dirigible/pull/1004)
+- Updated ide-csv module [#994](https://github.com/eclipse/dirigible/pull/994)
+- Implementing Drop/Create Builder for TableTypе [#986](https://github.com/eclipse/dirigible/pull/986)
+
+----
+
+## 2021 Week 29 (19 July - 25 July)
+
+#### Focus topics:
+
+- Modified the Body class to be able to read the body both of root and multipart requests.
+- Form based editor for csv
+- Finished $.hdb API - functionality check, added tests and documentation
+- Finalizing the Flowable process for migration
+- Worked on adding encryption for user data
+- Opens a tunnel with NEO SDK
+- Fetches DeliveryUnits
+- Choosing DeliveryUnit copies the files to a new workspace with the name of the DeliveryUnit
+
+#### Issues and PRs:
+
+- Refactoring of procedures and functions [#344](https://github.com/SAP/xsk/pull/344)
+- Adapt hdbti to handle schemas [#348](https://github.com/SAP/xsk/pull/348)
+- Adapt odata to handle schemas [#349](https://github.com/SAP/xsk/pull/349)
+- Altering of an existing table now possible [#351](https://github.com/SAP/xsk/pull/351)
+
+----
+
 ## 2021 Week 28 (12 July - 18 July)
 
 #### Focus topics:

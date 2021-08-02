@@ -6,7 +6,7 @@
 
 #### Focus topics:
 
-- Buildpack builders
+- Buildpack builders [#353](https://github.com/SAP/xsk/issues/353)
 - Implemented the EntityList class which was required for parsing multipart POST requests using the upload dirigible API. Also added header parsing for the upload dirigible API.
 - Removing Guice dependency
 - Removing Xtext dependency
@@ -43,6 +43,8 @@
 - Adapt hdbti to handle schemas [#348](https://github.com/SAP/xsk/pull/348)
 - Adapt odata to handle schemas [#349](https://github.com/SAP/xsk/pull/349)
 - Altering of an existing table now possible [#351](https://github.com/SAP/xsk/pull/351)
+- Missing processor for .hdbscalarfunction [#352](https://github.com/SAP/xsk/issues/352)
+- Deploy every new release on public cluster [#355](https://github.com/SAP/xsk/issues/355)
 
 ----
 

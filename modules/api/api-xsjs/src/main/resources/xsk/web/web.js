@@ -15,7 +15,9 @@
 
 var dRequest = require('http/v4/request');
 var dResponse = require('http/v4/response');
+var dUpload = require('http/v4/upload');
 var http = require('xsk/http/http');
+var session = require('xsk/session/session');
 
 exports.TupelList = function (dArrayOfContents) {
   var internalDArrayOfContents = dArrayOfContents ? dArrayOfContents : [];
@@ -78,34 +80,63 @@ exports.TupelList = function (dArrayOfContents) {
 
 };
 
-EntityList = function () {
-  this.get = function (name) {
+EntityList = function (webEntitiesArray, parentClassName) {
+  syncWithWebEntitiesArray.call(this);
 
+  this.create = function () {
+    if (parentClassName === '$.response' || parentClassName === '$.net.http.Request') {
+      webEntitiesArray.push(new exports.WebEntityResponse());
+      syncWithWebEntitiesArray.call(this);
+    }
+    else {
+      throw new Error("Method only available for $.response and $.net.http.Request");
+    }
   };
+
+  function syncWithWebEntitiesArray() {
+    for (var i = 0; i < webEntitiesArray.length; i++) {
+      this[i] = webEntitiesArray[i];
+    }
+
+    this.length = webEntitiesArray.length;
+  }
 };
 
-Body = function () {
-
+Body = function (bodyValue) {
   this.asArrayBuffer = function () {
-    //ToDo
+    if (bodyValue) {
+      return bodyValue;
+    }
+    else {
+      return dRequest.getBytes();
+    }
   };
 
   this.asString = function () {
-    return dRequest.getText();
+    if (bodyValue) {
+      return String.fromCharCode.apply(null, bodyValue);
+    }
+    else {
+      return dRequest.getText();
+    }
   };
 
   this.asWebRequest = function () {
-    //ToDo
+    if (bodyValue) {
+      // ToDo
+    }
+    else {
+      throw new Error("Cannot be used on root request.")
+    }
   };
 };
-
 
 exports.WebRequest = function () {
   const XSJS_FILE_EXTENSION_LENGTH = 5;
   const XSJS_FILE_EXTENSION = ".xsjs";
 
   this.body = function () {
-    var wXscBody = new Body(dRequest);
+    var wXscBody = new Body();
     return wXscBody;
   }();
 
@@ -117,7 +148,40 @@ exports.WebRequest = function () {
     return wXscTupelList;
   }();
 
-  this.entities; //ToDo
+  this.entities = function () {
+    var dEntitiesArray = [];
+
+    if (dRequest.getMethod() === "POST") {
+      if (dUpload.isMultipartContent()) {
+        var fileItems = dUpload.parseRequest();
+        for (i=0; i<fileItems.size(); i++) {
+          var fileItem = fileItems.get(i);
+          if (fileItem.isFormField()) {
+            var requestEntity = new WebEntityRequest(fileItem.getBytes());
+
+            var fieldName = fileItem.getFieldName();
+            var fieldValue = fileItem.getText();
+
+            var itemHeaders = fileItem.getHeaders();
+            var headerNames = itemHeaders.getHeaderNames();
+
+            for (j=0; j<headerNames.size(); j++) {
+              var headerName = headerNames.get(j);
+              var headerValue = itemHeaders.getHeader(headerName);
+              requestEntity.headers.set(headerName, headerValue);
+            }
+
+            requestEntity.parameters.set(fieldName, fieldValue);
+            requestEntity.contentType = fileItem.getContentType();
+
+            dEntitiesArray.push(requestEntity);
+          }
+        }
+      }
+    }
+
+    return new EntityList(dEntitiesArray);
+  }();
 
   this.headers = function () {
     var dHeadersArray = [];
@@ -133,7 +197,7 @@ exports.WebRequest = function () {
     return wXscTupelList;
   }();
 
-  this.language; //ToDo
+  this.language = session.language;
 
   if (dRequest.getMethod() === 'OPTIONS') {
     this.method = http.OPTIONS;
@@ -197,7 +261,7 @@ exports.WebResponse = function () {
   this.cacheControl;
   this.contentType;
   this.cookies = new exports.TupelList([]);
-  this.entities; //ToDo
+  this.entities = new EntityList([], "$.response");
   this.headers = function () {
     var dHeadersArray = [];
     var headerNamesArray = dResponse.getHeaderNames();
@@ -214,7 +278,37 @@ exports.WebResponse = function () {
 
   this.status; // from $.net.http
 
-  this.followUp; //ToDo
+  this.followUp = function (followUpObject) {
+    var {
+      uri: uri,
+      functionName : functionName,
+      parameter : parameters
+    } = {...followUpObject}
+
+    if (uri && functionName) {
+      try {
+        var params = new Array();
+
+        if (parameters && typeof parameters === 'object') {
+          for (var param in parameters) {
+            params.push(parameters[param]);
+          }
+        }
+
+        var splitUri = uri.split(":");
+        var pathToFile = splitUri[0].replace(".", "/");
+        var fileName = splitUri[1];
+
+        var parsedUri = pathToFile + "/" + fileName;
+
+        var module = require(parsedUri);
+        var func = module[functionName];
+        func.apply(this, params);
+      } catch (error) {
+        throw new Error(error);
+      }
+    }
+  };
 
   this.setBody = function (text) {
     if (this.contentType) {
@@ -230,17 +324,17 @@ exports.WebResponse = function () {
     dResponse.close();
   };
 
-  this.followUpObject; //ToDo
 };
 
-WebEntityRequest = function () {
-  this.body = new Body();
+WebEntityRequest = function (bodyValue) {
+  this.body = new Body(bodyValue);
   this.contentType;
-  this.entities; //ToDo
+  this.entities = new EntityList([]);
   this.headers = new exports.TupelList([]);
   this.parameters = new exports.TupelList([]);
-  this.setBody = function () {
-    //ToDo;
+
+  this.setBody = function (body, index) {
+    //ToDo
   };
 
 };
@@ -248,10 +342,11 @@ WebEntityRequest = function () {
 exports.WebEntityResponse = function () {
   this.body = new Body();
   this.contentType;
-  this.entities; //ToDo
+  this.entities = new EntityList([]);
   this.headers = new exports.TupelList([]);
+
   this.setBody = function (body, index) {
-    this.body = body;
+    // ToDo
   };
 
 };

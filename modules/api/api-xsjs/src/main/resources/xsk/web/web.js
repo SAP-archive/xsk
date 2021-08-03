@@ -180,7 +180,7 @@ exports.WebRequest = function () {
       }
     }
 
-    return new EntityList(dEntitiesArray, "WebRequest");
+    return new EntityList(dEntitiesArray);
   }();
 
   this.headers = function () {
@@ -261,7 +261,7 @@ exports.WebResponse = function () {
   this.cacheControl;
   this.contentType;
   this.cookies = new exports.TupelList([]);
-  this.entities = new EntityList([], "WebResponse");
+  this.entities = new EntityList([], "$.response");
   this.headers = function () {
     var dHeadersArray = [];
     var headerNamesArray = dResponse.getHeaderNames();

@@ -33,6 +33,10 @@ var stringAssertion = resultSet.getString(11) == "test";
 var timeAssertion = resultSet.getTime(12).toString() == "Thu Jan 01 1970 23:59:59 GMT+0200 (EET)";
 var timestampAssertion = resultSet.getTimestamp(13).toString() == "Wed Jul 21 2021 12:36:43 GMT+0300 (EEST)";
 
+response.println("date: " + resultSet.getDate(3).toString())
+response.println("time: " + resultSet.getTime(12).toString())
+response.println("timestamp: " + resultSet.getTimestamp(13).toString())
+
 resultSet.close();
 var isClosedAssertion = resultSet.isClosed() == true;
 

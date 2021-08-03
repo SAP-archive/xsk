@@ -1,5 +1,4 @@
 var db = $.db;
-var response = require('http/v4/response');
 
 var connection = db.getConnection();
 

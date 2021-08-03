@@ -42,6 +42,10 @@ try {
   closeAssertion = false;
 } catch {}
 
+response.println(bigIntAssertion.toString() + dateAssertion.toString() + decAssertion.toString() + doubleAssertion.toString() + intAssertion.toString() + stringAssertion.toString() + timeAssertion.toString() + timestampAssertion.toString() + closeAssertion.toString() + isClosedAssertion.toString());
+response.flush();
+response.close();
+
 bigIntAssertion && dateAssertion && decAssertion && doubleAssertion && intAssertion && stringAssertion && timeAssertion && timestampAssertion && closeAssertion && isClosedAssertion;
 
 function setStatementFields() {

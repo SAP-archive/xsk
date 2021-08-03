@@ -11,18 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbsynonym;
 
+import static org.junit.Assert.assertEquals;
+
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.repository.local.LocalResource;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.testcontainers.containers.PostgreSQLContainer;
-import javax.sql.DataSource;
+import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,12 +25,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
+import javax.sql.DataSource;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.repository.local.LocalResource;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 public class XSKHDBSynonymParserPostgreSQLITTest {
   private static PostgreSQLContainer jdbcContainer;
-  private static DataSource dastasource;
+  private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
 
 
@@ -58,24 +58,24 @@ public class XSKHDBSynonymParserPostgreSQLITTest {
 
   @Test
   public void testHDBSynonymCreateNotSupportedError() throws IOException, XSKDataStructuresException, SynchronizationException, SQLException {
-	  try (Connection connection = datasource.getConnection();
-	  			Statement stmt = connection.createStatement()) {
+    try (Connection connection = datasource.getConnection();
+        Statement stmt = connection.createStatement()) {
 
-	    stmt.executeUpdate("create table \"public\".\"hdbsynonym-itest::SampleTable\"(COLUMN1 integer,COLUMN2 integer)");
-	    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-	        "/registry/public/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym",
-	        "/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym");
-	
-	    this.facade.handleResourceSynchronization(resource);
-	    this.facade.updateEntities();
-	
-	    List<String> synonyms = new ArrayList<>();
-	    ResultSet rs = stmt.executeQuery("SELECT  * FROM  pg_class WHERE  relname = 'hdbsynonym-itest::SampleHanaXSClassicSynonym'");
-	    while (rs.next()) {
-	      synonyms.add(rs.getString("hdbsynonym-itest::SampleHanaXSClassicSynonym"));
-	    }
-	    assertEquals(0, synonyms.size());
-	    stmt.executeUpdate("DROP TABLE \"public\".\"hdbsynonym-itest::SampleTable\"");
-	  }
-  	}
+      stmt.executeUpdate("create table \"public\".\"hdbsynonym-itest::SampleTable\"(COLUMN1 integer,COLUMN2 integer)");
+      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+          "/registry/public/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym",
+          "/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym");
+
+      this.facade.handleResourceSynchronization(resource);
+      this.facade.updateEntities();
+
+      List<String> synonyms = new ArrayList<>();
+      ResultSet rs = stmt.executeQuery("SELECT  * FROM  pg_class WHERE  relname = 'hdbsynonym-itest::SampleHanaXSClassicSynonym'");
+      while (rs.next()) {
+        synonyms.add(rs.getString("hdbsynonym-itest::SampleHanaXSClassicSynonym"));
+      }
+      assertEquals(0, synonyms.size());
+      stmt.executeUpdate("DROP TABLE \"public\".\"hdbsynonym-itest::SampleTable\"");
+    }
+  }
 }

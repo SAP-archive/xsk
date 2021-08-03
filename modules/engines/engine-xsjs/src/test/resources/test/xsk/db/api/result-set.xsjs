@@ -1,5 +1,4 @@
 var db = $.db;
-var response = require('http/v4/response');
 
 var connection = db.getConnection();
 
@@ -22,7 +21,7 @@ resultSet.next();
 
 resultSet.getBlob(1); // not sure how to assert a value on this
 var bigIntAssertion = resultSet.getBigInt(2) == 1000000000000000;
-var dateAssertion = resultSet.getDate(3).toString() == "Fri Jan 01 2021 00:00:00 GMT+0200 (EET)";
+var dateAssertion = resultSet.getDate(3).toString().contains("Fri Jan 01 2021");
 resultSet.getClob(4); // same as blob, just a smoke test
 var decAssertion = resultSet.getDecimal(5).intValue() == 10;
 var doubleAssertion = resultSet.getDouble(6) == 10.11;
@@ -30,12 +29,8 @@ resultSet.getFloat(7); // creating a new java float with 10.11 produces 10.10999
 var intAssertion = resultSet.getInteger(8) == 10;
 resultSet.getReal(9);
 var stringAssertion = resultSet.getString(11) == "test";
-var timeAssertion = resultSet.getTime(12).toString() == "Thu Jan 01 1970 23:59:59 GMT+0200 (EET)";
-var timestampAssertion = resultSet.getTimestamp(13).toString() == "Wed Jul 21 2021 12:36:43 GMT+0300 (EEST)";
-
-response.println("date: " + resultSet.getDate(3).toString())
-response.println("time: " + resultSet.getTime(12).toString())
-response.println("timestamp: " + resultSet.getTimestamp(13).toString())
+var timeAssertion = resultSet.getTime(12).toString().contains("23:59:59");
+var timestampAssertion = resultSet.getTimestamp(13).toString().contains("Wed Jul 21 2021");
 
 resultSet.close();
 var isClosedAssertion = resultSet.isClosed() == true;
@@ -45,10 +40,6 @@ try {
   resultSet.next(); // Expect this to fail since the statement is closed
   closeAssertion = false;
 } catch {}
-
-response.println(bigIntAssertion.toString() + dateAssertion.toString() + decAssertion.toString() + doubleAssertion.toString() + intAssertion.toString() + stringAssertion.toString() + timeAssertion.toString() + timestampAssertion.toString() + closeAssertion.toString() + isClosedAssertion.toString());
-response.flush();
-response.close();
 
 bigIntAssertion && dateAssertion && decAssertion && doubleAssertion && intAssertion && stringAssertion && timeAssertion && timestampAssertion && closeAssertion && isClosedAssertion;
 

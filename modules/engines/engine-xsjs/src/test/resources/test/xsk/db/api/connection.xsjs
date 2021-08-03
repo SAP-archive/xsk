@@ -1,34 +1,29 @@
-var database = require('xsk/db');
-var response = require('http/v4/response');
+var db = $.db;
 
-var newAge = 30;
+// tests isClosed() too
+function close(){
+  var connection = db.getConnection();
+  var beforeClose = connection.isClosed();
+  connection.close();
+  var afterClose = connection.isClosed();
 
-try {
-	var connection = database.getConnection();
-	response.println("Is Auto Commit enabled before setting it to false: " + connection.getAutoCommit());
-	connection.setAutoCommit(false);
-	response.println("Is Auto Commit enabled after setting it to false:  " + connection.getAutoCommit());
-
-   	var statement = connection.prepareStatement("UPDATE TEST_USERS SET AGE=? WHERE ID=?");
-   	statement.setTinyInt(1, newAge);
-   	statement.setInteger(2, 1);
-   	statement.executeUpdate();
-
-   	if (newAge <= 69) {
-   		connection.commit(); // surprisingly it's working even without calling commit()
-   		response.println("\nTransaction was successfully commited!");
-   	} else {
-   		connection.rollback();
-   		response.println("\nSorry dude, the transaction was rollbacked. We prefer to stay younger:))")
-   	}
-
-    statement.close();
-} catch(e) {
-	connection.rollback();
-	response.println("\nTransaction was rollbacked: " + e.message);
-} finally {
-   	connection.close();
+  return !beforeClose && afterClose;
 }
 
-response.flush();
-response.close();
+function prepareCall(){
+  var connection = db.getConnection();
+  var call = connection.prepareCall("CREATE TABLE TEST (ID int)");
+  connection.close();
+  call.close();
+  return call.constructor.name == "XscCallableStatement"
+}
+
+function prepareStatement(){
+  var connection = db.getConnection();
+  var statement = connection.prepareStatement("CREATE TABLE TEST (ID int)");
+  connection.close();
+  statement.close();
+  return statement.constructor.name == "XscPreparedStatement"
+}
+
+close() && prepareCall() && prepareStatement();

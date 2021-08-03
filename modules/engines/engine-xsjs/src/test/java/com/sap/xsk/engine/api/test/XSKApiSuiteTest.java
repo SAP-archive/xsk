@@ -68,7 +68,17 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
   }
 
   @Before
-  public void registerModules() {
+  public void registerModules()
+  {
+    // DB tests
+    TEST_MODULES.add("test/xsk/db/api/db.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/connection.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/parameter-metadata.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/callable-statement.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/prepared-statement.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/result-set.xsjs");
+    TEST_MODULES.add("test/xsk/db/api/resultset-metadata.xsjs");
+
     TEST_MODULES.add("test/xsk/response/response.xsjs");
     TEST_MODULES.add("test/xsk/session/session.xsjs");
     TEST_MODULES.add("test/xsk/trace/trace.xsjs");

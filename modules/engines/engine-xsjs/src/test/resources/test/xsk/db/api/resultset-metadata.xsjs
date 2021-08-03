@@ -1,34 +1,35 @@
-var database = require('xsk/db');
-var response = require('http/v4/response');
+var db = $.db;
+
+var connection = db.getConnection();
 
 try {
-	var connection = database.getConnection();
-   	var statement = connection.prepareStatement("SELECT * FROM TEST_USERS");
+  connection.prepareStatement("DROP TABLE TEST_USERS").execute();
+} catch {}
 
-   	var metaDataColumnIndex = 5;
+connection.prepareStatement("CREATE TABLE TEST_USERS (ID int)").execute();
 
-   	statement.execute();
-   	var resultSetMetaData = statement.getMetaData();
+connection.prepareStatement("INSERT INTO TEST_USERS (ID) VALUES (1)").execute();
 
-   	response.println("Catalog Name: " + resultSetMetaData.getCatalogName(1));
-   	response.println("Table Name: " + resultSetMetaData.getTableName(metaDataColumnIndex));
-   	response.println("Columns count: " + resultSetMetaData.getColumnCount());
-   	response.println("\n----------------------------------------\nDisplaying data for column with index " + metaDataColumnIndex + "\n----------------------------------------");
-   	response.println("Column display size: " + resultSetMetaData.getColumnDisplaySize(metaDataColumnIndex));
-   	response.println("Column Label: " + resultSetMetaData.getColumnLabel(metaDataColumnIndex));
-   	response.println("Column Name: " + resultSetMetaData.getColumnName(metaDataColumnIndex));
-   	response.println("Column Type: " + resultSetMetaData.getColumnType(metaDataColumnIndex));
-   	response.println("Column Type Name: " + resultSetMetaData.getColumnTypeName(metaDataColumnIndex));
-   	response.println("Column Precision: " + resultSetMetaData.getPrecision(metaDataColumnIndex));
-   	response.println("Column Scale: " + resultSetMetaData.getScale(metaDataColumnIndex));
+var metadata = connection.prepareStatement("SELECT * FROM TEST_USERS").executeQuery().getMetaData();
 
-   	statement.close();
-} catch(e) {
-   console.trace(e);
-   response.println(e.message);
-} finally {
-   connection.close();
-}
+metadata.getCatalogName(1);
 
-response.flush();
-response.close();
+var columnCountAssertion = metadata.getColumnCount() == 1;
+
+metadata.getColumnDisplaySize(1);
+
+var labelAssertion = metadata.getColumnLabel(1) == "ID";
+
+var nameAssertion = metadata.getColumnName(1) == "ID";
+
+var typeAssertion = metadata.getColumnType(1) == 4;
+
+var typeNameAssertion = metadata.getColumnTypeName(1) == "INTEGER";
+
+var precisionAssertion = metadata.getPrecision(1) == 10;
+
+var scaleAssertion = metadata.getScale(1) == 0;
+
+var tableNameAssertion = metadata.getTableName(1) == "TEST_USERS";
+
+columnCountAssertion && labelAssertion && nameAssertion && typeAssertion && typeNameAssertion && precisionAssertion && scaleAssertion && tableNameAssertion

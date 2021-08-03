@@ -13,12 +13,12 @@ package com.sap.xsk.hdb.ds.model.hdbsequence;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import java.util.List;
 
 @Getter
 @Setter

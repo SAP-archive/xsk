@@ -11,6 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 //import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
@@ -20,8 +23,6 @@ import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
-import java.util.HashMap;
-import java.util.Map;
 
 //import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
 

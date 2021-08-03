@@ -11,14 +11,16 @@
  */
 package com.sap.xsk.hdb.ds.processors;
 
-import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
 
 public abstract class AbstractXSKProcessor<T extends XSKDataStructureModel> implements IXSKHdbProcessor<T> {

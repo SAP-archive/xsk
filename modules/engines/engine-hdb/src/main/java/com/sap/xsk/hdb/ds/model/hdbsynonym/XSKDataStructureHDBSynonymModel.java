@@ -11,12 +11,14 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbsynonym;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The synonym model representation.

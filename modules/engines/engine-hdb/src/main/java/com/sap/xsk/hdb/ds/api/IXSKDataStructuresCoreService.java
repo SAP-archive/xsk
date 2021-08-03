@@ -11,9 +11,11 @@
  */
 package com.sap.xsk.hdb.ds.api;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.util.List;
+
 import org.eclipse.dirigible.commons.api.service.ICoreService;
+
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
 /**
  * The XSK Data Structures Core Service interface.

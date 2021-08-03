@@ -11,14 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
-import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterProcessor;
-import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.table.XSKTableDropProcessor;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,8 +18,17 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterProcessor;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableDropProcessor;
 
 public class IXSKTableManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBTableModel> {
 

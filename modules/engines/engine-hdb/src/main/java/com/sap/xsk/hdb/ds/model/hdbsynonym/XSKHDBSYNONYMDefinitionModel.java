@@ -11,10 +11,16 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbsynonym;
 
+import java.util.Objects;
+
 import com.google.gson.annotations.SerializedName;
 import com.sap.xsk.hdb.ds.exceptions.XSKHDBSYNONYMMissingPropertyException;
-import lombok.*;
-import java.util.Objects;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter

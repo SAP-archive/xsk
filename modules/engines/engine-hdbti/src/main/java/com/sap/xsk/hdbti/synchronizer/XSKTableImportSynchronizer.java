@@ -24,9 +24,14 @@ import com.sap.xsk.hdbti.api.IXSKTableImportArtifactDao;
 import com.sap.xsk.hdbti.api.IXSKTableImportModel;
 import com.sap.xsk.hdbti.api.IXSKTableImportParser;
 import com.sap.xsk.hdbti.api.XSKTableImportException;
+import com.sap.xsk.hdbti.dao.XSKCsvToHdbtiRelationDao;
+import com.sap.xsk.hdbti.dao.XSKTableImportArtifactDao;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
+import com.sap.xsk.hdbti.processors.XSKHDBTIProcessor;
+import com.sap.xsk.hdbti.service.XSKHDBTICoreService;
+import com.sap.xsk.hdbti.service.XSKTableImportParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.utils.XSKUtils;
 import java.io.ByteArrayInputStream;
@@ -67,11 +72,11 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
 
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
-  private IXSKTableImportParser xskTableImportParser = (IXSKTableImportParser) StaticObjects.get("xskTableImportParser");
-  private IXSKHDBTIProcessor xskHdbtiProcessor =  (IXSKHDBTIProcessor) StaticObjects.get("xskHdbtiProcessor");
-  private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = (IXSKCsvToHdbtiRelationDao) StaticObjects.get("xskCsvToHdbtiRelationDao");
-  private IXSKTableImportArtifactDao xskTableImportArtifactDao = (IXSKTableImportArtifactDao) StaticObjects.get("xskTableImportArtifactDao");
-  private IXSKHDBTICoreService xskHdbtiCoreService = (IXSKHDBTICoreService) StaticObjects.get("xskHdbtiCoreService");
+  private IXSKTableImportParser xskTableImportParser = new XSKTableImportParser();
+  private IXSKHDBTIProcessor xskHdbtiProcessor =  new XSKHDBTIProcessor();
+  private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = new XSKCsvToHdbtiRelationDao();
+  private IXSKTableImportArtifactDao xskTableImportArtifactDao = new XSKTableImportArtifactDao();
+  private IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
 
   @Override
   public void synchronize() {

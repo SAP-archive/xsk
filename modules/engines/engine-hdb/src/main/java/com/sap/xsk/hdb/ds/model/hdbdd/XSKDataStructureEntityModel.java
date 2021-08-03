@@ -11,11 +11,12 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbdd;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The table model representation.

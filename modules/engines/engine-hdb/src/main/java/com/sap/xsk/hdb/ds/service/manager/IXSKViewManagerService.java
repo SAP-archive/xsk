@@ -11,13 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.view.XSKViewDropProcessor;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,9 +18,18 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.naming.OperationNotSupportedException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.view.XSKViewDropProcessor;
 
 public class IXSKViewManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBViewModel> {
 

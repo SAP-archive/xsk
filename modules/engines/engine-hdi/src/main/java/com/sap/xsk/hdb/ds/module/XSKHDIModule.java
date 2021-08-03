@@ -14,7 +14,6 @@ package com.sap.xsk.hdb.ds.module;
 import java.util.Map;
 
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
-import org.eclipse.dirigible.commons.config.StaticObjects;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
@@ -33,7 +32,7 @@ public class XSKHDIModule extends AbstractDirigibleModule {
 //    MapBinder<String, XSKDataStructureParser> mapBinder
 //        = MapBinder.newMapBinder(binder(), String.class, XSKDataStructureParser.class);
 
-	  Map<String, XSKDataStructureParser> parserServices = (Map<String, XSKDataStructureParser>) StaticObjects.get("parserServices");
+	  Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
       parserServices.put(IXSKDataStructureModel.TYPE_HDI, new XSKHDIParser());
   }
 

@@ -170,9 +170,24 @@ jobs:
             - [hdi-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-simple.zip) - HDI.
             - [hdi-ext](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-ext.zip) - HDI Ext.
             - [hdi-cube](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-cube.zip) - HDI Cube.
-
-          ### SAP Java Buildpack Usage
-
+          
+          ### Cloud Native Buildpacks
+          
+          #### Pack
+          
+          Available Buildpack Builders:
+          - [dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk) - builder for local deployments.
+          - [dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk-kyma) - builder for Kyma ready deployments.
+          - [dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk-cf) - builder for Cloud Foundry ready deployments
+          
+          Building Docker Image with **pack**:
+          ```
+          pack build --builder dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }} <my-org>/<my-repository>
+          ```
+          > _**Note:** The command will package all sub-folders (`project1`, `project2`, etc.) into a XSK docker image with the application sources._
+          
+          ### Cloud Foundry - SAP Java Buildpack
+          
           **manifest.yaml**
 
           ```yaml
@@ -188,11 +203,9 @@ jobs:
             services:
               - <service-binding>
           ```
-
-          ### Buildpack
-
-          #### Prerequisites
-
+          
+          #### Kpack
+          
           - Install [Kpack](https://github.com/pivotal/kpack) on your Kubernetes/Kyma cluster
           - Create `ClusterStore`, `ClusterStack` and `Builder`:
 

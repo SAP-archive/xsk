@@ -11,9 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbtable;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
 /**
  * The table model representation.

@@ -11,8 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.processors.table.utils;
 
-import com.sap.xsk.hdb.ds.model.hdbtable.*;
-import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.util.List;
+import java.util.Objects;
+
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
@@ -22,9 +24,13 @@ import org.eclipse.dirigible.database.sql.builders.table.AbstractTableBuilder;
 import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
 import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 
-import java.sql.Connection;
-import java.util.List;
-import java.util.Objects;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintCheckModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.utils.XSKHDBUtils;
 
 public class XSKTableEscapeService {
 

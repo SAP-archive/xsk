@@ -11,13 +11,14 @@
  */
 package com.sap.xsk.hdb.ds.synchronizer;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import org.eclipse.dirigible.commons.api.content.AbstractClasspathContentHandler;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 
 /**
  * The XSK Data Structures Classpath Content Handler.

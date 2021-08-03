@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-parsers-parent</artifactId>
-        <version>0.7.0</version>
+        <version>0.8.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <name>XSK - Modules - Parsers - HDB Sequence</name>
 	<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-	<version>0.7.0</version>
+	<version>0.8.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
     <properties>

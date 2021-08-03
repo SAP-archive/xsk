@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsaccess.ds.service;
@@ -26,22 +26,17 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-@Singleton
 public class XSKAccessCoreService implements IXSKAccessCoreService {
 
   private static final List<XSKAccessDefinition> CACHE = Collections.synchronizedList(new ArrayList<>());
-  @Inject
-  private DataSource dataSource;
-  @Inject
-  private PersistenceManager<XSKAccessDefinition> xskAccessDefinitionPersistenceManager;
-  @Inject
-  private XSKPrivilegeCoreService xskPrivilegeCoreService;
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private PersistenceManager<XSKAccessDefinition> xskAccessDefinitionPersistenceManager = new PersistenceManager<XSKAccessDefinition>();
+  private XSKPrivilegeCoreService xskPrivilegeCoreService = new XSKPrivilegeCoreService();
 
   @Override
   public XSKAccessDefinition createXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed,

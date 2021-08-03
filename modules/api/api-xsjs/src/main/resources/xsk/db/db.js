@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 /*
@@ -64,7 +64,7 @@ function XscCallableStatement(callableStatement) {
 	};
 
 	this.getInteger = function(index) {
-		return callableStatement.getInteger(index);
+		return callableStatement.getInt(index);
 	};
 
 	this.getMoreResults = function() {
@@ -168,7 +168,7 @@ function XscCallableStatement(callableStatement) {
 		callableStatement.setNString(index, value);
 	};
 
-	this.setNull = function(index) {
+	this.setNull = function(index, sqlTypeStr) {
 		var sqlTypeStr = callableStatement.getResultSet().getMetaData()
 				.getColumnTypeName(index);
 		callableStatement.setNull(index, sqlTypeStr);
@@ -278,14 +278,10 @@ function XscParameterMetaData(dParameterMetaData) {
 
 	};
 
-	// although I put not null constraints, this method always returns 2 for all
-	// columns which is strange
 	this.isNullable = function(paramIndex) {
 		return dParameterMetaData.isNullable(paramIndex);
 	};
 
-	// although I set some integer fields to be unsigned, this method always
-	// returns true, which is also strange
 	this.isSigned = function(paramIndex) {
 		return dParameterMetaData.isSigned(paramIndex);
 	};
@@ -337,13 +333,11 @@ function XscPreparedStatement(dPreparedStatement) {
 	// calling this method returns always null, I need to find a way to simulate
 	// conditions when it returns something
 	this.getSQLWarning = function() {
-		return dPreparedStatement.getWarnings();
+		return dPreparedStatement.getSQLWarning();
 	};
 
-	// currently not working and throwing the following error: Cannot find
-	// function isCLosed in object prep55985
 	this.isClosed = function() {
-		return dPreparedStatement.isCLosed();
+		return dPreparedStatement.isClosed();
 	};
 
 	// No such method in Dirigible API, neither in JDBC Statements
@@ -376,7 +370,7 @@ function XscPreparedStatement(dPreparedStatement) {
 	// probably because we are passing a double value instead of BigDecimal
 	// object
 	this.setDecimal = function(index, value) {
-		dPreparedStatement.setBigDecimal(index, value);
+		dPreparedStatement.setDecimal(index, value);
 	};
 
 	this.setDouble = function(index, value) {

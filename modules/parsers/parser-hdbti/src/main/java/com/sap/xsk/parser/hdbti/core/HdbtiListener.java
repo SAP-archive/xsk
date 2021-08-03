@@ -97,6 +97,17 @@ public interface HdbtiListener extends ParseTreeListener {
 	void exitPair(@NotNull HdbtiParser.PairContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link HdbtiParser#tableName}.
+	 * @param ctx the parse tree
+	 */
+	void enterTableName(@NotNull HdbtiParser.TableNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbtiParser#tableName}.
+	 * @param ctx the parse tree
+	 */
+	void exitTableName(@NotNull HdbtiParser.TableNameContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link HdbtiParser#assignFile}.
 	 * @param ctx the parse tree
 	 */

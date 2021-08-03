@@ -1,38 +1,34 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.processors.entity;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.sql.Connection;
-import java.sql.SQLException;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class XSKEntityUpdateProcessor extends AbstractXSKProcessor<XSKDataStructureEntityModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKEntityUpdateProcessor.class);
 
-  @Inject
-  @Named("xskEntityDropProcessor")
-  private IXSKHdbProcessor xskEntityDropProcessor;
-  @Inject
-  @Named("xskEntityCreateProcessor")
-  private IXSKHdbProcessor xskEntityCreateProcessor;
+  private IXSKHdbProcessor xskEntityDropProcessor = new XSKEntityDropProcessor();
+  private IXSKHdbProcessor xskEntityCreateProcessor = new XSKEntityCreateProcessor();
 
   /**
    * Execute the corresponding statement.

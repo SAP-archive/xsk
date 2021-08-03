@@ -1,17 +1,16 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsodata.ds.synchronizer;
 
-import com.google.inject.name.Named;
 import com.sap.xsk.xsodata.ds.api.IXSKODataCoreService;
 import com.sap.xsk.xsodata.ds.api.IXSKODataModel;
 import com.sap.xsk.xsodata.ds.api.XSKODataException;
@@ -19,9 +18,9 @@ import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2ODataHTransformer;
 import com.sap.xsk.xsodata.ds.service.XSKOData2ODataMTransformer;
 import com.sap.xsk.xsodata.ds.service.XSKOData2ODataXTransformer;
+import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
 import com.sap.xsk.xsodata.utils.XSKODataUtils;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
@@ -35,8 +34,6 @@ import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +47,6 @@ import static java.text.MessageFormat.format;
 /**
  * The XSOData Synchronizer.
  */
-@Singleton
 public class XSKODataSynchronizer extends AbstractSynchronizer {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKODataSynchronizer.class);
@@ -63,26 +59,23 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
     private static final Map<String, XSKODataModel> ODATA_MODELS = new LinkedHashMap<>();
     private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
 
-    @com.google.inject.Inject
-    @Named("xskODataCoreService")
-    private IXSKODataCoreService xskODataCoreService;
+    private IXSKODataCoreService xskODataCoreService = new XSKODataCoreService();
 
-    @Inject
-    private ODataCoreService odataCoreService;
-    @Inject
-    private XSKOData2ODataMTransformer xskOData2ODataMTransformer;
-    @Inject
-    private XSKOData2ODataXTransformer xskOData2ODataXTransformer;
-    @Inject
-    private XSKOData2ODataHTransformer xskOData2ODataHTransformer;
-    @Inject
-    private DBMetadataUtil dbMetadataUtil;
+    private ODataCoreService odataCoreService = new ODataCoreService();
+    
+    private XSKOData2ODataMTransformer xskOData2ODataMTransformer = new XSKOData2ODataMTransformer();
+
+    private XSKOData2ODataXTransformer xskOData2ODataXTransformer = new XSKOData2ODataXTransformer();
+
+    private XSKOData2ODataHTransformer xskOData2ODataHTransformer = new XSKOData2ODataHTransformer();
+
+    private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
     /**
      * Force synchronization.
      */
     public static void forceSynchronization() {
-        XSKODataSynchronizer synchronizer = StaticInjector.getInjector().getInstance(XSKODataSynchronizer.class);
+        XSKODataSynchronizer synchronizer = new XSKODataSynchronizer();
         synchronizer.setForcedSynchronization(true);
         try {
             synchronizer.synchronize();

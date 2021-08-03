@@ -53,6 +53,61 @@ public interface HdbsequenceListener extends ParseTreeListener {
 	void exitNomaxvalue(@NotNull HdbsequenceParser.NomaxvalueContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link HdbsequenceParser#nominvalue}.
+	 * @param ctx the parse tree
+	 */
+	void enterNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbsequenceParser#nominvalue}.
+	 * @param ctx the parse tree
+	 */
+	void exitNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbsequenceParser#cycles}.
+	 * @param ctx the parse tree
+	 */
+	void enterCycles(@NotNull HdbsequenceParser.CyclesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbsequenceParser#cycles}.
+	 * @param ctx the parse tree
+	 */
+	void exitCycles(@NotNull HdbsequenceParser.CyclesContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbsequenceParser#dependsOnTable}.
+	 * @param ctx the parse tree
+	 */
+	void enterDependsOnTable(@NotNull HdbsequenceParser.DependsOnTableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbsequenceParser#dependsOnTable}.
+	 * @param ctx the parse tree
+	 */
+	void exitDependsOnTable(@NotNull HdbsequenceParser.DependsOnTableContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbsequenceParser#minvalue}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbsequenceParser#minvalue}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link HdbsequenceParser#dependsOnView}.
+	 * @param ctx the parse tree
+	 */
+	void enterDependsOnView(@NotNull HdbsequenceParser.DependsOnViewContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HdbsequenceParser#dependsOnView}.
+	 * @param ctx the parse tree
+	 */
+	void exitDependsOnView(@NotNull HdbsequenceParser.DependsOnViewContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link HdbsequenceParser#property}.
 	 * @param ctx the parse tree
 	 */
@@ -86,28 +141,6 @@ public interface HdbsequenceListener extends ParseTreeListener {
 	void exitIncrement_by(@NotNull HdbsequenceParser.Increment_byContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link HdbsequenceParser#nominvalue}.
-	 * @param ctx the parse tree
-	 */
-	void enterNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HdbsequenceParser#nominvalue}.
-	 * @param ctx the parse tree
-	 */
-	void exitNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link HdbsequenceParser#cycles}.
-	 * @param ctx the parse tree
-	 */
-	void enterCycles(@NotNull HdbsequenceParser.CyclesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HdbsequenceParser#cycles}.
-	 * @param ctx the parse tree
-	 */
-	void exitCycles(@NotNull HdbsequenceParser.CyclesContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link HdbsequenceParser#hdbsequence}.
 	 * @param ctx the parse tree
 	 */
@@ -128,15 +161,4 @@ public interface HdbsequenceListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStart_with(@NotNull HdbsequenceParser.Start_withContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link HdbsequenceParser#minvalue}.
-	 * @param ctx the parse tree
-	 */
-	void enterMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HdbsequenceParser#minvalue}.
-	 * @param ctx the parse tree
-	 */
-	void exitMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx);
 }

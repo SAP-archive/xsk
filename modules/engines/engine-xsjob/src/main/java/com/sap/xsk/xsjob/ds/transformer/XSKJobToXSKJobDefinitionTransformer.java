@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsjob.ds.transformer;
@@ -17,14 +17,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 public class XSKJobToXSKJobDefinitionTransformer {
 
-  @Inject
-  private XSKCronToQuartzCronTransformer xskCronToQuartzCronTransformer;
+  private XSKCronToQuartzCronTransformer xskCronToQuartzCronTransformer = new XSKCronToQuartzCronTransformer();
 
   public ArrayList<XSKJobDefinition> transform(XSKJobArtifact xskJobArtifact) throws ParseException {
     ArrayList<XSKJobDefinition> jobDefinitions = new ArrayList<>();

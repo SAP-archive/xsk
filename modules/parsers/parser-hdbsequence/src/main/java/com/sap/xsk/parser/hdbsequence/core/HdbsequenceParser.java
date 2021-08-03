@@ -17,22 +17,25 @@ public class HdbsequenceParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__9=1, T__8=2, T__7=3, T__6=4, T__5=5, T__4=6, T__3=7, T__2=8, T__1=9, 
-		T__0=10, STRING=11, INT=12, BOOLEAN=13, TRUE=14, FALSE=15, WS=16, LB=17, 
-		RB=18, EQ=19, SC=20, SIGNED_INT=21, LINE_COMMENT=22, COMMENT=23;
+		T__11=1, T__10=2, T__9=3, T__8=4, T__7=5, T__6=6, T__5=7, T__4=8, T__3=9, 
+		T__2=10, T__1=11, T__0=12, STRING=13, INT=14, BOOLEAN=15, TRUE=16, FALSE=17, 
+		WS=18, LB=19, RB=20, EQ=21, SC=22, SIGNED_INT=23, LINE_COMMENT=24, COMMENT=25;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'nominvalue'", "'reset_by'", "'schema'", "'start_with'", 
-		"'cycles'", "'maxvalue'", "'increment_by'", "'public'", "'nomaxvalue'", 
-		"'minvalue'", "STRING", "INT", "BOOLEAN", "'true'", "'false'", "WS", "'['", 
-		"']'", "'='", "';'", "'-'", "LINE_COMMENT", "COMMENT"
+		"<INVALID>", "'nominvalue'", "'reset_by'", "'schema'", "'depends_on_table'", 
+		"'start_with'", "'cycles'", "'maxvalue'", "'increment_by'", "'depends_on_view'", 
+		"'public'", "'nomaxvalue'", "'minvalue'", "STRING", "INT", "BOOLEAN", 
+		"'true'", "'false'", "WS", "'['", "']'", "'='", "';'", "'-'", "LINE_COMMENT", 
+		"COMMENT"
 	};
 	public static final int
 		RULE_hdbsequence = 0, RULE_property = 1, RULE_schema = 2, RULE_increment_by = 3, 
 		RULE_start_with = 4, RULE_maxvalue = 5, RULE_nomaxvalue = 6, RULE_minvalue = 7, 
-		RULE_nominvalue = 8, RULE_cycles = 9, RULE_reset_by = 10, RULE_publicc = 11;
+		RULE_nominvalue = 8, RULE_cycles = 9, RULE_reset_by = 10, RULE_publicc = 11, 
+		RULE_dependsOnTable = 12, RULE_dependsOnView = 13;
 	public static final String[] ruleNames = {
 		"hdbsequence", "property", "schema", "increment_by", "start_with", "maxvalue", 
-		"nomaxvalue", "minvalue", "nominvalue", "cycles", "reset_by", "publicc"
+		"nomaxvalue", "minvalue", "nominvalue", "cycles", "reset_by", "publicc", 
+		"dependsOnTable", "dependsOnView"
 	};
 
 	@Override
@@ -87,19 +90,19 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(25); 
+			setState(29); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(24); property();
+				setState(28); property();
 				}
 				}
-				setState(27); 
+				setState(31); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__9) | (1L << T__8) | (1L << T__7) | (1L << T__6) | (1L << T__5) | (1L << T__4) | (1L << T__3) | (1L << T__2) | (1L << T__1) | (1L << T__0))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__11) | (1L << T__10) | (1L << T__9) | (1L << T__8) | (1L << T__7) | (1L << T__6) | (1L << T__5) | (1L << T__4) | (1L << T__3) | (1L << T__2) | (1L << T__1) | (1L << T__0))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -132,6 +135,9 @@ public class HdbsequenceParser extends Parser {
 		public PubliccContext publicc() {
 			return getRuleContext(PubliccContext.class,0);
 		}
+		public DependsOnViewContext dependsOnView() {
+			return getRuleContext(DependsOnViewContext.class,0);
+		}
 		public Increment_byContext increment_by() {
 			return getRuleContext(Increment_byContext.class,0);
 		}
@@ -140,6 +146,9 @@ public class HdbsequenceParser extends Parser {
 		}
 		public SchemaContext schema() {
 			return getRuleContext(SchemaContext.class,0);
+		}
+		public DependsOnTableContext dependsOnTable() {
+			return getRuleContext(DependsOnTableContext.class,0);
 		}
 		public CyclesContext cycles() {
 			return getRuleContext(CyclesContext.class,0);
@@ -167,66 +176,78 @@ public class HdbsequenceParser extends Parser {
 		PropertyContext _localctx = new PropertyContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_property);
 		try {
-			setState(39);
+			setState(45);
 			switch (_input.LA(1)) {
-			case T__7:
+			case T__9:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(29); schema();
-				}
-				break;
-			case T__3:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(30); increment_by();
-				}
-				break;
-			case T__6:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(31); start_with();
+				setState(33); schema();
 				}
 				break;
 			case T__4:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(34); increment_by();
+				}
+				break;
+			case T__7:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(35); start_with();
+				}
+				break;
+			case T__5:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(32); maxvalue();
+				setState(36); maxvalue();
 				}
 				break;
 			case T__1:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(33); nomaxvalue();
+				setState(37); nomaxvalue();
 				}
 				break;
 			case T__0:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(34); minvalue();
+				setState(38); minvalue();
 				}
 				break;
-			case T__9:
+			case T__11:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(35); nominvalue();
+				setState(39); nominvalue();
 				}
 				break;
-			case T__5:
+			case T__6:
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(36); cycles();
+				setState(40); cycles();
 				}
 				break;
-			case T__8:
+			case T__10:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(37); reset_by();
+				setState(41); reset_by();
 				}
 				break;
 			case T__2:
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(38); publicc();
+				setState(42); publicc();
+				}
+				break;
+			case T__8:
+				enterOuterAlt(_localctx, 11);
+				{
+				setState(43); dependsOnTable();
+				}
+				break;
+			case T__3:
+				enterOuterAlt(_localctx, 12);
+				{
+				setState(44); dependsOnView();
 				}
 				break;
 			default:
@@ -273,10 +294,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(41); match(T__7);
-			setState(42); match(EQ);
-			setState(43); match(STRING);
-			setState(44); match(SC);
+			setState(47); match(T__9);
+			setState(48); match(EQ);
+			setState(49); match(STRING);
+			setState(50); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -319,10 +340,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(46); match(T__3);
-			setState(47); match(EQ);
-			setState(48); match(INT);
-			setState(49); match(SC);
+			setState(52); match(T__4);
+			setState(53); match(EQ);
+			setState(54); match(INT);
+			setState(55); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -365,10 +386,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(51); match(T__6);
-			setState(52); match(EQ);
-			setState(53); match(INT);
-			setState(54); match(SC);
+			setState(57); match(T__7);
+			setState(58); match(EQ);
+			setState(59); match(INT);
+			setState(60); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -411,10 +432,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(56); match(T__4);
-			setState(57); match(EQ);
-			setState(58); match(INT);
-			setState(59); match(SC);
+			setState(62); match(T__5);
+			setState(63); match(EQ);
+			setState(64); match(INT);
+			setState(65); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -457,10 +478,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(61); match(T__1);
-			setState(62); match(EQ);
-			setState(63); match(BOOLEAN);
-			setState(64); match(SC);
+			setState(67); match(T__1);
+			setState(68); match(EQ);
+			setState(69); match(BOOLEAN);
+			setState(70); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -503,10 +524,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(66); match(T__0);
-			setState(67); match(EQ);
-			setState(68); match(INT);
-			setState(69); match(SC);
+			setState(72); match(T__0);
+			setState(73); match(EQ);
+			setState(74); match(INT);
+			setState(75); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -549,10 +570,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(71); match(T__9);
-			setState(72); match(EQ);
-			setState(73); match(BOOLEAN);
-			setState(74); match(SC);
+			setState(77); match(T__11);
+			setState(78); match(EQ);
+			setState(79); match(BOOLEAN);
+			setState(80); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -595,10 +616,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(76); match(T__5);
-			setState(77); match(EQ);
-			setState(78); match(BOOLEAN);
-			setState(79); match(SC);
+			setState(82); match(T__6);
+			setState(83); match(EQ);
+			setState(84); match(BOOLEAN);
+			setState(85); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -641,10 +662,10 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(81); match(T__8);
-			setState(82); match(EQ);
-			setState(83); match(STRING);
-			setState(84); match(SC);
+			setState(87); match(T__10);
+			setState(88); match(EQ);
+			setState(89); match(STRING);
+			setState(90); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -687,10 +708,102 @@ public class HdbsequenceParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(86); match(T__2);
-			setState(87); match(EQ);
-			setState(88); match(BOOLEAN);
-			setState(89); match(SC);
+			setState(92); match(T__2);
+			setState(93); match(EQ);
+			setState(94); match(BOOLEAN);
+			setState(95); match(SC);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class DependsOnTableContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbsequenceParser.EQ, 0); }
+		public TerminalNode STRING() { return getToken(HdbsequenceParser.STRING, 0); }
+		public TerminalNode SC() { return getToken(HdbsequenceParser.SC, 0); }
+		public DependsOnTableContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_dependsOnTable; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof HdbsequenceListener ) ((HdbsequenceListener)listener).enterDependsOnTable(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof HdbsequenceListener ) ((HdbsequenceListener)listener).exitDependsOnTable(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof HdbsequenceVisitor ) return ((HdbsequenceVisitor<? extends T>)visitor).visitDependsOnTable(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final DependsOnTableContext dependsOnTable() throws RecognitionException {
+		DependsOnTableContext _localctx = new DependsOnTableContext(_ctx, getState());
+		enterRule(_localctx, 24, RULE_dependsOnTable);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(97); match(T__8);
+			setState(98); match(EQ);
+			setState(99); match(STRING);
+			setState(100); match(SC);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class DependsOnViewContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbsequenceParser.EQ, 0); }
+		public TerminalNode STRING() { return getToken(HdbsequenceParser.STRING, 0); }
+		public TerminalNode SC() { return getToken(HdbsequenceParser.SC, 0); }
+		public DependsOnViewContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_dependsOnView; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof HdbsequenceListener ) ((HdbsequenceListener)listener).enterDependsOnView(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof HdbsequenceListener ) ((HdbsequenceListener)listener).exitDependsOnView(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof HdbsequenceVisitor ) return ((HdbsequenceVisitor<? extends T>)visitor).visitDependsOnView(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final DependsOnViewContext dependsOnView() throws RecognitionException {
+		DependsOnViewContext _localctx = new DependsOnViewContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_dependsOnView);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(102); match(T__3);
+			setState(103); match(EQ);
+			setState(104); match(STRING);
+			setState(105); match(SC);
 			}
 		}
 		catch (RecognitionException re) {
@@ -705,28 +818,32 @@ public class HdbsequenceParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\31^\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\33n\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
-		"\f\t\f\4\r\t\r\3\2\6\2\34\n\2\r\2\16\2\35\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\5\3*\n\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\6\3\6"+
-		"\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3"+
-		"\t\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3"+
-		"\r\3\r\3\r\3\r\3\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30\2\2[\2\33"+
-		"\3\2\2\2\4)\3\2\2\2\6+\3\2\2\2\b\60\3\2\2\2\n\65\3\2\2\2\f:\3\2\2\2\16"+
-		"?\3\2\2\2\20D\3\2\2\2\22I\3\2\2\2\24N\3\2\2\2\26S\3\2\2\2\30X\3\2\2\2"+
-		"\32\34\5\4\3\2\33\32\3\2\2\2\34\35\3\2\2\2\35\33\3\2\2\2\35\36\3\2\2\2"+
-		"\36\3\3\2\2\2\37*\5\6\4\2 *\5\b\5\2!*\5\n\6\2\"*\5\f\7\2#*\5\16\b\2$*"+
-		"\5\20\t\2%*\5\22\n\2&*\5\24\13\2\'*\5\26\f\2(*\5\30\r\2)\37\3\2\2\2) "+
-		"\3\2\2\2)!\3\2\2\2)\"\3\2\2\2)#\3\2\2\2)$\3\2\2\2)%\3\2\2\2)&\3\2\2\2"+
-		")\'\3\2\2\2)(\3\2\2\2*\5\3\2\2\2+,\7\5\2\2,-\7\25\2\2-.\7\r\2\2./\7\26"+
-		"\2\2/\7\3\2\2\2\60\61\7\t\2\2\61\62\7\25\2\2\62\63\7\16\2\2\63\64\7\26"+
-		"\2\2\64\t\3\2\2\2\65\66\7\6\2\2\66\67\7\25\2\2\678\7\16\2\289\7\26\2\2"+
-		"9\13\3\2\2\2:;\7\b\2\2;<\7\25\2\2<=\7\16\2\2=>\7\26\2\2>\r\3\2\2\2?@\7"+
-		"\13\2\2@A\7\25\2\2AB\7\17\2\2BC\7\26\2\2C\17\3\2\2\2DE\7\f\2\2EF\7\25"+
-		"\2\2FG\7\16\2\2GH\7\26\2\2H\21\3\2\2\2IJ\7\3\2\2JK\7\25\2\2KL\7\17\2\2"+
-		"LM\7\26\2\2M\23\3\2\2\2NO\7\7\2\2OP\7\25\2\2PQ\7\17\2\2QR\7\26\2\2R\25"+
-		"\3\2\2\2ST\7\4\2\2TU\7\25\2\2UV\7\r\2\2VW\7\26\2\2W\27\3\2\2\2XY\7\n\2"+
-		"\2YZ\7\25\2\2Z[\7\17\2\2[\\\7\26\2\2\\\31\3\2\2\2\4\35)";
+		"\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\6\2 \n\2\r\2\16\2!\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\60\n\3\3\4\3\4\3\4\3\4\3\4\3"+
+		"\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b"+
+		"\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3"+
+		"\13\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3\16\3\16\3\16\3"+
+		"\17\3\17\3\17\3\17\3\17\3\17\2\2\20\2\4\6\b\n\f\16\20\22\24\26\30\32\34"+
+		"\2\2k\2\37\3\2\2\2\4/\3\2\2\2\6\61\3\2\2\2\b\66\3\2\2\2\n;\3\2\2\2\f@"+
+		"\3\2\2\2\16E\3\2\2\2\20J\3\2\2\2\22O\3\2\2\2\24T\3\2\2\2\26Y\3\2\2\2\30"+
+		"^\3\2\2\2\32c\3\2\2\2\34h\3\2\2\2\36 \5\4\3\2\37\36\3\2\2\2 !\3\2\2\2"+
+		"!\37\3\2\2\2!\"\3\2\2\2\"\3\3\2\2\2#\60\5\6\4\2$\60\5\b\5\2%\60\5\n\6"+
+		"\2&\60\5\f\7\2\'\60\5\16\b\2(\60\5\20\t\2)\60\5\22\n\2*\60\5\24\13\2+"+
+		"\60\5\26\f\2,\60\5\30\r\2-\60\5\32\16\2.\60\5\34\17\2/#\3\2\2\2/$\3\2"+
+		"\2\2/%\3\2\2\2/&\3\2\2\2/\'\3\2\2\2/(\3\2\2\2/)\3\2\2\2/*\3\2\2\2/+\3"+
+		"\2\2\2/,\3\2\2\2/-\3\2\2\2/.\3\2\2\2\60\5\3\2\2\2\61\62\7\5\2\2\62\63"+
+		"\7\27\2\2\63\64\7\17\2\2\64\65\7\30\2\2\65\7\3\2\2\2\66\67\7\n\2\2\67"+
+		"8\7\27\2\289\7\20\2\29:\7\30\2\2:\t\3\2\2\2;<\7\7\2\2<=\7\27\2\2=>\7\20"+
+		"\2\2>?\7\30\2\2?\13\3\2\2\2@A\7\t\2\2AB\7\27\2\2BC\7\20\2\2CD\7\30\2\2"+
+		"D\r\3\2\2\2EF\7\r\2\2FG\7\27\2\2GH\7\21\2\2HI\7\30\2\2I\17\3\2\2\2JK\7"+
+		"\16\2\2KL\7\27\2\2LM\7\20\2\2MN\7\30\2\2N\21\3\2\2\2OP\7\3\2\2PQ\7\27"+
+		"\2\2QR\7\21\2\2RS\7\30\2\2S\23\3\2\2\2TU\7\b\2\2UV\7\27\2\2VW\7\21\2\2"+
+		"WX\7\30\2\2X\25\3\2\2\2YZ\7\4\2\2Z[\7\27\2\2[\\\7\17\2\2\\]\7\30\2\2]"+
+		"\27\3\2\2\2^_\7\f\2\2_`\7\27\2\2`a\7\21\2\2ab\7\30\2\2b\31\3\2\2\2cd\7"+
+		"\6\2\2de\7\27\2\2ef\7\17\2\2fg\7\30\2\2g\33\3\2\2\2hi\7\13\2\2ij\7\27"+
+		"\2\2jk\7\17\2\2kl\7\30\2\2l\35\3\2\2\2\4!/";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

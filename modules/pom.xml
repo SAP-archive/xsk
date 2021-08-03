@@ -20,13 +20,12 @@
 		<module>api</module>
 		<module>parsers</module>
 		<module>engines</module>
-		<module>basis</module>
 		<module>ide</module>
     	<module>migration</module>
 	</modules>
 
 	<properties>
-		<license.header.location>../license-header.txt</license.header.location>
+		<license.header.location>../licensing-header.txt</license.header.location>
 	</properties>
 
 </project>

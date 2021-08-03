@@ -3,9 +3,9 @@ api = "0.5"
 
 # Buildpack ID and metadata
 [buildpack]
-id = "dirigiblelabs/kneo-xsk-buildpack"
+id = "dirigiblelabs/buildpacks-xsk"
 version = "0.0.1"
-name = "Kneo XSK Buildpack"
+name = "XSK Buildpack"
 
 # Stacks that the buildpack will work with
 [[stacks]]

@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xssecurestore.ds.facade;
@@ -16,13 +16,11 @@ import com.sap.xsk.xssecurestore.ds.api.XSKSecureStoreException;
 import com.sap.xsk.xssecurestore.ds.model.XSKSecureStoreContent;
 import com.sap.xsk.xssecurestore.ds.service.XSKSecureStoreCoreService;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
-import org.eclipse.dirigible.commons.api.module.StaticInjector;
 import org.eclipse.dirigible.commons.api.scripting.IScriptingFacade;
 
 public class XSKSecureStoreFacade implements IScriptingFacade {
 
-  private static final XSKSecureStoreCoreService xskSecureStoreCoreService = StaticInjector.getInjector()
-      .getInstance(XSKSecureStoreCoreService.class);
+  private static final XSKSecureStoreCoreService xskSecureStoreCoreService = new XSKSecureStoreCoreService();
 
   public XSKSecureStoreFacade() {
   }

@@ -1,18 +1,20 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
@@ -22,6 +24,7 @@ import org.junit.Test;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 
 
@@ -44,6 +47,29 @@ public class XSKHDBSequenceParserTest {
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
     }
 
+    @Test
+    public void parseDefaultValues() throws Exception {
+      String content = org.apache.commons.io.IOUtils
+          .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/SchemaOnlySequence.hdbsequence"),
+              StandardCharsets.UTF_8);
+      XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
+          .parse("/test/xsk/com/sap/SchemaOnlySequence.hdbsequence", content);
+      assertFalse(model.isPublic());
+      assertEquals(Integer.valueOf(1), model.getStart_with());
+      assertEquals(Integer.valueOf(1), model.getIncrement_by());
+      assertEquals(Integer.valueOf(1), model.getMinvalue());
+    }
+
+    @Test
+    public void parseDependsOnContent() throws Exception {
+      String content = org.apache.commons.io.IOUtils
+          .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/DependsOnSequence.hdbsequence"),
+              StandardCharsets.UTF_8);
+      XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
+          .parse("/test/xsk/com/sap/DependsOnSequence.hdbsequence", content);
+      assertEquals("sap.ino.db.iam::t_identity", model.getDepends_on_table());
+      assertEquals("sap.ino.db.iam::t_view", model.getDepends_on_view());
+    }
 
     @Test
     public void parseHanaXSAdvancedContent() throws Exception {
@@ -59,11 +85,8 @@ public class XSKHDBSequenceParserTest {
 
     @Test
     public void parseGrammarUnreadableContent() throws Exception {
-        String content = org.apache.commons.io.IOUtils
-                .toString(XSKHDBSequenceParserTest.class.getResourceAsStream("/test/xsk/com/sap/InvalidContent.hdbsequence"),
-                        StandardCharsets.UTF_8);
-
-        assertThrows(XSKDataStructuresException.class, () -> new XSKHDBSequenceParser().parse("/test/xsk/com/sap/InvalidContent.hdbsequence", content));
+        String content = "Some invalid content.";
+        assertThrows(XSKArtifactParserException.class, () -> new XSKHDBSequenceParser().parse("/test/xsk/com/sap/InvalidContent.hdbsequence", content));
     }
 
 
@@ -90,7 +113,7 @@ public class XSKHDBSequenceParserTest {
         assertEquals(false, model.getNomaxvalue());
         assertEquals(true, model.getNominvalue());
         assertEquals(false, model.getCycles());
-        assertEquals(false, model.getPublicc());
+        assertFalse(model.isPublic());
         assertEquals(Integer.valueOf(-2), model.getIncrement_by());
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
     }
@@ -110,6 +133,20 @@ public class XSKHDBSequenceParserTest {
         XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
                 .parse("/test/xsk/com/sap/someFileName.hdbsequence", content);
         assertEquals(XSKDBContentType.OTHERS, model.getDBContentType());
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithLexerErrorFail() throws Exception {
+        String content = "start_with= 10;\n" +
+                "nomaxvalue=dddddfalse;";
+        XSKDataStructureModelFactory.parseView("db/test.hdbsequence", content);
+    }
+
+    @Test(expected = XSKArtifactParserException.class)
+    public void parseHanaXSClassicContentWithSyntaxErrorFail() throws Exception {
+        String content = "start_with= 10;\n" +
+                "nomaxvalue=";
+        XSKDataStructureModelFactory.parseView("db/test.hdbsequence", content);
     }
 
 }

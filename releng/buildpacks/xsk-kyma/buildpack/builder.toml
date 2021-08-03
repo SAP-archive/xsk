@@ -1,0 +1,14 @@
+# Buildpacks to include in builder
+[[buildpacks]]
+uri = "."
+
+[[order]]
+    [[order.group]]
+    id = "dirigiblelabs/buildpacks-xsk-kyma"
+    version = "0.0.1"
+
+[stack]
+id = "com.sap.kneo.xsk"
+#TODO Add tags -> dirigiblelabs/buildpacks-stack-build-xsk-kyma:0.6.2
+build-image = "dirigiblelabs/buildpacks-stack-build-xsk-kyma"
+run-image = "dirigiblelabs/buildpacks-stack-run-xsk-kyma"

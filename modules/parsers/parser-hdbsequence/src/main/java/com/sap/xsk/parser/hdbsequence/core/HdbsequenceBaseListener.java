@@ -69,6 +69,71 @@ public class HdbsequenceBaseListener implements HdbsequenceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCycles(@NotNull HdbsequenceParser.CyclesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCycles(@NotNull HdbsequenceParser.CyclesContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDependsOnTable(@NotNull HdbsequenceParser.DependsOnTableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDependsOnTable(@NotNull HdbsequenceParser.DependsOnTableContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDependsOnView(@NotNull HdbsequenceParser.DependsOnViewContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDependsOnView(@NotNull HdbsequenceParser.DependsOnViewContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterProperty(@NotNull HdbsequenceParser.PropertyContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -108,32 +173,6 @@ public class HdbsequenceBaseListener implements HdbsequenceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNominvalue(@NotNull HdbsequenceParser.NominvalueContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCycles(@NotNull HdbsequenceParser.CyclesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCycles(@NotNull HdbsequenceParser.CyclesContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterHdbsequence(@NotNull HdbsequenceParser.HdbsequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -154,19 +193,6 @@ public class HdbsequenceBaseListener implements HdbsequenceListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStart_with(@NotNull HdbsequenceParser.Start_withContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMinvalue(@NotNull HdbsequenceParser.MinvalueContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

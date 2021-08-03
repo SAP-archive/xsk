@@ -1,24 +1,25 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdbti.transformer;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdbti.api.IXSKHDBTICoreService;
 import com.sap.xsk.hdbti.api.IXSKTableImportArtifactFactory;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
+import com.sap.xsk.hdbti.service.XSKHDBTICoreService;
 import com.sap.xsk.parser.hdbti.custom.IXSKHDBTIParser;
+import com.sap.xsk.parser.hdbti.custom.XSKHDBTIParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
@@ -33,6 +34,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
@@ -42,17 +44,14 @@ public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFac
 
     private static final Logger logger = LoggerFactory.getLogger(XSKTableImportArtifactFactory.class);
 
-    @Inject
-    private IRepository repository;
+    private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
 
-    @Inject @Named("xskHdbtiCoreService")
-    private IXSKHDBTICoreService xskHdbtiCoreService;
+    private IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
 
-    @Inject @Named("xskHdbtiParser")
-    private IXSKHDBTIParser xskHdbtiParser;
+    private IXSKHDBTIParser xskHdbtiParser = new XSKHDBTIParser();
 
     @Override
-    public XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException {
+    public XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
         XSKTableImportArtifact tableImportArtifact = new XSKTableImportArtifact();
         List<XSKTableImportConfigurationDefinition> importConfigurationDefinitions = new ArrayList<>();
         List<XSKTableImportToCsvRelation> tableImportToCsvRelations = new ArrayList<>();
@@ -60,7 +59,7 @@ public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFac
         tableImportArtifact.setImportConfigurationDefinition(importConfigurationDefinitions);
         tableImportArtifact.setTableImportToCsvRelations(tableImportToCsvRelations);
 
-        XSKHDBTIImportModel importObject = xskHdbtiParser.parse(content);
+        XSKHDBTIImportModel importObject = xskHdbtiParser.parse(location, content);
 
         for (XSKHDBTIImportConfigModel configuration : importObject.getConfigModels()) {
             addHdbtiToCsvRelation(tableImportArtifact, configuration, location);

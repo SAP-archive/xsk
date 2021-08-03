@@ -1,42 +1,33 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdbti.service;
 
-import static java.lang.String.format;
-
-import com.google.inject.name.Named;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdbti.api.IXSKCSVRecordDao;
-import com.sap.xsk.hdbti.api.IXSKCsvToHdbtiRelationDao;
-import com.sap.xsk.hdbti.api.IXSKHDBTICoreService;
-import com.sap.xsk.hdbti.api.IXSKImportedCSVRecordDao;
-import com.sap.xsk.hdbti.api.IXSKTableImportArtifactDao;
-import com.sap.xsk.hdbti.api.IXSKTableImportModel;
-import com.sap.xsk.hdbti.api.XSKTableImportException;
+import com.sap.xsk.hdbti.api.*;
+import com.sap.xsk.hdbti.dao.XSKCSVRecordDao;
+import com.sap.xsk.hdbti.dao.XSKCsvToHdbtiRelationDao;
+import com.sap.xsk.hdbti.dao.XSKImportedCSVRecordDao;
+import com.sap.xsk.hdbti.dao.XSKTableImportArtifactDao;
 import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.utils.XSKCsvRecordMetadata;
+import com.sap.xsk.utils.XSKCommonsDBUtils;
 import com.sap.xsk.utils.XSKUtils;
-import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.cxf.common.util.StringUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
@@ -45,37 +36,37 @@ import org.eclipse.dirigible.repository.api.IRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.lang.String.format;
+
 public class XSKHDBTICoreService implements IXSKHDBTICoreService {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBTICoreService.class);
 
-    @com.google.inject.Inject
-    @Named("xskcsvRecordDao")
-    private IXSKCSVRecordDao xskcsvRecordDao;
-    @com.google.inject.Inject
-    @Named("xskImportedCSVRecordDao")
-    private IXSKImportedCSVRecordDao xskImportedCSVRecordDao;
-    @com.google.inject.Inject
-    @Named("xskTableImportArtifactDao")
-    private IXSKTableImportArtifactDao xskTableImportArtifactDao;
-    @com.google.inject.Inject
-    @Named("xskCsvToHdbtiRelationDao")
-    private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao;
-    @Inject
-    private IRepository repository;
-    @Inject
-    private DBMetadataUtil dbMetadataUtil;
+    private IXSKCSVRecordDao xskcsvRecordDao = new XSKCSVRecordDao();
+    private IXSKImportedCSVRecordDao xskImportedCSVRecordDao = new XSKImportedCSVRecordDao();
+    private IXSKTableImportArtifactDao xskTableImportArtifactDao = new XSKTableImportArtifactDao();
+    private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = new XSKCsvToHdbtiRelationDao();
+    private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+    private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
     @Override
     public void insertCsvRecords(List<CSVRecord> recordsToInsert, List<String> headerNames,
-        XSKTableImportConfigurationDefinition tableImportConfigurationDefinition)
-        throws SQLException {
+                                 XSKTableImportConfigurationDefinition tableImportConfigurationDefinition)
+            throws SQLException {
         String tableName = convertToActualTableName(tableImportConfigurationDefinition.getTable());
-        PersistenceTableModel tableModel = dbMetadataUtil.getTableMetadata(tableName);
+        PersistenceTableModel tableModel = dbMetadataUtil.getTableMetadata(tableName, tableImportConfigurationDefinition.getSchema());
         for (CSVRecord csvRecord : recordsToInsert) {
             try {
-              XSKCsvRecordMetadata csvRecordMetadata = new XSKCsvRecordMetadata(csvRecord, tableModel, headerNames,
-                  tableImportConfigurationDefinition.getDistinguishEmptyFromNull());
+                XSKCsvRecordMetadata csvRecordMetadata = new XSKCsvRecordMetadata(csvRecord, tableModel, headerNames,
+                        tableImportConfigurationDefinition.getDistinguishEmptyFromNull());
                 xskcsvRecordDao.save(csvRecordMetadata);
 
                 XSKImportedCSVRecordModel importedCSVRecordModel = new XSKImportedCSVRecordModel();
@@ -113,7 +104,7 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
 
         for (XSKTableImportArtifact tableImportArtifact : tableImportArtifacts) {
             if (tableImportArtifact.getType().equals(IXSKTableImportModel.TYPE_HDBTI)
-                  && !repository.hasResource(XSKUtils.convertToFullPath(tableImportArtifact.getLocation()))) {
+                    && !repository.hasResource(XSKUtils.convertToFullPath(tableImportArtifact.getLocation()))) {
                 xskTableImportArtifactDao.removeTableImportArtifact(tableImportArtifact.getLocation());
                 xskCsvToHdbtiRelationDao.deleteCsvAndHdbtiRelations(tableImportArtifact.getLocation());
                 removeCSVRecordsFromDb(tableImportArtifact.getLocation());
@@ -124,26 +115,26 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
         }
     }
 
-  @Override
-  public void updateCsvRecords(List<CSVRecord> csvRecords, List<String> headerNames,
-      List<XSKImportedCSVRecordModel> importedCsvRecordsToUpdate,
-      XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) throws SQLException {
-    String tableName = convertToActualTableName(tableImportConfigurationDefinition.getTable());
-    PersistenceTableModel tableModel = dbMetadataUtil.getTableMetadata(tableName);
+    @Override
+    public void updateCsvRecords(List<CSVRecord> csvRecords, List<String> headerNames,
+                                 List<XSKImportedCSVRecordModel> importedCsvRecordsToUpdate,
+                                 XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) throws SQLException {
+        String tableName = convertToActualTableName(tableImportConfigurationDefinition.getTable());
+        PersistenceTableModel tableModel = dbMetadataUtil.getTableMetadata(tableName, XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
 
-    for (CSVRecord csvRecord : csvRecords) {
-      try {
-        XSKCsvRecordMetadata csvRecordMetadata = new XSKCsvRecordMetadata(csvRecord, tableModel, headerNames,
-            tableImportConfigurationDefinition.getDistinguishEmptyFromNull());
-        xskcsvRecordDao.update(csvRecordMetadata);
-        for (XSKImportedCSVRecordModel importedCSVRecordModel : importedCsvRecordsToUpdate) {
-          xskImportedCSVRecordDao.update(importedCSVRecordModel);
+        for (CSVRecord csvRecord : csvRecords) {
+            try {
+                XSKCsvRecordMetadata csvRecordMetadata = new XSKCsvRecordMetadata(csvRecord, tableModel, headerNames,
+                        tableImportConfigurationDefinition.getDistinguishEmptyFromNull());
+                xskcsvRecordDao.update(csvRecordMetadata);
+                for (XSKImportedCSVRecordModel importedCSVRecordModel : importedCsvRecordsToUpdate) {
+                    xskImportedCSVRecordDao.update(importedCSVRecordModel);
+                }
+            } catch (SQLException throwable) {
+                throwable.printStackTrace();
+            }
         }
-      } catch (SQLException throwables) {
-        throwables.printStackTrace();
-      }
     }
-  }
 
     @Override
     public void removeCsvRecords(List<XSKImportedCSVRecordModel> importedCSVRecordModels, String tableName) {
@@ -153,7 +144,7 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
             xskcsvRecordDao.deleteAll(idsToRemove, tableName);
             xskImportedCSVRecordDao.deleteAll(importedCSVRecordModels);
         } catch (SQLException sqlException) {
-            logger.error(String.format("An error occurred while trying to delete removed CSVs with ids: %s from table %s", String.join(",", idsToRemove)));
+            logger.error(String.format("An error occurred while trying to delete removed CSVs with ids: %s from table %s", String.join(",", idsToRemove), tableName));
         }
     }
 
@@ -165,12 +156,12 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
 
     @Override
     public String getPkForCSVRecord(CSVRecord csvRecord, String tableName, List<String> headerNames) {
-      List<PersistenceTableColumnModel> columnModels = getTableMetadata(tableName).getColumns();
-      if (headerNames.size() > 0) {
-        String pkColumName = columnModels.stream().filter(c -> c.isPrimaryKey()).findFirst().get().getName();
-        int csvRecordPkValueIndex = headerNames.indexOf(pkColumName);
-        return csvRecord.get(csvRecordPkValueIndex);
-      }
+        List<PersistenceTableColumnModel> columnModels = getTableMetadata(tableName).getColumns();
+        if (headerNames.size() > 0) {
+            String pkColumnName = columnModels.stream().filter(PersistenceTableColumnModel::isPrimaryKey).findFirst().get().getName();
+            int csvRecordPkValueIndex = headerNames.indexOf(pkColumnName);
+            return csvRecord.get(csvRecordPkValueIndex);
+        }
 
         for (int i = 0; i < csvRecord.size(); i++) {
             boolean isColumnPk = columnModels.get(i).isPrimaryKey();
@@ -214,11 +205,10 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
 
     private PersistenceTableModel getTableMetadata(String tableName) {
         try {
-            return dbMetadataUtil.getTableMetadata(tableName);
+            return dbMetadataUtil.getTableMetadata(tableName, XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
         } catch (SQLException sqlException) {
             logger.error(String.format("Error occurred while trying to read table metadata for table with name: %s", tableName), sqlException);
         }
-
         return null;
     }
 

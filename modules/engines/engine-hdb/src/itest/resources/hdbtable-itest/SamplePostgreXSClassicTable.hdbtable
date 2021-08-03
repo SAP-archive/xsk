@@ -1,4 +1,4 @@
-table.schemaName = "SAP_INO";
+table.schemaName = "test";
 table.temporary = true;
 table.tableType = COLUMNSTORE;
 table.loggingType = NOLOGGING;

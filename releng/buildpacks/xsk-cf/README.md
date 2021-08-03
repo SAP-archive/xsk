@@ -1,0 +1,32 @@
+## XSK Cloud Foundry Buildpack
+
+1. Build `XSK Cloud Foundry Stack`:
+
+    ```
+    docker build -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
+    docker push dirigiblelabs/buildpacks-stack-base-xsk-cf
+
+    docker build -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
+    docker push dirigiblelabs/buildpacks-stack-run-xsk-cf
+
+    docker build -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
+    docker push dirigiblelabs/buildpacks-stack-build-xsk-cf
+    ```
+
+1. Build `XSK Cloud Foundry Buildpack`:
+
+    ```
+    cd buildpack/
+
+    pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
+    docker push dirigiblelabs/buildpacks-xsk-cf
+
+    pack builder create dirigiblelabs/buildpacks-builder-xsk-cf --config ./builder.toml
+    docker push dirigiblelabs/buildpacks-builder-xsk-cf
+    ```
+
+1. Usage with `pack`:
+
+    ```
+    pack build --builder dirigiblelabs/buildpacks-builder-xsk-cf <my-org>/<my-repository>
+    ```

@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.engine;
@@ -16,8 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -34,7 +32,6 @@ import org.eclipse.dirigible.commons.api.service.IRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
 @Path("/xsk")
 @Api(value = "JavaScript Engine - HANA XS Classic", authorizations = {@Authorization(value = "basicAuth", scopes = {})})
 @ApiResponses({@ApiResponse(code = 401, message = "Unauthorized"), @ApiResponse(code = 403, message = "Forbidden"),
@@ -43,8 +40,7 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKJavascriptEngineRestService.class);
 
-  @Inject
-  private XSKJavascriptEngineProcessor processor;
+  private XSKJavascriptEngineProcessor processor = new XSKJavascriptEngineProcessor();
 
   @Context
   private HttpServletResponse response;

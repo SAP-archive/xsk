@@ -1,18 +1,17 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.xsodata.ds.service;
 
-import com.ibm.icu.impl.IllegalIcuArgumentException;
-import com.mysql.cj.util.StringUtils;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataLexer;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataParser;
 import com.sap.xsk.parser.xsodata.custom.XSKHDBXSODATACoreListener;
@@ -21,7 +20,7 @@ import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATABindingType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAParameter;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAService;
-import com.sap.xsk.utils.XSKHDBUtils;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsodata.ds.api.IXSKODataParser;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -30,8 +29,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
@@ -46,11 +49,12 @@ import java.util.stream.Collectors;
  */
 public class XSKODataParser implements IXSKODataParser {
 
-    @javax.inject.Inject
-    private DataSource dataSource;
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
     private static final List<String> METADATA_VIEW_TYPES = List.of("CALC VIEW", ISqlKeywords.KEYWORD_VIEW);
     private static final List<String> METADATA_CALC_ANALYTIC_TYPES = List.of("CALC VIEW");
+
+    private static final Logger logger = LoggerFactory.getLogger(XSKODataParser.class);
 
     /**
      * Creates a odata model from the raw content.
@@ -59,8 +63,8 @@ public class XSKODataParser implements IXSKODataParser {
      * @return the odata model instance
      * @throws IOException exception during parsing
      */
-    public XSKODataModel parseXSODataArtifact(String location, String content) throws IOException, SQLException {
-
+    public XSKODataModel parseXSODataArtifact(String location, String content) throws IOException, SQLException, XSKArtifactParserException {
+        logger.debug("Parsing xsodata.");
         XSKODataModel odataModel = new XSKODataModel();
         odataModel.setName(new File(location).getName());
         odataModel.setLocation(location);
@@ -71,22 +75,21 @@ public class XSKODataParser implements IXSKODataParser {
         ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
         HdbxsodataLexer lexer = new HdbxsodataLexer(inputStream);
-        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+        XSKHDBXSODATASyntaxErrorListener lexerErrorListener = new XSKHDBXSODATASyntaxErrorListener();
+        lexer.addErrorListener(lexerErrorListener);
+        lexer.removeErrorListeners();
 
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         HdbxsodataParser parser = new HdbxsodataParser(tokenStream);
         parser.setBuildParseTree(true);
         parser.removeErrorListeners();
+        XSKHDBXSODATASyntaxErrorListener parserErrorListener = new XSKHDBXSODATASyntaxErrorListener();
+        parser.addErrorListener(parserErrorListener);
 
-        XSKHDBXSODATASyntaxErrorListener errorListener = new XSKHDBXSODATASyntaxErrorListener();
-        parser.addErrorListener(errorListener);
         ParseTree parseTree = parser.xsodataDefinition();
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "XSODATA", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "XSODATA", logger);
 
-        if (parser.getNumberOfSyntaxErrors() > 0) {
-            String syntaxError = errorListener.getErrorMessage();
-            throw new IllegalIcuArgumentException(String.format(
-                    "Wrong format of XSODATA: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version. [%s]",
-                    location, syntaxError));
-        }
         XSKHDBXSODATACoreListener coreListener = new XSKHDBXSODATACoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
         parseTreeWalker.walk(coreListener, parseTree);
@@ -101,6 +104,7 @@ public class XSKODataParser implements IXSKODataParser {
 
     private void applyConditions(String location, XSKODataModel odataModel) throws SQLException {
         //the order of invocation matter, so do not change it
+        applyEmptyExistCondition(location, odataModel);
         applyEntitySetCondition(odataModel);
 
         applyEmptyNamespaceCondition(location, odataModel);
@@ -113,6 +117,15 @@ public class XSKODataParser implements IXSKODataParser {
         applyOmittedParamResultCondition(odataModel);
     }
 
+    private void applyEmptyExistCondition(String location, XSKODataModel odataModel) throws SQLException {
+        for (XSKHDBXSODATAEntity entity : odataModel.getService().getEntities()) {
+            if (entity.getKeyList().size() > 0) {
+                if (!checkIfEntityExist(entity.getRepositoryObject().getCatalogObjectName()))
+                    throw new XSKOData2TransformerException(String.format("Entity: %s from %s don't exist. make sure the artifacts exist before processing the xsodata file", entity.getRepositoryObject().getCatalogObjectName(), location));
+            }
+        }
+    }
+
     /**
      * If the namespace is not specified, the schema namespace in the EDMX metadata document will be the repository package of
      * the service definition file concatenated with the repository object name.
@@ -120,7 +133,7 @@ public class XSKODataParser implements IXSKODataParser {
      */
     private void applyEmptyNamespaceCondition(String location, XSKODataModel odataModel) {
         if (odataModel.getService().getNamespace() == null) {
-            String namespace = XSKHDBUtils.getRepositoryNamespace(location) + "." + FilenameUtils.getBaseName(location);
+            String namespace = XSKCommonsUtils.getRepositoryNamespace(location) + "." + FilenameUtils.getBaseName(location);
             odataModel.getService().setNamespace(namespace);
         }
     }
@@ -146,9 +159,9 @@ public class XSKODataParser implements IXSKODataParser {
      */
     private void applyEntitySetCondition(XSKODataModel odataModel) {
         odataModel.getService().getEntities().forEach(entity -> {
-            if (StringUtils.isNullOrEmpty(entity.getAlias())) {
-                String baseObjName = XSKHDBUtils.extractBaseObjectNameFromCatalogName(entity.getRepositoryObject().getCatalogObjectName());
-                if (!StringUtils.isNullOrEmpty(baseObjName)) {
+            if (StringUtils.isEmpty(entity.getAlias()) || entity.getAlias() == null) {
+                String baseObjName = XSKCommonsUtils.extractBaseObjectNameFromCatalogName(entity.getRepositoryObject().getCatalogObjectName());
+                if (!StringUtils.isEmpty(baseObjName) || baseObjName == null) {
                     entity.setAlias(baseObjName);
                 } else {
                     entity.setAlias(entity.getRepositoryObject().getCatalogObjectName());
@@ -298,9 +311,18 @@ public class XSKODataParser implements IXSKODataParser {
     }
 
     private boolean checkIfEntityIsFromAGivenDBType(String artifactName, List<String> dbTypes) throws SQLException {
-        Connection connection = dataSource.getConnection();
-        DatabaseMetaData databaseMetaData = connection.getMetaData();
-        ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, artifactName, dbTypes.toArray(String[]::new));
-        return rs.next();
+        try (Connection connection = dataSource.getConnection()) {
+            DatabaseMetaData databaseMetaData = connection.getMetaData();
+            ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, artifactName, dbTypes.toArray(String[]::new));
+            return rs.next();
+        }
+    }
+
+    private boolean checkIfEntityExist(String artifactName) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            DatabaseMetaData databaseMetaData = connection.getMetaData();
+            ResultSet rs = databaseMetaData.getTables(null, null, artifactName, null);
+            return rs.next();
+        }
     }
 }

@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 /*
@@ -33,39 +33,25 @@
  */
 package com.sap.xsk.parser.hdbsequence.custom;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceBaseVisitor;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser;
+import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser.DependsOnTableContext;
+import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser.DependsOnViewContext;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
 import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
-import java.util.HashSet;
-import java.util.List;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import java.util.HashSet;
+import java.util.List;
 
 
 public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
 
   private HashSet<String> visitedProperties = new HashSet<>();
-
-  private JsonObject getDefaultParsedObj() {
-    JsonObject parsedObj = new JsonObject();
-    parsedObj.add(HDBSequenceConstants.SCHEMA_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.INCREMENT_BY_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.START_WITH_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.MAXVALUE_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.NOMAXVALUE_PROPERTY, null); //boolean
-    parsedObj.add(HDBSequenceConstants.MINVALUE_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.NOMINVALUE_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.CYCLES_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.RESET_BY_PROPERTY, null);
-    parsedObj.add(HDBSequenceConstants.PUBLIC_PROPERTY, null);
-
-    return parsedObj;
-  }
 
   private void checkForPropertyRepetition(String property) throws XSKHDBSequenceDuplicatePropertyException {
     if (!visitedProperties.contains(property)) {
@@ -78,7 +64,7 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
 
   @Override
   public JsonElement visitHdbsequence(@NotNull HdbsequenceParser.HdbsequenceContext ctx) {
-    JsonObject parsedObj = this.getDefaultParsedObj();
+    JsonObject parsedObj = new JsonObject();
     List<ParseTree> ctxList = ctx.children;
     for (ParseTree tree : ctxList) {
       if (tree.getChild(0) instanceof HdbsequenceParser.SchemaContext) {
@@ -102,6 +88,10 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
             .add(HDBSequenceConstants.INCREMENT_BY_PROPERTY, visitIncrement_by((HdbsequenceParser.Increment_byContext) tree.getChild(0)));
       } else if (tree.getChild(0) instanceof HdbsequenceParser.Start_withContext) {
         parsedObj.add(HDBSequenceConstants.START_WITH_PROPERTY, visitStart_with((HdbsequenceParser.Start_withContext) tree.getChild(0)));
+     } else if (tree.getChild(0) instanceof HdbsequenceParser.DependsOnTableContext) {
+        parsedObj.add(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY, visitDependsOnTable((HdbsequenceParser.DependsOnTableContext) tree.getChild(0)));
+      } else if (tree.getChild(0) instanceof HdbsequenceParser.DependsOnViewContext) {
+        parsedObj.add(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY, visitDependsOnView((HdbsequenceParser.DependsOnViewContext) tree.getChild(0)));
       }
     }
     return parsedObj;
@@ -188,4 +178,19 @@ public class HdbsequenceVisitor extends HdbsequenceBaseVisitor<JsonElement> {
         : new JsonPrimitive(HDBSequenceConstants.START_WITH_DEFAULT_VALUE);
   }
 
+  @Override
+  public JsonElement visitDependsOnTable(DependsOnTableContext ctx) {
+    checkForPropertyRepetition(HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY);
+    return (ctx != null && ctx.STRING() != null)
+            ? new JsonPrimitive(ctx.STRING().getText())
+            : null;
+  }
+
+  @Override
+  public JsonElement visitDependsOnView(DependsOnViewContext ctx) {
+    checkForPropertyRepetition(HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY);
+    return (ctx != null && ctx.STRING() != null)
+            ? new JsonPrimitive(ctx.STRING().getText())
+            : null;
+  }
 }

@@ -1,28 +1,28 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.model;
 
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
+import java.util.HashMap;
+import java.util.Map;
+
+//import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
-import java.util.HashMap;
-import java.util.Map;
 
 //import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
 
@@ -99,33 +99,31 @@ public class XSKDataStructureModelFactory {
   }
 
   private void setupParser() {
-//    Injector injector = new HdbDDStandaloneSetup().createInjectorAndDoEMFRegistration();
-//    injector.injectMembers(this);
   }
 
-  /**
-   * Creates a entities model from the raw content.
-   *
-   * @param content the entities definition
-   * @return the entities model instance
-   * @throws Exception
-   */
-  public XSKDataStructureEntitiesModel parseEntities(String location, String content) throws Exception {
-    XSKEntitiesParser parser = new XSKEntitiesParser();
-    XSKDataStructureEntitiesModel result = parser.parse(location, content);
-    return result;
-  }
+//  /**
+//   * Creates a entities model from the raw content.
+//   *
+//   * @param content the entities definition
+//   * @return the entities model instance
+//   * @throws Exception
+//   */
+//  public XSKDataStructureEntitiesModel parseEntities(String location, String content) throws Exception {
+//    XSKEntitiesParser parser = new XSKEntitiesParser();
+//    XSKDataStructureEntitiesModel result = parser.parse(location, content);
+//    return result;
+//  }
 
-  /**
-   * Creates a entities model from the raw content.
-   *
-   * @param bytes the entities definition
-   * @return the entities model instance
-   * @throws Exception
-   */
-  public XSKDataStructureEntitiesModel parseEntities(String location, byte[] bytes) throws Exception {
-    return parseEntities(location, new String(bytes));
-  }
+//  /**
+//   * Creates a entities model from the raw content.
+//   *
+//   * @param bytes the entities definition
+//   * @return the entities model instance
+//   * @throws Exception
+//   */
+//  public XSKDataStructureEntitiesModel parseEntities(String location, byte[] bytes) throws Exception {
+//    return parseEntities(location, new String(bytes));
+//  }
 
   /**
    * Creates a schema model from the raw content.

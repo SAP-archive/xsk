@@ -17,12 +17,12 @@
     <packaging>jar</packaging>
 
     <dependencies>
-    	<dependency>
+        <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-engines-core</artifactId>
             <version>0.7.0-SNAPSHOT</version>
         </dependency>
-    	<dependency>
+        <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-engines-hdb</artifactId>
             <version>0.7.0-SNAPSHOT</version>
@@ -58,33 +58,6 @@
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
             <version>67.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.xtext</groupId>
-            <artifactId>org.eclipse.xtext.testing</artifactId>
-            <version>${xtextVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.xtext</groupId>
-            <artifactId>org.eclipse.xtext.xbase.testing</artifactId>
-            <version>${xtextVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.xtext</groupId>
-            <artifactId>org.eclipse.xtext</artifactId>
-            <version>${xtextVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.xtext</groupId>
-            <artifactId>org.eclipse.xtext.xbase</artifactId>
-            <version>${xtextVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.xtext</groupId>
-            <artifactId>org.eclipse.xtext.xtext.generator</artifactId>
-            <version>${xtextVersion}</version>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -192,40 +165,46 @@
             <version>0.7.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-dbcp2</artifactId>
-        <version>2.2.0</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <version>1.4.193</version>
-        <scope>test</scope>
-      </dependency>
-		<dependency>
-			<groupId>com.sap.xsk</groupId>
-			<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-			<version>0.7.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
         <dependency>
-			<groupId>com.sap.xsk</groupId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.193</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sap.xsk</groupId>
+            <artifactId>xsk-modules-parsers-hdbsequence</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-			<version>0.7.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-dbcp2</artifactId>
-        <version>2.2.0</version>
-        <scope>test</scope>
-      </dependency>
+            <version>0.7.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${org.projectlombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <properties>
-		<license.header.location>../../../license-header.txt</license.header.location>
-	</properties>
+        <license.header.location>../../../licensing-header.txt</license.header.location>
+    </properties>
 
 </project>

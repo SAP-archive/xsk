@@ -1,18 +1,30 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.parser.hdbschema;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbschema.core.HdbschemaLexer;
@@ -20,70 +32,53 @@ import com.sap.xsk.parser.hdbschema.core.HdbschemaParser;
 import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMACoreListener;
 import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMASyntaxErrorListener;
 import com.sap.xsk.parser.hdbschema.models.XSKHDBSCHEMADefinitionModel;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.sql.Timestamp;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
 
 public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureHDBSchemaModel> {
 
-  @Override
-  public String getType() {
-    return IXSKDataStructureModel.TYPE_HDB_SCHEMA;
-  }
+    private static final Logger logger = LoggerFactory.getLogger(XSKSchemaParser.class);
 
-  @Override
-  public Class<XSKDataStructureHDBSchemaModel> getDataStructureClass() {
-    return XSKDataStructureHDBSchemaModel.class;
-  }
-
-  @Override
-  public XSKDataStructureHDBSchemaModel parse(String location, String content) throws XSKDataStructuresException, IOException {
-    XSKDataStructureHDBSchemaModel hdbSchemaModel = new XSKDataStructureHDBSchemaModel();
-    populateXSKDataStructureHDBSchemaModel(location, content, hdbSchemaModel);
-
-    ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
-    ANTLRInputStream inputStream = new ANTLRInputStream(is);
-    HdbschemaLexer hdbschemaLexer = new HdbschemaLexer(inputStream);
-    CommonTokenStream tokenStream = new CommonTokenStream(hdbschemaLexer);
-
-    HdbschemaParser hdbschemaParser = new HdbschemaParser(tokenStream);
-    hdbschemaParser.setBuildParseTree(true);
-    hdbschemaParser.removeErrorListeners();
-
-    XSKHDBSCHEMASyntaxErrorListener xskhdbschemaSyntaxErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
-    hdbschemaParser.addErrorListener(xskhdbschemaSyntaxErrorListener);
-    ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
-
-    if (hdbschemaParser.getNumberOfSyntaxErrors() > 0) {
-      String syntaxError = xskhdbschemaSyntaxErrorListener.getErrorMessage();
-      throw new XSKDataStructuresException(String.format(
-          "Wrong format of HDB Schema: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version. [%s]",
-          location, syntaxError));
+    @Override
+    public String getType() {
+        return IXSKDataStructureModel.TYPE_HDB_SCHEMA;
     }
 
-    XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
-    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-    parseTreeWalker.walk(XSKHDBSCHEMACoreListener, parseTree);
+    @Override
+    public Class<XSKDataStructureHDBSchemaModel> getDataStructureClass() {
+        return XSKDataStructureHDBSchemaModel.class;
+    }
 
-    XSKHDBSCHEMADefinitionModel antlr4Model = XSKHDBSCHEMACoreListener.getModel();
-    hdbSchemaModel.setSchema(antlr4Model.getSchemaName());
+    @Override
+    public XSKDataStructureHDBSchemaModel parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+        XSKDataStructureHDBSchemaModel hdbSchemaModel = new XSKDataStructureHDBSchemaModel();
+        XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSchemaModel, IXSKDataStructureModel.TYPE_HDB_SCHEMA, XSKDBContentType.XS_CLASSIC);
 
-    return hdbSchemaModel;
-  }
+        ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
+        ANTLRInputStream inputStream = new ANTLRInputStream(is);
+        HdbschemaLexer lexer = new HdbschemaLexer(inputStream);
+        XSKHDBSCHEMASyntaxErrorListener lexerErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(lexerErrorListener);
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
-  private void populateXSKDataStructureHDBSchemaModel(String location, String content, XSKDataStructureHDBSchemaModel hdbSchemaModel) {
-    hdbSchemaModel.setName(XSKHDBUtils.getRepositoryBaseObjectName(location));
-    hdbSchemaModel.setLocation(location);
-    hdbSchemaModel.setType(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
-    hdbSchemaModel.setHash(DigestUtils.md5Hex(content));
-    hdbSchemaModel.setCreatedBy(UserFacade.getName());
-    hdbSchemaModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-  }
+        HdbschemaParser hdbschemaParser = new HdbschemaParser(tokenStream);
+        hdbschemaParser.setBuildParseTree(true);
+        XSKHDBSCHEMASyntaxErrorListener parserErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
+        hdbschemaParser.removeErrorListeners();
+        hdbschemaParser.addErrorListener(parserErrorListener);
+
+        ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB Schema", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB Schema", logger);
+
+        XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
+        ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+        parseTreeWalker.walk(XSKHDBSCHEMACoreListener, parseTree);
+
+        XSKHDBSCHEMADefinitionModel antlr4Model = XSKHDBSCHEMACoreListener.getModel();
+        hdbSchemaModel.setSchema(antlr4Model.getSchemaName());
+
+        return hdbSchemaModel;
+    }
 }

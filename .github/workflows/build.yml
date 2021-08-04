@@ -79,7 +79,7 @@ jobs:
         pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
         docker push dirigiblelabs/buildpacks-builder-xsk-kyma
         cd ../../../../
-    - name: XSK Buildpack
+    - name: XSK Cloud Foundry Buildpack
       run: |
         cd releng/buildpacks/xsk-cf/
         docker build -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base

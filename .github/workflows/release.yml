@@ -64,6 +64,7 @@ jobs:
         docker tag dirigiblelabs/buildpacks-stack-build-xsk dirigiblelabs/buildpacks-stack-build-xsk:$XSK_VERSION
         docker push dirigiblelabs/buildpacks-stack-build-xsk:$XSK_VERSION
         cd buildpack/
+        find builder.toml -type f -exec sed -i ''s/latest/${{ env.XSK_VERSION }}/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk --config ./package.toml
         docker tag dirigiblelabs/buildpacks-xsk dirigiblelabs/buildpacks-xsk:$XSK_VERSION
         docker push dirigiblelabs/buildpacks-xsk:$XSK_VERSION
@@ -84,6 +85,7 @@ jobs:
         docker tag dirigiblelabs/buildpacks-stack-build-xsk-kyma dirigiblelabs/buildpacks-stack-build-xsk-kyma:$XSK_VERSION
         docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma:$XSK_VERSION
         cd buildpack/
+        find builder.toml -type f -exec sed -i ''s/latest/${{ env.XSK_VERSION }}/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
         docker tag dirigiblelabs/buildpacks-xsk-kyma dirigiblelabs/buildpacks-xsk-kyma:$XSK_VERSION
         docker push dirigiblelabs/buildpacks-xsk-kyma:$XSK_VERSION
@@ -104,6 +106,7 @@ jobs:
         docker tag dirigiblelabs/buildpacks-stack-build-xsk-cf dirigiblelabs/buildpacks-stack-build-xsk-cf:$XSK_VERSION
         docker push dirigiblelabs/buildpacks-stack-build-xsk-cf:$XSK_VERSION
         cd buildpack/
+        find builder.toml -type f -exec sed -i ''s/latest/${{ env.XSK_VERSION }}/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
         docker tag dirigiblelabs/buildpacks-xsk-cf dirigiblelabs/buildpacks-xsk-cf:$XSK_VERSION
         docker push dirigiblelabs/buildpacks-xsk-cf:$XSK_VERSION

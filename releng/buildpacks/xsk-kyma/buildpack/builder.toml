@@ -9,6 +9,5 @@ uri = "."
 
 [stack]
 id = "com.sap.kneo.xsk"
-#TODO Add tags -> dirigiblelabs/buildpacks-stack-build-xsk-kyma:0.6.2
-build-image = "dirigiblelabs/buildpacks-stack-build-xsk-kyma"
-run-image = "dirigiblelabs/buildpacks-stack-run-xsk-kyma"
+build-image = "dirigiblelabs/buildpacks-stack-build-xsk-kyma:latest"
+run-image = "dirigiblelabs/buildpacks-stack-run-xsk-kyma:latest"

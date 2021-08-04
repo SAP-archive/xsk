@@ -49,6 +49,7 @@ jobs:
         docker build -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
         docker build -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
         cd buildpack/
+        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk --config ./package.toml
         pack builder create dirigiblelabs/buildpacks-builder-xsk --config ./builder.toml
         cd ../../../../
@@ -59,6 +60,7 @@ jobs:
         docker build -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
         docker build -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
         cd buildpack/
+        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
         pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
         cd ../../../../
@@ -69,6 +71,7 @@ jobs:
         docker build -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
         docker build -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
         cd buildpack/
+        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
         pack builder create dirigiblelabs/buildpacks-builder-xsk-cf --config ./builder.toml
         cd ../../../../

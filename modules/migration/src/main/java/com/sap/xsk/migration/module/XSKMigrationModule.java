@@ -1,16 +1,17 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.migration.module;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.sap.xsk.migration.neo.db.hana.ConnectionProvider;
 import com.sap.xsk.migration.neo.db.hana.DeliveryUnitsExporter;
@@ -29,11 +30,12 @@ import com.sap.xsk.migration.neo.sdk.command.tunnel.OpenDatabaseTunnelSdkCommand
 import com.sap.xsk.migration.tooling.MigrationToolExecutor;
 import com.sap.xsk.migration.tooling.SystemProcessBuilder;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+import org.eclipse.dirigible.commons.api.module.DirigibleModule;
 
-public class XSKMigrationModule extends AbstractDirigibleModule {
+public class XSKMigrationModule extends AbstractModule implements DirigibleModule {
 
   @Override
-  protected void configure() {
+  public void configure() {
     // Neo SDK commands
     bind(new TypeLiteral<SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes>>() {
     }).to(ListDatabasesSdkCommand.class);
@@ -56,5 +58,10 @@ public class XSKMigrationModule extends AbstractDirigibleModule {
   @Override
   public String getName() {
     return "XSK Migration Module";
+  }
+
+  @Override
+  public int getPriority() {
+    return 50;
   }
 }

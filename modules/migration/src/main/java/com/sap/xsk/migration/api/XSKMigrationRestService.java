@@ -1,18 +1,16 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.migration.api;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,6 +24,7 @@ import com.sap.xsk.migration.api.dto.DeliveryUnitData;
 import com.sap.xsk.migration.api.dto.ExecuteMigrationRequestBody;
 import com.sap.xsk.migration.api.dto.MigrationRequestBody;
 import com.sap.xsk.migration.api.dto.MigrationResponseBody;
+import com.sap.xsk.migration.module.XSKMigrationModuleServiceProvider;
 import com.sap.xsk.migration.neo.db.hana.DeliveryUnitsExportConfig;
 import com.sap.xsk.migration.neo.db.hana.DeliveryUnitsExporter;
 import com.sap.xsk.migration.neo.db.hana.DeliveryUnitsProvider;
@@ -48,7 +47,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Singleton
 @Path("/migration-operations")
 @Api(value = "XSK Migration Service", authorizations = {@Authorization(value = "basicAuth", scopes = {})})
 @ApiResponses({@ApiResponse(code = 401, message = "Unauthorized"), @ApiResponse(code = 403, message = "Forbidden"),
@@ -60,23 +58,23 @@ public class XSKMigrationRestService extends AbstractRestService {
   @Context
   private HttpServletResponse response;
 
-  @Inject
-  private HanaConnector hanaConnector;
+  private final HanaConnector hanaConnector;
 
-  @Inject
-  private DeliveryUnitsProvider deliveryUnitsProvider;
+  private final DeliveryUnitsProvider deliveryUnitsProvider;
 
-  @Inject
-  private SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> listDatabasesSdkCommand;
+  private final SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> listDatabasesSdkCommand;
 
-  @Inject
-  private DeliveryUnitsExporter deliveryUnitsExporter;
+  private final DeliveryUnitsExporter deliveryUnitsExporter;
 
-  @Inject
-  private WorkspacesCoreService workspacesCoreService;
+  private final WorkspacesCoreService workspacesCoreService;
 
   public XSKMigrationRestService() {
-    // for Guice
+    hanaConnector = XSKMigrationModuleServiceProvider.INSTANCE.getHanaConnector();
+    listDatabasesSdkCommand = XSKMigrationModuleServiceProvider.INSTANCE
+        .getListDatabasesSdkCommand();
+    deliveryUnitsProvider = XSKMigrationModuleServiceProvider.INSTANCE.getDeliveryUnitsProvider();
+    deliveryUnitsExporter = XSKMigrationModuleServiceProvider.INSTANCE.getDeliveryUnitsExporter();
+    workspacesCoreService = XSKMigrationModuleServiceProvider.INSTANCE.getWorkspacesCoreService();
   }
 
   public XSKMigrationRestService(HanaConnector hanaConnector, DeliveryUnitsProvider deliveryUnitsProvider,

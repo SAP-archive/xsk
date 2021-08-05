@@ -1,19 +1,18 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.migration.neo.db.hana;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.dirigible.runtime.transport.processor.TransportProcessor;
-import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -26,7 +25,6 @@ public class DeliveryUnitsExporter {
 
   private final TransportProcessor transportProcessor;
 
-  @Inject
   public DeliveryUnitsExporter(TransportProcessor transportProcessor){
     this.transportProcessor = transportProcessor;
   }

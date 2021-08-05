@@ -69,12 +69,11 @@ public class XSKMigrationRestService extends AbstractRestService {
   private final WorkspacesCoreService workspacesCoreService;
 
   public XSKMigrationRestService() {
-    hanaConnector = XSKMigrationModuleServiceProvider.INSTANCE.getHanaConnector();
-    listDatabasesSdkCommand = XSKMigrationModuleServiceProvider.INSTANCE
-        .getListDatabasesSdkCommand();
-    deliveryUnitsProvider = XSKMigrationModuleServiceProvider.INSTANCE.getDeliveryUnitsProvider();
-    deliveryUnitsExporter = XSKMigrationModuleServiceProvider.INSTANCE.getDeliveryUnitsExporter();
-    workspacesCoreService = XSKMigrationModuleServiceProvider.INSTANCE.getWorkspacesCoreService();
+    hanaConnector = XSKMigrationModuleServiceProvider.createHanaConnector();
+    listDatabasesSdkCommand = XSKMigrationModuleServiceProvider.createListDatabasesSdkCommand();
+    deliveryUnitsProvider = XSKMigrationModuleServiceProvider.createDeliveryUnitsProvider();
+    deliveryUnitsExporter = XSKMigrationModuleServiceProvider.createDeliveryUnitsExporter();
+    workspacesCoreService = XSKMigrationModuleServiceProvider.createWorkspacesCoreService();
   }
 
   public XSKMigrationRestService(HanaConnector hanaConnector, DeliveryUnitsProvider deliveryUnitsProvider,

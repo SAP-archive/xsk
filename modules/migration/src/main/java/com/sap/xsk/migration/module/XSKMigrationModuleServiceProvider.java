@@ -32,15 +32,13 @@ public class XSKMigrationModuleServiceProvider {
   private XSKMigrationModuleServiceProvider() {
   }
 
-  public static final XSKMigrationModuleServiceProvider INSTANCE = new XSKMigrationModuleServiceProvider();
-
-  public SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> getListDatabasesSdkCommand() {
+  public static SdkCommand<SdkCommandGenericArgs, ListDatabasesSdkCommandRes> createListDatabasesSdkCommand() {
     var systemProcessBuilder = new SystemProcessBuilder();
     var migrationToolsExecutor = new MigrationToolExecutor(systemProcessBuilder);
     return new ListDatabasesSdkCommand(migrationToolsExecutor);
   }
 
-  public HanaConnector getHanaConnector() {
+  public static HanaConnector createHanaConnector() {
     var systemProcessBuilder = new SystemProcessBuilder();
     var migrationToolsExecutor = new MigrationToolExecutor(systemProcessBuilder);
     var openDatabaseTunnelCommand = new OpenDatabaseTunnelSdkCommand(migrationToolsExecutor);
@@ -48,17 +46,17 @@ public class XSKMigrationModuleServiceProvider {
     return new TunneledHanaConnector(openDatabaseTunnelCommand, closeDatabaseTunnelCommand);
   }
 
-  public DeliveryUnitsProvider getDeliveryUnitsProvider() {
+  public static DeliveryUnitsProvider createDeliveryUnitsProvider() {
     var connectionProvider = new ConnectionProvider();
     return new DeliveryUnitsProvider(connectionProvider);
   }
 
-  public DeliveryUnitsExporter getDeliveryUnitsExporter() {
+  public static DeliveryUnitsExporter createDeliveryUnitsExporter() {
     var transportProcessor = new TransportProcessor();
     return new DeliveryUnitsExporter(transportProcessor);
   }
 
-  public WorkspacesCoreService getWorkspacesCoreService() {
+  public static WorkspacesCoreService createWorkspacesCoreService() {
     return new WorkspacesCoreService();
   }
 }

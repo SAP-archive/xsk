@@ -23,8 +23,7 @@
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-commons-api</artifactId>
-      <version>5.11.2</version>
-      <scope>compile</scope>
+      <version>${dirigible.version}</version>
     </dependency>
   </dependencies>
 

@@ -11,9 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.itest.module;
 
-import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
@@ -21,7 +22,7 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-public class XSKHDBTestModule {
+public class XSKHDBTestModule extends AbstractDirigibleModule {
 
   private JDBCModel model;
 
@@ -38,7 +39,6 @@ public class XSKHDBTestModule {
     basicDataSource.setDefaultAutoCommit(true);
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
     return basicDataSource;
-
   }
 
   public static LocalResource getResources(String rootFolder, String repoPath, String relativeResourcePath) throws IOException {
@@ -50,5 +50,15 @@ public class XSKHDBTestModule {
     LocalResource resource = new LocalResource(fileRepo, path);
     resource.setContent(content);
     return resource;
+  }
+
+  @Override
+  public String getName() {
+    return "XSKHDBTestModule";
+  }
+
+  @Override
+  public void configure() {
+    StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
   }
 }

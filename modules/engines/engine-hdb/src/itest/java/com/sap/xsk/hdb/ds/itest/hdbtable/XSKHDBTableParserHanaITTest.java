@@ -11,6 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbtable;
 
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
 import static org.junit.Assert.assertTrue;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
@@ -18,7 +22,6 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.itest.utils.TestConstants;
 import com.sap.xsk.utils.XSKConstants;
 import java.io.IOException;
 import java.sql.Connection;
@@ -28,6 +31,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -42,12 +46,11 @@ public class XSKHDBTableParserHanaITTest {
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException {
-    JDBCModel model = new JDBCModel(TestConstants.HANA_DRIVER,
-        TestConstants.HANA_URL,
-        TestConstants.HANA_USERNAME,
-        TestConstants.HANA_PASSWORD);
+    JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
+        HANA_PASSWORD);
     XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
-    datasource = xskhdbTestModule.getDataSource();
+    xskhdbTestModule.configure();
+    datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
     facade = new XSKHDBCoreFacade();
   }
 
@@ -81,13 +84,16 @@ public class XSKHDBTableParserHanaITTest {
       facade.updateEntities();
 
       DatabaseMetaData metaData = connection.getMetaData();
-      ResultSet table = metaData.getTables(null, schemaName, "hdbtable-itest::SamplePostgreXSClassicTable", new String[]{ISqlKeywords.KEYWORD_TABLE});
+      ResultSet table = metaData
+          .getTables(null, schemaName, "hdbtable-itest::SamplePostgreXSClassicTable", new String[]{ISqlKeywords.KEYWORD_TABLE});
       assertTrue(table.next());
 
-      ResultSet synonym = metaData.getTables(null, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "hdbtable-itest::SamplePostgreXSClassicTable", new String[]{ISqlKeywords.KEYWORD_SYNONYM});
+      ResultSet synonym = metaData.getTables(null, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "hdbtable-itest::SamplePostgreXSClassicTable",
+          new String[]{ISqlKeywords.KEYWORD_SYNONYM});
       assertTrue(synonym.next());
 
-      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
+      stmt.executeUpdate(
+          String.format("drop SYNONYM \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
       stmt.executeUpdate(String.format("drop table \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", schemaName));
       stmt.executeUpdate(String.format("DROP SCHEMA \"%s\"", schemaName));
     }

@@ -16,6 +16,7 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.BeforeClass;
@@ -42,7 +43,8 @@ public class XSKHDBTableParserMySQLITTest {
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
     XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
-    datasource = xskhdbTestModule.getDataSource();
+    xskhdbTestModule.configure();
+    datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
     facade = new XSKHDBCoreFacade();
   }
 

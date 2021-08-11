@@ -9,5 +9,16 @@ import = [
      delimField = ";";
      keys = [ "GROUP_TYPE" : "BW_CUBE", "GROUP_TYPE" : "BW_DSO", "GROUP_TYPE" : "BW_PSA"];
      file = "sap.ti2.demo:myData.csv";
+   },
+    {
+     delimEnclosing="\"";
+     schema = "mySchema";
+     distinguishEmptyFromNull = true;
+     header = false;
+     table = "myTable";
+     useHeaderNames = false;
+     delimField = ";";
+     keys = [ "GROUP_TYPE" : "BW_CUBE", "GROUP_TYPE" : "BW_DSO", "GROUP_TYPE" : "BW_PSA"];
+     file = "sap.ti2.demo:myData1111.csv";
    }
  ];

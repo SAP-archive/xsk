@@ -152,6 +152,57 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.testcontainers</groupId>-->
+<!--            <artifactId>testcontainers</artifactId>-->
+<!--            <version>${org.testcontainers.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey.media</groupId>-->
+<!--            <artifactId>jersey-media-json-binding</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey.test-framework.providers</groupId>-->
+<!--            <artifactId>jersey-test-framework-provider-grizzly2</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey.core</groupId>-->
+<!--            <artifactId>jersey-client</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey.containers</groupId>-->
+<!--            <artifactId>jersey-container-servlet</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey.test-framework</groupId>-->
+<!--            <artifactId>jersey-test-framework-core</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey.test-framework.providers</groupId>-->
+<!--            <artifactId>jersey-test-framework-provider-grizzly2</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+
+
+
+
 
         <dependency>
             <groupId>org.hamcrest</groupId>

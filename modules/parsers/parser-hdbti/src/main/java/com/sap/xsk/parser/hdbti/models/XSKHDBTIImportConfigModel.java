@@ -11,11 +11,21 @@
  */
 package com.sap.xsk.parser.hdbti.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class XSKHDBTIImportConfigModel {
 
+  @JsonProperty("table")
   private String tableName;
+
   private String schemaName;
   private String fileName;
   private Boolean header;
@@ -24,78 +34,6 @@ public class XSKHDBTIImportConfigModel {
   private String delimEnclosing;
   private Boolean distinguishEmptyFromNull;
   private List<Pair> keys;
-
-  public String getTableName() {
-    return tableName;
-  }
-
-  public void setTableName(String tableName) {
-    this.tableName = tableName;
-  }
-
-  public String getSchemaName() {
-    return schemaName;
-  }
-
-  public void setSchemaName(String schemaName) {
-    this.schemaName = schemaName;
-  }
-
-  public String getFileName() {
-    return fileName;
-  }
-
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
-
-  public Boolean getHeader() {
-    return header;
-  }
-
-  public void setHeader(Boolean header) {
-    this.header = header;
-  }
-
-  public Boolean getUseHeaderNames() {
-    return useHeaderNames;
-  }
-
-  public void setUseHeaderNames(Boolean useHeaderNames) {
-    this.useHeaderNames = useHeaderNames;
-  }
-
-  public String getDelimField() {
-    return delimField;
-  }
-
-  public void setDelimField(String delimField) {
-    this.delimField = delimField;
-  }
-
-  public String getDelimEnclosing() {
-    return delimEnclosing;
-  }
-
-  public void setDelimEnclosing(String delimEnclosing) {
-    this.delimEnclosing = delimEnclosing;
-  }
-
-  public Boolean getDistinguishEmptyFromNull() {
-    return distinguishEmptyFromNull;
-  }
-
-  public void setDistinguishEmptyFromNull(Boolean distinguishEmptyFromNull) {
-    this.distinguishEmptyFromNull = distinguishEmptyFromNull;
-  }
-
-  public List<Pair> getKeys() {
-    return keys;
-  }
-
-  public void setKeys(List<Pair> keys) {
-    this.keys = keys;
-  }
 
   public static class Pair {
 
@@ -114,5 +52,8 @@ public class XSKHDBTIImportConfigModel {
     public String getValue() {
       return value;
     }
+
+    @JsonProperty("key")
+    public String getJsonkeys(){return "sss";}
   }
 }

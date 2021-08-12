@@ -86,7 +86,7 @@ public class XSKHDBSchemaParserHanaITTest {
 
       ResultSet rs = metaData.getSchemas(null, schemaName);
       assertTrue(rs.next());
-      stmt.executeUpdate(String.format("DROP SCHEMA \"%s\"", schemaName));
+      stmt.executeUpdate(String.format("DROP SCHEMA \"%s\" CASCADE", schemaName));
     }
   }
 
@@ -107,7 +107,7 @@ public class XSKHDBSchemaParserHanaITTest {
 
       ResultSet rs = metaData.getSchemas(null, schemaName);
       assertTrue(rs.next());
-      stmt.executeUpdate(String.format("DROP SCHEMA \"%s\"", schemaName));
+      stmt.executeUpdate(String.format("DROP SCHEMA \"%s\" CASCADE", schemaName));
     }
   }
 
@@ -132,7 +132,7 @@ public class XSKHDBSchemaParserHanaITTest {
 
       ResultSet rs = metaData.getSchemas(null, schemaName);
       assertTrue(rs.next());
-      stmt.executeUpdate(String.format("DROP SCHEMA \"%s\"", schemaName));
+      stmt.executeUpdate(String.format("DROP SCHEMA \"%s\" CASCADE", schemaName));
     }
   }
 }

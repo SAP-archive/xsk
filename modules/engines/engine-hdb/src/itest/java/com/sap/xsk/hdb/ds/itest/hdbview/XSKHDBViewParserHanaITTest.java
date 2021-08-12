@@ -184,7 +184,7 @@ public class XSKHDBViewParserHanaITTest {
       stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE2\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
       stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE1\"", schemaName));
       stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE2\"", schemaName));
-      stmt.executeUpdate("DROP SCHEMA TEST_SCHEMA");
+      stmt.executeUpdate("DROP SCHEMA TEST_SCHEMA CASCADE ");
     }
   }
 
@@ -239,7 +239,7 @@ public class XSKHDBViewParserHanaITTest {
       stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE2\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
       stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE1\"", schemaName));
       stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE2\"", schemaName));
-      stmt.executeUpdate("DROP SCHEMA TEST_SCHEMA");
+      stmt.executeUpdate("DROP SCHEMA TEST_SCHEMA CASCADE");
     }
   }
 }

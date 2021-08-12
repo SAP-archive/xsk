@@ -23,6 +23,14 @@ import com.sap.xsk.parser.hdbti.custom.XSKHDBTIParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.repository.api.IRepository;
+import org.eclipse.dirigible.repository.api.IResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,23 +40,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.repository.api.IRepository;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKTableImportArtifactFactory.class);
 
-    private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+    private final IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
 
-    private IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
+    private final IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
 
-    private IXSKHDBTIParser xskHdbtiParser = new XSKHDBTIParser();
+    private final IXSKHDBTIParser xskHdbtiParser = new XSKHDBTIParser();
 
     @Override
     public XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
@@ -109,12 +110,12 @@ public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFac
 
     }
 
-    private Map<String, String> handleKeyValuePairs(List<XSKHDBTIImportConfigModel.Pair> pairs) {
+    private Map<String, ArrayList<String>> handleKeyValuePairs(List<XSKHDBTIImportConfigModel.Pair> pairs) {
         if (pairs == null) {
             return new HashMap<>();
         }
 
-        return pairs.stream().collect(Collectors.toMap(XSKHDBTIImportConfigModel.Pair::getKey, XSKHDBTIImportConfigModel.Pair::getValue));
+        return pairs.stream().collect(Collectors.toMap(XSKHDBTIImportConfigModel.Pair::getColumn, XSKHDBTIImportConfigModel.Pair::getValues));
     }
 
     private String getContentFromResource(IResource resource) {
@@ -124,7 +125,7 @@ public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFac
             contentAsString = IOUtils
                     .toString(new InputStreamReader(new ByteArrayInputStream(content), StandardCharsets.UTF_8));
         } catch (IOException e) {
-            logger.error("Error occured while reading the content from CSV File" ,e);
+            logger.error("Error occurred while reading the content from CSV File" ,e);
         }
         return contentAsString;
     }

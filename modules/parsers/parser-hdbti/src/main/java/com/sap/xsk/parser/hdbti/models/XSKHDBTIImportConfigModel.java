@@ -11,108 +11,51 @@
  */
 package com.sap.xsk.parser.hdbti.models;
 
+import com.google.gson.annotations.SerializedName;
+import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class XSKHDBTIImportConfigModel {
 
-  private String tableName;
-  private String schemaName;
-  private String fileName;
-  private Boolean header;
-  private Boolean useHeaderNames;
-  private String delimField;
-  private String delimEnclosing;
-  private Boolean distinguishEmptyFromNull;
-  private List<Pair> keys;
+    @SerializedName("table")
+    private String tableName;
 
-  public String getTableName() {
-    return tableName;
-  }
+    @SerializedName("schema")
+    private String schemaName;
 
-  public void setTableName(String tableName) {
-    this.tableName = tableName;
-  }
+    @SerializedName("file")
+    private String fileName;
 
-  public String getSchemaName() {
-    return schemaName;
-  }
+    @SerializedName("header")
+    private Boolean header;
 
-  public void setSchemaName(String schemaName) {
-    this.schemaName = schemaName;
-  }
+    @SerializedName("useHeaderNames")
+    private Boolean useHeaderNames;
 
-  public String getFileName() {
-    return fileName;
-  }
+    @SerializedName("delimField")
+    private String delimField;
 
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
+    @SerializedName("delimEnclosing")
+    private String delimEnclosing;
 
-  public Boolean getHeader() {
-    return header;
-  }
+    @SerializedName("distinguishEmptyFromNull")
+    private Boolean distinguishEmptyFromNull;
 
-  public void setHeader(Boolean header) {
-    this.header = header;
-  }
+    private List<Pair> keys;
 
-  public Boolean getUseHeaderNames() {
-    return useHeaderNames;
-  }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @EqualsAndHashCode
+    public static class Pair {
 
-  public void setUseHeaderNames(Boolean useHeaderNames) {
-    this.useHeaderNames = useHeaderNames;
-  }
-
-  public String getDelimField() {
-    return delimField;
-  }
-
-  public void setDelimField(String delimField) {
-    this.delimField = delimField;
-  }
-
-  public String getDelimEnclosing() {
-    return delimEnclosing;
-  }
-
-  public void setDelimEnclosing(String delimEnclosing) {
-    this.delimEnclosing = delimEnclosing;
-  }
-
-  public Boolean getDistinguishEmptyFromNull() {
-    return distinguishEmptyFromNull;
-  }
-
-  public void setDistinguishEmptyFromNull(Boolean distinguishEmptyFromNull) {
-    this.distinguishEmptyFromNull = distinguishEmptyFromNull;
-  }
-
-  public List<Pair> getKeys() {
-    return keys;
-  }
-
-  public void setKeys(List<Pair> keys) {
-    this.keys = keys;
-  }
-
-  public static class Pair {
-
-    private String key;
-    private String value;
-
-    public Pair(String key, String value) {
-      this.key = key;
-      this.value = value;
+        private String column;
+        private ArrayList<String> values = new ArrayList<>();
     }
-
-    public String getKey() {
-      return key;
-    }
-
-    public String getValue() {
-      return value;
-    }
-  }
 }

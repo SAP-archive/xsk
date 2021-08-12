@@ -22,6 +22,8 @@ import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 
@@ -47,15 +49,11 @@ public class XSKHDBTIParserTest {
     assertEquals(configModel.getDelimField(), ";");
     assertEquals(configModel.getDelimEnclosing(), "\"");
     assertEquals(configModel.getDistinguishEmptyFromNull(), true);
-    int expectedKeysSize = 3;
+    int expectedKeysSize = 1;
     List<XSKHDBTIImportConfigModel.Pair> keys = configModel.getKeys();
     assertEquals(keys.size(), expectedKeysSize);
-    assertEquals(keys.get(0).getKey(), "GROUP_TYPE");
-    assertEquals(keys.get(0).getValue(), "BW_CUBE");
-    assertEquals(keys.get(1).getKey(), "GROUP_TYPE");
-    assertEquals(keys.get(1).getValue(), "BW_DSO");
-    assertEquals(keys.get(2).getKey(), "GROUP_TYPE");
-    assertEquals(keys.get(2).getValue(), "BW_PSA");
+    assertEquals(keys.get(0).getColumn(), "GROUP_TYPE");
+    assertEquals(keys.get(0).getValues(), new ArrayList<>(Arrays.asList("BW_CUBE","BW_DSO","BW_PSA")));
   }
 
   @Test

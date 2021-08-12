@@ -11,11 +11,10 @@
  */
 package com.sap.xsk.parser.hdbti.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.google.gson.annotations.SerializedName;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,37 +22,40 @@ import java.util.List;
 @NoArgsConstructor
 public class XSKHDBTIImportConfigModel {
 
-  @JsonProperty("table")
-  private String tableName;
+    @SerializedName("table")
+    private String tableName;
 
-  private String schemaName;
-  private String fileName;
-  private Boolean header;
-  private Boolean useHeaderNames;
-  private String delimField;
-  private String delimEnclosing;
-  private Boolean distinguishEmptyFromNull;
-  private List<Pair> keys;
+    @SerializedName("schema")
+    private String schemaName;
 
-  public static class Pair {
+    @SerializedName("file")
+    private String fileName;
 
-    private String key;
-    private String value;
+    @SerializedName("header")
+    private Boolean header;
 
-    public Pair(String key, String value) {
-      this.key = key;
-      this.value = value;
+    @SerializedName("useHeaderNames")
+    private Boolean useHeaderNames;
+
+    @SerializedName("delimField")
+    private String delimField;
+
+    @SerializedName("delimEnclosing")
+    private String delimEnclosing;
+
+    @SerializedName("distinguishEmptyFromNull")
+    private Boolean distinguishEmptyFromNull;
+
+    private List<Pair> keys;
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @EqualsAndHashCode
+    public static class Pair {
+
+        private String column;
+        private ArrayList<String> values = new ArrayList<>();
     }
-
-    public String getKey() {
-      return key;
-    }
-
-    public String getValue() {
-      return value;
-    }
-
-    @JsonProperty("key")
-    public String getJsonkeys(){return "sss";}
-  }
 }

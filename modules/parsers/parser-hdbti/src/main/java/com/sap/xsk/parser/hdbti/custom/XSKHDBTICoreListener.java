@@ -17,10 +17,7 @@ import com.sap.xsk.parser.hdbti.exception.DuplicateFieldNameException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class XSKHDBTICoreListener extends HdbtiBaseListener {
 
@@ -69,8 +66,18 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
                 configModel.setDistinguishEmptyFromNull(Boolean.parseBoolean(distinguishEmptyFromNull));
             } else if (expressionContext.assignKeys() != null) {
                 expressionContext.assignKeys().keyArr().pair().forEach(el -> {
-                    XSKHDBTIImportConfigModel.Pair pair = new XSKHDBTIImportConfigModel.Pair(handleStringLiteral(el.pairKey().getText()), handleStringLiteral(el.pairValue().getText()));
-                    pairs.add(pair);
+                    pairs.forEach(pair -> {
+                        if (pair.getColumn().equals(handleStringLiteral(el.pairKey().getText()))) {
+                            pair.getValues().add(handleStringLiteral(el.pairValue().getText()));
+                        } else {
+                            XSKHDBTIImportConfigModel.Pair newPair = new XSKHDBTIImportConfigModel.Pair(handleStringLiteral(el.pairKey().getText()), new ArrayList<>(Collections.singletonList(handleStringLiteral(el.pairValue().getText()))));
+                            pairs.add(newPair);
+                        }
+                    });
+                    if (pairs.isEmpty()) {
+                        XSKHDBTIImportConfigModel.Pair newPair = new XSKHDBTIImportConfigModel.Pair(handleStringLiteral(el.pairKey().getText()), new ArrayList<>(Collections.singletonList(handleStringLiteral(el.pairValue().getText()))));
+                        pairs.add(newPair);
+                    }
                 });
             }
         }

@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 @Getter
@@ -39,5 +40,5 @@ public class XSKTableImportConfigurationDefinition {
     private String delimField;
     private String delimEnclosing;
     private Boolean distinguishEmptyFromNull = Boolean.TRUE;
-    private Map<String, String> keysAsMap;
+    private Map<String, ArrayList<String>> keysAsMap;
 }

@@ -35,18 +35,18 @@ public class XSKHDBTIRestService extends AbstractRestService {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIRestService.class);
 
-    private XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
+    private final XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
 
     @Context
     private HttpServletResponse response;
 
     @POST
-    @Path("/parse/{location}")
+    @Path("/parse")
     @ApiOperation("Parse HDBTI file")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponses({@ApiResponse(code = 200, message = "HDBTI file was parsed")})
-    public Response parseHdbti(@ApiParam(value = "File registry path") @PathParam("location") String location,
+    public Response parseHdbti(@ApiParam(value = "File registry path") @QueryParam("location") String location,
                                @ApiParam(value = "The HDBTI file", required = true)
                                @Multipart("file") byte[] file) {
         try {

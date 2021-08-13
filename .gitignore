@@ -20,4 +20,6 @@ derby.log
 *.iml
 *._trace
 
+docs-site/site/
+
 !releng/buildpacks/**/bin/

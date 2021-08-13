@@ -1,18 +1,25 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import static java.text.MessageFormat.format;
-
+import com.google.inject.Inject;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableDropProcessor;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,35 +27,23 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.naming.OperationNotSupportedException;
-
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.processors.entity.XSKEntityCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.entity.XSKEntityDropProcessor;
-import com.sap.xsk.hdb.ds.processors.entity.XSKEntityUpdateProcessor;
-import com.sap.xsk.utils.XSKHDBUtils;
-
-public class IXSKEntityManagerService extends AbstractDataStructureManagerService<XSKDataStructureEntitiesModel> {
+public class IXSKEntityManagerService extends AbstractDataStructureManagerService<XSKDataStructureCdsModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(IXSKEntityManagerService.class);
 
-  private final Map<String, XSKDataStructureEntitiesModel> dataStructureEntitiesModel;
+  private final Map<String, XSKDataStructureCdsModel> dataStructureEntitiesModel;
   private final List<String> entitiesSynchronized;
 
-  private IXSKHdbProcessor xskEntityUpdateProcessor = new XSKEntityUpdateProcessor();
+  @Inject
+  private XSKTableDropProcessor xskTableDropProcessor;
 
-  private IXSKHdbProcessor xskEntityDropProcessor = new XSKEntityDropProcessor();
-
-  private IXSKHdbProcessor xskEntityCreateProcessor = new XSKEntityCreateProcessor();
+  @Inject
+  private XSKTableCreateProcessor xskTableCreateProcessor;
 
   public IXSKEntityManagerService() {
     dataStructureEntitiesModel = Collections.synchronizedMap(new LinkedHashMap<>());
@@ -57,7 +52,7 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
 
 
   @Override
-  public void synchronizeRuntimeMetadata(XSKDataStructureEntitiesModel entitiesModel) throws XSKDataStructuresException {
+  public void synchronizeRuntimeMetadata(XSKDataStructureCdsModel entitiesModel) throws XSKDataStructuresException {
     if (!getDataStructuresCoreService().existsDataStructure(entitiesModel.getLocation(), entitiesModel.getType())) {
       getDataStructuresCoreService()
           .createDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
@@ -79,14 +74,13 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
+  public void createDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel) throws SQLException {
     if (entitiesModel != null) {
-      for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-        String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
+      for (XSKDataStructureHDBTableModel entityModel : entitiesModel.getTableModels()) {
+        String tableName = XSKHDBUtils.escapeArtifactName(connection, entityModel.getName());
         if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
-          this.xskEntityCreateProcessor.execute(connection, entityModel);
+          this.xskTableCreateProcessor.execute(connection, entityModel);
         } else {
-          this.xskEntityUpdateProcessor.execute(connection, entityModel);
         }
       }
     }
@@ -94,38 +88,17 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel) throws SQLException {
-    if (entitiesModel != null) {
-      for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-        String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
-        if (SqlFactory.getNative(connection).exists(connection, tableName)) {
-          if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
-            xskEntityDropProcessor.execute(connection, entityModel);
-          } else {
-            logger.warn(format("Entity [{0}] cannot be deleted during the update process, because it is not empty", entityModel.getName()));
-          }
-        }
-      }
-    }
+  public void dropDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel) throws SQLException {
+
   }
 
   @Override
-  public void updateDataStructure(Connection connection, XSKDataStructureEntitiesModel entitiesModel)
+  public void updateDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel)
       throws SQLException, OperationNotSupportedException {
-    if (entitiesModel != null) {
-      for (XSKDataStructureEntityModel entityModel : entitiesModel.getContext().getЕntities()) {
-        String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
-        if (SqlFactory.getNative(connection).exists(connection, tableName)) {
-          if (SqlFactory.getNative(connection).count(connection, tableName) != 0) {
-            this.xskEntityUpdateProcessor.execute(connection, entityModel);
-          }
-        }
-      }
-    }
   }
 
   @Override
-  public Map<String, XSKDataStructureEntitiesModel> getDataStructureModels() {
+  public Map<String, XSKDataStructureCdsModel> getDataStructureModels() {
     return Collections.unmodifiableMap(this.dataStructureEntitiesModel);
   }
 

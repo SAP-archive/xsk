@@ -21,6 +21,7 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.inject.Singleton;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
@@ -34,6 +35,7 @@ import com.sap.xsk.utils.XSKHDBUtils;
 /**
  * The Table Create Processor.
  */
+@Singleton
 public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableCreateProcessor.class);

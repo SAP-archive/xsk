@@ -1,0 +1,111 @@
+/*
+ * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package com.sap.xsk.parser.hdbdd.symbols;
+
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
+import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import org.antlr.v4.runtime.Token;
+
+/***
+ * Excerpted from "Language Implementation Patterns",
+ * published by The Pragmatic Bookshelf.
+ * Copyrights apply to this code. It may not be used to create training material, 
+ * courses, books, articles, and the like. Contact us if you are in doubt.
+ * We make no guarantees that this code is fit for any purpose. 
+ * Visit http://www.pragmaticprogrammer.com/titles/tpdsl for more book information.
+ ***/
+public class Symbol { // A generic programming language symbol
+    private String packageName;
+    private String fullName;
+    private String name;      // All com.sap.xsk.parser.hdbdd.symbols at least have a name
+    private Scope scope;
+    private Token idToken;
+    private Map<String, AnnotationObj> annotations;
+
+    public Symbol(String name) {
+        this.name = name;
+        this.annotations = new HashMap<>();
+    }
+
+    public Symbol(String name, Scope scope) {
+        this(name);
+        this.scope = scope;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Scope getScope() {
+        return scope;
+    }
+
+    public void setScope(Scope scope) {
+        this.scope = scope;
+    }
+
+    public Token getIdToken() {
+        return idToken;
+    }
+
+    public void setIdToken(Token idToken) {
+        this.idToken = idToken;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+  public String getPackageName() {
+    return packageName;
+  }
+
+  public void setPackageName(String packageName) {
+    this.packageName = packageName;
+  }
+
+  public Map<String, AnnotationObj> getAnnotations() {
+        return annotations;
+    }
+
+    public void addAnnotation(String name, AnnotationObj annotationObj) {
+        this.annotations.put(name, annotationObj);
+    }
+
+    public AnnotationObj getAnnotation(String name) {
+        return this.annotations.get(name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Symbol symbol = (Symbol) o;
+        return name.equals(symbol.name) && scope.equals(symbol.scope);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, scope);
+    }
+}

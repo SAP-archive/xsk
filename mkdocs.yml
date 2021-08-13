@@ -1,0 +1,61 @@
+site_name: Project XSK
+site_url: https://sap.github.io/xsk
+
+nav:
+    - Welcome: 'index.md'
+    - Overview: 
+      - Project XSK: 'overview/index.md'
+    - Setup: 
+      - Local: 'setup/local.md'
+      - Kyma: 'setup/kyma.md'
+      - Cloud Foundry: 'setup/cloud-foundry.md'
+      - Environment Variables: 'setup/environment-variables.md'
+
+theme:
+  # favicon: /img/favicon.png
+  # logo: /img/logo/dirigible-logo.png
+  name: mkdocs
+  custom_dir: overrides
+  features:
+    - navigation.instant
+    
+# extra_css:
+#   - stylesheets/custom.css
+#   - stylesheets/homepage.css
+
+markdown_extensions:
+    - attr_list
+    - pymdownx.snippets
+    - pymdownx.highlight:
+        linenums: false
+    - pymdownx.keys
+    - pymdownx.inlinehilite
+    - pymdownx.superfences
+    - pymdownx.tabbed
+    - pymdownx.emoji
+    - meta
+    - footnotes
+    - admonition
+    - pymdownx.details
+
+repo_url: https://github.com/sap/xsk
+repo_name: sap/xsk
+edit_uri: ../../sap/xsk/edit/gh-pages/docs-site/
+
+copyright: Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors.
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/dirigible_io
+    - icon: fontawesome/brands/facebook
+      link: https://www.facebook.com/dirigible.io
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/groups/8413366
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/c/dirigibleio
+    - icon: fontawesome/brands/slack
+      link: https://eclipse-dirigible.slack.com/
+
+google_analytics:
+  - UA-49027147-1
+  - auto

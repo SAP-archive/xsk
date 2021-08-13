@@ -1,0 +1,23 @@
+# folders
+dist/
+.settings/
+.idea/
+.run/
+target/
+dirigible_local/
+bin/
+
+# files
+.DS_Store
+.project
+.classpath
+*.bak
+*.class
+*.jar
+derby.log
+*.versionsBackup
+*.fpr
+*.iml
+*._trace
+
+!releng/buildpacks/**/bin/

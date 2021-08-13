@@ -1,0 +1,33 @@
+name: CI
+on:
+  push:
+    branches: 
+      - gh-pages
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        token: ${{secrets.GH_TOKEN}}
+    - name: Build the site with squidfunk/mkdocs-material container
+      run: |
+        docker pull squidfunk/mkdocs-material
+
+        # Build
+        docker run -v ${{ github.workspace }}/docs-site:/docs squidfunk/mkdocs-material build
+
+        # Copy build output
+        rm -r docs/*
+        mkdir docs/
+
+        cp -a docs-site/site/. docs/
+
+    - name: Git Commit and Push
+      run: |
+        git config user.name ${{secrets.GH_USER_NAME}}
+        git config user.email ${{secrets.GH_USER_EMAIL}}
+        git add docs
+        git commit -m "Site content updated - ci skip"
+        git push origin gh-pages

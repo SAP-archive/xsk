@@ -22,14 +22,14 @@ jobs:
         mv docs-site/ ../
         mv .github/ ../
         mv .git/ ../
-        mv .gitignore/ ../
+        mv .gitignore ../
         rm -rf *
         mv ../charts/ .
         mv ../index.yaml .
         mv ../docs-site/ .
         mv ../.github/ .
         mv ../.git/ .
-        mv ../.gitignore/ .
+        mv ../.gitignore .
         cp -a docs-site/site/. .
         rm -rf docs-site/site/
     - name: Git Commit and Push

@@ -14,10 +14,12 @@ package com.sap.xsk.hdb.ds.parser.hdbschema;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import com.sap.xsk.parser.utils.ParserConstants;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +52,8 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
     }
 
     @Override
-    public XSKDataStructureHDBSchemaModel parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+    public XSKDataStructureHDBSchemaModel parse(String location, String content)
+        throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
         XSKDataStructureHDBSchemaModel hdbSchemaModel = new XSKDataStructureHDBSchemaModel();
         XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSchemaModel, IXSKDataStructureModel.TYPE_HDB_SCHEMA, XSKDBContentType.XS_CLASSIC);
 
@@ -69,8 +72,8 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
         hdbschemaParser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB Schema", logger);
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB Schema", logger);
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Schema");
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Schema");
 
         XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

@@ -12,6 +12,7 @@
 package com.sap.xsk.xsodata.ds.service;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataLexer;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataParser;
 import com.sap.xsk.parser.xsodata.custom.XSKHDBXSODATACoreListener;
@@ -32,6 +33,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +65,8 @@ public class XSKODataParser implements IXSKODataParser {
      * @return the odata model instance
      * @throws IOException exception during parsing
      */
-    public XSKODataModel parseXSODataArtifact(String location, String content) throws IOException, SQLException, XSKArtifactParserException {
+    public XSKODataModel parseXSODataArtifact(String location, String content)
+        throws IOException, SQLException, XSKArtifactParserException, ProblemsException {
         logger.debug("Parsing xsodata.");
         XSKODataModel odataModel = new XSKODataModel();
         odataModel.setName(new File(location).getName());
@@ -87,8 +90,8 @@ public class XSKODataParser implements IXSKODataParser {
         parser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = parser.xsodataDefinition();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "XSODATA", logger);
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "XSODATA", logger);
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "XSODATA");
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "XSODATA");
 
         XSKHDBXSODATACoreListener coreListener = new XSKHDBXSODATACoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

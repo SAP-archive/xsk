@@ -341,7 +341,7 @@ public class XSKHDBTableParserHanaITTest {
     String createTableSQL = String.format(
         "CREATE COLUMN TABLE \"DBADMIN\".\"%s\" ( \"Col1\" NVARCHAR (20) NOT NULL , \"Col2\" INTEGER  NOT\n"
             + " NULL , \"Col5\" NVARCHAR (20) DEFAULT 'Defaultvalue'  NOT NULL , \"Col66\" NVARCHAR (20) DEFAULT 'Defaultvalue'  , \"Col77\" NVARCHAR (20) DEFAULT 'Defaultvalue'  , PRIMARY KEY(\"Col1\" , "
-            + "\"Col2\" , \"Col5\") , CONSTRAINT \"BB112%s\" UNIQUE ( \"Col2\" ), CONSTRAINT \"BB212%s\" UNIQUE ( \"Col1\" ))", tableName, String.valueOf(++indexCounter), String.valueOf(++indexCounter));
+            + "\"Col2\" , \"Col5\") , CONSTRAINT \"BB112\" UNIQUE ( \"Col2\" ), CONSTRAINT \"BB212\" UNIQUE ( \"Col1\" ))", tableName);
     stmt.executeUpdate(createTableSQL);
     ResultSet table = metaData
         .getTables(null, null, tableName, new String[]{ISqlKeywords.KEYWORD_TABLE});

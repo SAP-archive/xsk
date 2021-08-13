@@ -326,10 +326,16 @@ Prerequisites: Get access to the **SAP Cloud Platform Cloud Foundry** environmen
           ],
           "role-collections": [
             {
-              "name": "xsk-developer",
+              "name": "XSK Developer",
               "description": "XSK Developer",
               "role-template-references": [ 
-                "$XSAPPNAME.Developer",
+                "$XSAPPNAME.Developer"
+              ]
+            },
+            {
+              "name": "XSK Operator",
+              "description": "XSK Operator",
+              "role-template-references": [ 
                 "$XSAPPNAME.Operator"
               ]
             }

@@ -57,6 +57,7 @@ jobs:
         docker build -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
         docker push dirigiblelabs/buildpacks-stack-build-xsk
         cd buildpack/
+        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk --config ./package.toml
         docker push dirigiblelabs/buildpacks-xsk
         pack builder create dirigiblelabs/buildpacks-builder-xsk --config ./builder.toml
@@ -72,12 +73,13 @@ jobs:
         docker build -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
         docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma
         cd buildpack/
+        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
         docker push dirigiblelabs/buildpacks-xsk-kyma
         pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
         docker push dirigiblelabs/buildpacks-builder-xsk-kyma
         cd ../../../../
-    - name: XSK Buildpack
+    - name: XSK Cloud Foundry Buildpack
       run: |
         cd releng/buildpacks/xsk-cf/
         docker build -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
@@ -87,6 +89,7 @@ jobs:
         docker build -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
         docker push dirigiblelabs/buildpacks-stack-build-xsk-cf
         cd buildpack/
+        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
         pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
         docker push dirigiblelabs/buildpacks-xsk-cf
         pack builder create dirigiblelabs/buildpacks-builder-xsk-cf --config ./builder.toml

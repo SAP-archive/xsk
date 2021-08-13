@@ -205,7 +205,8 @@ public class XSKTableAlterHandler {
     boolean isPKListUnchanged =
         dbPrimaryKeys.size() == modelPrimaryKeys.size() && dbPrimaryKeys.removeAll(modelPrimaryKeys) && dbPrimaryKeys.isEmpty();
     if (!isPKListUnchanged) {
-      throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_TABLE, this.tableModel.getName(), "", "TO PRIMARY KEY LIST"));
+      throw new SQLException(
+          String.format("Incompatible change of table [%s] by trying to change its primary key list", this.tableModel.getName()));
     }
   }
 
@@ -215,9 +216,7 @@ public class XSKTableAlterHandler {
     Set<String> columnsToUpdate = new HashSet<String>(dbColumnNames);
     columnsToUpdate.retainAll(modelColumnNames);
     return this.tableModel.getColumns().stream()
-        .filter(column -> {
-          return columnsToUpdate.contains(column.getName());
-        })
+        .filter(column -> columnsToUpdate.contains(column.getName()))
         .collect(Collectors.toList());
   }
 

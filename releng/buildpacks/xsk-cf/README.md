@@ -1,5 +1,8 @@
 ## XSK Cloud Foundry Buildpack
 
+1. Set the XSK version:
+    > Replace the `#{XSKVersion}#` placeholder (e.g. `latest`, `0.7.1`, `1.0.0`) in `buildpack/*.toml` files.
+
 1. Build `XSK Cloud Foundry Stack`:
 
     ```

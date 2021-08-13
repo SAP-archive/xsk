@@ -5,10 +5,9 @@ uri = "."
 [[order]]
     [[order.group]]
     id = "dirigiblelabs/buildpacks-xsk-cf"
-    version = "0.0.1"
+    version = "#{XSKVersion}#"
 
 [stack]
 id = "com.sap.kneo.xsk"
-#TODO Add tags -> dirigiblelabs/buildpacks-stack-build-xsk-cf:0.6.2
-build-image = "dirigiblelabs/buildpacks-stack-build-xsk-cf"
-run-image = "dirigiblelabs/buildpacks-stack-run-xsk-cf"
+build-image = "dirigiblelabs/buildpacks-stack-build-xsk-cf:#{XSKVersion}#"
+run-image = "dirigiblelabs/buildpacks-stack-run-xsk-cf:#{XSKVersion}#"

@@ -18,16 +18,15 @@ jobs:
         # Build
         docker run -v ${{ github.workspace }}/docs-site:/docs squidfunk/mkdocs-material build
 
-        # Copy build output
-        rm -rf docs/*
-        mkdir docs/
-
-        cp -a docs-site/site/. docs/
+        # Clean-up and Copy Build Output
+        rm -rf !("charts"|"index.yaml"|"docs-site")
+        cp -a docs-site/site/. .
+        rm -rf docs-site/site/
 
     - name: Git Commit and Push
       run: |
         git config user.name ${{secrets.GH_USER_NAME}}
         git config user.email ${{secrets.GH_USER_EMAIL}}
-        git add docs
+        git add .
         git commit -m "Site content updated - ci skip"
         git push origin gh-pages

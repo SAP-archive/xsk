@@ -23,10 +23,6 @@
       <version>${dirigible.version}</version>
       <exclusions>
         <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-database-dynamic</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>com.google.code.gson</groupId>
           <artifactId>gson</artifactId>
         </exclusion>

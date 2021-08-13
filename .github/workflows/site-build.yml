@@ -19,7 +19,7 @@ jobs:
         docker run -v ${{ github.workspace }}/docs-site:/docs squidfunk/mkdocs-material build
 
         # Copy build output
-        rm -r docs/*
+        rm -rf docs/*
         mkdir docs/
 
         cp -a docs-site/site/. docs/

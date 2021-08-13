@@ -17,19 +17,15 @@ jobs:
         docker run -v ${{ github.workspace }}/docs-site:/docs squidfunk/mkdocs-material build
     - name: Clean-up and Copy Build Output
       run: |
-        mv charts/ ../
-        mv index.yaml ../
-        mv docs-site/ ../
-        mv .github/ ../
-        mv .git/ ../
-        mv .gitignore ../
-        rm -rf *
-        mv ../charts/ .
-        mv ../index.yaml .
-        mv ../docs-site/ .
-        mv ../.github/ .
-        mv ../.git/ .
-        mv ../.gitignore .
+        mkdir ../temp/
+        mv * ../temp/
+        mv ../temp/charts/ .
+        mv ../temp/index.yaml .
+        mv ../temp/docs-site/ .
+        mv ../temp/.github/ ../
+        mv ../temp/.git/ .
+        mv ../temp/.gitignore .
+        rm -rf ../temp/
         cp -a docs-site/site/. .
         rm -rf docs-site/site/
     - name: Git Commit and Push

@@ -1,5 +1,6 @@
 # Project "XSK"
 
+[![XSK - Try it Out](https://img.shields.io/badge/XSK-Try%20it%20Out-white.svg)](https://xsk-trial.kneo.promart.shoot.canary.k8s-hana.ondemand.com)
 [![Build Status](https://github.com/sap/xsk/workflows/Build/badge.svg)](https://github.com/sap/xsk/actions?query=workflow%3ABuild)
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/xsk)](https://api.reuse.software/info/github.com/SAP/xsk)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -11,6 +12,13 @@
 Compatible environment for [SAP HANA Extended Application Services](https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/a6c0749255d84a81a154a7fc87dd33ce.html) (XS) based applications. It is deployed outside of [SAP HANA](https://www.sap.com/products/hana.html?btp=991d50bf-fa15-4979-ac4b-b280b0eb951f) instance as a [Docker](https://www.docker.com/) a container on [Kubernetes](https://kubernetes.io/). Hence, some of the features can work against any other JDBC compliant RDBMS such as [PostgreSQL](https://www.postgresql.org/). The compatibility stack is an extension of the [Eclipse Dirigible](https://github.com/eclipse/dirigible) cloud development platform.
 
 > Note: the project is not yet ready to be used productively
+
+
+## Try it Out
+
+`Try it Out` version is available [here](https://xsk-trial.kneo.promart.shoot.canary.k8s-hana.ondemand.com).
+
+> Note: the `Try it Out` instance is a shared one and it is intended for test & demo purposes only
 
 ## Overview
 - [Project XSK](#project-xsk)

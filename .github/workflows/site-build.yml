@@ -14,15 +14,12 @@ jobs:
     - name: Build the site with squidfunk/mkdocs-material container
       run: |
         docker pull squidfunk/mkdocs-material
-
-        # Build
         docker run -v ${{ github.workspace }}/docs-site:/docs squidfunk/mkdocs-material build
-
-        # Clean-up and Copy Build Output
-        rm -rf !("charts"|"index.yaml"|"docs-site")
+    - name: Clean-up and Copy Build Output
+      run: |
+        rm -rf !(charts|index.yaml|docs-site)
         cp -a docs-site/site/. .
         rm -rf docs-site/site/
-
     - name: Git Commit and Push
       run: |
         git config user.name ${{secrets.GH_USER_NAME}}

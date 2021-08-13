@@ -22,9 +22,6 @@ jobs:
         mv ../temp/charts/ .
         mv ../temp/index.yaml .
         mv ../temp/docs-site/ .
-        mv ../temp/.github/ ../
-        mv ../temp/.git/ .
-        mv ../temp/.gitignore .
         rm -rf ../temp/
         cp -a docs-site/site/. .
         rm -rf docs-site/site/

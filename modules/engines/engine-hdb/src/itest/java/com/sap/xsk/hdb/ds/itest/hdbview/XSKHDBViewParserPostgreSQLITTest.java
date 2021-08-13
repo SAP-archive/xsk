@@ -17,6 +17,7 @@ import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.utils.XSKHDBUtils;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.BeforeClass;
@@ -31,45 +32,46 @@ import static org.junit.Assert.assertTrue;
 
 public class XSKHDBViewParserPostgreSQLITTest {
 
-    private static PostgreSQLContainer jdbcContainer;
-    private static DataSource datasource;
-    private static IXSKHDBCoreFacade facade;
+  private static PostgreSQLContainer jdbcContainer;
+  private static DataSource datasource;
+  private static IXSKHDBCoreFacade facade;
 
 
-    @BeforeClass
-    public static void setUp() throws SQLException {
-        jdbcContainer =
-                new PostgreSQLContainer<>("postgres:alpine");
-        jdbcContainer.start();
-        JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
-                jdbcContainer.getPassword());
-        XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
-        datasource = xskhdbTestModule.getDataSource();
-        facade = new XSKHDBCoreFacade();
+  @BeforeClass
+  public static void setUp() throws SQLException {
+    jdbcContainer =
+        new PostgreSQLContainer<>("postgres:alpine");
+    jdbcContainer.start();
+    JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
+        jdbcContainer.getPassword());
+    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
+    xskhdbTestModule.configure();
+    datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+    facade = new XSKHDBCoreFacade();
+  }
+
+
+  @Test
+  public void testHDBViewCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    try (Connection connection = datasource.getConnection();
+        Statement stmt = connection.createStatement()) {
+      stmt.executeUpdate("create table \"public\".\"acme.com.test.tables::MY_TABLE1\"(Column1 integer,Column2 integer)");
+      stmt.executeUpdate("create table \"public\".\"acme.com.test.views::MY_VIEW1\"(Column1 integer,Column2 integer)");
+      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+          "/registry/public/hdbview-itest/SamplePostgreXSClassicView.hdbview",
+          "/hdbview-itest/SamplePostgreXSClassicView.hdbview");
+
+      facade.handleResourceSynchronization(resource);
+      facade.updateEntities();
+
+      DatabaseMetaData metaData = connection.getMetaData();
+      ResultSet table = metaData.getTables(null, "public", "hdbview-itest::SamplePostgreXSClassicView", new String[]{"VIEW"});
+      assertTrue(table.next());
+
+      stmt.executeUpdate(
+          String.format("DROP VIEW %s", XSKHDBUtils.escapeArtifactName(connection, "hdbview-itest::SamplePostgreXSClassicView")));
+      stmt.executeUpdate("drop table \"public\".\"acme.com.test.tables::MY_TABLE1\"");
+      stmt.executeUpdate("drop table \"public\".\"acme.com.test.views::MY_VIEW1\"");
     }
-
-
-    @Test
-    public void testHDBViewCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    	try (Connection connection = datasource.getConnection();
-	  			Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate("create table \"public\".\"acme.com.test.tables::MY_TABLE1\"(Column1 integer,Column2 integer)");
-	        stmt.executeUpdate("create table \"public\".\"acme.com.test.views::MY_VIEW1\"(Column1 integer,Column2 integer)");
-	        LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-	                "/registry/public/hdbview-itest/SamplePostgreXSClassicView.hdbview",
-	                "/hdbview-itest/SamplePostgreXSClassicView.hdbview");
-	
-	        facade.handleResourceSynchronization(resource);
-	        facade.updateEntities();
-	
-	        DatabaseMetaData metaData = connection.getMetaData();
-	        ResultSet table = metaData.getTables(null, "public", "hdbview-itest::SamplePostgreXSClassicView", new String[]{"VIEW"});
-	        assertTrue(table.next());
-	
-	        stmt.executeUpdate(
-	                String.format("DROP VIEW %s", XSKHDBUtils.escapeArtifactName(connection, "hdbview-itest::SamplePostgreXSClassicView")));
-	        stmt.executeUpdate("drop table \"public\".\"acme.com.test.tables::MY_TABLE1\"");
-	        stmt.executeUpdate("drop table \"public\".\"acme.com.test.views::MY_VIEW1\"");
-    	}
-    }
+  }
 }

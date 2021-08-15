@@ -49,8 +49,8 @@ public class XSKHDBTIParser implements IXSKHDBTIParser {
     hdbtiParser.addErrorListener(parseErrorListener);
 
     ParseTree parseTree = hdbtiParser.importArr();
-    XSKCommonsUtils.logParserErrors(parseErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDBTI");
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDBTI");
+    XSKCommonsUtils.logParserErrors(parseErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDBTI", logger);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDBTI", logger);
 
     XSKHDBTICoreListener XSKHDBTICoreListener = new XSKHDBTICoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

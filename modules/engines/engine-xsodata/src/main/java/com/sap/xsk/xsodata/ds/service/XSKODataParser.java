@@ -90,8 +90,8 @@ public class XSKODataParser implements IXSKODataParser {
         parser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = parser.xsodataDefinition();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "XSODATA");
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "XSODATA");
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "XSODATA", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "XSODATA", logger);
 
         XSKHDBXSODATACoreListener coreListener = new XSKHDBXSODATACoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

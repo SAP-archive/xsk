@@ -26,9 +26,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Test;
 
-public class XSKHDBTIParserTest {
+public class XSKHDBTIParserTest extends AbstractDirigibleTest {
 
   @Test
   public void testValidInputAllFieldsAssignedProperlyParseSuccessfully()

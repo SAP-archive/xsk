@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.eclipse.dirigible</groupId>
             <artifactId>dirigible-api-facade-log</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
+            <version>${dirigible.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

@@ -72,8 +72,8 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
         hdbschemaParser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Schema");
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Schema");
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Schema", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Schema", logger);
 
         XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

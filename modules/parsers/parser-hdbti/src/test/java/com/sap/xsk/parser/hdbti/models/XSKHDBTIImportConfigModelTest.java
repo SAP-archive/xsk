@@ -38,7 +38,8 @@ public class XSKHDBTIImportConfigModelTest {
         XSKHDBTIImportModel model = new XSKHDBTIImportModel();
         model.setConfigModels(Collections.singletonList(impModel));
 
-        String expectedString = "import = [{\n" +
+        String expectedString = "import = [\n" +
+                "{\n" +
                 "\tdelimEnclosing=\"\\\"\";\n" +
                 "\tschema = \"mySchema\";\n" +
                 "\tdistinguishEmptyFromNull = true;\n" +

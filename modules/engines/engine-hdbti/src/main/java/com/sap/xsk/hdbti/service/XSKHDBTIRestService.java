@@ -11,70 +11,32 @@
  */
 package com.sap.xsk.hdbti.service;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.hdbti.utils.XSKHDBTIUtils;
 import com.sap.xsk.parser.hdbti.custom.XSKHDBTIParser;
+import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
+import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
-import io.swagger.annotations.*;
-import org.apache.cxf.jaxrs.ext.multipart.Multipart;
-import org.eclipse.dirigible.commons.api.service.AbstractRestService;
-import org.eclipse.dirigible.commons.api.service.IRestService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
-@Path("/hdbti")
-@Api(value = "HDBTI Engine - HANA XS Classic", authorizations = {@Authorization(value = "basicAuth", scopes = {})})
-@ApiResponses({@ApiResponse(code = 401, message = "Unauthorized"), @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"), @ApiResponse(code = 500, message = "Internal Server Error")})
-public class XSKHDBTIRestService extends AbstractRestService {
-
-    private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIRestService.class);
+public class XSKHDBTIRestService {
 
     private final XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
 
-    @Context
-    private HttpServletResponse response;
-
-    @POST
-    @Path("/parse")
-    @ApiOperation("Parse HDBTI file")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiResponses({@ApiResponse(code = 200, message = "HDBTI file was parsed")})
-    public Response parseHdbti(@ApiParam(value = "File registry path") @QueryParam("location") String location,
-                               @ApiParam(value = "The HDBTI file", required = true)
-                               @Multipart("file") byte[] file) {
-        try {
-            XSKHDBTIImportModel parsedFile = xskhdbtiParser.parse(location, new String(file, StandardCharsets.UTF_8));
-            return Response.ok(parsedFile.getConfigModels()).build();
-        } catch (Throwable e) {
-            String message = e.getMessage();
-            logger.error(message, e);
-            createErrorResponseInternalServerError(message);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).build();
-        }
+    public List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file) throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException {
+        XSKHDBTIImportModel parsedFile = xskhdbtiParser.parse(location, new String(file, StandardCharsets.UTF_8));
+        parsedFile.getConfigModels().forEach(el -> el.setFileName(XSKHDBTIUtils.convertHDBTIFilePropertyToPath(el.getFileName())));
+        return parsedFile.getConfigModels();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.dirigible.commons.api.service.IRestService#getType()
-     */
-    @Override
-    public Class<? extends IRestService> getType() {
-        return XSKHDBTIRestService.class;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.dirigible.commons.api.service.AbstractRestService#getLogger()
-     */
-    @Override
-    protected Logger getLogger() {
-        return logger;
+    public String parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json) {
+        json.forEach(el -> el.setFileName(XSKHDBTIUtils.convertPathToHDBTIFileProperty(el.getFileName())));
+        XSKHDBTIImportModel model = new XSKHDBTIImportModel();
+        model.setConfigModels(json);
+        return model.toString();
     }
 }

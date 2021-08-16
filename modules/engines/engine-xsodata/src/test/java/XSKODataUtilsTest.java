@@ -156,16 +156,16 @@ public class XSKODataUtilsTest {
         assertEquals("Employees", oDataDefinition.getAssociations().get(0).getFrom().getEntity());
         assertNull(oDataDefinition.getAssociations().get(0).getFrom().getColumn());
         assertEquals("1", oDataDefinition.getAssociations().get(0).getFrom().getMultiplicity());
-        assertEquals(2, oDataDefinition.getAssociations().get(0).getFrom().getProperty().size());
-        assertEquals("COMPANY_ID", oDataDefinition.getAssociations().get(0).getFrom().getProperty().get(0));
-        assertEquals("EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getFrom().getProperty().get(1));
+        assertEquals(2, oDataDefinition.getAssociations().get(0).getFrom().getProperties().size());
+        assertEquals("COMPANY_ID", oDataDefinition.getAssociations().get(0).getFrom().getProperties().get(0));
+        assertEquals("EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getFrom().getProperties().get(1));
 
         assertEquals("Phones", oDataDefinition.getAssociations().get(0).getTo().getEntity());
         assertNull(oDataDefinition.getAssociations().get(0).getTo().getColumn());
         assertEquals("*", oDataDefinition.getAssociations().get(0).getTo().getMultiplicity());
-        assertEquals(2, oDataDefinition.getAssociations().get(0).getTo().getProperty().size());
-        assertEquals("FK_COMPANY_ID", oDataDefinition.getAssociations().get(0).getTo().getProperty().get(0));
-        assertEquals("FK_EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getTo().getProperty().get(1));
+        assertEquals(2, oDataDefinition.getAssociations().get(0).getTo().getProperties().size());
+        assertEquals("FK_COMPANY_ID", oDataDefinition.getAssociations().get(0).getTo().getProperties().get(0));
+        assertEquals("FK_EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getTo().getProperties().get(1));
     }
 
     @Test
@@ -247,16 +247,16 @@ public class XSKODataUtilsTest {
         assertEquals("Employees", oDataDefinition.getAssociations().get(0).getFrom().getEntity());
         assertNull(oDataDefinition.getAssociations().get(0).getFrom().getColumn());
         assertEquals("1", oDataDefinition.getAssociations().get(0).getFrom().getMultiplicity());
-        assertEquals(2, oDataDefinition.getAssociations().get(0).getFrom().getProperty().size());
-        assertEquals("COMPANY_ID", oDataDefinition.getAssociations().get(0).getFrom().getProperty().get(0));
-        assertEquals("EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getFrom().getProperty().get(1));
+        assertEquals(2, oDataDefinition.getAssociations().get(0).getFrom().getProperties().size());
+        assertEquals("COMPANY_ID", oDataDefinition.getAssociations().get(0).getFrom().getProperties().get(0));
+        assertEquals("EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getFrom().getProperties().get(1));
 
         assertEquals("Phones", oDataDefinition.getAssociations().get(0).getTo().getEntity());
         assertNull(oDataDefinition.getAssociations().get(0).getTo().getColumn());
         assertEquals("*", oDataDefinition.getAssociations().get(0).getTo().getMultiplicity());
-        assertEquals(2, oDataDefinition.getAssociations().get(0).getTo().getProperty().size());
-        assertEquals("FK_COMPANY_ID", oDataDefinition.getAssociations().get(0).getTo().getProperty().get(0));
-        assertEquals("FK_EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getTo().getProperty().get(1));
+        assertEquals(2, oDataDefinition.getAssociations().get(0).getTo().getProperties().size());
+        assertEquals("FK_COMPANY_ID", oDataDefinition.getAssociations().get(0).getTo().getProperties().get(0));
+        assertEquals("FK_EMPLOYEE_NUMBER", oDataDefinition.getAssociations().get(0).getTo().getProperties().get(1));
     }
 
     @Test

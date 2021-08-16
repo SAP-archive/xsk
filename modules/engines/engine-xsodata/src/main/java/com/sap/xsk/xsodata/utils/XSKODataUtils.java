@@ -69,7 +69,7 @@ public class XSKODataUtils {
                 //The Multiplicity of the Principal role must be 1 or 0..1
                 validateEdmMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText(), navigate.getAssociation());
                 fromDef.setMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText());
-                fromDef.setProperty((ArrayList<String>) xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
+                fromDef.setProperties((ArrayList<String>) xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
                 ODataAssociationEndDefinition toDef = new ODataAssociationEndDefinition();
                 toDef.setEntity(xsOdataAssoc.getDependent().getEntitySetName());
 
@@ -82,7 +82,7 @@ public class XSKODataUtils {
                     toDef.setMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText());
                 }
 
-                toDef.setProperty((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
+                toDef.setProperties((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
                 oDataAssociationDefinition.setFrom(fromDef);
                 oDataAssociationDefinition.setTo(toDef);
 

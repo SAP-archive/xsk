@@ -12,13 +12,13 @@ import = [
    },
     {
      delimEnclosing="#";
-     schema = "mySchema";
-     distinguishEmptyFromNull = true;
+     schema = "mySchema2";
+     distinguishEmptyFromNull = false;
      header = false;
-     table = "myTable";
+     table = "myTable2";
      useHeaderNames = false;
      delimField = ";";
-     keys = [ "MAIN_TYPE" : "BW_CUBE", "MAIN_TYPE" : "BW_DSO"];
-     file = "sap.ti2.demo:myData1111.csv";
+     keys = [ "MAIN_TYPE" : "BW_CO", "SECOND_TYPE" : "BW_PO"];
+     file = "sap.ti2.demo:myData2.csv";
    }
  ];

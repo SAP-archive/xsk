@@ -1,6 +1,6 @@
-var net = $.net;
+let net = $.net;
 
-var mail = new net.Mail({
+let mail = new net.Mail({
    sender: {address: "sender@sap.com"},
    to: [{ name: "John Doe", address: "john.doe@sap.com", nameEncoding: "US-ASCII"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
    cc: ["cc1@sap.com", {address: "cc2@sap.com"}],
@@ -15,11 +15,10 @@ var mail = new net.Mail({
    })]
 });
 
-var smtp = new net.SMTPConnection();
-// TODO upgrade mockito's versions in dirigible and xsk to mock the static methods
-//smtp.send(mail);
-//var returnValue = mail.send();
+let smtp = new net.SMTPConnection();
 
-to = mail.to.map(e => e.address)
+let to = mail.to.map(e => e.address)
+let cc = mail.cc.map(e => e.address)
+let bcc = mail.bcc.map(e => e.address)
 
-to !== "" && to !== undefined && smtp.isClosed()
+to !== "" && to !== undefined && cc !== "" && cc !== undefined && bcc !== "" && bcc !== undefined && smtp.isClosed()

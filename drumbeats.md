@@ -1,6 +1,53 @@
 # Drumbeats
 
 
+## 2021 Week 32 (09 August - 15 August)
+
+#### Focus topics:
+
+- Trial instance setup [#369](https://github.com/SAP/xsk/issues/369), [#370](https://github.com/SAP/xsk/issues/370), [#371](https://github.com/SAP/xsk/issues/371)
+- Provide a way for the user to select a region in the migration [#373](https://github.com/SAP/xsk/issues/373)
+- Extend parser-hdbti API [#368](https://github.com/SAP/xsk/issues/368)
+
+#### Issues and PRs:
+
+- Rest API for hdbti [#367](https://github.com/SAP/xsk/pull/367)
+- DataSource fix for all itests under hdb module & tests for hdbtable alter [#372](https://github.com/SAP/xsk/pull/372)
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-09..2021-08-15) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-09..2021-08-15) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-08-09..2021-08-15) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-08-09..2021-08-15) PRs
+
+----
+
+
+## 2021 Week 31 (01 August - 08 August)
+
+#### Focus topics:
+
+- Migration Tool in dark mode fixes [#362](https://github.com/SAP/xsk/issues/362)
+- Adds build and run images version [#361](https://github.com/SAP/xsk/issues/361)
+- Optimize docker build for migration tools [#273](https://github.com/SAP/xsk/issues/273)
+- Provide a way to list the database instances for a given user in a subaccount [#253](https://github.com/SAP/xsk/issues/253)
+- Create a service for openning a DB tunnel to the client provided HANA [#247](https://github.com/SAP/xsk/issues/247)
+- Vulnerability in jQuery 3.3.1-1 fix [#223](https://github.com/SAP/xsk/issues/223)
+
+#### Issues and PRs:
+
+- Update migration UI [#365](https://github.com/SAP/xsk/pull/365)
+- Hdb itests fixes [#360](https://github.com/SAP/xsk/pull/360)
+- $.web API enhancements [#359](https://github.com/SAP/xsk/pull/359)
+- $.db tests refactor [#356](https://github.com/SAP/xsk/pull/356)
+- Bump versions [#363](https://github.com/SAP/xsk/pull/363)
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-01..2021-08-08) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-01..2021-08-08) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-08-01..2021-08-08) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-08-01..2021-08-08) PRs
+
+----
+
 
 ## 2021 Week 30 (26 July - 01 August)
 

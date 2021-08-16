@@ -24,4 +24,9 @@ import java.util.List;
 public class XSKHDBTIImportModel {
 
     private List<XSKHDBTIImportConfigModel> configModels = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "import = " + configModels.toString() + ";";
+    }
 }

@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdbti;
+package com.sap.xsk.hdbti.processors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

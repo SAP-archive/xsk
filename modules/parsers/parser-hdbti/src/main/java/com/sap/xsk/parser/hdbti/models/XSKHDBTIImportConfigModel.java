@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.parser.hdbti.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
@@ -23,30 +24,56 @@ import java.util.List;
 public class XSKHDBTIImportConfigModel {
 
     @SerializedName("table")
+    @JsonProperty("table")
     private String tableName;
 
     @SerializedName("schema")
+    @JsonProperty("schema")
     private String schemaName;
 
     @SerializedName("file")
+    @JsonProperty("file")
     private String fileName;
 
     @SerializedName("header")
+    @JsonProperty("header")
     private Boolean header;
 
     @SerializedName("useHeaderNames")
+    @JsonProperty("useHeaderNames")
     private Boolean useHeaderNames;
 
     @SerializedName("delimField")
+    @JsonProperty("delimField")
     private String delimField;
 
     @SerializedName("delimEnclosing")
+    @JsonProperty("delimEnclosing")
     private String delimEnclosing;
 
     @SerializedName("distinguishEmptyFromNull")
+    @JsonProperty("distinguishEmptyFromNull")
     private Boolean distinguishEmptyFromNull;
 
-    private List<Pair> keys;
+    @SerializedName("keys")
+    @JsonProperty("keys")
+    private List<Pair> keys = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        String result = "\n{\n";
+        result += delimEnclosing.equals("\"") ? "\tdelimEnclosing=\"\\" + delimEnclosing + "\";\n" : "\tdelimEnclosing=\"" + delimEnclosing + "\";\n";
+        result += "\tschema = \"" + schemaName + "\";\n" +
+                "\tdistinguishEmptyFromNull = " + distinguishEmptyFromNull + ";\n" +
+                "\theader = " + header + ";\n" +
+                "\ttable = \"" + tableName + "\";\n" +
+                "\tuseHeaderNames = " + useHeaderNames + ";\n" +
+                "\tdelimField = \"" + delimField + "\";\n" +
+                "\tkeys = " + keys.toString() + ";\n" +
+                "\tfile = \"" + fileName + "\";\n" +
+                "}";
+        return result;
+    }
 
     @Getter
     @Setter
@@ -57,5 +84,14 @@ public class XSKHDBTIImportConfigModel {
 
         private String column;
         private ArrayList<String> values = new ArrayList<>();
+
+        @Override
+        public String toString() {
+            StringBuilder result = new StringBuilder();
+            for (String value : values) {
+                result.append("\"").append(column).append("\":").append("\"").append(value).append("\",");
+            }
+            return result.substring(0, result.length() - 1);
+        }
     }
 }

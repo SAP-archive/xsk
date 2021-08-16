@@ -11,32 +11,87 @@
  */
 package com.sap.xsk.hdbti.service;
 
-import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdbti.utils.XSKHDBTIUtils;
-import com.sap.xsk.parser.hdbti.custom.XSKHDBTIParser;
-import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
+import com.sap.xsk.hdbti.processors.XSKHDBTIProcessor;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
-import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
+import io.swagger.annotations.*;
+import org.apache.cxf.jaxrs.ext.multipart.Multipart;
+import org.eclipse.dirigible.commons.api.service.AbstractRestService;
+import org.eclipse.dirigible.commons.api.service.IRestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.List;
 
-public class XSKHDBTIRestService {
+@Path("/parse")
+@Api(value = "HDBTI Engine - HANA XS Classic", authorizations = {@Authorization(value = "basicAuth", scopes = {})})
+@ApiResponses({@ApiResponse(code = 401, message = "Unauthorized"), @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Not Found"), @ApiResponse(code = 500, message = "Internal Server Error")})
+public class XSKHDBTIRestService extends AbstractRestService implements IRestService {
 
-    private final XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
+    private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIRestService.class);
 
-    public List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file) throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException {
-        XSKHDBTIImportModel parsedFile = xskhdbtiParser.parse(location, new String(file, StandardCharsets.UTF_8));
-        parsedFile.getConfigModels().forEach(el -> el.setFileName(XSKHDBTIUtils.convertHDBTIFilePropertyToPath(el.getFileName())));
-        return parsedFile.getConfigModels();
+    @Context
+    private HttpServletResponse response;
+
+    private final XSKHDBTIProcessor hdbtiProcessor = new XSKHDBTIProcessor();
+
+    @POST
+    @Path("/hdbti")
+    @ApiOperation("Parse HDBTI file")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiResponses({@ApiResponse(code = 200, message = "HDBTI file was parsed")})
+    public Response parseHdbtiToJSON(@ApiParam(value = "File registry path") @QueryParam("location") String location,
+                                     @ApiParam(value = "The HDBTI file", required = true)
+                                     @Multipart("file") byte[] file) {
+        try {
+            return Response.ok(hdbtiProcessor.parseHdbtiToJSON(location, file)).build();
+        } catch (Throwable e) {
+            String message = e.getMessage();
+            logger.error(message, e);
+            createErrorResponseInternalServerError(message);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).build();
+        }
     }
 
-    public String parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json) {
-        json.forEach(el -> el.setFileName(XSKHDBTIUtils.convertPathToHDBTIFileProperty(el.getFileName())));
-        XSKHDBTIImportModel model = new XSKHDBTIImportModel();
-        model.setConfigModels(json);
-        return model.toString();
+    @POST
+    @Path("/csvim")
+    @ApiOperation("Parse CSVIM file")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    @ApiResponses({@ApiResponse(code = 200, message = "SCVIM file was parsed")})
+    public Response parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json) {
+        try {
+            return Response.ok(hdbtiProcessor.parseJSONtoHdbti(json)).build();
+        } catch (Throwable e) {
+            String message = e.getMessage();
+            logger.error(message, e);
+            createErrorResponseInternalServerError(message);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).build();
+        }
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.dirigible.commons.api.service.IRestService#getType()
+     */
+    @Override
+    public Class<? extends IRestService> getType() {
+        return XSKHDBTIRestService.class;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.dirigible.commons.api.service.AbstractRestService#getLogger()
+     */
+    @Override
+    protected Logger getLogger() {
+        return logger;
     }
 }

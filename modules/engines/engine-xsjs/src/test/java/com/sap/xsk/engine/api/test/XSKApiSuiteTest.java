@@ -86,7 +86,6 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     TEST_MODULES.add("test/xsk/util/util.xsjs");
     TEST_MODULES.add("test/xsk/util/codec/codec.xsjs");
     TEST_MODULES.add("test/xsk/http/http.xsjs");
-    // TODO rework net.xsjs's test after upgrading mockito's versions in dirigible and xsk
     TEST_MODULES.add("test/xsk/net/net.xsjs");
 
     // HDB tests

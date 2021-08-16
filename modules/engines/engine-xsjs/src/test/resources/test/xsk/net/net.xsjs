@@ -16,10 +16,9 @@ var mail = new net.Mail({
 });
 
 var smtp = new net.SMTPConnection();
-// TODO upgrade mockito's versions in dirigible and xsk to mock the static methods
-//smtp.send(mail);
-//var returnValue = mail.send();
 
 to = mail.to.map(e => e.address)
+cc = mail.cc.map(e => e.address)
+bcc = mail.bcc.map(e => e.address)
 
-to !== "" && to !== undefined && smtp.isClosed()
+to !== "" && to !== undefined && cc !== "" && cc !== undefined && bcc !== "" && bcc !== undefined && smtp.isClosed()

@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdbti.processors;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.api.IXSKHDBTICoreService;
 import com.sap.xsk.hdbti.api.IXSKHDBTIProcessor;
@@ -29,6 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import com.sap.xsk.hdbti.utils.XSKHDBTIUtils;
+import com.sap.xsk.parser.hdbti.custom.XSKHDBTIParser;
+import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
+import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
+import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -45,11 +52,13 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIProcessor.class);
   
-  private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
+  private final DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
-  private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+  private final IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
 
-  private IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
+  private final IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
+
+  private final XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
 
   @Override
   public void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection)
@@ -147,5 +156,18 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     }
 
     return csvFormat;
+  }
+
+  public List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file) throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException {
+    XSKHDBTIImportModel parsedFile = xskhdbtiParser.parse(location, new String(file, StandardCharsets.UTF_8));
+    parsedFile.getConfigModels().forEach(el -> el.setFileName(XSKHDBTIUtils.convertHDBTIFilePropertyToPath(el.getFileName())));
+    return parsedFile.getConfigModels();
+  }
+
+  public String parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json) {
+    json.forEach(el -> el.setFileName(XSKHDBTIUtils.convertPathToHDBTIFileProperty(el.getFileName())));
+    XSKHDBTIImportModel model = new XSKHDBTIImportModel();
+    model.setConfigModels(json);
+    return model.toString();
   }
 }

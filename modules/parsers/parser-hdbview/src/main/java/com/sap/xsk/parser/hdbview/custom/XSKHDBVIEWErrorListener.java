@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.parser.hdbview.custom;
 
+import com.sap.xsk.parser.models.BaseParserErrorsModel;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
@@ -19,16 +20,17 @@ import java.util.ArrayList;
 
 public class XSKHDBVIEWErrorListener extends BaseErrorListener {
 
-    private final ArrayList<String> errorMessages = new ArrayList<>();
+  private final ArrayList<BaseParserErrorsModel> errors = new ArrayList<>();
 
-    @Override
-    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg,
-                            RecognitionException e) {
-        this.errorMessages.add("line " + line + ":" + charPositionInLine + " at " +
-                offendingSymbol + ": " + msg);
-    }
+  @Override
+  public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg,
+                          RecognitionException e) {
+    String errorMessage = "line " + line + ":" + charPositionInLine + " at " +
+        offendingSymbol + ": " + msg;
+    this.errors.add(new BaseParserErrorsModel(errorMessage, line, charPositionInLine));
+  }
 
-    public ArrayList<String> getErrorMessages() {
-        return errorMessages;
-    }
+  public ArrayList<BaseParserErrorsModel> getErrors() {
+    return errors;
+  }
 }

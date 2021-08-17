@@ -20,9 +20,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.sap.xsk.parser.utils.ParserConstants;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +66,8 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
     }
 
     @Override
-    public XSKDataStructureHDBTableModel parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+    public XSKDataStructureHDBTableModel parse(String location, String content)
+        throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
         Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*(COLUMN)(\\t\\n)*(\\s)*(TABLE)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
         boolean matchFound = matcher.find();
@@ -74,7 +77,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
     }
 
     private XSKDataStructureHDBTableModel parseHanaXSClassicContent(String location, String content)
-            throws IOException, XSKArtifactParserException {
+        throws IOException, XSKArtifactParserException, ProblemsException {
         logger.debug("Parsing hdbtable as Hana XS Classic format");
         ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
@@ -91,8 +94,8 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         XSKHDBTABLESyntaxErrorListener parserErrorListener = new XSKHDBTABLESyntaxErrorListener();
         hdbtableParser.addErrorListener(parserErrorListener);
         ParseTree parseTree = hdbtableParser.hdbtableDefinition();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB Table", logger);
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB Table", logger);
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Table", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Table", logger);
 
         XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
 

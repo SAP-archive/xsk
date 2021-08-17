@@ -12,9 +12,11 @@
 package com.sap.xsk.utils;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.parser.models.BaseParserErrorsModel;
 import org.apache.commons.io.FilenameUtils;
+import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,14 +101,20 @@ public class XSKCommonsUtils {
     }
 
     /**
-     * Use to log errors from antl4 parsers
+     * Use to log errors from antlr4 parsers
      */
-    public static void logParserErrors(ArrayList<String> errorMessages, String location, String artifactType, Logger logger) throws XSKArtifactParserException {
-        if (errorMessages.size() > 0) {
-            for (String errorMessage : errorMessages) {
-                logger.error(String.format(
-                        "Wrong format of %s: [%s] during parsing.: %s",
-                        artifactType, location, errorMessage));
+    public static void logParserErrors(ArrayList<BaseParserErrorsModel> errorList, String errorType, String location,
+        String artifactType, Logger logger)
+        throws XSKArtifactParserException, ProblemsException {
+        if (errorList.size() > 0) {
+            for (BaseParserErrorsModel errorModel : errorList) {
+              ProblemsFacade.save(location, errorType, Integer.toString(errorModel.getLine()), Integer.toString(errorModel.getCharPositionInLine()),
+                  artifactType, "Parsers", "Publish Request", "XSK");
+
+              //Left for development purposes until ProblemsFacade is properly tested
+              logger.error(String.format(
+                  "Wrong format of %s: [%s] during parsing.: %s",
+                  artifactType, location, errorModel.getErrorMessage()));
             }
             throw new XSKArtifactParserException(String.format(
                     "Wrong format of HDB %s: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version.",

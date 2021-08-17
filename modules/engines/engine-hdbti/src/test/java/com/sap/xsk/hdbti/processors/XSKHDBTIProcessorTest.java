@@ -23,6 +23,7 @@ import com.sap.xsk.hdbti.service.XSKHDBTICoreService;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.junit.After;
 import org.junit.Before;
@@ -422,7 +423,8 @@ public class XSKHDBTIProcessorTest {
     }
 
     @Test
-    public void testParseHdbtiToJSONSuccessfully() throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
+    public void testParseHdbtiToJSONSuccessfully()
+        throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException, ProblemsException {
         String hdbtiSample = org.apache.commons.io.IOUtils
                 .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
 
@@ -464,7 +466,8 @@ public class XSKHDBTIProcessorTest {
     }
 
     @Test
-    public void testParseJSONtoHdbtiSuccessfully() throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
+    public void testParseJSONtoHdbtiSuccessfully()
+        throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException, ProblemsException {
         String hdbtiSample = org.apache.commons.io.IOUtils
                 .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
 

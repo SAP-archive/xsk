@@ -19,6 +19,7 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 
 public class XSKCoreParserService implements IXSKCoreParserService {
 
@@ -26,7 +27,7 @@ public class XSKCoreParserService implements IXSKCoreParserService {
 
   @Override
   public XSKDataStructureModel parseDataStructure(String type, String location, String content)
-          throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+      throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
     if (!parserServices.containsKey(type)) {
       return null;
     }

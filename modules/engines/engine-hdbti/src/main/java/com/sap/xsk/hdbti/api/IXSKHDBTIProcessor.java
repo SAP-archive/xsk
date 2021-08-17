@@ -16,6 +16,7 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -27,7 +28,7 @@ public interface IXSKHDBTIProcessor {
     void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection)
             throws IOException, SQLException, XSKDataStructuresException, XSKTableImportException;
 
-    List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file) throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException;
+    List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file) throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException, ProblemsException;
 
     String parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json);
 }

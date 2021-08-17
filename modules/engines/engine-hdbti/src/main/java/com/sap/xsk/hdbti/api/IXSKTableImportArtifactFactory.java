@@ -16,10 +16,12 @@ import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.parser.hdbti.custom.IXSKHDBTIParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import java.io.IOException;
+
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.repository.api.IRepository;
 
 public interface IXSKTableImportArtifactFactory {
-    XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException;
+    XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, ProblemsException;
 
     IRepository getRepository();
 

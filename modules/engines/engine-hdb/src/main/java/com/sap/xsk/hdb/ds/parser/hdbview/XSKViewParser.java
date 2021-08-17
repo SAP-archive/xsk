@@ -17,10 +17,12 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sap.xsk.parser.utils.ParserConstants;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +45,8 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
     private static final Logger logger = LoggerFactory.getLogger(XSKViewParser.class);
 
     @Override
-    public XSKDataStructureHDBViewModel parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+    public XSKDataStructureHDBViewModel parse(String location, String content)
+        throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
         Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*VIEW", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
         boolean matchFound = matcher.find();
@@ -60,7 +63,8 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
         return hdbViewModel;
     }
 
-    private XSKDataStructureHDBViewModel parseHanaXSClassicContent(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+    private XSKDataStructureHDBViewModel parseHanaXSClassicContent(String location, String content)
+        throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
         logger.debug("Parsing hdbview as Hana XS Classic format");
         XSKDataStructureHDBViewModel hdbViewModel = new XSKDataStructureHDBViewModel();
         XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbViewModel, IXSKDataStructureModel.TYPE_HDB_VIEW, XSKDBContentType.XS_CLASSIC);
@@ -81,8 +85,8 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
         parser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = parser.hdbviewDefinition();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB View", logger);
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB View", logger);
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB View", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB View", logger);
 
         XSKHDBVIEWCoreListener XSKHDBVIEWCoreListener = new XSKHDBVIEWCoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

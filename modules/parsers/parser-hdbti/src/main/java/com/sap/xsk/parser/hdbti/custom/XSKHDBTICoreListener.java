@@ -65,19 +65,22 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
                 String distinguishEmptyFromNull = expressionContext.assignDistinguishEmptyFromNull().BOOLEAN().getText();
                 configModel.setDistinguishEmptyFromNull(Boolean.parseBoolean(distinguishEmptyFromNull));
             } else if (expressionContext.assignKeys() != null) {
+                List<XSKHDBTIImportConfigModel.Pair> pairsToBeAdd = new ArrayList<>();
                 expressionContext.assignKeys().keyArr().pair().forEach(el -> {
-                    pairs.forEach(pair -> {
-                        if (pair.getColumn().equals(handleStringLiteral(el.pairKey().getText()))) {
-                            pair.getValues().add(handleStringLiteral(el.pairValue().getText()));
-                        } else {
-                            XSKHDBTIImportConfigModel.Pair newPair = new XSKHDBTIImportConfigModel.Pair(handleStringLiteral(el.pairKey().getText()), new ArrayList<>(Collections.singletonList(handleStringLiteral(el.pairValue().getText()))));
-                            pairs.add(newPair);
-                        }
-                    });
                     if (pairs.isEmpty()) {
                         XSKHDBTIImportConfigModel.Pair newPair = new XSKHDBTIImportConfigModel.Pair(handleStringLiteral(el.pairKey().getText()), new ArrayList<>(Collections.singletonList(handleStringLiteral(el.pairValue().getText()))));
                         pairs.add(newPair);
+                    } else {
+                        for (XSKHDBTIImportConfigModel.Pair pair : pairs) {
+                            if (pair.getColumn().equals(handleStringLiteral(el.pairKey().getText()))) {
+                                pair.getValues().add(handleStringLiteral(el.pairValue().getText()));
+                            } else {
+                                XSKHDBTIImportConfigModel.Pair newPair = new XSKHDBTIImportConfigModel.Pair(handleStringLiteral(el.pairKey().getText()), new ArrayList<>(Collections.singletonList(handleStringLiteral(el.pairValue().getText()))));
+                                pairsToBeAdd.add(newPair);
+                            }
+                        }
                     }
+                    pairs.addAll(pairsToBeAdd);
                 });
             }
         }

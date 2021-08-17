@@ -41,6 +41,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.eclipse.dirigible.repository.api.IRepository;
@@ -158,7 +159,8 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     return csvFormat;
   }
 
-  public List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file) throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException {
+  public List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file)
+      throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException, ProblemsException {
     XSKHDBTIImportModel parsedFile = xskhdbtiParser.parse(location, new String(file, StandardCharsets.UTF_8));
     parsedFile.getConfigModels().forEach(el -> el.setFileName(XSKHDBTIUtils.convertHDBTIFilePropertyToPath(el.getFileName())));
     return parsedFile.getConfigModels();

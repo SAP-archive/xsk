@@ -35,6 +35,7 @@ import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
@@ -43,6 +44,7 @@ import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
 
 @RunWith(PowerMockRunner.class)
+@PowerMockIgnore("javax.management.*")
 public class XSKOdataParserTest extends AbstractDirigibleTest {
 	
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)

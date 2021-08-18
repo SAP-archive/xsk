@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>SAP BTP SDK for the Neo environment Websocket example</title>
+<script src="calculatorclient.js"></script>
+</head>
+<body>
+    <b>Choose type of calculator service implementation:</b>
+    <p>
+    <input id="radio_annotations" type="radio" name="impltype" checked></input>
+    <label for="radio_annotations">Annotations</label>
+    <br>
+    <input id="radio_programmatic" type="radio" name="impltype"></input>
+    <label for="radio_programmatic">Programmatic</label>
+    <br>
+    <p>
+        <b>Enter a list of integers separated by ";" (e.g. 2;3;4).
+            The result of the calculation will be their sum.</b>
+    <p>
+        <textarea id="textarea_input" maxlength="150" rows="2" cols="60">2;3;4</textarea>
+    <p>
+        <textarea id="textarea_output" maxlength="1000" rows="10" cols="60" readonly></textarea>
+    <div>
+        <span>
+            <button id="button_calculate"
+                onclick="calculate(document.getElementById('textarea_input').value.trim())">Calculate</button>
+            <button id="button_clear"
+                onclick="document.getElementById('textarea_output').value = ''">Clear</button>
+        </span>
+    </div>
+</body>
+</html>

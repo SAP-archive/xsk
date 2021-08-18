@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    id="WebApp_ID" version="2.5">
+
+    <!-- Main sample servlet mapped to / so that the integration test harness can detect readiness (generic for all samples) -->
+    <servlet>
+        <servlet-name>AuthenticationServlet</servlet-name>
+        <servlet-class>com.sap.cloud.sample.authentication.AuthenticationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthenticationServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- Protected servlet that requires login/authentication of user -->
+    <servlet>
+        <servlet-name>AuthenticationProtectedServlet</servlet-name>
+        <servlet-class>com.sap.cloud.sample.authentication.AuthenticationProtectedServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthenticationProtectedServlet</servlet-name>
+        <url-pattern>/protected</url-pattern>
+    </servlet-mapping>
+
+    <!-- Logout servlet that logs out a logged in user -->
+    <servlet>
+        <servlet-name>AuthenticationLogoutServlet</servlet-name>
+        <servlet-class>com.sap.cloud.sample.authentication.AuthenticationLogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthenticationLogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <!-- Secure application -->
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Protected Area</web-resource-name>
+            <url-pattern>/protected/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Everyone</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Public Area</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+    <security-role>
+        <description>All SAP BTP users</description>
+        <role-name>Everyone</role-name>
+    </security-role>
+</web-app>

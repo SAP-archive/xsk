@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- docBase path is relative to the corresponding appBase folder -->
+<Context docBase="../systemapps/com.sap.core.jpaas.security.saml2.sp.war">
+    <Resources>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.security.core.server.csi.jar" webAppMount="/WEB-INF/classes"/>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.core.jpaas.security.saml2.service.jar" webAppMount="/WEB-INF/classes"/>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.core.jpaas.security.saml2.service.jar" webAppMount="/META-INF/resources"/>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.core.jpaas.security.saml2.sp.lib.jar" webAppMount="/WEB-INF/classes"/>
+    </Resources>	
+</Context>

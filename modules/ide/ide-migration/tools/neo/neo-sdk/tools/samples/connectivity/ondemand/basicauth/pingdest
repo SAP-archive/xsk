@@ -1,0 +1,7 @@
+Name=pingdest
+Type=HTTP
+URL=https://<your_IP>:9443/PingAppHttpBasicAuth/
+Authentication=BasicAuthentication
+ProxyType=OnPremise
+User=pinguser
+Password=abcd1234

@@ -1,0 +1,6 @@
+Name=backend-no-auth-destination
+Type=HTTP
+URL=http://virtualpingbackend:1234/BackendAppHttpNoAuth/noauth
+Authentication=NoAuthentication
+ProxyType=OnPremise
+CloudConnectorVersion = 2

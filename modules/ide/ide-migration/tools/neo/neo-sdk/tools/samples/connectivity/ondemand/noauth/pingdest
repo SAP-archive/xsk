@@ -1,0 +1,5 @@
+Name=pingdest
+Type=HTTP
+URL=https://<your_IP>:9443/PingAppHttpNoAuth/
+Authentication=NoAuthentication
+ProxyType=OnPremise

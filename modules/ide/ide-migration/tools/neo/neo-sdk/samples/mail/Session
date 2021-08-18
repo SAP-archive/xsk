@@ -1,0 +1,9 @@
+Name=Session
+Type=MAIL
+mail.transport.protocol=smtp
+mail.smtp.host=${mail.host}
+mail.smtp.auth=true
+mail.smtp.starttls.enable=${mail.starttls}
+mail.smtp.port=${mail.port}
+mail.user=${mail.user}
+mail.password=${mail.password}

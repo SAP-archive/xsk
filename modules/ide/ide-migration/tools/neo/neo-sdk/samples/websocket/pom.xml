@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sap.cloud.sample</groupId>
+        <artifactId>sdk-samples-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>websocket</artifactId>
+    <packaging>war</packaging>
+
+    <description>This sample demonstrates usage of websockets.</description>
+    <licenses>
+        <license>
+            <name>SAP DEVELOPER LICENSE AGREEMENT</name>
+            <url>https://tools.hana.ondemand.com/developer-license-3.1.txt</url>
+        </license>
+    </licenses>
+
+    <properties>
+        <!-- Property that holds the maximum time in seconds to wait for the expected websocket reply in the test -->
+        <integrationtest.timeout>25</integrationtest.timeout>
+        <!-- Property that holds the path where Selenium screenshots should be saved when integration-testing -->
+        <integration.test.screenshot.path>${project.build.directory}/screenshots</integration.test.screenshot.path>
+    </properties>
+
+    <dependencies>
+        <!-- Required for UI testing -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.test.framework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Required by selenium -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Set test properties for local integration testing -->
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <integrationtest.timeout>${integrationtest.timeout}</integrationtest.timeout>
+                        <integration.test.screenshot.path>${integration.test.screenshot.path}</integration.test.screenshot.path>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Sample requires JDK 1.7 or higher for local integration test execution -->
+        <profile>
+            <id>local-integration-tests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-jdk7</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireJavaVersion>
+                                            <version>[1.7,)</version>
+                                        </requireJavaVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

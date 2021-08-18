@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sap.cloud.sample</groupId>
+        <artifactId>sdk-samples-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>persistence-with-jpa</artifactId>
+    <packaging>war</packaging>
+
+    <description>This sample provides application-managed persistence with JPA.</description>
+    <licenses>
+        <license>
+            <name>SAP DEVELOPER LICENSE AGREEMENT</name>
+            <url>https://tools.hana.ondemand.com/developer-license-3.1.txt</url>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <!-- Required for compilation and required at runtime (additional web application libraries) -->
+        <dependency>
+            <groupId>com.sap.security.core.server</groupId>
+            <artifactId>csi</artifactId>
+            <version>1.0.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/WebContent/WEB-INF/lib/com.sap.security.core.server.csi_1.0.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>jakarta.persistence</artifactId>
+            <version>2.2.3</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/WebContent/WEB-INF/lib/jakarta.persistence-2.2.3.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>2.7.8</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/WebContent/WEB-INF/lib/eclipselink-2.7.8.jar</systemPath>
+        </dependency>
+        <!-- Required for executing PersonCRUDIntegrationTest without a DB tunnel -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.8.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Required for executing PersonCRUDIntegrationTest against a HANA DB -->
+        <dependency>
+            <groupId>com.sap.db.jdbc</groupId>
+            <artifactId>ngdbc</artifactId>
+            <version>2.4.76</version>
+            <scope>system</scope>
+            <systemPath>${sap.cloud.sdk.path}/repository/.archive/lib/ngdbc.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <!-- DB type to be used for integration testing -->
+        <dbtype>hana</dbtype>
+        <!-- Explicitly set JMX port for DB tunnel background process to avoid port clash with ${local.server.jmx.port}-->
+        <dbtunnel.jmx.port>9019</dbtunnel.jmx.port>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>cloud-integration-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.sap.cloud</groupId>
+                        <artifactId>${sap.cloud.sdk.plugin}</artifactId>
+                        <version>${sap.cloud.sdk.version}</version>
+                        <executions>
+                            <!-- Delete the DB schema currently used as part of the cleanup (overrides parent pom.xml) -->
+                            <execution>
+                                <id>cleanup-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                    <goal>unbind-schema</goal>
+                                    <goal>delete-schema</goal>
+                                </goals>
+                                <configuration>
+                                    <failOnError>false</failOnError>
+                                    <force>true</force>
+                                    <silent>true</silent>
+                                </configuration>
+                            </execution>
+                            <!-- Create a new DB schema and bind to it to the application (overrides parent pom.xml) -->
+                            <execution>
+                                <id>prepare-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>create-schema</goal>
+                                    <goal>bind-schema</goal>
+                                </goals>
+                            </execution>
+                            <!-- Open a DB tunnel to the SAP HANA DB on SAP BTP -->
+                            <execution>
+                                <id>open-db-tunnel</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>open-db-tunnel</goal>
+                                </goals>
+                                <configuration>
+                                    <jmxPort>${dbtunnel.jmx.port}</jmxPort>
+                                    <background>true</background>
+                                    <consoleOutputPropertyPrefix>dbtunnel</consoleOutputPropertyPrefix>
+                                </configuration>
+                            </execution>
+                            <!-- Close the DB tunnel after tests are finished -->
+                            <execution>
+                                <id>close-db-tunnel</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>close-db-tunnel</goal>
+                                </goals>
+                                <configuration>
+                                    <jmxPort>${dbtunnel.jmx.port}</jmxPort>
+                                    <sessionId>${dbtunnel.result.sessionId}</sessionId>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <id>${sap.cloud.account}.${sap.cloud.application}.${dbtype}</id>
+                            <dbtype>${dbtype}</dbtype>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <!-- Pass in DB type and DB tunnel parameters read from open-db-tunnel goal to forked test process -->
+                            <systemPropertyVariables>
+                                <dbtunnel.result.jdbcUrl>${dbtunnel.result.jdbcUrl}</dbtunnel.result.jdbcUrl>
+                                <dbtunnel.result.dbUser>${dbtunnel.result.dbUser}</dbtunnel.result.dbUser>
+                                <dbtunnel.result.dbUserPassword>${dbtunnel.result.dbUserPassword}</dbtunnel.result.dbUserPassword>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

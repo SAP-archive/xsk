@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sap.cloud.sample</groupId>
+        <artifactId>sdk-samples-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>persistence-with-jdbc</artifactId>
+    <packaging>war</packaging>
+
+    <description>This sample provides relational persistence with JDBC.</description>
+    <licenses>
+        <license>
+            <name>SAP DEVELOPER LICENSE AGREEMENT</name>
+            <url>https://tools.hana.ondemand.com/developer-license-3.1.txt</url>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <!-- Required for compilation and required at runtime (additional web application libraries) -->
+        <dependency>
+            <groupId>com.sap.security.core.server</groupId>
+            <artifactId>csi</artifactId>
+            <version>1.0.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/WebContent/WEB-INF/lib/com.sap.security.core.server.csi_1.0.1.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <!-- DB type to be used for integration testing -->
+        <dbtype>hana</dbtype>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>cloud-integration-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.sap.cloud</groupId>
+                        <artifactId>${sap.cloud.sdk.plugin}</artifactId>
+                        <version>${sap.cloud.sdk.version}</version>
+                        <executions>
+                            <!-- Delete the DB schema currently used as part of the cleanup (overrides parent pom.xml) -->
+                            <execution>
+                                <id>cleanup-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                    <goal>unbind-schema</goal>
+                                    <goal>delete-schema</goal>
+                                </goals>
+                                <configuration>
+                                    <failOnError>false</failOnError>
+                                    <force>true</force>
+                                    <silent>true</silent>
+                                </configuration>
+                            </execution>
+                            <!-- Create a new DB schema and bind to it to the application (overrides parent pom.xml) -->
+                            <execution>
+                                <id>prepare-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>create-schema</goal>
+                                    <goal>bind-schema</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <id>${sap.cloud.account}.${sap.cloud.application}.${dbtype}</id>
+                            <dbtype>${dbtype}</dbtype>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

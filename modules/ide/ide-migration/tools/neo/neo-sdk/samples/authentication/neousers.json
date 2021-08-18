@@ -1,0 +1,25 @@
+{
+  "Users": [
+    {
+      "UID": "john",
+      "Password": "{SSHA}rPIKarM9WXSsmJTWd+kK8FGIRdpWzgtyI7g\u003d",
+      "Roles": [
+        "Everyone"
+      ],
+      "Attributes": [
+        {
+          "attributeName": "firstname",
+          "attributeValue": "John"
+        },
+        {
+          "attributeName": "lastname",
+          "attributeValue": "Doe"
+        },
+        {
+          "attributeName": "email",
+          "attributeValue": "john.doe@sap.com"
+        }
+      ]
+    }
+  ]
+}

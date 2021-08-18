@@ -1,0 +1,8 @@
+#Tue Jul 24 10:41:05 EEST 2012
+Name=outbound-internet-destination
+URL=https\://help.sap.com/doc/8cd05d3af14a42f7a53c0609acf55826/Cloud/en-US/terms_of_use.html
+ProxyType=Internet
+Type=HTTP
+Authentication=NoAuthentication
+TrustAll=true
+CloudConnectorVersion = 2

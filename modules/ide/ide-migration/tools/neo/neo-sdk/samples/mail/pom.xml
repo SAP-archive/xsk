@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sap.cloud.sample</groupId>
+        <artifactId>sdk-samples-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>mail</artifactId>
+    <packaging>war</packaging>
+
+    <description>This sample demonstrates sending e-mails from a simple Web application.</description>
+    <licenses>
+        <license>
+            <name>SAP DEVELOPER LICENSE AGREEMENT</name>
+            <url>https://tools.hana.ondemand.com/developer-license-3.1.txt</url>
+        </license>
+    </licenses>
+
+    <properties>
+        <!-- Properties for the mail server/account that are required for the cloud integration tests must be provided -->
+        <!-- as Maven properties, e.g.: -->
+        <!-- mvn verify -P cloud-integration-tests -Dmail.host=... -Dmail.user=... -Dmail.password=... -Dmail.from.address=... -Dmail.to.address=... -->
+        <!-- Hint: To avoid retyping the above whenever you call Maven, you can of course add the properties directly, e.g.: -->
+        <!-- <mail.user>p0123456789</mail.user> -->
+        <!-- Hint: You may like to use environment variables and set the properties based on their values, e.g.: -->
+        <!-- <mail.password>${env.MAIL_PASSWORD}</mail.password> -->
+
+        <!-- Properties that hold mail server configuration are pre-defined below with sensible defaults -->
+        <mail.port>587</mail.port>
+        <mail.starttls>true</mail.starttls>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Set properties that hold information on your mail account for integration testing -->
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <mail.from.address>${mail.from.address}</mail.from.address>
+                        <mail.to.address>${mail.to.address}</mail.to.address>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>cloud-integration-tests</id>
+            <build>
+                <plugins>
+                    <!-- Inject mail session properties and copy session to the right location -->
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.4.2</version>
+                        <executions>
+                            <execution>
+                                <id>filter-mail-session-before-usage</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/mail-configuration</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}</directory>
+                                            <includes>
+                                                <include>Session</include>
+                                            </includes>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                    <overwrite>true</overwrite>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Install mail session that the sample requires into the cloud server -->
+                    <plugin>
+                        <groupId>com.sap.cloud</groupId>
+                        <artifactId>${sap.cloud.sdk.plugin}</artifactId>
+                        <version>${sap.cloud.sdk.version}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>put-destination</goal>
+                                </goals>
+                                <configuration>
+                                    <localpath>${project.build.directory}/mail-configuration/Session</localpath>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

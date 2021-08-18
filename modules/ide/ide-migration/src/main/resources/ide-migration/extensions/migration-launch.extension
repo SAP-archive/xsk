@@ -1,5 +1,0 @@
-{
-    "module": "ide-migration/services/migration-launch-view.js",
-    "extensionPoint": "ide-view",
-    "description": "XS Migration Launch Configuration"
-}

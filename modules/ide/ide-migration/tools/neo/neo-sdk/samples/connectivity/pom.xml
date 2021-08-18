@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sap.cloud.sample</groupId>
+        <artifactId>sdk-samples-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>connectivity</artifactId>
+    <packaging>war</packaging>
+
+    <description>This sample covers different types of connectivity scenarios.</description>
+    <licenses>
+        <license>
+            <name>SAP DEVELOPER LICENSE AGREEMENT</name>
+            <url>https://tools.hana.ondemand.com/developer-license-3.1.txt</url>
+        </license>
+    </licenses>
+
+    <profiles>
+        <profile>
+            <id>local-integration-tests</id>
+            <build>
+                <plugins>
+                    <!-- Install destination that the sample requires into the local server -->
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-local-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <copy file="${basedir}/destinations/outbound-internet-destination"
+                                            tofile="${local.server.root}/config_master/service.destinations/destinations/outbound-internet-destination"
+                                            failonerror="true" overwrite="true">
+                                        </copy>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>cloud-integration-tests</id>
+            <build>
+                <plugins>
+                    <!-- Install destination that the sample requires into the cloud server -->
+                    <plugin>
+                        <groupId>com.sap.cloud</groupId>
+                        <artifactId>${sap.cloud.sdk.plugin}</artifactId>
+                        <version>${sap.cloud.sdk.version}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>put-destination</goal>
+                                </goals>
+                                <configuration>
+                                    <localpath>${basedir}/destinations/outbound-internet-destination</localpath>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <title>Welcome to SAPUI5</title>
+
+        <link type="image/x-icon" href="resources/sap/ui/core/mimes/logo/txtonly_16x16.ico" rel="shortcut icon" />
+        <link type="image/x-icon" href="resources/sap/ui/core/mimes/logo/txtonly_16x16.ico" rel="icon" />
+        <script id="sap-ui-bootstrap" data-sap-ui-theme="sap_goldreflection" type="text/javascript"
+            data-sap-ui-libs="sap.ui.commons" src="resources/sap-ui-core.js">
+        </script>
+
+        <script>
+            jQuery.sap.require("sap.ui.commons.MessageBox");
+
+            function doClick(oControlEvent) {
+                var sText = sap.ui.getCore().byId("testTextField").getValue();
+                sap.ui.commons.MessageBox.show("You typed: '" + sText
+                        + "' into the TextField.",
+                        sap.ui.commons.MessageBox.Icon.INFORMATION, "Hello!");
+            }
+
+            function updateTypedText(evt) {
+                var sText = evt.getParameter("liveValue");
+                oLbl.setText("Last text you typed: " + sText);
+            }
+
+            function switchTheme(themeName) {
+                sap.ui.getCore().applyTheme(themeName);
+            }
+
+            var oTextField = new sap.ui.commons.TextField("testTextField", {
+                width : "250px"
+            }).attachLiveChange(updateTypedText).placeAt("uiArea");
+
+            var oButton = new sap.ui.commons.Button("testButton", {
+                text : "Click me!",
+                press : doClick
+            }).placeAt("uiArea");
+
+            var oLbl = new sap.ui.commons.Label("testLabel", {
+                text : "Last text you typed:"
+            }).placeAt("uiArea");
+        </script>
+
+        <style>
+            html {
+                background: #ffffff; /* Old browsers */
+                background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 50%, #cfcfcf 100%); /* FF3.6+ */
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(50%, #ffffff),
+                    color-stop(100%, #cfcfcf) ); /* Chrome,Safari4+ */
+                background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 50%, #cfcfcf 100%); /* Chrome10+,Safari5.1+ */
+                background: -ms-linear-gradient(top, #ffffff 0%, #ffffff 50%, #cfcfcf 100%); /* IE10+ */
+                background: linear-gradient(top, #ffffff 0%, #ffffff 50%, #cfcfcf 100%); /* W3C */
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#cfcfcf', GradientType=0);
+                /* IE6-9 */
+                background-repeat: no-repeat;
+                min-height: 100%;
+            }
+
+            body {
+                font-family: Calibri, Tahoma, Arial, Helvetica, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                margin: 3px 0;
+            }
+
+            h2 {
+                margin: 8px 0px 5px 0px;
+            }
+
+            h3 {
+                margin: 18px 0px 3px 0px;
+            }
+
+            ul {
+                margin-top: 3px;
+                margin-bottom: 6px;
+            }
+
+            #banner-div {
+                padding: 0 15px;
+                border-bottom: 5px solid gray;
+            }
+
+            #content {
+                padding: 15px;
+            }
+
+            #preview {
+                -moz-border-radius: 6px;
+                -webkit-border-radius: 6px;
+                border-radius: 6px;
+                border: 1px solid #AAAAAA;
+                padding: 20px;
+                height: 24px;
+            }
+
+            #uiArea>* {
+                margin-right: 8px;
+            }
+
+            #footer {
+                font-size: 9pt;
+                position: fixed;
+                bottom: 1px;
+                left: 45%;
+                border: 1px solid #DDDDDD;
+                background-color: white;
+            }
+
+            .onlyInIE8 {
+                display: none;
+            }
+
+            html[data-sap-ui-browser="ie8"] .onlyInIE8 {
+                display: inline;
+            }
+
+            html[data-sap-ui-browser="ie9"] .notInIE9 {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="banner-div">
+            <h1 style="color: gray;">
+                <span style="color: #aaa; font-size: 120%;"> <span style="font-weight: bold;">SAP</span><span
+                    style="color: #000;">UI</span><span style="color: #EFAA00;">5</span>
+                </span> - UI development toolkit for HTML5
+            </h1>
+        </div>
+        <div id="content">
+            <h2>Welcome to SAPUI5</h2>
+            You have successfully installed the &quot;Getting Started&quot; sample.<br>
+
+            <h3>Introduction</h3>
+            SAPUI5 is a state-of-the-art JavaScript UI library that:
+            <ul>
+                <li>... provides RIA-style AJAX features</li>
+                <li>... supports the SAP product standards</li>
+                <li>... is based on Open Source libraries like jQuery</li>
+                <li>... offers an extensibility concept</li>
+                <li>... allows theming and customer branding</li>
+            </ul>
+            For more information visit us at <a href="https://sapui5.hana.ondemand.com/sdk/">https://sapui5.hana.ondemand.com/sdk</a>
+
+            <h3>Demo</h3>
+            In the box below there is a SAPUI5-rendered TextField, Button, and Label. Enter some text and then click the button:<br>
+            <p id="uiAreaProblemDescription"></p>
+            <script>
+                try {
+                    // Try to access remote resources and provide problem message if not available
+                    sap.ui;
+                } catch (err) {
+                    document.getElementById("uiAreaProblemDescription").innerHTML = "<font color=\"red\">Unable to load SAP UI 5 resources from SAP BTP. Please check your server proxy settings as described in the readme.txt of this sample.</font>";
+                }
+            </script>
+            <div id="preview" class="sapUiBody">
+                <span id="uiArea" style="display: inline-block;"></span>
+            </div>
+            You can also switch themes - available themes are: <a href="javascript:switchTheme('sap_goldreflection')">Gold
+                Reflection</a>, <a href="javascript:switchTheme('sap_hcb')">High Contrast Black</a>, <a
+                href="javascript:switchTheme('sap_platinum')">Platinum</a> and <a href="javascript:switchTheme('sap_ux')">Ux
+                Target Design</a>
+        </div>
+
+        <div id="footer">&copy; 2009-2014 SAP SE. Do not distribute without permission.</div>
+    </body>
+</html>

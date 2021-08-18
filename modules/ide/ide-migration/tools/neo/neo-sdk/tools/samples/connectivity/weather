@@ -1,0 +1,4 @@
+URL = http://weather.yahooapis.com/forecastrss?p=BUXX0005&u=c
+Name = weather
+Type = HTTP
+Authentication = NoAuthentication

@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sap.cloud.sample</groupId>
+    <artifactId>sdk-samples-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <description>This is the parent for the samples.</description>
+
+    <licenses>
+        <license>
+            <name>SAP DEVELOPER LICENSE AGREEMENT</name>
+            <url>https://tools.hana.ondemand.com/developer-license-3.1.txt</url>
+        </license>
+    </licenses>
+
+    <properties>
+        <!-- Properties that hold information on the location, version and plugin of the SAP BTP SDK for the Neo environment -->
+        <sap.cloud.sdk.path>${project.basedir}/../..</sap.cloud.sdk.path>
+        <sap.cloud.sdk.version>4.2.4</sap.cloud.sdk.version>
+        <sap.cloud.sdk.plugin>neo-java-web-maven-plugin</sap.cloud.sdk.plugin>
+
+        <!-- Property that holds the supported JDK version for the given SAP BTP SDK for the Neo environment -->
+        <sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
+
+        <!-- Properties for account, user name, and password that are required to access the SAP BTP -->
+        <!-- data center for the cloud integration tests must be provided as Maven properties, e.g.: -->
+        <!-- mvn clean verify -P cloud-integration-tests -Dsap.cloud.account=... -Dsap.cloud.username=... -Dsap.cloud.password=... -->
+        <!-- Hint: To avoid retyping the above whenever you call Maven, you can of course add the properties directly, e.g.: -->
+        <!-- <sap.cloud.username>p0123456789</sap.cloud.username> -->
+        <!-- Hint: You may like to use environment variables and set the properties based on their values, e.g.: -->
+        <!-- <sap.cloud.password>${env.SAP_CLOUD_PASSWORD}</sap.cloud.password> -->
+
+        <!-- Property that holds the data center host is pre-defined below, but may be overwritten if required, e.g.: -->
+        <!-- mvn clean verify -P cloud-integration-tests ... -Dsap.cloud.host=hanatrial.ondemand.com -->
+        <sap.cloud.host>hana.ondemand.com</sap.cloud.host>
+
+        <!-- Property that holds the name of the application under which it will later appear in the cloud -->
+        <sap.cloud.application>sample</sap.cloud.application>
+
+        <!-- Properties that hold the local server configuration required for local integration-testing -->
+        <local.server.root>${project.build.directory}/server</local.server.root>
+        <local.server.host>localhost</local.server.host>
+        <local.server.shutdown.port>9003</local.server.shutdown.port>
+        <local.server.jmx.port>9004</local.server.jmx.port>
+        <local.server.http.port>9080</local.server.http.port>
+        <local.server.https.port>9443</local.server.https.port>
+        <local.server.config.service.port>9087</local.server.config.service.port>
+        <local.server.ajp.port>9009</local.server.ajp.port>
+
+        <!-- Property setting source encoding to UTF-8 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Property setting the selenium test framework version to be use in UI integration tests -->
+        <selenium.test.framework.version>2.52.0</selenium.test.framework.version>
+    </properties>
+
+    <dependencies>
+        <!-- The SAP BTP Java Web Tomcat 9 API -->
+        <dependency>
+            <groupId>com.sap.cloud</groupId>
+            <artifactId>neo-java-web-api</artifactId>
+            <version>${sap.cloud.sdk.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Required for testing -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Required for integration testing -->
+        <dependency>
+            <groupId>org.httpunit</groupId>
+            <artifactId>httpunit</artifactId>
+            <version>1.7.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xmlParserAPIs</artifactId>
+            <version>2.6.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.9.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>0.9.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>rhino</groupId>
+            <artifactId>js</artifactId>
+            <version>1.6R5</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <modules>
+        <module>authentication</module>
+        <module>connectivity</module>
+        <module>explore-ui5</module>
+        <module>hello-world</module>
+        <module>mail</module>
+        <module>persistence-with-jdbc</module>
+        <module>persistence-with-jpa</module>
+        <module>websocket</module>
+    </modules>
+
+    <build>
+        <!-- Map the Eclipse file system layout to the Maven plug-ins -->
+        <sourceDirectory>${project.basedir}/src</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/test</testSourceDirectory>
+        <outputDirectory>${project.basedir}/war/WEB-INF/classes</outputDirectory>
+        <testOutputDirectory>${project.basedir}/bin/classes</testOutputDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/test</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <!-- Map the Eclipse file system layout to the Maven plug-ins -->
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <warName>${project.artifactId}</warName>
+                    <warSourceDirectory>WebContent</warSourceDirectory>
+                    <archive>
+                        <manifestFile>WebContent/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Set compiler to officially supported JDK version for the given SAP BTP SDK for the Neo environment -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>${sap.cloud.jdk.version}</source>
+                    <target>${sap.cloud.jdk.version}</target>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+
+            <!-- Include only unit tests for maven-surefire-plugin that is run in test phase -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/integrationtest/**/*Test.java</exclude>
+                    </excludes>
+                    <includes>
+                        <include>**/test/**/*Test.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+            <!-- Include only integration tests for maven-failsafe-plugin that is run in integration-test phase -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/test/**/*Test.java</exclude>
+                    </excludes>
+                    <includes>
+                        <include>**/integrationtest/**/*Test.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+            <!-- Enforce officially supported JDK and validated Maven version or higher -->
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[${sap.cloud.jdk.version},2.0)</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>[3.0.3, 4.0.0)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <!-- Define the version of the Maven Plugin for SAP BTP we want to use -->
+                <plugin>
+                    <groupId>com.sap.cloud</groupId>
+                    <artifactId>${sap.cloud.sdk.plugin}</artifactId>
+                    <version>${sap.cloud.sdk.version}</version>
+                </plugin>
+
+                <!-- Force m2e to ignore plugin goal that it doesn't support naturally -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.apache.maven.plugins
+                                        </groupId>
+                                        <artifactId>
+                                            maven-enforcer-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [0.0.1,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>enforce</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <!-- Skip integration tests for the parent project -->
+        <profile>
+            <id>skip-integration-test-for-parent</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <file>
+                    <missing>WebContent/WEB-INF/web.xml</missing>
+                </file>
+            </activation>
+            <properties>
+                <skipIntegrationTests>true</skipIntegrationTests>
+            </properties>
+        </profile>
+
+        <!-- Activate compiler warnings when matching JDK is present (compiler then doesn't generate bootstrap warnings) -->
+        <profile>
+            <id>compiler-warnings</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>${sap.cloud.jdk.version}</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>2.5.1</version>
+                        <configuration>
+                            <compilerArguments>
+                                <Werror />
+                            </compilerArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- The cloud integration tests will stop a currently running sample application (cleanup-cloud-application), deploy 
+            the sample application (deploy-cloud-application), allow samples to run sample specific application configurations (prepare-cloud-application), 
+            start the cloud application and wait for it to become available (start-cloud-application), run the integration tests with 
+            the maven-failsafe-plugin (execute-cloud-integration-tests) and finally stop the cloud application (stop-cloud-application) -->
+        <!-- Note that you need to provide Maven properties sap.cloud.account, sap.cloud.username, and sap.cloud.password 
+            for the operations to pass successfully and https.proxyHost and possibly https.proxyPort if you have a proxy! -->
+        <profile>
+            <id>cloud-integration-tests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>1.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-maven</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>sap.cloud.account</property>
+                                            <message>Maven property for SAP BTP account
+                                                (-Dsap.cloud.account=...) is missing, but required!</message>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>sap.cloud.username</property>
+                                            <message>Maven property for SAP BTP user name
+                                                (-Dsap.cloud.username=...) is missing, but required!</message>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>sap.cloud.password</property>
+                                            <message>Maven property for SAP BTP password
+                                                (-Dsap.cloud.password=...) is missing, but required!</message>
+                                        </requireProperty>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>${skipIntegrationTests}</skip>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.sap.cloud</groupId>
+                        <artifactId>${sap.cloud.sdk.plugin}</artifactId>
+                        <executions>
+                            <execution>
+                                <id>cleanup-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>deploy-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                            <!-- This execution can be overridden in the sample pom.xml in order to execute additional steps 
+                                between deployment and start of the sample application. The additional execution must be specified with the neo-java-web-maven-plugin 
+                                and the same id "prepare-cloud-application" and phase "pre-integration-test" -->
+                            <execution>
+                                <id>prepare-cloud-application</id>
+                                <phase>pre-integration-test</phase>
+                            </execution>
+                            <execution>
+                                <id>start-cloud-application</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-cloud-application</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>${skipIntegrationTests}</skip>
+                            <sdkInstallPath>${sap.cloud.sdk.path}</sdkInstallPath>
+                            <host>${sap.cloud.host}</host>
+                            <user>${sap.cloud.username}</user>
+                            <password>${sap.cloud.password}</password>
+                            <account>${sap.cloud.account}</account>
+                            <application>${sap.cloud.application}</application>
+                            <source>${project.build.directory}/${project.artifactId}.war</source>
+                            <synchronous>true</synchronous>
+                            <javaVersion>8</javaVersion>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>execute-cloud-integration-tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <sap.cloud.username>${sap.cloud.username}</sap.cloud.username>
+                                        <sap.cloud.password>${sap.cloud.password}</sap.cloud.password>
+                                        <integration.test.server.url>https://${sap.cloud.application}${sap.cloud.account}.${sap.cloud.host}</integration.test.server.url>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>verify-cloud-integration-tests</id>
+                                <goals>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>${skipIntegrationTests}</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- The local integration tests will install a local server from the repository that is contained inside the SAP Cloud 
+            Platform SDK for Neo environment(install-local-server), deploy the sample application (deploy-local-application), allow samples to run 
+            sample specific application configurations (prepare-local-application), start the local server and wait for the deployed 
+            sample application to become available (start-local-server), run the integration tests with the maven-failsafe-plugin (execute-local-integration-tests) 
+            and finally stop the local server (stop-local-server) -->
+        <!-- Note that you need to provide Maven properties https.proxyHost and possibly https.proxyPort if you have a proxy! -->
+        <profile>
+            <id>local-integration-tests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.sap.cloud</groupId>
+                        <artifactId>${sap.cloud.sdk.plugin}</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-local-server</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>install-local</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>deploy-local-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>deploy-local</goal>
+                                </goals>
+                            </execution>
+                            <!-- The maven-antrun-plugin execution prepare-local-application defined farther below will run 
+                                between this deploy-local-application and start-local-server executions -->
+                            <execution>
+                                <id>start-local-server</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>start-local</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-local-server</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop-local</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>${skipIntegrationTests}</skip>
+                            <sdkInstallPath>${sap.cloud.sdk.path}</sdkInstallPath>
+                            <location>${local.server.root}</location>
+                            <shutdownPort>${local.server.shutdown.port}</shutdownPort>
+                            <configServicePort>${local.server.config.service.port}</configServicePort>
+                            <httpPort>${local.server.http.port}</httpPort>
+                            <httpsPort>${local.server.https.port}</httpsPort>
+                            <jmxPort>${local.server.jmx.port}</jmxPort>
+                            <ajpPort>${local.server.ajp.port}</ajpPort>
+                            <source>${project.build.directory}/${project.artifactId}.war</source>
+                            <waitUrl>http://${local.server.host}:${local.server.http.port}/${project.artifactId}/</waitUrl>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <!-- This execution can be overridden in the sample pom.xml in order to execute additional steps 
+                                between deployment and start of the sample application. The additional execution must be specified with the maven-antrun-plugin 
+                                and same id "prepare-local-application" and phase "pre-integration-test" -->
+                            <execution>
+                                <id>prepare-local-application</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>${skipIntegrationTests}</skip>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>execute-local-integration-tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <integration.test.server.url>http://${local.server.host}:${local.server.http.port}</integration.test.server.url>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>verify-local-integration-tests</id>
+                                <goals>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>${skipIntegrationTests}</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- If HTTPS Internet access requires a proxy the Maven Plugin for SAP BTP and the Failsafe plugin 
+            running the integration tests need to know of it (the profile will auto-activate if https.proxyHost is provided) -->
+        <profile>
+            <id>use-https-proxy</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>https.proxyHost</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- Set default Oracle HTTPS port in case none is defined as profile gets activated on HTTPS host only -->
+                <https.proxyPort>443</https.proxyPort>
+            </properties>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.sap.cloud</groupId>
+                            <artifactId>${sap.cloud.sdk.plugin}</artifactId>
+                            <configuration>
+                                <!-- Make the local server access the Internet through the HTTPS proxy -->
+                                <httpsProxyHost>${https.proxyHost}</httpsProxyHost>
+                                <httpsProxyPort>${https.proxyPort}</httpsProxyPort>
+                                <!-- Make the console access the Internet through the HTTPS proxy -->
+                                <consoleHttpsProxyHost>${https.proxyHost}</consoleHttpsProxyHost>
+                                <consoleHttpsProxyPort>${https.proxyPort}</consoleHttpsProxyPort>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <configuration>
+                                <!-- Make the integration tests access the Internet through the HTTPS proxy -->
+                                <systemPropertyVariables>
+                                    <https.proxyHost>${https.proxyHost}</https.proxyHost>
+                                    <https.proxyPort>${https.proxyPort}</https.proxyPort>
+                                </systemPropertyVariables>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+</project>

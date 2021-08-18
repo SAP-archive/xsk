@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    id="WebApp_ID" version="2.5">
+
+    <!-- SAPUI5 resource servlet used to handle application resources -->
+    <servlet>
+        <servlet-name>ResourceServlet</servlet-name>
+        <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResourceServlet</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- This option enables proxying of resources from a remote location (in the cloud) -->
+    <context-param>
+        <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
+        <param-value>https://sapui5.hana.ondemand.com</param-value>
+    </context-param>
+
+    <!-- The dev_mode disables the caching of local resources (not for remote ones!) -->
+    <context-param>
+        <param-name>com.sap.ui5.resource.DEV_MODE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <!-- Cache Control Filter to prevent caching of any resource -->
+    <filter>
+        <display-name>CacheControlFilter</display-name>
+        <filter-name>CacheControlFilter</filter-name>
+        <filter-class>com.sap.ui5.resource.CacheControlFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>*.xml</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>*.json</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+
+    <!-- Welcome file list -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+</web-app>

@@ -16,10 +16,11 @@ import java.io.IOException;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 
 public interface XSKDataStructureParser<T extends XSKDataStructureModel> {
 
-  T parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException;
+  T parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException;
 
   String getType();
 

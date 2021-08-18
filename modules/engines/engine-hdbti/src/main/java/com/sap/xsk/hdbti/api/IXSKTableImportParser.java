@@ -14,9 +14,11 @@ package com.sap.xsk.hdbti.api;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
 public interface IXSKTableImportParser {
-    XSKTableImportArtifact parseTableImportArtifact(String location, String content) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, SQLException;
+    XSKTableImportArtifact parseTableImportArtifact(String location, String content) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, SQLException, ProblemsException;
 }

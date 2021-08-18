@@ -25,13 +25,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Test;
 
-public class XSKHDBTIParserTest {
+public class XSKHDBTIParserTest extends AbstractDirigibleTest {
 
   @Test
   public void testValidInputAllFieldsAssignedProperlyParseSuccessfully()
-      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
+      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, ProblemsException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/sample.hdbti"), StandardCharsets.UTF_8);
 
@@ -88,7 +90,7 @@ public class XSKHDBTIParserTest {
 
   @Test
   public void testParseConfigObjectFieldsRandomOrderShouldPass()
-      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
+      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, ProblemsException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
     XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();

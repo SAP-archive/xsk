@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -135,7 +136,8 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @throws IOException                in case of an error
    * @throws XSKDataStructuresException in case of an error
    */
-  public void registerPredeliveredHDBProcedure(String contentPath) throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+  public void registerPredeliveredHDBProcedure(String contentPath)
+      throws IOException, XSKDataStructuresException, XSKArtifactParserException, ProblemsException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBProcedureModel model;
     model = (XSKDataStructureHDBProcedureModel) xskCoreParserService
@@ -149,7 +151,8 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @param contentPath the data path
    * @throws IOException in case of an error
    */
-  public void registerPredeliveredHDBTableFunction(String contentPath) throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+  public void registerPredeliveredHDBTableFunction(String contentPath)
+      throws IOException, XSKDataStructuresException, XSKArtifactParserException, ProblemsException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBTableFunctionModel model;
     model = (XSKDataStructureHDBTableFunctionModel) xskCoreParserService
@@ -164,7 +167,8 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @throws IOException                in case of an error
    * @throws XSKDataStructuresException in case of an error
    */
-  public void registerPredeliveredHDBSchema(String contentPath) throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+  public void registerPredeliveredHDBSchema(String contentPath)
+      throws IOException, XSKDataStructuresException, XSKArtifactParserException, ProblemsException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBSchemaModel model;
     model = (XSKDataStructureHDBSchemaModel) xskCoreParserService

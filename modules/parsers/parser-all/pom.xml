@@ -20,6 +20,11 @@
 			<artifactId>xsk-modules-parsers-hdbdd</artifactId>
 			<version>0.7.0-SNAPSHOT</version>
 		</dependency> -->
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-modules-parsers-commons</artifactId>
+      <version>0.8.0-SNAPSHOT</version>
+    </dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-xsodata</artifactId>

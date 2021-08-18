@@ -26,6 +26,7 @@ import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
@@ -52,7 +53,8 @@ public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFac
     private final IXSKHDBTIParser xskHdbtiParser = new XSKHDBTIParser();
 
     @Override
-    public XSKTableImportArtifact parseTableImport(String content, String location) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
+    public XSKTableImportArtifact parseTableImport(String content, String location)
+        throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, ProblemsException {
         XSKTableImportArtifact tableImportArtifact = new XSKTableImportArtifact();
         List<XSKTableImportConfigurationDefinition> importConfigurationDefinitions = new ArrayList<>();
         List<XSKTableImportToCsvRelation> tableImportToCsvRelations = new ArrayList<>();

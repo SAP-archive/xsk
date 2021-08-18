@@ -32,6 +32,7 @@ import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.transformer.XSKTableImportArtifactFactory;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.utils.XSKCommonsDBUtils;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 
 public class XSKTableImportParser implements IXSKTableImportParser {
 
@@ -41,7 +42,7 @@ public class XSKTableImportParser implements IXSKTableImportParser {
 
     @Override
     public XSKTableImportArtifact parseTableImportArtifact(String location, String content)
-            throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, SQLException {
+        throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, SQLException, ProblemsException {
         XSKTableImportArtifact parsedArtifact = xskTableImportArtifactFactory.parseTableImport(content, location);
         parsedArtifact.setName(new File(location).getName());
         parsedArtifact.setLocation(location);

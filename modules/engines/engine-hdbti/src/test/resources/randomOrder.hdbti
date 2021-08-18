@@ -1,0 +1,24 @@
+import = [
+   {
+     delimEnclosing="\"";
+     schema = "mySchema";
+     distinguishEmptyFromNull = true;
+     header = false;
+     table = "myTable";
+     useHeaderNames = false;
+     delimField = ";";
+     keys = [ "GROUP_TYPE" : "BW_CUBE", "GROUP_TYPE" : "BW_DSO", "GROUP_TYPE" : "BW_PSA"];
+     file = "sap.ti2.demo:myData.csv";
+   },
+    {
+     delimEnclosing="#";
+     schema = "mySchema2";
+     distinguishEmptyFromNull = false;
+     header = false;
+     table = "myTable2";
+     useHeaderNames = false;
+     delimField = ";";
+     keys = [ "MAIN_TYPE" : "BW_CO", "SECOND_TYPE" : "BW_PO"];
+     file = "sap.ti2.demo:myData2.csv";
+   }
+ ];

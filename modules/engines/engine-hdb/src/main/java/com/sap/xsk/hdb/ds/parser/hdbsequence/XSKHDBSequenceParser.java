@@ -17,9 +17,11 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sap.xsk.parser.utils.ParserConstants;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
@@ -52,7 +54,8 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceParser.class);
 
     @Override
-    public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+    public XSKDataStructureModel parse(String location, String content)
+        throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
         Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*SEQUENCE", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
         boolean matchFound = matcher.find();
@@ -73,7 +76,8 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
         return XSKDataStructureHDBSequenceModel.class;
     }
 
-    private XSKDataStructureModel parseHanaXSClassicContent(String location, String content) throws IOException, XSKArtifactParserException {
+    private XSKDataStructureModel parseHanaXSClassicContent(String location, String content)
+        throws IOException, XSKArtifactParserException, ProblemsException {
         logger.debug("Parsing hdbsequence as Hana XS Classic format");
         ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
         ANTLRInputStream inputStream = new ANTLRInputStream(is);
@@ -92,8 +96,8 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
         parser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = parser.hdbsequence();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB Sequence", logger);
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB Sequence", logger);
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Sequence", logger);
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Sequence", logger);
 
         HdbsequenceBaseVisitor<JsonElement> visitor = new HdbsequenceVisitor();
         JsonElement parsedResult = visitor.visit(parseTree);

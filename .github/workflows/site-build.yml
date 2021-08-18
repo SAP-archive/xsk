@@ -22,6 +22,7 @@ jobs:
         mv ../temp/charts/ .
         mv ../temp/index.yaml .
         mv ../temp/docs-site/ .
+        mv ../CNAME .
         rm -rf ../temp/
         cp -a docs-site/site/. .
     - name: Git Commit and Push

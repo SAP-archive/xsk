@@ -327,9 +327,39 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Cloud Foundry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Cloud Foundry
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    Steps
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -372,6 +402,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    Steps
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -388,7 +433,172 @@
                 
                 
                 <h1 id="setup-in-cloud-foundry">Setup in Cloud Foundry</h1>
-<p>TODO</p>
+<p>Deploy XSK in SAP BTP<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, Cloud Foundry environment.</p>
+<div class="admonition info">
+<p class="admonition-title">Prerequisites</p>
+<ul>
+<li>Install <a href="http://docs.cloudfoundry.org/devguide/installcf/install-go-cli.html">Cloud Foundry Command Line Interface</a>.</li>
+<li>Access to SAP BTP account <em>(the Trial landscape can be accessed <a href="https://account.hanatrial.ondemand.com/">here</a>).</em></li>
+</ul>
+</div>
+<h2 id="steps">Steps</h2>
+<hr />
+<ol>
+<li>
+<p>Set the SAP BTP Cloud Foundry API host:</p>
+<div class="highlight"><pre><span></span><code>cf api &lt;cloud-foundry-api-host&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Log in to the SAP BTP, Cloud Foundry environment with:</p>
+<div class="highlight"><pre><span></span><code>cf login
+</code></pre></div>
+</li>
+<li>
+<p>Create XSUAA service instance:</p>
+<ul>
+<li>
+<p>Copy and paste the following content into <code>xs-security.json</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+   <span class="nt">&quot;xsappname&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;applicationName&gt;-xsuaa&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;tenant-mode&quot;</span><span class="p">:</span> <span class="s2">&quot;shared&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;scopes&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer scope&quot;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator scope&quot;</span>
+      <span class="p">}</span>
+   <span class="p">],</span>
+   <span class="nt">&quot;role-templates&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer related roles&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;scope-references&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span>
+         <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator related roles&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;scope-references&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span>
+         <span class="p">]</span>
+      <span class="p">}</span>
+   <span class="p">],</span>
+   <span class="nt">&quot;role-collections&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Developer&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Developer&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;role-template-references&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span>
+         <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Operator&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Operator&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;role-template-references&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span>
+         <span class="p">]</span>
+      <span class="p">}</span>
+   <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Replace the <strong><code>&lt;applicationName&gt;</code></strong> placeholder with your application name, e.g. <strong><code>xsk</code></strong>.</p>
+</li>
+<li>
+<p>Create a XSUAA service instance:</p>
+<div class="highlight"><pre><span></span><code>cf create-service xsuaa application &lt;applicationName&gt;-xsuaa -c xs-security.json
+</code></pre></div>
+<p>Use the same <strong><code>&lt;applicationName&gt;</code></strong> as in the previous step.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Deploy XSK:</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Docker</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>cf push xsk \
+--docker-image=dirigiblelabs/xsk-cf:latest \
+--hostname xsk-&lt;org-name&gt; \
+-m 2G -k 2G
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<ul>
+<li>Replace the <code>&lt;org-name&gt;</code> placeholder with your subaccount's <strong>Subdomain</strong> value.</li>
+<li>Instead of using the <code>latest</code> tag (version), for production and development use cases it is recomended to use a stable release version:<ul>
+<li>All released versions can be found <a href="https://github.com/sap/xsk/releases/">here</a>.</li>
+<li>All XSK Docker images and tags (versions) can be found <a href="https://hub.docker.com/u/dirigiblelabs">here</a>.</li>
+</ul>
+</li>
+</ul>
+</div>
+<ul>
+<li>
+<p>Bind the XSUAA service instance to the XSK deployment:</p>
+<div class="highlight"><pre><span></span><code>cf bind-service xsk &lt;applicationName&gt;-xsuaa
+</code></pre></div>
+<p>Replace the <code>&lt;applicationName&gt;</code> placeholder with the application name used in the previous steps.</p>
+</li>
+<li>
+<p>Restart the <code>xsk</code> deployment:</p>
+<div class="highlight"><pre><span></span><code>cf restart xsk
+</code></pre></div>
+</li>
+</ul>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Buildpack</label><div class="tabbed-content">
+<ul>
+<li>Download the <code>sap-cf</code> binaries from the downloads site: <a href="https://github.com/SAP/xsk/releases">https://github.com/SAP/xsk/releases</a></li>
+<li>Unzip the downloaded archieve to extract the <code>ROOT.war</code> file.</li>
+<li>
+<p>Create <code>manifest.yaml</code> file in the same directory where the <code>ROOT.war</code> is located:
+    <div class="highlight"><pre><span></span><code><span class="nt">applications</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-&lt;org-name&gt;</span>
+  <span class="nt">memory</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2G</span>
+  <span class="nt">buildpack</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sap_java_buildpack</span>
+  <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ROOT.war</span>
+  <span class="nt">env</span><span class="p">:</span>
+    <span class="nt">JBP_CONFIG_COMPONENTS</span><span class="p">:</span> <span class="s">&quot;jres:</span><span class="nv"> </span><span class="s">[&#39;com.sap.xs.java.buildpack.jdk.SAPMachineJDK&#39;]&quot;</span>
+    <span class="nt">JBP_CONFIG_SAP_MACHINE_JRE</span><span class="p">:</span> <span class="s">&#39;jre:</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">version:</span><span class="nv"> </span><span class="s">11.+</span><span class="nv"> </span><span class="s">}&#39;</span>
+  <span class="nt">services</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;applicationName&gt;-xsuaa</span>
+</code></pre></div></p>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<ul>
+<li>Replace the <strong><code>&lt;org-name&gt;</code></strong> placeholder with your subaccount's Subdomain value.</li>
+<li>Replace the <strong><code>&lt;applicationName&gt;</code></strong> placeholder with the application name used in the previous steps.</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Deploy with:
+    <div class="highlight"><pre><span></span><code>cf push
+</code></pre></div></p>
+</li>
+</ul>
+</div>
+</div>
+</li>
+<li>
+<p>Assign the <code>Developer</code> and <code>Operator</code> roles.</p>
+</li>
+<li>
+<p>Log in.</p>
+</li>
+</ol>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>SAP Cloud Platform is called SAP Business Technology Platform (SAP BTP) as of 2021.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 
                   
                 

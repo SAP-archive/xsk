@@ -13,6 +13,9 @@ Deploy XSK in SAP BTP[^1], Kyma environment.
     - Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - this step is optional.
     - Access to SAP BTP account _(the Trial landscape can be accessed [here](https://account.hanatrial.ondemand.com/))._
 
+!!! warning "Warning"
+    At the time of writing the setup manual _(19.08.2021)_, creation of HANA Cloud service instance in the SAP BTP Kyma environment was not possible, those the setup is suitable only for **test** & **demo** purposes.
+
 ## Steps
 ---
 

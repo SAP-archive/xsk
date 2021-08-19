@@ -1,16 +1,6 @@
 site_name: Project XSK
 site_url: https://sap.github.io/xsk
 
-nav:
-    - Welcome: 'index.md'
-    - Overview: 
-      - Project XSK: 'overview/index.md'
-    - Setup: 
-      - Local: 'setup/local.md'
-      - Kyma: 'setup/kyma.md'
-      - Cloud Foundry: 'setup/cloud-foundry.md'
-      - Environment Variables: 'setup/environment-variables.md'
-
 theme:
   # favicon: /img/favicon.png
   # logo: /img/logo/dirigible-logo.png

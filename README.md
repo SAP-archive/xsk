@@ -276,87 +276,8 @@ Additional info if using IntelliJ could be found [here](https://www.jetbrains.co
 > http://localhost:8080
 
 #### Cloud Foundry
-Prerequisites: Get access to the **SAP Cloud Platform Cloud Foundry** environment.
 
-1. Set the correct Cloud Foundry **API Endpoint**:
-    ```
-    cf api https://api.cf.eu10.hana.ondemand.com
-    ```
-1. **Login** to the target Cloud Foundry space:
-    ```
-    cf login
-    ```
-1. **Deploy** the XSK engine to your Cloud Foundry space, with the following command:
-    ```
-    cf push xsk \
-    --docker-image=dirigiblelabs/xsk-cf \
-    --hostname xsk-<org-name> \
-    -m 2G -k 2G
-    ```
-1. Create XSUAA Service Instance:
-    - Create **security.json** file with the following content:
-        ```json
-        {
-          "xsappname": "xsk-xsuaa",
-          "scopes": [
-            {
-              "name": "$XSAPPNAME.Developer",
-              "description": "Developer scope"
-            },
-            {
-              "name": "$XSAPPNAME.Operator",
-              "description": "Operator scope"
-            }
-          ],
-          "role-templates": [
-            {
-              "name": "Developer",
-              "description": "Developer related roles",
-              "scope-references": [
-                "$XSAPPNAME.Developer"
-              ]
-            },
-            {
-              "name": "Operator",
-              "description": "Operator related roles",
-              "scope-references": [
-                "$XSAPPNAME.Operator"
-              ]
-            }
-          ],
-          "role-collections": [
-            {
-              "name": "XSK Developer",
-              "description": "XSK Developer",
-              "role-template-references": [ 
-                "$XSAPPNAME.Developer"
-              ]
-            },
-            {
-              "name": "XSK Operator",
-              "description": "XSK Operator",
-              "role-template-references": [ 
-                "$XSAPPNAME.Operator"
-              ]
-            }
-          ]
-        }
-        ```
-    - Execute the following command to create the XSUAA service instance:
-        ```
-        cf create-service xsuaa application xsk-xsuaa -c security.json
-        ```
-1. Bind the XSUAA Service Instance to the XSK engine:
-    ```
-    cf bind-service xsk xsk-xsuaa
-    ```
-1. Restart the XSK engine:
-    ```
-    cf restart xsk
-    ```
-1. Assign the **xsk-developer** role collection to your user, from the SAP Cloud Platform Cockpit.
-1. Access the XSK engine:
-    > You can retrieve the application URL from the SAP Cloud Platform Cockpit, or by executing the following command: **cf apps**
+For Cloud Foundry setup navigate to: [https://www.xsk.io/setup/cloud-foundry/](https://www.xsk.io/setup/cloud-foundry/)
 
 #### Kyma
 

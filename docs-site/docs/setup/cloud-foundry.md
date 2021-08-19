@@ -83,7 +83,8 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
         }
         ```
 
-        Replace the `<applicationName>` placeholder with your application name, e.g. **`xsk`**.
+        !!! Note
+            Replace the `<applicationName>` placeholder with your application name, e.g. **`xsk`**.
 
     - Create a XSUAA service instance:
 
@@ -91,7 +92,8 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
         cf create-service xsuaa application <applicationName>-xsuaa -c xs-security.json
         ```
 
-        Use the same `<applicationName>` as in the previous step.
+        !!! Note
+            Use the same `<applicationName>` as in the previous step.
 
 1. Deploy XSK:
 
@@ -106,9 +108,12 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
         ```
         !!! info "Note"
             - Replace the `<org-name>` placeholder with your subaccount's **Subdomain** value.
-            - Instead of using the `latest` tag (version), for production and development use cases it is recomended to use a stable release version:
-                - All released versions can be found [here](https://github.com/sap/xsk/releases/).
-                - All XSK Docker images and tags (versions) can be found [here](https://hub.docker.com/u/dirigiblelabs).
+            
+        !!! tip "XSK versions"
+            Instead of using the `latest` tag (version), for production and development use cases it is recomended to use a stable release version:
+            
+            - All released versions can be found [here](https://github.com/sap/xsk/releases/).
+            - All XSK Docker images and tags (versions) can be found [here](https://hub.docker.com/u/dirigiblelabs).
 
         - Bind the XSUAA and HANA Cloud service instances to the XSK deployment:
 
@@ -119,7 +124,7 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
             cf set-env xsk HANA_PASSWORD <hanaCloudPassword>
             ```
 
-            !!! info "Note"
+            !!! Note
                 - Replace the `<applicationName>` placeholder with the application name used in the previous steps.
                 - Replace the `<hanaCloudInstanceName>` placeholder with the HANA Cloud service instance name that will be used.
                 - Replace the `<hanaUsername>` placeholder with the HANA Cloud username that will be used.
@@ -153,7 +158,7 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
                 - <hanaCloudInstanceName>
             ```
 
-            !!! info "Note"
+            !!! Note
                 - Replace the `<org-name>` placeholder with your subaccount's Subdomain value.
                 - Replace the `<applicationName>` placeholder with the application name used in the previous steps.
                 - Replace the `<hanaUsername>` placeholder with the HANA Cloud username that will be used.
@@ -168,3 +173,6 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
 1. Assign the `Developer` and `Operator` roles.
 
 1. Log in.
+
+!!! example "Additional Materials"
+    Step-by-step tutorial can be found [here](https://blogs.sap.com/2020/03/15/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-cloud-foundry-environment/).

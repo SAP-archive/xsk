@@ -121,9 +121,9 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
 
             !!! info "Note"
                 - Replace the `<applicationName>` placeholder with the application name used in the previous steps.
-            - Replace the `<hanaCloudInstanceName>` placeholder with the HANA Cloud service instance name that will be used.
-            - Replace the `<hanaUsername>` placeholder with the HANA Cloud username that will be used.
-            - Replace the `<hanaPassword>` placeholder with the HANA Cloud password that will be used.
+                - Replace the `<hanaCloudInstanceName>` placeholder with the HANA Cloud service instance name that will be used.
+                - Replace the `<hanaUsername>` placeholder with the HANA Cloud username that will be used.
+                - Replace the `<hanaPassword>` placeholder with the HANA Cloud password that will be used.
 
         - Restart the `xsk` deployment:
 

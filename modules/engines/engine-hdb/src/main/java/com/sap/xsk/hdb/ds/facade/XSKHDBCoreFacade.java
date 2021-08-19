@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -111,8 +112,8 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
   @Override
   public void updateEntities() {
-//    Map<String, XSKDataStructureModel> dataStructureEntitiesModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_ENTITIES)
-//        .getDataStructureModels();
+    Map<String, XSKDataStructureModel> dataStructureCdsModel = managerServices.get(IXSKDataStructureModel.TYPE_HDBDD)
+        .getDataStructureModels();
     Map<String, XSKDataStructureModel> dataStructureTablesModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE)
         .getDataStructureModels();
     Map<String, XSKDataStructureModel> dataStructureViewsModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW)
@@ -128,9 +129,8 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     Map<String, XSKDataStructureModel> dataStructureSequencesModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE)
         .getDataStructureModels();
 
-    if (//dataStructureEntitiesModel.isEmpty()
-       // && 
-        dataStructureTablesModel.isEmpty()
+    if (dataStructureCdsModel.isEmpty()
+        && dataStructureTablesModel.isEmpty()
         && dataStructureViewsModel.isEmpty()
         && dataStructureProceduresModel.isEmpty()
         && dataStructureTableFunctionsModel.isEmpty()
@@ -153,7 +153,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         // something wrong happened with the sorting - probably cyclic dependencies
         // we go for the back-up list and try to apply what would succeed
         // Probably there are cyclic dependencies!
-//        sorted.addAll(dataStructureEntitiesModel.keySet());
+        sorted.addAll(dataStructureCdsModel.keySet());
         sorted.addAll(dataStructureTablesModel.keySet());
         sorted.addAll(dataStructureViewsModel.keySet());
         sorted.addAll(dataStructureProceduresModel.keySet());
@@ -374,16 +374,17 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
-          // process entities in the proper order
-//          for (String dsName : sorted) {
-//            XSKDataStructureEntitiesModel entitesModel = (XSKDataStructureEntitiesModel) dataStructureEntitiesModel.get(dsName);
-//            try {
-//              xskEntityManagerService.createDataStructure(connection, entitesModel);
-//            } catch (Exception e) {
-//              logger.error(e.getMessage(), e);
-//              errors.add(e.getMessage());
-//            }
-//          }
+          IXSKDataStructureManager<XSKDataStructureModel> xskHdbddManagerService = managerServices
+              .get(IXSKDataStructureModel.TYPE_HDBDD);
+          for (String dsName : sorted) {
+            XSKDataStructureCdsModel entitesModel = (XSKDataStructureCdsModel) dataStructureCdsModel.get(dsName);
+            try {
+              xskHdbddManagerService.createDataStructure(connection, entitesModel);
+            } catch (Exception e) {
+              logger.error(e.getMessage(), e);
+              errors.add(e.getMessage());
+            }
+          }
 
           // process sequences in the proper order
           IXSKDataStructureManager<XSKDataStructureModel> xskSequenceManagerService = managerServices

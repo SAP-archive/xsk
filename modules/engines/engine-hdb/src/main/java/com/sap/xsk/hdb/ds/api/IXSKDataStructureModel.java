@@ -62,6 +62,11 @@ public interface IXSKDataStructureModel {
   public static final String FILE_EXTENSION_SYNONYM = ".hdbsynonym";
 
   /**
+   * Type hdbdd
+   */
+  public static final String TYPE_HDBDD = "HDBDD";
+
+  /**
    * Type synonym
    */
   public static final String TYPE_HDB_SYNONYM = "HDBSYNONYM";

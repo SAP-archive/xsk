@@ -1,17 +1,16 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.parser.hdbdd.symbols.entity;
 
-import com.sap.xsk.parser.hdbdd.annotation.catalog.Catalog;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import java.util.LinkedHashMap;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 
 public class EntitySymbol extends Symbol implements Scope {
     private Map<String, Symbol> elements;
-    private Catalog catalog;
 
     public EntitySymbol(String name, Scope scope) {
         super(name, scope);
@@ -54,14 +52,6 @@ public class EntitySymbol extends Symbol implements Scope {
                 .map(e -> (EntityElementSymbol) e)
                 .filter(EntityElementSymbol::isKey)
                 .collect(Collectors.toList());
-    }
-
-    public Catalog getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
     }
 
   public List<EntityElementSymbol> getElements() {

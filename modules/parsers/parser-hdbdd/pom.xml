@@ -1,23 +1,24 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-modules-parsers-parent</artifactId>
-		<version>0.7.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+  <parent>
+    <groupId>com.sap.xsk</groupId>
+    <artifactId>xsk-modules-parsers-parent</artifactId>
+    <version>0.8.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-	<name>XSK - Modules - Parsers - HDB DD - Parent</name>
-	<artifactId>xsk-modules-parsers-hdbdd-parent</artifactId>
-	<version>0.7.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+  <name>XSK - Modules - Parsers - HDBDD</name>
+  <artifactId>xsk-modules-parsers-hdbdd</artifactId>
+  <version>0.8.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-	<properties>
-		<license.header.location>../../../license-header.txt</license.header.location>
-	</properties>
-
+  <properties>
+    <license.header.location>../../../licensing-header.txt</license.header.location>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -51,7 +52,6 @@
         <artifactId>antlr4-maven-plugin</artifactId>
         <version>${antlr4-maven-plugin.version}</version>
         <configuration>
-          <visitor>true</visitor>
           <outputDirectory>${basedir}/src/main/java</outputDirectory>
         </configuration>
         <executions>
@@ -65,4 +65,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>

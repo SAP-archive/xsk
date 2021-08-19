@@ -9,6 +9,17 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface CdsListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link CdsParser#topLevelSymbol}.
+	 * @param ctx the parse tree
+	 */
+	void enterTopLevelSymbol(@NotNull CdsParser.TopLevelSymbolContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#topLevelSymbol}.
+	 * @param ctx the parse tree
+	 */
+	void exitTopLevelSymbol(@NotNull CdsParser.TopLevelSymbolContext ctx);
+
+	/**
 	 * Enter a parse tree produced by the {@code AnnPropertyRule}
 	 * labeled alternative in {@link CdsParser#annotationRule}.
 	 * @param ctx the parse tree
@@ -105,6 +116,19 @@ public interface CdsListener extends ParseTreeListener {
 	void exitAssociation(@NotNull CdsParser.AssociationContext ctx);
 
 	/**
+	 * Enter a parse tree produced by the {@code AssignHanaType}
+	 * labeled alternative in {@link CdsParser#typeAssignRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignHanaType(@NotNull CdsParser.AssignHanaTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AssignHanaType}
+	 * labeled alternative in {@link CdsParser#typeAssignRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignHanaType(@NotNull CdsParser.AssignHanaTypeContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link CdsParser#structuredDataTypeRule}.
 	 * @param ctx the parse tree
 	 */
@@ -193,6 +217,19 @@ public interface CdsListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitContextRule(@NotNull CdsParser.ContextRuleContext ctx);
+
+	/**
+	 * Enter a parse tree produced by the {@code AssignHanaTypeWithArgs}
+	 * labeled alternative in {@link CdsParser#typeAssignRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignHanaTypeWithArgs(@NotNull CdsParser.AssignHanaTypeWithArgsContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AssignHanaTypeWithArgs}
+	 * labeled alternative in {@link CdsParser#typeAssignRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignHanaTypeWithArgs(@NotNull CdsParser.AssignHanaTypeWithArgsContext ctx);
 
 	/**
 	 * Enter a parse tree produced by the {@code AssignType}

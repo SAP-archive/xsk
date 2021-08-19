@@ -17,6 +17,19 @@ public class CdsBaseListener implements CdsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTopLevelSymbol(@NotNull CdsParser.TopLevelSymbolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTopLevelSymbol(@NotNull CdsParser.TopLevelSymbolContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAnnPropertyRule(@NotNull CdsParser.AnnPropertyRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -121,6 +134,19 @@ public class CdsBaseListener implements CdsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAssignHanaType(@NotNull CdsParser.AssignHanaTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignHanaType(@NotNull CdsParser.AssignHanaTypeContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStructuredDataTypeRule(@NotNull CdsParser.StructuredDataTypeRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -219,6 +245,19 @@ public class CdsBaseListener implements CdsListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitContextRule(@NotNull CdsParser.ContextRuleContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignHanaTypeWithArgs(@NotNull CdsParser.AssignHanaTypeWithArgsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignHanaTypeWithArgs(@NotNull CdsParser.AssignHanaTypeWithArgsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

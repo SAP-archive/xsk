@@ -1,5 +1,17 @@
+/*
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.hdb.ds.transformer.hdbdd;
 
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
@@ -10,16 +22,17 @@ import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
-@Singleton
 public class HdbddTransformer {
 
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
+    tableModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
     tableModel.setName(entitySymbol.getFullName());
+    tableModel.setSchema(entitySymbol.getSchema());
+
     List<XSKDataStructureHDBTableColumnModel> tableColumns = new ArrayList<>();
     entitySymbol.getElements().forEach(currentElement -> {
       if (currentElement.getType() instanceof StructuredDataTypeSymbol) {
@@ -50,6 +63,7 @@ public class HdbddTransformer {
       tableModel.getConstraints().getForeignKeys().add(foreignKeyModel);
     });
 
+    tableModel.setColumns(tableColumns);
     return tableModel;
   }
 
@@ -62,7 +76,12 @@ public class HdbddTransformer {
 
     if (entityElement.getType() instanceof BuiltInTypeSymbol) {
       BuiltInTypeSymbol builtInTypeSymbol = (BuiltInTypeSymbol) entityElement.getType();
-      setSqlType(columnModel, builtInTypeSymbol);
+      if (builtInTypeSymbol.isHanaType()) {
+        setHanaType(columnModel, builtInTypeSymbol);
+      } else {
+        setSqlType(columnModel, builtInTypeSymbol);
+      }
+
     } else if (entityElement.getType() instanceof DataTypeSymbol) {
       DataTypeSymbol dataType = (DataTypeSymbol) entityElement.getType();
       BuiltInTypeSymbol builtInType = (BuiltInTypeSymbol) dataType.getType();
@@ -99,6 +118,16 @@ public class HdbddTransformer {
     }
 
     columnModel.setType(cdsTypeEnum.getSqlType());
+  }
+
+  private void setHanaType(XSKDataStructureHDBTableColumnModel columnModel, BuiltInTypeSymbol builtInTypeSymbol) {
+    String typeName = builtInTypeSymbol.getName();
+
+    if (typeName.equals("VARCHAR")) {
+      columnModel.setLength(builtInTypeSymbol.getArgsValues().get(0).toString());
+    }
+
+    columnModel.setType(typeName);
   }
 
   private List<EntityElementSymbol> getStructuredTypeSubElements(EntityElementSymbol entityElementSymbol) {

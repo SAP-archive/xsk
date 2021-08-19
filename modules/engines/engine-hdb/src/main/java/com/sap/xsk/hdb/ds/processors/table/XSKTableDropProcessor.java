@@ -24,7 +24,6 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.inject.Singleton;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
@@ -38,7 +37,6 @@ import com.sap.xsk.utils.XSKHDBUtils;
 /**
  * The Table Drop Processor.
  */
-@Singleton
 public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableDropProcessor.class);

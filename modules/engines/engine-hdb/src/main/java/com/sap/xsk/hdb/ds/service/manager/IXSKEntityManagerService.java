@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import com.google.inject.Inject;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterProcessor;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableDropProcessor;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -39,11 +39,11 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
   private final Map<String, XSKDataStructureCdsModel> dataStructureEntitiesModel;
   private final List<String> entitiesSynchronized;
 
-  @Inject
-  private XSKTableDropProcessor xskTableDropProcessor;
+  private XSKTableDropProcessor xskTableDropProcessor = new XSKTableDropProcessor();
 
-  @Inject
-  private XSKTableCreateProcessor xskTableCreateProcessor;
+  private XSKTableAlterProcessor xskTableAlterProcessor = new XSKTableAlterProcessor();
+
+  private XSKTableCreateProcessor xskTableCreateProcessor = new XSKTableCreateProcessor();
 
   public IXSKEntityManagerService() {
     dataStructureEntitiesModel = Collections.synchronizedMap(new LinkedHashMap<>());
@@ -59,7 +59,7 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
       dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
       logger.info("Synchronized a new Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
     } else {
-      XSKDataStructureEntitiesModel existing = getDataStructuresCoreService()
+      XSKDataStructureCdsModel existing = getDataStructuresCoreService()
           .getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
       if (!entitiesModel.equals(existing)) {
         getDataStructuresCoreService()
@@ -81,6 +81,7 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
         if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
           this.xskTableCreateProcessor.execute(connection, entityModel);
         } else {
+          this.xskTableAlterProcessor.execute(connection, entityModel);
         }
       }
     }

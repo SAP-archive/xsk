@@ -1,7 +1,19 @@
+/*
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.hdb.ds.parser.hdbdd;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
@@ -11,36 +23,36 @@ import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
 import com.sap.xsk.parser.hdbdd.custom.EntityDefinitionListener;
 import com.sap.xsk.parser.hdbdd.custom.ReferenceResolvingListener;
+import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
+import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
+import com.sap.xsk.utils.XSKConstants;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
-import com.sap.xsk.utils.XSKConstants;
-import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.eclipse.dirigible.repository.api.IRepository;
-import org.eclipse.dirigible.repository.api.IResource;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Singleton
 public class XSKHdbddParser implements XSKDataStructureParser {
+
   private static final Logger logger = LoggerFactory.getLogger(XSKHdbddParser.class);
-  @Inject
-  private IRepository repository;
-  @Inject
-  private HdbddTransformer hdbddTransformer;
+
+  private HdbddTransformer hdbddTransformer = new HdbddTransformer();
   private SymbolTable symbolTable = new SymbolTable();
   private Map<String, String> contentByFileName = new HashMap<>();
   private Map<String, Set<String>> usedFiles = new HashMap<>();
@@ -51,10 +63,14 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     for (String fileLocation : this.getFilesToProcess(location)) {
       String fileContent = this.contentByFileName.get(fileLocation);
-      parseHdbdd(fileLocation, fileContent);
+      try{
+        parseHdbdd(fileLocation, fileContent);
+      } catch (CDSRuntimeException e) {
+        throw new XSKDataStructuresException(e.getMessage());
+      }
     }
 
-    XSKDataStructureCdsModel cdsModel = getCdsModel();
+    XSKDataStructureCdsModel cdsModel = getCdsModel(location, content);
     this.symbolTable.clearSymbolsByFullName();
     this.symbolTable.clearEntityGraph();
 
@@ -75,32 +91,39 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     EntityDefinitionListener entityDefinitionListener = new EntityDefinitionListener();
     entityDefinitionListener.setSymbolTable(symbolTable);
+    entityDefinitionListener.setFileLocation(location);
 
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-    parseTreeWalker.walk(entityDefinitionListener, parseTree);
+    try {
+      parseTreeWalker.walk(entityDefinitionListener, parseTree);
+    } catch (CDSRuntimeException e) {
+      throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
+    }
+
 
     entityDefinitionListener.getPackagesUsed().forEach(p -> {
       String fileLocation = getFileLocation(p);
       addUsedFile(fileLocation, location);
 
-      IResource loadedFile = repository.getResource(fileLocation);
-      String loadedContent = new String(loadedFile.getContent());
       try {
-        parse(fileLocation, loadedContent);
-      } catch (XSKDataStructuresException | IOException e) {
+        String loadedContent = loadResourceContent(fileLocation);
+        parseHdbdd(fileLocation, loadedContent);
+      } catch (IOException e) {
         e.printStackTrace();
       }
     });
 
     ReferenceResolvingListener referenceResolvingListener = new ReferenceResolvingListener();
     referenceResolvingListener.setSymbolTable(symbolTable);
-    referenceResolvingListener.setSymbolsByParseTreeContext(entityDefinitionListener.getSymbolsByParseTreeContext());
     referenceResolvingListener.setEntityElements(entityDefinitionListener.getEntityElements());
     referenceResolvingListener.setTypeables(entityDefinitionListener.getTypeables());
     referenceResolvingListener.setAssociations(entityDefinitionListener.getAssociations());
 
-    referenceResolvingListener.setSymbolsByParseTreeContext(entityDefinitionListener.getSymbolsByParseTreeContext());
-    parseTreeWalker.walk(referenceResolvingListener, parseTree);
+    try {
+      parseTreeWalker.walk(referenceResolvingListener, parseTree);
+    } catch (CDSRuntimeException e) {
+      throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
+    }
   }
 
   private void addUsedFile(String usedFile, String userFile) {
@@ -141,7 +164,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     });
   }
 
-  private XSKDataStructureCdsModel getCdsModel() {
+  private XSKDataStructureCdsModel getCdsModel(String location, String content) {
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
     List<XSKDataStructureHDBTableModel> tableModels = new ArrayList<>();
@@ -151,17 +174,29 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     XSKDataStructureCdsModel cdsModel = new XSKDataStructureCdsModel();
     cdsModel.setTableModels(tableModels);
-
+    cdsModel.setName(location);
+    cdsModel.setLocation(location);
+    cdsModel.setType(getType());
+    cdsModel.setCreatedBy(UserFacade.getName());
+    cdsModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    cdsModel.setHash(DigestUtils.md5Hex(content));
+    cdsModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
     return cdsModel;
   }
 
   private String getFileLocation(String fullPackagePath) {
     String[] splitPackagePath = fullPackagePath.split("::");
-    String directory = XSKHDBUtils.getRepositoryNamespace(splitPackagePath[0]);
+    String directory = splitPackagePath[0];
     String topLevelCdsObject = splitPackagePath[1].split("\\.")[0];
     String fileLocation = directory + "." + topLevelCdsObject;
     fileLocation = fileLocation.replace('.', XSKConstants.WINDOWS_SEPARATOR);
 
     return fileLocation;
+  }
+
+  private String loadResourceContent(String modelPath) throws IOException {
+    try (InputStream in = XSKHdbddParser.class.getResourceAsStream(modelPath)) {
+      return IOUtils.toString(in, StandardCharsets.UTF_8);
+    }
   }
 }

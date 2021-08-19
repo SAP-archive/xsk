@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2019-2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.parser.hdbdd.symbols;
@@ -36,6 +36,7 @@ public class SymbolTable {
   private Map<String, Symbol> symbolsByFullName = new HashMap<>();
   private Map<String, AnnotationObj> annotations;
   private Map<String, List<String>> entityGraph = new HashMap<>();
+  private Map<String, BuiltInTypeSymbol> hanaBuiltInTypes = new HashMap<>();
 
   public SymbolTable() {
     initTypeSystem();
@@ -54,6 +55,10 @@ public class SymbolTable {
 
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalDate", CdsLexer.LOCAL_DATE));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalTime", CdsLexer.LOCAL_TIME));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCDateTime", CdsLexer.UTC_DATE_TIME));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCTimestamp", CdsLexer.UTC_TIMESTAMP));
+
+    hanaBuiltInTypes.put("VARCHAR", new BuiltInTypeSymbol("VARCHAR", 1, CdsLexer.STRING, true));
 
     initAnnotations();
   }
@@ -85,6 +90,10 @@ public class SymbolTable {
 
   public Symbol getSymbol(String symbolFullName) {
     return this.symbolsByFullName.get(symbolFullName);
+  }
+
+  public BuiltInTypeSymbol getHanaType(String hanaType) {
+    return this.hanaBuiltInTypes.get(hanaType);
   }
 
   public List<EntitySymbol> getSortedEntities() {
@@ -181,6 +190,7 @@ public class SymbolTable {
 
     children.forEach(child -> {
       traverseEntityGraph(child, orderedSymbol, passedEntities);
+      orderedSymbol.add((EntitySymbol) this.symbolsByFullName.get(entityName));
     });
   }
 }

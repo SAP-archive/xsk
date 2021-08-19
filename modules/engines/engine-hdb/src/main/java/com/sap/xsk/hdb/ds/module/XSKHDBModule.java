@@ -14,6 +14,8 @@ package com.sap.xsk.hdb.ds.module;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
+import com.sap.xsk.hdb.ds.service.manager.IXSKEntityManagerService;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
@@ -62,7 +64,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
 	}
 
 	private static void bindManagerServicesToFileExtensions(Map<String, IXSKDataStructureManager> managerServices) {
-//		  managerServices.put(IXSKDataStructureModel.TYPE_HDB_ENTITIES, new XSKEntityManagerService());
+		  managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
 			managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());
 			managerServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new IXSKViewManagerService());
 			managerServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new IXSKSynonymManagerService());
@@ -74,7 +76,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
 
 	private static void bindParsersToFileExtension(Map<String, XSKDataStructureParser> parserServices) {
 
-//	  managerServices.put(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, new XSKEntitiesParser());
+    parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, new XSKHdbddParser());
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_TABLE, new XSKTableParser());
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_VIEW, new XSKViewParser());
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM, new XSKSynonymParser());
@@ -83,7 +85,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE, new XSKHDBProcedureParser());
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSEQUENCE, new XSKHDBSequenceParser());
 
-//	  managerServices.put(IXSKDataStructureModel.TYPE_HDB_ENTITIES, new XSKEntitiesParser());
+    parserServices.put(IXSKDataStructureModel.TYPE_HDBDD, new XSKHdbddParser());
 		parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new XSKTableParser());
 		parserServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new XSKViewParser());
 		parserServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new XSKSynonymParser());

@@ -438,6 +438,8 @@
 <p class="admonition-title">Prerequisites</p>
 <ul>
 <li>Install <a href="http://docs.cloudfoundry.org/devguide/installcf/install-go-cli.html">Cloud Foundry Command Line Interface</a>.</li>
+<li>Create <code>HANA Cloud</code> service instance in SAP BTP Cloud Foundry space.</li>
+<li>Create a separate <code>HANA Cloud</code> user that will be used from the XSK engine.</li>
 <li>Access to SAP BTP account <em>(the Trial landscape can be accessed <a href="https://account.hanatrial.ondemand.com/">here</a>).</em></li>
 </ul>
 </div>
@@ -506,13 +508,13 @@
    <span class="p">]</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Replace the <strong><code>&lt;applicationName&gt;</code></strong> placeholder with your application name, e.g. <strong><code>xsk</code></strong>.</p>
+<p>Replace the <code>&lt;applicationName&gt;</code> placeholder with your application name, e.g. <strong><code>xsk</code></strong>.</p>
 </li>
 <li>
 <p>Create a XSUAA service instance:</p>
 <div class="highlight"><pre><span></span><code>cf create-service xsuaa application &lt;applicationName&gt;-xsuaa -c xs-security.json
 </code></pre></div>
-<p>Use the same <strong><code>&lt;applicationName&gt;</code></strong> as in the previous step.</p>
+<p>Use the same <code>&lt;applicationName&gt;</code> as in the previous step.</p>
 </li>
 </ul>
 </li>
@@ -537,10 +539,23 @@
 </div>
 <ul>
 <li>
-<p>Bind the XSUAA service instance to the XSK deployment:</p>
+<p>Bind the XSUAA and HANA Cloud service instances to the XSK deployment:</p>
 <div class="highlight"><pre><span></span><code>cf bind-service xsk &lt;applicationName&gt;-xsuaa
+cf bind-service xsk &lt;hanaCloudInstanceName&gt;
+cf set-env xsk HANA_USERNAME &lt;hanaCloudUsername&gt;
+cf set-env xsk HANA_PASSWORD &lt;hanaCloudPassword&gt;
 </code></pre></div>
-<p>Replace the <code>&lt;applicationName&gt;</code> placeholder with the application name used in the previous steps.</p>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<ul>
+<li>Replace the <code>&lt;applicationName&gt;</code> placeholder with the application name used in the previous steps.</li>
+</ul>
+</div>
+<ul>
+<li>Replace the <code>&lt;hanaCloudInstanceName&gt;</code> placeholder with the HANA Cloud service instance name that will be used.</li>
+<li>Replace the <code>&lt;hanaUsername&gt;</code> placeholder with the HANA Cloud username that will be used.</li>
+<li>Replace the <code>&lt;hanaPassword&gt;</code> placeholder with the HANA Cloud password that will be used.</li>
+</ul>
 </li>
 <li>
 <p>Restart the <code>xsk</code> deployment:</p>
@@ -564,14 +579,20 @@
   <span class="nt">env</span><span class="p">:</span>
     <span class="nt">JBP_CONFIG_COMPONENTS</span><span class="p">:</span> <span class="s">&quot;jres:</span><span class="nv"> </span><span class="s">[&#39;com.sap.xs.java.buildpack.jdk.SAPMachineJDK&#39;]&quot;</span>
     <span class="nt">JBP_CONFIG_SAP_MACHINE_JRE</span><span class="p">:</span> <span class="s">&#39;jre:</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">version:</span><span class="nv"> </span><span class="s">11.+</span><span class="nv"> </span><span class="s">}&#39;</span>
+    <span class="nt">HANA_USERNAME</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hanaUsername&gt;</span>
+    <span class="nt">HANA_PASSWORD</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hanaPassword&gt;</span>
   <span class="nt">services</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;applicationName&gt;-xsuaa</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hanaCloudInstanceName&gt;</span>
 </code></pre></div></p>
 <div class="admonition info">
 <p class="admonition-title">Note</p>
 <ul>
-<li>Replace the <strong><code>&lt;org-name&gt;</code></strong> placeholder with your subaccount's Subdomain value.</li>
-<li>Replace the <strong><code>&lt;applicationName&gt;</code></strong> placeholder with the application name used in the previous steps.</li>
+<li>Replace the <code>&lt;org-name&gt;</code> placeholder with your subaccount's Subdomain value.</li>
+<li>Replace the <code>&lt;applicationName&gt;</code> placeholder with the application name used in the previous steps.</li>
+<li>Replace the <code>&lt;hanaUsername&gt;</code> placeholder with the HANA Cloud username that will be used.</li>
+<li>Replace the <code>&lt;hanaPassword&gt;</code> placeholder with the HANA Cloud password that will be used.</li>
+<li>Replace the <code>&lt;hanaCloudInstanceName&gt;</code> placeholder with the HANA Cloud service instance name that will be used.</li>
 </ul>
 </div>
 </li>

@@ -273,9 +273,39 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Kyma
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Kyma
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    Steps
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -318,6 +348,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    Steps
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -334,7 +379,227 @@
                 
                 
                 <h1 id="setup-in-kyma">Setup in Kyma</h1>
-<p>TODO</p>
+<p>Deploy XSK in SAP BTP<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, Kyma environment.</p>
+<div class="admonition info">
+<p class="admonition-title">Prerequisites</p>
+<ul>
+<li>Install <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a> - this step is optional.</li>
+<li>Access to SAP BTP account <em>(the Trial landscape can be accessed <a href="https://account.hanatrial.ondemand.com/">here</a>).</em></li>
+</ul>
+</div>
+<h2 id="steps">Steps</h2>
+<hr />
+<ol>
+<li>
+<p>Access the SAP BTP, Kyma environment via the SAP BTP cockpit:</p>
+</li>
+<li>
+<p>Deploy XSK:</p>
+<ul>
+<li>
+<p>Copy and paste the following content into <code>deployment.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">replicas</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">selector</span><span class="p">:</span>
+    <span class="nt">matchLabels</span><span class="p">:</span>
+      <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">template</span><span class="p">:</span>
+    <span class="nt">metadata</span><span class="p">:</span>
+      <span class="nt">labels</span><span class="p">:</span>
+        <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+    <span class="nt">spec</span><span class="p">:</span>
+      <span class="nt">containers</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dirigiblelabs/xsk-kyma:latest</span>
+        <span class="nt">imagePullPolicy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Always</span>
+        <span class="nt">env</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DIRIGIBLE_THEME_DEFAULT</span>
+          <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fiori</span>
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DIRIGIBLE_HOST</span>
+          <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://xsk.&lt;your-kyma-cluster-host&gt;</span>
+        <span class="nt">volumeMounts</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dirigible-volume</span>
+          <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/local/tomcat/target/dirigible/repository</span>
+        <span class="nt">ports</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">containerPort</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dirigible</span>
+          <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TCP</span>
+      <span class="nt">volumes</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-volume</span>
+        <span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+          <span class="nt">claimName</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-claim</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">ports</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+    <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TCP</span>
+    <span class="nt">targetPort</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
+  <span class="nt">selector</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PersistentVolumeClaim</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-claim</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">accessModes</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span>
+  <span class="nt">resources</span><span class="p">:</span>
+    <span class="nt">requests</span><span class="p">:</span>
+      <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gateway.kyma-project.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">APIRule</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kyma-gateway.kyma-system.svc.cluster.local</span>
+  <span class="nt">rules</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">accessStrategies</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">config</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+      <span class="nt">handler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">noop</span>
+    <span class="nt">methods</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">GET</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">POST</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PUT</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PATCH</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DELETE</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">HEAD</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/.*</span>
+  <span class="nt">service</span><span class="p">:</span>
+    <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk.&lt;your-kyma-cluster-host&gt;</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+    <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace the <strong><code>&lt;your-kyma-cluster-host&gt;</code></strong> placeholder with your Kyma cluster host (e.g. <strong><code>c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com</code></strong>)._</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">XSK versions</p>
+<p>Instead of using the <code>latest</code> tag (version), for production and development use cases it is recomended to use stable release version:</p>
+<ul>
+<li>All released versions can be found <a href="https://github.com/sap/xsk/releases/">here</a>.</li>
+<li>All XSK Docker images and tags (versions) can be found <a href="https://hub.docker.com/u/dirigiblelabs">here</a>.</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Navigate to your Kyma dashboard and select the <strong><code>default</code></strong> namespace.</p>
+</li>
+<li>
+<p>Click on the <strong>Deploy new resource</strong> button and select the <code>deployment.yaml</code> file.</p>
+</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<p>Alternatively the <code>kubectl -f deployment.yaml</code> could be used to deploy the resources.</p>
+</div>
+</li>
+<li>
+<p>Create XSUAA service instance:</p>
+<ul>
+<li>From the Kyma dashboard, go to <strong>Service Management</strong> <strong>&rarr;</strong> <strong>Catalog</strong>.</li>
+<li>Find the <code>Authorization &amp; Trust Management</code> service.</li>
+<li>Create new service instance.</li>
+<li>
+<p>Provide the following additional parameters.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+   <span class="nt">&quot;xsappname&quot;</span><span class="p">:</span> <span class="s2">&quot;dirigible-xsuaa&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;oauth2-configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;token-validity&quot;</span><span class="p">:</span> <span class="mi">7200</span><span class="p">,</span>
+      <span class="nt">&quot;redirect-uris&quot;</span><span class="p">:</span> <span class="p">[</span>
+         <span class="s2">&quot;https://dirigible.&lt;your-kyma-cluster-host&gt;&quot;</span>
+      <span class="p">]</span>
+   <span class="p">},</span>
+   <span class="nt">&quot;scopes&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer scope&quot;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator scope&quot;</span>
+      <span class="p">}</span>
+   <span class="p">],</span>
+   <span class="nt">&quot;role-templates&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer related roles&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;scope-references&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span>
+         <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator related roles&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;scope-references&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span>
+         <span class="p">]</span>
+      <span class="p">}</span>
+   <span class="p">],</span>
+   <span class="nt">&quot;role-collections&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Developer&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Developer&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;role-template-references&quot;</span><span class="p">:</span> <span class="p">[</span> 
+            <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span>
+         <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Operator&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Operator&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;role-template-references&quot;</span><span class="p">:</span> <span class="p">[</span> 
+            <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span>
+         <span class="p">]</span>
+      <span class="p">}</span>
+   <span class="p">]</span>    
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace the <strong><code>&lt;your-kyma-cluster-host&gt;</code></strong> placeholder with your Kyma cluster host (e.g. <strong><code>c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com</code></strong>).</p>
+</div>
+</li>
+<li>
+<p>Bind the servce instance to the <strong><code>xsk</code></strong> application.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Assign the <code>Developer</code> and <code>Operator</code> roles.</p>
+</li>
+<li>
+<p>Log in.</p>
+</li>
+</ol>
+<div class="admonition example">
+<p class="admonition-title">Additional Materials</p>
+<p>Step by step tutorial can be found <a href="https://blogs.sap.com/2020/10/13/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-kyma-environment/">here</a>.</p>
+</div>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>SAP Cloud Platform is called SAP Business Technology Platform (SAP BTP) as of 2021.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 
                   
                 

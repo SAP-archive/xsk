@@ -6,6 +6,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://sap.github.io/xsk/api/%24.request/</loc>
+         <lastmod>2021-08-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://sap.github.io/xsk/setup/cloud-foundry/</loc>
          <lastmod>2021-08-20</lastmod>
          <changefreq>daily</changefreq>

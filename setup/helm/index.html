@@ -9,14 +9,14 @@
       
       
       
-        <link rel="canonical" href="https://sap.github.io/xsk/setup/cloud-foundry/">
+        <link rel="canonical" href="https://sap.github.io/xsk/setup/helm/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
     
     
       
-        <title>Cloud Foundry - Project XSK</title>
+        <title>Helm - Project XSK</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#setup-in-cloud-foundry" class="md-skip">
+        <a href="#setup-with-helm" class="md-skip">
           Skip to content
         </a>
       
@@ -104,7 +104,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Cloud Foundry
+              Helm
             
           </span>
         </div>
@@ -292,6 +292,18 @@
             
   
   
+  
+    <li class="md-nav__item">
+      <a href="../cloud-foundry/" class="md-nav__link">
+        Cloud Foundry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
     
   
   
@@ -304,12 +316,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Cloud Foundry
+          Helm
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Cloud Foundry
+        Helm
       </a>
       
         
@@ -333,22 +345,30 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generic" class="md-nav__link">
+    Generic
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
       
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../helm/" class="md-nav__link">
-        Helm
-      </a>
     </li>
   
 
@@ -415,6 +435,26 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generic" class="md-nav__link">
+    Generic
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -427,210 +467,166 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/sap/xsk/edit/gh-pages/docs-site/docs/setup/cloud-foundry.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/sap/xsk/edit/gh-pages/docs-site/docs/setup/helm.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="setup-in-cloud-foundry">Setup in Cloud Foundry</h1>
-<p>Deploy XSK in SAP BTP<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, Cloud Foundry environment.</p>
+                <h1 id="setup-with-helm">Setup with Helm</h1>
+<p>You can deploy XSK via Helm Chart in a Kubernetes cluster.</p>
 <div class="admonition info">
 <p class="admonition-title">Prerequisites</p>
 <ul>
-<li>Install <a href="http://docs.cloudfoundry.org/devguide/installcf/install-go-cli.html">Cloud Foundry Command Line Interface</a>.</li>
-<li>Access to SAP BTP account <em>(the Trial landscape can be accessed <a href="https://account.hanatrial.ondemand.com/">here</a>).</em></li>
-<li>Create <code>HANA Cloud</code> service instance in SAP BTP Cloud Foundry space.</li>
-<li>Create a separate <code>HANA Cloud</code> user that will be used from the XSK engine.</li>
+<li><a href="https://helm.sh/">Helm</a></li>
+<li><a href="https://kubernetes.io/docs/setup/pick-right-solution/">Kubernetes Cluster</a> on IaaS provider of your choice</li>
 </ul>
 </div>
 <h2 id="steps">Steps</h2>
 <hr />
 <ol>
 <li>
-<p>Set the SAP BTP Cloud Foundry API host:</p>
-<div class="highlight"><pre><span></span><code>cf api &lt;cloud-foundry-api-host&gt;
+<p>Add the XSK Helm repository:</p>
+<div class="highlight"><pre><span></span><code>helm repo add xsk https://www.xsk.io
+
+helm repo update
 </code></pre></div>
 </li>
 <li>
-<p>Log in to the SAP BTP, Cloud Foundry environment with:</p>
-<div class="highlight"><pre><span></span><code>cf login
+<p>Basic:</p>
+<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk
 </code></pre></div>
-</li>
-<li>
-<p>Create XSUAA service instance:</p>
+<details class="info" open="open"><summary>Access</summary><p>This will install XSK Deployment and Service with ClusterIP only.
+To access the XSK instance execute the command that was printed in the console.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>export POD_NAME=$(kubectl get pods --namespace default -l &quot;app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk&quot; -o jsonpath=&quot;{.items[0].metadata.name}&quot;)
+echo &quot;Visit http://127.0.0.1:8080 to use your application&quot;
+kubectl --namespace default port-forward $POD_NAME 8080:8080    
+</code></pre></div>
 <ul>
-<li>
-<p>Copy and paste the following content into <code>xs-security.json</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-   <span class="nt">&quot;xsappname&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;applicationName&gt;-xsuaa&quot;</span><span class="p">,</span>
-   <span class="nt">&quot;tenant-mode&quot;</span><span class="p">:</span> <span class="s2">&quot;shared&quot;</span><span class="p">,</span>
-   <span class="nt">&quot;scopes&quot;</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer scope&quot;</span>
-      <span class="p">},</span>
-      <span class="p">{</span>
-         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator scope&quot;</span>
-      <span class="p">}</span>
-   <span class="p">],</span>
-   <span class="nt">&quot;role-templates&quot;</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Developer related roles&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;scope-references&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span>
-         <span class="p">]</span>
-      <span class="p">},</span>
-      <span class="p">{</span>
-         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Operator related roles&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;scope-references&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span>
-         <span class="p">]</span>
-      <span class="p">}</span>
-   <span class="p">],</span>
-   <span class="nt">&quot;role-collections&quot;</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Developer&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Developer&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;role-template-references&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;$XSAPPNAME.Developer&quot;</span>
-         <span class="p">]</span>
-      <span class="p">},</span>
-      <span class="p">{</span>
-         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Operator&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;XSK Operator&quot;</span><span class="p">,</span>
-         <span class="nt">&quot;role-template-references&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;$XSAPPNAME.Operator&quot;</span>
-         <span class="p">]</span>
-      <span class="p">}</span>
-   <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Replace the <code>&lt;applicationName&gt;</code> placeholder with your application name, e.g. <strong><code>xsk</code></strong>.</p>
-</div>
-</li>
-<li>
-<p>Create a XSUAA service instance:</p>
-<div class="highlight"><pre><span></span><code>cf create-service xsuaa application &lt;applicationName&gt;-xsuaa -c xs-security.json
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Use the same <code>&lt;applicationName&gt;</code> as in the previous step.</p>
-</div>
-</li>
+<li>Navigate to: <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a></li>
+<li>Login with: <code>dirigible</code>/<code>dirigible</code></li>
 </ul>
+</details>
 </li>
 <li>
-<p>Deploy XSK:</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Docker</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code>cf push xsk \
---docker-image=dirigiblelabs/xsk-cf:latest \
---hostname xsk-&lt;org-name&gt; \
--m 2G -k 2G
+<p>Kyma:</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Basic</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
+--set kyma.enabled=true \
+--set kyma.apirule.host=&lt;kyma-host&gt;
 </code></pre></div>
-<div class="admonition info">
-<p class="admonition-title">Note</p>
-<ul>
-<li>Replace the <code>&lt;org-name&gt;</code> placeholder with your subaccount's <strong>Subdomain</strong> value.</li>
-</ul>
+<p>This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.</p>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">XSK versions</p>
-<p>Instead of using the <code>latest</code> tag (version), for production and development use cases it is recomended to use a stable release version:</p>
-<ul>
-<li>All released versions can be found <a href="https://github.com/sap/xsk/releases/">here</a>.</li>
-<li>All XSK Docker images and tags (versions) can be found <a href="https://hub.docker.com/u/dirigiblelabs">here</a>.</li>
-</ul>
-</div>
-<ul>
-<li>
-<p>Bind the XSUAA and HANA Cloud service instances to the XSK deployment:</p>
-<div class="highlight"><pre><span></span><code>cf bind-service xsk &lt;applicationName&gt;-xsuaa
-cf bind-service xsk &lt;hanaCloudInstanceName&gt;
-cf set-env xsk HANA_USERNAME &lt;hanaCloudUsername&gt;
-cf set-env xsk HANA_PASSWORD &lt;hanaCloudPassword&gt;
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">PostgreSQL</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
+--set kyma.enabled=true \
+--set kyma.apirule.host=&lt;kyma-host&gt; \
+--set database.enabled=true
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul>
-<li>Replace the <code>&lt;applicationName&gt;</code> placeholder with the application name used in the previous steps.</li>
-<li>Replace the <code>&lt;hanaCloudInstanceName&gt;</code> placeholder with the HANA Cloud service instance name that will be used.</li>
-<li>Replace the <code>&lt;hanaUsername&gt;</code> placeholder with the HANA Cloud username that will be used.</li>
-<li>Replace the <code>&lt;hanaPassword&gt;</code> placeholder with the HANA Cloud password that will be used.</li>
-</ul>
+<p>This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.</p>
+</div>
 </div>
 </li>
 <li>
-<p>Restart the <code>xsk</code> deployment:</p>
-<div class="highlight"><pre><span></span><code>cf restart xsk
-</code></pre></div>
-</li>
-</ul>
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Buildpack</label><div class="tabbed-content">
-<ul>
-<li>Download the <code>sap-cf</code> binaries from the downloads site: <a href="https://github.com/SAP/xsk/releases">https://github.com/SAP/xsk/releases</a></li>
-<li>Unzip the downloaded archieve to extract the <code>ROOT.war</code> file.</li>
-<li>
-<p>Create <code>manifest.yaml</code> file in the same directory where the <code>ROOT.war</code> is located:
-    <div class="highlight"><pre><span></span><code><span class="nt">applications</span><span class="p">:</span>
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
-  <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-&lt;org-name&gt;</span>
-  <span class="nt">memory</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2G</span>
-  <span class="nt">buildpack</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sap_java_buildpack</span>
-  <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ROOT.war</span>
-  <span class="nt">env</span><span class="p">:</span>
-    <span class="nt">JBP_CONFIG_COMPONENTS</span><span class="p">:</span> <span class="s">&quot;jres:</span><span class="nv"> </span><span class="s">[&#39;com.sap.xs.java.buildpack.jdk.SAPMachineJDK&#39;]&quot;</span>
-    <span class="nt">JBP_CONFIG_SAP_MACHINE_JRE</span><span class="p">:</span> <span class="s">&#39;jre:</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">version:</span><span class="nv"> </span><span class="s">11.+</span><span class="nv"> </span><span class="s">}&#39;</span>
-    <span class="nt">HANA_USERNAME</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hanaUsername&gt;</span>
-    <span class="nt">HANA_PASSWORD</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hanaPassword&gt;</span>
-  <span class="nt">services</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;applicationName&gt;-xsuaa</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hanaCloudInstanceName&gt;</span>
-</code></pre></div></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul>
-<li>Replace the <code>&lt;org-name&gt;</code> placeholder with your subaccount's Subdomain value.</li>
-<li>Replace the <code>&lt;applicationName&gt;</code> placeholder with the application name used in the previous steps.</li>
-<li>Replace the <code>&lt;hanaUsername&gt;</code> placeholder with the HANA Cloud username that will be used.</li>
-<li>Replace the <code>&lt;hanaPassword&gt;</code> placeholder with the HANA Cloud password that will be used.</li>
-<li>Replace the <code>&lt;hanaCloudInstanceName&gt;</code> placeholder with the HANA Cloud service instance name that will be used.</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Deploy with:
-    <div class="highlight"><pre><span></span><code>cf push
+<p>Uninstall:
+    <div class="highlight"><pre><span></span><code>helm uninstall xsk
 </code></pre></div></p>
 </li>
-</ul>
-</div>
-</div>
-</li>
-<li>
-<p>Assign the <code>Developer</code> and <code>Operator</code> roles.</p>
-</li>
-<li>
-<p>Log in.</p>
-</li>
 </ol>
-<div class="admonition example">
-<p class="admonition-title">Additional Materials</p>
-<p>Step-by-step tutorial can be found <a href="https://blogs.sap.com/2020/03/15/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-cloud-foundry-environment/">here</a>.</p>
-</div>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>SAP Cloud Platform is called SAP Business Technology Platform (SAP BTP) as of 2021.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
+<h2 id="configuration">Configuration</h2>
+<p>The following table lists all the configurable parameters expose by the XSK chart and their default values.</p>
+<h4 id="generic">Generic</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dirigible.image</code></td>
+<td>Custom Dirigible image</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>Dirigible image repo</td>
+<td><code>dirigiblelabs/dirigible-all</code></td>
+</tr>
+<tr>
+<td><code>image.repositoryKyma</code></td>
+<td>Dirigible Kyma image repo</td>
+<td><code>dirigiblelabs/dirigible-sap-kyma</code></td>
+</tr>
+<tr>
+<td><code>image.repositoryKeycloak</code></td>
+<td>Dirigible Keycloak image repo</td>
+<td><code>dirigiblelabs/dirigible-keycloak</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Service port</td>
+<td><code>8080</code></td>
+</tr>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Number of replicas</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>imagePullSecrets</code></td>
+<td>Image pull secrets</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>nameOverride</code></td>
+<td>Name override</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>fullnameOverride</code></td>
+<td>Fullname override</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code></td>
+<td>Pod security context</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>nodeSelector</code></td>
+<td>Node selector</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>tolerations</code></td>
+<td>Tolerations</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>affinity</code></td>
+<td>Affinity</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td>Resources</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
                 
                   
                 
@@ -652,7 +648,7 @@ cf set-env xsk HANA_PASSWORD &lt;hanaCloudPassword&gt;
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../../api/%24.request/" class="md-footer__link md-footer__link--prev" aria-label="Previous: $.request" rel="prev">
+        <a href="../cloud-foundry/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Cloud Foundry" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -661,20 +657,20 @@ cf set-env xsk HANA_PASSWORD &lt;hanaCloudPassword&gt;
               <span class="md-footer__direction">
                 Previous
               </span>
-              $.request
+              Cloud Foundry
             </div>
           </div>
         </a>
       
       
         
-        <a href="../helm/" class="md-footer__link md-footer__link--next" aria-label="Next: Helm" rel="next">
+        <a href="../kyma/" class="md-footer__link md-footer__link--next" aria-label="Next: Kyma" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Helm
+              Kyma
             </div>
           </div>
           <div class="md-footer__button md-icon">

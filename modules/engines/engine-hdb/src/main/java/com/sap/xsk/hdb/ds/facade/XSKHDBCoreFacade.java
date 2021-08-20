@@ -131,7 +131,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     Map<String, XSKDataStructureModel> dataStructureSequencesModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE)
         .getDataStructureModels();
 
-<<<<<<< HEAD
     if (dataStructureCdsModel.isEmpty()
         && dataStructureTablesModel.isEmpty()
         && dataStructureViewsModel.isEmpty()
@@ -139,19 +138,8 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         && dataStructureTableFunctionsModel.isEmpty()
         && dataStructureSchemasModel.isEmpty()
         && dataStructureSynonymModel.isEmpty()
-        && dataStructureSequencesModel.isEmpty()) {
-=======
-    if (//dataStructureEntitiesModel.isEmpty()
-      // &&
-        dataStructureTablesModel.isEmpty()
-            && dataStructureViewsModel.isEmpty()
-            && dataStructureProceduresModel.isEmpty()
-            && dataStructureTableFunctionsModel.isEmpty()
-            && dataStructureSchemasModel.isEmpty()
-            && dataStructureSynonymModel.isEmpty()
-            && dataStructureSequencesModel.isEmpty()
-            && dataStructureScalarFunctionsModel.isEmpty()) {
->>>>>>> 9a79ad6b (fixed: processor for .hdbscalarfunction)
+        && dataStructureSequencesModel.isEmpty()
+        && dataStructureScalarFunctionsModel.isEmpty()) {
 
       logger.trace("No XSK Data Structures to update.");
       return;

@@ -11,14 +11,14 @@
 
 Compatible environment for [SAP HANA Extended Application Services](https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/a6c0749255d84a81a154a7fc87dd33ce.html) (XS) based applications. It is deployed outside of [SAP HANA](https://www.sap.com/products/hana.html?btp=991d50bf-fa15-4979-ac4b-b280b0eb951f) instance as a [Docker](https://www.docker.com/) a container on [Kubernetes](https://kubernetes.io/). Hence, some of the features can work against any other JDBC compliant RDBMS such as [PostgreSQL](https://www.postgresql.org/). The compatibility stack is an extension of the [Eclipse Dirigible](https://github.com/eclipse/dirigible) cloud development platform.
 
-> Note: the project is not yet ready to be used productively
+> _**Note:** the project is not yet ready to be used productively_
 
 
 ## Try it Out
 
 `Try it Out` version is available [here](https://xsk-trial.kneo.promart.shoot.canary.k8s-hana.ondemand.com).
 
-> Note: the `Try it Out` instance is a shared one and it is intended for test & demo purposes only
+> _**Note**: the `Try it Out` instance is a shared one and it is intended for test & demo purposes only_
 
 ## Overview
 - [Project XSK](#project-xsk)
@@ -30,8 +30,8 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 - [Build](#installation)
   - [Maven Build](#how-to-build)
   - [Docker Build](#build-docker-images)
+  - [Push to Docker Hub](#how-to-push-on-docker-hub)
 - [Deploy](#how-to-run)
-- [Push to Docker Hub](#how-to-push-on-docker-hub)
 - [Configuration](#configuration)
   - [Environment Variables](#environment-variables)
   - [Chrome Extentions](#chrome-extentions)
@@ -55,7 +55,50 @@ XSK stack is based on Java (JVM), so all the available plugins and/or new framew
 
 XSK stack can run within the HANA box, also in the virtual HANA system or outside in e.g. Kubernetes cluster, Kyma, Cloud Foundry, Open Stack. 
 
-### Development Experience
+## Requirements
+
+- Java suported versions 11 - 13
+- Maven 3.6.2 or later
+
+## Download and Installation
+
+```
+git clone https://github.com/SAP/xsk
+cd xsk
+mvn clean install
+```
+
+Integration Tests:
+- Main focus is to test against PostgreSQL, MySQL and SAP HANA Cloud.
+- There is a specific name pattern for each integration test (ending in ITTest).
+- The itests profile is to be run as follows:
+```
+mvn verify -Pitests "-Dhana.url=jdbcUrl" "-Dhana.username=jdbcUsername" "-Dhana.password=jdbcPassword"
+```
+> _**Note** that you have to provide the credentials of your own HANA Cloud instance and more importantly to wrap them in quotes! Otherwise you might not be able to connect to the db instance due some special characters in respective db properties._
+
+## How to run
+
+- [Local](https://www.xsk.io/setup/local/)
+- [Cloud Foundry](https://www.xsk.io/setup/cloud-foundry/)
+- [Kyma](https://www.xsk.io/setup/kyma/)
+- [Helm](https://www.xsk.io/setup/helm/)
+    
+#### Environment Variables
+
+* **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
+* **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
+
+#### Chrome Extentions
+
+To Visualize XML insatll chrome extention [xml-tree](https://chrome.google.com/webstore/detail/xml-tree/gbammbheopgpmaagmckhpjbfgdfkpadb)
+It will be used when showing xml related data, for example as xsodata
+
+## Cheat Sheet
+
+Visit the cheat sheet [here](https://github.com/SAP/xsk/wiki/Cheat-Sheet).
+
+## Development Experience
 
 | Aspect                         | Scope | Description  |
 | ------------------------------ |:-----:| -------------|
@@ -118,154 +161,9 @@ XSK stack can run within the HANA box, also in the virtual HANA system or outsid
 | [$.web](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.html)                 |  ✅   | Web namespace                      |
 | [$.security](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.security.html)       |  ✅   | Security namespace                 |
 
-
----
-
-## Requirements
-
-- Java suported versions 11 - 13
-- Maven 3.6.2 or later
-
-## Download and Installation
-
-```
-git clone https://github.com/SAP/xsk
-cd xsk
-mvn clean install
-```
-
-Integration Tests:
-- Main focus is to test against PostgreSQL, MySQL and SAP HANA Cloud.
-- There is a specific name pattern for each integration test (ending in ITTest).
-- The itests profile is to be run as follows:
-```
-mvn verify -Pitests "-Dhana.url=jdbcUrl" "-Dhana.username=jdbcUsername" "-Dhana.password=jdbcPassword"
-```
-Note that you have to provide the credentials of your own HANA Cloud instance and more importantly to wrap them in quotes! Otherwise you might not be able to connect to the db instance due some special characters in respective db properties. 
-#### Environment Variables for Local Instance
-
-    export DIRIGIBLE_DATABASE_PROVIDER=custom
-    export DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA
-    export DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA
-    export HANA_DRIVER=com.sap.db.jdbc.Driver
-    export HANA_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443?encrypt=true&validateCertificate=true
-    export HANA_USERNAME=DBADMIN
-    export HANA_PASSWORD=<password>
-    export DIRIGIBLE_SCHEDULER_DATABASE_DRIVER=com.sap.db.jdbc.Driver
-    export DIRIGIBLE_SCHEDULER_DATABASE_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443?encrypt=true&validateCertificate=true
-    export DIRIGIBLE_SCHEDULER_DATABASE_USER=DBADMIN
-    export DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<password>
-    export DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false
-    export DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false
-    export DIRIGIBLE_CMS_PROVIDER=database
-    export DIRIGIBLE_CMS_DATABASE_DATASOURCE_TYPE=custom
-    export DIRIGIBLE_CMS_DATABASE_DATASOURCE_NAME=HANA
-
-#### Pull Docker images
-
-##### Local (Tomcat Server)
-
-```
-docker pull dirigiblelabs/xsk
-```
-
-##### Cloud Foundry
-
-```
-docker pull dirigiblelabs/xsk-cf
-```
-
-##### Kyma
-
-```
-docker pull dirigiblelabs/xsk-kyma
-```
-
-#### Build Docker images
-
-##### Local (Tomcat Server)
-
-```
-cd releng/server
-
-docker build -t dirigiblelabs/xsk .
-```
-
-##### Cloud Foundry
-
-```
-cd releng/sap-cf
-
-docker build -t dirigiblelabs/xsk-cf .
-```
-
-##### Kyma
-
-```
-cd releng/sap-kyma
-
-docker build -t dirigiblelabs/xsk-kyma .
-```
-
-##### Developer
-
-###### If you want to use the default JDK from the base docker image:
-
-```
-cd releng/developer
-
-docker build -t dirigiblelabs/xsk .
-```
-
-###### If you want to use a HotSwap enabled JDK:
-
-```
-cd releng/developer
-
-docker build -t dirigiblelabs/xsk --build-arg JDK_TYPE=hotswap-jdk --build-arg USE_HOTSWAP_JDK .
-```
-
-Using a HotSwap enabled JVM like TravaOpenJDK enables you to patch Java code while still debugging. 
-Additional info if using IntelliJ could be found [here](https://www.jetbrains.com/help/idea/altering-the-program-s-execution-flow.html#reload_classes). Have in mind the HotSwap limitations described there should not exist in the XSK as the hotswap-jdk configuration in Docker uses a Dynamic Code Evolution VM by default.
-
-### How to run
-
-- [Local (Tomcat Server)](https://www.xsk.io/setup/local/)
-- [Cloud Foundry](https://www.xsk.io/setup/cloud-foundry/)
-- [Kyma](https://www.xsk.io/setup/kyma/)
-- [Helm](https://www.xsk.io/setup/helm/)
-
-### How to push on Docker Hub
-
-    docker login
-    
-    docker push dirigiblelabs/xsk
-
-    docker push dirigiblelabs/xsk-kyma
-
-    docker push dirigiblelabs/xsk-cf  
-    
----
-
-## Configuration
-
-### Environment Variables
-
-* **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
-* **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
-
-### Chrome Extentions
-
-To Visualize XML insatll chrome extention [xml-tree](https://chrome.google.com/webstore/detail/xml-tree/gbammbheopgpmaagmckhpjbfgdfkpadb)
-It will be used when showing xml related data, for example as xsodata
-
----
-
 ## Limitations
 
 Not all of the XS classic artifacts are supported as well as not all the features of the supported artifacts are covered so far.
-
----
 
 ## Known Issues
 
@@ -274,13 +172,9 @@ Not all of the XS classic artifacts are supported as well as not all the feature
 * Authentication is managed by the runtime container
 * Authorization checks in the application layer only (no HANA database security/user management)
 
----
-
 ## How to obtain support
 
 All the bug reports as well as the feature requests have to be registered as issues.
-
----
 
 ## Contributing
 

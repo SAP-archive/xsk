@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.graalvm.polyglot.HostAccess;
 
-public class AsyncHolder {
+public class AssertHolder {
   @HostAccess.Export
   public void callAssertTrue(Boolean res) {
       assertTrue(res);

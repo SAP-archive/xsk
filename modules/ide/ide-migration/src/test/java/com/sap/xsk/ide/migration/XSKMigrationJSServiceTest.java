@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.cxf.helpers.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ContextException;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.extensions.api.ExtensionsException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
@@ -31,7 +32,6 @@ import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.eclipse.dirigible.repository.api.RepositoryWriteException;
 import org.junit.Before;
 import org.junit.Test;
-import javax.websocket.Session;
 
 public class XSKMigrationJSServiceTest extends AbstractDirigibleTest {
 
@@ -52,13 +52,20 @@ public class XSKMigrationJSServiceTest extends AbstractDirigibleTest {
     String neoPath = getAbsolutePath("xsk-ide-migration/server/migration/neo.sh");
     String targetPath = System.getProperty("user.dir") + "/target/";
     String neoClientPath = targetPath + "migration-tools/neo/neo-sdk/tools/neo.sh";
-    Map context = Map.ofEntries(
-        Map.entry("__async_callback", new AsyncHolder()),
-        Map.entry("__neo_path", neoPath),
-        Map.entry("__neo_client_path", neoClientPath)
-    );
-    Object result = runTest(this.graaljsJavascriptEngineExecutor, repository, "xsk-ide-migration/server/test/migrate.js", context);
 
+    Map context = Map.ofEntries(
+        Map.entry("__async_callback", new AssertHolder()),
+        Map.entry("__neo_path", neoPath),
+        Map.entry("__neo_client_path", neoClientPath),
+        Map.entry("__account", Configuration.get("ACCOUNT")),
+        Map.entry("__host", Configuration.get("HOST")),
+        Map.entry("__user", Configuration.get("USER")),
+        Map.entry("__password", Configuration.get("PASSWORD")),
+        Map.entry("__db", Configuration.get("DB")),
+        Map.entry("__cuser", Configuration.get("CUSER")),
+        Map.entry("__hana_pass", Configuration.get("HANA_PASSWORD"))
+    );
+    runTest(this.graaljsJavascriptEngineExecutor, repository, "xsk-ide-migration/server/test/migrate.js", context);
   }
 
   private Object runTest(XSKJavascriptEngineExecutor executor, IRepository repository, String testModule, Map<Object, Object> context)

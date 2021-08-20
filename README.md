@@ -248,17 +248,7 @@ For Kyma setup navigate to: [https://www.xsk.io/setup/kyma/](https://www.xsk.io/
 
 ### Helm
 
-```
-helm repo add dirigible https://eclipse.github.io/dirigible
-helm repo update
-
-helm install xsk dirigible/dirigible \
---set kyma.enabled=true \
---set kyma.apirule.host=<kyma-host> \
---set dirigible.image=dirigiblelabs/xsk-kyma:latest
-```
-
-
+For setup with Helm navigate to: [https://www.xsk.io/setup/helm/](https://www.xsk.io/setup/helm/)
 
 ### How to push on Docker Hub
 

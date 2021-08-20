@@ -1,0 +1,4 @@
+//schema name to be considered when itests are run on local
+schema="DBADMIN";
+query="SELECT W1.\"MY_ID\" FROM \"acme.com.test.tables::MY_TABLE2\" AS W1 ";
+depends_on= ["acme.com.test.tables::MY_TABLE2"];

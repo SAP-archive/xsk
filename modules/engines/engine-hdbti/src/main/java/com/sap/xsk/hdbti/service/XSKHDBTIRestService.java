@@ -46,7 +46,7 @@ public class XSKHDBTIRestService extends AbstractRestService implements IRestSer
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponses({@ApiResponse(code = 200, message = "HDBTI file was parsed")})
-    public Response parseHdbtiToJSON(@ApiParam(value = "File registry path") @QueryParam("location") String location,
+    public Response parseHdbtiToJSON(@ApiParam(value = "File registry path", required = true) @QueryParam("location") String location,
                                      @ApiParam(value = "The HDBTI file", required = true)
                                      @Multipart("file") byte[] file) {
         try {

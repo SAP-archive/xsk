@@ -25,14 +25,10 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 _Project documentation is available at: https://www.xsk.io_
 
 - [Project XSK](#background)
-- [Setup](#setup)
-- [Readiness](#development-experience)
-  - [Development Experience](#development-experience)
-  - [Life-cycle Management](#life-cycle-management)
-  - [Artifacts Coverage](#artifacts-coverage)
-  - [XSJS APIs Coverage](#xsjs-apis-coverage)
-- [Limitations](#limitations)
-- [Known Issues](#known-issues)
+  - [Setup](#setup)
+  - [Readiness](#readiness)
+  - [Limitations](#limitations)
+  - [Known Issues](#known-issues)
 - [Support](#how-to-obtain-support)
 - [Contributing](#contributing)
 
@@ -78,77 +74,13 @@ mvn clean install
 * **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
 * **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
 
-#### Chrome Extentions
-
-To Visualize XML insatll chrome extention [xml-tree](https://chrome.google.com/webstore/detail/xml-tree/gbammbheopgpmaagmckhpjbfgdfkpadb)
-It will be used when showing xml related data, for example as xsodata
-
 ## Cheat Sheet
 
 Visit the cheat sheet [here](https://github.com/SAP/xsk/wiki/Cheat-Sheet).
 
-## Development Experience
+## Readiness
 
-| Aspect                         | Scope | Description  |
-| ------------------------------ |:-----:| -------------|
-| Preserve hdb* descriptors      |  ✅   |              |
-| Preserve XSJS code             |  ✅   |              |
-| Preserve XSOData descriptors   |  ✅   |              |
-| Preserve XSC development model |  ✅   |              |
-| Preserve XSC security model    |  ⚠️   | Authentication is managed by the runtime container |
-| Support for XSJS code          |  ✅   |              |
-
-
-### Life-cycle Management
-
-| Aspect                                | Scope | Description  |
-| ------------------------------------- |:-----:| -------------|
-| End-to-end life-cycle management      |  ✅   |              |
-| Single-step migration                 |  ✅   |              |
-| Can be deployed as a monolith         |  ✅   |              |
-| Can be deployed as a microservices    |  ✅   |              |
-| Can be deployed on Kubernetes         |  ✅   |              |
-| Can be deployed on Cloud Foundry      |  ✅   |              |
-
-
-### Artifacts Coverage
-
-| Aspect                | Scope | Description  |
-| --------------------- |:-----:| -------------|
-| .xsjs                 |  ✅   |              |
-| .xsjslib              |  ✅   |              |
-| .calculationview      |  ⚠️   |              |
-| [.hdbprocedure](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.05/en-US/93de88bf2c8242179647e40f958c24e5.html)         |  ✅   |              |
-| [.hdbrole](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.05/en-US/625d7733c30b4666b4a522d7fa68a550.html)              |  ❌   |              |
-| [.hdbsequence](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.05/en-US/b295c2e0a5d547f8b1717ad7dd52cc90.html)          |  ✅   |              |
-| .xsodata              |  ⚠️   |              |
-| .hdbdd                |  ⚠️   |              |
-| .xsaccess             |  ✅   |              |
-| .xsjob                |  ✅   |              |
-| .xssecurestore        |  ✅   |              |
-| .hdbti (+csv)         |  ✅   |              |
-| .xshttpdest           |  ✅   |              |
-| .hdbschema            |  ✅   |              |
-
-
-
-### XSJS APIs Coverage
-
-| Aspect                                                                                                     | Scope | Description                        |
-| ---------------------------------------------------------------------------------------------------------- |:-----:| -----------------------------------|
-| [$.session](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.Session.html)         |  ⚠️    | Represents an SAP HANA XS session   |
-| [$.request](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.WebRequest.html)  |  ✅   | Represents the client HTTP request currently being processed. |
-| [$.response](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.WebResponse.html)|  ✅   | Represents the HTTP response currently being populated. |
-| [$.hdb](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.hdb.html)                 |  ✅   | This namespace provides means for seamless HANA database access. It is intended to be a replacement of the older $.db namespace |
-| [$.db](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.db.html)                   |  ✅   | Namespace for HANA database access |
-| [$.util](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.util.html)               |  ✅   | Util namespace                     |
-| [$.trace](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.trace.html)             |  ✅   | Trace namespace                    |
-| [$.import](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.html#import)           |  ✅   | Imports a server-side JavaScript library artifact |
-| [$.net](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.net.html)                 |  ✅   | Network namespace                  |
-| [$.net.http](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.net.http.html)       |  ✅   | HTTP namespace                     |
-| [$.util.codec](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.util.codec.html)   |  ✅   | Codec namespace                    |
-| [$.web](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.web.html)                 |  ✅   | Web namespace                      |
-| [$.security](https://help.sap.com/doc/3de842783af24336b6305a3c0223a369/2.0.03/en-US/$.security.html)       |  ✅   | Security namespace                 |
+Visit the readiness page [here](https://github.com/SAP/xsk/wiki/Readiness).
 
 ## Limitations
 

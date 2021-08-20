@@ -93,7 +93,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         return;
       }
     } catch (XSKDataStructuresException e) {
-      logger.error("Synchronized artifact with path "+registryPath+" is not valid");
+      logger.error("Synchronized artifact with path " + registryPath + " is not valid");
       logger.error(e.getMessage());
       return;
     } catch (Exception e) {
@@ -122,6 +122,8 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         .getDataStructureModels();
     Map<String, XSKDataStructureModel> dataStructureTableFunctionsModel = managerServices
         .get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION).getDataStructureModels();
+    Map<String, XSKDataStructureModel> dataStructureScalarFunctionsModel = managerServices
+        .get(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION).getDataStructureModels();
     Map<String, XSKDataStructureModel> dataStructureSchemasModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SCHEMA)
         .getDataStructureModels();
     Map<String, XSKDataStructureModel> dataStructureSynonymModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SYNONYM)
@@ -136,7 +138,8 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         && dataStructureTableFunctionsModel.isEmpty()
         && dataStructureSchemasModel.isEmpty()
         && dataStructureSynonymModel.isEmpty()
-        && dataStructureSequencesModel.isEmpty()) {
+        && dataStructureSequencesModel.isEmpty()
+        && dataStructureScalarFunctionsModel.isEmpty()) {
 
       logger.trace("No XSK Data Structures to update.");
       return;
@@ -161,6 +164,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         sorted.addAll(dataStructureSchemasModel.keySet());
         sorted.addAll(dataStructureSynonymModel.keySet());
         sorted.addAll(dataStructureSequencesModel.keySet());
+        sorted.addAll(dataStructureScalarFunctionsModel.keySet());
 
         boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
         if (!hdiOnly) {
@@ -179,8 +183,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                             hdbSequencesToUpdate) {
                         xskSequencesManagerService.dropDataStructure(connection, sequenceToUpdate);
                     } */
-
-
 
           // ************** DROPPING ****************************************************************//
           // drop HDB Procedures
@@ -216,9 +218,26 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             xskTableFunctionManagerService.dropDataStructure(connection, tableFunctionModel);
           }
 
+          // drop HDB Scalar Functions
+          List<XSKDataStructureHDBTableFunctionModel> hdbScalarFunctionsToUpdate = new ArrayList<>();
+          for (int i = sorted.size() - 1; i >= 0; i--) {
+            String dsName = sorted.get(i);
+            XSKDataStructureHDBTableFunctionModel model = (XSKDataStructureHDBTableFunctionModel) dataStructureScalarFunctionsModel
+                .get(dsName);
+            if (model != null) {
+              hdbScalarFunctionsToUpdate.add(model);
+            }
+          }
+          IXSKDataStructureManager<XSKDataStructureModel> xskScalarFunctionManagerService = managerServices
+              .get(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION);
+          for (XSKDataStructureHDBTableFunctionModel tableFunctionModel :
+              hdbScalarFunctionsToUpdate) {
+            xskScalarFunctionManagerService.dropDataStructure(connection, tableFunctionModel);
+          }
+
           // drop Synonym in a reverse order
           IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService = managerServices
-                  .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
+              .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
           for (int i = sorted.size() - 1; i >= 0; i--) {
             String dsName = sorted.get(i);
             XSKDataStructureHDBSynonymModel model = (XSKDataStructureHDBSynonymModel) dataStructureSynonymModel.get(dsName);
@@ -291,7 +310,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
           // drop HDB Schemas
           IXSKDataStructureManager<XSKDataStructureModel> xskSchemaManagerService = managerServices
-                  .get(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
+              .get(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
           List<XSKDataStructureHDBSchemaModel> hdbSchemasToUpdate = new ArrayList<>();
           for (int i = sorted.size() - 1; i >= 0; i--) {
             String dsName = sorted.get(i);
@@ -329,7 +348,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
                   xskTableManagerService.createDataStructure(connection, model);
                 } else {
                   logger.warn(format("Table [{0}] already exists during the update process", dsName));
-                  if (SqlFactory.getNative(connection).count(connection,escapedName) != 0) {
+                  if (SqlFactory.getNative(connection).count(connection, escapedName) != 0) {
                     xskTableManagerService.updateDataStructure(connection, model);
                   }
                 }
@@ -416,6 +435,12 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
           for (XSKDataStructureHDBTableFunctionModel tableFunctionModel :
               hdbTableFunctionsToUpdate) {
             xskTableFunctionManagerService.createDataStructure(connection, tableFunctionModel);
+          }
+
+          // process hdbScalarFunctions
+          for (XSKDataStructureHDBTableFunctionModel tableFunctionModel :
+              hdbScalarFunctionsToUpdate) {
+            xskScalarFunctionManagerService.createDataStructure(connection, tableFunctionModel);
           }
         }
       } finally {

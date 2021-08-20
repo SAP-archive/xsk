@@ -55,6 +55,11 @@ public interface IXSKDataStructureModel {
    */
   public static final String FILE_EXTENSION_HDBSEQUENCE = ".hdbsequence";
 
+  /**
+   * File extension for *.hdbscalarfunction files
+   */
+  public static final String FILE_EXTENSION_HDBSCALARFUNCTION = ".hdbscalarfunction";
+
 
   /**
    * File extension for *.hdi files
@@ -114,5 +119,10 @@ public interface IXSKDataStructureModel {
    * Type hdbsequence
    */
   public static final String TYPE_HDB_SEQUENCE = "HDBSEQUENCE";
+
+  /**
+   * Type hdbscalarfunction
+   */
+  public static final String TYPE_HDB_SCALARFUNCTION = "HDBSCALARFUNCTION";
 
 }

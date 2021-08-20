@@ -31,10 +31,6 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
   - [Maven Build](#how-to-build)
   - [Docker Build](#build-docker-images)
 - [Deploy](#how-to-run)
-  - [Local](#local-tomcat-server-2)
-  - [Cloud Foundry](#cloud-foundry-2)
-  - [Kyma](#kyma-2)
-  - [Helm](#helm)
 - [Push to Docker Hub](#how-to-push-on-docker-hub)
 - [Configuration](#configuration)
   - [Environment Variables](#environment-variables)
@@ -234,21 +230,10 @@ Additional info if using IntelliJ could be found [here](https://www.jetbrains.co
 
 ### How to run
 
-#### Local (Tomcat Server)
-
-For Local setup navigate to: [https://www.xsk.io/setup/local/](https://www.xsk.io/setup/local/)
-
-#### Cloud Foundry
-
-For Cloud Foundry setup navigate to: [https://www.xsk.io/setup/cloud-foundry/](https://www.xsk.io/setup/cloud-foundry/)
-
-#### Kyma
-
-For Kyma setup navigate to: [https://www.xsk.io/setup/kyma/](https://www.xsk.io/setup/kyma/)
-
-### Helm
-
-For setup with Helm navigate to: [https://www.xsk.io/setup/helm/](https://www.xsk.io/setup/helm/)
+- [Local (Tomcat Server)](https://www.xsk.io/setup/local/)
+- [Cloud Foundry](https://www.xsk.io/setup/cloud-foundry/)
+- [Kyma](https://www.xsk.io/setup/kyma/)
+- [Helm](https://www.xsk.io/setup/helm/)
 
 ### How to push on Docker Hub
 

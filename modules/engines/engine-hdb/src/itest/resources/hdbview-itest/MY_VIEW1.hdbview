@@ -1,6 +1,6 @@
 //schema name to be considered when itests are run on local
 schema="DBADMIN";
-query="SELECT T1.\"ID\" FROM \"acme.com.test.tables::W_TABLE1\" AS T1 LEFT JOIN \"acme.com.test.views::MY_VIEW2\" AS T2 ON T1.\"ID\" = T2.\"ID\"";
+query="SELECT T1.\"ID\" FROM \"acme.com.test.tables::W_TABLE1\" AS T1 LEFT JOIN \"acme.com.test.views::MY_VIEW2\" AS T2 ON T1.\"ID\" = T2.\"MY_ID\"";
 depends_on= ["acme.com.test.tables::W_TABLE1","acme.com.test.views::MY_VIEW2"];
 depends_on_table= ["acme.com.test.tables::W_TABLE1"];
 depends_on_view= ["acme.com.test.views::MY_VIEW2"];

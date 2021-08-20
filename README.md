@@ -21,20 +21,13 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 > _**Note**: the `Try it Out` instance is a shared one and it is intended for test & demo purposes only_
 
 ## Overview
-- [Project XSK](#project-xsk)
-  - [Background](#background)
+- [Project XSK](#background)
+- [Setup](#setup)
+- [Readiness](#development-experience)
   - [Development Experience](#development-experience)
   - [Life-cycle Management](#life-cycle-management)
   - [Artifacts Coverage](#artifacts-coverage)
   - [XSJS APIs Coverage](#xsjs-apis-coverage)
-- [Build](#installation)
-  - [Maven Build](#how-to-build)
-  - [Docker Build](#build-docker-images)
-  - [Push to Docker Hub](#how-to-push-on-docker-hub)
-- [Deploy](#how-to-run)
-- [Configuration](#configuration)
-  - [Environment Variables](#environment-variables)
-  - [Chrome Extentions](#chrome-extentions)
 - [Limitations](#limitations)
 - [Known Issues](#known-issues)
 - [Support](#how-to-obtain-support)
@@ -68,16 +61,7 @@ cd xsk
 mvn clean install
 ```
 
-Integration Tests:
-- Main focus is to test against PostgreSQL, MySQL and SAP HANA Cloud.
-- There is a specific name pattern for each integration test (ending in ITTest).
-- The itests profile is to be run as follows:
-```
-mvn verify -Pitests "-Dhana.url=jdbcUrl" "-Dhana.username=jdbcUsername" "-Dhana.password=jdbcPassword"
-```
-> _**Note** that you have to provide the credentials of your own HANA Cloud instance and more importantly to wrap them in quotes! Otherwise you might not be able to connect to the db instance due some special characters in respective db properties._
-
-## How to run
+## Setup
 
 - [Local](https://www.xsk.io/setup/local/)
 - [Cloud Foundry](https://www.xsk.io/setup/cloud-foundry/)

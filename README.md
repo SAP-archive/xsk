@@ -236,44 +236,7 @@ Additional info if using IntelliJ could be found [here](https://www.jetbrains.co
 
 #### Local (Tomcat Server)
 
-##### With local database
-
-    docker run -p 8080:8080 dirigiblelabs/xsk
-
-##### With persistent volume
-
-    docker run -p 8080:8080 -v <your-local-directory>:/usr/local/tomcat/target dirigiblelabs/xsk
-
-##### With HANA Cloud instance(Mac)
-
-    docker run -p 8080:8080 dirigiblelabs/xsk \
-    -e DIRIGIBLE_DATABASE_PROVIDER=custom \
-    -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
-    -e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
-    -e HANA_DRIVER=com.sap.db.jdbc.Driver \
-    -e HANA_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443?encrypt=true&validateCertificate=true \
-    -e HANA_USERNAME=DBADMIN \
-    -e HANA_PASSWORD=<password> \
-    -e DIRIGIBLE_SCHEDULER_DATABASE_DRIVER=com.sap.db.jdbc.Driver \
-    -e DIRIGIBLE_SCHEDULER_DATABASE_URL=jdbc:sap://<uid>.hana.prod-eu10.hanacloud.ondemand.com:443?encrypt=true&validateCertificate=true \
-    -e DIRIGIBLE_SCHEDULER_DATABASE_USER=DBADMIN \
-    -e DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD=<password> \
-    -e DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE=false \
-    -e DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE=false \
-    -e DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE=true \
-    -e DIRIGIBLE_CMS_PROVIDER=database \
-    -e DIRIGIBLE_CMS_DATABASE_DATASOURCE_TYPE=custom \
-    -e DIRIGIBLE_CMS_DATABASE_DATASOURCE_NAME=HANA
-    
-##### With HANA Cloud instance(Windows/Mac)
-    docker run -p 8080:8080 --env-file env-variables.env dirigiblelabs/xsk
-##### DEBIG With HANA Cloud instance(Windows)
-    docker run --name dirigible --rm -e JPDA_ADDRESS=0.0.0.0:8000 -e JPDA_TRANSPORT=dt_socket -p 8000:8000 -p 8080:8080 -p 8081:8081 --env-file env-variables.env dirigiblelabs/xsk![image](https://user-images.githubusercontent.com/44926767/123221345-876c2200-d4d7-11eb-9f1b-b162e86adf82.png)
-   
-
-##### Go to:
-
-> http://localhost:8080
+For Local setup navigate to: [https://www.xsk.io/setup/local/](https://www.xsk.io/setup/local/)
 
 #### Cloud Foundry
 

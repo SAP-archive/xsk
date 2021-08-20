@@ -14,8 +14,11 @@ package com.sap.xsk.hdb.ds.module;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
 import com.sap.xsk.hdb.ds.service.manager.IXSKEntityManagerService;
+import com.sap.xsk.hdb.ds.parser.hdbscalarfunction.XSKHDBScalarFunctionParser;
+import com.sap.xsk.hdb.ds.service.manager.IXSKScalarFunctionManagerService;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
@@ -38,31 +41,10 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKTableManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
 
 public class XSKHDBModule extends AbstractDirigibleModule {
-	
-	private static Map<String, IXSKDataStructureManager> managerServices;
-	
-	private static Map<String, XSKDataStructureParser> parserServices;
-	
-	public static synchronized Map<String, IXSKDataStructureManager> getManagerServices() {
-		if (managerServices == null) {
-			managerServices = new HashMap<String, IXSKDataStructureManager>();
-			bindManagerServicesToFileExtensions(managerServices);			
-		}
-		return managerServices;
-	}
-	
-	public static synchronized Map<String, XSKDataStructureParser> getParserServices() {
-		if (parserServices == null) {
-			parserServices = new HashMap<String, XSKDataStructureParser>();
-			bindParsersToFileExtension(parserServices);
-		}
-		return parserServices;
-	}
 
-	@Override
-	public void configure() {
-	}
+  private static Map<String, IXSKDataStructureManager> managerServices;
 
+<<<<<<< HEAD
 	private static void bindManagerServicesToFileExtensions(Map<String, IXSKDataStructureManager> managerServices) {
 		  managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
 			managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());
@@ -73,9 +55,43 @@ public class XSKHDBModule extends AbstractDirigibleModule {
 			managerServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new IXSKProceduresManagerService());
 			managerServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new IXSKHDBSequenceManagerService());
 	}
+=======
+  private static Map<String, XSKDataStructureParser> parserServices;
 
-	private static void bindParsersToFileExtension(Map<String, XSKDataStructureParser> parserServices) {
+  public static synchronized Map<String, IXSKDataStructureManager> getManagerServices() {
+    if (managerServices == null) {
+      managerServices = new HashMap<String, IXSKDataStructureManager>();
+      bindManagerServicesToFileExtensions(managerServices);
+    }
+    return managerServices;
+  }
 
+  public static synchronized Map<String, XSKDataStructureParser> getParserServices() {
+    if (parserServices == null) {
+      parserServices = new HashMap<String, XSKDataStructureParser>();
+      bindParsersToFileExtension(parserServices);
+    }
+    return parserServices;
+  }
+
+  @Override
+  public void configure() {
+  }
+
+  private static void bindManagerServicesToFileExtensions(Map<String, IXSKDataStructureManager> managerServices) {
+    managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new IXSKViewManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new IXSKSynonymManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new IXSKTableFunctionManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new IXSKSchemaManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new IXSKProceduresManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new IXSKHDBSequenceManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION, new IXSKScalarFunctionManagerService());
+  }
+>>>>>>> 9a79ad6b (fixed: processor for .hdbscalarfunction)
+
+  private static void bindParsersToFileExtension(Map<String, XSKDataStructureParser> parserServices) {
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, new XSKHdbddParser());
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_TABLE, new XSKTableParser());
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_VIEW, new XSKViewParser());
@@ -84,6 +100,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA, new XSKSchemaParser());
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE, new XSKHDBProcedureParser());
 		parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSEQUENCE, new XSKHDBSequenceParser());
+    parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSCALARFUNCTION, new XSKHDBScalarFunctionParser());
 
     parserServices.put(IXSKDataStructureModel.TYPE_HDBDD, new XSKHdbddParser());
 		parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new XSKTableParser());
@@ -93,10 +110,11 @@ public class XSKHDBModule extends AbstractDirigibleModule {
 		parserServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new XSKSchemaParser());
 		parserServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new XSKHDBProcedureParser());
 		parserServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new XSKHDBSequenceParser());
+    parserServices.put(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION, new XSKHDBScalarFunctionParser());
 	}
 
-	@Override
-	public String getName() {
-		return "XSK HDB Module";
-	}
+  @Override
+  public String getName() {
+    return "XSK HDB Module";
+  }
 }

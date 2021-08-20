@@ -1,0 +1,7 @@
+function "DBADMIN"."hdbscalarfunction-itest::SampleHanaScalarFunction" ( iv_string varchar(1024), iv_delimiter char)
+    returns result varchar(1024)
+    language sqlscript
+    sql security definer as
+begin
+ result := 1;
+end;

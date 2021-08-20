@@ -53,6 +53,8 @@ _**To learn more go to: https://www.xsk.io**_
 
 - Java suported versions 11 - 13
 - Maven 3.6.2 or later
+- Access to SAP BTP account (optional)
+- Access to SAP HANA Cloud instance (optional)
 
 ## Download and Installation
 
@@ -64,15 +66,11 @@ mvn clean install
 
 ## Setup
 
-- [Local](https://www.xsk.io/setup/local/)
+- [Local](https://www.xsk.io/setup/)
 - [Cloud Foundry](https://www.xsk.io/setup/cloud-foundry/)
 - [Kyma](https://www.xsk.io/setup/kyma/)
 - [Helm](https://www.xsk.io/setup/helm/)
-    
-#### Environment Variables
-
-* **XSK_HDI_SUPPORTED** - whether the HDI API is supported by the database (e.g. HANA). Default is *true*.
-* **XSK_HDI_ONLY** - all the database models to be processed only via HDI API (no built-in processing). Default is *false*.
+- [Environment Variables](https://www.xsk.io/setup/setup-environment-variables/)
 
 ## Cheat Sheet
 

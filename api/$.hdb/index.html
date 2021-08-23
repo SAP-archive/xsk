@@ -645,7 +645,9 @@
                 
                 
                 <h1 id="hdb">$.hdb</h1>
-<p>$.hdb namespace provides means for seamless HANA database access. It is intended to be a replacement for the older $.db namespace. The fundamental goal of the new interface is to ensure simplicity, convenience, completeness, and performance.</p>
+<p>$.hdb namespace provides means for seamless HANA database access. It is intended to be a replacement for the older $.db
+namespace. The fundamental goal of the new interface is to ensure simplicity, convenience, completeness, and
+performance.</p>
 <div class="tabbed-set" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Overview</label><div class="tabbed-content"></div>
 </div>
 <ul>
@@ -700,14 +702,12 @@
 <tr>
 <th>Method</th>
 <th>Description</th>
-<th align="center">Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>getConnection()</td>
 <td>Returns a connection to the database</td>
-<td align="center">✅</td>
 </tr>
 </tbody>
 </table>
@@ -761,219 +761,210 @@
 </tbody>
 </table>
 <h4 id="types">Types</h4>
-<table class="props">
+<table>
 <thead>
 <tr>
-<th>Name</th>
-<th>Value</th>
-<th>JavaScript Type</th>
+<th align="left">Name</th>
+<th align="center">Value</th>
+<th align="center">JavaScript Type</th>
 <th>Comment</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code class="name">TINYINT</code></td>
-<td>1</td>
-<td>Number</td>
+<td align="left">TINYINT</td>
+<td align="center">1</td>
+<td align="center">Number</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">SMALLINT</code></td>
-<td>2</td>
-<td>Number</td>
+<td align="left">SMALLINT</td>
+<td align="center">2</td>
+<td align="center">Number</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">INTEGER</code></td>
-<td>3</td>
-<td>Number</td>
+<td align="left">INTEGER</td>
+<td align="center">3</td>
+<td align="center">Number</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">BIGINT</code></td>
-<td>4</td>
-<td>ctypes.Int64</td>
+<td align="left">BIGINT</td>
+<td align="center">4</td>
+<td align="center">ctypes.Int64</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">DECIMAL</code></td>
-<td>5</td>
-<td>String</td>
+<td align="left">DECIMAL</td>
+<td align="center">5</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">REAL</code></td>
-<td>6</td>
-<td>Number</td>
+<td align="left">REAL</td>
+<td align="center">6</td>
+<td align="center">Number</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">DOUBLE</code></td>
-<td>7</td>
-<td>Number</td>
+<td align="left">DOUBLE</td>
+<td align="center">7</td>
+<td align="center">Number</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">CHAR</code></td>
-<td>8</td>
-<td>String</td>
+<td align="left">CHAR</td>
+<td align="center">8</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">VARCHAR</code></td>
-<td>9</td>
-<td>String</td>
+<td align="left">VARCHAR</td>
+<td align="center">9</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">NCHAR</code></td>
-<td>10</td>
-<td>String</td>
+<td align="left">NCHAR</td>
+<td align="center">10</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">NVARCHAR</code></td>
-<td>11</td>
-<td>String</td>
+<td align="left">NVARCHAR</td>
+<td align="center">11</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">BINARY</code></td>
-<td>12</td>
-<td>ArrayBuffer</td>
+<td align="left">BINARY</td>
+<td align="center">12</td>
+<td align="center">ArrayBuffer</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">VARBINARY</code></td>
-<td>13</td>
-<td>ArrayBuffer</td>
+<td align="left">VARBINARY</td>
+<td align="center">13</td>
+<td align="center">ArrayBuffer</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">DATE</code></td>
-<td>14</td>
-<td>Date</td>
+<td align="left">DATE</td>
+<td align="center">14</td>
+<td align="center">Date</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">TIME</code></td>
-<td>15</td>
-<td>Date</td>
+<td align="left">TIME</td>
+<td align="center">15</td>
+<td align="center">Date</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">TIMESTAMP</code></td>
-<td>16</td>
-<td>Date</td>
+<td align="left">TIMESTAMP</td>
+<td align="center">16</td>
+<td align="center">Date</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">CLOB</code></td>
-<td>25</td>
-<td>String</td>
+<td align="left">CLOB</td>
+<td align="center">25</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">NCLOB</code></td>
-<td>26</td>
-<td>String</td>
+<td align="left">NCLOB</td>
+<td align="center">26</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">BLOB</code></td>
-<td>27</td>
-<td>ArrayBuffer</td>
+<td align="left">BLOB</td>
+<td align="center">27</td>
+<td align="center">ArrayBuffer</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">SMALLDECIMAL</code></td>
-<td>47</td>
-<td>String</td>
+<td align="left">SMALLDECIMAL</td>
+<td align="center">47</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">TEXT</code></td>
-<td>51</td>
-<td>ArrayBuffer</td>
+<td align="left">TEXT</td>
+<td align="center">51</td>
+<td align="center">ArrayBuffer</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">SHORTTEXT</code></td>
-<td>52</td>
-<td>String</td>
+<td align="left">SHORTTEXT</td>
+<td align="center">52</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">ALPHANUM</code></td>
-<td>55</td>
-<td>String</td>
+<td align="left">ALPHANUM</td>
+<td align="center">55</td>
+<td align="center">String</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">SECONDDATE</code></td>
-<td>62</td>
-<td>Date</td>
+<td align="left">SECONDDATE</td>
+<td align="center">62</td>
+<td align="center">Date</td>
 <td></td>
 </tr>
 <tr>
-<td><code class="name">ST_GEOMETRY</code></td>
-<td>74</td>
-<td>ArrayBuffer</td>
+<td align="left">ST_GEOMETRY</td>
+<td align="center">74</td>
+<td align="center">ArrayBuffer</td>
 <td>consider using SQL's ST_asGeoJSON() on ST_GEOMETRY columns for easy consumption</td>
 </tr>
 <tr>
-<td><code class="name">ST_POINT</code></td>
-<td>75</td>
-<td>ArrayBuffer</td>
+<td align="left">ST_POINT</td>
+<td align="center">75</td>
+<td align="center">ArrayBuffer</td>
 <td>consider using SQL's ST_asGeoJSON() on ST_POINT columns for easy consumption</td>
 </tr>
 </tbody>
 </table>
-
 <h4 id="hdbconnection">$.hdb.Connection</h4>
 <table>
 <thead>
 <tr>
 <th>Method</th>
 <th>Description</th>
-<th align="center">Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>close()</td>
 <td>Closes the connection.</td>
-<td align="center"><img alt="⚠️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/26a0.png" title=":warning:" /></td>
 </tr>
 <tr>
 <td>commit()</td>
 <td>Commits the changes.</td>
-<td align="center"><img alt="⚠️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/26a0.png" title=":warning:" /></td>
 </tr>
 <tr>
 <td>isClosed()</td>
 <td>Checks if the connection is closed.</td>
-<td align="center"><img alt="⚠️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/26a0.png" title=":warning:" /></td>
 </tr>
 <tr>
 <td>executeQuery(query, arguments(optional))</td>
 <td>Executes a database query. The query string is prepared and the additional arguments are applied as statement parameters, before the statement is executed.</td>
-<td align="center">✅</td>
 </tr>
 <tr>
 <td>executeUpdate(statement, arguments(optional))</td>
 <td>Executes a SQL statement, which changes the database state. SELECT and CALL statements are not allowed here. The query string is prepared and the additional arguments are applied as statement parameters, before the statement is executed.</td>
-<td align="center">✅</td>
 </tr>
 <tr>
 <td>rollback()</td>
 <td>Rolls back the changes.</td>
-<td align="center"><img alt="⚠️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/26a0.png" title=":warning:" /></td>
 </tr>
 <tr>
 <td>setAutoCommit(enable)</td>
 <td>Changes the auto-commit flag of the connection</td>
-<td align="center"><img alt="⚠️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/26a0.png" title=":warning:" /></td>
 </tr>
 </tbody>
 </table>
@@ -1058,7 +1049,8 @@
 <h3 id="hdb-columnmetadata">$.hdb. ColumnMetadata</h3>
 <p>Represents the metadata of a single column from a result set.</p>
 <ul>
-<li>Sample usage:
+<li>Sample usage:</li>
+</ul>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">conn</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">();</span>
 <span class="nx">conn</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s1">&#39;CREATE SCHEMA EXAMPLE&#39;</span><span class="p">);</span>
 <span class="nx">conn</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s1">&#39;CREATE TABLE EXAMPLE.TEST_METADATA( TINT TINYINT NOT NULL, FLOAT FLOAT )&#39;</span><span class="p">);</span>
@@ -1086,8 +1078,7 @@
 <span class="nx">conn</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s1">&#39;DROP SCHEMA EXAMPLE&#39;</span><span class="p">);</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">;</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
-</code></pre></div></li>
-</ul>
+</code></pre></div>
 <table>
 <thead>
 <tr>

@@ -44,6 +44,12 @@
       <version>${org.projectlombok.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-modules-parsers-commons</artifactId>
+      <version>0.8.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

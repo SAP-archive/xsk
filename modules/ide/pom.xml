@@ -20,7 +20,7 @@
 		<connection>${content.scm.connection}</connection>
 		<developerConnection>${content.scm.developerConnection}</developerConnection>
 	</scm>
-	
+
 	<properties>
     <profile.phase>generate-sources</profile.phase>
 
@@ -43,6 +43,7 @@
 	<modules>
 		<module>ide-all</module>
 		<module>ide-migration</module>
+		<module>ide-hdbti</module>
 	</modules>
 
 	<profiles>

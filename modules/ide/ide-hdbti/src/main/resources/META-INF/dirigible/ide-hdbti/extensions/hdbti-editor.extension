@@ -1,0 +1,5 @@
+{
+    "module": "ide-hdbti/services/hdbti-editor.js",
+    "extensionPoint": "ide-editor",
+    "description": "HDBTI Editor"
+}

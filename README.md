@@ -74,29 +74,29 @@ mvn clean install
 
 ## FAQ
 
-* How long will XSK be supported by SAP?
+- How long will XSK be supported by SAP?
 
-> XSK is an open source project with community support as of now. Everyone can join and make a [PR](CONTRIBUTING.md).
+  > XSK is an open source project with community support as of now. Everyone can join and make a [PR](CONTRIBUTING.md).
 
-* Should future developments be based on XSK?
+- Should future developments be based on XSK?
 
-> Yes, you can use XSK for future development.
+  > Yes, you can use XSK for future development.
 
-* What about the tooling? Do we get state of the art tooling for maintaining and enhancing XSK?
+- What about the tooling? Do we get state of the art tooling for maintaining and enhancing XSK?
 
-> XSK tooling is based on [Eclipse Dirigible](https://www.dirigible.io/) and in the near future it will be possible to maintain XSK projects with any modern IDE like VSCode, Eclipse Theia, etc.
+  > XSK tooling is based on [Eclipse Dirigible](https://www.dirigible.io/) and in the near future it will be possible to maintain XSK projects with any modern IDE like VSCode, Eclipse Theia, etc.
 
-* What about the ops aspects - will XSK be smoothly integrated into a state-of-the-art lifecycle and ops management (be it SAP-based or non-SAP based like GitHub Actions?
+- What about the ops aspects - will XSK be smoothly integrated into a state-of-the-art lifecycle and ops management (be it SAP-based or non-SAP based like GitHub Actions?
 
-> Yes, the XSK itself uses [GitHub actions](https://github.com/SAP/xsk/actions) for CI/CD
+  > Yes, the XSK itself uses [GitHub actions](https://github.com/SAP/xsk/actions) for CI/CD
 
-* Will there be limitations that will not be mitigated?
+- Will there be limitations that will not be mitigated?
 
-> You can get the up-to-date list of covered [features](https://github.com/SAP/xsk/wiki/Readiness) as well as the [limitations](https://github.com/SAP/xsk/wiki/Limitations)
+  > You can get the up-to-date list of covered [features](https://github.com/SAP/xsk/wiki/Readiness) as well as the [limitations](https://github.com/SAP/xsk/wiki/Limitations)
 
-* Is the support of PostgreSQL only possible in principle or will this be officially supported?
+- Is the support of PostgreSQL only possible in principle or will this be officially supported?
 
-> Yes, it is officially supported. Features specific for HANA Cloud like HDI, Calculation Views are not available for PostgreSQL.
+  > Yes, it is officially supported. Features specific for HANA Cloud like HDI, Calculation Views are not available for PostgreSQL.
 
 ## Cheat Sheet
 

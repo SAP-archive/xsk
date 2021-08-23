@@ -161,7 +161,7 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
   private Object runTest(IJavascriptEngineExecutor executor, IRepository repository, String testModule)
       throws IOException, ScriptingException {
 
-    try (InputStream in = XSKApiSuiteTest.class.getResourceAsStream(IRepositoryStructure.SEPARATOR + testModule)) {
+    try (InputStream in = XSKApiSuiteTest.class.getResourceAsStream("/META-INF/dirigible/" + testModule)) {
       if (in == null) {
         throw new IOException(IRepositoryStructure.SEPARATOR + testModule + " does not exist");
       }

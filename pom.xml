@@ -261,16 +261,12 @@
 		<antlr4-maven-plugin.version>4.3</antlr4-maven-plugin.version>
 		<org.testcontainers.version>1.15.2</org.testcontainers.version>
 
-		<!-- <profile.content.phase>generate-sources</profile.content.phase> -->
 		<profile.content.phase>none</profile.content.phase>
-
-		<!-- <content.repository.name>dirigiblelabs</content.repository.name>
-		<content.project.name>dirigiblelabs</content.project.name> -->
-		<content.repository.branch>main</content.repository.branch>
-
+		
 		<content.scm.url>https://github.com/dirigiblelabs/${content.repository.name}</content.scm.url>
 		<content.scm.connection>scm:git:git://github.com/dirigiblelabs/${content.repository.name}.git</content.scm.connection>
 		<content.scm.developerConnection>scm:git:https://github.com/dirigiblelabs/${content.repository.name}</content.scm.developerConnection>
+		<content.repository.branch>main</content.repository.branch>
 
 		<content.scm.server>github</content.scm.server>
 		<content.scm.checkoutDirectory>target</content.scm.checkoutDirectory>

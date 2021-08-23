@@ -32,6 +32,7 @@ import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.eclipse.dirigible.repository.api.RepositoryWriteException;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
 
 public class XSKMigrationJSServiceTest extends AbstractDirigibleTest {
 
@@ -52,6 +53,14 @@ public class XSKMigrationJSServiceTest extends AbstractDirigibleTest {
     String neoPath = getAbsolutePath("xsk-ide-migration/server/migration/neo.sh");
     String targetPath = System.getProperty("user.dir") + "/target/";
     String neoClientPath = targetPath + "migration-tools/neo/neo-sdk/tools/neo.sh";
+
+    assertNotNull(Configuration.get("ACCOUNT"));
+    assertNotNull(Configuration.get("HOST"));
+    assertNotNull(Configuration.get("USER"));
+    assertNotNull(Configuration.get("PASSWORD"));
+    assertNotNull(Configuration.get("DB"));
+    assertNotNull(Configuration.get("CUSER"));
+    assertNotNull(Configuration.get("HANA_PASSWORD"));
 
     Map context = Map.ofEntries(
         Map.entry("__async_callback", new AssertHolder()),

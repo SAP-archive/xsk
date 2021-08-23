@@ -171,6 +171,7 @@
     <content.output.directory>${basedir}/src/test/resources/xsk-ide-migration/${content.project.name}</content.output.directory>
 
     <license.header.location>../../../licensing-header.txt</license.header.location>
+    <skipTests>true</skipTests>
   </properties>
 
 </project>

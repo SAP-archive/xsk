@@ -9,14 +9,14 @@
       
       
       
-        <link rel="canonical" href="https://sap.github.io/xsk/api/%24.request/">
+        <link rel="canonical" href="https://sap.github.io/xsk/api/%24util.codec/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
     
     
       
-        <title>$.request - Project XSK</title>
+        <title>$.util.codec - Project XSK</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#request" class="md-skip">
+        <a href="#utilcodec" class="md-skip">
           Skip to content
         </a>
       
@@ -104,7 +104,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              $.request
+              $.util.codec
             
           </span>
         </div>
@@ -274,6 +274,30 @@
             
   
   
+  
+    <li class="md-nav__item">
+      <a href="../%24.request/" class="md-nav__link">
+        $.request
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%24.util/" class="md-nav__link">
+        $.util
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
     
   
   
@@ -286,12 +310,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          $.request
+          $.util.codec
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        $.request
+        $.util.codec
       </a>
       
         
@@ -315,48 +339,10 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#properties" class="md-nav__link">
-    Properties
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#functions" class="md-nav__link">
-    Functions
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
       
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../%24.util/" class="md-nav__link">
-        $.util
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../%24util.codec/" class="md-nav__link">
-        $.util.codec
-      </a>
     </li>
   
 
@@ -489,20 +475,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#properties" class="md-nav__link">
-    Properties
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#functions" class="md-nav__link">
-    Functions
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -515,153 +487,75 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/sap/xsk/edit/gh-pages/docs-site/docs/api/$.request.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/sap/xsk/edit/gh-pages/docs-site/docs/api/$util.codec.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="request">$.request</h1>
-<p>$.request object represents the client HTTP request currently being processed.</p>
+                <h1 id="utilcodec">$.util.codec</h1>
+<p>$.util.codec object represents the codec namespace with its fields.</p>
 <div class="tabbed-set" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Overview</label><div class="tabbed-content"></div>
 </div>
 <ul>
-<li>Definition: <a href="https://github.com/SAP/xsk/issues/12">https://github.com/SAP/xsk/issues/12</a></li>
-<li>Module: <a href="https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/web/web.js">web/web.js</a></li>
+<li>Definition: <a href="https://github.com/SAP/xsk/issues/21">https://github.com/SAP/xsk/issues/21</a></li>
+<li>Module: [util/codec/codec.js] (https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/xsk/util/codec/codec.js)</li>
 <li>Status: <code>alpha</code></li>
 </ul>
 <h3 id="basic-usage">Basic Usage</h3>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// retrieve user by id</span>
-<span class="p">}</span>
+<ul>
+<li>
+<p>Sample usage:
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">codec</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">codec</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">;</span>
 
-<span class="kd">function</span> <span class="nx">createUser</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// create user</span>
-<span class="p">}</span>
+<span class="c1">// encode the string value to  hex data</span>
+<span class="kd">var</span> <span class="nx">encodedHex</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">encodeHex</span><span class="p">(</span><span class="s2">&quot;dirigible as hex&quot;</span><span class="p">);</span>
 
-<span class="kd">function</span> <span class="nx">deleteUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// delete user</span>
-<span class="p">}</span>
+<span class="c1">//returns ArrayBuffer </span>
+<span class="kd">var</span> <span class="nx">decodedHex</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">decodeHex</span><span class="p">(</span><span class="nx">encodedHex</span><span class="p">);</span>
+<span class="c1">//Converts an ArrayBuffer containing UTF-8 encoded string to a JavaScript String object </span>
+<span class="kd">var</span> <span class="nx">valueFromHex</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">decodedHex</span><span class="p">);</span>
 
-<span class="k">if</span><span class="p">(</span><span class="sr">/\/?users$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">queryPath</span><span class="p">))</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">parameters</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="o">===</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">PUT</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">===</span> <span class="s2">&quot;application/json&quot;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">createUser</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
-
-            <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="sb">`created user [</span><span class="si">${</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">asString</span><span class="p">())</span> <span class="si">}</span><span class="sb">]`</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-                <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="s2">&quot;Unsupported content type.&quot;</span>
-            <span class="p">}));</span>
-        <span class="p">}</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">switch</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">case</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">GET</span><span class="o">:</span>
-                <span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
-
-                <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="sb">`retrieved user with id </span><span class="si">${</span> <span class="nx">id</span> <span class="si">}</span><span class="sb">`</span><span class="p">);</span>
-
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">DELETE</span><span class="o">:</span>
-                <span class="nx">deleteUser</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
-
-                <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="sb">`deleted user with id [</span><span class="si">${</span> <span class="nx">id</span> <span class="si">}</span><span class="sb">]`</span><span class="p">);</span>
-
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">default</span><span class="o">:</span>
-                <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-                    <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="sb">`Unsupported method [</span><span class="si">${</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="si">}</span><span class="sb">]`</span> 
-                <span class="p">}));</span>
-        <span class="p">}</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-            <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="s2">&quot;Missing required parameter [id]&quot;</span>
-        <span class="p">}));</span>
-    <span class="p">}</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> 
-        <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="sb">`Unsupported query path [</span><span class="si">${</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">queryPath</span> <span class="si">}</span><span class="sb">]`</span> 
-    <span class="p">}));</span>
-<span class="p">}</span>
-</code></pre></div>
-<h3 id="properties">Properties</h3>
-<hr />
+<span class="c1">// encode the string value  base64 data</span>
+<span class="kd">var</span> <span class="nx">encodedToBase64</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">encodeBase64</span><span class="p">(</span><span class="s2">&quot;dirigible as base64&quot;</span><span class="p">);</span>
+<span class="c1">//returns ArrayBuffer</span>
+<span class="kd">var</span> <span class="nx">decodedBase64</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">decodeBase64</span><span class="p">(</span><span class="nx">encodedToBase64</span><span class="p">);</span>
+<span class="c1">//Converts an ArrayBuffer containing UTF-8 encoded string to a JavaScript String object </span>
+<span class="kd">var</span> <span class="nx">valueFromBase64</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">decodedBase64</span><span class="p">);</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Methods</p>
+</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th>Name</th>
+<th>Members</th>
 <th>Description</th>
-<th>Type</th>
+<th align="center">Type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>body</strong></td>
-<td>The body of the request.</td>
-<td><em><code>$.web.Body</code></em></td>
+<td>decodeBase64(base64Data)</td>
+<td>Decodes Base64 data</td>
+<td align="center">ArrayBuffer</td>
 </tr>
 <tr>
-<td><strong>contentType</strong></td>
-<td>The content type of the entity.</td>
-<td><em><code>string</code></em></td>
+<td>decodeHex(hexData)</td>
+<td>Decodes hexadecimal data.</td>
+<td align="center">ArrayBuffer</td>
 </tr>
 <tr>
-<td><strong>cookies</strong></td>
-<td>The cookies associated with the entity.</td>
-<td><em><code>$.web.TupelList</code></em></td>
+<td>encodeBase64(data)</td>
+<td>Encodes data into Base64.</td>
+<td align="center">String</td>
 </tr>
 <tr>
-<td><strong>entities</strong></td>
-<td>The sub-entities of the entity.</td>
-<td><em><code>$.web.EntityList</code></em></td>
-</tr>
-<tr>
-<td><strong>headers</strong></td>
-<td>The headers of the entity.</td>
-<td><em><code>$.web.TupelList</code></em></td>
-</tr>
-<tr>
-<td><strong>language</strong></td>
-<td>Language of the request in IETF (BCP 47) format.</td>
-<td><em><code>string</code></em></td>
-</tr>
-<tr>
-<td><strong>method</strong></td>
-<td>The HTTP method of the incoming HTTP request.</td>
-<td><em><code>$.net.http</code></em></td>
-</tr>
-<tr>
-<td><strong>parameters</strong></td>
-<td>The parameters of the entity.</td>
-<td><em><code>$.web.TupelList</code></em></td>
-</tr>
-<tr>
-<td><strong>path</strong></td>
-<td>The URL path specified in the request.</td>
-<td><em><code>string</code></em></td>
-</tr>
-<tr>
-<td><strong>queryPath</strong></td>
-<td>The URL query path specified in the request.</td>
-<td><em><code>string</code></em></td>
-</tr>
-</tbody>
-</table>
-<h3 id="functions">Functions</h3>
-<hr />
-<table>
-<thead>
-<tr>
-<th>Function</th>
-<th>Description</th>
-<th>Returns</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>setBody(body)</strong></td>
-<td>Sets the body of the entity.</td>
-<td><em><code>-</code></em></td>
+<td>encodeHex(data)</td>
+<td>Encodes data into hexadecimal format.</td>
+<td align="center">String</td>
 </tr>
 </tbody>
 </table>
@@ -686,7 +580,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../%24.import/" class="md-footer__link md-footer__link--prev" aria-label="Previous: $.import" rel="prev">
+        <a href="../%24.util/" class="md-footer__link md-footer__link--prev" aria-label="Previous: $.util" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -695,20 +589,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              $.import
+              $.util
             </div>
           </div>
         </a>
       
       
         
-        <a href="../%24.util/" class="md-footer__link md-footer__link--next" aria-label="Next: $.util" rel="next">
+        <a href="../../setup/" class="md-footer__link md-footer__link--next" aria-label="Next: Local" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              $.util
+              Local
             </div>
           </div>
           <div class="md-footer__button md-icon">

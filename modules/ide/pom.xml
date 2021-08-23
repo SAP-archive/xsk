@@ -18,6 +18,7 @@
 	<modules>
 		<module>ide-all</module>
 		<module>ide-migration</module>
+		<module>ide-hdbti</module>
 	</modules>
 
 	<properties>

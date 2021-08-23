@@ -10,7 +10,7 @@ $.util.codec object represents the codec namespace with its fields.
 === "Overview"
 - Definition: [https://github.com/SAP/xsk/issues/21](https://github.com/SAP/xsk/issues/21)
 - Module: [util/codec/codec.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/xsk/util/codec/codec.js)
-- Status: `alpha`
+
 
 ### Basic Usage
 

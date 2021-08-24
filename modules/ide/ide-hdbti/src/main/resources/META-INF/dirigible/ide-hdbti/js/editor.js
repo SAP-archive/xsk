@@ -102,8 +102,8 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     const ctrlKey = 17;
     let ctrlDown = false;
     let isMac = false;
-    var csrfToken;
-    var contents;
+    let emptyHdbti = ["", "import=[]", "import=[];", "import=[{}]", "import=[{}];"];
+    let csrfToken;
     $scope.fileExists = true;
     $scope.saveEnabled = true;
     $scope.editEnabled = false;
@@ -112,7 +112,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     $scope.csvimData = [];
     $scope.activeItemId = 0;
     $scope.delimiterList = [',', '\\t', '|', ';', '#'];
-    $scope.quoteCharList = ["'", "\""];
+    $scope.quoteCharList = ["'", "\"", "#"];
 
     $scope.openFile = function () {
         if ($scope.checkResource($scope.csvimData[$scope.activeItemId].file)) {
@@ -259,6 +259,8 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     $scope.deleteFile = function () {
         // Clean search bar
         $scope.csvimData.splice($scope.activeItemId, 1);
+        $scope.setEditEnabled(false);
+        $scope.fileExists = true;
         if ($scope.csvimData.length > 0) {
             $scope.dataEmpty = false;
             $scope.activeItemId = $scope.csvimData.length - 1;
@@ -397,7 +399,15 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
         if ($scope.file) {
             $http.get('../../../../../../services/v4/ide/workspaces' + $scope.file)
                 .then(function (response) {
-                    parseHdbti(response.data);
+                    let data = response.data;
+                    if (
+                        emptyHdbti.includes(
+                            data.replaceAll(" ", '').replaceAll('\n', '').replaceAll('\t', '')
+                        )
+                    ) {
+                        data = "import = [];"
+                    }
+                    parseHdbti(data);
                 }, function (response) {
                     if (response.data) {
                         if ("error" in response.data) {
@@ -423,7 +433,6 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
                 }
             };
             xhr.send(text);
-            contents = text;
             isFileChanged = false;
             $messageHub.message('editor.file.saved', $scope.file);
             $messageHub.message('status.message', 'File [' + $scope.file + '] saved.');

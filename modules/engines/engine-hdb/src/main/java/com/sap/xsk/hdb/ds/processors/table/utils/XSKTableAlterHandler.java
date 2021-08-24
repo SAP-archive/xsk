@@ -111,7 +111,7 @@ public class XSKTableAlterHandler {
       } else if (!dbColumnTypes.get(name).equals(type.toString())) {
         throw new SQLException(String
             .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name,
-                "of type " + dbColumnTypes.get(name) + " to be changed to" + type));
+                "of type " + dbColumnTypes.get(name) + " to be changed to " + type));
       }
     }
   }

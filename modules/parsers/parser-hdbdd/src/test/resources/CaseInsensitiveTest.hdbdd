@@ -1,0 +1,11 @@
+namespace sap.table;
+@Schema : 'TEST'
+@Catalog.tableType : #COLUMN
+
+entity CaseInsensitiveTest{
+Key GSTIN : hana.VARCHAR(25);
+KeY FIN_PERIOD : hana.VARCHAR(10);
+keY CDN_NUM : hana.VARCHAR(16);
+key SUPP_GSTIN : hana.VARCHAR(25) default '';
+    INV_ITM_NUM : Integer DEFAULT 0;
+};

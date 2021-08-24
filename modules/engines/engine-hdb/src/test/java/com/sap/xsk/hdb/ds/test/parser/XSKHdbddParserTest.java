@@ -26,7 +26,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
                 "@Schema : 'GSTR2DB'\n" +
                 "@Catalog.tableType : #COLUMN\n" +
                 "entity ITC_EXPIRED_CONFIG {\n" +
-                "\tKeY FY_YEAR             : hana.VARCHAR(10);\n" + //-> incorrect key
+                "\tKeY1 FY_YEAR             : hana.VARCHAR(10);\n" + //-> incorrect key
                 "\tITC_EXPIRED_DATE        : LocalDate;\n" +
                 "}\n";
         XSKDataStructuresException exception = assertThrows(

@@ -171,7 +171,7 @@
 							<goals>checkout</goals>
 							<checkoutDirectory>${content.scm.checkoutDirectory}</checkoutDirectory>
 							<connectionUrl>${content.scm.connection}</connectionUrl>
-							<developerConnectionUrl>content.scm.developerConnection</developerConnectionUrl>
+							<developerConnectionUrl>${content.scm.developerConnection}</developerConnectionUrl>
 							<server>${content.scm.server}</server>
 							<scmVersion>${content.repository.branch}</scmVersion>
 							<scmVersionType>branch</scmVersionType>

@@ -9,8 +9,8 @@ topLevelSymbol: contextRule | entityRule | structuredDataTypeRule | dataTypeRule
 
 contextRule: annotationRule* CONTEXT ID '{' (contextRule | entityRule | structuredDataTypeRule | dataTypeRule)* '}' ';';
 entityRule: annotationRule* ENTITY ID '{' (association | elementDeclRule)* '}' ';'?;
-structuredDataTypeRule: annotationRule* TYPE1 ID '{' fieldDeclRule* '}' ';';
-dataTypeRule: TYPE1 ID ':' typeAssignRule ';';
+structuredDataTypeRule: annotationRule* TYPE ID '{' fieldDeclRule* '}' ';';
+dataTypeRule: TYPE ID ':' typeAssignRule ';';
 fieldDeclRule: ID ':' typeAssignRule ';';
 typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'           # AssignBuiltInTypeWithArgs
                 | HANA '.' ref=ID                                         # AssignHanaType
@@ -47,14 +47,14 @@ KEY: K E Y;
 NAMESPACE: N A M E S P A C E;
 AS: 'as';
 ENTITY: E N T I T Y;
-TYPE1: 'type';
+TYPE: 'type';
 HANA: 'hana';
 CONTEXT: C O N T E X T;
 USING: U S I N G;
 ASSOCIATION: A S S O C I A T I O N;
 TO: 'to';
 ON: 'on';
-NULL: N U L L;
+NULL: 'null';
 
 DEFAULT: D E F A U L T;
 ASSOCIATION_MIN: INTEGER '..' ;

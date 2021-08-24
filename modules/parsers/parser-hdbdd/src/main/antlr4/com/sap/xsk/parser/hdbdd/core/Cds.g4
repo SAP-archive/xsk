@@ -30,7 +30,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
               |  '[' ']'                                         # NoCardinality
               ;
 
-defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP);
+defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | NULL);
 
 annotationRule: '@' ID ':' annValue                       #AnnObjectRule
               | '@' annId=ID '.' prop=ID ':' annValue     #AnnPropertyRule
@@ -45,15 +45,16 @@ keyValue: ID ':' annValue;
 
 KEY: K E Y;
 NAMESPACE: N A M E S P A C E;
-AS: A S;
+AS: 'as';
 ENTITY: E N T I T Y;
-TYPE1: T Y P E;
-HANA: H A N A;
+TYPE1: 'type';
+HANA: 'hana';
 CONTEXT: C O N T E X T;
 USING: U S I N G;
 ASSOCIATION: A S S O C I A T I O N;
-TO: T O;
-ON: O N;
+TO: 'to';
+ON: 'on';
+NULL: N U L L;
 
 DEFAULT: D E F A U L T;
 ASSOCIATION_MIN: INTEGER '..' ;

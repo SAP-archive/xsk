@@ -50,6 +50,7 @@ import org.abego.treelayout.internal.util.java.lang.string.StringUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 public class EntityDefinitionListener extends CdsBaseListener {
 
@@ -203,6 +204,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
     this.typeables.put(ctx, elementSymbol);
   }
 
+
   @Override
   public void exitElementDeclRule(CdsParser.ElementDeclRuleContext ctx) {
     EntityElementSymbol elementSymbol = this.entityElements.get(ctx);
@@ -213,10 +215,10 @@ public class EntityDefinitionListener extends CdsBaseListener {
   @Override
   public void enterElementConstraints(CdsParser.ElementConstraintsContext ctx) {
     EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent());
-    boolean isNotNull = ctx.NULL() == null;
+    boolean isNotNull = !ctx.getText().equals("null");
     if (!isNotNull && elementSymbol.isKey()) {
       throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Element - part of composite key cannot be null.",
-          ctx.NULL().getSymbol().getLine(), ctx.NULL().getSymbol().getCharPositionInLine()));
+              ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getLine(), ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getCharPositionInLine()));
     }
 
     elementSymbol.setNotNull(isNotNull);

@@ -34,16 +34,23 @@ public class XSKViewParserTest extends AbstractDirigibleTest {
         assertEquals(2, model.getDependsOn().size());
         assertEquals("acme.com.test.tables::MY_TABLE1", model.getDependsOn().get(0));
         assertEquals("acme.com.test.views::MY_VIEW1", model.getDependsOn().get(1));
-        assertEquals(2, model.getDependsOnTable().size());
+        assertEquals(1, model.getDependsOnTable().size());
         assertEquals("acme.com.test.tables::MY_TABLE1", model.getDependsOnTable().get(0));
-        assertEquals("acme.com.test.views::MY_TABLE2", model.getDependsOnTable().get(1));
-        assertEquals(2, model.getDependsOnView().size());
-        assertEquals("acme.com.test.tables::MY_VIEW1", model.getDependsOnView().get(0));
-        assertEquals("acme.com.test.views::MY_VIEW2", model.getDependsOnView().get(1));
+        assertEquals(1, model.getDependsOnView().size());
+        assertEquals("acme.com.test.views::MY_VIEW1", model.getDependsOnView().get(0));
         assertEquals(
                 "SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"acme.com.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"acme.com.test.views::MY_VIEW1\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"",
                 model.getQuery());
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
+        assertEquals(4, model.getDependencies().size());
+        assertEquals("acme.com.test.tables::MY_TABLE1", model.getDependencies().get(0).getName());
+        assertEquals("none", model.getDependencies().get(0).getType());
+        assertEquals("acme.com.test.views::MY_VIEW1", model.getDependencies().get(1).getName());
+        assertEquals("none", model.getDependencies().get(1).getType());
+        assertEquals("acme.com.test.tables::MY_TABLE1", model.getDependencies().get(2).getName());
+        assertEquals("TABLE", model.getDependencies().get(2).getType());
+        assertEquals("acme.com.test.views::MY_VIEW1", model.getDependencies().get(3).getName());
+        assertEquals("VIEW", model.getDependencies().get(3).getType());
     }
 
     @Test

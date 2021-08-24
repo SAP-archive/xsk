@@ -9,17 +9,20 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import com.sap.xsk.xsodata.ds.api.IXSKODataArtifactDao;
 import com.sap.xsk.xsodata.ds.api.XSKODataException;
+import com.sap.xsk.xsodata.ds.dao.XSKODataArtifactDao;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
+import module.XSKHDBTestModule;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import javax.sql.DataSource;
@@ -36,43 +39,54 @@ import static org.junit.Assert.assertTrue;
 
 public class XSKODataArtifactDaoPostgreSQLITTest {
 
-    private static Datasource datasource;
+    private static PostgreSQLContainer jdbcContainer;
+    private static DataSource datasource;
     private static IXSKODataArtifactDao dao;
 
     @BeforeClass
-    public static void setUp() throws SQLException {
-        PostgreSQLContainer jdbcContainer = new PostgreSQLContainer<>("postgres:alpine");
+    public static void setUp() {
+         jdbcContainer =
+                new PostgreSQLContainer<>("postgres:alpine");
         jdbcContainer.start();
         JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
                 jdbcContainer.getPassword());
         XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
-        datasource = xskhdbTestModule.getDataSource();
-        dao = new XSKXSODataArtifactDao();
+        xskhdbTestModule.configure();
+        datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+        dao = new XSKODataArtifactDao();
     }
 
-    @BeforeAll
-    public static void initializeDBStructure() throws SQLException {
-    	try (Connection connection = datasource.getConnection();
-    			Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate("CREATE TABLE public.XSK_ODATA (OD_LOCATION VARCHAR(255) NOT NULL , OD_NAME VARCHAR(255) NOT NULL , OD_HASH VARCHAR(32) NOT NULL , OD_CREATED_BY VARCHAR(32) NOT NULL , OD_CREATED_AT timestamp NOT NULL , PRIMARY KEY (OD_LOCATION))");
-    	}
+    @AfterClass
+    public static void cleanUp() {
+        jdbcContainer.stop();
+    }
+
+
+    public static void initializeDBStructure() {
+        try (Connection connection = datasource.getConnection();
+             Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate("CREATE TABLE public.XSK_ODATA (OD_LOCATION VARCHAR(255) NOT NULL , OD_NAME VARCHAR(255) NOT NULL , OD_HASH VARCHAR(32) NOT NULL , OD_CREATED_BY VARCHAR(32) NOT NULL , OD_CREATED_AT timestamp NOT NULL , PRIMARY KEY (OD_LOCATION))");
+        }catch (Exception e){
+        }
     }
 
     public static void clearTable() throws SQLException {
-    	try (Connection connection = datasource.getConnection();
-    			Statement stmt = connection.createStatement()) {
-    		stmt.executeUpdate("DELETE FROM public.XSK_ODATA");
-    	}
+        try (Connection connection = datasource.getConnection();
+             Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate("DELETE FROM public.XSK_ODATA");
+        }
     }
 
-    public static XSKODataModel parseXSKODataModel() throws IOException, SQLException, XSKArtifactParserException {
+    public static XSKODataModel parseXSKODataModel() throws IOException, SQLException, XSKArtifactParserException, ProblemsException {
+        initializeDBStructure();
         XSKODataParser parser = new XSKODataParser();
         String content = org.apache.commons.io.IOUtils
                 .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_all_set_of_navigations.xsodata"), StandardCharsets.UTF_8);
         return parser.parseXSODataArtifact("np/entity_with_all_set_of_navigations.xsodata", content);
     }
 
-    public static XSKODataModel parseSecondXSKODataModel() throws IOException, SQLException, XSKArtifactParserException {
+    public static XSKODataModel parseSecondXSKODataModel() throws IOException, SQLException, XSKArtifactParserException, ProblemsException {
+        initializeDBStructure();
         XSKODataParser parser = new XSKODataParser();
         String content = org.apache.commons.io.IOUtils
                 .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
@@ -80,30 +94,32 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testCreateXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
+    public void testCreateXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException, ProblemsException {
+        initializeDBStructure();
         XSKODataModel xskoDataModel = parseXSKODataModel();
 
         try (Connection connection = datasource.getConnection();
-    			Statement stmt = connection.createStatement()) {
-	        dao.createXSKODataArtifact(xskoDataModel);
-	        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM public.XSK_ODATA");
-	        assertTrue(rs.next());
-	        assertEquals(1, rs.getInt("rawsCount"));
-	
-	        rs = stmt.executeQuery("SELECT OD_LOCATION, OD_NAME, OD_HASH, OD_CREATED_BY, OD_CREATED_AT FROM public.XSK_ODATA");
-	        assertTrue(rs.next());
-	        assertEquals(xskoDataModel.getLocation(), rs.getString("OD_LOCATION"));
-	        assertEquals(xskoDataModel.getName(), rs.getString("OD_NAME"));
-	        assertEquals(xskoDataModel.getHash(), rs.getString("OD_HASH"));
-	        assertEquals(xskoDataModel.getCreatedBy(), rs.getString("OD_CREATED_BY"));
-	        assertEquals(xskoDataModel.getCreatedAt(), rs.getTimestamp("OD_CREATED_AT"));
-	
-	        clearTable();
+             Statement stmt = connection.createStatement()) {
+            dao.createXSKODataArtifact(xskoDataModel);
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM public.XSK_ODATA");
+            assertTrue(rs.next());
+            assertEquals(1, rs.getInt("rawsCount"));
+
+            rs = stmt.executeQuery("SELECT OD_LOCATION, OD_NAME, OD_HASH, OD_CREATED_BY, OD_CREATED_AT FROM public.XSK_ODATA");
+            assertTrue(rs.next());
+            assertEquals(xskoDataModel.getLocation(), rs.getString("OD_LOCATION"));
+            assertEquals(xskoDataModel.getName(), rs.getString("OD_NAME"));
+            assertEquals(xskoDataModel.getHash(), rs.getString("OD_HASH"));
+            assertEquals(xskoDataModel.getCreatedBy(), rs.getString("OD_CREATED_BY"));
+            assertEquals(xskoDataModel.getCreatedAt(), rs.getTimestamp("OD_CREATED_AT"));
+
+            clearTable();
         }
     }
 
     @Test
-    public void testGetXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
+    public void testGetXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException, ProblemsException {
+        initializeDBStructure();
         XSKODataModel xskoDataModel = parseXSKODataModel();
 
         dao.createXSKODataArtifact(xskoDataModel);
@@ -113,7 +129,8 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testGetXSKODataArtifactByName() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
+    public void testGetXSKODataArtifactByName() throws IOException, SQLException, XSKODataException, XSKArtifactParserException, ProblemsException {
+        initializeDBStructure();
         XSKODataModel xskoDataModel = parseXSKODataModel();
 
         dao.createXSKODataArtifact(xskoDataModel);
@@ -123,24 +140,26 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testRemoveXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
+    public void testRemoveXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException, ProblemsException {
+        initializeDBStructure();
         XSKODataModel xskoDataModel = parseXSKODataModel();
 
         dao.createXSKODataArtifact(xskoDataModel);
         dao.removeXSKODataArtifact(xskoDataModel.getLocation());
 
         try (Connection connection = datasource.getConnection();
-    			Statement stmt = connection.createStatement()) {
-	        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM public.XSK_ODATA");
-	        assertTrue(rs.next());
-	        assertEquals(0, rs.getInt("rawsCount"));
-	
-	        clearTable();
+             Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as rawsCount FROM public.XSK_ODATA");
+            assertTrue(rs.next());
+            assertEquals(0, rs.getInt("rawsCount"));
+
+            clearTable();
         }
     }
 
     @Test
-    public void testGetAllXSKODataArtifacts() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
+    public void testGetAllXSKODataArtifacts() throws IOException, SQLException, XSKODataException, XSKArtifactParserException, ProblemsException {
+        initializeDBStructure();
         XSKODataModel xskoDataModel = parseXSKODataModel();
         dao.createXSKODataArtifact(xskoDataModel);
 
@@ -156,19 +175,20 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     }
 
     @Test
-    public void testUpdateXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException {
+    public void testUpdateXSKODataArtifact() throws IOException, SQLException, XSKODataException, XSKArtifactParserException, ProblemsException {
+        initializeDBStructure();
         XSKODataModel xskoDataModel = parseXSKODataModel();
         dao.createXSKODataArtifact(xskoDataModel);
         dao.updateXSKODataArtifact(xskoDataModel.getLocation(), xskoDataModel.getName() + "_new", "new_hash");
 
         try (Connection connection = datasource.getConnection();
-    			Statement stmt = connection.createStatement()) {
-	        ResultSet rs = stmt.executeQuery("SELECT OD_NAME, OD_HASH FROM public.XSK_ODATA");
-	        assertTrue(rs.next());
-	        assertEquals(xskoDataModel.getName() + "_new", rs.getString("OD_NAME"));
-	        assertEquals("new_hash", rs.getString("OD_HASH"));
-	
-	        clearTable();
+             Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery("SELECT OD_NAME, OD_HASH FROM public.XSK_ODATA");
+            assertTrue(rs.next());
+            assertEquals(xskoDataModel.getName() + "_new", rs.getString("OD_NAME"));
+            assertEquals("new_hash", rs.getString("OD_HASH"));
+
+            clearTable();
         }
     }
 }

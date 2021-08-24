@@ -61,18 +61,21 @@ public class XSKHDBTIImportConfigModel {
 
     @Override
     public String toString() {
-        String result = "\n{\n";
-        result += delimEnclosing.equals("\"") ? "\tdelimEnclosing=\"\\" + delimEnclosing + "\";\n" : "\tdelimEnclosing=\"" + delimEnclosing + "\";\n";
-        result += "\tschema = \"" + schemaName + "\";\n" +
-                "\tdistinguishEmptyFromNull = " + distinguishEmptyFromNull + ";\n" +
-                "\theader = " + header + ";\n" +
-                "\ttable = \"" + tableName + "\";\n" +
-                "\tuseHeaderNames = " + useHeaderNames + ";\n" +
-                "\tdelimField = \"" + delimField + "\";\n" +
-                "\tkeys = " + keys.toString() + ";\n" +
-                "\tfile = \"" + fileName + "\";\n" +
-                "}";
-        return result;
+        StringBuilder result = new StringBuilder();
+        result.append("\n{\n");
+        if (delimEnclosing != null)
+            result.append(delimEnclosing.equals("\"") ? "\tdelimEnclosing=\"\\" + delimEnclosing + "\";\n" : "\tdelimEnclosing=\"" + delimEnclosing + "\";\n");
+        if (schemaName != null) result.append("\tschema = \"" + schemaName + "\";\n");
+        if (distinguishEmptyFromNull != null)
+            result.append("\tdistinguishEmptyFromNull = " + distinguishEmptyFromNull + ";\n");
+        if (header != null) result.append("\theader = " + header + ";\n");
+        if (tableName != null) result.append("\ttable = \"" + tableName + "\";\n");
+        if (useHeaderNames != null) result.append("\tuseHeaderNames = " + useHeaderNames + ";\n");
+        if (delimField != null) result.append("\tdelimField = \"" + delimField + "\";\n");
+        if (keys.size() > 0) result.append("\tkeys = " + keys.toString() + ";\n");
+        if (fileName != null) result.append("\tfile = \"" + fileName + "\";\n");
+        result.append("}");
+        return result.toString();
     }
 
     @Getter

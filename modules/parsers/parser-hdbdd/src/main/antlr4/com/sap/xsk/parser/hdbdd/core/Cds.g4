@@ -3,26 +3,26 @@ cdsFile: namespaceRule
          usingRule*
          topLevelSymbol?;
 
-namespaceRule: 'namespace' members+=ID ('.' members+=ID)* ';';
-usingRule: 'using'   pack+=ID ('.' pack+=ID)* '::' members+=ID ('.' members+=ID)* ('as' alias=ID)?  ';';
+namespaceRule: NAMESPACE members+=ID ('.' members+=ID)* ';';
+usingRule: USING pack+=ID ('.' pack+=ID)* '::' members+=ID ('.' members+=ID)* (AS alias=ID)?  ';';
 topLevelSymbol: contextRule | entityRule | structuredDataTypeRule | dataTypeRule;
 
-contextRule: annotationRule* 'context' ID '{' (contextRule | entityRule | structuredDataTypeRule | dataTypeRule)* '}' ';';
-entityRule: annotationRule* 'entity'   ID '{' (association | elementDeclRule)* '}' ';';
-structuredDataTypeRule: annotationRule* 'type' ID '{' fieldDeclRule* '}' ';';
-dataTypeRule: 'type' ID ':' typeAssignRule ';';
+contextRule: annotationRule* CONTEXT ID '{' (contextRule | entityRule | structuredDataTypeRule | dataTypeRule)* '}' ';';
+entityRule: annotationRule* ENTITY ID '{' (association | elementDeclRule)* '}' ';'?;
+structuredDataTypeRule: annotationRule* TYPE ID '{' fieldDeclRule* '}' ';';
+dataTypeRule: TYPE ID ':' typeAssignRule ';';
 fieldDeclRule: ID ':' typeAssignRule ';';
 typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'           # AssignBuiltInTypeWithArgs
-                | 'hana' '.' ref=ID                                         # AssignHanaType
-                | 'hana' '.' ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
+                | HANA '.' ref=ID                                         # AssignHanaType
+                | HANA '.' ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
                 | TYPE_OF? pathSubMembers+=ID ('.'pathSubMembers+=ID)*      # AssignType
                 ;
-elementDeclRule: annotationRule* (key='key')? ID ':' typeAssignRule defaultValue? elementConstraints? ';';
-elementConstraints: NULL | NOT_NULL;
+elementDeclRule: annotationRule* (key=KEY)? ID ':' typeAssignRule defaultValue? elementConstraints? ';';
+elementConstraints: 'null' | 'not null';
 
-association: ID ':' 'Association' cardinality?  'to' associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
+association: ID ':' ASSOCIATION cardinality? TO associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
 associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*  ;
-unmanagedForeignKey: 'on' pathSubMembers+=ID ('.' pathSubMembers+=ID)* '=' source=ID;
+unmanagedForeignKey: ON pathSubMembers+=ID ('.' pathSubMembers+=ID)* '=' source=ID;
 managedForeignKeys: '{' foreignKey (',' foreignKey)* '}';
 foreignKey: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
 cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardinality
@@ -30,7 +30,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
               |  '[' ']'                                         # NoCardinality
               ;
 
-defaultValue: 'default' value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP);
+defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | NULL);
 
 annotationRule: '@' ID ':' annValue                       #AnnObjectRule
               | '@' annId=ID '.' prop=ID ':' annValue     #AnnPropertyRule
@@ -43,14 +43,23 @@ arrRule: '[' annValue (',' annValue)* ']';
 obj: '{' keyValue (',' keyValue)* '}';
 keyValue: ID ':' annValue;
 
+KEY: K E Y;
+NAMESPACE: N A M E S P A C E;
+AS: 'as';
+ENTITY: E N T I T Y;
+TYPE: 'type';
+HANA: 'hana';
+CONTEXT: C O N T E X T;
+USING: U S I N G;
+ASSOCIATION: A S S O C I A T I O N;
+TO: 'to';
+ON: 'on';
+NULL: 'null';
 
-DEFAULT: 'default';
-KEY: 'key';
+DEFAULT: D E F A U L T;
 ASSOCIATION_MIN: INTEGER '..' ;
-ASSOCIATION: 'Association';
 BOOLEAN: 'true' | 'false';
 ID: ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_')*;
-
 
 SEMICOLUMN: ';';
 INTEGER: SignedInteger;
@@ -63,13 +72,9 @@ STRING: '\'' (~["\\\r\n] | EscapeSequence)*? '\'' { setText(getText().substring(
 TYPE_OF: 'type' WS 'of';
 
 
-NULL: 'null';
-NOT_NULL: 'not' WS NULL;
-NOT: 'not';
-
-
 WS : [ \\\t\r\n]+ -> skip;
 LINE_COMMENT        : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
+LINE_COMMENT2        : '/*' .*? '*/' -> skip ; // Match "/* */" stuff
 
 fragment EscapeSequence
     : '\\' [btnfr"'\\]
@@ -114,3 +119,33 @@ fragment UTCTimestamp: 'timestamp' '\'' Date TimeWithPrecision '\'';
 fragment Date: Digit[4] '-' Digit[2] '-' Digit[2];
 fragment Time: Digit[2] ':' Digit[2] (':' Digit[2])?;
 fragment TimeWithPrecision: Digit[2] ':' Digit[2] ':' Digit[2] ('.' Digit[1-7])?;
+
+A : 'A'|'a';
+B : 'B'|'b';
+C : 'C'|'c';
+D : 'D'|'d';
+E : 'E'|'e';
+F : 'F'|'f';
+G : 'G'|'g';
+H : 'H'|'h';
+I : 'I'|'i';
+J : 'J'|'j';
+K : 'K'|'k';
+L : 'L'|'l';
+M : 'M'|'m';
+N : 'N'|'n';
+O : 'O'|'o';
+P : 'P'|'p';
+Q : 'Q'|'q';
+R : 'R'|'r';
+S : 'S'|'s';
+T : 'T'|'t';
+U : 'U'|'u';
+V : 'V'|'v';
+W : 'W'|'w';
+X : 'X'|'x';
+Y : 'Y'|'y';
+Z : 'Z'|'z';
+
+
+

@@ -1,0 +1,7 @@
+table.schemaName = "DBADMIN";
+table.tableType = COLUMNSTORE;
+table.columns = [
+	{name = "MY_ID"; sqlType = INTEGER; nullable = false;},
+	{name = "MY_JOB"; sqlType = INTEGER; nullable = false;}
+];
+table.primaryKey.pkcolumns = ["MY_ID"];

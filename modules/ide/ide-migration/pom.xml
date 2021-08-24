@@ -168,7 +168,7 @@
     <content.scm.server>github</content.scm.server>
     <content.scm.checkoutDirectory>target</content.scm.checkoutDirectory>
     <content.source.directory>target/${content.project.name}</content.source.directory>
-    <content.output.directory>${basedir}/src/test/resources/xsk-ide-migration/${content.project.name}</content.output.directory>
+    <content.output.directory>${basedir}/src/test/resources/META-INF/dirigible/xsk-ide-migration/${content.project.name}</content.output.directory>
 
     <license.header.location>../../../licensing-header.txt</license.header.location>
     <skipTests>true</skipTests>

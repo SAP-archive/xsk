@@ -12,7 +12,6 @@ package com.sap.xsk.ide.migration;
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +26,7 @@ import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.extensions.api.ExtensionsException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.eclipse.dirigible.repository.api.RepositoryWriteException;
@@ -38,19 +38,19 @@ public class XSKMigrationJSServiceTest extends AbstractDirigibleTest {
 
   private IRepository repository;
 
-  private XSKJavascriptEngineExecutor graaljsJavascriptEngineExecutor;
+  private GraalVMJavascriptEngineExecutor graaljsJavascriptEngineExecutor;
 
   @Before
   public void setUp() throws Exception {
     this.repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
-    this.graaljsJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
+    this.graaljsJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();
   }
 
   @Test
   public void runMigrationTest()
       throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException, URISyntaxException {
 
-    String neoPath = getAbsolutePath("xsk-ide-migration/server/migration/neo.sh");
+    String neoPath = getAbsolutePath("META-INF/dirigible/xsk-ide-migration/server/migration/neo.sh");
     String targetPath = System.getProperty("user.dir") + "/target/";
     String neoClientPath = targetPath + "migration-tools/neo/neo-sdk/tools/neo.sh";
 
@@ -74,10 +74,11 @@ public class XSKMigrationJSServiceTest extends AbstractDirigibleTest {
         Map.entry("__cuser", Configuration.get("CUSER")),
         Map.entry("__hana_pass", Configuration.get("HANA_PASSWORD"))
     );
-    runTest(this.graaljsJavascriptEngineExecutor, repository, "xsk-ide-migration/server/test/migrate.js", context);
+
+    runTest(this.graaljsJavascriptEngineExecutor, repository, "META-INF/dirigible/xsk-ide-migration/server/test/migrate.js", context);
   }
 
-  private Object runTest(XSKJavascriptEngineExecutor executor, IRepository repository, String testModule, Map<Object, Object> context)
+  private Object runTest(GraalVMJavascriptEngineExecutor executor, IRepository repository, String testModule, Map<Object, Object> context)
       throws IOException, ScriptingException {
 
     try (InputStream in = XSKMigrationJSServiceTest.class.getResourceAsStream(IRepositoryStructure.SEPARATOR + testModule)) {

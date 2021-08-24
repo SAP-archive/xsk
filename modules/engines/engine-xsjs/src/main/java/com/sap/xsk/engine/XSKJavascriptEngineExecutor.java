@@ -51,7 +51,7 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
 
   private String getXskApi() throws IOException {
     if (XSK_API_CONTENT == null) {
-      XSK_API_CONTENT = IOUtils.toString(XSKJavascriptEngineExecutor.class.getResourceAsStream(XSK_API_LOCATION), DEFAULT_CHARSET);
+      XSK_API_CONTENT = IOUtils.toString(XSKJavascriptEngineExecutor.class.getResourceAsStream("/META-INF/dirigible" + XSK_API_LOCATION), DEFAULT_CHARSET);
     }
     return XSK_API_CONTENT;
   }

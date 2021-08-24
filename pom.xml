@@ -140,6 +140,76 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>content</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+			</properties>
+			<build>
+				<finalName>${project.artifactId}</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>${maven.clean.plugin.version}</version>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>src/main/resources/META-INF/dirigible</directory>
+								</fileset>
+							</filesets>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-scm-plugin</artifactId>
+						<version>${maven.scm.plugin.version}</version>
+						<configuration>
+							<goals>checkout</goals>
+							<checkoutDirectory>${content.scm.checkoutDirectory}</checkoutDirectory>
+							<connectionUrl>${content.scm.connection}</connectionUrl>
+							<developerConnectionUrl>${content.scm.developerConnection}</developerConnectionUrl>
+							<server>${content.scm.server}</server>
+							<scmVersion>${content.repository.branch}</scmVersion>
+							<scmVersionType>branch</scmVersionType>
+						</configuration>
+						<executions>
+							<execution>
+								<id>generated-sources</id>
+								<phase>${profile.content.phase}</phase>
+								<goals>
+									<goal>checkout</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven.resource.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>copy-content-resources</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${content.output.directory}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${content.source.directory}</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<properties>
@@ -148,7 +218,7 @@
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dirigible.version>5.12.12</dirigible.version>
+		<dirigible.version>5.12.13</dirigible.version>
 
 		<maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
 		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
@@ -190,6 +260,18 @@
 		<antlr4-runtime.version>4.3</antlr4-runtime.version>
 		<antlr4-maven-plugin.version>4.3</antlr4-maven-plugin.version>
 		<org.testcontainers.version>1.15.2</org.testcontainers.version>
+
+		<profile.content.phase>none</profile.content.phase>
+		
+		<content.scm.url>https://github.com/dirigiblelabs/${content.repository.name}</content.scm.url>
+		<content.scm.connection>scm:git:git://github.com/dirigiblelabs/${content.repository.name}.git</content.scm.connection>
+		<content.scm.developerConnection>scm:git:https://github.com/dirigiblelabs/${content.repository.name}</content.scm.developerConnection>
+		<content.repository.branch>main</content.repository.branch>
+
+		<content.scm.server>github</content.scm.server>
+		<content.scm.checkoutDirectory>target</content.scm.checkoutDirectory>
+		<content.source.directory>target/${content.project.name}</content.source.directory>
+		<content.output.directory>${basedir}/src/main/resources/META-INF/dirigible/${content.project.name}</content.output.directory>
 
 		<license.header.location>licensing-header.txt</license.header.location>
 

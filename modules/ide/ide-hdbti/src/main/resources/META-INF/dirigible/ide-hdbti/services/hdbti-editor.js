@@ -9,15 +9,16 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-var uuid = require("utils/v4/uuid");
-var bytes = require("io/v4/bytes");
-
-exports.codec = require("xsk/util/codec/codec");
-
-exports.createUuid = function() {
-    return uuid.random();
-}
-
-exports.stringify = function(arrayBuffer) {
-    return bytes.byteArrayToText(arrayBuffer);
+exports.getEditor = function () {
+	var editor = {
+		"id": "HDBTI Editor",
+		"name": "HDBTI Editor",
+		"factory": "frame",
+		"region": "center-top",
+		"label": "HTBDI Editor",
+		"link": "../ide-hdbti/editor.html",
+		"defaultEditor": true,
+		"contentTypes": ["application/hdbti"]
+	};
+	return editor;
 }

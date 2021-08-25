@@ -1,8 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-core</artifactId>
+      <version>3.4.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-api</artifactId>
+      <version>${dirigible.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-commons-api</artifactId>
+      <version>${dirigible.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-commons-test</artifactId>
+      <version>${dirigible.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-engine-javascript-graalvm</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-modules-engines-xsjs</artifactId>
+      <version>0.8.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.websocket</groupId>
+      <artifactId>javax.websocket-api</artifactId>
+      <version>1.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.websocket</groupId>
+      <artifactId>javax.websocket-api</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.websocket</groupId>
+      <artifactId>javax.websocket-api</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.cloud.db.jdbc</groupId>
+      <artifactId>ngdbc</artifactId>
+      <version>2.8.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-repository-local</artifactId>
+      <version>${dirigible.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-	<parent>
+  <parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-ide-parent</artifactId>
 		<version>0.8.0-SNAPSHOT</version>
@@ -14,12 +96,76 @@
 	<version>0.8.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<properties>
-		<profile.content.phase>generate-sources</profile.content.phase>
-		<content.repository.name>xsk-ide-migration</content.repository.name>
-		<content.project.name>ide-migration</content.project.name>
+	<scm>
+		<url>${content.scm.url}</url>
+		<connection>${content.scm.connection}</connection>
+		<developerConnection>${content.scm.developerConnection}</developerConnection>
+	</scm>
 
-		<license.header.location>../../../licensing-header.txt</license.header.location>
-	</properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.sap.cloud</groupId>
+                  <artifactId>neo-java-web-sdk</artifactId>
+                  <version>4.2.4</version>
+                  <type>zip</type>
+                  <outputDirectory>tools/neo/neo-sdk/</outputDirectory>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+
+          <execution>
+            <id>copy-migration-tools</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/migration-tools</outputDirectory>
+              <overwrite>true</overwrite>
+              <resources>
+                <resource>
+                  <directory>tools</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <properties>
+
+    <profile.content.phase>generate-sources</profile.content.phase>
+    <content.repository.name>xsk-ide-migration</content.repository.name>
+    <content.project.name>ide-migration</content.project.name>
+    <content.repository.branch>main</content.repository.branch>
+    <content.source.directory>target/${content.project.name}</content.source.directory>
+    <content.output.directory>${basedir}/src/test/resources/META-INF/dirigible/${content.repository.name}/${content.project.name}</content.output.directory>
+
+    <license.header.location>../../../licensing-header.txt</license.header.location>
+    <skipTests>true</skipTests>
+  </properties>
 
 </project>

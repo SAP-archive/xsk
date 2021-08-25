@@ -67,6 +67,11 @@ public interface IXSKDataStructureModel {
   public static final String FILE_EXTENSION_SYNONYM = ".hdbsynonym";
 
   /**
+   * File extension for *.hdbstructure files
+   */
+  public static final String FILE_EXTENSION_STRUCTURE = ".hdbstructure";
+
+  /**
    * Type hdbdd
    */
   public static final String TYPE_HDBDD = "HDBDD";
@@ -125,4 +130,8 @@ public interface IXSKDataStructureModel {
    */
   public static final String TYPE_HDB_SCALARFUNCTION = "HDBSCALARFUNCTION";
 
+  /**
+   * Type hdbtabletype
+   */
+  public static final String TYPE_HDB_TABLE_TYPE = "HDBTABLETYPE";
 }

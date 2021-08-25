@@ -18,11 +18,13 @@ import java.util.Map;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
+import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
 
 //import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
@@ -186,4 +188,25 @@ public class XSKDataStructureModelFactory {
 //		return parseCalcView(location, new String(xml));
 //	}
 
+  /**
+   * Creates a table type model from the raw content.
+   *
+   * @param content the table type definition
+   * @return the table type model instance
+   */
+  public static XSKDataStructureHDBTableTypeModel parseTableType(String location, String content) throws Exception {
+    XSKTableTypeParser parser = new XSKTableTypeParser();
+    XSKDataStructureHDBTableTypeModel result = parser.parse(location, content);
+    return result;
+  }
+
+  /**
+   * Creates a table type model from the raw content.
+   *
+   * @param bytes the table type definition
+   * @return the table type model instance
+   */
+  public static XSKDataStructureHDBTableTypeModel parseTableType(String location, byte[] bytes) throws Exception {
+    return parseTableType(location, new String(bytes));
+  }
 }

@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
@@ -64,6 +65,8 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
   private static final Map<String, XSKDataStructureHDBSchemaModel> SCHEMAS_PREDELIVERED = Collections
       .synchronizedMap(new HashMap<>());
   private static final Map<String, XSKDataStructureHDBSynonymModel> SYNONYMS_PREDELIVERED = Collections
+      .synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBTableTypeModel> TABLE_TYPES_PREDELIVERED = Collections
       .synchronizedMap(new HashMap<>());
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
@@ -176,6 +179,19 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
     SCHEMAS_PREDELIVERED.put(contentPath, model);
   }
 
+  /**
+   * Register predelivered *.hdbstructure files.
+   *
+   * @param contentPath the data path
+   * @throws Exception
+   */
+  public void registerPredeliveredHDBStructure(String contentPath) throws Exception {
+    String data = loadResourceContent(contentPath);
+    XSKDataStructureHDBTableTypeModel model = (XSKDataStructureHDBTableTypeModel) xskCoreParserService
+        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_STRUCTURE, contentPath, data);
+    TABLE_TYPES_PREDELIVERED.put(contentPath, model);
+  }
+
   private String loadResourceContent(String modelPath) throws IOException {
     InputStream in = XSKDataStructuresSynchronizer.class.getResourceAsStream(modelPath);
     try {
@@ -211,6 +227,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
         int immutableFunctionsCount = TABLEFUNCTIONS_PREDELIVERED.size();
         int immutableSchemasCount = SCHEMAS_PREDELIVERED.size();
         int immutableSynonymsCount = SYNONYMS_PREDELIVERED.size();
+        int immutableTableTypesCount = TABLE_TYPES_PREDELIVERED.size();
 
 //				int mutableEntitiesCount = ENTITIES_SYNCHRONIZED.size();
 //				int mutableTablesCount = TABLES_SYNCHRONIZED.size();
@@ -333,6 +350,17 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
       }
     }
     logger.trace("Done synchronizing predelivered Synonyms.");
+
+    // Table Types
+    logger.trace("Synchronizing predelivered Table Types...");
+    for (XSKDataStructureHDBTableTypeModel tableType : TABLE_TYPES_PREDELIVERED.values()) {
+      try {
+        xskHDBCoreFacade.handleResourceSynchronization(IXSKDataStructureModel.FILE_EXTENSION_STRUCTURE, tableType);
+      } catch (Exception e) {
+        logger.error(format("Update tableType [{0}] skipped due to an error: {1}", tableType, e.getMessage()), e);
+      }
+    }
+    logger.trace("Done synchronizing predelivered Table Types.");
 
     logger.trace("Done synchronizing predelivered XSK Data Structures.");
   }

@@ -1,0 +1,9 @@
+table.schemaName = "DBADMIN";
+table.public = false;
+table.columns = [
+    {name = "SCENARIO_ID";              sqlType=VARCHAR; nullable=false; length=32; },
+    {name = "PERIOD_ID";                sqlType=DECIMAL; nullable=false; precision = 20; scale = 3; },
+    {name = "MATERIAL_ID";              sqlType=VARCHAR; length=32; },
+    {name = "DEPTH";                    sqlType=INTEGER; nullable=true; comment=""; }
+];
+table.primaryKey.pkcolumns = ["SCENARIO_ID"];

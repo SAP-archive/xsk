@@ -156,18 +156,13 @@
   </build>
 
   <properties>
+
+    <profile.content.phase>generate-sources</profile.content.phase>
     <content.repository.name>xsk-ide-migration</content.repository.name>
-    <content.project.name>server</content.project.name>
-    <content.scm.branch>main</content.scm.branch>
-
-    <content.scm.url>https://github.com/dirigiblelabs/${content.repository.name}</content.scm.url>
-    <content.scm.connection>scm:git:git://github.com/dirigiblelabs/${content.repository.name}.git</content.scm.connection>
-    <content.scm.developerConnection>scm:git:https://github.com/dirigiblelabs/${content.repository.name}</content.scm.developerConnection>
-
-    <content.scm.server>github</content.scm.server>
-    <content.scm.checkoutDirectory>target</content.scm.checkoutDirectory>
+    <content.project.name>ide-migration</content.project.name>
+    <content.repository.branch>main</content.repository.branch>
     <content.source.directory>target/${content.project.name}</content.source.directory>
-    <content.output.directory>${basedir}/src/test/resources/META-INF/dirigible/xsk-ide-migration/${content.project.name}</content.output.directory>
+    <content.output.directory>${basedir}/src/test/resources/META-INF/dirigible/${content.repository.name}/${content.project.name}</content.output.directory>
 
     <license.header.location>../../../licensing-header.txt</license.header.location>
     <skipTests>true</skipTests>

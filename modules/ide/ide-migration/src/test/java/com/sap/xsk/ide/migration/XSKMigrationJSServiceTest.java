@@ -50,7 +50,7 @@ public class XSKMigrationJSServiceTest extends AbstractDirigibleTest {
   public void runMigrationTest()
       throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException, URISyntaxException {
 
-    String neoPath = getAbsolutePath("META-INF/dirigible/xsk-ide-migration/server/migration/neo.sh");
+    String neoPath = getAbsolutePath("META-INF/dirigible/xsk-ide-migration/ide-migration/server/migration/neo.sh");
     String targetPath = System.getProperty("user.dir") + "/target/";
     String neoClientPath = targetPath + "migration-tools/neo/neo-sdk/tools/neo.sh";
 
@@ -75,7 +75,7 @@ public class XSKMigrationJSServiceTest extends AbstractDirigibleTest {
         Map.entry("__hana_pass", Configuration.get("HANA_PASSWORD"))
     );
 
-    runTest(this.graaljsJavascriptEngineExecutor, repository, "META-INF/dirigible/xsk-ide-migration/server/test/migrate.js", context);
+    runTest(this.graaljsJavascriptEngineExecutor, repository, "META-INF/dirigible/xsk-ide-migration/ide-migration/server/test/migrate.js", context);
   }
 
   private Object runTest(GraalVMJavascriptEngineExecutor executor, IRepository repository, String testModule, Map<Object, Object> context)

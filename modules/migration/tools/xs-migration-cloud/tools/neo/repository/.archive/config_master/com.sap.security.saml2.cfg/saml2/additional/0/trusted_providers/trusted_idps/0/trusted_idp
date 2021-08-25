@@ -1,7 +1,0 @@
-#Tue Jan 26 14:49:12 EET 2010
-enc_cert=idp.leanserver.com_enc
-name=idp.leanserver.com
-enabled=true
-signing_cert=idp.leanserver.com_sign
-default_name_id_format=urn\:oasis\:names\:tc\:SAML\:1.1\:nameid-format\:unspecified
-response_requirement_acs_type=ASSERTION_CONSUMER_URL

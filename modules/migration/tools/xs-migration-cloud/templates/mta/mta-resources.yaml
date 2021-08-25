@@ -1,5 +1,0 @@
-resources:
-  {{resource-hdi}}
-  {{resource-ui5}}
-  {{resource-uaa}}
-  {{resource-jobs}}

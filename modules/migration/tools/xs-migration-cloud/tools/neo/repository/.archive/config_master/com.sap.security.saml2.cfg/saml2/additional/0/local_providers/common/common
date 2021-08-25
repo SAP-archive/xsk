@@ -1,7 +1,0 @@
-#Tue Jan 26 14:49:06 EET 2010
-name=jpaas.developer
-keystore_view=saml2.jks
-plain_http_enabled=true
-sign_metadata=true
-signing_keypair=sp.leanserver.com
-encryption_keypair=sp.leanserver.com

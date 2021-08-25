@@ -1,5 +1,0 @@
-  - name: ${name}-hdi
-    type: com.sap.xs.hdi-container
-    properties:
-        service-name: ${service-name}
-{{resource-synonym}}

@@ -1,1 +1,0 @@
-JAVA_HOME=$JAVA8_HOME PATH=$JAVA8_HOME/bin:$PATH  /bin/bash ./neo-sdk/tools/neo.sh $@

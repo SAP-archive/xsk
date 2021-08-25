@@ -21,7 +21,6 @@
 		<module>parsers</module>
 		<module>engines</module>
 		<module>ide</module>
-    	<module>migration</module>
 	</modules>
 
 	<properties>

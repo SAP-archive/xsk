@@ -1,5 +1,0 @@
-[rhnreg_pkgs]                                                                                                                                                   
-name=RHN Register Packages
-baseurl=http://rhnproxy.wdf.sap.corp/pub/rhnpkgs_docker/
-enabled=1
-gpgcheck=0

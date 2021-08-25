@@ -1,2 +1,0 @@
-  - name: jobs
-    type: com.sap.xs.job-scheduler

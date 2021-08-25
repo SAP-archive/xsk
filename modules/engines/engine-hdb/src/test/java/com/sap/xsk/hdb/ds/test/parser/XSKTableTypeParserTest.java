@@ -19,6 +19,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Test;
 import java.io.IOException;
@@ -58,7 +59,8 @@ public class XSKTableTypeParserTest extends AbstractDirigibleTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void parse_WhenPKIsWrong_shouldThrowException() throws XSKDataStructuresException, XSKArtifactParserException, IOException {
+  public void parse_WhenPKIsWrong_shouldThrowException()
+      throws XSKDataStructuresException, XSKArtifactParserException, IOException, ProblemsException {
     XSKTableTypeParser parser = new XSKTableTypeParser();
 
     String content = "table.schemaName = \"DBADMIN\";\n" +

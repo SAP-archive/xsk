@@ -46,18 +46,18 @@ keyValue: ID ':' annValue;
 KEY: K E Y;
 NAMESPACE: N A M E S P A C E;
 AS: 'as';
-ENTITY: E N T I T Y;
+ENTITY: 'entity';
 TYPE: 'type';
 HANA: 'hana';
 CONTEXT: C O N T E X T;
 USING: U S I N G;
 ASSOCIATION: A S S O C I A T I O N;
-TO: 'to';
+TO: 'to' ;
 ON: 'on';
 NULL: 'null';
 
 DEFAULT: D E F A U L T;
-ASSOCIATION_MIN: INTEGER '..' ;
+ASSOCIATION_MIN: INTEGER '..';
 BOOLEAN: 'true' | 'false';
 ID: ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_')*;
 

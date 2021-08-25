@@ -16,44 +16,49 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ContextSymbol extends Symbol implements Scope {
-    private Map<String, Symbol> symbols = new LinkedHashMap<>();
 
-    public ContextSymbol(String name) {
-        super(name);
+  private Map<String, Symbol> symbols = new LinkedHashMap<>();
+
+  public ContextSymbol(String name) {
+    super(name);
+  }
+
+  public ContextSymbol(String name, Scope scope) {
+    super(name, scope);
+  }
+
+  @Override
+  public Scope getEnclosingScope() {
+    return this.getScope();
+  }
+
+  @Override
+  public void define(Symbol sym) {
+    this.symbols.put(sym.getName(), sym);
+    sym.setScope(this);
+  }
+
+  @Override
+  public Symbol resolve(String name) {
+    Symbol symbol = symbols.get(name);
+    if (symbol != null) {
+      return symbol;
     }
 
-    public ContextSymbol(String name, Scope scope) {
-        super(name, scope);
+    // if not here, check any enclosing com.sap.xsk.parser.hdbdd.symbols.scope
+    if (getEnclosingScope() != null) {
+      return getEnclosingScope().resolve(name);
     }
 
-    @Override
-    public Scope getEnclosingScope() {
-        return this.getScope();
-    }
+    return null; // not found
+  }
 
-    @Override
-    public void define(Symbol sym) {
-        this.symbols.put(sym.getName(), sym);
-        sym.setScope(this);
-    }
+  public Map<String, Symbol> getSymbols() {
+    return symbols;
+  }
 
-    @Override
-    public Symbol resolve(String name) {
-        Symbol symbol = symbols.get(name);
-        if (symbol != null) {
-            return symbol;
-        }
-
-        // if not here, check any enclosing com.sap.xsk.parser.hdbdd.symbols.scope
-        if (getEnclosingScope() != null) {
-            return getEnclosingScope().resolve(name);
-        }
-
-        return null; // not found
-    }
-
-    @Override
-    public boolean isDuplicateName(String id) {
-        return symbols.containsKey(id) || getName().equals(id);
-    }
+  @Override
+  public boolean isDuplicateName(String id) {
+    return symbols.containsKey(id) || getName().equals(id);
+  }
 }

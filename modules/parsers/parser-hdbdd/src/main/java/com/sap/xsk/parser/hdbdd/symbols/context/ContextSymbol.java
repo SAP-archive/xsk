@@ -12,6 +12,7 @@
 package com.sap.xsk.parser.hdbdd.symbols.context;
 
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -50,6 +51,10 @@ public class ContextSymbol extends Symbol implements Scope {
         }
 
         return null; // not found
+    }
+
+    public Map<String, Symbol> getSymbols() {
+        return symbols;
     }
 
     @Override

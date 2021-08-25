@@ -122,7 +122,7 @@ public class XSKEntityAlterProcessor {
 
       } else if (!columnDefinitions.get(name.toUpperCase()).equals(type.toString())) {
         throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name,
-            "of type " + columnDefinitions.get(name) + " to be changed to" + type));
+            "of type " + columnDefinitions.get(name) + " to be changed to " + type));
       }
     }
 

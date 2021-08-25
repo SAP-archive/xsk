@@ -11,6 +11,8 @@
  */
 package com.sap.xsk.hdb.ds.model;
 
+import java.util.Objects;
+
 /**
  * Dependency element of the DataStructureModel.
  */
@@ -68,4 +70,16 @@ public class XSKDataStructureDependencyModel {
     this.type = type;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    XSKDataStructureDependencyModel that = (XSKDataStructureDependencyModel) o;
+    return Objects.equals(name, that.name) && Objects.equals(type, that.type);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, type);
+  }
 }

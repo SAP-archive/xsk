@@ -19,6 +19,7 @@ import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
@@ -73,6 +74,12 @@ public class XSKDataStructureModelFactory {
   public static XSKDataStructureHDBViewModel parseView(String location, String content) throws Exception {
     XSKViewParser parser = new XSKViewParser();
     XSKDataStructureHDBViewModel result = parser.parse(location, content);
+    return result;
+  }
+
+  public static XSKDataStructureModel parseHdbdd(String location, String content) throws Exception {
+    XSKHdbddParser parser = new XSKHdbddParser();
+    XSKDataStructureModel result = parser.parse(location, content);
     return result;
   }
 

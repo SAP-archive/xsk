@@ -72,6 +72,32 @@ mvn clean install
 - [Helm](https://www.xsk.io/setup/helm/)
 - [Environment Variables](https://www.xsk.io/setup/setup-environment-variables/)
 
+## FAQ
+
+- How long will XSK be supported by SAP?
+
+  > XSK is an open source project with community support as of now. Everyone can join and make a [PR](CONTRIBUTING.md).
+
+- Should future developments be based on XSK?
+
+  > Yes, you can use XSK for future development.
+
+- What about the tooling? Do we get state of the art tooling for maintaining and enhancing XSK?
+
+  > XSK tooling is based on [Eclipse Dirigible](https://www.dirigible.io/) and in the near future it will be possible to maintain XSK projects with any modern IDE like VSCode, Eclipse Theia, etc.
+
+- What about the ops aspects - will XSK be smoothly integrated into a state-of-the-art lifecycle and ops management (be it SAP-based or non-SAP based like GitHub Actions?
+
+  > Yes, the XSK itself uses [GitHub actions](https://github.com/SAP/xsk/actions) for CI/CD
+
+- Will there be limitations that will not be mitigated?
+
+  > You can get the up-to-date list of covered [features](https://github.com/SAP/xsk/wiki/Readiness) as well as the [limitations](https://github.com/SAP/xsk/wiki/Limitations)
+
+- Is the support of PostgreSQL only possible in principle or will this be officially supported?
+
+  > Yes, it is officially supported. Features specific for HANA Cloud like HDI, Calculation Views are not available for PostgreSQL.
+
 ## Cheat Sheet
 
 Visit the cheat sheet [here](https://github.com/SAP/xsk/wiki/Cheat-Sheet).
@@ -79,17 +105,6 @@ Visit the cheat sheet [here](https://github.com/SAP/xsk/wiki/Cheat-Sheet).
 ## Readiness
 
 Visit the readiness page [here](https://github.com/SAP/xsk/wiki/Readiness).
-
-## Limitations
-
-Not all of the XS classic artifacts are supported as well as not all the features of the supported artifacts are covered so far.
-
-## Known Issues
-
-* Hard coded FQDN URLs have to be manually changed
-* Hard coded SCHEMA names within SQL statements have to be manually changed
-* Authentication is managed by the runtime container
-* Authorization checks in the application layer only (no HANA database security/user management)
 
 ## How to obtain support
 

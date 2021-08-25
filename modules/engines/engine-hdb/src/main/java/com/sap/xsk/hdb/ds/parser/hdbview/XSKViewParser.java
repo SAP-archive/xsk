@@ -11,13 +11,21 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbview;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureDependencyModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.parser.hdbview.core.HdbviewLexer;
+import com.sap.xsk.parser.hdbview.core.HdbviewParser;
+import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWCoreListener;
+import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWErrorListener;
+import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
 import com.sap.xsk.parser.utils.ParserConstants;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -26,19 +34,11 @@ import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import com.sap.xsk.parser.hdbview.core.HdbviewLexer;
-import com.sap.xsk.parser.hdbview.core.HdbviewParser;
-import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWCoreListener;
-import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWErrorListener;
-import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
-import com.sap.xsk.utils.XSKCommonsUtils;
-import com.sap.xsk.utils.XSKHDBUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDBViewModel> {
 
@@ -46,7 +46,7 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
 
     @Override
     public XSKDataStructureHDBViewModel parse(String location, String content)
-        throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
+            throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
         Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*VIEW", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
         boolean matchFound = matcher.find();
@@ -64,7 +64,7 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
     }
 
     private XSKDataStructureHDBViewModel parseHanaXSClassicContent(String location, String content)
-        throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
+            throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
         logger.debug("Parsing hdbview as Hana XS Classic format");
         XSKDataStructureHDBViewModel hdbViewModel = new XSKDataStructureHDBViewModel();
         XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbViewModel, IXSKDataStructureModel.TYPE_HDB_VIEW, XSKDBContentType.XS_CLASSIC);
@@ -104,6 +104,32 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
         hdbViewModel.setDependsOn(antlr4Model.getDependsOn());
         hdbViewModel.setDependsOnTable(antlr4Model.getDependsOnTable());
         hdbViewModel.setDependsOnView(antlr4Model.getDependsOnView());
+
+        //here we do not know if the artifact is table or view, will be set as none
+        if (antlr4Model.getDependsOn() != null) {
+            antlr4Model.getDependsOn().forEach(el -> {
+                XSKDataStructureDependencyModel dependencyModel = new XSKDataStructureDependencyModel(el, "none");
+                if (!hdbViewModel.getDependencies().contains(dependencyModel)) {
+                    hdbViewModel.getDependencies().add(dependencyModel);
+                }
+            });
+        }
+        if (antlr4Model.getDependsOnTable() != null) {
+            antlr4Model.getDependsOnTable().forEach(el -> {
+                XSKDataStructureDependencyModel dependencyModel = new XSKDataStructureDependencyModel(el, "TABLE");
+                if (!hdbViewModel.getDependencies().contains(dependencyModel)) {
+                    hdbViewModel.getDependencies().add(dependencyModel);
+                }
+            });
+        }
+        if (antlr4Model.getDependsOnView() != null) {
+            antlr4Model.getDependsOnView().forEach(el -> {
+                XSKDataStructureDependencyModel dependencyModel = new XSKDataStructureDependencyModel(el, "VIEW");
+                if (!hdbViewModel.getDependencies().contains(dependencyModel)) {
+                    hdbViewModel.getDependencies().add(dependencyModel);
+                }
+            });
+        }
 
         return hdbViewModel;
     }

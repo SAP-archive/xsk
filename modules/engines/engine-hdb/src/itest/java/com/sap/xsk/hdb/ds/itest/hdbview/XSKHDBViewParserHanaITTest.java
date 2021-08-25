@@ -65,7 +65,7 @@ public class XSKHDBViewParserHanaITTest {
         stmt.executeUpdate(String
             .format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION IN ('/hdbview-itest/SampleHANAXSClassicView.hdbview',"
                     + "'acme.com.test.tables::MY_TABLE1',"
-                    + "'acme.com.test.tables::MY_TABLE2')",
+                    + "'acme.com.test.tables::MY_TABLE20')",
                 hanaUserName));
       }
     }
@@ -76,9 +76,9 @@ public class XSKHDBViewParserHanaITTest {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName = Configuration.get("hana.username");
-      stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE1\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
           schemaName));
-      stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE2\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
           schemaName));
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
@@ -99,8 +99,8 @@ public class XSKHDBViewParserHanaITTest {
       stmt.executeUpdate(
           String.format("drop SYNONYM \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
       stmt.executeUpdate(String.format("drop VIEW    \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"", schemaName));
-      stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE1\"", schemaName));
-      stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE2\"", schemaName));
+      stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE10\"", schemaName));
+      stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE20\"", schemaName));
     }
   }
 
@@ -109,13 +109,13 @@ public class XSKHDBViewParserHanaITTest {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName = Configuration.get("hana.username");
-      stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE1\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
           schemaName));
-      stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE2\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
           schemaName));
 
       stmt.executeUpdate(String
-          .format("create VIEW  \"%s\".\"hdbview-itest::SampleHANAXSClassicView\" AS select * from \"acme.com.test.tables::MY_TABLE1\"",
+          .format("create VIEW  \"%s\".\"hdbview-itest::SampleHANAXSClassicView\" AS select * from \"acme.com.test.tables::MY_TABLE10\"",
               schemaName));
       stmt.executeUpdate(String
           .format("create SYNONYM \"%s\".\"hdbview-itest::SampleHANAXSClassicView\" FOR \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"",
@@ -139,8 +139,8 @@ public class XSKHDBViewParserHanaITTest {
       stmt.executeUpdate(
           String.format("drop SYNONYM \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
       stmt.executeUpdate(String.format("drop VIEW    \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"", schemaName));
-      stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE1\"", schemaName));
-      stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE2\"", schemaName));
+      stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE10\"", schemaName));
+      stmt.executeUpdate(String.format("drop table \"%s\".\"acme.com.test.tables::MY_TABLE20\"", schemaName));
     }
   }
 
@@ -150,15 +150,15 @@ public class XSKHDBViewParserHanaITTest {
         Statement stmt = connection.createStatement()) {
       String schemaName = "TEST_SCHEMA";
       stmt.executeUpdate(String.format("create SCHEMA \"%s\"", schemaName));
-      stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE1\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
           schemaName));
-      stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE2\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
           schemaName));
       stmt.executeUpdate(
-          String.format("create SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE1\" FOR \"%s\".\"acme.com.test.tables::MY_TABLE1\"",
+          String.format("create SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE10\" FOR \"%s\".\"acme.com.test.tables::MY_TABLE10\"",
               XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, schemaName));
       stmt.executeUpdate(
-          String.format("create SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE2\" FOR \"%s\".\"acme.com.test.tables::MY_TABLE2\"",
+          String.format("create SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE20\" FOR \"%s\".\"acme.com.test.tables::MY_TABLE20\"",
               XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, schemaName));
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
@@ -180,10 +180,10 @@ public class XSKHDBViewParserHanaITTest {
           String.format("drop SYNONYM \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
       stmt.executeUpdate(
           String.format("drop VIEW    \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"", Configuration.get("hana.username")));
-      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE1\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
-      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE2\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
-      stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE1\"", schemaName));
-      stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE2\"", schemaName));
+      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE10\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
+      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE20\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
+      stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE10\"", schemaName));
+      stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE20\"", schemaName));
       stmt.executeUpdate("DROP SCHEMA TEST_SCHEMA CASCADE ");
     }
   }
@@ -195,19 +195,19 @@ public class XSKHDBViewParserHanaITTest {
         Statement stmt = connection.createStatement()) {
       String schemaName = "TEST_SCHEMA";
       stmt.executeUpdate(String.format("create SCHEMA \"%s\"", schemaName));
-      stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE1\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
           schemaName));
-      stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE2\"(COLUMN1 integer,COLUMN2 integer)",
+      stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
           schemaName));
       stmt.executeUpdate(
-          String.format("create SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE1\" FOR \"%s\".\"acme.com.test.tables::MY_TABLE1\"",
+          String.format("create SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE10\" FOR \"%s\".\"acme.com.test.tables::MY_TABLE10\"",
               XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, schemaName));
       stmt.executeUpdate(
-          String.format("create SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE2\" FOR \"%s\".\"acme.com.test.tables::MY_TABLE2\"",
+          String.format("create SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE20\" FOR \"%s\".\"acme.com.test.tables::MY_TABLE20\"",
               XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, schemaName));
 
       stmt.executeUpdate(String.format(
-          "CREATE VIEW \"%s\".\"hdbview-itest::SampleHANAXSClassicView\" AS select * from \"%s\".\"acme.com.test.tables::MY_TABLE2\"",
+          "CREATE VIEW \"%s\".\"hdbview-itest::SampleHANAXSClassicView\" AS select * from \"%s\".\"acme.com.test.tables::MY_TABLE20\"",
           Configuration.get("hana.username"), schemaName));
       stmt.executeUpdate(String
           .format("create SYNONYM \"%s\".\"hdbview-itest::SampleHANAXSClassicView\" FOR \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"",
@@ -235,10 +235,10 @@ public class XSKHDBViewParserHanaITTest {
           String.format("drop SYNONYM \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
       stmt.executeUpdate(
           String.format("drop VIEW    \"%s\".\"hdbview-itest::SampleHANAXSClassicView\"", Configuration.get("hana.username")));
-      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE1\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
-      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE2\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
-      stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE1\"", schemaName));
-      stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE2\"", schemaName));
+      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE10\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
+      stmt.executeUpdate(String.format("drop SYNONYM \"%s\".\"acme.com.test.tables::MY_TABLE20\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
+      stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE10\"", schemaName));
+      stmt.executeUpdate(String.format("drop TABLE   \"%s\".\"acme.com.test.tables::MY_TABLE20\"", schemaName));
       stmt.executeUpdate("DROP SCHEMA TEST_SCHEMA CASCADE");
     }
   }

@@ -12,7 +12,6 @@
 package com.sap.xsk.xsodata.ds.api;
 
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
-import org.eclipse.dirigible.commons.api.service.ICoreService;
 
 import java.util.List;
 

@@ -39,9 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -424,7 +422,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testParseHdbtiToJSONSuccessfully()
-        throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException, ProblemsException {
+            throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException, ProblemsException {
         String hdbtiSample = org.apache.commons.io.IOUtils
                 .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
 
@@ -467,7 +465,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testParseJSONtoHdbtiSuccessfully()
-        throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException, ProblemsException {
+            throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException, ProblemsException {
         String hdbtiSample = org.apache.commons.io.IOUtils
                 .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
 
@@ -498,5 +496,78 @@ public class XSKHDBTIProcessorTest {
                 "}];";
 
         assertEquals(expectedValue, actualValue);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParseJSONtoHdbtiFailWithIncorrectFilePath() {
+        XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+        model.setDelimEnclosing("'");
+        model.setSchemaName("schema");
+        model.setHeader(true);
+        model.setTableName("table");
+        model.setFileName("workspace:csv=file-Name_cAN|be+running (งツ)ว");
+
+        List<XSKHDBTIImportConfigModel> list = new ArrayList<>(Arrays.asList(model));
+        processor.parseJSONtoHdbti((ArrayList<XSKHDBTIImportConfigModel>) list);
+    }
+
+    @Test
+    public void testParseJSONtoHdbtiSuccessfullyWithFileNameWithoutPath() {
+        XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+        model.setDelimEnclosing("'");
+        model.setSchemaName("schema");
+        model.setHeader(true);
+        model.setTableName("table");
+        model.setFileName("myData2.csv");
+
+        String expectedValue = "import = [\n" +
+                "{\n" +
+                "\tdelimEnclosing=\"'\";\n" +
+                "\tschema = \"schema\";\n" +
+                "\theader = true;\n" +
+                "\ttable = \"table\";\n" +
+                "\tfile = \"myData2.csv\";\n" +
+                "}];";
+
+        String actualResult =  processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+        assertEquals(expectedValue, actualResult);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParseJSONtoHdbtiFailWithIncorrectSchemaName() {
+        XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+        model.setDelimEnclosing("'");
+        model.setSchemaName("schema-Name_cAN|be\\whatever ¯\\_(ツ)_/¯");
+        model.setHeader(true);
+        model.setTableName("table");
+        model.setFileName("myData2.csv");
+
+        processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParseJSONtoHdbtiFailWithIncorrectTableName() {
+        XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+        model.setDelimEnclosing("'");
+        model.setSchemaName("schema");
+        model.setHeader(true);
+        model.setTableName("table-Name_cAN|be@bear ʕ•ᴥ•ʔ");
+        model.setFileName("myData2.csv");
+
+        processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParseJSONtoHdbtiFailWithIncorrectKeyColumn() {
+        XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+        model.setDelimEnclosing("'");
+        model.setSchemaName("schema");
+        model.setHeader(true);
+        model.setTableName("table");
+        model.setFileName("myData2.csv");
+        XSKHDBTIImportConfigModel.Pair pair = new XSKHDBTIImportConfigModel.Pair("%something&\":\"ƪ(ړײ)ƪ\u200B\u200B", new ArrayList<>((Collections.singletonList("BW_CUBE"))));
+        model.getKeys().add(pair);
+
+        processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
     }
 }

@@ -28,11 +28,13 @@ import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLESyntaxErrorListener;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
+import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.ByteArrayInputStream;
@@ -50,7 +52,7 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
 
   @Override
   public XSKDataStructureHDBTableTypeModel parse(String location, String content)
-      throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+      throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
     Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*TYPE", Pattern.CASE_INSENSITIVE);
     Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
     boolean matchFound = matcher.find();
@@ -60,7 +62,7 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
   }
 
   private XSKDataStructureHDBTableTypeModel parseHanaXSClassicContent(String location, String content)
-      throws IOException, XSKArtifactParserException {
+      throws IOException, XSKArtifactParserException, ProblemsException {
     logger.debug("Parsing hdbstructure in Hana XS Classic format");
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
@@ -77,8 +79,8 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
     XSKHDBTABLESyntaxErrorListener parserErrorListener = new XSKHDBTABLESyntaxErrorListener();
     hdbtableParser.addErrorListener(parserErrorListener);
     ParseTree parseTree = hdbtableParser.hdbtableDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrorMessages(), location, "HDB Structure", logger);
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrorMessages(), location, "HDB Structure", logger);
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Table Type", logger);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Table Type", logger);
 
     XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
 

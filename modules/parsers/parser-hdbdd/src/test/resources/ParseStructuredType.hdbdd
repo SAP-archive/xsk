@@ -1,0 +1,31 @@
+namespace sap.table;
+@Schema: 'MySchema'
+context ParseStructuredType
+{
+  type MyInteger  : Integer;
+  type MyString80 : String(80);
+  type MyDecimal  : Decimal(10,2);
+
+  type MyStruct  
+  {
+    aNumber   : Integer;
+    someText  : String(80);
+    otherText : MyString80;  // defined in example above
+  };
+
+  type MyS           : MyStruct;
+  type MyOtherInt    : type of MyStruct.aNumber;
+  type MyOtherStruct : type of MyDeepNestedStruct.nested.nested;
+
+  type MyNestedStruct
+  {
+    name   : MyString80;
+    nested : MyS;
+  };
+
+  type MyDeepNestedStruct
+  {
+    text   : LargeString;
+    nested : MyNestedStruct;
+  };
+};

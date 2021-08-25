@@ -1,0 +1,123 @@
+SAP BTP SDK for the Neo environment
+This document contains information respecting free and open-source software (collectively, "FOSS") provided with or contained in the product ("Product") that this document accompanies.  Any terms, conditions, and restrictions governing the use or distribution of FOSS that are offered or imposed by SAP and are not contained within the FOSS license(s) governing the use and distribution of the FOSS, are offered and imposed by SAP alone. The authors, licensors, and distributors of the FOSS have disclaimed all warranties relating to any liability arising from the use and distribution of the FOSS.
+
+While SAP has sought to provide a complete and accurate listing of the FOSS components used with or within the Product, SAP does not represent or warrant that the listing of FOSS components and associated notices and licensing information provided herein are complete or error-free. Recipients of the Product should investigate the identified FOSS components to confirm the accuracy of the notices and licensing information provided herein. Recipients are encouraged to notify SAP of any inaccurate information or errors found in this document.
+
+If you have any questions or concerns please contact SAP by email at opensource@sap.com or via mail at Dietmar Hopp Allee 16, 69190 Walldorf, Germany, Attn: Global Legal.
+
+Third Party Component                                                   License
+Apache Catalina, 9.0.45                                                 Apache License v2.0
+Apache Chemistry OpenCMIS Client, 1.0.0                                 Apache License v2.0 (please see ./notices/chemistry-opencmis-client-1.0.0_DEPENDENCIES.txt)
+Apache Commons Codec, 1.6                                               Apache License v2.0
+Apache Commons Compress, 1.4.1                                          Apache License v2.0
+Apache Commons DBCP2, 2.1.1                                             Apache License v2.0
+Apache Commons Daemon 1.0.15                                            Apache License v2.0
+Apache Commons Exec, 1.1                                                Apache License v2.0
+Apache Commons IO, 2.0.1                                                Apache License v2.0
+Apache Commons Logging, 1.1.1                                           Apache License v2.0
+Apache Commons Pool, 2.3                                                Apache License v2.0
+Apache Coyote, 9.0.45                                                   Apache License v2.0
+Apache Derby, 10.9                                                      Apache License v2.0
+Apache EL, 2.2                                                          Apache License v2.0
+Apache Felix, 1.0, 1.6                                                  Apache License v2.0
+Apache HttpComponents HttpClient, 4.3.6, 4.1.3                          Apache License v2.0
+Apache HttpComponents HttpCore, 4.3.3, 4.1.4                            Apache License v2.0
+Apache HttpComponents HttpCore NIO, 4.1.0, 4.1.4                        Apache License v2.0
+Apache Jakarta Commons Collections                                      Apache License v2.0
+Apache Jakarta Commons Validator 1.5.0                                  Apache License v2.0
+Apache Jakarta Log4j, 1.2.16                                            Apache License v2.0
+Apache Jasper, 9.0.45                                                   Apache License v2.0
+Apache Juli, 9.0.45                                                     Apache License v2.0
+Apache Mime4j, 0.6                                                      Apache License v2.0 (please see ./notices/apache-mime4j-0.6_DEPENDENCIES.txt)
+Apache Tomcat, 9.0.45                                                   Apache License v2.0 (please see ./notices/apache-tomcat-9.0.45_NOTICE.txt)
+Archaius Core, 2.0.0                                                    Apache License v2.0
+Common Annotations for the Java Platform                                CDDL v1.0
+Eclipse Compiler for Java, 3.11.0                                       Eclipse Public License v1.0
+Eclipse Core Contenttype, 3.4.100                                       Eclipse Public License v1.0
+Eclipse Core Jobs, 3.4.100                                              Eclipse Public License v1.0
+Eclipse Core Net, 1.2.100                                               Eclipse Public License v1.0
+Eclipse Core Runtime, 3.7.0                                             Eclipse Public License v1.0
+Eclipse ECF, 3.1                                                        Eclipse Public License v1.0
+Eclipse Equinox, 3.7                                                    Eclipse Public License v1.0
+EclipseLink, 2.7.8                                                      Eclipse Public License v2.0 (please see ./notices/eclipselink-2.7.8_about.html)
+Google-gson, 1.6, 2.2.4                                                 Apache License v2.0
+HdrHistogram, 2.1.9                                                     Creative Commons Zero v1.0 Universal
+Hystrix Core, 1.5.18                                                    Apache License v2.0
+Infomas-asl, 3.0.1                                                      Apache License v2.0
+Java Architecture for XML Binding, 2.1, 2.2                             CDDL v1.0
+Java Servlet, 3.1                                                       CDDL v1.0
+Java API for WebSocket, 1.1                                             CDDL v1.0
+Java Expression Language, 3.0                                           CDDL v1.0
+Java Authentication SPI for Containers, 1.1                             CDDL v1.0
+Java Mail API, 1.4.7                                                    CDDL v1.0
+Jakarta Persistence, 2.2.3                                              Eclipse Public License v2.0
+JavaBeans(TM) Activation Framework Specification, 1.1                   CDDL v1.0
+JavaServer Pages, 2.3                                                   CDDL v1.0
+JAX-WS (JSR-224) API, 2.1                                               CDDL v1.0
+JAX-WS (JSR 224) Reference Implementation, 2.1.7                        CDDL v1.0
+Jcommander, 1.26                                                        Apache License v2.0
+JSch, 0.1.54                                                            BSD license (3-clause)
+JSON.simple, 1.1, 1.1.1                                                 Apache License v2.0
+JZlib                                                                   BSD license (3-clause)
+Logback 1.1.6                                                           Eclipse Public License v1.0
+Mimepull, 1.3                                                           CDDL v1.0
+Objectweb ASM, 3.3.1                                                    BSD license (3-clause)
+OSGi Materials                                                          Apache License v2.0
+Retrofit, 1.9.0                                                         Apache License v2.0
+RxJava, 1.2.0                                                           Apache License v2.0
+SAAJ API, 1.3                                                           CDDL v1.0
+SAT4J, 2.3.0                                                            Eclipse Public License v1.0
+Service Data Objects, 2.1.1                                             CDDL v1.0
+Simple Logging Facade for Java (SLF4J), 1.7.19                          MIT (Copyright (c) 2004-2013 QOS.ch)
+System Out and Err redirected to SLF4J, 1.0.2                           MIT (Copyright (c) 2009-2010 Robert Elliot)
+STAX2 API, 3.1.4                                                        BSD license (3-clause)
+StAX-Ex, 1.2                                                            CDDL v1.0
+Streaming API for XML, 1.0, 1.0.1                                       CDDL v1.0
+Sun JAXB Reference Implementation Runtime, 2.1.7                        CDDL v1.0
+Sun SAAJ Standard Implementation, 1.3.3                                 CDDL v1.0
+Web Services Metadata for the Java Platform (jsr181-api-1.0)            CDDL v1.0
+Woodstox, 4.4.1                                                         Apache License v2.0
+The Netty Project, 4.1.42                                               Apache License v2.0 (please see ./notices/netty-all-4.1.42.Final_NOTICE.txt)
+XML Resolver library                                                    Apache License v2.0
+Xerces, 2.9.0                                                           Apache License v2.0
+
+The Open Source components shipped with this product may themselves contain other Open Source components that may be made available under other Open Source licenses. Please check the corresponding information that is contained in the Open source archives.
+
+
+Apache License Version 2.0
+(see full license text at ./licenses/APACHE-LICENSE-2.0.txt)
+
+
+Eclipse Public License - v 1.0
+(see full license text at ./licenses/EPL-v1.0.txt)
+
+Eclipse Public License - v 2.0
+(see full license text at ./licenses/EPL-v2.0.txt)
+
+
+COMMON DEVELOPMENT AND DISTRIBUTION LICENSE Version 1.0 (CDDL-1.0)
+(see full license text at ./licenses/CDDL-v1.0.txt)
+
+
+The MIT License (MIT)
+(see full license text at ./licenses/MIT-LICENSE.txt)
+
+
+BSD license (3-clause) for Objectweb ASM
+(see full license text at ./licenses/BSD license (3-clause)_ASM.txt)
+
+
+BSD license (3-clause) for JZlib
+(see full license text at ./licenses/BSD license (3-clause)_jzlib.txt)
+
+
+BSD license (3-clause) for STAX2 API
+(see full license text at ./licenses/BSD license (3-clause)_stax2api.txt)
+
+
+BSD license (3-clause) for JSch
+(see full license text at ./licenses/JSch-LICENSE.txt)
+
+
+Creative Commons Zero v1.0 Universal (CC0-1.0)
+(see full license text at ./licenses/CC0-1.0.txt)

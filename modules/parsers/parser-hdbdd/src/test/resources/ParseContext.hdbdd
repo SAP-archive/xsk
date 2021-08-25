@@ -1,0 +1,196 @@
+namespace sap.table;
+@Schema : 'TEST_SCHEMA'
+Context ParseContext {
+	type GlobalTypes {
+        UUID 						 				 : String(32); //String(32) or Binary(16)
+        UserID									 	 : String(256);
+        Name										 : String(100);
+        ID											 : String(50);
+        Type										 : String(50);
+        TextType									 : String(1); // D-Description A-Address T-Tag F-Facility
+        Category									 : String(1); // F-Fuel Grades, C-Cards, S-Services, P-Parking Space (as in config.db.LocationFacility::GlobalTypes.Category)
+        TimeStamp					 				 : UTCTimestamp;
+        Text										 : String(1024);
+        Geometry									 : String(5000);
+        BigGeometry                                  : LargeString;
+        STGeometry									 : String(32);
+        Boolean										 : String(1);
+        Language									 : String(1);
+        Url											 : String(5000);
+		Code										 : String(50);
+	    PhoneNumber					 				 : String(50);
+	    FacilityStatus								 : String(1); // 1-Parking Available, 2-Filling up Fast, 3-Full, 4-Unknown
+	    AdditionalInformation						 : String(5000);
+	    Mode										 : String(1);
+	    Icon										 : String(50);
+
+    };
+
+	type AuditTrailInfo {
+		CreatedBy                   				: type of GlobalTypes.UserID;
+		ChangedBy                   				: type of GlobalTypes.UserID;
+		CreationTime                				: type of GlobalTypes.TimeStamp;
+		ChangeTime                  				: type of GlobalTypes.TimeStamp;
+	};
+
+    type DisplayAreaInfo {
+    	ZoomLevel									: Decimal(34, 14);
+    	Center										: String(5000);
+    };
+
+ 	//@Comment.descr: 'OBSOLETE'
+    @Catalog.tableType: #COLUMN
+    entity Data //DONT REMOVE THIS TABLE.  DATA WILL BE LOST.  Can be removed in SCL Feature Pack 1 only
+    {
+    	key LocationID							: type of GlobalTypes.UUID;
+    	Name	    							: type of GlobalTypes.Name;
+		OwnerID									: type of GlobalTypes.UUID;
+		Type 									: type of GlobalTypes.Type;
+		Geometry								: type of GlobalTypes.Geometry;
+    	ParentLocationID						: type of GlobalTypes.UUID;
+    	Stacked									: type of GlobalTypes.Boolean;
+    	GateID									: type of GlobalTypes.UUID;
+    	isPublic								: type of GlobalTypes.Boolean;
+    	isDeleted								: type of GlobalTypes.Boolean;
+    	ImageUrl								: type of GlobalTypes.Url;
+    	Website									: type of GlobalTypes.Url;
+    	PhoneNumber								: type of GlobalTypes.PhoneNumber;
+    	AuditTrail                 				: AuditTrailInfo;
+    };
+
+    //@Comment.descr: 'Location Header'
+    @Catalog.tableType: #COLUMN
+    entity Header
+    {
+        key LocationID                          : type of GlobalTypes.UUID;
+        Name                                    : type of GlobalTypes.Name;
+        OwnerID                                 : type of GlobalTypes.UUID;
+        Type                                    : type of GlobalTypes.Type;
+        Geometry                                : type of GlobalTypes.BigGeometry;
+        SpacialGeometry							: type of GlobalTypes.STGeometry;
+        ParentLocationID                        : type of GlobalTypes.UUID;
+        Stacked                                 : type of GlobalTypes.Boolean;
+        GateID                                  : type of GlobalTypes.UUID;
+        isPublic                                : type of GlobalTypes.Boolean;
+        isDeleted                               : type of GlobalTypes.Boolean;
+        ImageUrl                                : type of GlobalTypes.Url;
+        Website                                 : type of GlobalTypes.Url;
+        PhoneNumber                             : type of GlobalTypes.PhoneNumber;
+        AuditTrail                              : AuditTrailInfo;
+        DisplayArea								: DisplayAreaInfo;
+        AdditionalInformation					: type of GlobalTypes.AdditionalInformation;
+		AdditionalID							: type of GlobalTypes.ID;
+		WebcamUrl								: type of GlobalTypes.Url;
+    };
+
+ 	//@Comment.descr: 'Location Facility'
+    @Catalog.tableType: #COLUMN
+    entity Facility
+    {
+    	key UUID								: type of GlobalTypes.UUID;
+    	LocationID								: type of GlobalTypes.UUID;
+    	Name	    							: type of GlobalTypes.Name;
+		Category								: type of GlobalTypes.Category;
+		Capacity                                : Integer;
+    	ImageUrl								: type of GlobalTypes.Url;
+    	Website									: type of GlobalTypes.Url;
+    	isDeleted								: type of GlobalTypes.Boolean;
+    	AuditTrail                 				: AuditTrailInfo;
+    	ModeOfStatusUpdate						: type of GlobalTypes.Mode;
+    	StatusProvider							: type of GlobalTypes.Text;
+    	AdditionalID							: type of GlobalTypes.ID;
+    };
+
+    //@Comment.descr: 'Location Texts'
+    @Catalog.tableType: #COLUMN
+    entity Texts
+    {
+    	key ObjectUUID							: type of GlobalTypes.UUID;
+    	key Type								: type of GlobalTypes.TextType;
+    	key Language							: type of GlobalTypes.Language;
+    	LocationID								: type of GlobalTypes.UUID;
+    	Text									: type of GlobalTypes.Text;
+    	CustomLocationID						: type of GlobalTypes.UUID;
+    };
+
+    entity Gate
+    {
+		key UUID								: type of GlobalTypes.UUID;
+    	Name	    							: type of GlobalTypes.Name;
+        Geometry								: type of GlobalTypes.Geometry;
+    	LocationID								: type of GlobalTypes.UUID;
+    	isDeleted								: type of GlobalTypes.Boolean;
+    	AuditTrail                 				: AuditTrailInfo;
+    };
+
+	entity Address
+    {
+		key UUID								: type of GlobalTypes.UUID;
+		LocationID								: type of GlobalTypes.UUID;
+    	CareOfName	    						: type of GlobalTypes.Name;
+		RoomID	    							: type of GlobalTypes.ID;
+    	BuildingID	    						: type of GlobalTypes.ID;
+    	HouseID	    							: type of GlobalTypes.ID;
+    	AdditionalHouseID						: type of GlobalTypes.ID;
+        StreetName								: type of GlobalTypes.Name;
+		CityName								: type of GlobalTypes.Name;
+		DistrictName							: type of GlobalTypes.Name;
+		StreetPostalCode						: type of GlobalTypes.Code;
+		RegionName								: type of GlobalTypes.Name;
+		RegionCode								: type of GlobalTypes.Code;
+		CountryName								: type of GlobalTypes.Name;
+		CountryCode								: type of GlobalTypes.Code;
+    };
+
+    entity FacilityAvailability
+    {
+    	key FacilityUUID						: type of GlobalTypes.UUID;
+    	ReportedStatus							: type of GlobalTypes.FacilityStatus;
+    	Availability							: Integer;
+    	StatusText                              : type of GlobalTypes.Text;
+    	AuditTrail                 				: AuditTrailInfo;
+    	ModeOfStatusUpdate						: type of GlobalTypes.Mode;
+    	StatusProvider							: type of GlobalTypes.Text;
+    };
+
+    entity CustomLocation
+    {
+    	key UUID								: type of GlobalTypes.UUID;
+    	OrganizationUUID						: type of GlobalTypes.UUID;
+    	Name									: type of GlobalTypes.Name;
+    	Icon									: type of GlobalTypes.Icon;
+    	Capacity								: type of GlobalTypes.Boolean;
+    	Geolocation								: type of GlobalTypes.Boolean;
+    	Address									: type of GlobalTypes.Boolean;
+    	Website									: type of GlobalTypes.Boolean;
+    	Webcam									: type of GlobalTypes.Boolean;
+    	WorkHour								: type of GlobalTypes.Boolean;
+    	Photo									: type of GlobalTypes.Boolean;
+    	TelephoneNumber							: type of GlobalTypes.Boolean;
+    	AdditionalDetails						: type of GlobalTypes.Boolean;
+    	ServicingStations						: type of GlobalTypes.Boolean;
+    	isTourStop								: type of GlobalTypes.Boolean;
+    	isDeleted								: type of GlobalTypes.Boolean;
+    	AuditTrail                 				: AuditTrailInfo;
+    };
+
+    entity EntityUserAssignment
+    {
+
+    	key UUID 							   : type of GlobalTypes.UUID;
+    	LocationID							   : type of GlobalTypes.UUID;
+    	UserUUID							   : type of GlobalTypes.UUID;
+    	AuditTrail                 			   : AuditTrailInfo;
+   		isDeleted							   : type of GlobalTypes.Boolean;
+    };
+
+    entity EntityGeofenceAssignment
+    {
+
+    	key UUID 							   : type of GlobalTypes.UUID;
+    	LocationID							   : type of GlobalTypes.UUID;
+    	GeofenceUUID						   : type of GlobalTypes.UUID;
+    	AuditTrail                 			   : AuditTrailInfo;
+   		isDeleted							   : type of GlobalTypes.Boolean;
+    };
+};

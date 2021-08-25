@@ -29,6 +29,7 @@
 
 	<modules>
 		<module>modules</module>
+		<module>resources</module>
 		<module>releng</module>
   </modules>
 
@@ -107,6 +108,7 @@
 								<exclude>**/logback.xml</exclude>
 								<exclude>**/logback-test.xml</exclude>
 								<exclude>**/src/test/resources/**</exclude>
+								<exclude>resources/resources-neo-sdk/**</exclude>
 							</excludes>
 						</configuration>
 						<dependencies>
@@ -218,7 +220,7 @@
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dirigible.version>5.12.13</dirigible.version>
+		<dirigible.version>5.12.14</dirigible.version>
 
 		<maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
 		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>

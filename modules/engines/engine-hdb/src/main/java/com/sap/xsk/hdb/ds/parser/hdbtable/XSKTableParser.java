@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.sap.xsk.hdb.ds.transformer.HDBTableDefinitionModelToHDBTableColumnModelTransformer;
 import com.sap.xsk.parser.utils.ParserConstants;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -54,6 +55,7 @@ import com.sap.xsk.utils.XSKHDBUtils;
 public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHDBTableModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKTableParser.class);
+    private HDBTableDefinitionModelToHDBTableColumnModelTransformer columnModelTransformer = new HDBTableDefinitionModelToHDBTableColumnModelTransformer();
 
     @Override
     public String getType() {
@@ -112,30 +114,6 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
 
         XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
 
-        List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-        for (XSKHDBTABLEColumnsModel column : hdbtableDefinitionModel.getColumns()) {
-            try {
-                column.checkForAllMandatoryColumnFieldsPresence();
-            } catch (Exception e) {
-                throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
-            }
-            XSKDataStructureHDBTableColumnModel dataStructureHDBTableColumnModel = new XSKDataStructureHDBTableColumnModel();
-            dataStructureHDBTableColumnModel.setLength(column.getLength());
-            dataStructureHDBTableColumnModel.setName(column.getName());
-            dataStructureHDBTableColumnModel.setType(column.getSqlType());
-            dataStructureHDBTableColumnModel.setComment(column.getComment());
-            dataStructureHDBTableColumnModel.setNullable(column.isNullable());
-            dataStructureHDBTableColumnModel.setDefaultValue(column.getDefaultValue());
-            dataStructureHDBTableColumnModel.setPrecision(column.getPrecision());
-            dataStructureHDBTableColumnModel.setScale(column.getScale());
-            dataStructureHDBTableColumnModel.setUnique(column.isUnique());
-            List<String> foundMatchKey = hdbtableDefinitionModel.getPkcolumns().stream().filter(key -> key.equals(column.getName())).collect(Collectors.toList());
-            if (foundMatchKey.size() == 1) {
-                dataStructureHDBTableColumnModel.setPrimaryKey(true);
-            }
-            columns.add(dataStructureHDBTableColumnModel);
-        }
-
         XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableModel, IXSKDataStructureModel.TYPE_HDB_TABLE, XSKDBContentType.XS_CLASSIC);
         dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName());
         dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription());
@@ -144,7 +122,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         dataStructureHDBTableModel.setTemporary(hdbtableDefinitionModel.getTemporary());
         dataStructureHDBTableModel.setTableType(hdbtableDefinitionModel.getTableType());
         dataStructureHDBTableModel.setRawContent(content);
-        dataStructureHDBTableModel.setColumns(columns);
+        dataStructureHDBTableModel.setColumns(columnModelTransformer.transform(hdbtableDefinitionModel, location));
         dataStructureHDBTableModel.setConstraints(new XSKDataStructureHDBTableConstraintsModel());
 
         XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();

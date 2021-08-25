@@ -46,7 +46,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
-import org.abego.treelayout.internal.util.java.lang.string.StringUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
@@ -218,7 +217,8 @@ public class EntityDefinitionListener extends CdsBaseListener {
     boolean isNotNull = !ctx.getText().equals("null");
     if (!isNotNull && elementSymbol.isKey()) {
       throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Element - part of composite key cannot be null.",
-              ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getLine(), ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getCharPositionInLine()));
+          ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getLine(),
+          ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getCharPositionInLine()));
     }
 
     elementSymbol.setNotNull(isNotNull);
@@ -597,6 +597,13 @@ public class EntityDefinitionListener extends CdsBaseListener {
     } else {
       AnnotationSimpleValue nameValue = (AnnotationSimpleValue) schemaAnnotation.getValue("name");
       this.schema = nameValue.getValue();
+      if (symbol instanceof ContextSymbol) {
+        ((ContextSymbol) symbol).getSymbols().forEach((k, v) -> {
+          v.setSchema(this.schema);
+        });
+      } else {
+        symbol.setSchema(this.schema);
+      }
     }
 
     if (!symbol.getName().equals(getTopLevelSymbolExpectedName())) {

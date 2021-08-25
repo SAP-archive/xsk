@@ -1,0 +1,79 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+OpenCMIS Client Implementation
+
+
+From: 'an unknown organization'
+  - WSDL4J (http://sf.net/projects/wsdl4j) wsdl4j:wsdl4j:jar:1.6.3
+    License: CPL  (http://www.opensource.org/licenses/cpl1.0.txt)
+
+From: 'Apache Software Foundation' (http://www.apache.org/)
+  - XML Commons Resolver Component (http://xml.apache.org/commons/components/resolver/) xml-resolver:xml-resolver:jar:1.2
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'Codehaus' (http://www.codehaus.org/)
+  - Woodstox (http://woodstox.codehaus.org) org.codehaus.woodstox:woodstox-core-asl:jar:4.4.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'fasterxml.com' (http://fasterxml.com)
+  - Stax2 API (http://wiki.fasterxml.com/WoodstoxStax2) org.codehaus.woodstox:stax2-api:bundle:3.1.4
+    License: The BSD License  (http://www.opensource.org/licenses/bsd-license.php)
+
+From: 'ObjectWeb' (http://www.objectweb.org/)
+  - ASM Core (http://asm.objectweb.org/asm/) asm:asm:jar:3.3.1
+    License: BSD  (http://asm.objectweb.org/license.html)
+
+From: 'Oracle Corporation' (http://www.oracle.com/)
+  - Old JAXB Core (http://jaxb.java.net/jaxb-bundles/jaxb-core) com.sun.xml.bind:jaxb-core:jar:2.2.11
+    License: CDDL+GPL License  (http://glassfish.java.net/public/CDDL+GPL_1_1.html)
+
+From: 'QOS.ch' (http://www.qos.ch)
+  - SLF4J API Module (http://www.slf4j.org) org.slf4j:slf4j-api:jar:1.7.21
+    License: MIT License  (http://www.opensource.org/licenses/mit-license.php)
+
+From: 'Sun Microsystems, Inc' (http://www.sun.com/)
+  - Sun JAXB Reference Implementation Runtime (https://jaxb.dev.java.net/) com.sun.xml.bind:jaxb-impl:jar:2.2.11:compile
+    License: Dual license consisting of the CDDL v1.0 and GPL v2  (https://glassfish.dev.java.net/public/CDDL+GPL.html)
+
+From: 'The Apache Software Foundation' (http://www.apache.org/)
+  - Apache CXF Core (http://cxf.apache.org) org.apache.cxf:cxf-core:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime SOAP Binding (http://cxf.apache.org) org.apache.cxf:cxf-rt-bindings-soap:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime XML Binding (http://cxf.apache.org) org.apache.cxf:cxf-rt-bindings-xml:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime JAXB DataBinding (http://cxf.apache.org) org.apache.cxf:cxf-rt-databinding-jaxb:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime JAX-WS Frontend (http://cxf.apache.org) org.apache.cxf:cxf-rt-frontend-jaxws:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime Simple Frontend (http://cxf.apache.org) org.apache.cxf:cxf-rt-frontend-simple:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime HTTP Transport (http://cxf.apache.org) org.apache.cxf:cxf-rt-transports-http:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime WS Addressing (http://cxf.apache.org) org.apache.cxf:cxf-rt-ws-addr:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime WS Policy (http://cxf.apache.org) org.apache.cxf:cxf-rt-ws-policy:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache CXF Runtime Core for WSDL (http://cxf.apache.org) org.apache.cxf:cxf-rt-wsdl:bundle:3.0.10
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache Neethi (http://ws.apache.org/neethi/) org.apache.neethi:neethi:bundle:3.0.3
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - XmlSchema Core (http://ws.apache.org/commons/xmlschema20/xmlschema-core/) org.apache.ws.xmlschema:xmlschema-core:bundle:2.2.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'The Apache Software Foundation' (https://www.apache.org/)
+  - OpenCMIS Client API (https://chemistry.apache.org/java/chemistry-opencmis-client/chemistry-opencmis-client-api/) org.apache.chemistry.opencmis:chemistry-opencmis-client-api:jar:1.0.0
+    License: Apache 2  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+  - OpenCMIS Client Bindings Implementation (https://chemistry.apache.org/java/chemistry-opencmis-client/chemistry-opencmis-client-bindings/) org.apache.chemistry.opencmis:chemistry-opencmis-client-bindings:jar:1.0.0
+    License: Apache 2  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+  - OpenCMIS Commons API (https://chemistry.apache.org/java/chemistry-opencmis-commons/chemistry-opencmis-commons-api/) org.apache.chemistry.opencmis:chemistry-opencmis-commons-api:jar:1.0.0
+    License: Apache 2  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+  - OpenCMIS Commons Implementation (https://chemistry.apache.org/java/chemistry-opencmis-commons/chemistry-opencmis-commons-impl/) org.apache.chemistry.opencmis:chemistry-opencmis-commons-impl:jar:1.0.0
+    License: Apache 2  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+
+

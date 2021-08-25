@@ -27,6 +27,7 @@ public final class XSKConstants {
   public static final String XSK_HDBTABLE_CREATE = "CREATE ";
   public static final String XSK_HDBTABLE_DROP = "DROP ";
   public static final String XSK_SYNONYM_PUBLIC_SCHEMA = "PUBLIC";
+  public static final String XSK_HDBTABLETYPE_CREATE = "CREATE ";
   /**
    * The Unix separator character.
    */

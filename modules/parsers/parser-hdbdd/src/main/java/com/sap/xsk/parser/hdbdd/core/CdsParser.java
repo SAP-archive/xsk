@@ -29,7 +29,7 @@ public class CdsParser extends Parser {
 	public static final String[] tokenNames = {
 		"<INVALID>", "':'", "'['", "'{'", "'::'", "']'", "'='", "'}'", "'@'", 
 		"'#'", "'('", "')'", "'*'", "','", "'not null'", "'.'", "KEY", "NAMESPACE", 
-		"'as'", "ENTITY", "'type'", "'hana'", "CONTEXT", "USING", "ASSOCIATION", 
+		"'as'", "'entity'", "'type'", "'hana'", "CONTEXT", "USING", "ASSOCIATION", 
 		"'to'", "'on'", "'null'", "DEFAULT", "ASSOCIATION_MIN", "BOOLEAN", "ID", 
 		"';'", "INTEGER", "DECIMAL", "LOCAL_TIME", "LOCAL_DATE", "UTC_DATE_TIME", 
 		"UTC_TIMESTAMP", "STRING", "TYPE_OF", "WS", "LINE_COMMENT", "LINE_COMMENT2", 

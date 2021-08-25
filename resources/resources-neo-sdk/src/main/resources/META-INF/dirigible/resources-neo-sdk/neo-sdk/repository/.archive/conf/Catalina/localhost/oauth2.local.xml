@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+
+    Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Apache License, v2.0
+    which accompanies this distribution, and is available at
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+    SPDX-License-Identifier: Apache-2.0
+
+-->
+<!-- docBase path is relative to the corresponding appBase folder -->
+<Context docBase="../systemapps/com.sap.cloud.security.oauth2.as.local.war">
+    <Resources>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.security.core.server.csi.jar" webAppMount="/WEB-INF/classes"/>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.cloud.security.oauth2.commons.jar" webAppMount="/WEB-INF/classes"/>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/impl/com.sap.cloud.security.oauth2.domain.jar" webAppMount="/WEB-INF/classes"/>
+    </Resources>
+</Context>

@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+
+    Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Apache License, v2.0
+    which accompanies this distribution, and is available at
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+    SPDX-License-Identifier: Apache-2.0
+
+-->
+<!-- The contents of this file will be loaded for each web application -->
+<Context>
+    <CookieProcessor className="org.apache.tomcat.util.http.LegacyCookieProcessor"/>
+    <Valve className="com.sap.cloud.runtime.impl.bridge.security.TomcatAuthenticator"/>
+    <Valve className="com.sap.core.connectivity.jco.session.ext.RequestTracker"/>
+    <Listener className="com.sap.cloud.runtime.kotyo.tomcat.support.NamingResourcesListener"
+              factoryClassName="com.sap.cloud.runtime.kotyo.tomcat.support.DelegatingObjectFactory"/>
+
+    <!-- Default set of monitored resources. If one of these changes, the    -->
+    <!-- web application will be reloaded.                                   -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
+
+    <Manager className="com.sap.cloud.runtime.impl.bridge.core.TomcatSessionManager" pathname="">
+	    <SessionIdGenerator sessionIdLength ="32"/>
+	</Manager>
+    <Resources>
+        <JarResources className="org.apache.catalina.webresources.JarResourceSet" base="${catalina.home}/resources/com.sap.cloud.runtime.kotyo.mail.client.jar" webAppMount="/WEB-INF/classes"/>
+    </Resources>
+
+</Context>

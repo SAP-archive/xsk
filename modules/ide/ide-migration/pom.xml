@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.sap.xsk</groupId>
+    <artifactId>xsk-modules-ide-parent</artifactId>
+    <version>0.8.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <name>XSK - Modules - IDE - Migration</name>
+  <artifactId>xsk-modules-ide-migration</artifactId>
+  <version>0.8.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.cxf</groupId>
@@ -82,78 +95,12 @@
       <version>${dirigible.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-resources-neo-sdk</artifactId>
+      <version>0.8.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
-
-  <parent>
-		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-modules-ide-parent</artifactId>
-		<version>0.8.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
-
-	<name>XSK - Modules - IDE - Migration</name>
-	<artifactId>xsk-modules-ide-migration</artifactId>
-	<version>0.8.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
-
-	<scm>
-		<url>${content.scm.url}</url>
-		<connection>${content.scm.connection}</connection>
-		<developerConnection>${content.scm.developerConnection}</developerConnection>
-	</scm>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.1</version>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.sap.cloud</groupId>
-                  <artifactId>neo-java-web-sdk</artifactId>
-                  <version>4.2.4</version>
-                  <type>zip</type>
-                  <outputDirectory>tools/neo/neo-sdk/</outputDirectory>
-                  <overWrite>true</overWrite>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-
-          <execution>
-            <id>copy-migration-tools</id>
-            <phase>install</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>target/migration-tools</outputDirectory>
-              <overwrite>true</overwrite>
-              <resources>
-                <resource>
-                  <directory>tools</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 
   <properties>
 
@@ -161,11 +108,8 @@
     <content.repository.name>xsk-ide-migration</content.repository.name>
     <content.project.name>ide-migration</content.project.name>
     <content.repository.branch>main</content.repository.branch>
-    <content.source.directory>target/${content.project.name}</content.source.directory>
-    <content.output.directory>${basedir}/src/test/resources/META-INF/dirigible/${content.repository.name}/${content.project.name}</content.output.directory>
 
     <license.header.location>../../../licensing-header.txt</license.header.location>
-    <skipTests>true</skipTests>
   </properties>
 
 </project>

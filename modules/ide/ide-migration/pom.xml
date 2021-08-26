@@ -110,6 +110,8 @@
     <content.repository.branch>main</content.repository.branch>
 
     <license.header.location>../../../licensing-header.txt</license.header.location>
+
+    <skipTests>true</skipTests>
   </properties>
 
 </project>

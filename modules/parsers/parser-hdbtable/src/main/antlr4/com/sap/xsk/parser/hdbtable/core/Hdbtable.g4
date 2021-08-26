@@ -46,7 +46,10 @@ indexAssignOrder: 'order' EQ ORDER SEMICOLON;
 indexAssignIndexColumns: 'indexColumns' EQ indexColumnsArray ;
 indexAssignIndexType: 'indexType' EQ INDEXTYPE SEMICOLON;
 indexColumnsArray: '[' (STRING(',' STRING)*)? ']' SEMICOLON;
-STRING : '"' .*? '"' ; //match anything in "..."
+
+fragment ESCAPED_QUOTE : '\\"';
+STRING : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"'; //match anything in "..." including escapted quotes
+
 WS : [ \t\r\n]+ -> skip ; //toss out whitespace
 TABLE : 'table';
 DOT : '.' ;
@@ -67,5 +70,6 @@ DATETIMEDEFAULTVALUES: 'CURRENT_DATE'
                         | 'CURRENT_UTCDATE'
                         | 'CURRENT_UTCTIME'
                         | 'CURRENT_UTCTIMESTAMP';
+
 LINE_COMMENT : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
 COMMENT : '/*' .*? '*/' -> skip ; // Match "/*" stuff "*/"

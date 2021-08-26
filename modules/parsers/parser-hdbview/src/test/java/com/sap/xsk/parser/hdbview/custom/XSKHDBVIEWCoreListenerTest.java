@@ -86,4 +86,37 @@ public class XSKHDBVIEWCoreListenerTest {
     model.checkForAllMandatoryFieldsPresence();
     assertFalse(model.isPublic());
   }
+
+  @Test
+  public void parseHdbviewFileWithSingleQuote() throws Exception {
+    String hdbviewSample = org.apache.commons.io.IOUtils
+        .toString(XSKHDBVIEWCoreListenerTest.class.getResourceAsStream("/sampleWithQuote.hdbview"), StandardCharsets.UTF_8);
+
+    ANTLRInputStream inputStream = new ANTLRInputStream(hdbviewSample);
+    HdbviewLexer hdbviewLexer = new HdbviewLexer(inputStream);
+    CommonTokenStream tokenStream = new CommonTokenStream(hdbviewLexer);
+    HdbviewParser hdbviewParser = new HdbviewParser(tokenStream);
+    hdbviewParser.setBuildParseTree(true);
+    ParseTree parseTree = hdbviewParser.hdbviewDefinition();
+
+    XSKHDBVIEWCoreListener hdbviewCoreListener = new XSKHDBVIEWCoreListener();
+    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+    parseTreeWalker.walk(hdbviewCoreListener, parseTree);
+
+    XSKHDBVIEWDefinitionModel model = hdbviewCoreListener.getModel();
+    model.checkForAllMandatoryFieldsPresence();
+    assertNotNull(model);
+    assertEquals(hdbviewParser.getNumberOfSyntaxErrors(), 0);
+    assertEquals("\n"
+        + "-- some comment\n"
+        + "select distinct code from\n"
+        + "(\n"
+        + "    select current_status_code as code, status_model_code\n"
+        + "    from \"sap.db.status::t_status_model_transition\"\n"
+        + "    union all\n"
+        + "    select next_status_code as code, status_model_code\n"
+        + "    from \"sap.db.status::t_status_model_transition\"\n"
+        + ")\n"
+        + "where status_model_code = 'sap.config.EVALUATION'\n", model.getQuery());
+  }
 }

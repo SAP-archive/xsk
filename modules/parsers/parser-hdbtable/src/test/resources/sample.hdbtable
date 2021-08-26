@@ -1,0 +1,43 @@
+table.schemaName = "MYSCHEMA";
+table.tableType = COLUMNSTORE;
+/*some comment*/
+//some comment
+table.description = "Criteria Configuration: \"Runtime Table\"";
+table.columns = [
+    {name = "PACKAGE_ID"; sqlType = NVARCHAR; length = 256; nullable = false; comment = "Package where content is delivered from";},
+    {name = "CODE"; sqlType = VARCHAR; length = 500; nullable = false; comment = "Identifier of SAP criterion";},
+    {name = "MODEL_CODE"; sqlType = VARCHAR; length = 500; nullable = false; comment = "Model the criterion belongs to. Foreign key reference to t_model.code. Criterion can either be belong to a method OR a model.";},
+    {name = "DATATYPE_CODE"; sqlType = VARCHAR; length = 8; nullable = true; comment = "Datatype (INTEGER, NUMERIC, TEXT, BOOLEAN). If null criterion is considered as \"heading\"";},
+    {name = "PARENT_CRITERION_CODE"; sqlType = VARCHAR; length = 500; nullable = true; comment = "Parent criterion (only 1 level supported!";},
+    {name = "SEQUENCE_NO"; sqlType = INTEGER; nullable = true; comment = "Sequence order for display";},
+    {name = "IS_OVERALL_RESULT"; sqlType = TINYINT; nullable = true; comment = "This is criterion is to be considered as overall result of this evaluation";},
+    {name = "UOM_CODE"; sqlType = VARCHAR; length = 500; nullable = true; comment = "Unit of measure code";},
+    {name = "VALUE_OPTION_LIST_CODE"; sqlType = VARCHAR; length = 500; nullable = true; comment = "List of possible values for criterion. Foreign key reference to t_value_option_s.CODE";},
+    {name = "AGGREGATION_TYPE"; sqlType = VARCHAR; length = 8; nullable = true; comment = "Aggregation function used for this criterion. Possible values: SUM (Integer, Numeric), AVG (Numeric), AND (Boolean), OR (Boolean), MATRIX (Integer)";},
+    {name = "NUM_VALUE_MIN"; sqlType = DOUBLE; nullable = true; comment = "Minimal value for criterion of data type NUMERIC";},
+    {name = "NUM_VALUE_MAX"; sqlType = DOUBLE; nullable = true; comment = "Maximal value for criterion of data type NUMERIC";},
+    {name = "X_AXIS_CRITERION_CODE"; sqlType = VARCHAR; length = 500; nullable = true; comment = "Criterion to be used as X axis (matrix calculation)";},
+    {name = "X_AXIS_SEGMENT_NO"; sqlType = INTEGER; nullable = true; comment = "Number of segments to divide X axis into (matrix calculation)";},
+    {name = "Y_AXIS_CRITERION_CODE"; sqlType = VARCHAR; length = 500; nullable = true; comment = "Criterion to be used as Y axis (matrix calculation)";},
+    {name = "Y_AXIS_SEGMENT_NO"; sqlType = INTEGER; nullable = true; comment = "Number of segments to divide Y axis into (matrix calculation)";},
+    {name = "VIS_PARAM_1_CRITERION_CODE"; sqlType = VARCHAR; length = 500; nullable = true; comment = "Criterion code to be used for visualization";},
+    {name = "VIS_PARAM_2_CRITERION_CODE"; sqlType = VARCHAR; length = 500; nullable = true; comment = "Criterion code to be used for visualization";},
+    {name = "DEFAULT_TEXT"; sqlType = NVARCHAR; length = 100; nullable = true; comment = "Default Text for Criterion";},
+    {name = "DEFAULT_LONG_TEXT"; sqlType = NVARCHAR; length = 300; nullable = true; comment = "Default Long Text for Criterion";},
+    {name = "ID"; sqlType = INTEGER; nullable = true; comment = "ID used for UI maintenance - empty for imported configuration content";},
+    {name = "PLAIN_CODE"; sqlType = VARCHAR; length = 100; nullable = true; comment = "Code key without package and naming prefix for UI maintenance";},
+    {name = "CREATED_AT"; sqlType = TIMESTAMP; nullable = true; comment = "Creation timestamp";},
+    {name = "CREATED_BY_ID"; sqlType = INTEGER; nullable = true; comment = "Identity by which content has been created.";},
+    {name = "CHANGED_AT"; sqlType = TIMESTAMP; nullable = true; comment = "Changed timestamp";},
+    {name = "CHANGED_BY_ID"; sqlType = INTEGER; nullable = true; comment = "Identity by which content has been changed.";},
+    {name = "MODEL_ID"; sqlType = INTEGER; nullable = true; comment = "Model ID";},
+    {name = "PARENT_CRITERION_ID"; sqlType = INTEGER; nullable = true; comment = "Parent criterion ID";},
+    {name = "X_AXIS_CRITERION_ID"; sqlType = INTEGER; nullable = true; comment = "X axis criterion ID";},
+    {name = "Y_AXIS_CRITERION_ID"; sqlType = INTEGER; nullable = true; comment = "Y axis criterion ID";},
+    {name = "VIS_PARAM_1_CRITERION_ID"; sqlType = INTEGER; nullable = true; comment = "Vis param 1 criterion ID";},
+    {name = "VIS_PARAM_2_CRITERION_ID"; sqlType = INTEGER; nullable = true; comment = "Vis param 2 criterion ID";},
+    {name = "NUM_VALUE_STEP_SIZE"; sqlType = DOUBLE; nullable = true; comment = "Step Size for the Numeric Values";},
+    {name = "WEIGHT"; sqlType = INTEGER; nullable = true; comment = "the weight of value for result";},
+    {name = "FORMULA"; sqlType = VARCHAR; length=500; nullable = true; comment = "the formula expression";}
+];
+table.primaryKey.pkcolumns = ["PACKAGE_ID", "CODE"];

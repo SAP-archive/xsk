@@ -11,3 +11,5 @@ import = [
      keys = [ "GROUP_TYPE" : "BW_CUBE", "GROUP_TYPE" : "BW_DSO", "GROUP_TYPE" : "BW_PSA"];
    }
  ];
+ /*some comment*/
+ //some comment

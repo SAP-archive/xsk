@@ -41,7 +41,7 @@ migrationLaunchView.factory('$messageHub', [function () {
 
 migrationLaunchView.controller('MigrationLaunchViewController', ['$scope', '$messageHub', function ($scope, $messageHub) {
     $scope.steps = [
-        { id: 1, name: "NEO DB Credentials", topicId: "migration.neo-credentials" },
+        { id: 1, name: "SAP BTP Neo Credentials", topicId: "migration.neo-credentials" },
         { id: 2, name: "SAP HANA Credentials", topicId: "migration.hana-credentials" },
         { id: 3, name: "Delivery Units", topicId: "migration.delivery-unit" },
         { id: 4, name: "Migration", topicId: "migration.start-migration" },

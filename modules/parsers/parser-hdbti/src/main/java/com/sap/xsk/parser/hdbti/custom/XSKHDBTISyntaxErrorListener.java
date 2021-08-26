@@ -26,7 +26,7 @@ public class XSKHDBTISyntaxErrorListener extends BaseErrorListener {
       RecognitionException e) {
     String errorMessage = "line " + line + ":" + charPositionInLine + " at " +
         offendingSymbol + ": " + msg;
-    this.errors.add(new BaseParserErrorsModel(errorMessage, line, charPositionInLine));
+    this.errors.add(new BaseParserErrorsModel(errorMessage, line, charPositionInLine, offendingSymbol.toString(), msg));
   }
 
   public ArrayList<BaseParserErrorsModel> getErrors() {

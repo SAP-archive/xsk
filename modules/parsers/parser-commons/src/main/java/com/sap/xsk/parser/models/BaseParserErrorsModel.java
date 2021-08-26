@@ -27,4 +27,6 @@ public class BaseParserErrorsModel {
   private String errorMessage;
   private int line;
   private int charPositionInLine;
+  private String offendingSymbol;
+  private String msg;
 }

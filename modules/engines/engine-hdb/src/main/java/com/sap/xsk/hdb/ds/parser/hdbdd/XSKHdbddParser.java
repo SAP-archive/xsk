@@ -95,8 +95,8 @@ public class XSKHdbddParser implements XSKDataStructureParser {
         hdbtiParser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = hdbtiParser.cdsFile();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDBDD", logger);
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDBDD", logger);
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDBDD");
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDBDD");
 
 
         EntityDefinitionListener entityDefinitionListener = new EntityDefinitionListener();

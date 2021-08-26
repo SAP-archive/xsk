@@ -104,17 +104,17 @@ public class XSKCommonsUtils {
      * Use to log errors from antlr4 parsers
      */
     public static void logParserErrors(ArrayList<BaseParserErrorsModel> errorList, String errorType, String location,
-        String artifactType, Logger logger)
+        String artifactType)
         throws XSKArtifactParserException, ProblemsException {
         if (errorList.size() > 0) {
             for (BaseParserErrorsModel errorModel : errorList) {
               ProblemsFacade.save(location, errorType, Integer.toString(errorModel.getLine()), Integer.toString(errorModel.getCharPositionInLine()),
-                  artifactType, "Parsers", "Publish Request", "XSK");
+                 errorModel.getOffendingSymbol(), errorModel.getMsg(), artifactType, "Parsers", "Publish Request", "XSK");
 
               //Left for development purposes until ProblemsFacade is properly tested
-              logger.error(String.format(
-                  "Wrong format of %s: [%s] during parsing.: %s",
-                  artifactType, location, errorModel.getErrorMessage()));
+//              logger.error(String.format(
+//                  "Wrong format of %s: [%s] during parsing.: %s",
+//                  artifactType, location, errorModel.getErrorMessage()));
             }
             throw new XSKArtifactParserException(String.format(
                     "Wrong format of HDB %s: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version.",

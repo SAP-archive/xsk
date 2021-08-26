@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.sap.xsk</groupId>
+		<artifactId>xsk-resources-parent</artifactId>
+		<version>0.8.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<name>XSK - Resources - Neo SDK - Synchronizer</name>
+	<artifactId>xsk-resources-neo-sdk-synchronizer</artifactId>
+	<version>0.8.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.dirigible</groupId>
+			<artifactId>dirigible-engine-javascript</artifactId>
+			<version>${dirigible.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.dirigible</groupId>
+			<artifactId>dirigible-core-scheduler</artifactId>
+			<version>${dirigible.version}</version>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<!-- Workaround to keep the JavaScript APIs test sources-->
+        <maven.clean.plugin.directory>target</maven.clean.plugin.directory>
+		<license.header.location>../../licensing-header.txt</license.header.location>
+	</properties>
+
+</project>

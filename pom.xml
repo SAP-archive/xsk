@@ -160,7 +160,7 @@
 						<configuration>
 							<filesets>
 								<fileset>
-									<directory>src/main/resources/META-INF/dirigible</directory>
+									<directory>${maven.clean.plugin.directory}</directory>
 								</fileset>
 							</filesets>
 						</configuration>
@@ -220,10 +220,11 @@
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dirigible.version>5.12.14</dirigible.version>
+		<dirigible.version>5.12.15</dirigible.version>
 
 		<maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
 		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
+		<maven.clean.plugin.directory>src/main/resources/META-INF/dirigible</maven.clean.plugin.directory>
 		<maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>

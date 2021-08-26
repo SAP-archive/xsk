@@ -1,0 +1,14 @@
+schema = "MYSCHEMA";
+query = "
+-- some comment
+select distinct code from
+(
+    select current_status_code as code, status_model_code
+    from \"sap.db.status::t_status_model_transition\"
+    union all
+    select next_status_code as code, status_model_code
+    from \"sap.db.status::t_status_model_transition\"
+)
+where status_model_code = \'sap.config.EVALUATION\'
+";
+depends_on_table = ["sap.db.status::t_status_model_transition"];

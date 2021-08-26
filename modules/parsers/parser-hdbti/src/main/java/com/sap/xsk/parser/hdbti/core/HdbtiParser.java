@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbti/core/Hdbti.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbti\core\Hdbti.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbti.core;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -20,12 +20,13 @@ public class HdbtiParser extends Parser {
 		T__16=1, T__15=2, T__14=3, T__13=4, T__12=5, T__11=6, T__10=7, T__9=8, 
 		T__8=9, T__7=10, T__6=11, T__5=12, T__4=13, T__3=14, T__2=15, T__1=16, 
 		T__0=17, STRING=18, BOOLEAN=19, TRUE=20, FALSE=21, WS=22, RB=23, LB=24, 
-		EQ=25;
+		EQ=25, LINE_COMMENT=26, COMMENT=27;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'file'", "'delimField'", "'useHeaderNames'", "'hdbtable'", 
 		"':'", "'{'", "';'", "'}'", "'keys'", "'schema'", "'table'", "'delimEnclosing'", 
 		"'header'", "'cdstable'", "','", "'import'", "'distinguishEmptyFromNull'", 
-		"STRING", "BOOLEAN", "'true'", "'false'", "WS", "'['", "']'", "'='"
+		"STRING", "BOOLEAN", "'true'", "'false'", "WS", "'['", "']'", "'='", "LINE_COMMENT", 
+		"COMMENT"
 	};
 	public static final int
 		RULE_importArr = 0, RULE_objConfig = 1, RULE_assignExpression = 2, RULE_assignTable = 3, 
@@ -965,7 +966,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\33\u008d\4\2\t\2"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\35\u008d\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\3\2\3\2\3\2\3\2\3\2\3\2\7\2+\n\2\f\2\16\2.\13\2\5\2\60\n\2\3\2\3\2\3"+

@@ -45,3 +45,6 @@ WS  :   [ \t\\\r\n]+ -> skip ; // toss out whitespace
 RB: '[';
 LB: ']';
 EQ: '=';
+
+LINE_COMMENT : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
+COMMENT : '/*' .*? '*/' -> skip ; // Match "/*" stuff "*/"

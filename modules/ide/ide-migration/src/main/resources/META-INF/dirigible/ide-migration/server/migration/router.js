@@ -18,18 +18,14 @@ class MigrationRouter {
     start() {
       let facade = new MigrationFacade()
       rs.service()
-      .resource("open-tunnel")
-        .post(facade.openTunnel)
       .resource("setup-migration")
-        .post(facade.setupConnection)
+        .post(facade.openTunnelAndFechDus)
       .resource("delivery-units")
         .post(facade.getAllDeliveryUnits)
-      .resource("copy-files")
+      .resource("execute-migration")
         .post(facade.copyAllFilesForDu)
       .execute();
     }
 }
 
 module.exports = MigrationRouter;
-
-

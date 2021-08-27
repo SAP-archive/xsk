@@ -30,13 +30,14 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
         body = {
             neo: neoData,
             hana: hanaData,
-            "connectionId": duData.connectionId,
+            "neoTunnelOutput": duData.neoTunnelOutput,
             "workspace": duData.workspace,
             "vendor": duData.du.vendor,
             "du": duData.du.name,
         }
         $http.post(
-            "/services/v4/migration-operations/execute-migration",
+            // "/services/v4/migration-operations/execute-migration",
+            "/services/v4/js/ide-migration/server/app.js/execute-migration",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {

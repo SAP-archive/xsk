@@ -387,6 +387,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -523,6 +530,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -547,11 +561,9 @@
 <ul>
 <li>Definition: <a href="https://github.com/SAP/xsk/issues/21">https://github.com/SAP/xsk/issues/21</a></li>
 <li>Module: <a href="https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/xsk/util/codec/codec.js">util/codec/codec.js</a></li>
+<li>Status: <code>alpha</code></li>
 </ul>
 <h3 id="basic-usage">Basic Usage</h3>
-<ul>
-<li>
-<p>Sample usage:
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">codec</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">codec</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">;</span>
 
@@ -569,40 +581,36 @@
 <span class="kd">var</span> <span class="nx">decodedBase64</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">decodeBase64</span><span class="p">(</span><span class="nx">encodedToBase64</span><span class="p">);</span>
 <span class="c1">//Converts an ArrayBuffer containing UTF-8 encoded string to a JavaScript String object </span>
 <span class="kd">var</span> <span class="nx">valueFromBase64</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">decodedBase64</span><span class="p">);</span>
-</code></pre></div></p>
-</li>
-<li>
-<p>Methods</p>
-</li>
-</ul>
+</code></pre></div>
+<h3 id="functions">Functions</h3>
 <table>
 <thead>
 <tr>
-<th>Members</th>
+<th>Function</th>
 <th>Description</th>
-<th align="center">Type</th>
+<th>Returns</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>decodeBase64(base64Data)</td>
-<td>Decodes Base64 data</td>
-<td align="center">ArrayBuffer</td>
+<td><strong>decodeBase64(data)</strong></td>
+<td>Decodes Base64 data.</td>
+<td><em><code>ArrayBuffer</code></em></td>
 </tr>
 <tr>
-<td>decodeHex(hexData)</td>
+<td><strong>decodeHex(data)</strong></td>
 <td>Decodes hexadecimal data.</td>
-<td align="center">ArrayBuffer</td>
+<td><em><code>ArrayBuffer</code></em></td>
 </tr>
 <tr>
-<td>encodeBase64(data)</td>
+<td><strong>encodeBase64(data)</strong></td>
 <td>Encodes data into Base64.</td>
-<td align="center">String</td>
+<td><em><code>string</code></em></td>
 </tr>
 <tr>
-<td>encodeHex(data)</td>
+<td><strong>encodeHex(data)</strong></td>
 <td>Encodes data into hexadecimal format.</td>
-<td align="center">String</td>
+<td><em><code>string</code></em></td>
 </tr>
 </tbody>
 </table>

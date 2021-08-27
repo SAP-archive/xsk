@@ -298,7 +298,7 @@
       
         <li class="md-nav__item">
   <a href="#basic-usage" class="md-nav__link">
-    Basic usage:
+    Basic Usage
   </a>
   
 </li>
@@ -518,7 +518,7 @@
       
         <li class="md-nav__item">
   <a href="#basic-usage" class="md-nav__link">
-    Basic usage:
+    Basic Usage
   </a>
   
 </li>
@@ -541,17 +541,17 @@
                 
                 
                 <h1 id="import">$.import</h1>
-<p>Imports a server-side JavaScript library artifact. The library is a design-time artifact located in the repository. JavaScript library design-time artifacts have the suffix '.xsjslib'.</p>
+<p>Imports a server-side JavaScript library artifact. The library is a design-time artifact located in the repository. JavaScript library design-time artifacts have the suffix <code>*.xsjslib</code>.</p>
 <div class="tabbed-set" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Overview</label><div class="tabbed-content"></div>
 </div>
 <ul>
 <li>Definition: <a href="https://github.com/SAP/xsk/issues/18">https://github.com/SAP/xsk/issues/18</a></li>
 <li>Module: <a href="https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/xsk/import/import.js">import/import.js</a></li>
+<li>Status: <code>alpha</code></li>
 </ul>
-<h3 id="basic-usage">Basic usage:</h3>
-<p>in xsk :
-<div class="highlight"><pre><span></span><code>root/
-|-- sap
+<h3 id="basic-usage">Basic Usage</h3>
+<p>Project structure :
+<div class="highlight"><pre><span></span><code>|-- sap
      |--myapp
           |--lib
              |--math.xsjslib
@@ -569,29 +569,31 @@
 </thead>
 <tbody>
 <tr>
-<td>package</td>
+<td><strong>package</strong></td>
 <td>string</td>
-<td>The name of the package in which the library object is located</td>
+<td><em><code>The name of the package in which the library object is located</code></em></td>
 </tr>
 <tr>
-<td>library</td>
+<td><strong>library</strong></td>
 <td>string</td>
-<td>The name of the library object in the repository (without the suffix .xsjslib)</td>
+<td><em><code>The name of the library object in the repository (without the suffix .xsjslib)</code></em></td>
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><span class="c1">// import .xsjslib to our file using $.import api (&quot;package&quot;,&quot;library&quot;)</span>
-<span class="c1">//in our case package equals &quot;sap.myapp.lib&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// Import .xsjslib to our file using $.import api (&quot;package&quot;,&quot;library&quot;)</span>
+<span class="c1">// In our case package equals to &quot;sap.myapp.lib&quot;</span>
+
 <span class="kd">var</span> <span class="nx">mathlib</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="k">import</span><span class="p">(</span><span class="s2">&quot;sap.myapp.lib&quot;</span><span class="p">,</span><span class="s2">&quot;math&quot;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http/v4/response&#39;</span><span class="p">);</span>
 
 <span class="kd">var</span> <span class="nx">square</span> <span class="o">=</span> <span class="nx">mathlib</span><span class="p">.</span><span class="nx">square</span><span class="p">(</span><span class="mf">6</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">multiply</span> <span class="o">=</span> <span class="nx">mathlib</span><span class="p">.</span><span class="nx">multiply</span><span class="p">(</span><span class="mf">4</span><span class="p">,</span><span class="mf">9</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">division</span> <span class="o">=</span> <span class="nx">mathlib</span><span class="p">.</span><span class="nx">division</span><span class="p">(</span><span class="mf">9</span><span class="p">,</span><span class="mf">3</span><span class="p">);</span>
 
-<span class="nx">response</span><span class="p">.</span><span class="nx">print</span><span class="p">(</span><span class="s2">&quot;number is &quot;</span><span class="o">+</span> <span class="nx">square</span><span class="p">);</span>
-<span class="nx">response</span><span class="p">.</span><span class="nx">print</span><span class="p">(</span><span class="s2">&quot;devision = &quot;</span><span class="o">+</span> <span class="nx">division</span><span class="p">);</span>
-<span class="nx">response</span><span class="p">.</span><span class="nx">print</span><span class="p">(</span><span class="s2">&quot;multiply = &quot;</span><span class="o">+</span> <span class="nx">multiply</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="sb">`number is </span><span class="si">${</span><span class="nx">square</span><span class="si">}</span><span class="sb"></span>
+<span class="sb">devision = </span><span class="si">${</span><span class="nx">division</span><span class="si">}</span><span class="sb"></span>
+<span class="sb">multiply = </span><span class="si">${</span><span class="nx">multiply</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 </code></pre></div>
                 
                   

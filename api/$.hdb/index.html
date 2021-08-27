@@ -292,40 +292,26 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coverage" class="md-nav__link">
-    Coverage
+  <a href="#functions" class="md-nav__link">
+    Functions
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#hdb_1" class="md-nav__link">
-    $.hdb
+  <a href="#properties" class="md-nav__link">
+    Properties
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#members" class="md-nav__link">
-    Members
+  <a href="#classes" class="md-nav__link">
+    Classes
   </a>
   
-    <nav class="md-nav" aria-label="Members">
+    <nav class="md-nav" aria-label="Classes">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#isolation-properties" class="md-nav__link">
-    Isolation Properties
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#types" class="md-nav__link">
-    Types
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#hdbconnection" class="md-nav__link">
@@ -336,7 +322,7 @@
         
           <li class="md-nav__item">
   <a href="#hdbresultset" class="md-nav__link">
-    $.hdb.ResultSet()
+    $.hdb.ResultSet
   </a>
   
 </li>
@@ -600,40 +586,26 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coverage" class="md-nav__link">
-    Coverage
+  <a href="#functions" class="md-nav__link">
+    Functions
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#hdb_1" class="md-nav__link">
-    $.hdb
+  <a href="#properties" class="md-nav__link">
+    Properties
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#members" class="md-nav__link">
-    Members
+  <a href="#classes" class="md-nav__link">
+    Classes
   </a>
   
-    <nav class="md-nav" aria-label="Members">
+    <nav class="md-nav" aria-label="Classes">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#isolation-properties" class="md-nav__link">
-    Isolation Properties
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#types" class="md-nav__link">
-    Types
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#hdbconnection" class="md-nav__link">
@@ -644,7 +616,7 @@
         
           <li class="md-nav__item">
   <a href="#hdbresultset" class="md-nav__link">
-    $.hdb.ResultSet()
+    $.hdb.ResultSet
   </a>
   
 </li>
@@ -701,6 +673,7 @@ performance.</p>
 <ul>
 <li>Definition: <a href="https://github.com/SAP/xsk/issues/14">https://github.com/SAP/xsk/issues/14</a></li>
 <li>Module: <a href="https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/xsk/hdb/hdb.js">hdb/hdb.js</a></li>
+<li>Status: <code>alpha</code></li>
 </ul>
 <h3 id="basic-usage">Basic Usage</h3>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">;</span>
@@ -741,364 +714,408 @@ performance.</p>
 <span class="nx">response</span><span class="p">.</span><span class="nx">flush</span><span class="p">();</span>
 <span class="nx">response</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
 </code></pre></div>
-<blockquote></blockquote>
-<h3 id="coverage">Coverage</h3>
-<h3 id="hdb_1">$.hdb</h3>
+<h3 id="functions">Functions</h3>
 <table>
 <thead>
 <tr>
-<th>Method</th>
+<th>Function</th>
 <th>Description</th>
+<th>Returns</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>getConnection()</td>
-<td>Returns a connection to the database</td>
+<td><strong>getConnection()</strong></td>
+<td>Returns a connection to the database.</td>
+<td><em><code>$.hdb.Connection</code></em></td>
 </tr>
 </tbody>
 </table>
-<h3 id="members">Members</h3>
-<table>
-<thead>
-<tr>
-<th>Members</th>
-<th>Description</th>
-<th align="center">Type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>isolation</td>
-<td>Constants that represent the isolation levels for a transaction</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td>types</td>
-<td>Set of constants of the database column types. The JavaScript Type column below describes the implicit Database to JavaScript type convertions performed by the $.hdb API</td>
-<td align="center"></td>
-</tr>
-</tbody>
-</table>
-<h4 id="isolation-properties">Isolation Properties</h4>
+<h3 id="properties">Properties</h3>
 <table>
 <thead>
 <tr>
 <th>Name</th>
+<th>Description</th>
 <th>Type</th>
-<th align="center">Default</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>READ_COMITTED</td>
-<td>number</td>
-<td align="center">2</td>
+<td>isolation.READ_COMITTED</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>2</code></em></td>
 </tr>
 <tr>
-<td>REPEATABLE_READ</td>
-<td>number</td>
-<td align="center">4</td>
+<td>isolation.REPEATABLE_READ</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>4</code></em></td>
 </tr>
 <tr>
-<td>SERIALIZABLE</td>
-<td>number</td>
-<td align="center">8</td>
+<td>isolation.SERIALIZABLE</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>8</code></em></td>
+</tr>
+<tr>
+<td>types.TINYINT</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>1</code></em></td>
+</tr>
+<tr>
+<td>types.SMALLINT</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>2</code></em></td>
+</tr>
+<tr>
+<td>types.INTEGER</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>3</code></em></td>
+</tr>
+<tr>
+<td>types.BIGINT</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>4</code></em></td>
+</tr>
+<tr>
+<td>types.DECIMAL</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>5</code></em></td>
+</tr>
+<tr>
+<td>types.REAL</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>6</code></em></td>
+</tr>
+<tr>
+<td>types.DOUBLE</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>7</code></em></td>
+</tr>
+<tr>
+<td>types.CHAR</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>8</code></em></td>
+</tr>
+<tr>
+<td>types.VARCHAR</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>9</code></em></td>
+</tr>
+<tr>
+<td>types.NCHAR</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>10</code></em></td>
+</tr>
+<tr>
+<td>types.NVARCHAR</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>11</code></em></td>
+</tr>
+<tr>
+<td>types.BINARY</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>12</code></em></td>
+</tr>
+<tr>
+<td>types.VARBINARY</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>13</code></em></td>
+</tr>
+<tr>
+<td>types.DATE</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>14</code></em></td>
+</tr>
+<tr>
+<td>types.TIME</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>15</code></em></td>
+</tr>
+<tr>
+<td>types.TIMESTAMP</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>16</code></em></td>
+</tr>
+<tr>
+<td>types.CLOB</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>25</code></em></td>
+</tr>
+<tr>
+<td>types.NCLOB</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>26</code></em></td>
+</tr>
+<tr>
+<td>types.BLOB</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>27</code></em></td>
+</tr>
+<tr>
+<td>types.SMALLDECIMAL</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>47</code></em></td>
+</tr>
+<tr>
+<td>types.TEXT</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>51</code></em></td>
+</tr>
+<tr>
+<td>types.SHORTTEXT</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>52</code></em></td>
+</tr>
+<tr>
+<td>types.ALPHANUM</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>55</code></em></td>
+</tr>
+<tr>
+<td>types.SECONDDATE</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>62</code></em></td>
+</tr>
+<tr>
+<td>types.ST_GEOMETRY</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>74</code></em></td>
+</tr>
+<tr>
+<td>types.ST_POINT</td>
+<td>-</td>
+<td><em><code>number</code></em></td>
+<td><em><code>75</code></em></td>
 </tr>
 </tbody>
 </table>
-<h4 id="types">Types</h4>
-<table>
-<thead>
-<tr>
-<th align="left">Name</th>
-<th align="center">Value</th>
-<th align="center">JavaScript Type</th>
-<th>Comment</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">TINYINT</td>
-<td align="center">1</td>
-<td align="center">Number</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">SMALLINT</td>
-<td align="center">2</td>
-<td align="center">Number</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">INTEGER</td>
-<td align="center">3</td>
-<td align="center">Number</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">BIGINT</td>
-<td align="center">4</td>
-<td align="center">ctypes.Int64</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">DECIMAL</td>
-<td align="center">5</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">REAL</td>
-<td align="center">6</td>
-<td align="center">Number</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">DOUBLE</td>
-<td align="center">7</td>
-<td align="center">Number</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">CHAR</td>
-<td align="center">8</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">VARCHAR</td>
-<td align="center">9</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">NCHAR</td>
-<td align="center">10</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">NVARCHAR</td>
-<td align="center">11</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">BINARY</td>
-<td align="center">12</td>
-<td align="center">ArrayBuffer</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">VARBINARY</td>
-<td align="center">13</td>
-<td align="center">ArrayBuffer</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">DATE</td>
-<td align="center">14</td>
-<td align="center">Date</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">TIME</td>
-<td align="center">15</td>
-<td align="center">Date</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">TIMESTAMP</td>
-<td align="center">16</td>
-<td align="center">Date</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">CLOB</td>
-<td align="center">25</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">NCLOB</td>
-<td align="center">26</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">BLOB</td>
-<td align="center">27</td>
-<td align="center">ArrayBuffer</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">SMALLDECIMAL</td>
-<td align="center">47</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">TEXT</td>
-<td align="center">51</td>
-<td align="center">ArrayBuffer</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">SHORTTEXT</td>
-<td align="center">52</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">ALPHANUM</td>
-<td align="center">55</td>
-<td align="center">String</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">SECONDDATE</td>
-<td align="center">62</td>
-<td align="center">Date</td>
-<td></td>
-</tr>
-<tr>
-<td align="left">ST_GEOMETRY</td>
-<td align="center">74</td>
-<td align="center">ArrayBuffer</td>
-<td>consider using SQL's ST_asGeoJSON() on ST_GEOMETRY columns for easy consumption</td>
-</tr>
-<tr>
-<td align="left">ST_POINT</td>
-<td align="center">75</td>
-<td align="center">ArrayBuffer</td>
-<td>consider using SQL's ST_asGeoJSON() on ST_POINT columns for easy consumption</td>
-</tr>
-</tbody>
-</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li><strong>isolation</strong> - constants that represent the isolation levels for a transaction.</li>
+<li><strong>types</strong> - set of constants of the database column types.</li>
+<li><code>types.ST_GEOMETRY</code> - consider using SQL's <code>ST_asGeoJSON()</code> on ST_GEOMETRY columns for easy consumption.</li>
+<li><code>types.ST_POINT</code> - consider using SQL's <code>ST_asGeoJSON()</code> on ST_POINT columns for easy consumption</li>
+</ul>
+</div>
+<h3 id="classes">Classes</h3>
 <h4 id="hdbconnection">$.hdb.Connection</h4>
+<p><strong>Functions</strong></p>
 <table>
 <thead>
 <tr>
-<th>Method</th>
+<th>Function</th>
 <th>Description</th>
+<th>Returns</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>close()</td>
+<td><strong>close()</strong></td>
 <td>Closes the connection.</td>
+<td><em><code>-</code></em></td>
 </tr>
 <tr>
-<td>commit()</td>
+<td><strong>commit()</strong></td>
 <td>Commits the changes.</td>
+<td><em><code>-</code></em></td>
 </tr>
 <tr>
-<td>isClosed()</td>
+<td><strong>isClosed()</strong></td>
 <td>Checks if the connection is closed.</td>
+<td><em><code>boolean</code></em></td>
 </tr>
 <tr>
-<td>executeQuery(query, arguments(optional))</td>
-<td>Executes a database query. The query string is prepared and the additional arguments are applied as statement parameters, before the statement is executed.</td>
+<td><strong>executeQuery(query, args)</strong></td>
+<td>Executes a database query.</td>
+<td><em><code>$.hdb.ResultSet</code></em></td>
 </tr>
 <tr>
-<td>executeUpdate(statement, arguments(optional))</td>
-<td>Executes a SQL statement, which changes the database state. SELECT and CALL statements are not allowed here. The query string is prepared and the additional arguments are applied as statement parameters, before the statement is executed.</td>
+<td><strong>executeUpdate(statement, args)</strong></td>
+<td>Executes a SQL statement, which changes the database state.</td>
+<td><em><code>$.hdb.ResultSet</code></em></td>
 </tr>
 <tr>
-<td>rollback()</td>
+<td><strong>rollback()</strong></td>
 <td>Rolls back the changes.</td>
+<td><em><code>-</code></em></td>
 </tr>
 <tr>
-<td>setAutoCommit(enable)</td>
-<td>Changes the auto-commit flag of the connection</td>
+<td><strong>setAutoCommit(enable)</strong></td>
+<td>Changes the auto-commit flag of the connection.</td>
+<td><em><code>-</code></em></td>
 </tr>
 </tbody>
 </table>
-<h4 id="hdbresultset">$.hdb.ResultSet()</h4>
+<h4 id="hdbresultset">$.hdb.ResultSet</h4>
+<p><strong>Functions</strong></p>
 <table>
 <thead>
 <tr>
-<th>Members</th>
+<th>Function</th>
 <th>Description</th>
-<th align="center">Type</th>
+<th>Returns</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>lenght</td>
-<td>The number of rows in the $.hdb.ResultSet object</td>
-<td align="center">number</td>
-</tr>
-<tr>
-<td>metadata</td>
-<td>Returns the ResultSetMetaData from $.hdb.ResultSet object.</td>
-<td align="center">ResultSetMetaData</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Description</th>
-<th align="center">Type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>getIterator()</td>
+<td><strong>getIterator()</strong></td>
 <td>Returns an iterator over this result set.</td>
-<td align="center">ResultSetIterator</td>
+<td><em><code>$.hdb.ResultSetIterator</code></em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Properties</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>lenght</strong></td>
+<td>The number of rows in the $.hdb.ResultSet object</td>
+<td><em><code>number</code></em></td>
+</tr>
+<tr>
+<td><strong>metadata</strong></td>
+<td>Returns the ResultSetMetaData from $.hdb.ResultSet object.</td>
+<td><em><code>$.hdb.ResultSetMetaData</code></em></td>
 </tr>
 </tbody>
 </table>
 <h4 id="hdbresultsetiterator">$.hdb.ResultSetIterator</h4>
+<p><strong>Functions</strong></p>
 <table>
 <thead>
 <tr>
 <th>Method</th>
 <th>Description</th>
-<th align="center">Type</th>
+<th>Type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>next()</td>
-<td>Checks if the underlying $.hdb.ResultSet has more rows and sets the value of the iterator to the next row if it exists.</td>
-<td align="center">Boolean</td>
+<td><strong>next()</strong></td>
+<td>Checks if the result set has more rows and sets the value of the iterator to the next row if it exists.</td>
+<td><em><code>boolean</code></em></td>
 </tr>
 <tr>
-<td>value()</td>
-<td>Returns the current row that the iterator's value is set to. Should always be called after a call to next();</td>
-<td align="center"><code>Row of a $.hdb.ResultSet.</code></td>
+<td><strong>value()</strong></td>
+<td>Returns the current row that the iterator's value is set to, should always be called after a call to <code>next()</code>.</td>
+<td><em><code>row of a $.hdb.ResultSet</code></em></td>
 </tr>
 </tbody>
 </table>
 <h4 id="hdbresultsetmetadata">$.hdb.ResultSetMetaData</h4>
-<p>Represents the metadata of a result set.</p>
+<p><strong>Properties</strong></p>
 <table>
 <thead>
 <tr>
-<th>Members</th>
+<th>Name</th>
 <th>Description</th>
-<th align="center">Type</th>
+<th>Type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>column</td>
-<td>Returns an array of $.hdb.ColumnMetadata objects, each of which represents the metadata for a particular column.</td>
-<td align="center">Array</td>
+<td><strong>column</strong></td>
+<td>Returns an array of column metadata objects, each of which represents the metadata for a particular column.</td>
+<td><em><code>array of $.hdb.ColumnMetadata</code></em></td>
 </tr>
 </tbody>
 </table>
 <h3 id="hdb-columnmetadata">$.hdb. ColumnMetadata</h3>
-<p>Represents the metadata of a single column from a result set.</p>
-<ul>
-<li>Sample usage:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">conn</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">();</span>
+<p><strong>Properties</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>catalogName</strong></td>
+<td>Returns the column's catalog name.</td>
+<td><em><code>string</code></em></td>
+</tr>
+<tr>
+<td><strong>displaySize</strong></td>
+<td>Returns the column's display size.</td>
+<td><em><code>number</code></em></td>
+</tr>
+<tr>
+<td><strong>isNullable</strong></td>
+<td>Returns true if the column is nullable and false otherwise.</td>
+<td><em><code>number</code></em></td>
+</tr>
+<tr>
+<td><strong>label</strong></td>
+<td>Returns the column's label.</td>
+<td><em><code>string</code></em></td>
+</tr>
+<tr>
+<td><strong>precision</strong></td>
+<td>Returns the column's name.</td>
+<td><em><code>string</code></em></td>
+</tr>
+<tr>
+<td><strong>scale</strong></td>
+<td>Returns the column's scale.</td>
+<td><em><code>string</code></em></td>
+</tr>
+<tr>
+<td><strong>tableName</strong></td>
+<td>Returns the name of the table to which the column belongs.</td>
+<td><em><code>string</code></em></td>
+</tr>
+<tr>
+<td><strong>type</strong></td>
+<td>Returns the column's type.</td>
+<td><em><code>string</code></em></td>
+</tr>
+<tr>
+<td><strong>typeName</strong></td>
+<td>Returns the column's type name.</td>
+<td><em><code>$.hdb.types</code></em></td>
+</tr>
+</tbody>
+</table>
+<details class="example" open="open"><summary>Sample Usage</summary><div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">conn</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">();</span>
 <span class="nx">conn</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s1">&#39;CREATE SCHEMA EXAMPLE&#39;</span><span class="p">);</span>
 <span class="nx">conn</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s1">&#39;CREATE TABLE EXAMPLE.TEST_METADATA( TINT TINYINT NOT NULL, FLOAT FLOAT )&#39;</span><span class="p">);</span>
 <span class="nx">conn</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s1">&#39;INSERT INTO EXAMPLE.TEST_METADATA VALUES(12, 34.5)&#39;</span><span class="p">);</span>
@@ -1126,62 +1143,7 @@ performance.</p>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">;</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
 </code></pre></div>
-<table>
-<thead>
-<tr>
-<th>Members</th>
-<th>Description</th>
-<th align="center">Type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>catalogName</td>
-<td>Returns the column's catalog name.</td>
-<td align="center">String</td>
-</tr>
-<tr>
-<td>displaySize</td>
-<td>Returns the column's display size.</td>
-<td align="center">Number</td>
-</tr>
-<tr>
-<td>isNullable</td>
-<td>Returns true if the column is nullable and false otherwise.</td>
-<td align="center">Number</td>
-</tr>
-<tr>
-<td>label</td>
-<td>Returns the column's label.</td>
-<td align="center">String</td>
-</tr>
-<tr>
-<td>precision</td>
-<td>Returns the column's name.</td>
-<td align="center">String</td>
-</tr>
-<tr>
-<td>scale</td>
-<td>Returns the column's scale.</td>
-<td align="center">String</td>
-</tr>
-<tr>
-<td>tableName</td>
-<td>Returns the name of the table to which the column belongs.</td>
-<td align="center">String</td>
-</tr>
-<tr>
-<td>type</td>
-<td>Returns the column's type.</td>
-<td align="center">String</td>
-</tr>
-<tr>
-<td>typeName</td>
-<td>Returns the column's type name.</td>
-<td align="center"><code>$.hdb.types</code></td>
-</tr>
-</tbody>
-</table>
+</details>
                 
                   
                 

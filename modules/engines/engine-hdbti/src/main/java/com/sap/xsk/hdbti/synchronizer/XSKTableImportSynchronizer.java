@@ -146,7 +146,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
       } catch (ProblemsException problemsException) {
         logger.error(problemsException.getMessage(), problemsException);
       } catch (XSKArtifactParserException parserException) {
-        logger.error(parserException.getMessage(), parserException);
+        logger.error(parserException.getMessage());
       } catch (SQLException throwables) {
         throwables.printStackTrace();
       }
@@ -174,7 +174,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     } catch (ProblemsException problemsException) {
       logger.error(problemsException.getMessage(), problemsException);
     } catch (XSKArtifactParserException parserException) {
-      logger.error(parserException.getMessage(), parserException);
+      logger.error(parserException.getMessage());
     }
 
   }

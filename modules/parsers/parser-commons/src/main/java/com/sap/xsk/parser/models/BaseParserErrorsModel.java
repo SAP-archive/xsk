@@ -24,7 +24,6 @@ import lombok.ToString;
 @ToString
 public class BaseParserErrorsModel {
 
-  private String errorMessage;
   private int line;
   private int charPositionInLine;
   private String offendingSymbol;

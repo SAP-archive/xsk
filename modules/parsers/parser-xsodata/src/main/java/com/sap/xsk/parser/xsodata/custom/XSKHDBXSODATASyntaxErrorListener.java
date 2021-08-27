@@ -25,9 +25,8 @@ public class XSKHDBXSODATASyntaxErrorListener extends BaseErrorListener {
   @Override
   public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg,
                           RecognitionException e) {
-    String errorMessage = "line " + line + ":" + charPositionInLine + " at " +
-        offendingSymbol + ": " + msg;
-    this.errors.add(new BaseParserErrorsModel(errorMessage, line, charPositionInLine, offendingSymbol.toString(), msg));
+
+    this.errors.add(new BaseParserErrorsModel(line, charPositionInLine, offendingSymbol == null? "" : offendingSymbol.toString(), msg));
   }
 
   public ArrayList<BaseParserErrorsModel> getErrors() {

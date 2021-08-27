@@ -341,15 +341,15 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
+          <li class="md-nav__item">
   <a href="#hdb-columnmetadata" class="md-nav__link">
     $.hdb. ColumnMetadata
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -635,15 +635,15 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
+          <li class="md-nav__item">
   <a href="#hdb-columnmetadata" class="md-nav__link">
     $.hdb. ColumnMetadata
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -677,42 +677,40 @@ performance.</p>
 </ul>
 <h3 id="basic-usage">Basic Usage</h3>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http/v4/response&#39;</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">tableName</span> <span class="o">=</span> <span class="s2">&quot;CARS&quot;</span><span class="p">;</span>
-
+<span class="kd">let</span> <span class="nx">connection</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 <span class="k">try</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">connection</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">();</span>
+    <span class="nx">connection</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">();</span>
 
-    <span class="c1">// Make sure to create the table only once</span>
-    <span class="nx">connection</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE &quot;</span> <span class="o">+</span> <span class="nx">tableName</span> <span class="o">+</span> <span class="s2">&quot; (MAKE varchar(255), MODEL varchar(255))&quot;</span><span class="p">);</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="nx">connection</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s2">&quot;DROP TABLE CARS&quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Do nothing</span>
+    <span class="p">}</span>
+    <span class="nx">connection</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE CARS (MAKE varchar(255), MODEL varchar(255))&quot;</span><span class="p">);</span>
 
-    <span class="kd">var</span> <span class="nx">rows</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s2">&quot;INSERT INTO &quot;</span> <span class="o">+</span> <span class="nx">tableName</span> <span class="o">+</span>  
-                                                      <span class="s2">&quot; (MAKE, MODEL) VALUES (&#39;BMW&#39;, &#39;325&#39;), (&#39;HONDA&#39;, &#39;ACCORD&#39;);&quot;</span><span class="p">);</span>
-    <span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">&quot;Query OK, &quot;</span> <span class="o">+</span> <span class="nx">rows</span> <span class="o">+</span> <span class="s2">&quot; rows affected\n&quot;</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">rows</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s2">&quot;INSERT INTO CARS (MAKE, MODEL) VALUES (&#39;BMW&#39;, &#39;325&#39;)&quot;</span><span class="p">);</span>
+    <span class="nx">rows</span> <span class="o">+=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s2">&quot;INSERT INTO CARS (MAKE, MODEL) VALUES (&#39;HONDA&#39;, &#39;ACCORD&#39;)&quot;</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">totalText</span> <span class="o">=</span> <span class="sb">`Query OK, </span><span class="si">${</span><span class="nx">rows</span><span class="si">}</span><span class="sb"> rows affected\n\n`</span><span class="p">;</span>
 
- <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">executeQuery</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM &#39;</span><span class="o">+</span> <span class="nx">tableName</span><span class="p">);</span>
- <span class="kd">var</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">getIterator</span><span class="p">();</span>
- <span class="kd">var</span> <span class="nx">metadata</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">metadata</span><span class="p">.</span><span class="nx">columns</span><span class="p">;</span>
- <span class="kd">var</span> <span class="nx">columnCount</span> <span class="o">=</span> <span class="nx">metadata</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
- <span class="kd">var</span> <span class="nx">totalText</span> <span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">executeQuery</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM CARS&quot;</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">getIterator</span><span class="p">();</span>
+    <span class="kd">let</span> <span class="nx">metadata</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">metadata</span><span class="p">.</span><span class="nx">columns</span><span class="p">;</span>
 
- <span class="k">while</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">())</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">currentRow</span> <span class="o">=</span> <span class="nx">iterator</span><span class="p">.</span><span class="nx">value</span><span class="p">();</span>
-    <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">metadata</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span><span class="o">+</span> <span class="nx">currentRow</span><span class="p">[</span><span class="nx">metadata</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">name</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">metadata</span><span class="p">[</span><span class="mf">1</span><span class="p">].</span><span class="nx">name</span><span class="o">+</span> <span class="s2">&quot;: &quot;</span><span class="o">+</span> <span class="nx">currentRow</span><span class="p">[</span><span class="nx">metadata</span><span class="p">[</span><span class="mf">1</span><span class="p">].</span><span class="nx">name</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;\n&quot;</span><span class="p">;</span>
-    <span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-<span class="p">}</span>
-
-
+    <span class="k">while</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">())</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">currentRow</span> <span class="o">=</span> <span class="nx">iterator</span><span class="p">.</span><span class="nx">value</span><span class="p">();</span>
+        <span class="nx">totalText</span> <span class="o">+=</span> <span class="sb">`</span><span class="si">${</span><span class="nx">metadata</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">name</span><span class="si">}</span><span class="sb">: </span><span class="si">${</span><span class="nx">currentRow</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="si">}</span><span class="sb">, </span><span class="si">${</span><span class="nx">metadata</span><span class="p">[</span><span class="mf">1</span><span class="p">].</span><span class="nx">name</span><span class="si">}</span><span class="sb">: </span><span class="si">${</span><span class="nx">currentRow</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="si">}</span><span class="sb">\n`</span><span class="p">;</span>
+        <span class="c1">// totalText += `${metadata[0].name}: ${currentRow[metadata[0].name]}, ${metadata[1].name}: ${currentRow[metadata[1].name]}\n`;</span>
+    <span class="p">}</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">totalText</span> <span class="p">);</span>
 <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">connection</span><span class="p">.</span><span class="nx">rollback</span><span class="p">();</span>
-    <span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">&quot;Transaction was rolled back: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Transaction was rolled back: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
 <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
-       <span class="nx">connection</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">connection</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">connection</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+    <span class="p">}</span>
 <span class="p">}</span>
-
-<span class="nx">response</span><span class="p">.</span><span class="nx">flush</span><span class="p">();</span>
-<span class="nx">response</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
 </code></pre></div>
 <h3 id="functions">Functions</h3>
 <table>
@@ -1057,7 +1055,7 @@ performance.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="hdb-columnmetadata">$.hdb. ColumnMetadata</h3>
+<h4 id="hdb-columnmetadata">$.hdb. ColumnMetadata</h4>
 <p><strong>Properties</strong></p>
 <table>
 <thead>

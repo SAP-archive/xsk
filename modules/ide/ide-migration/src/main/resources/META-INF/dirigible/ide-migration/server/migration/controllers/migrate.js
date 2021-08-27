@@ -42,7 +42,7 @@ class MigrationController {
         } 
     }
 
-    copyAllFilesForDu(du, completion) {
+    copyAllFilesForDu(workspaceName, du, completion) {
         if (!this.repo) {
             return completion("Repository not initialized", null);
         }
@@ -51,7 +51,7 @@ class MigrationController {
         try {
             this.repo.getAllFilesForDu(context, du, (err, files, packages) => {
                 console.log("Files list: " + JSON.stringify(files));
-                this.dumpSourceFiles(files, du, function(err){
+                this.dumpSourceFiles(workspaceName, files, du, function(err){
                     completion(err);
                 })
             })
@@ -61,13 +61,16 @@ class MigrationController {
         } 
     }
 
-    dumpSourceFiles(lists, du, callback) {
-
-        let workspace = workspaceManager.getWorkspace(du.name)
-        if (!workspace) {
-            workspaceManager.createWorkspace(du.name)
+    dumpSourceFiles(workspaceName, lists, du, callback) {
+        let workspace;
+        if (!workspaceName) {
             workspace = workspaceManager.getWorkspace(du.name)
-        }
+            if (!workspace) {
+                workspaceManager.createWorkspace(du.name)
+                workspace = workspaceManager.getWorkspace(du.name)
+            }
+        } 
+        workspace = workspaceManager.getWorkspace(workspaceName);
 
         for(let i = 0; i < lists.length; i++) {
             const file = lists[i];

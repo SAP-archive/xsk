@@ -54,7 +54,7 @@ function getAllDUsTest() {
         // console.log(units)
         if (units.length > 0) {
             const du = {"ach":"","caption":"","lastUpdate":"2021-06-18 11:47:41.1100000","name":"MIGR_TOOLS","ppmsID":"","responsible":"","sp_PPMS_ID":"","vendor":"migration.sap.com","version":"","version_patch":"","version_sp":""};
-            migrationController.copyAllFilesForDu(du, (err) => {
+            migrationController.copyAllFilesForDu(null, du, (err) => {
                 if (err) {
                     throw err;
                 } else {

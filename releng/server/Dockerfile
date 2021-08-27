@@ -17,7 +17,19 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
-FROM xsk-${JDK_TYPE} AS final
+FROM xsk-${JDK_TYPE} AS dependencies-base
+# Install OpenJDK-8
+RUN apt-get update && \
+    apt-get install -y openjdk-8-jdk && \
+    apt-get install -y ant && \
+    apt-get clean;
+
+# Fix certificate issues
+RUN apt-get update && \
+    apt-get install ca-certificates-java && \
+    apt-get clean && \
+    update-ca-certificates -f;
+
 
 RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/
@@ -31,6 +43,10 @@ RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc
 #Activate DEBUG mode
 #ENV JPDA_ADDRESS=0.0.0.0:8000
 #ENV JPDA_TRANSPORT=dt_socket
+
+# Setup JAVA8_HOME for Neo SDK
+ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+RUN export JAVA8_HOME
 
 ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 

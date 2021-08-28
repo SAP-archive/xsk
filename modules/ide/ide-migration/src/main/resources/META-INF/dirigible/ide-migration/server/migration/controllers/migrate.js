@@ -20,7 +20,7 @@ class MigrationController {
     repo = null;
 
     setupConnection(db, neoCredentials, cuser, hanaPass) {
-            database.createDataSource(db, "com.sap.db.jdbc.Driver", neoCredentials['url'], cuser, hanaPass, null);
+            database.createDataSource(db, "com.sap.db.jdbc.Driver", neoCredentials['jdbcUrl'], cuser, hanaPass, null);
 
             this.connection = database.getConnection('dynamic', db);
             this.repo = new HanaRepository(this.connection);

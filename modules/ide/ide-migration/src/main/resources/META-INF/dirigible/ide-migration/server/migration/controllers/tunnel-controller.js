@@ -26,7 +26,8 @@ class TunnelController {
         const script = `${neoClientPath} open-db-tunnel -a "${account}" -h "${host}" -u "${user}" -p "${password}" -i "${db}" --output json --background`;
 
         const commandResult = JSON.parse(exec.exec(script, {
-            "JAVA_HOME": config.get("JAVA8_HOME")
+            "JAVA_HOME": config.get("JAVA8_HOME"),
+            "PATH": config.get("JAVA8_HOME") + "/bin:" + config.get("PATH")
         }));
         console.log(commandResult)
         if (commandResult.errorMsg) {

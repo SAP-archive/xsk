@@ -80,8 +80,8 @@ class MigrationController {
                 project = workspace.getProject(file.packageId)
             }
  
-            project.createFile(file.RunLocation)
-            
+            let projectFile = project.createFile(file.RunLocation);
+            projectFile.setContent(file._content);
         }
         callback(null);
     }

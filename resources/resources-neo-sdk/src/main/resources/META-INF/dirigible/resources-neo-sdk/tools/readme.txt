@@ -2,9 +2,9 @@
 # Welcome to the SAP BTP SDK for the Neo environment #
 ######################################################
 
-Runtime    : Java Web Tomcat 9
-Version    : 4.2.4
-Build Date : 2021-05-19
+Runtime    : Java Web Tomcat 8
+Version    : 3.135.10
+Build Date : 2021-08-11
 
 
 1. Working Directory
@@ -12,7 +12,7 @@ Build Date : 2021-05-19
 Open the command prompt and change the current directory to the tools folder of the SAP BTP SDK for the Neo environment.
 
 Example:
-    cd sdk-4.2.4
+    cd sdk-3.135.10
     cd tools
 
 2. Proxy Settings

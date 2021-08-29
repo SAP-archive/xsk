@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Apache License, v2.0
+    which accompanies this distribution, and is available at
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+    SPDX-License-Identifier: Apache-2.0
+
+-->
+<!--
+  XML file for importing Catalina ant tasks.
+  <import file="${catalina.home}/bin/catalina-tasks.xml"/>
+-->
+
+<project name="catalina-tasks">
+  <description>Catalina Ant Manager, JMX and JSPC Tasks</description>
+  <!-- set catalina.home if it's not already set -->
+  <dirname property="catalina.home.bin.dir" file="${ant.file.catalina-tasks}"/>
+  <property name="catalina.home" value="${catalina.home.bin.dir}/.."/>
+  <typedef resource="org/apache/catalina/ant/catalina.tasks">
+    <classpath>
+      <fileset file="${catalina.home}/bin/tomcat-juli.jar"/>
+      <fileset dir="${catalina.home}/lib" includes="*.jar"/>
+    </classpath>
+  </typedef>
+  <typedef resource="org/apache/catalina/ant/jmx/jmxaccessor.tasks">
+    <classpath>
+      <fileset file="${catalina.home}/lib/catalina-ant.jar"/>
+    </classpath>
+  </typedef>
+</project>

@@ -26,8 +26,14 @@ rem :---------------------------------------------------------------------------
 
 if defined JAVA_HOME if exist "%JAVA_HOME%\bin\java.exe" PATH "%JAVA_HOME%\bin";%PATH%
 java.exe -version >nul 2>&1 || ( echo Java cannot be found on the system! & endlocal & exit /b 2 )
-for /f  tokens^=2^,3^,4^ delims^=_.^"  %%J in ('java.exe -version 2^>^&1') do set "jver=%%J%%K%%L" && goto :break_loop
+for /f  tokens^=2^,3^,4^ delims^=_.^"  %%J in ('java.exe -version 2^>^&1') do (
+  set "major=%%J"
+  set "minor=%%K"
+  set "patch=%%L"
+  goto :break_loop
+)
 :break_loop
+IF "%patch%"=="" (set jver=%major%00) ELSE (set jver=%major%%minor%%patch%)
 IF %jver%0 LSS 1600 ( echo Current Java version is older than 1.6.0 & endlocal & exit /b 2 )
 
 rem :-----------------------------------------------------------------------------

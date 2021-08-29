@@ -18,6 +18,7 @@
 	<modules>
 		<module>resources-all</module>
 		<module>resources-neo-sdk</module>
+		<module>resources-neo-sdk-synchronizer</module>
 	</modules>
 
 	<properties>

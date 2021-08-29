@@ -17,7 +17,28 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
-FROM xsk-${JDK_TYPE} AS final
+FROM xsk-${JDK_TYPE} AS dependencies-base
+####################
+### Java 8 Setup ###
+####################
+# Install OpenJDK-8
+RUN apt-get update && \
+    apt-get install -y openjdk-8-jdk && \
+    apt-get install -y ant && \
+    apt-get clean;
+
+# Fix certificate issues
+RUN apt-get update && \
+    apt-get install ca-certificates-java && \
+    apt-get clean && \
+    update-ca-certificates -f;
+
+# Setup JAVA8_HOME for Neo SDK
+ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+RUN export JAVA8_HOME
+####################
+### Java 8 Setup ###
+####################
 
 RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/

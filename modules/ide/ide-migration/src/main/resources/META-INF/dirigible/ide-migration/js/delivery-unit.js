@@ -26,7 +26,7 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
         "Provide the target workspace and delivery unit"
     ];
     $scope.descriptionText = descriptionList[0];
-    let connectionId = undefined;
+    let neoTunnelOutput = undefined;
     let neoData = undefined;
     let hanaData = undefined;
     let defaultErrorTitle = "Error loading delivery units";
@@ -38,11 +38,12 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
             hana: hanaData
         }
         $http.post(
-            "/services/v4/migration-operations/setup-migration",
+            // "/services/v4/migration-operations/setup-migration",
+            "/services/v4/js/ide-migration/server/app.js/setup-migration",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {
-            connectionId = response.data.connectionId;
+            neoTunnelOutput = response.data.neoTunnelOutput;
             $scope.workspaces = response.data.workspaces;
             $scope.workspacesList = $scope.workspaces;
             $scope.deliveryUnits = response.data.du;
@@ -164,7 +165,7 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
             if (msg.data.getData === "all") {
                 $messageHub.message(msg.data.controller, {
                     duData: {
-                        "connectionId": connectionId,
+                        "neoTunnelOutput": neoTunnelOutput,
                         "workspace": selectedWorkspace,
                         "du": selectedDeliveyUnit,
                     }

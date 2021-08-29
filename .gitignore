@@ -19,5 +19,6 @@ derby.log
 *.fpr
 *.iml
 *._trace
+*.log
 
 !releng/buildpacks/**/bin/

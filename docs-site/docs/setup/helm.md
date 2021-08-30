@@ -27,6 +27,8 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
 
 1. Deployment
 
+    To deploy XSK, you can either use the default or the Kyma setup instructions:
+
     #### Default Setup
 
     ```
@@ -49,6 +51,8 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         - Log in with these username and password: `dirigible`/`dirigible`
 
     #### Setup on Kyma
+
+    You can choose to set up XSK in Helm on Kyma following either the basic or the PostgreSQL setup instructions:
 
     === "Basic"
 

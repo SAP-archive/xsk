@@ -471,18 +471,52 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#steps" class="md-nav__link">
-    Steps
+  <a href="#overview" class="md-nav__link">
+    Overview
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
+  <a href="#steps" class="md-nav__link">
+    Steps
   </a>
   
-    <nav class="md-nav" aria-label="Configuration">
+    <nav class="md-nav" aria-label="Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-setup" class="md-nav__link">
+    Default Setup:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup-on-kyma" class="md-nav__link">
+    Setup on Kyma:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next Steps
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-options" class="md-nav__link">
+    Configuration Options
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Options">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -561,18 +595,52 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#steps" class="md-nav__link">
-    Steps
+  <a href="#overview" class="md-nav__link">
+    Overview
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
+  <a href="#steps" class="md-nav__link">
+    Steps
   </a>
   
-    <nav class="md-nav" aria-label="Configuration">
+    <nav class="md-nav" aria-label="Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-setup" class="md-nav__link">
+    Default Setup:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup-on-kyma" class="md-nav__link">
+    Setup on Kyma:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next Steps
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-options" class="md-nav__link">
+    Configuration Options
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Options">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -605,12 +673,14 @@
                 
                 
                 <h1 id="setup-with-helm">Setup with Helm</h1>
-<p>You can deploy XSK via Helm Chart in a Kubernetes cluster.</p>
+<h2 id="overview">Overview</h2>
+<hr />
+<p>You can deploy XSK via Helm chart in a Kubernetes cluster.</p>
 <div class="admonition info">
 <p class="admonition-title">Prerequisites</p>
 <ul>
-<li><a href="https://helm.sh/">Helm</a></li>
-<li><a href="https://kubernetes.io/docs/setup/pick-right-solution/">Kubernetes Cluster</a> on IaaS provider of your choice</li>
+<li>Install the <a href="https://helm.sh/docs/intro/install/#helm">Helm CLI</a>.</li>
+<li>Make sure you have access to a <a href="https://kubernetes.io/docs/setup/">Kubernetes Cluster</a>.</li>
 </ul>
 </div>
 <h2 id="steps">Steps</h2>
@@ -624,49 +694,64 @@ helm repo update
 </code></pre></div>
 </li>
 <li>
-<p>Basic:</p>
-<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk
-</code></pre></div>
-<details class="info" open="open"><summary>Access</summary><p>This will install XSK Deployment and Service with ClusterIP only.
-To access the XSK instance execute the command that was printed in the console.</p>
-<p>Example:</p>
-<div class="highlight"><pre><span></span><code>export POD_NAME=$(kubectl get pods --namespace default -l &quot;app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk&quot; -o jsonpath=&quot;{.items[0].metadata.name}&quot;)
-echo &quot;Visit http://127.0.0.1:8080 to use your application&quot;
-kubectl --namespace default port-forward $POD_NAME 8080:8080    
-</code></pre></div>
-<ul>
-<li>Navigate to: <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a></li>
-<li>Login with: <code>dirigible</code>/<code>dirigible</code></li>
-</ul>
-</details>
-</li>
-<li>
-<p>Kyma:</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Basic</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
---set kyma.enabled=true \
---set kyma.apirule.host=&lt;kyma-host&gt;
-</code></pre></div>
-<p>This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.</p>
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">PostgreSQL</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
---set kyma.enabled=true \
---set kyma.apirule.host=&lt;kyma-host&gt; \
---set database.enabled=true
-</code></pre></div>
-<p>This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.</p>
-</div>
-</div>
-</li>
-<li>
-<p>Uninstall:
-    <div class="highlight"><pre><span></span><code>helm uninstall xsk
-</code></pre></div></p>
+<p>Deployment</p>
 </li>
 </ol>
-<h2 id="configuration">Configuration</h2>
-<p>The following table lists all the configurable parameters expose by the XSK chart and their default values.</p>
+<h4 id="default-setup">Default Setup:</h4>
+<div class="highlight"><pre><span></span><code>```
+helm install xsk xsk/xsk
+```
+
+???+ info &quot;Accessing the XSK Instance&quot;
+    Running this command will install XSK Deployment and Service with ClusterIP only.
+    To access the XSK instance, execute the command that was printed in the console.
+
+    Example:
+
+    ```
+    export POD_NAME=$(kubectl get pods --namespace default -l &quot;app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk&quot; -o jsonpath=&quot;{.items[0].metadata.name}&quot;)
+    echo &quot;Visit http://127.0.0.1:8080 to use your application&quot;
+    kubectl --namespace default port-forward $POD_NAME 8080:8080    
+    ```
+
+    - Navigate to: [http://127.0.0.1:8080](http://127.0.0.1:8080)
+    - Log in with these username and password: `dirigible`/`dirigible`
+</code></pre></div>
+<h4 id="setup-on-kyma">Setup on Kyma:</h4>
+<div class="highlight"><pre><span></span><code>=== &quot;Basic&quot;
+
+    ```
+    helm install xsk xsk/xsk \
+    --set kyma.enabled=true \
+    --set kyma.apirule.host=&lt;kyma-host&gt;
+    ```
+
+    This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.
+
+    !!! info &quot;Configuration Options&quot;
+        You can also use other configuration parameters. See [Configuration Options](####Generic).
+
+=== &quot;PostgreSQL&quot;
+
+    ```
+    helm install xsk xsk/xsk \
+    --set kyma.enabled=true \
+    --set kyma.apirule.host=&lt;kyma-host&gt; \
+    --set database.enabled=true
+    ```
+
+    This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.
+</code></pre></div>
+<h2 id="next-steps">Next Steps</h2>
+<hr />
+<ul>
+<li>If you want to uninstall Helm, run:
+    <div class="highlight"><pre><span></span><code>helm uninstall xsk
+</code></pre></div></li>
+</ul>
+<h2 id="configuration-options">Configuration Options</h2>
+<hr />
+<p>The following table lists all the configurable parameters exposed by the XSK chart and their default values:</p>
 <h4 id="generic">Generic</h4>
 <table>
 <thead>

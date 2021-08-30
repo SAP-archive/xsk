@@ -5,16 +5,19 @@ title: Kyma
 Setup in Kyma
 ===
 
-Deploy XSK in SAP BTP[^1], Kyma environment.
+## Overview
+---
+
+You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
 [^1]: SAP Cloud Platform is called SAP Business Technology Platform (SAP BTP) as of 2021.
 
 !!! info "Prerequisites"
-    - Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - this step is optional.
-    - Access to SAP BTP account _(the Trial landscape can be accessed [here](https://account.hanatrial.ondemand.com/))._
+    - Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (optional)
+    - Navigate to your SAP BTP global account. You can access your Trial account from [here](https://account.hanatrial.ondemand.com/)).
 
 !!! warning "Warning"
-    At the time of writing the setup manual _(19.08.2021)_, creation of HANA Cloud service instance in the SAP BTP Kyma environment was not possible, thus the setup is suitable only for **test** & **demo** purposes. Workaround solution could be found [here](https://github.com/SAP/xsk/discussions/394).
+    At the time of writing these setup instructions _(19.08.2021)_, creating a HANA Cloud service instance in the SAP BTP Kyma environment was not possible, thus the setup is suitable only for **test** & **demo** purposes. You can find a workaround solution [here](https://github.com/SAP/xsk/discussions/394).
 
 ## Steps
 ---
@@ -119,24 +122,24 @@ Deploy XSK in SAP BTP[^1], Kyma environment.
             Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host (e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**)._
 
         !!! tip "XSK versions"
-            Instead of using the `latest` tag (version), for production and development use cases it is recomended to use stable release version:
+            Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:
 
-            - All released versions can be found [here](https://github.com/sap/xsk/releases/).
-            - All XSK Docker images and tags (versions) can be found [here](https://hub.docker.com/u/dirigiblelabs).
+            - You can find all released versions [here](https://github.com/sap/xsk/releases/).
+            - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
 
     - Navigate to your Kyma dashboard and select the **`default`** namespace.
 
-    - Click on the **Deploy new resource** button and select the `deployment.yaml` file.
+    - Click the **Deploy new resource** button and select the `deployment.yaml` file.
 
     !!! info "Note"
-        Alternatively the `kubectl -f deployment.yaml` could be used to deploy the resources.
+        Alternatively, you can use the `kubectl -f deployment.yaml` to deploy the resources.
 
 1. Create XSUAA service instance:
 
     - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
     - Find the `Authorization & Trust Management` service.
-    - Create new service instance.
-    - Provide the following additional parameters.
+    - Create a new service instance.
+    - Provide the following additional parameters:
 
         ```json
         {
@@ -202,4 +205,4 @@ Deploy XSK in SAP BTP[^1], Kyma environment.
 1. Log in.
 
 !!! example "Additional Materials"
-    Step by step tutorial can be found [here](https://blogs.sap.com/2020/10/13/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-kyma-environment/).
+    You can find a step-by-step tutorial [here](https://blogs.sap.com/2020/10/13/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-kyma-environment/).

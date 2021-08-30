@@ -11,7 +11,7 @@ Local Setup
 You can deploy XSK locally using Docker.
 
 !!! info "Prerequisites"
-Install [Docker](https://docs.docker.com/engine/installation/).
+    - Install [Docker](https://docs.docker.com/engine/installation/).
 
 
 ## Steps

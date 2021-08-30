@@ -435,6 +435,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#steps" class="md-nav__link">
     Steps
   </a>
@@ -517,6 +524,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#steps" class="md-nav__link">
     Steps
   </a>
@@ -541,7 +555,9 @@
                 
                 
                 <h1 id="setup-in-cloud-foundry">Setup in Cloud Foundry</h1>
-<p>Deploy XSK in SAP BTP<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, Cloud Foundry environment.</p>
+<h2 id="overview">Overview</h2>
+<hr />
+<p>You can deploy XSK in the SAP BTP<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, Cloud Foundry environment.</p>
 <div class="admonition info">
 <p class="admonition-title">Prerequisites</p>
 <ul>
@@ -565,7 +581,7 @@
 </code></pre></div>
 </li>
 <li>
-<p>Create XSUAA service instance:</p>
+<p>Create an XSUAA service instance:</p>
 <ul>
 <li>
 <p>Copy and paste the following content into <code>xs-security.json</code>:</p>
@@ -622,7 +638,7 @@
 </div>
 </li>
 <li>
-<p>Create a XSUAA service instance:</p>
+<p>Create an XSUAA service instance:</p>
 <div class="highlight"><pre><span></span><code>cf create-service xsuaa application &lt;applicationName&gt;-xsuaa -c xs-security.json
 </code></pre></div>
 <div class="admonition note">
@@ -648,10 +664,10 @@
 </div>
 <div class="admonition tip">
 <p class="admonition-title">XSK versions</p>
-<p>Instead of using the <code>latest</code> tag (version), for production and development use cases it is recomended to use a stable release version:</p>
+<p>Instead of using the <code>latest</code> tag (version), for production and development use cases it is recommended that you use a stable release version:</p>
 <ul>
-<li>All released versions can be found <a href="https://github.com/sap/xsk/releases/">here</a>.</li>
-<li>All XSK Docker images and tags (versions) can be found <a href="https://hub.docker.com/u/dirigiblelabs">here</a>.</li>
+<li>You can find all released versions <a href="https://github.com/sap/xsk/releases/">here</a>.</li>
+<li>You can find all XSK Docker images and tags (versions) <a href="https://hub.docker.com/u/dirigiblelabs">here</a>.</li>
 </ul>
 </div>
 <ul>
@@ -682,7 +698,7 @@ cf set-env xsk HANA_PASSWORD &lt;hanaCloudPassword&gt;
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Buildpack</label><div class="tabbed-content">
 <ul>
 <li>Download the <code>sap-cf</code> binaries from the downloads site: <a href="https://github.com/SAP/xsk/releases">https://github.com/SAP/xsk/releases</a></li>
-<li>Unzip the downloaded archieve to extract the <code>ROOT.war</code> file.</li>
+<li>Unzip the downloaded archive to extract the <code>ROOT.war</code> file.</li>
 <li>
 <p>Create <code>manifest.yaml</code> file in the same directory where the <code>ROOT.war</code> is located:
     <div class="highlight"><pre><span></span><code><span class="nt">applications</span><span class="p">:</span>
@@ -728,8 +744,8 @@ cf set-env xsk HANA_PASSWORD &lt;hanaCloudPassword&gt;
 </li>
 </ol>
 <div class="admonition example">
-<p class="admonition-title">Additional Materials</p>
-<p>Step-by-step tutorial can be found <a href="https://blogs.sap.com/2020/03/15/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-cloud-foundry-environment/">here</a>.</p>
+<p class="admonition-title">Additional Information</p>
+<p>You can find a step-by-step tutorial <a href="https://blogs.sap.com/2020/03/15/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-cloud-foundry-environment/">here</a>.</p>
 </div>
 <div class="footnote">
 <hr />

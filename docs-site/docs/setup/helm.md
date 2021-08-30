@@ -27,7 +27,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
 
 1. Deployment
 
-#### Default Setup:
+    #### Default Setup:
 
     ```
     helm install xsk xsk/xsk
@@ -48,7 +48,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         - Navigate to: [http://127.0.0.1:8080](http://127.0.0.1:8080)
         - Log in with these username and password: `dirigible`/`dirigible`
 
-#### Setup on Kyma:
+    #### Setup on Kyma:
 
     === "Basic"
 
@@ -60,8 +60,8 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
 
         This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.
         
-        !!! info "Configuration Options"
-            You can also use other configuration parameters. See [Configuration Options](####Generic).
+        !!!+ info "Configuration Options"
+            You can also use other configuration parameters. See [List of Configuration Options](#generic).
 
     === "PostgreSQL"
 
@@ -82,7 +82,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
     helm uninstall xsk
     ```
 
-## Configuration Options
+## List of Configuration Options
 ---
 
 The following table lists all the configurable parameters exposed by the XSK chart and their default values:

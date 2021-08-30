@@ -5,12 +5,14 @@ title: Helm
 Setup with Helm
 ===
 
+## Overview
+---
 
-You can deploy XSK via Helm Chart in a Kubernetes cluster.
+You can deploy XSK via Helm chart in a Kubernetes cluster.
 
 !!! info "Prerequisites"
-    - [Helm](https://helm.sh/)
-    - [Kubernetes Cluster](https://kubernetes.io/docs/setup/pick-right-solution/) on IaaS provider of your choice
+    - Install the [Helm CLI](https://helm.sh/docs/intro/install/#helm).
+    - Make sure you have access to a [Kubernetes Cluster](https://kubernetes.io/docs/setup/).
 
 ## Steps
 ---
@@ -23,15 +25,17 @@ You can deploy XSK via Helm Chart in a Kubernetes cluster.
     helm repo update
     ```
 
-1. Basic:
+1. Deployment
+
+#### Default Setup:
 
     ```
     helm install xsk xsk/xsk
     ```
 
-    ???+ info "Access"
-        This will install XSK Deployment and Service with ClusterIP only.
-        To access the XSK instance execute the command that was printed in the console.
+    ???+ info "Accessing the XSK Instance"
+        Running this command will install XSK Deployment and Service with ClusterIP only.
+        To access the XSK instance, execute the command that was printed in the console.
 
         Example:
 
@@ -42,9 +46,9 @@ You can deploy XSK via Helm Chart in a Kubernetes cluster.
         ```
 
         - Navigate to: [http://127.0.0.1:8080](http://127.0.0.1:8080)
-        - Login with: `dirigible`/`dirigible`
+        - Log in with these username and password: `dirigible`/`dirigible`
 
-1. Kyma:
+#### Setup on Kyma:
 
     === "Basic"
 
@@ -55,6 +59,9 @@ You can deploy XSK via Helm Chart in a Kubernetes cluster.
         ```
 
         This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.
+        
+        !!! info "Configuration Options"
+            You can also use other configuration parameters. See [Configuration Options](####Generic).
 
     === "PostgreSQL"
 
@@ -66,16 +73,19 @@ You can deploy XSK via Helm Chart in a Kubernetes cluster.
         ```
 
         This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.
+        
+## Next Steps
+---
 
-1. Uninstall:
+- If you want to uninstall Helm, run:
     ```
     helm uninstall xsk
     ```
 
-Configuration
+## Configuration Options
 ---
 
-The following table lists all the configurable parameters expose by the XSK chart and their default values.
+The following table lists all the configurable parameters exposed by the XSK chart and their default values:
 
 #### Generic
 

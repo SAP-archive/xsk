@@ -695,6 +695,7 @@ helm repo update
 </li>
 <li>
 <p>Deployment</p>
+<p>To deploy XSK, you can either use the default or the Kyma setup instructions:</p>
 <h4 id="default-setup">Default Setup</h4>
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk
 </code></pre></div>
@@ -711,6 +712,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </ul>
 </details>
 <h4 id="setup-on-kyma">Setup on Kyma</h4>
+<p>You can choose to set up XSK in Helm on Kyma following either the basic or the PostgreSQL setup instructions:</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Basic</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
 --set kyma.enabled=true \

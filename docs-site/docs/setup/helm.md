@@ -61,7 +61,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.
         
         ???+ info "Configuration Options"
-            You can also use other configuration parameters. See [List of Configuration Options](#table-1.-list-of-all-configurable-parameters-and-their-values).
+            You can also use other configuration parameters. See [Table 1. List of All Configurable Parameters and Their Values](#table-1.-list-of-all-configurable-parameters-and-their-values).
 
     === "PostgreSQL"
 
@@ -75,7 +75,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.
         
         ???+ info "Configuration Options"
-            You can also use other configuration parameters. See [List of Configuration Options](#table-1.-list-of-all-configurable-parameters-and-their-values).
+            You can also use other configuration parameters. See [Table 1. List of All Configurable Parameters and Their Values](#table-1.-list-of-all-configurable-parameters-and-their-values).
         
 ## Next Steps
 ---

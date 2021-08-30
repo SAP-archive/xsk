@@ -5,11 +5,12 @@ title: Local
 Local Setup
 ===
 
+## Overview
+---
 
 You can deploy XSK locally using Docker.
 
-## Prerequisites
-
+!!! info "Prerequisites"
 Install [Docker](https://docs.docker.com/engine/installation/).
 
 

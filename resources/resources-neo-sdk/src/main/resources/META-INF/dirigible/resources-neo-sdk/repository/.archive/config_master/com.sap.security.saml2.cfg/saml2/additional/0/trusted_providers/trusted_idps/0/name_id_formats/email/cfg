@@ -1,6 +1,0 @@
-#Tue Jan 26 14:49:12 EET 2010
-supported=true
-type=USER_ATTRIBUTE
-ume_attr_name=email
-ume_attr_namespace=com.sap.security.core.usermanagement
-are_all_domains_accepted=true

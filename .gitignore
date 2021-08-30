@@ -22,4 +22,6 @@ derby.log
 *.log
 
 !releng/buildpacks/**/bin/
-!resources/resources-neo-sdk/src/main/resources/META-INF/dirigible/resources-neo-sdk/**
+
+# Ignore Neo SDK
+resources/resources-neo-sdk/src/main/resources/META-INF/dirigible/resources-neo-sdk/

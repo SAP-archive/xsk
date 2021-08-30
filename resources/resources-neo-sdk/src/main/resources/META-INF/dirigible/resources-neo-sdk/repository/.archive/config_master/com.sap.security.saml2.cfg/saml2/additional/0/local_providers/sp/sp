@@ -1,4 +1,0 @@
-#Tue Jan 26 14:49:11 EET 2010
-supported_bindings_slo=urn\:oasis\:names\:tc\:SAML\:2.0\:bindings\:HTTP-Redirect|\#|urn\:oasis\:names\:tc\:SAML\:2.0\:bindings\:HTTP-POST|\#|
-supported_bindings_acs=urn\:oasis\:names\:tc\:SAML\:2.0\:bindings\:HTTP-POST|\#|
-default_entrance_location=/

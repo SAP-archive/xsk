@@ -7,13 +7,13 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-modules-parsers-parent</artifactId>
-    <version>0.8.0-SNAPSHOT</version>
+    <version>0.8.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Modules - Parsers - Commons</name>
   <artifactId>xsk-modules-parsers-commons</artifactId>
-  <version>0.8.0-SNAPSHOT</version>
+  <version>0.8.0</version>
   <packaging>jar</packaging>
 
   <dependencies>

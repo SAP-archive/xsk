@@ -695,7 +695,7 @@ helm repo update
 </li>
 <li>
 <p>Deployment</p>
-<h3 id="default-setup">Default Setup</h3>
+<h4 id="default-setup">Default Setup</h4>
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk
 </code></pre></div>
 <details class="info" open="open"><summary>Accessing the XSK Instance</summary><p>Running this command will install XSK Deployment and Service with ClusterIP only.
@@ -710,7 +710,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <li>Log in with these username and password: <code>dirigible</code>/<code>dirigible</code></li>
 </ul>
 </details>
-<h3 id="setup-on-kyma">Setup on Kyma</h3>
+<h4 id="setup-on-kyma">Setup on Kyma</h4>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Basic</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
 --set kyma.enabled=true \
@@ -743,7 +743,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <h2 id="configuration-options">Configuration Options</h2>
 <hr />
 <p>The following table lists all the configurable parameters exposed by the XSK chart and their default values:</p>
-<h5 id="list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</h5>
+<h4 id="list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</h4>
 <table>
 <thead>
 <tr>

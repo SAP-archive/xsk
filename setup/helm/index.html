@@ -487,14 +487,14 @@
         
           <li class="md-nav__item">
   <a href="#default-setup" class="md-nav__link">
-    Default Setup:
+    Default Setup
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#setup-on-kyma" class="md-nav__link">
-    Setup on Kyma:
+    Setup on Kyma
   </a>
   
 </li>
@@ -512,16 +512,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#list-of-configuration-options" class="md-nav__link">
-    List of Configuration Options
+  <a href="#configuration-options" class="md-nav__link">
+    Configuration Options
   </a>
   
-    <nav class="md-nav" aria-label="List of Configuration Options">
+    <nav class="md-nav" aria-label="Configuration Options">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#generic" class="md-nav__link">
-    Generic
+  <a href="#table-1-list-of-all-configurable-parameters-and-their-values" class="md-nav__link">
+    Table 1. List of All Configurable Parameters and Their Values
   </a>
   
 </li>
@@ -611,14 +611,14 @@
         
           <li class="md-nav__item">
   <a href="#default-setup" class="md-nav__link">
-    Default Setup:
+    Default Setup
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#setup-on-kyma" class="md-nav__link">
-    Setup on Kyma:
+    Setup on Kyma
   </a>
   
 </li>
@@ -636,16 +636,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#list-of-configuration-options" class="md-nav__link">
-    List of Configuration Options
+  <a href="#configuration-options" class="md-nav__link">
+    Configuration Options
   </a>
   
-    <nav class="md-nav" aria-label="List of Configuration Options">
+    <nav class="md-nav" aria-label="Configuration Options">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#generic" class="md-nav__link">
-    Generic
+  <a href="#table-1-list-of-all-configurable-parameters-and-their-values" class="md-nav__link">
+    Table 1. List of All Configurable Parameters and Their Values
   </a>
   
 </li>
@@ -695,7 +695,7 @@ helm repo update
 </li>
 <li>
 <p>Deployment</p>
-<h4 id="default-setup">Default Setup:</h4>
+<h3 id="default-setup">Default Setup</h3>
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk
 </code></pre></div>
 <details class="info" open="open"><summary>Accessing the XSK Instance</summary><p>Running this command will install XSK Deployment and Service with ClusterIP only.
@@ -710,15 +710,15 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <li>Log in with these username and password: <code>dirigible</code>/<code>dirigible</code></li>
 </ul>
 </details>
-<h4 id="setup-on-kyma">Setup on Kyma:</h4>
+<h3 id="setup-on-kyma">Setup on Kyma</h3>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Basic</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
 --set kyma.enabled=true \
 --set kyma.apirule.host=&lt;kyma-host&gt;
 </code></pre></div>
 <p>This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.</p>
-<p>!!!+ info "Configuration Options"
-    You can also use other configuration parameters. See <a href="#generic">List of Configuration Options</a>.</p>
+<details class="info" open="open"><summary>Configuration Options</summary><p>You can also use other configuration parameters. See <a href="#table-1.-list-of-all-configurable-parameters-and-their-values">List of Configuration Options</a>.</p>
+</details>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">PostgreSQL</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
@@ -727,6 +727,8 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 --set database.enabled=true
 </code></pre></div>
 <p>This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.</p>
+<details class="info" open="open"><summary>Configuration Options</summary><p>You can also use other configuration parameters. See <a href="#table-1.-list-of-all-configurable-parameters-and-their-values">List of Configuration Options</a>.</p>
+</details>
 </div>
 </div>
 </li>
@@ -738,10 +740,10 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
     <div class="highlight"><pre><span></span><code>helm uninstall xsk
 </code></pre></div></li>
 </ul>
-<h2 id="list-of-configuration-options">List of Configuration Options</h2>
+<h2 id="configuration-options">Configuration Options</h2>
 <hr />
 <p>The following table lists all the configurable parameters exposed by the XSK chart and their default values:</p>
-<h4 id="generic">Generic</h4>
+<h5 id="table-1-list-of-all-configurable-parameters-and-their-values">Table 1. List of All Configurable Parameters and Their Values</h5>
 <table>
 <thead>
 <tr>

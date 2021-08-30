@@ -32,7 +32,7 @@
 								<artifactItem>
 									<groupId>com.sap.cloud</groupId>
 									<artifactId>neo-java-web-sdk</artifactId>
-									<version>4.8.9</version>
+									<version>${neo-java-web-sdk.version}</version>
 									<type>zip</type>
 									<outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk</outputDirectory>
 									<overWrite>true</overWrite>

@@ -263,6 +263,7 @@
 		<antlr4-runtime.version>4.3</antlr4-runtime.version>
 		<antlr4-maven-plugin.version>4.3</antlr4-maven-plugin.version>
 		<org.testcontainers.version>1.15.2</org.testcontainers.version>
+		<neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>
 
 		<profile.content.phase>none</profile.content.phase>
 		

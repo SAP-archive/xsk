@@ -16,10 +16,10 @@ exports.Store = function (filePath) {
     filePath = REGISTRY_DIR_PREFIX + filePath;
 
     repositoryManager.getResource(filePath);
-    var existsStore = com.sap.xsk.xssecurestore.ds.facade.XSKSecureStoreFacade.existsStore(filePath);
-    if (!existsStore) {
-        throw new Error("Not such secure store found.")
-    }
+    // var existsStore = com.sap.xsk.xssecurestore.ds.facade.XSKSecureStoreFacade.existsStore(filePath);
+    // if (!existsStore) {
+    //     throw new Error("Not such secure store found.")
+    // }
 
     this.store = function(writeObject) {
         com.sap.xsk.xssecurestore.ds.facade.XSKSecureStoreFacade.store(filePath, writeObject.name, writeObject.value);

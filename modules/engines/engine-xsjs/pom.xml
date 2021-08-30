@@ -135,7 +135,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.dirigible</groupId>
-            <artifactId>dirigible-database-derby</artifactId>
+            <artifactId>dirigible-database-h2</artifactId>
             <version>${dirigible.version}</version>
             <scope>test</scope>
         </dependency>
@@ -144,6 +144,12 @@
             <artifactId>dirigible-repository-local</artifactId>
             <version>${dirigible.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-service-anonymous</artifactId>
+          <version>${dirigible.version}</version>
+          <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -194,7 +200,13 @@
 			<version>0.7.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.sap.xsk</groupId>
+            <artifactId>xsk-modules-engines-xssecurity</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <properties>
 		<license.header.location>../../../licensing-header.txt</license.header.location>

@@ -5,7 +5,10 @@ title: Cloud Foundry
 Setup in Cloud Foundry
 ===
 
-Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
+## Overview
+---
+
+You can deploy XSK in the SAP BTP[^1], Cloud Foundry environment.
 
 [^1]: SAP Cloud Platform is called SAP Business Technology Platform (SAP BTP) as of 2021.
     
@@ -30,7 +33,7 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
     cf login
     ```
 
-1. Create XSUAA service instance:
+1. Create an XSUAA service instance:
 
     - Copy and paste the following content into `xs-security.json`:
 
@@ -86,7 +89,7 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
         !!! Note
             Replace the `<applicationName>` placeholder with your application name, e.g. **`xsk`**.
 
-    - Create a XSUAA service instance:
+    - Create an XSUAA service instance:
 
         ```
         cf create-service xsuaa application <applicationName>-xsuaa -c xs-security.json
@@ -110,10 +113,10 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
             - Replace the `<org-name>` placeholder with your subaccount's **Subdomain** value.
             
         !!! tip "XSK versions"
-            Instead of using the `latest` tag (version), for production and development use cases it is recomended to use a stable release version:
+            Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:
             
-            - All released versions can be found [here](https://github.com/sap/xsk/releases/).
-            - All XSK Docker images and tags (versions) can be found [here](https://hub.docker.com/u/dirigiblelabs).
+            - You can find all released versions [here](https://github.com/sap/xsk/releases/).
+            - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
 
         - Bind the XSUAA and HANA Cloud service instances to the XSK deployment:
 
@@ -139,7 +142,7 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
     === "Buildpack"
 
         - Download the `sap-cf` binaries from the downloads site: [https://github.com/SAP/xsk/releases](https://github.com/SAP/xsk/releases)
-        - Unzip the downloaded archieve to extract the `ROOT.war` file.
+        - Unzip the downloaded archive to extract the `ROOT.war` file.
         - Create `manifest.yaml` file in the same directory where the `ROOT.war` is located:
             ```yaml
             applications:
@@ -174,5 +177,5 @@ Deploy XSK in SAP BTP[^1], Cloud Foundry environment.
 
 1. Log in.
 
-!!! example "Additional Materials"
-    Step-by-step tutorial can be found [here](https://blogs.sap.com/2020/03/15/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-cloud-foundry-environment/).
+!!! example "Additional Information"
+    You can find a step-by-step tutorial [here](https://blogs.sap.com/2020/03/15/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-cloud-foundry-environment/).

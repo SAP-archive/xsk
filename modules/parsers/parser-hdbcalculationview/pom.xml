@@ -7,13 +7,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-parsers-parent</artifactId>
-		<version>0.8.1</version>
+		<version>0.9.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Modules - Parsers - HDB Calculation View</name>
 	<artifactId>xsk-modules-parsers-hdbcalculationview</artifactId>
-	<version>0.8.1</version>
+	<version>0.9.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<dependencies>

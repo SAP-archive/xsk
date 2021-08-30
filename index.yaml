@@ -2,8 +2,39 @@ apiVersion: v1
 entries:
   xsk:
   - apiVersion: v2
+    appVersion: 0.8.0
+    created: "2021-08-30T06:40:51.518449785Z"
+    description: Compatible environment for SAP HANA Extended Application Services
+      (XS) based applications outside of SAP HANA instance running in a container
+      deployed on Kubernetes.
+    digest: 169b9908b6473dff4a0aa96a84f47c36a7286d4f30b12eed8369e9af51c4a254
+    home: https://github.com/sap/xsk
+    icon: https://raw.githubusercontent.com/eclipse/dirigible/master/logo/dirigible-logo-symbol.png
+    keywords:
+    - sap
+    - xsc
+    - hana
+    - neo
+    - xsk
+    - kyma
+    - platform
+    - development
+    - applications
+    - in-system
+    maintainers:
+    - email: yordan.pavlov@sap.com
+      name: Yordan Pavlov
+      url: https://github.com/ThuF
+    name: xsk
+    sources:
+    - https://github.com/sap/xsk
+    type: application
+    urls:
+    - https://sap.github.io/xsk/charts/xsk-0.8.0.tgz
+    version: 0.8.0
+  - apiVersion: v2
     appVersion: 0.7.2
-    created: "2021-08-04T11:11:33.824796592Z"
+    created: "2021-08-30T06:40:51.51775568Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -34,7 +65,7 @@ entries:
     version: 0.7.2
   - apiVersion: v2
     appVersion: 0.7.1
-    created: "2021-08-04T11:11:33.823916676Z"
+    created: "2021-08-30T06:40:51.517062575Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -65,7 +96,7 @@ entries:
     version: 0.7.1
   - apiVersion: v2
     appVersion: 0.7.0
-    created: "2021-08-04T11:11:33.821531032Z"
+    created: "2021-08-30T06:40:51.516085167Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -96,7 +127,7 @@ entries:
     version: 0.7.0
   - apiVersion: v2
     appVersion: 0.6.3
-    created: "2021-08-04T11:11:33.820348011Z"
+    created: "2021-08-30T06:40:51.514747557Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -127,7 +158,7 @@ entries:
     version: 0.6.3
   - apiVersion: v2
     appVersion: 0.6.2
-    created: "2021-08-04T11:11:33.819680899Z"
+    created: "2021-08-30T06:40:51.513557248Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -158,7 +189,7 @@ entries:
     version: 0.6.2
   - apiVersion: v2
     appVersion: 0.6.1
-    created: "2021-08-04T11:11:33.818994886Z"
+    created: "2021-08-30T06:40:51.512878343Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -189,7 +220,7 @@ entries:
     version: 0.6.1
   - apiVersion: v2
     appVersion: 0.6.0
-    created: "2021-08-04T11:11:33.818338174Z"
+    created: "2021-08-30T06:40:51.512218138Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -220,7 +251,7 @@ entries:
     version: 0.6.0
   - apiVersion: v2
     appVersion: 0.5.0
-    created: "2021-08-04T11:11:33.81756906Z"
+    created: "2021-08-30T06:40:51.511532533Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -251,7 +282,7 @@ entries:
     version: 0.5.0
   - apiVersion: v2
     appVersion: 0.4.2
-    created: "2021-08-04T11:11:33.816893548Z"
+    created: "2021-08-30T06:40:51.510810427Z"
     description: Compatible environment for SAP HANA Extended Application Services
       (XS) based applications outside of SAP HANA instance running in a container
       deployed on Kubernetes.
@@ -280,4 +311,4 @@ entries:
     urls:
     - https://sap.github.io/xsk/charts/xsk-0.4.2.tgz
     version: 0.4.2
-generated: "2021-08-04T11:11:33.816011231Z"
+generated: "2021-08-30T06:40:51.509893721Z"

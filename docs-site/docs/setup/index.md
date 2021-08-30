@@ -6,10 +6,11 @@ Local Setup
 ===
 
 
-Deploy XSK in Docker.
-    
-!!! info "Prerequisites"
-    Install [Docker](https://docs.docker.com/engine/installation/).
+You can deploy XSK locally using Docker.
+
+## Prerequisites
+
+Install [Docker](https://docs.docker.com/engine/installation/).
 
 
 ## Steps
@@ -50,12 +51,12 @@ Deploy XSK in Docker.
         ```
 
         !!! Note
-            - Replace the `<hanaHost>` placeholder with the HANA Cloud host that will be used.
-            - Replace the `<hanaUsername>` placeholder with the HANA Cloud username that will be used.
-            - Replace the `<hanaPassword>` placeholder with the HANA Cloud password that will be used.
+            - Replace the `<hanaHost>` placeholder with the HANA Cloud host that you're going to use.
+            - Replace the `<hanaUsername>` placeholder with the HANA Cloud username that you're going to use.
+            - Replace the `<hanaPassword>` placeholder with the HANA Cloud password that you're going to use.
 
         !!! info "Windows"
-            For Windows setup, issues may appear with the way the environment variables _(`-e XXX=YYY`)_ are provided. Either they should be properly escaped, or they could be supplied as `*.env` [file](https://docs.docker.com/compose/environment-variables/):
+            For setup on Windows OS, issues may appear with the way the environment variables _(`-e XXX=YYY`)_ are provided. Either they should be properly escaped, or they could be supplied as `*.env` [file](https://docs.docker.com/compose/environment-variables/):
             
             ```
             docker run --name xsk \
@@ -65,16 +66,16 @@ Deploy XSK in Docker.
             ```
 
     !!! tip "XSK versions"
-        Instead of using the `latest` tag (version), for production and development use cases it is recomended to use a stable release version:
+        Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:
         
-        - All released versions can be found [here](https://github.com/sap/xsk/releases/).
-        - All XSK Docker images and tags (versions) can be found [here](https://hub.docker.com/u/dirigiblelabs).
+        - You can find all released versions [here](https://github.com/sap/xsk/releases/).
+        - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
 
 
 1. Open a web browser and go to: [http://localhost:8080/](http://localhost:8080/)
 
     !!! Note
-        The default user name and password are **`dirigible/dirigible`**
+        The default user name and password are **`dirigible/dirigible`**.
 
 1. Stop the container:
 

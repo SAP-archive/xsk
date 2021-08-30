@@ -512,11 +512,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-options" class="md-nav__link">
-    Configuration Options
+  <a href="#list-of-configuration-options" class="md-nav__link">
+    List of Configuration Options
   </a>
   
-    <nav class="md-nav" aria-label="Configuration Options">
+    <nav class="md-nav" aria-label="List of Configuration Options">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -636,11 +636,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-options" class="md-nav__link">
-    Configuration Options
+  <a href="#list-of-configuration-options" class="md-nav__link">
+    List of Configuration Options
   </a>
   
-    <nav class="md-nav" aria-label="Configuration Options">
+    <nav class="md-nav" aria-label="List of Configuration Options">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -695,53 +695,42 @@ helm repo update
 </li>
 <li>
 <p>Deployment</p>
+<h4 id="default-setup">Default Setup:</h4>
+<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk
+</code></pre></div>
+<details class="info" open="open"><summary>Accessing the XSK Instance</summary><p>Running this command will install XSK Deployment and Service with ClusterIP only.
+To access the XSK instance, execute the command that was printed in the console.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>export POD_NAME=$(kubectl get pods --namespace default -l &quot;app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk&quot; -o jsonpath=&quot;{.items[0].metadata.name}&quot;)
+echo &quot;Visit http://127.0.0.1:8080 to use your application&quot;
+kubectl --namespace default port-forward $POD_NAME 8080:8080    
+</code></pre></div>
+<ul>
+<li>Navigate to: <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a></li>
+<li>Log in with these username and password: <code>dirigible</code>/<code>dirigible</code></li>
+</ul>
+</details>
+<h4 id="setup-on-kyma">Setup on Kyma:</h4>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Basic</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
+--set kyma.enabled=true \
+--set kyma.apirule.host=&lt;kyma-host&gt;
+</code></pre></div>
+<p>This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.</p>
+<p>!!!+ info "Configuration Options"
+    You can also use other configuration parameters. See <a href="#generic">List of Configuration Options</a>.</p>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">PostgreSQL</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
+--set kyma.enabled=true \
+--set kyma.apirule.host=&lt;kyma-host&gt; \
+--set database.enabled=true
+</code></pre></div>
+<p>This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.</p>
+</div>
+</div>
 </li>
 </ol>
-<h4 id="default-setup">Default Setup:</h4>
-<div class="highlight"><pre><span></span><code>```
-helm install xsk xsk/xsk
-```
-
-???+ info &quot;Accessing the XSK Instance&quot;
-    Running this command will install XSK Deployment and Service with ClusterIP only.
-    To access the XSK instance, execute the command that was printed in the console.
-
-    Example:
-
-    ```
-    export POD_NAME=$(kubectl get pods --namespace default -l &quot;app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk&quot; -o jsonpath=&quot;{.items[0].metadata.name}&quot;)
-    echo &quot;Visit http://127.0.0.1:8080 to use your application&quot;
-    kubectl --namespace default port-forward $POD_NAME 8080:8080    
-    ```
-
-    - Navigate to: [http://127.0.0.1:8080](http://127.0.0.1:8080)
-    - Log in with these username and password: `dirigible`/`dirigible`
-</code></pre></div>
-<h4 id="setup-on-kyma">Setup on Kyma:</h4>
-<div class="highlight"><pre><span></span><code>=== &quot;Basic&quot;
-
-    ```
-    helm install xsk xsk/xsk \
-    --set kyma.enabled=true \
-    --set kyma.apirule.host=&lt;kyma-host&gt;
-    ```
-
-    This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.
-
-    !!! info &quot;Configuration Options&quot;
-        You can also use other configuration parameters. See [Configuration Options](####Generic).
-
-=== &quot;PostgreSQL&quot;
-
-    ```
-    helm install xsk xsk/xsk \
-    --set kyma.enabled=true \
-    --set kyma.apirule.host=&lt;kyma-host&gt; \
-    --set database.enabled=true
-    ```
-
-    This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.
-</code></pre></div>
 <h2 id="next-steps">Next Steps</h2>
 <hr />
 <ul>
@@ -749,7 +738,7 @@ helm install xsk xsk/xsk
     <div class="highlight"><pre><span></span><code>helm uninstall xsk
 </code></pre></div></li>
 </ul>
-<h2 id="configuration-options">Configuration Options</h2>
+<h2 id="list-of-configuration-options">List of Configuration Options</h2>
 <hr />
 <p>The following table lists all the configurable parameters exposed by the XSK chart and their default values:</p>
 <h4 id="generic">Generic</h4>

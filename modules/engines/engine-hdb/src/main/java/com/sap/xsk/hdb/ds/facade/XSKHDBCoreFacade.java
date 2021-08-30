@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -119,6 +120,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
       }
     } catch (XSKDataStructuresException e) {
       logger.error("Synchronized artifact with path " + registryPath + " is not valid");
+      logger.error(e.getMessage());
+      return;
+    } catch (XSKArtifactParserException e) {
       logger.error(e.getMessage());
       return;
     } catch (Exception e) {

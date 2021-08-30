@@ -85,8 +85,8 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
         parser.addErrorListener(parserErrorListener);
 
         ParseTree parseTree = parser.hdbviewDefinition();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB View", logger);
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB View", logger);
+        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB View");
+        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB View");
 
         XSKHDBVIEWCoreListener XSKHDBVIEWCoreListener = new XSKHDBVIEWCoreListener();
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

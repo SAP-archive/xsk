@@ -27,7 +27,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
 
 1. Deployment
 
-    ### Default Setup
+    #### Default Setup
 
     ```
     helm install xsk xsk/xsk
@@ -48,7 +48,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         - Navigate to: [http://127.0.0.1:8080](http://127.0.0.1:8080)
         - Log in with these username and password: `dirigible`/`dirigible`
 
-    ### Setup on Kyma
+    #### Setup on Kyma
 
     === "Basic"
 
@@ -90,7 +90,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
 
 The following table lists all the configurable parameters exposed by the XSK chart and their default values:
 
-##### List of All Configurable Parameters and Their Values
+#### List of All Configurable Parameters and Their Values
 
 |             Name             |          Description            |            Default                 |
 |------------------------------|---------------------------------|------------------------------------|

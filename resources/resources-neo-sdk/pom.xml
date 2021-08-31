@@ -14,12 +14,38 @@
 	<version>0.9.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<properties>
-		<profile.content.phase>generate-sources</profile.content.phase>
-		<content.repository.name>xsk-resources-neo-sdk</content.repository.name>
-		<content.project.name>resources-neo-sdk</content.project.name>
-		<content.repository.branch>master</content.repository.branch>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.sap.cloud</groupId>
+									<artifactId>neo-java-web-sdk</artifactId>
+									<version>${neo-java-web-sdk.version}</version>
+									<type>zip</type>
+									<outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk</outputDirectory>
+									<overWrite>true</overWrite>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
+	<properties>
 		<license.header.location>../../licensing-header.txt</license.header.location>
 	</properties>
 

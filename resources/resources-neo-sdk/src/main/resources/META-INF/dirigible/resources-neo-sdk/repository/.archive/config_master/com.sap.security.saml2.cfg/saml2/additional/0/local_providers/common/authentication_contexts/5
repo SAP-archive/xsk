@@ -1,7 +1,0 @@
-#Tue Jan 26 14:49:07 EET 2010
-isHTTP=false
-name=urn\:oasis\:names\:tc\:SAML\:2.0\:ac\:classes\:TLSClient
-isHTTPS=true
-isCustom=false
-alias=TLSClient
-isInteractive=false

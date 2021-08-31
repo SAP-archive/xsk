@@ -610,41 +610,41 @@
                 
                 <h1 id="environment-variables">Environment Variables</h1>
 <h2 id="configuration-types">Configuration Types</h2>
-<p>Based on the layer, they are defined, configuration variables have the following priorities:</p>
+<p>Depending on the layer the configuration variables are defined by, they have the following priorities:</p>
 <div class="tabbed-set" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Runtime</label><div class="tabbed-content">
 <p>Highest precedence:</p>
 <ul>
-<li>No rebuild or restart of the application is required when configuration is changed.</li>
+<li>No rebuild or restart of the application is required when a configuration is changed.</li>
 <li>The <a href="../../../api/core/configurations/">Configuration API</a> could be used to apply changes in the <strong>Runtime</strong> configuration.</li>
 </ul>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Environment</label><div class="tabbed-content">
 <p>Second precedence:</p>
 <ul>
-<li>No rebuild is required when configuration is changed, however the application should be restarted, to apply the environment changes.</li>
-<li>Usually the <strong>Environment</strong> configurations are provided during the application deployment, as part of application descriptor <em>(e.g. <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/">Define environment variable for container in Kubernetes</a> or in <a href="https://docs.cloudfoundry.org/devguide/deploy-apps/manifest-attributes.html#-add-variables-to-a-manifest">Cloud Foundry App Manifest</a>)</em>.</li>
+<li>No rebuild is required when a configuration is changed. However, you should restart the application to apply the environment changes.</li>
+<li>Usually, the <strong>Environment</strong> configurations are provided during the application deployment, as part of application descriptor <em>(e.g. <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/">Define environment variable for container in Kubernetes</a>, or in <a href="https://docs.cloudfoundry.org/devguide/deploy-apps/manifest-attributes.html#-add-variables-to-a-manifest">Cloud Foundry App Manifest</a>)</em>.</li>
 </ul>
 </div>
 <input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">Deployment</label><div class="tabbed-content">
 <p>Third precedence:</p>
 <ul>
-<li>Rebuild and re-deployment is required.</li>
+<li>Rebuild and redeployment are required.</li>
 <li>"Default" deployment <em>(<code>ROOT.war</code>)</em> configuration variables are taken from <code>dirigible.properties</code> properties file <em>(sample could be found <a href="https://github.com/eclipse/dirigible/blob/master/releng/server-all/src/main/resources/dirigible.properties">here</a>)</em>.</li>
 </ul>
 </div>
 <input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><label for="__tabbed_1_4">Module</label><div class="tabbed-content">
 <p>Lowest precedence:</p>
 <ul>
-<li>Rebuild and re-deployment is required.</li>
+<li>Rebuild and redeployment are required.</li>
 <li>"Default" module <em>(e.g. <code>dirigible-database-custom.jar</code>, <code>dirigible-database-h2.jar</code>)</em> configuration variables are taken from <code>dirigible-xxx.properties</code> properties files <em>(sample could be found <a href="https://github.com/eclipse/dirigible/blob/master/modules/database/database-h2/src/main/resources/dirigible-database-h2.properties">here</a> and <a href="https://github.com/eclipse/dirigible/blob/master/modules/database/database-custom/src/main/resources/dirigible-database-custom.properties">here</a>)</em></li>
 </ul>
 </div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The precedence order means that, if the there is an <strong>Environment</strong> variable with name <code>DIRIGIBLE_TEST</code> and <strong>Runtime</strong> variable with the same name, the <strong>Runtime</strong> variable will have high prority and will be applied.</p>
+<p>The precedence order means that if the there is an <strong>Environment</strong> variable with name <code>DIRIGIBLE_TEST</code> and <strong>Runtime</strong> variable with the same name, the <strong>Runtime</strong> variable will have higher priority and will be applied.</p>
 </div>
-<p>All applied configuration values could be found under the <a href="https://www.dirigible.io/help/development/ide/views/configurations/">Configurations View</a>.</p>
+<p>You can find all applied configuration values under the <a href="https://www.dirigible.io/help/development/ide/views/configurations/">Configurations View</a>.</p>
 <h2 id="configuration-parameters">Configuration Parameters</h2>
 <h3 id="hdi">HDI</h3>
 <hr />
@@ -670,7 +670,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><em><strong>Note:</strong> All Eclipse Dirigible related environment variables could be found <a href="https://www.dirigible.io/help/setup/setup-environment-variables/">here</a>.</em></p>
+<p><em><strong>Note:</strong> You can find all Eclipse Dirigible related environment variables <a href="https://www.dirigible.io/help/setup/setup-environment-variables/">here</a>.</em></p>
 </blockquote>
                 
                   

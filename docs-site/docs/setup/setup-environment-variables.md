@@ -55,4 +55,5 @@ Parameter               | Description                                           
 **XSK_HDI_SUPPORTED**   | Whether the HDI API is supported by the database _(e.g. HANA)_ | _`true`_
 **XSK_HDI_ONLY**        | Database models to be processed only via the HDI API           | _`false`_
 
-> _**Note:** You can find all Eclipse Dirigible related environment variables [here](https://www.dirigible.io/help/setup/setup-environment-variables/)._
+!!! Note
+	You can find all Eclipse Dirigible related environment variables [here](https://www.dirigible.io/help/setup/setup-environment-variables/).

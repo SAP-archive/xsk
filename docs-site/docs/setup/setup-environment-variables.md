@@ -8,6 +8,7 @@ Environment Variables
 ===
 
 ## Configuration Types
+---
 
 Depending on the layer that defines the configuration variables, they have the following priorities:
 
@@ -46,6 +47,7 @@ Depending on the layer that defines the configuration variables, they have the f
 You can find all applied configuration values under the [Configurations View](https://www.dirigible.io/help/development/ide/views/configurations/).
 
 ## Configuration Parameters
+---
 
 ### HDI
 ---

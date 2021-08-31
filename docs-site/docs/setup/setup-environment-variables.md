@@ -9,7 +9,7 @@ Environment Variables
 
 ## Configuration Types
 
-Depending on the layer the configuration variables are defined by, they have the following priorities:
+Depending on the layer that defines the configuration variables, they have the following priorities:
 
 === "Runtime"
 

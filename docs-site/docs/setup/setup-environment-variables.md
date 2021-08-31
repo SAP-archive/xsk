@@ -16,7 +16,7 @@ Depending on the layer the configuration variables are defined by, they have the
     Highest precedence:
     
     - No rebuild or restart of the application is required when a configuration is changed.
-    - The [Configuration API](../../../api/core/configurations/) could be used to apply changes in the **Runtime** configuration.
+    - You can use the [Configuration API](../../../api/core/configurations/) to apply changes in the **Runtime** configuration.
 
 === "Environment"
 
@@ -31,14 +31,14 @@ Depending on the layer the configuration variables are defined by, they have the
     Third precedence:
     
     - Rebuild and redeployment are required.
-    - "Default" deployment _(`ROOT.war`)_ configuration variables are taken from `dirigible.properties` properties file _(sample could be found [here](https://github.com/eclipse/dirigible/blob/master/releng/server-all/src/main/resources/dirigible.properties))_.
+    - "Default" deployment _(`ROOT.war`)_ configuration variables are taken from `dirigible.properties` properties file. You can find a sample [here](https://github.com/eclipse/dirigible/blob/master/releng/server-all/src/main/resources/dirigible.properties).
 
 === "Module"
 
     Lowest precedence:
     
     - Rebuild and redeployment are required.
-    - "Default" module _(e.g. `dirigible-database-custom.jar`, `dirigible-database-h2.jar`)_ configuration variables are taken from `dirigible-xxx.properties` properties files _(sample could be found [here](https://github.com/eclipse/dirigible/blob/master/modules/database/database-h2/src/main/resources/dirigible-database-h2.properties) and [here](https://github.com/eclipse/dirigible/blob/master/modules/database/database-custom/src/main/resources/dirigible-database-custom.properties))_
+    - "Default" module _(e.g. `dirigible-database-custom.jar`, `dirigible-database-h2.jar`)_ configuration variables are taken from `dirigible-xxx.properties` properties files. You can find samples [here](https://github.com/eclipse/dirigible/blob/master/modules/database/database-h2/src/main/resources/dirigible-database-h2.properties) and [here](https://github.com/eclipse/dirigible/blob/master/modules/database/database-custom/src/main/resources/dirigible-database-custom.properties).
 
 !!! Note
 	The precedence order means that if the there is an **Environment** variable with name `DIRIGIBLE_TEST` and **Runtime** variable with the same name, the **Runtime** variable will have higher priority and will be applied.
@@ -55,5 +55,5 @@ Parameter               | Description                                           
 **XSK_HDI_SUPPORTED**   | Whether the HDI API is supported by the database _(e.g. HANA)_ | _`true`_
 **XSK_HDI_ONLY**        | Database models to be processed only via the HDI API           | _`false`_
 
-!!! Note
+!!! example "Additional Information"
 	You can find all Eclipse Dirigible related environment variables [here](https://www.dirigible.io/help/setup/setup-environment-variables/).

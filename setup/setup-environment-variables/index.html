@@ -615,7 +615,7 @@
 <p>Highest precedence:</p>
 <ul>
 <li>No rebuild or restart of the application is required when a configuration is changed.</li>
-<li>The <a href="../../../api/core/configurations/">Configuration API</a> could be used to apply changes in the <strong>Runtime</strong> configuration.</li>
+<li>You can use the <a href="../../../api/core/configurations/">Configuration API</a> to apply changes in the <strong>Runtime</strong> configuration.</li>
 </ul>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Environment</label><div class="tabbed-content">
@@ -629,14 +629,14 @@
 <p>Third precedence:</p>
 <ul>
 <li>Rebuild and redeployment are required.</li>
-<li>"Default" deployment <em>(<code>ROOT.war</code>)</em> configuration variables are taken from <code>dirigible.properties</code> properties file <em>(sample could be found <a href="https://github.com/eclipse/dirigible/blob/master/releng/server-all/src/main/resources/dirigible.properties">here</a>)</em>.</li>
+<li>"Default" deployment <em>(<code>ROOT.war</code>)</em> configuration variables are taken from <code>dirigible.properties</code> properties file. You can find a sample <a href="https://github.com/eclipse/dirigible/blob/master/releng/server-all/src/main/resources/dirigible.properties">here</a>.</li>
 </ul>
 </div>
 <input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><label for="__tabbed_1_4">Module</label><div class="tabbed-content">
 <p>Lowest precedence:</p>
 <ul>
 <li>Rebuild and redeployment are required.</li>
-<li>"Default" module <em>(e.g. <code>dirigible-database-custom.jar</code>, <code>dirigible-database-h2.jar</code>)</em> configuration variables are taken from <code>dirigible-xxx.properties</code> properties files <em>(sample could be found <a href="https://github.com/eclipse/dirigible/blob/master/modules/database/database-h2/src/main/resources/dirigible-database-h2.properties">here</a> and <a href="https://github.com/eclipse/dirigible/blob/master/modules/database/database-custom/src/main/resources/dirigible-database-custom.properties">here</a>)</em></li>
+<li>"Default" module <em>(e.g. <code>dirigible-database-custom.jar</code>, <code>dirigible-database-h2.jar</code>)</em> configuration variables are taken from <code>dirigible-xxx.properties</code> properties files. You can find samples <a href="https://github.com/eclipse/dirigible/blob/master/modules/database/database-h2/src/main/resources/dirigible-database-h2.properties">here</a> and <a href="https://github.com/eclipse/dirigible/blob/master/modules/database/database-custom/src/main/resources/dirigible-database-custom.properties">here</a>.</li>
 </ul>
 </div>
 </div>
@@ -669,8 +669,8 @@
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<div class="admonition example">
+<p class="admonition-title">Additional Information</p>
 <p>You can find all Eclipse Dirigible related environment variables <a href="https://www.dirigible.io/help/setup/setup-environment-variables/">here</a>.</p>
 </div>
                 

@@ -107,16 +107,18 @@ public class XSKHDBVIEWCoreListenerTest {
     model.checkForAllMandatoryFieldsPresence();
     assertNotNull(model);
     assertEquals(hdbviewParser.getNumberOfSyntaxErrors(), 0);
-    assertEquals("\n"
-        + "-- some comment\n"
-        + "select distinct code from\n"
-        + "(\n"
-        + "    select current_status_code as code, status_model_code\n"
-        + "    from \"sap.db.status::t_status_model_transition\"\n"
-        + "    union all\n"
-        + "    select next_status_code as code, status_model_code\n"
-        + "    from \"sap.db.status::t_status_model_transition\"\n"
-        + ")\n"
-        + "where status_model_code = 'sap.config.EVALUATION'\n", model.getQuery());
+
+    var osLineSeparator = System.lineSeparator();
+    assertEquals( osLineSeparator
+        + "-- some comment" + osLineSeparator
+        + "select distinct code from" + osLineSeparator
+        + "(" + osLineSeparator
+        + "    select current_status_code as code, status_model_code" + osLineSeparator
+        + "    from \"sap.db.status::t_status_model_transition\"" + osLineSeparator
+        + "    union all" + osLineSeparator
+        + "    select next_status_code as code, status_model_code" + osLineSeparator
+        + "    from \"sap.db.status::t_status_model_transition\"" + osLineSeparator
+        + ")" + osLineSeparator
+        + "where status_model_code = 'sap.config.EVALUATION'" + osLineSeparator, model.getQuery());
   }
 }

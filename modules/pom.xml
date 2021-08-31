@@ -21,7 +21,8 @@
 		<module>parsers</module>
 		<module>engines</module>
 		<module>ide</module>
-	</modules>
+    <module>integration-tests</module>
+  </modules>
 
 	<properties>
 		<license.header.location>../licensing-header.txt</license.header.location>

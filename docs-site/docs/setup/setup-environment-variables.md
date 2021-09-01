@@ -49,7 +49,7 @@ You can find all applied configuration values under the [Configurations View](ht
 ## Configuration Parameters
 ---
 
-### HDI
+### HDI Environment Variables
 ---
 
 Parameter               | Description                                                    | Default*

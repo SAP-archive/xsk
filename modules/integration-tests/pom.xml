@@ -90,12 +90,14 @@
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <version>${selenium.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>io.github.bonigarcia</groupId>
       <artifactId>webdrivermanager</artifactId>
       <version>${selenium.webdriver.manager.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

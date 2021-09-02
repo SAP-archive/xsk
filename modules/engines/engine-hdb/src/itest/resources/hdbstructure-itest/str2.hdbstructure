@@ -1,0 +1,7 @@
+table.schemaName = "TEST_SCHEMA";
+table.description = "bla";
+table.temporary   = true;
+table.columns = [
+    {name = "ID";        sqlType = INTEGER;              comment = "Object identifier";},
+    {name = "BIZ_EVENT"; sqlType = VARCHAR; length = 60; comment = "Object type code";}
+];

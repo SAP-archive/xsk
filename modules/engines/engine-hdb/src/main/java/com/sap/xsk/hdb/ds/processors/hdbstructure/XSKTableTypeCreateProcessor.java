@@ -11,11 +11,20 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbstructure;
 
+import static java.text.MessageFormat.format;
+
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
+import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
@@ -24,29 +33,37 @@ import org.eclipse.dirigible.database.sql.builders.tableType.CreateTableTypeBuil
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
 
-import static java.text.MessageFormat.format;
+public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableTypeModel> {
 
-public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableTypeModel>{
   private static final Logger logger = LoggerFactory.getLogger(XSKTableTypeCreateProcessor.class);
+  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
+  /**
+   * Execute the corresponding statement.
+   * The method will create a table type and a public synonym in order this table type to be accessed from other schemas.
+   *
+   * @param connection     the connection
+   * @param tableTypeModel the table type model
+   * @throws SQLException the SQL exception
+   */
   @Override
   public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel) throws SQLException {
     logger.info("Processing Create Table Type: " + tableTypeModel.getName());
-    String tableTypeNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableTypeModel.getName(), tableTypeModel.getSchema());
+
+    String tableTypeNameWithoutSchema = tableTypeModel.getName();
+    String tableTypeNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableTypeNameWithoutSchema, tableTypeModel.getSchema());
     List<XSKDataStructureHDBTableColumnModel> columns = tableTypeModel.getColumns();
 
     if (!SqlFactory.getNative(connection).exists(connection, tableTypeNameWithSchema, DatabaseArtifactTypes.TABLE_TYPE)) {
       String sql = null;
-      CreateTableTypeBuilder createTableTypeBuilder = SqlFactory.getNative(connection).create().tableType(tableTypeNameWithSchema) ;
+      CreateTableTypeBuilder createTableTypeBuilder = SqlFactory.getNative(connection).create().tableType(tableTypeNameWithSchema);
 
       for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
         String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName());
         DataType type = DataType.valueOf(columnModel.getType());
-        createTableTypeBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), this.getColumnModelArgs(columnModel));
+        createTableTypeBuilder
+            .column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), this.getColumnModelArgs(columnModel));
       }
 
       switch (tableTypeModel.getDBContentType()) {
@@ -66,7 +83,13 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
       }
       executeSql(sql, connection);
     } else {
-      logger.warn(format("Table Type [{0}] already exists during the create process", tableTypeModel.getName()));
+      logger.warn(format("Table Type [{0}] already exists during the create process", tableTypeNameWithoutSchema));
+    }
+
+    //Create public synonym
+    if (SqlFactory.getNative(connection).exists(connection, tableTypeNameWithoutSchema, DatabaseArtifactTypes.TABLE_TYPE)) {
+      XSKHDBUtils.createPublicSynonymForArtifact(managerServices
+          .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableTypeNameWithoutSchema, tableTypeModel.getSchema(), connection);
     }
   }
 

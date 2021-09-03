@@ -14,54 +14,38 @@ let workspaceManager = require("platform/v4/workspace");
 var database = require("db/v4/database");
 
 
-class MigrationController {
+class MigrationService {
 
     connection = null;
     repo = null;
 
-    setupConnection(db, neoCredentials, cuser, hanaPass) {
-            database.createDataSource(db, "com.sap.db.jdbc.Driver", neoCredentials['jdbcUrl'], cuser, hanaPass, null);
+    setupConnection(databaseName, databaseUser, databaseUserPassword) {
+        database.createDataSource(databaseName, "com.sap.db.jdbc.Driver", "jdbc:sap://localhost:30015/", databaseUser, databaseUserPassword, null);
 
-            this.connection = database.getConnection('dynamic', db);
-            this.repo = new HanaRepository(this.connection);
+        this.connection = database.getConnection('dynamic', databaseName);
+        this.repo = new HanaRepository(this.connection);
     }
 
-    getAllDeliveryUnits(completion) {
-        
+    getAllDeliveryUnits() {
         if (!this.repo) {
-            
-            return completion("Repository not initialized", null);       
+            throw new Error("Repository not initialized");
         }
-        
-        try {
-            this.repo.getAllDeliveryUnits(function(error, result){
-                completion(null, result);
-            });
-        } catch (error) {
-            completion(error)
-        } 
+
+        return this.repo.getAllDeliveryUnits();
     }
 
-    copyAllFilesForDu(workspaceName, du, completion) {
+    copyAllFilesForDu(du, workspaceName) {
         if (!this.repo) {
-            return completion("Repository not initialized", null);
+            throw new Error("Repository not initialized");
         }
 
         let context = {};
-        try {
-            this.repo.getAllFilesForDu(context, du, (err, files, packages) => {
-                console.log("Files list: " + JSON.stringify(files));
-                this.dumpSourceFiles(workspaceName, files, du, function(err){
-                    completion(err);
-                })
-            })
-        } catch (error) {
-            console.error(error)
-            completion(error);
-        } 
+        const filesAndPackagesObject = this.repo.getAllFilesForDu(context, du)
+        console.log("Files list: " + JSON.stringify(filesAndPackagesObject.files));
+        this.dumpSourceFiles(workspaceName, filesAndPackagesObject.files, du)
     }
 
-    dumpSourceFiles(workspaceName, lists, du, callback) {
+    dumpSourceFiles(workspaceName, lists, du) {
         let workspace;
         if (!workspaceName) {
             workspace = workspaceManager.getWorkspace(du.name)
@@ -69,25 +53,24 @@ class MigrationController {
                 workspaceManager.createWorkspace(du.name)
                 workspace = workspaceManager.getWorkspace(du.name)
             }
-        } 
+        }
         workspace = workspaceManager.getWorkspace(workspaceName);
 
-        for(let i = 0; i < lists.length; i++) {
+        for (let i = 0; i < lists.length; i++) {
             const file = lists[i];
             let project = workspace.getProject(file.packageId)
             if (!project) {
                 workspace.createProject(file.packageId)
                 project = workspace.getProject(file.packageId)
             }
- 
+
             let projectFile = project.createFile(file.RunLocation);
             projectFile.setContent(file._content);
         }
-        callback(null);
     }
 
 }
 
-module.exports = MigrationController;
+module.exports = MigrationService;
 
 

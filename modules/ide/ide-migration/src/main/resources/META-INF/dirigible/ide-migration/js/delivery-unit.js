@@ -26,7 +26,8 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
         "Provide the target workspace and delivery unit"
     ];
     $scope.descriptionText = descriptionList[0];
-    let neoTunnelOutput = undefined;
+    let connectionId = undefined;
+    let processId = undefined;
     let neoData = undefined;
     let hanaData = undefined;
     let defaultErrorTitle = "Error loading delivery units";
@@ -37,20 +38,33 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
             neo: neoData,
             hana: hanaData
         }
+
         $http.post(
-            // "/services/v4/migration-operations/setup-migration",
-            "/services/v4/js/ide-migration/server/app.js/setup-migration",
+            "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/start-process",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {
-            neoTunnelOutput = response.data.neoTunnelOutput;
-            $scope.workspaces = response.data.workspaces;
-            $scope.workspacesList = $scope.workspaces;
-            $scope.deliveryUnits = response.data.du;
-            $scope.deliveryUnitList = $scope.deliveryUnits;
-            $scope.$parent.setBottomNavEnabled(true);
-            $scope.descriptionText = descriptionList[1];
-            $scope.dataLoaded = true;
+            processId = body.processInstanceId = response.data.processInstanceId;
+            const timer = setInterval(function(){
+              $http.post(
+                          "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/get-process",
+                          JSON.stringify(body),
+                          { headers: { 'Content-Type': 'application/json' } }
+                      ).then(function (response) {
+                          if (response.data.workspaces && response.data.deliveryUnits && response.data.connectionId) {
+                                        clearInterval(timer);
+                                        connectionId = response.data.connectionId;
+                                        $scope.workspaces = response.data.workspaces;
+                                        $scope.workspacesList = $scope.workspaces;
+                                        $scope.deliveryUnits = response.data.deliveryUnits;
+                                        $scope.deliveryUnitList = $scope.deliveryUnits;
+                                        $scope.$parent.setBottomNavEnabled(true);
+                                        $scope.descriptionText = descriptionList[1];
+                                        $scope.dataLoaded = true;
+                          }
+                      }, function (response) {})
+            }, 1000);
+
         }, function (response) {
             if (response.data) {
                 if ("error" in response.data) {
@@ -165,7 +179,8 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
             if (msg.data.getData === "all") {
                 $messageHub.message(msg.data.controller, {
                     duData: {
-                        "neoTunnelOutput": neoTunnelOutput,
+                        "processId": processId,
+                        "connectionId": connectionId,
                         "workspace": selectedWorkspace,
                         "du": selectedDeliveyUnit,
                     }

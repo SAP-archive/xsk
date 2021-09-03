@@ -65,6 +65,8 @@ public class XSKHDBSchemaParserHanaITTest {
             .format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbschema-itest/SampleHANAXSClassicSchema.hdbschema'",
                 hanaUserName));
       }
+      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+      facade.clearCache();
     }
   }
 

@@ -13,31 +13,7 @@ package com.sap.xsk.hdb.ds.facade;
 
 import static java.text.MessageFormat.format;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
 import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
@@ -49,6 +25,7 @@ import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.service.XSKDataStructureTopologicalSorter;
@@ -56,18 +33,6 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
 import com.sap.xsk.utils.XSKHDBUtils;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -78,8 +43,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.text.MessageFormat.format;
+import javax.sql.DataSource;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.repository.api.IResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
@@ -414,26 +388,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
-          // process Tables in the proper order
-          for (String dsName : sorted) {
-            XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) dataStructureTablesModel.get(dsName);
-            try {
-              if (model != null) {
-                String escapedName = XSKHDBUtils.escapeArtifactName(connection, model.getName());
-                if (!SqlFactory.getNative(connection).exists(connection, escapedName)) {
-                  xskTableManagerService.createDataStructure(connection, model);
-                } else {
-                  logger.warn(format("Table [{0}] already exists during the update process", dsName));
-                  if (SqlFactory.getNative(connection).count(connection, escapedName) != 0) {
-                    xskTableManagerService.updateDataStructure(connection, model);
-                  }
-                }
-              }
-            } catch (Exception e) {
-              logger.error(e.getMessage(), e);
-              errors.add(e.getMessage());
-            }
-          }
           // process Tables in the proper order
           for (String dsName : sorted) {
             XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) dataStructureTablesModel.get(dsName);

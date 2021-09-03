@@ -20,6 +20,7 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -63,6 +64,8 @@ public class XSKHDBScalarFunctionHanaITTest {
             "DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbscalarfunction-itest/SampleHanaScalarFunction.hdbscalarfunction'",
             hanaUserName));
       }
+      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+      facade.clearCache();
     }
   }
 
@@ -80,7 +83,7 @@ public class XSKHDBScalarFunctionHanaITTest {
       this.facade.updateEntities();
 
       ResultSet rs = stmt.executeQuery(
-          "SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('hdbtablefunction-itest::SampleHanaTableFunction')");
+          "SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('hdbscalarfunction-itest::SampleHanaScalarFunction')");
       assertTrue(rs.next());
       assertEquals(1, rs.getInt("rawsCount"));
       stmt.executeUpdate(

@@ -11,7 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.itest.module;
 
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.module.XSKHDBModule;
+import com.sap.xsk.hdb.ds.service.manager.*;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -21,6 +24,7 @@ import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Map;
 
 public class XSKHDBTestModule extends AbstractDirigibleModule {
 
@@ -60,5 +64,22 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
   @Override
   public void configure() {
     StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
+
+    //when we run all integration tests at once, the first run test will determine the datasource of XSKDataStructuresCoreService.
+    //this can lead to issue, for example running MYSQL test which is accessing the HANA db, and leading to inconsistent test results
+    //that is why we are clearing and reentering the managerServices
+    //see: XSKHDBModule.bindManagerServicesToFileExtensions()
+    Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
+    managerServices.clear();
+    managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new IXSKViewManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new IXSKSynonymManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new IXSKTableFunctionManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new IXSKSchemaManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new IXSKProceduresManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new IXSKHDBSequenceManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION, new IXSKScalarFunctionManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new IXSKTableTypeManagerService());
   }
 }

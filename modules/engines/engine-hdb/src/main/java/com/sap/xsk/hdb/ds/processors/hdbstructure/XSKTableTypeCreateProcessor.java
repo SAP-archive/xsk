@@ -55,7 +55,8 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
     String tableTypeNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableTypeNameWithoutSchema, tableTypeModel.getSchema());
     List<XSKDataStructureHDBTableColumnModel> columns = tableTypeModel.getColumns();
 
-    if (!SqlFactory.getNative(connection).exists(connection, tableTypeNameWithSchema, DatabaseArtifactTypes.TABLE_TYPE)) {
+    if (!SqlFactory.getNative(connection)
+        .exists(connection, tableTypeModel.getSchema(), tableTypeNameWithoutSchema, DatabaseArtifactTypes.TABLE_TYPE)) {
       String sql = null;
       CreateTableTypeBuilder createTableTypeBuilder = SqlFactory.getNative(connection).create().tableType(tableTypeNameWithSchema);
 
@@ -86,8 +87,9 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
       logger.warn(format("Table Type [{0}] already exists during the create process", tableTypeNameWithoutSchema));
     }
 
-    //Create public synonym
-    if (SqlFactory.getNative(connection).exists(connection, tableTypeNameWithoutSchema, DatabaseArtifactTypes.TABLE_TYPE)) {
+    //Create public synonym only if the table type exist
+    if (SqlFactory.getNative(connection)
+        .exists(connection, tableTypeModel.getSchema(), tableTypeNameWithoutSchema, DatabaseArtifactTypes.TABLE_TYPE)) {
       XSKHDBUtils.createPublicSynonymForArtifact(managerServices
           .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableTypeNameWithoutSchema, tableTypeModel.getSchema(), connection);
     }

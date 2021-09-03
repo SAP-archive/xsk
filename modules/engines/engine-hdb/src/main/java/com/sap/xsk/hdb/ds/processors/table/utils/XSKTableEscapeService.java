@@ -43,7 +43,7 @@ public class XSKTableEscapeService {
 
   public XSKTableEscapeService(Connection connection, XSKDataStructureHDBTableModel tableModel) {
     this.tableModel = tableModel;
-    String escapedName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName());
+    String escapedName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
     this.createTableBuilder = SqlFactory.getNative(connection).create().table(escapedName);
     this.connection = connection;
     this.shouldEscapeArtefactPropertyName =

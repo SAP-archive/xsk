@@ -20,6 +20,7 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
@@ -64,6 +65,8 @@ public class XSKHDBProcedureParserHanaITTest {
             .format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure'",
                 hanaUserName));
       }
+      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+      facade.clearCache();
     }
   }
 

@@ -54,7 +54,6 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     String tableNameWithoutSchema = tableModel.getName();
     String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
 
-    tableModel.setName(tableNameWithSchema);
     XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, tableModel);
 
     switch (tableModel.getDBContentType()) {

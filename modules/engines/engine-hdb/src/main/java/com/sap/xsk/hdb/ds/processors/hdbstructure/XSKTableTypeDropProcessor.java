@@ -49,7 +49,8 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
       throw new IllegalStateException(String.format("XSK does not support Table Type for %s yet", dialect.getDatabaseName(connection)));
     } else {
-      if (SqlFactory.getNative(connection).exists(connection, tableTypeModel.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {
+      if (SqlFactory.getNative(connection)
+          .exists(connection, tableTypeModel.getSchema(), tableTypeModel.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {
         String tableTypeName = XSKHDBUtils.escapeArtifactName(connection, tableTypeModel.getName());
         String sql = SqlFactory.getNative(connection).drop().tableType(tableTypeName).build();
         executeSql(sql, connection);

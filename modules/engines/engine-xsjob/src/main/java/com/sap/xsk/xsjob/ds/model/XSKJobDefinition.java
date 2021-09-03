@@ -34,7 +34,7 @@ public class XSKJobDefinition {
   @Column(name = "MODULE", columnDefinition = "VARCHAR", nullable = false, length = 255)
   private String module;
 
-  @Column(name = "FUNCTION", columnDefinition = "VARCHAR", nullable = false, length = 255)
+  @Column(name = "JOB_FUNCTION", columnDefinition = "VARCHAR", nullable = false, length = 255)
   private String function;
 
   @Column(name = "CRON_EXPRESSION", columnDefinition = "VARCHAR", nullable = false, length = 255)

@@ -41,7 +41,8 @@ public class XSKJobCoreService implements IXSKJobCoreService {
   }
 
   @Override
-  public XSKJobDefinition createJob(String name, String group, String description, String module, String action, String cronExpression,
+  public XSKJobDefinition
+  createJob(String name, String group, String description, String module, String action, String cronExpression,
       Map<String, String> parametersAsMap) throws SchedulerException {
 
     try {

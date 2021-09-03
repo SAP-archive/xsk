@@ -56,6 +56,7 @@ public class XSKHDBTableParserHanaITTest {
     datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
     facade = new XSKHDBCoreFacade();
     indexCounter = 0;
+    facade.clearCache();
   }
 
   @Before
@@ -75,6 +76,7 @@ public class XSKHDBTableParserHanaITTest {
                 hanaUserName));
       }
     }
+    facade.clearCache();
   }
 
   @Test
@@ -325,7 +327,7 @@ public class XSKHDBTableParserHanaITTest {
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
       try {
-        String errMsg = "Incompatible change of table [\"hdbtable-itest::incompatible-column-type-change-hana\"] by adding a column [Col66] which is [of type NVARCHAR to be changed toBIGINT]";
+        String errMsg = "Incompatible change of table [\"hdbtable-itest::incompatible-column-type-change-hana\"] by adding a column [Col66] which is [of type NVARCHAR to be changed to BIGINT]";
         assertTrue(logCaptor.getErrorLogs().stream().anyMatch(logMsg -> logMsg.equals(errMsg)));
 
       } finally {

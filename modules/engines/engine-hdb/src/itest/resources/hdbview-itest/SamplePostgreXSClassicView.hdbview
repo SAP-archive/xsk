@@ -1,5 +1,3 @@
 schema="public";
-query="SELECT T1.\"Column2\" FROM \"public\".\"acme.com.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"public\".\"acme.com.test.views::MY_VIEW1\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"";
-depends_on= ["acme.com.test.tables::MY_TABLE1","acme.com.test.views::MY_VIEW1"];
-depends_on_table= ["acme.com.test.tables::MY_TABLE1","acme.com.test.views::MY_TABLE2"];
-depends_on_view= ["acme.com.test.tables::MY_VIEW1","acme.com.test.views::MY_VIEW2"];
+query="SELECT T1.\"Column2\" FROM \"public\".\"acme.com.test.tables::MY_TABLE10\" AS T1 LEFT JOIN \"public\".\"acme.com.test.tables::MY_TABLE20\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"";
+depends_on_table= ["acme.com.test.tables::MY_TABLE10","acme.com.test.tables::MY_TABLE20"];

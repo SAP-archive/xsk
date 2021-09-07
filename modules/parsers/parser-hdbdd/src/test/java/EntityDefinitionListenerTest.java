@@ -10,8 +10,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import static org.junit.Assert.assertEquals;
-
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
 import com.sap.xsk.parser.hdbdd.custom.EntityDefinitionListener;
@@ -20,14 +18,17 @@ import com.sap.xsk.parser.hdbdd.custom.XSKHdbddErrorListener;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class EntityDefinitionListenerTest {
 
@@ -65,6 +66,17 @@ public class EntityDefinitionListenerTest {
     parsedEntities.forEach(el -> assertEquals("TEST_SCHEMA", el.getSchema()));
   }
 
+  @Test
+  public void parseParseAssociationsSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/Products.hdbdd", "sap/db/Products.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+
+    //product.Orders.items
+    assertEquals(1, parsedEntities.get(1).getAssociations().get(0).getForeignKeys().size());
+  }
+
 //    @Test
 //    public void parseParseStructuredTypeSuccessfully() throws Exception {
 //        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
@@ -72,6 +84,7 @@ public class EntityDefinitionListenerTest {
 //
 //        assertEquals(0, parser.getNumberOfSyntaxErrors());
 //    }
+
 
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {
     String content =

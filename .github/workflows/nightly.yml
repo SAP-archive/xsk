@@ -1,6 +1,4 @@
-# This workflow will build a Java project with Maven
-
-name: Nightly Selenium Tests
+name: Nightly Build
 
 on:
   schedule:
@@ -66,3 +64,11 @@ jobs:
           path: /home/runner/work/xsk/xsk/*.jpg
           retention-days: 2
         if: always()
+
+      - name: Slack Notification
+        if: ${{ failure() }}
+        uses: slackapi/slack-github-action@v1.14.0
+        with:
+          payload: "{\"type\":\"Nightly Build\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

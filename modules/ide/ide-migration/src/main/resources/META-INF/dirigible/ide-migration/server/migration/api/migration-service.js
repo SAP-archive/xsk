@@ -58,13 +58,24 @@ class MigrationService {
 
         for (let i = 0; i < lists.length; i++) {
             const file = lists[i];
-            let project = workspace.getProject(file.packageId)
+            // each file's package id is based on its directory
+            // if we do not get only the first part of the package id, we would have several XSK projects created for directories in the same XS app
+            const filePackageId = file.packageId.split('.')[0]; 
+
+            let project = workspace.getProject(filePackageId)
             if (!project) {
-                workspace.createProject(file.packageId)
-                project = workspace.getProject(file.packageId)
+                workspace.createProject(filePackageId)
+                project = workspace.getProject(filePackageId)
             }
 
-            let projectFile = project.createFile(file.RunLocation);
+            let fileRunLocation = file.RunLocation;
+
+            if (fileRunLocation.startsWith("/" + filePackageId)) { 
+                // remove package id from file location in order to remove XSK project and folder nesting
+                fileRunLocation = fileRunLocation.slice(filePackageId.length + 1);
+            }
+
+            let projectFile = project.createFile(fileRunLocation);
             projectFile.setContent(file._content);
         }
     }

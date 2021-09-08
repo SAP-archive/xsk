@@ -1,0 +1,6 @@
+schema   = "SAP_INO";
+minvalue = 1;
+cycles   = false;
+reset_by = "select ifnull(max(id),0) + 1 as id from
+        (select max(id) as id from \"sap.ino.db.evaluation::t_evaluation_request_item\" )";
+depends_on_table = "sap.ino.db.evaluation::t_evaluation_request_item";

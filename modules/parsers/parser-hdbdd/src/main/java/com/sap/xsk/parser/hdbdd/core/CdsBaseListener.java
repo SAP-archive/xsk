@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbdd/core/Cds.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbdd\core\Cds.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbdd.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -284,6 +284,19 @@ public class CdsBaseListener implements CdsListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAnnMarkerRule(@NotNull CdsParser.AnnMarkerRuleContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElementDetails(@NotNull CdsParser.ElementDetailsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElementDetails(@NotNull CdsParser.ElementDetailsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

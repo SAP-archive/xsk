@@ -313,20 +313,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
-          // drop Entities in a reverse order
-//          IXSKDataStructureManager<XSKDataStructureModel> xskEntityManagerService = managerServices
-//              .get(IXSKDataStructureModel.TYPE_HDB_ENTITIES);
-//          for (int i = sorted.size() - 1; i >= 0; i--) {
-//            String dsName = sorted.get(i);
-//            XSKDataStructureEntitiesModel entitiesModel = (XSKDataStructureEntitiesModel) dataStructureEntitiesModel.get(dsName);
-//            try {
-//              xskEntityManagerService.dropDataStructure(connection, entitiesModel);
-//            } catch (Exception e) {
-//              logger.error(e.getMessage(), e);
-//              errors.add(e.getMessage());
-//            }
-//          }
-
           // drop HDB Table Types (HDB Structures)
           IXSKDataStructureManager<XSKDataStructureModel> xskTableTypeManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
@@ -443,6 +429,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
+          // process Cds models in proper order
           IXSKDataStructureManager<XSKDataStructureModel> xskHdbddManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDBDD);
           for (String dsName : sorted) {

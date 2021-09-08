@@ -20,6 +20,7 @@ import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.context.CDSFileScope;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.entity.CardinalityEnum;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
@@ -28,6 +29,7 @@ import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,14 +45,14 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
   @Override
   public void enterUsingRule(UsingRuleContext ctx) {
-    String packageName = ctx.pack.stream().map(Token::getText).collect(Collectors.joining("."));
-    String fullSymbolName = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
-
+    String packagePath = ctx.pack.stream().map(Token::getText).collect(Collectors.joining("."));
+    String memberPath = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
+    String fullSymbolName = packagePath + "::" + memberPath;
     Symbol externalSymbol = this.symbolTable.getSymbol(fullSymbolName);
     if (externalSymbol == null) {
       throw new CDSRuntimeException(String.format(
           "Error at line: %d col: %d. Non existing entity in package: %s::%s",
-          ctx.ID.getLine(), ctx.ID.getCharPositionInLine(), packageName, fullSymbolName));
+          ctx.ID.getLine(), ctx.ID.getCharPositionInLine(), packagePath, fullSymbolName));
     }
 
     if (ctx.alias == null) {
@@ -70,13 +72,13 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     Set<Symbol> nonResolvedRefSymbols = new HashSet<>();
     nonResolvedRefSymbols.add((Symbol) referencingSymbol);
     Symbol resolvedTypeSymbol = resolveReferenceChain(referencingSymbol.getReference(), (Symbol) referencingSymbol, nonResolvedRefSymbols);
-    setResolvedType(true, (Typeable) referencingSymbol, resolvedTypeSymbol);
+    setResolvedType(ctx.TYPE_OF() != null, referencingSymbol, resolvedTypeSymbol);
   }
 
   @Override
   public void enterDefaultValue(CdsParser.DefaultValueContext ctx) {
     int valueType = ctx.value.getType();
-    BuiltInTypeSymbol typeOfElement = (BuiltInTypeSymbol) this.entityElements.get(ctx.getParent()).getType();
+    BuiltInTypeSymbol typeOfElement = (BuiltInTypeSymbol) this.entityElements.get(ctx.getParent().getParent()).getType();
 
     //if the default value is se to null, ignore it
     if (ctx.NULL() == null) {
@@ -99,6 +101,8 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     Set<Symbol> nonResolvedRefSymbols = new HashSet<>();
     nonResolvedRefSymbols.add(associationSymbol);
     String reference = ctx.pathSubMembers.stream().map(Token::getText).collect(Collectors.joining("."));
+    associationSymbol.setReference(reference);
+
     Symbol resolvedSymbol = resolveReferenceChain(reference, associationSymbol, nonResolvedRefSymbols);
     if (!(resolvedSymbol instanceof EntitySymbol)) {
       throw new CDSRuntimeException(String.format(
@@ -107,14 +111,13 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     }
 
     associationSymbol.setTarget((EntitySymbol) resolvedSymbol);
-    EntitySymbol entity = (EntitySymbol) associationSymbol.getScope();
-    this.symbolTable.addChildToEntity(entity.getFullName(), resolvedSymbol.getFullName());
   }
 
   @Override
   public void enterForeignKey(CdsParser.ForeignKeyContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent().getParent());
-    String entityName = associationSymbol.getTarget().getName();
+    associationSymbol.setManaged(true);
+    String entityName = associationSymbol.getReference();
     String reference = ctx.pathSubMembers.stream().map(Token::getText).collect(Collectors.joining("."));
     String refFullPath = entityName + "." + reference;
     Symbol resolvedSymbol = resolveReferenceChain(refFullPath, associationSymbol, new HashSet<>(Arrays.asList(associationSymbol)));
@@ -130,11 +133,13 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     }
 
     associationSymbol.addForeignKey((EntityElementSymbol) resolvedSymbol);
+    EntitySymbol entity = (EntitySymbol) associationSymbol.getScope();
+    this.symbolTable.addChildToEntity(entity.getFullName(), resolvedSymbol.getFullName());
   }
 
-  @Override
   public void enterUnmanagedForeignKey(CdsParser.UnmanagedForeignKeyContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
+    associationSymbol.setManaged(false);
     String targetFullName = associationSymbol.getTarget().getName();
     String reference = ctx.pathSubMembers.stream().skip(1).map(Token::getText).collect(Collectors.joining("."));
 
@@ -150,15 +155,27 @@ public class ReferenceResolvingListener extends CdsBaseListener {
           "Error at line: %s. Only an Element of an Entity could be referenced as a foreign key.",
           associationSymbol.getIdToken().getLine()));
     }
-    associationSymbol.addForeignKey((EntityElementSymbol) resolvedTargetSymbol);
 
     EntitySymbol associationHolder = (EntitySymbol) associationSymbol.getScope();
-    Symbol resolvedSourceSymbol = associationHolder.resolve(ctx.source.getText());
-    if (resolvedSourceSymbol == null) {
+    EntityElementSymbol resolvedSourcePkElement = (EntityElementSymbol) associationHolder.resolve(ctx.source.getText());
+    if (resolvedSourcePkElement == null || !resolvedSourcePkElement.isKey()) {
       throw new CDSRuntimeException(String.format(
-          "Error at line: %s. No such field: %s found in: %s.",
+          "Error at line: %s. No such field: %s found in: %s or the field is not a primary key.",
           ctx.source.getLine(), ctx.source.getText(), associationSymbol.getTarget().getName()));
     }
+
+    AssociationSymbol targetAssociation = new AssociationSymbol(reference);
+    targetAssociation.setManaged(false);
+    targetAssociation.setTarget((EntitySymbol) associationSymbol.getScope());
+    targetAssociation.setCardinality(CardinalityEnum.ONE_TO_ONE);
+    targetAssociation.setScope(resolvedTargetSymbol.getScope());
+    targetAssociation.setIdToken(resolvedTargetSymbol.getIdToken());
+    targetAssociation.addForeignKey(resolvedSourcePkElement);
+
+    EntitySymbol targetEntity = associationSymbol.getTarget();
+    targetEntity.define(targetAssociation);
+
+    this.symbolTable.addChildToEntity(targetEntity.getFullName(), associationHolder.getFullName());
   }
 
   private Symbol resolveReferenceChain(String reference, Symbol referencingSymbol, Set<Symbol> nonResolvedRefSymbols) {
@@ -181,7 +198,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
         }
 
         if (resolvedSubMemberType instanceof Scope) {
-          scopeToExplore = (Scope) resolvedSubMemberField;
+          scopeToExplore = (Scope) resolvedSubMemberType;
         } else {
           return null;
         }
@@ -218,12 +235,13 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     } else if (resolvedSymbol instanceof EntitySymbol) {
       throw new CDSRuntimeException(
           String.format("Error at line: %s. Entities could not be used as a type.", typeableSymbol.getIdToken().getLine()));
-    } else if (resolvedSymbol instanceof Typeable && !isTypeOfUsed) {
-      throw new CDSRuntimeException(
-          String.format("Error at line: %s. The reference provided is not a type, but a field.", typeableSymbol.getIdToken().getLine()));
     } else if (resolvedSymbol instanceof Type) {
       typeable.setType((Type) resolvedSymbol);
-    } else if (resolvedSymbol instanceof Typeable && isTypeOfUsed) {
+    } else if (resolvedSymbol instanceof Typeable && !isTypeOfUsed) {
+      throw new CDSRuntimeException(
+          String.format("Error at line: %s. The reference provided is not a type, but a field. Use 'type of' keyword.",
+              typeableSymbol.getIdToken().getLine()));
+    } else if (resolvedSymbol instanceof Typeable) {
       typeable.setType(((Typeable) resolvedSymbol).getType());
     } else if (resolvedSymbol instanceof AssociationSymbol) {
       throw new CDSRuntimeException(String.format("Error at line: %s. Association field is not allowed as a reference, a type is required.",

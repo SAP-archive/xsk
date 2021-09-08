@@ -72,7 +72,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
   @Override
   public void enterNamespaceRule(CdsParser.NamespaceRuleContext ctx) {
     String packageName = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
-    if (!packageName.equals(getExpecteNamespace())) {
+    if (!packageName.equals(getExpectedNamespace())) {
       throw new CDSRuntimeException(
           String.format("Error at line: %s. Namespace does not match the file directory.", ctx.members.get(0).getLine()));
     }
@@ -81,7 +81,9 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterUsingRule(CdsParser.UsingRuleContext ctx) {
-    String fullSymbolName = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
+    String packagePath = ctx.pack.stream().map(Token::getText).collect(Collectors.joining("."));
+    String memberPath = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
+    String fullSymbolName = packagePath + "::" + memberPath;
 
     Symbol externalSymbol = this.symbolTable.getSymbol(fullSymbolName);
     if (externalSymbol == null) {
@@ -213,7 +215,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterElementConstraints(CdsParser.ElementConstraintsContext ctx) {
-    EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent());
+    EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent().getParent());
     boolean isNotNull = !ctx.getText().equals("null");
     if (!isNotNull && elementSymbol.isKey()) {
       throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Element - part of composite key cannot be null.",
@@ -581,7 +583,6 @@ public class EntityDefinitionListener extends CdsBaseListener {
     }
 
     symbol.setFullName(this.packageId + "::" + fullName);
-    symbol.setName(fullName);
     symbolTable.addSymbol(symbol);
   }
 
@@ -613,25 +614,27 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   private String getTopLevelSymbolExpectedName() {
-    String[] splitFileLocation = this.fileLocation.split("[\\/]");
+    String[] splitFileLocation = this.fileLocation.split("/");
     String fileName = splitFileLocation[splitFileLocation.length - 1];
 
     return fileName.split("\\.")[0];
   }
 
-  private String getExpecteNamespace() {
-    String[] splitFileLocation = this.fileLocation.split("[\\/]");
+  private String getExpectedNamespace() {
+    String[] splitFileLocation = this.fileLocation.split("/");
     splitFileLocation = Arrays.stream(splitFileLocation).filter(s -> !s.isEmpty()).toArray(String[]::new);
-    splitFileLocation = Arrays.copyOfRange(splitFileLocation, 0, splitFileLocation.length - 1);
+    splitFileLocation = Arrays.copyOfRange(splitFileLocation, 1, splitFileLocation.length - 1);
     return String.join(".", splitFileLocation);
+  }
+
+  private String getProjectName() {
+    String[] splitFileLocation = this.fileLocation.split("/");
+
+    return splitFileLocation[1];
   }
 
   public ParseTreeProperty<Symbol> getSymbolsByParseTreeContext() {
     return this.symbolsByParseTreeContext;
-  }
-
-  public Scope getCurrentScope() {
-    return currentScope;
   }
 
   public ParseTreeProperty<EntityElementSymbol> getEntityElements() {
@@ -640,6 +643,14 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   public ParseTreeProperty<Typeable> getTypeables() {
     return typeables;
+  }
+
+  public CDSFileScope getCdsFileScope() {
+    return cdsFileScope;
+  }
+
+  public void setCdsFileScope(CDSFileScope cdsFileScope) {
+    this.cdsFileScope = cdsFileScope;
   }
 
   private void checkForDuplicateName(String contextId, int line) {
@@ -657,7 +668,8 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   public Set<String> getPackagesUsed() {
-    return packagesUsed;
+    String projectName = this.getProjectName();
+    return packagesUsed.stream().map(p -> "/" + projectName + "." + p).collect(Collectors.toSet());
   }
 
   public void setFileLocation(String fileLocation) {

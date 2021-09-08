@@ -1,4 +1,4 @@
-// Generated from com/sap/xsk/parser/hdbdd/core/Cds.g4 by ANTLR 4.3
+// Generated from com\sap\xsk\parser\hdbdd\core\Cds.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbdd.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -256,6 +256,17 @@ public interface CdsListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAnnMarkerRule(@NotNull CdsParser.AnnMarkerRuleContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#elementDetails}.
+	 * @param ctx the parse tree
+	 */
+	void enterElementDetails(@NotNull CdsParser.ElementDetailsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#elementDetails}.
+	 * @param ctx the parse tree
+	 */
+	void exitElementDetails(@NotNull CdsParser.ElementDetailsContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link CdsParser#entityRule}.

@@ -45,6 +45,8 @@ public class SymbolTable {
   protected void initTypeSystem() {
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("String", 1, CdsLexer.STRING));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LargeString", CdsLexer.STRING));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Binary", 1, CdsLexer.VARBINARY));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LargeBinary", CdsLexer.VARBINARY));
 
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Integer", CdsLexer.INTEGER));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Integer64", CdsLexer.INTEGER));
@@ -57,8 +59,19 @@ public class SymbolTable {
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalTime", CdsLexer.LOCAL_TIME));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCDateTime", CdsLexer.UTC_DATE_TIME));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCTimestamp", CdsLexer.UTC_TIMESTAMP));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Boolean", CdsLexer.BOOLEAN));
 
+    hanaBuiltInTypes.put("ALPHANUM", new BuiltInTypeSymbol("ALPHANUMERIC", 0, CdsLexer.STRING, true));
+    hanaBuiltInTypes.put("SMALLINT", new BuiltInTypeSymbol("SMALLINT", 0, CdsLexer.INTEGER, true));
+    hanaBuiltInTypes.put("TINYINT", new BuiltInTypeSymbol("TINYINT", 0, CdsLexer.INTEGER, true));
+    hanaBuiltInTypes.put("REAL", new BuiltInTypeSymbol("REAL", 0, CdsLexer.STRING, true));
+    hanaBuiltInTypes.put("SMALLDECIMAL", new BuiltInTypeSymbol("SMALLDECIMAL", 0, CdsLexer.DECIMAL, true));
     hanaBuiltInTypes.put("VARCHAR", new BuiltInTypeSymbol("VARCHAR", 1, CdsLexer.STRING, true));
+    hanaBuiltInTypes.put("CLOB", new BuiltInTypeSymbol("CLOB", 0, CdsLexer.VARBINARY, true));
+    hanaBuiltInTypes.put("BINARY", new BuiltInTypeSymbol("BINARY", 1, CdsLexer.VARBINARY, true));
+
+    hanaBuiltInTypes.put("ST_POINT", new BuiltInTypeSymbol("ST_POINT", 0, CdsLexer.STRING, true));
+    hanaBuiltInTypes.put("ST_GEOMETRY", new BuiltInTypeSymbol("ST_GEOMETRY", 0, CdsLexer.STRING, true));
 
     initAnnotations();
   }
@@ -190,7 +203,8 @@ public class SymbolTable {
 
     children.forEach(child -> {
       traverseEntityGraph(child, orderedSymbol, passedEntities);
-      orderedSymbol.add((EntitySymbol) this.symbolsByFullName.get(entityName));
     });
+
+    orderedSymbol.add((EntitySymbol) this.symbolsByFullName.get(entityName));
   }
 }

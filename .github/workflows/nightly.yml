@@ -54,7 +54,7 @@ jobs:
 
       # Run Selenium tests on XSK
       - name: Run Selenium Tests
-        run: mvn clean install -Dintegration-tests
+        run: mvn clean install -P itests -Dintegration-tests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
 
       # Upload screenshots to a GitHub artifact
       - name: Save screenshots

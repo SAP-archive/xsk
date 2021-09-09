@@ -45,12 +45,16 @@ public class HdbddTransformer {
       }
     });
 
-
     entitySymbol.getAssociations().forEach(associationSymbol -> {
       List<XSKDataStructureHDBTableColumnModel> associationColumns = transformAssociationToColumnModels(associationSymbol);
       XSKDataStructureHDBTableConstraintForeignKeyModel foreignKeyModel = new XSKDataStructureHDBTableConstraintForeignKeyModel();
       String[] referencedColumns = associationColumns.stream().map(XSKDataStructureHDBTableColumnModel::getName).toArray(String[]::new);
-      associationColumns.forEach(ac -> ac.setName(associationSymbol.getName() + "." + ac.getName()));
+      if (associationSymbol.isManaged()) {
+        associationColumns.forEach(ac -> ac.setName(associationSymbol.getName() + "." + ac.getName()));
+      } else {
+        associationColumns.forEach(ac -> ac.setName(associationSymbol.getName().substring(1)));
+      }
+
       String[] foreignKeyColumns = associationColumns.stream().map(XSKDataStructureHDBTableColumnModel::getName).toArray(String[]::new);
       String foreignKeyName = tableModel.getName() + "." + associationSymbol.getName();
 
@@ -59,8 +63,13 @@ public class HdbddTransformer {
       foreignKeyModel.setReferencedColumns(referencedColumns);
       foreignKeyModel.setColumns(foreignKeyColumns);
 
-      tableColumns.addAll(associationColumns);
-      tableModel.getConstraints().getForeignKeys().add(foreignKeyModel);
+      if (associationSymbol.isManaged()) {
+        tableColumns.addAll(associationColumns);
+      }
+
+      if (!associationSymbol.getForeignKeys().isEmpty()) {
+        tableModel.getConstraints().getForeignKeys().add(foreignKeyModel);
+      }
     });
 
     tableModel.setColumns(tableColumns);
@@ -97,7 +106,7 @@ public class HdbddTransformer {
       if (fk.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(fk);
         subElements.forEach(subE ->
-          tableColumns.add(transformEntityElementToColumnModel(subE)));
+            tableColumns.add(transformEntityElementToColumnModel(subE)));
       } else {
         tableColumns.add(transformEntityElementToColumnModel(fk));
       }

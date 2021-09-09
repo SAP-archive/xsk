@@ -17,11 +17,12 @@ typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'           # As
                 | HANA '.' ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
                 | TYPE_OF? pathSubMembers+=ID ('.'pathSubMembers+=ID)*      # AssignType
                 ;
-elementDeclRule: annotationRule* (key=KEY)? ID ':' typeAssignRule defaultValue? elementConstraints? ';';
+elementDeclRule: annotationRule* (key=KEY)? ID ':' typeAssignRule elementDetails* ';';
+elementDetails: defaultValue | elementConstraints;
 elementConstraints: 'null' | 'not null';
 
 association: ID ':' ASSOCIATION cardinality? TO associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
-associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*  ;
+associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
 unmanagedForeignKey: ON pathSubMembers+=ID ('.' pathSubMembers+=ID)* '=' source=ID;
 managedForeignKeys: '{' foreignKey (',' foreignKey)* '}';
 foreignKey: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
@@ -30,7 +31,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
               |  '[' ']'                                         # NoCardinality
               ;
 
-defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | NULL);
+defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | NULL | VARBINARY);
 
 annotationRule: '@' ID ':' annValue                       #AnnObjectRule
               | '@' annId=ID '.' prop=ID ':' annValue     #AnnPropertyRule
@@ -69,6 +70,7 @@ LOCAL_DATE: LocalDate;
 UTC_DATE_TIME: UTCDateTime;
 UTC_TIMESTAMP: UTCTimestamp;
 STRING: '\'' (~["\\\r\n] | EscapeSequence)*? '\'' { setText(getText().substring(1, getText().length() - 1)); };
+VARBINARY: X '\'' ((A | B | C | D | E | F) | INTEGER)* '\'' { setText(getText().substring(1, getText().length() - 1)); };
 TYPE_OF: 'type' WS 'of';
 
 

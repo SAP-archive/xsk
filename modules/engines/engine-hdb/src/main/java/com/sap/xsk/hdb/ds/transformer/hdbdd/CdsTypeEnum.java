@@ -13,6 +13,8 @@ package com.sap.xsk.hdb.ds.transformer.hdbdd;
 
 public enum CdsTypeEnum {
   String("NVARCHAR"),
+  Binary("VARBINARY"),
+  LargeBinary("BLOB"),
   Integer("INTEGER"),
   Integer64("BIGINT"),
   Decimal("DECIMAL"),

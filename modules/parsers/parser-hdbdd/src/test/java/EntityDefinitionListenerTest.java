@@ -10,6 +10,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import static org.junit.Assert.assertEquals;
+
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
 import com.sap.xsk.parser.hdbdd.custom.EntityDefinitionListener;
@@ -18,17 +20,14 @@ import com.sap.xsk.parser.hdbdd.custom.XSKHdbddErrorListener;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class EntityDefinitionListenerTest {
 
@@ -84,7 +83,21 @@ public class EntityDefinitionListenerTest {
 //
 //        assertEquals(0, parser.getNumberOfSyntaxErrors());
 //    }
+    @Test
+    public void parseParseStructuredTypeSuccessfully() throws Exception {
+        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "project_name/sap/table/ParseStructuredType.hdbdd");
+        List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 
+        assertEquals(0, parser.getNumberOfSyntaxErrors());
+    }
+
+    @Test
+    public void parseUnmanagedAssociationSuccessfully() throws Exception {
+      CdsParser parser = parseSampleFile("/ProjectProducts.hdbdd", "sap/db/ProjectProducts.hdbdd");
+      List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
+
+      assertEquals(0, parser.getNumberOfSyntaxErrors());
+    }
 
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {
     String content =

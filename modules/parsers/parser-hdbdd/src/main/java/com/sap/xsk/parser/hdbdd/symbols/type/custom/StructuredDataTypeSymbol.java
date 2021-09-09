@@ -14,7 +14,7 @@ package com.sap.xsk.parser.hdbdd.symbols.type.custom;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.Type;
 
-public class StructuredDataTypeSymbol extends AbstractDataStructureSymbol implements Type, Scope, CustomDataType {
+public class StructuredDataTypeSymbol extends AbstractDataStructureSymbol implements Type, CustomDataType {
 
   public StructuredDataTypeSymbol(String name) {
     super(name);

@@ -16,6 +16,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import java.util.List;
 
 public class XSKDataStructureCdsModel extends XSKDataStructureModel {
+  private boolean forceUpdate;
 
   private List<XSKDataStructureHDBTableModel> tableModels;
 
@@ -25,5 +26,13 @@ public class XSKDataStructureCdsModel extends XSKDataStructureModel {
 
   public void setTableModels(List<XSKDataStructureHDBTableModel> tableModels) {
     this.tableModels = tableModels;
+  }
+
+  public boolean isForceUpdate() {
+    return forceUpdate;
+  }
+
+  public void setForceUpdate(boolean forceUpdate) {
+    this.forceUpdate = forceUpdate;
   }
 }

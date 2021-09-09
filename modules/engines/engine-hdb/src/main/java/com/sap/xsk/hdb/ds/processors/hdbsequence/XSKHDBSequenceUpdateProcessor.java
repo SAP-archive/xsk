@@ -61,6 +61,9 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
 
   private String getDatabaseSpecificSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel,
       String modifiedSequenceName) {
+    if (hdbSequenceModel.getSchema() != null) {
+      modifiedSequenceName = "\"" + hdbSequenceModel.getSchema() + "\"."+ modifiedSequenceName;
+    }
     return SqlFactory.getNative(connection).alter().sequence(modifiedSequenceName)
         .start(hdbSequenceModel.getStartWith())
         .increment(hdbSequenceModel.getIncrementBy())

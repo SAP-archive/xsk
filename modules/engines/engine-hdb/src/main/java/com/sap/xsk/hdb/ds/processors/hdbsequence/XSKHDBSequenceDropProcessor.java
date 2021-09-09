@@ -47,7 +47,7 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
             String sql = null;
             switch (hdbSequenceModel.getDBContentType()) {
                 case XS_CLASSIC: {
-                    sql = getDatabaseSpecificSQL(connection, hdbSequenceName);
+                    sql = getDatabaseSpecificSQL(connection, hdbSequenceModel, hdbSequenceName);
                     break;
                 }
                 case OTHERS: {
@@ -66,7 +66,10 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
         }
     }
 
-    private String getDatabaseSpecificSQL(Connection connection, String modifiedSequenceName) {
+    private String getDatabaseSpecificSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel, String modifiedSequenceName) {
+      if (hdbSequenceModel.getSchema() != null) {
+        modifiedSequenceName = "\"" + hdbSequenceModel.getSchema() + "\"."+ modifiedSequenceName;
+      }
         return SqlFactory.getNative(connection).drop().sequence(modifiedSequenceName).build();
     }
 

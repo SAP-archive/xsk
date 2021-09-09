@@ -623,14 +623,8 @@ public class EntityDefinitionListener extends CdsBaseListener {
   private String getExpectedNamespace() {
     String[] splitFileLocation = this.fileLocation.split("/");
     splitFileLocation = Arrays.stream(splitFileLocation).filter(s -> !s.isEmpty()).toArray(String[]::new);
-    splitFileLocation = Arrays.copyOfRange(splitFileLocation, 1, splitFileLocation.length - 1);
+    splitFileLocation = Arrays.copyOfRange(splitFileLocation, 0, splitFileLocation.length - 1);
     return String.join(".", splitFileLocation);
-  }
-
-  private String getProjectName() {
-    String[] splitFileLocation = this.fileLocation.split("/");
-
-    return splitFileLocation[1];
   }
 
   public ParseTreeProperty<Symbol> getSymbolsByParseTreeContext() {
@@ -668,8 +662,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   public Set<String> getPackagesUsed() {
-    String projectName = this.getProjectName();
-    return packagesUsed.stream().map(p -> "/" + projectName + "." + p).collect(Collectors.toSet());
+    return this.packagesUsed;
   }
 
   public void setFileLocation(String fileLocation) {

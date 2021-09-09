@@ -207,6 +207,6 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     fileLocation = fileLocation.replace('.', XSKConstants.UNIX_SEPARATOR);
     fileLocation = fileLocation + ".hdbdd";
 
-    return fileLocation;
+    return XSKConstants.UNIX_SEPARATOR + fileLocation;
   }
 }

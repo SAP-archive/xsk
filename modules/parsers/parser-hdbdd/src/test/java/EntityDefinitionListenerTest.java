@@ -93,7 +93,7 @@ public class EntityDefinitionListenerTest {
 
     @Test
     public void parseUnmanagedAssociationSuccessfully() throws Exception {
-      CdsParser parser = parseSampleFile("/ProjectProducts.hdbdd", "project_name/sap/db/ProjectProducts.hdbdd");
+      CdsParser parser = parseSampleFile("/ProjectProducts.hdbdd", "sap/db/ProjectProducts.hdbdd");
       List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 
       assertEquals(0, parser.getNumberOfSyntaxErrors());

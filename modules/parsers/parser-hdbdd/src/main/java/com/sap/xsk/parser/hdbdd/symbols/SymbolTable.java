@@ -16,6 +16,7 @@ import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationEnum;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationSimpleValue;
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
+import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.context.ContextSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.CDSFileScope;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
@@ -197,6 +198,10 @@ public class SymbolTable {
     List<String> children = entityGraph.get(entityName);
     if (children == null) {
       EntitySymbol bottomEntity =  (EntitySymbol) this.symbolsByFullName.get(entityName);
+      if (bottomEntity == null) {
+        throw new CDSRuntimeException(String.format("No entity with name: %s found in symbol table.", entityName));
+      }
+
       orderedSymbol.add(bottomEntity);
       return;
     }

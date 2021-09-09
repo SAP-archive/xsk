@@ -134,7 +134,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
     associationSymbol.addForeignKey((EntityElementSymbol) resolvedSymbol);
     EntitySymbol entity = (EntitySymbol) associationSymbol.getScope();
-    this.symbolTable.addChildToEntity(entity.getFullName(), resolvedSymbol.getFullName());
+    this.symbolTable.addChildToEntity(entity.getFullName(), ((Symbol)resolvedSymbol.getScope()).getFullName());
   }
 
   public void enterUnmanagedForeignKey(CdsParser.UnmanagedForeignKeyContext ctx) {
@@ -164,7 +164,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
           ctx.source.getLine(), ctx.source.getText(), associationSymbol.getTarget().getName()));
     }
 
-    AssociationSymbol targetAssociation = new AssociationSymbol(reference);
+    AssociationSymbol targetAssociation = new AssociationSymbol("@" + reference);
     targetAssociation.setManaged(false);
     targetAssociation.setTarget((EntitySymbol) associationSymbol.getScope());
     targetAssociation.setCardinality(CardinalityEnum.ONE_TO_ONE);

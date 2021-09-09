@@ -51,6 +51,7 @@ public class XSKHDBTIProcessorTest {
     public static final String STUDENTS_TABLE_NAME = "STUDENTS";
 
     private DataSource datasource;
+    private DataSource systemDatasource;
     private IXSKHDBTIProcessor processor;
     private IXSKHDBTICoreService xskHdbtiCoreService;
     private final PersistenceManager<Student> studentManager = new PersistenceManager<>();
@@ -62,21 +63,26 @@ public class XSKHDBTIProcessorTest {
     public void setUp() throws SQLException {
         HdbtiTestModule hdbtiTestModule = new HdbtiTestModule();
         hdbtiTestModule.configure();
-        this.datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+        datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+        systemDatasource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
         processor = new XSKHDBTIProcessor();
         xskHdbtiCoreService = new XSKHDBTICoreService();
-        try (Connection connection = this.datasource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             studentManager.tableCreate(connection, Student.class);
         }
     }
 
     @After
     public void cleanup() throws SQLException {
-        try (Connection connection = this.datasource.getConnection()) {
-            if (studentManager.tableExists(connection, Student.class))
-                studentManager.tableDrop(connection, Student.class);
-            if (importedCsvRecordsManager.tableExists(connection, XSKImportedCSVRecordModel.class))
-                importedCsvRecordsManager.tableDrop(connection, XSKImportedCSVRecordModel.class);
+        try (Connection connection = datasource.getConnection()) {
+            if (studentManager.tableExists(connection, Student.class)) {            	
+            	studentManager.tableDrop(connection, Student.class);
+            }
+        }
+        try (Connection connection = systemDatasource.getConnection()) {        	
+        	if (importedCsvRecordsManager.tableExists(connection, XSKImportedCSVRecordModel.class)) {
+        		importedCsvRecordsManager.tableDrop(connection, XSKImportedCSVRecordModel.class);        		
+        	}
         }
     }
 
@@ -88,14 +94,15 @@ public class XSKHDBTIProcessorTest {
         importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
         importConfigurationDefinition.setTable(STUDENTS_TABLE_NAME);
 
-        try (Connection connection = this.datasource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             processor.process(importConfigurationDefinition, connection);
             List<Student> students = studentManager.findAll(connection, Student.class);
             assertCorrectDataImported(students);
-
-            List<XSKImportedCSVRecordModel> importedCsvRecords = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
-            assertCorrectCsvRecordMetadataImported(importedCsvRecords);
-            writeToFile(STUDENTS_CSV_LOCATION, "");
+        }
+        try (Connection connection = systemDatasource.getConnection()) {            	
+        	List<XSKImportedCSVRecordModel> importedCsvRecords = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
+        	assertCorrectCsvRecordMetadataImported(importedCsvRecords);
+        	writeToFile(STUDENTS_CSV_LOCATION, "");
         }
     }
 
@@ -107,7 +114,7 @@ public class XSKHDBTIProcessorTest {
         importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
         importConfigurationDefinition.setTable(STUDENTS_TABLE_NAME);
 
-        try (Connection connection = this.datasource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
             processor.process(importConfigurationDefinition, connection);
 
@@ -130,7 +137,7 @@ public class XSKHDBTIProcessorTest {
         importConfigurationDefinitionWithRemovedRecord.setHdbtiFileName(HDBTI_LOCATION);
         importConfigurationDefinitionWithRemovedRecord.setTable(STUDENTS_TABLE_NAME);
 
-        try (Connection connection = this.datasource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
             processor.process(importConfigurationDefinitionWithRemovedRecord, connection);
 
@@ -141,16 +148,17 @@ public class XSKHDBTIProcessorTest {
             List<Student> students = studentManager.findAll(connection, Student.class);
             assertEquals(2, students.size());
 
-            List<XSKImportedCSVRecordModel> importedCsvRecords = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
-            assertEquals(2, importedCsvRecords.size());
 
             Student deletedStudent = studentManager.find(connection, Student.class, 1L);
             assertNull(deletedStudent);
             List<XSKImportedCSVRecordModel> importedCSVRecordModel = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
             boolean isCsvRecordRemovedFromMetadataTable = importedCSVRecordModel.stream().anyMatch(i -> i.getRowId().equals("1"));
             assertFalse(isCsvRecordRemovedFromMetadataTable);
-
-            writeToFile(STUDENTS_CSV_LOCATION, "");
+        }
+        try (Connection connection = systemDatasource.getConnection()) {        	
+        	List<XSKImportedCSVRecordModel> importedCsvRecords = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
+        	assertEquals(2, importedCsvRecords.size());
+        	writeToFile(STUDENTS_CSV_LOCATION, "");
         }
     }
 
@@ -162,7 +170,7 @@ public class XSKHDBTIProcessorTest {
         importConfigurationDefinitionWithRemovedRecord.setHdbtiFileName(HDBTI_LOCATION);
         importConfigurationDefinitionWithRemovedRecord.setTable(STUDENTS_TABLE_NAME);
 
-        try (Connection connection = this.datasource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
             processor.process(importConfigurationDefinitionWithRemovedRecord, connection);
 
@@ -173,9 +181,11 @@ public class XSKHDBTIProcessorTest {
 
             List<Student> students = studentManager.findAll(connection, Student.class);
             assertEquals(4, students.size());
-            List<XSKImportedCSVRecordModel> importedCSVRecordModel = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
-            assertEquals(4, importedCSVRecordModel.size());
-            writeToFile(STUDENTS_CSV_LOCATION, "");
+        }
+        try (Connection connection = systemDatasource.getConnection()) {        	
+        	List<XSKImportedCSVRecordModel> importedCSVRecordModel = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
+        	assertEquals(4, importedCSVRecordModel.size());
+        	writeToFile(STUDENTS_CSV_LOCATION, "");
         }
     }
 
@@ -189,7 +199,7 @@ public class XSKHDBTIProcessorTest {
         importConfigurationDefinition.setDelimEnclosing("'");
         importConfigurationDefinition.setDelimField(";");
 
-        try (Connection connection = this.datasource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             writeToFile(STUDENTS_CSV_LOCATION, getQuoteContent());
             processor.process(importConfigurationDefinition, connection);
             List<Student> students = studentManager.findAll(connection, Student.class);
@@ -209,15 +219,17 @@ public class XSKHDBTIProcessorTest {
         importConfigurationDefinition.setTable(STUDENTS_TABLE_NAME);
         importConfigurationDefinition.setHeader(true);
 
-        try (Connection connection = this.datasource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             writeToFile(STUDENTS_CSV_LOCATION, getInitialContentWithHeaders());
             processor.process(importConfigurationDefinition, connection);
             List<Student> students = studentManager.findAll(connection, Student.class);
             assertCorrectDataImported(students);
 
-            List<XSKImportedCSVRecordModel> importedCsvRecords = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
-            assertCorrectCsvRecordMetadataImported(importedCsvRecords);
-            writeToFile(STUDENTS_CSV_LOCATION, "");
+        }
+        try (Connection connection = systemDatasource.getConnection()) {        	
+        	List<XSKImportedCSVRecordModel> importedCsvRecords = importedCsvRecordsManager.findAll(connection, XSKImportedCSVRecordModel.class);
+        	assertCorrectCsvRecordMetadataImported(importedCsvRecords);
+        	writeToFile(STUDENTS_CSV_LOCATION, "");
         }
     }
 
@@ -230,7 +242,7 @@ public class XSKHDBTIProcessorTest {
         importConfigurationDefinition.setTable(STUDENTS_TABLE_NAME);
         importConfigurationDefinition.setHeader(true);
 
-        try (Connection connection = this.datasource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             writeToFile(STUDENTS_CSV_LOCATION, getInitialContentWithHeaders());
             processor.process(importConfigurationDefinition, connection);
 
@@ -263,24 +275,27 @@ public class XSKHDBTIProcessorTest {
         importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
         importConfigurationDefinition.setTable(STUDENTS_TABLE_NAME);
 
-        try (Connection connection = this.datasource.getConnection()) {
-            writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
-            importArtifactManager.insert(connection, getTableImportArtifact());
-            importToCsvRelationManager.insert(connection, getXskTableImportToCsvRelation());
-            importToCsvRelationManager.insert(connection, getXskTableImportToCsvRelation());
-
+        try (Connection connection = systemDatasource.getConnection()) {
+        	writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
+        	importArtifactManager.insert(connection, getTableImportArtifact());
+        	importToCsvRelationManager.insert(connection, getXskTableImportToCsvRelation());
+        	importToCsvRelationManager.insert(connection, getXskTableImportToCsvRelation());        	
+        }
+        try (Connection connection = datasource.getConnection()) {
             processor.process(importConfigurationDefinition, connection);
             xskHdbtiCoreService.cleanUpHdbtiRelatedData();
-            List<XSKTableImportToCsvRelation> csvRelations = importToCsvRelationManager.findAll(connection, XSKTableImportToCsvRelation.class);
-            List<XSKTableImportArtifact> importArtifacts = importArtifactManager.findAll(connection, XSKTableImportArtifact.class);
             List<Student> students = studentManager.findAll(connection, Student.class);
-            List<XSKImportedCSVRecordModel> importedCSVRecordModels = importedCsvRecordsManager
-                    .findAll(connection, XSKImportedCSVRecordModel.class);
-
-            assertEquals(0, csvRelations.size());
-            assertEquals(0, importArtifacts.size());
             assertEquals(0, students.size());
-            assertEquals(0, importedCSVRecordModels.size());
+        }
+        try (Connection connection = systemDatasource.getConnection()) {        	
+        	List<XSKTableImportToCsvRelation> csvRelations = importToCsvRelationManager.findAll(connection, XSKTableImportToCsvRelation.class);
+        	List<XSKTableImportArtifact> importArtifacts = importArtifactManager.findAll(connection, XSKTableImportArtifact.class);
+        	List<XSKImportedCSVRecordModel> importedCSVRecordModels = importedCsvRecordsManager
+        			.findAll(connection, XSKImportedCSVRecordModel.class);
+
+        	assertEquals(0, csvRelations.size());
+        	assertEquals(0, importArtifacts.size());
+        	assertEquals(0, importedCSVRecordModels.size());
         }
     }
 

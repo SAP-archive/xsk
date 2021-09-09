@@ -32,7 +32,7 @@ import com.sap.xsk.xssecurestore.ds.model.XSKSecureStoreContent;
 
 public class XSKSecureStoreCoreService implements IXSKSecureStoreCoreService {
 
-  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
   private PersistenceManager<XSKSecureStore> secureStorePersistenceManager = new PersistenceManager<XSKSecureStore>();
 

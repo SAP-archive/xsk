@@ -34,7 +34,7 @@ import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
 
 public class XSKDataStructuresCoreService implements IXSKDataStructuresCoreService {
 
-  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
   private PersistenceManager<XSKDataStructureModel> persistenceManager = new PersistenceManager<XSKDataStructureModel>();
 

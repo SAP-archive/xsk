@@ -25,7 +25,7 @@ import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
 public class XSKPrivilegeCoreService implements IXSKPrivilegeCoreService {
 
-  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
   private PersistenceManager<XSKPrivilegeDefinition> xskPrivilegeDefinitionPersistenceManager = new PersistenceManager<XSKPrivilegeDefinition>();
 

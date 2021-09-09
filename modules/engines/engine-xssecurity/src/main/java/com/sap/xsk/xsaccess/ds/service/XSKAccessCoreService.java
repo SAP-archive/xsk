@@ -34,7 +34,7 @@ import org.eclipse.dirigible.database.persistence.PersistenceManager;
 public class XSKAccessCoreService implements IXSKAccessCoreService {
 
   private static final List<XSKAccessDefinition> CACHE = Collections.synchronizedList(new ArrayList<>());
-  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
   private PersistenceManager<XSKAccessDefinition> xskAccessDefinitionPersistenceManager = new PersistenceManager<XSKAccessDefinition>();
   private XSKPrivilegeCoreService xskPrivilegeCoreService = new XSKPrivilegeCoreService();
 

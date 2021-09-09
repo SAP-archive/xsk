@@ -38,7 +38,7 @@ public class XSKTableImportParser implements IXSKTableImportParser {
 
     private IXSKTableImportArtifactFactory xskTableImportArtifactFactory = new XSKTableImportArtifactFactory();
 
-    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
     @Override
     public XSKTableImportArtifact parseTableImportArtifact(String location, String content)

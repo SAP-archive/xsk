@@ -35,20 +35,29 @@ public class HdbtiTestModule extends AbstractDirigibleModule {
     public void configure() {
     	StaticObjects.set(StaticObjects.REPOSITORY, new TestRepository());
     	StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
+    	StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getSystemDataSource());
     	
     	XSKHdbtiModule xskHdbtiModule = new XSKHdbtiModule();
     	xskHdbtiModule.configure();
     }
 
-    static DataSource getDataSource() {
-        BasicDataSource basicDataSource = new BasicDataSource();
+    private static DataSource getDataSource() {
+        return createDataSource("jdbc:h2:mem:xsk-datasource;DB_CLOSE_DELAY=-1");
+    }
+
+    private static DataSource getSystemDataSource() {
+    	return createDataSource("jdbc:h2:mem:xsk-system-datasource;DB_CLOSE_DELAY=-1");
+    }
+
+	private static DataSource createDataSource(String url) {
+		BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName("org.h2.Driver");
-        basicDataSource.setUrl("jdbc:h2:mem:dirigible;DB_CLOSE_DELAY=-1");
+		basicDataSource.setUrl(url);
         basicDataSource.setUsername("sa");
         basicDataSource.setPassword("sa");
         basicDataSource.setDefaultAutoCommit(true);
         basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
-
         return basicDataSource;
-    }
+	}
+
 }

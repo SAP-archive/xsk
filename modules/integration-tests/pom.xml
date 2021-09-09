@@ -106,5 +106,18 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-commons-api</artifactId>
+      <version>${dirigible.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 </project>

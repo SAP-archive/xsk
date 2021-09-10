@@ -665,131 +665,120 @@
                 <h1 id="local-setup">Local Setup</h1>
 <h2 id="overview">Overview</h2>
 <hr />
-<p>You can deploy XSK locally using Docker.</p>
-<div class="admonition info">
-<p class="admonition-title">Prerequisites</p>
-<p>Install <a href="https://docs.docker.com/engine/installation/">Docker</a>.</p>
-</div>
+<p>You can deploy XSK locally using Docker or Tomcat server.</p>
 <h2 id="steps">Steps</h2>
 <hr />
+<div class="highlight"><pre><span></span><code>=== &quot;Docker&quot;
+
+    !!! info &quot;Prerequisites&quot;
+        Install [Docker](https://docs.docker.com/engine/installation/).
+
+    1. Start the container:
+
+    === &quot;Run&quot;
+
+        ```
+        docker run --name xsk \
+        --rm -p 8080:8080 -p 8081:8081 \
+        dirigiblelabs/xsk:latest
+        ```
+
+    === &quot;with Mounted Volume&quot;
+
+        ```
+        docker run --name xsk \
+        --rm -p 8080:8080 -p 8081:8081 \
+        -v &lt;your-local-directory&gt;:/usr/local/tomcat/target \
+        dirigiblelabs/xsk:latest
+        ```
+
+    === &quot;with HANA Cloud&quot;
+
+        ```
+        docker run --name xsk \
+        --rm -p 8080:8080 -p 8081:8081 \
+        dirigiblelabs/xsk:latest \
+        -e DIRIGIBLE_DATABASE_PROVIDER=custom \
+        -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
+        -e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
+        -e HANA_DRIVER=com.sap.db.jdbc.Driver \
+        -e HANA_URL=jdbc:sap://&lt;hanaHost&gt;?encrypt=true&amp;validateCertificate=true \
+        -e HANA_USERNAME=&lt;hanaUsername&gt; \
+        -e HANA_PASSWORD=&lt;hanaPassword&gt;
+        ```
+
+        !!! Note
+            - Replace the `&lt;hanaHost&gt;` placeholder with the HANA Cloud host that you&#39;re going to use.
+            - Replace the `&lt;hanaUsername&gt;` placeholder with the HANA Cloud username that you&#39;re going to use.
+            - Replace the `&lt;hanaPassword&gt;` placeholder with the HANA Cloud password that you&#39;re going to use.
+
+        !!! info &quot;Windows&quot;
+            For setup on Windows OS, issues may appear with the way the environment variables _(`-e XXX=YYY`)_ are provided. Either they should be properly escaped, or they could be supplied as `*.env` [file](https://docs.docker.com/compose/environment-variables/):
+
+            ```
+            docker run --name xsk \
+            --env-file env-variables.env \
+            --rm -p 8080:8080 -p 8081:8081 \
+            dirigiblelabs/xsk:latest
+            ```
+
+=== &quot;Tomcat&quot;
+
+    !!! info &quot;Prerequisites&quot;
+        - Java 11 or Java 13 installed (default, required during runtime).
+        - Java 8 JRE/JDK installed (additional, required for compatability reasons).
+
+
+    1. Download `ROOT.war` for Tomcat from: [https://github.com/SAP/xsk/releases/latest](https://github.com/SAP/xsk/releases/latest)
+
+        !!! Note
+                For local test &amp; development purposes, we recommend the **server** distribution.
+
+    1. Configure the Users store under `$CATALINA_HOME/conf/tomcat-users.xml`:
+
+        ```xml
+        &lt;tomcat-users&gt;
+            &lt;role rolename=&quot;Developer&quot;/&gt;
+            &lt;role rolename=&quot;Operator&quot;/&gt;
+            &lt;role rolename=&quot;Everyone&quot;/&gt;
+            &lt;user username=&quot;dirigible&quot; password=&quot;dirigible&quot; roles=&quot;Developer,Operator,Everyone&quot;/&gt;
+        &lt;/tomcat-users&gt;
+        ```
+
+    1. Copy the XSK&#39;s `ROOT.war` to `$TOMCAT/webapps` folder.
+
+    1. Provide the Java 8 JRE/JDK path.
+
+        ```
+        export JAVA8_HOME=&lt;pathToJava8&gt;
+        ```
+
+        !!! Note
+            Replace the `&lt;pathToJava8&gt;` placeholder with the actual path to your Java 8 installation _(e.g. `/usr/lib/jvm/java-8-openjdk-amd64/`)_.
+
+    1. Configure connection to HANA Cloud instance.
+
+        ```
+        export HANA_DRIVER=com.sap.db.jdbc.Driver
+        export HANA_URL=jdbc:sap://&lt;hanaHost&gt;?encrypt=true&amp;validateCertificate=true
+        export HANA_USERNAME=&lt;hanaUsername&gt;
+        export HANA_PASSWORD=&lt;hanaPassword&gt;
+        ```
+
+        !!! Note
+            - Replace the `&lt;hanaHost&gt;` placeholder with the HANA Cloud host that you&#39;re going to use.
+            - Replace the `&lt;hanaUsername&gt;` placeholder with the HANA Cloud username that you&#39;re going to use.
+            - Replace the `&lt;hanaPassword&gt;` placeholder with the HANA Cloud password that you&#39;re going to use.
+
+    1. Start the Tomcat server.
+
+!!! tip &quot;XSK versions&quot;
+    Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:
+
+    - You can find all released versions [here](https://github.com/sap/xsk/releases/).
+    - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
+</code></pre></div>
 <ol>
-<li>
-<p>Start the container:</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Docker</label><div class="tabbed-content">
-<div class="tabbed-set" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Run</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code>docker run --name xsk \
---rm -p 8080:8080 -p 8081:8081 \
-dirigiblelabs/xsk:latest
-</code></pre></div>
-</div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">with Mounted Volume</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code>docker run --name xsk \
---rm -p 8080:8080 -p 8081:8081 \
--v &lt;your-local-directory&gt;:/usr/local/tomcat/target \
-dirigiblelabs/xsk:latest
-</code></pre></div>
-</div>
-<input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><label for="__tabbed_2_3">with HANA Cloud</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code>docker run --name xsk \
---rm -p 8080:8080 -p 8081:8081 \
-dirigiblelabs/xsk:latest \
--e DIRIGIBLE_DATABASE_PROVIDER=custom \
--e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
--e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
--e HANA_DRIVER=com.sap.db.jdbc.Driver \
--e HANA_URL=jdbc:sap://&lt;hanaHost&gt;?encrypt=true&amp;validateCertificate=true \
--e HANA_USERNAME=&lt;hanaUsername&gt; \
--e HANA_PASSWORD=&lt;hanaPassword&gt;
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul>
-<li>Replace the <code>&lt;hanaHost&gt;</code> placeholder with the HANA Cloud host that you're going to use.</li>
-<li>Replace the <code>&lt;hanaUsername&gt;</code> placeholder with the HANA Cloud username that you're going to use.</li>
-<li>Replace the <code>&lt;hanaPassword&gt;</code> placeholder with the HANA Cloud password that you're going to use.</li>
-</ul>
-</div>
-<div class="admonition info">
-<p class="admonition-title">Windows</p>
-<p>For setup on Windows OS, issues may appear with the way the environment variables <em>(<code>-e XXX=YYY</code>)</em> are provided. Either they should be properly escaped, or they could be supplied as <code>*.env</code> <a href="https://docs.docker.com/compose/environment-variables/">file</a>:</p>
-<div class="highlight"><pre><span></span><code>docker run --name xsk \
---env-file env-variables.env \
---rm -p 8080:8080 -p 8081:8081 \
-dirigiblelabs/xsk:latest
-</code></pre></div>
-</div>
-</div>
-</div>
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Tomcat</label><div class="tabbed-content">
-<div class="admonition info">
-<p class="admonition-title">Prerequisites</p>
-<ul>
-<li>Java 11 or Java 13 installed (default, required during runtime).</li>
-<li>Java 8 JRE/JDK installed (additional, required for compatability reasons).</li>
-</ul>
-</div>
-<ol>
-<li>
-<p>Download <code>ROOT.war</code> for Tomcat from: <a href="https://github.com/SAP/xsk/releases/latest">https://github.com/SAP/xsk/releases/latest</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note<p>For local test &amp; development purposes, we recommend the <strong>server</strong> distribution.</p>
-</p>
-</div>
-</li>
-<li>
-<p>Configure the Users store under <code>$CATALINA_HOME/conf/tomcat-users.xml</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">&lt;tomcat-users&gt;</span>
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&quot;Developer&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&quot;Operator&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&quot;Everyone&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;user</span> <span class="na">username=</span><span class="s">&quot;dirigible&quot;</span> <span class="na">password=</span><span class="s">&quot;dirigible&quot;</span> <span class="na">roles=</span><span class="s">&quot;Developer,Operator,Everyone&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/tomcat-users&gt;</span>
-</code></pre></div>
-</li>
-<li>
-<p>Copy the XSK's <code>ROOT.war</code> to <code>$TOMCAT/webapps</code> folder.</p>
-</li>
-<li>
-<p>Provide the Java 8 JRE/JDK path.</p>
-<div class="highlight"><pre><span></span><code>export JAVA8_HOME=&lt;pathToJava8&gt;
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Replace the <code>&lt;pathToJava8&gt;</code> placeholder with the actual path to your Java 8 installation <em>(e.g. <code>/usr/lib/jvm/java-8-openjdk-amd64/</code>)</em>.</p>
-</div>
-</li>
-<li>
-<p>Configure connection to HANA Cloud instance.</p>
-<div class="highlight"><pre><span></span><code>export HANA_DRIVER=com.sap.db.jdbc.Driver
-export HANA_URL=jdbc:sap://&lt;hanaHost&gt;?encrypt=true&amp;validateCertificate=true
-export HANA_USERNAME=&lt;hanaUsername&gt;
-export HANA_PASSWORD=&lt;hanaPassword&gt;
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul>
-<li>Replace the <code>&lt;hanaHost&gt;</code> placeholder with the HANA Cloud host that you're going to use.</li>
-<li>Replace the <code>&lt;hanaUsername&gt;</code> placeholder with the HANA Cloud username that you're going to use.</li>
-<li>Replace the <code>&lt;hanaPassword&gt;</code> placeholder with the HANA Cloud password that you're going to use.</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Start the Tomcat server.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">XSK versions</p>
-<p>Instead of using the <code>latest</code> tag (version), for production and development use cases it is recommended that you use a stable release version:</p>
-<ul>
-<li>You can find all released versions <a href="https://github.com/sap/xsk/releases/">here</a>.</li>
-<li>You can find all XSK Docker images and tags (versions) <a href="https://hub.docker.com/u/dirigiblelabs">here</a>.</li>
-</ul>
-</div>
-</li>
 <li>
 <p>Open a web browser and go to: <a href="http://localhost:8080/">http://localhost:8080/</a></p>
 <div class="admonition note">

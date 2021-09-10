@@ -19,43 +19,43 @@ import java.util.Set;
 
 public class XSKHDBSEQUENCEModel {
 
-  Set<String> missingProps = new HashSet<>();
+  private Set<String> missingProps = new HashSet<>();
 
   @SerializedName(value = HDBSequenceConstants.SCHEMA_PROPERTY)
-  String schema;
+  private String schema;
 
   @SerializedName(value = HDBSequenceConstants.INCREMENT_BY_PROPERTY)
-  Integer incrementBy = HDBSequenceConstants.INCREMENT_BY_DEFAULT_VALUE;
+  private Integer incrementBy = HDBSequenceConstants.INCREMENT_BY_DEFAULT_VALUE;
 
   @SerializedName(value = HDBSequenceConstants.START_WITH_PROPERTY)
-  Integer startWith = HDBSequenceConstants.START_WITH_DEFAULT_VALUE;
+  private Integer startWith = HDBSequenceConstants.START_WITH_DEFAULT_VALUE;
 
   @SerializedName(value = HDBSequenceConstants.MAXVALUE_PROPERTY)
-  Integer maxValue;
+  private Integer maxValue;
 
   @SerializedName(value = HDBSequenceConstants.NOMAXVALUE_PROPERTY)
-  Boolean noMaxValue;
+  private Boolean noMaxValue;
 
   @SerializedName(value = HDBSequenceConstants.MINVALUE_PROPERTY)
-  Integer minValue = HDBSequenceConstants.MIN_DEFAULT_VALUE;
+  private Integer minValue = HDBSequenceConstants.MIN_DEFAULT_VALUE;
 
   @SerializedName(value = HDBSequenceConstants.NOMINVALUE_PROPERTY)
-  Boolean noMinValue;
+  private Boolean noMinValue;
 
   @SerializedName(value = HDBSequenceConstants.CYCLES_PROPERTY)
-  Boolean cycles;
+  private Boolean cycles;
 
   @SerializedName(value = HDBSequenceConstants.RESET_BY_PROPERTY)
-  String resetBy;
+  private String resetBy;
 
   @SerializedName(value = HDBSequenceConstants.DEPENDS_ON_TABLE_PROPERTY)
-  String dependsOnTable;
+  private String dependsOnTable;
 
   @SerializedName(value = HDBSequenceConstants.DEPENDS_ON_VIEW_PROPERTY)
-  String dependsOnView;
+  private String dependsOnView;
 
   @SerializedName(value = HDBSequenceConstants.PUBLIC_PROPERTY)
-  Boolean publicProp = HDBSequenceConstants.PUBLIC_DEFAULT_VALUE;
+  private Boolean publicProp = HDBSequenceConstants.PUBLIC_DEFAULT_VALUE;
 
   public Set<String> getMissingProps() {
     return missingProps;

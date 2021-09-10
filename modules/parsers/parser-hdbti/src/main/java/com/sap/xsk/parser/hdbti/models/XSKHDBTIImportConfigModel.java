@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.parser.hdbti.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,39 +19,30 @@ import java.util.Objects;
 public class XSKHDBTIImportConfigModel {
 
   @SerializedName("table")
-  @JsonProperty("table")
   private String tableName;
 
   @SerializedName("schema")
-  @JsonProperty("schema")
   private String schemaName;
 
   @SerializedName("file")
-  @JsonProperty("file")
   private String fileName;
 
   @SerializedName("header")
-  @JsonProperty("header")
   private Boolean header;
 
   @SerializedName("useHeaderNames")
-  @JsonProperty("useHeaderNames")
   private Boolean useHeaderNames;
 
   @SerializedName("delimField")
-  @JsonProperty("delimField")
   private String delimField;
 
   @SerializedName("delimEnclosing")
-  @JsonProperty("delimEnclosing")
   private String delimEnclosing;
 
   @SerializedName("distinguishEmptyFromNull")
-  @JsonProperty("distinguishEmptyFromNull")
   private Boolean distinguishEmptyFromNull;
 
   @SerializedName("keys")
-  @JsonProperty("keys")
   private List<Pair> keys = new ArrayList<>();
 
   public String getTableName() {

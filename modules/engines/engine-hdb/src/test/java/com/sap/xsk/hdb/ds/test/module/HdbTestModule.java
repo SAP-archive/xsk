@@ -17,7 +17,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 
-public class HdbddTestModule extends AbstractDirigibleModule {
+public class HdbTestModule extends AbstractDirigibleModule {
 
   @Override
   public String getName() {
@@ -32,6 +32,7 @@ public class HdbddTestModule extends AbstractDirigibleModule {
   @Override
   public void configure() {
     StaticObjects.set(StaticObjects.REPOSITORY, new TestRepository());
+    StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
   }
 
   private static DataSource getDataSource() {

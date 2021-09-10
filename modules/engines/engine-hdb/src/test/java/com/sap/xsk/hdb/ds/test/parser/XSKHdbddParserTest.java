@@ -13,10 +13,9 @@ package com.sap.xsk.hdb.ds.test.parser;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.test.module.HdbddTestModule;
+import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -26,7 +25,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
   @Before
   public void setUp() {
-    HdbddTestModule testModule = new HdbddTestModule();
+    HdbTestModule testModule = new HdbTestModule();
     testModule.configure();
   }
     @Test

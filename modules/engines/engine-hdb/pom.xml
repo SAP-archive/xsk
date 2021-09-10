@@ -265,6 +265,12 @@
           <version>5.12.12</version>
           <scope>compile</scope>
       </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.193</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <profiles>

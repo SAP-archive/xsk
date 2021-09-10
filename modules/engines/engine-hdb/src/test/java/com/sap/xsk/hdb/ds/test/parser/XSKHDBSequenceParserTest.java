@@ -12,13 +12,14 @@
 package com.sap.xsk.hdb.ds.test.parser;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
+import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
 import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceMissingPropertyException;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,12 @@ import static org.junit.Assert.assertThrows;
 
 
 public class XSKHDBSequenceParserTest {
+
+  @Before
+  public void setUp() {
+    HdbTestModule testModule = new HdbTestModule();
+    testModule.configure();
+  }
 
     @Test
     public void parseHanaXSClassicContent() throws Exception {

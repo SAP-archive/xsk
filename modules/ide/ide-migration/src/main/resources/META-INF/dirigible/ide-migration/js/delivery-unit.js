@@ -27,24 +27,24 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
     ];
     $scope.descriptionText = descriptionList[0];
     let connectionId = undefined;
-    let processId = undefined;
     let neoData = undefined;
     let hanaData = undefined;
     let defaultErrorTitle = "Error loading delivery units";
     let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
+    let processId = undefined;
 
     function getDUData() {
         body = {
             neo: neoData,
-            hana: hanaData
+            hana: hanaData,
+            processInstanceId: processId
         }
 
         $http.post(
-            "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/start-process",
+            "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/continue-process",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {
-            processId = body.processInstanceId = response.data.processInstanceId;
             const timer = setInterval(function(){
               $http.post(
                           "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/get-process",
@@ -173,6 +173,7 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
         }
         if ("hanaData" in msg.data) {
             hanaData = msg.data.hanaData;
+            processId = msg.data.hanaData.processId;
             getDUData();
         }
         if ("getData" in msg.data) {

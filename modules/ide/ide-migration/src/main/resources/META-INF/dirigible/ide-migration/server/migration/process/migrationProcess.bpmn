@@ -9,7 +9,6 @@
         </flowable:field>
       </extensionElements>
     </serviceTask>
-    <sequenceFlow id="sid-797626AE-B2F6-4C00-ABEE-FB30ADC177E4" sourceRef="sid-3334E861-7999-4B89-B8B0-11724BA17A3E" targetRef="openHanaTunnelTask"/>
     <endEvent id="sid-70B488C1-384A-4E19-8091-1B12D1AEC7FD"/>
     <serviceTask id="listDeliveryUnitsTask" name="ListDeliveryUnitsTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
@@ -46,6 +45,17 @@
     </serviceTask>
     <sequenceFlow id="sid-ABFB4FD0-4101-4C47-ACB8-77C1DD47D117" sourceRef="listDeliveryUnitsTask" targetRef="listWorkspacesTask"/>
     <sequenceFlow id="sid-D1BF0223-853A-46D3-9163-939F800D7467" sourceRef="listWorkspacesTask" targetRef="userSelectDeliveryUnitAndWorkspaceTask"/>
+    <serviceTask id="listAvailableDatabasesTask" name="ListAvailableDatabasesTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
+      <extensionElements>
+        <flowable:field name="handler">
+          <flowable:string><![CDATA[ide-migration/server/migration/process/list-available-databases-task.js]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <userTask id="userProvideCredentialsTask" name="UserProvideCredentialsTask"/>
+    <sequenceFlow id="sid-7D910018-767E-40A0-A78F-5AFDB9B198AF" sourceRef="sid-3334E861-7999-4B89-B8B0-11724BA17A3E" targetRef="listAvailableDatabasesTask"/>
+    <sequenceFlow id="sid-AC83EE9C-E114-40E9-B930-BE102DBDEFA3" sourceRef="listAvailableDatabasesTask" targetRef="userProvideCredentialsTask"/>
+    <sequenceFlow id="sid-4C28ADD1-E977-440B-B421-ECF5F231BC62" sourceRef="userProvideCredentialsTask" targetRef="openHanaTunnelTask"/>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_migrationProcess">
     <bpmndi:BPMNPlane bpmnElement="migrationProcess" id="BPMNPlane_migrationProcess">
@@ -53,7 +63,7 @@
         <omgdc:Bounds height="30.0" width="30.0" x="15.0" y="78.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="openHanaTunnelTask" id="BPMNShape_openHanaTunnelTask">
-        <omgdc:Bounds height="80.0" width="100.0" x="75.0" y="52.0"/>
+        <omgdc:Bounds height="80.0" width="100.0" x="75.0" y="45.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="sid-70B488C1-384A-4E19-8091-1B12D1AEC7FD" id="BPMNShape_sid-70B488C1-384A-4E19-8091-1B12D1AEC7FD">
         <omgdc:Bounds height="28.0" width="28.0" x="1065.0" y="78.0"/>
@@ -68,22 +78,30 @@
         <omgdc:Bounds height="80.0" width="100.0" x="855.0" y="53.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="userSelectDeliveryUnitAndWorkspaceTask" id="BPMNShape_userSelectDeliveryUnitAndWorkspaceTask">
-        <omgdc:Bounds height="80.0" width="100.0" x="495.0" y="53.0"/>
+        <omgdc:Bounds height="80.0" width="100.0" x="495.0" y="45.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="listWorkspacesTask" id="BPMNShape_listWorkspacesTask">
         <omgdc:Bounds height="80.0" width="100.0" x="345.0" y="52.0"/>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="sid-797626AE-B2F6-4C00-ABEE-FB30ADC177E4" id="BPMNEdge_sid-797626AE-B2F6-4C00-ABEE-FB30ADC177E4">
-        <omgdi:waypoint x="44.94918894284055" y="92.8421138291549"/>
-        <omgdi:waypoint x="74.99999999999993" y="92.52578947368423"/>
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="listAvailableDatabasesTask" id="BPMNShape_listAvailableDatabasesTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="45.0" y="165.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userProvideCredentialsTask" id="BPMNShape_userProvideCredentialsTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="225.0" y="165.0"/>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="sid-983EFE4C-0C0D-403E-B55E-1AC7E62761C2" id="BPMNEdge_sid-983EFE4C-0C0D-403E-B55E-1AC7E62761C2">
-        <omgdi:waypoint x="594.95" y="93.0"/>
+        <omgdi:waypoint x="594.95" y="85.0"/>
+        <omgdi:waypoint x="635.0" y="85.0"/>
+        <omgdi:waypoint x="635.0" y="93.0"/>
         <omgdi:waypoint x="675.0" y="93.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-27200641-4891-4895-A5EF-1DBC0A12AB9A" id="BPMNEdge_sid-27200641-4891-4895-A5EF-1DBC0A12AB9A">
-        <omgdi:waypoint x="174.95" y="92.0"/>
-        <omgdi:waypoint x="209.9999999999962" y="92.0"/>
+        <omgdi:waypoint x="174.95" y="87.59000000000002"/>
+        <omgdi:waypoint x="209.99999999999994" y="89.4074074074074"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-AC83EE9C-E114-40E9-B930-BE102DBDEFA3" id="BPMNEdge_sid-AC83EE9C-E114-40E9-B930-BE102DBDEFA3">
+        <omgdi:waypoint x="144.95" y="205.0"/>
+        <omgdi:waypoint x="225.0" y="205.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-ABFB4FD0-4101-4C47-ACB8-77C1DD47D117" id="BPMNEdge_sid-ABFB4FD0-4101-4C47-ACB8-77C1DD47D117">
         <omgdi:waypoint x="309.95000000000005" y="92.0"/>
@@ -93,9 +111,19 @@
         <omgdi:waypoint x="774.9499999999999" y="93.0"/>
         <omgdi:waypoint x="855.0" y="93.0"/>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-4C28ADD1-E977-440B-B421-ECF5F231BC62" id="BPMNEdge_sid-4C28ADD1-E977-440B-B421-ECF5F231BC62">
+        <omgdi:waypoint x="224.99999999999997" y="165.0"/>
+        <omgdi:waypoint x="174.9291579824927" y="124.95"/>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-D1BF0223-853A-46D3-9163-939F800D7467" id="BPMNEdge_sid-D1BF0223-853A-46D3-9163-939F800D7467">
-        <omgdi:waypoint x="444.95000000000005" y="92.33300000000001"/>
-        <omgdi:waypoint x="494.9999999999986" y="92.66666666666666"/>
+        <omgdi:waypoint x="444.95000000000005" y="92.0"/>
+        <omgdi:waypoint x="470.0" y="92.0"/>
+        <omgdi:waypoint x="470.0" y="85.0"/>
+        <omgdi:waypoint x="495.0" y="85.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-7D910018-767E-40A0-A78F-5AFDB9B198AF" id="BPMNEdge_sid-7D910018-767E-40A0-A78F-5AFDB9B198AF">
+        <omgdi:waypoint x="37.50537458069474" y="105.93128467575782"/>
+        <omgdi:waypoint x="71.78571428571428" y="165.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-0597DAD6-1953-4AC0-BDDD-5FE6172DA252" id="BPMNEdge_sid-0597DAD6-1953-4AC0-BDDD-5FE6172DA252">
         <omgdi:waypoint x="954.9499999999978" y="92.71264367816092"/>

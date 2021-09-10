@@ -1,4 +1,4 @@
-// Generated from com\sap\xsk\parser\hdbdd\core\Cds.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbdd/core/Cds.g4 by ANTLR 4.3
 package com.sap.xsk.parser.hdbdd.core;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;

@@ -73,7 +73,8 @@ public class EntityDefinitionListenerTest {
     assertEquals(0, parser.getNumberOfSyntaxErrors());
 
     //product.Orders.items
-    assertEquals(1, parsedEntities.get(1).getAssociations().get(0).getForeignKeys().size());
+    assertEquals(0, parsedEntities.get(1).getAssociations().get(0).getForeignKeys().size());
+    assertEquals(1, parsedEntities.get(1).getAssociations().get(1).getForeignKeys().size());
   }
 
 //    @Test

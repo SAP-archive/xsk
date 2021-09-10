@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ReferenceResolvingListener extends CdsBaseListener {
+  private static final String UNMANAGED_ASSOCIATION_MARKER = "@";
 
   private SymbolTable symbolTable;
   private CDSFileScope cdsFileScope;
@@ -88,7 +89,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
             ctx.value.getLine(), ctx.value.getCharPositionInLine(), typeOfElement.getName(), ctx.value.getText()));
       }
 
-      EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent());
+      EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent().getParent());
       elementSymbol.setValue(ctx.value.getText());
     }
 
@@ -164,7 +165,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
           ctx.source.getLine(), ctx.source.getText(), associationSymbol.getTarget().getName()));
     }
 
-    AssociationSymbol targetAssociation = new AssociationSymbol("@" + reference);
+    AssociationSymbol targetAssociation = new AssociationSymbol(UNMANAGED_ASSOCIATION_MARKER + reference);
     targetAssociation.setManaged(false);
     targetAssociation.setTarget((EntitySymbol) associationSymbol.getScope());
     targetAssociation.setCardinality(CardinalityEnum.ONE_TO_ONE);

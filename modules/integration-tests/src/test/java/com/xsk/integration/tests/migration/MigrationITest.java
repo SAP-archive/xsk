@@ -91,9 +91,9 @@ public class MigrationITest {
   }
 
   private void enterHanaCredentials() {
-    enterAndAssertField(By.xpath("//*[@ng-model='schemaName']"), credentials.getSchema());
-    enterAndAssertField(By.id("hana-username"), credentials.getHanaUsername());
-    enterAndAssertField(By.id("hana-password"), credentials.getHanaPassword());
+    selectAndAssertDropdown("databasesList", credentials.getSchema());
+    enterAndAssertField(By.id("username"), credentials.getHanaUsername());
+    enterAndAssertField(By.id("password"), credentials.getHanaPassword());
     chrome.findElement(By.xpath("//*[@ng-click='nextClicked()']")).click();
   }
 
@@ -165,15 +165,17 @@ public class MigrationITest {
     validateFileContent(
         xpathCommon + "xsk-test-app/.xsaccess&contentType=text/plain\"]",
         validation.getXsaccess());
-    validateFileContent(
-        xpathCommon + "xsk-test-app/images/Contact_regular.png&contentType=image/png\"]",
-        validation.getContactRegular());
-    validateFileContent(
-        xpathCommon + "xsk-test-app/images/Contact_hover.png&contentType=image/png\"]",
-        validation.getContactHover());
-    validateFileContent(
-        xpathCommon + "xsk-test-app/images/SAPLogo.gif&contentType=image/gif\"]",
-        validation.getSapLogo());
+
+    // TODO: Add validation for image files with the new image view
+//    validateFileContent(
+//        xpathCommon + "xsk-test-app/images/Contact_regular.png&contentType=image/png\"]",
+//        validation.getContactRegular());
+//    validateFileContent(
+//        xpathCommon + "xsk-test-app/images/Contact_hover.png&contentType=image/png\"]",
+//        validation.getContactHover());
+//    validateFileContent(
+//        xpathCommon + "xsk-test-app/images/SAPLogo.gif&contentType=image/gif\"]",
+//        validation.getSapLogo());
   }
 
   private void validateFileContent(String editorFrameXpath, String validContent) {

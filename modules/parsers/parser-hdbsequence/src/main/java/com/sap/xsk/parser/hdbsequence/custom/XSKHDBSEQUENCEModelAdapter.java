@@ -41,14 +41,14 @@ public class XSKHDBSEQUENCEModelAdapter implements JsonDeserializer<XSKHDBSEQUEN
             throw new XSKHDBSequenceMissingPropertyException(String.format("Missing mandatory fields among  %s!", properties));
         }
         model.setSchema(handleStringLiteral(model.getSchema()));
-        if (Objects.nonNull(model.getReset_by())) {
-            model.setReset_by(handleStringLiteral(model.getReset_by()));
+        if (Objects.nonNull(model.getResetBy())) {
+            model.setResetBy(handleStringLiteral(model.getResetBy()));
         }
-        if (Objects.nonNull(model.getDepends_on_table())) {
-            model.setDepends_on_table(handleStringLiteral(model.getDepends_on_table()));
+        if (Objects.nonNull(model.getDependsOnTable())) {
+            model.setDependsOnTable(handleStringLiteral(model.getDependsOnTable()));
         }
-        if (Objects.nonNull(model.getDepends_on_view())) {
-            model.setDepends_on_view(handleStringLiteral(model.getDepends_on_view()));
+        if (Objects.nonNull(model.getDependsOnView())) {
+            model.setDependsOnView(handleStringLiteral(model.getDependsOnView()));
         }
         return model;
     }

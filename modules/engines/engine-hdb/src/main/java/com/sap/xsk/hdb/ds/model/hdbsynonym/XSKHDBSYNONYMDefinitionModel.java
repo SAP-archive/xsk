@@ -11,34 +11,67 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbsynonym;
 
-import java.util.Objects;
-
 import com.google.gson.annotations.SerializedName;
 import com.sap.xsk.hdb.ds.exceptions.XSKHDBSYNONYMMissingPropertyException;
+import java.util.Objects;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class XSKHDBSYNONYMDefinitionModel {
 
   private Target target;
   @SerializedName(value = "schema")
   String synonymSchema;
 
-  @Getter
-  @Setter
-  @NoArgsConstructor
+  public Target getTarget() {
+    return target;
+  }
+
+  public void setTarget(Target target) {
+    this.target = target;
+  }
+
+  public String getSynonymSchema() {
+    return synonymSchema;
+  }
+
+  public void setSynonymSchema(String synonymSchema) {
+    this.synonymSchema = synonymSchema;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    XSKHDBSYNONYMDefinitionModel that = (XSKHDBSYNONYMDefinitionModel) o;
+    return Objects.equals(target, that.target) && Objects.equals(synonymSchema, that.synonymSchema);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(target, synonymSchema);
+  }
+
   public static class Target {
+
     String object;
     String schema;
+
+    public String getObject() {
+      return object;
+    }
+
+    public void setObject(String object) {
+      this.object = object;
+    }
+
+    public String getSchema() {
+      return schema;
+    }
+
+    public void setSchema(String schema) {
+      this.schema = schema;
+    }
 
     public void checkForAllMandatoryFieldsPresence() {
       checkPresence(object, "object");

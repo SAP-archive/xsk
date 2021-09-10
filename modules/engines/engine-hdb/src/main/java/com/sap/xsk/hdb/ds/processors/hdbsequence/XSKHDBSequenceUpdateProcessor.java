@@ -62,14 +62,14 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
   private String getDatabaseSpecificSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel,
       String modifiedSequenceName) {
     return SqlFactory.getNative(connection).alter().sequence(modifiedSequenceName)
-        .start(hdbSequenceModel.getStart_with())
-        .increment(hdbSequenceModel.getIncrement_by())
-        .maxvalue(hdbSequenceModel.getMaxvalue())
-        .nomaxvalue(hdbSequenceModel.getNomaxvalue())
-        .minvalue(hdbSequenceModel.getMinvalue())
-        .nominvalue(hdbSequenceModel.getNominvalue())
+        .start(hdbSequenceModel.getStartWith())
+        .increment(hdbSequenceModel.getIncrementBy())
+        .maxvalue(hdbSequenceModel.getMaxValue())
+        .nomaxvalue(hdbSequenceModel.getNoMaxValue())
+        .minvalue(hdbSequenceModel.getMinValue())
+        .nominvalue(hdbSequenceModel.getNoMinValue())
         .cycles(hdbSequenceModel.getCycles())
-        .resetBy(hdbSequenceModel.getReset_by()).build();
+        .resetBy(hdbSequenceModel.getResetBy()).build();
   }
 
 }

@@ -11,18 +11,44 @@
  */
 package com.sap.xsk.parser.xsodata.model;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.util.Objects;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
-@Accessors(chain = true)
 public class XSKHDBXSODATAParameter {
 
-    private String parameterEntitySetName;
-    private String parameterResultsProperty;
+  private String parameterEntitySetName;
+  private String parameterResultsProperty;
 
+  public String getParameterEntitySetName() {
+    return parameterEntitySetName;
+  }
+
+  public XSKHDBXSODATAParameter setParameterEntitySetName(String parameterEntitySetName) {
+    this.parameterEntitySetName = parameterEntitySetName;
+    return this;
+  }
+
+  public String getParameterResultsProperty() {
+    return parameterResultsProperty;
+  }
+
+  public XSKHDBXSODATAParameter setParameterResultsProperty(String parameterResultsProperty) {
+    this.parameterResultsProperty = parameterResultsProperty;
+    return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    XSKHDBXSODATAParameter that = (XSKHDBXSODATAParameter) o;
+    return Objects.equals(parameterEntitySetName, that.parameterEntitySetName) && Objects.equals(parameterResultsProperty,
+        that.parameterResultsProperty);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(parameterEntitySetName, parameterResultsProperty);
+  }
 }

@@ -14,37 +14,105 @@ package com.sap.xsk.hdb.ds.model.hdbsequence;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
 public class XSKDataStructureHDBSequenceModel extends XSKDataStructureModel {
 
-  private Integer increment_by = HDBSequenceConstants.INCREMENT_BY_DEFAULT_VALUE;
-  private Integer start_with = HDBSequenceConstants.START_WITH_DEFAULT_VALUE;
-  private Integer maxvalue;
-  private Boolean nomaxvalue;
-  private Integer minvalue = HDBSequenceConstants.MIN_DEFAULT_VALUE;
-  private Boolean nominvalue;
+  private Integer incrementBy = HDBSequenceConstants.INCREMENT_BY_DEFAULT_VALUE;
+  private Integer startWith = HDBSequenceConstants.START_WITH_DEFAULT_VALUE;
+  private Integer maxValue;
+  private Boolean noMaxValue;
+  private Integer minValue = HDBSequenceConstants.MIN_DEFAULT_VALUE;
+  private Boolean noMinValue;
   private Boolean cycles;
-  private String reset_by;
-  private String depends_on_table;
-  private String depends_on_view;
+  private String resetBy;
+  private String dependsOnTable;
+  private String dependsOnView;
+  private Boolean publicProp = HDBSequenceConstants.PUBLIC_DEFAULT_VALUE;
 
-  @Getter(AccessLevel.NONE)
-  private Boolean publicc = HDBSequenceConstants.PUBLIC_DEFAULT_VALUE;
-
-  public boolean isPublic() {
-    return publicc;
+  public Integer getIncrementBy() {
+    return incrementBy;
   }
 
-  public void setPublic(boolean publicc) {
-    this.publicc = publicc;
+  public void setIncrementBy(Integer incrementBy) {
+    this.incrementBy = incrementBy;
+  }
+
+  public Integer getStartWith() {
+    return startWith;
+  }
+
+  public void setStartWith(Integer startWith) {
+    this.startWith = startWith;
+  }
+
+  public Integer getMaxValue() {
+    return maxValue;
+  }
+
+  public void setMaxValue(Integer maxValue) {
+    this.maxValue = maxValue;
+  }
+
+  public Boolean getNoMaxValue() {
+    return noMaxValue;
+  }
+
+  public void setNoMaxValue(Boolean noMaxValue) {
+    this.noMaxValue = noMaxValue;
+  }
+
+  public Integer getMinValue() {
+    return minValue;
+  }
+
+  public void setMinValue(Integer minValue) {
+    this.minValue = minValue;
+  }
+
+  public Boolean getNoMinValue() {
+    return noMinValue;
+  }
+
+  public void setNoMinValue(Boolean noMinValue) {
+    this.noMinValue = noMinValue;
+  }
+
+  public Boolean getCycles() {
+    return cycles;
+  }
+
+  public void setCycles(Boolean cycles) {
+    this.cycles = cycles;
+  }
+
+  public String getResetBy() {
+    return resetBy;
+  }
+
+  public void setResetBy(String resetBy) {
+    this.resetBy = resetBy;
+  }
+
+  public String getDependsOnTable() {
+    return dependsOnTable;
+  }
+
+  public void setDependsOnTable(String dependsOnTable) {
+    this.dependsOnTable = dependsOnTable;
+  }
+
+  public String getDependsOnView() {
+    return dependsOnView;
+  }
+
+  public void setDependsOnView(String dependsOnView) {
+    this.dependsOnView = dependsOnView;
+  }
+
+  public boolean isPublic() {
+    return publicProp;
+  }
+
+  public void setPublic(boolean publicProp) {
+    this.publicProp = publicProp;
   }
 }

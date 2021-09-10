@@ -259,7 +259,6 @@
 		<apache.httpclient.version>4.5.8</apache.httpclient.version>
 		<commons.lang3>3.9</commons.lang3>
 		<license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
-		<org.projectlombok.version>1.18.20</org.projectlombok.version>
 		<antlr4-runtime.version>4.3</antlr4-runtime.version>
 		<antlr4-maven-plugin.version>4.3</antlr4-maven-plugin.version>
 		<org.testcontainers.version>1.15.2</org.testcontainers.version>

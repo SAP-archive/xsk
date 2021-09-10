@@ -13,7 +13,9 @@ You can deploy XSK locally using Docker or Tomcat server.
 
 ## Steps
 ---
-      
+
+1. Deploy as a Docker container or on Tomcat server.
+
     === "Docker"
 
         !!! info "Prerequisites"

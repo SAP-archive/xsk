@@ -73,7 +73,8 @@ public class EntityDefinitionListenerTest {
     assertEquals(0, parser.getNumberOfSyntaxErrors());
 
     //product.Orders.items
-    assertEquals(1, parsedEntities.get(1).getAssociations().get(0).getForeignKeys().size());
+    assertEquals(0, parsedEntities.get(1).getAssociations().get(0).getForeignKeys().size());
+    assertEquals(1, parsedEntities.get(1).getAssociations().get(1).getForeignKeys().size());
   }
 
 //    @Test
@@ -85,7 +86,7 @@ public class EntityDefinitionListenerTest {
 //    }
     @Test
     public void parseParseStructuredTypeSuccessfully() throws Exception {
-        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "project_name/sap/table/ParseStructuredType.hdbdd");
+        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
         List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 
         assertEquals(0, parser.getNumberOfSyntaxErrors());

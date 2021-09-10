@@ -27,6 +27,8 @@ import java.util.List;
 
 public class HdbddTransformer {
 
+  private static final String UNMANAGED_ASSOCIATION_MARKER = "@";
+
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
     tableModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
@@ -49,14 +51,18 @@ public class HdbddTransformer {
       List<XSKDataStructureHDBTableColumnModel> associationColumns = transformAssociationToColumnModels(associationSymbol);
       XSKDataStructureHDBTableConstraintForeignKeyModel foreignKeyModel = new XSKDataStructureHDBTableConstraintForeignKeyModel();
       String[] referencedColumns = associationColumns.stream().map(XSKDataStructureHDBTableColumnModel::getName).toArray(String[]::new);
+      String foreignKeyName = tableModel.getName() + "." + associationSymbol.getName();
       if (associationSymbol.isManaged()) {
         associationColumns.forEach(ac -> ac.setName(associationSymbol.getName() + "." + ac.getName()));
       } else {
-        associationColumns.forEach(ac -> ac.setName(associationSymbol.getName().substring(1)));
+        String associationSymbolName = associationSymbol.getName();
+        associationColumns.forEach(ac -> ac.setName(associationSymbolName.substring(associationSymbolName.indexOf(
+            UNMANAGED_ASSOCIATION_MARKER))));
+        foreignKeyName = foreignKeyName.replace(UNMANAGED_ASSOCIATION_MARKER, "");
       }
 
       String[] foreignKeyColumns = associationColumns.stream().map(XSKDataStructureHDBTableColumnModel::getName).toArray(String[]::new);
-      String foreignKeyName = tableModel.getName() + "." + associationSymbol.getName();
+
 
       foreignKeyModel.setName(foreignKeyName);
       foreignKeyModel.setReferencedTable(associationSymbol.getTarget().getFullName());

@@ -15,7 +15,7 @@ context ProjectProducts {
         Phone                : String(200);
         Email                : String(300);
         items                : association[*] to Item on items.OrderId = Id;
-        Country              : association to ProjectProducts.Country { Id };
+        Country              : association to ProjectProducts.Country { Id, Street };
     };
 
     entity Item {

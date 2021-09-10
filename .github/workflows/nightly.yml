@@ -54,10 +54,7 @@ jobs:
 
       # Run Selenium tests on XSK
       - name: Run Selenium Tests
-<<<<<<< Updated upstream
         run: mvn clean install -P itests -Dintegration-tests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
-=======
-        run: mvn clean install -Dintegration-tests
         env:
           NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}
           NEO_SUBACCOUNT: ${{ secrets.ITESTS_SELENIUM_NEO_SUBACCOUNT }}
@@ -66,7 +63,6 @@ jobs:
           HANA_DB_SCHEMA: ${{ secrets.ITESTS_SELENIUM_HANA_DB_SCHEMA }}
           HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
           HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}
->>>>>>> Stashed changes
 
       # Upload screenshots to a GitHub artifact
       - name: Save screenshots

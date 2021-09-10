@@ -86,7 +86,7 @@ public class EntityDefinitionListenerTest {
 //    }
     @Test
     public void parseParseStructuredTypeSuccessfully() throws Exception {
-        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "project_name/sap/table/ParseStructuredType.hdbdd");
+        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
         List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 
         assertEquals(0, parser.getNumberOfSyntaxErrors());

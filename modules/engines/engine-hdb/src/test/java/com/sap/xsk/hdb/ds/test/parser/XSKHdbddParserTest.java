@@ -13,42 +13,37 @@ package com.sap.xsk.hdb.ds.test.parser;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.test.module.HdbddTestModule;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 public class XSKHdbddParserTest extends AbstractDirigibleTest {
+
+  @Before
+  public void setUp() {
+    HdbddTestModule testModule = new HdbddTestModule();
+    testModule.configure();
+  }
     @Test
     public void parseHanaXSClassicContentWithSyntaxErrorFail() {
-        String content = "namespace sap.slh.dcs.gstr2.table;\n" +
-                "@Schema : 'GSTR2DB'\n" +
-                "@Catalog.tableType : #COLUMN\n" +
-                "entity ITC_EXPIRED_CONFIG {\n" +
-                "\tKeY1 FY_YEAR             : hana.VARCHAR(10);\n" + //-> incorrect key
-                "\tITC_EXPIRED_DATE        : LocalDate;\n" +
-                "}\n";
         XSKDataStructuresException exception = assertThrows(
                 XSKDataStructuresException.class,
-                () -> XSKDataStructureModelFactory.parseHdbdd("sap/slh/dcs/gstr2/table/ITC_EXPIRED_CONFIG.hdbdd", content)
+                () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG.hdbdd", "")
         );
-        assertEquals("Wrong format of HDB HDBDD: [sap/slh/dcs/gstr2/table/ITC_EXPIRED_CONFIG.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.", exception.getMessage());
+        assertEquals("Wrong format of HDB HDBDD: [gstr2/ITC_EXPIRED_CONFIG.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.", exception.getMessage());
     }
 
     @Test
     public void parseHanaXSClassicContentWithLexerErrorFail() {
-        String content = "namespace/ sap.slh.dcs.gstr2.table;\n" +
-                "@Schema : 'GSTR2DB'\n" +
-                "@Catalog.tableType : #COLUMN\n" +
-                "entity ITC_EXPIRED_CONFIG {\n" +
-                "\tkey FY_YEAR             : hana.VARCHAR(10);\n" +
-                "\tITC_EXPIRED_DATE        : LocalDate;\n" +
-                "};";
         XSKDataStructuresException exception = assertThrows(
                 XSKDataStructuresException.class,
-                () -> XSKDataStructureModelFactory.parseHdbdd("sap/slh/dcs/gstr2/table/ITC_EXPIRED_CONFIG.hdbdd", content)
+                () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG1.hdbdd", "")
         );
-        assertEquals("Wrong format of HDB HDBDD: [sap/slh/dcs/gstr2/table/ITC_EXPIRED_CONFIG.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.", exception.getMessage());
+        assertEquals("Wrong format of HDB HDBDD: [gstr2/ITC_EXPIRED_CONFIG1.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.", exception.getMessage());
     }
 }

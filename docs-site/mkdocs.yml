@@ -46,6 +46,6 @@ extra:
     - icon: fontawesome/brands/slack
       link: https://eclipse-dirigible.slack.com/
 
-google_analytics:
-  - UA-49027147-1
-  - auto
+# google_analytics:
+#   - UA-49027147-1
+#   - auto

@@ -1,0 +1,17 @@
+namespace gstr2;
+
+@Schema: 'ADMIN'
+
+context ProductsWithManagedAss {
+
+ entity  Orders{
+        key Id               : String(32);
+        CustomerName         : String(500);
+        Country              : association to ProductsWithManagedAss.Country { Id };
+    };
+
+     entity Country {
+        key Id              : String(32);
+        Name                : String(32);
+    };
+};

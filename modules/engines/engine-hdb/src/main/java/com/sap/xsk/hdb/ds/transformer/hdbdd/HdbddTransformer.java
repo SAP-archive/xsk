@@ -40,10 +40,10 @@ public class HdbddTransformer {
       if (currentElement.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(currentElement);
         subElements.forEach(subE -> {
-          tableColumns.add(transformEntityElementToColumnModel(subE));
+          tableColumns.add(transformEntityElementToColumnModel(subE, true));
         });
       } else {
-        tableColumns.add(transformEntityElementToColumnModel(currentElement));
+        tableColumns.add(transformEntityElementToColumnModel(currentElement, true));
       }
     });
 
@@ -82,10 +82,15 @@ public class HdbddTransformer {
     return tableModel;
   }
 
-  private XSKDataStructureHDBTableColumnModel transformEntityElementToColumnModel(EntityElementSymbol entityElement) {
+  /**
+   *
+   * @param entityElement
+   * @param bAssignPK: false if the entityElement is coming from  association, otherwise it should be true
+   */
+  private XSKDataStructureHDBTableColumnModel transformEntityElementToColumnModel(EntityElementSymbol entityElement, boolean bAssignPK) {
     XSKDataStructureHDBTableColumnModel columnModel = new XSKDataStructureHDBTableColumnModel();
     columnModel.setName(entityElement.getName());
-    columnModel.setPrimaryKey(entityElement.isKey());
+    if(bAssignPK) columnModel.setPrimaryKey(entityElement.isKey());
     columnModel.setNullable(!entityElement.isNotNull());
     columnModel.setDefaultValue(entityElement.getValue());
 
@@ -112,9 +117,9 @@ public class HdbddTransformer {
       if (fk.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(fk);
         subElements.forEach(subE ->
-            tableColumns.add(transformEntityElementToColumnModel(subE)));
+            tableColumns.add(transformEntityElementToColumnModel(subE, false)));
       } else {
-        tableColumns.add(transformEntityElementToColumnModel(fk));
+        tableColumns.add(transformEntityElementToColumnModel(fk, false));
       }
     });
 

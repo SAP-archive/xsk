@@ -42,7 +42,7 @@ public class HDBTableDefinitionModelToHDBTableColumnModelTransformer {
       dataStructureHDBTableColumnModel.setPrecision(column.getPrecision());
       dataStructureHDBTableColumnModel.setScale(column.getScale());
       dataStructureHDBTableColumnModel.setUnique(column.isUnique());
-      List<String> foundMatchKey = hdbtableDefinitionModel.getPkcolumns().stream().filter(key -> key.equals(column.getName())).collect(
+      List<String> foundMatchKey = hdbtableDefinitionModel.getPkColumns().stream().filter(key -> key.equals(column.getName())).collect(
           Collectors.toList());
       if (foundMatchKey.size() == 1) {
         dataStructureHDBTableColumnModel.setPrimaryKey(true);

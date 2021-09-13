@@ -11,18 +11,43 @@
  */
 package com.sap.xsk.parser.xsodata.model;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.util.Objects;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
-@Accessors(chain = true)
 public class XSKHDBXSODATAModification {
 
-    private XSKHDBXSODATAHandlerMethod method;
-    private XSKHDBXSODATAModificationSpec specification;
+  private XSKHDBXSODATAHandlerMethod method;
+  private XSKHDBXSODATAModificationSpec specification;
 
+  public XSKHDBXSODATAHandlerMethod getMethod() {
+    return method;
+  }
+
+  public XSKHDBXSODATAModification setMethod(XSKHDBXSODATAHandlerMethod method) {
+    this.method = method;
+    return this;
+  }
+
+  public XSKHDBXSODATAModificationSpec getSpecification() {
+    return specification;
+  }
+
+  public XSKHDBXSODATAModification setSpecification(XSKHDBXSODATAModificationSpec specification) {
+    this.specification = specification;
+    return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    XSKHDBXSODATAModification that = (XSKHDBXSODATAModification) o;
+    return method == that.method && Objects.equals(specification, that.specification);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(method, specification);
+  }
 }

@@ -16,15 +16,6 @@
   <version>0.9.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${org.projectlombok.version}</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
-
   <properties>
     <license.header.location>../../../licensing-header.txt</license.header.location>
   </properties>

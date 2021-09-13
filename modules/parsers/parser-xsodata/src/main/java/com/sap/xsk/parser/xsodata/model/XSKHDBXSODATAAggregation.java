@@ -11,18 +11,43 @@
  */
 package com.sap.xsk.parser.xsodata.model;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.util.Objects;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
-@Accessors(chain = true)
 public class XSKHDBXSODATAAggregation {
 
-    private String aggregateFunction;
-    private String aggregateColumnName;
+  private String aggregateFunction;
+  private String aggregateColumnName;
 
+  public String getAggregateFunction() {
+    return aggregateFunction;
+  }
+
+  public XSKHDBXSODATAAggregation setAggregateFunction(String aggregateFunction) {
+    this.aggregateFunction = aggregateFunction;
+    return this;
+  }
+
+  public String getAggregateColumnName() {
+    return aggregateColumnName;
+  }
+
+  public XSKHDBXSODATAAggregation setAggregateColumnName(String aggregateColumnName) {
+    this.aggregateColumnName = aggregateColumnName;
+    return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    XSKHDBXSODATAAggregation that = (XSKHDBXSODATAAggregation) o;
+    return Objects.equals(aggregateFunction, that.aggregateFunction) && Objects.equals(aggregateColumnName, that.aggregateColumnName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(aggregateFunction, aggregateColumnName);
+  }
 }

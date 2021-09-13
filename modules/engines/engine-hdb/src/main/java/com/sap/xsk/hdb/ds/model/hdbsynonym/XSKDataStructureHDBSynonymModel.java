@@ -11,21 +11,21 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbsynonym;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * The synonym model representation.
  */
-@Getter
-@Setter
-@NoArgsConstructor
 public class XSKDataStructureHDBSynonymModel extends XSKDataStructureModel {
   Map<String, XSKHDBSYNONYMDefinitionModel> synonymDefinitions = new HashMap<>();
+
+  public Map<String, XSKHDBSYNONYMDefinitionModel> getSynonymDefinitions() {
+    return synonymDefinitions;
+  }
+
+  public void setSynonymDefinitions(Map<String, XSKHDBSYNONYMDefinitionModel> synonymDefinitions) {
+    this.synonymDefinitions = synonymDefinitions;
+  }
 }

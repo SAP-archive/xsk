@@ -1,10 +1,10 @@
 namespace products.db;
 
-@Schema: 'ADMIN'
+@Schema: 'DBADMIN'
 
 context Products {
 
-    entity  Orders {
+ entity  Orders{
         key Id               : String(32);
         CustomerName         : String(500);
         CustomerSurname      : String(500);
@@ -15,18 +15,23 @@ context Products {
         Address              : String(5000);
         Phone                : String(200);
         Email                : String(300);
-        items                : Association[*] to Item on items.OrderId = Id;
+        Country              : association to Products.Country { Id };
+		items                : Association[*] to Item on items.OrderId = Id;
     };
-
+     
     entity Item {
         key ItemId          : String(32);
-    	OrderId             : String(500);
+    	OrderId             : String(32);
 	    Name                : String(500);
-        ItemType            : String(100);
+        Type                : String(100);
         Price               : String(100);
         Currency            : String(100);
         Quantity            : String(100);
         Comment             : String(1000);
     };
-
+    
+     entity Country {
+        key Id              : String(32);
+        Name                : String(32);
+    };
 };

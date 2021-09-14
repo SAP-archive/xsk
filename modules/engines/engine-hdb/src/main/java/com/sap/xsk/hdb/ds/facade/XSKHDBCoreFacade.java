@@ -449,7 +449,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) dataStructureSequencesModel.get(dsName);
             try {
               if (model != null) {
-                if (!SqlFactory.getNative(connection).exists(connection, model.getName(), DatabaseArtifactTypes.SEQUENCE)) {
+                if (!SqlFactory.getNative(connection).exists(connection,  model.getSchema(), model.getName(), DatabaseArtifactTypes.SEQUENCE)) {
                   xskSequenceManagerService.createDataStructure(connection, model);
                 } else {
                   xskSequenceManagerService.updateDataStructure(connection, model);

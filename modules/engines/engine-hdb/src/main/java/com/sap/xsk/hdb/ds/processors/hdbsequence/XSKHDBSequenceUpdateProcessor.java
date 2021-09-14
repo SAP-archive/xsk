@@ -15,6 +15,7 @@ package com.sap.xsk.hdb.ds.processors.hdbsequence;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
@@ -33,11 +34,7 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
 
   @Override
   public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
-    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
-    String hdbSequenceName = hdbSequenceModel.getName();
-    if (caseSensitive) {
-      hdbSequenceName = "\"" + hdbSequenceName + "\"";
-    }
+    String hdbSequenceName = XSKHDBUtils.escapeArtifactName(connection, hdbSequenceModel.getName(), hdbSequenceModel.getSchema());
     logger.info("Processing Update HdbSequence: " + hdbSequenceName);
 
     String sql = null;
@@ -60,8 +57,8 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
   }
 
   private String getDatabaseSpecificSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel,
-      String modifiedSequenceName) {
-    return SqlFactory.getNative(connection).alter().sequence(modifiedSequenceName)
+      String hdbSequenceName) {
+    return SqlFactory.getNative(connection).alter().sequence(hdbSequenceName)
         .start(hdbSequenceModel.getStartWith())
         .increment(hdbSequenceModel.getIncrementBy())
         .maxvalue(hdbSequenceModel.getMaxValue())

@@ -57,12 +57,11 @@ public class HdbddTransformer {
       } else {
         String associationSymbolName = associationSymbol.getName();
         associationColumns.forEach(ac -> ac.setName(associationSymbolName.substring(associationSymbolName.indexOf(
-            UNMANAGED_ASSOCIATION_MARKER))));
+            UNMANAGED_ASSOCIATION_MARKER)+1)));
         foreignKeyName = foreignKeyName.replace(UNMANAGED_ASSOCIATION_MARKER, "");
       }
 
       String[] foreignKeyColumns = associationColumns.stream().map(XSKDataStructureHDBTableColumnModel::getName).toArray(String[]::new);
-
 
       foreignKeyModel.setName(foreignKeyName);
       foreignKeyModel.setReferencedTable(associationSymbol.getTarget().getFullName());

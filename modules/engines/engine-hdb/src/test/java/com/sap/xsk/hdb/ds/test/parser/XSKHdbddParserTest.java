@@ -148,4 +148,85 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertEquals(XSKDBContentType.XS_CLASSIC, parsedModel.getDBContentType());
 
   }
+
+  @Test
+  public void parseHDBDDWithUnManagedAss() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ProductsWithUnManagedAss.hdbdd", "");
+
+    assertEquals(2, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
+
+    XSKDataStructureHDBTableModel orderDataStructure = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0);
+    assertEquals("gstr2::ProductsWithUnManagedAss.Orders", orderDataStructure.getName());
+    assertEquals("ADMIN", orderDataStructure.getSchema());
+    assertEquals(XSKDBContentType.XS_CLASSIC, orderDataStructure.getDBContentType());
+    assertEquals(null, orderDataStructure.getConstraints().getPrimaryKey());
+    assertEquals(0, orderDataStructure.getConstraints().getForeignKeys().size());
+    assertEquals(0, orderDataStructure.getConstraints().getUniqueIndices().size());
+    assertEquals(0, orderDataStructure.getConstraints().getChecks().size());
+    assertEquals(null, orderDataStructure.getPublicProp());
+    assertEquals(null, orderDataStructure.getLoggingType());
+    assertEquals(null, orderDataStructure.getTemporary());
+    assertEquals(null, orderDataStructure.getLocation());
+    assertEquals(null, orderDataStructure.getType());
+    assertEquals(null, orderDataStructure.getTableType());
+    assertEquals(null, orderDataStructure.getDescription());
+
+   assertEquals(2, orderDataStructure.getColumns().size());
+
+    XSKDataStructureHDBTableColumnModel id = orderDataStructure.getColumns().get(0);
+    assertEquals("Id", id.getName());
+    assertEquals(true, id.isPrimaryKey());
+    assertEquals("32", id.getLength());
+    assertEquals(true, id.isNullable());
+    assertEquals(null, id.getDefaultValue());
+    assertEquals(null, id.getPrecision());
+    assertEquals(null, id.getScale());
+    assertEquals(false, id.isUnique());
+    assertEquals(null, id.getComment());
+
+    XSKDataStructureHDBTableColumnModel CustomerName = orderDataStructure.getColumns().get(1);
+    assertEquals("CustomerName", CustomerName.getName());
+    assertEquals(false, CustomerName.isPrimaryKey());
+    assertEquals("500", CustomerName.getLength());
+    assertEquals(true, CustomerName.isNullable());
+    assertEquals(null, CustomerName.getDefaultValue());
+    assertEquals(null, CustomerName.getPrecision());
+    assertEquals(null, CustomerName.getScale());
+    assertEquals(false, CustomerName.isUnique());
+    assertEquals(null, CustomerName.getComment());
+
+    XSKDataStructureHDBTableModel itemDataStructure = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1);
+    assertEquals("gstr2::ProductsWithUnManagedAss.Item", itemDataStructure.getName());
+    assertEquals("ADMIN", itemDataStructure.getSchema());
+    assertEquals(XSKDBContentType.XS_CLASSIC, itemDataStructure.getDBContentType());
+    assertEquals(null, itemDataStructure.getConstraints().getPrimaryKey());
+
+    assertEquals(1, itemDataStructure.getConstraints().getForeignKeys().size());
+    assertEquals("gstr2::ProductsWithUnManagedAss.Orders", itemDataStructure.getConstraints().getForeignKeys().get(0).getReferencedTable());
+    assertEquals("gstr2::ProductsWithUnManagedAss.Item.OrderId", itemDataStructure.getConstraints().getForeignKeys().get(0).getName());
+    assertEquals(null, itemDataStructure.getConstraints().getForeignKeys().get(0).getModifiers());
+    assertEquals(1, itemDataStructure.getConstraints().getForeignKeys().get(0).getReferencedColumns().length);
+    assertEquals("Id", itemDataStructure.getConstraints().getForeignKeys().get(0).getReferencedColumns()[0]);
+    assertEquals(1, itemDataStructure.getConstraints().getForeignKeys().get(0).getColumns().length);
+    assertEquals("OrderId", itemDataStructure.getConstraints().getForeignKeys().get(0).getColumns()[0]);
+
+    assertEquals(0, itemDataStructure.getConstraints().getUniqueIndices().size());
+    assertEquals(0, itemDataStructure.getConstraints().getChecks().size());
+    assertEquals(2, itemDataStructure.getColumns().size());
+    XSKDataStructureHDBTableColumnModel ItemId = itemDataStructure.getColumns().get(0);
+    assertEquals("ItemId", ItemId.getName());
+    assertEquals(true, ItemId.isPrimaryKey());
+    XSKDataStructureHDBTableColumnModel OrderId = itemDataStructure.getColumns().get(1);
+    assertEquals("OrderId", OrderId.getName());
+    assertEquals(false, OrderId.isPrimaryKey());
+
+    assertEquals("gstr2/ProductsWithUnManagedAss.hdbdd", parsedModel.getLocation());
+    assertEquals("gstr2/ProductsWithUnManagedAss.hdbdd", parsedModel.getName());
+    assertEquals("HDBDD", parsedModel.getType());
+    assertEquals("guest", parsedModel.getCreatedBy());
+    assertEquals(0, parsedModel.getDependencies().size());
+    assertEquals(null, parsedModel.getSchema());
+    assertEquals(null, parsedModel.getRawContent());
+    assertEquals(XSKDBContentType.XS_CLASSIC, parsedModel.getDBContentType());
+  }
 }

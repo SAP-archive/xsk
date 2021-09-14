@@ -1,7 +1,6 @@
 namespace gstr2;
 
 @Schema: 'ADMIN'
-
 context ProductsWithManagedAss {
 
  entity  Orders{

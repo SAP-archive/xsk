@@ -11,11 +11,11 @@
     create events(before "products.xsjs:ProductsLib.xsjslib::beforeCreateItem") 
     update forbidden;
 
-
     association "Items4Orders" principal "Orders"("Id")
        multiplicity "1" dependent "Items"("OrderId") multiplicity "*";
-       
+      
  }
+ 
  
  annotations {
    enable OData4SAP;

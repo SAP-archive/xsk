@@ -58,7 +58,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
                   mountPath: /usr/local/tomcat/target/dirigible/repository
                 ports:
                 - containerPort: 8080
-                  name: dirigible
+                  name: xsk
                   protocol: TCP
               volumes:
               - name: xsk-volume
@@ -143,11 +143,11 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
         ```json
         {
-           "xsappname": "dirigible-xsuaa",
+           "xsappname": "xsk-xsuaa",
            "oauth2-configuration": {
               "token-validity": 7200,
               "redirect-uris": [
-                 "https://dirigible.<your-kyma-cluster-host>"
+                 "https://xsk.<your-kyma-cluster-host>"
               ]
            },
            "scopes": [

@@ -16,42 +16,41 @@ $.import
 ## Sample Usage
 
 
-=== "Sample"
+=== "index.xsjs"
 
      ```javascript
      // Import .xsjslib to our file using $.import api ("package","library")
      // In our case package equals to "sap.myapp.lib"
 
-     var mathlib = $.import("sap.myapp.lib","math");
+     let mathlib = $.import("sap.myapp.lib","math");
 
-     var square = mathlib.square(6);
-     var multiply = mathlib.multiply(4,9);
-     var division = mathlib.division(9,3);
+     let square = mathlib.square(6);
+     let multiply = mathlib.multiply(4,9);
+     let division = mathlib.division(9,3);
 
-     var result = `number is ${square}
-     devision = ${division}
-     multiply = ${multiply}`;
+     let result = `Square is: ${square}`;
+     result += `\nMultiply is: ${multiply}`;
+     result += `\Division is: ${division}`;
 
      $.response.setBody(result);   
      ```
-=== "sap.myapp.lib"
+
+=== "math.xsjslib"
      
 
      ```javascript
-     // Import .xsjslib to our file using $.import api ("package","library")
-     // In our case package equals to "sap.myapp.lib"
+     
+     function square(x) {
+         return x * x;
+     }
 
-     var mathlib = $.import("sap.myapp.lib","math");
+     function multiply(x, y) {
+         return x * y;
+     }
 
-     var square = mathlib.square(6);
-     var multiply = mathlib.multiply(4,9);
-     var division = mathlib.division(9,3);
-
-     var result = `number is ${square}
-     devision = ${division}
-     multiply = ${multiply}`;
-
-     $.response.setBody(result);   
+     function division(x, y) {
+         return x / y;
+     }
      ```
 
 === "Project structure"
@@ -60,6 +59,7 @@ $.import
      |-- sap
           |--myapp
                |--lib
+                    |--index.xsjs
                     |--math.xsjslib
      ```
 

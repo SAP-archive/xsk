@@ -22,6 +22,7 @@ $.import = require("xsk/import/import").import;
 $.trace = require('xsk/trace/trace');
 $.security = require('xsk/security/security');
 $.util = require('xsk/util/util');
+$.jobs = require('xsk/jobs/jobs');
 
 try {
     let dResponse = require('xsk/web/web').WebResponse;

@@ -9,12 +9,15 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.utils.XSKUtils;
 import com.sap.xsk.xsjob.ds.facade.XSKJobFacade;
 import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
 import com.sap.xsk.xsjob.ds.synchronizer.XSKJobSynchronizer;
+
+import org.eclipse.dirigible.core.scheduler.manager.SchedulerInitializer;
 import com.sap.xsk.xsjob.ds.transformer.XSKCronToQuartzCronTransformer;
 import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
 import org.apache.commons.io.IOUtils;
@@ -95,56 +98,12 @@ public class XSKJobTransformerTest extends AbstractDirigibleTest {
   @Test
   public void test() throws Exception {
 
-//    DatabaseModule db = new DatabaseModule();
-//    db.configure();
-
     String jobPath = "/TestXSKJobTransformSuccess.xsjob";
-    XSKJobCoreService s = new XSKJobCoreService();
+    SchedulerInitializer initializer = new SchedulerInitializer();
+    initializer.initialize();
+
+
     XSKJobFacade.newJob(jobPath);
-
-    DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
-    PersistenceManager<XSKJobDefinition> xskJobPersistenceManager = new PersistenceManager<XSKJobDefinition>();
-
-    xskJobPersistenceManager.tableDrop(dataSource.getConnection(), XSKJobDefinition.class);
-
-//    XSKJobDefinition xskJobDefinition = new XSKJobDefinition();
-//    xskJobDefinition.setName("nameeee");
-//    xskJobDefinition.setGroup("group");
-//    xskJobDefinition.setDescription("description");
-//    xskJobDefinition.setModule("module");
-//    xskJobDefinition.setFunction("action");
-//    xskJobDefinition.setCronExpression("cronExpression");
-//    xskJobDefinition.setParameters(XSKUtils.objectToByteArray(new HashMap<String, String>()));
-//    xskJobDefinition.setCreatedBy(UserFacade.getName());
-//    xskJobDefinition.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-//    xskJobPersistenceManager.insert(dataSource.getConnection(), xskJobDefinition);
-
-//    System.out.println(xskJobPersistenceManager.findAll(dataSource.getConnection(), XSKJobDefinition.class).get(0).getName());
-
-
-    XSKJobCoreService jobService = new XSKJobCoreService();
-    InputStream in = XSKJobSynchronizer.class.getResourceAsStream(jobPath);
-    try {
-      String json = IOUtils.toString(in, StandardCharsets.UTF_8);
-      XSKJobArtifact xskJobArtifact = jobService.parseJob(json);
-      ArrayList<XSKJobDefinition> xskJobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
-      for (XSKJobDefinition jobDefinition:xskJobDefinitions) {
-        jobDefinition.setName(jobPath);
-      }
-
-      System.out.println(xskJobDefinitions.get(0).getName());
-    } finally {
-      if (in != null) {
-        in.close();
-      }
-    }
-
-//    XSKJobDefinition jobDefinition = jobService.getJob("nameeee");
-//    System.out.println(jobDefinition.getName());
-
-//    System.out.println(xskJobPersistenceManager.find(dataSource.getConnection(), XSKJobDefinition.class, "name"));
-
-//    XSKJobFacade.activate("/TestXSKJobTransformSuccess.xsjob");
-//    XSKJobFacade.deactivate("/TestXSKJobTransformSuccess.xsjob");
+    XSKJobFacade.activate(jobPath);
   }
 }

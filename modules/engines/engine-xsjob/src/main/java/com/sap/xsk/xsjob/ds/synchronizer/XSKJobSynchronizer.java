@@ -20,8 +20,13 @@ import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.XSKSchedulerManager;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
 import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -73,7 +78,7 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
   public void synchronize() {
     synchronized (XSKJobSynchronizer.class) {
       if (beforeSynchronizing()) {
-        if (true) {
+        if (beforeSynchronizing()) {
           logger.trace("Synchronizing Jobs...");
           try {
             startSynchronization(SYNCHRONIZER_NAME);
@@ -109,6 +114,7 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
    */
   public void registerPredeliveredJob(String jobPath) throws IOException, ParseException {
     InputStream in = XSKJobSynchronizer.class.getResourceAsStream(jobPath);
+
     try {
       String json = IOUtils.toString(in, StandardCharsets.UTF_8);
       XSKJobArtifact xskJobArtifact = schedulerCoreService.parseJob(json);
@@ -218,10 +224,12 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
 
   private void synchronizePredelivered() throws SynchronizationException {
     logger.trace("Synchronizing predelivered Jobs...");
+
     // Jobs
     for (XSKJobDefinition jobDefinition : JOBS_PREDELIVERED.values()) {
       synchronizeJob(jobDefinition);
     }
+
     logger.trace("Done synchronizing predelivered Jobs.");
   }
 

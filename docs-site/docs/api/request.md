@@ -15,7 +15,7 @@ $.request
 - Status: `alpha`
 
 
-## Basic Usage
+## Sample Usage
 
 ```javascript
 function getUser(id) {

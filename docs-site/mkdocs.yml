@@ -1,6 +1,35 @@
 site_name: Project XSK
 site_url: https://sap.github.io/xsk
 
+nav:
+    - Welcome: 'index.md'
+    - API: 
+      - $.hdb: 'api/hdb.md'
+      - $.import: 'api/import.md'
+      - $.net.Destination: 'api/net.Destination.md'
+      - $.net.Mail.Part: 'api/net.Mail.Part.md'
+      - $.net.Mail: 'api/net.Mail.md'
+      - $.net.SMTPConnection: 'api/net.SMTPConnection.md'
+      - $.net.http.Client: 'api/net.http.Client.md'
+      - $.net.http.Destination: 'api/net.http.Destination.md'
+      - $.net.http.Request: 'api/net.http.Request.md'
+      - $.net.http: 'api/net.http.md'
+      - $.net: 'api/net.md'
+      - $.request: 'api/request.md'
+      - $.response: 'api/response.md'
+      - $.session: 'api/session.md'
+      - $.trace: 'api/trace.md'
+      - $.util: 'api/util.md'
+      - $.util.codec: 'api/util.codec.md'
+      - $.web: 'api/web.md'
+    - Setup: 
+      - Local: 'setup/index.md'
+      - Cloud Foundry: 'setup/cloud-foundry.md'
+      - Kyma: 'setup/kyma.md'
+      - Helm: 'setup/helm.md'
+      - Environment Variables: 'setup/setup-environment-variables.md'
+    
+
 theme:
   # favicon: /img/favicon.png
   # logo: /img/logo/dirigible-logo.png

@@ -11,7 +11,7 @@ $.util
 - Module: [util/util.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/xsk/util/util.js)
 - Status: `alpha`
 
-## Basic Usage
+## Sample Usage
 
 ```javascript
 var util = $.util;

@@ -13,7 +13,7 @@ $.session
 - Module: [session/session.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/session/session.js)
 - Status: `alpha`
 
-## Basic Usage
+## Sample Usage
 
 ```javascript
 var session = $.session;

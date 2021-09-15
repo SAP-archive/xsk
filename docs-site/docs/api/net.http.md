@@ -13,7 +13,7 @@ $.net.http
 - Module: [http/http.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/http/http.js)
 - Status: `alpha`
 
-## Basic Usage
+## Sample Usage
 
 ```javascript
 let http = $.net.http;

@@ -13,7 +13,7 @@ $.trace
 - Module: [trace/trace.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/trace/trace.js)
 - Status: `alpha`
 
-## Basic Usage
+## Sample Usage
 
 ```javascript
 let trace = $.trace;

@@ -15,7 +15,7 @@ $.response
 - Status: `alpha`
 
 
-## Basic Usage
+## Sample Usage
 
 ```javascript
 function filterCarsByColor(color) {

@@ -13,7 +13,7 @@ $.net
 - Module: [net/net.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/net/net.js)
 - Status: `alpha`
 
-## Basic Usage
+## Sample Usage
 
 ```javascript
 let net = $.net;

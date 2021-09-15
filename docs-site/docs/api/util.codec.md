@@ -13,7 +13,7 @@ $.util.codec
 - Module: [util/codec/codec.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/xsk/util/codec/codec.js)
 - Status: `alpha`
 
-## Basic Usage
+## Sample Usage
 
 ```javascript
 var codec = $.util.codec;

@@ -21,7 +21,7 @@ import org.eclipse.dirigible.engine.js.api.IJavascriptEngineProcessor;
  */
 public class XSKJavascriptEngineProcessor implements IJavascriptEngineProcessor {
 
-  private XSKJavascriptEngineExecutor rhinoEngineExecutor = new XSKJavascriptEngineExecutor();
+  private XSKJavascriptEngineExecutor xskEngineExecutor = new XSKJavascriptEngineExecutor();
 
   /*
    * (non-Javadoc)
@@ -30,7 +30,7 @@ public class XSKJavascriptEngineProcessor implements IJavascriptEngineProcessor 
   @Override
   public void executeService(String module) throws ScriptingException {
     Map<Object, Object> executionContext = new HashMap<Object, Object>();
-    rhinoEngineExecutor.executeServiceModule(module, executionContext);
+    xskEngineExecutor.executeServiceModule(module, executionContext);
   }
 
 }

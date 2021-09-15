@@ -6,92 +6,92 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.hdb/</loc>
+         <loc>https://sap.github.io/xsk/api/hdb/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.import/</loc>
+         <loc>https://sap.github.io/xsk/api/import/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net.Destination/</loc>
+         <loc>https://sap.github.io/xsk/api/net.Destination/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net.Mail.Part/</loc>
+         <loc>https://sap.github.io/xsk/api/net.Mail.Part/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net.Mail/</loc>
+         <loc>https://sap.github.io/xsk/api/net.Mail/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net.SMTPConnection/</loc>
+         <loc>https://sap.github.io/xsk/api/net.SMTPConnection/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net.http.Client/</loc>
+         <loc>https://sap.github.io/xsk/api/net.http.Client/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net.http.Destination/</loc>
+         <loc>https://sap.github.io/xsk/api/net.http.Destination/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net.http.Request/</loc>
+         <loc>https://sap.github.io/xsk/api/net.http.Request/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net.http/</loc>
+         <loc>https://sap.github.io/xsk/api/net.http/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.net/</loc>
+         <loc>https://sap.github.io/xsk/api/net/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.request/</loc>
+         <loc>https://sap.github.io/xsk/api/request/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.response/</loc>
+         <loc>https://sap.github.io/xsk/api/response/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.session/</loc>
+         <loc>https://sap.github.io/xsk/api/session/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.trace/</loc>
+         <loc>https://sap.github.io/xsk/api/trace/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.util/</loc>
+         <loc>https://sap.github.io/xsk/api/util.codec/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24.web/</loc>
+         <loc>https://sap.github.io/xsk/api/util/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://sap.github.io/xsk/api/%24util.codec/</loc>
+         <loc>https://sap.github.io/xsk/api/web/</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>

@@ -30,7 +30,7 @@ $.import
 
      let result = `Square is: ${square}`;
      result += `\nMultiply is: ${multiply}`;
-     result += `\Division is: ${division}`;
+     result += `\nDivision is: ${division}`;
 
      $.response.setBody(result);   
      ```

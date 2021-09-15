@@ -310,6 +310,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#basic-usage" class="md-nav__link">
     Basic Usage
   </a>
@@ -319,6 +326,13 @@
         <li class="md-nav__item">
   <a href="#constructors" class="md-nav__link">
     Constructors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
   </a>
   
 </li>
@@ -628,6 +642,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#basic-usage" class="md-nav__link">
     Basic Usage
   </a>
@@ -637,6 +658,13 @@
         <li class="md-nav__item">
   <a href="#constructors" class="md-nav__link">
     Constructors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
   </a>
   
 </li>
@@ -666,15 +694,14 @@
                 
                 
                 <h1 id="netmailpart">$.net.Mail.Part</h1>
-<p>$.net.Mail.Part class for constructing email parts.</p>
-<div class="tabbed-set" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Overview</label><div class="tabbed-content"></div>
-</div>
+<p><code>$.net.Mail.Part</code> class for constructing email parts.</p>
+<h2 id="overview">Overview</h2>
 <ul>
 <li>Definition: <a href="https://github.com/SAP/xsk/issues/19">https://github.com/SAP/xsk/issues/19</a></li>
 <li>Module: <a href="https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/net/net.js">net/net.js</a></li>
 <li>Status: <code>alpha</code></li>
 </ul>
-<h3 id="basic-usage">Basic Usage</h3>
+<h2 id="basic-usage">Basic Usage</h2>
 <div class="highlight"><pre><span></span><code><span class="c1">// Create an inline $.net.Mail.Part from JSObject.</span>
 <span class="kd">var</span> <span class="nx">firstPart</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">();</span>
 <span class="nx">firstPart</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">.</span><span class="nx">TYPE_INLINE</span><span class="p">;</span>
@@ -715,10 +742,10 @@
 <span class="nx">mail</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">firstPart</span><span class="p">,</span> <span class="nx">secondPart</span><span class="p">,</span> <span class="nx">thirdPart</span><span class="p">);</span>
 <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
 </code></pre></div>
-<h3 id="constructors">Constructors</h3>
-<hr />
+<h2 id="constructors">Constructors</h2>
 <div class="highlight"><pre><span></span><code><span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">(</span><span class="nx">PartObject</span><span class="p">)</span>
 </code></pre></div>
+<h2 id="parameters">Parameters</h2>
 <table>
 <thead>
 <tr>
@@ -737,8 +764,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="properties">Properties</h3>
-<hr />
+<h2 id="properties">Properties</h2>
 <table>
 <thead>
 <tr>

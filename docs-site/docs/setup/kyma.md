@@ -119,7 +119,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         ```
 	
         !!! Note
-            Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host (e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**)._
+            Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host _(e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**)_.
 
         !!! tip "XSK versions"
             Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:

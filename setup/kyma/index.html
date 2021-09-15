@@ -706,7 +706,7 @@
           <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/local/tomcat/target/dirigible/repository</span>
         <span class="nt">ports</span><span class="p">:</span>
         <span class="p p-Indicator">-</span> <span class="nt">containerPort</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dirigible</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
           <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TCP</span>
       <span class="nt">volumes</span><span class="p">:</span>
       <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-volume</span>
@@ -799,11 +799,11 @@
 <li>
 <p>Provide the following additional parameters:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
-   <span class="nt">&quot;xsappname&quot;</span><span class="p">:</span> <span class="s2">&quot;dirigible-xsuaa&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;xsappname&quot;</span><span class="p">:</span> <span class="s2">&quot;xsk-xsuaa&quot;</span><span class="p">,</span>
    <span class="nt">&quot;oauth2-configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="nt">&quot;token-validity&quot;</span><span class="p">:</span> <span class="mi">7200</span><span class="p">,</span>
       <span class="nt">&quot;redirect-uris&quot;</span><span class="p">:</span> <span class="p">[</span>
-         <span class="s2">&quot;https://dirigible.&lt;your-kyma-cluster-host&gt;&quot;</span>
+         <span class="s2">&quot;https://xsk.&lt;your-kyma-cluster-host&gt;&quot;</span>
       <span class="p">]</span>
    <span class="p">},</span>
    <span class="nt">&quot;scopes&quot;</span><span class="p">:</span> <span class="p">[</span>

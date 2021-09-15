@@ -5,14 +5,15 @@ title: $.util.codec
 $.util.codec
 ===
 
-$.util.codec object represents the codec namespace with its fields.
+`$.util.codec` object represents the codec namespace with its fields.
 
-=== "Overview"
+## Overview
+
 - Definition: [https://github.com/SAP/xsk/issues/21](https://github.com/SAP/xsk/issues/21)
 - Module: [util/codec/codec.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/xsk/util/codec/codec.js)
 - Status: `alpha`
 
-### Basic Usage
+## Basic Usage
 
 ```javascript
 var codec = $.util.codec;
@@ -34,7 +35,7 @@ var decodedBase64 = codec.decodeBase64(encodedToBase64);
 var valueFromBase64 = util.stringify(decodedBase64);
 ```
 
-### Functions
+## Functions
 
 | Function               | Description                           | Returns          |
 |------------------------|---------------------------------------|------------------|

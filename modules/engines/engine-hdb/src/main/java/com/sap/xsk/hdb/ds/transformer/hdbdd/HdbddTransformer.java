@@ -14,6 +14,7 @@ package com.sap.xsk.hdb.ds.transformer.hdbdd;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
@@ -24,6 +25,8 @@ import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HdbddTransformer {
 
@@ -34,6 +37,12 @@ public class HdbddTransformer {
     tableModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
     tableModel.setName(entitySymbol.getFullName());
     tableModel.setSchema(entitySymbol.getSchema());
+
+    List<EntityElementSymbol> entityPks = entitySymbol.getElements().stream().filter(EntityElementSymbol::isKey).collect(Collectors.toList());
+    XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
+    primaryKey.setColumns(entityPks.stream().map(EntityElementSymbol::getName).toArray(String[]::new));
+    primaryKey.setName("PK_" + tableModel.getName());
+    tableModel.getConstraints().setPrimaryKey(primaryKey);
 
     List<XSKDataStructureHDBTableColumnModel> tableColumns = new ArrayList<>();
     entitySymbol.getElements().forEach(currentElement -> {

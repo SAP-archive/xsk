@@ -11,6 +11,7 @@ context ProductsWithManagedAss {
 
      entity Country {
         key Id              : String(32);
+        key Id2             : String(32);
         Name                : String(32);
     };
 };

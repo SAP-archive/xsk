@@ -11,6 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.processors.table.utils;
 
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -24,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
@@ -34,10 +36,6 @@ import org.eclipse.dirigible.database.sql.builders.table.AlterTableBuilder;
 import org.eclipse.dirigible.databases.helpers.DatabaseMetadataHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
-import com.sap.xsk.utils.XSKHDBUtils;
 
 public class XSKTableAlterHandler {
 
@@ -190,15 +188,16 @@ public class XSKTableAlterHandler {
 
     escapeService.escapeTableBuilderUniqueIndices(alterTableBuilder);
     executeAlterBuilder(connection, alterTableBuilder);
-
-
   }
 
   public void ensurePrimaryKeyIsUnchanged(Connection connection) throws SQLException {
     DatabaseMetaData dmd = connection.getMetaData();
     ResultSet rsPrimaryKeys = dmd.getPrimaryKeys(null, null, this.tableModel.getName());
     Set<String> dbPrimaryKeys = new HashSet<>();
-    Set<String> modelPrimaryKeys = new HashSet<>(Arrays.asList(this.tableModel.getConstraints().getPrimaryKey().getColumns()));
+    Set<String> modelPrimaryKeys = new HashSet<>();
+    if (this.tableModel.getConstraints().getPrimaryKey() != null) {
+      modelPrimaryKeys = new HashSet<>(Arrays.asList(this.tableModel.getConstraints().getPrimaryKey().getColumns()));
+    }
     while (rsPrimaryKeys.next()) {
       dbPrimaryKeys.add(rsPrimaryKeys.getString("COLUMN_NAME"));
     }
@@ -209,7 +208,6 @@ public class XSKTableAlterHandler {
           String.format("Incompatible change of table [%s] by trying to change its primary key list", this.tableModel.getName()));
     }
   }
-
 
   private List<XSKDataStructureHDBTableColumnModel> getColumnsToUpdate() {
     Set<String> dbColumnNames = this.dbColumnTypes.keySet();

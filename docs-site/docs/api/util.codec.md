@@ -19,20 +19,41 @@ $.util.codec
 var codec = $.util.codec;
 var util = $.util;
 
-// encode the string value to  hex data
-var encodedHex = codec.encodeHex("dirigible as hex");
+var text1 = "dirigible as hex";
+var text2 = "dirigible as base64";
 
-//returns ArrayBuffer 
+//HEX
+var encodedHex = codec.encodeHex(text1);
+result1 = "'" + text1 + "'" + " encoded to hex is "+ encodedHex;
+
 var decodedHex = codec.decodeHex(encodedHex);
-//Converts an ArrayBuffer containing UTF-8 encoded string to a JavaScript String object 
-var valueFromHex = util.stringify(decodedHex);
+result2 = "'" + encodedHex + "'" + " decoded to ArrayBuffer is: ["+ decodedHex+"]";
 
-// encode the string value  base64 data
+var valueFromHex = util.stringify(decodedHex);
+result3 = " Array Buffer stringified is "+"'" + valueFromHex +"'" ;
+
+let resultHex = `\n${result1} `;
+resultHex += `\n${result2} `;
+resultHex += `\n${result3} `;
+
+
+//BASE64
 var encodedToBase64 = codec.encodeBase64("dirigible as base64");
-//returns ArrayBuffer
+result4 = "'" + text2 + "'" + " encoded to base64 is "+ encodedToBase64;
+
 var decodedBase64 = codec.decodeBase64(encodedToBase64);
-//Converts an ArrayBuffer containing UTF-8 encoded string to a JavaScript String object 
+result5 = "'" + encodedToBase64 + "'" + " encoded to ArrayBuffer is "+ decodedBase64;
+
 var valueFromBase64 = util.stringify(decodedBase64);
+result6 = " Array Buffer stringified is "+"'" +  valueFromBase64+"'" ;
+
+let resultBase = `\n${result4} `;
+resultBase += `\n${result5} `;
+resultBase += `\n${result6} `;
+
+$.response.setBody(resultHex + "\n" + resultBase );
+
+
 ```
 
 ## Functions

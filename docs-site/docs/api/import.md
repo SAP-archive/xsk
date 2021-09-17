@@ -20,7 +20,7 @@ $.import
 !!! Note
     If you want to use sample usage code, file structure of project in your workspace browser should look like this:
 
-    ![img](/images/api/import-filestructure.png)
+    ![img](/assets/images/api/import-filestructure.png)
 
 === "import.xsjs"
 

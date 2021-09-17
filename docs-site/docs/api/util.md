@@ -14,21 +14,20 @@ $.util
 ## Sample Usage
 
 ```javascript
-var util = $.util;
-var randomID = util.createUuid(); // return random uuid
+let util = $.util;
+let randomID = util.createUuid();
 
 // Uint8Array
-var arrayBuffer = [84,104,105,115,32,105,115,32,97,32,85,105,110,116,
-                          56,65,114,114,97,121,32,99,111,110,118,101,114,116,
-                          101,100,32,116,111,32,97,32,115,116,114,105,110,103];
+let arrayBuffer = [
+    84, 104, 105, 115, 32, 105,
+    115, 32, 97, 32, 85, 105,
+];
 
-var convertedBuff = util.stringify(arrayBuffer); // return converted arrayBuffer to String
+let convertedBuff = util.stringify(arrayBuffer);
 
-var util = $.util;
-var randomID = util.createUuid(); // return random uuid
+let result = `randomID is : ${randomID} `;
+result += `\nconvertedBuff is: ${arrayBuffer} `;
 
-let result = `\n randomID is : ${randomID} `;
-result += `\n convertedBuff is: ${arrayBuffer} `;
 $.response.setBody(result);
 ```
 

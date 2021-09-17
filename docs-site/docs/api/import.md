@@ -19,7 +19,7 @@ If you want to use sample usage code,
 file structure of project in your workspace browser should look like this.
 ```
 
-![img](../../../assets/images/$.import.api:filestructure.png)
+![img](../../images/%24.import.api:filestructure.png)
 
 
 === "import.xsjs"

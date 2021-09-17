@@ -16,44 +16,34 @@ $.util.codec
 ## Sample Usage
 
 ```javascript
-var codec = $.util.codec;
-var util = $.util;
+const codec = $.util.codec;
+const util = $.util;
 
-var text1 = "dirigible as hex";
-var text2 = "dirigible as base64";
+const text1 = "Project XSK as Hex";
+const text2 = "Project XSK as Base64";
 
-//HEX
-var encodedHex = codec.encodeHex(text1);
-result1 = "'" + text1 + "'" + " encoded to hex is "+ encodedHex;
+//Hex
+let result = "";
+let encodedHex = codec.encodeHex(text1);
+result += `'${text1}' encoded to hex is ${encodedHex}`;
 
-var decodedHex = codec.decodeHex(encodedHex);
-result2 = "'" + encodedHex + "'" + " decoded to ArrayBuffer is: ["+ decodedHex+"]";
+let decodedHex = codec.decodeHex(encodedHex);
+result += `\n'${encodedHex}' decoded to ArrayBuffer is: [${decodedHex}]`;
 
-var valueFromHex = util.stringify(decodedHex);
-result3 = " Array Buffer stringified is "+"'" + valueFromHex +"'" ;
+let valueFromHex = util.stringify(decodedHex);
+result += `\n Array Buffer stringified is: '${valueFromHex}'\n` ;
 
-let resultHex = `\n${result1} `;
-resultHex += `\n${result2} `;
-resultHex += `\n${result3} `;
+//Base64
+let encodedToBase64 = codec.encodeBase64(text2);
+result += `\n'${text2}' encoded to base64 is ${encodedToBase64}`;
 
+let decodedBase64 = codec.decodeBase64(encodedToBase64);
+result += `\n'${encodedToBase64}' encoded to ArrayBuffer is: [${decodedBase64}]`;
 
-//BASE64
-var encodedToBase64 = codec.encodeBase64("dirigible as base64");
-result4 = "'" + text2 + "'" + " encoded to base64 is "+ encodedToBase64;
+let valueFromBase64 = util.stringify(decodedBase64);
+result += `\n Array Buffer stringified is '${valueFromBase64}'` ;
 
-var decodedBase64 = codec.decodeBase64(encodedToBase64);
-result5 = "'" + encodedToBase64 + "'" + " encoded to ArrayBuffer is "+ decodedBase64;
-
-var valueFromBase64 = util.stringify(decodedBase64);
-result6 = " Array Buffer stringified is "+"'" +  valueFromBase64+"'" ;
-
-let resultBase = `\n${result4} `;
-resultBase += `\n${result5} `;
-resultBase += `\n${result6} `;
-
-$.response.setBody(resultHex + "\n" + resultBase );
-
-
+$.response.setBody(result);
 ```
 
 ## Functions

@@ -27,7 +27,8 @@ nav:
       - Cloud Foundry: 'setup/cloud-foundry.md'
       - Kyma: 'setup/kyma.md'
       - Helm: 'setup/helm.md'
-      - Environment Variables: 'setup/setup-environment-variables.md'
+      - Environment Variables: 'setup/environment-variables.md'
+    - Community: 'community.md'
     
 
 theme:

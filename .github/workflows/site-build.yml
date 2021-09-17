@@ -22,6 +22,7 @@ jobs:
         mv ../temp/charts/ .
         mv ../temp/index.yaml .
         mv ../temp/docs-site/ .
+        mv ../temp/assets/images assets/
         mv ../temp/CNAME .
         rm -rf ../temp/
         cp -a docs-site/site/. .

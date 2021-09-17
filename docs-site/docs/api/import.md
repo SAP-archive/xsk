@@ -14,13 +14,13 @@ $.import
 - Status: `alpha`
 
 ## Sample Usage
-```
-If you want to use sample usage code, 
-file structure of project in your workspace browser should look like this.
-```
 
-![img](../../images/%24.import.api:filestructure.png)
 
+
+!!! Note
+    If you want to use sample usage code, file structure of project in your workspace browser should look like this:
+
+    ![img](/images/api/import-filestructure.png)
 
 === "import.xsjs"
 

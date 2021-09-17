@@ -11,7 +11,7 @@ contextRule: annotationRule* CONTEXT ID '{' (contextRule | entityRule | structur
 entityRule: annotationRule* ENTITY ID '{' (association | elementDeclRule)* '}' ';'?;
 structuredDataTypeRule: annotationRule* TYPE ID '{' fieldDeclRule* '}' ';';
 dataTypeRule: TYPE ID ':' typeAssignRule ';';
-fieldDeclRule: ID ':' typeAssignRule ';';
+fieldDeclRule: (ID | '"' ID '"') ':' typeAssignRule ';';
 typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'           # AssignBuiltInTypeWithArgs
                 | HANA '.' ref=ID                                         # AssignHanaType
                 | HANA '.' ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs

@@ -14,9 +14,15 @@ $.import
 - Status: `alpha`
 
 ## Sample Usage
+```
+If you want to use sample usage code, 
+file structure of project in your workspace browser should look like this.
+```
+
+![img](../../../resources/resources-all/images/$.import.api:filestructure.png)
 
 
-=== "index.xsjs"
+=== "import.xsjs"
 
      ```javascript
      // Import .xsjslib to our file using $.import api ("package","library")
@@ -51,16 +57,6 @@ $.import
      function division(x, y) {
          return x / y;
      }
-     ```
-
-=== "Project structure"
-
-     ```
-     |-- sap
-          |--myapp
-               |--lib
-                    |--index.xsjs
-                    |--math.xsjslib
      ```
 
 ## Parameters

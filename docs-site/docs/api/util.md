@@ -14,7 +14,8 @@ $.util
 ## Sample Usage
 
 ```javascript
-let util = $.util;
+const util = $.util;
+
 let randomID = util.createUuid();
 
 // Uint8Array

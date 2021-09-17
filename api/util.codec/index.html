@@ -677,20 +677,39 @@
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">codec</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">codec</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">;</span>
 
-<span class="c1">// encode the string value to  hex data</span>
-<span class="kd">var</span> <span class="nx">encodedHex</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">encodeHex</span><span class="p">(</span><span class="s2">&quot;dirigible as hex&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">text1</span> <span class="o">=</span> <span class="s2">&quot;dirigible as hex&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">text2</span> <span class="o">=</span> <span class="s2">&quot;dirigible as base64&quot;</span><span class="p">;</span>
 
-<span class="c1">//returns ArrayBuffer </span>
+<span class="c1">//HEX</span>
+<span class="kd">var</span> <span class="nx">encodedHex</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">encodeHex</span><span class="p">(</span><span class="nx">text1</span><span class="p">);</span>
+<span class="nx">result1</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="nx">text1</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="s2">&quot; encoded to hex is &quot;</span><span class="o">+</span> <span class="nx">encodedHex</span><span class="p">;</span>
+
 <span class="kd">var</span> <span class="nx">decodedHex</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">decodeHex</span><span class="p">(</span><span class="nx">encodedHex</span><span class="p">);</span>
-<span class="c1">//Converts an ArrayBuffer containing UTF-8 encoded string to a JavaScript String object </span>
-<span class="kd">var</span> <span class="nx">valueFromHex</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">decodedHex</span><span class="p">);</span>
+<span class="nx">result2</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="nx">encodedHex</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="s2">&quot; decoded to ArrayBuffer is: [&quot;</span><span class="o">+</span> <span class="nx">decodedHex</span><span class="o">+</span><span class="s2">&quot;]&quot;</span><span class="p">;</span>
 
-<span class="c1">// encode the string value  base64 data</span>
+<span class="kd">var</span> <span class="nx">valueFromHex</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">decodedHex</span><span class="p">);</span>
+<span class="nx">result3</span> <span class="o">=</span> <span class="s2">&quot; Array Buffer stringified is &quot;</span><span class="o">+</span><span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="nx">valueFromHex</span> <span class="o">+</span><span class="s2">&quot;&#39;&quot;</span> <span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">resultHex</span> <span class="o">=</span> <span class="sb">`\n</span><span class="si">${</span><span class="nx">result1</span><span class="si">}</span><span class="sb"> `</span><span class="p">;</span>
+<span class="nx">resultHex</span> <span class="o">+=</span> <span class="sb">`\n</span><span class="si">${</span><span class="nx">result2</span><span class="si">}</span><span class="sb"> `</span><span class="p">;</span>
+<span class="nx">resultHex</span> <span class="o">+=</span> <span class="sb">`\n</span><span class="si">${</span><span class="nx">result3</span><span class="si">}</span><span class="sb"> `</span><span class="p">;</span>
+
+
+<span class="c1">//BASE64</span>
 <span class="kd">var</span> <span class="nx">encodedToBase64</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">encodeBase64</span><span class="p">(</span><span class="s2">&quot;dirigible as base64&quot;</span><span class="p">);</span>
-<span class="c1">//returns ArrayBuffer</span>
+<span class="nx">result4</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="nx">text2</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="s2">&quot; encoded to base64 is &quot;</span><span class="o">+</span> <span class="nx">encodedToBase64</span><span class="p">;</span>
+
 <span class="kd">var</span> <span class="nx">decodedBase64</span> <span class="o">=</span> <span class="nx">codec</span><span class="p">.</span><span class="nx">decodeBase64</span><span class="p">(</span><span class="nx">encodedToBase64</span><span class="p">);</span>
-<span class="c1">//Converts an ArrayBuffer containing UTF-8 encoded string to a JavaScript String object </span>
+<span class="nx">result5</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="nx">encodedToBase64</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="s2">&quot; encoded to ArrayBuffer is &quot;</span><span class="o">+</span> <span class="nx">decodedBase64</span><span class="p">;</span>
+
 <span class="kd">var</span> <span class="nx">valueFromBase64</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">decodedBase64</span><span class="p">);</span>
+<span class="nx">result6</span> <span class="o">=</span> <span class="s2">&quot; Array Buffer stringified is &quot;</span><span class="o">+</span><span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span>  <span class="nx">valueFromBase64</span><span class="o">+</span><span class="s2">&quot;&#39;&quot;</span> <span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">resultBase</span> <span class="o">=</span> <span class="sb">`\n</span><span class="si">${</span><span class="nx">result4</span><span class="si">}</span><span class="sb"> `</span><span class="p">;</span>
+<span class="nx">resultBase</span> <span class="o">+=</span> <span class="sb">`\n</span><span class="si">${</span><span class="nx">result5</span><span class="si">}</span><span class="sb"> `</span><span class="p">;</span>
+<span class="nx">resultBase</span> <span class="o">+=</span> <span class="sb">`\n</span><span class="si">${</span><span class="nx">result6</span><span class="si">}</span><span class="sb"> `</span><span class="p">;</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">resultHex</span> <span class="o">+</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">resultBase</span> <span class="p">);</span>
 </code></pre></div>
 <h2 id="functions">Functions</h2>
 <table>

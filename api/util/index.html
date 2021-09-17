@@ -682,6 +682,13 @@
                           <span class="mf">101</span><span class="p">,</span><span class="mf">100</span><span class="p">,</span><span class="mf">32</span><span class="p">,</span><span class="mf">116</span><span class="p">,</span><span class="mf">111</span><span class="p">,</span><span class="mf">32</span><span class="p">,</span><span class="mf">97</span><span class="p">,</span><span class="mf">32</span><span class="p">,</span><span class="mf">115</span><span class="p">,</span><span class="mf">116</span><span class="p">,</span><span class="mf">114</span><span class="p">,</span><span class="mf">105</span><span class="p">,</span><span class="mf">110</span><span class="p">,</span><span class="mf">103</span><span class="p">];</span>
 
 <span class="kd">var</span> <span class="nx">convertedBuff</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">arrayBuffer</span><span class="p">);</span> <span class="c1">// return converted arrayBuffer to String</span>
+
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">randomID</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">createUuid</span><span class="p">();</span> <span class="c1">// return random uuid</span>
+
+<span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="sb">`\n randomID is : </span><span class="si">${</span><span class="nx">randomID</span><span class="si">}</span><span class="sb"> `</span><span class="p">;</span>
+<span class="nx">result</span> <span class="o">+=</span> <span class="sb">`\n convertedBuff is: </span><span class="si">${</span><span class="nx">arrayBuffer</span><span class="si">}</span><span class="sb"> `</span><span class="p">;</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 </code></pre></div>
 <h2 id="functions">Functions</h2>
 <table>

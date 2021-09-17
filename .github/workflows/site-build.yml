@@ -22,7 +22,7 @@ jobs:
         mv ../temp/charts/ .
         mv ../temp/index.yaml .
         mv ../temp/docs-site/ .
-        mkdir assets/images
+        mkdir -p assets/images
         mv ../temp/assets/images assets/images/
         mv ../temp/CNAME .
         rm -rf ../temp/

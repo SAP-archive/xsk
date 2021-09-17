@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SymbolTable {
 
@@ -118,6 +119,12 @@ public class SymbolTable {
     });
 
     return orderedEntities;
+  }
+
+  public List<StructuredDataTypeSymbol> getTableTypes() {
+    return this.symbolsByFullName.values().stream().filter(s -> s instanceof StructuredDataTypeSymbol)
+        .map(dt -> (StructuredDataTypeSymbol) dt)
+        .collect(Collectors.toList());
   }
 
   public void clearSymbolsByFullName() {

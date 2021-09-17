@@ -13,8 +13,11 @@ package com.sap.xsk.parser.hdbdd.symbols.type.custom;
 
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
+import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class AbstractDataStructureSymbol extends Symbol implements Scope {
 
@@ -50,7 +53,7 @@ public abstract class AbstractDataStructureSymbol extends Symbol implements Scop
     return fields.containsKey(id) || getName().equals(id);
   }
 
-  public Map<String, Symbol> getFields() {
-    return fields;
+  public List<FieldSymbol> getFields() {
+    return fields.values().stream().map(f -> (FieldSymbol) f).collect(Collectors.toList());
   }
 }

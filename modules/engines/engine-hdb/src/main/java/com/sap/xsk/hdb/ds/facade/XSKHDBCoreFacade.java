@@ -40,9 +40,11 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -158,6 +160,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         Map<String, XSKDataStructureModel> combined = new HashMap<>();
         combined.putAll(dataStructureTablesModel);
         combined.putAll(dataStructureViewsModel);
+        putCdsModelTableTypes(dataStructureCdsModel, dataStructureTableTypesModel);
 
         // topology sort of dependencies
         List<String> external = new ArrayList<>();
@@ -483,6 +486,22 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
       }
     } catch (SQLException e) {
       logger.error(concatenateListOfStrings(errors), e);
+    }
+  }
+
+  private void putCdsModelTableTypes(Map<String, XSKDataStructureModel> dataStructureCdsModel,
+      Map<String, XSKDataStructureModel> dataStructureTableTypesModel) {
+    if (!dataStructureCdsModel.isEmpty()) {
+      Collection<XSKDataStructureCdsModel> dataStructureCdsModels = dataStructureCdsModel.values().stream()
+          .map(cds -> (XSKDataStructureCdsModel) cds).collect(
+              Collectors.toList());
+      dataStructureCdsModels.forEach(cds -> {
+        if (!cds.getTableTypeModels().isEmpty()) {
+          cds.getTableTypeModels().forEach(tableType -> {
+            dataStructureTableTypesModel.put(tableType.getName(), tableType);
+          });
+        }
+      });
     }
   }
 

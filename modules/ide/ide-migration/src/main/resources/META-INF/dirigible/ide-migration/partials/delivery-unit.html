@@ -27,6 +27,8 @@
 			<li role="separator" class="divider"></li>
 			<li class="dropdown-item" ng-repeat="option in workspacesList" ng-click="workspaceSelected(option)">
 				{{option}}</li>
+			<li role="separator" class="divider ng-hide" ng-show="showSeparator"></li>
+			<button class="dropdown-item dropdown-btn" ng-click="workspaceSelected(btnBottonText)" ng-show="showCreateButton"> <i class="fa fa-plus-circle fa_margin" aria-hidden="true"></i> Create workspace: "{{btnBottonText}}"</button>
 		</ul>
 	</div>
 	<div class="dropdown-container margin-top-sm" ng-show="dataLoaded">

@@ -1,0 +1,16 @@
+namespace itest;
+
+@Schema: 'TEST_SCHEMA'
+context ProductsWithManagedAssItest {
+
+ entity  Orders{
+        key Id               : String(32);
+        CustomerName         : String(500);
+        Country              : association to ProductsWithManagedAssItest.Country { Id };
+    };
+
+     entity Country {
+        key Id              : String(32);
+        Name                : String(32);
+    };
+};

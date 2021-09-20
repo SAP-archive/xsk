@@ -76,6 +76,7 @@ public class HdbddTransformer {
 
       foreignKeyModel.setName(foreignKeyName);
       foreignKeyModel.setReferencedTable(associationSymbol.getTarget().getFullName());
+      foreignKeyModel.setReferencedTableSchema(associationSymbol.getTarget().getSchema());
       foreignKeyModel.setReferencedColumns(referencedColumns);
       foreignKeyModel.setColumns(foreignKeyColumns);
 

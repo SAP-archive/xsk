@@ -28,6 +28,7 @@ import java.util.List;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -68,7 +69,8 @@ public class XSKHDBSynonymParserPostgreSQLITTest {
   }
 
   @Test
-  public void testHDBSynonymCreateNotSupportedError() throws IOException, XSKDataStructuresException, SynchronizationException, SQLException {
+  public void testHDBSynonymCreateNotSupportedError()
+      throws IOException, XSKDataStructuresException, SynchronizationException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 

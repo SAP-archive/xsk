@@ -11,24 +11,26 @@
  */
 package com.sap.xsk.hdb.ds.processors.view;
 
+import static java.text.MessageFormat.format;
+
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Map;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Map;
-
-import static java.text.MessageFormat.format;
 
 /**
  * The View Create Processor.
@@ -46,7 +48,8 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @param viewModel  the view model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
+  public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
+      throws SQLException, ProblemsException {
     logger.info("Processing Create View: " + viewModel.getName());
     String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), viewModel.getSchema());
 
@@ -63,7 +66,9 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
             sql = XSKConstants.XSK_HDBVIEW_CREATE + viewModel.getRawContent();
             break;
           } else {
-            throw new IllegalStateException(String.format("Views are not supported for %s !", dialect.getDatabaseName(connection)));
+            String errorMessage = String.format("Views are not supported for %s !", dialect.getDatabaseName(connection));
+            XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", viewModel.getLocation(), "HDB View");
+            throw new IllegalStateException(errorMessage);
           }
         }
       }

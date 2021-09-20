@@ -16,10 +16,12 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 
+import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
@@ -47,7 +49,7 @@ import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SqlFactory.class, Configuration.class})
+@PrepareForTest({SqlFactory.class, Configuration.class, ProblemsFacade.class})
 public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
@@ -104,10 +106,10 @@ public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
     model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
 
     //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-
+    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
     processorSpy.execute(mockConnection, model);
   }
 
@@ -145,12 +147,13 @@ public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
     XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdsynonymSample);
     model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
 
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, "LL","SY_DUMMY", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, null,"PAL_TRIPLE_EXPSMOOTH", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, null, "PROCEDURES", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
 
     processorSpy.execute(mockConnection, model);
   }

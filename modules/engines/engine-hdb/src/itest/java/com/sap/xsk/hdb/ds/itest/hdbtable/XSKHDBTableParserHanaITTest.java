@@ -34,6 +34,7 @@ import javax.sql.DataSource;
 import nl.altindag.log.LogCaptor;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -80,7 +81,8 @@ public class XSKHDBTableParserHanaITTest {
   }
 
   @Test
-  public void testHDBTableCreateOnSameSchema() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBTableCreateOnSameSchema()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName = "test";
@@ -111,7 +113,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenCompatibleChange()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
 
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
@@ -166,7 +168,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenNullableToNotNullableChange()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
@@ -193,7 +195,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenNotUniqueToUniqueChange()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
@@ -224,7 +226,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenAddingExistingColumnToPKList()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
@@ -254,7 +256,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenAddingNewColumnToPKList()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
@@ -284,7 +286,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenAddingNewNotNullableColumn()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
@@ -312,7 +314,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenExistingColumnTypeChange()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");

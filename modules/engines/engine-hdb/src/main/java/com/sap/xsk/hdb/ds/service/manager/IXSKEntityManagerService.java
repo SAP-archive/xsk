@@ -14,7 +14,6 @@ package com.sap.xsk.hdb.ds.service.manager;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterProcessor;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
@@ -28,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.naming.OperationNotSupportedException;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,8 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel) throws SQLException {
+  public void createDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel)
+      throws SQLException, ProblemsException {
     if (entitiesModel != null) {
       for (XSKDataStructureHDBTableModel entityModel : entitiesModel.getTableModels()) {
         String tableName = XSKHDBUtils.escapeArtifactName(connection, entityModel.getName());

@@ -17,11 +17,13 @@ import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableEscapeService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -47,7 +49,8 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
    * @throws SQLException the SQL exception
    * @see <a href="https://github.com/SAP/xsk/wiki/Parser-hdbtable">hdbtable against postgresql itest</a>
    */
-  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
+      throws SQLException, ProblemsException {
     logger.info("Processing Create Table: " + tableModel.getName());
 
     String sql = null;
@@ -67,7 +70,9 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
           break;
         } else {
-          throw new IllegalStateException(String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection)));
+          String errorMessage = String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection));
+          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+          throw new IllegalStateException(errorMessage);
         }
       }
     }

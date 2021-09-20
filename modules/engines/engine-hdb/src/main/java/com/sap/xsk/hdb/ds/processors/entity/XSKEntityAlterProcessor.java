@@ -11,6 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.processors.entity;
 
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -20,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.DataTypeUtils;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -28,10 +32,6 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.table.AlterTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
-import com.sap.xsk.utils.XSKHDBUtils;
 
 /**
  * The Entity Alter Processor.
@@ -49,7 +49,8 @@ public class XSKEntityAlterProcessor {
    * @param entityModel the entity model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+  public void execute(Connection connection, XSKDataStructureEntityModel entityModel)
+      throws SQLException, ProblemsException {
     String tableName = XSKHDBUtils.getTableName(entityModel);
     logger.info("Processing Alter Entity: {}", tableName);
 
@@ -112,17 +113,23 @@ public class XSKEntityAlterProcessor {
         alterTableBuilder.add().column(name, type, isPrimaryKey, isNullable, isUnique, args);
 
         if (!isNullable) {
-          throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "NOT NULL"));
+          String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "NOT NULL");
+          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Entity");
+          throw new SQLException(errorMessage);
         }
         if (isPrimaryKey) {
-          throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "PRIMARY KEY"));
+          String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "PRIMARY KEY");
+          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Entity");
+          throw new SQLException(errorMessage);
         }
 
-        executeAlterBuilder(connection, alterTableBuilder);
+        executeAlterBuilder(connection, alterTableBuilder, entityModel);
 
       } else if (!columnDefinitions.get(name.toUpperCase()).equals(type.toString())) {
-        throw new SQLException(String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name,
-            "of type " + columnDefinitions.get(name) + " to be changed to " + type));
+        String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name,
+            "of type " + columnDefinitions.get(name) + " to be changed to " + type);
+        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Entity");
+        throw new SQLException(errorMessage);
       }
     }
 
@@ -132,14 +139,14 @@ public class XSKEntityAlterProcessor {
       if (!modelColumnNames.contains(columnName.toUpperCase())) {
         AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
         alterTableBuilder.drop().column(columnName, DataType.BOOLEAN);
-        executeAlterBuilder(connection, alterTableBuilder);
+        executeAlterBuilder(connection, alterTableBuilder, entityModel);
       }
     }
 
   }
 
-  private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
-      throws SQLException {
+  private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder, XSKDataStructureEntityModel entityModel)
+      throws SQLException, ProblemsException {
     final String sql = alterTableBuilder.build();
     try (PreparedStatement statement = connection.prepareStatement(sql);) {
       logger.info(sql);
@@ -147,6 +154,7 @@ public class XSKEntityAlterProcessor {
     } catch (SQLException e) {
       logger.error(sql);
       logger.error(e.getMessage(), e);
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", entityModel.getLocation(), "HDB Entity");
       throw new SQLException(e.getMessage(), e);
     }
   }

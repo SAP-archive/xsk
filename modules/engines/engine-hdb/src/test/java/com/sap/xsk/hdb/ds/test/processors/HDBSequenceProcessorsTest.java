@@ -20,11 +20,18 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
 
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceDropProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceUpdateProcessor;
 import java.sql.Connection;
 import java.sql.SQLException;
-
+import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -46,14 +53,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
-import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceDropProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceUpdateProcessor;
-
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SqlFactory.class, Configuration.class})
+@PrepareForTest({SqlFactory.class, Configuration.class, ProblemsFacade.class})
 public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
@@ -113,7 +114,7 @@ public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void executeUpdateSuccessfully() throws SQLException {
+  public void executeUpdateSuccessfully() throws SQLException, ProblemsException {
     XSKHDBSequenceUpdateProcessor spyProccessor = spy(XSKHDBSequenceUpdateProcessor.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
     String sql = "TestExecuteUpdateSuccessfully";
@@ -139,7 +140,7 @@ public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void executeDropSuccessfully() throws SQLException {
+  public void executeDropSuccessfully() throws SQLException, ProblemsException {
     XSKHDBSequenceDropProcessor spyProccessor = spy(XSKHDBSequenceDropProcessor.class);
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
@@ -162,35 +163,37 @@ public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
   @Test(expected = IllegalStateException.class)
   public void executeCreateFailed() throws Exception {
     XSKHDBSequenceCreateProcessor spyProccessor = spy(XSKHDBSequenceCreateProcessor.class);
-
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
     when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
     spyProccessor.execute(mockConnection, mockModel);
   }
 
   @Test(expected = IllegalStateException.class)
-  public void executeUpdateFailed() throws SQLException {
+  public void executeUpdateFailed() throws Exception {
     XSKHDBSequenceUpdateProcessor spyProccessor = spy(XSKHDBSequenceUpdateProcessor.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
     when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
+    when(mockModel.getLocation()).thenReturn("/");
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
     spyProccessor.execute(mockConnection, mockModel);
   }
 
   @Test(expected = IllegalStateException.class)
-  public void executeDropFailed() throws SQLException {
+  public void executeDropFailed() throws Exception {
     XSKHDBSequenceDropProcessor spyProccessor = spy(XSKHDBSequenceDropProcessor.class);
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
-
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("false");
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, mockModel.getName(), DatabaseArtifactTypes.SEQUENCE)).thenReturn(true);
     when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
     spyProccessor.execute(mockConnection, mockModel);
   }
 

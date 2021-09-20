@@ -18,10 +18,12 @@ import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -35,7 +37,8 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
   private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel) throws SQLException {
+  public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
+      throws SQLException, ProblemsException {
     logger.info("Processing Drop Table Type: " + tableTypeModel.getName());
 
     //drop public synonym
@@ -47,7 +50,9 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
     //drop table type
     ISqlDialect dialect = SqlFactory.deriveDialect(connection);
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-      throw new IllegalStateException(String.format("XSK does not support Table Type for %s yet", dialect.getDatabaseName(connection)));
+      String errorMessage = String.format("Table Types are not supported for %s !", dialect.getDatabaseName(connection));
+      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableTypeModel.getLocation(), "HDB Table Type");
+      throw new IllegalStateException(errorMessage);
     } else {
       if (SqlFactory.getNative(connection)
           .exists(connection, tableTypeModel.getSchema(), tableTypeModel.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {

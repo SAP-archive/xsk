@@ -32,6 +32,7 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -74,7 +75,8 @@ public class XSKHDBTableTypeParserHanaITTest {
   }
 
   @Test
-  public void testHDBTableTypeCreateOnSameSchema() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBTableTypeCreateOnSameSchema()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName = Configuration.get("hana.username");
@@ -100,7 +102,8 @@ public class XSKHDBTableTypeParserHanaITTest {
 
 
   @Test
-  public void testHDBViewCreateOnDiffSchemas() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBViewCreateOnDiffSchemas()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName = "TEST_SCHEMA";
@@ -128,7 +131,7 @@ public class XSKHDBTableTypeParserHanaITTest {
 
   @Test
   public void testHDBViewCreateOnDiffSchemasWithExistingSynonym()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName = "TEST_SCHEMA";

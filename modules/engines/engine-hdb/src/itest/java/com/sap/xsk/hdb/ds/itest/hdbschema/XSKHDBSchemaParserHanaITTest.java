@@ -31,6 +31,7 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -72,7 +73,7 @@ public class XSKHDBSchemaParserHanaITTest {
 
   @Test
   public void testHDBSchemaCreateWithNoCaseSensitivity()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false");
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
@@ -93,7 +94,8 @@ public class XSKHDBSchemaParserHanaITTest {
   }
 
   @Test
-  public void testHDBSchemaCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBSchemaCreate()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
@@ -116,7 +118,7 @@ public class XSKHDBSchemaParserHanaITTest {
 
   @Test
   public void testHDBSchemaCreateIfSchemaAlreadyExist()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {

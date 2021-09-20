@@ -10,6 +10,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http', '$messageHub', function ($scope, $http, $messageHub) {
+    $scope.showCreateButton = false;
+    $scope.showSeparator = false;
     $scope.isVisible = false;
     $scope.duDropdownDisabled = true;
     $scope.duDropdownText = "---Please select---";
@@ -45,24 +47,24 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {
-            const timer = setInterval(function(){
-              $http.post(
-                          "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/get-process",
-                          JSON.stringify(body),
-                          { headers: { 'Content-Type': 'application/json' } }
-                      ).then(function (response) {
-                          if (response.data.workspaces && response.data.deliveryUnits && response.data.connectionId) {
-                                        clearInterval(timer);
-                                        connectionId = response.data.connectionId;
-                                        $scope.workspaces = response.data.workspaces;
-                                        $scope.workspacesList = $scope.workspaces;
-                                        $scope.deliveryUnits = response.data.deliveryUnits;
-                                        $scope.deliveryUnitList = $scope.deliveryUnits;
-                                        $scope.$parent.setBottomNavEnabled(true);
-                                        $scope.descriptionText = descriptionList[1];
-                                        $scope.dataLoaded = true;
-                          }
-                      }, function (response) {})
+            const timer = setInterval(function () {
+                $http.post(
+                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/get-process",
+                    JSON.stringify(body),
+                    { headers: { 'Content-Type': 'application/json' } }
+                ).then(function (response) {
+                    if (response.data.workspaces && response.data.deliveryUnits && response.data.connectionId) {
+                        clearInterval(timer);
+                        connectionId = response.data.connectionId;
+                        $scope.workspaces = response.data.workspaces;
+                        $scope.workspacesList = $scope.workspaces;
+                        $scope.deliveryUnits = response.data.deliveryUnits;
+                        $scope.deliveryUnitList = $scope.deliveryUnits;
+                        $scope.$parent.setBottomNavEnabled(true);
+                        $scope.descriptionText = descriptionList[1];
+                        $scope.dataLoaded = true;
+                    }
+                }, function (response) { })
             }, 1000);
 
         }, function (response) {
@@ -117,16 +119,25 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
 
     $scope.filterWorkspaces = function () {
         if ($scope.workspacesSearch) {
+            $scope.showCreateButton = true;
+            $scope.showSeparator = true;
             let filtered = [];
             for (let i = 0; i < $scope.workspaces.length; i++) {
                 if ($scope.workspaces[i].toLowerCase().includes($scope.workspacesSearch.toLowerCase())) {
                     filtered.push($scope.workspaces[i]);
+                } else {
+                    $scope.showSeparator = false;
                 }
             }
             $scope.workspacesList = filtered;
+
+
         } else {
+            $scope.showSeparator = false;
+            $scope.showCreateButton = false;
             $scope.workspacesList = $scope.workspaces;
         }
+        $scope.btnBottonText = $scope.workspacesSearch;
     };
 
     $scope.workspaceSelected = function (workspace) {

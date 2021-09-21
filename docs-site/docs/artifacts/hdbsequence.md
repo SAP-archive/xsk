@@ -11,8 +11,8 @@ The information on how to develop the design-time data-persistence model for an 
 
 # Reference
 * SAP Help
-> * SAP HANA XS Classic: https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html
-> * SAP HANA XS Advanced: https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html
+> * SAP HANA XS Classic: [https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html)
+> * SAP HANA XS Advanced: [https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html](https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html)
 
 * Sample Hana XS Classic syntax:
 

@@ -17,7 +17,6 @@ HTTP(s) destination class that holds metadata (e.g., host, port, useSSL). The de
 
 ```javascript
 let http = $.net.http;
-let response_prev = require('http/v4/response');
 
 /*
 Read service.xshttpdest inside the Demo package that contains:
@@ -26,5 +25,5 @@ pathPrefix=/V4/Northwind/Northwind.svc/;
 */
 let dest = http.readDestination("Demo", "service");
 // Check if the file has been read properly
-response_prev.println("Host: " +dest.host+ " Path Prefix: " +dest.pathPrefix);
+$.response.setBody("Host: " + dest.host + " Path Prefix: " + dest.pathPrefix);
 ```

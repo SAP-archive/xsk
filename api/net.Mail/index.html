@@ -749,7 +749,6 @@
 <span class="kd">var</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">();</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">net</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">;</span>
-<span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http/v4/response&#39;</span><span class="p">);</span>
 
 <span class="c1">//create email from JS Object and send</span>
 <span class="kd">let</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">({</span>
@@ -771,10 +770,9 @@
 <span class="kd">let</span> <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
 <span class="kd">let</span> <span class="nx">response_msg</span> <span class="o">=</span> <span class="s2">&quot;MessageId = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">messageId</span> <span class="o">+</span> <span class="s2">&quot;, final reply = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">finalReply</span><span class="p">;</span>
 
-<span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">);</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">net</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http/v4/response&#39;</span><span class="p">);</span>
 
 <span class="kd">var</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">();</span>
 <span class="nx">mail</span><span class="p">.</span><span class="nx">subject</span> <span class="o">=</span> <span class="s2">&quot;About what the email is.&quot;</span>
@@ -795,7 +793,7 @@
 <span class="p">}</span>
 <span class="nx">response_msg</span> <span class="o">=</span> <span class="s2">&quot;MessageId = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">messageId</span> <span class="o">+</span> <span class="s2">&quot;, final reply = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">finalReply</span><span class="p">;</span>
 
-<span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">);</span>
 </code></pre></div>
 <h2 id="constructors">Constructors</h2>
 <div class="highlight"><pre><span></span><code><span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">(</span><span class="nx">MailObject</span><span class="p">)</span>

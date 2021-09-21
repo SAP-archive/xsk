@@ -17,7 +17,6 @@ $.session
 
 ```javascript
 var session = $.session;
-var response = require('http/v4/response');
 
 var username = session.getUsername()
 var timeout = session.getTimeout()
@@ -32,7 +31,7 @@ if (username === "dirigible" && session.hasAppPrivilege("Administrator")) {
     // Check a specific system privilege for that user
     if (session.hasSystemPrivilege("Dirigible")) {
         // Perform some operation with his session's information
-        response.println("Username: " +username+ " with session authentication type: " +authType+ " token: " +token+ " and timeout " +timeout);
+        $.response.setBody("Username: " + username + " with session authentication type: " + authType + " token: " + token + " and timeout " + timeout);
     }
 } else {
     // Assert that the user is a Developer in all other cases
@@ -41,16 +40,16 @@ if (username === "dirigible" && session.hasAppPrivilege("Administrator")) {
         // Check the authentification type
         if (authType === "BASIC") {
             // Use the information from the current session
-            response.println("Username: " +username+ " with session authentication type: " +authType+ " token: " +token+ " and timeout " +timeout);
+            $.response.setBody("Username: " + username + " with session authentication type: " + authType + " token: " + token + " and timeout " + timeout);
         }
     } catch(error) {
         //Display the missing role that was being asserted
-        response.println("User does not have the role: " +error.privilege)
+        $.response.setBody("User does not have the role: " + error.privilege);
     }
 }
 
 // After all calls are complete, check the invocation count of the current session
-response.println("Invocation count: " +session.getInvocationCount());
+$.response.setBody("Invocation count: " + session.getInvocationCount());
 ```
 
 ## Properties

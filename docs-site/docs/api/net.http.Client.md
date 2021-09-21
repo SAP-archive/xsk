@@ -21,7 +21,6 @@ This `HttpClient` is equipped with a cookie database. If a previous response sen
 
 ```javascript
 let http = $.net.http;
-let response_prev = require('http/v4/response');
 
 /*
 Read service.xshttpdest inside the Demo package that contains:
@@ -58,7 +57,7 @@ else
     body = response.body;
 
 // check the contents of the response
-response_prev.println("status: " +response.status+ " cookies: " +co+ " headers: " +he+ " body: " +body);
+$.response.setBody("status: " +response.status+ " cookies: " +co+ " headers: " +he+ " body: " +body);
 ```
 
 ## Functions

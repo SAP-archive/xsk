@@ -17,7 +17,6 @@ $.net.http
 
 ```javascript
 let http = $.net.http;
-let response_prev = require('http/v4/response');
 
 /*
 Read service.xshttpdest inside the Demo package that contains:
@@ -25,8 +24,6 @@ host=https://services.odata.org;
 pathPrefix=/V4/Northwind/Northwind.svc/;
 */
 let dest = http.readDestination("Demo", "service");
-// Check if the file has been read properly
-response_prev.println("Host: " +dest.host+ " Path Prefix: " +dest.pathPrefix);
 
 // create client
 let client = new http.Client();
@@ -59,7 +56,7 @@ else
 client.close();        // prevent socket leak - see xsengine.ini: [communication] - max_open_sockets_per_request
 
 // check the contents of the response
-response_prev.println("status: " +response.status+ " cookies: " +co+ " headers: " +he+ " body: " +body);
+$.response.setBody("status: " + response.status + " cookies: " + co + " headers: " + he + " body: " + body);
 ```
 
 ## Classes

@@ -117,7 +117,7 @@ public class HdbddTransformer {
   }
 
   /**
-   * @param fieldSymbol
+   * @param fieldSymbol: fieldSymbol
    * @param bAssignPK:  false if the entityElement is coming from  association, otherwise it should be true
    */
   private XSKDataStructureHDBTableColumnModel transformFieldSymbolToColumnModel(FieldSymbol fieldSymbol, boolean bAssignPK) {
@@ -183,8 +183,9 @@ public class HdbddTransformer {
 
   private void setHanaType(XSKDataStructureHDBTableColumnModel columnModel, BuiltInTypeSymbol builtInTypeSymbol) {
     String typeName = builtInTypeSymbol.getName();
+    CdsHanaTypeEnum cdsHanaTypeEnum = CdsHanaTypeEnum.valueOf(typeName);
 
-    if (typeName.equals("VARCHAR")) {
+    if (cdsHanaTypeEnum.equals(CdsHanaTypeEnum.NVARCHAR)) {
       columnModel.setLength(builtInTypeSymbol.getArgsValues().get(0).toString());
     }
 

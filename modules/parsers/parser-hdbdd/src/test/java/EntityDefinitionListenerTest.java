@@ -77,28 +77,80 @@ public class EntityDefinitionListenerTest {
     assertEquals(1, parsedEntities.get(1).getAssociations().get(1).getForeignKeys().size());
   }
 
-//    @Test
+  //    @Test
 //    public void parseParseStructuredTypeSuccessfully() throws Exception {
 //        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
 //        List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 //
 //        assertEquals(0, parser.getNumberOfSyntaxErrors());
 //    }
-    @Test
-    public void parseParseStructuredTypeSuccessfully() throws Exception {
-        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
-        List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
+  @Test
+  public void parseParseStructuredTypeSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
+    this.symbolTable.getSortedEntities();//get only Entities
 
-        assertEquals(0, parser.getNumberOfSyntaxErrors());
-    }
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+  }
 
-    @Test
-    public void parseUnmanagedAssociationSuccessfully() throws Exception {
-      CdsParser parser = parseSampleFile("/ProjectProducts.hdbdd", "sap/db/ProjectProducts.hdbdd");
-      List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
+  @Test
+  public void parseUnmanagedAssociationSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/ProjectProducts.hdbdd", "sap/db/ProjectProducts.hdbdd");
+    this.symbolTable.getSortedEntities();//get only Entities
 
-      assertEquals(0, parser.getNumberOfSyntaxErrors());
-    }
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+  }
+
+  @Test
+  public void parseHanaBuiltInTypesSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/HanaBuiltInTypesTest.hdbdd", "sap/db/HanaBuiltInTypesTest.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(1, parsedEntities.size());
+    EntitySymbol entity = parsedEntities.get(0);
+    assertEquals(10, entity.getElements().size());
+
+    assertEquals("ALPHANUMERIC", entity.getElements().get(1).getType().getName());
+    assertEquals("NVARCHAR", entity.getElements().get(0).getType().getName());
+    assertEquals("SMALLINT", entity.getElements().get(2).getType().getName());
+    assertEquals("TINYINT", entity.getElements().get(3).getType().getName());
+    assertEquals("REAL", entity.getElements().get(4).getType().getName());
+    assertEquals("SMALLDECIMAL", entity.getElements().get(5).getType().getName());
+    assertEquals("CLOB", entity.getElements().get(6).getType().getName());
+    assertEquals("BINARY", entity.getElements().get(7).getType().getName());
+    assertEquals("ST_POINT", entity.getElements().get(8).getType().getName());
+    assertEquals("ST_GEOMETRY", entity.getElements().get(9).getType().getName());
+
+  }
+
+  @Test
+  public void parseGlobalBuiltInTypesSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/GlobalBuiltInTypesTest.hdbdd", "sap/db/GlobalBuiltInTypesTest.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(1, parsedEntities.size());
+    EntitySymbol entity = parsedEntities.get(0);
+    assertEquals(16, entity.getElements().size());
+
+    assertEquals("String", entity.getElements().get(0).getType().getName());
+    assertEquals("LargeString", entity.getElements().get(1).getType().getName());
+    assertEquals("String", entity.getElements().get(2).getType().getName());
+    assertEquals("Binary", entity.getElements().get(3).getType().getName());
+    assertEquals("LargeBinary", entity.getElements().get(4).getType().getName());
+    assertEquals("Integer", entity.getElements().get(5).getType().getName());
+    assertEquals("Integer64", entity.getElements().get(6).getType().getName());
+    assertEquals("Decimal", entity.getElements().get(7).getType().getName());
+    assertEquals("DecimalFloat", entity.getElements().get(8).getType().getName());
+    assertEquals("BinaryFloat", entity.getElements().get(9).getType().getName());
+    assertEquals("LocalDate", entity.getElements().get(10).getType().getName());
+    assertEquals("LocalTime", entity.getElements().get(11).getType().getName());
+    assertEquals("UTCDateTime", entity.getElements().get(12).getType().getName());
+    assertEquals("UTCTimestamp", entity.getElements().get(13).getType().getName());
+    assertEquals("Boolean", entity.getElements().get(14).getType().getName());
+    assertEquals("Decimal", entity.getElements().get(15).getType().getName());
+
+  }
 
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {
     String content =

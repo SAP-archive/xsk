@@ -17,26 +17,6 @@ SAP Help
 
 [OData Service-Definition Examples (XS Advanced)](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/02e91608eb174dcea6d544aad6ea2e12.html)
 
-###  Supported syntax from the parser
-| Supportable 	| xsodata syntax 	| (XSKXsodataParser) 	| XTransformer 	| MTransfrmer 	| HTransformer 	| Comments 	|
-|-	|-	|-	|-	|-	|-	|-	|
-| HANA v1/v2 	| odata service definition 	| SUPPORTED 	| SUPPORTED 	| not relevant 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/51d401d204a54909abebcca6d0a8e058.html) 	|
-| HANA v1/v2 	| odata namespace definition 	| SUPPORTED 	| SUPPORTED 	| SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/f9f5f227e9f54cea9d9548c97860b7c0.html) 	|
-| HANA v1/v2 	| odata object exposure 	| SUPPORTED 	| SUPPORTED 	| SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/d08f928ac047443e8c2b0a7070ac1d0b.html) 	|
-| HANA v1/v2 	| odata property projection 	| SUPPORTED 	| SUPPORTED 	| SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/471609f56e354fe1b8f8e65b183202fa.html) 	|
-| HANA v1/v2 	| odata key specification 	| SUPPORTED 	| SUPPORTED using  sap:filterable 	| NOT SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/e86a01a7699a46528624d44678d37ea5.html) 	|
-| HANA v1/v2 	| odata associations 	| SUPPORTED 	| SUPPORTED 	| SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/595f0a124602449695bf15711032186c.html) 	|
-| HANA v1/v2 	| odata aggregations 	| SUPPORTED 	| SUPPORTED  using  sap:semantics="aggregate" 	| NOT SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/64560b807f004d8189b94385e5d02f1e.html) 	|
-| HANA v1/v2 	| odata parameters entitysets 	| SUPPORTED 	| No odata  representation exist 	| not relevant 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/2ec97095dcbd420794670912e3bc9cd6.html) 	|
-| HANA v1/v2 	| odata Etag support 	| NOT SUPPORTED 	| NOT SUPPORTED 	| NOT SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/17b479e1e928465baa07a5688fd5e355.html) 	|
-| HANA v1/v2 	| odata nullable properties 	| SUPPORTED 	| No odata representation exist 	| NOT SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/79b338c0296c4518b83aa6b19133bba5.html) 	|
-| HANA v1/v2 	| odata configurable cash settings 	| SUPPORTED 	| No odata representation exist 	| NOT SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/a5d3bea8a6ae43779ffaaae925554d0b.html) 	|
-| HANA v2 	| OData Hints for SQL Select Statements 	| SUPPORTED 	| No odata representation exist 	| NOT SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.05/en-US/34c4b422010c45a795362d8ac6a32638.html) 	|
-| HANA v2 	| OData Entity Limits 	| SUPPORTED 	| NOT SUPPORTED 	| NOT SUPPORTED 	| not relevant 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.05/en-US/b6efb153ac8a4b96bb48baa14aa3e358.html) 	|
-| HANA v1/v2 	| modifications 	| SUPPORTED 	| SUPPORTED  [forbidden: using  sap:creatable, sap:updatable,  sap:deletable], [events - no odata  representation exist] 	| not relevant 	| SUPPORTED 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/68c5a3bca9294e4098454dccbc73f7a9.html) 	|
-| HANA v1/v2 	| validation scrips with XS JavaScript 	| SUPPORTED 	| no odata  representation exist 	| not relevant 	| SUPPORTED 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/74dcb4480e80455eb0cfaacc4c739068.html) 	|
-| HANA v1/v2 	| validation exit with SQL script 	| SUPPORTED 	| no odata  representation exist 	| not relevant 	| SUPPORTED 	| [documentation](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/3621f082a10241759f0ec01f56319ae3.html) 	|
-
 * Example:
 
 ```

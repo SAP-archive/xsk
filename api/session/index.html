@@ -704,7 +704,6 @@
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">session</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">session</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http/v4/response&#39;</span><span class="p">);</span>
 
 <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">getUsername</span><span class="p">()</span>
 <span class="kd">var</span> <span class="nx">timeout</span> <span class="o">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">getTimeout</span><span class="p">()</span>
@@ -719,7 +718,7 @@
     <span class="c1">// Check a specific system privilege for that user</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">session</span><span class="p">.</span><span class="nx">hasSystemPrivilege</span><span class="p">(</span><span class="s2">&quot;Dirigible&quot;</span><span class="p">))</span> <span class="p">{</span>
         <span class="c1">// Perform some operation with his session&#39;s information</span>
-        <span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">&quot;Username: &quot;</span> <span class="o">+</span><span class="nx">username</span><span class="o">+</span> <span class="s2">&quot; with session authentication type: &quot;</span> <span class="o">+</span><span class="nx">authType</span><span class="o">+</span> <span class="s2">&quot; token: &quot;</span> <span class="o">+</span><span class="nx">token</span><span class="o">+</span> <span class="s2">&quot; and timeout &quot;</span> <span class="o">+</span><span class="nx">timeout</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Username: &quot;</span> <span class="o">+</span> <span class="nx">username</span> <span class="o">+</span> <span class="s2">&quot; with session authentication type: &quot;</span> <span class="o">+</span> <span class="nx">authType</span> <span class="o">+</span> <span class="s2">&quot; token: &quot;</span> <span class="o">+</span> <span class="nx">token</span> <span class="o">+</span> <span class="s2">&quot; and timeout &quot;</span> <span class="o">+</span> <span class="nx">timeout</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="c1">// Assert that the user is a Developer in all other cases</span>
@@ -728,16 +727,16 @@
         <span class="c1">// Check the authentification type</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">authType</span> <span class="o">===</span> <span class="s2">&quot;BASIC&quot;</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">// Use the information from the current session</span>
-            <span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">&quot;Username: &quot;</span> <span class="o">+</span><span class="nx">username</span><span class="o">+</span> <span class="s2">&quot; with session authentication type: &quot;</span> <span class="o">+</span><span class="nx">authType</span><span class="o">+</span> <span class="s2">&quot; token: &quot;</span> <span class="o">+</span><span class="nx">token</span><span class="o">+</span> <span class="s2">&quot; and timeout &quot;</span> <span class="o">+</span><span class="nx">timeout</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Username: &quot;</span> <span class="o">+</span> <span class="nx">username</span> <span class="o">+</span> <span class="s2">&quot; with session authentication type: &quot;</span> <span class="o">+</span> <span class="nx">authType</span> <span class="o">+</span> <span class="s2">&quot; token: &quot;</span> <span class="o">+</span> <span class="nx">token</span> <span class="o">+</span> <span class="s2">&quot; and timeout &quot;</span> <span class="o">+</span> <span class="nx">timeout</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">//Display the missing role that was being asserted</span>
-        <span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">&quot;User does not have the role: &quot;</span> <span class="o">+</span><span class="nx">error</span><span class="p">.</span><span class="nx">privilege</span><span class="p">)</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;User does not have the role: &quot;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">.</span><span class="nx">privilege</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c1">// After all calls are complete, check the invocation count of the current session</span>
-<span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">&quot;Invocation count: &quot;</span> <span class="o">+</span><span class="nx">session</span><span class="p">.</span><span class="nx">getInvocationCount</span><span class="p">());</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Invocation count: &quot;</span> <span class="o">+</span> <span class="nx">session</span><span class="p">.</span><span class="nx">getInvocationCount</span><span class="p">());</span>
 </code></pre></div>
 <h2 id="properties">Properties</h2>
 <table>

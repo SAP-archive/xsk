@@ -17,7 +17,6 @@ $.net.http.Request
 
 ```javascript
 let http = $.net.http;
-let response_prev = require('http/v4/response');
 
 let dest = http.readDestination("Demo", "service");
 // create client

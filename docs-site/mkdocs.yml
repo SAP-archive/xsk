@@ -3,6 +3,8 @@ site_url: https://sap.github.io/xsk
 
 nav:
     - Welcome: 'index.md'
+    - Artifacts: 
+      - hdbtable: 'artifacts/hdbtable.md'
     - API: 
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'

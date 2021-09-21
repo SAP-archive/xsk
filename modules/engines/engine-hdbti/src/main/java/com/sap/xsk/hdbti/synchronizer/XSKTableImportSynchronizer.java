@@ -244,7 +244,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     for (XSKTableImportConfigurationDefinition configurationDefinition : configurationDefinitions) {
       try {
         xskHdbtiProcessor.process(configurationDefinition, connection);
-      } catch (XSKDataStructuresException | SQLException | XSKTableImportException | IOException e) {
+      } catch (XSKDataStructuresException | SQLException | XSKTableImportException | IOException | ProblemsException e) {
         logger.error(String.format("An error occurred while trying to execute import. %s", e.getMessage()), e);
       }
     }

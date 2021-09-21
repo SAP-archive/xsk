@@ -7,6 +7,7 @@ nav:
       - hdbtable: 'artifacts/hdbtable.md'
       - hdbview: 'artifacts/hdbview.md'
       - hdbtablefunction: 'artifacts/hdbtablefunction.md'
+      - hdbprocedure: 'artifacts/hdbprocedure.md'
     - API: 
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'

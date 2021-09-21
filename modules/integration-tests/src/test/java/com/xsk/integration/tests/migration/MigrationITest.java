@@ -94,14 +94,7 @@ public class MigrationITest {
     options.addArguments("--window-size=1920,1080");
     options.addArguments("--incognito");
 
-    browser = new ChromeDriver(options);
-    browser.navigate().to(baseUrl);
-    browser.manage().window().maximize();
-    browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
-    jsExecutor = (JavascriptExecutor) (browser);
-    browserWait = new WebDriverWait(browser, 60);
-    browserActions = new Actions(browser);
+    setupBrowser(new ChromeDriver(options));
   }
 
   private void setupFirefox() {
@@ -110,7 +103,11 @@ public class MigrationITest {
     options.setHeadless(true);
     options.addArguments("--height=1080", "--width=1920", "-private");
 
-    browser = new FirefoxDriver(options);
+    setupBrowser(new FirefoxDriver(options));
+  }
+
+  private void setupBrowser(WebDriver webDriver) {
+    browser = webDriver;
     browser.navigate().to(baseUrl);
     browser.manage().window().maximize();
     browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -224,10 +221,19 @@ public class MigrationITest {
   private void validateTextFileContent(String editorFrameXpath, String validContent) {
     browser.switchTo().defaultContent();
     browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath(editorFrameXpath)));
+    sleep(3000);
     var migratedContent = (String) jsExecutor.executeScript("return window._editor.getValue();");
     assertEquals("File content after migration must match validation content.",
         validContent.replaceAll("\\s", ""), migratedContent.replaceAll("\\s", ""));
     browser.switchTo().defaultContent();
+  }
+
+  private void sleep(long millis) {
+    try {
+      Thread.sleep(millis);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private void validateImageFileContent(URL url, BufferedImage validImage) throws IOException {

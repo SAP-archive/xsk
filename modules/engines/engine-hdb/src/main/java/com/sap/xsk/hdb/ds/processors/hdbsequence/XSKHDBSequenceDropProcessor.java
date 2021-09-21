@@ -13,12 +13,16 @@ package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
 import static java.text.MessageFormat.format;
 
+import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKConstants;
+import com.sap.xsk.utils.XSKHDBUtils;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.sap.xsk.utils.XSKHDBUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -26,16 +30,12 @@ import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
-import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.utils.XSKConstants;
-
 public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSequenceModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceDropProcessor.class);
 
     @Override
-    public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
+    public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException, ProblemsException {
         String hdbSequenceName = XSKHDBUtils.escapeArtifactName(connection, hdbSequenceModel.getName(), hdbSequenceModel.getSchema());
         logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
 
@@ -52,7 +52,9 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
                         sql = XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
                         break;
                     } else {
-                        throw new IllegalStateException(String.format("Sequences are not supported for %s !", dialect.getDatabaseName(connection)));
+                      String errorMessage = String.format("Sequences are not supported for %s !", dialect.getDatabaseName(connection));
+                      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSequenceModel.getLocation(), "HDB Sequence");
+                      throw new IllegalStateException(errorMessage);
                     }
                 }
             }

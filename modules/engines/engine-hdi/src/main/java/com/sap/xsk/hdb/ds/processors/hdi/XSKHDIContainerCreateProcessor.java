@@ -12,10 +12,12 @@
 package com.sap.xsk.hdb.ds.processors.hdi;
 
 import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +36,7 @@ public class XSKHDIContainerCreateProcessor {
   private XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
   private XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor = new XSKGrantPrivilegesContainerTargetSchemaProcessor();
 
-  public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
+  public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) throws ProblemsException {
     logger.info("Start processing HDI Containers...");
     try {
       logger.info("Start processing HDI Container [{0}] from [{1}] ...", hdiModel.getContainer(), hdiModel.getLocation());
@@ -71,7 +73,9 @@ public class XSKHDIContainerCreateProcessor {
 
       logger.info("HDI Container [{0}] from [{1}] finished successfully.", hdiModel.getContainer(), hdiModel.getLocation());
     } catch (SQLException | IOException | ScriptingException e) {
-      logger.error("HDI Container [{0}] from [{1}] failed.\", hdiModel.getContainer(), hdiModel.getLocation()");
+      String errorMessage = String.format("HDI Container %s from %s failed.", hdiModel.getContainer(), hdiModel.getLocation());
+      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdiModel.getLocation(), "HDI");
+      logger.error(errorMessage);
       logger.error(e.getMessage(), e);
     }
 

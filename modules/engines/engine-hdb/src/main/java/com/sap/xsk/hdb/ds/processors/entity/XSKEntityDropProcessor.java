@@ -11,19 +11,19 @@
  */
 package com.sap.xsk.hdb.ds.processors.entity;
 
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
-import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.utils.XSKHDBUtils;
 
 /**
  * The Entity Drop Processor.
@@ -40,7 +40,7 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @return if delete operation has been performed successfully or the table does not exist
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException, ProblemsException {
     String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Drop Table: {}", tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
@@ -53,12 +53,15 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
           if (resultSet.next()) {
             int count = resultSet.getInt(1);
             if (count > 0) {
-              logger.error("Drop operation for the non empty Table {} will not be executed. Delete all the records in the table first.",
+              String errorMessage = String.format("Drop operation for the non empty Table %s will not be executed. Delete all the records in the table first.",
                   tableName);
+              XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Table");
+              logger.error(errorMessage);
             }
           }
         }
       } catch (SQLException e) {
+        XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", entityModel.getLocation(), "HDB Table");
         logger.error(sql);
         logger.error(e.getMessage(), e);
       }

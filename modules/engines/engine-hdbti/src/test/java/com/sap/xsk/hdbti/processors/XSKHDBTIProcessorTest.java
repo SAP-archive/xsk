@@ -11,25 +11,26 @@
  */
 package com.sap.xsk.hdbti.processors;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.api.IXSKHDBTICoreService;
 import com.sap.xsk.hdbti.api.IXSKHDBTIProcessor;
 import com.sap.xsk.hdbti.api.IXSKTableImportModel;
 import com.sap.xsk.hdbti.api.XSKTableImportException;
-import com.sap.xsk.hdbti.model.*;
+import com.sap.xsk.hdbti.model.Student;
+import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
+import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
+import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
+import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
 import com.sap.xsk.hdbti.module.HdbtiTestModule;
 import com.sap.xsk.hdbti.service.XSKHDBTICoreService;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-import org.eclipse.dirigible.database.persistence.PersistenceManager;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,9 +40,18 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.*;
-
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import javax.sql.DataSource;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.eclipse.dirigible.database.persistence.PersistenceManager;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class XSKHDBTIProcessorTest {
 
@@ -87,7 +97,8 @@ public class XSKHDBTIProcessorTest {
     }
 
     @Test
-    public void testDataImportedCorrectly() throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+    public void testDataImportedCorrectly()
+        throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
         writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
         XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
         importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
@@ -108,7 +119,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testChangeOfDataProperlyReflectedInDb()
-            throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+        throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
         XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
         importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
         importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -131,7 +142,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testCsvRecordRemovedFromCsvFileShouldRemoveFromDb()
-            throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+        throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
         XSKTableImportConfigurationDefinition importConfigurationDefinitionWithRemovedRecord = new XSKTableImportConfigurationDefinition();
         importConfigurationDefinitionWithRemovedRecord.setFile(CSV_FILE_LOCATION);
         importConfigurationDefinitionWithRemovedRecord.setHdbtiFileName(HDBTI_LOCATION);
@@ -164,7 +175,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testCsvRecordAddedShouldReflectDataInDb()
-            throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+        throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
         XSKTableImportConfigurationDefinition importConfigurationDefinitionWithRemovedRecord = new XSKTableImportConfigurationDefinition();
         importConfigurationDefinitionWithRemovedRecord.setFile(CSV_FILE_LOCATION);
         importConfigurationDefinitionWithRemovedRecord.setHdbtiFileName(HDBTI_LOCATION);
@@ -191,7 +202,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testCsvRecordWithCustomDelimFieldDelimEnclosingAndEscapeCharShouldInsertProperData()
-            throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+        throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
         XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
         importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
         importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -212,7 +223,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testInsertCsvRecordWithHeaders()
-            throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+        throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
         XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
         importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
         importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -235,7 +246,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testUpdateCsvRecordWithHeadersShouldReflectDbData()
-            throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+        throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
         XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
         importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
         importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -269,7 +280,7 @@ public class XSKHDBTIProcessorTest {
 
     @Test
     public void testCleanUpDeletesEverythingRelatedToHdbtiFile()
-            throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+        throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
         XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
         importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
         importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);

@@ -26,7 +26,7 @@ import java.util.List;
 
 public interface IXSKHDBTIProcessor {
     void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection)
-            throws IOException, SQLException, XSKDataStructuresException, XSKTableImportException;
+            throws IOException, SQLException, XSKDataStructuresException, XSKTableImportException, ProblemsException;
 
     List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file) throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException, ProblemsException;
 

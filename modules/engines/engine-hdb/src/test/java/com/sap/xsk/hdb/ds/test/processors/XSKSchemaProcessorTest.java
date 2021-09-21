@@ -11,16 +11,22 @@
  */
 package com.sap.xsk.hdb.ds.test.processors;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
+import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaDropProcessor;
+import com.sap.xsk.hdb.ds.test.parser.XSKSchemaParserTest;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-
+import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
@@ -30,7 +36,6 @@ import org.eclipse.dirigible.database.sql.builders.CreateBranchingBuilder;
 import org.eclipse.dirigible.database.sql.builders.DropBranchingBuilder;
 import org.eclipse.dirigible.database.sql.builders.schema.CreateSchemaBuilder;
 import org.eclipse.dirigible.database.sql.builders.schema.DropSchemaBuilder;
-import org.eclipse.dirigible.database.sql.dialects.DefaultSqlDialect;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
 import org.junit.Before;
@@ -43,24 +48,14 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbschema.HDBSchemaDropProcessor;
-import com.sap.xsk.hdb.ds.test.parser.XSKSchemaParserTest;
-
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SqlFactory.class, Configuration.class})
+@PrepareForTest({SqlFactory.class, Configuration.class, ProblemsFacade.class})
 public class XSKSchemaProcessorTest extends AbstractDirigibleTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private Connection mockConnection;
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private SqlFactory mockSqlfactory;
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private DefaultSqlDialect mockSqlDialect;
-  @Mock
-  private PreparedStatement mockStatement;
   @Mock
   private CreateBranchingBuilder create;
   @Mock
@@ -107,9 +102,11 @@ public class XSKSchemaProcessorTest extends AbstractDirigibleTest {
     XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("hdb_schema/Myschema.hdbschema", hdbschemaSample);
 
     //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+
     processorSpy.execute(mockConnection, model);
   }
 
@@ -138,7 +135,7 @@ public class XSKSchemaProcessorTest extends AbstractDirigibleTest {
   @Test(expected = IllegalStateException.class)
   public void executeDropSchemaFail() throws Exception {
     //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
+    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
 
@@ -147,6 +144,8 @@ public class XSKSchemaProcessorTest extends AbstractDirigibleTest {
         .toString(XSKSchemaParserTest.class.getResourceAsStream("/Myschema.hdbschema"), StandardCharsets.UTF_8);
 
     XSKDataStructureHDBSchemaModel model = XSKDataStructureModelFactory.parseSchema("hdb_schema/Myschema.hdbschema", hdbschemaSample);
+    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+
     processorSpy.execute(mockConnection, model);
   }
 }

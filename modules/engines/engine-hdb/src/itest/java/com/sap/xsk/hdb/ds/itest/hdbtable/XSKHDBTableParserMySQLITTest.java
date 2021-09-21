@@ -27,6 +27,7 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -61,7 +62,8 @@ public class XSKHDBTableParserMySQLITTest {
   }
 
   @Test
-  public void testHDBTableCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBTableCreate()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",

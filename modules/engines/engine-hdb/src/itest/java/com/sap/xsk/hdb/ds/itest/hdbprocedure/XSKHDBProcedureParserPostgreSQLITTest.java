@@ -16,8 +16,14 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -26,11 +32,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class XSKHDBProcedureParserPostgreSQLITTest {
   private static PostgreSQLContainer jdbcContainer;
@@ -63,7 +64,8 @@ public class XSKHDBProcedureParserPostgreSQLITTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testHDBTableFunctionCreateNotSupportedError() throws IOException, XSKDataStructuresException, SynchronizationException, SQLException {
+  public void testHDBTableFunctionCreateNotSupportedError()
+      throws IOException, XSKDataStructuresException, SynchronizationException, SQLException, ProblemsException {
 	  try (Connection connection = datasource.getConnection();
   			Statement stmt = connection.createStatement()) {
 

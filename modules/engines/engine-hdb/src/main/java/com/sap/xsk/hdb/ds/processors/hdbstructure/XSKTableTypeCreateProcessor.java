@@ -19,12 +19,14 @@ import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
@@ -48,7 +50,8 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
    * @throws SQLException the SQL exception
    */
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel) throws SQLException {
+  public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
+      throws SQLException, ProblemsException {
     logger.info("Processing Create Table Type: " + tableTypeModel.getName());
 
     String tableTypeNameWithoutSchema = tableTypeModel.getName();
@@ -78,7 +81,9 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
             sql = XSKConstants.XSK_HDBTABLETYPE_CREATE + tableTypeModel.getRawContent();
             break;
           } else {
-            throw new IllegalStateException(String.format("Table Types are not supported for %s !", dialect.getDatabaseName(connection)));
+            String errorMessage = String.format("Table Types are not supported for %s !", dialect.getDatabaseName(connection));
+            XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableTypeModel.getLocation(), "HDB Table Type");
+            throw new IllegalStateException(errorMessage);
           }
         }
       }

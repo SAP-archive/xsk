@@ -64,6 +64,7 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
   @Override
   public void configure() {
     StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
+    StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getDataSource());
 
     //when we run all integration tests at once, the first run test will determine the datasource of XSKDataStructuresCoreService.
     //this can lead to issue, for example running MYSQL test which is accessing the HANA db, and leading to inconsistent test results

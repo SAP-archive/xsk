@@ -13,15 +13,6 @@ package com.sap.xsk.hdb.ds.processors.view;
 
 import static java.text.MessageFormat.format;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Map;
-
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
@@ -29,6 +20,14 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Map;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The View Drop Processor.
@@ -46,7 +45,8 @@ public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureH
    * @param viewModel  the view model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
+  public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
+      throws SQLException, ProblemsException {
     logger.info("Processing Drop View: " + viewModel.getName());
         String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), viewModel.getSchema());
 

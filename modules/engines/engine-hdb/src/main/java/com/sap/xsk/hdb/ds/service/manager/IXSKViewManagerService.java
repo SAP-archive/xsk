@@ -11,6 +11,12 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.view.XSKViewDropProcessor;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,18 +24,10 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.naming.OperationNotSupportedException;
-
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.view.XSKViewDropProcessor;
 
 public class IXSKViewManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBViewModel> {
 
@@ -63,12 +61,14 @@ public class IXSKViewManagerService extends AbstractDataStructureManagerService<
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
+  public void createDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel)
+      throws SQLException, ProblemsException {
     this.xskViewCreateProcessor.execute(connection, viewModel);
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel) throws SQLException {
+  public void dropDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel)
+      throws SQLException, ProblemsException {
     this.xskViewDropProcessor.execute(connection, viewModel);
   }
 

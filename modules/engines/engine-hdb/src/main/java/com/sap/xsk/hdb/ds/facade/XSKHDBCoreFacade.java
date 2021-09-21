@@ -49,6 +49,7 @@ import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -115,7 +116,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
   }
 
   @Override
-  public void updateEntities() {
+  public void updateEntities() throws ProblemsException {
     Map<String, XSKDataStructureModel> dataStructureCdsModel = managerServices.get(IXSKDataStructureModel.TYPE_HDBDD)
         .getDataStructureModels();
     Map<String, XSKDataStructureModel> dataStructureTablesModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE)

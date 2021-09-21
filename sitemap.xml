@@ -111,6 +111,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://sap.github.io/xsk/artifacts/hdbsynonym/</loc>
+         <lastmod>2021-09-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbtable/</loc>
          <lastmod>2021-09-21</lastmod>
          <changefreq>daily</changefreq>

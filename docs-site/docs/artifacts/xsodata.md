@@ -55,6 +55,7 @@ service namespace "np"{
 ```
 
 # XSK XSODATA Annotations Support
+
 [SAP ODATA Annotations for XSOData XS2](https://github.wdf.sap.corp/xs2/xsodata/blob/cb734da393e83e9e893c10e720af53bd5e43c481/documentation/annotations.md)
 
 [SAP Annotations for OData Version 2.0](https://wiki.scn.sap.com/wiki/display/EmTech/SAP+Annotations+for+OData+Version+2.0)
@@ -74,67 +75,6 @@ service namespace "np"{
 
   
 For all the list of annotations check the official documentation [SAP OData Annotations v2.X](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/b7fb60b91ee54a75bb03e54af1316229.html)
-
-
-|XSODATA Supportability|Annotation Element|Parameter Name|Parameter Value|The following values are supported in the following cases|
-|:----|:----|:----|:----|:----|
-| |edm:EntityType|sap:semantics|Undefined|Defaul Value is Undefined|
-|:heavy_check_mark:| | |aggregate|Where aggregation is defined for the entity set of the entity type using "aggregates" expression in .xsodata file|
-|:x:| | |aggregate|Where the entity type represents a calculation view, which has a measure attribute|
-|:x:| | |parameters| if the entity type represents input parameters for a calculation view|
-|:x:|edm:EntitySet|sap:addressable|TRUE|Default Value is true|
-|:x:| | |FALSE|“false” if the entity set represents either a calculation view or input parameters for a calculation view.|
-|:x:| |sap:creatable|TRUE|Default Value is true|
-|:heavy_check_mark:| | |FALSE|The "create forbidden" setting is defined for the entity set in the OData service definition (.xsodata) file|
-|:x:| | |FALSE|The entity set represents a database view, for example, a table or a calculation view.|
-|:x:| | |FALSE|The entity set represents input parameters for a calculation view.|
-|:x:| | |FALSE|“aggregation” is defined for the entity set, for example, using the “aggregates always” expression in the OData service definition (.xsodata) file.|
-|:x:| |sap:updatable|TRUE|Default Value is true|
-|:heavy_check_mark:| | |FALSE|The "update forbidden" setting is defined for the entity set in the OData service definition (.xsodata) file|
-|:x:| | |FALSE|The entity set represents a database view, for example, a table or a calculation view.|
-|:x:| | |FALSE|The entity set represents input parameters for a calculation view.|
-|:x:| | |FALSE|“aggregation” is defined for the entity set, for example, using the “aggregates always” expression in the OData service definition (.xsodata) file.|
-|:x:| | |FALSE|A generated key is defined for the entity set.|
-|:x:| |sap:deletable|TRUE|Default Value is true|
-|:heavy_check_mark:| | |FALSE|The "delete forbidden" setting is defined for the entity set in the OData service definition (.xsodata) file|
-|:x:| | |FALSE|The entity set represents a database view, for example, a table or a calculation view.|
-|:x:| | |FALSE|The entity set represents input parameters for a calculation view.|
-|:x:| | |FALSE|“aggregation” is defined for the entity set, for example, using the “aggregates always” expression in the OData service definition (.xsodata) file.|
-|:x:| | |FALSE|A generated key is defined for the entity set.|
-|:x:|Entity-Type edm:Property|sap:semantics|Undefined|Undefined; there is no defined default value|
-|:x:| | |currency-code|check official docmentation for more detail|
-|:x:| | |unit-of-measure|check official docmentation for more detail|
-|:x:| | |dtstart|check official docmentation for more detail|
-|:x:| | |dtend|check official docmentation for more detail|
-|:x:| |sap:parameter|Undefined|Undefined; there is no defined default value|
-|:x:| | |mandatory|check official docmentation for more detail|
-|:x:| | |optional|check official docmentation for more detail|
-|:x:| |sap:label|Undefined|Undefined; there is no defined default value|
-|:x:| | |Additional Supported Values|check official docmentation for more detail|
-|:x:| |sap:filterable|TRUE|Default Value is true|
-|:x:| | |FALSE|The property represents a generated key|
-|:x:| | |FALSE|The property represents a measure attribute of a calculation view|
-|:x:| | |FALSE|The property is used in the aggregation, defined as the “aggregates always” expression in the XS OData service-definition (.xsodata) file.|
-|:x:| |sap:display-format|Undefined|Undefined; there is no defined default value|
-|:x:| | |Date|The “Date” value can be used if the SQL DATE type is used for the property on the database side.|
-|:x:| |sap:aggregation-role|Undefined|Undefined; there is no defined default value|
-|:x:| | |measure|The “measure” value can be used if the property represents a measure attribute of a calculation view or is used in the aggregation that is defined in the “aggregates always” expression in the XS advanced OData service-definition (.xsodata) file.|
-|:x:| |sap:unit|Undefined|Undefined; there is no defined default value|
-|:x:| | |Additional Supported Values|check official docmentation for more detail|
-|:x:| |sap:filter-restriction|Undefined|Undefined; there is no defined default value|
-|:x:| | |single-value|check official docmentation for more detail|
-|:x:| | |multi-value|check official docmentation for more detail|
-|:x:| | |interval|check official docmentation for more detail|
-|:x:|edm:NavigationProperty|sap:creatable|TRUE|Default Value is true|
-|:x:| | |FALSE|The annotation value is always “false” because neither “deep insert” (POST request payload containing data for both parent and related entity) nor POST request for the .../EntitySet(key)/navPropertyName URL is supported in XS OData for XS advanced.|
-|:x:| |sap:filterable|TRUE|Default Value is true|
-|:x:| | |FALSE|The annotation value is always “false” because navigation properties cannot be used in a $filter system query option in XS OData for XS advanced.|
-|:x:|edm:AssociationSet|sap:creatable|TRUE|Default Value is true|
-|:x:| | |FALSE|“false” if the association set connects entity sets for calculation view results and calculation view input parameters.|
-|:x:| |sap:updatable|TRUE|Default Value is true|
-|:x:| | |FALSE|“false” if the association set connects entity sets for calculation view results and calculation view input parameters.|
-|:x:| |sap:deletable|TRUE|Default Value is true|
-|:x:| | |FALSE|“false” if the association set connects entity sets for calculation view results and calculation view input parameters.|
 
 - Supportable [OData Service-Definition Features](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/fda42888439142dc9984d3560bc68206.html)
      

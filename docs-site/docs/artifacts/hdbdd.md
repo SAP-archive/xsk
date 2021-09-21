@@ -7,7 +7,7 @@ hdbdd
 
 ## Overview
 
-The information on how to develop the design-time data-persistence model for an XSK application using the HDBDD syntax
+The information on how to develop the design-time data-persistence model for an XSK application using the HDBDD syntax a.k.a HDBCDS
 
 ### Reference
 

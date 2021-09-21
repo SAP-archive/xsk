@@ -83,7 +83,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
     //if the default value is se to null, ignore it
     if (ctx.NULL() == null) {
-      if (valueType != typeOfElement.getValueType()) {
+      if (typeOfElement.getValueType().stream().filter(el->el.equals(valueType)).count()<0) {
         throw new CDSRuntimeException(String.format(
             "Error at line: %d col: %d. Incompatible types! Expected %s, Provided %s",
             ctx.value.getLine(), ctx.value.getCharPositionInLine(), typeOfElement.getName(), ctx.value.getText()));
@@ -92,7 +92,6 @@ public class ReferenceResolvingListener extends CdsBaseListener {
       EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent().getParent());
       elementSymbol.setValue(ctx.value.getText());
     }
-
   }
 
   @Override

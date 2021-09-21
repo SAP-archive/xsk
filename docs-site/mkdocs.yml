@@ -12,6 +12,7 @@ nav:
       - hdbsynonym: 'artifacts/hdbsynonym.md'
       - hdbdd: 'artifacts/hdbdd.md'
       - hdbcds: 'artifacts/hdbdd.md'
+      - hdbsequence: 'artifacts/hdbsequence.md'
     - API: 
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'

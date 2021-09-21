@@ -25,6 +25,7 @@ import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -66,12 +67,11 @@ public class SymbolTable {
     hanaBuiltInTypes.put("ALPHANUM", new BuiltInTypeSymbol("ALPHANUMERIC", 0, CdsLexer.STRING, true));
     hanaBuiltInTypes.put("SMALLINT", new BuiltInTypeSymbol("SMALLINT", 0, CdsLexer.INTEGER, true));
     hanaBuiltInTypes.put("TINYINT", new BuiltInTypeSymbol("TINYINT", 0, CdsLexer.INTEGER, true));
-    hanaBuiltInTypes.put("REAL", new BuiltInTypeSymbol("REAL", 0, CdsLexer.STRING, true));
+    hanaBuiltInTypes.put("REAL", new BuiltInTypeSymbol("REAL", 0, CdsLexer.DECIMAL, true));
     hanaBuiltInTypes.put("SMALLDECIMAL", new BuiltInTypeSymbol("SMALLDECIMAL", 0, CdsLexer.DECIMAL, true));
-    hanaBuiltInTypes.put("VARCHAR", new BuiltInTypeSymbol("VARCHAR", 1, CdsLexer.STRING, true));
+    hanaBuiltInTypes.put("VARCHAR", new BuiltInTypeSymbol("NVARCHAR", 1, CdsLexer.STRING, true));
     hanaBuiltInTypes.put("CLOB", new BuiltInTypeSymbol("CLOB", 0, CdsLexer.VARBINARY, true));
-    hanaBuiltInTypes.put("BINARY", new BuiltInTypeSymbol("BINARY", 1, CdsLexer.VARBINARY, true));
-
+    hanaBuiltInTypes.put("BINARY", new BuiltInTypeSymbol("BINARY", 0, CdsLexer.VARBINARY, true));
     hanaBuiltInTypes.put("ST_POINT", new BuiltInTypeSymbol("ST_POINT", 0, CdsLexer.STRING, true));
     hanaBuiltInTypes.put("ST_GEOMETRY", new BuiltInTypeSymbol("ST_GEOMETRY", 0, CdsLexer.STRING, true));
 
@@ -114,9 +114,7 @@ public class SymbolTable {
   public List<EntitySymbol> getSortedEntities() {
     Set<String> passedEntities = new HashSet<>();
     List<EntitySymbol> orderedEntities = new ArrayList<>();
-    entityGraph.keySet().forEach(entityName -> {
-      traverseEntityGraph(entityName, orderedEntities, passedEntities);
-    });
+    entityGraph.keySet().forEach(entityName -> traverseEntityGraph(entityName, orderedEntities, passedEntities));
 
     return orderedEntities;
   }
@@ -145,7 +143,7 @@ public class SymbolTable {
 
   private AnnotationObj createCatalogAnn() {
     AnnotationObj catalogObj = new AnnotationObj();
-    catalogObj.setAllowedForSymbols(Arrays.asList(EntitySymbol.class));
+    catalogObj.setAllowedForSymbols(Collections.singletonList(EntitySymbol.class));
     catalogObj.setTopLevel(false);
     catalogObj.setName("Catalog");
 
@@ -181,7 +179,7 @@ public class SymbolTable {
 
   private AnnotationObj createSearchIndex() {
     AnnotationObj searchIndex = new AnnotationObj();
-    searchIndex.setAllowedForSymbols(Arrays.asList(EntityElementSymbol.class));
+    searchIndex.setAllowedForSymbols(Collections.singletonList(EntityElementSymbol.class));
 
     AnnotationObj text = new AnnotationObj();
     AnnotationSimpleValue textValue = new AnnotationSimpleValue(CDSLiteralEnum.BOOLEAN.getLiteralType());
@@ -213,9 +211,7 @@ public class SymbolTable {
       return;
     }
 
-    children.forEach(child -> {
-      traverseEntityGraph(child, orderedSymbol, passedEntities);
-    });
+    children.forEach(child -> traverseEntityGraph(child, orderedSymbol, passedEntities));
 
     orderedSymbol.add((EntitySymbol) this.symbolsByFullName.get(entityName));
   }

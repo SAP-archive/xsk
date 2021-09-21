@@ -100,6 +100,29 @@ public class EntityDefinitionListenerTest {
       assertEquals(0, parser.getNumberOfSyntaxErrors());
     }
 
+  @Test
+  public void parseHanaBuiltInTypesSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/HanaBuiltInTypesTest.hdbdd", "sap/db/HanaBuiltInTypesTest.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(1, parsedEntities.size());
+    EntitySymbol entity = parsedEntities.get(0);
+    assertEquals(10, entity.getElements().size());
+
+    assertEquals("ALPHANUMERIC", entity.getElements().get(1).getType().getName());
+    assertEquals("NVARCHAR", entity.getElements().get(0).getType().getName());
+    assertEquals("SMALLINT", entity.getElements().get(2).getType().getName());
+    assertEquals("TINYINT", entity.getElements().get(3).getType().getName());
+    assertEquals("REAL", entity.getElements().get(4).getType().getName());
+    assertEquals("SMALLDECIMAL", entity.getElements().get(5).getType().getName());
+    assertEquals("CLOB", entity.getElements().get(6).getType().getName());
+    assertEquals("BINARY", entity.getElements().get(7).getType().getName());
+    assertEquals("ST_POINT", entity.getElements().get(8).getType().getName());
+    assertEquals("ST_GEOMETRY", entity.getElements().get(9).getType().getName());
+
+  }
+
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {
     String content =
         org.apache.commons.io.IOUtils.toString(

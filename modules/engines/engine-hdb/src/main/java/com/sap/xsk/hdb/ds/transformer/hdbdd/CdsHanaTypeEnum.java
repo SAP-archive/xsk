@@ -10,31 +10,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.transformer.hdbdd;
+
 /**
- * These types should respond to globalBuiltInTypeScope in SymbolTable class
+ * These types should respond to hanaBuiltInTypes in SymbolTable class
  * See also {@link com.sap.xsk.parser.hdbdd.symbols.SymbolTable}.
  */
-public enum CdsTypeEnum {
-  String("NVARCHAR"),
-  Binary("VARBINARY"),
-  LargeBinary("BLOB"),
-  Integer("INTEGER"),
-  Integer64("BIGINT"),
-  Decimal("DECIMAL"),
-  DecimalFloat("DECIMAL"),
-  LocalDate("DATE"),
-  LocalTime("TIME"),
-  UTCDateTime("SECONDDATE"),
-  UTCTimestamp("TIMESTAMP"),
-  Boolean("BOOLEAN");
-
-  CdsTypeEnum(java.lang.String sqlType) {
-    this.sqlType = sqlType;
-  }
-
-  private String sqlType;
-
-  public java.lang.String getSqlType() {
-    return sqlType;
-  }
+public enum CdsHanaTypeEnum {
+  NVARCHAR,
+  ALPHANUMERIC,
+  SMALLINT,
+  TINYINT,
+  SMALLDECIMAL,
+  CLOB,
+  BINARY,
+  ST_POINT,
+  ST_GEOMETRY
 }

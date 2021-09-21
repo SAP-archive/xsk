@@ -468,7 +468,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
           typeIdToken.getLine(), typeIdToken.getCharPositionInLine()));
     }
     BuiltInTypeSymbol resolvedBuiltInType = (BuiltInTypeSymbol) builtInType;
-    BuiltInTypeSymbol builtInTypeToProvide = new BuiltInTypeSymbol(typeId, resolvedBuiltInType.getArgsCount(),
+    BuiltInTypeSymbol builtInTypeToProvide = new BuiltInTypeSymbol(builtInType.getName(), resolvedBuiltInType.getArgsCount(),
         resolvedBuiltInType.getValueType());
     builtInTypeToProvide.setHanaType(resolvedBuiltInType.isHanaType());
 

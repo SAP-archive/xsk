@@ -141,6 +141,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://sap.github.io/xsk/artifacts/xsodata/</loc>
+         <lastmod>2021-09-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://sap.github.io/xsk/setup/</loc>
          <lastmod>2021-09-21</lastmod>
          <changefreq>daily</changefreq>

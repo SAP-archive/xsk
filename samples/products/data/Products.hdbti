@@ -1,11 +1,21 @@
 import = [
 	{
+		table = "products.db::Products.Country";
+		file = "products.data:Country.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "DBADMIN";
+	},
+	{
 		table = "products.db::Products.Orders";
 		file = "products.data:Products_Orders.csv";
 		header = false;
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
+		schema = "DBADMIN";
 	},
 	{
 		table = "products.db::Products.Item";
@@ -14,6 +24,9 @@ import = [
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
+		schema = "DBADMIN";
 	}
+	
+	
 ];
 

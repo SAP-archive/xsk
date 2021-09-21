@@ -113,9 +113,7 @@ public class XSKTableAlterHandler {
         executeAlterBuilder(connection, alterTableBuilder);
 
       } else if (!dbColumnTypes.get(name).equals(type.toString())) {
-        String errorMessage = String
-            .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name,
-                "of type " + dbColumnTypes.get(name) + " to be changed to " + type);
+        String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to " + type);
         XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
         throw new SQLException(errorMessage);
       }
@@ -169,9 +167,7 @@ public class XSKTableAlterHandler {
       }
 
       if (!dbColumnTypes.get(name).equals(type.toString())) {
-        String errorMessage = String
-            .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name,
-                "of type " + dbColumnTypes.get(name) + " to be changed to" + type);
+        String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to" + type);
         XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
         throw new SQLException(errorMessage);
       }
@@ -198,15 +194,16 @@ public class XSKTableAlterHandler {
 
     escapeService.escapeTableBuilderUniqueIndices(alterTableBuilder);
     executeAlterBuilder(connection, alterTableBuilder);
-
-
   }
 
   public void ensurePrimaryKeyIsUnchanged(Connection connection) throws SQLException, ProblemsException {
     DatabaseMetaData dmd = connection.getMetaData();
     ResultSet rsPrimaryKeys = dmd.getPrimaryKeys(null, null, this.tableModel.getName());
     Set<String> dbPrimaryKeys = new HashSet<>();
-    Set<String> modelPrimaryKeys = new HashSet<>(Arrays.asList(this.tableModel.getConstraints().getPrimaryKey().getColumns()));
+    Set<String> modelPrimaryKeys = new HashSet<>();
+    if (this.tableModel.getConstraints().getPrimaryKey() != null) {
+      modelPrimaryKeys = new HashSet<>(Arrays.asList(this.tableModel.getConstraints().getPrimaryKey().getColumns()));
+    }
     while (rsPrimaryKeys.next()) {
       dbPrimaryKeys.add(rsPrimaryKeys.getString("COLUMN_NAME"));
     }
@@ -218,7 +215,6 @@ public class XSKTableAlterHandler {
       throw new SQLException(errorMessage);
     }
   }
-
 
   private List<XSKDataStructureHDBTableColumnModel> getColumnsToUpdate() {
     Set<String> dbColumnNames = this.dbColumnTypes.keySet();

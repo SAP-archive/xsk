@@ -38,12 +38,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.projectlombok</groupId>
-          <artifactId>lombok</artifactId>
-          <version>${org.projectlombok.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-commons</artifactId>
             <version>0.9.0-SNAPSHOT</version>

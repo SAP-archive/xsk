@@ -160,7 +160,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
                 : tableImportConfigurationDefinition.getDelimField().charAt(0);
         char quote = Objects.isNull(tableImportConfigurationDefinition.getDelimEnclosing()) ? '"'
                 : tableImportConfigurationDefinition.getDelimEnclosing().charAt(0);
-        CSVFormat csvFormat = CSVFormat.newFormat(delimiter).withQuote(quote).withEscape('\\');
+        CSVFormat csvFormat = CSVFormat.newFormat(delimiter).withIgnoreEmptyLines().withQuote(quote).withEscape('\\');
 
         boolean useHeader = !Objects.isNull(tableImportConfigurationDefinition.getHeader()) && tableImportConfigurationDefinition.getHeader();
         if (useHeader) {

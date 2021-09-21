@@ -11,22 +11,23 @@
  */
 package com.sap.xsk.parser.hdbti.models;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
 public class XSKHDBTIImportModel {
 
-    private List<XSKHDBTIImportConfigModel> configModels = new ArrayList<>();
+  private List<XSKHDBTIImportConfigModel> configModels = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "import = " + configModels.toString() + ";";
-    }
+  public List<XSKHDBTIImportConfigModel> getConfigModels() {
+    return configModels;
+  }
+
+  public void setConfigModels(List<XSKHDBTIImportConfigModel> configModels) {
+    this.configModels = configModels;
+  }
+
+  @Override
+  public String toString() {
+    return "import = " + configModels.toString() + ";";
+  }
 }

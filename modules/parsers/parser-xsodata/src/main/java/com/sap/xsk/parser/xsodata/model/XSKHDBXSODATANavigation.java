@@ -11,8 +11,7 @@
  */
 package com.sap.xsk.parser.xsodata.model;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.util.Objects;
 
 /**
  * Representing association property of a service. For example:
@@ -28,15 +27,53 @@ import lombok.experimental.Accessors;
  * }</pre>
  * In the example, the association is "Orders_Customers" and the alias is "HisOrders".
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
-@Accessors(chain = true)
+
 public class XSKHDBXSODATANavigation {
 
-    private String association;
-    private String aliasNavigation;
-    private XSKHDBXSODATABindingType fromBindingType;
+  private String association;
+  private String aliasNavigation;
+  private XSKHDBXSODATABindingType fromBindingType;
+
+  public String getAssociation() {
+    return association;
+  }
+
+  public XSKHDBXSODATANavigation setAssociation(String association) {
+    this.association = association;
+    return this;
+  }
+
+  public String getAliasNavigation() {
+    return aliasNavigation;
+  }
+
+  public XSKHDBXSODATANavigation setAliasNavigation(String aliasNavigation) {
+    this.aliasNavigation = aliasNavigation;
+    return this;
+  }
+
+  public XSKHDBXSODATABindingType getFromBindingType() {
+    return fromBindingType;
+  }
+
+  public XSKHDBXSODATANavigation setFromBindingType(XSKHDBXSODATABindingType fromBindingType) {
+    this.fromBindingType = fromBindingType;
+    return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    XSKHDBXSODATANavigation that = (XSKHDBXSODATANavigation) o;
+    return Objects.equals(association, that.association) && Objects.equals(aliasNavigation, that.aliasNavigation)
+        && fromBindingType == that.fromBindingType;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(association, aliasNavigation, fromBindingType);
+  }
 }

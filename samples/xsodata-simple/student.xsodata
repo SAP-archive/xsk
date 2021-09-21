@@ -1,0 +1,19 @@
+service namespace "np" {
+	
+"xsodata-simple::student" as "Students" with ("ID", "FirstName","LastName")
+	create events (before "xsodata-simple.xsjs:student.xsjslib::logCreateConfigAfter");
+
+}
+
+annotations     {
+	enable      OData4SAP;
+	enable      OData4SAP;
+}
+
+settings {
+     support null;
+     content cache-control "no-store";
+     metadata cache-control "no-cache,no-store,max-age=86401,must-revalidate";
+}
+
+

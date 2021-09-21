@@ -14,7 +14,9 @@ package com.sap.xsk.hdb.ds.transformer.hdbdd;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
@@ -22,8 +24,11 @@ import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
 
 public class HdbddTransformer {
 
@@ -35,15 +40,21 @@ public class HdbddTransformer {
     tableModel.setName(entitySymbol.getFullName());
     tableModel.setSchema(entitySymbol.getSchema());
 
+    List<EntityElementSymbol> entityPks = entitySymbol.getElements().stream().filter(EntityElementSymbol::isKey).collect(Collectors.toList());
+    XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
+    primaryKey.setColumns(entityPks.stream().map(EntityElementSymbol::getName).toArray(String[]::new));
+    primaryKey.setName("PK_" + tableModel.getName());
+    tableModel.getConstraints().setPrimaryKey(primaryKey);
+
     List<XSKDataStructureHDBTableColumnModel> tableColumns = new ArrayList<>();
     entitySymbol.getElements().forEach(currentElement -> {
       if (currentElement.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(currentElement);
         subElements.forEach(subE -> {
-          tableColumns.add(transformEntityElementToColumnModel(subE));
+          tableColumns.add(transformFieldSymbolToColumnModel(subE, true));
         });
       } else {
-        tableColumns.add(transformEntityElementToColumnModel(currentElement));
+        tableColumns.add(transformFieldSymbolToColumnModel(currentElement, true));
       }
     });
 
@@ -57,12 +68,11 @@ public class HdbddTransformer {
       } else {
         String associationSymbolName = associationSymbol.getName();
         associationColumns.forEach(ac -> ac.setName(associationSymbolName.substring(associationSymbolName.indexOf(
-            UNMANAGED_ASSOCIATION_MARKER))));
+            UNMANAGED_ASSOCIATION_MARKER)+1)));
         foreignKeyName = foreignKeyName.replace(UNMANAGED_ASSOCIATION_MARKER, "");
       }
 
       String[] foreignKeyColumns = associationColumns.stream().map(XSKDataStructureHDBTableColumnModel::getName).toArray(String[]::new);
-
 
       foreignKeyModel.setName(foreignKeyName);
       foreignKeyModel.setReferencedTable(associationSymbol.getTarget().getFullName());
@@ -82,23 +92,59 @@ public class HdbddTransformer {
     return tableModel;
   }
 
-  private XSKDataStructureHDBTableColumnModel transformEntityElementToColumnModel(EntityElementSymbol entityElement) {
-    XSKDataStructureHDBTableColumnModel columnModel = new XSKDataStructureHDBTableColumnModel();
-    columnModel.setName(entityElement.getName());
-    columnModel.setPrimaryKey(entityElement.isKey());
-    columnModel.setNullable(!entityElement.isNotNull());
-    columnModel.setDefaultValue(entityElement.getValue());
+  public XSKDataStructureHDBTableTypeModel transformStructuredDataTypeToHdbTableType(StructuredDataTypeSymbol structuredDataTypeSymbol) {
+    XSKDataStructureHDBTableTypeModel hdbTableTypeModel = new XSKDataStructureHDBTableTypeModel();
+    List<XSKDataStructureHDBTableColumnModel> tableColumns = new ArrayList<>();
+    structuredDataTypeSymbol.getFields().forEach(field -> {
+      if (field.getType() instanceof StructuredDataTypeSymbol) {
+        List<EntityElementSymbol> subElements = getStructuredTypeSubElements(field);
+        subElements.forEach(subE -> {
+          tableColumns.add(transformFieldSymbolToColumnModel(subE, true));
+        });
+      } else {
+        tableColumns.add(transformFieldSymbolToColumnModel(field, true));
+      }
+    });
 
-    if (entityElement.getType() instanceof BuiltInTypeSymbol) {
-      BuiltInTypeSymbol builtInTypeSymbol = (BuiltInTypeSymbol) entityElement.getType();
+    hdbTableTypeModel.setColumns(tableColumns);
+    hdbTableTypeModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
+    hdbTableTypeModel.setName(structuredDataTypeSymbol.getFullName());
+    hdbTableTypeModel.setSchema(structuredDataTypeSymbol.getSchema());
+    hdbTableTypeModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    hdbTableTypeModel.setCreatedBy(UserFacade.getName());
+
+    return hdbTableTypeModel;
+  }
+
+  /**
+   * @param fieldSymbol
+   * @param bAssignPK:  false if the entityElement is coming from  association, otherwise it should be true
+   */
+  private XSKDataStructureHDBTableColumnModel transformFieldSymbolToColumnModel(FieldSymbol fieldSymbol, boolean bAssignPK) {
+    XSKDataStructureHDBTableColumnModel columnModel = new XSKDataStructureHDBTableColumnModel();
+    columnModel.setName(fieldSymbol.getName());
+    columnModel.setNullable(true);
+
+    if (fieldSymbol instanceof EntityElementSymbol) {
+      EntityElementSymbol elementSymbol = (EntityElementSymbol) fieldSymbol;
+      if (bAssignPK) {
+        columnModel.setPrimaryKey(elementSymbol.isKey());
+      }
+
+      columnModel.setNullable(!elementSymbol.isNotNull());
+      columnModel.setDefaultValue(elementSymbol.getValue());
+    }
+
+    if (fieldSymbol.getType() instanceof BuiltInTypeSymbol) {
+      BuiltInTypeSymbol builtInTypeSymbol = (BuiltInTypeSymbol) fieldSymbol.getType();
       if (builtInTypeSymbol.isHanaType()) {
         setHanaType(columnModel, builtInTypeSymbol);
       } else {
         setSqlType(columnModel, builtInTypeSymbol);
       }
 
-    } else if (entityElement.getType() instanceof DataTypeSymbol) {
-      DataTypeSymbol dataType = (DataTypeSymbol) entityElement.getType();
+    } else if (fieldSymbol.getType() instanceof DataTypeSymbol) {
+      DataTypeSymbol dataType = (DataTypeSymbol) fieldSymbol.getType();
       BuiltInTypeSymbol builtInType = (BuiltInTypeSymbol) dataType.getType();
       setSqlType(columnModel, builtInType);
     }
@@ -112,9 +158,9 @@ public class HdbddTransformer {
       if (fk.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(fk);
         subElements.forEach(subE ->
-            tableColumns.add(transformEntityElementToColumnModel(subE)));
+            tableColumns.add(transformFieldSymbolToColumnModel(subE, false)));
       } else {
-        tableColumns.add(transformEntityElementToColumnModel(fk));
+        tableColumns.add(transformFieldSymbolToColumnModel(fk, false));
       }
     });
 
@@ -145,12 +191,11 @@ public class HdbddTransformer {
     columnModel.setType(typeName);
   }
 
-  private List<EntityElementSymbol> getStructuredTypeSubElements(EntityElementSymbol entityElementSymbol) {
+  private List<EntityElementSymbol> getStructuredTypeSubElements(FieldSymbol entityElementSymbol) {
     StructuredDataTypeSymbol structuredDataType = (StructuredDataTypeSymbol) entityElementSymbol.getType();
     String elementName = entityElementSymbol.getName();
     List<EntityElementSymbol> subElements = new ArrayList<>();
-    structuredDataType.getFields().values().forEach(v -> {
-      FieldSymbol field = (FieldSymbol) v;
+    structuredDataType.getFields().forEach(field -> {
       EntityElementSymbol subElement = new EntityElementSymbol(elementName + "." + field.getName(), entityElementSymbol.getScope());
       if (field.getType() instanceof BuiltInTypeSymbol) {
         subElement.setType(field.getType());

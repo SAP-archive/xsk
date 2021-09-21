@@ -11,17 +11,49 @@
  */
 package com.sap.xsk.parser.xsodata.model;
 
-import lombok.*;
+import java.util.Objects;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
-@AllArgsConstructor
 public class XSKHDBXSODATAEvent {
 
-    private XSKHDBXSODATAEventType type;
-    private String action;
+  private XSKHDBXSODATAEventType type;
+  private String action;
 
+  public XSKHDBXSODATAEvent() {
+  }
+
+  public XSKHDBXSODATAEvent(XSKHDBXSODATAEventType type, String action) {
+    this.type = type;
+    this.action = action;
+  }
+
+  public XSKHDBXSODATAEventType getType() {
+    return type;
+  }
+
+  public void setType(XSKHDBXSODATAEventType type) {
+    this.type = type;
+  }
+
+  public String getAction() {
+    return action;
+  }
+
+  public void setAction(String action) {
+    this.action = action;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    XSKHDBXSODATAEvent that = (XSKHDBXSODATAEvent) o;
+    return type == that.type && Objects.equals(action, that.action);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type, action);
+  }
 }

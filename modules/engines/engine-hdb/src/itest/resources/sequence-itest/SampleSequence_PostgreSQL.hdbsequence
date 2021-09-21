@@ -1,0 +1,9 @@
+schema= "public";
+increment_by=1;
+start_with= 10;
+maxvalue= 30;
+nomaxvalue=false;
+nominvalue= false;
+minvalue= 10;
+cycles=false;
+public=false;

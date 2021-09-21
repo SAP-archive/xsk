@@ -15,11 +15,12 @@ import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
+import com.sap.xsk.utils.XSKHDBUtils;
+
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.commons.config.Configuration;
+
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
@@ -32,13 +33,8 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceCreateProcessor.class);
 
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
-      throws SQLException, ProblemsException {
-    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
-    String hdbSequenceName = hdbSequenceModel.getName();
-    if (caseSensitive) {
-      hdbSequenceName = "\"" + hdbSequenceName + "\"";
-    }
+  public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException, ProblemsException {
+    String hdbSequenceName = XSKHDBUtils.escapeArtifactName(connection, hdbSequenceModel.getName(), hdbSequenceModel.getSchema());
     logger.info("Processing Create HdbSequence: " + hdbSequenceName);
     String sql = null;
     switch (hdbSequenceModel.getDBContentType()) {
@@ -62,15 +58,15 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
   }
 
   private String getDatabaseSpecificSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel,
-      String modifiedSequenceName) {
-    return SqlFactory.getNative(connection).create().sequence(modifiedSequenceName)
-        .start(hdbSequenceModel.getStart_with())
-        .increment(hdbSequenceModel.getIncrement_by())
-        .maxvalue(hdbSequenceModel.getMaxvalue())
-        .nomaxvalue(hdbSequenceModel.getNomaxvalue())
-        .minvalue(hdbSequenceModel.getMinvalue())
-        .nominvalue(hdbSequenceModel.getNominvalue())
+      String hdbSequenceName) {
+    return SqlFactory.getNative(connection).create().sequence(hdbSequenceName)
+        .start(hdbSequenceModel.getStartWith())
+        .increment(hdbSequenceModel.getIncrementBy())
+        .maxvalue(hdbSequenceModel.getMaxValue())
+        .nomaxvalue(hdbSequenceModel.getNoMaxValue())
+        .minvalue(hdbSequenceModel.getMinValue())
+        .nominvalue(hdbSequenceModel.getNoMinValue())
         .cycles(hdbSequenceModel.getCycles())
-        .resetBy(hdbSequenceModel.getReset_by()).build();
+        .resetBy(hdbSequenceModel.getResetBy()).build();
   }
 }

@@ -10,7 +10,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 exports.getEditor = function () {
-	var editor = {
+	return {
 		"id": "HDBTI Editor",
 		"name": "HDBTI Editor",
 		"factory": "frame",
@@ -20,5 +20,4 @@ exports.getEditor = function () {
 		"defaultEditor": true,
 		"contentTypes": ["application/hdbti"]
 	};
-	return editor;
 }

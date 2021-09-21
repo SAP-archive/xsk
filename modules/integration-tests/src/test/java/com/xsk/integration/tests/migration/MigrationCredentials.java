@@ -13,7 +13,7 @@ package com.xsk.integration.tests.migration;
 
 import org.eclipse.dirigible.commons.config.Configuration;
 
-public class MigrationCredentials {
+class MigrationCredentials {
 
   private final String region;
   private final String subaccount;
@@ -23,8 +23,7 @@ public class MigrationCredentials {
   private final String hanaUsername;
   private final String hanaPassword;
 
-  public MigrationCredentials()
-  {
+  MigrationCredentials() {
     region = Configuration.get("ITESTS_SELENIUM_NEO_REGION");
     subaccount = Configuration.get("ITESTS_SELENIUM_NEO_SUBACCOUNT");
     username = Configuration.get("ITESTS_SELENIUM_NEO_USERNAME");
@@ -34,27 +33,27 @@ public class MigrationCredentials {
     hanaPassword = Configuration.get("ITESTS_SELENIUM_HANA_DB_PASSWORD");
   }
 
-  public String getRegion() {
+  String getRegion() {
     return region;
   }
 
-  public String getSubaccount() {
+  String getSubaccount() {
     return subaccount;
   }
 
-  public String getUsername() {
+  String getUsername() {
     return username;
   }
 
-  public String getPassword() {
+  String getPassword() {
     return password;
   }
 
-  public String getSchema() {
+  String getSchema() {
     return schema;
   }
 
-  public String getHanaUsername() {
+  String getHanaUsername() {
     return hanaUsername;
   }
 

@@ -317,7 +317,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     $scope.checkResource = function (resourcePath) {
         if (resourcePath != "") {
             let xhr = new XMLHttpRequest();
-            xhr.open('HEAD', `../../../../../../services/v4/ide/workspaces${resourcePath}`, false);
+            xhr.open('HEAD', `/services/v4/ide/workspaces${resourcePath}`, false);
             xhr.setRequestHeader('X-CSRF-Token', 'Fetch');
             xhr.send();
             if (xhr.status === 200) {
@@ -397,7 +397,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
         let searchParams = new URLSearchParams(window.location.search);
         $scope.file = searchParams.get('file');
         if ($scope.file) {
-            $http.get('../../../../../../services/v4/ide/workspaces' + $scope.file)
+            $http.get('/services/v4/ide/workspaces' + $scope.file)
                 .then(function (response) {
                     let data = response.data;
                     if (
@@ -424,7 +424,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
         console.log('Save called...');
         if ($scope.file) {
             let xhr = new XMLHttpRequest();
-            xhr.open('PUT', '../../../../../../services/v4/ide/workspaces' + $scope.file);
+            xhr.open('PUT', '/services/v4/ide/workspaces' + $scope.file);
             xhr.setRequestHeader('X-Requested-With', 'Fetch');
             xhr.setRequestHeader('X-CSRF-Token', csrfToken);
             xhr.onreadystatechange = function () {

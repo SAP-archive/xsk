@@ -46,7 +46,7 @@ public class IXSKTableTypeManagerService extends AbstractDataStructureManagerSer
 
   @Override
   public Map<String, XSKDataStructureHDBTableTypeModel> getDataStructureModels() {
-    return Collections.unmodifiableMap(this.dataStructureHDBTableTypeModels);
+    return dataStructureHDBTableTypeModels;
   }
 
   @Override

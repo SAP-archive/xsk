@@ -11,21 +11,41 @@
  */
 package com.sap.xsk.parser.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class BaseParserErrorsModel {
 
   private int line;
   private int charPositionInLine;
   private String offendingSymbol;
   private String msg;
+
+  public BaseParserErrorsModel(int line, int charPositionInLine, String offendingSymbol, String msg) {
+    this.line = line;
+    this.charPositionInLine = charPositionInLine;
+    this.offendingSymbol = offendingSymbol;
+    this.msg = msg;
+  }
+
+  public int getLine() {
+    return line;
+  }
+
+  public void setLine(int line) {
+    this.line = line;
+  }
+
+  public int getCharPositionInLine() {
+    return charPositionInLine;
+  }
+
+  public String getOffendingSymbol() {
+    return offendingSymbol;
+  }
+
+  public String getMsg() {
+    return msg;
+  }
+
+  public void setMsg(String msg) {
+    this.msg = msg;
+  }
 }

@@ -11,67 +11,63 @@
  */
 package com.xsk.integration.tests.migration;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class MigrationValidation {
+class MigrationValidation {
+
   private final String index;
   private final String indexUI5;
   private final String xsaccess;
   private final String xsapp;
   private final String logic;
-  private final String contactRegular;
-  private final String contactHover;
-  private final String sapLogo;
+  private final BufferedImage contactRegular;
+  private final BufferedImage contactHover;
+  private final BufferedImage sapLogo;
 
-  public MigrationValidation() throws IOException {
+  MigrationValidation() throws IOException {
     index = Files.readString(Paths.get("src/test/resources/migration/testProject/index.html"));
     indexUI5 = Files.readString(Paths.get("src/test/resources/migration/testProject/indexUI5.html"));
     xsaccess = Files.readString(Paths.get("src/test/resources/migration/testProject/.xsaccess"));
     xsapp = Files.readString(Paths.get("src/test/resources/migration/testProject/.xsapp"));
     logic = Files.readString(Paths.get("src/test/resources/migration/testProject/logic.xsjs"));
-    contactRegular = readFileUTF8(Paths.get("src/test/resources/migration/testProject/images/Contact_regular.png"));
-    contactHover = readFileUTF8(Paths.get("src/test/resources/migration/testProject/images/Contact_hover.png"));
-    sapLogo = readFileUTF8(Paths.get("src/test/resources/migration/testProject/images/SAPLogo.gif"));
+    contactRegular = ImageIO.read(Paths.get("src/test/resources/migration/testProject/images/Contact_regular.png").toFile());
+    contactHover = ImageIO.read(Paths.get("src/test/resources/migration/testProject/images/Contact_hover.png").toFile());
+    sapLogo = ImageIO.read(Paths.get("src/test/resources/migration/testProject/images/SAPLogo.gif").toFile());
   }
 
-  @SuppressWarnings("ReadWriteStringCanBeUsed")
-  private String readFileUTF8(Path path) throws IOException {
-    return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-  }
-
-  public String getIndex() {
+  String getIndex() {
     return index;
   }
 
-  public String getIndexUI5() {
+  String getIndexUI5() {
     return indexUI5;
   }
 
-  public String getXsaccess() {
+  String getXsaccess() {
     return xsaccess;
   }
 
-  public String getXsapp() {
+  String getXsapp() {
     return xsapp;
   }
 
-  public String getLogic() {
+  String getLogic() {
     return logic;
   }
 
-  public String getContactRegular() {
+  BufferedImage getContactRegular() {
     return contactRegular;
   }
 
-  public String getContactHover() {
+  BufferedImage getContactHover() {
     return contactHover;
   }
 
-  public String getSapLogo() {
+  BufferedImage getSapLogo() {
     return sapLogo;
   }
 }

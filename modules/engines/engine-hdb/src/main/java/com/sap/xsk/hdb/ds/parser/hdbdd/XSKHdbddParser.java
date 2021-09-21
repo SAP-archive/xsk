@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.transformer.hdbdd.HdbddTransformer;
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
@@ -28,6 +29,7 @@ import com.sap.xsk.parser.hdbdd.custom.XSKHdbddErrorListener;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
+import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
@@ -187,8 +189,15 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       tableModels.add(this.hdbddTransformer.transformEntitySymbolToTableModel(e));
     });
 
+    List<StructuredDataTypeSymbol> structuredDataTypes = this.symbolTable.getTableTypes();
+    List<XSKDataStructureHDBTableTypeModel> hdbTableTypeModels = new ArrayList<>();
+    structuredDataTypes.forEach(sdt -> {
+      hdbTableTypeModels.add(this.hdbddTransformer.transformStructuredDataTypeToHdbTableType(sdt));
+    });
+
     XSKDataStructureCdsModel cdsModel = new XSKDataStructureCdsModel();
     cdsModel.setTableModels(tableModels);
+    cdsModel.setTableTypeModels(hdbTableTypeModels);
     cdsModel.setName(location);
     cdsModel.setLocation(location);
     cdsModel.setType(getType());

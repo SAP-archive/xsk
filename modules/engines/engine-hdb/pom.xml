@@ -262,13 +262,13 @@
       <dependency>
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-core-scheduler</artifactId>
-          <version>5.12.12</version>
+          <version>${dirigible.version}</version>
           <scope>compile</scope>
       </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>1.4.193</version>
+      <version>${com.h2database.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

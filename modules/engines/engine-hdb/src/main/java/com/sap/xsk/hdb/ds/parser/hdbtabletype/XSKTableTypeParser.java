@@ -99,16 +99,16 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
 
     XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableTypeModel, IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, XSKDBContentType.XS_CLASSIC);
     dataStructureHDBTableTypeModel.setSchema(hdbtableDefinitionModel.getSchemaName());
-    dataStructureHDBTableTypeModel.setPublicProp(hdbtableDefinitionModel.getPublicProp());
+    dataStructureHDBTableTypeModel.setPublicProp(hdbtableDefinitionModel.isPublic());
     dataStructureHDBTableTypeModel.setRawContent(content);
     dataStructureHDBTableTypeModel.setColumns(columnModelTransformer.transform(hdbtableDefinitionModel, location));
 
     XSKDataStructureHDBTableTypePrimaryKeyModel primaryKey = new XSKDataStructureHDBTableTypePrimaryKeyModel();
-    primaryKey.setPrimaryKeyColumns(hdbtableDefinitionModel.getPkcolumns().toArray(String[]::new));
+    primaryKey.setPrimaryKeyColumns(hdbtableDefinitionModel.getPkColumns().toArray(String[]::new));
     primaryKey.setName("PK_" + dataStructureHDBTableTypeModel.getName());
     dataStructureHDBTableTypeModel.setPrimaryKey(primaryKey);
 
-    hdbtableDefinitionModel.getPkcolumns().forEach(key -> {
+    hdbtableDefinitionModel.getPkColumns().forEach(key -> {
       List<XSKHDBTABLEColumnsModel> foundMatchKey = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(key)).collect(Collectors.toList());
       if (foundMatchKey.size() != 1) {
         throw new IllegalStateException(String.format("%s: the column does not have a definition but is specified as a primary key", key));

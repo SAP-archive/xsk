@@ -43,6 +43,12 @@ jobs:
       - name: Verify Google Chrome
         run: chrome --version
 
+      # Setup Firefox
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
+      - name: Verify Firefox
+        run: firefox --version
+
       # Wait for XSK Service Container to Startup
       - name: Wait XSK Startup
         uses: nick-invision/retry@v2
@@ -54,15 +60,15 @@ jobs:
 
       # Run Selenium tests on XSK
       - name: Run Selenium Tests
-        run: mvn clean install -P itests -Dintegration-tests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
+        run: mvn clean install -Dintegration-tests
         env:
-          NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}
-          NEO_SUBACCOUNT: ${{ secrets.ITESTS_SELENIUM_NEO_SUBACCOUNT }}
-          NEO_USERNAME: ${{ secrets.ITESTS_SELENIUM_NEO_USERNAME }}
-          NEO_PASSWORD: ${{ secrets.ITESTS_SELENIUM_NEO_PASSWORD }}
-          HANA_DB_SCHEMA: ${{ secrets.ITESTS_SELENIUM_HANA_DB_SCHEMA }}
-          HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
-          HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}
+          ITESTS_SELENIUM_NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}
+          ITESTS_SELENIUM_NEO_SUBACCOUNT: ${{ secrets.ITESTS_SELENIUM_NEO_SUBACCOUNT }}
+          ITESTS_SELENIUM_NEO_USERNAME: ${{ secrets.ITESTS_SELENIUM_NEO_USERNAME }}
+          ITESTS_SELENIUM_NEO_PASSWORD: ${{ secrets.ITESTS_SELENIUM_NEO_PASSWORD }}
+          ITESTS_SELENIUM_HANA_DB_SCHEMA: ${{ secrets.ITESTS_SELENIUM_HANA_DB_SCHEMA }}
+          ITESTS_SELENIUM_HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
+          ITESTS_SELENIUM_HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}
 
       # Upload screenshots to a GitHub artifact
       - name: Save screenshots

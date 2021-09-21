@@ -11,36 +11,18 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbtable;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import com.sap.xsk.hdb.ds.transformer.HDBTableDefinitionModelToHDBTableColumnModelTransformer;
-import com.sap.xsk.parser.utils.ParserConstants;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.transformer.HDBTableDefinitionModelToHDBTableColumnModelTransformer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
 import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLECoreVisitor;
@@ -49,8 +31,23 @@ import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyExceptio
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
+import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHDBTableModel> {
 
@@ -118,7 +115,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName());
         dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription());
         dataStructureHDBTableModel.setLoggingType(hdbtableDefinitionModel.getLoggingType());
-        dataStructureHDBTableModel.setPublicProp(hdbtableDefinitionModel.getPublicProp());
+        dataStructureHDBTableModel.setPublicProp(hdbtableDefinitionModel.isPublic());
         dataStructureHDBTableModel.setTemporary(hdbtableDefinitionModel.getTemporary());
         dataStructureHDBTableModel.setTableType(hdbtableDefinitionModel.getTableType());
         dataStructureHDBTableModel.setRawContent(content);
@@ -126,11 +123,11 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         dataStructureHDBTableModel.setConstraints(new XSKDataStructureHDBTableConstraintsModel());
 
         XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
-        primaryKey.setColumns(hdbtableDefinitionModel.getPkcolumns().toArray(String[]::new));
+        primaryKey.setColumns(hdbtableDefinitionModel.getPkColumns().toArray(String[]::new));
         primaryKey.setName("PK_" + dataStructureHDBTableModel.getName());
         dataStructureHDBTableModel.getConstraints().setPrimaryKey(primaryKey);
 
-        hdbtableDefinitionModel.getPkcolumns().forEach(key -> {
+        hdbtableDefinitionModel.getPkColumns().forEach(key -> {
             List<XSKHDBTABLEColumnsModel> foundMatchKey = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(key)).collect(Collectors.toList());
             if (foundMatchKey.size() != 1) {
                 throw new IllegalStateException(String.format("%s: the column does not have a definition but is specified as a primary key", key));

@@ -17,14 +17,13 @@ $.trace
 
 ```javascript
 let trace = $.trace;
-let response = require('http/v4/response');
 
 // Check trace methods availability in the "Preview" tab
-response.println("Debug logging enabled: " +trace.isDebugEnabled());
-response.println("Error logging enabled: " +trace.isErrorEnabled());
-response.println("Fatal logging enabled: " +trace.isFatalEnabled());
-response.println("Info logging enabled: " +trace.isInfoEnabled());
-response.println("Warning logging enabled: " +trace.isWarningEnabled());
+$.response.setBody("Debug logging enabled: " + trace.isDebugEnabled()
+    + "Error logging enabled: " + trace.isErrorEnabled()
+    + "Fatal logging enabled: " + trace.isFatalEnabled()
+    + "Info logging enabled: " + trace.isInfoEnabled()
+    + "Warning logging enabled: " +trace.isWarningEnabled());
 
 // If the trace method is enabled, it will print the message in the "Console" tab
 trace.debug("Debug message!");

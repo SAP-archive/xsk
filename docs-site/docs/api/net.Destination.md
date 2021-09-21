@@ -17,7 +17,6 @@ $.net.Destination
 
 ```javascript
 let net = $.net;
-let response_prev = require('http/v4/response');
 
 /*
 Read service.xshttpdest inside the Demo package that contains:
@@ -26,7 +25,7 @@ port=8080;
 */
 let dest = new net.Destination("Demo", "service");
 // Check if the file has been read properly
-response_prev.println("Host: " +dest.host+ " Port: " +dest.port);
+$.response.setBody("Host: " +dest.host+ " Port: " +dest.port);
 ```
 
 ## Constructors

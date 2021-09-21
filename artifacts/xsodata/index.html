@@ -396,13 +396,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#supported-syntax-from-the-parser" class="md-nav__link">
-    Supported syntax from the parser
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -813,13 +806,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#supported-syntax-from-the-parser" class="md-nav__link">
-    Supported syntax from the parser
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -849,166 +835,6 @@
 <p>SAP Help</p>
 <p><a href="https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/502dbde2cbeb4f27b0e9b9887b0097b7.html">Tutorial: Use the SAP HANA OData Interface</a></p>
 <p><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/02e91608eb174dcea6d544aad6ea2e12.html">OData Service-Definition Examples (XS Advanced)</a></p>
-<h3 id="supported-syntax-from-the-parser">Supported syntax from the parser</h3>
-<table>
-<thead>
-<tr>
-<th>Supportable</th>
-<th>xsodata syntax</th>
-<th>(XSKXsodataParser)</th>
-<th>XTransformer</th>
-<th>MTransfrmer</th>
-<th>HTransformer</th>
-<th>Comments</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata service definition</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>not relevant</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/51d401d204a54909abebcca6d0a8e058.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata namespace definition</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/f9f5f227e9f54cea9d9548c97860b7c0.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata object exposure</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/d08f928ac047443e8c2b0a7070ac1d0b.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata property projection</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/471609f56e354fe1b8f8e65b183202fa.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata key specification</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED using  sap:filterable</td>
-<td>NOT SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/e86a01a7699a46528624d44678d37ea5.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata associations</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/595f0a124602449695bf15711032186c.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata aggregations</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED  using  sap:semantics="aggregate"</td>
-<td>NOT SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/64560b807f004d8189b94385e5d02f1e.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata parameters entitysets</td>
-<td>SUPPORTED</td>
-<td>No odata  representation exist</td>
-<td>not relevant</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/2ec97095dcbd420794670912e3bc9cd6.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata Etag support</td>
-<td>NOT SUPPORTED</td>
-<td>NOT SUPPORTED</td>
-<td>NOT SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/17b479e1e928465baa07a5688fd5e355.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata nullable properties</td>
-<td>SUPPORTED</td>
-<td>No odata representation exist</td>
-<td>NOT SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/79b338c0296c4518b83aa6b19133bba5.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>odata configurable cash settings</td>
-<td>SUPPORTED</td>
-<td>No odata representation exist</td>
-<td>NOT SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/a5d3bea8a6ae43779ffaaae925554d0b.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v2</td>
-<td>OData Hints for SQL Select Statements</td>
-<td>SUPPORTED</td>
-<td>No odata representation exist</td>
-<td>NOT SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.05/en-US/34c4b422010c45a795362d8ac6a32638.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v2</td>
-<td>OData Entity Limits</td>
-<td>SUPPORTED</td>
-<td>NOT SUPPORTED</td>
-<td>NOT SUPPORTED</td>
-<td>not relevant</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.05/en-US/b6efb153ac8a4b96bb48baa14aa3e358.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>modifications</td>
-<td>SUPPORTED</td>
-<td>SUPPORTED  [forbidden: using  sap:creatable, sap:updatable,  sap:deletable], [events - no odata  representation exist]</td>
-<td>not relevant</td>
-<td>SUPPORTED</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/68c5a3bca9294e4098454dccbc73f7a9.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>validation scrips with XS JavaScript</td>
-<td>SUPPORTED</td>
-<td>no odata  representation exist</td>
-<td>not relevant</td>
-<td>SUPPORTED</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/74dcb4480e80455eb0cfaacc4c739068.html">documentation</a></td>
-</tr>
-<tr>
-<td>HANA v1/v2</td>
-<td>validation exit with SQL script</td>
-<td>SUPPORTED</td>
-<td>no odata  representation exist</td>
-<td>not relevant</td>
-<td>SUPPORTED</td>
-<td><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/1.0.12/en-US/3621f082a10241759f0ec01f56319ae3.html">documentation</a></td>
-</tr>
-</tbody>
-</table>
 <ul>
 <li>Example:</li>
 </ul>

@@ -17,7 +17,6 @@ $.net.SMTPConnection
 
 ```javascript
 var net = $.net
-var response = require('http/v4/response');
 
 //create email from JS Object and send
 var mail = new net.Mail({

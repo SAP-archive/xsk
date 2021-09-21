@@ -676,7 +676,6 @@
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
 <div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">;</span>
-<span class="kd">let</span> <span class="nx">response_prev</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http/v4/response&#39;</span><span class="p">);</span>
 
 <span class="cm">/*</span>
 <span class="cm">Read service.xshttpdest inside the Demo package that contains:</span>
@@ -685,7 +684,7 @@
 <span class="cm">*/</span>
 <span class="kd">let</span> <span class="nx">dest</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">readDestination</span><span class="p">(</span><span class="s2">&quot;Demo&quot;</span><span class="p">,</span> <span class="s2">&quot;service&quot;</span><span class="p">);</span>
 <span class="c1">// Check if the file has been read properly</span>
-<span class="nx">response_prev</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">&quot;Host: &quot;</span> <span class="o">+</span><span class="nx">dest</span><span class="p">.</span><span class="nx">host</span><span class="o">+</span> <span class="s2">&quot; Path Prefix: &quot;</span> <span class="o">+</span><span class="nx">dest</span><span class="p">.</span><span class="nx">pathPrefix</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Host: &quot;</span> <span class="o">+</span> <span class="nx">dest</span><span class="p">.</span><span class="nx">host</span> <span class="o">+</span> <span class="s2">&quot; Path Prefix: &quot;</span> <span class="o">+</span> <span class="nx">dest</span><span class="p">.</span><span class="nx">pathPrefix</span><span class="p">);</span>
 </code></pre></div>
                 
                   

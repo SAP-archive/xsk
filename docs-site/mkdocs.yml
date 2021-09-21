@@ -9,6 +9,9 @@ nav:
       - hdbtablefunction: 'artifacts/hdbtablefunction.md'
       - hdbprocedure: 'artifacts/hdbprocedure.md'
       - hdbschema: 'artifacts/hdbschema.md'
+      - hdbsynonym: 'artifacts/hdbsynonym.md'
+      - hdbdd: 'artifacts/hdbdd.md'
+      - hdbcds: 'artifacts/hdbdd.md'
     - API: 
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'

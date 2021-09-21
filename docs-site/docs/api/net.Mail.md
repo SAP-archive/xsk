@@ -22,7 +22,6 @@ var mail = new $.net.Mail();
 
 ```javascript
 let net = $.net;
-let response = require('http/v4/response');
 
 //create email from JS Object and send
 let mail = new $.net.Mail({
@@ -44,12 +43,11 @@ let mail = new $.net.Mail({
 let returnValue = mail.send();
 let response_msg = "MessageId = " + returnValue.messageId + ", final reply = " + returnValue.finalReply;
 
-response.println(response_msg);
+$.response.setBody(response_msg);
 ```
 
 ```javascript
 let net = $.net;
-var response = require('http/v4/response');
 
 var mail = new net.Mail();
 mail.subject = "About what the email is."
@@ -70,7 +68,7 @@ try {
 }
 response_msg = "MessageId = " + returnValue.messageId + ", final reply = " + returnValue.finalReply;
 
-response.println(response_msg);
+$.response.setBody(response_msg);
 ```
 
 ## Constructors

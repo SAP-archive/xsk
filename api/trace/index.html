@@ -707,10 +707,10 @@
 
 <span class="c1">// Check trace methods availability in the &quot;Preview&quot; tab</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Debug logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isDebugEnabled</span><span class="p">()</span>
-    <span class="o">+</span> <span class="s2">&quot;Error logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isErrorEnabled</span><span class="p">()</span>
-    <span class="o">+</span> <span class="s2">&quot;Fatal logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isFatalEnabled</span><span class="p">()</span>
-    <span class="o">+</span> <span class="s2">&quot;Info logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isInfoEnabled</span><span class="p">()</span>
-    <span class="o">+</span> <span class="s2">&quot;Warning logging enabled: &quot;</span> <span class="o">+</span><span class="nx">trace</span><span class="p">.</span><span class="nx">isWarningEnabled</span><span class="p">());</span>
+    <span class="o">+</span> <span class="s2">&quot;, Error logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isErrorEnabled</span><span class="p">()</span>
+    <span class="o">+</span> <span class="s2">&quot;, Fatal logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isFatalEnabled</span><span class="p">()</span>
+    <span class="o">+</span> <span class="s2">&quot;, Info logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isInfoEnabled</span><span class="p">()</span>
+    <span class="o">+</span> <span class="s2">&quot;, Warning logging enabled: &quot;</span> <span class="o">+</span><span class="nx">trace</span><span class="p">.</span><span class="nx">isWarningEnabled</span><span class="p">());</span>
 
 <span class="c1">// If the trace method is enabled, it will print the message in the &quot;Console&quot; tab</span>
 <span class="nx">trace</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Debug message!&quot;</span><span class="p">);</span>

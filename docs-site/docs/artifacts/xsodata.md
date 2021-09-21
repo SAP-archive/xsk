@@ -59,7 +59,7 @@ service namespace "np"{
 
 [SAP Annotations for OData Version 2.0](https://wiki.scn.sap.com/wiki/display/EmTech/SAP+Annotations+for+OData+Version+2.0)
 
-|Annotation Element            | Dirigible Annotation Supportability |
+|Annotation Element            | Annotation Supportability |
 | ------------------------------ | ---- |
 | Element edm:Schema             | :x:|
 | Element edm:EntityContainer    | :x:|
@@ -146,7 +146,7 @@ For all the list of annotations check the official documentation [SAP OData Anno
 | Parameter Entity Sets |  :x:                 ||
 | Projection                |  :heavy_check_mark:   |DONE|
 
-| HANA TableType           | Dirigible supported type for odata|
+| HANA TableType           | Supported type for OData |
 | -------------------- | - |
 | CALC VIEW            | :heavy_check_mark: |
 | GLOBAL TEMPORARARY   | :x: |

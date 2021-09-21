@@ -17,7 +17,6 @@ $.net
 
 ```javascript
 let net = $.net;
-var response = require('http/v4/response');
 
 // Create a mail Object
 let mail = new net.Mail({
@@ -44,7 +43,7 @@ let returnValue = mail.send();
 let response_msg = "MessageId = " + returnValue.messageId + ", final reply = " + returnValue.finalReply;
 
 // The result is mocked to prevent errors
-response.println(response_msg);
+$.response.setBody(response_msg);
 ```
 
 ## Classes

@@ -13,6 +13,7 @@ nav:
       - hdbdd: 'artifacts/hdbdd.md'
       - hdbcds: 'artifacts/hdbdd.md'
       - hdbsequence: 'artifacts/hdbsequence.md'
+      - xsodata: 'artifacts/xsodata.md'
     - API: 
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'

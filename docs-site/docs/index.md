@@ -36,3 +36,11 @@ You can deploy it separately from a [SAP HANA](https://www.sap.com/products/hana
 
 XSK is an **open source project** provided by SAP on [GitHub](https://github.com/SAP/xsk). It is under the [Apache 2.0 License](https://github.com/SAP/xsk/blob/main/LICENSE). You can help improving the project by following the [Contribution Guidelines](https://github.com/SAP/xsk/blob/main/CONTRIBUTING.md) and creating [issues](https://github.com/SAP/xsk/issues).
 
+## Releases
+
+You can find all the different distributions of XSK project at [https://github.com/SAP/xsk/releases](https://github.com/SAP/xsk/releases) along with the instructions how to deploy them on the target platforms.
+
+## Contact us
+
+We run the project in compliance with the high standard of transparency and openness. In case of questions or suggestions you are welcome to our public [discussions](https://github.com/SAP/xsk/discussions) space. We hang on a public slack channel as well at: [https://eclipse-dirigible.slack.com/archives/C01MV5PCF7X](https://eclipse-dirigible.slack.com/archives/C01MV5PCF7X)
+

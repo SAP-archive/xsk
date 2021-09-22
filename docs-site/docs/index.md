@@ -42,5 +42,5 @@ You can find all the different distributions of XSK project at [https://github.c
 
 ## Contact us
 
-We run the project in compliance with the high standard of transparency and openness. In case of questions or suggestions you are welcome to our public [discussions](https://github.com/SAP/xsk/discussions) space. We hang on a public slack channel as well at: [https://eclipse-dirigible.slack.com/archives/C01MV5PCF7X](https://eclipse-dirigible.slack.com/archives/C01MV5PCF7X)
+We run the project in compliance with the high standard of transparency and openness. In case of questions or suggestions you are welcome to our public [discussions](https://github.com/SAP/xsk/discussions) space. We hang on a public [slack channel]((https://eclipse-dirigible.slack.com/archives/C01MV5PCF7X)) as well.
 

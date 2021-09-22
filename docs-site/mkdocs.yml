@@ -46,7 +46,7 @@ nav:
 
 theme:
   # favicon: /img/favicon.png
-  logo: /xsk-logo.png
+  logo: /img/xsk-logo-white.png
   name: mkdocs
   # custom_dir: overrides
   features:

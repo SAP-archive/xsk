@@ -60,7 +60,7 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
                     logger.warn(format("Synonym [{0}] does not exists during the drop process", value.getSynonymSchema() + "." + key));
                 }
             } catch (SQLException | ProblemsException exception) {
-                exception.printStackTrace();
+                logger.error(exception.getMessage(), exception);
             }
         });
     }

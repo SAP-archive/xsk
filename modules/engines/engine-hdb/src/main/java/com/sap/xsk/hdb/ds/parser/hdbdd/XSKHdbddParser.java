@@ -33,12 +33,20 @@ import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
@@ -46,13 +54,6 @@ import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.sql.Timestamp;
-import java.util.*;
 
 public class XSKHdbddParser implements XSKDataStructureParser {
 
@@ -124,7 +125,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
         IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
         parseHdbdd(fileLocation, new String(loadedResource.getContent()));
       } catch (IOException | ProblemsException | XSKArtifactParserException e) {
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
       }
     });
 

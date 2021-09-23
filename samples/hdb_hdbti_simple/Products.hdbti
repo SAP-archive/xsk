@@ -1,0 +1,12 @@
+import = [
+	{
+		table = "hdb_hdbti_simple::Products.Orders";
+		file = "hdb_hdbti_simple:Products_Orders.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "TEST_HDBTI_SIMPLE";
+	}
+];
+

@@ -14,9 +14,15 @@ package com.sap.xsk.hdbti.repository;
 import java.io.IOException;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.eclipse.dirigible.repository.api.RepositoryReadException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestRepository extends AbstractTestRepository {
-    @Override
+
+  private static final Logger logger = LoggerFactory.getLogger(TestRepository.class);
+
+
+  @Override
     public IResource getResource(String s) {
         try {
             byte[] content = TestRepository.class.getResourceAsStream(s).readAllBytes();
@@ -24,7 +30,7 @@ public class TestRepository extends AbstractTestRepository {
             resource.setContent(content);
             return resource;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         return null;

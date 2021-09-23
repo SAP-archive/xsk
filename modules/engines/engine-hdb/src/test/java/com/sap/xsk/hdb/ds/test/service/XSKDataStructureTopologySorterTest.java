@@ -11,30 +11,31 @@
  */
 package com.sap.xsk.hdb.ds.test.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import com.sap.xsk.hdb.ds.model.XSKDataStructureDependencyModel;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelException;
 import com.sap.xsk.hdb.ds.service.XSKDataStructureTopologicalSorter;
-import org.eclipse.dirigible.database.ds.model.DataStructureDependencyModel;
-import org.eclipse.dirigible.database.ds.model.DataStructureModel;
-import org.eclipse.dirigible.database.ds.model.DataStructureModelException;
-import org.eclipse.dirigible.database.ds.model.DataStructureTopologicalSorter;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import static org.junit.Assert.*;
+import org.eclipse.dirigible.database.ds.model.DataStructureModelException;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class DataStructureTopologySorter.
  */
 public class XSKDataStructureTopologySorterTest {
 
-	/**
+  private static final Logger logger = LoggerFactory.getLogger(XSKDataStructureTopologySorterTest.class);
+
+  /**
 	 * Test sort.
 	 */
 	@Test
@@ -78,7 +79,7 @@ public class XSKDataStructureTopologySorterTest {
 		try {
 			XSKDataStructureTopologicalSorter.sort(models, output, external);
 		} catch (DataStructureModelException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			fail(e.getMessage());
 		}
 

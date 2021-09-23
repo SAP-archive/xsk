@@ -379,7 +379,7 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
       try {
         this.xskhdiContainerCreateProcessor.execute(connection, hdiModel);
       } catch (ProblemsException e) {
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
       }
     });
   }

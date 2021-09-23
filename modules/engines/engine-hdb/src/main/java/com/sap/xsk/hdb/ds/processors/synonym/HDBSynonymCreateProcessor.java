@@ -65,7 +65,7 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
           logger.warn(format("Synonym [{0}] already exists during the create process", value.getSynonymSchema() + "." + key));
         }
       } catch (SQLException | ProblemsException exception) {
-        exception.printStackTrace();
+        logger.error(exception.getMessage(), exception);
       }
     });
   }

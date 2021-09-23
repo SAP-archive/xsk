@@ -392,7 +392,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
     try {
       xskHDBCoreFacade.handleResourceSynchronization(resource);
     } catch (XSKDataStructuresException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
   }
 
@@ -406,7 +406,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
     try {
       this.xskHDBCoreFacade.cleanup();
     } catch (XSKDataStructuresException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
   }
 }

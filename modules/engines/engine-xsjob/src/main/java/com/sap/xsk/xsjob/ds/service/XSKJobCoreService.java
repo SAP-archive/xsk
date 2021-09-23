@@ -37,8 +37,6 @@ public class XSKJobCoreService implements IXSKJobCoreService {
 
   private PersistenceManager<XSKJobDefinition> xskJobPersistenceManager = new PersistenceManager<XSKJobDefinition>();
 
-  private static final String JOB_GROUP_DEFINED = "xsk-defined";
-
   public XSKJobCoreService() {
   }
 
@@ -52,7 +50,7 @@ public class XSKJobCoreService implements IXSKJobCoreService {
       try {
         XSKJobDefinition xskJobDefinition = new XSKJobDefinition();
         xskJobDefinition.setName(name);
-        xskJobDefinition.setGroup(JOB_GROUP_DEFINED);
+        xskJobDefinition.setGroup(XSK_DEFINED_GROUP);
         xskJobDefinition.setDescription(description);
         xskJobDefinition.setModule(module);
         xskJobDefinition.setFunction(action);

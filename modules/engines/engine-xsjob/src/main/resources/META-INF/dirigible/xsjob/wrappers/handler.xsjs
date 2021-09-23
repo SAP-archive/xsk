@@ -9,20 +9,12 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
+var module = __context.get("xsk-job-module");
+var jobFunction = __context.get("xsk-job-function");
+var jobParameters = __context.get("xsk-job-parameters");
 
-var registry = require("platform/v4/registry");
+var pathWithHandler = module.split(".")[0].split("/");
+var handler = pathWithHandler.pop();
+var namespace = pathWithHandler.join(".");
 
-exports.Job = function Job(path) {
-  this.path = path;
-  var job = JSON.parse(registry.getText(path));
-
-//  com.sap.xsk.xsjob.ds.facade.XSKJobFacade.newJob(path, );
-
-  this.activate = function(){
-    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.activate(this.path);
-  }
-
-  this.deactivate = function(){
-    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.deactivate(this.path);
-  }
-}
+$.import(namespace, handler)[jobFunction](JSON.parse(jobParameters));

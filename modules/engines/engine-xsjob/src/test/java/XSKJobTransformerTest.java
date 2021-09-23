@@ -9,22 +9,12 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import com.sap.xsk.utils.XSKUtils;
-import com.sap.xsk.xsjob.ds.facade.XSKJobFacade;
 import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
-import com.sap.xsk.xsjob.ds.synchronizer.XSKJobSynchronizer;
-
-import org.eclipse.dirigible.core.scheduler.manager.SchedulerInitializer;
 import com.sap.xsk.xsjob.ds.transformer.XSKCronToQuartzCronTransformer;
 import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
-import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
-import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,16 +22,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import org.eclipse.dirigible.database.api.DatabaseModule;
-
-import javax.sql.DataSource;
-
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -95,15 +78,4 @@ public class XSKJobTransformerTest extends AbstractDirigibleTest {
     assertEquals(jobDefinitions.size(), 0);
   }
 
-  @Test
-  public void test() throws Exception {
-
-    String jobPath = "/TestXSKJobTransformSuccess.xsjob";
-    SchedulerInitializer initializer = new SchedulerInitializer();
-    initializer.initialize();
-
-
-    XSKJobFacade.newJob(jobPath);
-    XSKJobFacade.activate(jobPath);
-  }
 }

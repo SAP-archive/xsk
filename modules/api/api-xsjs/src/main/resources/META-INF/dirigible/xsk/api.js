@@ -14,13 +14,12 @@
  */
 
 var $ = {};
-
+//
 $.db = require('xsk/db/db');
 $.hdb = require('xsk/hdb/hdb');
 $.net = require('xsk/net/net');
 $.import = require("xsk/import/import").import;
 $.trace = require('xsk/trace/trace');
-$.security = require('xsk/security/security');
 $.util = require('xsk/util/util');
 $.jobs = require('xsk/jobs/jobs');
 
@@ -30,8 +29,9 @@ try {
     $.session = require('xsk/session/session');
     $.request = new dRequest();
     $.response = new dResponse();
+    $.security = require('xsk/security/security');
 } catch (e) {
-    // $.trace .warning("Caught exception. Api.js is being used by xsk job.")
+//     $.trace.warning("Caught exception. Api.js is being used by xsk job.")
 }
 
 $;

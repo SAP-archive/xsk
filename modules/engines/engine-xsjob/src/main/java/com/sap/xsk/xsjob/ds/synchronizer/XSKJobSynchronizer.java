@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -45,7 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class XSKJobSynchronizer extends AbstractSynchronizer {
-
+  public static final String XSK_SYNCHRONIZER_XSJOB_ENABLED = "XSK_SYNCHRONIZER_XSJOB_ENABLED";
   private static final Logger logger = LoggerFactory.getLogger(XSKJobSynchronizer.class);
 
   private static final Map<String, XSKJobDefinition> JOBS_PREDELIVERED = Collections
@@ -76,31 +77,33 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
    */
   @Override
   public void synchronize() {
-    synchronized (XSKJobSynchronizer.class) {
-      if (beforeSynchronizing()) {
+    if(Boolean.parseBoolean(Configuration.get(XSK_SYNCHRONIZER_XSJOB_ENABLED, "false"))) {
+      synchronized (XSKJobSynchronizer.class) {
         if (beforeSynchronizing()) {
-          logger.trace("Synchronizing Jobs...");
-          try {
-            startSynchronization(SYNCHRONIZER_NAME);
-            clearCache();
-            synchronizePredelivered();
-            synchronizeRegistry();
-            startJobs();
-            int immutableCount = JOBS_PREDELIVERED.size();
-            int mutableCount = JOBS_SYNCHRONIZED.size();
-            cleanup();
-            clearCache();
-            successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
-          } catch (Exception e) {
-            logger.error("Synchronizing process for Jobs failed.", e);
+          if (beforeSynchronizing()) {
+            logger.trace("Synchronizing Jobs...");
             try {
-              failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-            } catch (SchedulerException e1) {
-              logger.error("Synchronizing process for Jobs files failed in registering the state log.", e);
+              startSynchronization(SYNCHRONIZER_NAME);
+              clearCache();
+              synchronizePredelivered();
+              synchronizeRegistry();
+              startJobs();
+              int immutableCount = JOBS_PREDELIVERED.size();
+              int mutableCount = JOBS_SYNCHRONIZED.size();
+              cleanup();
+              clearCache();
+              successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
+            } catch (Exception e) {
+              logger.error("Synchronizing process for Jobs failed.", e);
+              try {
+                failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+              } catch (SchedulerException e1) {
+                logger.error("Synchronizing process for Jobs files failed in registering the state log.", e);
+              }
             }
+            logger.trace("Done synchronizing Jobs.");
+            afterSynchronizing();
           }
-          logger.trace("Done synchronizing Jobs.");
-          afterSynchronizing();
         }
       }
     }

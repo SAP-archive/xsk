@@ -11,21 +11,31 @@
  */
 package com.sap.xsk.xsjob.ds.facade;
 
+import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.XSKSchedulerManager;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
 import com.sap.xsk.xsjob.ds.synchronizer.XSKJobSynchronizer;
+import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class XSKJobFacade {
 
-  public static final void newJob(String jobPath) throws IOException, ParseException {
-    XSKJobSynchronizer  jobSynchronizer = new XSKJobSynchronizer();
-    jobSynchronizer.registerPredeliveredJob(jobPath);
-
-    jobSynchronizer.synchronize();
+  public static final void newJob(String job, String jobPath) throws ParseException, SchedulerException {
+    XSKJobCoreService jobService = new XSKJobCoreService();
+    XSKJobArtifact xskJobArtifact = jobService.parseJob(job);
+    XSKJobToXSKJobDefinitionTransformer xskJobToXSKJobDefinitionTransformer = new XSKJobToXSKJobDefinitionTransformer();
+    ArrayList<XSKJobDefinition> xskJobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
+    for (XSKJobDefinition jobDefinition:xskJobDefinitions) {
+      if (!jobService.existsJob(jobPath)) {
+        jobService.createJob(jobPath, jobDefinition.getGroup(), jobDefinition.getDescription(),
+            jobDefinition.getModule(), jobDefinition.getFunction(), jobDefinition.getCronExpression(), jobDefinition.getParametersAsMap());
+      }
+    }
   }
 
   public static final void activate(String name) throws SchedulerException {

@@ -63,7 +63,7 @@ public class XSKTableAlterHandler {
   }
 
   public void addColumns(Connection connection) throws SQLException, ProblemsException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName());
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
 
     for (XSKDataStructureHDBTableColumnModel columnModel : tableModel.getColumns()) {
       String name = columnModel.getName();
@@ -125,7 +125,7 @@ public class XSKTableAlterHandler {
     for (String columnName : this.dbColumnTypes.keySet()) {
       if (!modelColumnNames.contains(columnName)) {
         AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter()
-            .table(XSKHDBUtils.escapeArtifactName(connection, tableModel.getName()));
+            .table(XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema()));
         if (caseSensitive) {
           columnName = "\"" + columnName + "\"";
         }
@@ -136,7 +136,7 @@ public class XSKTableAlterHandler {
   }
 
   public void updateColumns(Connection connection) throws SQLException, ProblemsException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName());
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
     List<XSKDataStructureHDBTableColumnModel> columns = this.getColumnsToUpdate();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
       String name = columnModel.getName();
@@ -178,7 +178,7 @@ public class XSKTableAlterHandler {
   }
 
   public void rebuildIndeces(Connection connection) throws SQLException, ProblemsException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName());
+    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
     AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
 
     DatabaseMetaData dmd = connection.getMetaData();

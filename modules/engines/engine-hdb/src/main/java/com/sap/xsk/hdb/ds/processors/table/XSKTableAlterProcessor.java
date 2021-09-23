@@ -11,6 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableAlterHandler;
@@ -20,6 +23,8 @@ import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 
 public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableModel> {
 
+  private XSKTableAlterHandler handler;
+
   /**
    * Execute the corresponding statement.
    *
@@ -28,9 +33,8 @@ public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @throws SQLException the SQL exception
    */
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
-      throws SQLException, ProblemsException {
-    XSKTableAlterHandler handler = new XSKTableAlterHandler(connection, tableModel);
+  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException, ProblemsException {
+    XSKTableAlterHandler handler = createTableAlterHandler(connection, tableModel);
     handler.addColumns(connection);
     handler.removeColumns(connection);
     handler.updateColumns(connection);
@@ -38,5 +42,8 @@ public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructur
     handler.ensurePrimaryKeyIsUnchanged(connection);
   }
 
-
+  public XSKTableAlterHandler createTableAlterHandler (Connection connection, XSKDataStructureHDBTableModel tableModel)
+      throws SQLException {
+    return new XSKTableAlterHandler(connection, tableModel);
+  }
 }

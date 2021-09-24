@@ -141,6 +141,10 @@ public class SymbolTable {
     return this.annotations.get(name);
   }
 
+  public Map<String, Symbol> getSymbolsByFullName() {
+    return symbolsByFullName;
+  }
+
   private AnnotationObj createCatalogAnn() {
     AnnotationObj catalogObj = new AnnotationObj();
     catalogObj.setAllowedForSymbols(Collections.singletonList(EntitySymbol.class));

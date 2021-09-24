@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.parser.hdbdd.symbols.entity;
 
+import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 

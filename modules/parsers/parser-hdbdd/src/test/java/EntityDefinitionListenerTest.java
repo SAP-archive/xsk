@@ -11,6 +11,7 @@
  */
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
@@ -18,11 +19,13 @@ import com.sap.xsk.parser.hdbdd.custom.EntityDefinitionListener;
 import com.sap.xsk.parser.hdbdd.custom.ReferenceResolvingListener;
 import com.sap.xsk.parser.hdbdd.custom.XSKHdbddErrorListener;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
+import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -150,6 +153,34 @@ public class EntityDefinitionListenerTest {
     assertEquals("Boolean", entity.getElements().get(14).getType().getName());
     assertEquals("Decimal", entity.getElements().get(15).getType().getName());
 
+  }
+
+  @Test
+  public void parseArtifactsNamedAsKeywordsSuccessfully() throws Exception {
+      parseSampleFile("/Context.hdbdd", "sap/db/Context.hdbdd");
+      assertEquals(3, this.symbolTable.getSymbolsByFullName().size());
+
+      List<EntitySymbol> entitiesParsed = this.symbolTable.getSortedEntities();
+      assertEquals(1, entitiesParsed.size());
+
+      EntitySymbol parsedEntity = entitiesParsed.get(0);
+      assertNotNull(parsedEntity.resolve("key"));
+      assertNotNull(parsedEntity.resolve("entity"));
+      assertNotNull(parsedEntity.resolve("Type"));
+
+      assertNotNull(this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type"));
+    Symbol resolvedType = this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type");
+    assertEquals(DataTypeSymbol.class, resolvedType.getClass());
+  }
+
+  @Test
+  public void parseInvalidElementDeclarationShouldThrowException() throws Exception {
+    try {
+      parseSampleFile("/InvalidElementDeclaration.hdbdd", "sap/db/InvalidElementDeclaration.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 5 - Element declarations are only allowed for entity scope.", e.getMessage());
+    }
   }
 
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {

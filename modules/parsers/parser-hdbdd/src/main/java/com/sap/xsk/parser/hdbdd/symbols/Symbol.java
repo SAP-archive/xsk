@@ -35,6 +35,12 @@ public class Symbol { // A generic programming language symbol
   private String schema;
   private Map<String, AnnotationObj> annotations;
 
+  public Symbol(Symbol symbol) {
+    this(symbol.getName(), symbol.getScope());
+    this.idToken = symbol.getIdToken();
+    this.schema = symbol.getSchema();
+  }
+
   public Symbol(String name) {
     this.name = name;
     this.annotations = new HashMap<>();

@@ -1,0 +1,13 @@
+FUNCTION "TEST_TABLEFUNCTION_SIMPLE"."hdb-tablefunction-simple::OrderTableFunction" ()
+	RETURNS TABLE (
+		"Id" NVARCHAR(32),
+		"Status" NVARCHAR(32)
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER AS
+	
+BEGIN
+
+	RETURN  SELECT "Id", "Status" FROM "hdb-tablefunction-simple::Item";
+
+END;

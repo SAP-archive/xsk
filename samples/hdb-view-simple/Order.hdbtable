@@ -1,4 +1,4 @@
-table.schemaName = "DBADMIN";
+table.schemaName = "TEST_VIEW_SIMPLE";
 table.tableType = COLUMNSTORE;
 table.columns = [    
     {
@@ -20,4 +20,4 @@ table.columns = [
         nullable = true;
         length = 32;
     }];
-table.primaryKey.pkcolumns = ["ItemId"];
+table.primaryKey.pkcolumns = ["OrderId"];

@@ -1,2 +1,0 @@
-VIEW "TEST_VIEW_SIMPLE"."hdb-view-simple::ItemsByOrderHANAv2"
-AS SELECT "Id" FROM "hdb-view-simple::Item";

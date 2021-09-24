@@ -1,0 +1,5 @@
+schema="TEST_VIEW_SIMPLE";
+public=false;
+query="SELECT T1.\"OrderId\", T2.\"Status\" FROM \"hdb-view-simple::Order\" T1 INNER JOIN \"hdb-view-simple::Item\" T2 ON T1.\"ItemId\" = T2.\"Id\"";
+depends_on_view = ["hdb-view-simple::Item"];
+depends_on_table = ["hdb-view-simple::Order"];

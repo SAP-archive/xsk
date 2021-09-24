@@ -16,22 +16,28 @@ import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.Type;
 
 public class FieldSymbol extends Symbol implements Typeable {
-    private Type type;
-    private String reference;
-    public FieldSymbol(String name) {
-        super(name);
-    }
 
-    public FieldSymbol(String name, Scope scope) {
-        super(name, scope);
-    }
+  private Type type;
+  private String reference;
 
-    @Override
-    public Type getType() {
-        return type;
-    }
+  public FieldSymbol(String name) {
+    super(name);
+  }
 
-    @Override
+  public FieldSymbol(Symbol symbol) {
+    super(symbol);
+  }
+
+  public FieldSymbol(String name, Scope scope) {
+    super(name, scope);
+  }
+
+  @Override
+  public Type getType() {
+    return type;
+  }
+
+  @Override
     public void setType(Type type) {
         this.type = type;
     }

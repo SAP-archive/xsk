@@ -17,22 +17,28 @@ import com.sap.xsk.parser.hdbdd.symbols.type.Type;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 
 public class DataTypeSymbol extends Symbol implements Type, CustomDataType, Typeable {
-    private Type type;
-    private String reference;
-    public DataTypeSymbol(String name, Scope scope) {
-        super(name, scope);
-    }
 
-    @Override
-    public void setType(Type type) {
-        this.type = type;
-    }
+  private Type type;
+  private String reference;
 
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
+  public DataTypeSymbol(String name, Scope scope) {
+    super(name, scope);
+  }
 
-    @Override
+  public DataTypeSymbol(Symbol symbol) {
+    super(symbol);
+  }
+
+  @Override
+  public void setType(Type type) {
+    this.type = type;
+  }
+
+  public void setReference(String reference) {
+    this.reference = reference;
+  }
+
+  @Override
     public Type getType() {
         return type;
     }

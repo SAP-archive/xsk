@@ -40,7 +40,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG.hdbdd", "")
     );
     assertEquals(
-        "Wrong format of HDB HDBDD: [gstr2/ITC_EXPIRED_CONFIG.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.",
+        "Failed to parse file: gstr2/ITC_EXPIRED_CONFIG.hdbdd. Error at line: 6  - 'KeY1' is not a valid artifact type.",
         exception.getMessage());
   }
 

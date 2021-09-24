@@ -139,7 +139,7 @@ public class XSKViewProcessorTest extends AbstractDirigibleTest {
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
 
     processorSpy.execute(mockConnection, model);
   }
@@ -155,9 +155,8 @@ public class XSKViewProcessorTest extends AbstractDirigibleTest {
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(SqlFactory.getNative(mockConnection)
-        .exists(mockConnection, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "MYSCHEMA.hdb_view::ItemsByOrderHANAv1",
-            DatabaseArtifactTypes.VIEW)).thenReturn(true);
+    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "MYSCHEMA.hdb_view::ItemsByOrderHANAv1", DatabaseArtifactTypes.VIEW))
+        .thenReturn(true);
     when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
     when(SqlFactory.getNative(mockConnection).drop().view(any())).thenReturn(mockDropViewBuilder);
     when(SqlFactory.getNative(mockConnection).drop().view(any()).build()).thenReturn(mockSQL);

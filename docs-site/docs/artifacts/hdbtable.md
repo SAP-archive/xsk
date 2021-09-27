@@ -15,7 +15,7 @@ Here you will learn how to develop the design-time data-persistence model for an
 
   For more information, see [Create a Table](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/89cbf999e6004be3a5324b8f9ef0c53f.html).
 
-* Sample Hana XS Classic syntax:
+* Sample HANA XS Classic syntax:
 
 ```
 table.schemaName = "MYSCHEMA";
@@ -30,7 +30,7 @@ table.indexes =  [
 	{name = "MYINDEX2"; unique = true; indexColumns = ["Col1", "Col4"];}];
 table.primaryKey.pkcolumns = ["Col1", "Col2"];
 ```
-* Sample Hana XS Advanced syntax
+* Sample HANA XS Advanced syntax
 ```
 COLUMN TABLE "MYSCHEMA::MYTABLE" ( 
    "ID" INTEGER DEFAULT 555, "NAME" NVARCHAR(256),

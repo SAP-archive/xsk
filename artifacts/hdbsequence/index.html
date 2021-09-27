@@ -16,7 +16,7 @@
     
     
       
-        <title>hdbsequence - Project XSK</title>
+        <title>HDBSequence - Project XSK</title>
       
     
     
@@ -94,7 +94,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              hdbsequence
+              HDBSequence
             
           </span>
         </div>
@@ -911,22 +911,24 @@
                   </a>
                 
                 
-                <h1 id="hdbsequence">hdbsequence</h1>
+                <h1 id="hdbsequence">HDBSequence</h1>
 <h2 id="overview">Overview</h2>
-<p>The information on how to develop the design-time data-persistence model for an XSK application using the HDBSequence syntax</p>
+<p>The information on this page will help you lesrn how to develop the design-time data-persistence model for an XSK application using the HDBSequence syntax.</p>
 <h1 id="reference">Reference</h1>
 <ul>
 <li>
-<p>SAP Help</p>
-<blockquote>
-<ul>
-<li>SAP HANA XS Classic: <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html">https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html</a></li>
-<li>SAP HANA XS Advanced: <a href="https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html">https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html</a></li>
-</ul>
-</blockquote>
+<p>Additional information on SAP Help Portal</p>
 </li>
 <li>
-<p>Sample Hana XS Classic syntax:</p>
+<p>SAP HANA XS Classic:
+    For more information, see <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html">Create a Sequence</a>.</p>
+</li>
+<li>
+<p>SAP HANA XS Advanced:
+    For more information, see <a href="https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html">CREATE SEQUENCE Statement (Data Definition)</a>.</p>
+</li>
+<li>
+<p>Sample HANA XS Classic syntax:</p>
 </li>
 </ul>
 <div class="highlight"><pre><span></span><code>schema= &quot;TEST_DUMMY&quot;;
@@ -940,7 +942,7 @@ reset_by= &quot;SELECT T1.\&quot;Column2\&quot; FROM \&quot;MYSCHEMA\&quot;.\&qu
 depends_on=[&quot;com.acme.test.tables::MY_TABLE1&quot;, &quot;com.acme.test.tables::MY_TABLE2&quot;];
 </code></pre></div>
 <ul>
-<li>Sample Hana XS Advanced syntax</li>
+<li>Sample HANA XS Advanced syntax:</li>
 </ul>
 <div class="highlight"><pre><span></span><code>SEQUENCE &quot;com.sap.hana.example::CUSTOMER_ID&quot; 
 RESET BY 
@@ -969,49 +971,49 @@ SELECT IFNULL(MAX(ID), 0) + 1 FROM &quot;com.sap.hana.example::CUSTOMERS&quot;
 </tr>
 <tr>
 <td>increment_by</td>
-<td>Specify that the sequence increments by a defined value.</td>
+<td>Specifies that the sequence increments by a defined value.</td>
 <td align="center">Integer</td>
 <td align="center">1</td>
 <td align="center">No</td>
 </tr>
 <tr>
 <td>start_with</td>
-<td>Specify that the sequence starts with a specific value. Cannot be less than the minvalue.</td>
+<td>Specifies that the sequence starts with a specific value. Cannot be less than the minimum value.</td>
 <td align="center">Integer</td>
 <td align="center">1</td>
 <td align="center">No</td>
 </tr>
 <tr>
 <td>maxvalue</td>
-<td>Specify that the sequence stops at a specific maximum value.</td>
+<td>Specifies that the sequence stops at a specific maximum value.</td>
 <td align="center">Integer</td>
 <td align="center">Different for each DB</td>
 <td align="center">No</td>
 </tr>
 <tr>
 <td>nomaxvalue</td>
-<td>Specify that the sequence does not stop at any specific maximum value.</td>
+<td>Specifies that the sequence does not stop at any specific maximum value.</td>
 <td align="center">Boolean</td>
 <td align="center">False</td>
 <td align="center">No</td>
 </tr>
 <tr>
 <td>minvalue</td>
-<td>Specify that the sequence stops at a specific minimum value.</td>
+<td>Specifies that the sequence stops at a specific minimum value.</td>
 <td align="center">Integer</td>
 <td align="center">1</td>
 <td align="center">No</td>
 </tr>
 <tr>
 <td>nominvalue</td>
-<td>Specify that the sequence does not stop at any specific minimum value.</td>
+<td>Specifies that the sequence does not stop at any specific minimum value.</td>
 <td align="center">Boolean</td>
-<td align="center">false</td>
+<td align="center">False</td>
 <td align="center">No</td>
 </tr>
 <tr>
 <td>cycles</td>
-<td>Enables you to specify whether the sequence number will be restarted after it reaches its maximum or minimum valueg.</td>
+<td>Enables you to specify whether the sequence number will be restarted after it reaches its maximum or minimum value.</td>
 <td align="center">Boolean</td>
 <td align="center">None</td>
 <td align="center">No</td>
@@ -1046,7 +1048,7 @@ SELECT IFNULL(MAX(ID), 0) + 1 FROM &quot;com.sap.hana.example::CUSTOMERS&quot;
 </tr>
 <tr>
 <td>depends_on</td>
-<td>Enables you to define a dependency to one or more specific tables or views, for example when using the reset_by option to specify the query to use when resetting the sequence.</td>
+<td>Enables you to define a dependency to one or more specific tables or views, for example, when using the reset_by option to specify the query to use when resetting the sequence.</td>
 <td align="center">List(String)</td>
 <td align="center">None</td>
 <td align="center">No</td>

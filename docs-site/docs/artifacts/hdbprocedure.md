@@ -15,7 +15,7 @@ The information on this page will help you learn how to develop the design-time 
 
 For more information, see [Procedures (.hdbprocedure)](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.02/en-US/93de88bf2c8242179647e40f958c24e5.html).
 
-* Sample Artifact Code
+* Sample artifact code:
 
 ```
 PROCEDURE "MYSCHEMA"."hdb_view::OrderProcedure" ()

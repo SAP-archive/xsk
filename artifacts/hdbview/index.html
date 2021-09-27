@@ -939,7 +939,7 @@
                 
                 <h1 id="hdbview">hdbview</h1>
 <h2 id="overview">Overview</h2>
-<p>Here you will learn how to develop the design-time data-persistence model for an XSK application using the HDBView syntax.</p>
+<p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBView syntax.</p>
 <h3 id="reference">Reference</h3>
 <ul>
 <li>Additional information on SAP Help Portal</li>
@@ -954,10 +954,18 @@ depends_on=[&quot;acme.com.test.views::MY_VIEW1&quot;, &quot;acme.com.test.views
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Note</p>
-<p>There are currently some <a href="https://github.com/SAP/xsk/issues/108">issues</a> in the behavior of the HANA version1 of the parser:
-- Currently, the Parser takes into account if a given property is mandatory.
-- If the property order is misplaced, the parser will still parse the values.
-- If more than one value of one property is provided, then only the last one is taken.       </p>
+<p>There are currently some <a href="https://github.com/SAP/xsk/issues/108">issues</a> in the behavior of the HANA version1 of the parser:</p>
+<ul>
+<li>
+<p>Currently, the Parser takes into account if a given property is mandatory.</p>
+</li>
+<li>
+<p>If the property order is misplaced, the parser will still parse the values.</p>
+</li>
+<li>
+<p>If more than one value of one property is provided, then only the last one is taken.       </p>
+</li>
+</ul>
 </div>
 <ul>
 <li>Sample HANA version2 syntax</li>

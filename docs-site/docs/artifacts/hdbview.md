@@ -1,5 +1,5 @@
 ---
-title:HDBView
+title: HDBView
 ---
 
 HDBView

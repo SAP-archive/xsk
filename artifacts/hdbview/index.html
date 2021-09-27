@@ -952,7 +952,7 @@
 query=&quot;SELECT T1.\&quot;Column2\&quot; FROM \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW1\&quot; AS T1 LEFT JOIN \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW2\&quot; AS T2 ON T1.\&quot;Column1\&quot; = T2.\&quot;Column1\&quot;&quot;;
 depends_on=[&quot;acme.com.test.views::MY_VIEW1&quot;, &quot;acme.com.test.views::MY_VIEW2&quot;];
 </code></pre></div>
-<div class="admonition note">
+<div class="admonition info">
 <p class="admonition-title">Note</p>
 <p>There are currently some <a href="https://github.com/SAP/xsk/issues/108">issues</a> in the behavior of the HANA version1 of the parser:
 - Currently, the Parser takes into account if a given property is mandatory.

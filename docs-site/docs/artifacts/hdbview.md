@@ -15,7 +15,7 @@ The information on this page will help you learn how to develop the design-time 
 
 For more information, see [Create an SQL View](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/78dcb8e2f4f14b53b0d333bcd24f8721.html).
 
-* Sample HANA version1 syntax
+* Sample HANA version1 syntax:
 
 ```
 schema="MYSCHEMA";
@@ -33,7 +33,7 @@ depends_on=["acme.com.test.views::MY_VIEW1", "acme.com.test.views::MY_VIEW2"];
     
     - If more than one value of one property is provided, then only the last one is taken.       
 
-* Sample HANA version2 syntax
+* Sample HANA version2 syntax:
 
 ```
 VIEW "hdb_view.db::ItemsByOrderHANAv2"

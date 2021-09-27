@@ -1,8 +1,8 @@
 ---
-title: XS Javascript (XSJS)
+title: XS Javascript (XSJS) Libraries
 ---
 
-XS Javascript (XSJS)
+XS Javascript (XSJS) Libraries
 ===
 
 ## Overview

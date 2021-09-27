@@ -10,7 +10,7 @@ $.import
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/18](https://github.com/SAP/xsk/issues/18)
-- Module: [import/import.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/import)
+- Module: [import/import.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/import/import.js)
 - Status: `alpha`
 
 ## Sample Usage

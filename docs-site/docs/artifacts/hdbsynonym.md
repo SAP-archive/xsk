@@ -1,22 +1,22 @@
 ---
-title: hdbsynonym
+title: HDBSynonym
 ---
 
-hdbsynonym
+HDBSynonym
 ===
 
 ## Overview
 
-The information on how to develop the design-time data-persistence model for an XSK application using the HDBSynonym syntax
+The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBSynonym syntax.
 
 ### Reference
 
-* SAP Help
+* Additional information on SAP Help Portal
 
-> [https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/5278b5979128444cb6fffe0f8c2bf1e3.html](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/5278b5979128444cb6fffe0f8c2bf1e3.html)
+For more information, see [Create a Synonym](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/5278b5979128444cb6fffe0f8c2bf1e3.html).
 
 
-* Sample Hana v1 and v2 syntax
+* Sample HANA v1 and v2 syntax:
 ```
 { "acme.com.app1::MySynonym1" : { 
        "target" : { 
@@ -28,16 +28,16 @@ The information on how to develop the design-time data-persistence model for an 
 }
 ```
 
-* Which syntax is supported from the parser
+* Which syntax does the parser support?
 
-| hdbsynonym syntax (Hana 1)                | hdbview syntax (XSKSynonymParser) | Comments |
+| hdbsynonym syntax (HANA 1)                | hdbview syntax (XSKSynonymParser) | Comments |
 |-------------------------------------------|-----------------------------------|----------|
 | "<full.path.to.package>::<MySynonymName>" | location                          |          |
 | "target" : {"schema": "..."}              | targetSchema                      |          |
 | "target" : {"object": "..."}              | targetObject                      |          |
 | "schema"                                  | synonymSchema                     |          |
 
-* Example
+* Example:
   
 ```
 {

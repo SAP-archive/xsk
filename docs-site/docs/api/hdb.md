@@ -12,7 +12,7 @@ performance.
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/14](https://github.com/SAP/xsk/issues/14)
-- Module: [hdb/hdb.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/hdb/hdb.js)
+- Module: [hdb/hdb.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/hdb)
 - Status: `alpha`
 
 ## Sample Usage

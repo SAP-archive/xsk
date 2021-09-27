@@ -6,10 +6,12 @@ HDBTable
 ===
 
 ## Overview
+---
 
 The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBTable syntax.
 
-### Reference
+## Reference
+---
 
 * Additional information on SAP Help Portal
 
@@ -40,7 +42,8 @@ COLUMN TABLE "MYSCHEMA::MYTABLE" (
    PRIMARY KEY ("ID") )
 ```
 
-* Parser specific details
+## Details About the Parser
+---
 
 !!! warning "Caution"
 	The parser does not allow duplicate properties.

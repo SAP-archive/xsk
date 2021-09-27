@@ -30,7 +30,8 @@ table.indexes =  [
 	{name = "MYINDEX2"; unique = true; indexColumns = ["Col1", "Col4"];}];
 table.primaryKey.pkcolumns = ["Col1", "Col2"];
 ```
-* Sample HANA XS Advanced syntax
+
+* Sample HANA XS Advanced syntax:
 ```
 COLUMN TABLE "MYSCHEMA::MYTABLE" ( 
    "ID" INTEGER DEFAULT 555, "NAME" NVARCHAR(256),
@@ -41,7 +42,7 @@ COLUMN TABLE "MYSCHEMA::MYTABLE" (
 
 * Parser specific details
 
-**Parser does not allow duplicate properties.**
+!!! info The parser does not allow duplicate properties.
 
 The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. 
 An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.

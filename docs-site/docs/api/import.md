@@ -59,42 +59,6 @@ $.import
      }
      ```
 
-## Dirigible
-
-=== "Hello World"
-
-     ```javascript
-     var response = require("http/v4/response");
-
-     response.println("Hello World!");
-     ```
-
-=== "Database Query"
-     
-
-     ```javascript
-     var response = require("http/v4/response");
-     var query = require("db/v4/query");
-
-     var sql = "SELECT * FROM DIRIGIBLE_EXTENSIONS WHERE EXTENSION_EXTENSIONPOINT_NAME = ?";
-     var resultset = query.execute(sql, ["ide-view"]);
-
-     response.setContentType("application/json");
-     response.println(JSON.stringify(resultset, null, 2));
-     ```
-
-=== "HTTP Client"
-
-    ```javascript
-    var response = require("http/v4/response");
-    var httpClient = require("http/v4/client");
-
-    var httpResponse = httpClient.get("https://services.odata.org/V4/Northwind/Northwind.svc/");
-
-    response.println(httpResponse.statusMessage);
-    response.println(httpResponse.text);
-    ```
-
 ## Parameters
 
 | Name  | type | Description |

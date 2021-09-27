@@ -11,31 +11,36 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbprocedure;
 
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
+import static org.junit.Assert.assertTrue;
+
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.*;
-
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
-import static org.junit.Assert.assertTrue;
 
 public class XSKHDBProcedureParserHanaITTest {
 
@@ -64,11 +69,14 @@ public class XSKHDBProcedureParserHanaITTest {
             .format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure'",
                 hanaUserName));
       }
+      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+      facade.clearCache();
     }
   }
 
   @Test
-  public void testHDBTableFunctionCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBTableFunctionCreate()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       DatabaseMetaData metaData = connection.getMetaData();
@@ -95,7 +103,7 @@ public class XSKHDBProcedureParserHanaITTest {
 
   @Test
   public void testHDBTableFunctionCreateIfAlreadyExist()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       DatabaseMetaData metaData = connection.getMetaData();

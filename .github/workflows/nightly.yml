@@ -1,0 +1,88 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: "0 22 * * *"
+
+jobs:
+  selenium-tests:
+    runs-on: ubuntu-latest
+
+    # Download latest DockerHub image of XSK and run it in a service container
+    # that is available to the steps below via 127.0.0.1:8080
+    services:
+      xsk:
+        image: dirigiblelabs/xsk
+        ports:
+          - 8080:8080
+
+    steps:
+      # Checkout
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Download JDK
+      - name: Download sapmachine JDK 11
+        run: |
+          download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
+          wget -O "${RUNNER_TEMP}/sapmachine-jdk-11.0.11.tar.gz" "${download_url}"
+
+      # Setup JDK
+      - name: Setup sapmachine JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'jdkfile'
+          jdkFile: ${{ runner.temp }}/sapmachine-jdk-11.0.11.tar.gz
+          java-version: '11.0.11'
+          architecture: x64
+
+      # Setup Google Chrome
+      - name: Setup Google Chrome
+        uses: browser-actions/setup-chrome@latest
+      - name: Verify Google Chrome
+        run: chrome --version
+
+      # Setup Firefox
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
+      - name: Verify Firefox
+        run: firefox --version
+
+      # Wait for XSK Service Container to Startup
+      - name: Wait XSK Startup
+        uses: nick-invision/retry@v2
+        with:
+          timeout_seconds: 15
+          max_attempts: 10
+          warning_on_retry: false
+          command: curl -m 5 --silent --fail --request GET http://127.0.0.1:8080/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
+
+      # Run Selenium tests on XSK
+      - name: Run Selenium Tests
+        run: mvn clean install -Dintegration-tests
+        env:
+          ITESTS_SELENIUM_NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}
+          ITESTS_SELENIUM_NEO_SUBACCOUNT: ${{ secrets.ITESTS_SELENIUM_NEO_SUBACCOUNT }}
+          ITESTS_SELENIUM_NEO_USERNAME: ${{ secrets.ITESTS_SELENIUM_NEO_USERNAME }}
+          ITESTS_SELENIUM_NEO_PASSWORD: ${{ secrets.ITESTS_SELENIUM_NEO_PASSWORD }}
+          ITESTS_SELENIUM_HANA_DB_SCHEMA: ${{ secrets.ITESTS_SELENIUM_HANA_DB_SCHEMA }}
+          ITESTS_SELENIUM_HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
+          ITESTS_SELENIUM_HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}
+
+      # Upload screenshots to a GitHub artifact
+      - name: Save screenshots
+        uses: actions/upload-artifact@v2
+        with:
+          name: selenium-test-screenshots
+          path: /home/runner/work/xsk/xsk/*.jpg
+          retention-days: 2
+        if: always()
+
+      - name: Slack Notification
+        if: ${{ failure() }}
+        uses: slackapi/slack-github-action@v1.14.0
+        with:
+          payload: "{\"type\":\"Nightly Build\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

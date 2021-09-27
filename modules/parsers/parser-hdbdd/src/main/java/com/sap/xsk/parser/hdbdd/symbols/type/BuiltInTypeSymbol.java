@@ -18,21 +18,21 @@ import java.util.List;
 public class BuiltInTypeSymbol extends Symbol implements Type {
 
   private int argsCount;
-  private int valueType;
+  private List<Integer> valueType;
   private boolean isHanaType;
   private List<Integer> argsValues;
 
-  public BuiltInTypeSymbol(String name, int argsCount, int valueType) {
+  public BuiltInTypeSymbol(String name, int argsCount, List<Integer> valueType) {
     this(name, valueType);
     this.argsCount = argsCount;
   }
 
-  public BuiltInTypeSymbol(String name, int argsCount, int valueType, boolean isHanaType) {
+  public BuiltInTypeSymbol(String name, int argsCount, List<Integer> valueType, boolean isHanaType) {
     this(name, argsCount, valueType);
     this.isHanaType = isHanaType;
   }
 
-  public BuiltInTypeSymbol(String name, int valueType) {
+  public BuiltInTypeSymbol(String name, List<Integer> valueType) {
     super(name);
     this.argsValues = new ArrayList<>();
     this.valueType = valueType;
@@ -46,7 +46,7 @@ public class BuiltInTypeSymbol extends Symbol implements Type {
     return argsCount;
   }
 
-  public int getValueType() {
+  public List<Integer> getValueType() {
     return valueType;
   }
 

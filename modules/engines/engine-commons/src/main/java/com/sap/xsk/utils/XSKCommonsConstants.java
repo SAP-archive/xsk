@@ -11,9 +11,6 @@
  */
 package com.sap.xsk.utils;
 
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
 public final class XSKCommonsConstants {
     /**
      * The Unix separator character.

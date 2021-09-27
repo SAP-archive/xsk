@@ -1,0 +1,12 @@
+import = [
+	{
+		table = "hdb-procedure-simple.db::ItemForProcedure";
+		file =  "hdb-procedure-simple.data:ItemForProcedure.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "TEST_PROCEDURE_SIMPLE";
+	}
+];
+

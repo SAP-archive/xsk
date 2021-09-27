@@ -1,0 +1,38 @@
+namespace sap.db;
+
+@Schema: 'ADMIN'
+context ProjectProducts {
+
+    entity  Orders{
+        key Id               : String(32);
+        CustomerName         : String(500);
+        CustomerSurname      : String(500);
+        Status               : String(100);
+        CreatedAt            : UTCTimestamp;
+        CreatedBy            : String(5000);
+        Description          : String(100);
+        Address              : String(5000);
+        Phone                : String(200);
+        Email                : String(300);
+        items                : association[*] to Item on items.OrderId = Id;
+        Country              : association to ProjectProducts.Country { Id, Street };
+    };
+
+    entity Item {
+        key ItemId          : String(32);
+        OrderId             : String(500);
+        Name                : String(500);
+        Price               : String(100);
+        Currency            : String(100);
+        Quantity            : String(100);
+        Comment             : String(1000);
+    };
+
+     entity Country {
+        key Id              : String(32);
+        Street              : String(32);
+    };
+
+
+
+};

@@ -1,0 +1,7 @@
+namespace/ sap.slh.dcs.gstr2.table;
+@Schema : 'GSTR2DB'
+@Catalog.tableType : #COLUMN
+entity ITC_EXPIRED_CONFIG {
+    key FY_YEAR             : hana.VARCHAR(10);
+    ITC_EXPIRED_DATE        : LocalDate;
+};

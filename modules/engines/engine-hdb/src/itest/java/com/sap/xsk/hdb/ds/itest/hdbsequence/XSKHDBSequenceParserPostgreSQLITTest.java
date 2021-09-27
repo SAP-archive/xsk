@@ -11,19 +11,14 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbsequence;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.repository.local.LocalResource;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
-import javax.sql.DataSource;
+import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,9 +26,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import javax.sql.DataSource;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.repository.local.LocalResource;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.testcontainers.containers.Network;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 /**
  * XSKHDBSequenceParserITCase will test only sequence
@@ -56,8 +61,16 @@ public class XSKHDBSequenceParserPostgreSQLITTest {
     JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
         jdbcContainer.getPassword());
     XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
-    datasource = xskhdbTestModule.getDataSource();
+    xskhdbTestModule.configure();
+    datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
     facade = new XSKHDBCoreFacade();
+    facade.clearCache();
+  }
+
+  @Before
+  public void setUpBeforeTest() throws SQLException {
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    facade.clearCache();
   }
 
   @AfterClass
@@ -66,10 +79,11 @@ public class XSKHDBSequenceParserPostgreSQLITTest {
   }
 
   @Test
-  public void testHDBSequenceCreate() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBSequenceCreate()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-        "/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence",
-        "/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
+        "/registry/public/sequence-itest/SampleSequence_PostgreSQL.hdbsequence",
+        "/sequence-itest/SampleSequence_PostgreSQL.hdbsequence");
 
     this.facade.handleResourceSynchronization(resource);
     this.facade.updateEntities();
@@ -82,7 +96,7 @@ public class XSKHDBSequenceParserPostgreSQLITTest {
 	      dbSequences.add(rs.getString("sequence_name"));
 	    }
 	    assertEquals(1, dbSequences.size());
-	    assertEquals("sequence-itest::SampleSequence_HanaXSClassic", dbSequences.get(0));
+	    assertEquals("sequence-itest::SampleSequence_PostgreSQL", dbSequences.get(0));
 	
 	    stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
 	    rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");

@@ -27,7 +27,12 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import org.junit.Test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class HDBCalculationViewTest {
+
+  private static final Logger logger = LoggerFactory.getLogger(HDBCalculationViewTest.class);
 
   @Test
   public void serialize() throws JAXBException {
@@ -59,7 +64,7 @@ public class HDBCalculationViewTest {
       xml = org.apache.commons.io.IOUtils.toString(HDBCalculationViewTest.class.getResourceAsStream("/test.hdbcalculationview"));
     } catch (IOException e) {
       fail("Parsing of calculation view failed.");
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
 
     xml = xml.replace("<Calculation:scenario", "<Calculation:calculationScenario");

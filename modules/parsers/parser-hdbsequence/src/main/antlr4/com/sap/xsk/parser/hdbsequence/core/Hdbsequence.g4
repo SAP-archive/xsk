@@ -27,7 +27,7 @@ publicc:'public' EQ BOOLEAN SC;
 dependsOnTable: 'depends_on_table' EQ  STRING SC;
 dependsOnView:  'depends_on_view'  EQ  STRING SC;
 
-STRING: '"' (~["\\\r\n] | EscapeSequence)* '"';
+STRING: '"' (~["\\\r\n] | EscapeSequence | WS )* '"';
 INT :  SIGNED_INT? [0-9]+;
 BOOLEAN: TRUE | FALSE;
 

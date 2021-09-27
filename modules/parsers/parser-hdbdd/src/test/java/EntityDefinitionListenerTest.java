@@ -11,6 +11,7 @@
  */
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
@@ -18,11 +19,13 @@ import com.sap.xsk.parser.hdbdd.custom.EntityDefinitionListener;
 import com.sap.xsk.parser.hdbdd.custom.ReferenceResolvingListener;
 import com.sap.xsk.parser.hdbdd.custom.XSKHdbddErrorListener;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
+import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -65,13 +68,120 @@ public class EntityDefinitionListenerTest {
     parsedEntities.forEach(el -> assertEquals("TEST_SCHEMA", el.getSchema()));
   }
 
-//    @Test
+  @Test
+  public void parseParseAssociationsSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/Products.hdbdd", "sap/db/Products.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+
+    //product.Orders.items
+    assertEquals(0, parsedEntities.get(1).getAssociations().get(0).getForeignKeys().size());
+    assertEquals(1, parsedEntities.get(1).getAssociations().get(1).getForeignKeys().size());
+  }
+
+  //    @Test
 //    public void parseParseStructuredTypeSuccessfully() throws Exception {
 //        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
 //        List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 //
 //        assertEquals(0, parser.getNumberOfSyntaxErrors());
 //    }
+  @Test
+  public void parseParseStructuredTypeSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
+    this.symbolTable.getSortedEntities();//get only Entities
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+  }
+
+  @Test
+  public void parseUnmanagedAssociationSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/ProjectProducts.hdbdd", "sap/db/ProjectProducts.hdbdd");
+    this.symbolTable.getSortedEntities();//get only Entities
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+  }
+
+  @Test
+  public void parseHanaBuiltInTypesSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/HanaBuiltInTypesTest.hdbdd", "sap/db/HanaBuiltInTypesTest.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(1, parsedEntities.size());
+    EntitySymbol entity = parsedEntities.get(0);
+    assertEquals(10, entity.getElements().size());
+
+    assertEquals("ALPHANUMERIC", entity.getElements().get(1).getType().getName());
+    assertEquals("NVARCHAR", entity.getElements().get(0).getType().getName());
+    assertEquals("SMALLINT", entity.getElements().get(2).getType().getName());
+    assertEquals("TINYINT", entity.getElements().get(3).getType().getName());
+    assertEquals("REAL", entity.getElements().get(4).getType().getName());
+    assertEquals("SMALLDECIMAL", entity.getElements().get(5).getType().getName());
+    assertEquals("CLOB", entity.getElements().get(6).getType().getName());
+    assertEquals("BINARY", entity.getElements().get(7).getType().getName());
+    assertEquals("ST_POINT", entity.getElements().get(8).getType().getName());
+    assertEquals("ST_GEOMETRY", entity.getElements().get(9).getType().getName());
+
+  }
+
+  @Test
+  public void parseGlobalBuiltInTypesSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/GlobalBuiltInTypesTest.hdbdd", "sap/db/GlobalBuiltInTypesTest.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(1, parsedEntities.size());
+    EntitySymbol entity = parsedEntities.get(0);
+    assertEquals(16, entity.getElements().size());
+
+    assertEquals("String", entity.getElements().get(0).getType().getName());
+    assertEquals("LargeString", entity.getElements().get(1).getType().getName());
+    assertEquals("String", entity.getElements().get(2).getType().getName());
+    assertEquals("Binary", entity.getElements().get(3).getType().getName());
+    assertEquals("LargeBinary", entity.getElements().get(4).getType().getName());
+    assertEquals("Integer", entity.getElements().get(5).getType().getName());
+    assertEquals("Integer64", entity.getElements().get(6).getType().getName());
+    assertEquals("Decimal", entity.getElements().get(7).getType().getName());
+    assertEquals("DecimalFloat", entity.getElements().get(8).getType().getName());
+    assertEquals("BinaryFloat", entity.getElements().get(9).getType().getName());
+    assertEquals("LocalDate", entity.getElements().get(10).getType().getName());
+    assertEquals("LocalTime", entity.getElements().get(11).getType().getName());
+    assertEquals("UTCDateTime", entity.getElements().get(12).getType().getName());
+    assertEquals("UTCTimestamp", entity.getElements().get(13).getType().getName());
+    assertEquals("Boolean", entity.getElements().get(14).getType().getName());
+    assertEquals("Decimal", entity.getElements().get(15).getType().getName());
+
+  }
+
+  @Test
+  public void parseArtifactsNamedAsKeywordsSuccessfully() throws Exception {
+      parseSampleFile("/Context.hdbdd", "sap/db/Context.hdbdd");
+      assertEquals(3, this.symbolTable.getSymbolsByFullName().size());
+
+      List<EntitySymbol> entitiesParsed = this.symbolTable.getSortedEntities();
+      assertEquals(1, entitiesParsed.size());
+
+      EntitySymbol parsedEntity = entitiesParsed.get(0);
+      assertNotNull(parsedEntity.resolve("key"));
+      assertNotNull(parsedEntity.resolve("entity"));
+      assertNotNull(parsedEntity.resolve("Type"));
+
+      assertNotNull(this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type"));
+    Symbol resolvedType = this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type");
+    assertEquals(DataTypeSymbol.class, resolvedType.getClass());
+  }
+
+  @Test
+  public void parseInvalidElementDeclarationShouldThrowException() throws Exception {
+    try {
+      parseSampleFile("/InvalidElementDeclaration.hdbdd", "sap/db/InvalidElementDeclaration.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 5 - Element declarations are only allowed for entity scope.", e.getMessage());
+    }
+  }
 
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {
     String content =

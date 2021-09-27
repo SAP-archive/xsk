@@ -41,6 +41,7 @@ import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -374,7 +375,13 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
 
   private void executeHDI(Connection connection, List<XSKDataStructureHDIModel> hdiModels)
       throws SQLException {
-    hdiModels.forEach(hdiModel -> this.xskhdiContainerCreateProcessor.execute(connection, hdiModel));
+    hdiModels.forEach(hdiModel -> {
+      try {
+        this.xskhdiContainerCreateProcessor.execute(connection, hdiModel);
+      } catch (ProblemsException e) {
+        logger.error(e.getMessage(), e);
+      }
+    });
   }
 
 }

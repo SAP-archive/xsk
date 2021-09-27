@@ -19,8 +19,8 @@ public class ContextSymbol extends Symbol implements Scope {
 
   private Map<String, Symbol> symbols = new LinkedHashMap<>();
 
-  public ContextSymbol(String name) {
-    super(name);
+  public ContextSymbol(Symbol symbol) {
+    super(symbol);
   }
 
   public ContextSymbol(String name, Scope scope) {

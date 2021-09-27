@@ -18,7 +18,7 @@ class ResponseAttachmentParser {
         let lengthStart = 0;
         let lengthEnd = 4;
 
-        for(let i = 1; i <= numberOfAttachments; i++) {
+        for (let i = 1; i <= numberOfAttachments; i++) {
             let lengthBuffer = responseAttachmentBuffer.slice(lengthStart, lengthEnd);
             let length = Utils.byteArrayToInt(lengthBuffer);
 

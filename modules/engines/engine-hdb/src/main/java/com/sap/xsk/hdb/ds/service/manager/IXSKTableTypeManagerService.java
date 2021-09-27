@@ -17,9 +17,6 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.processors.hdbstructure.XSKTableTypeCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbstructure.XSKTableTypeDropProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import javax.naming.OperationNotSupportedException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,6 +24,10 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.naming.OperationNotSupportedException;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IXSKTableTypeManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBTableTypeModel> {
 
@@ -45,7 +46,7 @@ public class IXSKTableTypeManagerService extends AbstractDataStructureManagerSer
 
   @Override
   public Map<String, XSKDataStructureHDBTableTypeModel> getDataStructureModels() {
-    return Collections.unmodifiableMap(this.dataStructureHDBTableTypeModels);
+    return dataStructureHDBTableTypeModels;
   }
 
   @Override
@@ -74,12 +75,14 @@ public class IXSKTableTypeManagerService extends AbstractDataStructureManagerSer
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel structureModel) throws SQLException {
+  public void createDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel structureModel)
+      throws SQLException, ProblemsException {
     this.xskTableTypeCreateProcessor.execute(connection, structureModel);
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel) throws SQLException {
+  public void dropDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
+      throws SQLException, ProblemsException {
     this.xskTableTypeDropProcessor.execute(connection, tableTypeModel);
   }
 

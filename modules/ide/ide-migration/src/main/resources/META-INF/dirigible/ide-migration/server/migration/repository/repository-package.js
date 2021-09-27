@@ -9,22 +9,22 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-class RepositoryPackage{
-    
-    constructor(pkg){
+class RepositoryPackage {
+
+    constructor(pkg) {
         this._pkg = pkg;
     }
-    
+
     get packageName() {
         return this._pkg.package;
     }
-    
+
     get packageFile() {
         let path = this.packageName.replace(/\./g, '/');
 
         return '/' + path;
     }
-     
+
 }
 
 module.exports = RepositoryPackage;

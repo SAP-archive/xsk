@@ -30,19 +30,21 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
         body = {
             neo: neoData,
             hana: hanaData,
-            "neoTunnelOutput": duData.neoTunnelOutput,
-            "workspace": duData.workspace,
-            "vendor": duData.du.vendor,
-            "du": duData.du.name,
-        }
-        $http.post(
-            // "/services/v4/migration-operations/execute-migration",
-            "/services/v4/js/ide-migration/server/app.js/execute-migration",
+            connectionId: duData.connectionId,
+            workspace: duData.workspace,
+            du: {
+              name: duData.du.name,
+              vendor: duData.du.vendor
+            },
+            processInstanceId: duData.processId
+        };
+          $http.post(
+            "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/continue-process",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {
             $scope.progressTitle = titleList[1];
-            $scope.statusMessage = `Project '${response.data.projectName}' was successfully created.`;
+            $scope.statusMessage = `Project was successfully created.`;
             $scope.migrationFinished = true;
         }, function (response) {
             if (response.data) {

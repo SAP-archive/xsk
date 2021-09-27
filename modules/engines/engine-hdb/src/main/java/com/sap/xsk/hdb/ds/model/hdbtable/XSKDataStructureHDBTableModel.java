@@ -11,10 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbtable;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
 /**
  * The table model representation.
@@ -102,6 +101,10 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
     this.publicProp = publicProp;
   }
 
+  public Boolean getPublicProp() {
+    return publicProp;
+  }
+
   /**
    * @param loggingType the loggingType to set
    */
@@ -109,10 +112,18 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
     this.loggingType = loggingType;
   }
 
+  public String getLoggingType() {
+    return loggingType;
+  }
+
   /**
    * @param temporary the temporary to set
    */
   public void setTemporary(Boolean temporary) {
     this.temporary = temporary;
+  }
+
+  public Boolean getTemporary() {
+    return temporary;
   }
 }

@@ -11,33 +11,59 @@
  */
 package com.sap.xsk.parser.xsodata.model;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.util.Objects;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
-@Accessors(chain = true)
 public class XSKHDBXSODATARepositoryObject {
-    /**
-     * Catalog object name
-     * The name can represent repoobject or catalogobject.
-     * Repoobject is represented as "repopackage '/' reponame '.' repoextension"
-     * * <pre>{@code
-     *      service {
-     *          "teamdemo/MY_REPO_NAME.REPO_NAME" as "MyTable";
-     *      }
-     * }</pre>
-     * Catalogobject is represented as "catalogobjectschema '.' catalogobjectname"
-     * <pre>{@code
-     *      service {
-     *           "MY_SCHEMA"."sample.odata::table" as "MyTable";
-     *      }
-     * }</pre>
-     */
-    private String catalogObjectName;
-    private String catalogObjectSchema;
 
+  /**
+   * Catalog object name
+   * The name can represent repoobject or catalogobject.
+   * Repoobject is represented as "repopackage '/' reponame '.' repoextension"
+   * * <pre>{@code
+   *      service {
+   *          "teamdemo/MY_REPO_NAME.REPO_NAME" as "MyTable";
+   *      }
+   * }</pre>
+   * Catalogobject is represented as "catalogobjectschema '.' catalogobjectname"
+   * <pre>{@code
+   *      service {
+   *           "MY_SCHEMA"."sample.odata::table" as "MyTable";
+   *      }
+   * }</pre>
+   */
+  private String catalogObjectName;
+  private String catalogObjectSchema;
+
+  public String getCatalogObjectName() {
+    return catalogObjectName;
+  }
+
+  public XSKHDBXSODATARepositoryObject setCatalogObjectName(String catalogObjectName) {
+    this.catalogObjectName = catalogObjectName;
+    return this;
+  }
+
+  public String getCatalogObjectSchema() {
+    return catalogObjectSchema;
+  }
+
+  public XSKHDBXSODATARepositoryObject setCatalogObjectSchema(String catalogObjectSchema) {
+    this.catalogObjectSchema = catalogObjectSchema;
+    return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    XSKHDBXSODATARepositoryObject that = (XSKHDBXSODATARepositoryObject) o;
+    return Objects.equals(catalogObjectName, that.catalogObjectName) && Objects.equals(catalogObjectSchema, that.catalogObjectSchema);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(catalogObjectName, catalogObjectSchema);
+  }
 }

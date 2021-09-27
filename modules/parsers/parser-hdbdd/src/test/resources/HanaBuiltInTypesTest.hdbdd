@@ -1,0 +1,17 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+@Catalog.tableType : #COLUMN
+
+entity HanaBuiltInTypesTest {
+   key key1 : hana.VARCHAR(25);
+      COL_1 : hana.ALPHANUM;
+      COL_2 : hana.SMALLINT;
+      COL_3 : hana.TINYINT;
+      COL_4 : hana.REAL;
+      COL_5 : hana.SMALLDECIMAL;
+      COL_6 : hana.CLOB;
+      COL_7 : hana.BINARY;
+      COL_8 : hana.ST_POINT;
+      COL_9 : hana.ST_GEOMETRY;
+};

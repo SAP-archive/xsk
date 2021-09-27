@@ -26,10 +26,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -53,13 +57,20 @@ public class XSKHDBSynonymParserPostgreSQLITTest {
     facade = new XSKHDBCoreFacade();
   }
 
+  @Before
+  public void setUpBeforeTest() throws SQLException {
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    facade.clearCache();
+  }
+
   @AfterClass
   public static void cleanUp() {
     jdbcContainer.stop();
   }
 
   @Test
-  public void testHDBSynonymCreateNotSupportedError() throws IOException, XSKDataStructuresException, SynchronizationException, SQLException {
+  public void testHDBSynonymCreateNotSupportedError()
+      throws IOException, XSKDataStructuresException, SynchronizationException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 

@@ -28,7 +28,7 @@ public class XSKTableImportArtifactDao implements IXSKTableImportArtifactDao {
 
     private static final Logger logger = LoggerFactory.getLogger(XSKTableImportArtifactDao.class);
 
-    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
     private PersistenceManager<XSKTableImportArtifact> xskPersistenceManager = new PersistenceManager<XSKTableImportArtifact>();
 

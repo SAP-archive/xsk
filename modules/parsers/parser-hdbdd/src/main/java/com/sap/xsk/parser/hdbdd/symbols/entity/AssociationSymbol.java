@@ -11,49 +11,59 @@
  */
 package com.sap.xsk.parser.hdbdd.symbols.entity;
 
-import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
+import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssociationSymbol extends Symbol {
-    private CardinalityEnum cardinality;
-    private EntitySymbol target;
-    private List<EntityElementSymbol> foreignKeys = new ArrayList<>();
+public class AssociationSymbol extends FieldSymbol {
 
-    public AssociationSymbol(String name) {
-        super(name);
-    }
+  private CardinalityEnum cardinality;
+  private EntitySymbol target;
+  private List<EntityElementSymbol> foreignKeys = new ArrayList<>();
+  private boolean isManaged;
 
-    public AssociationSymbol(String name, Scope scope) {
-        super(name, scope);
-    }
+  public AssociationSymbol(String name) {
+    super(name);
+  }
 
-    public CardinalityEnum getCardinality() {
-        return cardinality;
-    }
+  public AssociationSymbol(String name, Scope scope) {
+    super(name, scope);
+  }
 
-    public void setCardinality(CardinalityEnum cardinality) {
-        this.cardinality = cardinality;
-    }
+  public CardinalityEnum getCardinality() {
+    return cardinality;
+  }
 
-    public List<EntityElementSymbol> getForeignKeys() {
-        return foreignKeys;
-    }
+  public void setCardinality(CardinalityEnum cardinality) {
+    this.cardinality = cardinality;
+  }
 
-    public void setForeignKeys(List<EntityElementSymbol> foreignKeys) {
-        this.foreignKeys = foreignKeys;
-    }
+  public List<EntityElementSymbol> getForeignKeys() {
+    return foreignKeys;
+  }
 
-    public EntitySymbol getTarget() {
-        return target;
-    }
+  public void setForeignKeys(List<EntityElementSymbol> foreignKeys) {
+    this.foreignKeys = foreignKeys;
+  }
 
-    public void setTarget(EntitySymbol target) {
-        this.target = target;
-    }
+  public EntitySymbol getTarget() {
+    return target;
+  }
 
-    public void addForeignKey(EntityElementSymbol elementSymbol) {
-        this.foreignKeys.add(elementSymbol);
-    }
+  public void setTarget(EntitySymbol target) {
+    this.target = target;
+  }
+
+  public void addForeignKey(EntityElementSymbol elementSymbol) {
+    this.foreignKeys.add(elementSymbol);
+  }
+
+  public boolean isManaged() {
+    return isManaged;
+  }
+
+  public void setManaged(boolean managed) {
+    isManaged = managed;
+  }
 }

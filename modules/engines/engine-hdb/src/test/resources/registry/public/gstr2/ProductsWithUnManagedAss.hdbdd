@@ -1,0 +1,16 @@
+namespace gstr2;
+
+@Schema: 'ADMIN'
+context ProductsWithUnManagedAss {
+
+ entity  Orders{
+        key Id               : String(32);
+        CustomerName         : String(500);
+		    items                : Association[*] to Item on items.OrderId = Id;
+    };
+
+    entity Item {
+        key ItemId          : String(32);
+    	  OrderId             : String(32);
+    };
+};

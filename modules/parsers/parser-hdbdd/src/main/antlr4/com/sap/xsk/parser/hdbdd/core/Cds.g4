@@ -5,23 +5,21 @@ cdsFile: namespaceRule
 
 namespaceRule: NAMESPACE members+=ID ('.' members+=ID)* ';';
 usingRule: USING pack+=ID ('.' pack+=ID)* '::' members+=ID ('.' members+=ID)* (AS alias=ID)?  ';';
-topLevelSymbol: contextRule | entityRule | structuredDataTypeRule | dataTypeRule;
+topLevelSymbol: dataTypeRule | artifactRule;
 
-contextRule: annotationRule* CONTEXT ID '{' (contextRule | entityRule | structuredDataTypeRule | dataTypeRule)* '}' ';';
-entityRule: annotationRule* ENTITY ID '{' (association | elementDeclRule)* '}' ';'?;
-structuredDataTypeRule: annotationRule* TYPE ID '{' fieldDeclRule* '}' ';';
-dataTypeRule: TYPE ID ':' typeAssignRule ';';
-fieldDeclRule: ID ':' typeAssignRule ';';
+dataTypeRule: type=ID name=ID ':' typeAssignRule ';';
+fieldDeclRule: (ID | '"' ID '"') ':' typeAssignRule ';';
 typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'           # AssignBuiltInTypeWithArgs
                 | HANA '.' ref=ID                                         # AssignHanaType
                 | HANA '.' ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
                 | TYPE_OF? pathSubMembers+=ID ('.'pathSubMembers+=ID)*      # AssignType
                 ;
-elementDeclRule: annotationRule* (key=KEY)? ID ':' typeAssignRule defaultValue? elementConstraints? ';';
+elementDeclRule: annotationRule* (key=ID)? (name=ID | '"' name=ID '"') ':' typeAssignRule elementDetails* ';';
+elementDetails: defaultValue | elementConstraints;
 elementConstraints: 'null' | 'not null';
 
 association: ID ':' ASSOCIATION cardinality? TO associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
-associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*  ;
+associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
 unmanagedForeignKey: ON pathSubMembers+=ID ('.' pathSubMembers+=ID)* '=' source=ID;
 managedForeignKeys: '{' foreignKey (',' foreignKey)* '}';
 foreignKey: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
@@ -30,7 +28,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
               |  '[' ']'                                         # NoCardinality
               ;
 
-defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | NULL);
+defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | NULL | VARBINARY);
 
 annotationRule: '@' ID ':' annValue                       #AnnObjectRule
               | '@' annId=ID '.' prop=ID ':' annValue     #AnnPropertyRule
@@ -43,13 +41,11 @@ arrRule: '[' annValue (',' annValue)* ']';
 obj: '{' keyValue (',' keyValue)* '}';
 keyValue: ID ':' annValue;
 
-KEY: K E Y;
+artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';';
+
 NAMESPACE: N A M E S P A C E;
 AS: 'as';
-ENTITY: 'entity';
-TYPE: 'type';
 HANA: 'hana';
-CONTEXT: C O N T E X T;
 USING: U S I N G;
 ASSOCIATION: A S S O C I A T I O N;
 TO: 'to' ;
@@ -59,7 +55,7 @@ NULL: 'null';
 DEFAULT: D E F A U L T;
 ASSOCIATION_MIN: INTEGER '..';
 BOOLEAN: 'true' | 'false';
-ID: ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_')*;
+ID: ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_' | '-')*;
 
 SEMICOLUMN: ';';
 INTEGER: SignedInteger;
@@ -69,6 +65,7 @@ LOCAL_DATE: LocalDate;
 UTC_DATE_TIME: UTCDateTime;
 UTC_TIMESTAMP: UTCTimestamp;
 STRING: '\'' (~["\\\r\n] | EscapeSequence)*? '\'' { setText(getText().substring(1, getText().length() - 1)); };
+VARBINARY: X '\'' ((A | B | C | D | E | F) | INTEGER)* '\'' { setText(getText().substring(1, getText().length() - 1)); };
 TYPE_OF: 'type' WS 'of';
 
 

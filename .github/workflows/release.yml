@@ -479,3 +479,11 @@ jobs:
       run: kubectl set image deployment/xsk-trial xsk-trial=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
 
 #------------------Update XSK Instance-------------------#
+
+    - name: Slack Notification
+      if: ${{ failure() }}
+      uses: slackapi/slack-github-action@v1.14.0
+      with:
+        payload: "{\"type\":\"Release\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

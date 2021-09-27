@@ -72,7 +72,7 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
         assertFalse(personRate.isNullable());
         assertFalse(personRate.isPrimaryKey());
         assertNull(personRate.getDefaultValue());
-        assertEquals("2", personRate.getPrecision());
+        assertEquals("20", personRate.getPrecision());
         assertEquals("3", personRate.getScale());
         assertFalse(personRate.isNullable());
         assertNull(personRate.getComment());

@@ -74,7 +74,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
 
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
   private IXSKTableImportParser xskTableImportParser = new XSKTableImportParser();
-  private IXSKHDBTIProcessor xskHdbtiProcessor =  new XSKHDBTIProcessor();
+  private IXSKHDBTIProcessor xskHdbtiProcessor = new XSKHDBTIProcessor();
   private IXSKCsvToHdbtiRelationDao xskCsvToHdbtiRelationDao = new XSKCsvToHdbtiRelationDao();
   private IXSKTableImportArtifactDao xskTableImportArtifactDao = new XSKTableImportArtifactDao();
   private IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
@@ -148,7 +148,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
       } catch (XSKArtifactParserException parserException) {
         logger.error(parserException.getMessage());
       } catch (SQLException throwables) {
-        throwables.printStackTrace();
+        logger.error(throwables.getMessage(), throwables);
       }
     } else if (resourceName.endsWith(IXSKTableImportModel.FILE_EXTENSION_CSV)) {
       List<XSKTableImportToCsvRelation> affectedHdbtiToCsvRelations = xskCsvToHdbtiRelationDao
@@ -214,7 +214,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
         HDBTI_SYNCHRONIZED.add(xskTableImportArtifact.getLocation());
       }
     } catch (XSKTableImportException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
   }
 
@@ -244,7 +244,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     for (XSKTableImportConfigurationDefinition configurationDefinition : configurationDefinitions) {
       try {
         xskHdbtiProcessor.process(configurationDefinition, connection);
-      } catch (XSKDataStructuresException | SQLException | XSKTableImportException | IOException e) {
+      } catch (XSKDataStructuresException | SQLException | XSKTableImportException | IOException | ProblemsException e) {
         logger.error(String.format("An error occurred while trying to execute import. %s", e.getMessage()), e);
       }
     }

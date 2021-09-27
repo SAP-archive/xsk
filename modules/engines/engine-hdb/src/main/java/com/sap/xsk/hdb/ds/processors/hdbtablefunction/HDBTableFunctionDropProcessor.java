@@ -13,9 +13,13 @@ package com.sap.xsk.hdb.ds.processors.hdbtablefunction;
 
 import static java.text.MessageFormat.format;
 
+import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKConstants;
 import java.sql.Connection;
 import java.sql.SQLException;
-
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -23,16 +27,12 @@ import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
-import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.utils.XSKCommonsUtils;
-import com.sap.xsk.utils.XSKConstants;
-
 public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableFunctionModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionDropProcessor.class);
 
-    public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction) throws SQLException {
+    public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
+        throws SQLException, ProblemsException {
         logger.info("Processing Drop TableFunction: " + hdbTableFunction.getName());
 
         String funcNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[1];
@@ -40,7 +40,9 @@ public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataS
         if (SqlFactory.getNative(connection).exists(connection, funcNameWithoutSchema, DatabaseArtifactTypes.FUNCTION)) {
             ISqlDialect dialect = SqlFactory.deriveDialect(connection);
             if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-                throw new IllegalStateException(String.format("TableFunctions are not supported for %s", dialect.getDatabaseName(connection)));
+              String errorMessage = String.format("TableFunctions are not supported for %s", dialect.getDatabaseName(connection));
+              XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbTableFunction.getLocation(), "HDB Table Function");
+              throw new IllegalStateException(errorMessage);
             } else {
                 String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + hdbTableFunction.getName();
                 executeSql(sql, connection);

@@ -1,0 +1,7 @@
+table.schemaName = "DBADMIN";
+table.description = "Business event table type";
+table.temporary   = true;
+table.columns = [
+    {name = "ID";        sqlType = INTEGER;              comment = "Object identifier";},
+    {name = "BIZ_EVENT"; sqlType = VARCHAR; length = 60; comment = "Object type code";}
+];

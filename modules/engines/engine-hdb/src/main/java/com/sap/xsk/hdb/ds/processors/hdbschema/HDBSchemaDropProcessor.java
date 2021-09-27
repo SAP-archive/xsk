@@ -13,9 +13,13 @@ package com.sap.xsk.hdb.ds.processors.hdbschema;
 
 import static java.text.MessageFormat.format;
 
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
-
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -23,20 +27,19 @@ import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.utils.XSKHDBUtils;
-
 public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSchemaModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
-    public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
+    public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema)
+        throws SQLException, ProblemsException {
         logger.info("Processing Drop Schema: " + hdbSchema.getSchema());
 
         ISqlDialect dialect = SqlFactory.deriveDialect(connection);
         if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-            throw new IllegalStateException(String.format("%s does not support Schema", dialect.getDatabaseName(connection)));
+          String errorMessage = String.format("%s does not support Schema", dialect.getDatabaseName(connection));
+          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
+          throw new IllegalStateException(errorMessage);
         } else {
             if (SqlFactory.getNative(connection).exists(connection, hdbSchema.getSchema(), DatabaseArtifactTypes.SCHEMA)) {
                 String schemaName = XSKHDBUtils.escapeArtifactName(connection, hdbSchema.getSchema());

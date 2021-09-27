@@ -18,10 +18,12 @@ import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationSimpleValue;
 import com.sap.xsk.parser.hdbdd.core.CdsBaseListener;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ArtifactRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeWithArgsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
+import com.sap.xsk.parser.hdbdd.factory.SymbolFactory;
 import com.sap.xsk.parser.hdbdd.symbols.CDSLiteralEnum;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
@@ -33,12 +35,9 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.CardinalityEnum;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
-import com.sap.xsk.parser.hdbdd.symbols.type.custom.CustomDataType;
-import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -61,18 +60,17 @@ public class EntityDefinitionListener extends CdsBaseListener {
   private final ParseTreeProperty<EntityElementSymbol> entityElements = new ParseTreeProperty<>();
   private final ParseTreeProperty<Typeable> typeables = new ParseTreeProperty<>();
   private final ParseTreeProperty<Symbol> symbolsByParseTreeContext = new ParseTreeProperty<>();
-  private final List<CustomDataType> dataTypes = new ArrayList<>();
-  private final List<EntitySymbol> entities = new ArrayList<>();
   private final Stack<String> fullSymbolName = new Stack<>();
   private final ParseTreeProperty<AssociationSymbol> associations = new ParseTreeProperty<>();
   private final ParseTreeProperty<AbstractAnnotationValue> values = new ParseTreeProperty<>();
   private final Set<String> packagesUsed = new HashSet<>();
+  private final SymbolFactory symbolFactory = new SymbolFactory();
   private String packageId;
 
   @Override
   public void enterNamespaceRule(CdsParser.NamespaceRuleContext ctx) {
     String packageName = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
-    if (!packageName.equals(getExpecteNamespace())) {
+    if (!packageName.equals(getExpectedNamespace())) {
       throw new CDSRuntimeException(
           String.format("Error at line: %s. Namespace does not match the file directory.", ctx.members.get(0).getLine()));
     }
@@ -81,7 +79,9 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterUsingRule(CdsParser.UsingRuleContext ctx) {
-    String fullSymbolName = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
+    String packagePath = ctx.pack.stream().map(Token::getText).collect(Collectors.joining("."));
+    String memberPath = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
+    String fullSymbolName = packagePath + "::" + memberPath;
 
     Symbol externalSymbol = this.symbolTable.getSymbol(fullSymbolName);
     if (externalSymbol == null) {
@@ -97,61 +97,50 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterContextRule(CdsParser.ContextRuleContext ctx) {
-    String contextId = ctx.ID().getText();
-    checkForDuplicateName(contextId, ctx.ID().getSymbol().getLine());
+  public void enterArtifactRule(ArtifactRuleContext ctx) {
+    Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
+    if (!(this.currentScope instanceof CDSFileScope) && !(this.currentScope instanceof ContextSymbol)) {
+      throw new CDSRuntimeException(String.format("Error at line: %s - Artifact with type: '%s' and name: '%s' is only allowed in a context scope.",
+          ctx.artifactType.getLine(), ctx.artifactType.getText(), ctx.artifactName.getText()));
+    }
 
-    ContextSymbol contextSymbol = new ContextSymbol(contextId, currentScope);
-    contextSymbol.setIdToken(ctx.ID().getSymbol());
-
-    currentScope.define(contextSymbol);
-    symbolsByParseTreeContext.put(ctx, contextSymbol);
-    registerSymbolToSymbolTable(contextSymbol);
-    fullSymbolName.push(contextSymbol.getName());
-    this.currentScope = contextSymbol; //push com.sap.xsk.parser.hdbdd.symbols.scope
+    symbolsByParseTreeContext.put(ctx, newSymbol);
+    registerSymbolToSymbolTable(newSymbol);
+    fullSymbolName.push(newSymbol.getName());
+    this.currentScope = (Scope) newSymbol;
+    if (newSymbol instanceof EntitySymbol) {
+      this.symbolTable.addEntityToGraph(newSymbol.getFullName());
+    }
   }
 
   @Override
-  public void exitContextRule(CdsParser.ContextRuleContext ctx) {
+  public void exitArtifactRule(ArtifactRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
     fullSymbolName.pop();
   }
 
   @Override
-  public void enterStructuredDataTypeRule(CdsParser.StructuredDataTypeRuleContext ctx) {
-    String typeId = ctx.ID().getText();
-    checkForDuplicateName(typeId, ctx.ID().getSymbol().getLine());
-
-    StructuredDataTypeSymbol dataTypeSymbol = new StructuredDataTypeSymbol(typeId, this.currentScope);
-    dataTypeSymbol.setIdToken(ctx.ID().getSymbol());
-    dataTypeSymbol.setSchema(this.schema);
-
-    this.dataTypes.add(dataTypeSymbol);
-    this.currentScope.define(dataTypeSymbol);
-    this.symbolsByParseTreeContext.put(ctx, dataTypeSymbol);
-    registerSymbolToSymbolTable(dataTypeSymbol);
-    this.currentScope = dataTypeSymbol;
-  }
-
-  @Override
-  public void exitStructuredDataTypeRule(CdsParser.StructuredDataTypeRuleContext ctx) {
-    validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
-    this.currentScope = this.currentScope.getEnclosingScope();
-  }
-
-  @Override
   public void enterDataTypeRule(CdsParser.DataTypeRuleContext ctx) {
-    String typeId = ctx.ID().getText();
-    if (this.currentScope.isDuplicateName(typeId)) {
-      throw new CDSRuntimeException(String.format("Duplicate name for: %s", typeId));
+    if (ctx.type.getText().equalsIgnoreCase("key")) {
+      if (!(this.currentScope instanceof EntitySymbol)) {
+        throw new CDSRuntimeException(String.format("Error at line: %s - Element declarations are only allowed for entity scope.",
+            ctx.name.getLine()));
+      }
+      EntityElementSymbol elementSymbol = this.symbolFactory.getEntityElementSymbol(ctx, this.currentScope);
+      this.entityElements.put(ctx, elementSymbol);
+      this.symbolsByParseTreeContext.put(ctx, elementSymbol);
+      this.typeables.put(ctx, elementSymbol);
+      return;
     }
 
-    DataTypeSymbol dataTypeSymbol = new DataTypeSymbol(typeId, this.currentScope);
-    dataTypeSymbol.setIdToken(ctx.ID().getSymbol());
-    dataTypeSymbol.setSchema(this.schema);
+    Symbol dataTypeSymbol = this.symbolFactory.getDataTypeSymbol(ctx, this.currentScope, this.schema);
+    if (!(this.currentScope instanceof CDSFileScope) && !(this.currentScope instanceof ContextSymbol)) {
+      throw new CDSRuntimeException(String.format("Error at line: %s - Artifact with type: '%s' and name: '%s' is only allowed in a context scope.",
+          ctx.name.getLine(), ctx.type.getText(), ctx.name.getText()));
+    }
 
-    typeables.put(ctx, dataTypeSymbol);
+    typeables.put(ctx, (Typeable) dataTypeSymbol);
     symbolsByParseTreeContext.put(ctx, dataTypeSymbol);
     registerSymbolToSymbolTable(dataTypeSymbol);
     this.currentScope.define(dataTypeSymbol);
@@ -159,50 +148,28 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void exitDataTypeRule(DataTypeRuleContext ctx) {
+    if (ctx.type.getText().equalsIgnoreCase("key")) {
+      EntityElementSymbol elementSymbol = this.entityElements.get(ctx);
+
+      this.currentScope.define(elementSymbol);
+      return;
+    }
+
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
-  }
-
-  @Override
-  public void enterEntityRule(CdsParser.EntityRuleContext ctx) {
-    String typeId = ctx.ID().getText();
-    checkForDuplicateName(typeId, ctx.ID().getSymbol().getLine());
-
-    EntitySymbol entitySymbol = new EntitySymbol(typeId, this.currentScope);
-
-    entitySymbol.setIdToken(ctx.ID().getSymbol());
-    entitySymbol.setSchema(this.schema);
-
-    this.currentScope.define(entitySymbol);
-    this.symbolsByParseTreeContext.put(ctx, entitySymbol);
-    this.currentScope = entitySymbol;
-    registerSymbolToSymbolTable(entitySymbol);
-
-    this.fullSymbolName.push(entitySymbol.getName());
-    this.entities.add(entitySymbol);
-    this.symbolTable.addEntityToGraph(entitySymbol.getFullName());
-  }
-
-  @Override
-  public void exitEntityRule(CdsParser.EntityRuleContext ctx) {
-    this.currentScope = this.currentScope.getEnclosingScope();
-    validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
-    this.fullSymbolName.pop();
   }
 
   @Override
   public void enterElementDeclRule(CdsParser.ElementDeclRuleContext ctx) {
-    String elementId = ctx.ID().getText();
-    checkForDuplicateName(elementId, ctx.ID().getSymbol().getLine());
+    EntityElementSymbol elementSymbol = this.symbolFactory.getEntityElementSymbol(ctx, this.currentScope);
+    if (!(this.currentScope instanceof EntitySymbol)) {
+      throw new CDSRuntimeException(String.format("Error at line: %s - Element declarations are only allowed for entity scope.",
+          ctx.name.getLine()));
+    }
 
-    EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, this.currentScope);
-    elementSymbol.setIdToken(ctx.ID().getSymbol());
-    boolean isKey = ctx.key != null;
-    elementSymbol.setKey(isKey);
     this.entityElements.put(ctx, elementSymbol);
     this.symbolsByParseTreeContext.put(ctx, elementSymbol);
     this.typeables.put(ctx, elementSymbol);
   }
-
 
   @Override
   public void exitElementDeclRule(CdsParser.ElementDeclRuleContext ctx) {
@@ -213,7 +180,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterElementConstraints(CdsParser.ElementConstraintsContext ctx) {
-    EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent());
+    EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent().getParent());
     boolean isNotNull = !ctx.getText().equals("null");
     if (!isNotNull && elementSymbol.isKey()) {
       throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Element - part of composite key cannot be null.",
@@ -226,14 +193,16 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterFieldDeclRule(CdsParser.FieldDeclRuleContext ctx) {
-    String filedId = ctx.ID().getText();
-    if (this.currentScope.isDuplicateName(filedId)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Duplicate name for: %s", ctx.ID().getSymbol().getLine(),
-          ctx.ID().getSymbol().getCharPositionInLine(), filedId));
+    FieldSymbol fieldSymbol = this.symbolFactory.getFieldSymbol(ctx, currentScope);
+    if (this.currentScope instanceof ContextSymbol) {
+      throw new CDSRuntimeException(String.format("Error at line: %s - Field declarations are only allowed for entity and type scopes.",
+          ctx.ID().getSymbol().getLine()));
     }
 
-    FieldSymbol fieldSymbol = new FieldSymbol(filedId, this.currentScope);
-    fieldSymbol.setIdToken(ctx.ID().getSymbol());
+    if (this.currentScope instanceof EntitySymbol) {
+      fieldSymbol = this.symbolFactory.getEntityElementSymbol(ctx, this.currentScope);
+    }
+
     this.typeables.put(ctx, fieldSymbol);
     this.symbolsByParseTreeContext.put(ctx, fieldSymbol);
     this.currentScope.define(fieldSymbol);
@@ -241,20 +210,9 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterAssociation(CdsParser.AssociationContext ctx) {
-    String associationId = ctx.ID().getText();
-    if (this.currentScope.isDuplicateName(associationId)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s col: %s . Duplicate name for: %s",
-          ctx.ID().getSymbol().getLine(), ctx.ID().getSymbol().getCharPositionInLine(), associationId));
-    }
-
-    AssociationSymbol associationSymbol = new AssociationSymbol(associationId, this.currentScope);
-    associationSymbol.setIdToken(ctx.ID().getSymbol());
-    if (ctx.cardinality() == null) {
-      associationSymbol.setCardinality(CardinalityEnum.ONE_TO_ONE);
-    }
+    AssociationSymbol associationSymbol = this.symbolFactory.getAssociationSymbol(ctx, currentScope);
 
     this.associations.put(ctx, associationSymbol);
-    this.currentScope.define(associationSymbol);
   }
 
   @Override
@@ -466,7 +424,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
           typeIdToken.getLine(), typeIdToken.getCharPositionInLine()));
     }
     BuiltInTypeSymbol resolvedBuiltInType = (BuiltInTypeSymbol) builtInType;
-    BuiltInTypeSymbol builtInTypeToProvide = new BuiltInTypeSymbol(typeId, resolvedBuiltInType.getArgsCount(),
+    BuiltInTypeSymbol builtInTypeToProvide = new BuiltInTypeSymbol(builtInType.getName(), resolvedBuiltInType.getArgsCount(),
         resolvedBuiltInType.getValueType());
     builtInTypeToProvide.setHanaType(resolvedBuiltInType.isHanaType());
 
@@ -581,7 +539,6 @@ public class EntityDefinitionListener extends CdsBaseListener {
     }
 
     symbol.setFullName(this.packageId + "::" + fullName);
-    symbol.setName(fullName);
     symbolTable.addSymbol(symbol);
   }
 
@@ -613,14 +570,14 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   private String getTopLevelSymbolExpectedName() {
-    String[] splitFileLocation = this.fileLocation.split("[\\/]");
+    String[] splitFileLocation = this.fileLocation.split("/");
     String fileName = splitFileLocation[splitFileLocation.length - 1];
 
     return fileName.split("\\.")[0];
   }
 
-  private String getExpecteNamespace() {
-    String[] splitFileLocation = this.fileLocation.split("[\\/]");
+  private String getExpectedNamespace() {
+    String[] splitFileLocation = this.fileLocation.split("/");
     splitFileLocation = Arrays.stream(splitFileLocation).filter(s -> !s.isEmpty()).toArray(String[]::new);
     splitFileLocation = Arrays.copyOfRange(splitFileLocation, 0, splitFileLocation.length - 1);
     return String.join(".", splitFileLocation);
@@ -630,16 +587,20 @@ public class EntityDefinitionListener extends CdsBaseListener {
     return this.symbolsByParseTreeContext;
   }
 
-  public Scope getCurrentScope() {
-    return currentScope;
-  }
-
   public ParseTreeProperty<EntityElementSymbol> getEntityElements() {
     return entityElements;
   }
 
   public ParseTreeProperty<Typeable> getTypeables() {
     return typeables;
+  }
+
+  public CDSFileScope getCdsFileScope() {
+    return cdsFileScope;
+  }
+
+  public void setCdsFileScope(CDSFileScope cdsFileScope) {
+    this.cdsFileScope = cdsFileScope;
   }
 
   private void checkForDuplicateName(String contextId, int line) {
@@ -657,7 +618,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   public Set<String> getPackagesUsed() {
-    return packagesUsed;
+    return this.packagesUsed;
   }
 
   public void setFileLocation(String fileLocation) {

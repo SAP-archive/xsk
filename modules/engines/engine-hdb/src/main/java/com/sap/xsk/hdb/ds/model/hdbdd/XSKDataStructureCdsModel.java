@@ -13,11 +13,15 @@ package com.sap.xsk.hdb.ds.model.hdbdd;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import java.util.List;
 
 public class XSKDataStructureCdsModel extends XSKDataStructureModel {
+  private boolean forceUpdate;
 
   private List<XSKDataStructureHDBTableModel> tableModels;
+
+  private List<XSKDataStructureHDBTableTypeModel> tableTypeModels;
 
   public List<XSKDataStructureHDBTableModel> getTableModels() {
     return tableModels;
@@ -25,5 +29,21 @@ public class XSKDataStructureCdsModel extends XSKDataStructureModel {
 
   public void setTableModels(List<XSKDataStructureHDBTableModel> tableModels) {
     this.tableModels = tableModels;
+  }
+
+  public List<XSKDataStructureHDBTableTypeModel> getTableTypeModels() {
+    return tableTypeModels;
+  }
+
+  public void setTableTypeModels(List<XSKDataStructureHDBTableTypeModel> tableTypeModels) {
+    this.tableTypeModels = tableTypeModels;
+  }
+
+  public boolean isForceUpdate() {
+    return forceUpdate;
+  }
+
+  public void setForceUpdate(boolean forceUpdate) {
+    this.forceUpdate = forceUpdate;
   }
 }

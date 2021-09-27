@@ -11,24 +11,29 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
-import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
-import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
-import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
-import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceMissingPropertyException;
-import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
+import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
+import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
+import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceDuplicatePropertyException;
+import com.sap.xsk.parser.hdbsequence.exceptions.XSKHDBSequenceMissingPropertyException;
+import java.nio.charset.StandardCharsets;
+import org.junit.Before;
+import org.junit.Test;
 
 public class XSKHDBSequenceParserTest {
+
+  @Before
+  public void setUp() {
+    HdbTestModule testModule = new HdbTestModule();
+    testModule.configure();
+  }
 
     @Test
     public void parseHanaXSClassicContent() throws Exception {
@@ -39,10 +44,10 @@ public class XSKHDBSequenceParserTest {
                 .parse("/test/xsk/com/sap/SampleSequence_HanaXSClassic.hdbsequence", content);
 
         assertEquals("MYSCHEMA", model.getSchema());
-        assertEquals(Integer.valueOf(10), model.getStart_with());
-        assertEquals(Integer.valueOf(30), model.getMaxvalue());
-        assertEquals(false, model.getNomaxvalue());
-        assertEquals(true, model.getNominvalue());
+        assertEquals(Integer.valueOf(10), model.getStartWith());
+        assertEquals(Integer.valueOf(30), model.getMaxValue());
+        assertEquals(false, model.getNoMaxValue());
+        assertEquals(true, model.getNoMinValue());
         assertEquals(false, model.getCycles());
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
     }
@@ -55,9 +60,9 @@ public class XSKHDBSequenceParserTest {
       XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
           .parse("/test/xsk/com/sap/SchemaOnlySequence.hdbsequence", content);
       assertFalse(model.isPublic());
-      assertEquals(Integer.valueOf(1), model.getStart_with());
-      assertEquals(Integer.valueOf(1), model.getIncrement_by());
-      assertEquals(Integer.valueOf(1), model.getMinvalue());
+      assertEquals(Integer.valueOf(1), model.getStartWith());
+      assertEquals(Integer.valueOf(1), model.getIncrementBy());
+      assertEquals(Integer.valueOf(1), model.getMinValue());
     }
 
     @Test
@@ -67,8 +72,8 @@ public class XSKHDBSequenceParserTest {
               StandardCharsets.UTF_8);
       XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) new XSKHDBSequenceParser()
           .parse("/test/xsk/com/sap/DependsOnSequence.hdbsequence", content);
-      assertEquals("sap.ino.db.iam::t_identity", model.getDepends_on_table());
-      assertEquals("sap.ino.db.iam::t_view", model.getDepends_on_view());
+      assertEquals("sap.ino.db.iam::t_identity", model.getDependsOnTable());
+      assertEquals("sap.ino.db.iam::t_view", model.getDependsOnView());
     }
 
     @Test
@@ -108,13 +113,13 @@ public class XSKHDBSequenceParserTest {
                 .parse("/test/xsk/com/sap/RandomlyOrderedSequence.hdbsequence", content);
 
         assertEquals("USR_9TCD6SXS67DP7AFLFE420B8EB", model.getSchema());
-        assertEquals(Integer.valueOf(10), model.getStart_with());
-        assertEquals(Integer.valueOf(30), model.getMaxvalue());
-        assertEquals(false, model.getNomaxvalue());
-        assertEquals(true, model.getNominvalue());
+        assertEquals(Integer.valueOf(10), model.getStartWith());
+        assertEquals(Integer.valueOf(30), model.getMaxValue());
+        assertEquals(false, model.getNoMaxValue());
+        assertEquals(true, model.getNoMinValue());
         assertEquals(false, model.getCycles());
         assertFalse(model.isPublic());
-        assertEquals(Integer.valueOf(-2), model.getIncrement_by());
+        assertEquals(Integer.valueOf(-2), model.getIncrementBy());
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
     }
 

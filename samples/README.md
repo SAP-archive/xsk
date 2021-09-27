@@ -4,7 +4,9 @@ This folder contains all the available sample applications, that can be used as 
 
 * non-HDI related
   * [hdb-simple](hdb-simple) - a single `hdbtable` artefact
+  * [hdb-view](hdb-view) - a single `hdbview` artefact
   * [xsjs-simple](xsjs-simple) - a single `xsjs` service of type *hello world*
+  * [xsodata-simple](xsodata-simple) - a single `xsodata` service with one entity and a table underneath
   * [products](products) - a more complex sample containing `hdbdd` and `hdbti` for data structure and content, `xsodata` for REST services exposure and `UI5` user interface. It contains also `xsaccess` definition for authorization management. `xsjob` is showing how to schedule a job which can regularly can call an operation from a xsjs service. `xsjs` and `xsjslib` dependency management is also presented.
 * HDI related
   * [hdi-simple](hdi-simple) - a group of artefacts - `hdbtable` (new format) and `hdbcalculationview` deployed as a HDI container

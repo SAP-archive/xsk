@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class XSKImportedCSVRecordDao implements IXSKImportedCSVRecordDao {
     private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIProcessor.class);
 
-    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
     private PersistenceManager<XSKImportedCSVRecordModel> persistenceManager = new PersistenceManager<XSKImportedCSVRecordModel>();
 

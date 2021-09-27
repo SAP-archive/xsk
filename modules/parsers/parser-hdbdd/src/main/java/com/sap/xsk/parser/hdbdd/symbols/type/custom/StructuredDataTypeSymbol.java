@@ -11,13 +11,21 @@
  */
 package com.sap.xsk.parser.hdbdd.symbols.type.custom;
 
+import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.Type;
+import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-public class StructuredDataTypeSymbol extends AbstractDataStructureSymbol implements Type, Scope, CustomDataType {
+public class StructuredDataTypeSymbol extends Symbol implements Type, Scope, CustomDataType {
 
-  public StructuredDataTypeSymbol(String name) {
-    super(name);
+  private Map<String, Symbol> fields = new LinkedHashMap<>();
+
+  public StructuredDataTypeSymbol(Symbol symbol) {
+    super(symbol);
   }
 
   public StructuredDataTypeSymbol(String name, Scope scope) {
@@ -28,4 +36,25 @@ public class StructuredDataTypeSymbol extends AbstractDataStructureSymbol implem
   public Scope getEnclosingScope() {
     return this.getScope();
   }
+
+  @Override
+  public void define(Symbol sym) {
+    fields.put(sym.getName(), sym);
+    sym.setScope(this);
+  }
+
+  @Override
+  public Symbol resolve(String name) {
+    return fields.get(name);
+  }
+
+  @Override
+  public boolean isDuplicateName(String id) {
+    return fields.containsKey(id) || getName().equals(id);
+  }
+
+  public List<FieldSymbol> getFields() {
+    return fields.values().stream().map(f -> (FieldSymbol) f).collect(Collectors.toList());
+  }
+
 }

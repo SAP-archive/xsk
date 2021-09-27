@@ -1,0 +1,21 @@
+import = [
+	{
+		table = "hdb-view-simple.db::ItemForView";
+		file =  "hdb-view-simple.data::ItemForView.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "TEST_VIEW_SIMPLE";
+	},
+	{
+		table = "hdb-view-simple.db::OrderForView";
+		file =  "hdb-view-simple.data::OrderForView.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "TEST_VIEW_SIMPLE";
+	}
+];
+

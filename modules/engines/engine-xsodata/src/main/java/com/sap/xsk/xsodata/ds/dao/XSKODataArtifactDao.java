@@ -28,7 +28,7 @@ import static java.text.MessageFormat.format;
 
 public class XSKODataArtifactDao implements IXSKODataArtifactDao {
 
-    private final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+    private final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
     private final PersistenceManager<XSKODataModel> xskPersistenceManager = new PersistenceManager<>();
 

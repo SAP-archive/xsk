@@ -1,5 +1,111 @@
 # Drumbeats
 
+## 2021 Week 38 (20 September - 26 September)
+
+#### Focus topics:
+
+- Simple samples for hdbview, hdbti, hdbprocedure, hdbtablefunction, xsodata
+- $.import logic enhancements 
+- Landing page and documentation
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-20..2021-09-26) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-20..2021-09-26) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-09-20..2021-09-26) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-09-20..2021-09-26) PRs
+
+----
+
+## 2021 Week 37 (13 September - 19 September)
+
+#### Focus topics:
+
+- XSOData event handlers fixes
+- Schema aware artefacts creation
+- Trial instance setup
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-13..2021-09-19) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-13..2021-09-19) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-09-13..2021-09-19) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-09-13..2021-09-19) PRs
+
+----
+
+## 2021 Week 36 (06 September - 12 September)
+
+#### Focus topics:
+
+- Integration tests automation in the nightly builds
+- HDBDD improvements and fixes base on the real projects
+- Migration tooling fixes for folder structure
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-06..2021-09-12) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-06..2021-09-12) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-09-06..2021-09-12) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-09-06..2021-09-12) PRs
+
+----
+
+
+## 2021 Week 35 (30 August - 05 September)
+
+#### Focus topics:
+
+- Selenium tests automation and integration in the nightly builds
+- Improvements on error handling
+- Synonyms creation per table during migration process
+- Istio & Calico policies reasearch for the multi-tenancy support
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-30..2021-09-05) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-30..2021-09-05) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-08-30..2021-09-05) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-08-30..2021-09-05) PRs
+
+----
+
+
+## 2021 Week 34 (23 August - 29 August)
+
+#### Focus topics:
+
+- Improved Neo SDK integration
+- HDB* artefacts improvements based on the real projects
+- Migration tooling user interface improvements and fixes
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-23..2021-08-29) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-23..2021-08-29) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-08-23..2021-08-29) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-08-23..2021-08-29) PRs
+
+----
+
+
+## 2021 Week 33 (16 August - 22 August)
+
+#### Focus topics:
+
+- Documentation for the available XSJS APIs e.g. https://www.xsk.io/api/%24.hdb/
+- Research about the user interface tests framework
+- Research about the Neo Service Proxy on Kyma
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-16..2021-08-22) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-08-16..2021-08-22) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-08-16..2021-08-22) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-08-16..2021-08-22) PRs
+
+----
+
 
 ## 2021 Week 32 (09 August - 15 August)
 

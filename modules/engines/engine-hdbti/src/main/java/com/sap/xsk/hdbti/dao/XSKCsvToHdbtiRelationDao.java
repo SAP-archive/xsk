@@ -34,7 +34,7 @@ public class XSKCsvToHdbtiRelationDao implements IXSKCsvToHdbtiRelationDao {
 
     private PersistenceManager<XSKTableImportToCsvRelation> xskTableImportToCsvRelationPersistenceManager = new PersistenceManager<XSKTableImportToCsvRelation>();
 
-    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+    private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
     @Override
     public void persistNewCsvAndHdbtiRelations(XSKTableImportArtifact tableImportArtifact) {

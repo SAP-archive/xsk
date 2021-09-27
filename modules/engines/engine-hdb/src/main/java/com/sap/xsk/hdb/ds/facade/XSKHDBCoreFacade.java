@@ -13,31 +13,7 @@ package com.sap.xsk.hdb.ds.facade;
 
 import static java.text.MessageFormat.format;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
 import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
@@ -49,6 +25,7 @@ import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.service.XSKDataStructureTopologicalSorter;
@@ -56,18 +33,6 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
 import com.sap.xsk.utils.XSKHDBUtils;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -75,11 +40,23 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.text.MessageFormat.format;
+import java.util.stream.Collectors;
+import javax.sql.DataSource;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.repository.api.IResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
@@ -139,7 +116,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
   }
 
   @Override
-  public void updateEntities() {
+  public void updateEntities() throws ProblemsException {
     Map<String, XSKDataStructureModel> dataStructureCdsModel = managerServices.get(IXSKDataStructureModel.TYPE_HDBDD)
         .getDataStructureModels();
     Map<String, XSKDataStructureModel> dataStructureTablesModel = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE)
@@ -184,6 +161,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         Map<String, XSKDataStructureModel> combined = new HashMap<>();
         combined.putAll(dataStructureTablesModel);
         combined.putAll(dataStructureViewsModel);
+        putCdsModelTableTypes(dataStructureCdsModel, dataStructureTableTypesModel);
 
         // topology sort of dependencies
         List<String> external = new ArrayList<>();
@@ -339,20 +317,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
-          // drop Entities in a reverse order
-//          IXSKDataStructureManager<XSKDataStructureModel> xskEntityManagerService = managerServices
-//              .get(IXSKDataStructureModel.TYPE_HDB_ENTITIES);
-//          for (int i = sorted.size() - 1; i >= 0; i--) {
-//            String dsName = sorted.get(i);
-//            XSKDataStructureEntitiesModel entitiesModel = (XSKDataStructureEntitiesModel) dataStructureEntitiesModel.get(dsName);
-//            try {
-//              xskEntityManagerService.dropDataStructure(connection, entitiesModel);
-//            } catch (Exception e) {
-//              logger.error(e.getMessage(), e);
-//              errors.add(e.getMessage());
-//            }
-//          }
-
           // drop HDB Table Types (HDB Structures)
           IXSKDataStructureManager<XSKDataStructureModel> xskTableTypeManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
@@ -434,26 +398,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
               errors.add(e.getMessage());
             }
           }
-          // process Tables in the proper order
-          for (String dsName : sorted) {
-            XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) dataStructureTablesModel.get(dsName);
-            try {
-              if (model != null) {
-                String escapedName = XSKHDBUtils.escapeArtifactName(connection, model.getName());
-                if (!SqlFactory.getNative(connection).exists(connection, escapedName)) {
-                  xskTableManagerService.createDataStructure(connection, model);
-                } else {
-                  logger.warn(format("Table [{0}] already exists during the update process", dsName));
-                  if (SqlFactory.getNative(connection).count(connection, escapedName) != 0) {
-                    xskTableManagerService.updateDataStructure(connection, model);
-                  }
-                }
-              }
-            } catch (Exception e) {
-              logger.error(e.getMessage(), e);
-              errors.add(e.getMessage());
-            }
-          }
 
           // process views in the proper order
           for (String dsName : sorted) {
@@ -489,6 +433,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             }
           }
 
+          // process Cds models in proper order
           IXSKDataStructureManager<XSKDataStructureModel> xskHdbddManagerService = managerServices
               .get(IXSKDataStructureModel.TYPE_HDBDD);
           for (String dsName : sorted) {
@@ -508,7 +453,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             XSKDataStructureHDBSequenceModel model = (XSKDataStructureHDBSequenceModel) dataStructureSequencesModel.get(dsName);
             try {
               if (model != null) {
-                if (!SqlFactory.getNative(connection).exists(connection, model.getName(), DatabaseArtifactTypes.SEQUENCE)) {
+                if (!SqlFactory.getNative(connection).exists(connection,  model.getSchema(), model.getName(), DatabaseArtifactTypes.SEQUENCE)) {
                   xskSequenceManagerService.createDataStructure(connection, model);
                 } else {
                   xskSequenceManagerService.updateDataStructure(connection, model);
@@ -542,6 +487,22 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
       }
     } catch (SQLException e) {
       logger.error(concatenateListOfStrings(errors), e);
+    }
+  }
+
+  private void putCdsModelTableTypes(Map<String, XSKDataStructureModel> dataStructureCdsModel,
+      Map<String, XSKDataStructureModel> dataStructureTableTypesModel) {
+    if (!dataStructureCdsModel.isEmpty()) {
+      Collection<XSKDataStructureCdsModel> dataStructureCdsModels = dataStructureCdsModel.values().stream()
+          .map(cds -> (XSKDataStructureCdsModel) cds).collect(
+              Collectors.toList());
+      dataStructureCdsModels.forEach(cds -> {
+        if (!cds.getTableTypeModels().isEmpty()) {
+          cds.getTableTypeModels().forEach(tableType -> {
+            dataStructureTableTypesModel.put(tableType.getName(), tableType);
+          });
+        }
+      });
     }
   }
 

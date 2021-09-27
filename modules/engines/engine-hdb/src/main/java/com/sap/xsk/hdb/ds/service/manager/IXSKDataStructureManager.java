@@ -11,15 +11,14 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-
 import javax.naming.OperationNotSupportedException;
-
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 
 
 public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
@@ -28,11 +27,12 @@ public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
 
   void synchronizeRuntimeMetadata(T tableModel) throws XSKDataStructuresException;
 
-  void createDataStructure(Connection connection, T tableModel) throws SQLException;
+  void createDataStructure(Connection connection, T tableModel) throws SQLException, ProblemsException;
 
-  void dropDataStructure(Connection connection, T tableModel) throws SQLException;
+  void dropDataStructure(Connection connection, T tableModel) throws SQLException, ProblemsException;
 
-  void updateDataStructure(Connection connection, T tableModel) throws SQLException, OperationNotSupportedException;
+  void updateDataStructure(Connection connection, T tableModel)
+      throws SQLException, OperationNotSupportedException, ProblemsException;
 
   List<String> getDataStructureSynchronized();
 

@@ -11,17 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.service.manager;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
@@ -29,6 +18,16 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterProcessor;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableDropProcessor;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IXSKTableManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBTableModel> {
 
@@ -70,15 +69,18 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
     }
   }
 
-  public void createDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+  public void createDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
+      throws SQLException, ProblemsException {
     this.xskTableCreateProcessor.execute(connection, tableModel);
   }
 
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+  public void dropDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
+      throws SQLException, ProblemsException {
     this.xskTableDropProcessor.execute(connection, tableModel);
   }
 
-  public void updateDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+  public void updateDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
+      throws SQLException, ProblemsException {
     //TODO: Create logic for updating hdb table
     logger.error("Altering of a non-empty table is not implemented yet.");
     // TableAlterProcessor.execute(connection, tableModel);

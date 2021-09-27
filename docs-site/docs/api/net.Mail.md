@@ -10,7 +10,7 @@ $.net.Mail
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/19](https://github.com/SAP/xsk/issues/19)
-- Module: [net/net.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/net/net.js)
+- Module: [net/net.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/net)
 - Status: `alpha`
 
 ## Sample Usage 

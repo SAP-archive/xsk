@@ -514,6 +514,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dirigible" class="md-nav__link">
+    Dirigible
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     Parameters
   </a>
@@ -918,6 +925,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dirigible" class="md-nav__link">
+    Dirigible
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     Parameters
   </a>
@@ -984,6 +998,35 @@
 <span class="kd">function</span> <span class="nx">division</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">x</span> <span class="o">/</span> <span class="nx">y</span><span class="p">;</span>
 <span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+<h2 id="dirigible">Dirigible</h2>
+<div class="tabbed-set" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Hello World</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;http/v4/response&quot;</span><span class="p">);</span>
+
+<span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Database Query</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;http/v4/response&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;db/v4/query&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">sql</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM DIRIGIBLE_EXTENSIONS WHERE EXTENSION_EXTENSIONPOINT_NAME = ?&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">resultset</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">sql</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;ide-view&quot;</span><span class="p">]);</span>
+
+<span class="nx">response</span><span class="p">.</span><span class="nx">setContentType</span><span class="p">(</span><span class="s2">&quot;application/json&quot;</span><span class="p">);</span>
+<span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">resultset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mf">2</span><span class="p">));</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><label for="__tabbed_2_3">HTTP Client</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;http/v4/response&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">httpClient</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;http/v4/client&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">httpResponse</span> <span class="o">=</span> <span class="nx">httpClient</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;https://services.odata.org/V4/Northwind/Northwind.svc/&quot;</span><span class="p">);</span>
+
+<span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="nx">httpResponse</span><span class="p">.</span><span class="nx">statusMessage</span><span class="p">);</span>
+<span class="nx">response</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="nx">httpResponse</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
 </code></pre></div>
 </div>
 </div>

@@ -1,19 +1,21 @@
 ---
-title: xsjs
+title: XS Javascript (XSJS)
 ---
 
-xsjs
+XS Javascript (XSJS)
 ===
 
 ## Overview
+---
 
-SAP HANA XS Javascript (XSJS) is a language that can be used by application developers to create server side business logic as **\*.xsjs** files. The libraires which can be imported in XSJS services are separated files with extension **\*.xsjslib**.
+SAP HANA XS Javascript (XSJS) is a programming language that can be used by application developers to create server-side business logic as **\*.xsjs** files. You can import libraries in XSJS services as separate files with the **\*.xsjslib** extension.
 
-### Reference
+## Reference
+---
 
-* SAP Help
+* Additional information on SAP Help Portal
 
-> [https://help.sap.com/viewer/d89d4595fae647eabc14002c0340a999/2.0.04/en-US/3459a57b68f440448350aea1bec1d4f8.html](https://help.sap.com/viewer/d89d4595fae647eabc14002c0340a999/2.0.04/en-US/3459a57b68f440448350aea1bec1d4f8.html)
+For more information, see [Getting Started with XS JavaScript](https://help.sap.com/viewer/d89d4595fae647eabc14002c0340a999/2.0.04/en-US/3459a57b68f440448350aea1bec1d4f8.html).
 
 * Sample XSJS service (\*.xsjs):
 
@@ -75,8 +77,8 @@ function doGet() {
 }());
 ```
 
-* Sample XSJS Library (\*.xsjslib)
-* 
+* Sample XSJS library (\*.xsjslib):
+
 ```
 var hdbConnection = $.hdb.getConnection({
 	treatDateAsUTC: true

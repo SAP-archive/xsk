@@ -1,13 +1,13 @@
 ---
-title: HDBDD
+title: HDBCDS
 ---
 
-HDBDD
+HDBCDS
 ===
 
 ## Overview
 
-The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBDD syntax, also known as HDBCDS.
+The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBCDS syntax, also known as HDBDD.
 
 ### Reference
 

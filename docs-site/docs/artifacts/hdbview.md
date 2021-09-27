@@ -6,10 +6,23 @@ HDBView
 ===
 
 ## Overview
+---
 
 The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBView syntax.
 
-### Reference
+## Details About the Parser
+---
+
+There are currently some [issues](https://github.com/SAP/xsk/issues/108) in the behavior of the HANA version1 of the parser:
+    
+- Currently, the parser takes into account if a given property is mandatory.
+    
+- If the property order is misplaced, the parser will still parse the values.
+    
+- If more than one value of one property is provided, then only the last one is taken.     
+
+## Reference
+---
 
 * Additional information on SAP Help Portal
 
@@ -22,16 +35,7 @@ schema="MYSCHEMA";
 query="SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"acme.com.test.views::MY_VIEW1\" AS T1 LEFT JOIN \"MYSCHEMA\".\"acme.com.test.views::MY_VIEW2\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"";
 depends_on=["acme.com.test.views::MY_VIEW1", "acme.com.test.views::MY_VIEW2"];
 ```
-
-!!! info "Note"
-
-    There are currently some [issues](https://github.com/SAP/xsk/issues/108) in the behavior of the HANA version1 of the parser:
-    
-    - Currently, the parser takes into account if a given property is mandatory.
-    
-    - If the property order is misplaced, the parser will still parse the values.
-    
-    - If more than one value of one property is provided, then only the last one is taken.       
+  
 
 * Sample HANA version2 syntax:
 

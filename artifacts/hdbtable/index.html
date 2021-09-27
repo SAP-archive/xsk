@@ -289,15 +289,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference" class="md-nav__link">
-    Reference
+  <a href="#details-about-the-parser" class="md-nav__link">
+    Details About the Parser
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#details-about-the-parser" class="md-nav__link">
-    Details About the Parser
+  <a href="#reference" class="md-nav__link">
+    Reference
   </a>
   
 </li>
@@ -909,15 +909,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference" class="md-nav__link">
-    Reference
+  <a href="#details-about-the-parser" class="md-nav__link">
+    Details About the Parser
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#details-about-the-parser" class="md-nav__link">
-    Details About the Parser
+  <a href="#reference" class="md-nav__link">
+    Reference
   </a>
   
 </li>
@@ -943,6 +943,14 @@
 <h2 id="overview">Overview</h2>
 <hr />
 <p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBTable syntax.</p>
+<h2 id="details-about-the-parser">Details About the Parser</h2>
+<hr />
+<div class="admonition warning">
+<p class="admonition-title">Caution</p>
+<p>The parser does not allow duplicate properties.</p>
+</div>
+<p>The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. </p>
+<p>An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.</p>
 <h2 id="reference">Reference</h2>
 <hr />
 <ul>
@@ -973,14 +981,6 @@ table.primaryKey.pkcolumns = [&quot;Col1&quot;, &quot;Col2&quot;];
    PRIMARY KEY (&quot;ID&quot;) )
 </code></pre></div></li>
 </ul>
-<h2 id="details-about-the-parser">Details About the Parser</h2>
-<hr />
-<div class="admonition warning">
-<p class="admonition-title">Caution</p>
-<p>The parser does not allow duplicate properties.</p>
-</div>
-<p>The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. </p>
-<p>An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.</p>
                 
                   
                 

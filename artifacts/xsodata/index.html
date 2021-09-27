@@ -16,7 +16,7 @@
     
     
       
-        <title>xsodata - Project XSK</title>
+        <title>XSODATA - Project XSK</title>
       
     
     
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              xsodata
+              XSODATA
             
           </span>
         </div>
@@ -442,12 +442,19 @@
     Overview
   </a>
   
-    <nav class="md-nav" aria-label="Overview">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    Reference
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#reference" class="md-nav__link">
-    Reference
+  <a href="#xsk-xsodata-annotations-support" class="md-nav__link">
+    XSK XSODATA Annotations Support
   </a>
   
 </li>
@@ -907,12 +914,19 @@
     Overview
   </a>
   
-    <nav class="md-nav" aria-label="Overview">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    Reference
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#reference" class="md-nav__link">
-    Reference
+  <a href="#xsk-xsodata-annotations-support" class="md-nav__link">
+    XSK XSODATA Annotations Support
   </a>
   
 </li>
@@ -939,15 +953,25 @@
                   </a>
                 
                 
-                <h1 id="xsodata">xsodata</h1>
+                <h1 id="xsodata">XSODATA</h1>
 <h2 id="overview">Overview</h2>
-<p>The information on how to develop the design-time data-persistence model for an XSK application using the XSODATA syntax</p>
-<h3 id="reference">Reference</h3>
-<p>SAP Help</p>
-<p><a href="https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/502dbde2cbeb4f27b0e9b9887b0097b7.html">Tutorial: Use the SAP HANA OData Interface</a></p>
-<p><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/02e91608eb174dcea6d544aad6ea2e12.html">OData Service-Definition Examples (XS Advanced)</a></p>
+<hr />
+<p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the XSODATA syntax.</p>
+<h2 id="reference">Reference</h2>
+<hr />
 <ul>
-<li>Example:</li>
+<li>
+<p>Additional information on SAP Help Portal</p>
+</li>
+<li>
+<p><a href="https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/502dbde2cbeb4f27b0e9b9887b0097b7.html">Tutorial: Use the SAP HANA OData Interface</a></p>
+</li>
+<li>
+<p><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/02e91608eb174dcea6d544aad6ea2e12.html">OData Service-Definition Examples (XS Advanced)</a></p>
+</li>
+<li>
+<p>Example:</p>
+</li>
 </ul>
 <div class="highlight"><pre><span></span><code>service namespace &quot;products.odata&quot;  {
 
@@ -974,13 +998,14 @@
 <ul>
 <li>More details</li>
 </ul>
-<p>Inside xsodata file we can specify which properties can be exposed using the 'with' and 'without' section:</p>
+<p>Inside an <code>*.xsodata</code> file we can specify which properties can be exposed using the 'with' and 'without' section:</p>
 <div class="highlight"><pre><span></span><code>service namespace &quot;np&quot;{
    &quot;sample.odata::table1&quot; as &quot;Table1&quot; without (&quot;COLUMN1&quot;);
    &quot;sample.odata::table2&quot; as &quot;Table2&quot; with (&quot;COLUMN1&quot;, &quot;COLUMN2&quot;);
 }
 </code></pre></div>
-<h1 id="xsk-xsodata-annotations-support">XSK XSODATA Annotations Support</h1>
+<h3 id="xsk-xsodata-annotations-support">XSK XSODATA Annotations Support</h3>
+<hr />
 <p><a href="https://github.wdf.sap.corp/xs2/xsodata/blob/cb734da393e83e9e893c10e720af53bd5e43c481/documentation/annotations.md">SAP ODATA Annotations for XSOData XS2</a></p>
 <p><a href="https://wiki.scn.sap.com/wiki/display/EmTech/SAP+Annotations+for+OData+Version+2.0">SAP Annotations for OData Version 2.0</a></p>
 <table>
@@ -1033,7 +1058,7 @@
 </tr>
 </tbody>
 </table>
-<p>For all the list of annotations check the official documentation <a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/b7fb60b91ee54a75bb03e54af1316229.html">SAP OData Annotations v2.X</a></p>
+<p>If you want to check the whole list of annotations, visit the official <a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/b7fb60b91ee54a75bb03e54af1316229.html">SAP OData Annotations v2.X</a> documentation.</p>
 <ul>
 <li>Supportable <a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/fda42888439142dc9984d3560bc68206.html">OData Service-Definition Features</a></li>
 </ul>

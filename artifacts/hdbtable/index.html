@@ -946,7 +946,7 @@
 </ul>
 <p>For more information, see <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/89cbf999e6004be3a5324b8f9ef0c53f.html">Create a Table</a>.</p>
 <ul>
-<li>Sample Hana XS Classic syntax:</li>
+<li>Sample HANA XS Classic syntax:</li>
 </ul>
 <p><div class="highlight"><pre><span></span><code>table.schemaName = &quot;MYSCHEMA&quot;;
 table.tableType = COLUMNSTORE;
@@ -960,7 +960,7 @@ table.indexes =  [
     {name = &quot;MYINDEX2&quot;; unique = true; indexColumns = [&quot;Col1&quot;, &quot;Col4&quot;];}];
 table.primaryKey.pkcolumns = [&quot;Col1&quot;, &quot;Col2&quot;];
 </code></pre></div>
-* Sample Hana XS Advanced syntax
+* Sample HANA XS Advanced syntax
 <div class="highlight"><pre><span></span><code>COLUMN TABLE &quot;MYSCHEMA::MYTABLE&quot; ( 
    &quot;ID&quot; INTEGER DEFAULT 555, &quot;NAME&quot; NVARCHAR(256),
    &quot;ACTIVE&quot; TINYINT,

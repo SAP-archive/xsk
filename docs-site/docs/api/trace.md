@@ -10,7 +10,7 @@ $.trace
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/17](https://github.com/SAP/xsk/issues/17)
-- Module: [trace/trace.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/trace)
+- Module: [trace/trace.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/trace/trace.js)
 - Status: `alpha`
 
 ## Sample Usage

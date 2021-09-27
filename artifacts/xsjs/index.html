@@ -16,7 +16,7 @@
     
     
       
-        <title>xsjs - Project XSK</title>
+        <title>XS Javascript (XSJS) - Project XSK</title>
       
     
     
@@ -63,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#xsjs" class="md-skip">
+        <a href="#xs-javascript-xsjs" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +94,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              xsjs
+              XS Javascript (XSJS)
             
           </span>
         </div>
@@ -426,18 +426,12 @@
     Overview
   </a>
   
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#reference" class="md-nav__link">
     Reference
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -905,18 +899,12 @@
     Overview
   </a>
   
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#reference" class="md-nav__link">
     Reference
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -937,16 +925,16 @@
                   </a>
                 
                 
-                <h1 id="xsjs">xsjs</h1>
+                <h1 id="xs-javascript-xsjs">XS Javascript (XSJS)</h1>
 <h2 id="overview">Overview</h2>
-<p>SAP HANA XS Javascript (XSJS) is a language that can be used by application developers to create server side business logic as <strong>*.xsjs</strong> files. The libraires which can be imported in XSJS services are separated files with extension <strong>*.xsjslib</strong>.</p>
-<h3 id="reference">Reference</h3>
+<hr />
+<p>SAP HANA XS Javascript (XSJS) is a programming language that can be used by application developers to create server-side business logic as <strong>*.xsjs</strong> files. You can import libraries in XSJS services as separate files with the <strong>*.xsjslib</strong> extension.</p>
+<h2 id="reference">Reference</h2>
+<hr />
 <ul>
-<li>SAP Help</li>
+<li>Additional information on SAP Help Portal</li>
 </ul>
-<blockquote>
-<p><a href="https://help.sap.com/viewer/d89d4595fae647eabc14002c0340a999/2.0.04/en-US/3459a57b68f440448350aea1bec1d4f8.html">https://help.sap.com/viewer/d89d4595fae647eabc14002c0340a999/2.0.04/en-US/3459a57b68f440448350aea1bec1d4f8.html</a></p>
-</blockquote>
+<p>For more information, see <a href="https://help.sap.com/viewer/d89d4595fae647eabc14002c0340a999/2.0.04/en-US/3459a57b68f440448350aea1bec1d4f8.html">Getting Started with XS JavaScript</a>.</p>
 <ul>
 <li>Sample XSJS service (*.xsjs):</li>
 </ul>
@@ -1007,8 +995,9 @@ function doGet() {
 }());
 </code></pre></div>
 <ul>
-<li>Sample XSJS Library (*.xsjslib)</li>
-<li><div class="highlight"><pre><span></span><code>var hdbConnection = $.hdb.getConnection({
+<li>Sample XSJS library (*.xsjslib):</li>
+</ul>
+<div class="highlight"><pre><span></span><code>var hdbConnection = $.hdb.getConnection({
     treatDateAsUTC: true
 });
 
@@ -1069,8 +1058,7 @@ function deleteOrder(paramObject) {
     }
 
 }
-</code></pre></div></li>
-</ul>
+</code></pre></div>
                 
                   
                 

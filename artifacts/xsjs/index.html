@@ -930,7 +930,7 @@
                 <h1 id="xs-javascript-xsjs">XS Javascript (XSJS)</h1>
 <h2 id="overview">Overview</h2>
 <hr />
-<p>SAP HANA XS Javascript (XSJS) is a programming language that can be used by application developers to create server-side business logic as <strong>*.xsjs</strong> files. You can import libraries in XSJS services as separate files with the <strong>*.xsjslib</strong> extension.</p>
+<p>SAP HANA XS Javascript (XSJS) is a programming language that can be used by application developers to create server-side business logic as <code>*.xsjs</code> files. You can import libraries in XSJS services as separate files with the <code>*.xsjslib</code> extension.</p>
 <h2 id="reference">Reference</h2>
 <hr />
 <ul>
@@ -938,7 +938,7 @@
 </ul>
 <p>For more information, see <a href="https://help.sap.com/viewer/d89d4595fae647eabc14002c0340a999/2.0.04/en-US/3459a57b68f440448350aea1bec1d4f8.html">Getting Started with XS JavaScript</a>.</p>
 <ul>
-<li>Sample XSJS service (*.xsjs):</li>
+<li>Sample XSJS service (<code>*.xsjs</code>):</li>
 </ul>
 <div class="highlight"><pre><span></span><code>var ProductsService = $.import(&quot;products.xsjs&quot;, &quot;ProductsLib&quot;).Products;
 var connection = $.hdb.getConnection({
@@ -997,7 +997,7 @@ function doGet() {
 }());
 </code></pre></div>
 <ul>
-<li>Sample XSJS library (*.xsjslib):</li>
+<li>Sample XSJS library (<code>*.xsjslib</code>):</li>
 </ul>
 <div class="highlight"><pre><span></span><code>var hdbConnection = $.hdb.getConnection({
     treatDateAsUTC: true

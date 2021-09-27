@@ -1,0 +1,12 @@
+import = [
+	{
+		table = "hdb_hdbtable_simple::Cities";
+		file = "hdb_hdbtable_simple:Cities_data.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "TEST_HDBTABLE_SIMPLE";
+	}
+];
+

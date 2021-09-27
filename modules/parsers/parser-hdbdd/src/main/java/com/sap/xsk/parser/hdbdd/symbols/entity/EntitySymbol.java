@@ -21,7 +21,12 @@ import java.util.stream.Collectors;
 public class EntitySymbol extends Symbol implements Scope {
     private Map<String, Symbol> elements;
 
-    public EntitySymbol(String name, Scope scope) {
+  public EntitySymbol(Symbol symbol) {
+    super(symbol);
+    elements = new LinkedHashMap<>();
+  }
+
+  public EntitySymbol(String name, Scope scope) {
         super(name, scope);
         elements = new LinkedHashMap<>();
     }

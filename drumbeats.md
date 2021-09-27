@@ -1,5 +1,38 @@
 # Drumbeats
 
+## 2021 Week 38 (20 September - 26 September)
+
+#### Focus topics:
+
+- Simple samples for hdbview, hdbti, hdbprocedure, hdbtablefunction, xsodata
+- $.import logic enhancements 
+- Landing page and documentation
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-20..2021-09-26) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-20..2021-09-26) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-09-20..2021-09-26) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-09-20..2021-09-26) PRs
+
+----
+
+## 2021 Week 37 (13 September - 19 September)
+
+#### Focus topics:
+
+- XSOData event handlers fixes
+- Schema aware artefacts creation
+- Trial instance setup
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-13..2021-09-19) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-13..2021-09-19) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-09-13..2021-09-19) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-09-13..2021-09-19) PRs
+
+----
 
 ## 2021 Week 36 (06 September - 12 September)
 

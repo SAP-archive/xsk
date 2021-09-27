@@ -1,0 +1,32 @@
+import = [
+	{
+		table = "hdb-hdbdd-simple.db::ProductsForHdbdd.Country";
+		file = "hdb-hdbdd-simple.data:CountryForHdbdd.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "DBADMIN";
+	},
+	{
+		table = "hdb-hdbdd-simple.db::ProductsForHdbdd.Orders";
+		file = "hdb-hdbdd-simple.data:ProductsForHdbdd.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "DBADMIN";
+	},
+	{
+		table = "hdb-hdbdd-simple.db::ProductsForHdbdd.Item";
+		file = "hdb-hdbdd-simple.data:ItemsForHdbdd.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "DBADMIN";
+	}
+	
+	
+];
+

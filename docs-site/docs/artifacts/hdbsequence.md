@@ -14,8 +14,9 @@ The information on this page will help you lesrn how to develop the design-time 
 ---
 
 * Additional information on SAP Help Portal
-  * SAP HANA XS Classic: For more information, see [Create a Sequence](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html).
-  * SAP HANA XS Advanced: For more information, see [CREATE SEQUENCE Statement (Data Definition)](https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html).
+
+   * SAP HANA XS Classic: For more information, see [Create a Sequence](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html).
+   * SAP HANA XS Advanced: For more information, see [CREATE SEQUENCE Statement (Data Definition)](https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html).
 
 * Sample HANA XS Classic syntax:
 

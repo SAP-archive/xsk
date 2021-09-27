@@ -14,7 +14,7 @@ This `HttpClient` is equipped with a cookie database. If a previous response sen
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/20](https://github.com/SAP/xsk/issues/20)
-- Module: [http/http.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/http)
+- Module: [http/http.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/http/http.js)
 - Status: `alpha`
 
 ## Sample Usage

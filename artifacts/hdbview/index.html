@@ -946,7 +946,7 @@
 </ul>
 <p>For more information, see <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/78dcb8e2f4f14b53b0d333bcd24f8721.html">Create an SQL View</a>.</p>
 <ul>
-<li>Sample HANA version1 syntax</li>
+<li>Sample HANA version1 syntax:</li>
 </ul>
 <div class="highlight"><pre><span></span><code>schema=&quot;MYSCHEMA&quot;;
 query=&quot;SELECT T1.\&quot;Column2\&quot; FROM \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW1\&quot; AS T1 LEFT JOIN \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW2\&quot; AS T2 ON T1.\&quot;Column1\&quot; = T2.\&quot;Column1\&quot;&quot;;
@@ -968,7 +968,7 @@ depends_on=[&quot;acme.com.test.views::MY_VIEW1&quot;, &quot;acme.com.test.views
 </ul>
 </div>
 <ul>
-<li>Sample HANA version2 syntax</li>
+<li>Sample HANA version2 syntax:</li>
 </ul>
 <div class="highlight"><pre><span></span><code>VIEW &quot;hdb_view.db::ItemsByOrderHANAv2&quot;
 AS SELECT &quot;Id&quot; FROM &quot;hdb_view::Item&quot;;

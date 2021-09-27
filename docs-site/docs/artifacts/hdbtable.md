@@ -42,7 +42,9 @@ COLUMN TABLE "MYSCHEMA::MYTABLE" (
 
 * Parser specific details
 
-!!! info The parser does not allow duplicate properties.
+!!! info "Note"
+	The parser does not allow duplicate properties.
 
 The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. 
+
 An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.

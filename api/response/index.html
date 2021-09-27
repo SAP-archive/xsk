@@ -960,32 +960,45 @@
 <h2 id="overview">Overview</h2>
 <ul>
 <li>Definition: <a href="https://github.com/SAP/xsk/issues/13">https://github.com/SAP/xsk/issues/13</a></li>
-<li>Module: <a href="https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/response/response.js">response/response.js</a></li>
+<li>Module: <a href="https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/web/web.js">response/response.js</a></li>
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">filterCarsByColor</span><span class="p">(</span><span class="nx">color</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// ...filter operation</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// array of cars and their colors</span>
+<span class="kd">let</span> <span class="nx">cars</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="nx">make</span><span class="o">:</span> <span class="s2">&quot;mercedes&quot;</span><span class="p">,</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;red&quot;</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nx">make</span><span class="o">:</span> <span class="s2">&quot;audi&quot;</span><span class="p">,</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;blue&quot;</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nx">make</span><span class="o">:</span> <span class="s2">&quot;toyota&quot;</span><span class="p">,</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;red&quot;</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nx">make</span><span class="o">:</span> <span class="s2">&quot;vw&quot;</span><span class="p">,</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;blue&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="c1">// filter by color function</span>
+<span class="kd">function</span> <span class="nx">filterCarsByColor</span><span class="p">(</span><span class="nx">color</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">cars</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">car</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="nx">car</span><span class="p">.</span><span class="nx">color</span> <span class="o">===</span> <span class="nx">color</span><span class="p">;</span>
+  <span class="p">})</span>
 <span class="p">}</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="o">===</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">GET</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// get query parameter color</span>
   <span class="kd">let</span> <span class="nx">color</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">parameters</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">);</span>
 
-  <span class="c1">// handle some request operation if color param has been passed else return bad request</span>
+  <span class="c1">// handle some request operation </span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">color</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">let</span> <span class="nx">cars</span> <span class="o">=</span> <span class="nx">filterCarsByColor</span><span class="p">(</span><span class="nx">color</span><span class="p">);</span>
+    <span class="c1">// filter by color if passed</span>
+    <span class="kd">let</span> <span class="nx">filteredCars</span> <span class="o">=</span> <span class="nx">filterCarsByColor</span><span class="p">(</span><span class="nx">color</span><span class="p">);</span>
 
     <span class="c1">// send response with filtered cars by color</span>
     <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s2">&quot;application/json&quot;</span><span class="p">;</span>
     <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">OK</span><span class="p">;</span>
     <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-      <span class="s2">&quot;cars&quot;</span><span class="o">:</span> <span class="nx">cars</span>
+      <span class="s2">&quot;cars&quot;</span><span class="o">:</span> <span class="nx">filteredCars</span>
     <span class="p">}));</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// send response with all cars as color param is missing</span>
     <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">BAD_REQUEST</span><span class="p">;</span>
     <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-      <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="s2">&quot;missing color parameter&quot;</span>
+      <span class="s2">&quot;cars&quot;</span><span class="o">:</span> <span class="nx">cars</span>
     <span class="p">}));</span>
   <span class="p">}</span>
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>

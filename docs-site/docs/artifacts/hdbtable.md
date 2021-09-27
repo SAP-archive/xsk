@@ -1,8 +1,8 @@
 ---
-title: hdbtable
+title: HDBTable
 ---
 
-hdbtable
+HDBTable
 ===
 
 ## Overview

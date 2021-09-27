@@ -948,7 +948,7 @@
 <ul>
 <li>Sample HANA XS Classic syntax:</li>
 </ul>
-<p><div class="highlight"><pre><span></span><code>table.schemaName = &quot;MYSCHEMA&quot;;
+<div class="highlight"><pre><span></span><code>table.schemaName = &quot;MYSCHEMA&quot;;
 table.tableType = COLUMNSTORE;
 table.columns = [
     {name = &quot;Col1&quot;; sqlType = VARCHAR; nullable = false; length = 20; comment = &quot;dummy comment&quot;;},
@@ -960,17 +960,21 @@ table.indexes =  [
     {name = &quot;MYINDEX2&quot;; unique = true; indexColumns = [&quot;Col1&quot;, &quot;Col4&quot;];}];
 table.primaryKey.pkcolumns = [&quot;Col1&quot;, &quot;Col2&quot;];
 </code></pre></div>
-* Sample HANA XS Advanced syntax
+<ul>
+<li>
+<p>Sample HANA XS Advanced syntax:
 <div class="highlight"><pre><span></span><code>COLUMN TABLE &quot;MYSCHEMA::MYTABLE&quot; ( 
    &quot;ID&quot; INTEGER DEFAULT 555, &quot;NAME&quot; NVARCHAR(256),
    &quot;ACTIVE&quot; TINYINT,
    &quot;COUNTRY&quot; NVARCHAR(256),
    PRIMARY KEY (&quot;ID&quot;) )
 </code></pre></div></p>
-<ul>
-<li>Parser specific details</li>
+</li>
+<li>
+<p>Parser specific details</p>
+</li>
 </ul>
-<p><strong>Parser does not allow duplicate properties.</strong></p>
+<p>!!! info The parser does not allow duplicate properties.</p>
 <p>The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. 
 An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.</p>
                 

@@ -10,6 +10,16 @@ HDBTable
 
 The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBTable syntax.
 
+## Details About the Parser
+---
+
+!!! warning "Caution"
+	The parser does not allow duplicate properties.
+
+The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. 
+
+An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.
+
 ## Reference
 ---
 
@@ -41,13 +51,3 @@ COLUMN TABLE "MYSCHEMA::MYTABLE" (
    "COUNTRY" NVARCHAR(256),
    PRIMARY KEY ("ID") )
 ```
-
-## Details About the Parser
----
-
-!!! warning "Caution"
-	The parser does not allow duplicate properties.
-
-The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. 
-
-An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.

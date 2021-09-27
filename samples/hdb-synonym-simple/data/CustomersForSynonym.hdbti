@@ -1,0 +1,11 @@
+import = [
+	{
+		table = "hdb-synonym-simple.db::CustomersForSynonym";
+		file = "hdb-synonym-simple.data:CustomersForSynonym.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+		schema = "TEST_SYNONYM_SIMPLE";
+	}
+];

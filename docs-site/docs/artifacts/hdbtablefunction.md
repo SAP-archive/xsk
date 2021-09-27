@@ -6,10 +6,12 @@ HDBTableFunction
 ===
 
 ## Overview
+---
 
 The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBTableFunction syntax.
 
-### Reference
+## Reference
+---
 
 * Additional information on SAP Help Portal
 

@@ -7,7 +7,7 @@ hdbtable
 
 ## Overview
 
-Here you will learn how to develop the design-time data-persistence model for an XSK application using the HDBTable syntax.
+The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBTable syntax.
 
 ### Reference
 

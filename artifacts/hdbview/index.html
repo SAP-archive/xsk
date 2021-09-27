@@ -300,18 +300,19 @@
     Overview
   </a>
   
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#reference" class="md-nav__link">
-    Reference
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#details-about-the-parser" class="md-nav__link">
+    Details About the Parser
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    Reference
+  </a>
   
 </li>
       
@@ -905,18 +906,19 @@
     Overview
   </a>
   
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#reference" class="md-nav__link">
-    Reference
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#details-about-the-parser" class="md-nav__link">
+    Details About the Parser
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    Reference
+  </a>
   
 </li>
       
@@ -939,8 +941,24 @@
                 
                 <h1 id="hdbview">HDBView</h1>
 <h2 id="overview">Overview</h2>
+<hr />
 <p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBView syntax.</p>
-<h3 id="reference">Reference</h3>
+<h2 id="details-about-the-parser">Details About the Parser</h2>
+<hr />
+<p>There are currently some <a href="https://github.com/SAP/xsk/issues/108">issues</a> in the behavior of the HANA version1 of the parser:</p>
+<ul>
+<li>
+<p>Currently, the parser takes into account if a given property is mandatory.</p>
+</li>
+<li>
+<p>If the property order is misplaced, the parser will still parse the values.</p>
+</li>
+<li>
+<p>If more than one value of one property is provided, then only the last one is taken.     </p>
+</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<hr />
 <ul>
 <li>Additional information on SAP Help Portal</li>
 </ul>
@@ -952,21 +970,6 @@
 query=&quot;SELECT T1.\&quot;Column2\&quot; FROM \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW1\&quot; AS T1 LEFT JOIN \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW2\&quot; AS T2 ON T1.\&quot;Column1\&quot; = T2.\&quot;Column1\&quot;&quot;;
 depends_on=[&quot;acme.com.test.views::MY_VIEW1&quot;, &quot;acme.com.test.views::MY_VIEW2&quot;];
 </code></pre></div>
-<div class="admonition info">
-<p class="admonition-title">Note</p>
-<p>There are currently some <a href="https://github.com/SAP/xsk/issues/108">issues</a> in the behavior of the HANA version1 of the parser:</p>
-<ul>
-<li>
-<p>Currently, the parser takes into account if a given property is mandatory.</p>
-</li>
-<li>
-<p>If the property order is misplaced, the parser will still parse the values.</p>
-</li>
-<li>
-<p>If more than one value of one property is provided, then only the last one is taken.       </p>
-</li>
-</ul>
-</div>
 <ul>
 <li>Sample HANA version2 syntax:</li>
 </ul>

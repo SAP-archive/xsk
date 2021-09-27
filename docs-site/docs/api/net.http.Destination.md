@@ -10,7 +10,7 @@ HTTP(s) destination class that holds metadata (e.g., host, port, useSSL). The de
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/20](https://github.com/SAP/xsk/issues/20)
-- Module: [http/http.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/http/http.js)
+- Module: [http/http.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/http)
 - Status: `alpha`
 
 ## Sample Usage

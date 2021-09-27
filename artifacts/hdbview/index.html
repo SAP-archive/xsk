@@ -939,25 +939,26 @@
                 
                 <h1 id="hdbview">hdbview</h1>
 <h2 id="overview">Overview</h2>
-<p>The information on how to develop the design-time data-persistence model for an XSK application using the HDBView syntax</p>
+<p>Here you will learn how to develop the design-time data-persistence model for an XSK application using the HDBView syntax.</p>
 <h3 id="reference">Reference</h3>
 <ul>
-<li>SAP Help</li>
+<li>Additional information on SAP Help Portal</li>
 </ul>
-<blockquote>
-<p><a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/78dcb8e2f4f14b53b0d333bcd24f8721.html">https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/78dcb8e2f4f14b53b0d333bcd24f8721.html</a></p>
-</blockquote>
+<p>For more information, see <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/78dcb8e2f4f14b53b0d333bcd24f8721.html">Create an SQL View</a>.</p>
 <ul>
-<li>Sample Hana version1 syntax</li>
+<li>Sample HANA version1 syntax</li>
 </ul>
-<p><div class="highlight"><pre><span></span><code>schema=&quot;MYSCHEMA&quot;;
+<div class="highlight"><pre><span></span><code>schema=&quot;MYSCHEMA&quot;;
 query=&quot;SELECT T1.\&quot;Column2\&quot; FROM \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW1\&quot; AS T1 LEFT JOIN \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW2\&quot; AS T2 ON T1.\&quot;Column1\&quot; = T2.\&quot;Column1\&quot;&quot;;
 depends_on=[&quot;acme.com.test.views::MY_VIEW1&quot;, &quot;acme.com.test.views::MY_VIEW2&quot;];
 </code></pre></div>
-* Parser Hana version1 behavior (<a href="https://github.com/SAP/xsk/issues/108">issue</a>)
-1. Currently the Parser take into account if a given property is mandatory.
-1. If the property order is misplaced the parser will still parse the values.
-1. If more than one value of one property is provided then only the last one is taken.       </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+</div>
+<p>There's currently an <a href="https://github.com/SAP/xsk/issues/108">issue</a> in the behavior of the HANA version1 of the parser:
+ - Currently, the Parser takes into account if a given property is mandatory.
+ - If the property order is misplaced, the parser will still parse the values.
+ - If more than one value of one property is provided, then only the last one is taken.       </p>
 <ul>
 <li>Sample HANA version2 syntax</li>
 </ul>
@@ -965,7 +966,7 @@ depends_on=[&quot;acme.com.test.views::MY_VIEW1&quot;, &quot;acme.com.test.views
 AS SELECT &quot;Id&quot; FROM &quot;hdb_view::Item&quot;;
 </code></pre></div>
 <ul>
-<li>Which syntax is supported from the parser</li>
+<li>Which syntax does the parser support?</li>
 </ul>
 <table>
 <thead>

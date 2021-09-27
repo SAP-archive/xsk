@@ -11,7 +11,7 @@ $.response
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/13](https://github.com/SAP/xsk/issues/13)
-- Module: [response/response.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/web/web.js)
+- Module: [response/response.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/web)
 - Status: `alpha`
 
 

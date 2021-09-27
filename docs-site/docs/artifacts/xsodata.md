@@ -1,21 +1,23 @@
 ---
-title: xsodata
+title: XSODATA
 ---
 
-xsodata
+XSODATA
 ===
 
 ## Overview
+---
 
-The information on how to develop the design-time data-persistence model for an XSK application using the XSODATA syntax
+The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the XSODATA syntax.
 
-### Reference
+## Reference
+---
 
-SAP Help
+* Additional information on SAP Help Portal
 
-[Tutorial: Use the SAP HANA OData Interface](https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/502dbde2cbeb4f27b0e9b9887b0097b7.html)
+  - [Tutorial: Use the SAP HANA OData Interface](https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/502dbde2cbeb4f27b0e9b9887b0097b7.html)
 
-[OData Service-Definition Examples (XS Advanced)](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/02e91608eb174dcea6d544aad6ea2e12.html)
+  - [OData Service-Definition Examples (XS Advanced)](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/02e91608eb174dcea6d544aad6ea2e12.html)
 
 * Example:
 
@@ -45,7 +47,7 @@ service namespace "products.odata"  {
 
 * More details
 
-Inside xsodata file we can specify which properties can be exposed using the 'with' and 'without' section:
+Inside an `*.xsodata` file we can specify which properties can be exposed using the 'with' and 'without' section:
 
 ```
 service namespace "np"{
@@ -54,7 +56,8 @@ service namespace "np"{
 }
 ```
 
-# XSK XSODATA Annotations Support
+### XSK XSODATA Annotations Support
+---
 
 [SAP ODATA Annotations for XSOData XS2](https://github.wdf.sap.corp/xs2/xsodata/blob/cb734da393e83e9e893c10e720af53bd5e43c481/documentation/annotations.md)
 
@@ -74,7 +77,7 @@ service namespace "np"{
 | Element edm:AssociationSet     | :heavy_check_mark:|
 
   
-For all the list of annotations check the official documentation [SAP OData Annotations v2.X](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/b7fb60b91ee54a75bb03e54af1316229.html)
+If you want to check the whole list of annotations, visit the official [SAP OData Annotations v2.X](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/b7fb60b91ee54a75bb03e54af1316229.html) documentation.
 
 - Supportable [OData Service-Definition Features](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/fda42888439142dc9984d3560bc68206.html)
      

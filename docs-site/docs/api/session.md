@@ -10,7 +10,7 @@ $.session
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/11](https://github.com/SAP/xsk/issues/11)
-- Module: [session/session.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/xsk/session/session.js)
+- Module: [session/session.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/session)
 - Status: `alpha`
 
 ## Sample Usage

@@ -1,21 +1,21 @@
 ---
-title: hdbschema
+title: HDBSchema
 ---
 
-hdbschema
+HDBSchema
 ===
 
 ## Overview
 
-The information on how to develop the design-time data-persistence model for an XSK application using the HDBSchema syntax
+The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBSchema syntax.
 
 ### Reference
 
-* SAP Help
+* Additional information on SAP Help Portal
 
-> [https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.02/en-US/8a825cbbe16a45a08987d9940d9f9f0f.html](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.02/en-US/8a825cbbe16a45a08987d9940d9f9f0f.html)
+For more information, see [Create a Schema](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.02/en-US/8a825cbbe16a45a08987d9940d9f9f0f.html).
 
-* Example
+* Example:
 
 ```
 schema_name="MYSCHEMA";

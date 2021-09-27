@@ -6,10 +6,20 @@ HDBCDS
 ===
 
 ## Overview
+---
 
 The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBCDS syntax, also known as HDBDD.
 
-### Reference
+## Details About the Parser
+---
+
+The following words are **_key symbols_** and they are:
+
+- not case sensitive: _**key, namespace, entity, context, using, assiciation**_
+- case sensitive: _**as, type, hana, to, on**_
+
+## Reference
+---
 
 * Additional information on SAP Help Portal
 
@@ -56,13 +66,6 @@ context Products {
     };
 };
 ```
-
-
-### Details About the Parser
-The following words are **_key symbols_** and they are:
-
-- not case sensitive: _**key, namespace, entity, context, using, assiciation**_
-- case sensitive: _**as, type, hana, to, on**_
 
 
 

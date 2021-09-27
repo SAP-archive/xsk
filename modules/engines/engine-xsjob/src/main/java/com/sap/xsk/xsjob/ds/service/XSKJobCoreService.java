@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
@@ -74,6 +75,7 @@ public class XSKJobCoreService implements IXSKJobCoreService {
 
   @Override
   public XSKJobDefinition updateJob(String name, String group, String description, String module, String action, String cronExpression,
+      Timestamp startAt, Timestamp endAt,
       Map<String, String> parametersAsMap) throws SchedulerException {
     try {
       Connection connection = null;
@@ -85,6 +87,8 @@ public class XSKJobCoreService implements IXSKJobCoreService {
         xskJobDefinition.setModule(module);
         xskJobDefinition.setFunction(action);
         xskJobDefinition.setCronExpression(cronExpression);
+        xskJobDefinition.setStartAt(startAt);
+        xskJobDefinition.setEndAt(endAt);
         xskJobDefinition.setParameters(XSKUtils.objectToByteArray(parametersAsMap));
         xskJobPersistenceManager.update(connection, xskJobDefinition);
 

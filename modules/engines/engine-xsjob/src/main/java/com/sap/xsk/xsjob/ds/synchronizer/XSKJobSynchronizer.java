@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class XSKJobSynchronizer extends AbstractSynchronizer {
+
   public static final String XSK_SYNCHRONIZER_XSJOB_ENABLED = "XSK_SYNCHRONIZER_XSJOB_ENABLED";
   private static final Logger logger = LoggerFactory.getLogger(XSKJobSynchronizer.class);
 
@@ -77,7 +78,7 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
    */
   @Override
   public void synchronize() {
-    if(Boolean.parseBoolean(Configuration.get(XSK_SYNCHRONIZER_XSJOB_ENABLED, "false"))) {
+    if (Boolean.parseBoolean(Configuration.get(XSK_SYNCHRONIZER_XSJOB_ENABLED, "false"))) {
       synchronized (XSKJobSynchronizer.class) {
         if (beforeSynchronizing()) {
           if (beforeSynchronizing()) {
@@ -122,7 +123,7 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
       String json = IOUtils.toString(in, StandardCharsets.UTF_8);
       XSKJobArtifact xskJobArtifact = schedulerCoreService.parseJob(json);
       ArrayList<XSKJobDefinition> xskJobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
-      for (XSKJobDefinition jobDefinition:xskJobDefinitions) {
+      for (XSKJobDefinition jobDefinition : xskJobDefinitions) {
         jobDefinition.setName(jobPath);
         JOBS_PREDELIVERED.put(jobPath, jobDefinition);
       }
@@ -246,7 +247,8 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
         XSKJobDefinition existing = schedulerCoreService.getJob(xskJob.getName());
         if (!xskJob.equals(existing)) {
           schedulerCoreService.updateJob(xskJob.getName(), xskJob.getGroup(), xskJob.getDescription(),
-              xskJob.getModule(), xskJob.getFunction(), xskJob.getCronExpression(), xskJob.getParametersAsMap());
+              xskJob.getModule(), xskJob.getFunction(), xskJob.getCronExpression(), xskJob.getStartAt(), xskJob.getEndAt(),
+              xskJob.getParametersAsMap());
           logger.info("Synchronized a modified Job [{}] from group: {}", xskJob.getName(), xskJob.getGroup());
         }
       }

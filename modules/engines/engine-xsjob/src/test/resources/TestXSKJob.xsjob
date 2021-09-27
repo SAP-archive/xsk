@@ -1,12 +1,12 @@
 {
 	"description": "My Job configuration",
-	"action": "XSJOB:jobHandler.xsjslib::jobFunc",
+	"action": "/:jobHandler.xsjslib::jobFunc",
 	"schedules": [
 		{
 			"description": "My Schedule configuration for execution every second",
 			"xscron": "* * * * * * */1",
 			"parameter": {
-				"myJobParamter": "paramterValue"
+				"myJobParameter": "parameterValue"
 			}
 		}
 	]

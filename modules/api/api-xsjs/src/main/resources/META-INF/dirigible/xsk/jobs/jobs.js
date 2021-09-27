@@ -14,9 +14,8 @@ var registry = require("platform/v4/registry");
 
 exports.Job = function Job(path) {
   this.path = path;
-  var job = JSON.parse(registry.getText(path));
 
-//  com.sap.xsk.xsjob.ds.facade.XSKJobFacade.newJob(path, );
+  com.sap.xsk.xsjob.ds.facade.XSKJobFacade.newJob(registry.getText(path), path);
 
   this.activate = function(){
     com.sap.xsk.xsjob.ds.facade.XSKJobFacade.activate(this.path);
@@ -24,5 +23,21 @@ exports.Job = function Job(path) {
 
   this.deactivate = function(){
     com.sap.xsk.xsjob.ds.facade.XSKJobFacade.deactivate(this.path);
+  }
+
+  this.configure = function(status, startAt, endAt) {
+    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.configure(this.path, status, parseDate(startAt), parseDate(endAt));
+  }
+}
+
+function parseDate(dateObj) {
+  if(dateObj instanceof Date) {
+    return new java.sql.Timestamp(dateObj.getTime());
+  } else {
+    var timestamp = Date.parse(dateObj.value);
+
+    if(!timestamp) throw "Invalid date format";
+
+    return new java.sql.Timestamp(timestamp);
   }
 }

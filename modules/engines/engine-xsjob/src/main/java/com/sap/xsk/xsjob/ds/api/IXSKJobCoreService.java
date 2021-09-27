@@ -13,6 +13,8 @@ package com.sap.xsk.xsjob.ds.api;
 
 import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
@@ -31,6 +33,7 @@ public interface IXSKJobCoreService {
       Map<String, String> parametersAsMap) throws SchedulerException;
 
   XSKJobDefinition updateJob(String name, String group, String description, String module, String action, String cronExpression,
+      Timestamp startAt, Timestamp endAt,
       Map<String, String> parametersAsMap) throws SchedulerException;
 
   XSKJobDefinition getJob(String name) throws SchedulerException;

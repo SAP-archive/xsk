@@ -18,6 +18,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 import com.sap.xsk.xsjob.ds.api.IXSKJobCoreService;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.handler.XSKJobHandler;
+import java.util.Date;
 import java.util.Set;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.manager.SchedulerManager;
@@ -53,7 +54,8 @@ public class XSKSchedulerManager {
           return;
         }
 
-        CronTrigger trigger = newTrigger().withIdentity(triggerKey).withSchedule(cronSchedule(jobDefinition.getCronExpression())).build();
+        CronTrigger trigger = newTrigger().withIdentity(triggerKey).startAt(new Date(jobDefinition.getStartAt().getTime()))
+            .endAt(new Date(jobDefinition.getEndAt().getTime())).withSchedule(cronSchedule(jobDefinition.getCronExpression())).build();
 
         scheduler.scheduleJob(job, trigger);
 

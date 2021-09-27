@@ -24,10 +24,10 @@ depends_on=["acme.com.test.views::MY_VIEW1", "acme.com.test.views::MY_VIEW2"];
 ```
 
 !!! Note
-There's currently an [issue](https://github.com/SAP/xsk/issues/108) in the behavior of the HANA version1 of the parser:
- - Currently, the Parser takes into account if a given property is mandatory.
- - If the property order is misplaced, the parser will still parse the values.
- - If more than one value of one property is provided, then only the last one is taken.       
+    There's currently an [issue](https://github.com/SAP/xsk/issues/108) in the behavior of the HANA version1 of the parser:
+    - Currently, the Parser takes into account if a given property is mandatory.
+    - If the property order is misplaced, the parser will still parse the values.
+    - If more than one value of one property is provided, then only the last one is taken.       
 
 * Sample HANA version2 syntax
 

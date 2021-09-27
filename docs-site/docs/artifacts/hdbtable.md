@@ -42,7 +42,7 @@ COLUMN TABLE "MYSCHEMA::MYTABLE" (
 
 * Parser specific details
 
-!!! info "Note"
+!!! tip "Caution"
 	The parser does not allow duplicate properties.
 
 The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. 

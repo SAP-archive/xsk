@@ -18,7 +18,7 @@ The information on this page will help you learn how to develop the design-time 
 
 The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. 
 
-An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.
+An exception will be thrown if a property is defined more than once in the `*.hdbtable` file. An additional exception will be thrown if a mandatory field is missing.
 
 ## Reference
 ---

@@ -954,10 +954,10 @@ depends_on=[&quot;acme.com.test.views::MY_VIEW1&quot;, &quot;acme.com.test.views
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>There's currently an <a href="https://github.com/SAP/xsk/issues/108">issue</a> in the behavior of the HANA version1 of the parser:
-- Currently, the Parser takes into account if a given property is mandatory.
-- If the property order is misplaced, the parser will still parse the values.
-- If more than one value of one property is provided, then only the last one is taken.       </p>
+<p>There are currently some <a href="https://github.com/SAP/xsk/issues/108">issues</a> in the behavior of the HANA version1 of the parser:
+    - Currently, the Parser takes into account if a given property is mandatory.
+    - If the property order is misplaced, the parser will still parse the values.
+    - If more than one value of one property is provided, then only the last one is taken.       </p>
 </div>
 <ul>
 <li>Sample HANA version2 syntax</li>
@@ -971,7 +971,7 @@ AS SELECT &quot;Id&quot; FROM &quot;hdb_view::Item&quot;;
 <table>
 <thead>
 <tr>
-<th>hdbview syntax (Hana v1)</th>
+<th>hdbview syntax (HANA v1)</th>
 <th>hdbview syntax (XSKViewParser)</th>
 <th>Comments</th>
 </tr>

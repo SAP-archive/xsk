@@ -2,177 +2,177 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://sap.github.io/xsk/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/community/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/hdb/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/import/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net.Destination/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net.Mail.Part/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net.Mail/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net.SMTPConnection/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net.http.Client/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net.http.Destination/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net.http.Request/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net.http/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/net/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/request/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/response/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/session/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/trace/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/util.codec/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/util/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/api/web/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbdd/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbprocedure/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbschema/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbsequence/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbsynonym/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbtable/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbtablefunction/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/hdbview/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/xsjs/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/artifacts/xsodata/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/setup/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/setup/cloud-foundry/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/setup/environment-variables/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/setup/helm/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sap.github.io/xsk/setup/kyma/</loc>
-         <lastmod>2021-09-26</lastmod>
+         <lastmod>2021-09-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

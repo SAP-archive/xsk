@@ -939,14 +939,12 @@
                 
                 <h1 id="hdbtable">hdbtable</h1>
 <h2 id="overview">Overview</h2>
-<p>The information on how to develop the design-time data-persistence model for an XSK application using the HDBTable syntax</p>
+<p>Here you will learn how to develop the design-time data-persistence model for an XSK application using the HDBTable syntax.</p>
 <h3 id="reference">Reference</h3>
 <ul>
-<li>SAP Help</li>
+<li>Additional information on SAP Help Portal</li>
 </ul>
-<blockquote>
-<p><a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/89cbf999e6004be3a5324b8f9ef0c53f.html">https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/89cbf999e6004be3a5324b8f9ef0c53f.html</a></p>
-</blockquote>
+<p>For more information, see <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/89cbf999e6004be3a5324b8f9ef0c53f.html">Create a Table</a>.</p>
 <ul>
 <li>Sample Hana XS Classic syntax:</li>
 </ul>
@@ -972,9 +970,9 @@ table.primaryKey.pkcolumns = [&quot;Col1&quot;, &quot;Col2&quot;];
 <ul>
 <li>Parser specific details</li>
 </ul>
-<p><strong>Parser do not allow duplicate properties.</strong></p>
-<p>The order of the table's properties, as well as column's and index's properties is not taken into account when table definition is parsed. 
-Exception will be thrown if a property is defined more than once in the *.hdbtable file. Also, additional exception will be thrown in case a mandatory field is missing.</p>
+<p><strong>Parser does not allow duplicate properties.</strong></p>
+<p>The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. 
+An exception will be thrown if a property is defined more than once in the *.hdbtable file. An additional exception will be thrown if a mandatory field is missing.</p>
                 
                   
                 

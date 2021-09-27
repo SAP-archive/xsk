@@ -1,8 +1,8 @@
 ---
-title: hdbtablefunction
+title: HDBTableFunction
 ---
 
-hdbtablefunction
+HDBTableFunction
 ===
 
 ## Overview

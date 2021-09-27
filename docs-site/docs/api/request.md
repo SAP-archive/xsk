@@ -11,7 +11,7 @@ $.request
 ## Overview
 
 - Definition: [https://github.com/SAP/xsk/issues/12](https://github.com/SAP/xsk/issues/12)
-- Module: [web/web.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/web)
+- Module: [web/web.js](https://github.com/SAP/xsk/tree/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/web/web.js)
 - Status: `alpha`
 
 

@@ -389,8 +389,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#details-about-the-parser" class="md-nav__link">
-    Details About the Parser
+  <a href="#cds-file" class="md-nav__link">
+    CDS file
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cds-artifact" class="md-nav__link">
+    CDS artifact
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-conventions" class="md-nav__link">
+    Naming conventions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-artifacts-in-cds" class="md-nav__link">
+    External Artifacts in CDS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cds-primitive-data-types" class="md-nav__link">
+    CDS Primitive Data Types
   </a>
   
 </li>
@@ -911,8 +939,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#details-about-the-parser" class="md-nav__link">
-    Details About the Parser
+  <a href="#cds-file" class="md-nav__link">
+    CDS file
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cds-artifact" class="md-nav__link">
+    CDS artifact
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-conventions" class="md-nav__link">
+    Naming conventions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-artifacts-in-cds" class="md-nav__link">
+    External Artifacts in CDS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cds-primitive-data-types" class="md-nav__link">
+    CDS Primitive Data Types
   </a>
   
 </li>
@@ -945,13 +1001,626 @@
 <h2 id="overview">Overview</h2>
 <hr />
 <p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBCDS syntax, also known as HDBDD.</p>
-<h2 id="details-about-the-parser">Details About the Parser</h2>
+<h2 id="cds-file">CDS file</h2>
 <hr />
-<p>The following words are <strong><em>key symbols</em></strong> and they are:</p>
+<p>CDS documents are design-time source files that contain DDL code that describes a persistence model according to rules defined in Core Data Services.
+CDS documents have the file suffix .hdbdd. Each CDS document must contain the following basic elements:</p>
+<ol>
+<li>
+<p>namespace</p>
+<p>The name space you define must be the first declaration in the CDS document and match the absolute package path to the location of the CDS document in the repository.</p>
+</li>
+<li>
+<p>schema definition</p>
+<p>The schema you specify is used to store the catalog objects that are defined in the CDS document, for example: entities, structured types, and views. The objects are       generated in the catalog when the CDS document is synchronized by the xsk runtime.</p>
+</li>
+<li>
+<p>CDS artifact definitions</p>
+<p>The objects that make up your persistence model, for example: contexts, entities and structured types</p>
+</li>
+</ol>
+<p>Each CDS document must contain one top-level artifact, for example: a context, a type, an entity, or a view. The name of the top-level artifact in the CDS document must match the file name of the CDS document, without the suffix. For example, if the top-level artifact is a context named MyModel, the name of the CDS document must be MyModel.hdbdd.</p>
+<h2 id="cds-artifact">CDS artifact</h2>
+<h3>Context</h3>
+
+<p>If you want to define multiple CDS artifacts within a single CDS document (for example, multiple types, structured types, and entities), the top-level artifact must be a <strong>context</strong>. A CDS document can contain multiple contexts and any number and type of artifacts. A context can also contain nested sub-contexts, each of which can also contain any number and type of artifacts.</p>
+<h4>Example</h4>
+
+<div class="highlight"><pre><span></span><code>namespace com.acme.myapp1;
+
+@Schema: &#39;MySchema&#39;
+
+context MyContext {
+
+// Nested contexts
+
+   context InnerCtx {
+
+      Entity MyEntity {
+         …
+      };
+
+      Type CtxType {
+        a : Integer;
+        b : String(59);
+      };
+
+   }; 
+ };
+};
+</code></pre></div>
+<h3>Entity</h3>
+
+<p>In the SAP HANA database, as in other relational databases, a CDS entity is a table with a set of data elements. Each element will correspond to a table column on synchronizing the <strong>.hdbdd</strong> file.</p>
+<h4>Example</h4>
+
+<div class="highlight"><pre><span></span><code>entity MyTable {
+       key Author    : String(100);
+       key BookTitle : String(100);
+           ISBN      : Integer not null;
+           Publisher : String(100);
+       elem2     : String(20) default &#39;John Doe&#39;;      
+           elem3     : String(20) default &#39;John Doe&#39; null; 
+};
+</code></pre></div>
+<h4>Element</h4>
+
+<div class="highlight"><pre><span></span><code>name: String(20);
+age: Integer;
+address: hana.VARCHAR;
+</code></pre></div>
+<p>Each element(field) of the entity definition has to contain at least a name and a type.</p>
+<p>You can expand the definition of an entity element beyond the element's name and type by using element modifiers. For example, you can specify if an entity element is the primary key or part of the primary key. The following entity element modifiers are available:</p>
 <ul>
-<li>not case sensitive: <em><strong>key, namespace, entity, context, using, assiciation</strong></em></li>
-<li>case sensitive: <em><strong>as, type, hana, to, on</strong></em></li>
+<li><strong>key</strong></li>
 </ul>
+<p>Defines if the specified element is the primary key or part of the primary key for the specified entity.</p>
+<ul>
+<li><strong>null</strong></li>
+</ul>
+<p>Defines if an entity element can (null) or cannot (not null) have the value NULL. If neither null nor not null is specified for the element, the default value null applies (except for the key element).</p>
+<ul>
+<li><strong>default</strong> <literal_value>
+Defines the default value for an entity element in the event that no value is provided during an INSERT operation. The syntax for the literals is defined in the primitive data-type specification.</li>
+</ul>
+<p>Example of more literals wich could be used as default values for their corresponding scalar type.
+<div class="highlight"><pre><span></span><code>entity WithDefaults
+{
+  key id :  Integer;
+  field1 :  Integer       default -42;
+  field2 :  Integer64     default 9223372036854775807;
+  field3 :  Decimal(5, 3) default 12.345;
+  field4 :  BinaryFloat   default 123.456e-1;
+  field5 :  LocalDate     default date&#39;2013-04-29&#39;;
+  field6 :  LocalTime     default time&#39;17:04:03&#39;;
+  field7 :  UTCDateTime   default timestamp&#39;2013-05-01 01:02:03&#39;;
+  field8 :  UTCTimestamp  default timestamp&#39;2013-05-01 01:02:03&#39;;
+  field9 :  Binary(32)    default x&#39;0102030405060708090a0b0c0d0e0[...]&#39;;
+  field10 : String(10)    default &#39;foo&#39;;
+};
+</code></pre></div></p>
+<h3>Structured User-Defined Types</h3>
+
+<p>A structured type is a data type comprising a list of attributes, each of which has its own data type. The attributes of the structured type can be defined manually in the structured type itself and reused either by another structured type or an entity.</p>
+<p>In a structured user-defined type, you can define original types (aNumber in the following example) or reference existing types defined elsewhere in the same type definition or another, separate type definition (MyString80). If you define multiple types in a single CDS document, for example, in a parent context, each structure-type definition must be separated by a semi-colon (;).</p>
+<p>The type MyString80 is defined in the following CDS document:
+<div class="highlight"><pre><span></span><code>namespace Package1.Package2;
+@Schema: &#39;MySchema&#39;
+type MyString80: String(80);
+</code></pre></div></p>
+<p>A using directive is required to resolve the reference to the data type specified in otherText : MyString80;, as illustrated in the following example:</p>
+<div class="highlight"><pre><span></span><code>namespace Package1.Package2;
+using Package1.Package2::MyString80;  //contains definition of MyString80
+@Schema: &#39;MySchema&#39;
+type MyStruct
+{  
+  aNumber   : Integer;  
+  someText  : String(80);  
+  otherText : MyString80;  // defined in a separate type
+};
+</code></pre></div>
+<h4>Nested Structured Types</h4>
+<p>Since user-defined types can make use of other user-defined types, you can build nested structured types, as illustrated in the following example:</p>
+<div class="highlight"><pre><span></span><code>namespace com.sap.uni;
+
+@Schema: &#39;MYSCHEMA&#39;
+context ContextA {
+    type Address
+    {
+        street : String(50);
+        number: Integer;
+    zipCode: Integer;
+    };
+    type Student
+    {
+        name: String(50)
+        age: Integer;
+    address: Address;
+    };
+};
+</code></pre></div>
+<p>For each structured type, a SAP HANA table type is generated, whose name is built by concatenating the following elements of the CDS document containing the structured-type definition and separating the elements by a dot delimiter (.):</p>
+<ul>
+<li>the name space </li>
+<li>the names of all artifacts that enclose the type </li>
+<li>the name of the type itself</li>
+</ul>
+<p>The columns of the table type are built by flattening the elements of the type. Elements with structured types are mapped to one column per nested element, with the column names built by concatenating the element names and separating the names by dots ".". Taking the above example the following will be generated in the database:</p>
+<div class="highlight"><pre><span></span><code>create type &quot;com.sap.uni::ContextA.Address&quot; as table (
+    street : varchar(50);
+    number: integer;
+    zipCode: integer;
+);
+
+create type &quot;com.sap.uni::ContextA.Student&quot; as table (
+    name: varchar(50);
+        age: integer;
+    address.street : varchar(50);
+    address.number : integer;
+    address.zipCode : integer;
+);
+</code></pre></div>
+<p>The new SAP HANA table types are generated in the schema that is specified in the schema annotation of the respective top-level artifact in the CDS document containing the structured types.</p>
+<p>Table types are only generated for direct structure definitions; in the following example, this would include: MyStruct, MyNestedStruct, and MyDeepNestedStruct. No table types are generated for derived types that are based on structured types; in the following example, the derived types include: MyS, MyOtherInt, MyOtherStruct.</p>
+<div class="highlight"><pre><span></span><code>namespace Pack1.&quot;pack-age2&quot;; 
+@Schema: &#39;MySchema&#39;
+context MyModel
+{
+  type MyInteger  : Integer;
+  type MyString80 : String(80);
+  type MyDecimal  : Decimal(10,2);
+
+  type MyStruct  
+  {
+    aNumber   : Integer;
+    someText  : String(80);
+    otherText : MyString80;  // defined in example above
+  };
+
+  type MyS           : MyStruct;
+  type MyOtherInt    : type of MyStruct.aNumber;
+  type MyOtherStruct : type of MyDeepNestedStruct.nested.nested;
+
+  type MyNestedStruct
+  {
+    name   : MyString80;
+    nested : MyS;
+  };
+
+  type MyDeepNestedStruct
+  {
+    text   : LargeString;
+    nested : MyNestedStruct;
+  };
+};
+</code></pre></div>
+<h4>type of</h4>
+
+<p>You can also define a type based on an existing type that is already defined in another user-defined structured type, for example, by using the 'type of' keyword, as illustrated in the following example:</p>
+<div class="highlight"><pre><span></span><code>type MyOtherInt    : type of Address.number;        // =&gt; Integer 
+type MyString : type of Student.address.street;     // =&gt; String(50)
+</code></pre></div>
+<p>The following code example shows how to use the type of keyword to define an element using the definition specified in another user-defined data-type field. For example, field4 : type of field3; indicates that, like field3, field4 is a LocalDate data type.</p>
+<div class="highlight"><pre><span></span><code>entity MyEntity1 {
+  key id  : Integer;
+  field1  : MyType3;
+  field2  : String(24);
+  field3  : LocalDate;
+  field4  : type of field3;
+  field5  : type of MyType1.field2;  
+  field6  : type of InnerCtx.CtxType.b;  // context reference
+};
+</code></pre></div>
+<h2>Associations</h2>
+
+<p>Associations define relationships between entities. Associations are specified by adding an element to a source entity with an association type that points to a target entity, complemented by optional information defining cardinality and which keys to use. There are two kinds of associations available:</p>
+<ul>
+<li>Managed Associations</li>
+<li>Unmanaged Associations</li>
+</ul>
+<h3>Association Syntax</h3>
+
+<p>Association <em>cardinality</em>  to <em>targetEntity</em> <em>managed</em> / <em>unmanaged</em></p>
+<h4>cardinality</h4>
+<p>When using an association to define a relationship between entities in a CDS; you use the cardinality to specify the type of relation, for example:
+- one-to-one (to-one)
+- one-to-many (to-n)</p>
+<div class="highlight"><pre><span></span><code>namespace samples;
+@Schema: &#39;MYSCHEMA&#39;              // XS classic *only* 
+context AssociationCardinality {
+    entity Associations {
+        // To-one associations
+        assoc1 : Association[0..1]    to target; 
+        assoc2 : Association          to target; 
+        assoc3 : Association[1]       to target; 
+        assoc4 : Association[1..1]    to target; // association has one target instance
+        // To-many associations
+        assoc5 : Association[0..*]    to target{id1};
+        assoc6 : Association[]        to target{id1}; // as assoc4, [] is short for [0..*]
+        assoc7 : Association[2..7]    to target{id1}; // any numbers are possible; user provides
+        assoc8 : Association[1, 0..*] to target{id1}; // additional info. about source cardinality
+    };
+
+    // Required to make the example above work
+    entity target {
+        key id1 : Integer;
+        key id2 : Integer;
+    };
+};
+</code></pre></div>
+<p>Association Cardinality Syntax Examples: </p>
+<table>
+<thead>
+<tr>
+<th>Association</th>
+<th>Cardinality</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>assoc1</td>
+<td>[0..1]</td>
+<td>The association has no or one target instance</td>
+</tr>
+<tr>
+<td>assoc2</td>
+<td>[0..1]</td>
+<td>Like assoc1, this association has no or one target instance and uses the default [0..1]</td>
+</tr>
+<tr>
+<td>assoc3</td>
+<td>[1]</td>
+<td>Like assoc1, this association has no or one target instance; the default for min is 0</td>
+</tr>
+<tr>
+<td>assoc4</td>
+<td>[1..1]</td>
+<td>The association has one target instance. No validation process will occur, so not specifing a target instance is still valid.</td>
+</tr>
+<tr>
+<td>assoc5</td>
+<td>[0..*]</td>
+<td>The association has no, one, or multiple target instances</td>
+</tr>
+<tr>
+<td>assoc6</td>
+<td>[]</td>
+<td>Like assoc4, [] is short for [0..*] (the association has no, one, or multiple target instances)</td>
+</tr>
+<tr>
+<td>assoc7</td>
+<td>[2..7]</td>
+<td>Any numbers are possible; the user provides. No validation will occur and unlimited number of target instances will be possible.</td>
+</tr>
+<tr>
+<td>assoc8</td>
+<td>[1, 0..*]</td>
+<td>The association has no, one, or multiple target instances and includes additional information about the source cardinality</td>
+</tr>
+</tbody>
+</table>
+<h4>managed</h4>
+<p>In the relational model, associations are mapped to foreign-key relationships. For managed associations, the relation between source and target entity is defined by specifying a set of elements of the target entity that are used as a foreign key.</p>
+<p>If no foreign keys are specified explicitly, the elements of the target entity’s designated primary key are used. Elements of the target entity that reside inside substructures can be addressed by means of the respective path. If the chosen elements do not form a unique key of the target entity, the association has cardinality to-many. The following examples show how to express foreign keys in an association.</p>
+<div class="highlight"><pre><span></span><code>entity Person
+{
+  key id : Integer;
+  // address1,2,3 are to-one associations
+  address1 : Association to Address;
+  address2 : Association to Address { id };
+  address3 : Association[1] to Address { zipCode, street, country };
+
+  // address4,5,6 are to-many associations
+  address4 : Association[0..*] to Address { zipCode };
+  address5 : Association[*] to Address { street.name };
+  address6 : Association[*] to Address { street.name AS streetName,
+                                          country.name AS countryName };
+};
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Association</th>
+<th>Keys</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>address1</td>
+<td></td>
+<td>No foreign keys are specified: the target entity's primary key (the element id) is used as foreign key. Currently not a supported feature.</td>
+</tr>
+<tr>
+<td>address2</td>
+<td>{ id }</td>
+<td>Explicitly specifies the foreign key (the element id); this definition is identical to address1.</td>
+</tr>
+<tr>
+<td>address3</td>
+<td>{ zipCode, street, country }</td>
+<td>The foreign key elements to be used for the association are explicitly specified, namely: zipcode and the structured elements street and country.</td>
+</tr>
+<tr>
+<td>address4</td>
+<td>{ zipCode }</td>
+<td>Uses only zipcode as the foreign key. Since zipcode is not a unique key for entity Address, this association has cardinality “to-many”. (No validation present and "to-one" relation is till possible. It should throw error!)</td>
+</tr>
+<tr>
+<td>address5</td>
+<td>{ street.name }</td>
+<td>Uses the sub-element name of the structured element street as a foreign key. This is not a unique key and, as a result, address4 has cardinality “to-many”.</td>
+</tr>
+<tr>
+<td>address6</td>
+<td>{ street.name AS streetName, country.name AS countryName }</td>
+<td>Currently not suported syntax. It will be included in future releases.</td>
+</tr>
+</tbody>
+</table>
+<h4>unmanaged</h4>
+
+<p>Unmanaged associations are based on existing elements of the source and target entity; no fields are generated. In the ON condition, only elements of the source or the target entity can be used; it is not possible to use other associations. The ON condition may contain only comparison between target and source via the "=" sign.</p>
+<p>In the following example, the association inhabitants relates the element id of the source entity Room with the element officeId in the target entity Employee. The target element officeId is accessed through the name of the association itself.</p>
+<div class="highlight"><pre><span></span><code>namespace samples;
+@Schema: &#39;MYSCHEMA&#39;              // XS classic *only*
+context UnmanagedAssociations {
+    entity Employee {
+        key id : Integer;
+        officeId : Integer;
+
+    };
+    entity Room {
+        key id : Integer;
+        inhabitants : Association[*] to Employee on inhabitants.officeId = id;
+
+    };
+
+    entity Thing {
+        key id : Integer;
+        parentId : Integer;
+        parent : Association[1] to Thing on parent.id = parentId;
+        children : Association[*] to Thing on children.parentId = id;
+
+    };
+};
+</code></pre></div>
+<p>The following example defines two related unmanaged associations:</p>
+<ul>
+<li>parent</li>
+</ul>
+<p>The unmanaged association parent uses a cardinality of [1] to create a relation between the element parentId and the target element id. The target element id is accessed through the name of the association itself.</p>
+<ul>
+<li>children</li>
+</ul>
+<p>The unmanaged association children creates a relation between the element id and the target element parentId. The target element parentId is accessed through the name of the association itself.</p>
+<div class="highlight"><pre><span></span><code>entity Thing {
+  key id   : Integer;
+  parentId : Integer;
+  parent   : Association[1] to Thing on parent.id = parentId;
+  children : Association[*] to Thing on children.parentId = id;
+  ...
+};
+</code></pre></div>
+<h2 id="naming-conventions">Naming conventions</h2>
+<p>Rules and restrictions apply to the names of CDS documents and the package in which the CDS document resides.</p>
+<p>The rules that apply for naming CDS documents are the same as the rules for naming the packages in which the CDS document is located. When specifying the name of a package or a CDS document (or referencing the name of an existing CDS object, for example, within a CDS document), bear in mind the following rules:</p>
+<ul>
+<li>File suffix</li>
+<li>
+<p>.hdbdd, for example, MyModel.hdbdd.</p>
+</li>
+<li>
+<p>Permitted characters</p>
+</li>
+<li>
+<p>CDS object and package names can include the following characters:</p>
+</li>
+<li>
+<p>Lower or upper case letters(aA-zZ), the underscore character(_) and dash(-)</p>
+</li>
+<li>
+<p>Digits(0-9)</p>
+</li>
+<li>
+<p>Forbidden characters</p>
+</li>
+<li>You cannot use the dot (.) in the name of a CDS document.</li>
+<li>You cannot use a digit (0-9) as the first character of the name of either a CDS document or a package, for example, 2CDSobjectname.hdbdd (XS classic) or acme.com.1package.hdbcds (XS advanced).</li>
+<li>The CDS parser does not recognize either CDS document names or package names that consist exclusively of digits, for example, 1234.hdbdd (XS classic) or acme.com.999.hdbcds.</li>
+</ul>
+<p>You cannot use either the hyphen (-) or the dot (.) in the name of a CDS document.
+You cannot use a digit (0-9) as the first character of the name of either a CDS document or a package, for example, 2CDSobjectname.hdbdd (XS classic) or acme.com.1package.hdbcds (XS advanced).
+The CDS parser does not recognize either CDS document names or package names that consist exclusively of digits, for example, 1234.hdbdd (XS classic) or acme.com.999.hdbcds (XS advanced).</p>
+<p>Note: Although it is possible to use quotation marks ("") to wrap a name that includes forbidden characters, as a general rule, it is recommended to follow the naming conventions for CDS documents specified here in order to avoid problems during activation in the repository.</p>
+<h2 id="external-artifacts-in-cds">External Artifacts in CDS</h2>
+<p>You can define an artifact in one CDS document by referring to an artifact that is defined in another CDS document.</p>
+<p>The CDS syntax enables you to define a CDS artifact in one document by basing it on an “external” artifact - an artifact that is defined in a separate CDS document. Each external artifact must be explicitly declared in the source CDS document with the 'using' keyword, which specifies the location of the external artifact, its name, and where appropriate its CDS context.</p>
+<p>The using declarations must be located in the header of the CDS document between the namespace declaration and the beginning of the top-level artifact, for example, the context.</p>
+<p>The external artifact can be either a single object (for example, a type, an entity, or a view) or a context. You can also include an optional alias in the using declaration, for example, ContextA.ContextA1 as ic. The alias (ic) can then be used in subsequent type definitions in the source CDS document.</p>
+<div class="highlight"><pre><span></span><code>namespace Pack1.Distributed;
+
+using Pack1.Distributed::ContextA.T1;
+using Pack1.Distributed::ContextA.ContextAI as ic;
+
+using Pack1.Distributed::ContextA.ContextAI.T3 as ict3; 
+using Pack1.Distributed::ContextA.ContextAI.T3.a as a;  // error, is not an artifact
+
+context ContextB { 
+  type T10 {
+    a : T1;               // Integer
+    b : ic.T2;            // String(20)
+    c : ic.T3;            // structured
+    d : type of ic.T3.b;  // String(88)
+    e : ict3;             // structured
+    x : Pack1.Distributed::ContextA.T1;  // error, direct reference not allowed
+  };
+  context ContextBI {
+    type T1 : String(7);  // hides the T1 coming from the first using declaration
+    type T2 : T1;         // String(7)
+  }; 
+};
+</code></pre></div>
+<p>The CDS document ContextB.hdbdd shown above uses external artifacts (data types T1 and T3) that are defined in the “target” CDS document ContextA.hdbdd shown below. Two using declarations are present in the CDS document ContextB.hdbdd; one with no alias and one with an explictly specified alias (ic). The first using declaration introduces the scalar type Pack1.Distributed::ContextA.T1. The second using declaration introduces the context Pack1.Distributed::ContextA.ContextAI and makes it accessible by means of the explicitly specified alias ic.</p>
+<p>If no explicit alias is specified, the last part of the fully qualified name is assumed as the alias, for example T1.</p>
+<h2 id="cds-primitive-data-types">CDS Primitive Data Types</h2>
+<p>In the Data Definition Language (DDL), primitive (or core) data types are the basic building blocks that you use to define entities or structure types with DDL.
+When you are specifying a design-time table (entity) using the CDS syntax, you use data types such as String, Binary, or Integer to specify the type of content in the entity columns. Here are the supported types  supports the use of the following primitive data types:
+- DDL data types
+- Native SAP HANA data types</p>
+<h4>DDL data types</h4>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>SQL Literal Syntax</th>
+<th>SQL Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>String (n)</td>
+<td>Variable-length Unicode string with a specified maximum length of n=1-1333 characters (5000 for SAP HANA specific objects). Default = maximum length. String length (n) is mandatory.</td>
+<td>'text with “quote”'</td>
+<td>VARCHAR</td>
+</tr>
+<tr>
+<td>LargeString</td>
+<td>Variable length string of up to 2 GB (no comparison)</td>
+<td>'text with “quote”'</td>
+<td>NCLOB</td>
+</tr>
+<tr>
+<td>Binary(n)</td>
+<td>Variable length byte string with user-defined length limit of up to 4000 bytes. Binary length (n) is mandatory.</td>
+<td>x'01Cafe', X'01Cafe'</td>
+<td>VARBINARY</td>
+</tr>
+<tr>
+<td>LargeBinary</td>
+<td>Variable length byte string of up to 2 GB (no comparison)</td>
+<td>x'01Cafe', X'01Cafe'</td>
+<td>BLOB</td>
+</tr>
+<tr>
+<td>Integer</td>
+<td>Respective container's standard signed integer. Signed 32 bit integers in 2's complement, -2<strong>31 .. 2</strong>31-1. Default=NULL</td>
+<td>13, -1234567</td>
+<td>INTEGER</td>
+</tr>
+<tr>
+<td>Integer64</td>
+<td>Signed 64-bit integer with a value range of -2^63 to 2^63-1. Default=NULL.</td>
+<td>13, -1234567</td>
+<td>BIGINT</td>
+</tr>
+<tr>
+<td>Decimal( p, s )</td>
+<td>Decimal number with fixed precision (p) in range of 1 to 34 and fixed scale (s) in range of 0 to p. Values for precision and scale are mandatory.</td>
+<td>12.345, -9.8767</td>
+<td>DECIMAL( p, s )</td>
+</tr>
+<tr>
+<td>DecimalFloat</td>
+<td>Decimal floating-point number (IEEE 754-2008) with 34 mantissa digits; range is roughly ±1e-6143 through ±9.99e+6144</td>
+<td>12.345, -9.876</td>
+<td>DECIMAL</td>
+</tr>
+<tr>
+<td>BinaryFloat</td>
+<td>Binary floating-point number (IEEE 754), 8 bytes (roughly 16 decimal digits precision); range is roughly ±2.2207e-308 through ±1.7977e+308</td>
+<td>1.2, -3.4, 5.6e+7</td>
+<td>DOUBLE</td>
+</tr>
+<tr>
+<td>LocalDate</td>
+<td>Local date with values ranging from 0001-01-01 through 9999-12-31</td>
+<td>date'1234-12-31'</td>
+<td>DATE</td>
+</tr>
+<tr>
+<td>LocalTime</td>
+<td>Time values (with seconds precision) and values ranging from 00:00:00 through 24:00:00</td>
+<td>time'23:59:59', time'12:15'</td>
+<td>TIME</td>
+</tr>
+<tr>
+<td>UTCDateTime</td>
+<td>UTC date and time (with seconds precision) and values ranging from 0001-01-01 00:00:00 through 9999-12-31 23:59:59</td>
+<td>timestamp'2011-12-31 23:59:59'</td>
+<td>SECONDDATE</td>
+</tr>
+<tr>
+<td>UTCTimestamp</td>
+<td>UTC date and time (with a precision of 0.1 microseconds) and values ranging from 0001-01-01 00:00:00 through 9999-12-31 23:59:59.9999999, and a special initial value</td>
+<td>timestamp'2011-12-31 23:59:59.7654321'</td>
+<td>TIMESTAMP</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>Represents the concept of binary-valued logic</td>
+<td>true, false</td>
+<td>BOOLEAN</td>
+</tr>
+</tbody>
+</table>
+<p>In CDS, the name of SAP HANA data types are prefixed with the word “hana”, for example, hana.ALPHANUM, or hana.SMALLINT, or hana.TINYINT.</p>
+<h4>Native SAP HANA data types</h4>
+
+<table>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Description</th>
+<th>SQL Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ALPHANUM</td>
+<td>Variable-length character string with special comparison.</td>
+<td>ALPHANUMERIC</td>
+</tr>
+<tr>
+<td>SMALLINT</td>
+<td>Signed 16-bit integer</td>
+<td>SMALLINT</td>
+</tr>
+<tr>
+<td>TINYINT</td>
+<td>Unsigned 8-bit integer</td>
+<td>TINYINT</td>
+</tr>
+<tr>
+<td>REAL</td>
+<td>32-bit binary floating-point number</td>
+<td>REAL</td>
+</tr>
+<tr>
+<td>SMALLDECIMAL</td>
+<td>64-bit decimal floating-point number</td>
+<td>SMALLDECIMAL</td>
+</tr>
+<tr>
+<td>VARCHAR</td>
+<td>Variable-length ASCII character string with user-definable length limit n</td>
+<td>VARCHAR</td>
+</tr>
+<tr>
+<td>CLOB</td>
+<td>Large variable-length ASCII character string, no comparison</td>
+<td>CLOB</td>
+</tr>
+<tr>
+<td>BINARY</td>
+<td>Byte string of fixed length n</td>
+<td>BINARY</td>
+</tr>
+</tbody>
+</table>
 <h2 id="reference">Reference</h2>
 <hr />
 <ul>

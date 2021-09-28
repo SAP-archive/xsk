@@ -1,11 +1,14 @@
 namespace hdb-hdbdd-simple.db;
 
+using hdb-hdbdd-simple.db::CountryForHdbdd as CountryContext;
+using hdb-hdbdd-simple.db::CustomTypes as CustomTypesContext;
+
 @Schema: 'DBADMIN'
 
 context ProductsForHdbdd {
 
  entity  Orders{
-        key Id               : String(32);
+        key Id               : type of CustomTypesContext.MyString.ID;
         CustomerName         : String(500);
         CustomerSurname      : String(500);
         Status               : String(100);
@@ -14,14 +17,14 @@ context ProductsForHdbdd {
         Description          : String(100);
         Address              : AdressT;
         Phone                : String(200);
-        Email                : String(300);
-        Country              : association to ProductsForHdbdd.Country { Id };
+        Email                : String(200);
+        Country              : association to CountryContext.Country { Id };
 		items                : Association[*] to Item on items.OrderId = Id;
     };
-     
-    entity Item {
-        key ItemId          : String(32);
-    	OrderId             : String(32);
+
+ entity Item {
+        key ItemId          :  type of CustomTypesContext.MyString.ID;
+    	OrderId             :  type of CustomTypesContext.MyString.ID;
 	    Name                : String(500);
         Type                : String(100);
         Price               : String(100);
@@ -29,13 +32,8 @@ context ProductsForHdbdd {
         Quantity            : String(100);
         Comment             : String(1000);
     };
-    
-     entity Country {
-        key Id              : String(32);
-        Name                : String(32);
-    };
 	
-	type AdressT {
+ type AdressT {
         postcode      :String(100);
 		city		  :String(100);
     };

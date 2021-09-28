@@ -1,6 +1,6 @@
 import = [
 	{
-		table = "hdb-hdbdd-simple.db::ProductsForHdbdd.Country";
+		table = "hdb-hdbdd-simple.db::CountryForHdbdd.Country";
 		file = "hdb-hdbdd-simple.data:CountryForHdbdd.csv";
 		header = false;
 		useHeaderNames = false;

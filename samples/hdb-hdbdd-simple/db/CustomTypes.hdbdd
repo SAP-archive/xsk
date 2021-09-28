@@ -1,0 +1,11 @@
+namespace hdb-hdbdd-simple.db;
+
+@Schema: 'DBADMIN'
+
+context CustomTypes {
+     type MyString {
+            ID      :String(32);
+     };
+};
+
+

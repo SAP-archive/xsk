@@ -1,5 +1,5 @@
 site_name: Project XSK
-site_url: https://sap.github.io/xsk
+site_url: https://www.xsk.io
 
 nav:
     - Welcome: 'index.md'
@@ -86,7 +86,7 @@ extra:
     - icon: fontawesome/brands/youtube
       link: https://www.youtube.com/c/dirigibleio
     - icon: fontawesome/brands/slack
-      link: https://join.slack.com/t/eclipse-dirigible/shared_invite/zt-w9fvn5cj-zsnxN5dCGZ6fzCH~kH0cvg
+      link: https://slack.xsk.io
 
 # google_analytics:
 #   - UA-49027147-1

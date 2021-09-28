@@ -38,7 +38,7 @@ public class XSKJobHandler implements Job {
     executionContext.put(IXSKJobCoreService.XSK_JOB_PARAMETERS, parametersArray);
 
     try {
-      xskJavascriptEngineExecutor.executeService(module, executionContext, true);
+      xskJavascriptEngineExecutor.executeService(module, executionContext, true, true);
     } catch (ScriptingException e) {
       throw new JobExecutionException(e);
     }

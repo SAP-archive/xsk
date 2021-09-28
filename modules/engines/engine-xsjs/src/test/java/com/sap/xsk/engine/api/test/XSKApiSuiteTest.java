@@ -173,7 +173,7 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     }
 
     long start = System.currentTimeMillis();
-    Object result = executor.executeServiceModule(testModule, null);
+    Object result = executor.evalModule(testModule, null);
     long time = System.currentTimeMillis() - start;
     System.out.printf("API test [%s] on engine [%s] passed for: %d ms%n", testModule, executor.getType(), time);
     return result;

@@ -417,13 +417,9 @@ CDS object and package names can include the following characters:
 
 
 - Forbidden characters
-  - You cannot use the dot (.) in the name of a CDS document.
-  - You cannot use a digit (0-9) as the first character of the name of either a CDS document or a package, for example, 2CDSobjectname.hdbdd (XS classic) or acme.com.1package.hdbcds (XS advanced).
-  - The CDS parser does not recognize either CDS document names or package names that consist exclusively of digits, for example, 1234.hdbdd (XS classic) or acme.com.999.hdbcds.
-
-You cannot use either the hyphen (-) or the dot (.) in the name of a CDS document.
-You cannot use a digit (0-9) as the first character of the name of either a CDS document or a package, for example, 2CDSobjectname.hdbdd (XS classic) or acme.com.1package.hdbcds (XS advanced).
-The CDS parser does not recognize either CDS document names or package names that consist exclusively of digits, for example, 1234.hdbdd (XS classic) or acme.com.999.hdbcds (XS advanced).
+   - You cannot use the dot (.) in the name of a CDS document.
+   - You cannot use a digit (0-9) as the first character of the name of either a CDS document or a package, for example, 2CDSobjectname.hdbdd (XS classic) or acme.com.1package.hdbcds (XS advanced).
+   - The CDS parser does not recognize either CDS document names or package names that consist exclusively of digits, for example, 1234.hdbdd (XS classic) or acme.com.999.hdbcds.
 
 Note: Although it is possible to use quotation marks ("") to wrap a name that includes forbidden characters, as a general rule, it is recommended to follow the naming conventions for CDS documents specified here in order to avoid problems during activation in the repository.
 

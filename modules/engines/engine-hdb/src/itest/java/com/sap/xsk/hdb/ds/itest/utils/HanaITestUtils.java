@@ -12,6 +12,7 @@
 package com.sap.xsk.hdb.ds.itest.utils;
 
 import com.sap.xsk.utils.XSKConstants;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -35,7 +36,19 @@ public class HanaITestUtils {
     DatabaseMetaData metaData = connection.getMetaData();
     ResultSet table = metaData.getTables(null, tableSchema, tableName, new String[]{ISqlKeywords.KEYWORD_TABLE});
     return table.next();
+  }
 
+  public static boolean checkExistOfProcedure(Connection connection, String tableName, String tableSchema) throws SQLException {
+    DatabaseMetaData metaData = connection.getMetaData();
+    ResultSet proc = metaData.getProcedures(null, tableSchema, tableName);
+    return proc.next();
+  }
+
+  public static boolean checkExistOfFunction(Statement stmt, String funcName, String funcSchema) throws SQLException {
+    ResultSet rs = stmt.executeQuery(
+        "SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('" + funcName + "') AND OBJECT_TYPE = 'FUNCTION' AND SCHEMA_NAME ='"+funcSchema+"'");
+    rs.next();
+    return rs.getInt("rawsCount") == 1;
   }
 
   public static void dropTable(Connection connection, Statement stmt, String tableName, String tableSchema) throws SQLException {
@@ -46,6 +59,16 @@ public class HanaITestUtils {
     if (checkExistOfTable(connection, tableName, tableSchema)) {
       stmt.executeUpdate(String.format("drop TABLE  \"%s\".\"%s\"", tableSchema, tableName));
     }
+  }
+
+  public static void dropProcedure(Connection connection, Statement stmt, String procName, String procSchema) throws SQLException {
+    stmt.executeUpdate(String.format("DROP PROCEDURE %s", XSKHDBUtils
+        .escapeArtifactName(connection, procName, procSchema)));
+  }
+
+  public static void dropFunction(Connection connection, Statement stmt, String funcName, String funcSchema) throws SQLException {
+    stmt.executeUpdate(String.format("DROP FUNCTION %s", XSKHDBUtils
+        .escapeArtifactName(connection, funcName, funcSchema)));
   }
 
   public static void dropSchema(Statement stmt, String schemaName) throws SQLException {
@@ -70,4 +93,9 @@ public class HanaITestUtils {
     }
   }
 
+  public static void createEmptyTable(Statement stmt, String tableName, String tableSchema) throws SQLException {
+    stmt.executeUpdate(String.format("create table \"%s\".\"%s\"(Id INTEGER,Name NVARCHAR)",
+        tableSchema, tableName));
+    ;
+  }
 }

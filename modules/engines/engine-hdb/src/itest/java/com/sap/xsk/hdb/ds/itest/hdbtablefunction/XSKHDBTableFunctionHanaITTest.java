@@ -11,26 +11,12 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbtablefunction;
 
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.sql.DataSource;
+import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
@@ -40,11 +26,21 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.*;
+import static org.junit.Assert.assertTrue;
 
 public class XSKHDBTableFunctionHanaITTest {
 
   private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
+  private static final String testSchema = "TEST_SCHEMA";
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException {
@@ -58,19 +54,11 @@ public class XSKHDBTableFunctionHanaITTest {
 
   @Before
   public void setUpBeforeTest() throws SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      String hanaUserName = Configuration.get("hana.username");
-      ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-      if (table.next()) {
-        stmt.executeUpdate(String.format(
-            "DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction'",
-            hanaUserName));
-      }
-      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      facade.clearCache();
-    }
+    HanaITestUtils
+        .clearDataFromXSKDataStructure(datasource, Arrays.asList("'/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction'"));
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    facade.clearCache();
   }
 
   @Test
@@ -78,12 +66,9 @@ public class XSKHDBTableFunctionHanaITTest {
       throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      ResultSet tables = metaData.getTables(null, null, "hdbtablefunction-itest::SampleHanaTable", null);
-      if (!tables.next()) {
-        stmt.executeUpdate(String.format("create table \"%s\".\"hdbtablefunction-itest::SampleHanaTable\"(Id INTEGER,Name NVARCHAR)",
-            Configuration.get("hana.username")));
-      }
+
+      HanaITestUtils.createSchema(stmt, testSchema);
+      HanaITestUtils.createEmptyTable(stmt, "hdbtablefunction-itest::SampleHanaTable", testSchema);
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction",
@@ -91,15 +76,13 @@ public class XSKHDBTableFunctionHanaITTest {
 
       this.facade.handleResourceSynchronization(resource);
       this.facade.updateEntities();
-
-      ResultSet rs = stmt.executeQuery(
-          "SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('hdbtablefunction-itest::SampleHanaTableFunction')");
-      assertTrue(rs.next());
-      assertEquals(1, rs.getInt("rawsCount"));
-      stmt.executeUpdate(
-          String.format("DROP FUNCTION %s", XSKHDBUtils.escapeArtifactName(connection, "hdbtablefunction-itest::SampleHanaTableFunction")));
-      stmt.executeUpdate(
-          String.format("DROP TABLE \"%s\".\"hdbtablefunction-itest::SampleHanaTable\"", Configuration.get("hana.username")));
+      try {
+        assertTrue(HanaITestUtils.checkExistOfFunction(stmt, "hdbtablefunction-itest::SampleHanaTableFunction", testSchema));
+      } finally {
+        HanaITestUtils.dropFunction(connection, stmt, "hdbtablefunction-itest::SampleHanaTableFunction", testSchema);
+        HanaITestUtils.dropTable(connection, stmt, "hdbtablefunction-itest::SampleHanaTable", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
+      }
     }
   }
 }

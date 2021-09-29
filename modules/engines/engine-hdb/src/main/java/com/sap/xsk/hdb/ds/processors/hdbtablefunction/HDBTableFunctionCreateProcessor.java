@@ -29,26 +29,27 @@ import org.slf4j.LoggerFactory;
 
 public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableFunctionModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionCreateProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionCreateProcessor.class);
 
-    public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
-        throws SQLException, ProblemsException {
-        logger.info("Processing Create TableFunction: " + hdbTableFunction.getName());
+  public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
+      throws SQLException, ProblemsException {
+    logger.info("Processing Create TableFunction: " + hdbTableFunction.getName());
 
-        String funcNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[1];
-        hdbTableFunction.setSchema(XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[0]);
-        if (!SqlFactory.getNative(connection).exists(connection, funcNameWithoutSchema, DatabaseArtifactTypes.FUNCTION)) {
-            ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-            if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-              String errorMessage = String.format("TableFunctions are not supported for %s", dialect.getDatabaseName(connection));
-              XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbTableFunction.getLocation(), "HDB Table Function");
-              throw new IllegalStateException(errorMessage);
-            } else {
-                String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getContent();
-                executeSql(sql, connection);
-            }
-        } else {
-            logger.warn(format("TableFunction [{0}] already exists during the create process", hdbTableFunction.getName()));
-        }
+    String funcNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[1];
+    hdbTableFunction.setSchema(XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[0]);
+    if (!SqlFactory.getNative(connection)
+        .exists(connection, hdbTableFunction.getSchema(), funcNameWithoutSchema, DatabaseArtifactTypes.FUNCTION)) {
+      ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+      if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+        String errorMessage = String.format("TableFunctions are not supported for %s", dialect.getDatabaseName(connection));
+        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbTableFunction.getLocation(), "HDB Table Function");
+        throw new IllegalStateException(errorMessage);
+      } else {
+        String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getContent();
+        executeSql(sql, connection);
+      }
+    } else {
+      logger.warn(format("TableFunction [{0}] already exists during the create process", hdbTableFunction.getName()));
     }
+  }
 }

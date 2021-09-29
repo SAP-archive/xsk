@@ -11,26 +11,12 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbsequence;
 
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.sql.DataSource;
+import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
@@ -41,10 +27,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.*;
+import static org.junit.Assert.assertTrue;
+
 public class XSKHDBSequenceParserHanaITTest {
 
   private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
+  private static final String testSchema = "TEST_SCHEMA";
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException {
@@ -58,74 +55,54 @@ public class XSKHDBSequenceParserHanaITTest {
 
   @Before
   public void setUpBeforeTest() throws SQLException {
+    HanaITestUtils
+        .clearDataFromXSKDataStructure(datasource, Arrays.asList("'/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence'",
+            "'/sequence-itest/SampleSequence_HanaXSClassicDiffSchema.hdbsequence'"));
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    facade.clearCache();
+  }
+
+  @Test
+  public void testHDBSequenceCreateSameSchema()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      String hanaUserName = Configuration.get("hana.username");
-      ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-      if (table.next()) {
-        stmt.executeUpdate(String.format(
-            "DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence' OR DS_LOCATION = '/sequence-itest/SampleSequence_HanaXSClassicDiffSchema.hdbsequence'",
-            hanaUserName));
+
+      String userSchema = Configuration.get("hana.username");
+      String artifactName = "sequence-itest::SampleSequence_HanaXSClassic";
+      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+          "/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence",
+          "/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
+      this.facade.handleResourceSynchronization(resource);
+      this.facade.updateEntities();
+      try {
+        assertTrue(HanaITestUtils.checkExistOfSequence(stmt, artifactName, userSchema));
+      } finally {
+        HanaITestUtils.dropSequence(connection, stmt, artifactName, userSchema);
       }
-      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      facade.clearCache();
     }
   }
 
   @Test
-  public void testHDBSequenceCreateSameSchema() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
-    LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-        "/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence",
-        "/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
-    this.facade.handleResourceSynchronization(resource);
-    this.facade.updateEntities();
+  public void testHDBSequenceCreateDifferentSchema()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      ResultSet rs = stmt.executeQuery(String
-          .format("SELECT COUNT(*) as rawsCount from Sequences WHERE SEQUENCE_NAME = '%s'",
-              "sequence-itest::SampleSequence_HanaXSClassic"));
-      assertTrue(rs.next());
-      assertEquals(1, rs.getInt("rawsCount"));
-      stmt.executeUpdate(
-          String.format("DROP SEQUENCE %s", XSKHDBUtils.escapeArtifactName(connection, "sequence-itest::SampleSequence_HanaXSClassic")));
-      rs = stmt.executeQuery(String
-          .format("SELECT COUNT(*) as rawsCount from Sequences WHERE SEQUENCE_NAME = '%s'",
-              "sequence-itest::SampleSequence_HanaXSClassic"));
-      assertTrue(rs.next());
-      assertEquals(0, rs.getInt("rawsCount"));
-    }
-  }
 
-  @Test
-  public void testHDBSequenceCreateDifferentSchema() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
-      String schemaName = "SEQUENCE_ITEST";
+      HanaITestUtils.createSchema(stmt, testSchema);
       String artifactName = "sequence-itest::SampleSequence_HanaXSClassicDiffSchema";
-      stmt.executeUpdate(String.format("CREATE SCHEMA %s", schemaName));
-
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/sequence-itest/SampleSequence_HanaXSClassicDiffSchema.hdbsequence",
           "/sequence-itest/SampleSequence_HanaXSClassicDiffSchema.hdbsequence");
 
       this.facade.handleResourceSynchronization(resource);
       this.facade.updateEntities();
-
-      ResultSet rs = stmt.executeQuery(String
-          .format("SELECT COUNT(*) as rawsCount from Sequences WHERE SCHEMA_NAME='%s' AND SEQUENCE_NAME = '%s'",
-              schemaName, artifactName));
-
-      assertTrue(rs.next());
-      assertEquals(1, rs.getInt("rawsCount"));
-      stmt.executeUpdate(
-          String.format("DROP SEQUENCE %s", XSKHDBUtils.escapeArtifactName(connection, artifactName, schemaName)));
-      rs = stmt.executeQuery(String
-          .format("SELECT COUNT(*) as rawsCount from Sequences WHERE SCHEMA_NAME='%s' AND SEQUENCE_NAME = '%s'",
-              schemaName, artifactName));
-      assertTrue(rs.next());
-      assertEquals(0, rs.getInt("rawsCount"));
-      stmt.executeUpdate(String.format("DROP SCHEMA %s CASCADE ", schemaName));
+      try {
+        assertTrue(HanaITestUtils.checkExistOfSequence(stmt, artifactName, testSchema));
+      } finally {
+        HanaITestUtils.dropSequence(connection, stmt, artifactName, testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
+      }
     }
   }
 }

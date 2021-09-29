@@ -22,20 +22,19 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
+import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 import com.sap.xsk.utils.XSKConstants;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -45,6 +44,7 @@ public class XSKHDBTableTypeParserHanaITTest {
 
   private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
+  private static final String testSchema = "TEST_SCHEMA";
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException {
@@ -58,20 +58,11 @@ public class XSKHDBTableTypeParserHanaITTest {
 
   @Before
   public void setUpBeforeTest() throws SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      String hanaUserName = Configuration.get("hana.username");
-      ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-      if (table.next()) {
-        stmt.executeUpdate(String
-            .format(
-                "DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION IN ('/hdbstructure-itest/str1.hdbstructure', '/hdbstructure-itest/str2.hdbstructure')",
-                hanaUserName));
-      }
-      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      facade.clearCache();
-    }
+    HanaITestUtils
+        .clearDataFromXSKDataStructure(datasource, Arrays.asList("'/hdbstructure-itest/str1.hdbstructure'",
+            "'/hdbstructure-itest/str2.hdbstructure'"));
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    facade.clearCache();
   }
 
   @Test
@@ -79,53 +70,43 @@ public class XSKHDBTableTypeParserHanaITTest {
       throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      String schemaName = Configuration.get("hana.username");
+
+      String userSchema = Configuration.get("hana.username");
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbstructure-itest/str1.hdbstructure",
           "/hdbstructure-itest/str1.hdbstructure");
 
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
-
-      DatabaseMetaData metaData = connection.getMetaData();
-      assertTrue(doesTableTypeExist(stmt, "hdbstructure-itest::str1", schemaName));
-
-      ResultSet synonym = metaData.getTables(null, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "hdbstructure-itest::str1",
-          new String[]{ISqlKeywords.KEYWORD_SYNONYM});
-      assertTrue(synonym.next());
-
-      stmt.executeUpdate(
-          String.format("drop SYNONYM \"%s\".\"hdbstructure-itest::str1\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
-      stmt.executeUpdate(String.format("drop TYPE    \"%s\".\"hdbstructure-itest::str1\"", schemaName));
+      try {
+        assertTrue(HanaITestUtils.checkExistOfTableType(stmt, "hdbstructure-itest::str1", userSchema));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "hdbstructure-itest::str1"));
+      } finally {
+        HanaITestUtils.dropTableType(connection, stmt, "hdbstructure-itest::str1", userSchema);
+      }
     }
   }
-
 
   @Test
   public void testHDBViewCreateOnDiffSchemas()
       throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      String schemaName = "TEST_SCHEMA";
-      stmt.executeUpdate(String.format("create SCHEMA \"%s\"", schemaName));
+
+      HanaITestUtils.createSchema(stmt, testSchema);
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbstructure-itest/str2.hdbstructure",
           "/hdbstructure-itest/str2.hdbstructure");
 
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
-
-      DatabaseMetaData metaData = connection.getMetaData();
-      assertTrue(doesTableTypeExist(stmt, "hdbstructure-itest::str2", schemaName));
-
-      ResultSet synonym = metaData.getTables(null, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "hdbstructure-itest::str2",
-          new String[]{ISqlKeywords.KEYWORD_SYNONYM});
-      assertTrue(synonym.next());
-
-      stmt.executeUpdate(
-          String.format("drop SYNONYM \"%s\".\"hdbstructure-itest::str2\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
-      stmt.executeUpdate(String.format("drop TYPE    \"%s\".\"hdbstructure-itest::str2\"", schemaName));
-      stmt.executeUpdate("DROP SCHEMA TEST_SCHEMA CASCADE ");
+      try {
+        assertTrue(HanaITestUtils.checkExistOfTableType(stmt, "hdbstructure-itest::str2", testSchema));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "hdbstructure-itest::str2"));
+      } finally {
+        HanaITestUtils.dropTableType(connection, stmt, "hdbstructure-itest::str2", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
+      }
     }
   }
 
@@ -134,15 +115,16 @@ public class XSKHDBTableTypeParserHanaITTest {
       throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      String schemaName = "TEST_SCHEMA";
-      stmt.executeUpdate(String.format("create SCHEMA \"%s\"", schemaName));
+
+      HanaITestUtils.createSchema(stmt, testSchema);
+
       stmt.executeUpdate(String.format(
           "CREATE TYPE \"%s\".\"hdbstructure-itest::str2\" AS TABLE ( \"ID\" INTEGER NOT NULL , \"BIZ_EVENT\" VARCHAR (60) NOT NULL );\n",
-          schemaName));
+          testSchema));
       stmt.executeUpdate(
           String.format("create SYNONYM \"%s\".\"hdbstructure-itest::str2\" FOR \"%s\".\"hdbstructure-itest::str2\"",
-              XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, schemaName));
-      stmt.executeUpdate(String.format("drop TYPE    \"%s\".\"hdbstructure-itest::str2\"", schemaName));
+              XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, testSchema));
+      stmt.executeUpdate(String.format("drop TYPE    \"%s\".\"hdbstructure-itest::str2\"", testSchema));
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbstructure-itest/str2.hdbstructure",
@@ -150,28 +132,14 @@ public class XSKHDBTableTypeParserHanaITTest {
 
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
-
-      DatabaseMetaData metaData = connection.getMetaData();
-      assertTrue(doesTableTypeExist(stmt, "hdbstructure-itest::str2", schemaName));
-
-      ResultSet synonym = metaData.getTables(null, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "hdbstructure-itest::str2",
-          new String[]{ISqlKeywords.KEYWORD_SYNONYM});
-      assertTrue(synonym.next());
-
-      stmt.executeUpdate(
-          String.format("drop SYNONYM \"%s\".\"hdbstructure-itest::str2\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
-      stmt.executeUpdate(String.format("drop TYPE    \"%s\".\"hdbstructure-itest::str2\"", schemaName));
-      stmt.executeUpdate("DROP SCHEMA TEST_SCHEMA CASCADE ");
+      try {
+        assertTrue(HanaITestUtils.checkExistOfTableType(stmt, "hdbstructure-itest::str2", testSchema));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "hdbstructure-itest::str2"));
+      } finally {
+        HanaITestUtils.dropTableType(connection, stmt, "hdbstructure-itest::str2", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
+      }
     }
-  }
-
-  boolean doesTableTypeExist(Statement stmt, String tableTypeName, String schemaName) throws SQLException {
-    ResultSet tableType = stmt
-        .executeQuery(
-            String.format(
-                "SELECT IS_USER_DEFINED_TYPE FROM SYS.\"TABLES\" WHERE TABLE_NAME like '%s' AND IS_USER_DEFINED_TYPE like 'TRUE' AND SCHEMA_NAME LIKE '%s'",
-                tableTypeName, schemaName));
-    return tableType.next();
   }
 
 }

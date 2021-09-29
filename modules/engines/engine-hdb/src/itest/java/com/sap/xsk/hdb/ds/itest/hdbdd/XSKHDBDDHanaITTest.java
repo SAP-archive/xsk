@@ -82,10 +82,10 @@ public class XSKHDBDDHanaITTest {
         facade.updateEntities();
 
         assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Orders", testSchema));
-        assertTrue(HanaITestUtils.checkExistOfSynonym(connection, "itest::ProductsWithManagedAssItest.Orders"));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Orders"));
 
         assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Country", testSchema));
-        assertTrue(HanaITestUtils.checkExistOfSynonym(connection, "itest::ProductsWithManagedAssItest.Country"));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Country"));
 
       } finally {
         HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssItest.Orders", testSchema);
@@ -118,13 +118,13 @@ public class XSKHDBDDHanaITTest {
         facade.updateEntities();
 
         assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders", testSchema));
-        assertTrue(HanaITestUtils.checkExistOfSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders"));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders"));
 
         assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Country", testSchema));
-        assertTrue(HanaITestUtils.checkExistOfSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Country"));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Country"));
 
         assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::Status.StatusEntity", schemaName2));
-        assertTrue(HanaITestUtils.checkExistOfSynonym(connection, "itest::Status.StatusEntity"));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::Status.StatusEntity"));
 
       } finally {
         HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssWithUsingItest.Orders", testSchema);

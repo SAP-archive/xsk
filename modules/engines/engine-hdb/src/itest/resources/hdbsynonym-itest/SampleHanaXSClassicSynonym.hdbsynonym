@@ -1,8 +1,8 @@
 {
   "hdbsynonym-itest::SampleHanaXSClassicSynonym": {
-    "schema": "DBADMIN",
+    "schema": "TEST_SCHEMA",
     "target": {
-      "schema": "DBADMIN",
+      "schema": "TEST_SCHEMA",
       "object": "hdbsynonym-itest::SampleHanaTable"
     }
   }

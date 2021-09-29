@@ -1,4 +1,4 @@
-schema= "SEQUENCE_ITEST";
+schema= "TEST_SCHEMA";
 increment_by=1;
 start_with= 10;
 maxvalue= 30;

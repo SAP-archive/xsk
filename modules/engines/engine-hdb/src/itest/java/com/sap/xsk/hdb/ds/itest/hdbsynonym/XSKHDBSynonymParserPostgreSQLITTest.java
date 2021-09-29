@@ -35,10 +35,13 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+@Ignore
 public class XSKHDBSynonymParserPostgreSQLITTest {
+
   private static PostgreSQLContainer jdbcContainer;
   private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;

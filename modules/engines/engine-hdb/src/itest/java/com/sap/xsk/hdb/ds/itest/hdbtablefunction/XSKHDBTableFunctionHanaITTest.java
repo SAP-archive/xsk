@@ -57,7 +57,6 @@ public class XSKHDBTableFunctionHanaITTest {
     HanaITestUtils
         .clearDataFromXSKDataStructure(datasource, Arrays.asList("'/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction'"));
     Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
     facade.clearCache();
   }
 

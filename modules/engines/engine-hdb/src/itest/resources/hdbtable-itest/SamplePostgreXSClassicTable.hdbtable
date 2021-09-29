@@ -1,4 +1,4 @@
-table.schemaName = "TEST_SCHEMA";
+table.schemaName = "XSK_ITESTS";
 table.temporary = true;
 table.tableType = COLUMNSTORE;
 table.loggingType = NOLOGGING;

@@ -1,4 +1,4 @@
-table.schemaName = "DBADMIN";
+table.schemaName = "XSK_ITESTS";
 table.description = "Business event table type";
 table.temporary   = true;
 table.columns = [

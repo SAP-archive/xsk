@@ -1,4 +1,4 @@
-schema= "DBADMIN";
+schema= "XSK_ITESTS";
 increment_by=1;
 start_with= 10;
 maxvalue= 30;

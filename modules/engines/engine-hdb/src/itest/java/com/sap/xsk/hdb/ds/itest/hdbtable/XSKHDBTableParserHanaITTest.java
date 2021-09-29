@@ -80,7 +80,7 @@ public class XSKHDBTableParserHanaITTest {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
-      HanaITestUtils.createSchema(stmt, testSchema);
+      String userSchema = Configuration.get("hana.username");
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
           "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
@@ -88,11 +88,10 @@ public class XSKHDBTableParserHanaITTest {
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
       try {
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "hdbtable-itest::SamplePostgreXSClassicTable", testSchema));
-        assertTrue(HanaITestUtils.checkExistOfSynonym(connection, "hdbtable-itest::SamplePostgreXSClassicTable"));
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "hdbtable-itest::SamplePostgreXSClassicTable", userSchema));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "hdbtable-itest::SamplePostgreXSClassicTable"));
       } finally {
-        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::SamplePostgreXSClassicTable", testSchema);
-        HanaITestUtils.dropSchema(stmt, testSchema);
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::SamplePostgreXSClassicTable", userSchema);
       }
     }
   }

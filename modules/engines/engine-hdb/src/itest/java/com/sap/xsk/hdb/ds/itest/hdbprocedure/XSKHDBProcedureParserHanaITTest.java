@@ -69,16 +69,17 @@ public class XSKHDBProcedureParserHanaITTest {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
-      HanaITestUtils.createSchema(stmt, testSchema);
-      HanaITestUtils.createEmptyTable(stmt, "hdbprocedure-itest::SampleHanaTable", testSchema);
-
-      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-          "/registry/public/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure",
-          "/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure");
-
-      this.facade.handleResourceSynchronization(resource);
-      this.facade.updateEntities();
       try {
+        HanaITestUtils.createSchema(stmt, testSchema);
+        HanaITestUtils.createEmptyTable(stmt, "hdbprocedure-itest::SampleHanaTable", testSchema);
+
+        LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+            "/registry/public/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure",
+            "/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure");
+
+        this.facade.handleResourceSynchronization(resource);
+        this.facade.updateEntities();
+
         assertTrue(HanaITestUtils.checkExistOfProcedure(connection, "hdbprocedure-itest::SampleHanaProcedure", testSchema));
       } finally {
         HanaITestUtils.dropProcedure(connection, stmt, "hdbprocedure-itest::SampleHanaProcedure", testSchema);
@@ -94,22 +95,23 @@ public class XSKHDBProcedureParserHanaITTest {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
-      HanaITestUtils.createSchema(stmt, testSchema);
-      HanaITestUtils.createEmptyTable(stmt, "hdbprocedure-itest::SampleHanaTable", testSchema);
-      DatabaseMetaData metaData = connection.getMetaData();
-
-      String hdbprocedureSample = org.apache.commons.io.IOUtils
-          .toString(XSKHDBProcedureParserHanaITTest.class.getResourceAsStream("/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure"),
-              StandardCharsets.UTF_8);
-      stmt.executeUpdate("CREATE " + hdbprocedureSample);
-
-      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-          "/registry/public/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure",
-          "/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure");
-
-      this.facade.handleResourceSynchronization(resource);
-      this.facade.updateEntities();
       try {
+        HanaITestUtils.createSchema(stmt, testSchema);
+        HanaITestUtils.createEmptyTable(stmt, "hdbprocedure-itest::SampleHanaTable", testSchema);
+        DatabaseMetaData metaData = connection.getMetaData();
+
+        String hdbprocedureSample = org.apache.commons.io.IOUtils
+            .toString(XSKHDBProcedureParserHanaITTest.class.getResourceAsStream("/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure"),
+                StandardCharsets.UTF_8);
+        stmt.executeUpdate("CREATE " + hdbprocedureSample);
+
+        LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+            "/registry/public/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure",
+            "/hdbprocedure-itest/SampleHanaProcedure.hdbprocedure");
+
+        this.facade.handleResourceSynchronization(resource);
+        this.facade.updateEntities();
+
         assertTrue(HanaITestUtils.checkExistOfProcedure(connection, "hdbprocedure-itest::SampleHanaProcedure", testSchema));
       } finally {
         HanaITestUtils.dropProcedure(connection, stmt, "hdbprocedure-itest::SampleHanaProcedure", testSchema);

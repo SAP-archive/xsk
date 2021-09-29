@@ -964,23 +964,45 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// retrieve user by id</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// defined a hardcoded users array for the example</span>
+<span class="kd">let</span> <span class="nx">users</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;John&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Ben&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;George&#39;</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="kd">function</span> <span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// retrieve user operation by id</span>
+    <span class="k">return</span> <span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="o">===</span> <span class="nx">id</span><span class="p">;</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 
 <span class="kd">function</span> <span class="nx">createUser</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// create user</span>
+    <span class="c1">// create user operation which will update the users array only for the scope of the current request call as the users are hardcoded</span>
+    <span class="nx">users</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">});</span>
 <span class="p">}</span>
 
 <span class="kd">function</span> <span class="nx">deleteUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// delete user</span>
+    <span class="c1">// delete user operation which will remove a user only for the current scope of the request as the users are hardcoded</span>
+    <span class="nx">users</span> <span class="o">=</span> <span class="nx">users</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="nx">id</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 
-<span class="k">if</span><span class="p">(</span><span class="sr">/\/?users$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">queryPath</span><span class="p">))</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">parameters</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="o">===</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">PUT</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nx">allUsers</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// retrieve all users operation</span>
+    <span class="k">return</span> <span class="nx">users</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// get id query param </span>
+<span class="kd">const</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">parameters</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
+
+<span class="c1">// check the type of the request</span>
+<span class="k">switch</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">PUT</span><span class="o">:</span>
         <span class="k">if</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">===</span> <span class="s2">&quot;application/json&quot;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">createUser</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+            <span class="nx">createUser</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">asString</span><span class="p">()));</span>
 
             <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="sb">`created user [</span><span class="si">${</span> <span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">asString</span><span class="p">())</span> <span class="si">}</span><span class="sb">]`</span><span class="p">);</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -988,34 +1010,36 @@
                 <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="s2">&quot;Unsupported content type.&quot;</span>
             <span class="p">}));</span>
         <span class="p">}</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">switch</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">case</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">GET</span><span class="o">:</span>
-                <span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">GET</span><span class="o">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
 
-                <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="sb">`retrieved user with id </span><span class="si">${</span> <span class="nx">id</span> <span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span> <span class="p">}));</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">DELETE</span><span class="o">:</span>
-                <span class="nx">deleteUser</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+            <span class="kd">let</span> <span class="nx">users</span> <span class="o">=</span> <span class="nx">allUsers</span><span class="p">();</span>
 
-                <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="sb">`deleted user with id [</span><span class="si">${</span> <span class="nx">id</span> <span class="si">}</span><span class="sb">]`</span><span class="p">);</span>
-
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">default</span><span class="o">:</span>
-                <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-                    <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="sb">`Unsupported method [</span><span class="si">${</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="si">}</span><span class="sb">]`</span> 
-                <span class="p">}));</span>
+            <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="nx">users</span><span class="o">:</span> <span class="nx">users</span> <span class="p">}));</span>
         <span class="p">}</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">DELETE</span><span class="o">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">deleteUser</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+
+            <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="sb">`deleted user with id [</span><span class="si">${</span> <span class="nx">id</span> <span class="si">}</span><span class="sb">]`</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+                <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="sb">`Parameter id is missing`</span>
+            <span class="p">}));</span>
+        <span class="p">}</span>
+
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="o">:</span>
         <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-            <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="s2">&quot;Missing required parameter [id]&quot;</span>
+            <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="sb">`Unsupported method [</span><span class="si">${</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="si">}</span><span class="sb">]`</span> 
         <span class="p">}));</span>
-    <span class="p">}</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> 
-        <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="sb">`Unsupported query path [</span><span class="si">${</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">queryPath</span> <span class="si">}</span><span class="sb">]`</span> 
-    <span class="p">}));</span>
 <span class="p">}</span>
 </code></pre></div>
 <h2 id="properties">Properties</h2>

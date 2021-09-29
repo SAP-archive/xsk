@@ -1,0 +1,19 @@
+namespace itest;
+
+using itest::Status as StatusContext;
+
+@Schema: 'TEST_SCHEMA'
+context ProductsWithManagedAssWithUsingItest {
+
+ entity  Orders{
+        key Id               : String(32);
+        CustomerName         : String(500);
+        Country              : association to ProductsWithManagedAssWithUsingItest.Country { Id };
+        Status               : association to StatusContext.StatusEntity { Id };
+    };
+
+     entity Country {
+        key Id              : String(32);
+        Name                : String(32);
+    };
+};

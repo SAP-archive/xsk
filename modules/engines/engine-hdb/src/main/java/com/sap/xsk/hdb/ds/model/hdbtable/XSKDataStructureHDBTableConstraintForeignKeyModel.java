@@ -20,6 +20,8 @@ public class XSKDataStructureHDBTableConstraintForeignKeyModel extends XSKDataSt
 
   private String[] referencedColumns;
 
+  private String referencedTableSchema;
+
   /**
    * Gets the referenced table.
    *
@@ -56,4 +58,21 @@ public class XSKDataStructureHDBTableConstraintForeignKeyModel extends XSKDataSt
     this.referencedColumns = referencedColumns;
   }
 
+  /**
+   * Gets the referenced table schema.
+   *
+   * @return the referenced table schema
+   */
+  public String getReferencedTableSchema() {
+    return referencedTableSchema;
+  }
+
+  /**
+   * Sets the referenced table schema.
+   *
+   * @param referencedTableSchema the new referenced table schema
+   */
+  public void setReferencedTableSchema(String referencedTableSchema) {
+    this.referencedTableSchema = referencedTableSchema;
+  }
 }

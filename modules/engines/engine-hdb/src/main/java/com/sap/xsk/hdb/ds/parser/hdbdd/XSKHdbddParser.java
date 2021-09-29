@@ -185,9 +185,14 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   private XSKDataStructureCdsModel getCdsModel(String location, String content) {
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
+    XSKDataStructureCdsModel cdsModel = new XSKDataStructureCdsModel();
+
     List<XSKDataStructureHDBTableModel> tableModels = new ArrayList<>();
     parsedEntities.forEach(e -> {
       tableModels.add(this.hdbddTransformer.transformEntitySymbolToTableModel(e));
+
+      //One HDBDD file have only one schema, with apply to all entities inside the hdbdd file
+      cdsModel.setSchema(e.getSchema());
     });
 
     List<StructuredDataTypeSymbol> structuredDataTypes = this.symbolTable.getTableTypes();
@@ -196,7 +201,6 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       hdbTableTypeModels.add(this.hdbddTransformer.transformStructuredDataTypeToHdbTableType(sdt));
     });
 
-    XSKDataStructureCdsModel cdsModel = new XSKDataStructureCdsModel();
     cdsModel.setTableModels(tableModels);
     cdsModel.setTableTypeModels(hdbTableTypeModels);
     cdsModel.setName(location);

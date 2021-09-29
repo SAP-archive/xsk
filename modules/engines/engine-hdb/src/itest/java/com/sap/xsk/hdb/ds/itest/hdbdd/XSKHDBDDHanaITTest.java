@@ -11,27 +11,31 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbdd;
 
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
+import static org.junit.Assert.assertTrue;
+
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.repository.local.LocalResource;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
-
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.*;
-import static org.junit.Assert.assertTrue;
+import javax.sql.DataSource;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.repository.local.LocalResource;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class XSKHDBDDHanaITTest {
 
@@ -58,7 +62,7 @@ public class XSKHDBDDHanaITTest {
   }
 
   @Test
-  public void testHDBDDWithManagedAssOnDiffSchema() throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+  public void testHDBDDWithManagedAssOnDiffSchema() throws XSKDataStructuresException, ProblemsException, SynchronizationException, IOException, SQLException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName = "TEST_SCHEMA";
@@ -88,7 +92,7 @@ public class XSKHDBDDHanaITTest {
 
   @Test
   public void testHDBDDWithManagedAssWithUsingOnDiffSchema()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName = "TEST_SCHEMA";

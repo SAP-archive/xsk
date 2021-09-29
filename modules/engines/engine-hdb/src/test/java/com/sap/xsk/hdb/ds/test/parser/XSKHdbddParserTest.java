@@ -11,6 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
@@ -22,8 +29,6 @@ import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
@@ -154,7 +159,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertEquals("HDBDD", parsedModel.getType());
     assertEquals("guest", parsedModel.getCreatedBy());
     assertEquals(0, parsedModel.getDependencies().size());
-    assertNull(parsedModel.getSchema());
+    assertEquals("ADMIN", parsedModel.getSchema());
     assertNull(parsedModel.getRawContent());
     assertEquals(XSKDBContentType.XS_CLASSIC, parsedModel.getDBContentType());
 
@@ -244,7 +249,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertEquals("HDBDD", parsedModel.getType());
     assertEquals("guest", parsedModel.getCreatedBy());
     assertEquals(0, parsedModel.getDependencies().size());
-    assertNull(parsedModel.getSchema());
+    assertEquals("ADMIN",parsedModel.getSchema());
     assertNull(parsedModel.getRawContent());
     assertEquals(XSKDBContentType.XS_CLASSIC, parsedModel.getDBContentType());
   }

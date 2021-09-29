@@ -72,9 +72,16 @@ public class XSKHDBTableTypeParserHanaITTest {
         Statement stmt = connection.createStatement()) {
 
       String userSchema = Configuration.get("hana.username");
-      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+      String fileContent = String.format("table.schemaName = \"%s\";\n"
+          + "table.description = \"Business event table type\";\n"
+          + "table.temporary   = true;\n"
+          + "table.columns = [\n"
+          + "    {name = \"ID\";        sqlType = INTEGER;              comment = \"Object identifier\";},\n"
+          + "    {name = \"BIZ_EVENT\"; sqlType = VARCHAR; length = 60; comment = \"Object type code\";}\n"
+          + "];", userSchema);
+      LocalResource resource = XSKHDBTestModule.getResourceFromString("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbstructure-itest/str1.hdbstructure",
-          "/hdbstructure-itest/str1.hdbstructure");
+          fileContent);
 
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();

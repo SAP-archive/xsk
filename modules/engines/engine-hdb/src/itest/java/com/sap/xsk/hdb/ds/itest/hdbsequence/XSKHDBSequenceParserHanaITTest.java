@@ -26,7 +26,6 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
@@ -70,9 +69,19 @@ public class XSKHDBSequenceParserHanaITTest {
 
       String userSchema = Configuration.get("hana.username");
       String artifactName = "sequence-itest::SampleSequence_HanaXSClassic";
-      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+
+      String fileContent = String.format("schema= \"%s\";\n"
+          + "increment_by=1;\n"
+          + "start_with= 10;\n"
+          + "maxvalue= 30;\n"
+          + "nomaxvalue=false;\n"
+          + "nominvalue= false;\n"
+          + "minvalue= 10;\n"
+          + "cycles=false;\n"
+          + "public=false;", userSchema);
+      LocalResource resource = XSKHDBTestModule.getResourceFromString("/usr/local/target/dirigible/repository/root",
           "/registry/public/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence",
-          "/sequence-itest/SampleSequence_HanaXSClassic.hdbsequence");
+          fileContent);
       this.facade.handleResourceSynchronization(resource);
       this.facade.updateEntities();
       try {

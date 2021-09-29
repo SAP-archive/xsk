@@ -81,9 +81,21 @@ public class XSKHDBTableParserHanaITTest {
         Statement stmt = connection.createStatement()) {
 
       String userSchema = Configuration.get("hana.username");
-      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+
+      String fileContent = String.format("table.schemaName = \"%s\";\n"
+          + "table.temporary = true;\n"
+          + "table.tableType = COLUMNSTORE;\n"
+          + "table.loggingType = NOLOGGING;\n"
+          + "table.columns = [\n"
+          + " {name = \"ID\"; sqlType = INTEGER; unique= false; length = 40; nullable = false; comment = \"hello\"; defaultValue = 20; precision = 2; scale = 15;},\n"
+          + " {name = \"NAME\"; sqlType = VARCHAR; length = 20; nullable = false; },\n"
+          + " {name = \"JOB\"; sqlType = VARCHAR; length = 20; nullable = false;},\n"
+          + " {name = \"NUMBER\"; sqlType = INTEGER; length = 20; nullable = false; defaultValue = 444;}];\n"
+          + "table.primaryKey.pkcolumns = [\"ID\"];\n"
+          + "table.description = \"test table test\";", userSchema);
+      LocalResource resource = XSKHDBTestModule.getResourceFromString("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
-          "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
+          fileContent);
 
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();

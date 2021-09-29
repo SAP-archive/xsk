@@ -11,12 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbview;
 
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
-import static org.junit.Assert.assertTrue;
-
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
@@ -24,12 +18,6 @@ import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 import com.sap.xsk.utils.XSKConstants;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Arrays;
-import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
@@ -39,6 +27,15 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.*;
+import static org.junit.Assert.assertTrue;
 
 public class XSKHDBViewParserHanaITTest {
 
@@ -79,9 +76,13 @@ public class XSKHDBViewParserHanaITTest {
             userSchema));
         stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
             userSchema));
-        LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+
+        String fileContent = String.format("schema=\"%s\";\n"
+            + "query=\"SELECT T1.\\\"COLUMN2\\\" FROM \\\"acme.com.test.tables::MY_TABLE10\\\" AS T1 LEFT JOIN \\\"acme.com.test.tables::MY_TABLE20\\\" AS T2 ON T1.\\\"COLUMN1\\\" = T2.\\\"COLUMN1\\\"\";\n"
+            + "depends_on= [\"acme.com.test.tables::MY_TABLE10\",\"acme.com.test.tables::MY_TABLE20\"];", userSchema);
+        LocalResource resource = XSKHDBTestModule.getResourceFromString("/usr/local/target/dirigible/repository/root",
             "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
-            "/hdbview-itest/SampleHANAXSClassicView.hdbview");
+            fileContent);
 
         facade.handleResourceSynchronization(resource);
         facade.updateEntities();
@@ -117,9 +118,13 @@ public class XSKHDBViewParserHanaITTest {
             .format(
                 "create SYNONYM \"%s\".\"%s\" FOR \"%s\".\"%s\"",
                 XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, artifactName, userSchema, artifactName));
-        LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+
+        String fileContent = String.format("schema=\"%s\";\n"
+            + "query=\"SELECT T1.\\\"COLUMN2\\\" FROM \\\"acme.com.test.tables::MY_TABLE10\\\" AS T1 LEFT JOIN \\\"acme.com.test.tables::MY_TABLE20\\\" AS T2 ON T1.\\\"COLUMN1\\\" = T2.\\\"COLUMN1\\\"\";\n"
+            + "depends_on= [\"acme.com.test.tables::MY_TABLE10\",\"acme.com.test.tables::MY_TABLE20\"];", userSchema);
+        LocalResource resource = XSKHDBTestModule.getResourceFromString("/usr/local/target/dirigible/repository/root",
             "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
-            "/hdbview-itest/SampleHANAXSClassicView.hdbview");
+            fileContent);
 
         facade.handleResourceSynchronization(resource);
         facade.updateEntities();

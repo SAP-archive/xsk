@@ -1,10 +1,10 @@
 service namespace "np"{
 	
-"hdb-xsodata::customer" as "Customers" with ("ID", "OrderID","OrderID2")
+"xsodata-navigations::customer" as "Customers" with ("ID", "OrderID","OrderID2")
 	navigates ("Orders_Customers" as "HisOrders")
 	create events (after "kneo.test.xsjs:auditlog.xsjslib::logCreateConfigAfter"); 
 	
-	"hdb-xsodata::order" as "Orders";
+	"xsodata-navigations::order" as "Orders";
 	 
 	association "Orders_Customers" with referential constraint 
 	 principal "Orders"("ID", "ID2") multiplicity "1"
@@ -12,14 +12,13 @@ service namespace "np"{
    
      update using  "kneo.test.xsjs:auditlog.xsjslib::logCreateConfigAfter";
 
-"hdb-xsodata::customer" as "CustomersWithoutKey" without ("OrderID");
-"hdb-xsodata::customer" as "CustomersWithAllKeys"
+"xsodata-navigations::customer" as "CustomersWithoutKey" without ("OrderID");
+"xsodata-navigations::customer" as "CustomersWithAllKeys"
         key generate local "GenID"
         aggregates always (SUM of "OrderID3") ;
-"hdb-xsodata::customer" as "CustomersWithGenID" key generate local "GenID";
+"xsodata-navigations::customer" as "CustomersWithGenID" key generate local "GenID";
 
-"hdb-xsodata::orderView" as "orderView" key ("ID");
-"hdb-xsodata::orderView" as "orderViewKeyGen" key generate local "ViewGenID";
+"xsodata-navigations::orderView" as "orderViewKeyGen" key generate local "ViewGenID";
 
 }
 annotations     {

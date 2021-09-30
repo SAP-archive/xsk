@@ -28,7 +28,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import javax.sql.DataSource;
-import module.XSKHDBTestModule;
+import module.XSKOdataTestModule;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.junit.AfterClass;
@@ -51,8 +51,8 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
         jdbcContainer.start();
         JDBCModel model = new JDBCModel(jdbcContainer.getDriverClassName(), jdbcContainer.getJdbcUrl(), jdbcContainer.getUsername(),
                 jdbcContainer.getPassword());
-        XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
-        xskhdbTestModule.configure();
+        XSKOdataTestModule XSKOdataTestModule = new XSKOdataTestModule(model);
+        XSKOdataTestModule.configure();
         datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
         dao = new XSKODataArtifactDao();
     }

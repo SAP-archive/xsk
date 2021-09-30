@@ -18,28 +18,44 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 
-public class XSKHDBTestModule extends AbstractDirigibleModule {
+public class XSKOdataTestModule extends AbstractDirigibleModule {
 
-  private final JDBCModel model;
+  private JDBCModel model;
 
-  public XSKHDBTestModule(JDBCModel model) {
+  public XSKOdataTestModule(JDBCModel model) {
     this.model = model;
   }
 
-  public DataSource getDataSource() {
+  public XSKOdataTestModule() {
+  }
+
+  private static DataSource createDataSource(String url) {
     BasicDataSource basicDataSource = new BasicDataSource();
-    basicDataSource.setDriverClassName(this.model.getDriverClassName());
-    basicDataSource.setUrl(this.model.getJdbcUrl());
-    basicDataSource.setUsername(this.model.getUsername());
-    basicDataSource.setPassword(this.model.getPassword());
+    basicDataSource.setDriverClassName("org.h2.Driver");
+    basicDataSource.setUrl(url);
+    basicDataSource.setUsername("sa");
+    basicDataSource.setPassword("sa");
     basicDataSource.setDefaultAutoCommit(true);
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
     return basicDataSource;
   }
 
+  private static DataSource getDataSource() {
+    return createDataSource("jdbc:h2:mem:xsk-datasource;DB_CLOSE_DELAY=-1");
+  }
+
+  private static DataSource getSystemDataSource() {
+    return createDataSource("jdbc:h2:mem:xsk-system-datasource;DB_CLOSE_DELAY=-1");
+  }
+
   @Override
   public String getName() {
-    return "XSKHDBTestModule";
+    return "XSKOdataTestModule";
+  }
+
+  @Override
+  public int getPriority() {
+    return super.getPriority();
   }
 
   @Override

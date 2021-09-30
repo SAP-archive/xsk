@@ -27,6 +27,7 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKTableManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKTableTypeManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -62,6 +63,15 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
     byte[] content = XSKHDBTestModule.class
         .getResourceAsStream(relativeResourcePath).readAllBytes();
 
+    LocalResource resource = new LocalResource(fileRepo, path);
+    resource.setContent(content);
+    return resource;
+  }
+
+  public static LocalResource getResourceFromString(String rootFolder, String repoPath, String fileContent) throws IOException {
+    FileSystemRepository fileRepo = new LocalRepository(rootFolder);
+    RepositoryPath path = new RepositoryPath(repoPath);
+    byte[] content = fileContent.getBytes(StandardCharsets.UTF_8);
     LocalResource resource = new LocalResource(fileRepo, path);
     resource.setContent(content);
     return resource;

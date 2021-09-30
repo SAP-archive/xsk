@@ -33,9 +33,11 @@ import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+@Ignore
 public class XSKHDBViewParserPostgreSQLITTest {
 
   private static PostgreSQLContainer jdbcContainer;

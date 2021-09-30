@@ -1,4 +1,4 @@
-FUNCTION "DBADMIN"."hdbtablefunction-itest::SampleHanaTableFunction" ()
+FUNCTION "TEST_SCHEMA"."hdbtablefunction-itest::SampleHanaTableFunction" ()
 	RETURNS TABLE (
 		"ID" INTEGER,
 		"NAME" NVARCHAR
@@ -7,6 +7,6 @@ FUNCTION "DBADMIN"."hdbtablefunction-itest::SampleHanaTableFunction" ()
 	SQL SECURITY INVOKER AS
 BEGIN
 
-RETURN  SELECT "ID", "NAME" FROM "hdbtablefunction-itest::SampleHanaTable";
+RETURN  SELECT "ID", "NAME" FROM "TEST_SCHEMA"."hdbtablefunction-itest::SampleHanaTable";
 
 END;

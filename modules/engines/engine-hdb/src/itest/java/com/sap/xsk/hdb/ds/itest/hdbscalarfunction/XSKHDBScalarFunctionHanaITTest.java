@@ -15,7 +15,6 @@ import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
 import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
 import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
 import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
@@ -23,13 +22,12 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.utils.XSKHDBUtils;
+import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -45,6 +43,7 @@ public class XSKHDBScalarFunctionHanaITTest {
 
   private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
+  private static final String testSchema = "TEST_SCHEMA";
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException {
@@ -58,19 +57,10 @@ public class XSKHDBScalarFunctionHanaITTest {
 
   @Before
   public void setUpBeforeTest() throws SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      String hanaUserName = Configuration.get("hana.username");
-      ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-      if (table.next()) {
-        stmt.executeUpdate(String.format(
-            "DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbscalarfunction-itest/SampleHanaScalarFunction.hdbscalarfunction'",
-            hanaUserName));
-      }
-      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      facade.clearCache();
-    }
+    HanaITestUtils
+        .clearDataFromXSKDataStructure(datasource, Arrays.asList("'/hdbscalarfunction-itest/SampleHanaScalarFunction.hdbscalarfunction'"));
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    facade.clearCache();
   }
 
   @Test
@@ -78,24 +68,20 @@ public class XSKHDBScalarFunctionHanaITTest {
       throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
 
+      HanaITestUtils.createSchema(stmt, testSchema);
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbscalarfunction-itest/SampleHanaScalarFunction.hdbscalarfunction",
           "/hdbscalarfunction-itest/SampleHanaScalarFunction.hdbscalarfunction");
 
       this.facade.handleResourceSynchronization(resource);
       this.facade.updateEntities();
-
-      ResultSet rs = stmt.executeQuery(
-          "SELECT COUNT(*) as rawsCount FROM SYS.OBJECTS WHERE OBJECT_NAME IN ('hdbscalarfunction-itest::SampleHanaScalarFunction')");
-      assertTrue(rs.next());
-      assertEquals(1, rs.getInt("rawsCount"));
-      stmt.executeUpdate(
-          String
-              .format("DROP FUNCTION %s", XSKHDBUtils.escapeArtifactName(connection, "hdbscalarfunction-itest::SampleHanaScalarFunction")));
-
+      try {
+        assertTrue(HanaITestUtils.checkExistOfFunction(stmt, "hdbscalarfunction-itest::SampleHanaScalarFunction", testSchema));
+      } finally {
+        HanaITestUtils.dropFunction(connection, stmt, "hdbscalarfunction-itest::SampleHanaScalarFunction", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
+      }
     }
-
   }
 }

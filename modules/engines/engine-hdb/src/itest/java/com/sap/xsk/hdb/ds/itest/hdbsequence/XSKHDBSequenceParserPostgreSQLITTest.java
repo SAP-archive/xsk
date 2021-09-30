@@ -36,6 +36,7 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -45,6 +46,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
  * creation due existing sequence drop logic that is never invoked.
  * Existing sequence alter logic is not checked due db limitations on retrieving sequence info.
  */
+@Ignore
 public class XSKHDBSequenceParserPostgreSQLITTest {
 
   private static PostgreSQLContainer jdbcContainer;

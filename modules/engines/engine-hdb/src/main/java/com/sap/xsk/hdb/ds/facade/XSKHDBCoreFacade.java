@@ -383,7 +383,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) dataStructureTablesModel.get(dsName);
             try {
               if (model != null) {
-                String escapedName = XSKHDBUtils.escapeArtifactName(connection, model.getName());
+                String escapedName = XSKHDBUtils.escapeArtifactName(connection, model.getName(), model.getSchema());
                 if (!SqlFactory.getNative(connection).exists(connection, escapedName)) {
                   xskTableManagerService.createDataStructure(connection, model);
                 } else {

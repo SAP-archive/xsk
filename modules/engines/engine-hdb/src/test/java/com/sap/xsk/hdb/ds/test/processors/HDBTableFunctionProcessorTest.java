@@ -90,9 +90,10 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
     XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
     model.setContent(hdbprocedureSample);
     model.setName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
+    model.setSchema("MYSCHEMA");
     String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + model.getContent();
     when(SqlFactory.getNative(mockConnection)
-        .exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
+        .exists(mockConnection, "MYSCHEMA", XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
             DatabaseArtifactTypes.FUNCTION)).thenReturn(doExist);
 
     when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
@@ -142,7 +143,7 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
     model.setName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
     String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + model.getName();
     when(SqlFactory.getNative(mockConnection)
-        .exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
+        .exists(mockConnection, "MYSCHEMA", XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
             DatabaseArtifactTypes.FUNCTION)).thenReturn(doExist);
 
     when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
@@ -163,9 +164,9 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     when(SqlFactory.getNative(mockConnection)
-        .exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
+        .exists(mockConnection, "MYSCHEMA", XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
             DatabaseArtifactTypes.FUNCTION)).thenReturn(true);
-    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
 
     processorSpy.execute(mockConnection, model);
   }

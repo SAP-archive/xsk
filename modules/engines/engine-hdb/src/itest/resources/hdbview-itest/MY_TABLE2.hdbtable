@@ -1,4 +1,4 @@
-table.schemaName = "DBADMIN";
+table.schemaName = "TEST_SCHEMA";
 table.tableType = COLUMNSTORE;
 table.columns = [
 	{name = "MY_ID"; sqlType = INTEGER; nullable = false;},

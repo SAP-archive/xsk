@@ -1,4 +1,4 @@
-function "DBADMIN"."hdbscalarfunction-itest::SampleHanaScalarFunction" ( iv_string varchar(1024), iv_delimiter char)
+function "TEST_SCHEMA"."hdbscalarfunction-itest::SampleHanaScalarFunction" ( iv_string varchar(1024), iv_delimiter char)
     returns result varchar(1024)
     language sqlscript
     sql security definer as

@@ -1,0 +1,4 @@
+//schema name to be considered when itests are run on local
+schema="TEST_SCHEMA";
+query="SELECT T1.\"COLUMN2\" FROM \"TEST_SCHEMA\".\"acme.com.test.tables::MY_TABLE10\" AS T1 LEFT JOIN \"TEST_SCHEMA\".\"acme.com.test.tables::MY_TABLE20\" AS T2 ON T1.\"COLUMN1\" = T2.\"COLUMN1\"";
+depends_on= ["acme.com.test.tables::MY_TABLE10","acme.com.test.tables::MY_TABLE20"];

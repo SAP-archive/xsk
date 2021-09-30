@@ -13,38 +13,38 @@
 package module;
 
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
+import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 
-import javax.sql.DataSource;
-
 public class XSKHDBTestModule extends AbstractDirigibleModule {
 
-    private final JDBCModel model;
+  private final JDBCModel model;
 
-    public XSKHDBTestModule(JDBCModel model) {
-        this.model = model;
-    }
+  public XSKHDBTestModule(JDBCModel model) {
+    this.model = model;
+  }
 
-    public DataSource getDataSource() {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setDriverClassName(this.model.getDriverClassName());
-        basicDataSource.setUrl(this.model.getJdbcUrl());
-        basicDataSource.setUsername(this.model.getUsername());
-        basicDataSource.setPassword(this.model.getPassword());
-        basicDataSource.setDefaultAutoCommit(true);
-        basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
-        return basicDataSource;
-    }
+  public DataSource getDataSource() {
+    BasicDataSource basicDataSource = new BasicDataSource();
+    basicDataSource.setDriverClassName(this.model.getDriverClassName());
+    basicDataSource.setUrl(this.model.getJdbcUrl());
+    basicDataSource.setUsername(this.model.getUsername());
+    basicDataSource.setPassword(this.model.getPassword());
+    basicDataSource.setDefaultAutoCommit(true);
+    basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
+    return basicDataSource;
+  }
 
-    @Override
-    public String getName() {
-        return "XSKHDBTestModule";
-    }
+  @Override
+  public String getName() {
+    return "XSKHDBTestModule";
+  }
 
-    @Override
-    public void configure() {
-        StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
-    }
+  @Override
+  public void configure() {
+    StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
+    StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getDataSource());
+  }
 }

@@ -10,6 +10,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.test.itest.model.JDBCModel;
 import com.sap.xsk.xsodata.ds.api.IXSKODataArtifactDao;
@@ -17,15 +20,6 @@ import com.sap.xsk.xsodata.ds.api.XSKODataException;
 import com.sap.xsk.xsodata.ds.dao.XSKODataArtifactDao;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
-import module.XSKHDBTestModule;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.testcontainers.containers.PostgreSQLContainer;
-
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -33,10 +27,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import javax.sql.DataSource;
+import module.XSKHDBTestModule;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+@Ignore
 public class XSKODataArtifactDaoPostgreSQLITTest {
 
     private static PostgreSQLContainer jdbcContainer;

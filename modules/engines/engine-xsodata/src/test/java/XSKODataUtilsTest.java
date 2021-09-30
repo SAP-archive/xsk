@@ -26,7 +26,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import module.XSKOdataTestModule;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableRelationModel;
@@ -36,7 +35,6 @@ import org.eclipse.dirigible.engine.odata2.definition.ODataEntityDefinition;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerMethods;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -48,12 +46,6 @@ public class XSKODataUtilsTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private DBMetadataUtil dbMetadataUtil;
-
-  @Before
-  public void setUp() {
-    XSKOdataTestModule testModule = new XSKOdataTestModule();
-    testModule.configure();
-  }
 
   @Test
   public void testConvertMultiplicityOneToMany() throws Exception {

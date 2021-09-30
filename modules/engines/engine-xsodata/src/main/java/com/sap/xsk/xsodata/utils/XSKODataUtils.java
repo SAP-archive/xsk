@@ -18,186 +18,200 @@ import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAMultiplicityType;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
-import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
-import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
-import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
-import org.eclipse.dirigible.engine.odata2.definition.*;
-import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
+import org.eclipse.dirigible.database.sql.ISqlKeywords;
+import org.eclipse.dirigible.engine.odata2.definition.ODataAssociationDefinition;
+import org.eclipse.dirigible.engine.odata2.definition.ODataAssociationEndDefinition;
+import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
+import org.eclipse.dirigible.engine.odata2.definition.ODataEntityDefinition;
+import org.eclipse.dirigible.engine.odata2.definition.ODataHandler;
+import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes;
+import org.eclipse.dirigible.engine.odata2.definition.ODataNavigation;
+import org.eclipse.dirigible.engine.odata2.definition.ODataProperty;
+import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKODataUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(XSKODataUtils.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKODataUtils.class);
 
-    private XSKODataUtils() {
-    }
+  private XSKODataUtils() {
+  }
 
-    public static ODataDefinition convertXSKODataModelToODataDefinition(XSKODataModel xskoDataModel, DBMetadataUtil dbMetadataUtil) {
-        ODataDefinition oDataDefinitionModel = new ODataDefinition();
-        String namespace = xskoDataModel.getService().getNamespace() != null ? xskoDataModel.getService().getNamespace() : "Default";
-        oDataDefinitionModel.setNamespace(namespace);
+  public static ODataDefinition convertXSKODataModelToODataDefinition(XSKODataModel xskoDataModel, DBMetadataUtil dbMetadataUtil) {
+    ODataDefinition oDataDefinitionModel = new ODataDefinition();
 
-        for (XSKHDBXSODATAEntity entity : xskoDataModel.getService().getEntities()) {
-            String tableName = entity.getRepositoryObject().getCatalogObjectName();
+    oDataDefinitionModel.setLocation(xskoDataModel.getLocation());
 
-            ODataEntityDefinition oDataEntityDefinition = new ODataEntityDefinition();
-            oDataEntityDefinition.setName(entity.getAlias());
-            oDataEntityDefinition.setAlias(entity.getAlias());
-            oDataEntityDefinition.setTable(tableName);
+    String namespace = xskoDataModel.getService().getNamespace() != null ? xskoDataModel.getService().getNamespace() : "Default";
+    oDataDefinitionModel.setNamespace(namespace);
 
-            entity.getNavigates().forEach(navigate -> {
-                ODataNavigation oDataNavigation = new ODataNavigation();
-                oDataNavigation.setName(navigate.getAliasNavigation());
-                oDataNavigation.setAssociation(navigate.getAssociation());
-                oDataEntityDefinition.setNavigations(Collections.singletonList(oDataNavigation));
+    for (XSKHDBXSODATAEntity entity : xskoDataModel.getService().getEntities()) {
+      String tableName = entity.getRepositoryObject().getCatalogObjectName();
 
-                //set navigations
-                ODataAssociationDefinition oDataAssociationDefinition = new ODataAssociationDefinition();
-                oDataAssociationDefinition.setName(navigate.getAssociation());
-                XSKHDBXSODATAAssociation xsOdataAssoc = XSKODataCoreService.getAssociation(xskoDataModel, navigate.getAssociation(), navigate.getAliasNavigation());
+      ODataEntityDefinition oDataEntityDefinition = new ODataEntityDefinition();
+      oDataEntityDefinition.setName(entity.getAlias());
+      oDataEntityDefinition.setAlias(entity.getAlias());
+      oDataEntityDefinition.setTable(tableName);
 
-                ODataAssociationEndDefinition fromDef = new ODataAssociationEndDefinition();
-                fromDef.setEntity(xsOdataAssoc.getPrincipal().getEntitySetName());
+      entity.getNavigates().forEach(navigate -> {
+        ODataNavigation oDataNavigation = new ODataNavigation();
+        oDataNavigation.setName(navigate.getAliasNavigation());
+        oDataNavigation.setAssociation(navigate.getAssociation());
+        oDataEntityDefinition.setNavigations(Collections.singletonList(oDataNavigation));
 
-                //The Multiplicity of the Principal role must be 1 or 0..1
-                validateEdmMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText(), navigate.getAssociation());
-                fromDef.setMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText());
-                fromDef.setProperties((ArrayList<String>) xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
-                ODataAssociationEndDefinition toDef = new ODataAssociationEndDefinition();
-                toDef.setEntity(xsOdataAssoc.getDependent().getEntitySetName());
+        //set navigations
+        ODataAssociationDefinition oDataAssociationDefinition = new ODataAssociationDefinition();
+        oDataAssociationDefinition.setName(navigate.getAssociation());
+        XSKHDBXSODATAAssociation xsOdataAssoc = XSKODataCoreService
+            .getAssociation(xskoDataModel, navigate.getAssociation(), navigate.getAliasNavigation());
 
-                //The Multiplicity of the Principal role must be 1, 0..1, 1..*, *
-                //convert 1..* to *, because odata do not support it
-                if (xsOdataAssoc.getDependent().getMultiplicityType().getText().equals(XSKHDBXSODATAMultiplicityType.ONE_TO_MANY.getText())) {
-                    toDef.setMultiplicity(EdmMultiplicity.MANY.toString());
-                } else {
-                    validateEdmMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText(), navigate.getAssociation());
-                    toDef.setMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText());
-                }
+        ODataAssociationEndDefinition fromDef = new ODataAssociationEndDefinition();
+        fromDef.setEntity(xsOdataAssoc.getPrincipal().getEntitySetName());
 
-                toDef.setProperties((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
-                oDataAssociationDefinition.setFrom(fromDef);
-                oDataAssociationDefinition.setTo(toDef);
+        //The Multiplicity of the Principal role must be 1 or 0..1
+        validateEdmMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText(), navigate.getAssociation());
+        fromDef.setMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText());
+        fromDef.setProperties((ArrayList<String>) xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
+        ODataAssociationEndDefinition toDef = new ODataAssociationEndDefinition();
+        toDef.setEntity(xsOdataAssoc.getDependent().getEntitySetName());
 
-                oDataDefinitionModel.getAssociations().add(oDataAssociationDefinition);
-            });
-
-            //set properties
-            try {
-                PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName, dbMetadataUtil.getOdataArtifactTypeSchema(tableName));
-                List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
-
-                if ("CALC VIEW".equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity.getWithoutPropertyProjections().isEmpty()) {
-                    allEntityDbColumns.forEach(el -> {
-                        ODataProperty oDataProperty = new ODataProperty();
-                        oDataProperty.setName(el.getName());
-                        oDataProperty.setColumn(el.getName());
-                        oDataProperty.setNullable(el.isNullable());
-                        oDataProperty.setType(el.getType());
-                        oDataEntityDefinition.getProperties().add(oDataProperty);
-                    });
-                }
-
-                entity.getWithPropertyProjections().forEach(prop -> {
-                    ODataProperty oDataProperty = new ODataProperty();
-                    oDataProperty.setName(prop);
-                    oDataProperty.setColumn(prop);
-                    List<PersistenceTableColumnModel> dbProp = allEntityDbColumns.stream().filter(x -> x.getName().equals(prop)).collect(Collectors.toList());
-                    if (dbProp.size() > 0) {
-                        oDataProperty.setNullable(dbProp.get(0).isNullable());
-                        oDataProperty.setType(dbProp.get(0).getType());
-                    }
-                    oDataEntityDefinition.getProperties().add(oDataProperty);
-                });
-
-                if (!entity.getWithoutPropertyProjections().isEmpty()) {
-                    allEntityDbColumns.forEach(el -> {
-                        if (entity.getWithoutPropertyProjections().stream().noneMatch(x -> x.equals(el.getName()))) {
-                            ODataProperty oDataProperty = new ODataProperty();
-                            oDataProperty.setName(el.getName());
-                            oDataProperty.setColumn(el.getName());
-                            oDataProperty.setNullable(el.isNullable());
-                            oDataProperty.setType(el.getType());
-                            oDataEntityDefinition.getProperties().add(oDataProperty);
-                        }
-                    });
-                }
-            } catch (SQLException e) {
-                throw new XSKOData2TransformerException(e);
-            }
-
-            List<ODataHandler> handlers = new ArrayList<>();
-            entity.getModifications().forEach(modification -> {
-                modification.getSpecification().getEvents().forEach(event -> {
-                    if (validateHandlerType(event.getType())) {
-                        ODataHandler oDataHandler = new ODataHandler();
-                        oDataHandler.setHandler(event.getAction());
-                        oDataHandler.setType(event.getType().getOdataHandlerType());
-                        oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
-                        handlers.add(oDataHandler);
-                    }
-                });
-                if (modification.getSpecification().isForbidden()) {
-                    ODataHandler oDataHandler = new ODataHandler();
-                    oDataHandler.setType(ODataHandlerTypes.forbid.name());
-                    oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
-                    handlers.add(oDataHandler);
-                    oDataEntityDefinition.getAnnotationsEntitySet().put(modification.getMethod().getOdataSAPAnnotation(), "false");
-                }
-                if (modification.getSpecification().getModificationAction() != null) {
-                    ODataHandler oDataHandler = new ODataHandler();
-                    oDataHandler.setHandler(modification.getSpecification().getModificationAction());
-                    oDataHandler.setType(ODataHandlerTypes.on.name());
-                    oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
-                    handlers.add(oDataHandler);
-                }
-            });
-            handlers.forEach(el -> oDataEntityDefinition.getHandlers().add(el));
-
-            if (!entity.getKeyList().isEmpty()) {
-                oDataEntityDefinition.setKeys(entity.getKeyList());
-            } else if (entity.getKeyGenerated() != null) {
-                oDataEntityDefinition.getKeys().add(entity.getKeyGenerated());
-            }
-
-            //process Aggregations
-            if (entity.getAggregations().size() > 0) {
-                oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
-            }
-
-            oDataDefinitionModel.getEntities().add(oDataEntityDefinition);
+        //The Multiplicity of the Principal role must be 1, 0..1, 1..*, *
+        //convert 1..* to *, because odata do not support it
+        if (xsOdataAssoc.getDependent().getMultiplicityType().getText().equals(XSKHDBXSODATAMultiplicityType.ONE_TO_MANY.getText())) {
+          toDef.setMultiplicity(EdmMultiplicity.MANY.toString());
+        } else {
+          validateEdmMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText(), navigate.getAssociation());
+          toDef.setMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText());
         }
-        return oDataDefinitionModel;
-    }
 
-    /**
-     * Validate if provided multiplicity from xsodata can be mapped to olingo ones.
-     */
-    public static void validateEdmMultiplicity(String actualValue, String assName) {
-        try {
-            EdmMultiplicity.fromLiteral(actualValue);
-        } catch (IllegalArgumentException ex) {
-            throw new XSKOData2TransformerException(String.format("Unsupported multiplicity %s for association %s", actualValue, assName));
-        }
-    }
+        toDef.setProperties((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
+        oDataAssociationDefinition.setFrom(fromDef);
+        oDataAssociationDefinition.setTo(toDef);
 
-    /**
-     * Validate if provided handler type is one of the org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes
-     */
-    public static boolean validateHandlerType(XSKHDBXSODATAEventType eventType) {
-        try {
-            ODataHandlerTypes.fromValue(eventType.getOdataHandlerType());
-        } catch (IllegalArgumentException ex) {
-            logger.error(String.format("%s type is not supported", eventType.name()));
-            return false;
+        oDataDefinitionModel.getAssociations().add(oDataAssociationDefinition);
+      });
+
+      //set properties
+      try {
+        PersistenceTableModel tableMetadata = dbMetadataUtil
+            .getTableMetadata(tableName, dbMetadataUtil.getOdataArtifactTypeSchema(tableName));
+        List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
+
+        if (ISqlKeywords.METADATA_CALC_VIEW.equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity
+            .getWithoutPropertyProjections().isEmpty()) {
+          allEntityDbColumns.forEach(el -> {
+            ODataProperty oDataProperty = new ODataProperty();
+            oDataProperty.setName(el.getName());
+            oDataProperty.setColumn(el.getName());
+            oDataProperty.setNullable(el.isNullable());
+            oDataProperty.setType(el.getType());
+            oDataEntityDefinition.getProperties().add(oDataProperty);
+          });
         }
-        return true;
+
+        entity.getWithPropertyProjections().forEach(prop -> {
+          ODataProperty oDataProperty = new ODataProperty();
+          oDataProperty.setName(prop);
+          oDataProperty.setColumn(prop);
+          List<PersistenceTableColumnModel> dbProp = allEntityDbColumns.stream().filter(x -> x.getName().equals(prop))
+              .collect(Collectors.toList());
+          if (dbProp.size() > 0) {
+            oDataProperty.setNullable(dbProp.get(0).isNullable());
+            oDataProperty.setType(dbProp.get(0).getType());
+          }
+          oDataEntityDefinition.getProperties().add(oDataProperty);
+        });
+
+        if (!entity.getWithoutPropertyProjections().isEmpty()) {
+          allEntityDbColumns.forEach(el -> {
+            if (entity.getWithoutPropertyProjections().stream().noneMatch(x -> x.equals(el.getName()))) {
+              ODataProperty oDataProperty = new ODataProperty();
+              oDataProperty.setName(el.getName());
+              oDataProperty.setColumn(el.getName());
+              oDataProperty.setNullable(el.isNullable());
+              oDataProperty.setType(el.getType());
+              oDataEntityDefinition.getProperties().add(oDataProperty);
+            }
+          });
+        }
+      } catch (SQLException e) {
+        throw new XSKOData2TransformerException(e);
+      }
+
+      List<ODataHandler> handlers = new ArrayList<>();
+      entity.getModifications().forEach(modification -> {
+        modification.getSpecification().getEvents().forEach(event -> {
+          if (validateHandlerType(event.getType())) {
+            ODataHandler oDataHandler = new ODataHandler();
+            oDataHandler.setHandler(event.getAction());
+            oDataHandler.setType(event.getType().getOdataHandlerType());
+            oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+            handlers.add(oDataHandler);
+          }
+        });
+        if (modification.getSpecification().isForbidden()) {
+          ODataHandler oDataHandler = new ODataHandler();
+          oDataHandler.setType(ODataHandlerTypes.forbid.name());
+          oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+          handlers.add(oDataHandler);
+          oDataEntityDefinition.getAnnotationsEntitySet().put(modification.getMethod().getOdataSAPAnnotation(), "false");
+        }
+        if (modification.getSpecification().getModificationAction() != null) {
+          ODataHandler oDataHandler = new ODataHandler();
+          oDataHandler.setHandler(modification.getSpecification().getModificationAction());
+          oDataHandler.setType(ODataHandlerTypes.on.name());
+          oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+          handlers.add(oDataHandler);
+        }
+      });
+      handlers.forEach(el -> oDataEntityDefinition.getHandlers().add(el));
+
+      if (!entity.getKeyList().isEmpty()) {
+        oDataEntityDefinition.setKeys(entity.getKeyList());
+      } else if (entity.getKeyGenerated() != null) {
+        oDataEntityDefinition.getKeys().add(entity.getKeyGenerated());
+      }
+
+      //process Aggregations
+      if (entity.getAggregations().size() > 0) {
+        oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
+      }
+
+      oDataDefinitionModel.getEntities().add(oDataEntityDefinition);
     }
+    return oDataDefinitionModel;
+  }
+
+  /**
+   * Validate if provided multiplicity from xsodata can be mapped to olingo ones.
+   */
+  public static void validateEdmMultiplicity(String actualValue, String assName) {
+    try {
+      EdmMultiplicity.fromLiteral(actualValue);
+    } catch (IllegalArgumentException ex) {
+      throw new XSKOData2TransformerException(String.format("Unsupported multiplicity %s for association %s", actualValue, assName));
+    }
+  }
+
+  /**
+   * Validate if provided handler type is one of the org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes
+   */
+  public static boolean validateHandlerType(XSKHDBXSODATAEventType eventType) {
+    try {
+      ODataHandlerTypes.fromValue(eventType.getOdataHandlerType());
+    } catch (IllegalArgumentException ex) {
+      logger.error(String.format("%s type is not supported", eventType.name()));
+      return false;
+    }
+    return true;
+  }
 }

@@ -45,7 +45,7 @@ public class XSKCommonsUtils {
   /**
    * Assemble the catalog name of a Repository Base Object(e.g hdbtable, hdbview, hdbsequence, hdbstructure, hdbprocedure)
    * The catalog name includes the package path, the separating dots, and the object base name, as NAMESPACE::OBJECT_BASE_NAME
-   * For example: Given location "/projectname/com/sap/hana/example/ItemsByOrder.hdbview",
+   * For example: Given location "/project_name/com/sap/hana/example/ItemsByOrder.hdbview",
    * the method will return "com.sap.hana.example::ItemsByOrder"
    *
    * @param location String representing file location path
@@ -81,7 +81,7 @@ public class XSKCommonsUtils {
   }
 
   /**
-   * Extraxt corret RepositoryBaseObject definition from content, by removing tabs or spaces between the
+   * Extract correct RepositoryBaseObject definition from content, by removing tabs or spaces between the
    * syntax word and the Object name.
    * For example "VIEW              "hdb_view::ItemsByOrderHANAv2" should be return as "VIEW "hdb_view::ItemsByOrderHANAv2"
    *

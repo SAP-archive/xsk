@@ -19,7 +19,10 @@ import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
+import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
+import org.eclipse.dirigible.core.messaging.service.SchedulerManager;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
+
 
 public class XSKJobFacade {
 
@@ -66,6 +69,16 @@ public class XSKJobFacade {
     if (status) {
       activate(name);
     }
+  }
+
+  public static final XSKJobDefinition getConfiguration(String name) throws SchedulerException {
+    XSKJobCoreService jobService = new XSKJobCoreService();
+
+    return jobService.getJob(name);
+  }
+
+  public static final boolean isActive(String name) throws SchedulerException {
+    return XSKSchedulerManager.existsJob(name);
   }
 
 }

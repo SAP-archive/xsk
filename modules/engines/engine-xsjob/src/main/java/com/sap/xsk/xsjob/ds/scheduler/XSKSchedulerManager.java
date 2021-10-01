@@ -55,7 +55,8 @@ public class XSKSchedulerManager {
         }
 
         CronTrigger trigger = newTrigger().withIdentity(triggerKey).startAt(new Date(jobDefinition.getStartAt().getTime()))
-            .endAt(new Date(jobDefinition.getEndAt().getTime())).withSchedule(cronSchedule(jobDefinition.getCronExpression())).build();
+            .endAt(new Date(jobDefinition.getEndAt().getTime()))
+            .withSchedule(cronSchedule(jobDefinition.getCronExpression()).withMisfireHandlingInstructionDoNothing()).build();
 
         scheduler.scheduleJob(job, trigger);
 

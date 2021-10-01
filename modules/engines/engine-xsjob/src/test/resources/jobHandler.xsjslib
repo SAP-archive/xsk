@@ -1,4 +1,0 @@
-
-function jobFunc() {
-  throw "something";
-}

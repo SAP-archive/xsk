@@ -59,7 +59,11 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
             throw new IllegalStateException(errorMessage);
           } else {
             String sql = SqlFactory.getNative(connection).create().synonym(synonymName).forSource(targetObjectName).build();
-            executeSql(sql, connection);
+            try {
+              executeSql(sql, connection);
+            } catch (SQLException ex) {
+              XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", synonymModel.getLocation(), "HDB Synonym");
+            }
           }
         } else {
           logger.warn(format("Synonym [{0}] already exists during the create process", value.getSynonymSchema() + "." + key));

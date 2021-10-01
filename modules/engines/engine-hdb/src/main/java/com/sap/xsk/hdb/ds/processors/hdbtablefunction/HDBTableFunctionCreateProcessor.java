@@ -46,7 +46,11 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
         throw new IllegalStateException(errorMessage);
       } else {
         String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getContent();
-        executeSql(sql, connection);
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbTableFunction.getLocation(), "HDB Table Function");
+        }
       }
     } else {
       logger.warn(format("TableFunction [{0}] already exists during the create process", hdbTableFunction.getName()));

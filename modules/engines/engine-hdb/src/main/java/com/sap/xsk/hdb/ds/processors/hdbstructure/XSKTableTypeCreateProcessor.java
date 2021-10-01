@@ -87,7 +87,11 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
           }
         }
       }
-      executeSql(sql, connection);
+      try {
+        executeSql(sql, connection);
+      } catch (SQLException ex) {
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", tableTypeModel.getLocation(), "HDB Table Type");
+      }
     } else {
       logger.warn(format("Table Type [{0}] already exists during the create process", tableTypeNameWithoutSchema));
     }

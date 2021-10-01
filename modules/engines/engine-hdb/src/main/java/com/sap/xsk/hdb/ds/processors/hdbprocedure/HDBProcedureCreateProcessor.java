@@ -29,26 +29,30 @@ import org.slf4j.LoggerFactory;
 
 public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBProcedureModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(HDBProcedureCreateProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(HDBProcedureCreateProcessor.class);
 
-    public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure)
-        throws SQLException, ProblemsException {
-        logger.info("Processing Create Procedure: " + hdbProcedure.getName());
-        String procedureNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[1];
-        hdbProcedure.setSchema(XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[0]);
+  public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure)
+      throws SQLException, ProblemsException {
+    logger.info("Processing Create Procedure: " + hdbProcedure.getName());
+    String procedureNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[1];
+    hdbProcedure.setSchema(XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[0]);
 
-        if (!SqlFactory.getNative(connection).exists(connection, procedureNameWithoutSchema, DatabaseArtifactTypes.PROCEDURE)) {
-            ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-            if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-              String errorMessage = String.format("Procedures are not supported for %s", dialect.getDatabaseName(connection));
-              XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbProcedure.getLocation(), "HDB Procedure");
-              throw new IllegalStateException(errorMessage);
-            } else {
-                String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getContent();
-                executeSql(sql, connection);
-            }
-        } else {
-            logger.warn(format("Procedure [{0}] already exists during the create process", hdbProcedure.getName()));
+    if (!SqlFactory.getNative(connection).exists(connection, procedureNameWithoutSchema, DatabaseArtifactTypes.PROCEDURE)) {
+      ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+      if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+        String errorMessage = String.format("Procedures are not supported for %s", dialect.getDatabaseName(connection));
+        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbProcedure.getLocation(), "HDB Procedure");
+        throw new IllegalStateException(errorMessage);
+      } else {
+        String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getContent();
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbProcedure.getLocation(), "HDB Procedure");
         }
+      }
+    } else {
+      logger.warn(format("Procedure [{0}] already exists during the create process", hdbProcedure.getName()));
     }
+  }
 }

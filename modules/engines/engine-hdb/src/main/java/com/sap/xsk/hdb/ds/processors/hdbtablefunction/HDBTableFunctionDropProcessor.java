@@ -11,10 +11,14 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbtablefunction;
 
+import static java.text.MessageFormat.format;
+
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
+import java.sql.Connection;
+import java.sql.SQLException;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
@@ -22,11 +26,6 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import static java.text.MessageFormat.format;
 
 public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableFunctionModel> {
 
@@ -47,7 +46,11 @@ public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataS
         throw new IllegalStateException(errorMessage);
       } else {
         String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + hdbTableFunction.getName();
-        executeSql(sql, connection);
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbTableFunction.getLocation(), "HDB Table Function");
+        }
       }
     } else {
       logger.warn(format("TableFunction [{0}] does not exists during the drop process", hdbTableFunction.getName()));

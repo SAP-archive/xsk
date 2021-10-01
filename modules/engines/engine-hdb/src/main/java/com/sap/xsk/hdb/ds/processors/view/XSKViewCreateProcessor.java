@@ -72,7 +72,11 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
           }
         }
       }
-      executeSql(sql, connection);
+      try {
+        executeSql(sql, connection);
+      } catch (SQLException ex) {
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", viewModel.getLocation(), "HDB View");
+      }
     } else {
       logger.warn(format("View [{0}] already exists during the create process", viewModel.getName()));
     }

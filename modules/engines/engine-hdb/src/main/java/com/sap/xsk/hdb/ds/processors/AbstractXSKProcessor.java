@@ -34,6 +34,7 @@ public abstract class AbstractXSKProcessor<T extends XSKDataStructureModel> impl
     } catch (SQLException e) {
       logger.error(sql);
       logger.error(e.getMessage(), e);
+      throw e;
     }
   }
 }

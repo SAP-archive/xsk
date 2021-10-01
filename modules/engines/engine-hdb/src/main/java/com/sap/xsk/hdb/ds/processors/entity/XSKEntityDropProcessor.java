@@ -37,7 +37,6 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
    *
    * @param connection  the connection
    * @param entityModel the table model
-   * @return if delete operation has been performed successfully or the table does not exist
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException, ProblemsException {
@@ -79,12 +78,20 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
             referencedColumns[i] = XSKHDBUtils.escapeArtifactName(connection, referencedColumns[i]);
           }
           sql = SqlFactory.getNative(connection).drop().constraint(foreignKeyName).fromTable(tableName).build();
-          executeSql(sql, connection);
+          try {
+            executeSql(sql, connection);
+          } catch (SQLException ex) {
+            XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", entityModel.getLocation(), "XSK Entity");
+          }
         }
       }
 
       sql = SqlFactory.getNative(connection).drop().table(tableName).build();
-      executeSql(sql, connection);
+      try {
+        executeSql(sql, connection);
+      } catch (SQLException ex) {
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", entityModel.getLocation(), "XSK Entity");
+      }
       return;
     }
     logger.warn("Trying to delete non existing Table: {}", tableName);

@@ -1,4 +1,4 @@
-PROCEDURE "DBADMIN"."hdbprocedure-itest::SampleHanaProcedure" ()
+PROCEDURE "TEST_SCHEMA"."hdbprocedure-itest::SampleHanaProcedure" ()
    LANGUAGE SQLSCRIPT
    SQL SECURITY INVOKER
    --DEFAULT SCHEMA <default_schema_name>
@@ -8,5 +8,5 @@ BEGIN
        Write your procedure logic
    *************************************/
 
-      SELECT * FROM "hdbprocedure-itest::SampleHanaTable";
+      SELECT * FROM "TEST_SCHEMA"."hdbprocedure-itest::SampleHanaTable";
 END

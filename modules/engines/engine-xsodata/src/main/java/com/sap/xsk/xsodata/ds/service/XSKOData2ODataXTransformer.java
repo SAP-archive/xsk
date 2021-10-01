@@ -11,16 +11,22 @@
  */
 package com.sap.xsk.xsodata.ds.service;
 
+import com.sap.xsk.utils.XSKCommonsUtils;
+import java.sql.SQLException;
+import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
 import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataXTransformer;
 
-import java.sql.SQLException;
-
 public class XSKOData2ODataXTransformer {
 
-	private OData2ODataXTransformer oData2ODataXTransformer = new OData2ODataXTransformer();
+  private OData2ODataXTransformer oData2ODataXTransformer = new OData2ODataXTransformer();
 
-    public String[] transform(ODataDefinition oDataDefinition) throws SQLException {
-        return oData2ODataXTransformer.transform(oDataDefinition);
+  public String[] transform(ODataDefinition oDataDefinition) throws SQLException, ProblemsException {
+    try {
+      return oData2ODataXTransformer.transform(oDataDefinition);
+    } catch (Exception e) {
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", oDataDefinition.getLocation(), "XSODATA");
+      throw e;
     }
+  }
 }

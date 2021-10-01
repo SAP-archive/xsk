@@ -11,26 +11,12 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbsynonym;
 
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.sql.DataSource;
+import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
@@ -40,11 +26,21 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.*;
+import static org.junit.Assert.assertTrue;
 
 public class XSKHDBSynonymParserHanaITTest {
 
   private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
+  private static final String testSchema = "TEST_SCHEMA";
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException {
@@ -58,19 +54,10 @@ public class XSKHDBSynonymParserHanaITTest {
 
   @Before
   public void setUpBeforeTest() throws SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      String hanaUserName = Configuration.get("hana.username");
-      ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-      if (table.next()) {
-        stmt.executeUpdate(String.format(
-            "DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION ='/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym'",
-            hanaUserName));
-      }
-      Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      facade.clearCache();
-    }
+    HanaITestUtils
+        .clearDataFromXSKDataStructure(datasource, Arrays.asList("'/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym'"));
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    facade.clearCache();
   }
 
   @Test
@@ -78,12 +65,9 @@ public class XSKHDBSynonymParserHanaITTest {
       throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      ResultSet tables = metaData.getTables(null, null, "hdbsynonym-itest::SampleHanaTable", null);
-      if (!tables.next()) {
-        stmt.executeUpdate(String.format("create table \"%s\".\"hdbsynonym-itest::SampleHanaTable\"(COLUMN1 integer,COLUMN2 integer)",
-            Configuration.get("hana.username")));
-      }
+
+      HanaITestUtils.createSchema(stmt, testSchema);
+      HanaITestUtils.createEmptyTable(stmt, "hdbsynonym-itest::SampleHanaTable", testSchema);
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbsynonym-itest/SampleHanaXSClassicSynonym.hdbsynonym",
@@ -91,15 +75,12 @@ public class XSKHDBSynonymParserHanaITTest {
 
       this.facade.handleResourceSynchronization(resource);
       this.facade.updateEntities();
-
-      ResultSet rs = stmt.executeQuery(
-          String.format("SELECT COUNT(*) as rawsCount FROM %s",
-              XSKHDBUtils.escapeArtifactName(connection, "hdbsynonym-itest::SampleHanaXSClassicSynonym")));
-      assertTrue(rs.next());
-      assertEquals(0, rs.getInt("rawsCount"));
-      stmt.executeUpdate(
-          String.format("DROP SYNONYM %s", XSKHDBUtils.escapeArtifactName(connection, "hdbsynonym-itest::SampleHanaXSClassicSynonym")));
-      stmt.executeUpdate(String.format("DROP TABLE \"%s\".\"hdbsynonym-itest::SampleHanaTable\"", Configuration.get("hana.username")));
+      try {
+        assertTrue(HanaITestUtils.checkExistOfSynonym(connection, "hdbsynonym-itest::SampleHanaXSClassicSynonym", testSchema));
+      } finally {
+        HanaITestUtils.dropTable(connection, stmt, "hdbsynonym-itest::SampleHanaTable", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
+      }
     }
   }
 }

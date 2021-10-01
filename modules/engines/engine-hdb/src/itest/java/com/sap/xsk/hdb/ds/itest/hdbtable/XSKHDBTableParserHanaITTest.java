@@ -22,14 +22,15 @@ import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
+import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableAlterHandler;
-import com.sap.xsk.utils.XSKConstants;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import javax.sql.DataSource;
 import nl.altindag.log.LogCaptor;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -37,16 +38,16 @@ import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 public class XSKHDBTableParserHanaITTest {
 
   private static DataSource datasource;
   private static IXSKHDBCoreFacade facade;
-  private static int indexCounter;
+  private static final String testSchema = "TEST_SCHEMA";
 
   @BeforeClass
   public static void setUpBeforeClass() throws SQLException {
@@ -56,27 +57,20 @@ public class XSKHDBTableParserHanaITTest {
     xskhdbTestModule.configure();
     datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
     facade = new XSKHDBCoreFacade();
-    indexCounter = 0;
     facade.clearCache();
   }
 
   @Before
   public void setUpBeforeTest() throws SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      String hanaUserName = Configuration.get("hana.username");
-      ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
-      if (table.next()) {
-        stmt.executeUpdate(String
-            .format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION IN "
-                    + "('/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable','/hdbtable-itest/compatible-length-change-hana.hdbtable',"
-                    + "'/hdbtable-itest/incompatible-nullable-change-hana.hdbtable','/hdbtable-itest/incompatible-unique-change-hana.hdbtable',"
-                    + "'/hdbtable-itest/incompatible-primary-key-change-hana.hdbtable','/hdbtable-itest/adding-new-column-to-pk-list-hana.hdbtable',"
-                    + "'/hdbtable-itest/adding-new-not-nullable-column-hana.hdbtable', '/hdbtable-itest/incompatible-column-type-change-hana.hdbtable')",
-                hanaUserName));
-      }
-    }
+    HanaITestUtils
+        .clearDataFromXSKDataStructure(datasource, Arrays
+            .asList("'/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable'", "'/hdbtable-itest/compatible-length-change-hana.hdbtable'"
+                , "'/hdbtable-itest/incompatible-nullable-change-hana.hdbtable'",
+                "'/hdbtable-itest/incompatible-unique-change-hana.hdbtable'",
+                "'/hdbtable-itest/incompatible-primary-key-change-hana.hdbtable'",
+                "'/hdbtable-itest/adding-new-column-to-pk-list-hana.hdbtable'",
+                "'/hdbtable-itest/adding-new-not-nullable-column-hana.hdbtable'",
+                "'/hdbtable-itest/incompatible-column-type-change-hana.hdbtable'"));
     facade.clearCache();
   }
 
@@ -85,29 +79,32 @@ public class XSKHDBTableParserHanaITTest {
       throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
-      String schemaName = "test";
-      stmt.executeUpdate(String.format("CREATE SCHEMA \"%s\"", schemaName));
 
-      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+      String userSchema = Configuration.get("hana.username");
+
+      String fileContent = String.format("table.schemaName = \"%s\";\n"
+          + "table.temporary = true;\n"
+          + "table.tableType = COLUMNSTORE;\n"
+          + "table.loggingType = NOLOGGING;\n"
+          + "table.columns = [\n"
+          + " {name = \"ID\"; sqlType = INTEGER; unique= false; length = 40; nullable = false; comment = \"hello\"; defaultValue = 20; precision = 2; scale = 15;},\n"
+          + " {name = \"NAME\"; sqlType = VARCHAR; length = 20; nullable = false; },\n"
+          + " {name = \"JOB\"; sqlType = VARCHAR; length = 20; nullable = false;},\n"
+          + " {name = \"NUMBER\"; sqlType = INTEGER; length = 20; nullable = false; defaultValue = 444;}];\n"
+          + "table.primaryKey.pkcolumns = [\"ID\"];\n"
+          + "table.description = \"test table test\";", userSchema);
+      LocalResource resource = XSKHDBTestModule.getResourceFromString("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable",
-          "/hdbtable-itest/SamplePostgreXSClassicTable.hdbtable");
+          fileContent);
 
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
-
-      DatabaseMetaData metaData = connection.getMetaData();
-      ResultSet table = metaData
-          .getTables(null, schemaName, "hdbtable-itest::SamplePostgreXSClassicTable", new String[]{ISqlKeywords.KEYWORD_TABLE});
-      assertTrue(table.next());
-
-      ResultSet synonym = metaData.getTables(null, XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, "hdbtable-itest::SamplePostgreXSClassicTable",
-          new String[]{ISqlKeywords.KEYWORD_SYNONYM});
-      assertTrue(synonym.next());
-
-      stmt.executeUpdate(
-          String.format("drop SYNONYM \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA));
-      stmt.executeUpdate(String.format("drop table \"%s\".\"hdbtable-itest::SamplePostgreXSClassicTable\"", schemaName));
-      stmt.executeUpdate(String.format("DROP SCHEMA \"%s\" CASCADE", schemaName));
+      try {
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "hdbtable-itest::SamplePostgreXSClassicTable", userSchema));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "hdbtable-itest::SamplePostgreXSClassicTable"));
+      } finally {
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::SamplePostgreXSClassicTable", userSchema);
+      }
     }
   }
 
@@ -118,9 +115,9 @@ public class XSKHDBTableParserHanaITTest {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
+      HanaITestUtils.createSchema(stmt, testSchema);
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      DatabaseMetaData metaData = connection.getMetaData();
-      createNonEmptyTable(stmt, metaData, "hdbtable-itest::compatible-length-change-hana");
+      createNonEmptyTable(connection, stmt, "hdbtable-itest::compatible-length-change-hana");
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/compatible-length-change-hana.hdbtable",
@@ -129,6 +126,7 @@ public class XSKHDBTableParserHanaITTest {
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
       try {
+        DatabaseMetaData metaData = connection.getMetaData();
         ResultSet allColumns = metaData
             .getColumns(null, null, "hdbtable-itest::compatible-length-change-hana",
                 null);
@@ -158,11 +156,10 @@ public class XSKHDBTableParserHanaITTest {
         }
         assertTrue(isCol78Indexed);
       } finally {
-        stmt.executeUpdate("drop table \"hdbtable-itest::compatible-length-change-hana\"");
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::compatible-length-change-hana", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
         Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false");
       }
-
-
     }
   }
 
@@ -171,9 +168,10 @@ public class XSKHDBTableParserHanaITTest {
       throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
+
+      HanaITestUtils.createSchema(stmt, testSchema);
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      DatabaseMetaData metaData = connection.getMetaData();
-      createNonEmptyTable(stmt, metaData, "hdbtable-itest::incompatible-nullable-change-hana");
+      createNonEmptyTable(connection, stmt, "hdbtable-itest::incompatible-nullable-change-hana");
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/incompatible-nullable-change-hana.hdbtable",
@@ -183,14 +181,14 @@ public class XSKHDBTableParserHanaITTest {
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
       try {
-        String errMsg = "SAP DBTech JDBC: [7]: feature not supported: NULL value exists: Col66: line 1 col 72 (at pos 71)";
+        String errMsg = "SAP DBTech JDBC: [7]: feature not supported: NULL value exists: Col66: line 1 col 86 (at pos 85)";
         assertTrue(logCaptor.getErrorLogs().stream().anyMatch(logMsg -> logMsg.equals(errMsg)));
       } finally {
-        stmt.executeUpdate("drop table \"hdbtable-itest::incompatible-nullable-change-hana\"");
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::incompatible-nullable-change-hana", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
         Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false");
       }
     }
-
   }
 
   @Test
@@ -198,9 +196,10 @@ public class XSKHDBTableParserHanaITTest {
       throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
+
+      HanaITestUtils.createSchema(stmt, testSchema);
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      DatabaseMetaData metaData = connection.getMetaData();
-      createNonEmptyTable(stmt, metaData, "hdbtable-itest::incompatible-unique-change-hana");
+      createNonEmptyTable(connection, stmt, "hdbtable-itest::incompatible-unique-change-hana");
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/incompatible-unique-change-hana.hdbtable",
@@ -210,17 +209,13 @@ public class XSKHDBTableParserHanaITTest {
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
       try {
-        String errMsg = "SAP DBTech JDBC: [349]: cannot CREATE UNIQUE INDEX; duplicate key found:  [5] "
-            + "Several documents with the same ID exist in the index;DBADMIN:hdbtable-itest::incompatible-unique-change-hana.Col66 content not unique, "
-            + "cannot define unique constraint. rowCount != distinctCount ";
+        String errMsg = "SAP DBTech JDBC: [349]: cannot CREATE UNIQUE INDEX; duplicate key found:  [5] Several documents with the same ID exist in the index;TEST_SCHEMA:hdbtable-itest::incompatible-unique-change-hana.Col66 content not unique, cannot define unique constraint. rowCount != distinctCount ";
         assertTrue(logCaptor.getErrorLogs().stream().anyMatch(logMsg -> logMsg.equals(errMsg)));
-
       } finally {
-        stmt.executeUpdate("drop table \"hdbtable-itest::incompatible-unique-change-hana\"");
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::incompatible-unique-change-hana", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
         Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false");
       }
-
-
     }
   }
 
@@ -229,9 +224,10 @@ public class XSKHDBTableParserHanaITTest {
       throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
+
+      HanaITestUtils.createSchema(stmt, testSchema);
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      DatabaseMetaData metaData = connection.getMetaData();
-      createNonEmptyTable(stmt, metaData, "hdbtable-itest::incompatible-primary-key-change-hana");
+      createNonEmptyTable(connection, stmt, "hdbtable-itest::incompatible-primary-key-change-hana");
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/incompatible-primary-key-change-hana.hdbtable",
@@ -244,13 +240,11 @@ public class XSKHDBTableParserHanaITTest {
         String errMsg = String.format("Incompatible change of table [%s] by trying to change its primary key list",
             "hdbtable-itest::incompatible-primary-key-change-hana");
         assertTrue(logCaptor.getErrorLogs().stream().anyMatch(logMsg -> logMsg.equals(errMsg)));
-
       } finally {
-        stmt.executeUpdate("drop table \"hdbtable-itest::incompatible-primary-key-change-hana\"");
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::incompatible-primary-key-change-hana", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
         Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false");
       }
-
-
     }
   }
 
@@ -260,9 +254,9 @@ public class XSKHDBTableParserHanaITTest {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
+      HanaITestUtils.createSchema(stmt, testSchema);
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      DatabaseMetaData metaData = connection.getMetaData();
-      createNonEmptyTable(stmt, metaData, "hdbtable-itest::adding-new-column-to-pk-list-hana");
+      createNonEmptyTable(connection, stmt, "hdbtable-itest::adding-new-column-to-pk-list-hana");
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/adding-new-column-to-pk-list-hana.hdbtable",
@@ -272,15 +266,13 @@ public class XSKHDBTableParserHanaITTest {
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
       try {
-        String errMsg = "Incompatible change of table [\"hdbtable-itest::adding-new-column-to-pk-list-hana\"] by adding a column [Col67] which is [PRIMARY KEY]";
+        String errMsg = "Incompatible change of table [\"TEST_SCHEMA\".\"hdbtable-itest::adding-new-column-to-pk-list-hana\"] by adding a column [Col67] which is [PRIMARY KEY]";
         assertTrue(logCaptor.getErrorLogs().stream().anyMatch(logMsg -> logMsg.equals(errMsg)));
-
       } finally {
-        stmt.executeUpdate("drop table \"hdbtable-itest::adding-new-column-to-pk-list-hana\"");
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::adding-new-column-to-pk-list-hana", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
         Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false");
       }
-
-
     }
   }
 
@@ -289,9 +281,10 @@ public class XSKHDBTableParserHanaITTest {
       throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
+
+      HanaITestUtils.createSchema(stmt, testSchema);
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      DatabaseMetaData metaData = connection.getMetaData();
-      createNonEmptyTable(stmt, metaData, "hdbtable-itest::adding-new-not-nullable-column-hana");
+      createNonEmptyTable(connection, stmt, "hdbtable-itest::adding-new-not-nullable-column-hana");
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/adding-new-not-nullable-column-hana.hdbtable",
@@ -301,14 +294,13 @@ public class XSKHDBTableParserHanaITTest {
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
       try {
-        String errMsg = "Incompatible change of table [\"hdbtable-itest::adding-new-not-nullable-column-hana\"] by adding a column [Col67] which is [NOT NULL]";
+        String errMsg = "Incompatible change of table [\"TEST_SCHEMA\".\"hdbtable-itest::adding-new-not-nullable-column-hana\"] by adding a column [Col67] which is [NOT NULL]";
         assertTrue(logCaptor.getErrorLogs().stream().anyMatch(logMsg -> logMsg.equals(errMsg)));
-
       } finally {
-        stmt.executeUpdate("drop table \"hdbtable-itest::adding-new-not-nullable-column-hana\"");
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::adding-new-not-nullable-column-hana", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
         Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false");
       }
-
     }
   }
 
@@ -317,9 +309,10 @@ public class XSKHDBTableParserHanaITTest {
       throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
+
+      HanaITestUtils.createSchema(stmt, testSchema);
       Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-      DatabaseMetaData metaData = connection.getMetaData();
-      createNonEmptyTable(stmt, metaData, "hdbtable-itest::incompatible-column-type-change-hana");
+      createNonEmptyTable(connection, stmt, "hdbtable-itest::incompatible-column-type-change-hana");
 
       LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
           "/registry/public/hdbtable-itest/incompatible-column-type-change-hana.hdbtable",
@@ -329,37 +322,35 @@ public class XSKHDBTableParserHanaITTest {
       facade.handleResourceSynchronization(resource);
       facade.updateEntities();
       try {
-        String errMsg = "Incompatible change of table [\"hdbtable-itest::incompatible-column-type-change-hana\"] by adding a column [Col66] which is [of type NVARCHAR to be changed to BIGINT]";
+        String errMsg = "Incompatible change of table [\"TEST_SCHEMA\".\"hdbtable-itest::incompatible-column-type-change-hana\"] by adding a column [Col66] which is [of type NVARCHAR to be changed to BIGINT]";
         assertTrue(logCaptor.getErrorLogs().stream().anyMatch(logMsg -> logMsg.equals(errMsg)));
-
       } finally {
-        stmt.executeUpdate("drop table \"hdbtable-itest::incompatible-column-type-change-hana\"");
+        HanaITestUtils.dropTable(connection, stmt, "hdbtable-itest::incompatible-column-type-change-hana", testSchema);
+        HanaITestUtils.dropSchema(stmt, testSchema);
         Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false");
       }
-
-
     }
   }
 
-  private void createNonEmptyTable(Statement stmt, DatabaseMetaData metaData, String tableName) throws SQLException {
+  private void createNonEmptyTable(Connection connection, Statement stmt, String tableName) throws SQLException {
     String createTableSQL = String.format(
-        "CREATE COLUMN TABLE \"DBADMIN\".\"%s\" ( \"Col1\" NVARCHAR (20) NOT NULL , \"Col2\" INTEGER  NOT\n"
+        "CREATE COLUMN TABLE \"%s\".\"%s\" ( \"Col1\" NVARCHAR (20) NOT NULL , \"Col2\" INTEGER  NOT\n"
             + " NULL , \"Col5\" NVARCHAR (20) DEFAULT 'Defaultvalue'  NOT NULL , \"Col66\" NVARCHAR (20) DEFAULT 'Defaultvalue'  , \"Col77\" NVARCHAR (20) DEFAULT 'Defaultvalue'  , PRIMARY KEY(\"Col1\" , "
-            + "\"Col2\" , \"Col5\") , CONSTRAINT \"BB112\" UNIQUE ( \"Col2\" ), CONSTRAINT \"BB212\" UNIQUE ( \"Col1\" ))", tableName);
+            + "\"Col2\" , \"Col5\") , CONSTRAINT \"BB112\" UNIQUE ( \"Col2\" ), CONSTRAINT \"BB212\" UNIQUE ( \"Col1\" ))",
+        testSchema,
+        tableName);
     stmt.executeUpdate(createTableSQL);
-    ResultSet table = metaData
-        .getTables(null, null, tableName, new String[]{ISqlKeywords.KEYWORD_TABLE});
-    assertTrue(table.next());
+    assertTrue(HanaITestUtils.checkExistOfTable(connection, tableName, testSchema));
 
-    String insertOne = String.format("INSERT INTO \"DBADMIN\".\"%s\" \n"
+    String insertOne = String.format("INSERT INTO \"%s\".\"%s\" \n"
         + "(\"Col1\", \"Col2\", \"Col5\", \"Col66\", \"Col77\")\n"
-        + "VALUES('', 0, 'Defaultvalue', null, 'Defaultvalue');", tableName);
-    String insertSecond = String.format("INSERT INTO \"DBADMIN\".\"%s\" \n"
+        + "VALUES('', 0, 'Defaultvalue', null, 'Defaultvalue');", testSchema, tableName);
+    String insertSecond = String.format("INSERT INTO \"%s\".\"%s\" \n"
         + "(\"Col1\", \"Col2\", \"Col5\", \"Col66\", \"Col77\")\n"
-        + "VALUES('a', 1, 'Defaultvalue12', 'Defaultvalue', 'Defaultvalue');", tableName);
-    String insertThird = String.format("INSERT INTO \"DBADMIN\".\"%s\" \n"
+        + "VALUES('a', 1, 'Defaultvalue12', 'Defaultvalue', 'Defaultvalue');", testSchema, tableName);
+    String insertThird = String.format("INSERT INTO \"%s\".\"%s\" \n"
         + "(\"Col1\", \"Col2\", \"Col5\", \"Col66\", \"Col77\")\n"
-        + "VALUES('b', 2, 'Defaultvalue12', 'Defaultvalue', 'Defaultvalue');", tableName);
+        + "VALUES('b', 2, 'Defaultvalue12', 'Defaultvalue', 'Defaultvalue');", testSchema, tableName);
     stmt.addBatch(insertOne);
     stmt.addBatch(insertSecond);
     stmt.addBatch(insertThird);

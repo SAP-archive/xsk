@@ -126,15 +126,24 @@ jobs:
       run: |
         cd samples/
         zip -r products products/*
-        zip -r xsjs-simple xsjs-simple/*
-        zip -r xsjs xsjs/*
+        zip -r hdb_hdbsequence_simple hdb_hdbsequence_simple/*
+        zip -r hdb_hdbstructure_simple hdb_hdbstructure_simple/*
+        zip -r hdb_hdbtable_simple hdb_hdbtable_simple/*
+        zip -r hdb_hdbti_simple hdb_hdbti_simple/*
+        zip -r hdb-hdbdd-simple hdb-hdbdd-simple/*
+        zip -r hdb-procedure-simple hdb-procedure-simple/*
+        zip -r hdb-schema-simple hdb-schema-simple/*
         zip -r hdb-simple hdb-simple/*
-        zip -r hdb-view hdb-view/*
-        zip -r hdb-odata hdb-odata/*
-        zip -r hdb-xsodata hdb-xsodata/*
-        zip -r hdi-simple hdi-simple/*
-        zip -r hdi-ext hdi-ext/*
+        zip -r hdb-synonym-simple hdb-synonym-simple/*
+        zip -r hdb-tablefunction-simple hdb-tablefunction-simple/*
+        zip -r hdb-view-simple hdb-view-simple/*
         zip -r hdi-cube hdi-cube/*
+        zip -r hdi-ext hdi-ext/*
+        zip -r hdi-simple hdi-simple/*
+        zip -r xsjs xsjs/*
+        zip -r xsjs-simple xsjs-simple/*
+        zip -r xsodata-navigations xsodata-navigations/*
+        zip -r xsodata-simple xsodata-simple/*
 
     - name: Create Release
       id: create_release
@@ -167,12 +176,21 @@ jobs:
             - [xsjs-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs-simple.zip) - XSJS Hello World.
             - [xsjs](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs.zip) - XSJS APIs.
             - [hdb-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-simple.zip) - HDB Table.
-            - [hdb-view](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-view.zip) - HDB View.
-            - [hdb-odata](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-odata.zip) - HDB OData.
-            - [hdb-xsodata](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-xsodata.zip) - HDB XSOData.
+            - [hdb-view-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-view-simple.zip) - HDB View - Simple.
+            - [xsodata-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsodata-simple.zip) - XSOData - Simple.
+            - [xsodata-navigations](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsodata-navigations.zip) - XSOData - Navigations.
             - [hdi-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-simple.zip) - HDI.
             - [hdi-ext](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-ext.zip) - HDI Ext.
             - [hdi-cube](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-cube.zip) - HDI Cube.
+            - [hdb_hdbtable_simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb_hdbtable_simple.zip) - HDBTable - Simple.
+            - [hdb-hdbdd-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-hdbdd-simple.zip) - HDBDD - Simple.
+            - [hdb_hdbstructure_simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb_hdbstructure_simple.zip) - HDBStructure - Simple.
+            - [hdb_hdbti_simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb_hdbti_simple.zip) - HDBTI - Simple.
+            - [hdb-schema-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-schema-simple.zip) - HDBSchema - Simple.
+            - [hdb-synonym-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-synonym-simple.zip) - HDBSynonym - Simple.
+            - [hdb_hdbsequence_simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb_hdbsequence_simple.zip) - HDBSequence - Simple.
+            - [hdb-procedure-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-procedure-simple.zip) - HDBProcedure - Simple.
+            - [hdb-tablefunction-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-tablefunction-simple.zip) - HDBTableFunction - Simple.
           
           ### Cloud Native Buildpacks
           
@@ -310,30 +328,85 @@ jobs:
         asset_name: products.zip
         asset_content_type: application/zip
 
-    - name: Upload Sample - xsjs-simple
-      id: upload-sample-xsjs-simple 
+    - name: Upload Sample - hdb_hdbsequence_simple
+      id: upload-sample-hdb_hdbsequence_simple
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/xsjs-simple.zip
-        asset_name: xsjs-simple.zip
-        asset_content_type: application/zip
+        asset_path: ./samples/hdb_hdbsequence_simple.zip
+        asset_name: hdb_hdbsequence_simple.zip
+        asset_content_type: hdb_hdbsequence_simple/zip
 
-    - name: Upload Sample - xsjs
-      id: upload-sample-xsjs 
+    - name: Upload Sample - hdb_hdbstructure_simple
+      id: upload-sample-hdb_hdbstructure_simple
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/xsjs.zip
-        asset_name: xsjs.zip
-        asset_content_type: application/zip
+        asset_path: ./samples/hdb_hdbstructure_simple.zip
+        asset_name: hdb_hdbstructure_simple.zip
+        asset_content_type: hdb_hdbstructure_simple/zip
+
+    - name: Upload Sample - hdb_hdbtable_simple
+      id: upload-sample-hdb_hdbtable_simple
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb_hdbtable_simple.zip
+        asset_name: hdb_hdbtable_simple.zip
+        asset_content_type: hdb_hdbtable_simple/zip
+
+    - name: Upload Sample - hdb_hdbti_simple
+      id: upload-sample-hdb_hdbti_simple
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb_hdbti_simple.zip
+        asset_name: hdb_hdbti_simple.zip
+        asset_content_type: hdb_hdbti_simple/zip
+
+    - name: Upload Sample - hdb-hdbdd-simple
+      id: upload-sample-hdb-hdbdd-simple
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-hdbdd-simple.zip
+        asset_name: hdb-hdbdd-simple.zip
+        asset_content_type: hdb-hdbdd-simple/zip
+
+    - name: Upload Sample - hdb-procedure-simple
+      id: upload-sample-hdb-procedure-simple
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-procedure-simple.zip
+        asset_name: hdb-procedure-simple.zip
+        asset_content_type: hdb-procedure-simple/zip
+
+    - name: Upload Sample - hdb-schema-simple
+      id: upload-sample-hdb-schema-simple
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdb-schema-simple.zip
+        asset_name: hdb-schema-simple.zip
+        asset_content_type: hdb-schema-simple/zip
 
     - name: Upload Sample - hdb-simple
-      id: upload-sample-hdb-simple 
+      id: upload-sample-hdb-simple
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -341,65 +414,43 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./samples/hdb-simple.zip
         asset_name: hdb-simple.zip
-        asset_content_type: application/zip
+        asset_content_type: hdb-simple/zip
 
-    - name: Upload Sample - hdb-view
-      id: upload-sample-hdb-view 
+    - name: Upload Sample - hdb-synonym-simple
+      id: upload-sample-hdb-synonym-simple
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-view.zip
-        asset_name: hdb-view.zip
-        asset_content_type: application/zip
+        asset_path: ./samples/hdb-synonym-simple.zip
+        asset_name: hdb-synonym-simple.zip
+        asset_content_type: hdb-synonym-simple/zip
 
-    - name: Upload Sample - hdb-odata
-      id: upload-sample-hdb-odata 
+    - name: Upload Sample - hdb-tablefunction-simple
+      id: upload-sample-hdb-tablefunction-simple
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-odata.zip
-        asset_name: hdb-odata.zip
-        asset_content_type: application/zip
+        asset_path: ./samples/hdb-tablefunction-simple.zip
+        asset_name: hdb-tablefunction-simple.zip
+        asset_content_type: hdb-tablefunction-simple/zip
 
-    - name: Upload Sample - hdb-xsodata
-      id: upload-sample-hdb-xsodata 
+    - name: Upload Sample - hdb-view-simple
+      id: upload-sample-hdb-view-simple
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-xsodata.zip
-        asset_name: hdb-xsodata.zip
-        asset_content_type: application/zip
-
-    - name: Upload Sample - hdi-simple
-      id: upload-sample-hdi-simple 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdi-simple.zip
-        asset_name: hdi-simple.zip
-        asset_content_type: application/zip
-
-    - name: Upload Sample - hdi-ext
-      id: upload-sample-hdi-ext 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdi-ext.zip
-        asset_name: hdi-ext.zip
-        asset_content_type: application/zip
+        asset_path: ./samples/hdb-view-simple.zip
+        asset_name: hdb-view-simple.zip
+        asset_content_type: hdb-view-simple/zip
 
     - name: Upload Sample - hdi-cube
-      id: upload-sample-hdi-cube 
+      id: upload-sample-hdi-cube
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -407,7 +458,73 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./samples/hdi-cube.zip
         asset_name: hdi-cube.zip
-        asset_content_type: application/zip
+        asset_content_type: hdi-cube/zip
+
+    - name: Upload Sample - hdi-ext
+      id: upload-sample-hdi-ext
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdi-ext.zip
+        asset_name: hdi-ext.zip
+        asset_content_type: hdi-ext/zip
+
+    - name: Upload Sample - hdi-simple
+      id: upload-sample-hdi-simple
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/hdi-simple.zip
+        asset_name: hdi-simple.zip
+        asset_content_type: hdi-simple/zip
+
+    - name: Upload Sample - xsjs
+      id: upload-sample-xsjs
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/xsjs.zip
+        asset_name: xsjs.zip
+        asset_content_type: xsjs/zip
+
+    - name: Upload Sample - xsjs-simple
+      id: upload-sample-xsjs-simple
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/xsjs-simple.zip
+        asset_name: xsjs-simple.zip
+        asset_content_type: xsjs-simple/zip
+
+    - name: Upload Sample - xsodata-navigations
+      id: upload-sample-xsodata-navigations
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/xsodata-navigations.zip
+        asset_name: xsodata-navigations.zip
+        asset_content_type: xsodata-navigations/zip
+
+    - name: Upload Sample - xsodata-simple
+      id: upload-sample-xsodata-simple
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/xsodata-simple.zip
+        asset_name: xsodata-simple.zip
+        asset_content_type: xsodata-simple/zip
 
 #----------------Publish GitHub Release------------------#
 

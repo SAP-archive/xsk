@@ -1,4 +1,4 @@
 schema="DBADMIN";
-query="SELECT * FROM \"hdb-xsodata::order\"";
-depends_on= ["hdb-xsodata::order"];
+query="SELECT * FROM \"xsodata-navigations::order\"";
+depends_on= ["xsodata-navigations-xsodata::order"];
 

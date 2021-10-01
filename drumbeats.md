@@ -93,7 +93,7 @@
 
 #### Focus topics:
 
-- Documentation for the available XSJS APIs e.g. https://www.xsk.io/api/%24.hdb/
+- Documentation for the available XSJS APIs e.g. https://www.xsk.io/api/hdb/
 - Research about the user interface tests framework
 - Research about the Neo Service Proxy on Kyma
 

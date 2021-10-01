@@ -13,8 +13,23 @@ package com.sap.xsk.hdb.ds.itest.module;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
+import com.sap.xsk.hdb.ds.itest.repository.TestRepository;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
-import com.sap.xsk.hdb.ds.service.manager.*;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.hdb.ds.service.manager.IXSKEntityManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKHDBSequenceManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKProceduresManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKScalarFunctionManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKSchemaManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKSynonymManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKTableFunctionManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKTableManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKTableTypeManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -22,9 +37,6 @@ import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.eclipse.dirigible.repository.local.LocalResource;
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.util.Map;
 
 public class XSKHDBTestModule extends AbstractDirigibleModule {
 
@@ -56,6 +68,15 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
     return resource;
   }
 
+  public static LocalResource getResourceFromString(String rootFolder, String repoPath, String fileContent) throws IOException {
+    FileSystemRepository fileRepo = new LocalRepository(rootFolder);
+    RepositoryPath path = new RepositoryPath(repoPath);
+    byte[] content = fileContent.getBytes(StandardCharsets.UTF_8);
+    LocalResource resource = new LocalResource(fileRepo, path);
+    resource.setContent(content);
+    return resource;
+  }
+
   @Override
   public String getName() {
     return "XSKHDBTestModule";
@@ -65,6 +86,7 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
   public void configure() {
     StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
     StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getDataSource());
+    StaticObjects.set(StaticObjects.REPOSITORY, new TestRepository());
 
     //when we run all integration tests at once, the first run test will determine the datasource of XSKDataStructuresCoreService.
     //this can lead to issue, for example running MYSQL test which is accessing the HANA db, and leading to inconsistent test results

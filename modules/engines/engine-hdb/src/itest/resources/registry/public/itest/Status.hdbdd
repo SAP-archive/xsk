@@ -1,0 +1,11 @@
+namespace itest;
+
+@Schema: 'TEST_SCHEMA 2'
+
+context Status {
+
+     entity StatusEntity {
+        key Id              : String(32);
+        Name                : String(32);
+    };
+};

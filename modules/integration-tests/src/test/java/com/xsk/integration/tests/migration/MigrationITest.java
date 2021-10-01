@@ -222,7 +222,7 @@ public class MigrationITest {
     browser.switchTo().defaultContent();
     browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath(editorFrameXpath)));
     sleep(3000);
-    var migratedContent = (String) jsExecutor.executeScript("return window._editor.getValue();");
+    var migratedContent = (String) jsExecutor.executeScript("return monaco.editor.getModels().at(0).getValue();");
     assertEquals("File content after migration must match validation content.",
         validContent.replaceAll("\\s", ""), migratedContent.replaceAll("\\s", ""));
     browser.switchTo().defaultContent();

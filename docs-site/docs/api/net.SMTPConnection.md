@@ -46,8 +46,19 @@ var mailConfig = {
 var smtp = new net.SMTPConnection(mailConfig);
 smtp.send(mail);
 ```
+## Constructors
 
-## Class options (mailConfig)
+```javascript
+new $.net.SMTPConnection(mailConfig)
+```
+
+## Parameters
+
+| Parameter Name | Description                                                                                                                                                     | Required     | Type       |
+|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|------------|
+| **mailConfig** | JS object containing mail server configuration properties. | _`optional`_ | _`object`_ |
+
+## mailConfig Properties
 
 Property     | Description | Type
 ------------ | ----------- | --------

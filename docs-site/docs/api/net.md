@@ -15,6 +15,9 @@ $.net
 
 ## Sample Usage
 
+Note: Requires a running mail server. If `mailConfig` is not set the api defaults to a local mail server.
+For more information please take a look [here](https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/).
+
 ```javascript
 let net = $.net;
 
@@ -22,7 +25,7 @@ let net = $.net;
 let mail = new net.Mail({
    sender: {address: "sender@sap.com"},
    to: [{ name: "John Doe", address: "john.doe@sap.com", nameEncoding: "US-ASCII"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
-   cc: ["cc1@sap.com", {address: "cc2@sap.com"}],
+   cc: [{address:"cc1@sap.com"}, {address: "cc2@sap.com"}],
    bcc: [{ name: "Jonnie Doe", address: "jonnie.doe@sap.com"}],
    subject: "subject",
    subjectEncoding: "UTF-8",
@@ -34,12 +37,21 @@ let mail = new net.Mail({
    })]
 });
 
-let smtp = new net.SMTPConnection();
+let mailConfig = {
+    "mail.user": "test@gmail.com",
+    "mail.password": "test",
+    "mail.transport.protocol": "smtps",
+    "mail.smtps.host": "smtp.gmail.com",
+    "mail.smtps.port": "465",
+    "mail.smtps.auth": "true"
+};
+
+let smtp = new net.SMTPConnection(mailConfig);
 // Send the mail Object with SMPT
 smtp.send(mail);
 
 // Send the mail Object from the built-in send method. The send method is void in xsk. The response is mocked.
-let returnValue = mail.send();
+let returnValue = mail.send(mailConfig);
 let response_msg = "MessageId = " + returnValue.messageId + ", final reply = " + returnValue.finalReply;
 
 // The result is mocked to prevent errors

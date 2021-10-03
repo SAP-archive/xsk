@@ -570,6 +570,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#class-options-mailconfig" class="md-nav__link">
+    Class options (mailConfig)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#functions" class="md-nav__link">
     Functions
   </a>
@@ -918,6 +925,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#class-options-mailconfig" class="md-nav__link">
+    Class options (mailConfig)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#functions" class="md-nav__link">
     Functions
   </a>
@@ -956,7 +970,7 @@
 <span class="kd">var</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">({</span>
    <span class="nx">sender</span><span class="o">:</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;sender@sap.com&quot;</span><span class="p">},</span>
    <span class="nx">to</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">,</span> <span class="nx">nameEncoding</span><span class="o">:</span> <span class="s2">&quot;US-ASCII&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jane Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jane.doe@sap.com&quot;</span><span class="p">}],</span>
-   <span class="nx">cc</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
+   <span class="nx">cc</span><span class="o">:</span> <span class="p">[{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">bcc</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jonnie Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jonnie.doe@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">subject</span><span class="o">:</span> <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
    <span class="nx">subjectEncoding</span><span class="o">:</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">,</span>
@@ -968,9 +982,79 @@
    <span class="p">})]</span>
 <span class="p">});</span>
 
-<span class="kd">var</span> <span class="nx">smtp</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">SMTPConnection</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">mailConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mail.user&quot;</span><span class="o">:</span> <span class="s2">&quot;test@gmail.com&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.password&quot;</span><span class="o">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.transport.protocol&quot;</span><span class="o">:</span> <span class="s2">&quot;smtps&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.host&quot;</span><span class="o">:</span> <span class="s2">&quot;smtp.gmail.com&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.port&quot;</span><span class="o">:</span> <span class="s2">&quot;465&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.auth&quot;</span><span class="o">:</span> <span class="s2">&quot;true&quot;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">smtp</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">SMTPConnection</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
 <span class="nx">smtp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mail</span><span class="p">);</span>
 </code></pre></div>
+<h2 id="class-options-mailconfig">Class options (mailConfig)</h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>mail.user</strong></td>
+<td>The mailbox user</td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.password</strong></td>
+<td>The mailbox password</td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.transport.protocol</strong></td>
+<td>(optional) The mail transport protocol, default is <em>smtps</em></td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtps.host</strong></td>
+<td>The mail SMPTPS host</td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtps.port</strong></td>
+<td>The mail SMPTPS port</td>
+<td><em>number as string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtps.auth</strong></td>
+<td>Enable/Disable mail SMPTPS authentication</td>
+<td><em>boolean as string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtp.host</strong></td>
+<td>The mail SMPTP host</td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtp.port</strong></td>
+<td>The mail SMPTP port</td>
+<td><em>number as string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtp.auth</strong></td>
+<td>Enable/Disable mail SMPTP authentication</td>
+<td><em>boolean as string</em></td>
+</tr>
+</tbody>
+</table>
+<p>Addition mail client options can be found here:
+- <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html">SMTP/SMTPS</a>
+- <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html">IMAP</a>
+- <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html">POP3</a></p>
 <h2 id="functions">Functions</h2>
 <table>
 <thead>

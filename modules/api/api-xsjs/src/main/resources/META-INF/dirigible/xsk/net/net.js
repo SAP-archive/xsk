@@ -14,6 +14,7 @@ exports.http = require("xsk/http/http");
 var mail = require("mail/v4/client");
 
 exports.Mail = function (mailObject) {
+  mailObject = mailObject || {};
   this.to = mailObject.to || [];
   this.cc = mailObject.cc || [];
   this.bcc = mailObject.bcc || [];
@@ -24,7 +25,7 @@ exports.Mail = function (mailObject) {
   this.subjectEncoding = mailObject.subjectEncoding;
 
   this.send = function (mailConfig) {
-    let mailClient = mail.getClient(mailConfig || {});
+    let mailClient = mail.getClient(mailConfig);
     let recipients = {
       to: this.to.map(e => e.address),
       cc: this.cc.map(e => e.address),

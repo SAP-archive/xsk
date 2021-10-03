@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://www.xsk.io/api/net/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.0">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.1">
     
     
       
@@ -20,7 +20,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.8b42a75e.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.1c75ef36.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -1044,13 +1044,15 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
+<p>Note: Requires a running mail server. If <code>mailConfig</code> is not set the api defaults to a local mail server.
+For more information please take a look <a href="https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/">here</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">net</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">;</span>
 
 <span class="c1">// Create a mail Object</span>
 <span class="kd">let</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">({</span>
    <span class="nx">sender</span><span class="o">:</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;sender@sap.com&quot;</span><span class="p">},</span>
    <span class="nx">to</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">,</span> <span class="nx">nameEncoding</span><span class="o">:</span> <span class="s2">&quot;US-ASCII&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jane Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jane.doe@sap.com&quot;</span><span class="p">}],</span>
-   <span class="nx">cc</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
+   <span class="nx">cc</span><span class="o">:</span> <span class="p">[{</span><span class="nx">address</span><span class="o">:</span><span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">bcc</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jonnie Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jonnie.doe@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">subject</span><span class="o">:</span> <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
    <span class="nx">subjectEncoding</span><span class="o">:</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">,</span>
@@ -1062,12 +1064,21 @@
    <span class="p">})]</span>
 <span class="p">});</span>
 
-<span class="kd">let</span> <span class="nx">smtp</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">SMTPConnection</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">mailConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mail.user&quot;</span><span class="o">:</span> <span class="s2">&quot;test@gmail.com&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.password&quot;</span><span class="o">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.transport.protocol&quot;</span><span class="o">:</span> <span class="s2">&quot;smtps&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.host&quot;</span><span class="o">:</span> <span class="s2">&quot;smtp.gmail.com&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.port&quot;</span><span class="o">:</span> <span class="s2">&quot;465&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.auth&quot;</span><span class="o">:</span> <span class="s2">&quot;true&quot;</span>
+<span class="p">};</span>
+
+<span class="kd">let</span> <span class="nx">smtp</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">SMTPConnection</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
 <span class="c1">// Send the mail Object with SMPT</span>
 <span class="nx">smtp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mail</span><span class="p">);</span>
 
 <span class="c1">// Send the mail Object from the built-in send method. The send method is void in xsk. The response is mocked.</span>
-<span class="kd">let</span> <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
 <span class="kd">let</span> <span class="nx">response_msg</span> <span class="o">=</span> <span class="s2">&quot;MessageId = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">messageId</span> <span class="o">+</span> <span class="s2">&quot;, final reply = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">finalReply</span><span class="p">;</span>
 
 <span class="c1">// The result is mocked to prevent errors</span>
@@ -1525,10 +1536,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.f8263e09.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.4fc53ad4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c7d1b464.min.js"></script>
       
     
   </body>

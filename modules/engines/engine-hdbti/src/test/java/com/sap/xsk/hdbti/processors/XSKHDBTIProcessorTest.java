@@ -530,7 +530,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testParseJSONtoHdbtiFailWithIncorrectFilePath() {
+  public void testParseJSONtoHdbtiFailWithIncorrectFilePath() throws ProblemsException {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema");
@@ -543,7 +543,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test
-  public void testParseJSONtoHdbtiSuccessfullyWithFileNameWithoutPath() {
+  public void testParseJSONtoHdbtiSuccessfullyWithFileNameWithoutPath() throws ProblemsException {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema");
@@ -565,7 +565,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testParseJSONtoHdbtiFailWithIncorrectSchemaName() {
+  public void testParseJSONtoHdbtiFailWithIncorrectSchemaName() throws ProblemsException {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema-Name_cAN|be\\whatever ¯\\_(ツ)_/¯");
@@ -577,7 +577,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testParseJSONtoHdbtiFailWithIncorrectTableName() {
+  public void testParseJSONtoHdbtiFailWithIncorrectTableName() throws ProblemsException {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema");
@@ -589,7 +589,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testParseJSONtoHdbtiFailWithIncorrectKeyColumn() {
+  public void testParseJSONtoHdbtiFailWithIncorrectKeyColumn() throws ProblemsException {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema");

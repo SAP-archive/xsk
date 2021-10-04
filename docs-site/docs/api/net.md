@@ -18,7 +18,7 @@ $.net
 
 !!! Note
 	Requires a running mail server. If `mailConfig` is not set the api defaults to a local mail server.
-For more information please take a look [here](https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/).
+	For more information please take a look [here](https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/).
 
 ```javascript
 let net = $.net;

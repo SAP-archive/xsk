@@ -23,7 +23,6 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -50,7 +49,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
    * @see <a href="https://github.com/SAP/xsk/wiki/Parser-hdbtable">hdbtable against postgresql itest</a>
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Create Table: " + tableModel.getName());
 
     String sql = null;

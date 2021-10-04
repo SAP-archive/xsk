@@ -44,7 +44,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +68,7 @@ public class XSKODataParser implements IXSKODataParser {
    * @throws IOException exception during parsing
    */
   public XSKODataModel parseXSODataArtifact(String location, String content)
-      throws IOException, SQLException, XSKArtifactParserException, ProblemsException {
+      throws IOException, SQLException, XSKArtifactParserException {
     logger.debug("Parsing xsodata.");
     XSKODataModel odataModel = new XSKODataModel();
     odataModel.setName(new File(location).getName());
@@ -108,7 +107,7 @@ public class XSKODataParser implements IXSKODataParser {
     return odataModel;
   }
 
-  private void applyConditions(String location, XSKODataModel odataModel) throws SQLException, ProblemsException {
+  private void applyConditions(String location, XSKODataModel odataModel) throws SQLException {
     try {
       //the order of invocation matter, so do not change it
       applyEmptyExistCondition(location, odataModel);

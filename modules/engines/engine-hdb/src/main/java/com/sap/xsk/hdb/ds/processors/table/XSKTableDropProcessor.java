@@ -25,7 +25,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
@@ -49,7 +48,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Drop Table: " + tableModel.getName());
 
     String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
@@ -89,8 +88,9 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
         if (resultSet.next()) {
           int count = resultSet.getInt(1);
           if (count > 0) {
-            String errorMessage = String.format("Drop operation for the non empty Table %s will not be executed. Delete all the records in the table first.",
-                tableName);
+            String errorMessage = String
+                .format("Drop operation for the non empty Table %s will not be executed. Delete all the records in the table first.",
+                    tableName);
             XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
             logger.error(errorMessage);
             return;
@@ -119,7 +119,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
   }
 
   private void executeUpdate(Connection connection, String sql, XSKDataStructureHDBTableModel tableModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     PreparedStatement statement = null;
     try {
       statement = connection.prepareStatement(sql);

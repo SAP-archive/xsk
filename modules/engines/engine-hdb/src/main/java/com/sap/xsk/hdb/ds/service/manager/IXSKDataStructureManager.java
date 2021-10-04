@@ -18,7 +18,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import javax.naming.OperationNotSupportedException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 
 
 public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
@@ -27,12 +26,12 @@ public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
 
   void synchronizeRuntimeMetadata(T tableModel) throws XSKDataStructuresException;
 
-  void createDataStructure(Connection connection, T tableModel) throws SQLException, ProblemsException;
+  void createDataStructure(Connection connection, T tableModel) throws SQLException;
 
-  void dropDataStructure(Connection connection, T tableModel) throws SQLException, ProblemsException;
+  void dropDataStructure(Connection connection, T tableModel) throws SQLException;
 
   void updateDataStructure(Connection connection, T tableModel)
-      throws SQLException, OperationNotSupportedException, ProblemsException;
+      throws SQLException, OperationNotSupportedException;
 
   List<String> getDataStructureSynchronized();
 

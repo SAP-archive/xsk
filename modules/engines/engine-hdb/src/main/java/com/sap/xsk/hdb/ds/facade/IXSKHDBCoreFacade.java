@@ -13,7 +13,6 @@ package com.sap.xsk.hdb.ds.facade;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.api.IResource;
 
@@ -24,7 +23,7 @@ public interface IXSKHDBCoreFacade {
   void handleResourceSynchronization(String fileExtension, XSKDataStructureModel dataStructureModel)
       throws SynchronizationException, XSKDataStructuresException;
 
-  void updateEntities() throws ProblemsException;
+  void updateEntities();
 
   void cleanup() throws XSKDataStructuresException;
 

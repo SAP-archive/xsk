@@ -13,23 +13,6 @@ package com.sap.xsk.hdb.ds.synchronizer;
 
 import static java.text.MessageFormat.format;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
-import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
@@ -41,9 +24,23 @@ import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
+import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.repository.api.IResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The XSK Data Structures Synchronizer.
@@ -140,7 +137,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @throws XSKDataStructuresException in case of an error
    */
   public void registerPredeliveredHDBProcedure(String contentPath)
-      throws IOException, XSKDataStructuresException, XSKArtifactParserException, ProblemsException {
+      throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBProcedureModel model;
     model = (XSKDataStructureHDBProcedureModel) xskCoreParserService
@@ -155,7 +152,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @throws IOException in case of an error
    */
   public void registerPredeliveredHDBTableFunction(String contentPath)
-      throws IOException, XSKDataStructuresException, XSKArtifactParserException, ProblemsException {
+      throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBTableFunctionModel model;
     model = (XSKDataStructureHDBTableFunctionModel) xskCoreParserService
@@ -171,7 +168,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    * @throws XSKDataStructuresException in case of an error
    */
   public void registerPredeliveredHDBSchema(String contentPath)
-      throws IOException, XSKDataStructuresException, XSKArtifactParserException, ProblemsException {
+      throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
     XSKDataStructureHDBSchemaModel model;
     model = (XSKDataStructureHDBSchemaModel) xskCoreParserService

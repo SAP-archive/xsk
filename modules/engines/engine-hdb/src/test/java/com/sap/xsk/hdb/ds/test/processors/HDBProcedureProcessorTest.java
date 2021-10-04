@@ -31,7 +31,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -69,17 +68,17 @@ public class HDBProcedureProcessorTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void executeCreateProcedureIfDoNotExist() throws IOException, SQLException, ProblemsException {
+  public void executeCreateProcedureIfDoNotExist() throws IOException, SQLException {
     executeCreateProcedureSuccessfully(false, 1);
   }
 
   @Test
-  public void executeCreateProcedureIfAlreadyExist() throws IOException, SQLException, ProblemsException {
+  public void executeCreateProcedureIfAlreadyExist() throws IOException, SQLException {
     executeCreateProcedureSuccessfully(true, 0);
   }
 
   public void executeCreateProcedureSuccessfully(boolean doExist, int expectedTimesOfInvocation)
-      throws IOException, SQLException, ProblemsException {
+      throws IOException, SQLException {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
@@ -127,17 +126,17 @@ public class HDBProcedureProcessorTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void executeDropProcedureIfDoNotExist() throws IOException, SQLException, ProblemsException {
+  public void executeDropProcedureIfDoNotExist() throws IOException, SQLException {
     executeDropProcedureSuccessfully(false, 0);
   }
 
   @Test
-  public void executeDropProcedureIfAlreadyExist() throws IOException, SQLException, ProblemsException {
+  public void executeDropProcedureIfAlreadyExist() throws IOException, SQLException {
     executeDropProcedureSuccessfully(true, 1);
   }
 
   public void executeDropProcedureSuccessfully(boolean doExist, int expectedTimesOfInvocation)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
@@ -176,7 +175,7 @@ public class HDBProcedureProcessorTest extends AbstractDirigibleTest {
         .exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
             DatabaseArtifactTypes.PROCEDURE)).thenReturn(true);
 
-    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
     processorSpy.execute(mockConnection, model);
   }
 }

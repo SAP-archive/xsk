@@ -50,7 +50,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -143,8 +142,6 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
         throw new SynchronizationException();
       } catch (XSKHDBTISyntaxErrorException syntaxErrorException) {
         logger.error(syntaxErrorException.getMessage(), syntaxErrorException);
-      } catch (ProblemsException problemsException) {
-        logger.error(problemsException.getMessage(), problemsException);
       } catch (XSKArtifactParserException parserException) {
         logger.error(parserException.getMessage());
       } catch (SQLException throwables) {
@@ -171,8 +168,6 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
       logger.error("Error during the force reimport of an HDBTI file due to a linked csv file change", e);
     } catch (XSKHDBTISyntaxErrorException syntaxErrorException) {
       logger.error(syntaxErrorException.getMessage());
-    } catch (ProblemsException problemsException) {
-      logger.error(problemsException.getMessage(), problemsException);
     } catch (XSKArtifactParserException parserException) {
       logger.error(parserException.getMessage());
     }
@@ -244,7 +239,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
     for (XSKTableImportConfigurationDefinition configurationDefinition : configurationDefinitions) {
       try {
         xskHdbtiProcessor.process(configurationDefinition, connection);
-      } catch (XSKDataStructuresException | SQLException | XSKTableImportException | IOException | ProblemsException e) {
+      } catch (XSKDataStructuresException | SQLException | XSKTableImportException | IOException e) {
         logger.error(String.format("An error occurred while trying to execute import. %s", e.getMessage()), e);
       }
     }

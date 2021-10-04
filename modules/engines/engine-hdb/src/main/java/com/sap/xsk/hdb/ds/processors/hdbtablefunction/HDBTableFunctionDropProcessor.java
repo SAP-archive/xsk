@@ -19,7 +19,6 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -32,7 +31,7 @@ public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataS
   private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionDropProcessor.class);
 
   public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Drop TableFunction: " + hdbTableFunction.getName());
 
     String funcNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[1];

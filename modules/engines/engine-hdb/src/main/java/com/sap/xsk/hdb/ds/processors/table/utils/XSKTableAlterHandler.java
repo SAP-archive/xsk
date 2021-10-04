@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -62,7 +61,7 @@ public class XSKTableAlterHandler {
     this.tableModel = tableModel;
   }
 
-  public void addColumns(Connection connection) throws SQLException, ProblemsException {
+  public void addColumns(Connection connection) throws SQLException {
     String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
 
     for (XSKDataStructureHDBTableColumnModel columnModel : tableModel.getColumns()) {
@@ -113,14 +112,15 @@ public class XSKTableAlterHandler {
         executeAlterBuilder(connection, alterTableBuilder);
 
       } else if (!dbColumnTypes.get(name).equals(type.toString())) {
-        String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to " + type);
+        String errorMessage = String
+            .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to " + type);
         XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
         throw new SQLException(errorMessage);
       }
     }
   }
 
-  public void removeColumns(Connection connection) throws SQLException, ProblemsException {
+  public void removeColumns(Connection connection) throws SQLException {
     boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false"));
     for (String columnName : this.dbColumnTypes.keySet()) {
       if (!modelColumnNames.contains(columnName)) {
@@ -135,7 +135,7 @@ public class XSKTableAlterHandler {
     }
   }
 
-  public void updateColumns(Connection connection) throws SQLException, ProblemsException {
+  public void updateColumns(Connection connection) throws SQLException {
     String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
     List<XSKDataStructureHDBTableColumnModel> columns = this.getColumnsToUpdate();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
@@ -167,7 +167,8 @@ public class XSKTableAlterHandler {
       }
 
       if (!dbColumnTypes.get(name).equals(type.toString())) {
-        String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to" + type);
+        String errorMessage = String
+            .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to" + type);
         XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
         throw new SQLException(errorMessage);
       }
@@ -177,7 +178,7 @@ public class XSKTableAlterHandler {
     }
   }
 
-  public void rebuildIndeces(Connection connection) throws SQLException, ProblemsException {
+  public void rebuildIndeces(Connection connection) throws SQLException {
     String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
     AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
 
@@ -196,7 +197,7 @@ public class XSKTableAlterHandler {
     executeAlterBuilder(connection, alterTableBuilder);
   }
 
-  public void ensurePrimaryKeyIsUnchanged(Connection connection) throws SQLException, ProblemsException {
+  public void ensurePrimaryKeyIsUnchanged(Connection connection) throws SQLException {
     DatabaseMetaData dmd = connection.getMetaData();
     ResultSet rsPrimaryKeys = dmd.getPrimaryKeys(null, null, this.tableModel.getName());
     Set<String> dbPrimaryKeys = new HashSet<>();
@@ -210,7 +211,8 @@ public class XSKTableAlterHandler {
     boolean isPKListUnchanged =
         dbPrimaryKeys.size() == modelPrimaryKeys.size() && dbPrimaryKeys.removeAll(modelPrimaryKeys) && dbPrimaryKeys.isEmpty();
     if (!isPKListUnchanged) {
-      String errorMessage = String.format("Incompatible change of table [%s] by trying to change its primary key list", this.tableModel.getName());
+      String errorMessage = String
+          .format("Incompatible change of table [%s] by trying to change its primary key list", this.tableModel.getName());
       XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
       throw new SQLException(errorMessage);
     }
@@ -239,7 +241,7 @@ public class XSKTableAlterHandler {
   }
 
   private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     final String multiSQL = alterTableBuilder.build();
     String[] sqlStatements = multiSQL.split(ISqlKeywords.SEMICOLON);
 

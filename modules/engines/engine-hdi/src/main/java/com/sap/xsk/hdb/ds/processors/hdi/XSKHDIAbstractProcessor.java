@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,11 +32,7 @@ public abstract class XSKHDIAbstractProcessor {
     } catch (SQLException e) {
       logger.error(sql);
       logger.error(e.getMessage(), e);
-      try {
-        XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", "-", "HDI");
-      } catch (ProblemsException problemsException) {
-        logger.error(problemsException.getMessage());
-      }
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", "-", "HDI");
     } finally {
       if (statement != null) {
         statement.close();

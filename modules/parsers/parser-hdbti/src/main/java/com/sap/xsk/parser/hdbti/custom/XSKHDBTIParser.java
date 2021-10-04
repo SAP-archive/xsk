@@ -16,15 +16,14 @@ import com.sap.xsk.parser.hdbti.core.HdbtiLexer;
 import com.sap.xsk.parser.hdbti.core.HdbtiParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,7 @@ public class XSKHDBTIParser implements IXSKHDBTIParser {
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIParser.class);
 
   public XSKHDBTIImportModel parse(String location, String content)
-      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, ProblemsException {
+      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     HdbtiLexer hdbtiLexer = new HdbtiLexer(inputStream);

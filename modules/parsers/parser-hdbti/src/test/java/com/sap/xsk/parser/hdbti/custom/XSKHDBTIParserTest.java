@@ -25,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Test;
 
@@ -33,7 +32,7 @@ public class XSKHDBTIParserTest extends AbstractDirigibleTest {
 
   @Test
   public void testValidInputAllFieldsAssignedProperlyParseSuccessfully()
-      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, ProblemsException {
+      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/sample.hdbti"), StandardCharsets.UTF_8);
 
@@ -55,7 +54,7 @@ public class XSKHDBTIParserTest extends AbstractDirigibleTest {
     List<XSKHDBTIImportConfigModel.Pair> keys = configModel.getKeys();
     assertEquals(keys.size(), expectedKeysSize);
     assertEquals(keys.get(0).getColumn(), "GROUP_TYPE");
-    assertEquals(keys.get(0).getValues(), new ArrayList<>(Arrays.asList("BW_CUBE","BW_DSO","BW_PSA")));
+    assertEquals(keys.get(0).getValues(), new ArrayList<>(Arrays.asList("BW_CUBE", "BW_DSO", "BW_PSA")));
   }
 
   @Test
@@ -90,7 +89,7 @@ public class XSKHDBTIParserTest extends AbstractDirigibleTest {
 
   @Test
   public void testParseConfigObjectFieldsRandomOrderShouldPass()
-      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, ProblemsException {
+      throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
     XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();

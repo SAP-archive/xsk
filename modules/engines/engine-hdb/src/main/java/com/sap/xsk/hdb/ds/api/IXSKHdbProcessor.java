@@ -14,9 +14,8 @@ package com.sap.xsk.hdb.ds.api;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 
 public interface IXSKHdbProcessor<T extends XSKDataStructureModel> {
 
-  void execute(Connection connection, T entityModel) throws SQLException, ProblemsException;
+  void execute(Connection connection, T entityModel) throws SQLException;
 }

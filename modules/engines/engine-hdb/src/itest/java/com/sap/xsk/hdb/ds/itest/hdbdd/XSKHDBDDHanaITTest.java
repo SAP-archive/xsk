@@ -31,7 +31,6 @@ import java.util.Arrays;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -67,7 +66,7 @@ public class XSKHDBDDHanaITTest {
 
   @Test
   public void testHDBDDWithManagedAssOnDiffSchema()
-      throws XSKDataStructuresException, ProblemsException, SynchronizationException, IOException, SQLException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     try (Connection connection = datasource.getConnection();
 
         Statement stmt = connection.createStatement()) {
@@ -97,7 +96,7 @@ public class XSKHDBDDHanaITTest {
 
   @Test
   public void testHDBDDWithManagedAssWithUsingOnDiffSchema()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       String schemaName2 = "TEST_SCHEMA 2";

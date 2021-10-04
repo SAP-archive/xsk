@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.xsjob.ds.transformer;
 
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsjob.ds.api.XSKCronExpressionException;
 import java.text.ParseException;
 
@@ -30,21 +31,26 @@ public class XSKCronToQuartzCronTransformer {
   }
 
   public String transform(String xskCronExpression) throws ParseException {
+
     xskCronExpressionArr = xskCronExpression.split(" ");
 
     QuartzCronExpression quartzCronExpression = new QuartzCronExpression();
-    quartzCronExpression.setYear(parseRange(xskCronExpressionArr[XSK_CRON_YEAR]));
-    quartzCronExpression.setMonth(parseRange(xskCronExpressionArr[XSK_CRON_MONTH]));
-    quartzCronExpression.setDayOfMonth(parseRange(xskCronExpressionArr[XSK_CRON_DAY]));
+    try {
+      quartzCronExpression.setYear(parseRange(xskCronExpressionArr[XSK_CRON_YEAR]));
+      quartzCronExpression.setMonth(parseRange(xskCronExpressionArr[XSK_CRON_MONTH]));
+      quartzCronExpression.setDayOfMonth(parseRange(xskCronExpressionArr[XSK_CRON_DAY]));
 
-    String quartzDayOfWeek = parseRange(xskCronExpressionArr[XSK_CRON_DAY_OF_WEEK]);
-    quartzDayOfWeek = parseDayOfWeekElement(quartzDayOfWeek);
-    quartzCronExpression.setDayOfWeek(quartzDayOfWeek);
+      String quartzDayOfWeek = parseRange(xskCronExpressionArr[XSK_CRON_DAY_OF_WEEK]);
+      quartzDayOfWeek = parseDayOfWeekElement(quartzDayOfWeek);
+      quartzCronExpression.setDayOfWeek(quartzDayOfWeek);
 
-    quartzCronExpression.setHours(parseRange(xskCronExpressionArr[XSK_CRON_HOUR]));
-    quartzCronExpression.setMinutes(parseRange(xskCronExpressionArr[XSK_CRON_MINUTE]));
-    quartzCronExpression.setSeconds(parseRange(xskCronExpressionArr[XSK_CRON_SECOND]));
-
+      quartzCronExpression.setHours(parseRange(xskCronExpressionArr[XSK_CRON_HOUR]));
+      quartzCronExpression.setMinutes(parseRange(xskCronExpressionArr[XSK_CRON_MINUTE]));
+      quartzCronExpression.setSeconds(parseRange(xskCronExpressionArr[XSK_CRON_SECOND]));
+    } catch (Exception e) {
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", xskCronExpression, "XSK JOB");
+      throw e;
+    }
     return quartzCronExpression.toString();
   }
 

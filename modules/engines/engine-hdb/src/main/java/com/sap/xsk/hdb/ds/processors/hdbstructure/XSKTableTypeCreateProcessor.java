@@ -26,7 +26,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
@@ -51,7 +50,7 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
    */
   @Override
   public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Create Table Type: " + tableTypeModel.getName());
 
     String tableTypeNameWithoutSchema = tableTypeModel.getName();

@@ -22,11 +22,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doNothing;
 
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceDropProcessor;
+import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceUpdateProcessor;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -48,12 +52,6 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
-import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceDropProcessor;
-import com.sap.xsk.hdb.ds.processors.hdbsequence.XSKHDBSequenceUpdateProcessor;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SqlFactory.class, Configuration.class, ProblemsFacade.class})
@@ -106,19 +104,25 @@ public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
     when(mockCreateSequenceBuilder.start(anyInt())).thenReturn(mockCreateSequenceBuilder);
     when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt())).thenReturn(mockCreateSequenceBuilder);
     when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt())).thenReturn(mockCreateSequenceBuilder);
-    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean())).thenReturn(mockCreateSequenceBuilder);
-    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())).thenReturn(mockCreateSequenceBuilder);
-    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean())).thenReturn(mockCreateSequenceBuilder);
-    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean())).thenReturn(mockCreateSequenceBuilder);
-    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString())).thenReturn(mockCreateSequenceBuilder);
-    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString()).build()).thenReturn(sql);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()))
+        .thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()))
+        .thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())
+        .nominvalue(anyBoolean())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())
+        .nominvalue(anyBoolean()).cycles(anyBoolean())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())
+        .nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString())).thenReturn(mockCreateSequenceBuilder);
+    when(mockCreateSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())
+        .nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString()).build()).thenReturn(sql);
     spyProccessor.execute(mockConnection, mockModel);
 
     verify(spyProccessor, times(1)).executeSql(sql, mockConnection);
   }
 
   @Test
-  public void executeUpdateSuccessfully() throws SQLException, ProblemsException {
+  public void executeUpdateSuccessfully() throws SQLException {
     XSKHDBSequenceUpdateProcessor spyProccessor = spy(XSKHDBSequenceUpdateProcessor.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
     String sql = "TestExecuteUpdateSuccessfully";
@@ -134,19 +138,25 @@ public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
     when(mockAlterSequenceBuilder.start(anyInt())).thenReturn(mockAlterSequenceBuilder);
     when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt())).thenReturn(mockAlterSequenceBuilder);
     when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt())).thenReturn(mockAlterSequenceBuilder);
-    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean())).thenReturn(mockAlterSequenceBuilder);
-    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())).thenReturn(mockAlterSequenceBuilder);
-    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean())).thenReturn(mockAlterSequenceBuilder);
-    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean())).thenReturn(mockAlterSequenceBuilder);
-    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString())).thenReturn(mockAlterSequenceBuilder);
-    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()).nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString()).build()).thenReturn(sql);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()))
+        .thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt()))
+        .thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())
+        .nominvalue(anyBoolean())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())
+        .nominvalue(anyBoolean()).cycles(anyBoolean())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())
+        .nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString())).thenReturn(mockAlterSequenceBuilder);
+    when(mockAlterSequenceBuilder.start(anyInt()).increment(anyInt()).maxvalue(anyInt()).nomaxvalue(anyBoolean()).minvalue(anyInt())
+        .nominvalue(anyBoolean()).cycles(anyBoolean()).resetBy(anyString()).build()).thenReturn(sql);
     spyProccessor.execute(mockConnection, mockModel);
 
     verify(spyProccessor, times(1)).executeSql(sql, mockConnection);
   }
 
   @Test
-  public void executeDropSuccessfully() throws SQLException, ProblemsException {
+  public void executeDropSuccessfully() throws SQLException {
     XSKHDBSequenceDropProcessor spyProccessor = spy(XSKHDBSequenceDropProcessor.class);
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     XSKDataStructureHDBSequenceModel mockModel = mock(XSKDataStructureHDBSequenceModel.class);
@@ -177,7 +187,7 @@ public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
     when(mockModel.getName()).thenReturn("\"MYSCHEMA\".\"hdb_sequence::SampleSequence_HanaXSClassic\"");
     when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
     spyProccessor.execute(mockConnection, mockModel);
   }
 
@@ -189,7 +199,7 @@ public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
     when(mockModel.getName()).thenReturn("\"MYSCHEMA\".\"hdb_sequence::SampleSequence_HanaXSClassic\"");
     when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
     spyProccessor.execute(mockConnection, mockModel);
   }
 
@@ -204,7 +214,7 @@ public class HDBSequenceProcessorsTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, mockModel.getName(), DatabaseArtifactTypes.SEQUENCE)).thenReturn(true);
     when(mockModel.getDBContentType()).thenReturn(XSKDBContentType.OTHERS);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+    doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
     spyProccessor.execute(mockConnection, mockModel);
   }
 

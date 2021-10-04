@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.DataTypeUtils;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -50,7 +49,7 @@ public class XSKEntityAlterProcessor {
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     String tableName = XSKHDBUtils.getTableName(entityModel);
     logger.info("Processing Alter Entity: {}", tableName);
 
@@ -134,7 +133,6 @@ public class XSKEntityAlterProcessor {
     }
 
     // DROP iteration
-
     for (String columnName : columnDefinitions.keySet()) {
       if (!modelColumnNames.contains(columnName.toUpperCase())) {
         AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
@@ -142,11 +140,10 @@ public class XSKEntityAlterProcessor {
         executeAlterBuilder(connection, alterTableBuilder, entityModel);
       }
     }
-
   }
 
   private void executeAlterBuilder(Connection connection, AlterTableBuilder alterTableBuilder, XSKDataStructureEntityModel entityModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     final String sql = alterTableBuilder.build();
     try (PreparedStatement statement = connection.prepareStatement(sql);) {
       logger.info(sql);

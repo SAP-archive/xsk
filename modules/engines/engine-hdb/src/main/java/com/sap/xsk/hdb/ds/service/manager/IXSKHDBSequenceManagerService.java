@@ -26,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.naming.OperationNotSupportedException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,19 +77,19 @@ public class IXSKHDBSequenceManagerService extends AbstractDataStructureManagerS
 
   @Override
   public void createDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     this.xskHdbSequenceCreateProcessor.execute(connection, hdbSequenceModel);
   }
 
   @Override
   public void dropDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     this.xskHdbSequenceDropProcessor.execute(connection, hdbSequenceModel);
   }
 
   @Override
   public void updateDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
-      throws SQLException, OperationNotSupportedException, ProblemsException {
+      throws SQLException, OperationNotSupportedException {
     this.xskHdbSequenceUpdateProcessor.execute(connection, hdbSequenceModel);
   }
 

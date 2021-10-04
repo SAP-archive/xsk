@@ -11,6 +11,11 @@
  */
 package com.sap.xsk.hdb.ds.test.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
@@ -18,18 +23,12 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
-import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.junit.Test;
 
 public class XSKTableTypeParserTest extends AbstractDirigibleTest {
 
@@ -60,7 +59,7 @@ public class XSKTableTypeParserTest extends AbstractDirigibleTest {
 
   @Test(expected = IllegalStateException.class)
   public void parse_WhenPKIsWrong_shouldThrowException()
-      throws XSKDataStructuresException, XSKArtifactParserException, IOException, ProblemsException {
+      throws XSKDataStructuresException, XSKArtifactParserException, IOException {
     XSKTableTypeParser parser = new XSKTableTypeParser();
 
     String content = "table.schemaName = \"DBADMIN\";\n" +

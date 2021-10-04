@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.naming.OperationNotSupportedException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,13 +75,13 @@ public class IXSKTableTypeManagerService extends AbstractDataStructureManagerSer
 
   @Override
   public void createDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel structureModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     this.xskTableTypeCreateProcessor.execute(connection, structureModel);
   }
 
   @Override
   public void dropDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     this.xskTableTypeDropProcessor.execute(connection, tableTypeModel);
   }
 

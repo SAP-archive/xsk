@@ -11,18 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbschema;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import com.sap.xsk.parser.utils.ParserConstants;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
@@ -34,54 +22,64 @@ import com.sap.xsk.parser.hdbschema.core.HdbschemaParser;
 import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMACoreListener;
 import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMASyntaxErrorListener;
 import com.sap.xsk.parser.hdbschema.models.XSKHDBSCHEMADefinitionModel;
+import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureHDBSchemaModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(XSKSchemaParser.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKSchemaParser.class);
 
-    @Override
-    public String getType() {
-        return IXSKDataStructureModel.TYPE_HDB_SCHEMA;
-    }
+  @Override
+  public String getType() {
+    return IXSKDataStructureModel.TYPE_HDB_SCHEMA;
+  }
 
-    @Override
-    public Class<XSKDataStructureHDBSchemaModel> getDataStructureClass() {
-        return XSKDataStructureHDBSchemaModel.class;
-    }
+  @Override
+  public Class<XSKDataStructureHDBSchemaModel> getDataStructureClass() {
+    return XSKDataStructureHDBSchemaModel.class;
+  }
 
-    @Override
-    public XSKDataStructureHDBSchemaModel parse(String location, String content)
-        throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
-        XSKDataStructureHDBSchemaModel hdbSchemaModel = new XSKDataStructureHDBSchemaModel();
-        XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSchemaModel, IXSKDataStructureModel.TYPE_HDB_SCHEMA, XSKDBContentType.XS_CLASSIC);
+  @Override
+  public XSKDataStructureHDBSchemaModel parse(String location, String content)
+      throws XSKDataStructuresException, IOException, XSKArtifactParserException {
+    XSKDataStructureHDBSchemaModel hdbSchemaModel = new XSKDataStructureHDBSchemaModel();
+    XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSchemaModel, IXSKDataStructureModel.TYPE_HDB_SCHEMA,
+        XSKDBContentType.XS_CLASSIC);
 
-        ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
-        ANTLRInputStream inputStream = new ANTLRInputStream(is);
-        HdbschemaLexer lexer = new HdbschemaLexer(inputStream);
-        XSKHDBSCHEMASyntaxErrorListener lexerErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(lexerErrorListener);
-        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+    ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
+    ANTLRInputStream inputStream = new ANTLRInputStream(is);
+    HdbschemaLexer lexer = new HdbschemaLexer(inputStream);
+    XSKHDBSCHEMASyntaxErrorListener lexerErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
+    lexer.removeErrorListeners();
+    lexer.addErrorListener(lexerErrorListener);
+    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
-        HdbschemaParser hdbschemaParser = new HdbschemaParser(tokenStream);
-        hdbschemaParser.setBuildParseTree(true);
-        XSKHDBSCHEMASyntaxErrorListener parserErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
-        hdbschemaParser.removeErrorListeners();
-        hdbschemaParser.addErrorListener(parserErrorListener);
+    HdbschemaParser hdbschemaParser = new HdbschemaParser(tokenStream);
+    hdbschemaParser.setBuildParseTree(true);
+    XSKHDBSCHEMASyntaxErrorListener parserErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
+    hdbschemaParser.removeErrorListeners();
+    hdbschemaParser.addErrorListener(parserErrorListener);
 
-        ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
-        XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Schema");
-        XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Schema");
+    ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Schema");
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Schema");
 
-        XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
-        ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-        parseTreeWalker.walk(XSKHDBSCHEMACoreListener, parseTree);
+    XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
+    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+    parseTreeWalker.walk(XSKHDBSCHEMACoreListener, parseTree);
 
-        XSKHDBSCHEMADefinitionModel antlr4Model = XSKHDBSCHEMACoreListener.getModel();
-        hdbSchemaModel.setSchema(antlr4Model.getSchemaName());
+    XSKHDBSCHEMADefinitionModel antlr4Model = XSKHDBSCHEMACoreListener.getModel();
+    hdbSchemaModel.setSchema(antlr4Model.getSchemaName());
 
-        return hdbSchemaModel;
-    }
+    return hdbSchemaModel;
+  }
 }

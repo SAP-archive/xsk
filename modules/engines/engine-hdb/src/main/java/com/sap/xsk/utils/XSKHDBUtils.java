@@ -24,7 +24,6 @@ import java.sql.Timestamp;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
@@ -98,12 +97,12 @@ public class XSKHDBUtils {
     }
 
     public static void createPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService, String artifactName, String artifactSchema, Connection connection)
-        throws SQLException, ProblemsException {
+        throws SQLException {
         xskSynonymManagerService.createDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
     }
 
     public static void dropPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService, String artifactName, String artifactSchema, Connection connection)
-        throws SQLException, ProblemsException {
+        throws SQLException {
         xskSynonymManagerService.dropDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
     }
 

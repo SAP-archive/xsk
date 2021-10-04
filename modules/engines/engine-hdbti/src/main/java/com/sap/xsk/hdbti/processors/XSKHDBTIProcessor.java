@@ -42,7 +42,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.eclipse.dirigible.repository.api.IRepository;
@@ -64,7 +63,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
 
   @Override
   public void process(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, Connection connection)
-      throws XSKDataStructuresException, XSKTableImportException, SQLException, ProblemsException {
+      throws XSKDataStructuresException, XSKTableImportException, SQLException {
     IResource resource = repository.getResource(xskHdbtiCoreService.convertToActualFileName(tableImportConfigurationDefinition.getFile()));
     String tableName = xskHdbtiCoreService.convertToActualTableName(tableImportConfigurationDefinition.getTable());
     CSVParser csvParser = getCsvParser(tableImportConfigurationDefinition, resource);
@@ -112,8 +111,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     xskHdbtiCoreService.removeCsvRecords(new ArrayList<>(allImportedRecordsByCsv.values()), tableName);
   }
 
-  private PersistenceTableModel getTableMetadata(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition)
-      throws ProblemsException {
+  private PersistenceTableModel getTableMetadata(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) {
     String tableName = xskHdbtiCoreService.convertToActualTableName(tableImportConfigurationDefinition.getTable());
     try {
       return dbMetadataUtil.getTableMetadata(tableName, tableImportConfigurationDefinition.getSchema());
@@ -126,7 +124,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
   }
 
   private CSVParser getCsvParser(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition, IResource resource)
-      throws XSKTableImportException, ProblemsException {
+      throws XSKTableImportException {
     try {
       String contentAsString = IOUtils
           .toString(new InputStreamReader(new ByteArrayInputStream(resource.getContent()), StandardCharsets.UTF_8));
@@ -143,7 +141,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
   }
 
   private CSVFormat createCSVFormat(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition)
-      throws XSKTableImportException, ProblemsException {
+      throws XSKTableImportException {
     if (tableImportConfigurationDefinition.getDelimField() != null && (!tableImportConfigurationDefinition.getDelimField().equals(",")
         && !tableImportConfigurationDefinition.getDelimField().equals(";"))) {
       String errorMessage = "Only ';' or ',' characters are supported as delimiters for csv files.";
@@ -171,7 +169,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
   }
 
   public List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file)
-      throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException, ProblemsException {
+      throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException {
     if (location == null) {
       location = "undefined";
     }
@@ -180,7 +178,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     return parsedFile.getConfigModels();
   }
 
-  public String parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json) throws ProblemsException {
+  public String parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json) {
     for (XSKHDBTIImportConfigModel el : json) {
       try {
         el.setFileName(XSKHDBTIUtils.convertPathToHDBTIFileProperty(el.getFileName()));

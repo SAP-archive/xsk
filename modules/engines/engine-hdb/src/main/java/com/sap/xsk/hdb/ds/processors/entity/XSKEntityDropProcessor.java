@@ -20,7 +20,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,7 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @param entityModel the table model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException, ProblemsException {
+  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
     String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Drop Table: {}", tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
@@ -52,8 +51,9 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
           if (resultSet.next()) {
             int count = resultSet.getInt(1);
             if (count > 0) {
-              String errorMessage = String.format("Drop operation for the non empty Table %s will not be executed. Delete all the records in the table first.",
-                  tableName);
+              String errorMessage = String
+                  .format("Drop operation for the non empty Table %s will not be executed. Delete all the records in the table first.",
+                      tableName);
               XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Table");
               logger.error(errorMessage);
             }

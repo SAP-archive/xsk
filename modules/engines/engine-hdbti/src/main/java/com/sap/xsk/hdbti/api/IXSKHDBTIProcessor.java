@@ -30,5 +30,5 @@ public interface IXSKHDBTIProcessor {
 
     List<XSKHDBTIImportConfigModel> parseHdbtiToJSON(String location, byte[] file) throws XSKArtifactParserException, IOException, XSKHDBTISyntaxErrorException, ProblemsException;
 
-    String parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json);
+    String parseJSONtoHdbti(ArrayList<XSKHDBTIImportConfigModel> json) throws ProblemsException;
 }

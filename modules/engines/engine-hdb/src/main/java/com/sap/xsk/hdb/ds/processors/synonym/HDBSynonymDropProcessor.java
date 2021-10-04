@@ -29,39 +29,44 @@ import org.slf4j.LoggerFactory;
 
 public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSynonymModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(HDBSynonymDropProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(HDBSynonymDropProcessor.class);
 
-    /**
-     * Execute :
-     * DROP SYNONYM <synonym_name> [<drop_option>]
-     * If <drop_option> is not specified, then a non-cascaded drop is performed which only drops the specified synonym.
-     * Dependent objects of the synonym are invalidated but not dropped.
-     *
-     * @see <a href="https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d7e172751910148bccb49de92d9859.html">DROP SYNONYM Statement (Data Definition)</a>
-     */
-    @Override
-    public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException, ProblemsException {
-        synonymModel.getSynonymDefinitions().forEach((key, value) -> {
-            logger.info("Processing Drop Synonym: " + key);
+  /**
+   * Execute :
+   * DROP SYNONYM <synonym_name> [<drop_option>]
+   * If <drop_option> is not specified, then a non-cascaded drop is performed which only drops the specified synonym.
+   * Dependent objects of the synonym are invalidated but not dropped.
+   *
+   * @see <a href="https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d7e172751910148bccb49de92d9859.html">DROP SYNONYM Statement (Data Definition)</a>
+   */
+  @Override
+  public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException, ProblemsException {
+    synonymModel.getSynonymDefinitions().forEach((key, value) -> {
+      logger.info("Processing Drop Synonym: " + key);
 
-            String synonymName = (value.getSynonymSchema() != null) ? (XSKHDBUtils.escapeArtifactName(connection, key, value.getSynonymSchema())) : (XSKHDBUtils.escapeArtifactName(connection, key));
+      String synonymName = (value.getSynonymSchema() != null) ? (XSKHDBUtils.escapeArtifactName(connection, key, value.getSynonymSchema()))
+          : (XSKHDBUtils.escapeArtifactName(connection, key));
+      try {
+        if (SqlFactory.getNative(connection).exists(connection, value.getSynonymSchema(), key, DatabaseArtifactTypes.SYNONYM)) {
+          ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+          if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+            String errorMessage = String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection));
+            XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", synonymModel.getLocation(), "HDB Synonym");
+            throw new IllegalStateException(errorMessage);
+          } else {
+            String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();
             try {
-                if (SqlFactory.getNative(connection).exists(connection, value.getSynonymSchema(), key, DatabaseArtifactTypes.SYNONYM)) {
-                    ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-                    if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-                      String errorMessage = String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection));
-                      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", synonymModel.getLocation(), "HDB Synonym");
-                      throw new IllegalStateException(errorMessage);
-                    } else {
-                        String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();
-                        executeSql(sql, connection);
-                    }
-                } else {
-                    logger.warn(format("Synonym [{0}] does not exists during the drop process", value.getSynonymSchema() + "." + key));
-                }
-            } catch (SQLException | ProblemsException exception) {
-                logger.error(exception.getMessage(), exception);
+              executeSql(sql, connection);
+            } catch (SQLException ex) {
+              XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", synonymModel.getLocation(), "HDB Synonym");
             }
-        });
-    }
+          }
+        } else {
+          logger.warn(format("Synonym [{0}] does not exists during the drop process", value.getSynonymSchema() + "." + key));
+        }
+      } catch (SQLException | ProblemsException exception) {
+        logger.error(exception.getMessage(), exception);
+      }
+    });
+  }
 }

@@ -58,7 +58,11 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
           .exists(connection, tableTypeModel.getSchema(), tableTypeModel.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {
         String tableTypeName = XSKHDBUtils.escapeArtifactName(connection, tableTypeModel.getName());
         String sql = SqlFactory.getNative(connection).drop().tableType(tableTypeName).build();
-        executeSql(sql, connection);
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", tableTypeModel.getLocation(), "HDB Table Type");
+        }
       } else {
         logger.warn(format("Table Type [{0}] does not exists during the drop process", tableTypeModel.getName()));
       }

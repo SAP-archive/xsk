@@ -76,7 +76,11 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         }
       }
     }
-    executeSql(sql, connection);
+    try {
+      executeSql(sql, connection);
+    } catch (SQLException ex) {
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", tableModel.getLocation(), "HDB Table");
+    }
 
     boolean shouldCreatePublicSynonym = SqlFactory.getNative(connection)
         .exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE);

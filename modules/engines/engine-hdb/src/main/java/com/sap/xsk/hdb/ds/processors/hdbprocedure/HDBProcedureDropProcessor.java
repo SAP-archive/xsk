@@ -45,7 +45,11 @@ public class HDBProcedureDropProcessor extends AbstractXSKProcessor<XSKDataStruc
               throw new IllegalStateException(errorMessage);
             } else {
                 String sql = XSKConstants.XSK_HDBPROCEDURE_DROP + hdbProcedure.getName();
+              try {
                 executeSql(sql, connection);
+              } catch (SQLException ex) {
+                XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbProcedure.getLocation(), "HDB Procedure");
+              }
             }
         } else {
             logger.warn(format("Procedure [{0}] does not exists during the drop process", hdbProcedure.getName()));

@@ -29,25 +29,29 @@ import org.slf4j.LoggerFactory;
 
 public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSchemaModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
-    public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema)
-        throws SQLException, ProblemsException {
-        logger.info("Processing Drop Schema: " + hdbSchema.getSchema());
+  public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema)
+      throws SQLException, ProblemsException {
+    logger.info("Processing Drop Schema: " + hdbSchema.getSchema());
 
-        ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-        if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-          String errorMessage = String.format("%s does not support Schema", dialect.getDatabaseName(connection));
-          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
-          throw new IllegalStateException(errorMessage);
-        } else {
-            if (SqlFactory.getNative(connection).exists(connection, hdbSchema.getSchema(), DatabaseArtifactTypes.SCHEMA)) {
-                String schemaName = XSKHDBUtils.escapeArtifactName(connection, hdbSchema.getSchema());
-                String sql = SqlFactory.getNative(connection).drop().schema(schemaName).build();
-                executeSql(sql, connection);
-            } else {
-                logger.warn(format("Schema [{0}] does not exists during the drop process", hdbSchema.getSchema()));
-            }
+    ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+    if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+      String errorMessage = String.format("%s does not support Schema", dialect.getDatabaseName(connection));
+      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
+      throw new IllegalStateException(errorMessage);
+    } else {
+      if (SqlFactory.getNative(connection).exists(connection, hdbSchema.getSchema(), DatabaseArtifactTypes.SCHEMA)) {
+        String schemaName = XSKHDBUtils.escapeArtifactName(connection, hdbSchema.getSchema());
+        String sql = SqlFactory.getNative(connection).drop().schema(schemaName).build();
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
         }
+      } else {
+        logger.warn(format("Schema [{0}] does not exists during the drop process", hdbSchema.getSchema()));
+      }
     }
+  }
 }

@@ -61,7 +61,11 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
         alterTableBuilder.add().foreignKey(name, foreignKeyModel.getColumns(), tableName, foreignKeyModel.getReferencedColumns());
 
         String sql = alterTableBuilder.build();
-        executeSql(sql, connection);
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", entityModel.getLocation(), "XSK Entity");
+        }
       } else {
         String reason = "Table does not exist - " + sourceTable;
         XSKCommonsUtils.logProcessorErrors(reason, "PROCESSOR", entityModel.getLocation(), "HDB Entity");

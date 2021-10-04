@@ -17,10 +17,8 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -55,7 +53,11 @@ public class XSKHDBSequenceUpdateProcessor extends AbstractXSKProcessor<XSKDataS
         }
       }
     }
-    executeSql(sql, connection);
+    try {
+      executeSql(sql, connection);
+    } catch (SQLException ex) {
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbSequenceModel.getLocation(), "HDB Sequence");
+    }
   }
 
   private String getDatabaseSpecificSQL(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel,

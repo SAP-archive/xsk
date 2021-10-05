@@ -21,6 +21,14 @@ public class XSKGrantPrivilegesContainerSchemaProcessor extends XSKHDIAbstractPr
     for (String user : users) {
       executeUpdate(connection,
           "INSERT INTO #PRIVILEGES(PRIVILEGE_NAME, PRINCIPAL_SCHEMA_NAME, PRINCIPAL_NAME) VALUES ('SELECT', '', '" + user + "');");
+      executeUpdate(connection,
+          "INSERT INTO #PRIVILEGES(PRIVILEGE_NAME, PRINCIPAL_SCHEMA_NAME, PRINCIPAL_NAME) VALUES ('INSERT', '', '" + user + "');");
+      executeUpdate(connection,
+          "INSERT INTO #PRIVILEGES(PRIVILEGE_NAME, PRINCIPAL_SCHEMA_NAME, PRINCIPAL_NAME) VALUES ('UPDATE', '', '" + user + "');");
+      executeUpdate(connection,
+          "INSERT INTO #PRIVILEGES(PRIVILEGE_NAME, PRINCIPAL_SCHEMA_NAME, PRINCIPAL_NAME) VALUES ('DELETE', '', '" + user + "');");
+      executeUpdate(connection,
+          "INSERT INTO #PRIVILEGES(PRIVILEGE_NAME, PRINCIPAL_SCHEMA_NAME, PRINCIPAL_NAME) VALUES ('EXECUTE', '', '" + user + "');");
     }
     executeQuery(connection, "CALL " + container + "#DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES(#PRIVILEGES, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);");
     executeUpdate(connection, "DROP TABLE #PRIVILEGES;");

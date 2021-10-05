@@ -42,7 +42,7 @@ nav:
       - Helm: 'setup/helm.md'
       - Environment Variables: 'setup/environment-variables.md'
     - Cheat sheet: 
-      - Create delivery units: 'cheatsheet/dus.md'
+      - Create Delivery Unit: 'cheatsheet/delivery-unit.md'
     - Community: 'community.md'
     
 

@@ -35,7 +35,6 @@ import javax.sql.DataSource;
 import nl.altindag.log.LogCaptor;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -76,7 +75,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableCreateOnSameSchema()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
@@ -110,7 +109,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenCompatibleChange()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
 
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
@@ -165,7 +164,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenNullableToNotNullableChange()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
@@ -193,7 +192,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenNotUniqueToUniqueChange()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
@@ -221,7 +220,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenAddingExistingColumnToPKList()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
@@ -250,7 +249,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenAddingNewColumnToPKList()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
@@ -278,7 +277,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenAddingNewNotNullableColumn()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 
@@ -306,7 +305,7 @@ public class XSKHDBTableParserHanaITTest {
 
   @Test
   public void testHDBTableAlterWhenExistingColumnTypeChange()
-      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException, ProblemsException {
+      throws SQLException, IOException, XSKDataStructuresException, SynchronizationException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
 

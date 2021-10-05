@@ -47,7 +47,6 @@ import java.util.Date;
 import java.util.List;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.junit.After;
 import org.junit.Before;
@@ -102,7 +101,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testDataImportedCorrectly()
-      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
     writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
     XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
     importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
@@ -123,7 +122,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testChangeOfDataProperlyReflectedInDb()
-      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
     XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
     importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
     importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -146,7 +145,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testCsvRecordRemovedFromCsvFileShouldRemoveFromDb()
-      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
     XSKTableImportConfigurationDefinition importConfigurationDefinitionWithRemovedRecord = new XSKTableImportConfigurationDefinition();
     importConfigurationDefinitionWithRemovedRecord.setFile(CSV_FILE_LOCATION);
     importConfigurationDefinitionWithRemovedRecord.setHdbtiFileName(HDBTI_LOCATION);
@@ -179,7 +178,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testCsvRecordAddedShouldReflectDataInDb()
-      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
     XSKTableImportConfigurationDefinition importConfigurationDefinitionWithRemovedRecord = new XSKTableImportConfigurationDefinition();
     importConfigurationDefinitionWithRemovedRecord.setFile(CSV_FILE_LOCATION);
     importConfigurationDefinitionWithRemovedRecord.setHdbtiFileName(HDBTI_LOCATION);
@@ -207,7 +206,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testCsvRecordWithCustomDelimFieldDelimEnclosingAndEscapeCharShouldInsertProperData()
-      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
     XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
     importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
     importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -228,7 +227,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testInsertCsvRecordWithHeaders()
-      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
     XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
     importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
     importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -251,7 +250,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testUpdateCsvRecordWithHeadersShouldReflectDbData()
-      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
     XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
     importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
     importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -285,7 +284,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testCleanUpDeletesEverythingRelatedToHdbtiFile()
-      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException, ProblemsException {
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
     XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
     importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
     importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
@@ -453,7 +452,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testParseHdbtiToJSONSuccessfully()
-      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException, ProblemsException {
+      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
 
@@ -496,7 +495,7 @@ public class XSKHDBTIProcessorTest {
 
   @Test
   public void testParseJSONtoHdbtiSuccessfully()
-      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException, ProblemsException {
+      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
 
@@ -530,7 +529,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testParseJSONtoHdbtiFailWithIncorrectFilePath() throws ProblemsException {
+  public void testParseJSONtoHdbtiFailWithIncorrectFilePath() {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema");
@@ -543,7 +542,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test
-  public void testParseJSONtoHdbtiSuccessfullyWithFileNameWithoutPath() throws ProblemsException {
+  public void testParseJSONtoHdbtiSuccessfullyWithFileNameWithoutPath() {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema");
@@ -565,7 +564,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testParseJSONtoHdbtiFailWithIncorrectSchemaName() throws ProblemsException {
+  public void testParseJSONtoHdbtiFailWithIncorrectSchemaName() {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema-Name_cAN|be\\whatever ¯\\_(ツ)_/¯");
@@ -577,7 +576,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testParseJSONtoHdbtiFailWithIncorrectTableName() throws ProblemsException {
+  public void testParseJSONtoHdbtiFailWithIncorrectTableName() {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema");
@@ -589,7 +588,7 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testParseJSONtoHdbtiFailWithIncorrectKeyColumn() throws ProblemsException {
+  public void testParseJSONtoHdbtiFailWithIncorrectKeyColumn() {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
     model.setDelimEnclosing("'");
     model.setSchemaName("schema");

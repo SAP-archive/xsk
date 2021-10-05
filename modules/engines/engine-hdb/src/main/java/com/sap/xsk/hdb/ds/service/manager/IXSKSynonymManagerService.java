@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.naming.OperationNotSupportedException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,13 +60,13 @@ public class IXSKSynonymManagerService extends AbstractDataStructureManagerServi
 
   @Override
   public void createDataStructure(Connection connection, XSKDataStructureHDBSynonymModel synonymModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     this.xskSynonymCreateProcessor.execute(connection, synonymModel);
   }
 
   @Override
   public void dropDataStructure(Connection connection, XSKDataStructureHDBSynonymModel synonymModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     this.xskSynonymDropProcessor.execute(connection, synonymModel);
   }
 

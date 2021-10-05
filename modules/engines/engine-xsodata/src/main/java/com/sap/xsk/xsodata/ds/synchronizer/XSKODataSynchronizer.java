@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -353,15 +352,15 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
     }
   }
 
-  private String[] generateODataX(ODataDefinition oDataDefinition) throws SQLException, ProblemsException {
+  private String[] generateODataX(ODataDefinition oDataDefinition) throws SQLException {
     return xskOData2ODataXTransformer.transform(oDataDefinition);
   }
 
-  private String[] generateODataMs(ODataDefinition oDataDefinition) throws SQLException, ProblemsException {
+  private String[] generateODataMs(ODataDefinition oDataDefinition) throws SQLException {
     return xskOData2ODataMTransformer.transform(oDataDefinition);
   }
 
-  private List<ODataHandlerDefinition> generateODataHs(ODataDefinition oDataDefinition) throws SQLException, ProblemsException {
+  private List<ODataHandlerDefinition> generateODataHs(ODataDefinition oDataDefinition) throws SQLException {
     return xskOData2ODataHTransformer.transform(oDataDefinition);
   }
 

@@ -14,10 +14,9 @@ package com.sap.xsk.parser.hdbti.custom;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-
 import java.io.IOException;
 
 public interface IXSKHDBTIParser {
-    XSKHDBTIImportModel parse(String location, String content) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException, ProblemsException;
+
+  XSKHDBTIImportModel parse(String location, String content) throws IOException, XSKHDBTISyntaxErrorException, XSKArtifactParserException;
 }

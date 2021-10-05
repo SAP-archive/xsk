@@ -17,7 +17,6 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class XSKEntityUpdateProcessor extends AbstractXSKProcessor<XSKDataStruct
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Update Entity: {}", tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {

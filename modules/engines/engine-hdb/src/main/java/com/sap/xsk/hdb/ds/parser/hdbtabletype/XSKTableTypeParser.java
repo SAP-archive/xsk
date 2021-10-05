@@ -31,12 +31,6 @@ import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
 import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -44,6 +38,11 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructureHDBTableTypeModel> {
 
@@ -52,7 +51,7 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
 
   @Override
   public XSKDataStructureHDBTableTypeModel parse(String location, String content)
-      throws XSKDataStructuresException, IOException, XSKArtifactParserException, ProblemsException {
+      throws XSKDataStructuresException, IOException, XSKArtifactParserException {
     Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*TYPE", Pattern.CASE_INSENSITIVE);
     Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
     boolean matchFound = matcher.find();
@@ -62,7 +61,7 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
   }
 
   private XSKDataStructureHDBTableTypeModel parseHanaXSClassicContent(String location, String content)
-      throws IOException, XSKArtifactParserException, ProblemsException {
+      throws IOException, XSKArtifactParserException {
     logger.debug("Parsing hdbstructure in Hana XS Classic format");
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
@@ -92,12 +91,14 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
     try {
       hdbtableDefinitionModel.checkForAllMandatoryFieldsPresence();
     } catch (Exception e) {
-      throw new XSKHDBTableMissingPropertyException(String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
+      throw new XSKHDBTableMissingPropertyException(
+          String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
     }
 
     XSKDataStructureHDBTableTypeModel dataStructureHDBTableTypeModel = new XSKDataStructureHDBTableTypeModel();
 
-    XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableTypeModel, IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, XSKDBContentType.XS_CLASSIC);
+    XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableTypeModel, IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE,
+        XSKDBContentType.XS_CLASSIC);
     dataStructureHDBTableTypeModel.setSchema(hdbtableDefinitionModel.getSchemaName());
     dataStructureHDBTableTypeModel.setPublicProp(hdbtableDefinitionModel.isPublic());
     dataStructureHDBTableTypeModel.setRawContent(content);
@@ -109,7 +110,8 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
     dataStructureHDBTableTypeModel.setPrimaryKey(primaryKey);
 
     hdbtableDefinitionModel.getPkColumns().forEach(key -> {
-      List<XSKHDBTABLEColumnsModel> foundMatchKey = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(key)).collect(Collectors.toList());
+      List<XSKHDBTABLEColumnsModel> foundMatchKey = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(key))
+          .collect(Collectors.toList());
       if (foundMatchKey.size() != 1) {
         throw new IllegalStateException(String.format("%s: the column does not have a definition but is specified as a primary key", key));
       }
@@ -121,7 +123,8 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
   private XSKDataStructureHDBTableTypeModel parseHanaXSAdvancedContent(String location, String content) {
     logger.debug("Parsing hdbstructure as Hana XS Advanced format");
     XSKDataStructureHDBTableTypeModel dataStructureHDBTableTypeModel = new XSKDataStructureHDBTableTypeModel();
-    XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableTypeModel, IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, XSKDBContentType.OTHERS);
+    XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableTypeModel, IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE,
+        XSKDBContentType.OTHERS);
     dataStructureHDBTableTypeModel.setRawContent(content);
     return dataStructureHDBTableTypeModel;
   }

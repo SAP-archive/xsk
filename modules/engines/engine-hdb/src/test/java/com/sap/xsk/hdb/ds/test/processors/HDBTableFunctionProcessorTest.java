@@ -31,7 +31,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -65,18 +64,18 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void executeCreateTableFunctionIfDoNotExist() throws IOException, SQLException, ProblemsException {
+  public void executeCreateTableFunctionIfDoNotExist() throws IOException, SQLException {
     executeCreateTableFunctionSuccessfully(false, 1);
   }
 
   @Test
   public void executeCreateTableFunctionIfAlreadyExist()
-      throws IOException, SQLException, ProblemsException {
+      throws IOException, SQLException {
     executeCreateTableFunctionSuccessfully(true, 0);
   }
 
   public void executeCreateTableFunctionSuccessfully(boolean doExist, int expectedTimesOfInvocation)
-      throws IOException, SQLException, ProblemsException {
+      throws IOException, SQLException {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
@@ -120,17 +119,17 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void executeDropTableFunctionIfDoNotExist() throws IOException, SQLException, ProblemsException {
+  public void executeDropTableFunctionIfDoNotExist() throws IOException, SQLException {
     executeDropTableFunctionSuccessfully(false, 0);
   }
 
   @Test
-  public void executeDropTableFunctionIfAlreadyExist() throws IOException, SQLException, ProblemsException {
+  public void executeDropTableFunctionIfAlreadyExist() throws IOException, SQLException {
     executeDropTableFunctionSuccessfully(true, 1);
   }
 
   public void executeDropTableFunctionSuccessfully(boolean doExist, int expectedTimesOfInvocation)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     //PowerMock do not support deep stub calls
     PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);

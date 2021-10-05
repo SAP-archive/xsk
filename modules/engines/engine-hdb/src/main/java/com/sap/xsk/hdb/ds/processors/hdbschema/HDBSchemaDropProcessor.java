@@ -19,7 +19,6 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -32,7 +31,7 @@ public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructur
   private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
 
   public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Drop Schema: " + hdbSchema.getSchema());
 
     ISqlDialect dialect = SqlFactory.deriveDialect(connection);

@@ -23,7 +23,6 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
@@ -46,7 +45,7 @@ public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureH
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Drop View: " + viewModel.getName());
     String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), viewModel.getSchema());
 

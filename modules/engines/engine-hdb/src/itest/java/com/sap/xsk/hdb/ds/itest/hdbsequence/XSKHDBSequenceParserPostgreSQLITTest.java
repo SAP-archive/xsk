@@ -29,7 +29,6 @@ import java.util.List;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -82,7 +81,7 @@ public class XSKHDBSequenceParserPostgreSQLITTest {
 
   @Test
   public void testHDBSequenceCreate()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
         "/registry/public/sequence-itest/SampleSequence_PostgreSQL.hdbsequence",
         "/sequence-itest/SampleSequence_PostgreSQL.hdbsequence");
@@ -91,18 +90,18 @@ public class XSKHDBSequenceParserPostgreSQLITTest {
     this.facade.updateEntities();
 
     try (Connection connection = datasource.getConnection();
-  			Statement stmt = connection.createStatement()) {
-	    List<String> dbSequences = new ArrayList<>();
-	    ResultSet rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
-	    while (rs.next()) {
-	      dbSequences.add(rs.getString("sequence_name"));
-	    }
-	    assertEquals(1, dbSequences.size());
-	    assertEquals("sequence-itest::SampleSequence_PostgreSQL", dbSequences.get(0));
-	
-	    stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
-	    rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
-	    assertFalse(rs.next());
+        Statement stmt = connection.createStatement()) {
+      List<String> dbSequences = new ArrayList<>();
+      ResultSet rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
+      while (rs.next()) {
+        dbSequences.add(rs.getString("sequence_name"));
+      }
+      assertEquals(1, dbSequences.size());
+      assertEquals("sequence-itest::SampleSequence_PostgreSQL", dbSequences.get(0));
+
+      stmt.executeUpdate(String.format("DROP SEQUENCE \"%s\"", dbSequences.get(0)));
+      rs = stmt.executeQuery("SELECT  relname sequence_name FROM  pg_class WHERE  relkind = 'S'");
+      assertFalse(rs.next());
     }
   }
 

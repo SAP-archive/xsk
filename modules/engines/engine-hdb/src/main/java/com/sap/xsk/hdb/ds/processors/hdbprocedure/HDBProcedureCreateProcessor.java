@@ -19,7 +19,6 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -32,7 +31,7 @@ public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStr
   private static final Logger logger = LoggerFactory.getLogger(HDBProcedureCreateProcessor.class);
 
   public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Create Procedure: " + hdbProcedure.getName());
     String procedureNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[1];
     hdbProcedure.setSchema(XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[0]);

@@ -49,7 +49,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
@@ -71,7 +70,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       String fileContent = new String(loadedResource.getContent());
       try {
         parseHdbdd(fileLocation, fileContent);
-      } catch (CDSRuntimeException | XSKArtifactParserException | ProblemsException e) {
+      } catch (CDSRuntimeException | XSKArtifactParserException e) {
         this.symbolTable.clearSymbolsByFullName();
         this.symbolTable.clearEntityGraph();
         throw new XSKDataStructuresException(e.getMessage());
@@ -86,7 +85,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   }
 
 
-  private void parseHdbdd(String location, String content) throws IOException, XSKArtifactParserException, ProblemsException {
+  private void parseHdbdd(String location, String content) throws IOException, XSKArtifactParserException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     CdsLexer hdbtiLexer = new CdsLexer(inputStream);
@@ -124,7 +123,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       try {
         IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
         parseHdbdd(fileLocation, new String(loadedResource.getContent()));
-      } catch (IOException | ProblemsException | XSKArtifactParserException e) {
+      } catch (IOException | XSKArtifactParserException e) {
         logger.error(e.getMessage(), e);
       }
     });

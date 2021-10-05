@@ -19,7 +19,6 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -40,7 +39,7 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
    * @see <a href="https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d7e172751910148bccb49de92d9859.html">DROP SYNONYM Statement (Data Definition)</a>
    */
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException, ProblemsException {
+  public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
     synonymModel.getSynonymDefinitions().forEach((key, value) -> {
       logger.info("Processing Drop Synonym: " + key);
 
@@ -64,7 +63,7 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
         } else {
           logger.warn(format("Synonym [{0}] does not exists during the drop process", value.getSynonymSchema() + "." + key));
         }
-      } catch (SQLException | ProblemsException exception) {
+      } catch (SQLException exception) {
         logger.error(exception.getMessage(), exception);
       }
     });

@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,17 +69,17 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
   }
 
   public void createDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     this.xskTableCreateProcessor.execute(connection, tableModel);
   }
 
   public void dropDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     this.xskTableDropProcessor.execute(connection, tableModel);
   }
 
   public void updateDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     //TODO: Create logic for updating hdb table
     logger.error("Altering of a non-empty table is not implemented yet.");
     // TableAlterProcessor.execute(connection, tableModel);

@@ -20,8 +20,13 @@ import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.XSKSchedulerManager;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
 import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -31,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
@@ -41,6 +47,7 @@ import org.slf4j.LoggerFactory;
 
 public class XSKJobSynchronizer extends AbstractSynchronizer {
 
+  public static final String XSK_SYNCHRONIZER_XSJOB_ENABLED = "XSK_SYNCHRONIZER_XSJOB_ENABLED";
   private static final Logger logger = LoggerFactory.getLogger(XSKJobSynchronizer.class);
 
   private static final Map<String, XSKJobDefinition> JOBS_PREDELIVERED = Collections
@@ -71,30 +78,34 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
    */
   @Override
   public void synchronize() {
-    synchronized (XSKJobSynchronizer.class) {
-      if (beforeSynchronizing()) {
-        logger.trace("Synchronizing Jobs...");
-        try {
-          startSynchronization(SYNCHRONIZER_NAME);
-          clearCache();
-          synchronizePredelivered();
-          synchronizeRegistry();
-          startJobs();
-          int immutableCount = JOBS_PREDELIVERED.size();
-          int mutableCount = JOBS_SYNCHRONIZED.size();
-          cleanup();
-          clearCache();
-          successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
-        } catch (Exception e) {
-          logger.error("Synchronizing process for Jobs failed.", e);
-          try {
-            failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-          } catch (SchedulerException e1) {
-            logger.error("Synchronizing process for Jobs files failed in registering the state log.", e);
+    if (Boolean.parseBoolean(Configuration.get(XSK_SYNCHRONIZER_XSJOB_ENABLED, "false"))) {
+      synchronized (XSKJobSynchronizer.class) {
+        if (beforeSynchronizing()) {
+          if (beforeSynchronizing()) {
+            logger.trace("Synchronizing Jobs...");
+            try {
+              startSynchronization(SYNCHRONIZER_NAME);
+              clearCache();
+              synchronizePredelivered();
+              synchronizeRegistry();
+              startJobs();
+              int immutableCount = JOBS_PREDELIVERED.size();
+              int mutableCount = JOBS_SYNCHRONIZED.size();
+              cleanup();
+              clearCache();
+              successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
+            } catch (Exception e) {
+              logger.error("Synchronizing process for Jobs failed.", e);
+              try {
+                failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+              } catch (SchedulerException e1) {
+                logger.error("Synchronizing process for Jobs files failed in registering the state log.", e);
+              }
+            }
+            logger.trace("Done synchronizing Jobs.");
+            afterSynchronizing();
           }
         }
-        logger.trace("Done synchronizing Jobs.");
-        afterSynchronizing();
       }
     }
   }
@@ -107,11 +118,12 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
    */
   public void registerPredeliveredJob(String jobPath) throws IOException, ParseException {
     InputStream in = XSKJobSynchronizer.class.getResourceAsStream(jobPath);
+
     try {
       String json = IOUtils.toString(in, StandardCharsets.UTF_8);
       XSKJobArtifact xskJobArtifact = schedulerCoreService.parseJob(json);
       ArrayList<XSKJobDefinition> xskJobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
-      for (XSKJobDefinition jobDefinition:xskJobDefinitions) {
+      for (XSKJobDefinition jobDefinition : xskJobDefinitions) {
         jobDefinition.setName(jobPath);
         JOBS_PREDELIVERED.put(jobPath, jobDefinition);
       }
@@ -216,10 +228,12 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
 
   private void synchronizePredelivered() throws SynchronizationException {
     logger.trace("Synchronizing predelivered Jobs...");
+
     // Jobs
     for (XSKJobDefinition jobDefinition : JOBS_PREDELIVERED.values()) {
       synchronizeJob(jobDefinition);
     }
+
     logger.trace("Done synchronizing predelivered Jobs.");
   }
 
@@ -233,7 +247,8 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
         XSKJobDefinition existing = schedulerCoreService.getJob(xskJob.getName());
         if (!xskJob.equals(existing)) {
           schedulerCoreService.updateJob(xskJob.getName(), xskJob.getGroup(), xskJob.getDescription(),
-              xskJob.getModule(), xskJob.getFunction(), xskJob.getCronExpression(), xskJob.getParametersAsMap());
+              xskJob.getModule(), xskJob.getFunction(), xskJob.getCronExpression(), xskJob.getStartAt(), xskJob.getEndAt(),
+              xskJob.getParametersAsMap());
           logger.info("Synchronized a modified Job [{}] from group: {}", xskJob.getName(), xskJob.getGroup());
         }
       }

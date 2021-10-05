@@ -1,0 +1,20 @@
+/*
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+var module = __context.get("xsk-job-module");
+var jobFunction = __context.get("xsk-job-function");
+var jobParameters = __context.get("xsk-job-parameters");
+
+var pathWithHandler = module.split(".")[0].split("/");
+var handler = pathWithHandler.pop();
+var namespace = pathWithHandler.join(".");
+
+$.import(namespace, handler)[jobFunction](JSON.parse(jobParameters));

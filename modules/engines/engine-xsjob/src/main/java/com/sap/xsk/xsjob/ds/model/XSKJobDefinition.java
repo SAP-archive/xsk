@@ -34,7 +34,7 @@ public class XSKJobDefinition {
   @Column(name = "MODULE", columnDefinition = "VARCHAR", nullable = false, length = 255)
   private String module;
 
-  @Column(name = "FUNCTION", columnDefinition = "VARCHAR", nullable = false, length = 255)
+  @Column(name = "JOB_FUNCTION", columnDefinition = "VARCHAR", nullable = false, length = 255)
   private String function;
 
   @Column(name = "CRON_EXPRESSION", columnDefinition = "VARCHAR", nullable = false, length = 255)
@@ -45,6 +45,12 @@ public class XSKJobDefinition {
 
   @Column(name = "JOB_CREATED_AT", columnDefinition = "TIMESTAMP", nullable = false)
   private Timestamp createdAt;
+
+  @Column(name = "JOB_START_AT", columnDefinition = "TIMESTAMP", nullable = true)
+  private Timestamp startAt;
+
+  @Column(name = "JOB_END_AT", columnDefinition = "TIMESTAMP", nullable = true)
+  private Timestamp endAt;
 
   @Column(name = "PARAMETERS", columnDefinition = "BLOB", nullable = false, length = 2000)
   private byte[] parameters;
@@ -108,6 +114,22 @@ public class XSKJobDefinition {
 
   public void setCreatedAt(Timestamp createdAt) {
     this.createdAt = createdAt;
+  }
+
+  public Timestamp getStartAt() {
+    return startAt;
+  }
+
+  public void setStartAt(Timestamp startAt) {
+    this.startAt = startAt;
+  }
+
+  public Timestamp getEndAt() {
+    return endAt;
+  }
+
+  public void setEndAt(Timestamp endAt) {
+    this.endAt = endAt;
   }
 
   public byte[] getParameters() {

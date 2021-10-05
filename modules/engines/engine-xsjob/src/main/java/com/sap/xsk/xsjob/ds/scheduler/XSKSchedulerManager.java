@@ -19,6 +19,7 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsjob.ds.api.IXSKJobCoreService;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.handler.XSKJobHandler;
+import java.util.Date;
 import java.util.Set;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.manager.SchedulerManager;
@@ -27,6 +28,8 @@ import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.ObjectAlreadyExistsException;
 import org.quartz.Scheduler;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
@@ -39,6 +42,10 @@ public class XSKSchedulerManager {
   private static Scheduler scheduler = SchedulerManager.getScheduler();
 
   public static void scheduleJob(XSKJobDefinition jobDefinition) throws SchedulerException {
+    if (jobDefinition.getStartAt() == null) {
+      return;
+    }
+
     try {
       JobKey jobKey = new JobKey(jobDefinition.getName(), jobDefinition.getGroup());
       TriggerKey triggerKey = new TriggerKey(jobDefinition.getName(), jobDefinition.getGroup());
@@ -54,9 +61,15 @@ public class XSKSchedulerManager {
           return;
         }
 
-        CronTrigger trigger = newTrigger().withIdentity(triggerKey).withSchedule(cronSchedule(jobDefinition.getCronExpression())).build();
+        TriggerBuilder<CronTrigger> triggerBuilder = newTrigger().withIdentity(triggerKey)
+            .startAt(new Date(jobDefinition.getStartAt().getTime()))
+            .withSchedule(cronSchedule(jobDefinition.getCronExpression()).withMisfireHandlingInstructionDoNothing());
 
-        scheduler.scheduleJob(job, trigger);
+        if (jobDefinition.getEndAt() != null) {
+          triggerBuilder.endAt(new Date(jobDefinition.getEndAt().getTime()));
+        }
+
+        scheduler.scheduleJob(job, triggerBuilder.build());
 
         logger.info("Scheduled Job: [{}] of group: [{}] at: [{}]", jobDefinition.getName(), jobDefinition.getGroup(),
             jobDefinition.getCronExpression());

@@ -18,11 +18,8 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -32,40 +29,44 @@ import org.slf4j.LoggerFactory;
 
 public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSequenceModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceDropProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceDropProcessor.class);
 
-    @Override
-    public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException, ProblemsException {
-        String hdbSequenceName = XSKHDBUtils.escapeArtifactName(connection, hdbSequenceModel.getName(), hdbSequenceModel.getSchema());
-        logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
+  @Override
+  public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
+    String hdbSequenceName = XSKHDBUtils.escapeArtifactName(connection, hdbSequenceModel.getName(), hdbSequenceModel.getSchema());
+    logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
 
-        if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)) {
-            String sql = null;
-            switch (hdbSequenceModel.getDBContentType()) {
-                case XS_CLASSIC: {
-                    sql = getDatabaseSpecificSQL(connection, hdbSequenceName);
-                    break;
-                }
-                case OTHERS: {
-                    ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-                    if (dialect.getClass().equals(HanaSqlDialect.class)) {
-                        sql = XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
-                        break;
-                    } else {
-                      String errorMessage = String.format("Sequences are not supported for %s !", dialect.getDatabaseName(connection));
-                      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSequenceModel.getLocation(), "HDB Sequence");
-                      throw new IllegalStateException(errorMessage);
-                    }
-                }
-            }
-            executeSql(sql, connection);
-        } else {
-            logger.warn(format("Sequence [{0}] does not exists during the drop process", hdbSequenceModel.getName()));
+    if (SqlFactory.getNative(connection).exists(connection, hdbSequenceName, DatabaseArtifactTypes.SEQUENCE)) {
+      String sql = null;
+      switch (hdbSequenceModel.getDBContentType()) {
+        case XS_CLASSIC: {
+          sql = getDatabaseSpecificSQL(connection, hdbSequenceName);
+          break;
         }
+        case OTHERS: {
+          ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+          if (dialect.getClass().equals(HanaSqlDialect.class)) {
+            sql = XSKConstants.XSK_HDBSEQUENCE_DROP + hdbSequenceModel.getRawContent();
+            break;
+          } else {
+            String errorMessage = String.format("Sequences are not supported for %s !", dialect.getDatabaseName(connection));
+            XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSequenceModel.getLocation(), "HDB Sequence");
+            throw new IllegalStateException(errorMessage);
+          }
+        }
+      }
+      try {
+        executeSql(sql, connection);
+      } catch (SQLException ex) {
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbSequenceModel.getLocation(), "HDB Sequence");
+      }
+    } else {
+      logger.warn(format("Sequence [{0}] does not exists during the drop process", hdbSequenceModel.getName()));
     }
+  }
 
-    private String getDatabaseSpecificSQL(Connection connection, String hdbSequenceName) {
-        return SqlFactory.getNative(connection).drop().sequence(hdbSequenceName).build();
-    }
+  private String getDatabaseSpecificSQL(Connection connection, String hdbSequenceName) {
+    return SqlFactory.getNative(connection).drop().sequence(hdbSequenceName).build();
+  }
 
 }

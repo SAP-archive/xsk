@@ -19,7 +19,6 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.table.AlterTableBuilder;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     String tableName = XSKHDBUtils.getTableName(entityModel);
     logger.info("Processing Foreign Keys to the Table: {}", tableName);
 //		CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
@@ -61,7 +60,11 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
         alterTableBuilder.add().foreignKey(name, foreignKeyModel.getColumns(), tableName, foreignKeyModel.getReferencedColumns());
 
         String sql = alterTableBuilder.build();
-        executeSql(sql, connection);
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", entityModel.getLocation(), "XSK Entity");
+        }
       } else {
         String reason = "Table does not exist - " + sourceTable;
         XSKCommonsUtils.logProcessorErrors(reason, "PROCESSOR", entityModel.getLocation(), "HDB Entity");

@@ -13,7 +13,6 @@ package com.sap.xsk.xsodata.ds.service;
 
 import com.sap.xsk.utils.XSKCommonsUtils;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
 import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataXTransformer;
 
@@ -21,7 +20,7 @@ public class XSKOData2ODataXTransformer {
 
   private OData2ODataXTransformer oData2ODataXTransformer = new OData2ODataXTransformer();
 
-  public String[] transform(ODataDefinition oDataDefinition) throws SQLException, ProblemsException {
+  public String[] transform(ODataDefinition oDataDefinition) throws SQLException {
     try {
       return oData2ODataXTransformer.transform(oDataDefinition);
     } catch (Exception e) {

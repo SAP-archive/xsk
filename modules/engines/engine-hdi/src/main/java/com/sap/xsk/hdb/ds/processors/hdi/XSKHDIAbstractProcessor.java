@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdi;
 
+import com.sap.xsk.utils.XSKCommonsUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +32,7 @@ public abstract class XSKHDIAbstractProcessor {
     } catch (SQLException e) {
       logger.error(sql);
       logger.error(e.getMessage(), e);
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", "-", "HDI");
     } finally {
       if (statement != null) {
         statement.close();

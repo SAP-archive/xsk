@@ -19,7 +19,6 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -29,27 +28,31 @@ import org.slf4j.LoggerFactory;
 
 public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSchemaModel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(HDBSchemaCreateProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(HDBSchemaCreateProcessor.class);
 
-    public HDBSchemaCreateProcessor() {
-    }
+  public HDBSchemaCreateProcessor() {
+  }
 
-    public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException, ProblemsException {
-        logger.info("Processing Create Schema: " + hdbSchema.getSchema());
+  public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
+    logger.info("Processing Create Schema: " + hdbSchema.getSchema());
 
-        ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-        if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
-          String errorMessage = String.format("%s does not support Schema", dialect.getDatabaseName(connection));
-          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
-          throw new IllegalStateException(errorMessage);
-        } else {
-            if (!SqlFactory.getNative(connection).exists(connection, hdbSchema.getSchema(), DatabaseArtifactTypes.SCHEMA)) {
-                String schemaName = XSKHDBUtils.escapeArtifactName(connection, hdbSchema.getSchema());
-                String sql = SqlFactory.getNative(connection).create().schema(schemaName).build();
-                executeSql(sql, connection);
-            } else {
-                logger.warn(format("Schema [{0}] already exists during the create process", hdbSchema.getSchema()));
-            }
+    ISqlDialect dialect = SqlFactory.deriveDialect(connection);
+    if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
+      String errorMessage = String.format("%s does not support Schema", dialect.getDatabaseName(connection));
+      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
+      throw new IllegalStateException(errorMessage);
+    } else {
+      if (!SqlFactory.getNative(connection).exists(connection, hdbSchema.getSchema(), DatabaseArtifactTypes.SCHEMA)) {
+        String schemaName = XSKHDBUtils.escapeArtifactName(connection, hdbSchema.getSchema());
+        String sql = SqlFactory.getNative(connection).create().schema(schemaName).build();
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
         }
+      } else {
+        logger.warn(format("Schema [{0}] already exists during the create process", hdbSchema.getSchema()));
+      }
     }
+  }
 }

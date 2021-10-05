@@ -14,7 +14,7 @@
  */
 
 var $ = {};
-//
+
 $.db = require('xsk/db/db');
 $.hdb = require('xsk/hdb/hdb');
 $.net = require('xsk/net/net');

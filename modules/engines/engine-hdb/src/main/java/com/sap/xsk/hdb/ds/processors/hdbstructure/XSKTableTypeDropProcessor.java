@@ -23,7 +23,6 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -38,7 +37,7 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
 
   @Override
   public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Drop Table Type: " + tableTypeModel.getName());
 
     //drop public synonym
@@ -58,7 +57,11 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
           .exists(connection, tableTypeModel.getSchema(), tableTypeModel.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {
         String tableTypeName = XSKHDBUtils.escapeArtifactName(connection, tableTypeModel.getName());
         String sql = SqlFactory.getNative(connection).drop().tableType(tableTypeName).build();
-        executeSql(sql, connection);
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", tableTypeModel.getLocation(), "HDB Table Type");
+        }
       } else {
         logger.warn(format("Table Type [{0}] does not exists during the drop process", tableTypeModel.getName()));
       }

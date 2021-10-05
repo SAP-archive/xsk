@@ -43,9 +43,7 @@ public class XSKJobFacade {
     XSKJobCoreService jobService = new XSKJobCoreService();
     XSKJobDefinition jobDefinition = jobService.getJob(name);
 
-    if (jobDefinition.getStartAt() != null && jobDefinition.getEndAt() != null) {
-      XSKSchedulerManager.scheduleJob(jobDefinition);
-    }
+    XSKSchedulerManager.scheduleJob(jobDefinition);
   }
 
   public static final void deactivate(String name) throws SchedulerException {

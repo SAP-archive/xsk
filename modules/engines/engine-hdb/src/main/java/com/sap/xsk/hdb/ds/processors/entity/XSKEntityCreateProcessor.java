@@ -11,23 +11,22 @@
  */
 package com.sap.xsk.hdb.ds.processors.entity;
 
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
-import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.utils.XSKHDBUtils;
 
 /**
  * The Entity Create Processor.
@@ -48,7 +47,7 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
     logger.info("Processing Create Table: {}", tableName);
     CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
     List<XSKDataStructureHDBTableColumnModel> columns = entityModel.getColumns();
-    List<String> primaryKeyColumns = new ArrayList<String>();
+    List<String> primaryKeyColumns = new ArrayList<>();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
       String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName());
       DataType type = DataType.valueOf(columnModel.getType());
@@ -114,7 +113,11 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
     }
 
     String sql = createTableBuilder.build();
-    executeSql(sql, connection);
+    try {
+      executeSql(sql, connection);
+    } catch (SQLException ex) {
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", entityModel.getLocation(), "XSK Entity");
+    }
   }
 
 }

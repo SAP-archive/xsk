@@ -27,7 +27,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.naming.OperationNotSupportedException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +74,7 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
 
   @Override
   public void createDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     if (entitiesModel != null) {
       for (XSKDataStructureHDBTableModel entityModel : entitiesModel.getTableModels()) {
         String tableName = XSKHDBUtils.escapeArtifactName(connection, entityModel.getName(), entityModel.getSchema());

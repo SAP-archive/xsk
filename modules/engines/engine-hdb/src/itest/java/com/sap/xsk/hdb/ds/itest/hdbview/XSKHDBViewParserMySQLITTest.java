@@ -27,7 +27,6 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
@@ -66,7 +65,7 @@ public class XSKHDBViewParserMySQLITTest {
 
   @Test
   public void testHDBViewCreate()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException, ProblemsException {
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
     try (Connection connection = datasource.getConnection();
         Statement stmt = connection.createStatement()) {
       stmt.executeUpdate("create table `test`.`acme.com.test.tables::MY_TABLE1`(Column1 integer,Column2 integer)");

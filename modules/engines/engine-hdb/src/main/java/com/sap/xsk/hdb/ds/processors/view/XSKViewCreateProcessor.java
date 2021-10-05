@@ -24,7 +24,6 @@ import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -49,7 +48,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Create View: " + viewModel.getName());
     String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), viewModel.getSchema());
 
@@ -72,7 +71,11 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
           }
         }
       }
-      executeSql(sql, connection);
+      try {
+        executeSql(sql, connection);
+      } catch (SQLException ex) {
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", viewModel.getLocation(), "HDB View");
+      }
     } else {
       logger.warn(format("View [{0}] already exists during the create process", viewModel.getName()));
     }

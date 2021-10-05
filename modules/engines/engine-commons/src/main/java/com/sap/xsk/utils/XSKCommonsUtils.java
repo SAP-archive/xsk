@@ -19,11 +19,15 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKCommonsUtils {
 
   private XSKCommonsUtils() {
   }
+
+  private static final Logger logger = LoggerFactory.getLogger(XSKCommonsUtils.class);
 
   /**
    * Extract the object base name from catalog name.
@@ -105,17 +109,22 @@ public class XSKCommonsUtils {
    */
   public static void logParserErrors(ArrayList<BaseParserErrorsModel> errorList, String errorType, String location,
       String artifactType)
-      throws XSKArtifactParserException, ProblemsException {
+      throws XSKArtifactParserException {
     if (errorList.size() > 0) {
       for (BaseParserErrorsModel errorModel : errorList) {
-        ProblemsFacade.save(location, errorType, Integer.toString(errorModel.getLine()),
-            Integer.toString(errorModel.getCharPositionInLine()),
-            errorModel.getOffendingSymbol(), errorModel.getMsg(), artifactType, "Parsers", "Publish Request", "XSK");
+        try {
+          ProblemsFacade.save(location, errorType, Integer.toString(errorModel.getLine()),
+              Integer.toString(errorModel.getCharPositionInLine()),
+              errorModel.getOffendingSymbol(), errorModel.getMsg(), artifactType, "Parsers", "Publish Request", "XSK");
 
-        //Left for development purposes until ProblemsFacade is properly tested
-//              logger.error(String.format(
-//                  "Wrong format of %s: [%s] during parsing.: %s",
-//                  artifactType, location, errorModel.getErrorMessage()));
+          //Left for development purposes until ProblemsFacade is properly tested
+//          logger.error(String.format(
+//              "Wrong format of %s: [%s] during parsing.: %s",
+//              artifactType, location, errorModel.getErrorMessage()));
+        } catch (ProblemsException e) {
+          logger.error("There is an issue with logging of the Errors.");
+          logger.error(e.getMessage());
+        }
       }
       throw new XSKArtifactParserException(String.format(
           "Wrong format of HDB %s: [%s] during parsing. Ensure you are using the correct format for the correct compatibility version.",
@@ -126,12 +135,13 @@ public class XSKCommonsUtils {
   /**
    * Use to log errors from artifact processing
    */
-  public static void logProcessorErrors(String errorMessage, String errorType, String location,
-      String artifactType)
-      throws ProblemsException {
-    ProblemsFacade.save(location, errorType, "",
-        "",
-        errorMessage, "", artifactType, "Processors", "Publish Request", "XSK");
+  public static void logProcessorErrors(String errorMessage, String errorType, String location, String artifactType) {
+    try {
+      ProblemsFacade.save(location, errorType, "", "", errorMessage, "", artifactType, "Processors", "Publish Request", "XSK");
+    } catch (ProblemsException e) {
+      logger.error("There is an issue with logging of the Errors.");
+      logger.error(e.getMessage());
+    }
   }
 
   public static String[] extractArtifactNameWhenSchemaIsProvided(String artifactName) {

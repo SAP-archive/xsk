@@ -19,7 +19,6 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -32,7 +31,7 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
   private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionCreateProcessor.class);
 
   public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
-      throws SQLException, ProblemsException {
+      throws SQLException {
     logger.info("Processing Create TableFunction: " + hdbTableFunction.getName());
 
     String funcNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbTableFunction.getName())[1];
@@ -46,7 +45,11 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
         throw new IllegalStateException(errorMessage);
       } else {
         String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getContent();
-        executeSql(sql, connection);
+        try {
+          executeSql(sql, connection);
+        } catch (SQLException ex) {
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbTableFunction.getLocation(), "HDB Table Function");
+        }
       }
     } else {
       logger.warn(format("TableFunction [{0}] already exists during the create process", hdbTableFunction.getName()));

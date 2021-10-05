@@ -14,7 +14,9 @@ package com.sap.xsk.engine;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.util.Map;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.eclipse.dirigible.engine.api.script.IScriptEngineExecutor;
 import org.eclipse.dirigible.engine.js.api.IJavascriptModuleSourceProvider;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
@@ -54,6 +56,32 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
       XSK_API_CONTENT = IOUtils.toString(XSKJavascriptEngineExecutor.class.getResourceAsStream("/META-INF/dirigible" + XSK_API_LOCATION), DEFAULT_CHARSET);
     }
     return XSK_API_CONTENT;
+  }
+
+  @Override
+  public Object executeServiceModule(String module, Map<Object, Object> executionContext) throws ScriptingException {
+    return super.executeServiceModule(module, executionContext);
+  }
+
+  @Override
+  public Object executeServiceCode(String code, Map<Object, Object> executionContext) throws ScriptingException {
+    return super.executeServiceCode(code, executionContext);
+  }
+
+  @Override
+  public Object evalCode(String code, Map<Object, Object> executionContext) throws ScriptingException {
+    return super.evalCode(code, executionContext);
+  }
+
+  @Override
+  public Object evalModule(String module, Map<Object, Object> executionContext) throws ScriptingException {
+    return super.evalModule(module, executionContext);
+  }
+
+  @Override
+  public Object executeService(String moduleOrCode, Map<Object, Object> executionContext, boolean isModule, boolean commonJSModule)
+      throws ScriptingException {
+    return super.executeService(moduleOrCode, executionContext, isModule, false);
   }
 
   // TODO: Handle XSK Job calls -> callXSKJobFunction(...)

@@ -19,7 +19,6 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -41,7 +40,7 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
    * @see <a href="https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d5412b75191014bc7ec7e133ce5bf5.html">CREATE SYNONYM Statement (Data Definition)</a>
    */
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException, ProblemsException {
+  public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) throws SQLException {
     synonymModel.getSynonymDefinitions().forEach((key, value) -> {
       logger.info("Processing Create Synonym: " + key);
 
@@ -59,12 +58,16 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
             throw new IllegalStateException(errorMessage);
           } else {
             String sql = SqlFactory.getNative(connection).create().synonym(synonymName).forSource(targetObjectName).build();
-            executeSql(sql, connection);
+            try {
+              executeSql(sql, connection);
+            } catch (SQLException ex) {
+              XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", synonymModel.getLocation(), "HDB Synonym");
+            }
           }
         } else {
           logger.warn(format("Synonym [{0}] already exists during the create process", value.getSynonymSchema() + "." + key));
         }
-      } catch (SQLException | ProblemsException exception) {
+      } catch (SQLException exception) {
         logger.error(exception.getMessage(), exception);
       }
     });

@@ -14,7 +14,6 @@ package com.sap.xsk.xsodata.ds.service;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import java.sql.SQLException;
 import java.util.List;
-import org.eclipse.dirigible.core.problems.exceptions.ProblemsException;
 import org.eclipse.dirigible.engine.odata2.definition.ODataDefinition;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerDefinition;
 import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataHTransformer;
@@ -23,7 +22,7 @@ public class XSKOData2ODataHTransformer {
 
   private OData2ODataHTransformer oData2ODataHTransformer = new OData2ODataHTransformer();
 
-  public List<ODataHandlerDefinition> transform(ODataDefinition oDataDefinition) throws SQLException, ProblemsException {
+  public List<ODataHandlerDefinition> transform(ODataDefinition oDataDefinition) throws SQLException {
     try {
       return oData2ODataHTransformer.transform(oDataDefinition);
     } catch (Exception e) {

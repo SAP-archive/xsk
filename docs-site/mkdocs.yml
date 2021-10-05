@@ -41,6 +41,8 @@ nav:
       - Kyma: 'setup/kyma.md'
       - Helm: 'setup/helm.md'
       - Environment Variables: 'setup/environment-variables.md'
+    - Cheat sheet: 
+      - Create delivery units: 'cheatsheet/dus.md'
     - Community: 'community.md'
     
 

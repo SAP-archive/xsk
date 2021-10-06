@@ -19,7 +19,7 @@ $.jobs
 ## Sample usage:
 
 
-=== "definition.xsjob"
+=== "Definition"
 
      Create a `definition.xsjob` file in a project named `xsjob_demo`:
 
@@ -38,7 +38,7 @@ $.jobs
      }
      ```
 
-=== "handler.xsjslib"
+=== "Handler"
 
      Create a `handler.xsjslib` file in the `xsjob_demo` project:
 
@@ -60,7 +60,7 @@ $.jobs
      }
      ```
 
-=== "trigger.xsjs"
+=== "Trigger"
 
      And now, to use the API, create a `.xsjs` file:
 

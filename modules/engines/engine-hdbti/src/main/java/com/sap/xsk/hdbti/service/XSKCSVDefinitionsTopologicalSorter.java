@@ -72,12 +72,16 @@ public class XSKCSVDefinitionsTopologicalSorter {
             while (foreignKeys.next()) {
               String pk_table = foreignKeys.getString("PKTABLE_NAME");
               XSKTableImportConfigurationDefinition dependencyConfigDefinition = mappedConfigurationDefinititions.get(pk_table);
-              if (!visitedConfigurationDefinitions.contains(mappedConfigurationDefinititions.get(pk_table))) {
+              if (!visitedConfigurationDefinitions.contains(dependencyConfigDefinition)) {
                 visitConfigurationDefinition(dependencyConfigDefinition, visitedConfigurationDefinitions, sortedConfigurationDefinitions,
                     metaData, mappedConfigurationDefinititions, cyclingDependencySet);
-                sortedConfigurationDefinitions.add(mappedConfigurationDefinititions.get(pk_table));
+                if(!sortedConfigurationDefinitions.contains(mappedConfigurationDefinititions.get(pk_table))) {
+                  sortedConfigurationDefinitions.add(mappedConfigurationDefinititions.get(pk_table));
+                }
               }
-              sortedConfigurationDefinitions.add(configurationDefinition);
+              if(!sortedConfigurationDefinitions.contains(configurationDefinition)){
+                sortedConfigurationDefinitions.add(configurationDefinition);
+              }
             }
           } catch (SQLException exception) {
             logger.error(String.format("An error occurred while trying to get metadata. %s", exception.getMessage()), exception);

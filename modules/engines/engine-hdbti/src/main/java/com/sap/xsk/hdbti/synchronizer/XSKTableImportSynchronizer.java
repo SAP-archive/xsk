@@ -30,6 +30,7 @@ import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
 import com.sap.xsk.hdbti.processors.XSKHDBTIProcessor;
+import com.sap.xsk.hdbti.service.XSKCSVDefinitionsTopologicalSorter;
 import com.sap.xsk.hdbti.service.XSKHDBTICoreService;
 import com.sap.xsk.hdbti.service.XSKTableImportParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
@@ -235,8 +236,12 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer {
   private void executeTableImport(XSKTableImportArtifact tableImportArtifact, Connection connection) {
     List<XSKTableImportConfigurationDefinition> configurationDefinitions = tableImportArtifact.getImportConfigurationDefinition();
 
+    List<XSKTableImportConfigurationDefinition> sortedConfigurationDefinitions = new ArrayList<>();
+
+    XSKCSVDefinitionsTopologicalSorter.sort(configurationDefinitions, sortedConfigurationDefinitions, connection);
+
     xskHdbtiCoreService.refreshCsvRelations(tableImportArtifact);
-    for (XSKTableImportConfigurationDefinition configurationDefinition : configurationDefinitions) {
+    for (XSKTableImportConfigurationDefinition configurationDefinition : sortedConfigurationDefinitions) {
       try {
         xskHdbtiProcessor.process(configurationDefinition, connection);
       } catch (XSKDataStructuresException | SQLException | XSKTableImportException | IOException e) {

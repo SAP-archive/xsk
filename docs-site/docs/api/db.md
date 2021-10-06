@@ -18,58 +18,46 @@ $.db
 ## Sample Usage
 
 ```javascript
-var db = $.db;
+let connection;
 
-var response = $.response;
+try {
+    connection = $.db.getConnection();
 
-  
+    // Make sure to create the table only once
+    try {
+        connection.prepareStatement("CREATE TABLE SAMPLE_USERS (NAME varchar(255), AGE int)").execute();
+    } catch (e) {
+        // Do nothing, as the table already exists
+    }
 
-var tableName =  "USERS";
+    let insertStatement = connection.prepareStatement("INSERT INTO SAMPLE_USERS (NAME, AGE) VALUES ('Bob', 20)");
+    insertStatement.executeUpdate();
+    insertStatement.close();
 
-  
+    insertStatement = connection.prepareStatement("INSERT INTO SAMPLE_USERS (NAME, AGE) VALUES ('Alice', 21)");
+    insertStatement.executeUpdate();
+    insertStatement.close();
 
-try  {
+    let selectStatement = connection.prepareStatement("SELECT * FROM SAMPLE_USERS");
+    selectStatement.execute();
 
-	var connection = db.getConnection();
+    let resultSet = selectStatement.getResultSet();
+    let names =  [];
 
-	// Make sure to create the table only once
-	connection.prepareStatement("CREATE TABLE "  + tableName +  " (NAME varchar(255), AGE int)").execute();
+    while (resultSet.next()) {
+        names.push(resultSet.getString(1));
+    }    
+    selectStatement.close();
+    resultSet.close();
 
-  
-
-	var insertStatement = connection.prepareStatement("INSERT INTO "  + tableName +
-		" (NAME, AGE) VALUES ('Bob', 20), ('Alice', 21);");
-
-	insertStatement.executeUpdate();
-	insertStatement.close();
-	
-	var selectStatement = connection.prepareStatement("SELECT * FROM "  + tableName);
-	selectStatement.execute();
-
-	var resultSet = selectStatement.getResultSet();
-
-	var names =  [];
-
-	while  (resultSet.next())  {
-		names.push(resultSet.getString(1));
-	}
-
-	response.setBody(names.toString());
-
-	selectStatement.close();
-
-	resultSet.close();
-
-}  catch(e)  {
-
-	connection.rollback();
-
-	response.setBody("Transaction was rolled back: "  + e.message);
-
-}  finally  {
-
-	connection.close();
-
+    $.response.setBody(names.toString());
+} catch(e) {
+    if (connection) {
+        connection.rollback();
+    }
+    $.response.setBody("Transaction was rolled back: "  + e.message);
+} finally {
+    connection.close();
 }
 ```
 

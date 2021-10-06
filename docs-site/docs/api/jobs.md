@@ -19,51 +19,63 @@ $.jobs
 ## Sample usage:
 
 
-Create a `definition.xsjob` file:
+=== "definition.xsjob"
 
-```javascript
-{
-    "description": "My Job configuration",
-        "action": "xsjob_demo:handler.xsjslib::writeInDB",
-        "schedules": [
-        {
-            "description": "Execute every 5 seconds",
-            "xscron": "* * * * * * */5",
-            "parameter": {
-            }
-        }
-    ]
-}
-```
+     Create a `definition.xsjob` file in a project named `xsjob_demo`:
 
-Create a `handler.xsjslib` file:
+     ```json
+     {
+         "description": "My Job configuration",
+             "action": "xsjob_demo:handler.xsjslib::writeInDB",
+             "schedules": [
+             {
+                 "description": "Execute every 5 seconds",
+                 "xscron": "* * * * * * */5",
+                 "parameter": {
+                 }
+             }
+         ]
+     }
+     ```
 
-```javascript
-function writeInDB() {
-    var connection;
-    try {
-        connection = $.db.getConnection();
+=== "handler.xsjslib"
 
-        var insertStatement = connection.prepareStatement("INSERT INTO XSJOB_DEMO (EXECUTED_AT) VALUES (CURRENT_TIMESTAMP)");
-        insertStatement.executeUpdate();
-        insertStatement.close();
-    } catch(e) {
-        connection.rollback();
-        console.log("Transaction was rolled back: " + e.message);
-    } finally {
-        connection.close();
-    }
-}
-```
+     Create a `handler.xsjslib` file in the `xsjob_demo` project:
 
-And now, to use the API, create a `.xsjs` file:
-```javascript
-var job = new $.jobs.Job({ uri: "xsjob_demo/definition.xsjob" });
+     ```javascript
+     function writeInDB() {
+         let connection;
+         try {
+             connection = $.db.getConnection();
 
-// execute the job for 60 seconds, starting from now
-job.configure({ status: true, start_time: new Date(), end_time: new Date(Date.now() + 60000) });
-```
+             let insertStatement = connection.prepareStatement("INSERT INTO XSJOB_DEMO (EXECUTED_AT) VALUES (CURRENT_TIMESTAMP)");
+             insertStatement.executeUpdate();
+             insertStatement.close();
+         } catch(e) {
+             connection.rollback();
+             console.log("Transaction was rolled back: " + e.message);
+         } finally {
+             connection.close();
+         }
+     }
+     ```
 
+=== "trigger.xsjs"
+
+     And now, to use the API, create a `.xsjs` file:
+
+     ```javascript
+     let job = new $.jobs.Job({
+         uri: "xsjob_demo/definition.xsjob"
+     });
+
+     // execute the job for 60 seconds, starting from now
+     job.configure({
+         status: true,
+         start_time: new Date(),
+         end_time: new Date(Date.now() + 60000)
+     });
+     ```
 
 ## Functions
 

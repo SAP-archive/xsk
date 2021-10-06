@@ -17,7 +17,6 @@ import java.util.Objects;
 
 public class XSKTableImportConfigurationDefinition {
 
-  private Long id;
   private String table;
   private String schema;
   private String file;
@@ -28,14 +27,6 @@ public class XSKTableImportConfigurationDefinition {
   private String delimEnclosing;
   private Boolean distinguishEmptyFromNull = Boolean.TRUE;
   private Map<String, ArrayList<String>> keysAsMap;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public String getTable() {
     return table;
@@ -126,11 +117,11 @@ public class XSKTableImportConfigurationDefinition {
       return false;
     }
     XSKTableImportConfigurationDefinition that = (XSKTableImportConfigurationDefinition) o;
-    return id.equals(that.id) && table.equals(that.table) && schema.equals(that.schema) && file.equals(that.file);
+    return table.equals(that.table) && schema.equals(that.schema) && file.equals(that.file);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, table, schema, file);
+    return Objects.hash(table, schema, file);
   }
 }

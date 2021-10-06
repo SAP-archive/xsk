@@ -62,7 +62,7 @@ $.jobs
 
 === "Trigger"
 
-     And now, to use the API, create a `.xsjs` file:
+     And now, to use the API, create a `trigger.xsjs` file:
 
      ```javascript
      let job = new $.jobs.Job({

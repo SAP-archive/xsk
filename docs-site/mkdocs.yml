@@ -16,7 +16,8 @@ nav:
       - xsjs: 'artifacts/xsjs.md'
       - xsjslib: 'artifacts/xsjs.md'
       - xsodata: 'artifacts/xsodata.md'
-    - API: 
+    - API:
+      - $.db: 'api/db.md'
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'
       - $.net.Destination: 'api/net.Destination.md'

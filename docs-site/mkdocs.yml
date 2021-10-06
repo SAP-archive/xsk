@@ -20,6 +20,7 @@ nav:
       - $.db: 'api/db.md'
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'
+      - $.jobs: 'api/jobs.md'
       - $.net.Destination: 'api/net.Destination.md'
       - $.net.Mail.Part: 'api/net.Mail.Part.md'
       - $.net.Mail: 'api/net.Mail.md'

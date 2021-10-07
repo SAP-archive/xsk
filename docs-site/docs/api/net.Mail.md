@@ -69,7 +69,7 @@ new $.net.Mail(MailObject)
 
 | Classes      | Description                                           |
 |--------------|-------------------------------------------------------|
-| **[Part](../$.net.Mail.Part)** | Class for constructing email parts. | 
+| **[Part](../net.Mail.Part)** | Class for constructing email parts. | 
 
 ## Properties
 

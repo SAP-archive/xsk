@@ -90,6 +90,6 @@ $.web
 |--------------------------|------------------------------|---------|
 | **setBody(body, index)** | Sets the body of the entity. | _`-`_   |
 
-### [`$.web.WebRequest`]($.request)
+### [`$.web.WebRequest`](../request)
 
-### [`$.web.WebResponse`]($.response)
+### [`$.web.WebResponse`](../response)

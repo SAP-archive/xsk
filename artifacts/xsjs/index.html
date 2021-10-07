@@ -437,6 +437,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -986,6 +993,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1009,134 +1023,130 @@
 <p>SAP HANA XS Javascript (XSJS) is a programming language that can be used by application developers to create server-side business logic as <code>*.xsjs</code> files. You can import libraries in XSJS services as separate files with the <code>*.xsjslib</code> extension.</p>
 <h2 id="reference">Reference</h2>
 <hr />
-<ul>
-<li>Additional information on SAP Help Portal</li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">SAP Help Portal</p>
 <p>For more information, see <a href="https://help.sap.com/viewer/d89d4595fae647eabc14002c0340a999/2.0.04/en-US/3459a57b68f440448350aea1bec1d4f8.html">Getting Started with XS JavaScript</a>.</p>
-<ul>
-<li>Sample XSJS service (<code>*.xsjs</code>):</li>
-</ul>
-<div class="highlight"><pre><span></span><code>var ProductsService = $.import(&quot;products.xsjs&quot;, &quot;ProductsLib&quot;).Products;
-var connection = $.hdb.getConnection({
-    treatDateAsUTC: true
-});
+</div>
+<h2 id="sample">Sample</h2>
+<hr />
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Sample XSJS service (<code>*.xsjs</code>)</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">ProductsService</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="k">import</span><span class="p">(</span><span class="s2">&quot;products.xsjs&quot;</span><span class="p">,</span> <span class="s2">&quot;ProductsLib&quot;</span><span class="p">).</span><span class="nx">Products</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">connection</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">({</span>
+    <span class="nx">treatDateAsUTC</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
 
-function error(msg, statusCode) {
-    $.response.status = statusCode;
-    $.response.contentType = &quot;text/plain&quot;;
-    $.response.setBody(msg);
-}
+<span class="kd">function</span> <span class="nx">error</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">statusCode</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">statusCode</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+<span class="p">}</span>
 
-/**
- * respond with a result with content type &#39;application/json&#39; with the status code &#39;OK&#39; (200) and specified message
- */
-function positiveResult(oResponse) {
-    $.response.status = $.net.http.OK;
-    $.response.contentType = &quot;application/json&quot;;
-    var sResponse = JSON.stringify(oResponse);
-    $.response.setBody(sResponse);
-}
+<span class="cm">/**</span>
+<span class="cm"> * respond with a result with content type &#39;application/json&#39; with the status code &#39;OK&#39; (200) and specified message</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">positiveResult</span><span class="p">(</span><span class="nx">oResponse</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">OK</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s2">&quot;application/json&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">sResponse</span> <span class="o">=</span> <span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">oResponse</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">sResponse</span><span class="p">);</span>
+<span class="p">}</span>
 
-/**
- * Handle the post-request.
- *
- * See above for the expected format of a request-entity
- */
-function doPost() {
+<span class="cm">/**</span>
+<span class="cm"> * Handle the post-request.</span>
+<span class="cm"> *</span>
+<span class="cm"> * See above for the expected format of a request-entity</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">doPost</span><span class="p">()</span> <span class="p">{</span>
 
-    var request = JSON.parse($.request.body.asString());
-    var productsService = new ProductsService(connection, &quot;DBADMIN&quot;);
-    var response = productsService.handlePostRequest(request);
-    connection.close();
-    positiveResult(response);
-}
+    <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">asString</span><span class="p">());</span>
+    <span class="kd">var</span> <span class="nx">productsService</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">ProductsService</span><span class="p">(</span><span class="nx">connection</span><span class="p">,</span> <span class="s2">&quot;DBADMIN&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">productsService</span><span class="p">.</span><span class="nx">handlePostRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
+    <span class="nx">connection</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+    <span class="nx">positiveResult</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">}</span>
 
-function doGet() {
+<span class="kd">function</span> <span class="nx">doGet</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">response</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">productsService</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">ProductsService</span><span class="p">(</span><span class="nx">connection</span><span class="p">,</span> <span class="s2">&quot;DBADMIN&quot;</span><span class="p">);</span>
+    <span class="nx">response</span> <span class="o">=</span> <span class="nx">productsService</span><span class="p">.</span><span class="nx">handleGetRequest</span><span class="p">();</span>
+    <span class="nx">connection</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+    <span class="nx">positiveResult</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">}</span>
 
-    var response;
-    var productsService = new ProductsService(connection, &quot;DBADMIN&quot;);
-    response = productsService.handleGetRequest();
-    connection.close();
-    positiveResult(response);
-}
+<span class="p">(</span><span class="kd">function</span> <span class="nx">doService</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span><span class="p">;</span>
 
-(function doService() {
-    var method = $.request.method;
-
-    if (method === $.net.http.GET) {
-        doGet();
-    } else if (method === $.net.http.POST) {
-        doPost();
-    } else {
-        $.response.status = $.net.http.BAD_REQUEST;
-    }
-}());
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method</span> <span class="o">===</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">GET</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">doGet</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">method</span> <span class="o">===</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">POST</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">doPost</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">BAD_REQUEST</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}());</span>
 </code></pre></div>
-<ul>
-<li>Sample XSJS library (<code>*.xsjslib</code>):</li>
-</ul>
-<div class="highlight"><pre><span></span><code>var hdbConnection = $.hdb.getConnection({
-    treatDateAsUTC: true
-});
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Sample XSJS library (<code>*.xsjslib</code>)</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">hdbConnection</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">({</span>
+    <span class="nx">treatDateAsUTC</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
 
-var schema = &quot;DBADMIN&quot;;
-var PRODUCTS_TABLE = &quot;products.db::Products.Orders&quot;;
-var ITEMS_TABLE = &quot;products.db::Products.Item&quot;;
+<span class="kd">var</span> <span class="nx">schema</span> <span class="o">=</span> <span class="s2">&quot;DBADMIN&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">PRODUCTS_TABLE</span> <span class="o">=</span> <span class="s2">&quot;products.db::Products.Orders&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">ITEMS_TABLE</span> <span class="o">=</span> <span class="s2">&quot;products.db::Products.Item&quot;</span><span class="p">;</span>
 
-function Products(connection, schema) {
-    connection = connection || $.hdb.getConnection({
-        treatDateAsUTC: true
-    });
-    schema = schema || &quot;DBADMIN&quot;;
+<span class="kd">function</span> <span class="nx">Products</span><span class="p">(</span><span class="nx">connection</span><span class="p">,</span> <span class="nx">schema</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">connection</span> <span class="o">=</span> <span class="nx">connection</span> <span class="o">||</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">({</span>
+        <span class="nx">treatDateAsUTC</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">});</span>
+    <span class="nx">schema</span> <span class="o">=</span> <span class="nx">schema</span> <span class="o">||</span> <span class="s2">&quot;DBADMIN&quot;</span><span class="p">;</span>
 
-    /** Create a new UUID */
-    function createUUID() {
-        return $.util.createUuid();
-    }
+    <span class="cm">/** Create a new UUID */</span>
+    <span class="kd">function</span> <span class="nx">createUUID</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">createUuid</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    this.handlePostRequest = function(oData) {
-        try {
-            connection.setAutoCommit(0);
-            var OrderId = createUUID();
-            var oRs = connection.executeUpdate(&#39;INSERT INTO &quot;&#39; + schema + &#39;&quot;.&quot;&#39; + PRODUCTS_TABLE +
-                &#39;&quot; (&quot;Id&quot;, &quot;CustomerName&quot;, &quot;CustomerSurname&quot;, &quot;Status&quot;, &quot;CreatedAt&quot;, &quot;CreatedBy&quot;, &quot;Description&quot;, &quot;Address&quot;, &quot;Phone&quot;, &quot;Email&quot;) values (?,?,?,?, CURRENT_UTCTIMESTAMP, SESSION_CONTEXT(\&#39;APPLICATIONUSER\&#39;), ?, ?, ?, ?)&#39;,
-                OrderId, oData.CustomerName, oData.CustomerSurname, oData.Status, oData.Description, oData.Address, oData.Phone, oData.Email);
-            connection.commit();
+    <span class="k">this</span><span class="p">.</span><span class="nx">handlePostRequest</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oData</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="nx">connection</span><span class="p">.</span><span class="nx">setAutoCommit</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">OrderId</span> <span class="o">=</span> <span class="nx">createUUID</span><span class="p">();</span>
+            <span class="kd">var</span> <span class="nx">oRs</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">(</span><span class="s1">&#39;INSERT INTO &quot;&#39;</span> <span class="o">+</span> <span class="nx">schema</span> <span class="o">+</span> <span class="s1">&#39;&quot;.&quot;&#39;</span> <span class="o">+</span> <span class="nx">PRODUCTS_TABLE</span> <span class="o">+</span>
+                <span class="s1">&#39;&quot; (&quot;Id&quot;, &quot;CustomerName&quot;, &quot;CustomerSurname&quot;, &quot;Status&quot;, &quot;CreatedAt&quot;, &quot;CreatedBy&quot;, &quot;Description&quot;, &quot;Address&quot;, &quot;Phone&quot;, &quot;Email&quot;) values (?,?,?,?, CURRENT_UTCTIMESTAMP, SESSION_CONTEXT(\&#39;APPLICATIONUSER\&#39;), ?, ?, ?, ?)&#39;</span><span class="p">,</span>
+                <span class="nx">OrderId</span><span class="p">,</span> <span class="nx">oData</span><span class="p">.</span><span class="nx">CustomerName</span><span class="p">,</span> <span class="nx">oData</span><span class="p">.</span><span class="nx">CustomerSurname</span><span class="p">,</span> <span class="nx">oData</span><span class="p">.</span><span class="nx">Status</span><span class="p">,</span> <span class="nx">oData</span><span class="p">.</span><span class="nx">Description</span><span class="p">,</span> <span class="nx">oData</span><span class="p">.</span><span class="nx">Address</span><span class="p">,</span> <span class="nx">oData</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span> <span class="nx">oData</span><span class="p">.</span><span class="nx">Email</span><span class="p">);</span>
+                <span class="nx">connection</span><span class="p">.</span><span class="nx">commit</span><span class="p">();</span>
 
-            return oRs;
-        } catch (e) {
-            connection.rollback();
-        }
-    };
+            <span class="k">return</span> <span class="nx">oRs</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">connection</span><span class="p">.</span><span class="nx">rollback</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
 
-    this.handleGetRequest = function() {
-        try {
+    <span class="k">this</span><span class="p">.</span><span class="nx">handleGetRequest</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">executeQuery</span><span class="p">(</span><span class="s1">&#39;select * from &quot;&#39;</span> <span class="o">+</span> <span class="nx">schema</span> <span class="o">+</span> <span class="s1">&#39;&quot;.&quot;&#39;</span> <span class="o">+</span> <span class="nx">PRODUCTS_TABLE</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
+            <span class="nx">connection</span><span class="p">.</span><span class="nx">commit</span><span class="p">();</span>
+            <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">connection</span><span class="p">.</span><span class="nx">rollback</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
 
-            var res = connection.executeQuery(&#39;select * from &quot;&#39; + schema + &#39;&quot;.&quot;&#39; + PRODUCTS_TABLE + &#39;&quot;&#39;);
-            connection.commit();
-            return res;
-        } catch (e) {
-            connection.rollback();
-        }
-    };
+<span class="kd">function</span> <span class="nx">deleteOrder</span><span class="p">(</span><span class="nx">paramObject</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">oConnection</span> <span class="o">=</span> <span class="nx">paramObject</span><span class="p">.</span><span class="nx">connection</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">sQuery</span> <span class="o">=</span> <span class="s1">&#39;delete from &quot;DBADMIN&quot;.&quot;products.db::Products.Orders&quot; where &quot;Id&quot; = (select &quot;Id&quot; from &quot;&#39;</span> <span class="o">+</span> <span class="nx">paramObject</span><span class="p">.</span><span class="nx">beforeTableName</span> <span class="o">+</span> <span class="s1">&#39;&quot;)&#39;</span><span class="p">;</span>
 
-}
-
-function deleteOrder(paramObject) {
-    try {
-        var oConnection = paramObject.connection;
-        var sQuery = &#39;delete from &quot;DBADMIN&quot;.&quot;products.db::Products.Orders&quot; where &quot;Id&quot; = (select &quot;Id&quot; from &quot;&#39; + paramObject.beforeTableName +
-            &#39;&quot;)&#39;;
-
-        var pstmt = oConnection.prepareStatement(sQuery);
-        pstmt.executeUpdate();
-        pstmt.close();
-    } catch (e) {
-        oConnection.rollback();
-    }
-
-}
+        <span class="kd">var</span> <span class="nx">pstmt</span> <span class="o">=</span> <span class="nx">oConnection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="nx">sQuery</span><span class="p">);</span>
+        <span class="nx">pstmt</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">();</span>
+        <span class="nx">pstmt</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">oConnection</span><span class="p">.</span><span class="nx">rollback</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
+</div>
+</div>
                 
                   
                 

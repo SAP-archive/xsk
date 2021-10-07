@@ -26,8 +26,8 @@ let net = $.net;
 // Create a mail Object
 let mail = new net.Mail({
    sender: {address: "sender@sap.com"},
-   to: [{ name: "John Doe", address: "john.doe@sap.com", nameEncoding: "US-ASCII"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
-   cc: [{address:"cc1@sap.com"}, {address: "cc2@sap.com"}],
+   to: [{ name: "John Doe", address: "john.doe@sap.com"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
+   cc: [{address: "cc1@sap.com"}, {address: "cc2@sap.com"}],
    bcc: [{ name: "Jonnie Doe", address: "jonnie.doe@sap.com"}],
    subject: "subject",
    subjectEncoding: "UTF-8",
@@ -39,6 +39,7 @@ let mail = new net.Mail({
    })]
 });
 
+// Set mail server configuration.
 let mailConfig = {
     "mail.user": "test@gmail.com",
     "mail.password": "test",
@@ -52,11 +53,10 @@ let smtp = new net.SMTPConnection(mailConfig);
 // Send the mail Object with SMPT
 smtp.send(mail);
 
-// Send the mail Object from the built-in send method. The send method is void in xsk. The response is mocked.
+// Send the mail Object from the built-in mail send method.
 let returnValue = mail.send(mailConfig);
 let response_msg = "MessageId = " + returnValue.messageId + ", final reply = " + returnValue.finalReply;
 
-// The result is mocked to prevent errors
 $.response.setBody(response_msg);
 ```
 

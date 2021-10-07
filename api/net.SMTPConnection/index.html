@@ -1068,12 +1068,17 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires a running mail server. If <code>mailConfig</code> is not set the api defaults to a local mail server.
+For more information please take a look <a href="https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/">here</a>.</p>
+</div>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">net</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span>
 
-<span class="c1">//create email from JS Object and send</span>
+<span class="c1">// Create email from JS Object.</span>
 <span class="kd">var</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">({</span>
    <span class="nx">sender</span><span class="o">:</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;sender@sap.com&quot;</span><span class="p">},</span>
-   <span class="nx">to</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">,</span> <span class="nx">nameEncoding</span><span class="o">:</span> <span class="s2">&quot;US-ASCII&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jane Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jane.doe@sap.com&quot;</span><span class="p">}],</span>
+   <span class="nx">to</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jane Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jane.doe@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">cc</span><span class="o">:</span> <span class="p">[{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">bcc</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jonnie Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jonnie.doe@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">subject</span><span class="o">:</span> <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
@@ -1086,6 +1091,7 @@
    <span class="p">})]</span>
 <span class="p">});</span>
 
+<span class="c1">// Set mail server configurations.</span>
 <span class="kd">var</span> <span class="nx">mailConfig</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;mail.user&quot;</span><span class="o">:</span> <span class="s2">&quot;test@gmail.com&quot;</span><span class="p">,</span>
     <span class="s2">&quot;mail.password&quot;</span><span class="o">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>

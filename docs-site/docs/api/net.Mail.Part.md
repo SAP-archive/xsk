@@ -107,3 +107,5 @@ new $.net.Mail.Part(PartObject)
 | **fileNameEncoding**       | Property used for initializing "fileNameEncoding" property of the attachment and inline $.net.Mail.Part object. It is the encoding of the filename. If this property is not set, the default value is "UTF-8". | _`string`_             |
 | **text**                   | Property used for initializing "text" property of the text $.net.Mail.Part object. | _`string`_             |
 | **type**                   | Property used for initializing "type" property of the $.net.Mail.Part object. If this property is not set, the part will not be set. It should be one of the following: $.net.Mail.Part.TYPE_TEXT $.net.Mail.Part.TYPE_ATTACHMENT $.net.Mail.Part.TYPE_INLINE | _`string`_             |
+
+See common content types [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types).

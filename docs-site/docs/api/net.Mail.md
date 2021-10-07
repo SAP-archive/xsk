@@ -15,6 +15,10 @@ $.net.Mail
 
 ## Sample Usage 
 
+!!! Note
+	Requires a running mail server. If `mailConfig` is not set the api defaults to a local mail server.
+	For more information please take a look [here](https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/).
+
 ```javascript
 //create empty $.net.Mail
 var mail = new $.net.Mail();
@@ -23,11 +27,11 @@ var mail = new $.net.Mail();
 ```javascript
 let net = $.net;
 
-//create email from JS Object and send
+// Create email from JS Object.
 let mail = new $.net.Mail({
     sender: {address: "sender@sap.com"},
-    to: [{ name: "John Doe", address: "john.doe@sap.com", nameEncoding: "US-ASCII"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
-    cc: ["cc1@sap.com", {address: "cc2@sap.com"}],
+    to: [{ name: "John Doe", address: "john.doe@sap.com"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
+    cc: [{address: "cc1@sap.com"}, {address: "cc2@sap.com"}],
     bcc: [{ name: "Jonnie Doe", address: "jonnie.doe@sap.com"}],
     subject: "subject",
     subjectEncoding: "UTF-8",
@@ -39,36 +43,18 @@ let mail = new $.net.Mail({
     })]
 });
 
-//return value is mocked as send is now a void method
-let returnValue = mail.send();
-let response_msg = "MessageId = " + returnValue.messageId + ", final reply = " + returnValue.finalReply;
+// Set mail server configurations.
+let mailConfig = {
+    "mail.user": "test@gmail.com",
+    "mail.password": "test",
+    "mail.transport.protocol": "smtps",
+    "mail.smtps.host": "smtp.gmail.com",
+    "mail.smtps.port": "465",
+    "mail.smtps.auth": "true"
+};
 
-$.response.setBody(response_msg);
-```
-
-```javascript
-let net = $.net;
-
-var mail = new net.Mail();
-mail.subject = "About what the email is."
-mail.subjectEncoding = "UTF-8";
-mail.sender = {address: "from@sap.com"};
-mail.to.push({name: "John Doe", address: "john.doe@sap.com", nameEncoding: "US-ASCII"});
-mail.cc = [{name: "Cc1", address: "cc1@recepient.com"}, {address: "cc2@recepient.com"}];
-mail.parts.push(new net.Mail.Part({type: net.Mail.Part.TYPE_TEXT, text: 'Text'}));
-
-var returnValue;
-var response = "";
-
-try {
-    //the return value is mocked as send is now a void method
-    returnValue = mail.send();
-} catch(error) {
-    response = "Error occurred:" + error.message;
-}
-response_msg = "MessageId = " + returnValue.messageId + ", final reply = " + returnValue.finalReply;
-
-$.response.setBody(response_msg);
+let returnValue = mail.send(mailConfig);
+$.response.setBody(JSON.stringify(response_msg));
 ```
 
 ## Constructors
@@ -108,4 +94,23 @@ new $.net.Mail(MailObject)
 
 | Function     | Description                                                                                                                |  Returns     |
 |--------------|----------------------------------------------------------------------------------------------------------------------------| -------------|
-| **send()**   | Void method that returns a mocked object containing two properties: 'messageId' and 'finalReply' for compatibility reasons.|  _`object`_  |
+| **send(mailConfig)**   | method that returns an object containing two properties: 'messageId' and 'finalReply'.|  _`object`_  |
+
+## mailConfig Properties
+
+Property     | Description | Type
+------------ | ----------- | --------
+**mail.user**   | The mailbox user | *string*
+**mail.password**   | The mailbox password | *string*
+**mail.transport.protocol**   | (optional) The mail transport protocol, default is *smtps* | *string*
+**mail.smtps.host**   | The mail SMPTPS host | *string*
+**mail.smtps.port**   | The mail SMPTPS port | *number as string*
+**mail.smtps.auth**   | Enable/Disable mail SMPTPS authentication | *boolean as string*
+**mail.smtp.host**   | The mail SMPTP host | *string*
+**mail.smtp.port**   | The mail SMPTP port | *number as string*
+**mail.smtp.auth**   | Enable/Disable mail SMPTP authentication | *boolean as string*
+
+Addition mail client options can be found here:
+- [SMTP/SMTPS](https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html)
+- [IMAP](https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html)
+- [POP3](https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html)

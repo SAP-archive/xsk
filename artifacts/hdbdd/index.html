@@ -430,6 +430,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1056,6 +1063,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1102,48 +1116,46 @@ CDS documents have the file suffix .hdbdd. Each CDS document must contain the fo
 <p>If you want to define multiple CDS artifacts within a single CDS document (for example, multiple types, structured types, and entities), the top-level artifact must be a <strong>context</strong>. A CDS document can contain multiple contexts and any number and type of artifacts. A context can also contain nested sub-contexts, each of which can also contain any number and type of artifacts.</p>
 <h4>Example</h4>
 
-<div class="highlight"><pre><span></span><code>namespace com.acme.myapp1;
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">com.acme.myapp</span><span class="mi">1</span><span class="err">;</span>
 
-@Schema: &#39;MySchema&#39;
+<span class="err">@Schema</span><span class="p">:</span> <span class="err">&#39;MySchema&#39;</span>
 
-context MyContext {
+<span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">MyCo</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="p">{</span>
 
-// Nested contexts
+    <span class="err">//</span> <span class="err">Nes</span><span class="kc">te</span><span class="err">d</span> <span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">ts</span>
 
-   context InnerCtx {
+    <span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">I</span><span class="kc">nner</span><span class="err">C</span><span class="kc">t</span><span class="err">x</span> <span class="p">{</span>
 
-      Entity MyEntity {
-         …
-      };
+        <span class="err">E</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">MyE</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="p">{</span>
+            <span class="err">…</span>
+        <span class="p">}</span><span class="err">;</span>
 
-      Type CtxType {
-        a : Integer;
-        b : String(59);
-      };
-
-   }; 
- };
-};
+        <span class="err">Type</span> <span class="err">C</span><span class="kc">t</span><span class="err">xType</span> <span class="p">{</span>
+            <span class="err">a</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+            <span class="err">b</span> <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">59</span><span class="err">);</span>
+        <span class="p">}</span><span class="err">;</span>
+    <span class="p">}</span><span class="err">;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <h3>Entity</h3>
 
 <p>In the SAP HANA database, as in other relational databases, a CDS entity is a table with a set of data elements. Each element will correspond to a table column on synchronizing the <strong>.hdbdd</strong> file.</p>
 <h4>Example</h4>
 
-<div class="highlight"><pre><span></span><code>entity MyTable {
-       key Author    : String(100);
-       key BookTitle : String(100);
-           ISBN      : Integer not null;
-           Publisher : String(100);
-       elem2     : String(20) default &#39;John Doe&#39;;      
-           elem3     : String(20) default &#39;John Doe&#39; null; 
-};
+<div class="highlight"><pre><span></span><code><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">MyTable</span> <span class="p">{</span>
+    <span class="err">key</span> <span class="err">Au</span><span class="kc">t</span><span class="err">hor</span>    <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+    <span class="err">key</span> <span class="err">BookTi</span><span class="kc">tle</span> <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+    <span class="err">ISBN</span>      <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger</span> <span class="kc">n</span><span class="err">o</span><span class="kc">t</span> <span class="kc">null</span><span class="err">;</span>
+    <span class="err">Publisher</span> <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+    <span class="err">elem</span><span class="mi">2</span>     <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">20</span><span class="err">)</span> <span class="err">de</span><span class="kc">fault</span> <span class="err">&#39;Joh</span><span class="kc">n</span> <span class="err">Doe&#39;;</span>      
+    <span class="err">elem</span><span class="mi">3</span>     <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">20</span><span class="err">)</span> <span class="err">de</span><span class="kc">fault</span> <span class="err">&#39;Joh</span><span class="kc">n</span> <span class="err">Doe&#39;</span> <span class="kc">null</span><span class="err">;</span> 
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <h4>Element</h4>
 
-<div class="highlight"><pre><span></span><code>name: String(20);
-age: Integer;
-address: hana.VARCHAR;
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">me</span><span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">20</span><span class="err">);</span>
+<span class="err">age</span><span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+<span class="err">address</span><span class="p">:</span> <span class="err">ha</span><span class="kc">na</span><span class="err">.VARCHAR;</span>
 </code></pre></div>
 <p>Each element(field) of the entity definition has to contain at least a name and a type.</p>
 <p>You can expand the definition of an entity element beyond the element's name and type by using element modifiers. For example, you can specify if an entity element is the primary key or part of the primary key. The following entity element modifiers are available:</p>
@@ -1160,60 +1172,61 @@ address: hana.VARCHAR;
 Defines the default value for an entity element in the event that no value is provided during an INSERT operation. The syntax for the literals is defined in the primitive data-type specification.</li>
 </ul>
 <p>Example of more literals wich could be used as default values for their corresponding scalar type.
-<div class="highlight"><pre><span></span><code>entity WithDefaults
-{
-  key id :  Integer;
-  field1 :  Integer       default -42;
-  field2 :  Integer64     default 9223372036854775807;
-  field3 :  Decimal(5, 3) default 12.345;
-  field4 :  BinaryFloat   default 123.456e-1;
-  field5 :  LocalDate     default date&#39;2013-04-29&#39;;
-  field6 :  LocalTime     default time&#39;17:04:03&#39;;
-  field7 :  UTCDateTime   default timestamp&#39;2013-05-01 01:02:03&#39;;
-  field8 :  UTCTimestamp  default timestamp&#39;2013-05-01 01:02:03&#39;;
-  field9 :  Binary(32)    default x&#39;0102030405060708090a0b0c0d0e0[...]&#39;;
-  field10 : String(10)    default &#39;foo&#39;;
-};
+<div class="highlight"><pre><span></span><code><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">Wi</span><span class="kc">t</span><span class="err">hDe</span><span class="kc">faults</span>
+<span class="p">{</span>
+    <span class="err">key</span> <span class="err">id</span> <span class="p">:</span>  <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">1</span> <span class="p">:</span>  <span class="err">I</span><span class="kc">nte</span><span class="err">ger</span>       <span class="err">de</span><span class="kc">fault</span> <span class="mi">-42</span><span class="err">;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">2</span> <span class="p">:</span>  <span class="err">I</span><span class="kc">nte</span><span class="err">ger</span><span class="mi">64</span>     <span class="err">de</span><span class="kc">fault</span> <span class="mi">9223372036854775807</span><span class="err">;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">3</span> <span class="p">:</span>  <span class="err">Decimal(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="err">)</span> <span class="err">de</span><span class="kc">fault</span> <span class="mf">12.345</span><span class="err">;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">4</span> <span class="p">:</span>  <span class="err">Bi</span><span class="kc">nar</span><span class="err">yFloa</span><span class="kc">t</span>   <span class="err">de</span><span class="kc">fault</span> <span class="mf">123.456e-1</span><span class="err">;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">5</span> <span class="p">:</span>  <span class="err">LocalDa</span><span class="kc">te</span>     <span class="err">de</span><span class="kc">fault</span> <span class="err">da</span><span class="kc">te</span><span class="err">&#39;</span><span class="mi">2013-04-29</span><span class="err">&#39;;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">6</span> <span class="p">:</span>  <span class="err">LocalTime</span>     <span class="err">de</span><span class="kc">fault</span> <span class="kc">t</span><span class="err">ime&#39;</span><span class="mi">17</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mi">03</span><span class="err">&#39;;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">7</span> <span class="p">:</span>  <span class="err">UTCDa</span><span class="kc">te</span><span class="err">Time</span>   <span class="err">de</span><span class="kc">fault</span> <span class="kc">t</span><span class="err">imes</span><span class="kc">ta</span><span class="err">mp&#39;</span><span class="mi">2013-05-01</span> <span class="mi">01</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">03</span><span class="err">&#39;;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">8</span> <span class="p">:</span>  <span class="err">UTCTimes</span><span class="kc">ta</span><span class="err">mp</span>  <span class="err">de</span><span class="kc">fault</span> <span class="kc">t</span><span class="err">imes</span><span class="kc">ta</span><span class="err">mp&#39;</span><span class="mi">2013-05-01</span> <span class="mi">01</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">03</span><span class="err">&#39;;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">9</span> <span class="p">:</span>  <span class="err">Bi</span><span class="kc">nar</span><span class="err">y(</span><span class="mi">32</span><span class="err">)</span>    <span class="err">de</span><span class="kc">fault</span> <span class="err">x&#39;</span><span class="mi">0102030405060708090</span><span class="err">a</span><span class="mi">0</span><span class="err">b</span><span class="mi">0</span><span class="err">c</span><span class="mi">0</span><span class="err">d</span><span class="mf">0e0</span><span class="p">[</span><span class="err">...</span><span class="p">]</span><span class="err">&#39;;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">10</span> <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">10</span><span class="err">)</span>    <span class="err">de</span><span class="kc">fault</span> <span class="err">&#39;</span><span class="kc">f</span><span class="err">oo&#39;;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div></p>
 <h3>Structured User-Defined Types</h3>
 
 <p>A structured type is a data type comprising a list of attributes, each of which has its own data type. The attributes of the structured type can be defined manually in the structured type itself and reused either by another structured type or an entity.</p>
 <p>In a structured user-defined type, you can define original types (aNumber in the following example) or reference existing types defined elsewhere in the same type definition or another, separate type definition (MyString80). If you define multiple types in a single CDS document, for example, in a parent context, each structure-type definition must be separated by a semi-colon (;).</p>
-<p>The type MyString80 is defined in the following CDS document:
-<div class="highlight"><pre><span></span><code>namespace Package1.Package2;
-@Schema: &#39;MySchema&#39;
-type MyString80: String(80);
-</code></pre></div></p>
+<p>The type MyString80 is defined in the following CDS document:</p>
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">Package</span><span class="mf">1.</span><span class="err">Package</span><span class="mi">2</span><span class="err">;</span>
+<span class="err">@Schema</span><span class="p">:</span> <span class="err">&#39;MySchema&#39;</span>
+<span class="kc">t</span><span class="err">ype</span> <span class="err">MyS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span><span class="mi">80</span><span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">80</span><span class="err">);</span>
+</code></pre></div>
 <p>A using directive is required to resolve the reference to the data type specified in otherText : MyString80;, as illustrated in the following example:</p>
-<div class="highlight"><pre><span></span><code>namespace Package1.Package2;
-using Package1.Package2::MyString80;  //contains definition of MyString80
-@Schema: &#39;MySchema&#39;
-type MyStruct
-{  
-  aNumber   : Integer;  
-  someText  : String(80);  
-  otherText : MyString80;  // defined in a separate type
-};
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">Package</span><span class="mf">1.</span><span class="err">Package</span><span class="mi">2</span><span class="err">;</span>
+<span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="err">Package</span><span class="mf">1.</span><span class="err">Package</span><span class="mi">2</span><span class="p">::</span><span class="err">MyS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span><span class="mi">80</span><span class="err">;</span>  <span class="err">//co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ns</span> <span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">n</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span> <span class="err">o</span><span class="kc">f</span> <span class="err">MyS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span><span class="mi">80</span>
+<span class="err">@Schema</span><span class="p">:</span> <span class="err">&#39;MySchema&#39;</span>
+<span class="kc">t</span><span class="err">ype</span> <span class="err">MyS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span>
+<span class="p">{</span>  
+    <span class="err">aNumber</span>   <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>  
+    <span class="err">someTex</span><span class="kc">t</span>  <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">80</span><span class="err">);</span>  
+    <span class="err">o</span><span class="kc">t</span><span class="err">herTex</span><span class="kc">t</span> <span class="p">:</span> <span class="err">MyS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span><span class="mi">80</span><span class="err">;</span>  <span class="err">//</span> <span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span> <span class="err">i</span><span class="kc">n</span> <span class="err">a</span> <span class="err">separa</span><span class="kc">te</span> <span class="kc">t</span><span class="err">ype</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <h4>Nested Structured Types</h4>
 <p>Since user-defined types can make use of other user-defined types, you can build nested structured types, as illustrated in the following example:</p>
-<div class="highlight"><pre><span></span><code>namespace com.sap.uni;
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">com.sap.u</span><span class="kc">n</span><span class="err">i;</span>
 
-@Schema: &#39;MYSCHEMA&#39;
-context ContextA {
-    type Address
-    {
-        street : String(50);
-        number: Integer;
-    zipCode: Integer;
-    };
-    type Student
-    {
-        name: String(50)
-        age: Integer;
-    address: Address;
-    };
-};
+<span class="err">@Schema</span><span class="p">:</span> <span class="err">&#39;MYSCHEMA&#39;</span>
+<span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">A</span> <span class="p">{</span>
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">Address</span>
+    <span class="p">{</span>
+        <span class="err">s</span><span class="kc">treet</span> <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">50</span><span class="err">);</span>
+        <span class="kc">nu</span><span class="err">mber</span><span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="err">zipCode</span><span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="p">}</span><span class="err">;</span>
+
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">S</span><span class="kc">tu</span><span class="err">de</span><span class="kc">nt</span>
+    <span class="p">{</span>
+        <span class="kc">na</span><span class="err">me</span><span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">50</span><span class="err">)</span>
+        <span class="err">age</span><span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="err">address</span><span class="p">:</span> <span class="err">Address;</span>
+    <span class="p">}</span><span class="err">;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <p>For each structured type, a SAP HANA table type is generated, whose name is built by concatenating the following elements of the CDS document containing the structured-type definition and separating the elements by a dot delimiter (.):</p>
 <ul>
@@ -1222,70 +1235,70 @@ context ContextA {
 <li>the name of the type itself</li>
 </ul>
 <p>The columns of the table type are built by flattening the elements of the type. Elements with structured types are mapped to one column per nested element, with the column names built by concatenating the element names and separating the names by dots ".". Taking the above example the following will be generated in the database:</p>
-<div class="highlight"><pre><span></span><code>create type &quot;com.sap.uni::ContextA.Address&quot; as table (
-    street : varchar(50);
-    number: integer;
-    zipCode: integer;
-);
+<div class="highlight"><pre><span></span><code><span class="err">crea</span><span class="kc">te</span> <span class="kc">t</span><span class="err">ype</span> <span class="s2">&quot;com.sap.uni::ContextA.Address&quot;</span> <span class="err">as</span> <span class="kc">ta</span><span class="err">ble</span> <span class="err">(</span>
+    <span class="err">s</span><span class="kc">treet</span> <span class="p">:</span> <span class="err">varchar(</span><span class="mi">50</span><span class="err">);</span>
+    <span class="kc">nu</span><span class="err">mber</span><span class="p">:</span> <span class="err">i</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="err">zipCode</span><span class="p">:</span> <span class="err">i</span><span class="kc">nte</span><span class="err">ger;</span>
+<span class="err">);</span>
 
-create type &quot;com.sap.uni::ContextA.Student&quot; as table (
-    name: varchar(50);
-        age: integer;
-    address.street : varchar(50);
-    address.number : integer;
-    address.zipCode : integer;
-);
+<span class="err">crea</span><span class="kc">te</span> <span class="kc">t</span><span class="err">ype</span> <span class="s2">&quot;com.sap.uni::ContextA.Student&quot;</span> <span class="err">as</span> <span class="kc">ta</span><span class="err">ble</span> <span class="err">(</span>
+    <span class="kc">na</span><span class="err">me</span><span class="p">:</span> <span class="err">varchar(</span><span class="mi">50</span><span class="err">);</span>
+    <span class="err">age</span><span class="p">:</span> <span class="err">i</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="err">address.s</span><span class="kc">treet</span> <span class="p">:</span> <span class="err">varchar(</span><span class="mi">50</span><span class="err">);</span>
+    <span class="err">address.</span><span class="kc">nu</span><span class="err">mber</span> <span class="p">:</span> <span class="err">i</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="err">address.zipCode</span> <span class="p">:</span> <span class="err">i</span><span class="kc">nte</span><span class="err">ger;</span>
+<span class="err">);</span>
 </code></pre></div>
 <p>The new SAP HANA table types are generated in the schema that is specified in the schema annotation of the respective top-level artifact in the CDS document containing the structured types.</p>
 <p>Table types are only generated for direct structure definitions; in the following example, this would include: MyStruct, MyNestedStruct, and MyDeepNestedStruct. No table types are generated for derived types that are based on structured types; in the following example, the derived types include: MyS, MyOtherInt, MyOtherStruct.</p>
-<div class="highlight"><pre><span></span><code>namespace Pack1.&quot;pack-age2&quot;; 
-@Schema: &#39;MySchema&#39;
-context MyModel
-{
-  type MyInteger  : Integer;
-  type MyString80 : String(80);
-  type MyDecimal  : Decimal(10,2);
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">Pack</span><span class="mf">1.</span><span class="s2">&quot;pack-age2&quot;</span><span class="err">;</span> 
+<span class="err">@Schema</span><span class="p">:</span> <span class="err">&#39;MySchema&#39;</span>
+<span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">MyModel</span>
+<span class="p">{</span>
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyI</span><span class="kc">nte</span><span class="err">ger</span>  <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span><span class="mi">80</span> <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">80</span><span class="err">);</span>
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyDecimal</span>  <span class="p">:</span> <span class="err">Decimal(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="err">);</span>
 
-  type MyStruct  
-  {
-    aNumber   : Integer;
-    someText  : String(80);
-    otherText : MyString80;  // defined in example above
-  };
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span>  
+    <span class="p">{</span>
+        <span class="err">aNumber</span>   <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+        <span class="err">someTex</span><span class="kc">t</span>  <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">80</span><span class="err">);</span>
+        <span class="err">o</span><span class="kc">t</span><span class="err">herTex</span><span class="kc">t</span> <span class="p">:</span> <span class="err">MyS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span><span class="mi">80</span><span class="err">;</span>  <span class="err">//</span> <span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span> <span class="err">i</span><span class="kc">n</span> <span class="err">example</span> <span class="err">above</span>
+    <span class="p">}</span><span class="err">;</span>
 
-  type MyS           : MyStruct;
-  type MyOtherInt    : type of MyStruct.aNumber;
-  type MyOtherStruct : type of MyDeepNestedStruct.nested.nested;
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyS</span>           <span class="p">:</span> <span class="err">MyS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span><span class="err">;</span>
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyO</span><span class="kc">t</span><span class="err">herI</span><span class="kc">nt</span>    <span class="p">:</span> <span class="kc">t</span><span class="err">ype</span> <span class="err">o</span><span class="kc">f</span> <span class="err">MyS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span><span class="err">.aNumber;</span>
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyO</span><span class="kc">t</span><span class="err">herS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span> <span class="p">:</span> <span class="kc">t</span><span class="err">ype</span> <span class="err">o</span><span class="kc">f</span> <span class="err">MyDeepNes</span><span class="kc">te</span><span class="err">dS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span><span class="err">.</span><span class="kc">neste</span><span class="err">d.</span><span class="kc">neste</span><span class="err">d;</span>
 
-  type MyNestedStruct
-  {
-    name   : MyString80;
-    nested : MyS;
-  };
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyNes</span><span class="kc">te</span><span class="err">dS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span>
+    <span class="p">{</span>
+        <span class="kc">na</span><span class="err">me</span>   <span class="p">:</span> <span class="err">MyS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span><span class="mi">80</span><span class="err">;</span>
+        <span class="kc">neste</span><span class="err">d</span> <span class="p">:</span> <span class="err">MyS;</span>
+    <span class="p">}</span><span class="err">;</span>
 
-  type MyDeepNestedStruct
-  {
-    text   : LargeString;
-    nested : MyNestedStruct;
-  };
-};
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">MyDeepNes</span><span class="kc">te</span><span class="err">dS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span>
+    <span class="p">{</span>
+        <span class="kc">te</span><span class="err">x</span><span class="kc">t</span>   <span class="p">:</span> <span class="err">LargeS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g;</span>
+        <span class="kc">neste</span><span class="err">d</span> <span class="p">:</span> <span class="err">MyNes</span><span class="kc">te</span><span class="err">dS</span><span class="kc">tru</span><span class="err">c</span><span class="kc">t</span><span class="err">;</span>
+    <span class="p">}</span><span class="err">;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <h4>type of</h4>
 
 <p>You can also define a type based on an existing type that is already defined in another user-defined structured type, for example, by using the 'type of' keyword, as illustrated in the following example:</p>
-<div class="highlight"><pre><span></span><code>type MyOtherInt    : type of Address.number;        // =&gt; Integer 
-type MyString : type of Student.address.street;     // =&gt; String(50)
+<div class="highlight"><pre><span></span><code><span class="kc">t</span><span class="err">ype</span> <span class="err">MyO</span><span class="kc">t</span><span class="err">herI</span><span class="kc">nt</span> <span class="p">:</span> <span class="kc">t</span><span class="err">ype</span> <span class="err">o</span><span class="kc">f</span> <span class="err">Address.</span><span class="kc">nu</span><span class="err">mber;</span>           <span class="err">//</span> <span class="err">=&gt;</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger</span> 
+<span class="kc">t</span><span class="err">ype</span> <span class="err">MyS</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span> <span class="p">:</span> <span class="kc">t</span><span class="err">ype</span> <span class="err">o</span><span class="kc">f</span> <span class="err">S</span><span class="kc">tu</span><span class="err">de</span><span class="kc">nt</span><span class="err">.address.s</span><span class="kc">treet</span><span class="err">;</span>     <span class="err">//</span> <span class="err">=&gt;</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">50</span><span class="err">)</span>
 </code></pre></div>
 <p>The following code example shows how to use the type of keyword to define an element using the definition specified in another user-defined data-type field. For example, field4 : type of field3; indicates that, like field3, field4 is a LocalDate data type.</p>
-<div class="highlight"><pre><span></span><code>entity MyEntity1 {
-  key id  : Integer;
-  field1  : MyType3;
-  field2  : String(24);
-  field3  : LocalDate;
-  field4  : type of field3;
-  field5  : type of MyType1.field2;  
-  field6  : type of InnerCtx.CtxType.b;  // context reference
-};
+<div class="highlight"><pre><span></span><code><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">MyE</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span><span class="mi">1</span> <span class="p">{</span>
+    <span class="err">key</span> <span class="err">id</span>  <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">1</span>  <span class="p">:</span> <span class="err">MyType</span><span class="mi">3</span><span class="err">;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">2</span>  <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">24</span><span class="err">);</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">3</span>  <span class="p">:</span> <span class="err">LocalDa</span><span class="kc">te</span><span class="err">;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">4</span>  <span class="p">:</span> <span class="kc">t</span><span class="err">ype</span> <span class="err">o</span><span class="kc">f</span> <span class="kc">f</span><span class="err">ield</span><span class="mi">3</span><span class="err">;</span>
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">5</span>  <span class="p">:</span> <span class="kc">t</span><span class="err">ype</span> <span class="err">o</span><span class="kc">f</span> <span class="err">MyType</span><span class="mf">1.</span><span class="kc">f</span><span class="err">ield</span><span class="mi">2</span><span class="err">;</span>  
+    <span class="kc">f</span><span class="err">ield</span><span class="mi">6</span>  <span class="p">:</span> <span class="kc">t</span><span class="err">ype</span> <span class="err">o</span><span class="kc">f</span> <span class="err">I</span><span class="kc">nner</span><span class="err">C</span><span class="kc">t</span><span class="err">x.C</span><span class="kc">t</span><span class="err">xType.b;</span>  <span class="err">//</span> <span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">re</span><span class="kc">feren</span><span class="err">ce</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <h2>Associations</h2>
 
@@ -1301,28 +1314,28 @@ type MyString : type of Student.address.street;     // =&gt; String(50)
 <p>When using an association to define a relationship between entities in a CDS; you use the cardinality to specify the type of relation, for example:
 - one-to-one (to-one)
 - one-to-many (to-n)</p>
-<div class="highlight"><pre><span></span><code>namespace samples;
-@Schema: &#39;MYSCHEMA&#39;              // XS classic *only* 
-context AssociationCardinality {
-    entity Associations {
-        // To-one associations
-        assoc1 : Association[0..1]    to target; 
-        assoc2 : Association          to target; 
-        assoc3 : Association[1]       to target; 
-        assoc4 : Association[1..1]    to target; // association has one target instance
-        // To-many associations
-        assoc5 : Association[0..*]    to target{id1};
-        assoc6 : Association[]        to target{id1}; // as assoc4, [] is short for [0..*]
-        assoc7 : Association[2..7]    to target{id1}; // any numbers are possible; user provides
-        assoc8 : Association[1, 0..*] to target{id1}; // additional info. about source cardinality
-    };
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">samples;</span>
+<span class="err">@Schema</span><span class="p">:</span> <span class="err">&#39;MYSCHEMA&#39;</span>              <span class="err">//</span> <span class="err">XS</span> <span class="err">classic</span> <span class="err">*o</span><span class="kc">nl</span><span class="err">y*</span> 
+<span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Cardi</span><span class="kc">nal</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="p">{</span>
+    <span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span> <span class="p">{</span>
+        <span class="err">//</span> <span class="err">To</span><span class="mi">-</span><span class="err">o</span><span class="kc">ne</span> <span class="err">associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span>
+        <span class="err">assoc</span><span class="mi">1</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mf">0..1</span><span class="p">]</span>    <span class="kc">t</span><span class="err">o</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span><span class="err">;</span> 
+        <span class="err">assoc</span><span class="mi">2</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span>          <span class="kc">t</span><span class="err">o</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span><span class="err">;</span> 
+        <span class="err">assoc</span><span class="mi">3</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>       <span class="kc">t</span><span class="err">o</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span><span class="err">;</span> 
+        <span class="err">assoc</span><span class="mi">4</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mf">1..1</span><span class="p">]</span>    <span class="kc">t</span><span class="err">o</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span><span class="err">;</span> <span class="err">//</span> <span class="err">associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span> <span class="err">has</span> <span class="err">o</span><span class="kc">ne</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span> <span class="err">i</span><span class="kc">nstan</span><span class="err">ce</span>
+        <span class="err">//</span> <span class="err">To</span><span class="mi">-</span><span class="err">ma</span><span class="kc">n</span><span class="err">y</span> <span class="err">associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span>
+        <span class="err">assoc</span><span class="mi">5</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mf">0..</span><span class="err">*</span><span class="p">]</span>    <span class="kc">t</span><span class="err">o</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span><span class="p">{</span><span class="err">id</span><span class="mi">1</span><span class="p">}</span><span class="err">;</span>
+        <span class="err">assoc</span><span class="mi">6</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[]</span>        <span class="kc">t</span><span class="err">o</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span><span class="p">{</span><span class="err">id</span><span class="mi">1</span><span class="p">}</span><span class="err">;</span> <span class="err">//</span> <span class="err">as</span> <span class="err">assoc</span><span class="mi">4</span><span class="p">,</span> <span class="p">[]</span> <span class="err">is</span> <span class="err">shor</span><span class="kc">t</span> <span class="kc">f</span><span class="err">or</span> <span class="p">[</span><span class="mf">0..</span><span class="err">*</span><span class="p">]</span>
+        <span class="err">assoc</span><span class="mi">7</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mf">2..7</span><span class="p">]</span>    <span class="kc">t</span><span class="err">o</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span><span class="p">{</span><span class="err">id</span><span class="mi">1</span><span class="p">}</span><span class="err">;</span> <span class="err">//</span> <span class="err">a</span><span class="kc">n</span><span class="err">y</span> <span class="kc">nu</span><span class="err">mbers</span> <span class="err">are</span> <span class="err">possible;</span> <span class="err">user</span> <span class="err">provides</span>
+        <span class="err">assoc</span><span class="mi">8</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0..</span><span class="err">*</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span><span class="p">{</span><span class="err">id</span><span class="mi">1</span><span class="p">}</span><span class="err">;</span> <span class="err">//</span> <span class="err">addi</span><span class="kc">t</span><span class="err">io</span><span class="kc">nal</span> <span class="err">i</span><span class="kc">nf</span><span class="err">o.</span> <span class="err">abou</span><span class="kc">t</span> <span class="err">source</span> <span class="err">cardi</span><span class="kc">nal</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span>
+    <span class="p">}</span><span class="err">;</span>
 
-    // Required to make the example above work
-    entity target {
-        key id1 : Integer;
-        key id2 : Integer;
-    };
-};
+    <span class="err">//</span> <span class="err">Required</span> <span class="kc">t</span><span class="err">o</span> <span class="err">make</span> <span class="kc">t</span><span class="err">he</span> <span class="err">example</span> <span class="err">above</span> <span class="err">work</span>
+    <span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="kc">tar</span><span class="err">ge</span><span class="kc">t</span> <span class="p">{</span>
+        <span class="err">key</span> <span class="err">id</span><span class="mi">1</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+        <span class="err">key</span> <span class="err">id</span><span class="mi">2</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="p">}</span><span class="err">;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <p>Association Cardinality Syntax Examples: </p>
 <table>
@@ -1379,20 +1392,19 @@ context AssociationCardinality {
 <h4>managed</h4>
 <p>In the relational model, associations are mapped to foreign-key relationships. For managed associations, the relation between source and target entity is defined by specifying a set of elements of the target entity that are used as a foreign key.</p>
 <p>If no foreign keys are specified explicitly, the elements of the target entity’s designated primary key are used. Elements of the target entity that reside inside substructures can be addressed by means of the respective path. If the chosen elements do not form a unique key of the target entity, the association has cardinality to-many. The following examples show how to express foreign keys in an association.</p>
-<div class="highlight"><pre><span></span><code>entity Person
-{
-  key id : Integer;
-  // address1,2,3 are to-one associations
-  address1 : Association to Address;
-  address2 : Association to Address { id };
-  address3 : Association[1] to Address { zipCode, street, country };
+<div class="highlight"><pre><span></span><code><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">Perso</span><span class="kc">n</span>
+<span class="p">{</span>
+    <span class="err">key</span> <span class="err">id</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="err">//</span> <span class="err">address</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span> <span class="err">are</span> <span class="kc">t</span><span class="err">o</span><span class="mi">-</span><span class="err">o</span><span class="kc">ne</span> <span class="err">associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span>
+    <span class="err">address</span><span class="mi">1</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Address;</span>
+    <span class="err">address</span><span class="mi">2</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Address</span> <span class="p">{</span> <span class="err">id</span> <span class="p">}</span><span class="err">;</span>
+    <span class="err">address</span><span class="mi">3</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Address</span> <span class="p">{</span> <span class="err">zipCode</span><span class="p">,</span> <span class="err">s</span><span class="kc">treet</span><span class="p">,</span> <span class="err">cou</span><span class="kc">ntr</span><span class="err">y</span> <span class="p">}</span><span class="err">;</span>
 
-  // address4,5,6 are to-many associations
-  address4 : Association[0..*] to Address { zipCode };
-  address5 : Association[*] to Address { street.name };
-  address6 : Association[*] to Address { street.name AS streetName,
-                                          country.name AS countryName };
-};
+    <span class="err">//</span> <span class="err">address</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span> <span class="err">are</span> <span class="kc">t</span><span class="err">o</span><span class="mi">-</span><span class="err">ma</span><span class="kc">n</span><span class="err">y</span> <span class="err">associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span>
+    <span class="err">address</span><span class="mi">4</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mf">0..</span><span class="err">*</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Address</span> <span class="p">{</span> <span class="err">zipCode</span> <span class="p">}</span><span class="err">;</span>
+    <span class="err">address</span><span class="mi">5</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="err">*</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Address</span> <span class="p">{</span> <span class="err">s</span><span class="kc">treet</span><span class="err">.</span><span class="kc">na</span><span class="err">me</span> <span class="p">}</span><span class="err">;</span>
+    <span class="err">address</span><span class="mi">6</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="err">*</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Address</span> <span class="p">{</span> <span class="err">s</span><span class="kc">treet</span><span class="err">.</span><span class="kc">na</span><span class="err">me</span> <span class="err">AS</span> <span class="err">s</span><span class="kc">treet</span><span class="err">Name</span><span class="p">,</span> <span class="err">cou</span><span class="kc">ntr</span><span class="err">y.</span><span class="kc">na</span><span class="err">me</span> <span class="err">AS</span> <span class="err">cou</span><span class="kc">ntr</span><span class="err">yName</span> <span class="p">}</span><span class="err">;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <table>
 <thead>
@@ -1439,28 +1451,26 @@ context AssociationCardinality {
 
 <p>Unmanaged associations are based on existing elements of the source and target entity; no fields are generated. In the ON condition, only elements of the source or the target entity can be used; it is not possible to use other associations. The ON condition may contain only comparison between target and source via the "=" sign.</p>
 <p>In the following example, the association inhabitants relates the element id of the source entity Room with the element officeId in the target entity Employee. The target element officeId is accessed through the name of the association itself.</p>
-<div class="highlight"><pre><span></span><code>namespace samples;
-@Schema: &#39;MYSCHEMA&#39;              // XS classic *only*
-context UnmanagedAssociations {
-    entity Employee {
-        key id : Integer;
-        officeId : Integer;
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">samples;</span>
+<span class="err">@Schema</span><span class="p">:</span> <span class="err">&#39;MYSCHEMA&#39;</span>              <span class="err">//</span> <span class="err">XS</span> <span class="err">classic</span> <span class="err">*o</span><span class="kc">nl</span><span class="err">y*</span>
+<span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">U</span><span class="kc">n</span><span class="err">ma</span><span class="kc">na</span><span class="err">gedAssocia</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span> <span class="p">{</span>
+    <span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">Employee</span> <span class="p">{</span>
+        <span class="err">key</span> <span class="err">id</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+        <span class="err">o</span><span class="kc">ff</span><span class="err">iceId</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="p">}</span><span class="err">;</span>
 
-    };
-    entity Room {
-        key id : Integer;
-        inhabitants : Association[*] to Employee on inhabitants.officeId = id;
+    <span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">Room</span> <span class="p">{</span>
+        <span class="err">key</span> <span class="err">id</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+        <span class="err">i</span><span class="kc">n</span><span class="err">habi</span><span class="kc">tants</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="err">*</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Employee</span> <span class="err">o</span><span class="kc">n</span> <span class="err">i</span><span class="kc">n</span><span class="err">habi</span><span class="kc">tants</span><span class="err">.o</span><span class="kc">ff</span><span class="err">iceId</span> <span class="err">=</span> <span class="err">id;</span>
+    <span class="p">}</span><span class="err">;</span>
 
-    };
-
-    entity Thing {
-        key id : Integer;
-        parentId : Integer;
-        parent : Association[1] to Thing on parent.id = parentId;
-        children : Association[*] to Thing on children.parentId = id;
-
-    };
-};
+    <span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">Thi</span><span class="kc">n</span><span class="err">g</span> <span class="p">{</span>
+        <span class="err">key</span> <span class="err">id</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+        <span class="err">pare</span><span class="kc">nt</span><span class="err">Id</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+        <span class="err">pare</span><span class="kc">nt</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Thi</span><span class="kc">n</span><span class="err">g</span> <span class="err">o</span><span class="kc">n</span> <span class="err">pare</span><span class="kc">nt</span><span class="err">.id</span> <span class="err">=</span> <span class="err">pare</span><span class="kc">nt</span><span class="err">Id;</span>
+        <span class="err">childre</span><span class="kc">n</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="err">*</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Thi</span><span class="kc">n</span><span class="err">g</span> <span class="err">o</span><span class="kc">n</span> <span class="err">childre</span><span class="kc">n</span><span class="err">.pare</span><span class="kc">nt</span><span class="err">Id</span> <span class="err">=</span> <span class="err">id;</span>
+    <span class="p">}</span><span class="err">;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <p>The following example defines two related unmanaged associations:</p>
 <ul>
@@ -1471,13 +1481,13 @@ context UnmanagedAssociations {
 <li>children</li>
 </ul>
 <p>The unmanaged association children creates a relation between the element id and the target element parentId. The target element parentId is accessed through the name of the association itself.</p>
-<div class="highlight"><pre><span></span><code>entity Thing {
-  key id   : Integer;
-  parentId : Integer;
-  parent   : Association[1] to Thing on parent.id = parentId;
-  children : Association[*] to Thing on children.parentId = id;
-  ...
-};
+<div class="highlight"><pre><span></span><code><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">Thi</span><span class="kc">n</span><span class="err">g</span> <span class="p">{</span>
+    <span class="err">key</span> <span class="err">id</span>   <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="err">pare</span><span class="kc">nt</span><span class="err">Id</span> <span class="p">:</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger;</span>
+    <span class="err">pare</span><span class="kc">nt</span>   <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Thi</span><span class="kc">n</span><span class="err">g</span> <span class="err">o</span><span class="kc">n</span> <span class="err">pare</span><span class="kc">nt</span><span class="err">.id</span> <span class="err">=</span> <span class="err">pare</span><span class="kc">nt</span><span class="err">Id;</span>
+    <span class="err">childre</span><span class="kc">n</span> <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="err">*</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Thi</span><span class="kc">n</span><span class="err">g</span> <span class="err">o</span><span class="kc">n</span> <span class="err">childre</span><span class="kc">n</span><span class="err">.pare</span><span class="kc">nt</span><span class="err">Id</span> <span class="err">=</span> <span class="err">id;</span>
+    <span class="err">...</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <h2 id="naming-conventions">Naming conventions</h2>
 <p>Rules and restrictions apply to the names of CDS documents and the package in which the CDS document resides.</p>
@@ -1512,28 +1522,29 @@ context UnmanagedAssociations {
 <p>The CDS syntax enables you to define a CDS artifact in one document by basing it on an “external” artifact - an artifact that is defined in a separate CDS document. Each external artifact must be explicitly declared in the source CDS document with the 'using' keyword, which specifies the location of the external artifact, its name, and where appropriate its CDS context.</p>
 <p>The using declarations must be located in the header of the CDS document between the namespace declaration and the beginning of the top-level artifact, for example, the context.</p>
 <p>The external artifact can be either a single object (for example, a type, an entity, or a view) or a context. You can also include an optional alias in the using declaration, for example, ContextA.ContextA1 as ic. The alias (ic) can then be used in subsequent type definitions in the source CDS document.</p>
-<div class="highlight"><pre><span></span><code>namespace Pack1.Distributed;
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">Pack</span><span class="mf">1.</span><span class="err">Dis</span><span class="kc">tr</span><span class="err">ibu</span><span class="kc">te</span><span class="err">d;</span>
 
-using Pack1.Distributed::ContextA.T1;
-using Pack1.Distributed::ContextA.ContextAI as ic;
+<span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="err">Pack</span><span class="mf">1.</span><span class="err">Dis</span><span class="kc">tr</span><span class="err">ibu</span><span class="kc">te</span><span class="err">d</span><span class="p">::</span><span class="err">Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">A.T</span><span class="mi">1</span><span class="err">;</span>
+<span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="err">Pack</span><span class="mf">1.</span><span class="err">Dis</span><span class="kc">tr</span><span class="err">ibu</span><span class="kc">te</span><span class="err">d</span><span class="p">::</span><span class="err">Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">A.Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">AI</span> <span class="err">as</span> <span class="err">ic;</span>
 
-using Pack1.Distributed::ContextA.ContextAI.T3 as ict3; 
-using Pack1.Distributed::ContextA.ContextAI.T3.a as a;  // error, is not an artifact
+<span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="err">Pack</span><span class="mf">1.</span><span class="err">Dis</span><span class="kc">tr</span><span class="err">ibu</span><span class="kc">te</span><span class="err">d</span><span class="p">::</span><span class="err">Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">A.Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">AI.T</span><span class="mi">3</span> <span class="err">as</span> <span class="err">ic</span><span class="kc">t</span><span class="mi">3</span><span class="err">;</span> 
+<span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="err">Pack</span><span class="mf">1.</span><span class="err">Dis</span><span class="kc">tr</span><span class="err">ibu</span><span class="kc">te</span><span class="err">d</span><span class="p">::</span><span class="err">Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">A.Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">AI.T</span><span class="mf">3.</span><span class="err">a</span> <span class="err">as</span> <span class="err">a;</span>  <span class="err">//</span> <span class="err">error</span><span class="p">,</span> <span class="err">is</span> <span class="kc">n</span><span class="err">o</span><span class="kc">t</span> <span class="err">a</span><span class="kc">n</span> <span class="err">ar</span><span class="kc">t</span><span class="err">i</span><span class="kc">fa</span><span class="err">c</span><span class="kc">t</span>
 
-context ContextB { 
-  type T10 {
-    a : T1;               // Integer
-    b : ic.T2;            // String(20)
-    c : ic.T3;            // structured
-    d : type of ic.T3.b;  // String(88)
-    e : ict3;             // structured
-    x : Pack1.Distributed::ContextA.T1;  // error, direct reference not allowed
-  };
-  context ContextBI {
-    type T1 : String(7);  // hides the T1 coming from the first using declaration
-    type T2 : T1;         // String(7)
-  }; 
-};
+<span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">B</span> <span class="p">{</span> 
+    <span class="kc">t</span><span class="err">ype</span> <span class="err">T</span><span class="mi">10</span> <span class="p">{</span>
+        <span class="err">a</span> <span class="p">:</span> <span class="err">T</span><span class="mi">1</span><span class="err">;</span>               <span class="err">//</span> <span class="err">I</span><span class="kc">nte</span><span class="err">ger</span>
+        <span class="err">b</span> <span class="p">:</span> <span class="err">ic.T</span><span class="mi">2</span><span class="err">;</span>            <span class="err">//</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">20</span><span class="err">)</span>
+        <span class="err">c</span> <span class="p">:</span> <span class="err">ic.T</span><span class="mi">3</span><span class="err">;</span>            <span class="err">//</span> <span class="err">s</span><span class="kc">tru</span><span class="err">c</span><span class="kc">ture</span><span class="err">d</span>
+        <span class="err">d</span> <span class="p">:</span> <span class="kc">t</span><span class="err">ype</span> <span class="err">o</span><span class="kc">f</span> <span class="err">ic.T</span><span class="mf">3.</span><span class="err">b;</span>  <span class="err">//</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">88</span><span class="err">)</span>
+        <span class="err">e</span> <span class="p">:</span> <span class="err">ic</span><span class="kc">t</span><span class="mi">3</span><span class="err">;</span>             <span class="err">//</span> <span class="err">s</span><span class="kc">tru</span><span class="err">c</span><span class="kc">ture</span><span class="err">d</span>
+        <span class="err">x</span> <span class="p">:</span> <span class="err">Pack</span><span class="mf">1.</span><span class="err">Dis</span><span class="kc">tr</span><span class="err">ibu</span><span class="kc">te</span><span class="err">d</span><span class="p">::</span><span class="err">Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">A.T</span><span class="mi">1</span><span class="err">;</span>  <span class="err">//</span> <span class="err">error</span><span class="p">,</span> <span class="err">direc</span><span class="kc">t</span> <span class="err">re</span><span class="kc">feren</span><span class="err">ce</span> <span class="kc">n</span><span class="err">o</span><span class="kc">t</span> <span class="err">allowed</span>
+    <span class="p">}</span><span class="err">;</span>
+
+    <span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">Co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span><span class="err">BI</span> <span class="p">{</span>
+        <span class="kc">t</span><span class="err">ype</span> <span class="err">T</span><span class="mi">1</span> <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">7</span><span class="err">);</span>  <span class="err">//</span> <span class="err">hides</span> <span class="kc">t</span><span class="err">he</span> <span class="err">T</span><span class="mi">1</span> <span class="err">comi</span><span class="kc">n</span><span class="err">g</span> <span class="kc">fr</span><span class="err">om</span> <span class="kc">t</span><span class="err">he</span> <span class="kc">f</span><span class="err">irs</span><span class="kc">t</span> <span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="err">declara</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span>
+        <span class="kc">t</span><span class="err">ype</span> <span class="err">T</span><span class="mi">2</span> <span class="p">:</span> <span class="err">T</span><span class="mi">1</span><span class="err">;</span>         <span class="err">//</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">7</span><span class="err">)</span>
+    <span class="p">}</span><span class="err">;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
 <p>The CDS document ContextB.hdbdd shown above uses external artifacts (data types T1 and T3) that are defined in the “target” CDS document ContextA.hdbdd shown below. Two using declarations are present in the CDS document ContextB.hdbdd; one with no alias and one with an explictly specified alias (ic). The first using declaration introduces the scalar type Pack1.Distributed::ContextA.T1. The second using declaration introduces the context Pack1.Distributed::ContextA.ContextAI and makes it accessible by means of the explicitly specified alias ic.</p>
 <p>If no explicit alias is specified, the last part of the fully qualified name is assumed as the alias, for example T1.</p>
@@ -1696,50 +1707,49 @@ When you are specifying a design-time table (entity) using the CDS syntax, you u
 </table>
 <h2 id="reference">Reference</h2>
 <hr />
-<ul>
-<li>Additional information on SAP Help Portal</li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">SAP Help Portal</p>
 <p>For more information, see <a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/36257a5f611540f9b2f8e13110ddf97a.html">Core Data Services (.hdbcds)</a>.</p>
-<ul>
-<li>Example:</li>
-</ul>
-<div class="highlight"><pre><span></span><code>namespace products.db;
+</div>
+<h2 id="sample">Sample</h2>
+<hr />
+<div class="highlight"><pre><span></span><code><span class="kc">na</span><span class="err">mespace</span> <span class="err">produc</span><span class="kc">ts</span><span class="err">.db;</span>
 
-@Schema: &#39;DBADMIN&#39;
+<span class="err">@Schema</span><span class="p">:</span> <span class="err">&#39;DBADMIN&#39;</span>
 
-context Products {
+<span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="err">Produc</span><span class="kc">ts</span> <span class="p">{</span>
 
- entity  Orders{
-        key Id               : String(32);
-        CustomerName         : String(500);
-        CustomerSurname      : String(500);
-        Status               : String(100);
-        CreatedAt            : UTCTimestamp;
-        CreatedBy            : String(5000);
-        Description          : String(100);
-        Address              : String(5000);
-        Phone                : String(200);
-        Email                : String(300);
-        Country              : association to Products.Country { Id };
-        items                : Association[*] to Item on items.OrderId = Id;
-    };
+    <span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span>  <span class="err">Orders</span><span class="p">{</span>
+        <span class="err">key</span> <span class="err">Id</span>               <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">32</span><span class="err">);</span>
+        <span class="err">Cus</span><span class="kc">t</span><span class="err">omerName</span>         <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">500</span><span class="err">);</span>
+        <span class="err">Cus</span><span class="kc">t</span><span class="err">omerSur</span><span class="kc">na</span><span class="err">me</span>      <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">500</span><span class="err">);</span>
+        <span class="err">S</span><span class="kc">tatus</span>               <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+        <span class="err">Crea</span><span class="kc">te</span><span class="err">dA</span><span class="kc">t</span>            <span class="p">:</span> <span class="err">UTCTimes</span><span class="kc">ta</span><span class="err">mp;</span>
+        <span class="err">Crea</span><span class="kc">te</span><span class="err">dBy</span>            <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">5000</span><span class="err">);</span>
+        <span class="err">Descrip</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span>          <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+        <span class="err">Address</span>              <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">5000</span><span class="err">);</span>
+        <span class="err">Pho</span><span class="kc">ne</span>                <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">200</span><span class="err">);</span>
+        <span class="err">Email</span>                <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">300</span><span class="err">);</span>
+        <span class="err">Cou</span><span class="kc">ntr</span><span class="err">y</span>              <span class="p">:</span> <span class="err">associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span> <span class="kc">t</span><span class="err">o</span> <span class="err">Produc</span><span class="kc">ts</span><span class="err">.Cou</span><span class="kc">ntr</span><span class="err">y</span> <span class="p">{</span> <span class="err">Id</span> <span class="p">}</span><span class="err">;</span>
+        <span class="err">i</span><span class="kc">te</span><span class="err">ms</span>                <span class="p">:</span> <span class="err">Associa</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">[</span><span class="err">*</span><span class="p">]</span> <span class="kc">t</span><span class="err">o</span> <span class="err">I</span><span class="kc">te</span><span class="err">m</span> <span class="err">o</span><span class="kc">n</span> <span class="err">i</span><span class="kc">te</span><span class="err">ms.OrderId</span> <span class="err">=</span> <span class="err">Id;</span>
+    <span class="p">}</span><span class="err">;</span>
 
-    entity Item {
-        key ItemId          : String(32);
-        OrderId             : String(32);
-        Name                : String(500);
-        Type                : String(100);
-        Price               : String(100);
-        Currency            : String(100);
-        Quantity            : String(100);
-        Comment             : String(1000);
-    };
+    <span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">I</span><span class="kc">te</span><span class="err">m</span> <span class="p">{</span>
+        <span class="err">key</span> <span class="err">I</span><span class="kc">te</span><span class="err">mId</span>          <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">32</span><span class="err">);</span>
+        <span class="err">OrderId</span>             <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">32</span><span class="err">);</span>
+        <span class="err">Name</span>                <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">500</span><span class="err">);</span>
+        <span class="err">Type</span>                <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+        <span class="err">Price</span>               <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+        <span class="err">Curre</span><span class="kc">n</span><span class="err">cy</span>            <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+        <span class="err">Qua</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span>            <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">100</span><span class="err">);</span>
+        <span class="err">Comme</span><span class="kc">nt</span>             <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">1000</span><span class="err">);</span>
+    <span class="p">}</span><span class="err">;</span>
 
-     entity Country {
-        key Id              : String(32);
-        Name                : String(32);
-    };
-};
+     <span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span> <span class="err">Cou</span><span class="kc">ntr</span><span class="err">y</span> <span class="p">{</span>
+        <span class="err">key</span> <span class="err">Id</span>              <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">32</span><span class="err">);</span>
+        <span class="err">Name</span>                <span class="p">:</span> <span class="err">S</span><span class="kc">tr</span><span class="err">i</span><span class="kc">n</span><span class="err">g(</span><span class="mi">32</span><span class="err">);</span>
+    <span class="p">}</span><span class="err">;</span>
+<span class="p">}</span><span class="err">;</span>
 </code></pre></div>
                 
                   

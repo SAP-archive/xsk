@@ -1116,8 +1116,8 @@ For more information please take a look <a href="https://blogs.sap.com/2020/02/0
     <span class="s2">&quot;mail.smtps.auth&quot;</span><span class="o">:</span> <span class="s2">&quot;true&quot;</span>
 <span class="p">};</span>
 
-<span class="kd">let</span> <span class="nx">resultValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">resultValue</span><span class="p">));</span>
+<span class="kd">let</span> <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">));</span>
 </code></pre></div>
 <h2 id="constructors">Constructors</h2>
 <div class="highlight"><pre><span></span><code><span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">(</span><span class="nx">PartObject</span><span class="p">)</span>

@@ -339,6 +339,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -986,6 +993,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1009,25 +1023,25 @@
 <p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBProcedure syntax.</p>
 <h2 id="reference">Reference</h2>
 <hr />
-<ul>
-<li>Additional information on SAP Help Portal</li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">SAP Help Portal</p>
 <p>For more information, see <a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.02/en-US/93de88bf2c8242179647e40f958c24e5.html">Procedures (.hdbprocedure)</a>.</p>
-<ul>
-<li>Sample artifact code:</li>
-</ul>
-<div class="highlight"><pre><span></span><code>PROCEDURE &quot;MYSCHEMA&quot;.&quot;hdb_view::OrderProcedure&quot; ()
-   LANGUAGE SQLSCRIPT
-   SQL SECURITY INVOKER
-   --DEFAULT SCHEMA &lt;default_schema_name&gt;
-   READS SQL DATA AS
-BEGIN
-   /*************************************
-       Write your procedure logic
-   *************************************/
+</div>
+<h2 id="sample">Sample</h2>
+<hr />
+<div class="highlight"><pre><span></span><code><span class="k">PROCEDURE</span> <span class="ss">&quot;MYSCHEMA&quot;</span><span class="p">.</span><span class="ss">&quot;hdb_view::OrderProcedure&quot;</span> <span class="p">()</span>
+    <span class="k">LANGUAGE</span> <span class="n">SQLSCRIPT</span>
+    <span class="k">SQL</span> <span class="k">SECURITY</span> <span class="k">INVOKER</span>
+    <span class="c1">--DEFAULT SCHEMA &lt;default_schema_name&gt;</span>
+    <span class="k">READS</span> <span class="k">SQL</span> <span class="k">DATA</span> <span class="k">AS</span>
+<span class="k">BEGIN</span>
 
-      SELECT * FROM &quot;hdb_view::Item&quot;;
-END
+   <span class="cm">/*************************************</span>
+<span class="cm">       Write your procedure logic</span>
+<span class="cm">   *************************************/</span>
+
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="ss">&quot;hdb_view::Item&quot;</span><span class="p">;</span>
+<span class="k">END</span>
 </code></pre></div>
                 
                   

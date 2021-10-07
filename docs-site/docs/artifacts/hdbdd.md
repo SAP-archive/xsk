@@ -38,28 +38,26 @@ If you want to define multiple CDS artifacts within a single CDS document (for e
 
 <h4>Example</h4>
 
-```
+```json
 namespace com.acme.myapp1;
 
 @Schema: 'MySchema'
 
 context MyContext {
 
-// Nested contexts
+    // Nested contexts
 
-   context InnerCtx {
-   
-      Entity MyEntity {
-         …
-      };
+    context InnerCtx {
 
-      Type CtxType {
-        a : Integer;
-        b : String(59);
-      };
+        Entity MyEntity {
+            …
+        };
 
-   }; 
- };
+        Type CtxType {
+            a : Integer;
+            b : String(59);
+        };
+    };
 };
 ```
 <h3>Entity</h3>
@@ -68,20 +66,20 @@ In the SAP HANA database, as in other relational databases, a CDS entity is a ta
 
 <h4>Example</h4>
 
-```
+```json
 entity MyTable {
-       key Author    : String(100);
-       key BookTitle : String(100);
-           ISBN      : Integer not null;
-           Publisher : String(100);
-	   elem2     : String(20) default 'John Doe';      
-           elem3     : String(20) default 'John Doe' null; 
+    key Author    : String(100);
+    key BookTitle : String(100);
+    ISBN      : Integer not null;
+    Publisher : String(100);
+    elem2     : String(20) default 'John Doe';      
+    elem3     : String(20) default 'John Doe' null; 
 };
 ```
 
 <h4>Element</h4>
 
-```
+```json
 name: String(20);
 age: Integer;
 address: hana.VARCHAR;
@@ -103,23 +101,21 @@ Defines if an entity element can (null) or cannot (not null) have the value NULL
 Defines the default value for an entity element in the event that no value is provided during an INSERT operation. The syntax for the literals is defined in the primitive data-type specification.
 
 Example of more literals wich could be used as default values for their corresponding scalar type.
-```
-
+```json
 entity WithDefaults
 {
-  key id :  Integer;
-  field1 :  Integer       default -42;
-  field2 :  Integer64     default 9223372036854775807;
-  field3 :  Decimal(5, 3) default 12.345;
-  field4 :  BinaryFloat   default 123.456e-1;
-  field5 :  LocalDate     default date'2013-04-29';
-  field6 :  LocalTime     default time'17:04:03';
-  field7 :  UTCDateTime   default timestamp'2013-05-01 01:02:03';
-  field8 :  UTCTimestamp  default timestamp'2013-05-01 01:02:03';
-  field9 :  Binary(32)    default x'0102030405060708090a0b0c0d0e0[...]';
-  field10 : String(10)    default 'foo';
+    key id :  Integer;
+    field1 :  Integer       default -42;
+    field2 :  Integer64     default 9223372036854775807;
+    field3 :  Decimal(5, 3) default 12.345;
+    field4 :  BinaryFloat   default 123.456e-1;
+    field5 :  LocalDate     default date'2013-04-29';
+    field6 :  LocalTime     default time'17:04:03';
+    field7 :  UTCDateTime   default timestamp'2013-05-01 01:02:03';
+    field8 :  UTCTimestamp  default timestamp'2013-05-01 01:02:03';
+    field9 :  Binary(32)    default x'0102030405060708090a0b0c0d0e0[...]';
+    field10 : String(10)    default 'foo';
 };
-
 ```
 
 <h3>Structured User-Defined Types</h3>
@@ -129,7 +125,8 @@ A structured type is a data type comprising a list of attributes, each of which 
 In a structured user-defined type, you can define original types (aNumber in the following example) or reference existing types defined elsewhere in the same type definition or another, separate type definition (MyString80). If you define multiple types in a single CDS document, for example, in a parent context, each structure-type definition must be separated by a semi-colon (;).
 
 The type MyString80 is defined in the following CDS document:
-```
+
+```json
 namespace Package1.Package2;
 @Schema: 'MySchema'
 type MyString80: String(80);
@@ -137,21 +134,22 @@ type MyString80: String(80);
 
 A using directive is required to resolve the reference to the data type specified in otherText : MyString80;, as illustrated in the following example:
 
-```
+```json
 namespace Package1.Package2;
 using Package1.Package2::MyString80;  //contains definition of MyString80
 @Schema: 'MySchema'
 type MyStruct
 {  
-  aNumber   : Integer;  
-  someText  : String(80);  
-  otherText : MyString80;  // defined in a separate type
+    aNumber   : Integer;  
+    someText  : String(80);  
+    otherText : MyString80;  // defined in a separate type
 };
 ```
+
 <h4>Nested Structured Types</h4>
 Since user-defined types can make use of other user-defined types, you can build nested structured types, as illustrated in the following example:
 
-```
+```json
 namespace com.sap.uni;
 
 @Schema: 'MYSCHEMA'
@@ -162,6 +160,7 @@ context ContextA {
         number: Integer;
 	zipCode: Integer;
     };
+
     type Student
     {
         name: String(50)
@@ -179,19 +178,19 @@ For each structured type, a SAP HANA table type is generated, whose name is buil
 
 The columns of the table type are built by flattening the elements of the type. Elements with structured types are mapped to one column per nested element, with the column names built by concatenating the element names and separating the names by dots ".". Taking the above example the following will be generated in the database:
 
-```
+```json
 create type "com.sap.uni::ContextA.Address" as table (
-	street : varchar(50);
-	number: integer;
-	zipCode: integer;
+    street : varchar(50);
+    number: integer;
+    zipCode: integer;
 );
 
 create type "com.sap.uni::ContextA.Student" as table (
-	name: varchar(50);
-        age: integer;
-	address.street : varchar(50);
-	address.number : integer;
-	address.zipCode : integer;
+    name: varchar(50);
+    age: integer;
+    address.street : varchar(50);
+    address.number : integer;
+    address.zipCode : integer;
 );
 ```
 
@@ -199,37 +198,37 @@ The new SAP HANA table types are generated in the schema that is specified in th
 
 Table types are only generated for direct structure definitions; in the following example, this would include: MyStruct, MyNestedStruct, and MyDeepNestedStruct. No table types are generated for derived types that are based on structured types; in the following example, the derived types include: MyS, MyOtherInt, MyOtherStruct.
 
-```
+```json
 namespace Pack1."pack-age2"; 
 @Schema: 'MySchema'
 context MyModel
 {
-  type MyInteger  : Integer;
-  type MyString80 : String(80);
-  type MyDecimal  : Decimal(10,2);
+    type MyInteger  : Integer;
+    type MyString80 : String(80);
+    type MyDecimal  : Decimal(10,2);
 
-  type MyStruct  
-  {
-    aNumber   : Integer;
-    someText  : String(80);
-    otherText : MyString80;  // defined in example above
-  };
+    type MyStruct  
+    {
+        aNumber   : Integer;
+        someText  : String(80);
+        otherText : MyString80;  // defined in example above
+    };
 
-  type MyS           : MyStruct;
-  type MyOtherInt    : type of MyStruct.aNumber;
-  type MyOtherStruct : type of MyDeepNestedStruct.nested.nested;
+    type MyS           : MyStruct;
+    type MyOtherInt    : type of MyStruct.aNumber;
+    type MyOtherStruct : type of MyDeepNestedStruct.nested.nested;
 
-  type MyNestedStruct
-  {
-    name   : MyString80;
-    nested : MyS;
-  };
+    type MyNestedStruct
+    {
+        name   : MyString80;
+        nested : MyS;
+    };
 
-  type MyDeepNestedStruct
-  {
-    text   : LargeString;
-    nested : MyNestedStruct;
-  };
+    type MyDeepNestedStruct
+    {
+        text   : LargeString;
+        nested : MyNestedStruct;
+    };
 };
 ```
 
@@ -237,22 +236,22 @@ context MyModel
 
 You can also define a type based on an existing type that is already defined in another user-defined structured type, for example, by using the 'type of' keyword, as illustrated in the following example:
 
-```
-type MyOtherInt    : type of Address.number;        // => Integer 
+```json
+type MyOtherInt : type of Address.number;           // => Integer 
 type MyString : type of Student.address.street;     // => String(50)
 ```
 
 The following code example shows how to use the type of keyword to define an element using the definition specified in another user-defined data-type field. For example, field4 : type of field3; indicates that, like field3, field4 is a LocalDate data type.
 
-```
+```json
 entity MyEntity1 {
-  key id  : Integer;
-  field1  : MyType3;
-  field2  : String(24);
-  field3  : LocalDate;
-  field4  : type of field3;
-  field5  : type of MyType1.field2;  
-  field6  : type of InnerCtx.CtxType.b;  // context reference
+    key id  : Integer;
+    field1  : MyType3;
+    field2  : String(24);
+    field3  : LocalDate;
+    field4  : type of field3;
+    field5  : type of MyType1.field2;  
+    field6  : type of InnerCtx.CtxType.b;  // context reference
 };
 ```
 
@@ -273,7 +272,7 @@ When using an association to define a relationship between entities in a CDS; yo
 - one-to-one (to-one)
 - one-to-many (to-n)
 	
-```
+```json
 namespace samples;
 @Schema: 'MYSCHEMA'              // XS classic *only* 
 context AssociationCardinality {
@@ -296,7 +295,6 @@ context AssociationCardinality {
         key id2 : Integer;
     };
 };
-	
 ```
 	
 
@@ -319,21 +317,19 @@ In the relational model, associations are mapped to foreign-key relationships. F
 
 If no foreign keys are specified explicitly, the elements of the target entity’s designated primary key are used. Elements of the target entity that reside inside substructures can be addressed by means of the respective path. If the chosen elements do not form a unique key of the target entity, the association has cardinality to-many. The following examples show how to express foreign keys in an association.
 
-```
-
+```json
 entity Person
 {
-  key id : Integer;
-  // address1,2,3 are to-one associations
-  address1 : Association to Address;
-  address2 : Association to Address { id };
-  address3 : Association[1] to Address { zipCode, street, country };
+    key id : Integer;
+    // address1,2,3 are to-one associations
+    address1 : Association to Address;
+    address2 : Association to Address { id };
+    address3 : Association[1] to Address { zipCode, street, country };
 
-  // address4,5,6 are to-many associations
-  address4 : Association[0..*] to Address { zipCode };
-  address5 : Association[*] to Address { street.name };
-  address6 : Association[*] to Address { street.name AS streetName,
-                                          country.name AS countryName };
+    // address4,5,6 are to-many associations
+    address4 : Association[0..*] to Address { zipCode };
+    address5 : Association[*] to Address { street.name };
+    address6 : Association[*] to Address { street.name AS streetName, country.name AS countryName };
 };
 ```
 
@@ -352,19 +348,18 @@ Unmanaged associations are based on existing elements of the source and target e
 
 In the following example, the association inhabitants relates the element id of the source entity Room with the element officeId in the target entity Employee. The target element officeId is accessed through the name of the association itself.
 
-```
+```json
 namespace samples;
 @Schema: 'MYSCHEMA'              // XS classic *only*
 context UnmanagedAssociations {
     entity Employee {
         key id : Integer;
         officeId : Integer;
-       
     };
+
     entity Room {
         key id : Integer;
         inhabitants : Association[*] to Employee on inhabitants.officeId = id;
-        
     };
 
     entity Thing {
@@ -372,7 +367,6 @@ context UnmanagedAssociations {
         parentId : Integer;
         parent : Association[1] to Thing on parent.id = parentId;
         children : Association[*] to Thing on children.parentId = id;
-        
     };
 };
 
@@ -388,14 +382,13 @@ The unmanaged association parent uses a cardinality of [1] to create a relation 
 
 The unmanaged association children creates a relation between the element id and the target element parentId. The target element parentId is accessed through the name of the association itself.
 
-```
-
+```json
 entity Thing {
-  key id   : Integer;
-  parentId : Integer;
-  parent   : Association[1] to Thing on parent.id = parentId;
-  children : Association[*] to Thing on children.parentId = id;
-  ...
+    key id   : Integer;
+    parentId : Integer;
+    parent   : Association[1] to Thing on parent.id = parentId;
+    children : Association[*] to Thing on children.parentId = id;
+    ...
 };
 ```
 
@@ -433,7 +426,7 @@ The using declarations must be located in the header of the CDS document between
 
 The external artifact can be either a single object (for example, a type, an entity, or a view) or a context. You can also include an optional alias in the using declaration, for example, ContextA.ContextA1 as ic. The alias (ic) can then be used in subsequent type definitions in the source CDS document.
 
-```
+```json
 namespace Pack1.Distributed;
 
 using Pack1.Distributed::ContextA.T1;
@@ -443,18 +436,19 @@ using Pack1.Distributed::ContextA.ContextAI.T3 as ict3;
 using Pack1.Distributed::ContextA.ContextAI.T3.a as a;  // error, is not an artifact
 
 context ContextB { 
-  type T10 {
-    a : T1;               // Integer
-    b : ic.T2;            // String(20)
-    c : ic.T3;            // structured
-    d : type of ic.T3.b;  // String(88)
-    e : ict3;             // structured
-    x : Pack1.Distributed::ContextA.T1;  // error, direct reference not allowed
-  };
-  context ContextBI {
-    type T1 : String(7);  // hides the T1 coming from the first using declaration
-    type T2 : T1;         // String(7)
-  }; 
+    type T10 {
+        a : T1;               // Integer
+        b : ic.T2;            // String(20)
+        c : ic.T3;            // structured
+        d : type of ic.T3.b;  // String(88)
+        e : ict3;             // structured
+        x : Pack1.Distributed::ContextA.T1;  // error, direct reference not allowed
+    };
+
+    context ContextBI {
+        type T1 : String(7);  // hides the T1 coming from the first using declaration
+        type T2 : T1;         // String(7)
+    };
 };
 ```
 
@@ -507,38 +501,39 @@ BINARY | 	Byte string of fixed length n | BINARY
 ## Reference
 ---
 
-* Additional information on SAP Help Portal
+!!! note "SAP Help Portal"
 
-For more information, see [Core Data Services (.hdbcds)](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/36257a5f611540f9b2f8e13110ddf97a.html).
+    For more information, see [Core Data Services (.hdbcds)](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/36257a5f611540f9b2f8e13110ddf97a.html).
 
-* Example:
+## Sample
+---
 
-```
+```json
 namespace products.db;
 
 @Schema: 'DBADMIN'
 
 context Products {
 
- entity  Orders{
+    entity  Orders{
         key Id               : String(32);
         CustomerName         : String(500);
         CustomerSurname      : String(500);
         Status               : String(100);
         CreatedAt            : UTCTimestamp;
-   		CreatedBy            : String(5000);
+        CreatedBy            : String(5000);
         Description          : String(100);
         Address              : String(5000);
         Phone                : String(200);
         Email                : String(300);
         Country              : association to Products.Country { Id };
-		items                : Association[*] to Item on items.OrderId = Id;
+        items                : Association[*] to Item on items.OrderId = Id;
     };
      
     entity Item {
         key ItemId          : String(32);
     	OrderId             : String(32);
-	    Name                : String(500);
+        Name                : String(500);
         Type                : String(100);
         Price               : String(100);
         Currency            : String(100);

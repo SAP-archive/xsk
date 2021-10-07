@@ -40,31 +40,3 @@ The information on this page will help you learn how to develop the design-time 
 | "target" : {"schema": "..."}              | targetSchema                      |          |
 | "target" : {"object": "..."}              | targetObject                      |          |
 | "schema"                                  | synonymSchema                     |          |
-
-=== "Example 1"
-
-    ```json
-    {
-        "acme.test.db::Test.dvMySynonym1": {
-            "target": {
-                "schema": "SYS",
-                "object": "DUMMY"
-            },
-            "schema": "TONI"
-        }
-    }
-    ```
-
-=== "Example 2"
-
-    ```json
-    {
-      "acme.test.db::Test.dvMySynonym1": {
-        "schema": "TONI",
-        "target": {
-            "object": "DUMMY",
-            "schema": "SYS"
-        }
-      }
-    }
-    ```

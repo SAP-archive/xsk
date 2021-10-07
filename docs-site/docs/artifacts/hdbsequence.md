@@ -13,34 +13,37 @@ The information on this page will help you lesrn how to develop the design-time 
 ## Reference
 ---
 
-* Additional information on SAP Help Portal
+!!! note "SAP Help Portal"
 
-    * SAP HANA XS Classic: For more information, see [Create a Sequence](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html).
-    * SAP HANA XS Advanced: For more information, see [CREATE SEQUENCE Statement (Data Definition)](https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html).
+    - SAP HANA XS Classic: For more information, see [Create a Sequence](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/a1e95af655ee4e00bd9183518d1fa5c5.html).
+    - SAP HANA XS Advanced: For more information, see [CREATE SEQUENCE Statement (Data Definition)](https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/1.0.12/en-US/20d509277519101489029c064d468c5d.html).
 
-* Sample HANA XS Classic syntax:
+## Sample
+---
 
-```
-schema= "TEST_DUMMY";
-start_with= 10;
-maxvalue= 30;
-nomaxvalue=false;
-minvalue= 1;
-nominvalue=true;
-cycles= false;
-reset_by= "SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"com.acme.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"MYSCHEMA\".\"com.acme.test.tables::MY_TABLE2\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"";
-depends_on=["com.acme.test.tables::MY_TABLE1", "com.acme.test.tables::MY_TABLE2"];
-```
+=== "HANA XS Classic syntax"
 
-* Sample HANA XS Advanced syntax:
+    ```json
+    schema= "TEST_DUMMY";
+    start_with= 10;
+    maxvalue= 30;
+    nomaxvalue=false;
+    minvalue= 1;
+    nominvalue=true;
+    cycles= false;
+    reset_by= "SELECT T1.\"Column2\" FROM \"MYSCHEMA\".\"com.acme.test.tables::MY_TABLE1\" AS T1 LEFT JOIN \"MYSCHEMA\".\"com.acme.test.tables::MY_TABLE2\" AS T2 ON T1.\"Column1\" = T2.\"Column1\"";
+    depends_on=["com.acme.test.tables::MY_TABLE1", "com.acme.test.tables::MY_TABLE2"];
+    ```
 
-```
-SEQUENCE "com.sap.hana.example::CUSTOMER_ID" 
-RESET BY 
-SELECT IFNULL(MAX(ID), 0) + 1 FROM "com.sap.hana.example::CUSTOMERS"
-```
+=== "HANA XS Advanced syntax"
 
-* Configuration Schema
+    ```sql
+    SEQUENCE "com.sap.hana.example::CUSTOMER_ID" 
+    RESET BY 
+    SELECT IFNULL(MAX(ID), 0) + 1 FROM "com.sap.hana.example::CUSTOMERS"
+    ```
+
+**Configuration Schema**
 
 | Name       | Description                                                 | Type     | Default value | Required |
 |------------|-------------------------------------------------------------|:--------:|:-------------:|:--------:|

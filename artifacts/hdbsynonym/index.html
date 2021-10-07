@@ -367,6 +367,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -986,6 +993,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1009,32 +1023,28 @@
 <p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBSynonym syntax.</p>
 <h2 id="reference">Reference</h2>
 <hr />
-<ul>
-<li>Additional information on SAP Help Portal</li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">SAP Help Portal</p>
 <p>For more information, see <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/5278b5979128444cb6fffe0f8c2bf1e3.html">Create a Synonym</a>.</p>
-<ul>
-<li>
-<p>Sample HANA v1 and v2 syntax:
-<div class="highlight"><pre><span></span><code>{ &quot;acme.com.app1::MySynonym1&quot; : { 
-       &quot;target&quot; : { 
-            &quot;schema&quot;: &quot;DEFAULT_SCHEMA&quot;, 
-            &quot;object&quot;: &quot;MY_ERP_TABLE_1&quot;
-                  },
-       &quot;schema&quot;: &quot;SCHEMA_2&quot;
-       }
-}
-</code></pre></div></p>
-</li>
-<li>
-<p>Which syntax does the parser support?</p>
-</li>
-</ul>
+</div>
+<h2 id="sample">Sample</h2>
+<hr />
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;acme.com.app1::MySynonym1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;target&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="s2">&quot;DEFAULT_SCHEMA&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;MY_ERP_TABLE_1&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="s2">&quot;SCHEMA_2&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Which syntax does the parser support?</strong></p>
 <table>
 <thead>
 <tr>
-<th>hdbsynonym syntax (HANA 1)</th>
-<th>hdbview syntax (XSKSynonymParser)</th>
+<th>HANA XS Classic syntax</th>
+<th>HANA XS Advanced syntax</th>
 <th>Comments</th>
 </tr>
 </thead>
@@ -1061,29 +1071,31 @@
 </tr>
 </tbody>
 </table>
-<ul>
-<li>Example:</li>
-</ul>
-<p><div class="highlight"><pre><span></span><code>{
-  &quot;acme.test.db::Test.dvMySynonym1&quot;: {
-    &quot;target&quot;: {
-      &quot;schema&quot;: &quot;SYS&quot;,
-      &quot;object&quot;: &quot;DUMMY&quot;
-    },
-    &quot;schema&quot;: &quot;TONI&quot;
-  }
-}
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Example 1</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;acme.test.db::Test.dvMySynonym1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;target&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="s2">&quot;SYS&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;DUMMY&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="s2">&quot;TONI&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>{
-  &quot;acme.test.db::Test.dvMySynonym1&quot;: {
-    &quot;schema&quot;: &quot;TONI&quot;,
-    &quot;target&quot;: {
-        &quot;object&quot;: &quot;DUMMY&quot;,
-        &quot;schema&quot;: &quot;SYS&quot;
-    }
-  }
-}
-</code></pre></div></p>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Example 2</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="nt">&quot;acme.test.db::Test.dvMySynonym1&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="s2">&quot;TONI&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;target&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;DUMMY&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="s2">&quot;SYS&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
                 
                   
                 

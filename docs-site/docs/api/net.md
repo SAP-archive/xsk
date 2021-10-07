@@ -55,9 +55,8 @@ smtp.send(mail);
 
 // Send the mail Object from the built-in mail send method.
 let returnValue = mail.send(mailConfig);
-let response_msg = "MessageId = " + returnValue.messageId + ", final reply = " + returnValue.finalReply;
 
-$.response.setBody(response_msg);
+$.response.setBody(JSON.stringify(returnValue));
 ```
 
 ## Classes

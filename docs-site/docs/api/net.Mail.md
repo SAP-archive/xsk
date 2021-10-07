@@ -20,11 +20,6 @@ $.net.Mail
 	For more information please take a look [here](https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/).
 
 ```javascript
-//create empty $.net.Mail
-var mail = new $.net.Mail();
-```
-
-```javascript
 let net = $.net;
 
 // Create email from JS Object.

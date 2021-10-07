@@ -65,7 +65,7 @@ var mail = new $.net.Mail({
     subjectEncoding: "UTF-8"
 });
 
-mail.parts.push(firstPart, secondPart, thirdPart);
+mail.parts.push(attachmentPart, inlinePart, textPart);
 
 // Set mail server configurations.
 let mailConfig = {

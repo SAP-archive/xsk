@@ -16,7 +16,7 @@
     
     
       
-        <title>XSODATA - Project XSK</title>
+        <title>XSOData - Project XSK</title>
       
     
     
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              XSODATA
+              XSOData
             
           </span>
         </div>
@@ -449,7 +449,14 @@
     Reference
   </a>
   
-    <nav class="md-nav" aria-label="Reference">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+    <nav class="md-nav" aria-label="Sample">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -997,7 +1004,14 @@
     Reference
   </a>
   
-    <nav class="md-nav" aria-label="Reference">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+    <nav class="md-nav" aria-label="Sample">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1029,58 +1043,49 @@
                   </a>
                 
                 
-                <h1 id="xsodata">XSODATA</h1>
+                <h1 id="xsodata">XSOData</h1>
 <h2 id="overview">Overview</h2>
 <hr />
 <p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the XSODATA syntax.</p>
 <h2 id="reference">Reference</h2>
 <hr />
+<div class="admonition note">
+<p class="admonition-title">SAP Help Portal</p>
 <ul>
-<li>
-<p>Additional information on SAP Help Portal</p>
-<ul>
-<li>
-<p><a href="https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/502dbde2cbeb4f27b0e9b9887b0097b7.html">Tutorial: Use the SAP HANA OData Interface</a></p>
-</li>
-<li>
-<p><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/02e91608eb174dcea6d544aad6ea2e12.html">OData Service-Definition Examples (XS Advanced)</a></p>
-</li>
+<li><a href="https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/502dbde2cbeb4f27b0e9b9887b0097b7.html">Tutorial: Use the SAP HANA OData Interface</a></li>
+<li><a href="https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/02e91608eb174dcea6d544aad6ea2e12.html">OData Service-Definition Examples (XS Advanced)</a></li>
 </ul>
-</li>
-<li>
-<p>Example:</p>
-</li>
-</ul>
-<div class="highlight"><pre><span></span><code>service namespace &quot;products.odata&quot;  {
+</div>
+<h2 id="sample">Sample</h2>
+<hr />
+<div class="highlight"><pre><span></span><code><span class="n">service</span> <span class="n">namespace</span> <span class="ss">&quot;products.odata&quot;</span>  <span class="err">{</span>
 
-   &quot;products.db::Products.Orders&quot; as &quot;Orders&quot;
-        navigates(&quot;Items4Orders&quot; as &quot;Items&quot;)
+   <span class="ss">&quot;products.db::Products.Orders&quot;</span> <span class="k">as</span> <span class="ss">&quot;Orders&quot;</span>
+        <span class="n">navigates</span><span class="p">(</span><span class="ss">&quot;Items4Orders&quot;</span> <span class="k">as</span> <span class="ss">&quot;Items&quot;</span><span class="p">)</span>
 
-    create events(before &quot;products.xsjs:ProductsLib.xsjslib::beforeCreateOrder&quot;)
-    delete using &quot;products.xsjs:ProductsLib.xsjslib::deleteOrder&quot;;
+    <span class="k">create</span> <span class="n">events</span><span class="p">(</span><span class="k">before</span> <span class="ss">&quot;products.xsjs:ProductsLib.xsjslib::beforeCreateOrder&quot;</span><span class="p">)</span>
+    <span class="k">delete</span> <span class="k">using</span> <span class="ss">&quot;products.xsjs:ProductsLib.xsjslib::deleteOrder&quot;</span><span class="p">;</span>
 
 
-  &quot;products.db::Products.Item&quot; as &quot;Items&quot;
-    create events(before &quot;products.xsjs:ProductsLib.xsjslib::beforeCreateItem&quot;) 
-    update forbidden;
+  <span class="ss">&quot;products.db::Products.Item&quot;</span> <span class="k">as</span> <span class="ss">&quot;Items&quot;</span>
+    <span class="k">create</span> <span class="n">events</span><span class="p">(</span><span class="k">before</span> <span class="ss">&quot;products.xsjs:ProductsLib.xsjslib::beforeCreateItem&quot;</span><span class="p">)</span> 
+    <span class="k">update</span> <span class="n">forbidden</span><span class="p">;</span>
 
-    association &quot;Items4Orders&quot; principal &quot;Orders&quot;(&quot;Id&quot;)
-       multiplicity &quot;1&quot; dependent &quot;Items&quot;(&quot;OrderId&quot;) multiplicity &quot;*&quot;;
+    <span class="n">association</span> <span class="ss">&quot;Items4Orders&quot;</span> <span class="n">principal</span> <span class="ss">&quot;Orders&quot;</span><span class="p">(</span><span class="ss">&quot;Id&quot;</span><span class="p">)</span>
+       <span class="n">multiplicity</span> <span class="ss">&quot;1&quot;</span> <span class="n">dependent</span> <span class="ss">&quot;Items&quot;</span><span class="p">(</span><span class="ss">&quot;OrderId&quot;</span><span class="p">)</span> <span class="n">multiplicity</span> <span class="ss">&quot;*&quot;</span><span class="p">;</span>
 
- }
+ <span class="err">}</span>
 
- annotations {
-   enable OData4SAP;
-}
+ <span class="n">annotations</span> <span class="err">{</span>
+   <span class="n">enable</span> <span class="n">OData4SAP</span><span class="p">;</span>
+<span class="err">}</span>
 </code></pre></div>
-<ul>
-<li>More details</li>
-</ul>
+<p><strong>More Details</strong></p>
 <p>Inside an <code>*.xsodata</code> file we can specify which properties can be exposed using the 'with' and 'without' section:</p>
-<div class="highlight"><pre><span></span><code>service namespace &quot;np&quot;{
-   &quot;sample.odata::table1&quot; as &quot;Table1&quot; without (&quot;COLUMN1&quot;);
-   &quot;sample.odata::table2&quot; as &quot;Table2&quot; with (&quot;COLUMN1&quot;, &quot;COLUMN2&quot;);
-}
+<div class="highlight"><pre><span></span><code><span class="n">service</span> <span class="n">namespace</span> <span class="ss">&quot;np&quot;</span> <span class="err">{</span>
+   <span class="ss">&quot;sample.odata::table1&quot;</span> <span class="k">as</span> <span class="ss">&quot;Table1&quot;</span> <span class="k">without</span> <span class="p">(</span><span class="ss">&quot;COLUMN1&quot;</span><span class="p">);</span>
+   <span class="ss">&quot;sample.odata::table2&quot;</span> <span class="k">as</span> <span class="ss">&quot;Table2&quot;</span> <span class="k">with</span> <span class="p">(</span><span class="ss">&quot;COLUMN1&quot;</span><span class="p">,</span> <span class="ss">&quot;COLUMN2&quot;</span><span class="p">);</span>
+<span class="err">}</span>
 </code></pre></div>
 <h3 id="xsk-xsodata-annotations-support">XSK XSODATA Annotations Support</h3>
 <hr />

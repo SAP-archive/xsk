@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://www.xsk.io/artifacts/hdbtable/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.1">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.2">
     
     
       
@@ -20,7 +20,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.1c75ef36.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.24c991ad.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -300,6 +300,13 @@
         <li class="md-nav__item">
   <a href="#reference" class="md-nav__link">
     Reference
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
   </a>
   
 </li>
@@ -1000,6 +1007,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1025,40 +1039,47 @@
 <hr />
 <div class="admonition warning">
 <p class="admonition-title">Caution</p>
-<p>The parser does not allow duplicate properties.</p>
+<ul>
+<li>The parser does not allow duplicate properties.</li>
+<li>The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. </li>
+<li>An exception will be thrown if a property is defined more than once in the <code>*.hdbtable</code> file. An additional exception will be thrown if a mandatory field is missing.</li>
+</ul>
 </div>
-<p>The order of the table's, column's and index's properties is not taken into account when the table definition is parsed. </p>
-<p>An exception will be thrown if a property is defined more than once in the <code>*.hdbtable</code> file. An additional exception will be thrown if a mandatory field is missing.</p>
 <h2 id="reference">Reference</h2>
 <hr />
-<ul>
-<li>Additional information on SAP Help Portal</li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">Additional information on SAP Help Portal</p>
 <p>For more information, see <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/89cbf999e6004be3a5324b8f9ef0c53f.html">Create a Table</a>.</p>
-<ul>
-<li>Sample HANA XS Classic syntax:</li>
-</ul>
-<div class="highlight"><pre><span></span><code>table.schemaName = &quot;MYSCHEMA&quot;;
-table.tableType = COLUMNSTORE;
-table.columns = [
-    {name = &quot;Col1&quot;; sqlType = VARCHAR; nullable = false; length = 20; comment = &quot;dummy comment&quot;;},
-    {name = &quot;Col2&quot;; sqlType = INTEGER; nullable = false;},
-    {name = &quot;Col3&quot;; sqlType = NVARCHAR; nullable = true; length = 20; defaultValue = &quot;Defaultvalue&quot;;},
-    {name = &quot;Col4&quot;; sqlType = DECIMAL; nullable = false; precision = 2; scale = 3;}];
-table.indexes =  [
-    {name = &quot;MYINDEX1&quot;; unique = true; indexColumns = [&quot;Col2&quot;];},
-    {name = &quot;MYINDEX2&quot;; unique = true; indexColumns = [&quot;Col1&quot;, &quot;Col4&quot;];}];
-table.primaryKey.pkcolumns = [&quot;Col1&quot;, &quot;Col2&quot;];
+</div>
+<h2 id="sample">Sample</h2>
+<hr />
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">HANA XS Classic syntax</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kc">ta</span><span class="err">ble.schemaName</span> <span class="err">=</span> <span class="s2">&quot;MYSCHEMA&quot;</span><span class="err">;</span>
+<span class="kc">ta</span><span class="err">ble.</span><span class="kc">ta</span><span class="err">bleType</span> <span class="err">=</span> <span class="err">COLUMNSTORE;</span>
+<span class="kc">ta</span><span class="err">ble.colum</span><span class="kc">ns</span> <span class="err">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="kc">na</span><span class="err">me</span> <span class="err">=</span> <span class="s2">&quot;Col1&quot;</span><span class="err">;</span> <span class="err">sqlType</span> <span class="err">=</span> <span class="err">VARCHAR;</span> <span class="kc">nulla</span><span class="err">ble</span> <span class="err">=</span> <span class="kc">false</span><span class="err">;</span> <span class="err">le</span><span class="kc">n</span><span class="err">g</span><span class="kc">t</span><span class="err">h</span> <span class="err">=</span> <span class="mi">20</span><span class="err">;</span> <span class="err">comme</span><span class="kc">nt</span> <span class="err">=</span> <span class="s2">&quot;dummy comment&quot;</span><span class="err">;</span><span class="p">},</span>
+    <span class="p">{</span><span class="kc">na</span><span class="err">me</span> <span class="err">=</span> <span class="s2">&quot;Col2&quot;</span><span class="err">;</span> <span class="err">sqlType</span> <span class="err">=</span> <span class="err">INTEGER;</span> <span class="kc">nulla</span><span class="err">ble</span> <span class="err">=</span> <span class="kc">false</span><span class="err">;</span><span class="p">},</span>
+    <span class="p">{</span><span class="kc">na</span><span class="err">me</span> <span class="err">=</span> <span class="s2">&quot;Col3&quot;</span><span class="err">;</span> <span class="err">sqlType</span> <span class="err">=</span> <span class="err">NVARCHAR;</span> <span class="kc">nulla</span><span class="err">ble</span> <span class="err">=</span> <span class="kc">true</span><span class="err">;</span> <span class="err">le</span><span class="kc">n</span><span class="err">g</span><span class="kc">t</span><span class="err">h</span> <span class="err">=</span> <span class="mi">20</span><span class="err">;</span> <span class="err">de</span><span class="kc">fault</span><span class="err">Value</span> <span class="err">=</span> <span class="s2">&quot;Defaultvalue&quot;</span><span class="err">;</span><span class="p">},</span>
+    <span class="p">{</span><span class="kc">na</span><span class="err">me</span> <span class="err">=</span> <span class="s2">&quot;Col4&quot;</span><span class="err">;</span> <span class="err">sqlType</span> <span class="err">=</span> <span class="err">DECIMAL;</span> <span class="kc">nulla</span><span class="err">ble</span> <span class="err">=</span> <span class="kc">false</span><span class="err">;</span> <span class="err">precisio</span><span class="kc">n</span> <span class="err">=</span> <span class="mi">2</span><span class="err">;</span> <span class="err">scale</span> <span class="err">=</span> <span class="mi">3</span><span class="err">;</span><span class="p">}</span>
+<span class="p">]</span><span class="err">;</span>
+<span class="kc">ta</span><span class="err">ble.i</span><span class="kc">n</span><span class="err">dexes</span> <span class="err">=</span>  <span class="p">[</span>
+    <span class="p">{</span><span class="kc">na</span><span class="err">me</span> <span class="err">=</span> <span class="s2">&quot;MYINDEX1&quot;</span><span class="err">;</span> <span class="err">u</span><span class="kc">n</span><span class="err">ique</span> <span class="err">=</span> <span class="kc">true</span><span class="err">;</span> <span class="err">i</span><span class="kc">n</span><span class="err">dexColum</span><span class="kc">ns</span> <span class="err">=</span> <span class="p">[</span><span class="s2">&quot;Col2&quot;</span><span class="p">]</span><span class="err">;</span><span class="p">},</span>
+    <span class="p">{</span><span class="kc">na</span><span class="err">me</span> <span class="err">=</span> <span class="s2">&quot;MYINDEX2&quot;</span><span class="err">;</span> <span class="err">u</span><span class="kc">n</span><span class="err">ique</span> <span class="err">=</span> <span class="kc">true</span><span class="err">;</span> <span class="err">i</span><span class="kc">n</span><span class="err">dexColum</span><span class="kc">ns</span> <span class="err">=</span> <span class="p">[</span><span class="s2">&quot;Col1&quot;</span><span class="p">,</span> <span class="s2">&quot;Col4&quot;</span><span class="p">]</span><span class="err">;</span><span class="p">}</span>
+<span class="p">]</span><span class="err">;</span>
+<span class="kc">ta</span><span class="err">ble.primaryKey.pkcolum</span><span class="kc">ns</span> <span class="err">=</span> <span class="p">[</span><span class="s2">&quot;Col1&quot;</span><span class="p">,</span> <span class="s2">&quot;Col2&quot;</span><span class="p">]</span><span class="err">;</span>
 </code></pre></div>
-<ul>
-<li>Sample HANA XS Advanced syntax:
-<div class="highlight"><pre><span></span><code>COLUMN TABLE &quot;MYSCHEMA::MYTABLE&quot; ( 
-   &quot;ID&quot; INTEGER DEFAULT 555, &quot;NAME&quot; NVARCHAR(256),
-   &quot;ACTIVE&quot; TINYINT,
-   &quot;COUNTRY&quot; NVARCHAR(256),
-   PRIMARY KEY (&quot;ID&quot;) )
-</code></pre></div></li>
-</ul>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">HANA XS Advanced syntax</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">COLUMN</span> <span class="k">TABLE</span> <span class="ss">&quot;MYSCHEMA::MYTABLE&quot;</span> <span class="p">(</span> 
+    <span class="ss">&quot;ID&quot;</span> <span class="nb">INTEGER</span> <span class="k">DEFAULT</span> <span class="mi">555</span><span class="p">,</span>
+    <span class="ss">&quot;NAME&quot;</span> <span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">256</span><span class="p">),</span>
+    <span class="ss">&quot;ACTIVE&quot;</span> <span class="n">TINYINT</span><span class="p">,</span>
+    <span class="ss">&quot;COUNTRY&quot;</span> <span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">256</span><span class="p">),</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="ss">&quot;ID&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
                 
                   
                 
@@ -1189,7 +1210,7 @@ table.primaryKey.pkcolumns = [&quot;Col1&quot;, &quot;Col2&quot;];
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c7d1b464.min.js"></script>
+      <script src="../../assets/javascripts/bundle.bc35569b.min.js"></script>
       
     
   </body>

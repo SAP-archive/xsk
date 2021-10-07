@@ -15,13 +15,17 @@ $.net.SMTPConnection
 
 ## Sample Usage
 
+!!! Note
+	Requires a running mail server. If `mailConfig` is not set the api defaults to a local mail server.
+	For more information please take a look [here](https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/).
+
 ```javascript
 var net = $.net
 
-//create email from JS Object and send
+// Create email from JS Object.
 var mail = new net.Mail({
    sender: {address: "sender@sap.com"},
-   to: [{ name: "John Doe", address: "john.doe@sap.com", nameEncoding: "US-ASCII"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
+   to: [{ name: "John Doe", address: "john.doe@sap.com"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
    cc: [{address: "cc1@sap.com"}, {address: "cc2@sap.com"}],
    bcc: [{ name: "Jonnie Doe", address: "jonnie.doe@sap.com"}],
    subject: "subject",
@@ -34,6 +38,7 @@ var mail = new net.Mail({
    })]
 });
 
+// Set mail server configurations.
 var mailConfig = {
     "mail.user": "test@gmail.com",
     "mail.password": "test",

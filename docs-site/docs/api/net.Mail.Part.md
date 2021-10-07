@@ -77,7 +77,8 @@ let mailConfig = {
     "mail.smtps.auth": "true"
 };
 
-mail.send(mailConfig);
+let resultValue = mail.send(mailConfig);
+$.response.setBody(JSON.stringify(resultValue));
 ```
 
 ## Constructors

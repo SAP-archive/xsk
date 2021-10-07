@@ -49,7 +49,7 @@ let mailConfig = {
 };
 
 let returnValue = mail.send(mailConfig);
-$.response.setBody(JSON.stringify(response_msg));
+$.response.setBody(JSON.stringify(returnValue));
 ```
 
 ## Constructors

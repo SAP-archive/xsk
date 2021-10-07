@@ -318,6 +318,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1000,6 +1007,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1023,45 +1037,41 @@
 <p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBView syntax.</p>
 <h2 id="details-about-the-parser">Details About the Parser</h2>
 <hr />
-<p>There are currently some <a href="https://github.com/SAP/xsk/issues/108">issues</a> in the behavior of the HANA version1 of the parser:</p>
+<div class="admonition warning">
+<p class="admonition-title">Caution</p>
+<p>There are currently some <a href="https://github.com/SAP/xsk/issues/108">issues</a> in the behavior of the HANA version 1.x of the parser:</p>
 <ul>
-<li>
-<p>Currently, the parser takes into account if a given property is mandatory.</p>
-</li>
-<li>
-<p>If the property order is misplaced, the parser will still parse the values.</p>
-</li>
-<li>
-<p>If more than one value of one property is provided, then only the last one is taken.     </p>
-</li>
+<li>Currently, the parser takes into account if a given property is mandatory.</li>
+<li>If the property order is misplaced, the parser will still parse the values.</li>
+<li>If more than one value of one property is provided, then only the last one is taken.     </li>
 </ul>
+</div>
 <h2 id="reference">Reference</h2>
 <hr />
-<ul>
-<li>Additional information on SAP Help Portal</li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">SAP Help Portal</p>
 <p>For more information, see <a href="https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/78dcb8e2f4f14b53b0d333bcd24f8721.html">Create an SQL View</a>.</p>
-<ul>
-<li>Sample HANA version1 syntax:</li>
-</ul>
-<div class="highlight"><pre><span></span><code>schema=&quot;MYSCHEMA&quot;;
-query=&quot;SELECT T1.\&quot;Column2\&quot; FROM \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW1\&quot; AS T1 LEFT JOIN \&quot;MYSCHEMA\&quot;.\&quot;acme.com.test.views::MY_VIEW2\&quot; AS T2 ON T1.\&quot;Column1\&quot; = T2.\&quot;Column1\&quot;&quot;;
-depends_on=[&quot;acme.com.test.views::MY_VIEW1&quot;, &quot;acme.com.test.views::MY_VIEW2&quot;];
+</div>
+<h2 id="sample">Sample</h2>
+<hr />
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">HANA XS Classic syntax</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">schema</span><span class="o">=</span><span class="ss">&quot;MYSCHEMA&quot;</span><span class="p">;</span>
+<span class="n">query</span><span class="o">=</span><span class="ss">&quot;SELECT T1.\&quot;</span><span class="n">Column2</span><span class="err">\</span><span class="ss">&quot; FROM \&quot;</span><span class="n">MYSCHEMA</span><span class="err">\</span><span class="ss">&quot;.\&quot;</span><span class="n">acme</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">test</span><span class="p">.</span><span class="n">views</span><span class="p">::</span><span class="n">MY_VIEW1</span><span class="err">\</span><span class="ss">&quot; AS T1 LEFT JOIN \&quot;</span><span class="n">MYSCHEMA</span><span class="err">\</span><span class="ss">&quot;.\&quot;</span><span class="n">acme</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">test</span><span class="p">.</span><span class="n">views</span><span class="p">::</span><span class="n">MY_VIEW2</span><span class="err">\</span><span class="ss">&quot; AS T2 ON T1.\&quot;</span><span class="n">Column1</span><span class="err">\</span><span class="ss">&quot; = T2.\&quot;</span><span class="n">Column1</span><span class="err">\</span><span class="ss">&quot;&quot;</span><span class="p">;</span>
+<span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="ss">&quot;acme.com.test.views::MY_VIEW1&quot;</span><span class="p">,</span> <span class="ss">&quot;acme.com.test.views::MY_VIEW2&quot;</span><span class="p">];</span>
 </code></pre></div>
-<ul>
-<li>Sample HANA version2 syntax:</li>
-</ul>
-<div class="highlight"><pre><span></span><code>VIEW &quot;hdb_view.db::ItemsByOrderHANAv2&quot;
-AS SELECT &quot;Id&quot; FROM &quot;hdb_view::Item&quot;;
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">HANA XS Advanced syntax</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">VIEW</span> <span class="ss">&quot;hdb_view.db::ItemsByOrderHANAv2&quot;</span>
+<span class="k">AS</span> <span class="k">SELECT</span> <span class="ss">&quot;Id&quot;</span> <span class="k">FROM</span> <span class="ss">&quot;hdb_view::Item&quot;</span><span class="p">;</span>
 </code></pre></div>
-<ul>
-<li>Which syntax does the parser support?</li>
-</ul>
+</div>
+</div>
+<p><strong>Which syntax does the parser support?</strong></p>
 <table>
 <thead>
 <tr>
-<th>hdbview syntax (HANA v1)</th>
-<th>hdbview syntax (XSKViewParser)</th>
+<th>HANA XS Classic syntax</th>
+<th>HANA XS Advanced syntax</th>
 <th>Comments</th>
 </tr>
 </thead>

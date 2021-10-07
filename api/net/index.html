@@ -1159,9 +1159,8 @@ For more information please take a look <a href="https://blogs.sap.com/2020/02/0
 
 <span class="c1">// Send the mail Object from the built-in mail send method.</span>
 <span class="kd">let</span> <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">response_msg</span> <span class="o">=</span> <span class="s2">&quot;MessageId = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">messageId</span> <span class="o">+</span> <span class="s2">&quot;, final reply = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">finalReply</span><span class="p">;</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">));</span>
 </code></pre></div>
 <h2 id="classes">Classes</h2>
 <table>

@@ -1130,8 +1130,8 @@ For more information please take a look <a href="https://blogs.sap.com/2020/02/0
 <span class="c1">// Create a mail Object</span>
 <span class="kd">let</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">({</span>
    <span class="nx">sender</span><span class="o">:</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;sender@sap.com&quot;</span><span class="p">},</span>
-   <span class="nx">to</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">,</span> <span class="nx">nameEncoding</span><span class="o">:</span> <span class="s2">&quot;US-ASCII&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jane Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jane.doe@sap.com&quot;</span><span class="p">}],</span>
-   <span class="nx">cc</span><span class="o">:</span> <span class="p">[{</span><span class="nx">address</span><span class="o">:</span><span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
+   <span class="nx">to</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jane Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jane.doe@sap.com&quot;</span><span class="p">}],</span>
+   <span class="nx">cc</span><span class="o">:</span> <span class="p">[{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">bcc</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jonnie Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jonnie.doe@sap.com&quot;</span><span class="p">}],</span>
    <span class="nx">subject</span><span class="o">:</span> <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
    <span class="nx">subjectEncoding</span><span class="o">:</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">,</span>
@@ -1143,6 +1143,7 @@ For more information please take a look <a href="https://blogs.sap.com/2020/02/0
    <span class="p">})]</span>
 <span class="p">});</span>
 
+<span class="c1">// Set mail server configuration.</span>
 <span class="kd">let</span> <span class="nx">mailConfig</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;mail.user&quot;</span><span class="o">:</span> <span class="s2">&quot;test@gmail.com&quot;</span><span class="p">,</span>
     <span class="s2">&quot;mail.password&quot;</span><span class="o">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
@@ -1156,11 +1157,10 @@ For more information please take a look <a href="https://blogs.sap.com/2020/02/0
 <span class="c1">// Send the mail Object with SMPT</span>
 <span class="nx">smtp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mail</span><span class="p">);</span>
 
-<span class="c1">// Send the mail Object from the built-in send method. The send method is void in xsk. The response is mocked.</span>
+<span class="c1">// Send the mail Object from the built-in mail send method.</span>
 <span class="kd">let</span> <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
 <span class="kd">let</span> <span class="nx">response_msg</span> <span class="o">=</span> <span class="s2">&quot;MessageId = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">messageId</span> <span class="o">+</span> <span class="s2">&quot;, final reply = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">finalReply</span><span class="p">;</span>
 
-<span class="c1">// The result is mocked to prevent errors</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">);</span>
 </code></pre></div>
 <h2 id="classes">Classes</h2>

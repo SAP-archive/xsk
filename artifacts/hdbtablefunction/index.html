@@ -325,6 +325,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -986,6 +993,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    Sample
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1009,25 +1023,24 @@
 <p>The information on this page will help you learn how to develop the design-time data-persistence model for an XSK application using the HDBTableFunction syntax.</p>
 <h2 id="reference">Reference</h2>
 <hr />
-<ul>
-<li>Additional information on SAP Help Portal</li>
-</ul>
-<p>For more information, see <a href="https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.04/en-US/18a94543fe3f41f1b29e7c439f255b95.html">Tutorial: Create a Table User-Defined Function</a></p>
-<ul>
-<li>Sample artifact code:</li>
-</ul>
-<div class="highlight"><pre><span></span><code>FUNCTION &quot;MYSCHEMA&quot;.&quot;hdb_view::OrderTableFunction&quot; ()
-    RETURNS TABLE (
-        &quot;Id&quot; NVARCHAR(32),
-        &quot;CustomerName&quot; NVARCHAR(500)
-    )
-    LANGUAGE SQLSCRIPT
-    SQL SECURITY INVOKER AS
-BEGIN
+<div class="admonition note">
+<p class="admonition-title">SAP Help Portal</p>
+<p>For more information, see <a href="https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.04/en-US/18a94543fe3f41f1b29e7c439f255b95.html">Create a Table User-Defined Function</a></p>
+</div>
+<h2 id="sample">Sample</h2>
+<hr />
+<div class="highlight"><pre><span></span><code><span class="k">FUNCTION</span> <span class="ss">&quot;MYSCHEMA&quot;</span><span class="p">.</span><span class="ss">&quot;hdb_view::OrderTableFunction&quot;</span> <span class="p">()</span>
+    <span class="k">RETURNS</span> <span class="k">TABLE</span> <span class="p">(</span>
+        <span class="ss">&quot;Id&quot;</span> <span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span>
+        <span class="ss">&quot;CustomerName&quot;</span> <span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">LANGUAGE</span> <span class="n">SQLSCRIPT</span>
+    <span class="k">SQL</span> <span class="k">SECURITY</span> <span class="k">INVOKER</span> <span class="k">AS</span>
+<span class="k">BEGIN</span>
 
-RETURN  SELECT &quot;Id&quot;, &quot;CustomerName&quot; FROM &quot;hdb_view::Item&quot;;
+<span class="k">RETURN</span>  <span class="k">SELECT</span> <span class="ss">&quot;Id&quot;</span><span class="p">,</span> <span class="ss">&quot;CustomerName&quot;</span> <span class="k">FROM</span> <span class="ss">&quot;hdb_view::Item&quot;</span><span class="p">;</span>
 
-END;
+<span class="k">END</span><span class="p">;</span>
 </code></pre></div>
                 
                   

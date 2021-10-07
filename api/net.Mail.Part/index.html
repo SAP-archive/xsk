@@ -1054,32 +1054,45 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
-<div class="highlight"><pre><span></span><code><span class="c1">// Create an inline $.net.Mail.Part from JSObject.</span>
-<span class="kd">var</span> <span class="nx">firstPart</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">();</span>
-<span class="nx">firstPart</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">.</span><span class="nx">TYPE_INLINE</span><span class="p">;</span>
-<span class="nx">firstPart</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">data1</span><span class="p">;</span> <span class="c1">// data1 contains the binary data of the image</span>
-<span class="nx">firstPart</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s2">&quot;image/jpg&quot;</span><span class="p">;</span>
-<span class="nx">firstPart</span><span class="p">.</span><span class="nx">contentId</span> <span class="o">=</span> <span class="s2">&quot;IMAGE1_ID&quot;</span><span class="p">;</span>
-<span class="nx">firstPart</span><span class="p">.</span><span class="nx">fileName</span> <span class="o">=</span> <span class="s2">&quot;fileName1.jpg&quot;</span><span class="p">;</span>
-<span class="nx">firstPart</span><span class="p">.</span><span class="nx">fileNameEncoding</span> <span class="o">=</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">;</span>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires a running mail server. If <code>mailConfig</code> is not set the api defaults to a local mail server.
+For more information please take a look <a href="https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/">here</a>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">files</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;io/v4/files&quot;</span><span class="p">);</span>
+
+<span class="c1">// Getting the byte array of the attachment.</span>
+<span class="kd">var</span> <span class="nx">xskLogo</span> <span class="o">=</span> <span class="nx">files</span><span class="p">.</span><span class="nx">readBytes</span><span class="p">(</span><span class="s1">&#39;path-to-file/xsk-logo.png&#39;</span><span class="p">);</span>
 
 <span class="c1">// Create an attachment $.net.Mail.Part from JSObject.</span>
-<span class="kd">var</span> <span class="nx">secondPart</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">attachmentPart</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">({</span>
     <span class="nx">type</span><span class="o">:</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">.</span><span class="nx">TYPE_ATTACHMENT</span><span class="p">,</span>
-    <span class="nx">data</span><span class="o">:</span> <span class="nx">data2</span><span class="p">,</span> <span class="c1">// data2 contains the binary data of the image</span>
-    <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;image/jpg&quot;</span><span class="p">,</span>
-    <span class="nx">fileName</span><span class="o">:</span> <span class="s2">&quot;fileName2.jpg&quot;</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">xskLogo</span><span class="p">,</span> 
+    <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;image/png&quot;</span><span class="p">,</span>
+    <span class="nx">fileName</span><span class="o">:</span> <span class="s2">&quot;xsk-logo.png&quot;</span><span class="p">,</span>
+    <span class="nx">fileNameEncoding</span><span class="o">:</span> <span class="s2">&quot;UTF-8&quot;</span>
+<span class="p">});</span>
+
+<span class="c1">// Getting the byte array of the inline image.</span>
+<span class="kd">var</span> <span class="nx">sapLogo</span> <span class="o">=</span> <span class="nx">files</span><span class="p">.</span><span class="nx">readBytes</span><span class="p">(</span><span class="s1">&#39;path-to-file/sap-logo.png&#39;</span><span class="p">);</span>
+
+<span class="c1">// Create an inline $.net.Mail.Part from JSObject.</span>
+<span class="kd">var</span> <span class="nx">inlinePart</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">.</span><span class="nx">TYPE_INLINE</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">sapLogo</span><span class="p">,</span>
+    <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;image/png&quot;</span><span class="p">,</span>
+    <span class="nx">contentId</span><span class="o">:</span> <span class="s2">&quot;IMAGE1_ID&quot;</span><span class="p">,</span> <span class="c1">// The content id is used in the text part to display the image in the mail body.</span>
+    <span class="nx">fileName</span><span class="o">:</span> <span class="s2">&quot;sap-logo.png&quot;</span><span class="p">,</span>
     <span class="nx">fileNameEncoding</span><span class="o">:</span> <span class="s2">&quot;UTF-8&quot;</span>
 <span class="p">});</span>
 
 <span class="c1">// Create a text $.net.Mail.Part object.</span>
-<span class="kd">var</span> <span class="nx">thirdPart</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">();</span>
-<span class="nx">thirdPart</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">.</span><span class="nx">TYPE_TEXT</span><span class="p">;</span>
-<span class="nx">thirdPart</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;img src=\&quot;cid:IMAGE1_ID\&quot;&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="p">;</span>
-<span class="nx">thirdPart</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s2">&quot;text/html&quot;</span><span class="p">;</span>
-<span class="nx">thirdPart</span><span class="p">.</span><span class="nx">alternative</span> <span class="o">=</span> <span class="s2">&quot;The alternative of the text&quot;</span><span class="p">;</span>
-<span class="nx">thirdPart</span><span class="p">.</span><span class="nx">alternativeContentType</span> <span class="o">=</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">;</span>
-<span class="nx">thirdPart</span><span class="p">.</span><span class="nx">encoding</span> <span class="o">=</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">textPart</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">.</span><span class="nx">TYPE_TEXT</span><span class="p">,</span>
+    <span class="nx">text</span><span class="o">:</span> <span class="s2">&quot;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;This is XSK&lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;cid:IMAGE1_ID\&quot;&gt;&lt;br&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="p">,</span>
+    <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/html&quot;</span><span class="p">,</span>
+    <span class="nx">encoding</span><span class="o">:</span> <span class="s2">&quot;UTF-8&quot;</span>
+<span class="p">});</span>
 
 <span class="c1">// Create an $.net.Mail object.</span>
 <span class="kd">var</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">({</span>
@@ -1092,7 +1105,18 @@
 <span class="p">});</span>
 
 <span class="nx">mail</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">firstPart</span><span class="p">,</span> <span class="nx">secondPart</span><span class="p">,</span> <span class="nx">thirdPart</span><span class="p">);</span>
-<span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+
+<span class="c1">// Set mail server configurations.</span>
+<span class="kd">let</span> <span class="nx">mailConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mail.user&quot;</span><span class="o">:</span> <span class="s2">&quot;&lt;your-user&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.password&quot;</span><span class="o">:</span> <span class="s2">&quot;&lt;your-password&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.transport.protocol&quot;</span><span class="o">:</span> <span class="s2">&quot;smtps&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.host&quot;</span><span class="o">:</span> <span class="s2">&quot;&lt;your-mail-provider-host&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.port&quot;</span><span class="o">:</span> <span class="s2">&quot;465&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.auth&quot;</span><span class="o">:</span> <span class="s2">&quot;true&quot;</span>
+<span class="p">};</span>
+
+<span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
 </code></pre></div>
 <h2 id="constructors">Constructors</h2>
 <div class="highlight"><pre><span></span><code><span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">(</span><span class="nx">PartObject</span><span class="p">)</span>

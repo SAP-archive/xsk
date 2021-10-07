@@ -49,7 +49,9 @@ let mailConfig = {
 };
 
 var smtp = new net.SMTPConnection(mailConfig);
-smtp.send(mail);
+let returnValue = smtp.send(mail);
+
+$.response.setBody(JSON.stringify(returnValue));
 ```
 ## Constructors
 

@@ -22,7 +22,7 @@ The information on this page will help you learn how to develop the design-time 
 ## Reference
 ---
 
-!!! note "Additional information on SAP Help Portal"
+!!! note "SAP Help Portal"
 
     For more information, see [Create a Table](https://help.sap.com/viewer/cc2b23beaa3344aebffa2f6e717df049/2.0.03/en-US/89cbf999e6004be3a5324b8f9ef0c53f.html).
 

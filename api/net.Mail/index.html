@@ -618,6 +618,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#mailconfig-properties" class="md-nav__link">
+    mailConfig Properties
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1056,6 +1063,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#mailconfig-properties" class="md-nav__link">
+    mailConfig Properties
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1082,16 +1096,21 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires a running mail server. If <code>mailConfig</code> is not set the api defaults to a local mail server.
+For more information please take a look <a href="https://blogs.sap.com/2020/02/05/sending-e-mails-with-the-eclipse-dirigible-mail-api/">here</a>.</p>
+</div>
 <div class="highlight"><pre><span></span><code><span class="c1">//create empty $.net.Mail</span>
 <span class="kd">var</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">();</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">net</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">;</span>
 
-<span class="c1">//create email from JS Object and send</span>
+<span class="c1">// Create email from JS Object.</span>
 <span class="kd">let</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">({</span>
     <span class="nx">sender</span><span class="o">:</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;sender@sap.com&quot;</span><span class="p">},</span>
-    <span class="nx">to</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">,</span> <span class="nx">nameEncoding</span><span class="o">:</span> <span class="s2">&quot;US-ASCII&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jane Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jane.doe@sap.com&quot;</span><span class="p">}],</span>
-    <span class="nx">cc</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
+    <span class="nx">to</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jane Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jane.doe@sap.com&quot;</span><span class="p">}],</span>
+    <span class="nx">cc</span><span class="o">:</span> <span class="p">[{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc1@sap.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@sap.com&quot;</span><span class="p">}],</span>
     <span class="nx">bcc</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Jonnie Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;jonnie.doe@sap.com&quot;</span><span class="p">}],</span>
     <span class="nx">subject</span><span class="o">:</span> <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
     <span class="nx">subjectEncoding</span><span class="o">:</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">,</span>
@@ -1103,34 +1122,18 @@
     <span class="p">})]</span>
 <span class="p">});</span>
 
-<span class="c1">//return value is mocked as send is now a void method</span>
-<span class="kd">let</span> <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
-<span class="kd">let</span> <span class="nx">response_msg</span> <span class="o">=</span> <span class="s2">&quot;MessageId = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">messageId</span> <span class="o">+</span> <span class="s2">&quot;, final reply = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">finalReply</span><span class="p">;</span>
+<span class="c1">// Set mail server configurations.</span>
+<span class="kd">let</span> <span class="nx">mailConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mail.user&quot;</span><span class="o">:</span> <span class="s2">&quot;test@gmail.com&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.password&quot;</span><span class="o">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.transport.protocol&quot;</span><span class="o">:</span> <span class="s2">&quot;smtps&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.host&quot;</span><span class="o">:</span> <span class="s2">&quot;smtp.gmail.com&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.port&quot;</span><span class="o">:</span> <span class="s2">&quot;465&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail.smtps.auth&quot;</span><span class="o">:</span> <span class="s2">&quot;true&quot;</span>
+<span class="p">};</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">);</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">net</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">;</span>
-
-<span class="kd">var</span> <span class="nx">mail</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">();</span>
-<span class="nx">mail</span><span class="p">.</span><span class="nx">subject</span> <span class="o">=</span> <span class="s2">&quot;About what the email is.&quot;</span>
-<span class="nx">mail</span><span class="p">.</span><span class="nx">subjectEncoding</span> <span class="o">=</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">;</span>
-<span class="nx">mail</span><span class="p">.</span><span class="nx">sender</span> <span class="o">=</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;from@sap.com&quot;</span><span class="p">};</span>
-<span class="nx">mail</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;john.doe@sap.com&quot;</span><span class="p">,</span> <span class="nx">nameEncoding</span><span class="o">:</span> <span class="s2">&quot;US-ASCII&quot;</span><span class="p">});</span>
-<span class="nx">mail</span><span class="p">.</span><span class="nx">cc</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Cc1&quot;</span><span class="p">,</span> <span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc1@recepient.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="nx">address</span><span class="o">:</span> <span class="s2">&quot;cc2@recepient.com&quot;</span><span class="p">}];</span>
-<span class="nx">mail</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="ow">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">.</span><span class="nx">Part</span><span class="p">.</span><span class="nx">TYPE_TEXT</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Text&#39;</span><span class="p">}));</span>
-
-<span class="kd">var</span> <span class="nx">returnValue</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-
-<span class="k">try</span> <span class="p">{</span>
-    <span class="c1">//the return value is mocked as send is now a void method</span>
-    <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
-<span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">response</span> <span class="o">=</span> <span class="s2">&quot;Error occurred:&quot;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nx">response_msg</span> <span class="o">=</span> <span class="s2">&quot;MessageId = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">messageId</span> <span class="o">+</span> <span class="s2">&quot;, final reply = &quot;</span> <span class="o">+</span> <span class="nx">returnValue</span><span class="p">.</span><span class="nx">finalReply</span><span class="p">;</span>
-
-<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">mail</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">mailConfig</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response_msg</span><span class="p">));</span>
 </code></pre></div>
 <h2 id="constructors">Constructors</h2>
 <div class="highlight"><pre><span></span><code><span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">Mail</span><span class="p">(</span><span class="nx">MailObject</span><span class="p">)</span>
@@ -1227,12 +1230,73 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>send()</strong></td>
-<td>Void method that returns a mocked object containing two properties: 'messageId' and 'finalReply' for compatibility reasons.</td>
+<td><strong>send(mailConfig)</strong></td>
+<td>method that returns an object containing two properties: 'messageId' and 'finalReply'.</td>
 <td><em><code>object</code></em></td>
 </tr>
 </tbody>
 </table>
+<h2 id="mailconfig-properties">mailConfig Properties</h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>mail.user</strong></td>
+<td>The mailbox user</td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.password</strong></td>
+<td>The mailbox password</td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.transport.protocol</strong></td>
+<td>(optional) The mail transport protocol, default is <em>smtps</em></td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtps.host</strong></td>
+<td>The mail SMPTPS host</td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtps.port</strong></td>
+<td>The mail SMPTPS port</td>
+<td><em>number as string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtps.auth</strong></td>
+<td>Enable/Disable mail SMPTPS authentication</td>
+<td><em>boolean as string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtp.host</strong></td>
+<td>The mail SMPTP host</td>
+<td><em>string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtp.port</strong></td>
+<td>The mail SMPTP port</td>
+<td><em>number as string</em></td>
+</tr>
+<tr>
+<td><strong>mail.smtp.auth</strong></td>
+<td>Enable/Disable mail SMPTP authentication</td>
+<td><em>boolean as string</em></td>
+</tr>
+</tbody>
+</table>
+<p>Addition mail client options can be found here:
+- <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html">SMTP/SMTPS</a>
+- <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html">IMAP</a>
+- <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html">POP3</a></p>
                 
                   
                 

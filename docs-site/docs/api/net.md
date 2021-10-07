@@ -41,10 +41,10 @@ let mail = new net.Mail({
 
 // Set mail server configuration.
 let mailConfig = {
-    "mail.user": "test@gmail.com",
-    "mail.password": "test",
+    "mail.user": "<your-user>",
+    "mail.password": "<your-password>",
     "mail.transport.protocol": "smtps",
-    "mail.smtps.host": "smtp.gmail.com",
+    "mail.smtps.host": "<your-mail-provider-host>",
     "mail.smtps.port": "465",
     "mail.smtps.auth": "true"
 };

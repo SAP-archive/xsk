@@ -158,14 +158,14 @@ context ContextA {
     {
         street : String(50);
         number: Integer;
-	zipCode: Integer;
+        zipCode: Integer;
     };
 
     type Student
     {
         name: String(50)
         age: Integer;
-	address: Address;
+        address: Address;
     };
 };
 ```

@@ -64,9 +64,9 @@ $.response.setBody(JSON.stringify(returnValue));
 
 | Classes                                        | Description                                               |
 |------------------------------------------------|-----------------------------------------------------------|
-| **[Mail](../$.net.Mail/)**                     | Class for constructing and sending multipart emails.      |
-| **[SMTPConnection](../$.net.SMTPConnection/)** | Class for sending $.net.Mail objects via SMTP connection. |
-| **[Destination](../$.net.Destination/)**       | Contains metadata, for example, host name and port number.|
+| **[Mail](../net.Mail/)**                     | Class for constructing and sending multipart emails.      |
+| **[SMTPConnection](../net.SMTPConnection/)** | Class for sending $.net.Mail objects via SMTP connection. |
+| **[Destination](../net.Destination/)**       | Contains metadata, for example, host name and port number.|
 
 ## Properties
 

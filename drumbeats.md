@@ -4,7 +4,7 @@
 
 #### Focus topics:
 
-- Ordering of CSV files in HDBTI
+- Topological ordering of CSV files in HDBTI
 - Applying Problems Facade API for HDB* Parsers
 - $.net.Mail API enhancements, documentation and samples
 
@@ -21,7 +21,7 @@
 
 #### Focus topics:
 
-- Simple samples for jobs, hdbsynonum, hdbsequence, hdbdd
+- Simple samples for xsjobs, hdbsynonum, hdbsequence, hdbdd
 - $.jobs implementation and integration tests
 - Angular version update and fixes
 

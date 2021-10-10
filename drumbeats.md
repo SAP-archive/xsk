@@ -1,5 +1,39 @@
 # Drumbeats
 
+## 2021 Week 40 (04 October - 03 October)
+
+#### Focus topics:
+
+- Ordering of CSV files in HDBTI
+- Applying Problems Facade API for HDB* Parsers
+- $.net.Mail API enhancements, documentation and samples
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-10-04..2021-10-10) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-10-04..2021-10-10) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-10-04..2021-10-10) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-10-04..2021-10-10) PRs
+
+----
+
+## 2021 Week 39 (27 September - 03 October)
+
+#### Focus topics:
+
+- Simple samples for jobs, hdbsynonum, hdbsequence, hdbdd
+- $.jobs implementation and integration tests
+- Angular version update and fixes
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-27..2021-10-03) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-09-27..2021-10-03) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-09-27..2021-10-03) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-09-27..2021-10-03) PRs
+
+----
+
 ## 2021 Week 38 (20 September - 26 September)
 
 #### Focus topics:

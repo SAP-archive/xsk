@@ -36,28 +36,24 @@ let request = new http.Request(http.GET, "/"); // new Request(METHOD, PATH)
 // set the timeout in seconds
 client.setTimeout(10);
 // send the request and synchronously get the response
-client.request(request, dest);
+client.request(request, destination);
 let response = client.getResponse();
 
 // get all the cookies and headers from the response
-let co = [], he = [];
-for(let c in response.cookies) {
-    co.push(response.cookies[c]);
+let cookies = [], headers = [];
+
+for(let i = 0; i< response.cookies.length; i++) {
+    cookies.push(response.cookies[i]);
 }
 
-for(let c in response.headers) {
-    he.push(response.headers[c]);
+for(let i = 0; i< response.headers.length; i++) {
+    headers.push(response.headers[i]);
 }
 
-// get the body
-let body;
-if(!response.body)
-    body = "";
-else
-    body = response.body;
+console.log(response.body.asString());
 
 // check the contents of the response
-$.response.setBody("status: " +response.status+ " cookies: " +co+ " headers: " +he+ " body: " +body);
+$.response.setBody("status: " + response.status + " cookies: " + JSON.stringify(cookies) + " headers: " + JSON.stringify(headers) + " body: " + response.body.asString());
 ```
 
 ## Functions

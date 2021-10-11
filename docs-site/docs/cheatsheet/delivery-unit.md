@@ -53,9 +53,9 @@ You use a DU to transport the design-time objects that are stored in the SAP HAN
            - `0` - the support package version (if required).
            - `5` - the patch version (if required).
 
-           !!! note
-    
-               The numbers you enter here refer to the application component that you are developing. The numbers do not refer to the patch or service-pack level deployed on the SAP HANA server.
+       !!! note
+
+           The numbers you enter here refer to the application component that you are developing. The numbers do not refer to the patch or service-pack level deployed on the SAP HANA server.
 
    1. Choose `Create` - the new delivery unit is added to the SAP HANA repository in the namespace specified by the vendor ID and the application path.
    1. Check the status bar at the bottom of the browser window for error messages.

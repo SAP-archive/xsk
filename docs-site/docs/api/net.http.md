@@ -66,9 +66,9 @@ $.response.setBody("status: " + response.status + " cookies: " + JSON.stringify(
 
 | Classes                                       | Description                                               |
 |-----------------------------------------------|-----------------------------------------------------------|
-| **[Destination](../$.net.http.Destination/)** | Contains metadata, for example, host name, port number and custom values.      |
-| **[Client](../$.net.http.Client/)**           | HTTP(s) Client for outbound connectivity. This client supports HTTP and HTTPs connections over HTTP or SOCKS proxy. |
-| **[Request](../$.net.http.Request/)**         | Request class to be used with HTTP client.|
+| **[Destination](../net.http.Destination/)** | Contains metadata, for example, host name, port number and custom values.      |
+| **[Client](../net.http.Client/)**           | HTTP(s) Client for outbound connectivity. This client supports HTTP and HTTPs connections over HTTP or SOCKS proxy. |
+| **[Request](../net.http.Request/)**         | Request class to be used with HTTP client.|
 
 ## Functions
 

@@ -50,8 +50,6 @@ for(let i = 0; i< response.headers.length; i++) {
     headers.push(response.headers[i]);
 }
 
-console.log(response.body.asString());
-
 // check the contents of the response
 $.response.setBody("status: " + response.status + " cookies: " + JSON.stringify(cookies) + " headers: " + JSON.stringify(headers) + " body: " + response.body.asString());
 ```

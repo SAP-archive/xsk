@@ -918,15 +918,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#procedure" class="md-nav__link">
-    Procedure
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#note" class="md-nav__link">
-    Note
+  <a href="#steps" class="md-nav__link">
+    Steps
   </a>
   
 </li>
@@ -1001,15 +994,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#procedure" class="md-nav__link">
-    Procedure
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#note" class="md-nav__link">
-    Note
+  <a href="#steps" class="md-nav__link">
+    Steps
   </a>
   
 </li>
@@ -1032,50 +1018,74 @@
                 
                 
                 <h1 id="create-delivery-units">Create Delivery Units</h1>
-<p><a href="https://help.sap.com/viewer/a4d43a319ecf464e9d838454a6bdb9ad/2.0.03/en-US/d5ca92aba6b4445aba17ca3f8d671217.html">SAP documentation</a></p>
 <p>A delivery unit (DU) is a group of transportable packages that contain objects used for content delivery. You can use the SAP HANA Application Lifecycle Management to create a DU for your application content or your software component.</p>
+<div class="admonition note">
+<p class="admonition-title">SAP Help Portal</p>
+<p>For more information, see <a href="https://help.sap.com/viewer/a4d43a319ecf464e9d838454a6bdb9ad/2.0.03/en-US/d5ca92aba6b4445aba17ca3f8d671217.html">Create a Delivery Unit</a>.</p>
+</div>
 <h2 id="prerequisites">Prerequisites</h2>
+<div class="admonition info">
+<p class="admonition-title">Prerequisites</p>
 <p>To create a delivery unit with the SAP HANA Application Lifecycle Management, you must ensure the following prerequisites are met:</p>
-<ol>
+<ul>
 <li>You have access to an SAP HANA system.</li>
 <li>You have the privileges granted by a role based on the SAP HANA <code>sap.hana.xs.lm.roles::Administrator</code> user role template.</li>
 <li>The <code>vendor</code> ID is defined for the DU; the vendor ID defines the repository namespace in which the new DU resides.</li>
-</ol>
+</ul>
+</div>
 <h2 id="context">Context</h2>
 <p>You use a DU to transport the design-time objects that are stored in the SAP HANA repository between two systems, for example, from a development system to a consolidation system. To create a new delivery unit using the SAP HANA application lifecycle management, perform the following steps.</p>
-<h2 id="procedure">Procedure</h2>
-<p><strong>1. Open SAP HANA Application Lifecycle Management.</strong>
-SAP HANA Application Lifecycle Management is available on the SAP HANA XS Web server at the following URL: <strong><code>http://&lt;WebServerHost&gt;:80&lt;SAPHANAinstance&gt;/sap/hana/XS/lm</code></strong></p>
+<h2 id="steps">Steps</h2>
+<ul>
+<li>
+<p>Open SAP HANA Application Lifecycle Management.</p>
+<ul>
+<li>SAP HANA Application Lifecycle Management is available on the SAP HANA XS Web server at the following URL: <strong><code>http://&lt;WebServerHost&gt;:80&lt;SAPHANAinstance&gt;/sap/hana/XS/lm</code></strong></li>
+</ul>
 <p><img alt="" src="https://user-images.githubusercontent.com/12174161/132681639-6b26dd88-f2ca-43c2-858e-ce3bef2155d3.png" /></p>
-<p><strong>2. Choose the <code>PRODUCTS</code> tab.</strong></p>
-<p>Choose the <strong><code>Delivery Units</code></strong> tab.</p>
-<p>Choose <strong><code>Create</code></strong>.</p>
-<p>The <strong>New Delivery Unit</strong> dialog box appears.
-<img alt="" src="https://user-images.githubusercontent.com/12174161/132681635-408a0e35-7dac-4945-8fe3-9ee23c6552ec.png" /></p>
+</li>
+<li>
+<p>Choose the <code>PRODUCTS</code> tab.</p>
+</li>
+<li>
+<p>Select the <code>Delivery Units</code> tab.</p>
+</li>
+<li>Click the <code>Create</code> button.</li>
+<li>
+<p>The <code>New Delivery Unit</code> dialog box appears.</p>
+<p><img alt="" src="https://user-images.githubusercontent.com/12174161/132681635-408a0e35-7dac-4945-8fe3-9ee23c6552ec.png" /></p>
+</li>
+<li>
 <p>Enter details for the new DU.</p>
 <p><img alt="" src="https://user-images.githubusercontent.com/12174161/132681631-e5f91d98-f587-46a3-a32e-ded916e97ae3.png" /></p>
+</li>
+<li>
 <p>When entering details, note the following points:</p>
 <ul>
-<li><strong>Name</strong></li>
-</ul>
-<p>The field is mandatory and you must follow strict naming conventions, for example, use capital letters.</p>
-<ul>
-<li><strong>Vendor</strong></li>
-</ul>
-<p>This field is mandatory. However, you cannot enter a vendor here; the box is populated by the value you enter when defining the vendor in the <strong><code>SETTINGS</code></strong> tab.</p>
+<li><code>Name</code> - the field is mandatory and you must follow strict naming conventions, for example, use capital letters.</li>
+<li>
+<p><code>Vendor</code> - this field is mandatory. However, you cannot enter a vendor here, the box is populated by the value you enter when defining the vendor in the <code>SETTINGS</code> tab.</p>
 <p><img alt="" src="https://user-images.githubusercontent.com/12174161/132681626-68eef9d7-1c16-47da-b821-9a67de6010d6.png" /></p>
+</li>
+<li>
+<p><code>Version</code> - version numbers must take the form <code>#.#.#</code>, for example, <code>1.0.5</code>, where:</p>
 <ul>
-<li><strong>Version</strong></li>
+<li><code>1</code> - the DU version number.</li>
+<li><code>0</code> - the support package version (if required).</li>
+<li><code>5</code> - the patch version (if required).</li>
 </ul>
-<p>Version numbers must take the form <code>#.#.#</code>, for example, <code>1.0.5</code>, where:</p>
-<p><strong><code>1</code></strong> = the DU version number</p>
-<p><strong><code>0</code></strong> = the support package version (if required)</p>
-<p><strong><code>5</code></strong> = the patch version (if required)</p>
-<h2 id="note">Note</h2>
-<p>The numbers you enter here refer to the application component that you are developing; the numbers do not refer to the patch or service-pack level deployed on the SAP HANA server.
-Choose Create.
-The new delivery unit is added to the SAP HANA repository in the namespace specified by the vendor ID and the application path.
-Check the status bar at the bottom of the browser window for error messages. Choose the message link to display the message text.</p>
+<p>!!! note</p>
+<div class="highlight"><pre><span></span><code>   The numbers you enter here refer to the application component that you are developing. The numbers do not refer to the patch or service-pack level deployed on the SAP HANA server.
+</code></pre></div>
+</li>
+</ul>
+</li>
+<li>
+<p>Choose <code>Create</code> - the new delivery unit is added to the SAP HANA repository in the namespace specified by the vendor ID and the application path.</p>
+</li>
+<li>Check the status bar at the bottom of the browser window for error messages.</li>
+<li>Choose the message link to display the message text.</li>
+</ul>
                 
               
               

@@ -23,7 +23,8 @@ Read service.xshttpdest inside the Demo package that contains:
 host=https://services.odata.org;
 pathPrefix=/V4/Northwind/Northwind.svc/;
 */
-let dest = http.readDestination("Demo", "service");
+
+let destination = http.readDestination("Demo", "service");
 
 // create client
 let client = new http.Client();
@@ -36,13 +37,14 @@ client.request(request, dest);
 let response = client.getResponse();
 
 // get all the cookies and headers from the response
-let co = [], he = [];
-for(let c in response.cookies) {
-    co.push(response.cookies[c]);
+let cookies = [], headers = [];
+
+for(let i = 0; i< response.cookies.length; i++) {
+    cookies.push(response.cookies[i]);
 }
 
-for(let c in response.headers) {
-    he.push(response.headers[c]);
+for(let i = 0; i< response.headers.length; i++) {
+    headers.push(response.headers[i]);
 }
 
 // get the body
@@ -56,7 +58,7 @@ else
 client.close();        // prevent socket leak - see xsengine.ini: [communication] - max_open_sockets_per_request
 
 // check the contents of the response
-$.response.setBody("status: " + response.status + " cookies: " + co + " headers: " + he + " body: " + body);
+$.response.setBody("status: " + response.status + " cookies: " + JSON.stringify(cookies) + " headers: " + JSON.stringify(headers) + " body: " + body.asString());
 ```
 
 ## Classes

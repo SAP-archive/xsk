@@ -3,19 +3,19 @@ site_url: https://www.xsk.io
 
 nav:
     - Welcome: 'index.md'
-    - Artifacts: 
-      - hdbtable: 'artifacts/hdbtable.md'
-      - hdbview: 'artifacts/hdbview.md'
-      - hdbtablefunction: 'artifacts/hdbtablefunction.md'
-      - hdbprocedure: 'artifacts/hdbprocedure.md'
-      - hdbschema: 'artifacts/hdbschema.md'
-      - hdbsynonym: 'artifacts/hdbsynonym.md'
-      - hdbdd: 'artifacts/hdbdd.md'
-      - hdbcds: 'artifacts/hdbdd.md'
-      - hdbsequence: 'artifacts/hdbsequence.md'
-      - xsjs: 'artifacts/xsjs.md'
-      - xsjslib: 'artifacts/xsjs.md'
-      - xsodata: 'artifacts/xsodata.md'
+    - Artefacts: 
+      - hdbtable: 'artefacts/hdbtable.md'
+      - hdbview: 'artefacts/hdbview.md'
+      - hdbtablefunction: 'artefacts/hdbtablefunction.md'
+      - hdbprocedure: 'artefacts/hdbprocedure.md'
+      - hdbschema: 'artefacts/hdbschema.md'
+      - hdbsynonym: 'artefacts/hdbsynonym.md'
+      - hdbdd: 'artefacts/hdbdd.md'
+      - hdbcds: 'artefacts/hdbdd.md'
+      - hdbsequence: 'artefacts/hdbsequence.md'
+      - xsjs: 'artefacts/xsjs.md'
+      - xsjslib: 'artefacts/xsjs.md'
+      - xsodata: 'artefacts/xsodata.md'
     - API:
       - $.db: 'api/db.md'
       - $.hdb: 'api/hdb.md'

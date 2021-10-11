@@ -27,7 +27,7 @@ Read service.xshttpdest inside the Demo package that contains:
 host=https://services.odata.org;
 pathPrefix=/V4/Northwind/Northwind.svc/;
 */
-let dest = http.readDestination("Demo", "service");
+let destination = http.readDestination("Demo", "service");
 
 // create client
 let client = new http.Client();

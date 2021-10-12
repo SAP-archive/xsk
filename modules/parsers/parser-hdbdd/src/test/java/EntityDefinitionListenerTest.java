@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -158,15 +159,19 @@ public class EntityDefinitionListenerTest {
   @Test
   public void parseArtifactsNamedAsKeywordsSuccessfully() throws Exception {
       parseSampleFile("/Context.hdbdd", "sap/db/Context.hdbdd");
-      assertEquals(3, this.symbolTable.getSymbolsByFullName().size());
+      assertEquals(4, this.symbolTable.getSymbolsByFullName().size());
 
       List<EntitySymbol> entitiesParsed = this.symbolTable.getSortedEntities();
-      assertEquals(1, entitiesParsed.size());
+      assertEquals(2, entitiesParsed.size());
 
-      EntitySymbol parsedEntity = entitiesParsed.get(0);
+      EntitySymbol parsedEntity = entitiesParsed.get(1);
       assertNotNull(parsedEntity.resolve("key"));
       assertNotNull(parsedEntity.resolve("entity"));
       assertNotNull(parsedEntity.resolve("Type"));
+
+      EntitySymbol to = entitiesParsed.get(0);
+      assertNotNull(to.resolve("id"));
+      assertNotNull(to.resolve("to"));
 
       assertNotNull(this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type"));
     Symbol resolvedType = this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type");
@@ -181,6 +186,23 @@ public class EntityDefinitionListenerTest {
       assertEquals(CDSRuntimeException.class, e.getClass());
       assertEquals("Error at line: 5 - Element declarations are only allowed for entity scope.", e.getMessage());
     }
+  }
+
+  @Test
+  public void parseEntitiesWithEscapedNamesShouldResolveCorrectly() throws Exception {
+    parseSampleFile("/EscapedNamesExample.hdbdd", "com/sap/EscapedNamesExample.hdbdd");
+    List<EntitySymbol> sortedEntities = this.symbolTable.getSortedEntities();
+
+    EntitySymbol school = sortedEntities.get(0);
+    EntitySymbol student = sortedEntities.get(1);
+
+    assertEquals("Escaped-Student", student.getName());
+    assertNotNull(student.resolve("n@me!"));
+    assertNotNull(student.resolve("from"));
+
+    assertEquals("Escaped-School", school.getName());
+    assertNotNull(((Typeable) school.resolve("name")).getType());
+    assertNotNull(((Typeable) school.resolve("to")).getType());
   }
 
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {

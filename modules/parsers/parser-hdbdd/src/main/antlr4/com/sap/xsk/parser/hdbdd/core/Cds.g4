@@ -18,7 +18,7 @@ elementDeclRule: annotationRule* (key=ID)? (name=ID | '"' name=ID '"') ':' typeA
 elementDetails: defaultValue | elementConstraints;
 elementConstraints: 'null' | 'not null';
 
-association: ID ':' ASSOCIATION cardinality? TO associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
+association: ascId=ID ':' ascKeyword=ID cardinality? toKeyword=ID associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
 associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
 unmanagedForeignKey: ON pathSubMembers+=ID ('.' pathSubMembers+=ID)* '=' source=ID;
 managedForeignKeys: '{' foreignKey (',' foreignKey)* '}';
@@ -41,21 +41,19 @@ arrRule: '[' annValue (',' annValue)* ']';
 obj: '{' keyValue (',' keyValue)* '}';
 keyValue: ID ':' annValue;
 
-artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';';
+artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
 
 NAMESPACE: N A M E S P A C E;
 AS: 'as';
 HANA: 'hana';
 USING: U S I N G;
-ASSOCIATION: A S S O C I A T I O N;
-TO: 'to' ;
 ON: 'on';
 NULL: 'null';
 
 DEFAULT: D E F A U L T;
 ASSOCIATION_MIN: INTEGER '..';
 BOOLEAN: 'true' | 'false';
-ID: ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_' | '-')*;
+ID: IdCharacters | EscapedIdCharactes;
 
 SEMICOLUMN: ';';
 INTEGER: SignedInteger;
@@ -73,11 +71,15 @@ WS : [ \\\t\r\n]+ -> skip;
 LINE_COMMENT        : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
 LINE_COMMENT2        : '/*' .*? '*/' -> skip ; // Match "/* */" stuff
 
+fragment IdCharacters : ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_')*;
+fragment EscapedIdCharactes: '"' (~["\\\r\n] | EscapeSequence)*? '"';
+
 fragment EscapeSequence
     : '\\' [btnfr"'\\]
     | '\\' ([0-3]? [0-7])? [0-7]
     | '\\' 'u'+ HexDigit HexDigit HexDigit HexDigit
     ;
+
 fragment HexDigits
     : HexDigit ((HexDigit | '_')* HexDigit)?
     ;

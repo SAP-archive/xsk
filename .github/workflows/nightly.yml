@@ -5,7 +5,7 @@ on:
     - cron: "0 22 * * *"
 
 jobs:
-  selenium-tests:
+  integration-tests:
     runs-on: ubuntu-latest
 
     # Download latest DockerHub image of XSK and run it in a service container
@@ -60,7 +60,7 @@ jobs:
 
       # Run Selenium tests on XSK
       - name: Run Selenium Tests
-        run: mvn clean install -P itests -Dintegration-tests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
+        run: mvn clean install -P itests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
 
         env:
           ITESTS_SELENIUM_NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}

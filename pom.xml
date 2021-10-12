@@ -81,6 +81,15 @@
 			</build>
 		</profile>
 		<profile>
+			<id>itests</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>integration-tests</module>
+			</modules>
+		</profile>
+		<profile>
 			<id>license</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -212,6 +221,7 @@
 				</plugins>
 			</build>
 		</profile>
+
 	</profiles>
 
 	<properties>

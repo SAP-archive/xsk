@@ -45,8 +45,7 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
 	}
 
 	@Test
-	public void testHDBDDWithManagedAssOnDiffSchema()
-			throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+	public void testHDBDDWithManagedAssOnDiffSchema() throws Exception {
 		try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 			try {
 				HanaITestUtils.createSchema(stmt, TEST_SCHEMA);

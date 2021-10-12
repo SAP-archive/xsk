@@ -44,6 +44,8 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
 
 public class XSKHDBTestModule extends AbstractDirigibleModule {
 
+  private static final int MAX_IDLE_CONNECTIONS = 30;
+
   private JDBCModel model;
 
   public XSKHDBTestModule(JDBCModel model) {
@@ -52,12 +54,13 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
 
   public DataSource getDataSource() {
     BasicDataSource basicDataSource = new BasicDataSource();
-    basicDataSource.setDriverClassName(this.model.getDriverClassName());
-    basicDataSource.setUrl(this.model.getJdbcUrl());
-    basicDataSource.setUsername(this.model.getUsername());
-    basicDataSource.setPassword(this.model.getPassword());
+    basicDataSource.setDriverClassName(model.getDriverClassName());
+    basicDataSource.setUrl(model.getJdbcUrl());
+    basicDataSource.setUsername(model.getUsername());
+    basicDataSource.setPassword(model.getPassword());
     basicDataSource.setDefaultAutoCommit(true);
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
+    basicDataSource.setMaxIdle(MAX_IDLE_CONNECTIONS);
     return basicDataSource;
   }
 

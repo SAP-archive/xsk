@@ -17,25 +17,25 @@ $.net.Destination
 
 === "destination-sample.xsjs"
 
-```javascript
-let net = $.net;
+    ```javascript
+    let net = $.net;
 
-/*
-Read service.xshttpdest inside the Demo package that contains:
-host=http://localhost;
-port=8080;
-*/
-let dest = new net.Destination("Demo", "service");
-// Check if the file has been read properly
-$.response.setBody("Host: " +dest.host+ " Port: " +dest.port);
-```
+    /*
+    Read service.xshttpdest inside the Demo package that contains:
+    host=http://localhost;
+    port=8080;
+    */
+    let dest = new net.Destination("Demo", "service");
+    // Check if the file has been read properly
+    $.response.setBody("Host: " +dest.host+ " Port: " +dest.port);
+    ```
 
 === "service.xshttpdest"
 
-```javascript
-host=http://localhost;
-port=8080;
-```
+    ```javascript
+    host=http://localhost;
+    port=8080;
+    ```
 
 ## Constructors
 

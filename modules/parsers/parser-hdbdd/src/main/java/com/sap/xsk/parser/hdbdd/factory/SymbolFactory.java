@@ -25,12 +25,13 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import org.antlr.v4.runtime.Token;
 
 public class SymbolFactory {
 
   public Symbol getSymbol(ArtifactRuleContext artifactRuleContext, Scope currentScope, String schema) {
-    String symbolId = artifactRuleContext.artifactName.getText();
+    String symbolId = HdbddUtils.processEscapedSymbolName(artifactRuleContext.artifactName.getText());
     checkForDuplicateName(symbolId, currentScope, artifactRuleContext.artifactName.getLine());
     SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(artifactRuleContext.artifactType);
 
@@ -54,7 +55,7 @@ public class SymbolFactory {
   }
 
   public DataTypeSymbol getDataTypeSymbol(CdsParser.DataTypeRuleContext ctx, Scope currentScope, String schema) {
-    String typeId = ctx.name.getText();
+    String typeId = HdbddUtils.processEscapedSymbolName(ctx.name.getText());
     checkForDuplicateName(typeId, currentScope, ctx.name.getLine());
     SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(ctx.type);
     Symbol newSymbol = createSymbol(typeId, currentScope, schema, ctx.name);
@@ -68,7 +69,7 @@ public class SymbolFactory {
   }
 
   public EntityElementSymbol getEntityElementSymbol(CdsParser.ElementDeclRuleContext ctx, Scope currentScope) {
-    String elementId = ctx.name.getText();
+    String elementId = HdbddUtils.processEscapedSymbolName(ctx.name.getText());
     checkForDuplicateName(elementId, currentScope, ctx.name.getLine());
 
     EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
@@ -84,7 +85,7 @@ public class SymbolFactory {
   }
 
   public EntityElementSymbol getEntityElementSymbol(CdsParser.FieldDeclRuleContext ctx, Scope currentScope) {
-    String elementId = ctx.ID().getText();
+    String elementId = HdbddUtils.processEscapedSymbolName(ctx.ID().getText());
     checkForDuplicateName(elementId, currentScope, ctx.ID().getSymbol().getLine());
     EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
     elementSymbol.setIdToken(ctx.ID().getSymbol());
@@ -93,7 +94,7 @@ public class SymbolFactory {
   }
 
   public EntityElementSymbol getEntityElementSymbol(CdsParser.DataTypeRuleContext ctx, Scope currentScope) {
-    String elementId = ctx.name.getText();
+    String elementId = HdbddUtils.processEscapedSymbolName(ctx.name.getText());
     checkForDuplicateName(elementId, currentScope, ctx.name.getLine());
     EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
     elementSymbol.setIdToken(ctx.name);
@@ -103,7 +104,7 @@ public class SymbolFactory {
   }
 
   public FieldSymbol getFieldSymbol(CdsParser.FieldDeclRuleContext ctx, Scope currentScope) {
-    String filedId = ctx.ID().getText();
+    String filedId = HdbddUtils.processEscapedSymbolName(ctx.ID().getText());
     checkForDuplicateName(filedId, currentScope, ctx.ID().getSymbol().getLine());
     FieldSymbol fieldSymbol = new FieldSymbol(filedId, currentScope);
     fieldSymbol.setIdToken(ctx.ID().getSymbol());
@@ -112,11 +113,11 @@ public class SymbolFactory {
   }
 
   public AssociationSymbol getAssociationSymbol(CdsParser.AssociationContext ctx, Scope currentScope) {
-    String associationId = ctx.ID().getText();
-    checkForDuplicateName(associationId, currentScope, ctx.ID().getSymbol().getLine());
+    String associationId = HdbddUtils.processEscapedSymbolName(ctx.ascId.getText());
+    checkForDuplicateName(associationId, currentScope, ctx.ascId.getLine());
 
     AssociationSymbol associationSymbol = new AssociationSymbol(associationId, currentScope);
-    associationSymbol.setIdToken(ctx.ID().getSymbol());
+    associationSymbol.setIdToken(ctx.ascId);
     currentScope.define(associationSymbol);
 
     if (ctx.cardinality() == null) {

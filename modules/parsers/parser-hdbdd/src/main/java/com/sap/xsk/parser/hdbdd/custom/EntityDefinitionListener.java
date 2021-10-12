@@ -35,16 +35,17 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.CardinalityEnum;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
-import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
+import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
@@ -69,7 +70,8 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterNamespaceRule(CdsParser.NamespaceRuleContext ctx) {
-    String packageName = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
+    String packageName = ctx.members.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+
     if (!packageName.equals(getExpectedNamespace())) {
       throw new CDSRuntimeException(
           String.format("Error at line: %s. Namespace does not match the file directory.", ctx.members.get(0).getLine()));
@@ -79,8 +81,8 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterUsingRule(CdsParser.UsingRuleContext ctx) {
-    String packagePath = ctx.pack.stream().map(Token::getText).collect(Collectors.joining("."));
-    String memberPath = ctx.members.stream().map(Token::getText).collect(Collectors.joining("."));
+    String packagePath = ctx.pack.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+    String memberPath = ctx.members.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
     String fullSymbolName = packagePath + "::" + memberPath;
 
     Symbol externalSymbol = this.symbolTable.getSymbol(fullSymbolName);
@@ -210,8 +212,17 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterAssociation(CdsParser.AssociationContext ctx) {
-    AssociationSymbol associationSymbol = this.symbolFactory.getAssociationSymbol(ctx, currentScope);
+    String associationKeyword = ctx.ascKeyword.getText().toLowerCase();
+    String toKeyword = ctx.toKeyword.getText().toLowerCase();
+    if (!associationKeyword.equals("association")) {
+      throw new CDSRuntimeException(String.format("Error at line: %s. The 'Association' keyword is expected instead of: '%s'",
+          ctx.ascKeyword.getLine(), ctx.ascKeyword.getText()));
+    } else if (!toKeyword.equals("to")) {
+      throw new CDSRuntimeException(String.format("Error at line: %s. The 'to' keyword is expected instead of: '%s'",
+          ctx.toKeyword.getLine(), ctx.toKeyword.getText()));
+    }
 
+    AssociationSymbol associationSymbol = this.symbolFactory.getAssociationSymbol(ctx, currentScope);
     this.associations.put(ctx, associationSymbol);
   }
 
@@ -279,7 +290,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
   @Override
   public void enterAssignType(CdsParser.AssignTypeContext ctx) {
     Typeable typeable = typeables.get(ctx.getParent());
-    String fullReference = ctx.pathSubMembers.stream().map(Token::getText).collect(Collectors.joining("."));
+    String fullReference = ctx.pathSubMembers.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
 
     typeable.setReference(fullReference);
   }
@@ -508,6 +519,8 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
     this.values.put(ctx.getParent(), annotationObj);
   }
+
+
 
   public Symbol resolveReference(String referencedId, Symbol referencingSymbol) {
     if (symbolTable.getGlobalBuiltInTypeScope().resolve(referencedId) != null) {

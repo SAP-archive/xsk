@@ -11,5 +11,11 @@ context Context {
                 entity:  type of Entity.Id;
       };
 
+      entity To {
+        key id: Integer;
+        to: String(32);
+        association : association to Entity on association.Id = id;
+      }
+
      type Type: String(30);
 };

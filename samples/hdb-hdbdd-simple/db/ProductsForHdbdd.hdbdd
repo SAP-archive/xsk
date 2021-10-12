@@ -13,7 +13,7 @@ context ProductsForHdbdd {
         CustomerSurname      : String(500);
         Status               : String(100);
         CreatedAt            : UTCTimestamp;
-   		CreatedBy            : String(5000);
+   		CreatedBy               : String(5000);
         Description          : String(100);
         Address              : AdressT;
         Phone                : String(200);

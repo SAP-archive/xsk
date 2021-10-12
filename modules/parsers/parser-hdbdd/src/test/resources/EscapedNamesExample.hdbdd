@@ -1,0 +1,16 @@
+namespace com.sap;
+
+@Schema: 'ADMIN'
+context EscapedNamesExample {
+  entity "Escaped-Student" {
+    id : Integer;
+    "n@me!" : String(20);
+    "from": String(20);
+  };
+
+  entity "Escaped-School" {
+    id: Integer;
+    name: type of "Escaped-Student"."n@me!";
+    "to": type of "Escaped-Student"."from";
+  };
+};

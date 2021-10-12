@@ -11,6 +11,21 @@
  */
 package com.sap.xsk.hdb.ds.itest.module;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.database.h2.H2Database;
+import org.eclipse.dirigible.repository.api.RepositoryPath;
+import org.eclipse.dirigible.repository.fs.FileSystemRepository;
+import org.eclipse.dirigible.repository.local.LocalRepository;
+import org.eclipse.dirigible.repository.local.LocalResource;
+
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.repository.TestRepository;
@@ -26,17 +41,6 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKTableFunctionManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKTableManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKTableTypeManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import javax.sql.DataSource;
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.repository.api.RepositoryPath;
-import org.eclipse.dirigible.repository.fs.FileSystemRepository;
-import org.eclipse.dirigible.repository.local.LocalRepository;
-import org.eclipse.dirigible.repository.local.LocalResource;
 
 public class XSKHDBTestModule extends AbstractDirigibleModule {
 
@@ -55,6 +59,11 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
     basicDataSource.setDefaultAutoCommit(true);
     basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
     return basicDataSource;
+  }
+
+  public DataSource getSystemDataSource() {
+	  H2Database h2Database = new H2Database();
+	  return h2Database.getDataSource();
   }
 
   public static LocalResource getResources(String rootFolder, String repoPath, String relativeResourcePath) throws IOException {
@@ -85,7 +94,7 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
   @Override
   public void configure() {
     StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
-    StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getDataSource());
+    StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getSystemDataSource());
     StaticObjects.set(StaticObjects.REPOSITORY, new TestRepository());
 
     //when we run all integration tests at once, the first run test will determine the datasource of XSKDataStructuresCoreService.

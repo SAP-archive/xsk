@@ -11,17 +11,21 @@
  */
 package com.sap.xsk.hdb.ds.itest.utils;
 
-import com.sap.xsk.utils.XSKConstants;
-import com.sap.xsk.utils.XSKHDBUtils;
+import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
 import javax.sql.DataSource;
-import org.eclipse.dirigible.commons.config.Configuration;
+
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
+
+import com.sap.xsk.utils.XSKConstants;
+import com.sap.xsk.utils.XSKHDBUtils;
 
 public class HanaITestUtils {
 
@@ -142,15 +146,11 @@ public class HanaITestUtils {
   }
 
   public static void clearDataFromXSKDataStructure(DataSource datasource, List<String> resources) throws SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
       DatabaseMetaData metaData = connection.getMetaData();
-      String hanaUserName = Configuration.get("hana.username");
-      ResultSet table = metaData.getTables(null, hanaUserName, "XSK_DATA_STRUCTURES", null);
+      ResultSet table = metaData.getTables(null, null, "XSK_DATA_STRUCTURES", null);
       if (table.next()) {
-        stmt.executeUpdate(String
-            .format("DELETE FROM \"%s\".\"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION IN " + "(" + String.join(",", resources) + ")",
-                hanaUserName));
+        stmt.executeUpdate("DELETE FROM \"XSK_DATA_STRUCTURES\" WHERE DS_LOCATION IN " + "(" + String.join(",", resources) + ")");
       }
     }
   }

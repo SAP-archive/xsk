@@ -11,79 +11,56 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbtablefunction;
 
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
 import static org.junit.Assert.assertTrue;
 
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
-import javax.sql.DataSource;
+
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class XSKHDBTableFunctionHanaITTest {
+import com.sap.xsk.hdb.ds.itest.AbstractXSKHDBITTest;
+import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
+import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 
-  private static DataSource datasource;
-  private static IXSKHDBCoreFacade facade;
-  private static final String testSchema = "TEST_SCHEMA";
+public class XSKHDBTableFunctionHanaITTest extends AbstractXSKHDBITTest {
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws SQLException {
-    JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
-        HANA_PASSWORD);
-    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
-    xskhdbTestModule.configure();
-    datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
-    facade = new XSKHDBCoreFacade();
-  }
+	@Before
+	public void setUpBeforeTest() throws SQLException {
+		HanaITestUtils.clearDataFromXSKDataStructure(systemDatasource, Arrays.asList( //
+				"'/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction'" //
+		));
+		Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+		facade.clearCache();
+	}
 
-  @Before
-  public void setUpBeforeTest() throws SQLException {
-    HanaITestUtils
-        .clearDataFromXSKDataStructure(datasource, Arrays.asList("'/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction'"));
-    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-    facade.clearCache();
-  }
+	@Test
+	public void testHDBTableFunctionCreate() throws Exception {
+		try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
-  @Test
-  public void testHDBTableFunctionCreate()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
+			HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+			HanaITestUtils.createEmptyTable(stmt, "hdbtablefunction-itest::SampleHanaTable", TEST_SCHEMA);
 
-      HanaITestUtils.createSchema(stmt, testSchema);
-      HanaITestUtils.createEmptyTable(stmt, "hdbtablefunction-itest::SampleHanaTable", testSchema);
+			LocalResource resource = XSKHDBTestModule.getResources( //
+					"/usr/local/target/dirigible/repository/root", //
+					"/registry/public/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction", //
+					"/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction" //
+			);
 
-      LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-          "/registry/public/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction",
-          "/hdbtablefunction-itest/SampleHanaTableFunction.hdbtablefunction");
-
-      this.facade.handleResourceSynchronization(resource);
-      this.facade.updateEntities();
-      try {
-        assertTrue(HanaITestUtils.checkExistOfFunction(stmt, "hdbtablefunction-itest::SampleHanaTableFunction", testSchema));
-      } finally {
-        HanaITestUtils.dropFunction(connection, stmt, "hdbtablefunction-itest::SampleHanaTableFunction", testSchema);
-        HanaITestUtils.dropTable(connection, stmt, "hdbtablefunction-itest::SampleHanaTable", testSchema);
-        HanaITestUtils.dropSchema(stmt, testSchema);
-      }
-    }
-  }
+			try {
+				facade.handleResourceSynchronization(resource);
+				facade.updateEntities();
+				assertTrue(HanaITestUtils.checkExistOfFunction(stmt, "hdbtablefunction-itest::SampleHanaTableFunction", TEST_SCHEMA));
+			} finally {
+				HanaITestUtils.dropFunction(connection, stmt, "hdbtablefunction-itest::SampleHanaTableFunction", TEST_SCHEMA);
+				HanaITestUtils.dropTable(connection, stmt, "hdbtablefunction-itest::SampleHanaTable", TEST_SCHEMA);
+				HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+			}
+		}
+	}
 }

@@ -11,206 +11,181 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbview;
 
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_DRIVER;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_PASSWORD;
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_URL;
 import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
 import static org.junit.Assert.assertTrue;
 
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
-import com.sap.xsk.utils.XSKConstants;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
-import javax.sql.DataSource;
+
 import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class XSKHDBViewParserHanaITTest {
+import com.sap.xsk.hdb.ds.itest.AbstractXSKHDBITTest;
+import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
+import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
+import com.sap.xsk.utils.XSKConstants;
 
-  private static DataSource datasource;
-  private static IXSKHDBCoreFacade facade;
-  private static final String testSchema = "TEST_SCHEMA";
+public class XSKHDBViewParserHanaITTest extends AbstractXSKHDBITTest {
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws SQLException {
-    JDBCModel model = new JDBCModel(HANA_DRIVER, HANA_URL, HANA_USERNAME,
-        HANA_PASSWORD);
-    XSKHDBTestModule xskhdbTestModule = new XSKHDBTestModule(model);
-    xskhdbTestModule.configure();
-    datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
-    facade = new XSKHDBCoreFacade();
-  }
+	@Before
+	public void setUpBeforeTest() throws SQLException {
+		HanaITestUtils.clearDataFromXSKDataStructure(systemDatasource, Arrays.asList( //
+				"'/hdbview-itest/SampleHANAXSClassicView.hdbview'", //
+				"'acme.com.test.tables::MY_TABLE1'", "'acme.com.test.tables::MY_TABLE20'", //
+				"'/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview'" //
+		));
+		Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+		facade.clearCache();
+	}
 
-  @Before
-  public void setUpBeforeTest() throws SQLException {
-    HanaITestUtils
-        .clearDataFromXSKDataStructure(datasource, Arrays.asList("'/hdbview-itest/SampleHANAXSClassicView.hdbview'",
-            "'acme.com.test.tables::MY_TABLE1'", "'acme.com.test.tables::MY_TABLE20'",
-            "'/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview'"));
-    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-    facade.clearCache();
-  }
+	@Test
+	public void testHDBViewCreateOnSameSchema() throws Exception {
+		try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
-  @Test
-  public void testHDBViewCreateOnSameSchema()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
+			String artifactName = "hdbview-itest::SampleHANAXSClassicView";
+			String userSchema = HANA_USERNAME;
+			try {
+				stmt.executeUpdate(String.format(
+						"create table \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
+						userSchema));
+				stmt.executeUpdate(String.format(
+						"create table \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
+						userSchema));
 
-      String artifactName = "hdbview-itest::SampleHANAXSClassicView";
-      String userSchema = Configuration.get("hana.username");
-      try {
-        stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
-            userSchema));
-        stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
-            userSchema));
+				String fileContent = String.format("schema=\"%s\";\n"
+						+ "query=\"SELECT T1.\\\"COLUMN2\\\" FROM \\\"acme.com.test.tables::MY_TABLE10\\\" AS T1 LEFT JOIN \\\"acme.com.test.tables::MY_TABLE20\\\" AS T2 ON T1.\\\"COLUMN1\\\" = T2.\\\"COLUMN1\\\"\";\n"
+						+ "depends_on= [\"acme.com.test.tables::MY_TABLE10\",\"acme.com.test.tables::MY_TABLE20\"];",
+						userSchema);
+				LocalResource resource = XSKHDBTestModule.getResourceFromString(
+						"/usr/local/target/dirigible/repository/root",
+						"/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview", fileContent);
 
-        String fileContent = String.format("schema=\"%s\";\n"
-            + "query=\"SELECT T1.\\\"COLUMN2\\\" FROM \\\"acme.com.test.tables::MY_TABLE10\\\" AS T1 LEFT JOIN \\\"acme.com.test.tables::MY_TABLE20\\\" AS T2 ON T1.\\\"COLUMN1\\\" = T2.\\\"COLUMN1\\\"\";\n"
-            + "depends_on= [\"acme.com.test.tables::MY_TABLE10\",\"acme.com.test.tables::MY_TABLE20\"];", userSchema);
-        LocalResource resource = XSKHDBTestModule.getResourceFromString("/usr/local/target/dirigible/repository/root",
-            "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
-            fileContent);
+				facade.handleResourceSynchronization(resource);
+				facade.updateEntities();
 
-        facade.handleResourceSynchronization(resource);
-        facade.updateEntities();
+				assertTrue(HanaITestUtils.checkExistOfView(connection, artifactName, userSchema));
+				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, artifactName));
+			} finally {
+				HanaITestUtils.dropView(connection, stmt, artifactName, userSchema);
+				HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE10", userSchema);
+				HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE20", userSchema);
+			}
+		}
+	}
 
-        assertTrue(HanaITestUtils.checkExistOfView(connection, artifactName, userSchema));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, artifactName));
-      } finally {
-        HanaITestUtils.dropView(connection, stmt, artifactName, userSchema);
-        HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE10", userSchema);
-        HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE20", userSchema);
-      }
-    }
-  }
+	@Test
+	public void testHDBViewUpdateOnSameSchema() throws Exception {
+		try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
-  @Test
-  public void testHDBViewUpdateOnSameSchema()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
+			String artifactName = "hdbview-itest::SampleHANAXSClassicView";
+			String userSchema = Configuration.get("hana.username");
+			try {
+				stmt.executeUpdate(String.format(
+						"create table \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
+						userSchema));
+				stmt.executeUpdate(String.format(
+						"create table \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
+						userSchema));
 
-      String artifactName = "hdbview-itest::SampleHANAXSClassicView";
-      String userSchema = Configuration.get("hana.username");
-      try {
-        stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
-            userSchema));
-        stmt.executeUpdate(String.format("create table \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
-            userSchema));
+				stmt.executeUpdate(String.format(
+						"create VIEW  \"%s\".\"%s\" AS select * from \"acme.com.test.tables::MY_TABLE10\"", userSchema,
+						artifactName));
+				stmt.executeUpdate(String.format("create SYNONYM \"%s\".\"%s\" FOR \"%s\".\"%s\"",
+						XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, artifactName, userSchema, artifactName));
 
-        stmt.executeUpdate(String
-            .format("create VIEW  \"%s\".\"%s\" AS select * from \"acme.com.test.tables::MY_TABLE10\"",
-                userSchema, artifactName));
-        stmt.executeUpdate(String
-            .format(
-                "create SYNONYM \"%s\".\"%s\" FOR \"%s\".\"%s\"",
-                XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, artifactName, userSchema, artifactName));
+				String fileContent = String.format("schema=\"%s\";\n"
+						+ "query=\"SELECT T1.\\\"COLUMN2\\\" FROM \\\"acme.com.test.tables::MY_TABLE10\\\" AS T1 LEFT JOIN \\\"acme.com.test.tables::MY_TABLE20\\\" AS T2 ON T1.\\\"COLUMN1\\\" = T2.\\\"COLUMN1\\\"\";\n"
+						+ "depends_on= [\"acme.com.test.tables::MY_TABLE10\",\"acme.com.test.tables::MY_TABLE20\"];",
+						userSchema);
+				LocalResource resource = XSKHDBTestModule.getResourceFromString(
+						"/usr/local/target/dirigible/repository/root",
+						"/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview", fileContent);
 
-        String fileContent = String.format("schema=\"%s\";\n"
-            + "query=\"SELECT T1.\\\"COLUMN2\\\" FROM \\\"acme.com.test.tables::MY_TABLE10\\\" AS T1 LEFT JOIN \\\"acme.com.test.tables::MY_TABLE20\\\" AS T2 ON T1.\\\"COLUMN1\\\" = T2.\\\"COLUMN1\\\"\";\n"
-            + "depends_on= [\"acme.com.test.tables::MY_TABLE10\",\"acme.com.test.tables::MY_TABLE20\"];", userSchema);
-        LocalResource resource = XSKHDBTestModule.getResourceFromString("/usr/local/target/dirigible/repository/root",
-            "/registry/public/hdbview-itest/SampleHANAXSClassicView.hdbview",
-            fileContent);
+				facade.handleResourceSynchronization(resource);
+				facade.updateEntities();
 
-        facade.handleResourceSynchronization(resource);
-        facade.updateEntities();
+				assertTrue(HanaITestUtils.checkExistOfView(connection, artifactName, userSchema));
+				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, artifactName));
+			} finally {
+				HanaITestUtils.dropView(connection, stmt, artifactName, userSchema);
+				HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE10", userSchema);
+				HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE20", userSchema);
+			}
+		}
+	}
 
-        assertTrue(HanaITestUtils.checkExistOfView(connection, artifactName, userSchema));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, artifactName));
-      } finally {
-        HanaITestUtils.dropView(connection, stmt, artifactName, userSchema);
-        HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE10", userSchema);
-        HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE20", userSchema);
-      }
-    }
-  }
+	@Test
+	public void testHDBViewCreateOnDiffSchemas() throws Exception {
+		try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
-  @Test
-  public void testHDBViewCreateOnDiffSchemas()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
+			String artifactName = "hdbview-itest::SampleHANAXSClassicViewDiffSchema";
+			try {
+				HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+				stmt.executeUpdate(String.format(
+						"create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
+						TEST_SCHEMA));
+				stmt.executeUpdate(String.format(
+						"create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
+						TEST_SCHEMA));
+				LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+						"/registry/public/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview",
+						"/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview");
 
-      String artifactName = "hdbview-itest::SampleHANAXSClassicViewDiffSchema";
-      try {
-        HanaITestUtils.createSchema(stmt, testSchema);
-        stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
-            testSchema));
-        stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
-            testSchema));
-        LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-            "/registry/public/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview",
-            "/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview");
+				facade.handleResourceSynchronization(resource);
+				facade.updateEntities();
 
-        facade.handleResourceSynchronization(resource);
-        facade.updateEntities();
+				assertTrue(HanaITestUtils.checkExistOfView(connection, artifactName, TEST_SCHEMA));
+				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, artifactName));
+			} finally {
+				HanaITestUtils.dropView(connection, stmt, artifactName, TEST_SCHEMA);
+				HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE10", TEST_SCHEMA);
+				HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE20", TEST_SCHEMA);
+				HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+			}
+		}
+	}
 
-        assertTrue(HanaITestUtils.checkExistOfView(connection, artifactName, testSchema));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, artifactName));
-      } finally {
-        HanaITestUtils.dropView(connection, stmt, artifactName, testSchema);
-        HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE10", testSchema);
-        HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE20", testSchema);
-        HanaITestUtils.dropSchema(stmt, testSchema);
-      }
-    }
-  }
+	@Test
+	public void testHDBViewCreateOnDiffSchemasWithExistingSynonym() throws Exception {
+		try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
-  @Test
-  public void testHDBViewCreateOnDiffSchemasWithExistingSynonym()
-      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-    try (Connection connection = datasource.getConnection();
-        Statement stmt = connection.createStatement()) {
+			String artifactName = "hdbview-itest::SampleHANAXSClassicViewDiffSchema";
+			try {
+				HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+				stmt.executeUpdate(String.format(
+						"create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
+						TEST_SCHEMA));
+				stmt.executeUpdate(String.format(
+						"create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
+						TEST_SCHEMA));
 
-      String artifactName = "hdbview-itest::SampleHANAXSClassicViewDiffSchema";
-      try {
-        HanaITestUtils.createSchema(stmt, testSchema);
-        stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE10\"(COLUMN1 integer,COLUMN2 integer)",
-            testSchema));
-        stmt.executeUpdate(String.format("create TABLE \"%s\".\"acme.com.test.tables::MY_TABLE20\"(COLUMN1 integer,COLUMN2 integer)",
-            testSchema));
+				stmt.executeUpdate(String.format(
+						"CREATE VIEW \"%s\".\"%s\" AS select * from \"%s\".\"acme.com.test.tables::MY_TABLE20\"",
+						TEST_SCHEMA, artifactName, TEST_SCHEMA));
+				stmt.executeUpdate(String.format("create SYNONYM \"%s\".\"%s\" FOR \"%s\".\"%s\"",
+						XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, artifactName, TEST_SCHEMA, artifactName));
+				stmt.executeUpdate(String.format("drop VIEW    \"%s\".\"%s\"", TEST_SCHEMA, artifactName));
 
-        stmt.executeUpdate(String.format(
-            "CREATE VIEW \"%s\".\"%s\" AS select * from \"%s\".\"acme.com.test.tables::MY_TABLE20\"",
-            testSchema, artifactName, testSchema));
-        stmt.executeUpdate(String
-            .format(
-                "create SYNONYM \"%s\".\"%s\" FOR \"%s\".\"%s\"",
-                XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA, artifactName, testSchema, artifactName));
-        stmt.executeUpdate(
-            String.format("drop VIEW    \"%s\".\"%s\"", testSchema, artifactName));
+				LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
+						"/registry/public/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview",
+						"/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview");
 
-        LocalResource resource = XSKHDBTestModule.getResources("/usr/local/target/dirigible/repository/root",
-            "/registry/public/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview",
-            "/hdbview-itest/SampleHANAXSClassicViewDiffSchema.hdbview");
+				facade.handleResourceSynchronization(resource);
+				facade.updateEntities();
 
-        facade.handleResourceSynchronization(resource);
-        facade.updateEntities();
-
-        assertTrue(HanaITestUtils.checkExistOfView(connection, artifactName, testSchema));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, artifactName));
-      } finally {
-        HanaITestUtils.dropView(connection, stmt, artifactName, testSchema);
-        HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE10", testSchema);
-        HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE20", testSchema);
-        HanaITestUtils.dropSchema(stmt, testSchema);
-      }
-    }
-  }
+				assertTrue(HanaITestUtils.checkExistOfView(connection, artifactName, TEST_SCHEMA));
+				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, artifactName));
+			} finally {
+				HanaITestUtils.dropView(connection, stmt, artifactName, TEST_SCHEMA);
+				HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE10", TEST_SCHEMA);
+				HanaITestUtils.dropTable(connection, stmt, "acme.com.test.tables::MY_TABLE20", TEST_SCHEMA);
+				HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+			}
+		}
+	}
 }

@@ -15,51 +15,60 @@ $.net.http
 
 ## Sample Usage
 
-```javascript
-let http = $.net.http;
+=== "service.xshttpdest"
 
-/*
-Read service.xshttpdest inside the Demo package that contains:
-host=https://services.odata.org;
-pathPrefix=/V4/Northwind/Northwind.svc/;
-*/
+    ```javascript
+    let http = $.net.http;
 
-let destination = http.readDestination("Demo", "service");
+    /*
+    Read service.xshttpdest inside the Demo package that contains:
+    host=https://services.odata.org;
+    pathPrefix=/V4/Northwind/Northwind.svc/;
+    */
 
-// create client
-let client = new http.Client();
-let request = new http.Request(http.GET, "/"); // new Request(METHOD, PATH)
-// the PATH will be prefixed by destination's pathPrefix, e.g. "/search?" on the request
-// set the timeout in seconds
-client.setTimeout(10);
-// send the request and synchronously get the response
-client.request(request, dest);
-let response = client.getResponse();
+    let destination = http.readDestination("Demo", "service");
 
-// get all the cookies and headers from the response
-let cookies = [], headers = [];
+    // create client
+    let client = new http.Client();
+    let request = new http.Request(http.GET, "/"); // new Request(METHOD, PATH)
+    // the PATH will be prefixed by destination's pathPrefix, e.g. "/search?" on the request
+    // set the timeout in seconds
+    client.setTimeout(10);
+    // send the request and synchronously get the response
+    client.request(request, dest);
+    let response = client.getResponse();
 
-for(let i = 0; i< response.cookies.length; i++) {
-    cookies.push(response.cookies[i]);
-}
+    // get all the cookies and headers from the response
+    let cookies = [], headers = [];
 
-for(let i = 0; i< response.headers.length; i++) {
-    headers.push(response.headers[i]);
-}
+    for(let i = 0; i< response.cookies.length; i++) {
+        cookies.push(response.cookies[i]);
+    }
 
-// get the body
-let body;
-if(!response.body)
-    body = "";
-else
-    body = response.body;
+    for(let i = 0; i< response.headers.length; i++) {
+        headers.push(response.headers[i]);
+    }
 
-// close the connection
-client.close();        // prevent socket leak - see xsengine.ini: [communication] - max_open_sockets_per_request
+    // get the body
+    let body;
+    if(!response.body)
+        body = "";
+    else
+        body = response.body;
 
-// check the contents of the response
-$.response.setBody("status: " + response.status + " cookies: " + JSON.stringify(cookies) + " headers: " + JSON.stringify(headers) + " body: " + body.asString());
-```
+    // close the connection
+    client.close();        // prevent socket leak - see xsengine.ini: [communication] - max_open_sockets_per_request
+
+    // check the contents of the response
+    $.response.setBody("status: " + response.status + " cookies: " + JSON.stringify(cookies) + " headers: " + JSON.stringify(headers) + " body: " + body.asString());
+    ```
+
+=== "service.xshttpdest"
+
+    ```javascript
+    host=https://services.odata.org;
+    pathPrefix=/V4/Northwind/Northwind.svc/;
+    ```
 
 ## Classes
 

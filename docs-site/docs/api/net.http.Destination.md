@@ -15,15 +15,24 @@ HTTP(s) destination class that holds metadata (e.g., host, port, useSSL). The de
 
 ## Sample Usage
 
-```javascript
-let http = $.net.http;
+=== "destination-sample.xsjs"
 
-/*
-Read service.xshttpdest inside the Demo package that contains:
-host=https://services.odata.org;
-pathPrefix=/V4/Northwind/Northwind.svc/;
-*/
-let dest = http.readDestination("Demo", "service");
-// Check if the file has been read properly
-$.response.setBody("Host: " + dest.host + " Path Prefix: " + dest.pathPrefix);
-```
+    ```javascript
+    let http = $.net.http;
+
+    /*
+    Read service.xshttpdest inside the Demo package that contains:
+    host=https://services.odata.org;
+    pathPrefix=/V4/Northwind/Northwind.svc/;
+    */
+    let dest = http.readDestination("Demo", "service");
+    // Check if the file has been read properly
+    $.response.setBody("Host: " + dest.host + " Path Prefix: " + dest.pathPrefix);
+    ```
+
+=== "service.xshttpdest"
+
+    ```javascript
+    host=https://services.odata.org;
+    pathPrefix=/V4/Northwind/Northwind.svc/;
+    ```

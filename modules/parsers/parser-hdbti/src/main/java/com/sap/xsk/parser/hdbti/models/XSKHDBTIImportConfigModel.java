@@ -12,6 +12,7 @@
 package com.sap.xsk.parser.hdbti.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.sap.xsk.parser.hdbti.exception.XSKHDBTIMissingPropertyException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -201,6 +202,19 @@ public class XSKHDBTIImportConfigModel {
         result.append("\"").append(column).append("\":").append("\"").append(value).append("\",");
       }
       return result.substring(0, result.length() - 1);
+    }
+  }
+
+  public void checkForAllMandatoryFieldsPresence() {
+    checkPresence(schemaName, "schemaName");
+  }
+
+  private <T> void checkPresence(T field, String fieldName) {
+    if (Objects.isNull(field)) {
+      throw new XSKHDBTIMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
+    }
+    if ((field instanceof ArrayList) && ((ArrayList) field).isEmpty()) {
+      throw new XSKHDBTIMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
     }
   }
 }

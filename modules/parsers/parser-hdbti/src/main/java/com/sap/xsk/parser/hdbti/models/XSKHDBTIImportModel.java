@@ -30,4 +30,8 @@ public class XSKHDBTIImportModel {
   public String toString() {
     return "import = " + configModels.toString() + ";";
   }
+
+  public void checkMandatoryFieldsInAllConfigModels() {
+    configModels.forEach(XSKHDBTIImportConfigModel::checkForAllMandatoryFieldsPresence);
+  }
 }

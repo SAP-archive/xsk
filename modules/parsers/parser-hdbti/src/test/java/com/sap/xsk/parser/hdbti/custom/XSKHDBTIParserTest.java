@@ -17,6 +17,7 @@ import static org.junit.Assert.fail;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.parser.hdbti.exception.DuplicateFieldNameException;
+import com.sap.xsk.parser.hdbti.exception.XSKHDBTIMissingPropertyException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
@@ -111,5 +112,13 @@ public class XSKHDBTIParserTest extends AbstractDirigibleTest {
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/parserError.hdbti"), StandardCharsets.UTF_8);
     XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
     xskhdbtiParser.parse("/test/xsk/com/sap/syntaxError.hdbti", content);
+  }
+
+  @Test(expected = XSKHDBTIMissingPropertyException.class)
+  public void parseHDBTIMissingSchemaException() throws Exception {
+    String content = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIParserTest.class.getResourceAsStream("/missingSchema.hdbti"), StandardCharsets.UTF_8);
+    XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
+    xskhdbtiParser.parse("/test/xsk/com/sap/missingSchema.hdbti", content);
   }
 }

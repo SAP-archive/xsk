@@ -1,0 +1,2 @@
+host=https://services.odata.org;
+pathPrefix=/V4/Northwind/Northwind.svc/;

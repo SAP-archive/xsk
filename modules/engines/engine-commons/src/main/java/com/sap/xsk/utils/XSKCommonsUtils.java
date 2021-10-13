@@ -114,13 +114,8 @@ public class XSKCommonsUtils {
       for (BaseParserErrorsModel errorModel : errorList) {
         try {
           ProblemsFacade.save(location, errorType, Integer.toString(errorModel.getLine()),
-              Integer.toString(errorModel.getCharPositionInLine()),
-              errorModel.getOffendingSymbol(), errorModel.getMsg(), artifactType, "Parsers", "Publish Request", "XSK");
-
-          //Left for development purposes until ProblemsFacade is properly tested
-//          logger.error(String.format(
-//              "Wrong format of %s: [%s] during parsing.: %s",
-//              artifactType, location, errorModel.getErrorMessage()));
+              Integer.toString(errorModel.getCharPositionInLine()), errorModel.getOffendingSymbol(), errorModel.getMsg(), artifactType,
+              XSKCommonsConstants.MODULE_PARSERS, XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
         } catch (ProblemsException e) {
           logger.error("There is an issue with logging of the Errors.");
           logger.error(e.getMessage());
@@ -137,7 +132,8 @@ public class XSKCommonsUtils {
    */
   public static void logProcessorErrors(String errorMessage, String errorType, String location, String artifactType) {
     try {
-      ProblemsFacade.save(location, errorType, "", "", errorMessage, "", artifactType, "Processors", "Publish Request", "XSK");
+      ProblemsFacade.save(location, errorType, "", "", errorMessage, "", artifactType,
+          XSKCommonsConstants.MODULE_PROCESSORS, XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
     } catch (ProblemsException e) {
       logger.error("There is an issue with logging of the Errors.");
       logger.error(e.getMessage());

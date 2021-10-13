@@ -9,17 +9,10 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.parser.utils;
+package com.sap.xsk.parser.hdbti.exception;
 
-public final class ParserConstants {
-
-  // ---- PARSER ERRORS TYPE ----
-  public static final String PARSER_ERROR = "PARSER";
-  public static final String LEXER_ERROR = "LEXER";
-
-  // ---- PARSER EXPECTED ERROR MESSAGE ----
-  public static final String EXPECTED_FIELDS = "Add missing fields.";
-
-  // ---- PARSER TYPES ----
-  public static final String HDBTI_PARSER = "HDBTI";
+public class XSKHDBTIMissingPropertyException extends RuntimeException{
+  public XSKHDBTIMissingPropertyException(String message) {
+    super(message);
+  }
 }

@@ -20,4 +20,11 @@ public final class XSKCommonsConstants {
      * The Windows separator character.
      */
     public static final char WINDOWS_SEPARATOR = '\\';
+    /**
+     * Problems facade constants
+     */
+    public static final String MODULE_PARSERS = "Parsers";
+    public static final String MODULE_PROCESSORS = "Processors";
+    public static final String SOURCE_PUBLISH_REQUEST = "Publish Request";
+    public static final String PROGRAM_XSK = "XSK";
 }

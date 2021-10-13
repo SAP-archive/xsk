@@ -1,0 +1,12 @@
+{
+    "description": "My Job configuration",
+        "action": "xsjob_demo:handler.xsjslib::writeInDB",
+        "schedules": [
+        {
+            "description": "Execute every 5 seconds",
+            "xscron": "* * * * * * */5",
+            "parameter": {
+            }
+        }
+    ]
+}

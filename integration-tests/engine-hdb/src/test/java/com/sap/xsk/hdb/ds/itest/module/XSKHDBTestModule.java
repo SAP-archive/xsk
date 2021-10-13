@@ -17,9 +17,11 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.database.api.IDatabase;
+import org.eclipse.dirigible.database.custom.CustomDatabase;
 import org.eclipse.dirigible.database.h2.H2Database;
 import org.eclipse.dirigible.repository.api.RepositoryPath;
 import org.eclipse.dirigible.repository.fs.FileSystemRepository;
@@ -44,77 +46,79 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
 
 public class XSKHDBTestModule extends AbstractDirigibleModule {
 
-  private static final int MAX_IDLE_CONNECTIONS = 30;
+	private JDBCModel model;
 
-  private JDBCModel model;
+	public XSKHDBTestModule(JDBCModel model) {
+		this.model = model;
+	}
 
-  public XSKHDBTestModule(JDBCModel model) {
-    this.model = model;
-  }
+	public DataSource getDataSource() {
+		Configuration.set(IDatabase.DIRIGIBLE_DATABASE_PROVIDER, "custom");
+		Configuration.set(IDatabase.DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES, "HANA");
+		Configuration.set(IDatabase.DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT, "HANA");
+		Configuration.set(IDatabase.DIRIGIBLE_DATABASE_DEFAULT_MAX_CONNECTIONS_COUNT, "32");
 
-  public DataSource getDataSource() {
-    BasicDataSource basicDataSource = new BasicDataSource();
-    basicDataSource.setDriverClassName(model.getDriverClassName());
-    basicDataSource.setUrl(model.getJdbcUrl());
-    basicDataSource.setUsername(model.getUsername());
-    basicDataSource.setPassword(model.getPassword());
-    basicDataSource.setDefaultAutoCommit(true);
-    basicDataSource.setAccessToUnderlyingConnectionAllowed(true);
-    basicDataSource.setMaxIdle(MAX_IDLE_CONNECTIONS);
-    return basicDataSource;
-  }
+		Configuration.set("HANA_URL", model.getJdbcUrl());
+		Configuration.set("HANA_DRIVER", model.getDriverClassName());
+		Configuration.set("HANA_USERNAME", model.getUsername());
+		Configuration.set("HANA_PASSWORD", model.getPassword());
 
-  public DataSource getSystemDataSource() {
-	  H2Database h2Database = new H2Database();
-	  return h2Database.getDataSource();
-  }
+		CustomDatabase customDatabase = new CustomDatabase();
+		return customDatabase.getDataSource();
+	}
 
-  public static LocalResource getResources(String rootFolder, String repoPath, String relativeResourcePath) throws IOException {
-    FileSystemRepository fileRepo = new LocalRepository(rootFolder);
-    RepositoryPath path = new RepositoryPath(repoPath);
-    byte[] content = XSKHDBTestModule.class
-        .getResourceAsStream(relativeResourcePath).readAllBytes();
+	public DataSource getSystemDataSource() {
+		H2Database h2Database = new H2Database();
+		return h2Database.getDataSource();
+	}
 
-    LocalResource resource = new LocalResource(fileRepo, path);
-    resource.setContent(content);
-    return resource;
-  }
+	public static LocalResource getResources(String rootFolder, String repoPath, String relativeResourcePath) throws IOException {
+		FileSystemRepository fileRepo = new LocalRepository(rootFolder);
+		RepositoryPath path = new RepositoryPath(repoPath);
+		byte[] content = XSKHDBTestModule.class.getResourceAsStream(relativeResourcePath).readAllBytes();
 
-  public static LocalResource getResourceFromString(String rootFolder, String repoPath, String fileContent) throws IOException {
-    FileSystemRepository fileRepo = new LocalRepository(rootFolder);
-    RepositoryPath path = new RepositoryPath(repoPath);
-    byte[] content = fileContent.getBytes(StandardCharsets.UTF_8);
-    LocalResource resource = new LocalResource(fileRepo, path);
-    resource.setContent(content);
-    return resource;
-  }
+		LocalResource resource = new LocalResource(fileRepo, path);
+		resource.setContent(content);
+		return resource;
+	}
 
-  @Override
-  public String getName() {
-    return "XSKHDBTestModule";
-  }
+	public static LocalResource getResourceFromString(String rootFolder, String repoPath, String fileContent) throws IOException {
+		FileSystemRepository fileRepo = new LocalRepository(rootFolder);
+		RepositoryPath path = new RepositoryPath(repoPath);
+		byte[] content = fileContent.getBytes(StandardCharsets.UTF_8);
+		LocalResource resource = new LocalResource(fileRepo, path);
+		resource.setContent(content);
+		return resource;
+	}
 
-  @Override
-  public void configure() {
-    StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
-    StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getSystemDataSource());
-    StaticObjects.set(StaticObjects.REPOSITORY, new TestRepository());
+	@Override
+	public String getName() {
+		return "XSKHDBTestModule";
+	}
 
-    //when we run all integration tests at once, the first run test will determine the datasource of XSKDataStructuresCoreService.
-    //this can lead to issue, for example running MYSQL test which is accessing the HANA db, and leading to inconsistent test results
-    //that is why we are clearing and reentering the managerServices
-    //see: XSKHDBModule.bindManagerServicesToFileExtensions()
-    Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
-    managerServices.clear();
-    managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new IXSKViewManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new IXSKSynonymManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new IXSKTableFunctionManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new IXSKSchemaManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new IXSKProceduresManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new IXSKHDBSequenceManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION, new IXSKScalarFunctionManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new IXSKTableTypeManagerService());
-  }
+	@Override
+	public void configure() {
+		StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
+		StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getSystemDataSource());
+		StaticObjects.set(StaticObjects.REPOSITORY, new TestRepository());
+
+		// when we run all integration tests at once, the first run test will determine
+		// the datasource of XSKDataStructuresCoreService.
+		// this can lead to issue, for example running MYSQL test which is accessing the
+		// HANA db, and leading to inconsistent test results
+		// that is why we are clearing and reentering the managerServices
+		// see: XSKHDBModule.bindManagerServicesToFileExtensions()
+		Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
+		managerServices.clear();
+		managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new IXSKViewManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new IXSKSynonymManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new IXSKTableFunctionManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new IXSKSchemaManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new IXSKProceduresManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new IXSKHDBSequenceManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION, new IXSKScalarFunctionManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new IXSKTableTypeManagerService());
+	}
 }

@@ -10,6 +10,8 @@ Project XSK
 
 **Project XSK** is a compatible environment for applications based on [SAP HANA Extended Application Services](https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/a6c0749255d84a81a154a7fc87dd33ce.html) (XS).
 
+![asd](/img/xsk-migration-architecture.png)
+
 #### Comparison with other options
 
 | Aspect                         | XSK  | Others  | Description |

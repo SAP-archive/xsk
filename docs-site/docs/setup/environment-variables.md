@@ -17,7 +17,7 @@ Depending on the layer that defines the configuration variables, they have the f
     Highest precedence:
     
     - No rebuild or restart of the application is required when a configuration is changed.
-    - You can use the [Configuration API](../../../api/core/configurations/) to apply changes in the **Runtime** configuration.
+    - You can use the [Configuration API](https://www.dirigible.io/api/core/configurations/) to apply changes in the **Runtime** configuration.
 
 === "Environment"
 

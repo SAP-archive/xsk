@@ -57,6 +57,9 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
 		Configuration.set(IDatabase.DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES, "HANA");
 		Configuration.set(IDatabase.DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT, "HANA");
 		Configuration.set(IDatabase.DIRIGIBLE_DATABASE_DEFAULT_MAX_CONNECTIONS_COUNT, "32");
+		Configuration.set("DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE", "true");
+		Configuration.set(IDatabase.DIRIGIBLE_DATABASE_DEFAULT_SET_AUTO_COMMIT, "true");
+
 
 		Configuration.set("HANA_URL", model.getJdbcUrl());
 		Configuration.set("HANA_DRIVER", model.getDriverClassName());

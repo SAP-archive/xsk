@@ -8,11 +8,14 @@ Project XSK
 ## What is XSK?
 ---
 
+<iframe class="md-tabs" width="560" height="315" src="https://www.youtube-nocookie.com/embed/K0CY-vVbnnw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+## Overview
+---
+
 **Project XSK** is a compatible environment for applications based on [SAP HANA Extended Application Services](https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/a6c0749255d84a81a154a7fc87dd33ce.html) (XS).
 
 ![XSK - Migration Architecture](/img/xsk-migration-architecture.png)
-
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/K0CY-vVbnnw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 #### Comparison with other options
 

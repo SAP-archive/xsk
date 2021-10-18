@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.sap.xsk.utils.XSKCommonsConstants;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +56,9 @@ public class XSKSynonymParser implements XSKDataStructureParser {
         //aligned with HANA XS Classic, where the synonym name must match the artifact name and multiple synonym definitions are not supported
         //synonymDefinitions.put(hdbSynonymModel.getName(), definitionModel);
       } catch (XSKHDBSYNONYMMissingPropertyException exception) {
-        logger.error(String.format("Missing mandatory field for synonym %s!", entry.getKey()));
+        XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", exception.getMessage(),
+            XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_SYNONYM,XSKCommonsConstants.MODULE_PARSERS,
+            XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       }
     }
     hdbSynonymModel.setSynonymDefinitions(synonymDefinitions);

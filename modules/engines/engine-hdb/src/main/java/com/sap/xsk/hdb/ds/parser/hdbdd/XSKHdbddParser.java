@@ -30,7 +30,7 @@ import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
-import com.sap.xsk.parser.utils.ParserConstants;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import java.io.ByteArrayInputStream;
@@ -102,8 +102,8 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     hdbtiParser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = hdbtiParser.cdsFile();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDBDD");
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDBDD");
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDBDD);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDBDD);
 
     EntityDefinitionListener entityDefinitionListener = new EntityDefinitionListener();
     entityDefinitionListener.setSymbolTable(symbolTable);
@@ -113,6 +113,9 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     try {
       parseTreeWalker.walk(entityDefinitionListener, parseTree);
     } catch (CDSRuntimeException e) {
+      XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+          "", XSKCommonsConstants.HDBDD, XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
     }
 
@@ -124,7 +127,9 @@ public class XSKHdbddParser implements XSKDataStructureParser {
         IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
         parseHdbdd(fileLocation, new String(loadedResource.getContent()));
       } catch (IOException | XSKArtifactParserException e) {
-        logger.error(e.getMessage(), e);
+        XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+            "", XSKCommonsConstants.HDBDD, XSKCommonsConstants.MODULE_PARSERS,
+            XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       }
     });
 
@@ -138,6 +143,9 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     try {
       parseTreeWalker.walk(referenceResolvingListener, parseTree);
     } catch (CDSRuntimeException e) {
+      XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+          "", XSKCommonsConstants.HDBDD, XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
     }
   }

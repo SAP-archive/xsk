@@ -23,7 +23,7 @@ import com.sap.xsk.parser.hdbview.core.HdbviewParser;
 import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWCoreListener;
 import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWErrorListener;
 import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
-import com.sap.xsk.parser.utils.ParserConstants;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
@@ -85,8 +85,8 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
     parser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = parser.hdbviewDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB View");
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB View");
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_VIEW);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_VIEW);
 
     XSKHDBVIEWCoreListener XSKHDBVIEWCoreListener = new XSKHDBVIEWCoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
@@ -96,6 +96,9 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
     try {
       antlr4Model.checkForAllMandatoryFieldsPresence();
     } catch (Exception e) {
+      XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_VIEW,XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new XSKDataStructuresException(String.format("Wrong format of HDB View: [%s] during parsing. [%s]", location, e.getMessage()));
     }
     hdbViewModel.setQuery(antlr4Model.getQuery());

@@ -64,7 +64,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   public void parseHDBDDWithManagedAss() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ProductsWithManagedAss.hdbdd", "");
 
-    assertEquals(2, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
+    assertEquals(3, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
 
     XSKDataStructureHDBTableModel orderDataStructure = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1);
     assertEquals("gstr2::ProductsWithManagedAss.Orders", orderDataStructure.getName());
@@ -75,7 +75,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertEquals("Id", orderDataStructure.getConstraints().getPrimaryKey().getColumns()[0]);
     assertEquals("PK_gstr2::ProductsWithManagedAss.Orders", orderDataStructure.getConstraints().getPrimaryKey().getName());
     assertNull(orderDataStructure.getConstraints().getPrimaryKey().getModifiers());
-    assertEquals(1, orderDataStructure.getConstraints().getForeignKeys().size());
+    assertEquals(2, orderDataStructure.getConstraints().getForeignKeys().size());
 
     assertEquals("gstr2::ProductsWithManagedAss.Country", orderDataStructure.getConstraints().getForeignKeys().get(0).getReferencedTable());
     assertEquals("gstr2::ProductsWithManagedAss.Orders.Country", orderDataStructure.getConstraints().getForeignKeys().get(0).getName());
@@ -84,6 +84,18 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertEquals("Id", orderDataStructure.getConstraints().getForeignKeys().get(0).getReferencedColumns()[0]);
     assertEquals(1, orderDataStructure.getConstraints().getForeignKeys().get(0).getColumns().length);
     assertEquals("Country.Id", orderDataStructure.getConstraints().getForeignKeys().get(0).getColumns()[0]);
+
+    assertEquals("gstr2::ProductsWithManagedAss.City", orderDataStructure.getConstraints().getForeignKeys().get(1).getReferencedTable());
+    assertEquals("gstr2::ProductsWithManagedAss.Orders.City", orderDataStructure.getConstraints().getForeignKeys().get(1).getName());
+    assertNull(orderDataStructure.getConstraints().getForeignKeys().get(1).getModifiers());
+    assertEquals(3, orderDataStructure.getConstraints().getForeignKeys().get(1).getReferencedColumns().length);
+    assertEquals(3, orderDataStructure.getConstraints().getForeignKeys().get(1).getColumns().length);
+    assertEquals("Id", orderDataStructure.getConstraints().getForeignKeys().get(1).getReferencedColumns()[0]);
+    assertEquals("City.Id", orderDataStructure.getConstraints().getForeignKeys().get(1).getColumns()[0]);
+    assertEquals("Name", orderDataStructure.getConstraints().getForeignKeys().get(1).getReferencedColumns()[1]);
+    assertEquals("City.Name", orderDataStructure.getConstraints().getForeignKeys().get(1).getColumns()[1]);
+    assertEquals("PostalCode", orderDataStructure.getConstraints().getForeignKeys().get(1).getReferencedColumns()[2]);
+    assertEquals("City.PostalCode", orderDataStructure.getConstraints().getForeignKeys().get(1).getColumns()[2]);
 
     assertEquals(0, orderDataStructure.getConstraints().getUniqueIndices().size());
     assertEquals(0, orderDataStructure.getConstraints().getChecks().size());
@@ -95,7 +107,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertNull(orderDataStructure.getTableType());
     assertNull(orderDataStructure.getDescription());
 
-    assertEquals(3, orderDataStructure.getColumns().size());
+    assertEquals(6, orderDataStructure.getColumns().size());
 
     XSKDataStructureHDBTableColumnModel OrderId = orderDataStructure.getColumns().get(0);
     assertEquals("Id", OrderId.getName());

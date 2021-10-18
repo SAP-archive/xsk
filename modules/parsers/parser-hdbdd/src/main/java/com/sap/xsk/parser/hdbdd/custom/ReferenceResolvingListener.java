@@ -13,6 +13,8 @@ package com.sap.xsk.parser.hdbdd.custom;
 
 import com.sap.xsk.parser.hdbdd.core.CdsBaseListener;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ManagedForeignKeysContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.UnmanagedForeignKeyContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.UsingRuleContext;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
@@ -29,14 +31,17 @@ import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ReferenceResolvingListener extends CdsBaseListener {
+
   private static final String UNMANAGED_ASSOCIATION_MARKER = "@";
 
   private SymbolTable symbolTable;
@@ -84,7 +89,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
     //if the default value is se to null, ignore it
     if (ctx.NULL() == null) {
-      if (typeOfElement.getValueType().stream().filter(el->el.equals(valueType)).count() < 0) {
+      if (typeOfElement.getValueType().stream().filter(el -> el.equals(valueType)).count() < 0) {
         throw new CDSRuntimeException(String.format(
             "Error at line: %d col: %d. Incompatible types! Expected %s, Provided %s",
             ctx.value.getLine(), ctx.value.getCharPositionInLine(), typeOfElement.getName(), ctx.value.getText()));
@@ -101,7 +106,8 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
     Set<Symbol> nonResolvedRefSymbols = new HashSet<>();
     nonResolvedRefSymbols.add(associationSymbol);
-    String reference = ctx.pathSubMembers.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+    String reference = ctx.pathSubMembers.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
     associationSymbol.setReference(reference);
 
     Symbol resolvedSymbol = resolveReferenceChain(reference, associationSymbol, nonResolvedRefSymbols);
@@ -115,11 +121,24 @@ public class ReferenceResolvingListener extends CdsBaseListener {
   }
 
   @Override
+  public void exitAssociation(@NotNull CdsParser.AssociationContext ctx) {
+    AssociationSymbol associationSymbol = this.associations.get(ctx);
+
+    if (ctx.getChild(ManagedForeignKeysContext.class, 0) == null
+        && ctx.getChild(UnmanagedForeignKeyContext.class, 0) == null) {
+      List<EntityElementSymbol> associationKeys = associationSymbol.getTarget().getKeys();
+      associationSymbol.setForeignKeys(associationKeys);
+      associationSymbol.setManaged(true);
+    }
+  }
+
+  @Override
   public void enterForeignKey(CdsParser.ForeignKeyContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent().getParent());
     associationSymbol.setManaged(true);
     String entityName = associationSymbol.getReference();
-    String reference = ctx.pathSubMembers.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+    String reference = ctx.pathSubMembers.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
     String refFullPath = entityName + "." + reference;
     Symbol resolvedSymbol = resolveReferenceChain(refFullPath, associationSymbol, new HashSet<>(Arrays.asList(associationSymbol)));
 
@@ -135,7 +154,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
     associationSymbol.addForeignKey((EntityElementSymbol) resolvedSymbol);
     EntitySymbol entity = (EntitySymbol) associationSymbol.getScope();
-    this.symbolTable.addChildToEntity(entity.getFullName(), ((Symbol)resolvedSymbol.getScope()).getFullName());
+    this.symbolTable.addChildToEntity(entity.getFullName(), ((Symbol) resolvedSymbol.getScope()).getFullName());
   }
 
   @Override
@@ -143,7 +162,8 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
     associationSymbol.setManaged(false);
     String targetFullName = associationSymbol.getTarget().getName();
-    String reference = ctx.pathSubMembers.stream().skip(1).map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+    String reference = ctx.pathSubMembers.stream().skip(1).map(Token::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
 
     String refFullPath = targetFullName + "." + reference;
     Symbol resolvedTargetSymbol = resolveReferenceChain(refFullPath, associationSymbol, new HashSet<>(Arrays.asList(associationSymbol)));

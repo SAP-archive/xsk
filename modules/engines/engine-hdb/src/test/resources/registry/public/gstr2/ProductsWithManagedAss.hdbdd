@@ -3,15 +3,22 @@ namespace gstr2;
 @Schema: 'ADMIN'
 context ProductsWithManagedAss {
 
- entity  Orders{
+    entity  Orders{
         key Id               : String(32);
         CustomerName         : String(500);
         Country              : association to ProductsWithManagedAss.Country { Id };
+        City                 : association to ProductsWithManagedAss.City;
     };
 
-     entity Country {
+    entity Country {
         key Id              : String(32);
         key Id2             : String(32);
         Name                : String(32);
+    };
+
+    entity City {
+        key Id              : String(32);
+        key Name            : String(32);
+        key PostalCode      : String(32);
     };
 };

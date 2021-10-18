@@ -31,6 +31,7 @@ import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.Arrays;
@@ -116,14 +117,19 @@ public class ReferenceResolvingListener extends CdsBaseListener {
           resolvedSymbol.getIdToken().getLine(), resolvedSymbol.getIdToken().getCharPositionInLine()));
     }
 
-    if (ctx.getParent().getChild(ManagedForeignKeysContext.class, 0) == null
-        && ctx.getParent().getChild(UnmanagedForeignKeyContext.class, 0) == null) {
-      List<EntityElementSymbol> associationKeys = ((EntitySymbol) resolvedSymbol).getKeys();
+    associationSymbol.setTarget((EntitySymbol) resolvedSymbol);
+  }
+
+  @Override
+  public void exitAssociation(@NotNull CdsParser.AssociationContext ctx) {
+    AssociationSymbol associationSymbol = this.associations.get(ctx);
+
+    if (ctx.getChild(ManagedForeignKeysContext.class, 0) == null
+        && ctx.getChild(UnmanagedForeignKeyContext.class, 0) == null) {
+      List<EntityElementSymbol> associationKeys = associationSymbol.getTarget().getKeys();
       associationSymbol.setForeignKeys(associationKeys);
       associationSymbol.setManaged(true);
     }
-
-    associationSymbol.setTarget((EntitySymbol) resolvedSymbol);
   }
 
   @Override

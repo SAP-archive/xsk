@@ -15,6 +15,7 @@ import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -39,7 +40,7 @@ public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
     ISqlDialect dialect = SqlFactory.deriveDialect(connection);
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
       String errorMessage = String.format("%s does not support Schema", dialect.getDatabaseName(connection));
-      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdbSchema.getLocation(), XSKCommonsConstants.HDB_SCHEMA_PARSER);
       throw new IllegalStateException(errorMessage);
     } else {
       if (!SqlFactory.getNative(connection).exists(connection, hdbSchema.getSchema(), DatabaseArtifactTypes.SCHEMA)) {
@@ -48,7 +49,7 @@ public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
         try {
           executeSql(sql, connection);
         } catch (SQLException ex) {
-          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbSchema.getLocation(), "HDB Schema");
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbSchema.getLocation(), XSKCommonsConstants.HDB_SCHEMA_PARSER);
         }
       } else {
         logger.warn(format("Schema [{0}] already exists during the create process", hdbSchema.getSchema()));

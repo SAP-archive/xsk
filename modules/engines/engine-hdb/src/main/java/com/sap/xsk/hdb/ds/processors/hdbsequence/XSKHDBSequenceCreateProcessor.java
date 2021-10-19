@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -46,7 +47,7 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
           break;
         } else {
           String errorMessage = String.format("Sequences are not supported for %s !", dialect.getDatabaseName(connection));
-          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbSequenceModel.getLocation(), "HDB Sequence");
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdbSequenceModel.getLocation(), XSKCommonsConstants.HDB_SEQUENCE_PARSER);
           throw new IllegalStateException(errorMessage);
         }
       }
@@ -54,7 +55,7 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
     try {
       executeSql(sql, connection);
     } catch (SQLException ex) {
-      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbSequenceModel.getLocation(), "HDB Sequence");
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbSequenceModel.getLocation(), XSKCommonsConstants.HDB_SEQUENCE_PARSER);
     }
   }
 

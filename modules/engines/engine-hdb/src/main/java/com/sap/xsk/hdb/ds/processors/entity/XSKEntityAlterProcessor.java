@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.processors.entity;
 
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -113,12 +114,12 @@ public class XSKEntityAlterProcessor {
 
         if (!isNullable) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "NOT NULL");
-          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Entity");
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.HDB_ENTITY_PROCESSOR);
           throw new SQLException(errorMessage);
         }
         if (isPrimaryKey) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name, "PRIMARY KEY");
-          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Entity");
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.HDB_ENTITY_PROCESSOR);
           throw new SQLException(errorMessage);
         }
 
@@ -127,7 +128,7 @@ public class XSKEntityAlterProcessor {
       } else if (!columnDefinitions.get(name.toUpperCase()).equals(type.toString())) {
         String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_ENTITY, entityName, name,
             "of type " + columnDefinitions.get(name) + " to be changed to " + type);
-        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Entity");
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.HDB_ENTITY_PROCESSOR);
         throw new SQLException(errorMessage);
       }
     }
@@ -151,7 +152,7 @@ public class XSKEntityAlterProcessor {
     } catch (SQLException e) {
       logger.error(sql);
       logger.error(e.getMessage(), e);
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", entityModel.getLocation(), "HDB Entity");
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.HDB_ENTITY_PROCESSOR);
       throw new SQLException(e.getMessage(), e);
     }
   }

@@ -17,6 +17,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -74,7 +75,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
             break;
           } else {
             String errorMessage = String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection));
-            XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
             throw new IllegalStateException(errorMessage);
           }
         }
@@ -91,13 +92,13 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
             String errorMessage = String
                 .format("Drop operation for the non empty Table %s will not be executed. Delete all the records in the table first.",
                     tableName);
-            XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
             logger.error(errorMessage);
             return;
           }
         }
       } catch (SQLException e) {
-        XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", tableModel.getLocation(), "HDB Table");
+        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
         logger.error(sql);
         logger.error(e.getMessage(), e);
       } finally {
@@ -126,7 +127,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
       logger.info(sql);
       statement.executeUpdate();
     } catch (SQLException e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", tableModel.getLocation(), "HDB Table");
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
       logger.error(sql);
       logger.error(e.getMessage(), e);
     } finally {

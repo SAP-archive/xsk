@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -66,7 +67,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
             break;
           } else {
             String errorMessage = String.format("Views are not supported for %s !", dialect.getDatabaseName(connection));
-            XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", viewModel.getLocation(), "HDB View");
+            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(), XSKCommonsConstants.HDB_VIEW_PARSER);
             throw new IllegalStateException(errorMessage);
           }
         }
@@ -74,7 +75,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
       try {
         executeSql(sql, connection);
       } catch (SQLException ex) {
-        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", viewModel.getLocation(), "HDB View");
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(), XSKCommonsConstants.HDB_VIEW_PARSER);
       }
     } else {
       logger.warn(format("View [{0}] already exists during the create process", viewModel.getName()));

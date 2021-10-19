@@ -57,7 +57,7 @@ public class XSKSynonymParser implements XSKDataStructureParser {
         //synonymDefinitions.put(hdbSynonymModel.getName(), definitionModel);
       } catch (XSKHDBSYNONYMMissingPropertyException exception) {
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", exception.getMessage(),
-            XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_SYNONYM,XSKCommonsConstants.MODULE_PARSERS,
+            XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_SYNONYM_PARSER,XSKCommonsConstants.MODULE_PARSERS,
             XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       }
     }

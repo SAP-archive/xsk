@@ -92,8 +92,8 @@ public class XSKODataParser implements IXSKODataParser {
     parser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = parser.xsodataDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.XSK_ODATA);
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.XSK_ODATA);
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.XSK_ODATA_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.XSK_ODATA_PARSER);
 
     XSKHDBXSODATACoreListener coreListener = new XSKHDBXSODATACoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
@@ -122,7 +122,7 @@ public class XSKODataParser implements IXSKODataParser {
       applyParametersToViewsCondition(odataModel);
       applyOmittedParamResultCondition(odataModel);
     } catch (Exception ex) {
-      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.XSK_ODATA);
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.XSK_ODATA_PARSER);
       throw ex;
     }
   }

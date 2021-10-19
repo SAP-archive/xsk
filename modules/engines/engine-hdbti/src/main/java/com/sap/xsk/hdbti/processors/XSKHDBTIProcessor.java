@@ -26,6 +26,7 @@ import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel.Pair;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -85,7 +86,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
                 + "The number of csv records should be equal to the number of columns of a db entity",
             xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames()),
             tableImportConfigurationDefinition.getFile());
-        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableImportConfigurationDefinition.getHdbtiFileName(), "HDBTI");
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
         throw new XSKTableImportException(errorMessage);
       }
 
@@ -117,7 +118,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
       return dbMetadataUtil.getTableMetadata(tableName, tableImportConfigurationDefinition.getSchema());
     } catch (SQLException sqlException) {
       String errorMessage = String.format("Error occurred while trying to read table metadata for table with name: %s", tableName);
-      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableImportConfigurationDefinition.getHdbtiFileName(), "HDBTI");
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
       logger.error(errorMessage, sqlException);
     }
     return null;
@@ -133,7 +134,7 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     } catch (IOException e) {
       String errorMessage = String.format("Error occurred while trying to parse csv imported from hdbti file: %s",
           tableImportConfigurationDefinition.getHdbtiFileName());
-      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableImportConfigurationDefinition.getHdbtiFileName(), "HDBTI");
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
       logger.error(errorMessage, e);
     }
 
@@ -145,12 +146,12 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     if (tableImportConfigurationDefinition.getDelimField() != null && (!tableImportConfigurationDefinition.getDelimField().equals(",")
         && !tableImportConfigurationDefinition.getDelimField().equals(";"))) {
       String errorMessage = "Only ';' or ',' characters are supported as delimiters for csv files.";
-      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableImportConfigurationDefinition.getHdbtiFileName(), "HDBTI");
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
       throw new XSKTableImportException(errorMessage);
     } else if (tableImportConfigurationDefinition.getDelimEnclosing() != null
         && tableImportConfigurationDefinition.getDelimEnclosing().length() > 1) {
       String errorMessage = "Delim enclosing should only contain one character.";
-      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableImportConfigurationDefinition.getHdbtiFileName(), "HDBTI");
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
       throw new XSKTableImportException(errorMessage);
     }
 
@@ -183,23 +184,23 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
       try {
         el.setFileName(XSKHDBTIUtils.convertPathToHDBTIFileProperty(el.getFileName()));
       } catch (IllegalArgumentException ex) {
-        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", el.getFileName(), "HDBTI");
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
         throw ex;
       }
       if (!XSKHDBTIUtils.isCorrectPropertySyntax(el.getSchemaName())) {
         String errMsg = "Schema property contains unsupported symbols: " + el.getSchemaName();
-        XSKCommonsUtils.logProcessorErrors(errMsg, "PROCESSOR", el.getFileName(), "HDBTI");
+        XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
         throw new IllegalIcuArgumentException(errMsg);
       }
       if (!XSKHDBTIUtils.isCorrectPropertySyntax(el.getTableName())) {
         String errMsg = "Table property contains unsupported symbols: " + el.getTableName();
-        XSKCommonsUtils.logProcessorErrors(errMsg, "PROCESSOR", el.getFileName(), "HDBTI");
+        XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
         throw new IllegalIcuArgumentException(errMsg);
       }
       for (Pair key : el.getKeys()) {
         if (!XSKHDBTIUtils.isCorrectPropertySyntax(key.getColumn())) {
           String errMsg = "key column property contains unsupported symbols: " + key.getColumn();
-          XSKCommonsUtils.logProcessorErrors(errMsg, "PROCESSOR", el.getFileName(), "HDBTI");
+          XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
           throw new IllegalIcuArgumentException(errMsg);
         }
       }

@@ -93,8 +93,8 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     parser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = parser.hdbsequence();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_SEQUENCE);
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_SEQUENCE);
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_SEQUENCE_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_SEQUENCE_PARSER);
 
     HdbsequenceBaseVisitor<JsonElement> visitor = new HdbsequenceVisitor();
     JsonElement parsedResult = visitor.visit(parseTree);

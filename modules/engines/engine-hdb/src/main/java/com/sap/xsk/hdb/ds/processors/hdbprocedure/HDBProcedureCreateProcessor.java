@@ -15,6 +15,7 @@ import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import java.sql.Connection;
@@ -40,14 +41,14 @@ public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStr
       ISqlDialect dialect = SqlFactory.deriveDialect(connection);
       if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
         String errorMessage = String.format("Procedures are not supported for %s", dialect.getDatabaseName(connection));
-        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbProcedure.getLocation(), "HDB Procedure");
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdbProcedure.getLocation(), XSKCommonsConstants.HDB_PROCEDURE_PARSER);
         throw new IllegalStateException(errorMessage);
       } else {
         String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getContent();
         try {
           executeSql(sql, connection);
         } catch (SQLException ex) {
-          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbProcedure.getLocation(), "HDB Procedure");
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbProcedure.getLocation(), XSKCommonsConstants.HDB_PROCEDURE_PARSER);
         }
       }
     } else {

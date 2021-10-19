@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.processors.table.utils;
 
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -100,12 +101,12 @@ public class XSKTableAlterHandler {
 
         if (!isNullable) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "NOT NULL");
-          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
           throw new SQLException(errorMessage);
         }
         if (isPrimaryKey) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "PRIMARY KEY");
-          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
           throw new SQLException(errorMessage);
         }
 
@@ -114,7 +115,7 @@ public class XSKTableAlterHandler {
       } else if (!dbColumnTypes.get(name).equals(type.toString())) {
         String errorMessage = String
             .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to " + type);
-        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
         throw new SQLException(errorMessage);
       }
     }
@@ -169,7 +170,7 @@ public class XSKTableAlterHandler {
       if (!dbColumnTypes.get(name).equals(type.toString())) {
         String errorMessage = String
             .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to" + type);
-        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
         throw new SQLException(errorMessage);
       }
       AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
@@ -213,7 +214,7 @@ public class XSKTableAlterHandler {
     if (!isPKListUnchanged) {
       String errorMessage = String
           .format("Incompatible change of table [%s] by trying to change its primary key list", this.tableModel.getName());
-      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
       throw new SQLException(errorMessage);
     }
   }
@@ -253,7 +254,7 @@ public class XSKTableAlterHandler {
       } catch (SQLException e) {
         logger.error(sql);
         logger.error(e.getMessage(), e);
-        XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", this.tableModel.getLocation(), "HDB Table");
+        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, this.tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
         throw new SQLException(e.getMessage(), e);
       } finally {
         if (statement != null) {

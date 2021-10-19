@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -50,7 +51,7 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
     ISqlDialect dialect = SqlFactory.deriveDialect(connection);
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
       String errorMessage = String.format("Table Types are not supported for %s !", dialect.getDatabaseName(connection));
-      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableTypeModel.getLocation(), "HDB Table Type");
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableTypeModel.getLocation(), XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
       throw new IllegalStateException(errorMessage);
     } else {
       if (SqlFactory.getNative(connection)
@@ -60,7 +61,7 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
         try {
           executeSql(sql, connection);
         } catch (SQLException ex) {
-          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", tableTypeModel.getLocation(), "HDB Table Type");
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableTypeModel.getLocation(), XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
         }
       } else {
         logger.warn(format("Table Type [{0}] does not exists during the drop process", tableTypeModel.getName()));

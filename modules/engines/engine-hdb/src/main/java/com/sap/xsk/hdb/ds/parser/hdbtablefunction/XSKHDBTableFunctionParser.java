@@ -34,7 +34,7 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
     }
     String errMsg = "HDB Table Function file not correct";
     XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
-        "", XSKCommonsConstants.HDB_TABLE_FUNCTION, XSKCommonsConstants.MODULE_PARSERS,
+        "", XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER, XSKCommonsConstants.MODULE_PARSERS,
         XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
     throw new XSKDataStructuresException(errMsg);
   }

@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.xsjob.ds.transformer;
 
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsjob.ds.model.XSKJobArtifact;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
@@ -48,7 +49,7 @@ public class XSKJobToXSKJobDefinitionTransformer {
         jobDefinitions.add(xskJobDefinition);
       }
     }else {
-      XSKCommonsUtils.logProcessorErrors("Invalid xsjob artifact definition!", "PROCESSOR", xskJobArtifact.getDescription(), "XSK JOB");
+      XSKCommonsUtils.logProcessorErrors("Invalid xsjob artifact definition!", XSKCommonsConstants.PROCESSOR_ERROR, xskJobArtifact.getDescription(), XSKCommonsConstants.XSK_JOB_PARSER);
       throw new IllegalStateException("Invalid xsjob artifact definition!");
     }
 

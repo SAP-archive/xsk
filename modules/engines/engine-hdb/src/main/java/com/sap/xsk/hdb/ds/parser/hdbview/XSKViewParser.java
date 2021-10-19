@@ -85,8 +85,8 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
     parser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = parser.hdbviewDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_VIEW);
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_VIEW);
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_VIEW_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_VIEW_PARSER);
 
     XSKHDBVIEWCoreListener XSKHDBVIEWCoreListener = new XSKHDBVIEWCoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
@@ -97,7 +97,7 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
       antlr4Model.checkForAllMandatoryFieldsPresence();
     } catch (Exception e) {
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
-          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_VIEW,XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_VIEW_PARSER,XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new XSKDataStructuresException(String.format("Wrong format of HDB View: [%s] during parsing. [%s]", location, e.getMessage()));
     }

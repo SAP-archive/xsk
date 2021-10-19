@@ -12,6 +12,7 @@
 package com.sap.xsk.xsjob.ds.scheduler.handler;
 
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsjob.ds.api.IXSKJobCoreService;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class XSKJobHandler implements Job {
     try {
       xskJavascriptEngineExecutor.executeService(XSJOB_HANDLER, executionContext, true, true);
     } catch (ScriptingException e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", context.getJobDetail().getDescription(), "XSK JOB");
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, context.getJobDetail().getDescription(), XSKCommonsConstants.XSK_JOB_PARSER);
       throw new JobExecutionException(e);
     }
   }

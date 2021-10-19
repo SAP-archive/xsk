@@ -34,7 +34,7 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser {
     }
     String errMsg = "HDB Procedure file not correct";
     XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
-        "", XSKCommonsConstants.HDB_PROCEDURE, XSKCommonsConstants.MODULE_PARSERS,
+        "", XSKCommonsConstants.HDB_PROCEDURE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
         XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
     throw new XSKDataStructuresException(errMsg);
   }

@@ -60,6 +60,9 @@ public class XSKHDBTIParser implements IXSKHDBTIParser {
     try {
       importModel.checkMandatoryFieldsInAllConfigModels();
     } catch (Exception e) {
+      XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDBTI_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new XSKHDBTIMissingPropertyException(String.format("Wrong format of hdbti definition: [%s]. [%s]", location, e.getMessage()));
     }
 

@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -61,7 +62,7 @@ public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureH
       try {
         executeSql(sql, connection);
       } catch (SQLException ex) {
-        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", viewModel.getLocation(), "HDB View");
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(), XSKCommonsConstants.HDB_VIEW_PARSER);
       }
     } else {
       logger.warn(format("View [{0}] does not exists during the drop process", viewModel.getName()));

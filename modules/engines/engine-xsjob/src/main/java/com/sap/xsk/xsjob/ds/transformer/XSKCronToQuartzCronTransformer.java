@@ -49,7 +49,7 @@ public class XSKCronToQuartzCronTransformer {
       quartzCronExpression.setMinutes(parseRange(xskCronExpressionArr[XSK_CRON_MINUTE]));
       quartzCronExpression.setSeconds(parseRange(xskCronExpressionArr[XSK_CRON_SECOND]));
     } catch (Exception e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, xskCronExpression, XSKCommonsConstants.XSK_JOB);
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, xskCronExpression, XSKCommonsConstants.XSK_JOB_PARSER);
       throw e;
     }
     return quartzCronExpression.toString();

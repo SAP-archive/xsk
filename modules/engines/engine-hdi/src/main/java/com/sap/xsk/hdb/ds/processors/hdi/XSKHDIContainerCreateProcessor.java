@@ -12,6 +12,7 @@
 package com.sap.xsk.hdb.ds.processors.hdi;
 
 import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import java.io.IOException;
 import java.sql.Connection;
@@ -73,7 +74,7 @@ public class XSKHDIContainerCreateProcessor {
       logger.info("HDI Container [{0}] from [{1}] finished successfully.", hdiModel.getContainer(), hdiModel.getLocation());
     } catch (SQLException | IOException | ScriptingException e) {
       String errorMessage = String.format("HDI Container %s from %s failed.", hdiModel.getContainer(), hdiModel.getLocation());
-      XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdiModel.getLocation(), "HDI");
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdiModel.getLocation(), XSKCommonsConstants.HDI_PROCESSOR);
       logger.error(errorMessage);
       logger.error(e.getMessage(), e);
     }

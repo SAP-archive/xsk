@@ -31,7 +31,7 @@ import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyExceptio
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
-import com.sap.xsk.parser.utils.ParserConstants;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
@@ -92,8 +92,8 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
     XSKHDBTABLESyntaxErrorListener parserErrorListener = new XSKHDBTABLESyntaxErrorListener();
     hdbtableParser.addErrorListener(parserErrorListener);
     ParseTree parseTree = hdbtableParser.hdbtableDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Table");
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Table");
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_TABLE_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_TABLE_PARSER);
 
     XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
 
@@ -105,6 +105,9 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
     try {
       hdbtableDefinitionModel.checkForAllMandatoryFieldsPresence();
     } catch (Exception e) {
+      XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_TABLE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new XSKHDBTableMissingPropertyException(
           String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
     }
@@ -132,7 +135,11 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
       List<XSKHDBTABLEColumnsModel> foundMatchKey = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(key))
           .collect(Collectors.toList());
       if (foundMatchKey.size() != 1) {
-        throw new IllegalStateException(String.format("%s: the column does not have a definition but is specified as a primary key", key));
+        String errMsg = String.format("%s: the column does not have a definition but is specified as a primary key", key);
+        XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
+            "", XSKCommonsConstants.HDB_TABLE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+            XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+        throw new IllegalStateException(errMsg);
       }
     });
 
@@ -143,6 +150,9 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         try {
           index.checkForAllIndexMandatoryFieldsPresence();
         } catch (Exception e) {
+          XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+              XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_TABLE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+              XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
           throw new XSKHDBTableMissingPropertyException(
               String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
         }
@@ -154,7 +164,11 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
           List<XSKHDBTABLEColumnsModel> foundMatch = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(col))
               .collect(Collectors.toList());
           if (foundMatch.size() != 1) {
-            throw new IllegalStateException(String.format("%s: the column does not have a definition but is specified as an index", col));
+            String errMsg = String.format("%s: the column does not have a definition but is specified as an index", col);
+            XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
+                "", XSKCommonsConstants.HDB_TABLE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+                XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+            throw new IllegalStateException(errMsg);
           }
         });
 

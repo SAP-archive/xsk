@@ -17,7 +17,7 @@ import com.sap.xsk.parser.hdbti.core.HdbtiParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTIMissingPropertyException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
-import com.sap.xsk.parser.utils.ParserConstants;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -49,8 +49,8 @@ public class XSKHDBTIParser implements IXSKHDBTIParser {
     hdbtiParser.addErrorListener(parseErrorListener);
 
     ParseTree parseTree = hdbtiParser.importArr();
-    XSKCommonsUtils.logParserErrors(parseErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, ParserConstants.HDBTI_PARSER);
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, ParserConstants.HDBTI_PARSER);
+    XSKCommonsUtils.logParserErrors(parseErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDBTI_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDBTI_PARSER);
 
     XSKHDBTICoreListener XSKHDBTICoreListener = new XSKHDBTICoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
@@ -60,6 +60,9 @@ public class XSKHDBTIParser implements IXSKHDBTIParser {
     try {
       importModel.checkMandatoryFieldsInAllConfigModels();
     } catch (Exception e) {
+      XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDBTI_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new XSKHDBTIMissingPropertyException(String.format("Wrong format of hdbti definition: [%s]. [%s]", location, e.getMessage()));
     }
 

@@ -17,6 +17,7 @@ import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableEscapeService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -70,7 +71,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           break;
         } else {
           String errorMessage = String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection));
-          XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", tableModel.getLocation(), "HDB Table");
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
           throw new IllegalStateException(errorMessage);
         }
       }
@@ -78,7 +79,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     try {
       executeSql(sql, connection);
     } catch (SQLException ex) {
-      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", tableModel.getLocation(), "HDB Table");
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
     }
 
     boolean shouldCreatePublicSynonym = SqlFactory.getNative(connection)

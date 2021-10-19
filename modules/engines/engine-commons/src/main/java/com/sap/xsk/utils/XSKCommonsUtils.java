@@ -128,6 +128,19 @@ public class XSKCommonsUtils {
   }
 
   /**
+   * Log errors with all custom fields. Used in parser errors outside antlr4.
+   */
+  public static void logCustomErrors(String location, String errorType, String line, String column, String errorMessage, String expected,
+      String category, String module, String source, String program) {
+    try {
+      ProblemsFacade.save(location, errorType, line, column, errorMessage, expected, category, module, source, program);
+    } catch (ProblemsException e) {
+      logger.error("There is an issue with logging of the Errors.");
+      logger.error(e.getMessage());
+    }
+  }
+
+  /**
    * Use to log errors from artifact processing
    */
   public static void logProcessorErrors(String errorMessage, String errorType, String location, String artifactType) {

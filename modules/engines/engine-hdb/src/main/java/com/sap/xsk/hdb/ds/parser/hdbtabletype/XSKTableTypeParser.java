@@ -28,7 +28,7 @@ import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLESyntaxErrorListener;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
-import com.sap.xsk.parser.utils.ParserConstants;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
@@ -78,8 +78,8 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
     XSKHDBTABLESyntaxErrorListener parserErrorListener = new XSKHDBTABLESyntaxErrorListener();
     hdbtableParser.addErrorListener(parserErrorListener);
     ParseTree parseTree = hdbtableParser.hdbtableDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Table Type");
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Table Type");
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
 
     XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
 
@@ -91,6 +91,9 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
     try {
       hdbtableDefinitionModel.checkForAllMandatoryFieldsPresence();
     } catch (Exception e) {
+      XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
+          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_TABLE_TYPE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new XSKHDBTableMissingPropertyException(
           String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
     }
@@ -113,7 +116,11 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
       List<XSKHDBTABLEColumnsModel> foundMatchKey = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(key))
           .collect(Collectors.toList());
       if (foundMatchKey.size() != 1) {
-        throw new IllegalStateException(String.format("%s: the column does not have a definition but is specified as a primary key", key));
+        String errMsg = String.format("%s: the column does not have a definition but is specified as a primary key", key);
+        XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
+            "", XSKCommonsConstants.HDB_TABLE_TYPE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+            XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+        throw new IllegalStateException(errMsg);
       }
     });
 

@@ -23,6 +23,7 @@ import com.sap.xsk.parser.hdbti.custom.XSKHDBTIParser;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -128,7 +129,7 @@ public class XSKTableImportArtifactFactory implements IXSKTableImportArtifactFac
           .toString(new InputStreamReader(new ByteArrayInputStream(content), StandardCharsets.UTF_8));
     } catch (IOException e) {
       String errMsg = "Error occurred while reading the content from CSV File. ";
-      XSKCommonsUtils.logProcessorErrors(errMsg + e.getMessage(), "PARSER}", resource.getPath(), "HDBTI");
+      XSKCommonsUtils.logProcessorErrors(errMsg + e.getMessage(), XSKCommonsConstants.PARSER_ERROR, resource.getPath(), XSKCommonsConstants.HDBTI_PARSER);
       logger.error(errMsg, e);
     }
     return contentAsString;

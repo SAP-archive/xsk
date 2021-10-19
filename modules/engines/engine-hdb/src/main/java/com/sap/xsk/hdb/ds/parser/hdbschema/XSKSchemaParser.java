@@ -22,7 +22,7 @@ import com.sap.xsk.parser.hdbschema.core.HdbschemaParser;
 import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMACoreListener;
 import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMASyntaxErrorListener;
 import com.sap.xsk.parser.hdbschema.models.XSKHDBSCHEMADefinitionModel;
-import com.sap.xsk.parser.utils.ParserConstants;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
@@ -70,8 +70,8 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
     hdbschemaParser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Schema");
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Schema");
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_SCHEMA_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_SCHEMA_PARSER);
 
     XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

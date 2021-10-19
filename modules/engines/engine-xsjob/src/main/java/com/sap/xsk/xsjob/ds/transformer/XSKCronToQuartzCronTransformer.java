@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.xsjob.ds.transformer;
 
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsjob.ds.api.XSKCronExpressionException;
 import java.text.ParseException;
@@ -48,7 +49,7 @@ public class XSKCronToQuartzCronTransformer {
       quartzCronExpression.setMinutes(parseRange(xskCronExpressionArr[XSK_CRON_MINUTE]));
       quartzCronExpression.setSeconds(parseRange(xskCronExpressionArr[XSK_CRON_SECOND]));
     } catch (Exception e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", xskCronExpression, "XSK JOB");
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, xskCronExpression, XSKCommonsConstants.XSK_JOB_PARSER);
       throw e;
     }
     return quartzCronExpression.toString();

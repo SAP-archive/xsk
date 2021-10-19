@@ -14,6 +14,7 @@ package com.sap.xsk.hdb.ds.processors.entity;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -63,11 +64,11 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
         try {
           executeSql(sql, connection);
         } catch (SQLException ex) {
-          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", entityModel.getLocation(), "XSK Entity");
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
         }
       } else {
         String reason = "Table does not exist - " + sourceTable;
-        XSKCommonsUtils.logProcessorErrors(reason, "PROCESSOR", entityModel.getLocation(), "HDB Entity");
+        XSKCommonsUtils.logProcessorErrors(reason, XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.HDB_ENTITY_PROCESSOR);
         logger.error(reason);
         throw new SQLException(reason);
       }

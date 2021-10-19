@@ -14,6 +14,7 @@ package com.sap.xsk.hdb.ds.processors.entity;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -54,13 +55,13 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
               String errorMessage = String
                   .format("Drop operation for the non empty Table %s will not be executed. Delete all the records in the table first.",
                       tableName);
-              XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", entityModel.getLocation(), "HDB Table");
+              XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
               logger.error(errorMessage);
             }
           }
         }
       } catch (SQLException e) {
-        XSKCommonsUtils.logProcessorErrors(e.getMessage(), "PROCESSOR", entityModel.getLocation(), "HDB Table");
+        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
         logger.error(sql);
         logger.error(e.getMessage(), e);
       }
@@ -81,7 +82,7 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
           try {
             executeSql(sql, connection);
           } catch (SQLException ex) {
-            XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", entityModel.getLocation(), "XSK Entity");
+            XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
           }
         }
       }
@@ -90,7 +91,7 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
       try {
         executeSql(sql, connection);
       } catch (SQLException ex) {
-        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", entityModel.getLocation(), "XSK Entity");
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
       }
       return;
     }

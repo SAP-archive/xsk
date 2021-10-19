@@ -12,7 +12,6 @@
 package com.sap.xsk.xsodata.ds.service;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.parser.utils.ParserConstants;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataLexer;
 import com.sap.xsk.parser.xsodata.core.HdbxsodataParser;
 import com.sap.xsk.parser.xsodata.custom.XSKHDBXSODATACoreListener;
@@ -21,6 +20,7 @@ import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATABindingType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAParameter;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAService;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsodata.ds.api.IXSKODataParser;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
@@ -92,8 +92,8 @@ public class XSKODataParser implements IXSKODataParser {
     parser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = parser.xsodataDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "XSODATA");
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "XSODATA");
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.XSK_ODATA_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.XSK_ODATA_PARSER);
 
     XSKHDBXSODATACoreListener coreListener = new XSKHDBXSODATACoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
@@ -122,7 +122,7 @@ public class XSKODataParser implements IXSKODataParser {
       applyParametersToViewsCondition(odataModel);
       applyOmittedParamResultCondition(odataModel);
     } catch (Exception ex) {
-      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PARSER", location, "XSODATA");
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.XSK_ODATA_PARSER);
       throw ex;
     }
   }

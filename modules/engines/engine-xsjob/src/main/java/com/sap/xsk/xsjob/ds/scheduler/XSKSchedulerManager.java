@@ -15,6 +15,7 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsjob.ds.api.IXSKJobCoreService;
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
@@ -77,7 +78,7 @@ public class XSKSchedulerManager {
     } catch (ObjectAlreadyExistsException e) {
       logger.warn(e.getMessage());
     } catch (org.quartz.SchedulerException e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "SCHEDULER", jobDefinition.getName(), "XSK JOB");
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.SCHEDULER_ERROR, jobDefinition.getName(), XSKCommonsConstants.XSK_JOB_PARSER);
       throw new SchedulerException(e);
     }
   }
@@ -97,7 +98,7 @@ public class XSKSchedulerManager {
     } catch (ObjectAlreadyExistsException e) {
       logger.warn(e.getMessage());
     } catch (org.quartz.SchedulerException e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "SCHEDULER", name, "XSK JOB");
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.SCHEDULER_ERROR, name, XSKCommonsConstants.XSK_JOB_PARSER);
       throw new SchedulerException(e);
     }
   }
@@ -107,7 +108,7 @@ public class XSKSchedulerManager {
       Set<TriggerKey> triggerKeys = scheduler.getTriggerKeys(GroupMatcher.anyTriggerGroup());
       return triggerKeys;
     } catch (org.quartz.SchedulerException e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), "SCHEDULER", "-", "XSK JOB");
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.SCHEDULER_ERROR, "-", XSKCommonsConstants.XSK_JOB_PARSER);
       throw new SchedulerException(e);
     }
   }

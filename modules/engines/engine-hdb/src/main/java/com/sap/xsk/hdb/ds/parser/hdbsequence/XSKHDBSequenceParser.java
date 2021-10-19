@@ -28,7 +28,7 @@ import com.sap.xsk.parser.hdbsequence.custom.HdbsequenceVisitor;
 import com.sap.xsk.parser.hdbsequence.custom.XSKHDBSEQUENCEModelAdapter;
 import com.sap.xsk.parser.hdbsequence.custom.XSKHDBSEQUENCESyntaxErrorListener;
 import com.sap.xsk.parser.hdbsequence.models.XSKHDBSEQUENCEModel;
-import com.sap.xsk.parser.utils.ParserConstants;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
@@ -93,8 +93,8 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
     parser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = parser.hdbsequence();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), ParserConstants.PARSER_ERROR, location, "HDB Sequence");
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), ParserConstants.LEXER_ERROR, location, "HDB Sequence");
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_SEQUENCE_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_SEQUENCE_PARSER);
 
     HdbsequenceBaseVisitor<JsonElement> visitor = new HdbsequenceVisitor();
     JsonElement parsedResult = visitor.visit(parseTree);

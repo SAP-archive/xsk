@@ -15,6 +15,7 @@ import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -50,14 +51,14 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
           ISqlDialect dialect = SqlFactory.deriveDialect(connection);
           if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
             String errorMessage = String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection));
-            XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", synonymModel.getLocation(), "HDB Synonym");
+            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, synonymModel.getLocation(), XSKCommonsConstants.HDB_SYNONYM_PARSER);
             throw new IllegalStateException(errorMessage);
           } else {
             String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();
             try {
               executeSql(sql, connection);
             } catch (SQLException ex) {
-              XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", synonymModel.getLocation(), "HDB Synonym");
+              XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, synonymModel.getLocation(), XSKCommonsConstants.HDB_SYNONYM_PARSER);
             }
           }
         } else {

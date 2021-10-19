@@ -15,6 +15,7 @@ import static java.text.MessageFormat.format;
 
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import java.sql.Connection;
@@ -41,14 +42,14 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
       ISqlDialect dialect = SqlFactory.deriveDialect(connection);
       if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
         String errorMessage = String.format("TableFunctions are not supported for %s", dialect.getDatabaseName(connection));
-        XSKCommonsUtils.logProcessorErrors(errorMessage, "PROCESSOR", hdbTableFunction.getLocation(), "HDB Table Function");
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdbTableFunction.getLocation(), XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
         throw new IllegalStateException(errorMessage);
       } else {
         String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getContent();
         try {
           executeSql(sql, connection);
         } catch (SQLException ex) {
-          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), "PROCESSOR", hdbTableFunction.getLocation(), "HDB Table Function");
+          XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbTableFunction.getLocation(), XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
         }
       }
     } else {

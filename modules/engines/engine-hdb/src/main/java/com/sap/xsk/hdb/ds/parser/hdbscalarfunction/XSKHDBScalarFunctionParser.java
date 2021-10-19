@@ -15,27 +15,33 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.utils.XSKCommonsConstants;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import java.sql.Timestamp;
 
 public class XSKHDBScalarFunctionParser implements XSKDataStructureParser<XSKDataStructureHDBTableFunctionModel> {
 
-  private String extractTableFunctionNameFromContent(String content) throws XSKDataStructuresException {
+  private String extractTableFunctionNameFromContent(String content, String location) throws XSKDataStructuresException {
     int indexOfBracket = content.indexOf('(');
     int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("function") + "function".length();
     if (indexOfBracket > -1 && indexOfEndOfProcKeyword > -1) {
       String procNameWithWhiteSymbols = content.substring(indexOfEndOfProcKeyword, indexOfBracket);
       return procNameWithWhiteSymbols.replace("\\s", "").trim();
     }
-    throw new XSKDataStructuresException("HDB Table Function file not correct");
+    String errMsg = "HDB Table Function file not correct";
+    XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
+        "", XSKCommonsConstants.HDB_SCALAR_FUNCTION_PARSER, XSKCommonsConstants.MODULE_PARSERS,
+        XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+    throw new XSKDataStructuresException(errMsg);
   }
 
 
   @Override
   public XSKDataStructureHDBTableFunctionModel parse(String location, String content) throws XSKDataStructuresException {
     XSKDataStructureHDBTableFunctionModel hdbTableFunction = new XSKDataStructureHDBTableFunctionModel();
-    hdbTableFunction.setName(extractTableFunctionNameFromContent(content));
+    hdbTableFunction.setName(extractTableFunctionNameFromContent(content, location));
     hdbTableFunction.setLocation(location);
     hdbTableFunction.setType(getType());
     hdbTableFunction.setHash(DigestUtils.md5Hex(content));

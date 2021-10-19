@@ -12,9 +12,11 @@
 package com.sap.xsk.hdb.ds.test.parser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +26,6 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
-
-import nl.altindag.log.LogCaptor;
 
 public class XSKSynonymParserTest extends AbstractDirigibleTest {
 
@@ -50,6 +50,7 @@ public class XSKSynonymParserTest extends AbstractDirigibleTest {
 
   @Test
   public void parseHdbsynonymFileMissingTargetSchemaFailed() throws Exception {
+    ProblemsFacade.clearAllProblems();
     String content = "{\n"
         + "    \"SY_DUMMY\": {\n"
         + "        \"target\": {\n"
@@ -59,9 +60,8 @@ public class XSKSynonymParserTest extends AbstractDirigibleTest {
         + "    }\n"
         + "}";
     String errorMessage = "Missing mandatory field for synonym SY_DUMMY!";
-    LogCaptor logCaptor = LogCaptor.forClass(XSKSynonymParser.class);
     XSKSynonymParser parser = new XSKSynonymParser();
     parser.parse("hdb_view/MySynonym.hdbsynonym", content);
-    assertEquals(logCaptor.getErrorLogs().get(0),errorMessage);
+    assertTrue(ProblemsFacade.fetchAllProblems().contains(errorMessage));
   }
 }

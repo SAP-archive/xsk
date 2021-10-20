@@ -77,6 +77,7 @@ exports.TupelList = function (dArrayOfContents) {
     }
     this.length = internalDArrayOfContents.length;
   }
+
 };
 
 EntityList = function (webEntitiesArray, parentClassName) {
@@ -86,7 +87,8 @@ EntityList = function (webEntitiesArray, parentClassName) {
     if (parentClassName === '$.response' || parentClassName === '$.net.http.Request') {
       webEntitiesArray.push(new exports.WebEntityResponse());
       syncWithWebEntitiesArray.call(this);
-    } else {
+    }
+    else {
       throw new Error("Method only available for $.response and $.net.http.Request");
     }
   };
@@ -104,7 +106,8 @@ Body = function (bodyValue) {
   this.asArrayBuffer = function () {
     if (bodyValue) {
       return bodyValue;
-    } else {
+    }
+    else {
       return dRequest.getBytes();
     }
   };
@@ -112,7 +115,8 @@ Body = function (bodyValue) {
   this.asString = function () {
     if (bodyValue) {
       return String.fromCharCode.apply(null, bodyValue);
-    } else {
+    }
+    else {
       return dRequest.getText();
     }
   };
@@ -120,7 +124,8 @@ Body = function (bodyValue) {
   this.asWebRequest = function () {
     if (bodyValue) {
       // ToDo
-    } else {
+    }
+    else {
       throw new Error("Cannot be used on root request.")
     }
   };
@@ -149,11 +154,10 @@ exports.WebRequest = function () {
     if (dRequest.getMethod() === "POST") {
       if (dUpload.isMultipartContent()) {
         var fileItems = dUpload.parseRequest();
-        for (i = 0; i < fileItems.size(); i++) {
+        for (i=0; i<fileItems.size(); i++) {
           var fileItem = fileItems.get(i);
           if (fileItem.isFormField()) {
-            var requestEntity = new WebEntityRequest();
-            requestEntity.setBody(fileItem);
+            var requestEntity = new WebEntityRequest(fileItem.getBytes());
 
             var fieldName = fileItem.getFieldName();
             var fieldValue = fileItem.getText();
@@ -161,7 +165,7 @@ exports.WebRequest = function () {
             var itemHeaders = fileItem.getHeaders();
             var headerNames = itemHeaders.getHeaderNames();
 
-            for (j = 0; j < headerNames.size(); j++) {
+            for (j=0; j<headerNames.size(); j++) {
               var headerName = headerNames.get(j);
               var headerValue = itemHeaders.getHeader(headerName);
               requestEntity.headers.set(headerName, headerValue);
@@ -249,6 +253,7 @@ exports.WebRequest = function () {
     });
     return arrayToReturn;
   };
+
 };
 
 exports.WebResponse = function () {
@@ -276,8 +281,8 @@ exports.WebResponse = function () {
   this.followUp = function (followUpObject) {
     var {
       uri: uri,
-      functionName: functionName,
-      parameter: parameters
+      functionName : functionName,
+      parameter : parameters
     } = {...followUpObject}
 
     if (uri && functionName) {
@@ -321,16 +326,17 @@ exports.WebResponse = function () {
 
 };
 
-WebEntityRequest = function () {
-  this.body = new Body();
+WebEntityRequest = function (bodyValue) {
+  this.body = new Body(bodyValue);
   this.contentType;
   this.entities = new EntityList([]);
   this.headers = new exports.TupelList([]);
   this.parameters = new exports.TupelList([]);
 
   this.setBody = function (body, index) {
-    this.body = new Body(body.getBytes());
+    //ToDo
   };
+
 };
 
 exports.WebEntityResponse = function () {
@@ -340,6 +346,7 @@ exports.WebEntityResponse = function () {
   this.headers = new exports.TupelList([]);
 
   this.setBody = function (body, index) {
-    this.body = new Body(body.getBytes());
+    // ToDo
   };
+
 };

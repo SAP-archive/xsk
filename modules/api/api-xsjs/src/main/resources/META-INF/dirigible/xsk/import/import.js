@@ -12,82 +12,74 @@
 var acorn = require("acornjs/acorn");
 
 exports.import = function (namespace, name) {
-  var validPackages = namespace.split('.');
-  var validPackage = validPackages.join('/') + '/';
-  var resourceName = validPackage + name + '.xsjslib';
+    var validPackages = namespace.split('.');
+    var validPackage = validPackages.join('/') + '/';
+    var resourceName = validPackage + name + '.xsjslib';
 
-  console.info("Importing: " + resourceName);
+    console.info("Importing: " + resourceName);
 
-  var module = xskRequire(resourceName);
-  addToXSJSApis(this, validPackages, name, module);
+    var module = xskRequire(resourceName);
 
-  console.info("Imported: " + resourceName);
-  return module;
+    console.info("Imported: " + resourceName);
+
+    return module;
 }
 
-var Require = (function (modulePath) {
-  var _loadedModules = {};
-  var _require = function (path) {
-    var moduleInfo, buffered, head = '(function(exports,module,require){ ', code = '', tail = '})', line = null;
-    moduleInfo = _loadedModules[path];
-    if (moduleInfo) {
-      return moduleInfo;
-    }
-    code = SourceProvider.loadSource(path);
+var Require = (function(modulePath) {
+	var _loadedModules = {};
+	var _require = function(path) {
+		var moduleInfo, buffered, head = '(function(exports,module,require){ ', code = '', tail = '})', line = null;
+		moduleInfo = _loadedModules[path];
+		if (moduleInfo) {
+			return moduleInfo;
+		}
+		code = SourceProvider.loadSource(path);
+        
+        var exports = getExports(code);
+        code += "\n\n";
+        exports.forEach(e => code += "exports." + e + " = " + e + ";\n");
 
-    var exports = getExports(code);
-    code += "\n\n";
-    exports.forEach(e => code += "exports." + e + " = " + e + ";\n");
-
-    moduleInfo = {
-      loaded: false,
-      id: path,
-      exports: {},
-      require: _requireClosure()
-    };
-    code = head + code + tail;
-    _loadedModules[path] = moduleInfo;
-    var compiledWrapper = null;
-    try {
-      compiledWrapper = eval(code);
-    } catch (e) {
-      throw new Error('Error evaluating module ' + path + ' line #' + e.lineNumber + ' : ' + e.message, path, e.lineNumber);
-    }
-    var parameters = [moduleInfo.exports, /* exports */
-      moduleInfo, /* module */
-      moduleInfo.require /* require */
-    ];
-    try {
-      compiledWrapper.apply(moduleInfo.exports, /* this */
-          parameters);
-    } catch (e) {
-      throw new Error('Error executing module ' + path + ' line #' + e.lineNumber + ' : ' + e.message, path, e.lineNumber);
-    }
-    moduleInfo.loaded = true;
-    return moduleInfo;
-  };
-  var _requireClosure = function () {
-    return function (path) {
-      var module = _require(path);
-      return module.exports;
-    };
-  };
-  return _requireClosure();
+		moduleInfo = {
+			loaded: false,
+			id: path,
+			exports: {},
+			require: _requireClosure()
+		};
+		code = head + code + tail;
+		_loadedModules[path] = moduleInfo;
+		var compiledWrapper = null;
+		try {
+			compiledWrapper = eval(code);
+		} catch (e) {
+			throw new Error('Error evaluating module ' + path + ' line #' + e.lineNumber + ' : ' + e.message, path, e.lineNumber);
+		}
+		var parameters = [moduleInfo.exports, /* exports */
+			moduleInfo, /* module */
+		moduleInfo.require /* require */
+		];
+		try {
+			compiledWrapper.apply(moduleInfo.exports, /* this */
+				parameters);
+		} catch (e) {
+			throw new Error('Error executing module ' + path + ' line #' + e.lineNumber + ' : ' + e.message, path, e.lineNumber);
+		}
+		moduleInfo.loaded = true;
+		return moduleInfo;
+	};
+	var _requireClosure = function() {
+		return function(path) {
+			var module = _require(path);
+			return module.exports;
+		};
+	}; return _requireClosure();
 });
 
 var xskRequire = Require();
 
 function getExports(code) {
-  var nodes = acorn.parse(code);
-  var functionDeclarations = nodes.body.filter(e => e.type === "FunctionDeclaration").map(e => e.id.name);
-  var variableDeclarations = nodes.body.filter(e => e.type === "VariableDeclaration").flatMap(e => e.declarations.filter(d => d.type === "VariableDeclarator").flatMap(d => d.id.name));
-  var exports = functionDeclarations.concat(variableDeclarations);
-  return exports;
+    var nodes = acorn.parse(code);
+    var functionDeclarations = nodes.body.filter(e => e.type === "FunctionDeclaration").map(e => e.id.name);
+    var variableDeclarations = nodes.body.filter(e => e.type === "VariableDeclaration").flatMap(e => e.declarations.filter(d => d.type === "VariableDeclarator").flatMap(d => d.id.name));
+    var exports = functionDeclarations.concat(variableDeclarations);
+    return exports;
 }
-
-function addToXSJSApis (api, validPackages, name, module) {
-  for (var i = 0; i < validPackages.length; i++) {
-    api = api[validPackages[i]] = api[validPackages[i]] || {};
-  }
-  api[name] = module;
-};

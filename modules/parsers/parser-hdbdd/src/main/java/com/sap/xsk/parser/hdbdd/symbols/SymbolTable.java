@@ -85,6 +85,9 @@ public class SymbolTable {
 
     AnnotationObj schemaObj = createSchema();
     annotations.put(schemaObj.getName(), schemaObj);
+
+    AnnotationObj noKeyObj = buildTemplateForNoKeyAnnotation();
+    annotations.put(noKeyObj.getName(), noKeyObj);
   }
 
   public void addEntityToGraph(String fullName) {
@@ -196,6 +199,15 @@ public class SymbolTable {
     searchIndex.define("fuzzy", fuzzy);
 
     return searchIndex;
+  }
+
+  private AnnotationObj buildTemplateForNoKeyAnnotation() {
+    AnnotationObj noKeyObj = new AnnotationObj();
+    noKeyObj.setName("nokey");
+    noKeyObj.setTopLevel(false);
+    noKeyObj.setAllowedForSymbols(Collections.singletonList(EntitySymbol.class));
+
+    return noKeyObj;
   }
 
   private void traverseEntityGraph(String entityName, List<EntitySymbol> orderedSymbol, Set<String> passedEntities) {

@@ -20,7 +20,7 @@ public class AssociationSymbol extends FieldSymbol {
 
   private CardinalityEnum cardinality;
   private EntitySymbol target;
-  private List<EntityElementSymbol> foreignKeys = new ArrayList<>();
+  private List<ForeignKeySymbol> foreignKeys = new ArrayList<>();
   private boolean isManaged;
 
   public AssociationSymbol(String name) {
@@ -39,12 +39,20 @@ public class AssociationSymbol extends FieldSymbol {
     this.cardinality = cardinality;
   }
 
-  public List<EntityElementSymbol> getForeignKeys() {
+  public List<ForeignKeySymbol> getForeignKeys() {
     return foreignKeys;
   }
 
   public void setForeignKeys(List<EntityElementSymbol> foreignKeys) {
-    this.foreignKeys = foreignKeys;
+    List<ForeignKeySymbol> foreignKeysWithAlias = new ArrayList<>();
+
+    for (EntityElementSymbol element : foreignKeys) {
+      ForeignKeySymbol foreignKey = new ForeignKeySymbol();
+      foreignKey.setEntityElement(element);
+      foreignKeysWithAlias.add(foreignKey);
+    }
+
+    this.foreignKeys = foreignKeysWithAlias;
   }
 
   public EntitySymbol getTarget() {
@@ -55,8 +63,8 @@ public class AssociationSymbol extends FieldSymbol {
     this.target = target;
   }
 
-  public void addForeignKey(EntityElementSymbol elementSymbol) {
-    this.foreignKeys.add(elementSymbol);
+  public void addForeignKey(ForeignKeySymbol foreignKey) {
+    this.foreignKeys.add(foreignKey);
   }
 
   public boolean isManaged() {

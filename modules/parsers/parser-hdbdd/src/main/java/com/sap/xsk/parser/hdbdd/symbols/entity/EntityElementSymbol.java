@@ -11,40 +11,40 @@
  */
 package com.sap.xsk.parser.hdbdd.symbols.entity;
 
-import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 
 public class EntityElementSymbol extends FieldSymbol {
-    private String value;
-    private boolean isKey;
-    private boolean isNotNull;
 
-    public EntityElementSymbol(String name, Scope scope) {
-        super(name, scope);
-    }
+  private String value;
+  private boolean isKey;
+  private boolean isNotNull;
 
-    public String getValue() {
-        return value;
-    }
+  public EntityElementSymbol(String name, Scope scope) {
+    super(name, scope);
+  }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+  public String getValue() {
+    return value;
+  }
 
-    public boolean isNotNull() {
-        return isNotNull;
-    }
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    public void setNotNull(boolean notNull) {
-        isNotNull = notNull;
-    }
+  public boolean isNotNull() {
+    return isNotNull;
+  }
 
-    public boolean isKey() {
-        return isKey;
-    }
+  public void setNotNull(boolean notNull) {
+    isNotNull = notNull;
+  }
 
-    public void setKey(boolean key) {
-        isKey = key;
-    }
+  public boolean isKey() {
+    return isKey;
+  }
+
+  public void setKey(boolean key) {
+    isKey = key;
+  }
 }

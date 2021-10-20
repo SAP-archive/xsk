@@ -36,6 +36,7 @@ public class XSKDataStructureHDBTableColumnModel {
 
   private String comment;
 
+  private String alias;
 
   /**
    * The default constructor.
@@ -59,7 +60,7 @@ public class XSKDataStructureHDBTableColumnModel {
    */
   public XSKDataStructureHDBTableColumnModel(String name, String type, String length, boolean nullable, boolean primaryKey,
       String defaultValue,
-      String precision, String scale, boolean unique) {
+      String precision, String scale, boolean unique, String alias) {
     super();
     this.name = name;
     this.sqlType = type;
@@ -70,6 +71,7 @@ public class XSKDataStructureHDBTableColumnModel {
     this.precision = precision;
     this.scale = scale;
     this.unique = unique;
+    this.alias = alias;
   }
 
   /**
@@ -245,5 +247,13 @@ public class XSKDataStructureHDBTableColumnModel {
 
   public String getComment() {
     return comment;
+  }
+
+  public void setAlias(String alias) {
+    this.alias = alias;
+  }
+
+  public String getAlias() {
+    return alias;
   }
 }

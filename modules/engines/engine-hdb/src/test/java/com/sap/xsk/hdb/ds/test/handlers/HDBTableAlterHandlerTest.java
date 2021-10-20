@@ -90,8 +90,8 @@ public class HDBTableAlterHandlerTest {
   public void addColumnsSuccessfully() throws Exception {
 
     List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true));
-    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true, null));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
     tableModel.setColumns(columns);
     tableModel.setConstraints(constraintsModel);
     tableModel.setName("hdb_table::SampleHdbdd");
@@ -112,7 +112,7 @@ public class HDBTableAlterHandlerTest {
   @Test(expected = SQLException.class)
   public void addColumnsFailedWhenPrimaryKey() throws Exception {
     List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-    columns.add(new XSKDataStructureHDBTableColumnModel("Age", "INTEGER", "32", true, true, null, null, null, true));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Age", "INTEGER", "32", true, true, null, null, null, true, null));
     tableModel.setColumns(columns);
     tableModel.setConstraints(constraintsModel);
     tableModel.setName("hdb_table::SampleHdbdd");
@@ -134,8 +134,8 @@ public class HDBTableAlterHandlerTest {
   public void removeColumnsSuccessfully() throws Exception {
 
     List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true));
-    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true, null));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
     tableModel.setColumns(columns);
     tableModel.setConstraints(constraintsModel);
     tableModel.setName("hdb_table::SampleHdbdd");
@@ -163,8 +163,8 @@ public class HDBTableAlterHandlerTest {
   public void updateColumnsSuccessfully() throws Exception {
 
     List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true));
-    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true, null));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
     tableModel.setColumns(columns);
     tableModel.setConstraints(constraintsModel);
     tableModel.setName("hdb_table::SampleHdbdd");
@@ -193,8 +193,8 @@ public class HDBTableAlterHandlerTest {
   public void rebuildIndecesSuccessfully() throws Exception {
 
     List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true));
-    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true, null));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
     tableModel.setColumns(columns);
     tableModel.setConstraints(constraintsModel);
     tableModel.setName("hdb_table::SampleHdbdd");
@@ -221,8 +221,8 @@ public class HDBTableAlterHandlerTest {
   public void ensurePrimaryKeyIsUnchangedSuccessfully() throws Exception {
 
     List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, true, null, null, null, true));
-    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, true, null, null, null, true, null));
+    columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
     tableModel.setColumns(columns);
     tableModel.setConstraints(constraintsModel);
     primaryKey.setColumns(new String[]{"Id"});

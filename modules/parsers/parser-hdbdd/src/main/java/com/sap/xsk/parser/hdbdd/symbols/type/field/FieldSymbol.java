@@ -38,17 +38,17 @@ public class FieldSymbol extends Symbol implements Typeable {
   }
 
   @Override
-    public void setType(Type type) {
-        this.type = type;
-    }
+  public void setType(Type type) {
+    this.type = type;
+  }
 
-    @Override
-    public String getReference() {
-        return reference;
-    }
+  @Override
+  public String getReference() {
+    return reference;
+  }
 
-    @Override
-    public void setReference(String token) {
-        this.reference = token;
-    }
+  @Override
+  public void setReference(String token) {
+    this.reference = token;
+  }
 }

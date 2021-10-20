@@ -25,20 +25,20 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.CardinalityEnum;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
+import com.sap.xsk.parser.hdbdd.symbols.entity.ForeignKeySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.Type;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 public class ReferenceResolvingListener extends CdsBaseListener {
 
@@ -142,6 +142,13 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     String refFullPath = entityName + "." + reference;
     Symbol resolvedSymbol = resolveReferenceChain(refFullPath, associationSymbol, new HashSet<>(Arrays.asList(associationSymbol)));
 
+    ForeignKeySymbol foreignKeySymbol = new ForeignKeySymbol();
+    foreignKeySymbol.setEntityElement((EntityElementSymbol) resolvedSymbol);
+
+    if (ctx.alias != null) {
+      foreignKeySymbol.setAlias(ctx.alias.getText());
+    }
+
     if (resolvedSymbol == null) {
       throw new CDSRuntimeException(String.format(
           "Error at line: %s. No such field found in entity: %s.",
@@ -152,7 +159,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
           resolvedSymbol.getIdToken().getLine()));
     }
 
-    associationSymbol.addForeignKey((EntityElementSymbol) resolvedSymbol);
+    associationSymbol.addForeignKey(foreignKeySymbol);
     EntitySymbol entity = (EntitySymbol) associationSymbol.getScope();
     this.symbolTable.addChildToEntity(entity.getFullName(), ((Symbol) resolvedSymbol.getScope()).getFullName());
   }
@@ -192,7 +199,9 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     targetAssociation.setCardinality(CardinalityEnum.ONE_TO_ONE);
     targetAssociation.setScope(resolvedTargetSymbol.getScope());
     targetAssociation.setIdToken(resolvedTargetSymbol.getIdToken());
-    targetAssociation.addForeignKey(resolvedSourcePkElement);
+    ForeignKeySymbol foreignKey = new ForeignKeySymbol();
+    foreignKey.setEntityElement(resolvedSourcePkElement);
+    targetAssociation.addForeignKey(foreignKey);
 
     EntitySymbol targetEntity = associationSymbol.getTarget();
     targetEntity.define(targetAssociation);

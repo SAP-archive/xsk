@@ -25,7 +25,6 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.CardinalityEnum;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
-import com.sap.xsk.parser.hdbdd.symbols.entity.ForeignKeySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.Type;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
@@ -142,11 +141,10 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     String refFullPath = entityName + "." + reference;
     Symbol resolvedSymbol = resolveReferenceChain(refFullPath, associationSymbol, new HashSet<>(Arrays.asList(associationSymbol)));
 
-    ForeignKeySymbol foreignKeySymbol = new ForeignKeySymbol();
-    foreignKeySymbol.setEntityElement((EntityElementSymbol) resolvedSymbol);
+    EntityElementSymbol entityElement = new EntityElementSymbol((EntityElementSymbol) resolvedSymbol);
 
     if (ctx.alias != null) {
-      foreignKeySymbol.setAlias(ctx.alias.getText());
+      entityElement.setAlias(ctx.alias.getText());
     }
 
     if (resolvedSymbol == null) {
@@ -159,7 +157,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
           resolvedSymbol.getIdToken().getLine()));
     }
 
-    associationSymbol.addForeignKey(foreignKeySymbol);
+    associationSymbol.addForeignKey(entityElement);
     EntitySymbol entity = (EntitySymbol) associationSymbol.getScope();
     this.symbolTable.addChildToEntity(entity.getFullName(), ((Symbol) resolvedSymbol.getScope()).getFullName());
   }
@@ -199,9 +197,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     targetAssociation.setCardinality(CardinalityEnum.ONE_TO_ONE);
     targetAssociation.setScope(resolvedTargetSymbol.getScope());
     targetAssociation.setIdToken(resolvedTargetSymbol.getIdToken());
-    ForeignKeySymbol foreignKey = new ForeignKeySymbol();
-    foreignKey.setEntityElement(resolvedSourcePkElement);
-    targetAssociation.addForeignKey(foreignKey);
+    targetAssociation.addForeignKey(resolvedSourcePkElement);
 
     EntitySymbol targetEntity = associationSymbol.getTarget();
     targetEntity.define(targetAssociation);

@@ -20,7 +20,6 @@ import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
-import com.sap.xsk.parser.hdbdd.symbols.entity.ForeignKeySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
@@ -53,15 +52,14 @@ public class HdbddTransformer {
       if (currentElement.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(currentElement);
         subElements.forEach(subE -> {
-          tableColumns.add(transformFieldSymbolToColumnModel(subE, true, null));
+          tableColumns.add(transformFieldSymbolToColumnModel(subE, true));
         });
       } else {
-        tableColumns.add(transformFieldSymbolToColumnModel(currentElement, true, null));
+        tableColumns.add(transformFieldSymbolToColumnModel(currentElement, true));
       }
     });
 
     entitySymbol.getAssociations().forEach(associationSymbol -> {
-      List<ForeignKeySymbol> foreignKeys = associationSymbol.getForeignKeys();
       List<XSKDataStructureHDBTableColumnModel> associationColumns = transformAssociationToColumnModels(associationSymbol);
       XSKDataStructureHDBTableConstraintForeignKeyModel foreignKeyModel = new XSKDataStructureHDBTableConstraintForeignKeyModel();
       String[] referencedColumns = associationColumns.stream().map(XSKDataStructureHDBTableColumnModel::getName).toArray(String[]::new);
@@ -110,10 +108,10 @@ public class HdbddTransformer {
       if (field.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(field);
         subElements.forEach(subE -> {
-          tableColumns.add(transformFieldSymbolToColumnModel(subE, true, null));
+          tableColumns.add(transformFieldSymbolToColumnModel(subE, true));
         });
       } else {
-        tableColumns.add(transformFieldSymbolToColumnModel(field, true, null));
+        tableColumns.add(transformFieldSymbolToColumnModel(field, true));
       }
     });
 
@@ -131,10 +129,10 @@ public class HdbddTransformer {
    * @param fieldSymbol: fieldSymbol
    * @param bAssignPK:   false if the entityElement is coming from  association, otherwise it should be true
    */
-  private XSKDataStructureHDBTableColumnModel transformFieldSymbolToColumnModel(FieldSymbol fieldSymbol, boolean bAssignPK, String foreignKeyAlias) {
+  private XSKDataStructureHDBTableColumnModel transformFieldSymbolToColumnModel(FieldSymbol fieldSymbol, boolean bAssignPK) {
     XSKDataStructureHDBTableColumnModel columnModel = new XSKDataStructureHDBTableColumnModel();
 
-    columnModel.setAlias(foreignKeyAlias);
+    columnModel.setAlias(fieldSymbol.getAlias());
     columnModel.setName(fieldSymbol.getName());
 
     columnModel.setNullable(true);
@@ -169,14 +167,12 @@ public class HdbddTransformer {
   private List<XSKDataStructureHDBTableColumnModel> transformAssociationToColumnModels(AssociationSymbol associationSymbol) {
     List<XSKDataStructureHDBTableColumnModel> tableColumns = new ArrayList<>();
     associationSymbol.getForeignKeys().forEach(fk -> {
-      EntityElementSymbol foreignKey = fk.getEntityElement();
-      String foreignKeyAlias = fk.getAlias();
-      if (foreignKey.getType() instanceof StructuredDataTypeSymbol) {
-        List<EntityElementSymbol> subElements = getStructuredTypeSubElements(foreignKey);
+      if (fk.getType() instanceof StructuredDataTypeSymbol) {
+        List<EntityElementSymbol> subElements = getStructuredTypeSubElements(fk);
         subElements.forEach(subE ->
-            tableColumns.add(transformFieldSymbolToColumnModel(subE, false, null)));
+            tableColumns.add(transformFieldSymbolToColumnModel(subE, false)));
       } else {
-        tableColumns.add(transformFieldSymbolToColumnModel(foreignKey, false, foreignKeyAlias));
+        tableColumns.add(transformFieldSymbolToColumnModel(fk, false));
       }
     });
 

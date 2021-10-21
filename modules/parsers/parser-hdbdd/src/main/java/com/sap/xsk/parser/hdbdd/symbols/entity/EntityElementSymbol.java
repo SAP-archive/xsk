@@ -24,6 +24,15 @@ public class EntityElementSymbol extends FieldSymbol {
     super(name, scope);
   }
 
+  public EntityElementSymbol(EntityElementSymbol entityElementSymbol) {
+    super(entityElementSymbol.getType(), entityElementSymbol.getReference(), entityElementSymbol.getName(), entityElementSymbol.getScope(),
+        entityElementSymbol.getIdToken(), entityElementSymbol.getFullName(), entityElementSymbol.getAnnotations(),
+        entityElementSymbol.getSchema());
+    this.value = entityElementSymbol.getValue();
+    this.isKey = entityElementSymbol.isKey();
+    this.isNotNull = entityElementSymbol.isKey();
+  }
+
   public String getValue() {
     return value;
   }

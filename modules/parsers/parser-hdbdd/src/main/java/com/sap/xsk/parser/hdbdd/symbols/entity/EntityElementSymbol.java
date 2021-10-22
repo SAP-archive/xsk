@@ -11,40 +11,49 @@
  */
 package com.sap.xsk.parser.hdbdd.symbols.entity;
 
-import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 
 public class EntityElementSymbol extends FieldSymbol {
-    private String value;
-    private boolean isKey;
-    private boolean isNotNull;
 
-    public EntityElementSymbol(String name, Scope scope) {
-        super(name, scope);
-    }
+  private String value;
+  private boolean isKey;
+  private boolean isNotNull;
 
-    public String getValue() {
-        return value;
-    }
+  public EntityElementSymbol(String name, Scope scope) {
+    super(name, scope);
+  }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+  public EntityElementSymbol(EntityElementSymbol entityElementSymbol) {
+    super(entityElementSymbol.getType(), entityElementSymbol.getReference(), entityElementSymbol.getName(), entityElementSymbol.getScope(),
+        entityElementSymbol.getIdToken(), entityElementSymbol.getFullName(), entityElementSymbol.getAnnotations(),
+        entityElementSymbol.getSchema());
+    this.value = entityElementSymbol.getValue();
+    this.isKey = entityElementSymbol.isKey();
+    this.isNotNull = entityElementSymbol.isNotNull();
+  }
 
-    public boolean isNotNull() {
-        return isNotNull;
-    }
+  public String getValue() {
+    return value;
+  }
 
-    public void setNotNull(boolean notNull) {
-        isNotNull = notNull;
-    }
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    public boolean isKey() {
-        return isKey;
-    }
+  public boolean isNotNull() {
+    return isNotNull;
+  }
 
-    public void setKey(boolean key) {
-        isKey = key;
-    }
+  public void setNotNull(boolean notNull) {
+    isNotNull = notNull;
+  }
+
+  public boolean isKey() {
+    return isKey;
+  }
+
+  public void setKey(boolean key) {
+    isKey = key;
+  }
 }

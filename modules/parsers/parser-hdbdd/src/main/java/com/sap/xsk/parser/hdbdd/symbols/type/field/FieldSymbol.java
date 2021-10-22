@@ -11,9 +11,12 @@
  */
 package com.sap.xsk.parser.hdbdd.symbols.type.field;
 
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.Type;
+import org.antlr.v4.runtime.Token;
+import java.util.Map;
 
 public class FieldSymbol extends Symbol implements Typeable {
 
@@ -24,12 +27,15 @@ public class FieldSymbol extends Symbol implements Typeable {
     super(name);
   }
 
-  public FieldSymbol(Symbol symbol) {
-    super(symbol);
-  }
-
   public FieldSymbol(String name, Scope scope) {
     super(name, scope);
+  }
+
+  public FieldSymbol(Type type, String reference, String name, Scope scope, Token idToken, String fullName,
+      Map<String, AnnotationObj> annotations, String schema) {
+    super(name, scope, idToken, fullName, annotations, schema);
+    this.type = type;
+    this.reference = reference;
   }
 
   @Override
@@ -38,17 +44,17 @@ public class FieldSymbol extends Symbol implements Typeable {
   }
 
   @Override
-    public void setType(Type type) {
-        this.type = type;
-    }
+  public void setType(Type type) {
+    this.type = type;
+  }
 
-    @Override
-    public String getReference() {
-        return reference;
-    }
+  @Override
+  public String getReference() {
+    return reference;
+  }
 
-    @Override
-    public void setReference(String token) {
-        this.reference = token;
-    }
+  @Override
+  public void setReference(String token) {
+    this.reference = token;
+  }
 }

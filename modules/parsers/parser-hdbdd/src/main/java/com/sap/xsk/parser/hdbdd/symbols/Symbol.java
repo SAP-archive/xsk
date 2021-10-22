@@ -34,6 +34,7 @@ public class Symbol { // A generic programming language symbol
   private Token idToken;
   private String schema;
   private Map<String, AnnotationObj> annotations;
+  String alias;
 
   public Symbol(Symbol symbol) {
     this(symbol.getName(), symbol.getScope());
@@ -49,6 +50,18 @@ public class Symbol { // A generic programming language symbol
   public Symbol(String name, Scope scope) {
     this(name);
     this.scope = scope;
+  }
+
+  public Symbol() {
+  }
+
+  public Symbol(String name, Scope scope, Token idToken, String fullName, Map<String, AnnotationObj> annotations, String schema) {
+    this.name = name;
+    this.scope = scope;
+    this.idToken = idToken;
+    this.fullName = fullName;
+    this.annotations = annotations;
+    this.schema = schema;
   }
 
   public String getName() {
@@ -101,6 +114,14 @@ public class Symbol { // A generic programming language symbol
 
   public AnnotationObj getAnnotation(String name) {
     return this.annotations.get(name);
+  }
+
+  public String getAlias() {
+    return alias;
+  }
+
+  public void setAlias(String alias) {
+    this.alias = alias;
   }
 
   @Override

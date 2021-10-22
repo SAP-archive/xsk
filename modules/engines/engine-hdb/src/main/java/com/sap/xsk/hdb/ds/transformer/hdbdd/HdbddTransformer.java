@@ -40,7 +40,8 @@ public class HdbddTransformer {
     tableModel.setName(entitySymbol.getFullName());
     tableModel.setSchema(entitySymbol.getSchema());
 
-    List<EntityElementSymbol> entityPks = entitySymbol.getElements().stream().filter(EntityElementSymbol::isKey).collect(Collectors.toList());
+    List<EntityElementSymbol> entityPks = entitySymbol.getElements().stream().filter(EntityElementSymbol::isKey)
+        .collect(Collectors.toList());
     XSKDataStructureHDBTableConstraintPrimaryKeyModel primaryKey = new XSKDataStructureHDBTableConstraintPrimaryKeyModel();
     primaryKey.setColumns(entityPks.stream().map(EntityElementSymbol::getName).toArray(String[]::new));
     primaryKey.setName("PK_" + tableModel.getName());
@@ -64,11 +65,18 @@ public class HdbddTransformer {
       String[] referencedColumns = associationColumns.stream().map(XSKDataStructureHDBTableColumnModel::getName).toArray(String[]::new);
       String foreignKeyName = tableModel.getName() + "." + associationSymbol.getName();
       if (associationSymbol.isManaged()) {
-        associationColumns.forEach(ac -> ac.setName(associationSymbol.getName() + "." + ac.getName()));
+        associationColumns.forEach(ac -> {
+          if (ac.getAlias() == null) {
+            ac.setName(associationSymbol.getName() + "." + ac.getName());
+          }
+          else {
+            ac.setName(ac.getAlias());
+          }
+        });
       } else {
         String associationSymbolName = associationSymbol.getName();
         associationColumns.forEach(ac -> ac.setName(associationSymbolName.substring(associationSymbolName.indexOf(
-            UNMANAGED_ASSOCIATION_MARKER)+1)));
+            UNMANAGED_ASSOCIATION_MARKER) + 1)));
         foreignKeyName = foreignKeyName.replace(UNMANAGED_ASSOCIATION_MARKER, "");
       }
 
@@ -119,11 +127,14 @@ public class HdbddTransformer {
 
   /**
    * @param fieldSymbol: fieldSymbol
-   * @param bAssignPK:  false if the entityElement is coming from  association, otherwise it should be true
+   * @param bAssignPK:   false if the entityElement is coming from  association, otherwise it should be true
    */
   private XSKDataStructureHDBTableColumnModel transformFieldSymbolToColumnModel(FieldSymbol fieldSymbol, boolean bAssignPK) {
     XSKDataStructureHDBTableColumnModel columnModel = new XSKDataStructureHDBTableColumnModel();
+
+    columnModel.setAlias(fieldSymbol.getAlias());
     columnModel.setName(fieldSymbol.getName());
+
     columnModel.setNullable(true);
 
     if (fieldSymbol instanceof EntityElementSymbol) {

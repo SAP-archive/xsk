@@ -1,0 +1,18 @@
+namespace gstr2;
+
+@Schema: 'ADMIN'
+context ClientsWithManagedAssAndAlias {
+
+    entity Address {
+       key id           : Integer;
+       key country      : String(30);
+       key city         : String(30);
+       key zipCode      : String(30);
+    };
+
+   entity Person {
+       key id           : Integer;
+       address1         : Association[*] to Address { id as PersonAddressId1, country, city, zipCode };
+       address2         : Association[*] to Address { id as PersonAddressId2, country, city, zipCode };
+   };
+};

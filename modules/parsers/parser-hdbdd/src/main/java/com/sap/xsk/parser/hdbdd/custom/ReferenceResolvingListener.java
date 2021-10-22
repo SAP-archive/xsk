@@ -30,15 +30,14 @@ import com.sap.xsk.parser.hdbdd.symbols.type.Type;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 public class ReferenceResolvingListener extends CdsBaseListener {
 
@@ -142,6 +141,12 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     String refFullPath = entityName + "." + reference;
     Symbol resolvedSymbol = resolveReferenceChain(refFullPath, associationSymbol, new HashSet<>(Arrays.asList(associationSymbol)));
 
+    EntityElementSymbol entityElement = new EntityElementSymbol((EntityElementSymbol) resolvedSymbol);
+
+    if (ctx.alias != null) {
+      entityElement.setAlias(ctx.alias.getText());
+    }
+
     if (resolvedSymbol == null) {
       throw new CDSRuntimeException(String.format(
           "Error at line: %s. No such field found in entity: %s.",
@@ -152,7 +157,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
           resolvedSymbol.getIdToken().getLine()));
     }
 
-    associationSymbol.addForeignKey((EntityElementSymbol) resolvedSymbol);
+    associationSymbol.addForeignKey(entityElement);
     EntitySymbol entity = (EntitySymbol) associationSymbol.getScope();
     this.symbolTable.addChildToEntity(entity.getFullName(), ((Symbol) resolvedSymbol.getScope()).getFullName());
   }

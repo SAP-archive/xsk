@@ -22,7 +22,7 @@ association: ascId=ID ':' ascKeyword=ID cardinality? toKeyword=ID associationTar
 associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
 unmanagedForeignKey: ON pathSubMembers+=ID ('.' pathSubMembers+=ID)* '=' source=ID;
 managedForeignKeys: '{' foreignKey (',' foreignKey)* '}';
-foreignKey: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
+foreignKey: pathSubMembers+=ID ('.' pathSubMembers+=ID)* (AS alias=ID)?;
 cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardinality
               | '[' (max=INTEGER | many='*') ']'                 # MaxCardinality
               |  '[' ']'                                         # NoCardinality

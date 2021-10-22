@@ -30,7 +30,7 @@ public class EntityElementSymbol extends FieldSymbol {
         entityElementSymbol.getSchema());
     this.value = entityElementSymbol.getValue();
     this.isKey = entityElementSymbol.isKey();
-    this.isNotNull = entityElementSymbol.isKey();
+    this.isNotNull = entityElementSymbol.isNotNull();
   }
 
   public String getValue() {

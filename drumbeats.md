@@ -1,5 +1,39 @@
 # Drumbeats
 
+## 2021 Week 42 (18 October - 24 October)
+
+#### Focus topics:
+
+- Parametrizing HDI container
+- HANA 2.0 MDC on Neo validation
+- Documentation and Samples
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-10-18..2021-10-24) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-10-18..2021-10-24) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-10-18..2021-10-24) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-10-18..2021-10-24) PRs
+
+----
+
+## 2021 Week 41 (11 October - 17 October)
+
+#### Focus topics:
+
+- Automate creation of the HDI container
+- HANA 2.0 MDC on Neo support
+- Documentation and Samples
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-10-11..2021-10-17) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-10-11..2021-10-17) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-10-11..2021-10-17) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-10-11..2021-10-17) PRs
+
+----
+
 ## 2021 Week 40 (04 October - 03 October)
 
 #### Focus topics:

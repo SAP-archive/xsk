@@ -1,0 +1,13 @@
+name: "Clone issue labeled as shadow"
+on:
+    issues:
+        types: [labeled]
+jobs:
+    copy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: dpanayotov/issue-cloner@v0.3
+              with:
+                label: "shadow"
+                targetRepo: eclipse/dirigible
+                token: ${{ secrets.CLONE_ISSUE_TOKEN }}

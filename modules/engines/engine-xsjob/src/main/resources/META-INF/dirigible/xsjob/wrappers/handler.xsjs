@@ -13,8 +13,4 @@ var module = __context.get("xsk-job-module");
 var jobFunction = __context.get("xsk-job-function");
 var jobParameters = __context.get("xsk-job-parameters");
 
-var pathWithHandler = module.split(".")[0].split("/");
-var handler = pathWithHandler.pop();
-var namespace = pathWithHandler.join(".");
-
-$.import(namespace, handler)[jobFunction](JSON.parse(jobParameters));
+$.import(module)[jobFunction](JSON.parse(jobParameters));

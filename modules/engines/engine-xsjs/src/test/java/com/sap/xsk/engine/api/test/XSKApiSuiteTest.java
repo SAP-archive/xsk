@@ -147,8 +147,9 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     when(mockedRequest.getMethod()).thenReturn("GET");
     when(mockedRequest.getRemoteUser()).thenReturn("tester");
     when(mockedRequest.getHeader("header1")).thenReturn("header1");
-    when(mockedRequest.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("header1", "header2")));
     when(mockedRequest.getHeader("header1")).thenReturn("header1");
+    when(mockedRequest.getHeader("accept-language")).thenReturn("en-US,en;q=0.9,bg;q=0.8,nb;q=0.7");
+    when(mockedRequest.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("header1", "header2", "accept-language")));
     when(mockedRequest.getRequestURI()).thenReturn("/services/v3/js/test/test.xsjs");
     when(mockedRequest.getSession(true)).thenReturn(httpSession);
   }

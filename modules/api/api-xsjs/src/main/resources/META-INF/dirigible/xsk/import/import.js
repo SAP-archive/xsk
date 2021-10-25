@@ -16,8 +16,6 @@ exports.import = function (namespace, name) {
   var resourceName;
   var moduleName;
 
-  console.log(arguments)
-
   if(arguments.length == 1) {
       validPackages = namespace.split('/');
       moduleName = validPackages.pop().split('.')[0];

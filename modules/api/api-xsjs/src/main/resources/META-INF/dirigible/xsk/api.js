@@ -24,14 +24,14 @@ $.util = require('xsk/util/util');
 $.jobs = require('xsk/jobs/jobs');
 
 try {
-    let dResponse = require('xsk/web/web').WebResponse;
-    let dRequest = require('xsk/web/web').WebRequest;
-    $.session = require('xsk/session/session');
-    $.request = new dRequest();
-    $.response = new dResponse();
-    $.security = require('xsk/security/security');
+  let dResponse = require('xsk/web/web').WebResponse;
+  let dRequest = require('xsk/web/web').WebRequest;
+  $.session = require('xsk/session/session');
+  $.request = new dRequest();
+  $.response = new dResponse();
+  $.security = require('xsk/security/security');
 } catch (e) {
-//     $.trace.warning("Caught exception. Api.js is being used by xsk job.")
+  // $.trace.warning("Caught exception. Api.js is being used by xsk job.")
 }
 
 $;

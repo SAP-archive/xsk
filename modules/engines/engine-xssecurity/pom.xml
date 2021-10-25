@@ -7,30 +7,30 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-engines-parent</artifactId>
-        <version>0.10.0-SNAPSHOT</version>
+        <version>0.9.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>XSK - Modules - Engines - XS Security</name>
     <artifactId>xsk-modules-engines-xssecurity</artifactId>
-    <version>0.10.0-SNAPSHOT</version>
+    <version>0.9.3</version>
     <packaging>jar</packaging>
 
     <dependencies>
     	<dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-engines-core</artifactId>
-            <version>0.10.0-SNAPSHOT</version>
+            <version>0.9.3</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-all</artifactId>
-            <version>0.10.0-SNAPSHOT</version>
+            <version>0.9.3</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-api-all</artifactId>
-            <version>0.10.0-SNAPSHOT</version>
+            <version>0.9.3</version>
         </dependency>
 
         <dependency>
@@ -157,19 +157,19 @@
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-hdbti</artifactId>
-            <version>0.10.0-SNAPSHOT</version>
+            <version>0.9.3</version>
             <scope>compile</scope>
         </dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-			<version>0.10.0-SNAPSHOT</version>
+			<version>0.9.3</version>
 			<scope>compile</scope>
 		</dependency>
         <dependency>
 			<groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-			<version>0.10.0-SNAPSHOT</version>
+			<version>0.9.3</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

@@ -63,6 +63,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
   private SymbolTable symbolTable = new SymbolTable();
   private Map<String, Set<String>> usedFiles = new HashMap<>();
+  private Set<String> currentlyParsed;
 
   @Override
   public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException {
@@ -70,7 +71,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     if (XSKHDBModule.getManagerServices().get(getType()).skipParse(cdsModel, usedFiles.get(location) != null)) {
       return null;
     }
-
+    currentlyParsed = new HashSet<>();
     for (String fileLocation : this.getFilesToProcess(location)) {
       IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
       String fileContent = new String(loadedResource.getContent());
@@ -92,6 +93,9 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
 
   private void parseHdbdd(String location, String content) throws IOException, XSKArtifactParserException {
+    if(!currentlyParsed.isEmpty() && currentlyParsed.contains(location)){
+      return;
+    }
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     CdsLexer hdbtiLexer = new CdsLexer(inputStream);
@@ -127,6 +131,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     entityDefinitionListener.getPackagesUsed().forEach(p -> {
       String fileLocation = getFileLocation(p);
+      currentlyParsed.add(fileLocation);
       addUsedFile(fileLocation, location);
 
       try {

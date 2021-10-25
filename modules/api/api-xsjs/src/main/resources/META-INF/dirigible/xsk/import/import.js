@@ -12,14 +12,26 @@
 var acorn = require("acornjs/acorn");
 
 exports.import = function (namespace, name) {
-  var validPackages = namespace.split('.');
-  var validPackage = validPackages.join('/') + '/';
-  var resourceName = validPackage + name + '.xsjslib';
+  var validPackages;
+  var resourceName;
+  var moduleName;
+
+  console.log(arguments)
+
+  if(arguments.length == 1) {
+      validPackages = namespace.split('/');
+      moduleName = validPackages.pop().split('.')[0];
+      resourceName = namespace;
+  } else {
+      validPackages = namespace.split('.');
+      resourceName = validPackages.join('/') + '/' + name + '.xsjslib';
+      moduleName = name;
+  }
 
   console.info("Importing: " + resourceName);
 
   var module = xskRequire(resourceName);
-  addToXSJSApis(this, validPackages, name, module);
+  addToXSJSApis(this, validPackages, moduleName, module);
 
   console.info("Imported: " + resourceName);
   return module;

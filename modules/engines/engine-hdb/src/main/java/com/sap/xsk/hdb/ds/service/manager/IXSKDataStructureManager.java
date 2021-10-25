@@ -40,4 +40,6 @@ public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
   void cleanup() throws XSKDataStructuresException;
 
   void clearCache();
+
+  boolean skipParse(T tableModel, boolean parsedByRoot) throws XSKDataStructuresException;
 }

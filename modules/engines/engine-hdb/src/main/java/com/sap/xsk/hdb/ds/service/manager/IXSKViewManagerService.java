@@ -96,4 +96,9 @@ public class IXSKViewManagerService extends AbstractDataStructureManagerService<
   public void clearCache() {
     dataStructureViewsModels.clear();
   }
+
+  @Override
+  public boolean skipParse(XSKDataStructureHDBViewModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+    return false;
+  }
 }

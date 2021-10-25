@@ -95,4 +95,9 @@ public class IXSKSynonymManagerService extends AbstractDataStructureManagerServi
   public void clearCache() {
     dataStructureSynonymModels.clear();
   }
+
+  @Override
+  public boolean skipParse(XSKDataStructureHDBSynonymModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+    return false;
+  }
 }

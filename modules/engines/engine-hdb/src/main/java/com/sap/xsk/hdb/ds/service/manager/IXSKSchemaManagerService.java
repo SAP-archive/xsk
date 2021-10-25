@@ -102,6 +102,11 @@ public class IXSKSchemaManagerService extends AbstractDataStructureManagerServic
   }
 
   @Override
+  public boolean skipParse(XSKDataStructureHDBSchemaModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+    return false;
+  }
+
+  @Override
   public Map<String, XSKDataStructureHDBSchemaModel> getDataStructureModels() {
     return Collections.unmodifiableMap(this.dataStructureSchemasModels);
   }

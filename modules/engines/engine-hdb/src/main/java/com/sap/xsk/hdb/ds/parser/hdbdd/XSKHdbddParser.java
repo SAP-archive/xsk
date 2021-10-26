@@ -93,9 +93,6 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
 
   private void parseHdbdd(String location, String content) throws IOException, XSKArtifactParserException {
-    if(!currentlyParsed.isEmpty() && currentlyParsed.contains(location)){
-      return;
-    }
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     CdsLexer hdbtiLexer = new CdsLexer(inputStream);
@@ -131,12 +128,15 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     entityDefinitionListener.getPackagesUsed().forEach(p -> {
       String fileLocation = getFileLocation(p);
-      currentlyParsed.add(fileLocation);
       addUsedFile(fileLocation, location);
+      if(!currentlyParsed.isEmpty() && currentlyParsed.contains(fileLocation)){
+        return;
+      }
 
       try {
         IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
         parseHdbdd(fileLocation, new String(loadedResource.getContent()));
+        currentlyParsed.add(fileLocation);
       } catch (IOException | XSKArtifactParserException e) {
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
             "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,

@@ -23,12 +23,18 @@ class MigrationCredentials {
   private final String hanaUsername;
   private final String hanaPassword;
 
-  MigrationCredentials() {
+  MigrationCredentials(boolean isHana2) {
     region = Configuration.get("ITESTS_SELENIUM_NEO_REGION");
     subaccount = Configuration.get("ITESTS_SELENIUM_NEO_SUBACCOUNT");
     username = Configuration.get("ITESTS_SELENIUM_NEO_USERNAME");
     password = Configuration.get("ITESTS_SELENIUM_NEO_PASSWORD");
-    schema = Configuration.get("ITESTS_SELENIUM_HANA_DB_SCHEMA");
+
+    if(isHana2) {
+      schema = Configuration.get("ITESTS_SELENIUM_HANA_DB_SCHEMA_2");
+    } else {
+      schema = Configuration.get("ITESTS_SELENIUM_HANA_DB_SCHEMA");
+    }
+
     hanaUsername = Configuration.get("ITESTS_SELENIUM_HANA_DB_USERNAME");
     hanaPassword = Configuration.get("ITESTS_SELENIUM_HANA_DB_PASSWORD");
   }

@@ -157,8 +157,13 @@ public class HdbddTransformer {
 
     } else if (fieldSymbol.getType() instanceof DataTypeSymbol) {
       DataTypeSymbol dataType = (DataTypeSymbol) fieldSymbol.getType();
-      BuiltInTypeSymbol builtInType = (BuiltInTypeSymbol) dataType.getType();
-      setSqlType(columnModel, builtInType);
+      if(!(dataType.getType() instanceof StructuredDataTypeSymbol)){
+        BuiltInTypeSymbol builtInType = (BuiltInTypeSymbol) dataType.getType();
+        setSqlType(columnModel, builtInType);
+      }else {
+        StructuredDataTypeSymbol structuredDataTypeSymbol = (StructuredDataTypeSymbol) dataType.getType();
+        transformStructuredDataTypeToHdbTableType(structuredDataTypeSymbol);
+      }
     }
 
     return columnModel;

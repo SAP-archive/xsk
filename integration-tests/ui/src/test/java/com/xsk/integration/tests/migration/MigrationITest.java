@@ -177,14 +177,14 @@ public class MigrationITest {
 
     // Open all files by double-click
     var jstreeAnchors = new ArrayList<WebElement>();
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_14_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_11_anchor"))));
     jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_7_anchor"))));
     jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_8_anchor"))));
     jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_9_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_13_anchor"))));
+    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_11_anchor"))));
     jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_12_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_10_anchor"))));
+    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_13_anchor"))));
+    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_14_anchor"))));
+    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_16_anchor"))));
 
     for (var anchor : jstreeAnchors) {
       browserActions.doubleClick(anchor).perform();

@@ -14,6 +14,7 @@ package com.sap.xsk.parser.hdbdd.symbols.type.field;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.Type;
+import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 
 public class FieldSymbol extends Symbol implements Typeable {
 
@@ -34,7 +35,11 @@ public class FieldSymbol extends Symbol implements Typeable {
 
   @Override
   public Type getType() {
-    return type;
+    if (type instanceof DataTypeSymbol){
+      return ((DataTypeSymbol) type).getType();
+    }else {
+      return type;
+    }
   }
 
   @Override

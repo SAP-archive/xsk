@@ -60,14 +60,14 @@ public class MigrationITest {
   private final String baseUrl = "http://" + auth + "@" + host + ":" + port + ide;
 
   public MigrationITest() throws IOException {
-    credentials = new MigrationCredentials();
     validation = new MigrationValidation();
   }
 
   @Test
-  @Parameters({"Chrome", "Firefox"})
-  public void migrationTest(String browserType) throws InterruptedException, IOException {
-    setupBrowser(browserType);
+  @Parameters({"Chrome-Hana1", "Chrome-Hana2", "Firefox-Hana1", "Firefox-Hana2"})
+  public void migrationTest(String param) throws InterruptedException, IOException {
+    credentials = new MigrationCredentials(param.contains("Hana2"));
+    setupBrowser(param);
     navigateToMigrationPerspective();
     enterNeoDBTunnelCredentials();
     enterHanaCredentials();
@@ -77,8 +77,8 @@ public class MigrationITest {
     validateAllMigratedFileContents();
   }
 
-  private void setupBrowser(String browserType) {
-    if (browserType.equals("Chrome")) {
+  private void setupBrowser(String param) {
+    if (param.contains("Chrome")) {
       setupChrome();
     } else {
       setupFirefox();

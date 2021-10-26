@@ -35,8 +35,8 @@ You can deploy XSK locally using Docker or Tomcat server.
 
             ```
             docker run --name xsk \
-            --rm -p 8080:8080 -p 8081:8081 \
             -v <your-local-directory>:/usr/local/tomcat/target \
+            --rm -p 8080:8080 -p 8081:8081 \
             dirigiblelabs/xsk:latest
             ```
 

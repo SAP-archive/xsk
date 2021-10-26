@@ -87,6 +87,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     getCdsModelWithParsedData(cdsModel);
     this.symbolTable.clearSymbolsByFullName();
     this.symbolTable.clearEntityGraph();
+    currentlyParsed = null;
 
     return cdsModel;
   }

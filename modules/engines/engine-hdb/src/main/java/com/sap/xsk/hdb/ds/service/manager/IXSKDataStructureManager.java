@@ -41,5 +41,5 @@ public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
 
   void clearCache();
 
-  boolean skipParse(T tableModel, boolean parsedByRoot) throws XSKDataStructuresException;
+  boolean isParsed(T tableModel, boolean parsedByRoot) throws XSKDataStructuresException;
 }

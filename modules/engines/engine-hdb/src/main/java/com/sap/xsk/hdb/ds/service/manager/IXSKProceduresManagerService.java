@@ -108,7 +108,7 @@ public class IXSKProceduresManagerService extends AbstractDataStructureManagerSe
   }
 
   @Override
-  public boolean skipParse(XSKDataStructureHDBProcedureModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+  public boolean isParsed(XSKDataStructureHDBProcedureModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
     return false;
   }
 

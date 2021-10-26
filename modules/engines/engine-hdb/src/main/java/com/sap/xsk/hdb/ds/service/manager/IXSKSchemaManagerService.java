@@ -102,7 +102,7 @@ public class IXSKSchemaManagerService extends AbstractDataStructureManagerServic
   }
 
   @Override
-  public boolean skipParse(XSKDataStructureHDBSchemaModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+  public boolean isParsed(XSKDataStructureHDBSchemaModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
     return false;
   }
 

@@ -97,7 +97,7 @@ public class IXSKSynonymManagerService extends AbstractDataStructureManagerServi
   }
 
   @Override
-  public boolean skipParse(XSKDataStructureHDBSynonymModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+  public boolean isParsed(XSKDataStructureHDBSynonymModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
     return false;
   }
 }

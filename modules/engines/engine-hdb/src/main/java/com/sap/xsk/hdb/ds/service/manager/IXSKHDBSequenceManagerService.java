@@ -109,7 +109,7 @@ public class IXSKHDBSequenceManagerService extends AbstractDataStructureManagerS
   }
 
   @Override
-  public boolean skipParse(XSKDataStructureHDBSequenceModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+  public boolean isParsed(XSKDataStructureHDBSequenceModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
     return false;
   }
 }

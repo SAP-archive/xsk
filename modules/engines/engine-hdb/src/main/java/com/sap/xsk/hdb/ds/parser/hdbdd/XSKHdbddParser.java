@@ -62,16 +62,16 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   private HdbddTransformer hdbddTransformer = new HdbddTransformer();
   private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
   private SymbolTable symbolTable = new SymbolTable();
-  private Map<String, Set<String>> usedFiles = new HashMap<>();
-  private Set<String> currentlyParsed;
+  private Map<String, Set<String>> dependencyStructure = new HashMap<>();
+  private Set<String> parsedNodes = new HashSet<>();
 
   @Override
   public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException {
     XSKDataStructureCdsModel cdsModel = getCdsModelBaseData(location, content);
-    if (XSKHDBModule.getManagerServices().get(getType()).skipParse(cdsModel, usedFiles.get(location) != null)) {
+    if (XSKHDBModule.getManagerServices().get(getType()).isParsed(cdsModel, dependencyStructure.get(location) != null)) {
       return null;
     }
-    currentlyParsed = new HashSet<>();
+
     for (String fileLocation : this.getFilesToProcess(location)) {
       IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
       String fileContent = new String(loadedResource.getContent());
@@ -87,7 +87,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     getCdsModelWithParsedData(cdsModel);
     this.symbolTable.clearSymbolsByFullName();
     this.symbolTable.clearEntityGraph();
-    currentlyParsed = null;
+    parsedNodes.clear();
 
     return cdsModel;
   }
@@ -129,15 +129,15 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     entityDefinitionListener.getPackagesUsed().forEach(p -> {
       String fileLocation = getFileLocation(p);
-      addUsedFile(fileLocation, location);
-      if(!currentlyParsed.isEmpty() && currentlyParsed.contains(fileLocation)){
+      addFileToDependencyTree(fileLocation, location);
+      if(!parsedNodes.isEmpty() && parsedNodes.contains(fileLocation)){
         return;
       }
 
       try {
         IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
         parseHdbdd(fileLocation, new String(loadedResource.getContent()));
-        currentlyParsed.add(fileLocation);
+        parsedNodes.add(fileLocation);
       } catch (IOException | XSKArtifactParserException e) {
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
             "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
@@ -162,14 +162,14 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     }
   }
 
-  private void addUsedFile(String usedFile, String userFile) {
-    Set<String> userFiles = usedFiles.get(usedFile);
-    if (userFiles == null) {
-      userFiles = new HashSet<>();
+  private void addFileToDependencyTree(String nodeFile, String rootFile) {
+    Set<String> rootFiles = dependencyStructure.get(nodeFile);
+    if (rootFiles == null) {
+      rootFiles = new HashSet<>();
     }
 
-    userFiles.add(userFile);
-    this.usedFiles.put(usedFile, userFiles);
+    rootFiles.add(rootFile);
+    this.dependencyStructure.put(nodeFile, rootFiles);
   }
 
   @Override
@@ -190,13 +190,13 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   }
 
   private void getRootFiles(String usedFileName, List<String> rootFiles) {
-    Set<String> userFiles = usedFiles.get(usedFileName);
+    Set<String> userFiles = dependencyStructure.get(usedFileName);
     if (userFiles == null) {
       rootFiles.add(usedFileName);
       return;
     }
 
-    usedFiles.get(usedFileName).forEach(f -> {
+    dependencyStructure.get(usedFileName).forEach(f -> {
       getRootFiles(f, rootFiles);
     });
   }

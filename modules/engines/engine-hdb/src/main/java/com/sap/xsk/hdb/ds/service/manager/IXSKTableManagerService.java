@@ -105,7 +105,7 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
   }
 
   @Override
-  public boolean skipParse(XSKDataStructureHDBTableModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+  public boolean isParsed(XSKDataStructureHDBTableModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
     return false;
   }
 }

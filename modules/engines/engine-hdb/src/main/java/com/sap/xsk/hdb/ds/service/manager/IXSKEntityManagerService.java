@@ -49,18 +49,19 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
     entitiesSynchronized = Collections.synchronizedList(new ArrayList<>());
   }
 
-  public boolean skipParse(XSKDataStructureCdsModel entitiesModel, boolean parsedByRoot) throws XSKDataStructuresException {
+  public boolean isParsed(XSKDataStructureCdsModel entitiesModel, boolean parsedByRoot) throws XSKDataStructuresException {
     XSKDataStructureCdsModel existingModel = getDataStructuresCoreService()
         .getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
+    boolean isEmptyExistingModel = existingModel == null;
 
-    if (existingModel == null && parsedByRoot) {
+    if (isEmptyExistingModel && parsedByRoot) {
       getDataStructuresCoreService()
           .createDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
       return true;
-    } else {
-      entitiesModel.setCreateDataStructure(existingModel == null);
-      return existingModel != null && existingModel.equals(entitiesModel);
     }
+
+    entitiesModel.setCreateDataStructure(isEmptyExistingModel);
+    return !isEmptyExistingModel && existingModel.equals(entitiesModel);
   }
 
   @Override

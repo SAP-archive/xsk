@@ -587,6 +587,43 @@ public class XSKHDBTIProcessorTest {
     processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
   }
 
+  @Test
+  public void testParseJSONtoHdbtiSuccessfullyWithDoubleColonTableName() {
+    XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+
+    model.setDelimEnclosing("'");
+    model.setSchemaName("schema");
+    model.setHeader(true);
+    model.setTableName("sap_xsk.test::c_users");
+    model.setFileName("myData2.csv");
+
+    String actualValue = processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+
+    String expectedValue = "import = [\n" +
+        "{\n" +
+        "\tdelimEnclosing=\"'\";\n" +
+        "\tschema = \"schema\";\n" +
+        "\theader = true;\n" +
+        "\ttable = \"sap_xsk.test::c_users\";\n" +
+        "\tfile = \"myData2.csv\";\n" +
+        "}];";
+
+    assertEquals(expectedValue, actualValue);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testParseJSONtoHdbtiFailWithSingleColonTableName() {
+    XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+
+    model.setDelimEnclosing("'");
+    model.setSchemaName("schema");
+    model.setHeader(true);
+    model.setTableName("sap_xsk:i_users");
+    model.setFileName("myData2.csv");
+
+    processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void testParseJSONtoHdbtiFailWithIncorrectKeyColumn() {
     XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();

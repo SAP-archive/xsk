@@ -17,6 +17,7 @@ import static org.junit.Assert.fail;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.parser.hdbti.exception.DuplicateFieldNameException;
+import com.sap.xsk.parser.hdbti.exception.TablePropertySyntaxException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTIMissingPropertyException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
@@ -59,6 +60,21 @@ public class XSKHDBTIParserTest extends AbstractDirigibleTest {
   }
 
   @Test
+  public void testParseConfigObjectContainsMultipleTableDeclarationsShouldThrowProperException() throws IOException {
+    String hdbtiSample = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIParserTest.class.getResourceAsStream("/multipleTableDeclarations.hdbti"), StandardCharsets.UTF_8);
+    XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
+
+    try {
+      xskhdbtiParser.parse("/test/xsk/com/sap/duplicateKeys.hdbti", hdbtiSample);
+    } catch (DuplicateFieldNameException duplicateFieldNameException) {
+      assertTrue(true);
+    } catch (Exception e) {
+      fail();
+    }
+  }
+
+  @Test
   public void testParseContainsInvalidSyntaxShouldThrowException() throws IOException {
     String hdbtiSample = org.apache.commons.io.IOUtils
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/invalidSyntax.hdbti"), StandardCharsets.UTF_8);
@@ -67,6 +83,21 @@ public class XSKHDBTIParserTest extends AbstractDirigibleTest {
     try {
       xskhdbtiParser.parse("/test/xsk/com/sap/invalidSyntax.hdbti", hdbtiSample);
     } catch (XSKArtifactParserException parseErrorException) {
+      assertTrue(true);
+    } catch (Exception e) {
+      fail();
+    }
+  }
+
+  @Test
+  public void testParseContainsInvalidTablePropertySyntaxShouldThrowProperException() throws IOException {
+    String hdbtiSample = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIParserTest.class.getResourceAsStream("/invalidTablePropertySyntax.hdbti"), StandardCharsets.UTF_8);
+    XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
+
+    try {
+      xskhdbtiParser.parse("/test/xsk/com/sap/invalidTablePropertySyntax.hdbti", hdbtiSample);
+    } catch (TablePropertySyntaxException parseErrorException) {
       assertTrue(true);
     } catch (Exception e) {
       fail();

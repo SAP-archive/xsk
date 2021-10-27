@@ -19,6 +19,7 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
+import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.transformer.hdbdd.HdbddTransformer;
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
@@ -61,10 +62,16 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   private HdbddTransformer hdbddTransformer = new HdbddTransformer();
   private IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
   private SymbolTable symbolTable = new SymbolTable();
-  private Map<String, Set<String>> usedFiles = new HashMap<>();
+  private Map<String, Set<String>> dependencyStructure = new HashMap<>();
+  private Set<String> parsedNodes = new HashSet<>();
 
   @Override
   public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+    XSKDataStructureCdsModel cdsModel = getCdsModelBaseData(location, content);
+    if (XSKHDBModule.getManagerServices().get(getType()).isParsed(cdsModel, dependencyStructure.get(location) != null)) {
+      return null;
+    }
+
     for (String fileLocation : this.getFilesToProcess(location)) {
       IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
       String fileContent = new String(loadedResource.getContent());
@@ -77,9 +84,10 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       }
     }
 
-    XSKDataStructureCdsModel cdsModel = getCdsModel(location, content);
+    getCdsModelWithParsedData(cdsModel);
     this.symbolTable.clearSymbolsByFullName();
     this.symbolTable.clearEntityGraph();
+    parsedNodes.clear();
 
     return cdsModel;
   }
@@ -121,11 +129,15 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     entityDefinitionListener.getPackagesUsed().forEach(p -> {
       String fileLocation = getFileLocation(p);
-      addUsedFile(fileLocation, location);
+      addFileToDependencyTree(fileLocation, location);
+      if(!parsedNodes.isEmpty() && parsedNodes.contains(fileLocation)){
+        return;
+      }
 
       try {
         IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
         parseHdbdd(fileLocation, new String(loadedResource.getContent()));
+        parsedNodes.add(fileLocation);
       } catch (IOException | XSKArtifactParserException e) {
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
             "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
@@ -150,14 +162,14 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     }
   }
 
-  private void addUsedFile(String usedFile, String userFile) {
-    Set<String> userFiles = usedFiles.get(usedFile);
-    if (userFiles == null) {
-      userFiles = new HashSet<>();
+  private void addFileToDependencyTree(String nodeFile, String rootFile) {
+    Set<String> rootFiles = dependencyStructure.get(nodeFile);
+    if (rootFiles == null) {
+      rootFiles = new HashSet<>();
     }
 
-    userFiles.add(userFile);
-    this.usedFiles.put(usedFile, userFiles);
+    rootFiles.add(rootFile);
+    this.dependencyStructure.put(nodeFile, rootFiles);
   }
 
   @Override
@@ -178,21 +190,32 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   }
 
   private void getRootFiles(String usedFileName, List<String> rootFiles) {
-    Set<String> userFiles = usedFiles.get(usedFileName);
+    Set<String> userFiles = dependencyStructure.get(usedFileName);
     if (userFiles == null) {
       rootFiles.add(usedFileName);
       return;
     }
 
-    usedFiles.get(usedFileName).forEach(f -> {
+    dependencyStructure.get(usedFileName).forEach(f -> {
       getRootFiles(f, rootFiles);
     });
   }
 
-  private XSKDataStructureCdsModel getCdsModel(String location, String content) {
-    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
-
+  private XSKDataStructureCdsModel getCdsModelBaseData(String location, String content) {
     XSKDataStructureCdsModel cdsModel = new XSKDataStructureCdsModel();
+    cdsModel.setName(location);
+    cdsModel.setLocation(location);
+    cdsModel.setType(getType());
+    cdsModel.setCreatedBy(UserFacade.getName());
+    cdsModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    cdsModel.setHash(DigestUtils.md5Hex(content));
+    cdsModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
+
+    return cdsModel;
+  }
+
+  private void getCdsModelWithParsedData(XSKDataStructureCdsModel cdsModel) {
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
     List<XSKDataStructureHDBTableModel> tableModels = new ArrayList<>();
     parsedEntities.forEach(e -> {
@@ -210,14 +233,6 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     cdsModel.setTableModels(tableModels);
     cdsModel.setTableTypeModels(hdbTableTypeModels);
-    cdsModel.setName(location);
-    cdsModel.setLocation(location);
-    cdsModel.setType(getType());
-    cdsModel.setCreatedBy(UserFacade.getName());
-    cdsModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    cdsModel.setHash(DigestUtils.md5Hex(content));
-    cdsModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
-    return cdsModel;
   }
 
   private String getFileLocation(String fullPackagePath) {

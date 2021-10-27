@@ -57,6 +57,9 @@ public class XSKDataStructureModel {
   @Transient
   private transient XSKDBContentType dbContentType;
 
+  @Transient
+  private transient boolean createDataStructure = false;
+
   /**
    * Gets the location.
    *
@@ -219,6 +222,14 @@ public class XSKDataStructureModel {
 
   public void setDbContentType(XSKDBContentType dbContentType) {
     this.dbContentType = dbContentType;
+  }
+
+  public boolean isCreateDataStructure() {
+    return createDataStructure;
+  }
+
+  public void setCreateDataStructure(boolean createDataStructure) {
+    this.createDataStructure = createDataStructure;
   }
 
   /**

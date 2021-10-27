@@ -108,6 +108,11 @@ public class IXSKProceduresManagerService extends AbstractDataStructureManagerSe
   }
 
   @Override
+  public boolean isParsed(XSKDataStructureHDBProcedureModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+    return false;
+  }
+
+  @Override
   public Map<String, XSKDataStructureHDBProcedureModel> getDataStructureModels() {
     return Collections.unmodifiableMap(this.dataStructureProceduresModels);
   }

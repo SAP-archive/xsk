@@ -107,4 +107,9 @@ public class IXSKHDBSequenceManagerService extends AbstractDataStructureManagerS
   public void clearCache() {
     dataStructureSequenceModels.clear();
   }
+
+  @Override
+  public boolean isParsed(XSKDataStructureHDBSequenceModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
+    return false;
+  }
 }

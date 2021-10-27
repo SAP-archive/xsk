@@ -49,23 +49,33 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
     entitiesSynchronized = Collections.synchronizedList(new ArrayList<>());
   }
 
+  public boolean isParsed(XSKDataStructureCdsModel entitiesModel, boolean parsedByRoot) throws XSKDataStructuresException {
+    XSKDataStructureCdsModel existingModel = getDataStructuresCoreService()
+        .getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
+    boolean isEmptyExistingModel = existingModel == null;
+
+    if (isEmptyExistingModel && parsedByRoot) {
+      getDataStructuresCoreService()
+          .createDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
+      return true;
+    }
+
+    entitiesModel.setCreateDataStructure(isEmptyExistingModel);
+    return !isEmptyExistingModel && existingModel.equals(entitiesModel);
+  }
 
   @Override
   public void synchronizeRuntimeMetadata(XSKDataStructureCdsModel entitiesModel) throws XSKDataStructuresException {
-    if (!getDataStructuresCoreService().existsDataStructure(entitiesModel.getLocation(), entitiesModel.getType())) {
+    if (entitiesModel.isCreateDataStructure()) {
       getDataStructuresCoreService()
           .createDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
       dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
       logger.info("Synchronized a new Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
     } else {
-      XSKDataStructureCdsModel existing = getDataStructuresCoreService()
-          .getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
-      if (!entitiesModel.equals(existing)) {
-        getDataStructuresCoreService()
-            .updateDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
-        dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
-        logger.info("Synchronized a modified Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
-      }
+      getDataStructuresCoreService()
+          .updateDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
+      dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
+      logger.info("Synchronized a modified Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
     }
     if (!entitiesSynchronized.contains(entitiesModel.getLocation())) {
       entitiesSynchronized.add(entitiesModel.getLocation());

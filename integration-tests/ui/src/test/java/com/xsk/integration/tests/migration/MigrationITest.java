@@ -52,6 +52,7 @@ public class MigrationITest {
 
   private MigrationCredentials credentials;
   private MigrationValidation validation;
+  private SeleniumLogger debug;
 
   private final String host = "127.0.0.1";
   private final String port = "8080";
@@ -68,13 +69,21 @@ public class MigrationITest {
   public void migrationTest(String param) throws InterruptedException, IOException {
     credentials = new MigrationCredentials(param.contains("Hana2"));
     setupBrowser(param);
+    debug = new SeleniumLogger(browser, param);
     navigateToMigrationPerspective();
+    debug.save();
     enterNeoDBTunnelCredentials();
+    debug.save();
     enterHanaCredentials();
+    debug.save();
     selectDeliveryUnits();
+    debug.save();
     goToWorkspace();
+    debug.save();
     openFilesFromJstree();
+    debug.save();
     validateAllMigratedFileContents();
+    debug.save();
   }
 
   private void setupBrowser(String param) {
@@ -123,7 +132,7 @@ public class MigrationITest {
         By.xpath("//iframe[@src='../ide-migration/migration-launch.html']")));
   }
 
-  private void enterNeoDBTunnelCredentials() {
+  private void enterNeoDBTunnelCredentials() throws IOException {
     enterAndAssertField(By.id("subaccount"), credentials.getSubaccount());
     selectAndAssertDropdown("regionList", credentials.getRegion());
     enterAndAssertField(By.id("neo-username"), credentials.getUsername());
@@ -131,14 +140,15 @@ public class MigrationITest {
     browser.findElement(By.xpath("//*[@ng-click='nextClicked()']")).click();
   }
 
-  private void enterAndAssertField(By by, String value) {
+  private void enterAndAssertField(By by, String value) throws IOException {
     var field = browser.findElement(by);
     field.sendKeys(value);
     assertEquals("Input field value doesn't match sent keys.",
         value, field.getAttribute("value"));
+    debug.save();
   }
 
-  private void selectAndAssertDropdown(String listName, String selectionValue) {
+  private void selectAndAssertDropdown(String listName, String selectionValue) throws IOException {
     var dropdownList = browserWait.until(
         ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@ng-repeat=\"option in " + listName + "\"]")));
     WebElement dropdownButton = dropdownList.get(0).findElement(By.xpath("./../../button"));
@@ -149,82 +159,95 @@ public class MigrationITest {
     assertEquals("Only one dropdown item should be selected.",
         1, selection.size());
     selection.get(0).click();
+    debug.save();
   }
 
-  private void enterHanaCredentials() {
+  private void enterHanaCredentials() throws IOException {
     selectAndAssertDropdown("databasesList", credentials.getSchema());
     enterAndAssertField(By.id("username"), credentials.getHanaUsername());
     enterAndAssertField(By.id("password"), credentials.getHanaPassword());
     browser.findElement(By.xpath("//*[@ng-click='nextClicked()']")).click();
   }
 
-  private void selectDeliveryUnits() {
+  private void selectDeliveryUnits() throws IOException {
     selectAndAssertDropdown("workspacesList", "workspace");
     selectAndAssertDropdown("deliveryUnitList", "MIGR_TOOLS");
     browser.findElement(By.xpath("//*[@ng-click=\"finishClicked()\"]")).click();
   }
 
-  private void goToWorkspace() {
+  private void goToWorkspace() throws IOException {
     browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"))).click();
+    debug.save();
   }
 
-  private void openFilesFromJstree() throws InterruptedException {
+  private void openFilesFromJstree() throws InterruptedException, IOException {
     // Select the workspace Iframe and expand the tree view in jstree
     browser.switchTo().defaultContent();
     browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[@src='../ide-workspace/workspace.html']")));
+    debug.save();
     browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_1_anchor")));
     jsExecutor.executeScript("$(\".jstree\").jstree(\"open_all\")");
 
     // Open all files by double-click
+    var xpaths = new ArrayList<By>();
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.INDEX.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.INDEXUI5.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.XSACCESS.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.XSAPP.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.LOGIC.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.CONTACT_REGULAR.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.CONTACT_HOVER.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.SAPLOGO.getFileName() + "']"));
+
     var jstreeAnchors = new ArrayList<WebElement>();
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_7_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_8_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_9_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_11_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_12_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_13_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_14_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_16_anchor"))));
+    for(var by : xpaths){
+      jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(by)));
+    }
+    debug.save();
 
     for (var anchor : jstreeAnchors) {
       browserActions.doubleClick(anchor).perform();
       Thread.sleep(500);
+      debug.save();
     }
 
     browser.switchTo().defaultContent();
   }
 
   private void validateAllMigratedFileContents() throws IOException {
-    var xpathCommon = "//iframe[@src=\"../ide-monaco/editor.html?file=/workspace/xsk-test-app/";
+
     validateTextFileContent(
-        xpathCommon + "index.html&contentType=text/html\"]",
+        MigrationValidation.XPATH_COMMON + MigrationValidation.XPATH_INDEX,
         validation.getIndex());
     validateTextFileContent(
-        xpathCommon + "logic.xsjs&contentType=application/javascript\"]",
+        MigrationValidation.XPATH_COMMON + MigrationValidation.XPATH_LOGIC,
         validation.getLogic());
     validateTextFileContent(
-        xpathCommon + ".xsapp&contentType=text/plain\"]",
+        MigrationValidation.XPATH_COMMON + MigrationValidation.XPATH_XSAPP,
         validation.getXsapp());
     validateTextFileContent(
-        xpathCommon + "indexUI5.html&contentType=text/html\"]",
+        MigrationValidation.XPATH_COMMON + MigrationValidation.XPATH_INDEXUI5,
         validation.getIndexUI5());
     validateTextFileContent(
-        xpathCommon + ".xsaccess&contentType=text/plain\"]",
+        MigrationValidation.XPATH_COMMON + MigrationValidation.XPATH_XSACCESS,
         validation.getXsaccess());
 
-    String imagesURL = "http://127.0.0.1:8080/services/v4/ide/workspaces/workspace/xsk-test-app/images/";
-    validateImageFileContent(new URL(imagesURL + "SAPLogo.gif"), validation.getSapLogo());
-    validateImageFileContent(new URL(imagesURL + "Contact_hover.png"), validation.getContactHover());
-    validateImageFileContent(new URL(imagesURL + "Contact_regular.png"), validation.getContactRegular());
+    String imagesURL = MigrationValidation.IMAGE_URL_COMMON;
+    validateImageFileContent(new URL(imagesURL + MigrationValidation.SAPLOGO.getFileName()), validation.getSapLogo());
+    validateImageFileContent(new URL(imagesURL + MigrationValidation.CONTACT_HOVER.getFileName()), validation.getContactHover());
+    validateImageFileContent(new URL(imagesURL + MigrationValidation.CONTACT_REGULAR.getFileName()), validation.getContactRegular());
   }
 
-  private void validateTextFileContent(String editorFrameXpath, String validContent) {
+  private void validateTextFileContent(String editorFrameXpath, String validContent) throws IOException {
     browser.switchTo().defaultContent();
+    debug.save();
     browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath(editorFrameXpath)));
     sleep(3000);
+    debug.save();
     var migratedContent = (String) jsExecutor.executeScript("return monaco.editor.getModels().at(0).getValue();");
     assertEquals("File content after migration must match validation content.",
         validContent.replaceAll("\\s", ""), migratedContent.replaceAll("\\s", ""));
+    debug.save();
     browser.switchTo().defaultContent();
   }
 

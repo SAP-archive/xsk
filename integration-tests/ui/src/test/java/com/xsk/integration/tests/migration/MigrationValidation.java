@@ -15,9 +15,28 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 class MigrationValidation {
+
+  public static final Path INDEX = Paths.get("src/test/resources/migration/testProject/index.html");
+  public static final Path INDEXUI5 = Paths.get("src/test/resources/migration/testProject/indexUI5.html");
+  public static final Path XSACCESS = Paths.get("src/test/resources/migration/testProject/.xsaccess");
+  public static final Path XSAPP = Paths.get("src/test/resources/migration/testProject/.xsapp");
+  public static final Path LOGIC = Paths.get("src/test/resources/migration/testProject/logic.xsjs");
+  public static final Path CONTACT_REGULAR = Paths.get("src/test/resources/migration/testProject/images/Contact_regular.png");
+  public static final Path CONTACT_HOVER = Paths.get("src/test/resources/migration/testProject/images/Contact_hover.png");
+  public static final Path SAPLOGO = Paths.get("src/test/resources/migration/testProject/images/SAPLogo.gif");
+
+  public static final String XPATH_COMMON = "//iframe[@src=\"../ide-monaco/editor.html?file=/workspace/xsk-test-app/";
+  public static final String XPATH_INDEX = "index.html&contentType=text/html\"]";
+  public static final String XPATH_INDEXUI5 = "indexUI5.html&contentType=text/html\"]";
+  public static final String XPATH_XSACCESS = ".xsaccess&contentType=text/plain\"]";
+  public static final String XPATH_XSAPP = ".xsapp&contentType=text/plain\"]";
+  public static final String XPATH_LOGIC = "logic.xsjs&contentType=application/javascript\"]";
+
+  public static final String IMAGE_URL_COMMON = "http://127.0.0.1:8080/services/v4/ide/workspaces/workspace/xsk-test-app/images/";
 
   private final String index;
   private final String indexUI5;
@@ -29,14 +48,14 @@ class MigrationValidation {
   private final BufferedImage sapLogo;
 
   MigrationValidation() throws IOException {
-    index = Files.readString(Paths.get("src/test/resources/migration/testProject/index.html"));
-    indexUI5 = Files.readString(Paths.get("src/test/resources/migration/testProject/indexUI5.html"));
-    xsaccess = Files.readString(Paths.get("src/test/resources/migration/testProject/.xsaccess"));
-    xsapp = Files.readString(Paths.get("src/test/resources/migration/testProject/.xsapp"));
-    logic = Files.readString(Paths.get("src/test/resources/migration/testProject/logic.xsjs"));
-    contactRegular = ImageIO.read(Paths.get("src/test/resources/migration/testProject/images/Contact_regular.png").toFile());
-    contactHover = ImageIO.read(Paths.get("src/test/resources/migration/testProject/images/Contact_hover.png").toFile());
-    sapLogo = ImageIO.read(Paths.get("src/test/resources/migration/testProject/images/SAPLogo.gif").toFile());
+    index = Files.readString(INDEX);
+    indexUI5 = Files.readString(INDEXUI5);
+    xsaccess = Files.readString(XSACCESS);
+    xsapp = Files.readString(XSAPP);
+    logic = Files.readString(LOGIC);
+    contactRegular = ImageIO.read(CONTACT_REGULAR.toFile());
+    contactHover = ImageIO.read(CONTACT_HOVER.toFile());
+    sapLogo = ImageIO.read(SAPLOGO.toFile());
   }
 
   String getIndex() {
@@ -70,4 +89,5 @@ class MigrationValidation {
   BufferedImage getSapLogo() {
     return sapLogo;
   }
+
 }

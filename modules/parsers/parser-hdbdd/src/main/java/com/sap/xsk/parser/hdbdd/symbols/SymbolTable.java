@@ -88,6 +88,9 @@ public class SymbolTable {
 
     AnnotationObj noKeyObj = buildTemplateForNoKeyAnnotation();
     annotations.put(noKeyObj.getName(), noKeyObj);
+
+    AnnotationObj generateTableTypeObj = buildTemplateForGenerateTableTypeAnnotation();
+    annotations.put(generateTableTypeObj.getName(),generateTableTypeObj);
   }
 
   public void addEntityToGraph(String fullName) {
@@ -208,6 +211,17 @@ public class SymbolTable {
     noKeyObj.setAllowedForSymbols(Collections.singletonList(EntitySymbol.class));
 
     return noKeyObj;
+  }
+
+  private AnnotationObj buildTemplateForGenerateTableTypeAnnotation() {
+    AnnotationObj generateTableTypeObj = new AnnotationObj();
+    generateTableTypeObj.setName("GenerateTableType");
+    generateTableTypeObj.setTopLevel(false);
+    generateTableTypeObj.setAllowedForSymbols(Collections.singletonList(StructuredDataTypeSymbol.class));
+    AnnotationSimpleValue booleanValue = new AnnotationSimpleValue(CDSLiteralEnum.BOOLEAN.getLiteralType());
+    generateTableTypeObj.define("booleanValue", booleanValue);
+
+    return generateTableTypeObj;
   }
 
   private void traverseEntityGraph(String entityName, List<EntitySymbol> orderedSymbol, Set<String> passedEntities) {

@@ -51,7 +51,7 @@ public class MigrationITest {
   private JavascriptExecutor jsExecutor;
 
   private MigrationCredentials credentials;
-  private MigrationValidation validation;
+  private final MigrationValidation validation;
   private SeleniumLogger debug;
 
   private final String host = "127.0.0.1";
@@ -69,21 +69,29 @@ public class MigrationITest {
   public void migrationTest(String param) throws InterruptedException, IOException {
     credentials = new MigrationCredentials(param.contains("Hana2"));
     setupBrowser(param);
-    debug = new SeleniumLogger(browser, param);
-    navigateToMigrationPerspective();
-    debug.save();
-    enterNeoDBTunnelCredentials();
-    debug.save();
-    enterHanaCredentials();
-    debug.save();
-    selectDeliveryUnits();
-    debug.save();
-    goToWorkspace();
-    debug.save();
-    openFilesFromJstree();
-    debug.save();
-    validateAllMigratedFileContents();
-    debug.save();
+    debug = new SeleniumLogger(browser, credentials, param);
+
+    try {
+      navigateToMigrationPerspective();
+      debug.save();
+      enterNeoDBTunnelCredentials();
+      debug.save();
+      enterHanaCredentials();
+      debug.save();
+      selectDeliveryUnits();
+      debug.save();
+      goToWorkspace();
+      debug.save();
+      openFilesFromJstree();
+      debug.save();
+      validateAllMigratedFileContents();
+      debug.save();
+      debug.finish();
+    } catch(Throwable exception) {
+      debug.save();
+      debug.finish();
+      throw exception;
+    }
   }
 
   private void setupBrowser(String param) {
@@ -177,7 +185,8 @@ public class MigrationITest {
 
   private void goToWorkspace() throws IOException {
     browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"))).click();
-    debug.save();
+    browserWait.until(ExpectedConditions.titleIs("Workspace | XSK WebIDE"));
+    browser.switchTo().defaultContent();
   }
 
   private void openFilesFromJstree() throws InterruptedException, IOException {

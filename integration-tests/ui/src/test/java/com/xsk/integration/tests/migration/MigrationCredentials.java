@@ -66,4 +66,11 @@ class MigrationCredentials {
   public String getHanaPassword() {
     return hanaPassword;
   }
+
+  public String removePasswordsFromString(String input) {
+    input = input.replaceAll(getHanaPassword(), "HIDDEN_PASSWORD");
+    input = input.replaceAll(getPassword(), "HIDDEN_PASSWORD");
+    return input;
+  }
+
 }

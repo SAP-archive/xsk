@@ -1,12 +1,8 @@
 name: Nightly Build
 
-#on:
-#  schedule:
-#    - cron: "0 22 * * *"
-
 on:
-  push:
-    branches: [ yakov/migration-selenium-update ]
+  schedule:
+    - cron: "0 22 * * *"
 
 jobs:
   integration-tests:
@@ -75,14 +71,15 @@ jobs:
           ITESTS_SELENIUM_HANA_DB_SCHEMA_2: ${{ secrets.ITESTS_SELENIUM_HANA_DB_SCHEMA_2 }}
           ITESTS_SELENIUM_HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
           ITESTS_SELENIUM_HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}
+          ITESTS_SELENIUM_ARTIFACT_PASSWORD: ${{ secrets.ITESTS_SELENIUM_ARTIFACT_PASSWORD }}
 
       # Upload Selenium Logs to a GitHub artifact
       - name: Save Selenium Logs
         uses: actions/upload-artifact@v2
         with:
           name: selenium-test-logs-upload
-          path: /home/runner/work/xsk/xsk/integration-tests/ui/SeleniumOut
-          retention-days: 5
+          path: /home/runner/work/xsk/xsk/integration-tests/ui/SeleniumOut.zip
+          retention-days: 2
         if: always()
 
       - name: Slack Notification

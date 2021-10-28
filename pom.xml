@@ -254,6 +254,7 @@
 		<lucene.version>7.0.1</lucene.version>
 		<chemistry.version>1.1.0</chemistry.version>
 		<flowable.version>6.3.0</flowable.version>
+    <zip4j.version>2.9.0</zip4j.version>
 		<jaxb.version>2.3.0</jaxb.version>
 		<jaxws.version>2.3.0</jaxws.version>
 		<emf.mwe.utils.version>1.4.0</emf.mwe.utils.version>

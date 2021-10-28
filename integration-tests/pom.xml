@@ -16,8 +16,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-<!--		<module>engine-hdb</module>-->
-<!--		<module>engine-xsodata</module>-->
+		<module>engine-hdb</module>
+		<module>engine-xsodata</module>
 		<module>ui</module>
   </modules>
 

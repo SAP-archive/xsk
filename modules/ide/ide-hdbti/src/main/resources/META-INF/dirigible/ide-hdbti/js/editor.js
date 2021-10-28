@@ -37,7 +37,54 @@ editorView.directive('allowedSymbols', () => {
                 if (!value) {
                     return true;
                 }
-                let correct = RegExp(scope.regex, 'gm').test(value);
+                let correct = RegExp(scope.regex, 'g').test(value);
+                if (correct) {
+                    element.removeClass("error-input");
+                } else {
+                    element.addClass('error-input');
+                }
+                if (attrs.hasOwnProperty("id") && attrs["id"] === "filepath") {
+                    scope.$parent.fileExists = true;
+                }
+                scope.$parent.setSaveEnabled(correct);
+                return correct;
+            };
+        }
+    };
+});
+
+/*
+ * Use this if one field has multiple regex validations based on a condition.
+ * You must provide a list with the following syntax:
+ * [{ regex: '^[A-Za-z0-9_\\-$.]+::[A-Za-z0-9_\\-$.]+$', contains: '::' }, { regex: '^[A-Za-z0-9_\\-$.]+$' }]
+ * If there is a validation without a condition, you must place it in the last position, without the 'contains' key.
+ * Sort this list by validation priority.
+ */
+editorView.directive('multipleAllowedSymbols', () => {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        scope: {
+            params: '@multipleAllowedSymbols'
+        },
+        link: (scope, element, attrs, controller) => {
+            controller.$validators.forbiddenName = value => {
+                if (!value) {
+                    return true;
+                }
+                let validationList = scope.$eval(scope.params);
+                let correct = false;
+                for (let i = 0; i < validationList.length; i++) {
+                    if (validationList[i].contains) {
+                        if (value.includes(validationList[i].contains)) {
+                            correct = RegExp(validationList[i].regex, 'g').test(value);
+                            break;
+                        }
+                    } else {
+                        correct = RegExp(validationList[i].regex, 'g').test(value);
+                        break;
+                    }
+                }
                 if (correct) {
                     element.removeClass("error-input");
                 } else {
@@ -63,7 +110,7 @@ editorView.directive('uniqueField', () => {
         link: (scope, element, attrs, controller) => {
             controller.$validators.forbiddenName = value => {
                 let unique = true;
-                let correct = RegExp(scope.regex, 'gm').test(value);
+                let correct = RegExp(scope.regex, 'g').test(value);
                 if (correct) {
                     if ("index" in attrs) {
                         for (let i = 0; i < scope.$parent.csvimData[scope.$parent.activeItemId].keys.length; i++) {
@@ -102,6 +149,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     const ctrlKey = 17;
     let ctrlDown = false;
     let isMac = false;
+    let workspace = 'workspace'; // This needs to be replace with an API.
     let emptyHdbti = ["", "import=[]", "import=[];", "import=[{}]", "import=[{}];"];
     let csrfToken;
     $scope.fileExists = true;
@@ -119,7 +167,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
             let msg = {
                 "file": {
                     "name": $scope.csvimData[$scope.activeItemId].name,
-                    "path": $scope.csvimData[$scope.activeItemId].file,
+                    "path": `/${workspace}${$scope.csvimData[$scope.activeItemId].file}`,
                     "type": "file",
                     "contentType": "text/csv",
                     "label": $scope.csvimData[$scope.activeItemId].name
@@ -317,7 +365,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     $scope.checkResource = function (resourcePath) {
         if (resourcePath != "") {
             let xhr = new XMLHttpRequest();
-            xhr.open('HEAD', `/services/v4/ide/workspaces${resourcePath}`, false);
+            xhr.open('HEAD', `/services/v4/ide/workspaces/${workspace}${resourcePath}`, false);
             xhr.setRequestHeader('X-CSRF-Token', 'Fetch');
             xhr.send();
             if (xhr.status === 200) {
@@ -405,7 +453,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
                             data.replaceAll(" ", '').replaceAll('\n', '').replaceAll('\t', '')
                         )
                     ) {
-                        data = "import = [];"
+                        data = "import = [];";
                     }
                     parseHdbti(data);
                 }, function (response) {
@@ -442,11 +490,17 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     }
 
     function checkPlatform() {
-        let platform = window.navigator.platform;
+        let platform = window.navigator.platform; // This needs improvement
         let macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K', 'darwin', 'Mac', 'mac', 'macOS'];
         if (macosPlatforms.indexOf(platform) !== -1) isMac = true;
     }
 
+    function getCurrentWorkspace() { // This needs to be replaced with an API
+        let storedWorkspace = JSON.parse(localStorage.getItem('DIRIGIBLE.workspace') || '{}');
+        if ('name' in storedWorkspace) workspace = storedWorkspace.name;
+    }
+
+    getCurrentWorkspace();
     checkPlatform();
     loadFileContents();
 

@@ -205,7 +205,9 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     List<StructuredDataTypeSymbol> structuredDataTypes = this.symbolTable.getTableTypes();
     List<XSKDataStructureHDBTableTypeModel> hdbTableTypeModels = new ArrayList<>();
     structuredDataTypes.forEach(sdt -> {
-      hdbTableTypeModels.add(this.hdbddTransformer.transformStructuredDataTypeToHdbTableType(sdt));
+      if(!(sdt.getAnnotations().containsKey("GenerateTableType")) || (sdt.getAnnotation("GenerateTableType").getKeyValuePairs().get("booleanValue").getValue()).equals("true")) {
+        hdbTableTypeModels.add(this.hdbddTransformer.transformStructuredDataTypeToHdbTableType(sdt));
+      }
     });
 
     cdsModel.setTableModels(tableModels);

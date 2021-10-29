@@ -34,10 +34,19 @@ editorView.directive('allowedSymbols', () => {
         },
         link: (scope, element, attrs, controller) => {
             controller.$validators.forbiddenName = value => {
+                let correct = false;
                 if (!value) {
-                    return true;
+                    if (attrs.hasOwnProperty("id") && attrs["id"] === "schema" && scope.$parent.isSchemaInTable()) {
+                        correct = true;
+                        element.removeClass("error-input");
+                    } else {
+                        correct = false;
+                        element.addClass('error-input');
+                    }
+                    scope.$parent.setSaveEnabled(correct);
+                    return correct;
                 }
-                let correct = RegExp(scope.regex, 'g').test(value);
+                correct = RegExp(scope.regex, 'g').test(value);
                 if (correct) {
                     element.removeClass("error-input");
                 } else {
@@ -180,6 +189,15 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
             };
             $messageHub.message('ide-core.openEditor', msg);
         }
+    };
+
+    $scope.isSchemaInTable = function () {
+        if (
+            $scope.csvimData.length > 0 &&
+            $scope.csvimData[$scope.activeItemId].table &&
+            $scope.csvimData[$scope.activeItemId].table.includes("::")
+        ) return true;
+        return false;
     };
 
     $scope.setSaveEnabled = function (enabled) {
@@ -393,9 +411,8 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
      * Used for removing some keys from the object before turning it into a string.
      */
     function cleanForOutput(key, value) {
-        if (key === "name" || key === "visible") {
-            return undefined;
-        }
+        if (key === "name" || key === "visible") return undefined;
+        else if (key === "schema" && value === "") return undefined;
         return value;
     }
 

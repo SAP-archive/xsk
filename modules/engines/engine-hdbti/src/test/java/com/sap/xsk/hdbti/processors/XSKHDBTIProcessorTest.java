@@ -29,6 +29,7 @@ import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
 import com.sap.xsk.hdbti.module.HdbtiTestModule;
 import com.sap.xsk.hdbti.service.XSKHDBTICoreService;
+import com.sap.xsk.parser.hdbti.exception.TablePropertySyntaxException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import java.io.File;
@@ -491,6 +492,42 @@ public class XSKHDBTIProcessorTest {
     assertEquals(import2.getKeys().get(1).getColumn(), "SECOND_TYPE");
     assertEquals(import2.getKeys().get(1).getValues().size(), 1);
     assertEquals(import2.getKeys().get(1).getValues().get(0), "BW_PO");
+  }
+
+  @Test
+  public void testParseHdbtiToJSONSuccessfullyWhenTablePropHasDoubleColon()
+      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
+    String hdbtiSample = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/doubleColonTableProp.hdbti"), StandardCharsets.UTF_8);
+
+    List<XSKHDBTIImportConfigModel> model = processor.parseHdbtiToJSON("doubleColonTableProp.hdbti",
+        hdbtiSample.getBytes(StandardCharsets.UTF_8));
+    assertEquals(model.size(), 1);
+
+    XSKHDBTIImportConfigModel import1 = model.get(0);
+    assertEquals(import1.getDelimEnclosing(), "\"");
+    assertEquals(import1.getSchemaName(), "mySchema");
+    assertTrue(import1.getDistinguishEmptyFromNull());
+    assertFalse(import1.getHeader());
+    assertEquals(import1.getTableName(), "sap.demo::mytable");
+    assertFalse(import1.getUseHeaderNames());
+    assertEquals(import1.getDelimField(), ";");
+    assertEquals(import1.getFileName(), "/sap/ti2/demo/myData.csv");
+    assertEquals(import1.getKeys().size(), 1);
+    assertEquals(import1.getKeys().get(0).getColumn(), "GROUP_TYPE");
+    assertEquals(import1.getKeys().get(0).getValues().size(), 3);
+    assertEquals(import1.getKeys().get(0).getValues().get(0), "BW_CUBE");
+    assertEquals(import1.getKeys().get(0).getValues().get(1), "BW_DSO");
+    assertEquals(import1.getKeys().get(0).getValues().get(2), "BW_PSA");
+  }
+
+  @Test(expected = TablePropertySyntaxException.class)
+  public void testParseHdbtiToJSONFailWhenTablePropHasSingleColon()
+      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
+    String hdbtiSample = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/singleColonTableProp.hdbti"), StandardCharsets.UTF_8);
+
+    processor.parseHdbtiToJSON("singleColonTableProp.hdbti", hdbtiSample.getBytes(StandardCharsets.UTF_8));
   }
 
   @Test

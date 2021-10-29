@@ -125,10 +125,9 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
 
   @Override
   public void enterAssignTable(AssignTableContext ctx) {
-    String tableKey = ctx.getChild(0).getChild(0).getText();
     String tableProperty = handleStringLiteral(ctx.STRING().getText());
 
-    if (!isCorrectTablePropertySyntax(tableKey, tableProperty)) {
+    if (!isCorrectTablePropertySyntax(tableProperty)) {
       throw new TablePropertySyntaxException(String.format("Table property contains unsupported symbols: %s", tableProperty));
     }
   }
@@ -136,12 +135,12 @@ public class XSKHDBTICoreListener extends HdbtiBaseListener {
   /**
    * Check if the table property has proper syntax.
    */
-  public static boolean isCorrectTablePropertySyntax(String tableKey, String tableProperty) throws IllegalArgumentException {
+  public static boolean isCorrectTablePropertySyntax(String tableProperty) throws IllegalArgumentException {
     String regex = new String();
 
-    if (tableKey.equals("hdbtable") | tableKey.equals("cdstable")) {
+    if (tableProperty.contains("::")) {
       regex = "^[A-Za-z0-9_\\-$.]+::[A-Za-z0-9_\\-$.]+$";
-    } else if (tableKey.equals("table")) {
+    } else {
       regex = "^[A-Za-z0-9_\\-$.]+$";
     }
 

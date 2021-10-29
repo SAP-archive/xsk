@@ -11,21 +11,16 @@
  */
 package com.sap.xsk.parser.hdbdd.symbols;
 
-import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationArray;
-import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationEnum;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
-import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationSimpleValue;
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
-import com.sap.xsk.parser.hdbdd.symbols.context.ContextSymbol;
+import com.sap.xsk.parser.hdbdd.factory.AnnotationTemplateFactory;
 import com.sap.xsk.parser.hdbdd.symbols.context.CDSFileScope;
-import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +35,7 @@ public class SymbolTable {
   private Map<String, AnnotationObj> annotations;
   private Map<String, List<String>> entityGraph = new HashMap<>();
   private Map<String, BuiltInTypeSymbol> hanaBuiltInTypes = new HashMap<>();
+  private AnnotationTemplateFactory annotationTemplateFactory = new AnnotationTemplateFactory();
 
   public SymbolTable() {
     initTypeSystem();
@@ -80,16 +76,16 @@ public class SymbolTable {
 
   protected void initAnnotations() {
     annotations = new HashMap<>();
-    AnnotationObj catalogObj = createCatalogAnn();
+    AnnotationObj catalogObj = annotationTemplateFactory.buildTemplateForCatalogAnnotation();
     annotations.put(catalogObj.getName(), catalogObj);
 
-    AnnotationObj schemaObj = createSchema();
+    AnnotationObj schemaObj = annotationTemplateFactory.buildTemplateForSchemaAnnotation();
     annotations.put(schemaObj.getName(), schemaObj);
 
-    AnnotationObj noKeyObj = buildTemplateForNoKeyAnnotation();
+    AnnotationObj noKeyObj = annotationTemplateFactory.buildTemplateForNoKeyAnnotation();
     annotations.put(noKeyObj.getName(), noKeyObj);
 
-    AnnotationObj generateTableTypeObj = buildTemplateForGenerateTableTypeAnnotation();
+    AnnotationObj generateTableTypeObj = annotationTemplateFactory.buildTemplateForGenerateTableTypeAnnotation();
     annotations.put(generateTableTypeObj.getName(),generateTableTypeObj);
   }
 
@@ -149,79 +145,6 @@ public class SymbolTable {
 
   public Map<String, Symbol> getSymbolsByFullName() {
     return symbolsByFullName;
-  }
-
-  private AnnotationObj createCatalogAnn() {
-    AnnotationObj catalogObj = new AnnotationObj();
-    catalogObj.setAllowedForSymbols(Collections.singletonList(EntitySymbol.class));
-    catalogObj.setTopLevel(false);
-    catalogObj.setName("Catalog");
-
-    AnnotationObj index = new AnnotationObj();
-    index.define("name", new AnnotationSimpleValue(CDSLiteralEnum.STRING.getLiteralType()));
-    index.define("unique", new AnnotationSimpleValue(CDSLiteralEnum.BOOLEAN.getLiteralType()));
-    AnnotationArray elementNames = new AnnotationArray(new AnnotationSimpleValue(CDSLiteralEnum.STRING.getLiteralType()));
-    index.define("elementNames", elementNames);
-    AnnotationEnum order = new AnnotationEnum();
-    order.add("ASC");
-    order.add("DESC");
-    index.define("order", order);
-    AnnotationArray catalogIndexArr = new AnnotationArray(index);
-    catalogObj.define("index", catalogIndexArr);
-
-    AnnotationEnum annotationEnum = new AnnotationEnum();
-    annotationEnum.add("COLUMN");
-    annotationEnum.add("ROW");
-    catalogObj.define("tableType", annotationEnum);
-    return catalogObj;
-  }
-
-  private AnnotationObj createSchema() {
-    AnnotationObj schemaObj = new AnnotationObj();
-    schemaObj.setName("Schema");
-    schemaObj.setTopLevel(true);
-    schemaObj.setAllowedForSymbols(Arrays.asList(EntitySymbol.class, ContextSymbol.class, StructuredDataTypeSymbol.class));
-    AnnotationSimpleValue nameValue = new AnnotationSimpleValue(CDSLiteralEnum.STRING.getLiteralType());
-    schemaObj.define("name", nameValue);
-
-    return schemaObj;
-  }
-
-  private AnnotationObj createSearchIndex() {
-    AnnotationObj searchIndex = new AnnotationObj();
-    searchIndex.setAllowedForSymbols(Collections.singletonList(EntityElementSymbol.class));
-
-    AnnotationObj text = new AnnotationObj();
-    AnnotationSimpleValue textValue = new AnnotationSimpleValue(CDSLiteralEnum.BOOLEAN.getLiteralType());
-    text.define("enabled", textValue);
-    searchIndex.define("text", text);
-
-    AnnotationObj fuzzy = new AnnotationObj();
-    AnnotationSimpleValue fuzzyValue = new AnnotationSimpleValue(CDSLiteralEnum.BOOLEAN.getLiteralType());
-    text.define("enabled", fuzzyValue);
-    searchIndex.define("fuzzy", fuzzy);
-
-    return searchIndex;
-  }
-
-  private AnnotationObj buildTemplateForNoKeyAnnotation() {
-    AnnotationObj noKeyObj = new AnnotationObj();
-    noKeyObj.setName("nokey");
-    noKeyObj.setTopLevel(false);
-    noKeyObj.setAllowedForSymbols(Collections.singletonList(EntitySymbol.class));
-
-    return noKeyObj;
-  }
-
-  private AnnotationObj buildTemplateForGenerateTableTypeAnnotation() {
-    AnnotationObj generateTableTypeObj = new AnnotationObj();
-    generateTableTypeObj.setName("GenerateTableType");
-    generateTableTypeObj.setTopLevel(false);
-    generateTableTypeObj.setAllowedForSymbols(Collections.singletonList(StructuredDataTypeSymbol.class));
-    AnnotationSimpleValue booleanValue = new AnnotationSimpleValue(CDSLiteralEnum.BOOLEAN.getLiteralType());
-    generateTableTypeObj.define("booleanValue", booleanValue);
-
-    return generateTableTypeObj;
   }
 
   private void traverseEntityGraph(String entityName, List<EntitySymbol> orderedSymbol, Set<String> passedEntities) {

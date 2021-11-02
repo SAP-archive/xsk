@@ -43,6 +43,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.eclipse.dirigible.repository.api.IRepository;
@@ -81,29 +82,33 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     List<CSVRecord> recordsToUpdate = new ArrayList<>();
 
     for (CSVRecord csvRecord : csvParser) {
-      if (csvRecord.size() != tableMetadata.getColumns().size()) {
-        String errorMessage = String.format("Error while trying to process csv with id %s with location %s."
-                + "The number of csv records should be equal to the number of columns of a db entity",
-            xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames()),
-            tableImportConfigurationDefinition.getFile());
-        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR,
-            tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
-        throw new XSKTableImportException(errorMessage);
-      }
+      if (recordShouldBeIncluded(csvRecord, tableMetadata.getColumns(),
+          tableImportConfigurationDefinition
+              .getKeysAsMap())) {
+        if (csvRecord.size() != tableMetadata.getColumns().size()) {
+          String errorMessage = String.format("Error while trying to process csv with id %s with location %s."
+                  + "The number of csv records should be equal to the number of columns of a db entity",
+              xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames()),
+              tableImportConfigurationDefinition.getFile());
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR,
+              tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
+          throw new XSKTableImportException(errorMessage);
+        }
 
-      String pkForCSVRecord = xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames());
-      String csvRecordHash = xskHdbtiCoreService.getCSVRecordHash(csvRecord);
-      if (pkForCSVRecord != null && !allImportedRecordsByCsv.containsKey(pkForCSVRecord)) {
-        recordsToInsert.add(csvRecord);
-      } else if (pkForCSVRecord != null && !allImportedRecordsByCsv.get(pkForCSVRecord).getHash().equals(csvRecordHash)) {
-        recordsToUpdate.add(csvRecord);
-        XSKImportedCSVRecordModel importedCSVRecordModelToUpdate = allImportedRecordsByCsv.get(pkForCSVRecord);
-        importedCSVRecordModelToUpdate.setHash(csvRecordHash);
-        importedCSVRecordsToUpdate.add(importedCSVRecordModelToUpdate);
+        String pkForCSVRecord = xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames());
+        String csvRecordHash = xskHdbtiCoreService.getCSVRecordHash(csvRecord);
+        if (pkForCSVRecord != null && !allImportedRecordsByCsv.containsKey(pkForCSVRecord)) {
+          recordsToInsert.add(csvRecord);
+        } else if (pkForCSVRecord != null && !allImportedRecordsByCsv.get(pkForCSVRecord).getHash().equals(csvRecordHash)) {
+          recordsToUpdate.add(csvRecord);
+          XSKImportedCSVRecordModel importedCSVRecordModelToUpdate = allImportedRecordsByCsv.get(pkForCSVRecord);
+          importedCSVRecordModelToUpdate.setHash(csvRecordHash);
+          importedCSVRecordsToUpdate.add(importedCSVRecordModelToUpdate);
 
-        allImportedRecordsByCsv.remove(pkForCSVRecord);
-      } else if (pkForCSVRecord != null) {
-        allImportedRecordsByCsv.remove(pkForCSVRecord);
+          allImportedRecordsByCsv.remove(pkForCSVRecord);
+        } else if (pkForCSVRecord != null) {
+          allImportedRecordsByCsv.remove(pkForCSVRecord);
+        }
       }
     }
 
@@ -111,6 +116,24 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     xskHdbtiCoreService.updateCsvRecords(recordsToUpdate, csvParser.getHeaderNames(), importedCSVRecordsToUpdate,
         tableImportConfigurationDefinition);
     xskHdbtiCoreService.removeCsvRecords(new ArrayList<>(allImportedRecordsByCsv.values()), tableName);
+  }
+
+  private boolean recordShouldBeIncluded(CSVRecord record, List<PersistenceTableColumnModel> columns, Map<String, ArrayList<String>> keys) {
+    if (keys == null || keys.isEmpty()) {
+      return true;
+    }
+
+    boolean match = false;
+    for (PersistenceTableColumnModel column : columns) {
+      String columnName = column.getName();
+      ArrayList<String> values = keys.get(columnName);
+      values = keys.get(columnName) == null ? keys.get(columnName.toLowerCase()) : values;
+      if (values != null) {
+        match = values.contains(record.get(columns.indexOf(column)));
+      }
+    }
+
+    return match;
   }
 
   private PersistenceTableModel getTableMetadata(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) {

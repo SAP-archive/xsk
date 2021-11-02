@@ -36,6 +36,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.csv.CSVFormat;
@@ -43,6 +44,8 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.database.api.metadata.TableMetadata;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.eclipse.dirigible.repository.api.IRepository;
@@ -81,28 +84,33 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     List<CSVRecord> recordsToUpdate = new ArrayList<>();
 
     for (CSVRecord csvRecord : csvParser) {
-      if (csvRecord.size() != tableMetadata.getColumns().size()) {
-        String errorMessage = String.format("Error while trying to process csv with id %s with location %s."
-                + "The number of csv records should be equal to the number of columns of a db entity",
-            xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames()),
-            tableImportConfigurationDefinition.getFile());
-        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
-        throw new XSKTableImportException(errorMessage);
-      }
+      if (recordShouldBeIncluded(csvRecord, tableMetadata.getColumns(),
+          tableImportConfigurationDefinition
+              .getKeysAsMap())) {
+        if (csvRecord.size() != tableMetadata.getColumns().size()) {
+          String errorMessage = String.format("Error while trying to process csv with id %s with location %s."
+                  + "The number of csv records should be equal to the number of columns of a db entity",
+              xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames()),
+              tableImportConfigurationDefinition.getFile());
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR,
+              tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
+          throw new XSKTableImportException(errorMessage);
+        }
 
-      String pkForCSVRecord = xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames());
-      String csvRecordHash = xskHdbtiCoreService.getCSVRecordHash(csvRecord);
-      if (pkForCSVRecord != null && !allImportedRecordsByCsv.containsKey(pkForCSVRecord)) {
-        recordsToInsert.add(csvRecord);
-      } else if (pkForCSVRecord != null && !allImportedRecordsByCsv.get(pkForCSVRecord).getHash().equals(csvRecordHash)) {
-        recordsToUpdate.add(csvRecord);
-        XSKImportedCSVRecordModel importedCSVRecordModelToUpdate = allImportedRecordsByCsv.get(pkForCSVRecord);
-        importedCSVRecordModelToUpdate.setHash(csvRecordHash);
-        importedCSVRecordsToUpdate.add(importedCSVRecordModelToUpdate);
+        String pkForCSVRecord = xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames());
+        String csvRecordHash = xskHdbtiCoreService.getCSVRecordHash(csvRecord);
+        if (pkForCSVRecord != null && !allImportedRecordsByCsv.containsKey(pkForCSVRecord)) {
+          recordsToInsert.add(csvRecord);
+        } else if (pkForCSVRecord != null && !allImportedRecordsByCsv.get(pkForCSVRecord).getHash().equals(csvRecordHash)) {
+          recordsToUpdate.add(csvRecord);
+          XSKImportedCSVRecordModel importedCSVRecordModelToUpdate = allImportedRecordsByCsv.get(pkForCSVRecord);
+          importedCSVRecordModelToUpdate.setHash(csvRecordHash);
+          importedCSVRecordsToUpdate.add(importedCSVRecordModelToUpdate);
 
-        allImportedRecordsByCsv.remove(pkForCSVRecord);
-      } else if (pkForCSVRecord != null) {
-        allImportedRecordsByCsv.remove(pkForCSVRecord);
+          allImportedRecordsByCsv.remove(pkForCSVRecord);
+        } else if (pkForCSVRecord != null) {
+          allImportedRecordsByCsv.remove(pkForCSVRecord);
+        }
       }
     }
 
@@ -112,13 +120,32 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     xskHdbtiCoreService.removeCsvRecords(new ArrayList<>(allImportedRecordsByCsv.values()), tableName);
   }
 
+  private boolean recordShouldBeIncluded(CSVRecord record, List<PersistenceTableColumnModel> columns, Map<String, ArrayList<String>> keys) {
+    if (keys == null || keys.isEmpty()) {
+      return true;
+    }
+
+    boolean match = false;
+    for (PersistenceTableColumnModel column : columns) {
+      String columnName = column.getName();
+      ArrayList<String> values = keys.get(columnName);
+      values = keys.get(columnName) == null ? keys.get(columnName.toLowerCase()) : values;
+      if (values != null) {
+        match = values.contains(record.get(columns.indexOf(column)));
+      }
+    }
+
+    return match;
+  }
+
   private PersistenceTableModel getTableMetadata(XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) {
     String tableName = xskHdbtiCoreService.convertToActualTableName(tableImportConfigurationDefinition.getTable());
     try {
       return dbMetadataUtil.getTableMetadata(tableName, tableImportConfigurationDefinition.getSchema());
     } catch (SQLException sqlException) {
       String errorMessage = String.format("Error occurred while trying to read table metadata for table with name: %s", tableName);
-      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR,
+          tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
       logger.error(errorMessage, sqlException);
     }
     return null;
@@ -134,7 +161,8 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     } catch (IOException e) {
       String errorMessage = String.format("Error occurred while trying to parse csv imported from hdbti file: %s",
           tableImportConfigurationDefinition.getHdbtiFileName());
-      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR,
+          tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
       logger.error(errorMessage, e);
     }
 
@@ -146,12 +174,14 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
     if (tableImportConfigurationDefinition.getDelimField() != null && (!tableImportConfigurationDefinition.getDelimField().equals(",")
         && !tableImportConfigurationDefinition.getDelimField().equals(";"))) {
       String errorMessage = "Only ';' or ',' characters are supported as delimiters for csv files.";
-      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR,
+          tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
       throw new XSKTableImportException(errorMessage);
     } else if (tableImportConfigurationDefinition.getDelimEnclosing() != null
         && tableImportConfigurationDefinition.getDelimEnclosing().length() > 1) {
       String errorMessage = "Delim enclosing should only contain one character.";
-      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR,
+          tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
       throw new XSKTableImportException(errorMessage);
     }
 
@@ -184,7 +214,8 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
       try {
         el.setFileName(XSKHDBTIUtils.convertPathToHDBTIFileProperty(el.getFileName()));
       } catch (IllegalArgumentException ex) {
-        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(),
+            XSKCommonsConstants.HDBTI_PARSER);
         throw ex;
       }
       if (!XSKHDBTIUtils.isCorrectPropertySyntax(el.getSchemaName())) {
@@ -200,7 +231,8 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
       for (Pair key : el.getKeys()) {
         if (!XSKHDBTIUtils.isCorrectPropertySyntax(key.getColumn())) {
           String errMsg = "key column property contains unsupported symbols: " + key.getColumn();
-          XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
+          XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(),
+              XSKCommonsConstants.HDBTI_PARSER);
           throw new IllegalIcuArgumentException(errMsg);
         }
       }

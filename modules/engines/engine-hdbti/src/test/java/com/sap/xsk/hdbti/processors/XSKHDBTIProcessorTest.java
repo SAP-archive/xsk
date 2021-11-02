@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -45,6 +46,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
@@ -311,6 +313,27 @@ public class XSKHDBTIProcessorTest {
       assertEquals(0, csvRelations.size());
       assertEquals(0, importArtifacts.size());
       assertEquals(0, importedCSVRecordModels.size());
+    }
+  }
+
+  @Test
+  public void testKeysProperlyFilterRecords()
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+    XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
+    importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
+    importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
+    importConfigurationDefinition.setTable(STUDENTS_TABLE_NAME);
+
+    Map<String, ArrayList<String>> keys = Map.of("FIRST_NAME", new ArrayList<String>(Arrays.asList("Georgi")));
+    importConfigurationDefinition.setKeysAsMap(keys);
+
+    try (Connection connection = datasource.getConnection()) {
+      writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
+      processor.process(importConfigurationDefinition, connection);
+
+      List<Student> students = studentManager.findAll(connection, Student.class);
+      assertEquals(1, students.size());
+      assertEquals("Georgi", students.get(0).getFirstName());
     }
   }
 

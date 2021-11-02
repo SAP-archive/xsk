@@ -206,7 +206,9 @@ public class XSKHDBTIImportConfigModel {
   }
 
   public void checkForAllMandatoryFieldsPresence() {
-    checkPresence(schemaName, "schemaName");
+    if (tableName != null && !tableName.contains("::")) {
+      checkPresence(schemaName, "schemaName");
+    }
   }
 
   private <T> void checkPresence(T field, String fieldName) {

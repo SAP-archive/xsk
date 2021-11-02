@@ -216,12 +216,17 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
             XSKCommonsConstants.HDBTI_PARSER);
         throw ex;
       }
-      if (!XSKHDBTIUtils.isCorrectPropertySyntax(el.getSchemaName())) {
+      if (!el.getTableName().contains("::") && el.getSchemaName() == null) {
+        String errMsg = "Missing schema property";
+        XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
+        throw new IllegalIcuArgumentException(errMsg);
+      }
+      if (el.getSchemaName() != null && !XSKHDBTIUtils.isCorrectPropertySyntax(el.getSchemaName())) {
         String errMsg = "Schema property contains unsupported symbols: " + el.getSchemaName();
         XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
         throw new IllegalIcuArgumentException(errMsg);
       }
-      if (!XSKHDBTIUtils.isCorrectPropertySyntax(el.getTableName())) {
+      if (!XSKHDBTIUtils.isCorrectTablePropertySyntax(el.getTableName())) {
         String errMsg = "Table property contains unsupported symbols: " + el.getTableName();
         XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
         throw new IllegalIcuArgumentException(errMsg);

@@ -25,6 +25,7 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
@@ -462,5 +463,34 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertEquals("ADMIN", parsedModel.getSchema());
     assertNull(parsedModel.getRawContent());
     assertEquals(XSKDBContentType.XS_CLASSIC, parsedModel.getDBContentType());
+  }
+
+  @Test
+  public void parseHDBDDWithNoKeyAnnotation () throws Exception {
+    XSKDataStructuresException exception = assertThrows(
+        XSKDataStructuresException.class,
+        () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/NoKeyAnnSample.hdbdd", "")
+    );
+    assertEquals(
+        "Failed to parse file: gstr2/NoKeyAnnSample.hdbdd. Error at line: 10 col: 1. Annotation nokey has been specified for entity with keys.",
+        exception.getMessage());
+  }
+
+  @Test
+  public void parseHDBDDWithGenerateTableTypeAnnotation () throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/GenerateTableTypeAnnotationSample.hdbdd", "");
+    assertEquals(1, ((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().size());
+
+    XSKDataStructureHDBTableTypeModel tableTypeModel = ((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0);
+    assertEquals("gstr2::GenerateTableTypeAnnotationSample.MyNestedStruct", tableTypeModel.getName());
+    assertEquals("ADMIN", tableTypeModel.getSchema());
+    assertEquals("name",tableTypeModel.getColumns().get(0).getName());
+    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(0).getType());
+    assertEquals("nested.aNumber",tableTypeModel.getColumns().get(1).getName());
+    assertEquals("INTEGER",tableTypeModel.getColumns().get(1).getType());
+    assertEquals("nested.someText",tableTypeModel.getColumns().get(2).getName());
+    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(2).getType());
+    assertEquals("nested.otherText",tableTypeModel.getColumns().get(3).getName());
+    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(3).getType());
   }
 }

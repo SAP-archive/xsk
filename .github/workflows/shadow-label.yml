@@ -4,6 +4,7 @@ on:
         types: [labeled]
 jobs:
     copy:
+        if: github.event.label.name == 'shadow'
         runs-on: ubuntu-latest
         steps:
             - uses: dpanayotov/issue-cloner@v0.3

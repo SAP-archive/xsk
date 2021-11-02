@@ -43,7 +43,7 @@
                     ng-model="filesSearch">
             </div>
             <div class="item-list">
-                <div class="list-item" ng-repeat="csv in csvimData track by $index"
+                <div class="list-item" ng-repeat="csv in jsonData track by $index"
                     ng-class="{active:activeItemId==$index}" ng-click="fileSelected($index)" ng-show="csv.visible">
                     <i class="fa fa-file-text-o" aria-hidden="true"></i>{{csv.name}}
                 </div>
@@ -70,32 +70,39 @@
                     <div class="col-lg-4 col-md-6 col-sm-8 col-xs-9">
                         <label for="table">Table</label>
                         <input type="text" class="form-control col-md-1" id="table" ng-trim="false"
-                            ng-model="csvimData[activeItemId].table" ng-disabled="!editEnabled"
-                            ng-keydown="fileChanged()"
-                            multiple-allowed-symbols="[{regex:'^[A-Za-z0-9_\\-$.]+::[A-Za-z0-9_\\-$.]+$', contains: '::'}, {regex:'^[A-Za-z0-9_\\-$.]+$'}]">
+                            ng-model="jsonData[activeItemId].table" ng-disabled="!editEnabled"
+                            ng-keydown="fileChanged()" validate-input>
+                        <label ng-show="tableError.hasError" class="error-label"
+                            id="tableError">{{tableError.msg}}</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
                         <label for="schema">Schema</label>
                         <input type="text" class="form-control" id="schema" ng-trim="false"
-                            ng-model="csvimData[activeItemId].schema" ng-disabled="!editEnabled"
-                            ng-keydown="fileChanged()" allowed-symbols="^[A-Za-z0-9_\-$.]+$">
+                            ng-model="jsonData[activeItemId].schema" ng-disabled="!editEnabled"
+                            ng-keydown="fileChanged()" validate-input>
+                        <label ng-show="schemaError.hasError" class="error-label"
+                            id="schemaError">{{schemaError.msg}}</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
                         <label for="filepath">File path</label>
-                        <input type="text" class="form-control" ng-class="{'error-input':fileExists===false}"
-                            id="filepath" ng-model="csvimData[activeItemId].file" ng-disabled="!editEnabled"
-                            ng-keydown="fileChanged()" allowed-symbols="^[\w\-. /$]+$">
+                        <input type="text" class="form-control" ng-class="{'warn-input':fileExists===false}"
+                            id="filepath" ng-model="jsonData[activeItemId].file" ng-disabled="!editEnabled"
+                            ng-keydown="fileChanged()" validate-input="^[\w\-. /$]+$">
+                        <label ng-show="filepathError.hasError" class="error-label"
+                            id="filepathError">{{filepathError.msg}}</label>
+                        <label ng-hide="fileExists" class="warn-label"
+                            id="pathWarn">File does not exist</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="header" ng-change="fileChanged()"
-                                ng-model="csvimData[activeItemId].header" ng-disabled="!editEnabled">
+                                ng-model="jsonData[activeItemId].header" ng-disabled="!editEnabled">
                             <label class="form-check-label" for="header">Header</label>
                         </div>
                     </div>
@@ -104,7 +111,7 @@
                     <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="headerNames" ng-change="fileChanged()"
-                                ng-model="csvimData[activeItemId].useHeaderNames" ng-disabled="!editEnabled">
+                                ng-model="jsonData[activeItemId].useHeaderNames" ng-disabled="!editEnabled">
                             <label class="form-check-label" for="headerNames">Use header names</label>
                         </div>
                     </div>
@@ -113,7 +120,7 @@
                     <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="distinguishEmptyFromNull"
-                                ng-change="fileChanged()" ng-model="csvimData[activeItemId].distinguishEmptyFromNull"
+                                ng-change="fileChanged()" ng-model="jsonData[activeItemId].distinguishEmptyFromNull"
                                 ng-disabled="!editEnabled">
                             <label class="form-check-label" for="distinguishEmptyFromNull">Distinguish empty from
                                 null</label>
@@ -126,15 +133,15 @@
                             <label>Delimiter</label>
                             <button class="btn btn-default btn-big dropdown-toggle" type="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"
-                                ng-disabled="!editEnabled">{{csvimData[activeItemId].delimField}}
+                                ng-disabled="!editEnabled">{{jsonData[activeItemId].delimField}}
                                 <span class="caret"></span></button>
                             <ul class="dropdown-menu dropdown-menu-searchable">
                                 <li class="dropdown-item" ng-repeat="option in delimiterList"
                                     ng-click="delimiterChanged(option)">{{option}}</li>
                             </ul>
                         </div>
-                        <label class="error-label"
-                            ng-hide="isDelimiterSupported(csvimData[activeItemId].delimField)">This delimiter is not
+                        <label class="warn-label"
+                            ng-hide="isDelimiterSupported(jsonData[activeItemId].delimField)">This delimiter is not
                             supported!</label>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -142,15 +149,15 @@
                             <label>Quote character</label>
                             <button class="btn btn-default btn-big dropdown-toggle" type="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"
-                                ng-disabled="!editEnabled">{{csvimData[activeItemId].delimEnclosing}}
+                                ng-disabled="!editEnabled">{{jsonData[activeItemId].delimEnclosing}}
                                 <span class="caret"></span></button>
                             <ul class="dropdown-menu dropdown-menu-searchable">
                                 <li class="dropdown-item" ng-repeat="option in quoteCharList"
                                     ng-click="quoteCharChanged(option)">{{option}}</li>
                             </ul>
                         </div>
-                        <label class="error-label"
-                            ng-hide="isQuoteCharSupported(csvimData[activeItemId].delimEnclosing)">This quote character
+                        <label class="warn-label"
+                            ng-hide="isQuoteCharSupported(jsonData[activeItemId].delimEnclosing)">This quote character
                             is not supported!</label>
                     </div>
                 </div>
@@ -163,11 +170,11 @@
                                     <th>Column</th>
                                     <th>Values</th>
                                 </tr>
-                                <tr ng-repeat="key in csvimData[activeItemId].keys track by $index">
+                                <tr ng-repeat="key in jsonData[activeItemId].keys track by $index">
                                     <td>
                                         <div class="input-cell">
-                                            <input index="{{$index}}" type="text" class="table-input"
-                                                ng-model="csvimData[activeItemId].keys[$index].column"
+                                            <input index="{{$index}}" type="text" class="form-control"
+                                                ng-model="jsonData[activeItemId].keys[$index].column"
                                                 ng-disabled="!editEnabled" ng-keydown="fileChanged()" ng-trim="false"
                                                 unique-field="^[A-Za-z0-9_\-$.]+$">
                                             <button type="button" ng-hide="!editEnabled"
@@ -178,11 +185,11 @@
                                     </td>
                                     <td class="column-values">
                                         <div class="input-cell"
-                                            ng-repeat="val in csvimData[activeItemId].keys[$index].values track by $index">
+                                            ng-repeat="val in jsonData[activeItemId].keys[$index].values track by $index">
                                             <div class="column-value">
-                                                <input type="text" class="table-input" kindex="{{$parent.$index}}"
+                                                <input type="text" class="form-control" kindex="{{$parent.$index}}"
                                                     vindex="{{$index}}" unique-field="^[A-Za-z0-9_\-$.]+$"
-                                                    ng-model="csvimData[activeItemId].keys[$parent.$index].values[$index]"
+                                                    ng-model="jsonData[activeItemId].keys[$parent.$index].values[$index]"
                                                     ng-trim="false" ng-disabled="!editEnabled"
                                                     ng-keydown="fileChanged()">
                                                 <button type="button" ng-hide="!editEnabled"

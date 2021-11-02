@@ -13,6 +13,18 @@ let editorView = angular.module('hdbti-editor', []);
 
 editorView.factory('$messageHub', [function () {
     let messageHub = new FramesMessageHub();
+    let announceAlert = function (title, message, type) {
+        messageHub.post({
+            data: {
+                title: title,
+                message: message,
+                type: type
+            }
+        }, 'ide.alert');
+    };
+    let announceAlertError = function (title, message) {
+        announceAlert(title, message, "error");
+    };
     let message = function (evtName, data) {
         messageHub.post({ data: data }, evtName);
     };
@@ -20,90 +32,40 @@ editorView.factory('$messageHub', [function () {
         messageHub.subscribe(callback, topic);
     };
     return {
+        announceAlert: announceAlert,
+        announceAlertError: announceAlertError,
         message: message,
         on: on
     };
 }]);
 
-editorView.directive('allowedSymbols', () => {
+editorView.directive('validateInput', () => {
     return {
         restrict: 'A',
         require: 'ngModel',
         scope: {
-            regex: '@allowedSymbols'
+            regex: '@validateInput'
         },
         link: (scope, element, attrs, controller) => {
             controller.$validators.forbiddenName = value => {
-                let correct = false;
-                if (!value) {
-                    if (attrs.hasOwnProperty("id") && attrs["id"] === "schema" && scope.$parent.isSchemaInTable()) {
-                        correct = true;
-                        element.removeClass("error-input");
+                if (attrs.hasOwnProperty("id")) {
+                    if (attrs["id"] === "table") {
+                        let correctSchema = scope.$parent.validateSchema();
+                        let correctTable = scope.$parent.validateTable(value);
+                        scope.$parent.setSaveEnabled(correctSchema && correctTable);
+                        return correctTable;
+                    } else if (attrs["id"] === "schema") {
+                        let correctTable = scope.$parent.validateTable();
+                        let correctSchema = scope.$parent.validateSchema(value);
+                        scope.$parent.setSaveEnabled(correctSchema && correctTable);
+                        return correctSchema;
+                    } else if (attrs["id"] === "filepath") {
+                        return scope.$parent.validateFilepath(element, value, scope.regex);
                     } else {
-                        correct = false;
-                        element.addClass('error-input');
-                    }
-                    scope.$parent.setSaveEnabled(correct);
-                    return correct;
-                }
-                correct = RegExp(scope.regex, 'g').test(value);
-                if (correct) {
-                    element.removeClass("error-input");
-                } else {
-                    element.addClass('error-input');
-                }
-                if (attrs.hasOwnProperty("id") && attrs["id"] === "filepath") {
-                    scope.$parent.fileExists = true;
-                }
-                scope.$parent.setSaveEnabled(correct);
-                return correct;
-            };
-        }
-    };
-});
-
-/*
- * Use this if one field has multiple regex validations based on a condition.
- * You must provide a list with the following syntax:
- * [{ regex: '^[A-Za-z0-9_\\-$.]+::[A-Za-z0-9_\\-$.]+$', contains: '::' }, { regex: '^[A-Za-z0-9_\\-$.]+$' }]
- * If there is a validation without a condition, you must place it in the last position, without the 'contains' key.
- * Sort this list by validation priority.
- */
-editorView.directive('multipleAllowedSymbols', () => {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        scope: {
-            params: '@multipleAllowedSymbols'
-        },
-        link: (scope, element, attrs, controller) => {
-            controller.$validators.forbiddenName = value => {
-                if (!value) {
-                    return true;
-                }
-                let validationList = scope.$eval(scope.params);
-                let correct = false;
-                for (let i = 0; i < validationList.length; i++) {
-                    if (validationList[i].contains) {
-                        if (value.includes(validationList[i].contains)) {
-                            correct = RegExp(validationList[i].regex, 'g').test(value);
-                            break;
-                        }
-                    } else {
-                        correct = RegExp(validationList[i].regex, 'g').test(value);
-                        break;
+                        return scope.$parent.validateInput(element, value, scope.regex);
                     }
                 }
-                if (correct) {
-                    element.removeClass("error-input");
-                } else {
-                    element.addClass('error-input');
-                }
-                if (attrs.hasOwnProperty("id") && attrs["id"] === "filepath") {
-                    scope.$parent.fileExists = true;
-                }
-                scope.$parent.setSaveEnabled(correct);
-                return correct;
+                return scope.$parent.validateInput(element, value, scope.regex);
             };
         }
     };
@@ -122,18 +84,18 @@ editorView.directive('uniqueField', () => {
                 let correct = RegExp(scope.regex, 'g').test(value);
                 if (correct) {
                     if ("index" in attrs) {
-                        for (let i = 0; i < scope.$parent.csvimData[scope.$parent.activeItemId].keys.length; i++) {
+                        for (let i = 0; i < scope.$parent.jsonData[scope.$parent.activeItemId].keys.length; i++) {
                             if (i != attrs.index) {
-                                if (value === scope.$parent.csvimData[scope.$parent.activeItemId].keys[i].column) {
+                                if (value === scope.$parent.jsonData[scope.$parent.activeItemId].keys[i].column) {
                                     unique = false;
                                     break;
                                 }
                             }
                         }
                     } else if ("kindex" in attrs && "vindex" in attrs) {
-                        for (let i = 0; i < scope.$parent.csvimData[scope.$parent.activeItemId].keys[attrs.kindex].values.length; i++) {
+                        for (let i = 0; i < scope.$parent.jsonData[scope.$parent.activeItemId].keys[attrs.kindex].values.length; i++) {
                             if (i != attrs.vindex) {
-                                if (value === scope.$parent.$parent.csvimData[scope.$parent.activeItemId].keys[attrs.kindex].values[i]) {
+                                if (value === scope.$parent.$parent.jsonData[scope.$parent.activeItemId].keys[attrs.kindex].values[i]) {
                                     unique = false;
                                     break;
                                 }
@@ -160,48 +122,150 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     let isMac = false;
     let workspace = 'workspace'; // This needs to be replace with an API.
     let emptyHdbti = ["", "import=[]", "import=[];", "import=[{}]", "import=[{}];"];
+    let tableValidationList = [
+        { regex: '^[A-Za-z0-9_\\-$.]+::[A-Za-z0-9_\\-$.]+$', contains: '::' },
+        { regex: '^[A-Za-z0-9_\\-$.]+$' }
+    ];
+    let schemaValidation = '^[A-Za-z0-9_\\-$.]+$';
     let csrfToken;
+    let tableField = document.getElementById("table");
+    let schemaField = document.getElementById("schema");
+    $scope.schemaError = { hasError: false, msg: '' };
+    $scope.tableError = { hasError: false, msg: '' };
+    $scope.filepathError = {
+        hasError: false,
+        msg: 'Path can only contain letters (a-z, A-Z), numbers (0-9), hyphens ("-"), forward slashes ("/"), dots ("."), underscores ("_"), and dollar signs ("$")'
+    };
     $scope.fileExists = true;
     $scope.saveEnabled = true;
     $scope.editEnabled = false;
     $scope.dataEmpty = true;
     $scope.dataLoaded = false;
-    $scope.csvimData = [];
+    $scope.jsonData = [];
     $scope.activeItemId = 0;
     $scope.delimiterList = [',', '\\t', '|', ';', '#'];
     $scope.quoteCharList = ["'", "\"", "#"];
 
     $scope.openFile = function () {
-        if ($scope.checkResource($scope.csvimData[$scope.activeItemId].file)) {
+        if ($scope.checkResource($scope.jsonData[$scope.activeItemId].file)) {
             let msg = {
                 "file": {
-                    "name": $scope.csvimData[$scope.activeItemId].name,
-                    "path": `/${workspace}${$scope.csvimData[$scope.activeItemId].file}`,
+                    "name": $scope.jsonData[$scope.activeItemId].name,
+                    "path": `/${workspace}${$scope.jsonData[$scope.activeItemId].file}`,
                     "type": "file",
                     "contentType": "text/csv",
-                    "label": $scope.csvimData[$scope.activeItemId].name
+                    "label": $scope.jsonData[$scope.activeItemId].name
                 },
                 "extraArgs": {
-                    "header": $scope.csvimData[$scope.activeItemId].header,
-                    "delimiter": $scope.csvimData[$scope.activeItemId].delimField,
-                    "quotechar": $scope.csvimData[$scope.activeItemId].delimEnclosing
+                    "header": $scope.jsonData[$scope.activeItemId].header,
+                    "delimiter": $scope.jsonData[$scope.activeItemId].delimField,
+                    "quotechar": $scope.jsonData[$scope.activeItemId].delimEnclosing
                 }
             };
             $messageHub.message('ide-core.openEditor', msg);
         }
     };
 
-    $scope.isSchemaInTable = function () {
-        if (
-            $scope.csvimData.length > 0 &&
-            $scope.csvimData[$scope.activeItemId].table &&
-            $scope.csvimData[$scope.activeItemId].table.includes("::")
-        ) return true;
+    $scope.validateTable = function (value = null) {
+        if (value === null) value = tableField.value;
+        let correct = false;
+        if (value) {
+            for (let i = 0; i < tableValidationList.length; i++) {
+                if (tableValidationList[i].contains) {
+                    if (value.includes(tableValidationList[i].contains)) {
+                        correct = RegExp(tableValidationList[i].regex, 'g').test(value);
+                        break;
+                    }
+                } else {
+                    correct = RegExp(tableValidationList[i].regex, 'g').test(value);
+                    break;
+                }
+            }
+        }
+        $scope.showTableError(!correct);
+        return correct;
+    };
+
+    $scope.validateSchema = function (value = null) {
+        if (value === null) value = schemaField.value;
+        let correct = false;
+        if (!value) {
+            if (tableField.value.trim().length > 0 && tableField.value.includes('::')) {
+                correct = true;
+                $scope.showSchemaError(false);
+            } else {
+                correct = false;
+                $scope.showSchemaError(
+                    true,
+                    'Schema must be specified either in the table name ("schemaName::tableName") or in the schema field.'
+                );
+            }
+            $scope.setSaveEnabled(correct);
+            return correct;
+        }
+        correct = RegExp(schemaValidation, 'g').test(value);
+        $scope.showSchemaError(!correct);
+        $scope.setSaveEnabled(correct);
+        return correct;
+    };
+
+    $scope.validateFilepath = function (element, value, regex) {
+        let correct = false;
+        if (value) {
+            correct = RegExp(regex, 'g').test(value);
+        }
+        $scope.fileExists = true;
+        if (correct) {
+            element.removeClass("error-input");
+            $scope.filepathError.hasError = false;
+        }
+        else {
+            element.addClass('error-input');
+            $scope.filepathError.hasError = true;
+        }
+        $scope.setSaveEnabled(correct);
+        return correct;
+    };
+
+    $scope.validateInput = function (element, value, regex) {
+        let correct = false;
+        if (!value) return correct;
+        correct = RegExp(regex, 'g').test(value);
+        if (correct) element.removeClass("error-input");
+        else element.addClass('error-input');
+        $scope.setSaveEnabled(correct);
+        return correct;
+    };
+
+    $scope.showTableError = function (hasError, msg) {
+        $scope.tableError.hasError = hasError;
+        if (msg !== undefined) {
+            $scope.tableError.msg = msg;
+        } else $scope.tableError.msg = 'Table can only contain letters (a-z, A-Z), numbers (0-9), hyphens ("-"), dots ("."), underscores ("_"), and dollar signs ("$"). Two colons ("::") are permitted only when table name contains schema ("schemaName::tableName").';
+        if (hasError) tableField.classList.add('error-input');
+        else tableField.classList.remove('error-input');
+    };
+
+    $scope.showSchemaError = function (hasError, msg = '') {
+        $scope.schemaError.hasError = hasError;
+        if (msg !== undefined) {
+            $scope.schemaError.msg = msg;
+        } else $scope.schemaError.msg = 'Schema can only contain letters (a-z, A-Z), numbers (0-9), hyphens ("-"), dots ("."), underscores ("_"), and dollar signs ("$")';
+        if (hasError) schemaField.classList.add('error-input');
+        else schemaField.classList.remove('error-input');
+    };
+
+    $scope.inputsHaveErrors = function () {
+        let inputs = document.getElementsByClassName("form-control");
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].classList.contains('error-input')) return true;
+        }
         return false;
     };
 
     $scope.setSaveEnabled = function (enabled) {
-        $scope.saveEnabled = enabled;
+        if (enabled && !$scope.inputsHaveErrors()) $scope.saveEnabled = true;
+        else $scope.saveEnabled = false;
     };
 
     $scope.setEditEnabled = function (enabled) {
@@ -229,8 +293,8 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
         // Clean search bar
         $scope.filesSearch = "";
         $scope.filterFiles();
-        $scope.csvimData.push(newCsv);
-        $scope.activeItemId = $scope.csvimData.length - 1;
+        $scope.jsonData.push(newCsv);
+        $scope.activeItemId = $scope.jsonData.length - 1;
         $scope.dataEmpty = false;
         $scope.setEditEnabled(false);
         $scope.fileChanged();
@@ -246,9 +310,11 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     };
 
     $scope.fileSelected = function (id) {
-        $scope.setEditEnabled(false);
-        $scope.fileExists = true;
-        $scope.activeItemId = id;
+        if (!$scope.inputsHaveErrors()) {
+            $scope.setEditEnabled(false);
+            $scope.fileExists = true;
+            $scope.activeItemId = id;
+        }
     };
 
     $scope.isDelimiterSupported = function (delimiter) {
@@ -260,28 +326,28 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     };
 
     $scope.delimiterChanged = function (delimiter) {
-        $scope.csvimData[$scope.activeItemId].delimField = delimiter;
+        $scope.jsonData[$scope.activeItemId].delimField = delimiter;
         $scope.fileChanged();
     };
 
     $scope.quoteCharChanged = function (quoteChar) {
-        $scope.csvimData[$scope.activeItemId].delimEnclosing = quoteChar;
+        $scope.jsonData[$scope.activeItemId].delimEnclosing = quoteChar;
         $scope.fileChanged();
     };
 
     $scope.addValueToKey = function (column) {
         let entry_num = 1;
-        for (let i = 0; i < $scope.csvimData[$scope.activeItemId].keys.length; i++) {
-            if ($scope.csvimData[$scope.activeItemId].keys[i].column === column) {
-                for (let k = 0; k < $scope.csvimData[$scope.activeItemId].keys[i].values.length; k++) {
+        for (let i = 0; i < $scope.jsonData[$scope.activeItemId].keys.length; i++) {
+            if ($scope.jsonData[$scope.activeItemId].keys[i].column === column) {
+                for (let k = 0; k < $scope.jsonData[$scope.activeItemId].keys[i].values.length; k++) {
                     let num = getNumber(
-                        $scope.csvimData[$scope.activeItemId].keys[i].values[k].replace("NEW_ENTRY_", '')
+                        $scope.jsonData[$scope.activeItemId].keys[i].values[k].replace("NEW_ENTRY_", '')
                     );
                     if (!isNaN(num) && num >= entry_num) {
                         entry_num = num + 1;
                     }
                 }
-                $scope.csvimData[$scope.activeItemId].keys[i].values.push(`NEW_ENTRY_${entry_num}`);
+                $scope.jsonData[$scope.activeItemId].keys[i].values.push(`NEW_ENTRY_${entry_num}`);
                 break;
             }
         }
@@ -289,18 +355,18 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     };
 
     $scope.removeValueFromKey = function (columnIndex, valueIndex) {
-        $scope.csvimData[$scope.activeItemId].keys[columnIndex].values.splice(valueIndex, 1);
+        $scope.jsonData[$scope.activeItemId].keys[columnIndex].values.splice(valueIndex, 1);
         $scope.fileChanged();
     };
 
     $scope.addKeyColumn = function () {
         let num = 1;
-        for (let i = 0; i < $scope.csvimData[$scope.activeItemId].keys.length; i++) {
-            if ($scope.csvimData[$scope.activeItemId].keys[i].column === `NEW_ENTRY_${num}`) {
+        for (let i = 0; i < $scope.jsonData[$scope.activeItemId].keys.length; i++) {
+            if ($scope.jsonData[$scope.activeItemId].keys[i].column === `NEW_ENTRY_${num}`) {
                 num++;
             }
         }
-        $scope.csvimData[$scope.activeItemId].keys.push(
+        $scope.jsonData[$scope.activeItemId].keys.push(
             {
                 "column": `NEW_ENTRY_${num}`,
                 "values": []
@@ -310,26 +376,26 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     };
 
     $scope.removeKeyColumn = function (index) {
-        $scope.csvimData[$scope.activeItemId].keys.splice(index, 1);
+        $scope.jsonData[$scope.activeItemId].keys.splice(index, 1);
         $scope.fileChanged();
     };
 
     $scope.save = function () {
         if (isFileChanged && $scope.saveEnabled) {
-            $scope.checkResource($scope.csvimData[$scope.activeItemId].file);
-            $scope.csvimData[$scope.activeItemId].name = $scope.getFileName($scope.csvimData[$scope.activeItemId].file, false);
-            parseCsvim(JSON.stringify($scope.csvimData, cleanForOutput, 2));
+            $scope.checkResource($scope.jsonData[$scope.activeItemId].file);
+            $scope.jsonData[$scope.activeItemId].name = $scope.getFileName($scope.jsonData[$scope.activeItemId].file, false);
+            parseJsonToHdbti(JSON.stringify($scope.jsonData, cleanForOutput, 2));
         }
     };
 
     $scope.deleteFile = function () {
         // Clean search bar
-        $scope.csvimData.splice($scope.activeItemId, 1);
+        $scope.jsonData.splice($scope.activeItemId, 1);
         $scope.setEditEnabled(false);
         $scope.fileExists = true;
-        if ($scope.csvimData.length > 0) {
+        if ($scope.jsonData.length > 0) {
             $scope.dataEmpty = false;
-            $scope.activeItemId = $scope.csvimData.length - 1;
+            $scope.activeItemId = $scope.jsonData.length - 1;
         } else {
             $scope.dataEmpty = true;
             $scope.activeItemId = 0;
@@ -339,16 +405,16 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
 
     $scope.filterFiles = function () {
         if ($scope.filesSearch) {
-            for (let i = 0; i < $scope.csvimData.length; i++) {
-                if ($scope.csvimData[i].name.toLowerCase().includes($scope.filesSearch.toLowerCase())) {
-                    $scope.csvimData[i].visible = true;
+            for (let i = 0; i < $scope.jsonData.length; i++) {
+                if ($scope.jsonData[i].name.toLowerCase().includes($scope.filesSearch.toLowerCase())) {
+                    $scope.jsonData[i].visible = true;
                 } else {
-                    $scope.csvimData[i].visible = false;
+                    $scope.jsonData[i].visible = false;
                 }
             }
         } else {
-            for (let i = 0; i < $scope.csvimData.length; i++) {
-                $scope.csvimData[i].visible = true;
+            for (let i = 0; i < $scope.jsonData.length; i++) {
+                $scope.jsonData[i].visible = true;
             }
         }
     };
@@ -417,7 +483,7 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     }
 
     /**
-     * Sends hdbti file, receives csvim file
+     * Sends hdbti file, receives json file
      */
     function parseHdbti(hdbti) {
         let blob = new Blob([hdbti], { type: "application/hdbti" });
@@ -428,32 +494,47 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
         }).then(function (response) {
-            $scope.csvimData = response.data;
-            for (let i = 0; i < $scope.csvimData.length; i++) {
-                $scope.csvimData[i]["name"] = $scope.getFileName($scope.csvimData[i].file, false);
-                $scope.csvimData[i]["visible"] = true;
+            $scope.jsonData = response.data;
+            for (let i = 0; i < $scope.jsonData.length; i++) {
+                $scope.jsonData[i]["name"] = $scope.getFileName($scope.jsonData[i].file, false);
+                $scope.jsonData[i]["visible"] = true;
             }
             $scope.activeItemId = 0;
-            if ($scope.csvimData.length > 0) {
+            if ($scope.jsonData.length > 0) {
                 $scope.dataEmpty = false;
             } else {
                 $scope.dataEmpty = true;
             }
             $scope.dataLoaded = true;
         }, function (response) {
+            $messageHub.announceAlertError(
+                "Error while loading file",
+                response.data.error.message
+            );
             console.error(response);
         });
     }
 
     /**
-     * Sends csvim in text form, receives hdbti string
+     * Sends json in text form, receives hdbti string
      */
-    function parseCsvim(csvim) {
-        $http.post("/services/v4/parse/csvim", csvim, {
+    function parseJsonToHdbti(json) {
+        $http.post("/services/v4/parse/csvim", json, {
             headers: { 'Content-Type': 'application/json' }
         }).then(function (response) {
             saveContents(response.data);
         }, function (response) {
+            if (response.data === "Missing schema property") {
+                $scope.showSchemaError(
+                    true,
+                    'Schema must be specified either in the table name ("schemaName::tableName") or in the schema field.'
+                );
+                $scope.setSaveEnabled(false);
+            }
+            $messageHub.announceAlertError(
+                "Error while saving the file",
+                "Please look at the console for more information"
+            );
             console.error(response);
         });
     }
@@ -475,9 +556,15 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
                     parseHdbti(data);
                 }, function (response) {
                     if (response.data) {
+                        $messageHub.announceAlertError(
+                            "Error while loading file",
+                            response.data.error.message
+                        );
                         if ("error" in response.data) {
                             console.error("Loading file:", response.data.error.message);
                         }
+                    } else {
+                        console.error("Error loading file.");
                     }
                 });
         } else {

@@ -166,6 +166,8 @@ public class MigrationITest {
 
   private void goToWorkspace() {
     browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"))).click();
+    browserWait.until(ExpectedConditions.titleIs("Workspace | XSK WebIDE"));
+    browser.switchTo().defaultContent();
   }
 
   private void openFilesFromJstree() throws InterruptedException {
@@ -176,15 +178,20 @@ public class MigrationITest {
     jsExecutor.executeScript("$(\".jstree\").jstree(\"open_all\")");
 
     // Open all files by double-click
+    var xpaths = new ArrayList<By>();
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.INDEX.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.INDEXUI5.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.XSACCESS.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.XSAPP.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.LOGIC.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.CONTACT_REGULAR.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.CONTACT_HOVER.getFileName() + "']"));
+    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.SAPLOGO.getFileName() + "']"));
+
     var jstreeAnchors = new ArrayList<WebElement>();
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_7_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_8_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_9_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_11_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_12_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_13_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_14_anchor"))));
-    jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_16_anchor"))));
+    for(var by : xpaths){
+      jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(by)));
+    }
 
     for (var anchor : jstreeAnchors) {
       browserActions.doubleClick(anchor).perform();
@@ -193,6 +200,7 @@ public class MigrationITest {
 
     browser.switchTo().defaultContent();
   }
+
 
   private void validateAllMigratedFileContents() throws IOException {
     var xpathCommon = "//iframe[@src=\"../ide-monaco/editor.html?file=/workspace/xsk-test-app/";

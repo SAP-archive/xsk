@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.xsodata.ds.filter;
 
+import com.sap.xsk.xsodata.utils.XSKODataWrappedHttpServletRequest;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +28,9 @@ public class XSODataForwardFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    WrappedHttpServletRequest wrappedHttpServletRequest = new WrappedHttpServletRequest((HttpServletRequest) request);
+    XSKODataWrappedHttpServletRequest wrappedHttpServletRequest = new XSKODataWrappedHttpServletRequest((HttpServletRequest) request);
 
     //only on production case
-
     String editorHeader = wrappedHttpServletRequest.getHeader("Dirigible-Editor");
     String requestMethod = wrappedHttpServletRequest.getMethod();
 

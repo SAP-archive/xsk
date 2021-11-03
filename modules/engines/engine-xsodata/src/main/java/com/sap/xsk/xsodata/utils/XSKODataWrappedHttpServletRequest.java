@@ -1,4 +1,4 @@
-package com.sap.xsk.xsodata.ds.filter;
+package com.sap.xsk.xsodata.utils;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -8,11 +8,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-final class WrappedHttpServletRequest extends HttpServletRequestWrapper {
+public class XSKODataWrappedHttpServletRequest extends HttpServletRequestWrapper {
 
   private final Map<String, String> customHeaders;
 
-  public WrappedHttpServletRequest(HttpServletRequest request) {
+  public XSKODataWrappedHttpServletRequest(HttpServletRequest request) {
     super(request);
     this.customHeaders = new HashMap<String, String>();
   }

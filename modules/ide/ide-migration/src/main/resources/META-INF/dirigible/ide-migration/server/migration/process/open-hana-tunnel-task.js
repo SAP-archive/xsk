@@ -33,3 +33,4 @@ userData.sessionId = openedTunnelData.sessionId;
 process.setVariable(execution.getId(), 'userData', JSON.stringify(userData));
 process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_OPENED');
 process.setVariable(execution.getId(), 'connectionId', openedTunnelData.sessionId.toString());
+process.setVariable(execution.getId(), 'connectionUrl', openedTunnelData.jdbcUrl);

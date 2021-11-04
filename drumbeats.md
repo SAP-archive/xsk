@@ -1,5 +1,42 @@
 # Drumbeats
 
+## 2021 Week 44 (1 November - 7 November)
+
+#### Focus topics:
+
+- HDBTI CSV records filtered by keys set in config
+- HDBTI error handling and proper alerts
+- New XSJS Service menu item extension
+- Uploading XSOData artifacts in workspace fixed
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-01..2021-11-07) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-01..2021-11-07) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-11-01..2021-11-07) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-11-01..2021-11-07) PRs
+
+----
+
+## 2021 Week 43 (25 October - 31 October)
+
+#### Focus topics:
+
+- Adding JSDoc to \*d.ts files for the APIs
+- HDI name pattern compliance fixes
+- Optimize error handling during the Migration Process
+- HDBDD support for additional annotations
+- Selenium tests improvements
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-10-25..2021-10-31) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-10-25..2021-10-31) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-10-25..2021-10-31) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-10-25..2021-10-31) PRs
+
+----
+
 ## 2021 Week 42 (18 October - 24 October)
 
 #### Focus topics:

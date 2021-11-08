@@ -17,20 +17,25 @@ const userData = JSON.parse(userDataJson);
 
 process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_OPENING');
 
-const tunnelData = {
-  account: userData.neo.subaccount,
-  host: userData.neo.hostName,
-  user: userData.neo.username,
-  password: userData.neo.password,
-  db: userData.hana.databaseSchema
-};
-
-const NeoTunnelService = require('ide-migration/server/migration/api/neo-tunnel-service');
-const neoTunnelService = new NeoTunnelService();
-const openedTunnelData = neoTunnelService.openTunnel(tunnelData);
-
-userData.sessionId = openedTunnelData.sessionId;
-process.setVariable(execution.getId(), 'userData', JSON.stringify(userData));
-process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_OPENED');
-process.setVariable(execution.getId(), 'connectionId', openedTunnelData.sessionId.toString());
-process.setVariable(execution.getId(), 'connectionUrl', openedTunnelData.jdbcUrl);
+try {
+  const tunnelData = {
+    account: userData.neo.subaccount,
+    host: userData.neo.hostName,
+    user: userData.neo.username,
+    password: userData.neo.password,
+    db: userData.hana.databaseSchema
+  };
+  
+  const NeoTunnelService = require('ide-migration/server/migration/api/neo-tunnel-service');
+  const neoTunnelService = new NeoTunnelService();
+  const openedTunnelData = neoTunnelService.openTunnel(tunnelData);
+  
+  userData.sessionId = openedTunnelData.sessionId;
+  process.setVariable(execution.getId(), 'userData', JSON.stringify(userData));
+  process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_OPENED');
+  process.setVariable(execution.getId(), 'connectionId', openedTunnelData.sessionId.toString());
+  process.setVariable(execution.getId(), 'connectionUrl', openedTunnelData.jdbcUrl);
+} catch (e) {
+  process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_OPENING_FAILED');
+  process.setVariable(execution.getId(), 'TUNNEL_OPENING_FAILED_REASON', e.toString());
+}

@@ -96,13 +96,17 @@ migrationLaunchView.controller('MigrationLaunchViewController', ['$scope', '$mes
 
     $scope.previousClicked = function () {
         $messageHub.message($scope.currentStep.topicId, { isVisible: false });
+        $scope.revertStep();
+        $messageHub.message($scope.currentStep.topicId, { isVisible: true });
+    };
+
+    $scope.revertStep = function () {
         for (let i = $scope.steps.length - 1; i >= 0; i--) {
             if ($scope.steps[i].id < $scope.currentStep.id) {
                 $scope.currentStep = $scope.steps[i];
                 break;
             }
         };
-        $messageHub.message($scope.currentStep.topicId, { isVisible: true });
     };
 
     $scope.finishClicked = function () {

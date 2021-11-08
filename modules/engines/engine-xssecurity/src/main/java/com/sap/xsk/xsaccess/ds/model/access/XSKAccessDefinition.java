@@ -26,8 +26,10 @@ public class XSKAccessDefinition {
   @Column(name = "ACCESS_PATH", columnDefinition = "VARCHAR", nullable = false, length = 255)
   private String path;
 
-  @Column(name = "AUTHENTICATION_METHOD", columnDefinition = "VARCHAR", nullable = false, length = 255)
-  private String authenticationMethod = "Form";
+  @Column(name = "AUTHENTICATION_METHODS", columnDefinition = "BLOB", nullable = false, length = 1000)
+  private byte[] authenticationMethods;
+
+  private List<String> authenticationMethodsAsList;
 
   @Column(name = "AUTHORIZATION_ROLES", columnDefinition = "BLOB", nullable = false, length = 1000)
   private byte[] authorizationRoles;
@@ -65,14 +67,6 @@ public class XSKAccessDefinition {
     this.hash = hash;
   }
 
-  public String getAuthenticationMethod() {
-    return authenticationMethod;
-  }
-
-  public void setAuthenticationMethod(String authenticationMethod) {
-    this.authenticationMethod = authenticationMethod;
-  }
-
   public byte[] getAuthorizationRoles() {
     return authorizationRoles;
   }
@@ -87,6 +81,22 @@ public class XSKAccessDefinition {
 
   public void setAuthorizationRolesAsList(List<String> authorizationRolesAsList) {
     this.authorizationRolesAsList = authorizationRolesAsList;
+  }
+
+  public byte[] getAuthenticationMethods() {
+    return authenticationMethods;
+  }
+
+  public void setAuthenticationMethods(byte[] authenticationMethods) {
+    this.authenticationMethods = authenticationMethods;
+  }
+
+  public List<String> getAuthenticationMethodsAsList() {
+    return authenticationMethodsAsList;
+  }
+
+  public void setAuthenticationMethodsAsList(List<String> authenticationMethodsAsList) {
+    this.authenticationMethodsAsList = authenticationMethodsAsList;
   }
 
   public String getPath() {
@@ -124,7 +134,7 @@ public class XSKAccessDefinition {
     XSKAccessDefinition that = (XSKAccessDefinition) o;
     return exposed == that.exposed &&
         path.equals(that.path) &&
-        authenticationMethod.equals(that.authenticationMethod) &&
+        authenticationMethodsAsList.equals(that.authenticationMethodsAsList) &&
         Arrays.equals(authorizationRoles, that.authorizationRoles) &&
         hash.equals(that.hash) &&
         authorizationRolesAsList.equals(that.authorizationRolesAsList) &&
@@ -134,7 +144,7 @@ public class XSKAccessDefinition {
 
   @Override
   public int hashCode() {
-    int result = Objects.hash(path, authenticationMethod, exposed, hash, authorizationRolesAsList, createdBy, createdAt);
+    int result = Objects.hash(path, authenticationMethodsAsList, exposed, hash, authorizationRolesAsList, createdBy, createdAt);
     result = 31 * result + Arrays.hashCode(authorizationRoles);
     return result;
   }

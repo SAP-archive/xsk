@@ -13,21 +13,41 @@ package com.sap.xsk.xsaccess.ds.model.access;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import com.google.gson.internal.LinkedTreeMap;
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 
 public class XSKAccessArtifact {
 
   private boolean exposed;
   private List<String> authorization;
-  private XSKAuthentication authentication;
+  private List<XSKAuthentication> authentication;
 
   public XSKAccessArtifact() {
   }
 
   public static XSKAccessArtifact parse(byte[] json) {
-    return GsonHelper.GSON.fromJson(new InputStreamReader(new ByteArrayInputStream(json), StandardCharsets.UTF_8), XSKAccessArtifact.class);
+    LinkedTreeMap artifactAsObject = (LinkedTreeMap) GsonHelper.GSON.fromJson(new InputStreamReader(new ByteArrayInputStream(json), StandardCharsets.UTF_8), Object.class);
+    if(artifactAsObject.get("authentication") instanceof LinkedTreeMap) {
+      XSKAccessArtifact artifact = new XSKAccessArtifact();
+      artifact.setExposed(Boolean.TRUE.equals(artifactAsObject.get("exposed")));
+      artifact.setAuthorization((ArrayList) artifactAsObject.get("authorization"));
+      LinkedTreeMap authenticationAsObject = (LinkedTreeMap) artifactAsObject.get("authentication");
+      XSKAuthentication authentication = new XSKAuthentication();
+      authentication.setMethod(String.valueOf(authenticationAsObject.get("method")));
+      ArrayList<XSKAuthentication> authenticationAsList = new ArrayList(Arrays.asList(authentication));
+      artifact.setAuthentication(authenticationAsList);
+
+      return artifact;
+    } else {
+      return GsonHelper.GSON.fromJson(new InputStreamReader(new ByteArrayInputStream(json), StandardCharsets.UTF_8),
+          XSKAccessArtifact.class);
+    }
   }
 
   public static XSKAccessArtifact parse(String json) {
@@ -50,11 +70,11 @@ public class XSKAccessArtifact {
     this.authorization = authorization;
   }
 
-  public XSKAuthentication getAuthentication() {
+  public List<XSKAuthentication> getAuthentication() {
     return authentication;
   }
 
-  public void setAuthentication(XSKAuthentication authentication) {
+  public void setAuthentication(List<XSKAuthentication> authentication) {
     this.authentication = authentication;
   }
 
@@ -63,7 +83,7 @@ public class XSKAccessArtifact {
     XSKAccessDefinition xskAccessDefinition = new XSKAccessDefinition();
     xskAccessDefinition.setAuthorizationRolesAsList(getAuthorization());
     if (getAuthentication() != null) {
-      xskAccessDefinition.setAuthenticationMethod(getAuthentication().getMethod());
+      xskAccessDefinition.setAuthenticationMethodsAsList(getAuthentication().stream().map(auth -> auth.getMethod()).collect(Collectors.toList()));
     }
     xskAccessDefinition.setExposed(isExposed());
 

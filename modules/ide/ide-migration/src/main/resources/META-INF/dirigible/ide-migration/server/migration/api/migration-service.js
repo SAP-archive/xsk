@@ -100,8 +100,10 @@ class MigrationService {
 
     handlePossibleDeployableArtifacts(deployables) {
         for (const deployable of deployables) {
-            const hdiConfigPath = this.createHdiConfigFile(deployable.project);
-            this.createHdiFile(deployable.project, hdiConfigPath, deployable.artifacts);
+            if (deployable.artifacts && deployable.artifacts.length > 0) {
+                const hdiConfigPath = this.createHdiConfigFile(deployable.project);
+                this.createHdiFile(deployable.project, hdiConfigPath, deployable.artifacts);
+            }    
         }
     }
 

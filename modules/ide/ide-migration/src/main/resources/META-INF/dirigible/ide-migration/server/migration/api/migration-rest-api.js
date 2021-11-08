@@ -55,7 +55,13 @@ function getProcessState(ctx, req, res) {
     migrationState: migrationState
   };
 
-  if (migrationState === "DATABASES_LISTED") {
+  if (migrationState.endsWith("_FAILED")) {
+    response.failed = true;
+    const failureReason = processService.getVariable(processInstanceIdString, migrationState + "_REASON");
+    if (failureReason) {
+      response.failureReason = failureReason;
+    }
+  } else if (migrationState === "DATABASES_LISTED") {
     const databasesJson = processService.getVariable(processInstanceIdString, "databases");
     response.databases = JSON.parse(databasesJson);
   } else if (migrationState === "WORKSPACES_LISTED") {

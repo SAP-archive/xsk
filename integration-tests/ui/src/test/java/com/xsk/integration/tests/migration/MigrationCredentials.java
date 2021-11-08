@@ -63,7 +63,7 @@ class MigrationCredentials {
     return hanaUsername;
   }
 
-  public String getHanaPassword() {
+  String getHanaPassword() {
     return hanaPassword;
   }
 }

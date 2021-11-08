@@ -11,63 +11,37 @@
  */
 package com.xsk.integration.tests.migration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.After;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @RunWith(JUnitParamsRunner.class)
 public class MigrationITest {
 
-  private WebDriver browser;
-  private WebDriverWait browserWait;
-  private Actions browserActions;
-  private JavascriptExecutor jsExecutor;
-
+  private WebBrowser webBrowser;
   private MigrationCredentials credentials;
-  private MigrationValidation validation;
-
-  private final String host = "127.0.0.1";
-  private final String port = "8080";
-  private final String ide = "/services/v4/web/ide/";
-  private final String auth = "dirigible:dirigible";
-  private final String baseUrl = "http://" + auth + "@" + host + ":" + port + ide;
-
-  public MigrationITest() throws IOException {
-    validation = new MigrationValidation();
-  }
+  private List<ExpectedContent> expectedContentList;
 
   @Test
-  @Parameters({"Chrome-Hana1", "Chrome-Hana2", "Firefox-Hana1", "Firefox-Hana2"})
-  public void migrationTest(String param) throws InterruptedException, IOException {
-    credentials = new MigrationCredentials(param.contains("Hana2"));
-    setupBrowser(param);
+  @Parameters({"Chrome-Hana1", /*"Chrome-Hana2",*/ "Firefox-Hana1", /*"Firefox-Hana2"*/})
+  public void migrationTest(String param) throws IOException {
+    setup(param);
     navigateToMigrationPerspective();
     enterNeoDBTunnelCredentials();
     enterHanaCredentials();
@@ -77,203 +51,137 @@ public class MigrationITest {
     validateAllMigratedFileContents();
   }
 
-  private void setupBrowser(String param) {
-    if (param.contains("Chrome")) {
-      setupChrome();
-    } else {
-      setupFirefox();
-    }
-  }
-
-  private void setupChrome() {
-    WebDriverManager.chromedriver().setup();
-    ChromeOptions options = new ChromeOptions();
-    options.setHeadless(true);
-    options.addArguments("--no-sandbox");
-    options.addArguments("--disable-dev-shm-usage");
-    options.addArguments("--window-size=1920,1080");
-    options.addArguments("--incognito");
-
-    setupBrowser(new ChromeDriver(options));
-  }
-
-  private void setupFirefox() {
-    WebDriverManager.firefoxdriver().setup();
-    FirefoxOptions options = new FirefoxOptions();
-    options.setHeadless(true);
-    options.addArguments("--height=1080", "--width=1920", "-private");
-
-    setupBrowser(new FirefoxDriver(options));
-  }
-
-  private void setupBrowser(WebDriver webDriver) {
-    browser = webDriver;
-    browser.navigate().to(baseUrl);
-    browser.manage().window().maximize();
-    browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
-    jsExecutor = (JavascriptExecutor) (browser);
-    browserWait = new WebDriverWait(browser, 60);
-    browserActions = new Actions(browser);
+  private void setup(String param) {
+    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
+    credentials = new MigrationCredentials(param.contains("Hana2"));
+    expectedContentList = ExpectedContentProvider.getExpectedContentList();
   }
 
   private void navigateToMigrationPerspective() {
-    browserWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@title=\"XS Migration\"]"))).click();
-    browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(
-        By.xpath("//iframe[@src='../ide-migration/migration-launch.html']")));
+    webBrowser.clickItem(By.xpath("//*[@title=\"XS Migration\"]"));
+    webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-migration/migration-launch.html']"));
   }
 
   private void enterNeoDBTunnelCredentials() {
-    enterAndAssertField(By.id("subaccount"), credentials.getSubaccount());
-    selectAndAssertDropdown("regionList", credentials.getRegion());
-    enterAndAssertField(By.id("neo-username"), credentials.getUsername());
-    enterAndAssertField(By.id("neo-password"), credentials.getPassword());
-    browser.findElement(By.xpath("//*[@ng-click='nextClicked()']")).click();
-  }
-
-  private void enterAndAssertField(By by, String value) {
-    var field = browser.findElement(by);
-    field.sendKeys(value);
-    assertEquals("Input field value doesn't match sent keys.",
-        value, field.getAttribute("value"));
-  }
-
-  private void selectAndAssertDropdown(String listName, String selectionValue) {
-    var dropdownList = browserWait.until(
-        ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@ng-repeat=\"option in " + listName + "\"]")));
-    WebElement dropdownButton = dropdownList.get(0).findElement(By.xpath("./../../button"));
-    browserWait.until(ExpectedConditions.elementToBeClickable(dropdownButton)).click();
-    var selection = dropdownList.stream()
-        .filter((WebElement it) -> it.getAttribute("innerHTML").contains(selectionValue)).collect(Collectors.toList());
-    browserWait.until(ExpectedConditions.elementToBeClickable(selection.get(0)));
-    assertEquals("Only one dropdown item should be selected.",
-        1, selection.size());
-    selection.get(0).click();
+    webBrowser.enterAndAssertField(By.id("subaccount"), credentials.getSubaccount());
+    webBrowser.selectAndAssertDropdown("regionList", credentials.getRegion());
+    webBrowser.enterAndAssertField(By.id("neo-username"), credentials.getUsername());
+    webBrowser.enterAndAssertField(By.id("neo-password"), credentials.getPassword());
+    webBrowser.clickItem(By.xpath("//*[@ng-click='nextClicked()']"));
   }
 
   private void enterHanaCredentials() {
-    selectAndAssertDropdown("databasesList", credentials.getSchema());
-    enterAndAssertField(By.id("username"), credentials.getHanaUsername());
-    enterAndAssertField(By.id("password"), credentials.getHanaPassword());
-    browser.findElement(By.xpath("//*[@ng-click='nextClicked()']")).click();
+    webBrowser.selectAndAssertDropdown("databasesList", credentials.getSchema());
+    webBrowser.enterAndAssertField(By.id("username"), credentials.getHanaUsername());
+    webBrowser.enterAndAssertField(By.id("password"), credentials.getHanaPassword());
+    webBrowser.clickItem(By.xpath("//*[@ng-click='nextClicked()']"));
   }
 
   private void selectDeliveryUnits() {
-    selectAndAssertDropdown("workspacesList", "workspace");
-    selectAndAssertDropdown("deliveryUnitList", "MIGR_TOOLS");
-    browser.findElement(By.xpath("//*[@ng-click=\"finishClicked()\"]")).click();
+    webBrowser.selectAndAssertDropdown("workspacesList", "workspace");
+    webBrowser.selectAndAssertDropdown("deliveryUnitList", ExpectedContentProvider.getExpectedDeliveryUnitName());
+    webBrowser.clickItem(By.xpath("//*[@ng-click=\"finishClicked()\"]"));
   }
 
   private void goToWorkspace() {
-    browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"))).click();
-    browserWait.until(ExpectedConditions.titleIs("Workspace | XSK WebIDE"));
-    browser.switchTo().defaultContent();
+    webBrowser.clickItem(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"));
+    webBrowser.waitForPageWithTitle("Workspace | XSK WebIDE");
+    webBrowser.switchToDefaultContent();
   }
 
-  private void openFilesFromJstree() throws InterruptedException {
-    // Select the workspace Iframe and expand the tree view in jstree
-    browser.switchTo().defaultContent();
-    browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[@src='../ide-workspace/workspace.html']")));
-    browserWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j1_1_anchor")));
-    jsExecutor.executeScript("$(\".jstree\").jstree(\"open_all\")");
+  private void openFilesFromJstree() {
+    // Select the workspace iframe and expand the tree view in jstree
+    webBrowser.switchToDefaultContent();
+    webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-workspace/workspace.html']"));
+    webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
+    webBrowser.executeJavascript("$(\".jstree\").jstree(\"open_all\")");
 
-    // Open all files by double-click
-    var xpaths = new ArrayList<By>();
-    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.INDEX.getFileName() + "']"));
-    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.INDEXUI5.getFileName() + "']"));
-    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.XSACCESS.getFileName() + "']"));
-    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.XSAPP.getFileName() + "']"));
-    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.LOGIC.getFileName() + "']"));
-    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.CONTACT_REGULAR.getFileName() + "']"));
-    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.CONTACT_HOVER.getFileName() + "']"));
-    xpaths.add(By.xpath("//*[text()='" + MigrationValidation.SAPLOGO.getFileName() + "']"));
-
-    var jstreeAnchors = new ArrayList<WebElement>();
-    for(var by : xpaths){
-      jstreeAnchors.add(browserWait.until(ExpectedConditions.visibilityOfElementLocated(by)));
+    // Double-click all jstree anchors by their file name (text content).
+    for(var expectedContent : expectedContentList) {
+      var fileName = Paths.get(expectedContent.getFilePath()).getFileName();
+      By anchorXpath = By.xpath("//*[text()='" + fileName + "']");
+      webBrowser.doubleClickVisibleElementBy(anchorXpath);
+      webBrowser.sleep(500);
     }
 
-    for (var anchor : jstreeAnchors) {
-      browserActions.doubleClick(anchor).perform();
-      Thread.sleep(500);
-    }
-
-    browser.switchTo().defaultContent();
+    webBrowser.switchToDefaultContent();
   }
-
 
   private void validateAllMigratedFileContents() throws IOException {
-    var xpathCommon = "//iframe[@src=\"../ide-monaco/editor.html?file=/workspace/xsk-test-app/";
-    validateTextFileContent(
-        xpathCommon + "index.html&contentType=text/html\"]",
-        validation.getIndex());
-    validateTextFileContent(
-        xpathCommon + "logic.xsjs&contentType=application/javascript\"]",
-        validation.getLogic());
-    validateTextFileContent(
-        xpathCommon + ".xsapp&contentType=text/plain\"]",
-        validation.getXsapp());
-    validateTextFileContent(
-        xpathCommon + "indexUI5.html&contentType=text/html\"]",
-        validation.getIndexUI5());
-    validateTextFileContent(
-        xpathCommon + ".xsaccess&contentType=text/plain\"]",
-        validation.getXsaccess());
+    var workspaceUrl = "http://"
+        + DirigibleConnectionProperties.HOST
+        + ":" + DirigibleConnectionProperties.PORT
+        + "/services/v4/ide/workspaces/workspace/";
 
-    String imagesURL = "http://127.0.0.1:8080/services/v4/ide/workspaces/workspace/xsk-test-app/images/";
-    validateImageFileContent(new URL(imagesURL + "SAPLogo.gif"), validation.getSapLogo());
-    validateImageFileContent(new URL(imagesURL + "Contact_hover.png"), validation.getContactHover());
-    validateImageFileContent(new URL(imagesURL + "Contact_regular.png"), validation.getContactRegular());
-  }
+    var projectUrl =  workspaceUrl + ExpectedContentProvider.getExpectedProjectName();
+    var iframes = webBrowser.findElementsBy(By.tagName("iframe"));
+    int assertedFilesCount = 0;
 
-  private void validateTextFileContent(String editorFrameXpath, String validContent) {
-    browser.switchTo().defaultContent();
-    browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath(editorFrameXpath)));
-    sleep(3000);
-    var migratedContent = (String) jsExecutor.executeScript("return monaco.editor.getModels().at(0).getValue();");
-    assertEquals("File content after migration must match validation content.",
-        validContent.replaceAll("\\s", ""), migratedContent.replaceAll("\\s", ""));
-    browser.switchTo().defaultContent();
-  }
+    for(var expectedContent : expectedContentList) {
+      var expectedFilePath = expectedContent.getFilePath();
+      var expectedFileContent = expectedContent.getContent();
+      var expectedFileName = Paths.get(expectedFilePath).getFileName().toString();
 
-  private void sleep(long millis) {
-    try {
-      Thread.sleep(millis);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private void validateImageFileContent(URL url, BufferedImage validImage) throws IOException {
-    URLConnection connection = url.openConnection();
-
-    String basicAuth = "Basic " + new String(Base64.getEncoder().encode(auth.getBytes()));
-    connection.setRequestProperty("Authorization", basicAuth);
-    BufferedImage migratedImage = ImageIO.read(connection.getInputStream());
-    assertTrue("Image data and size must be equal.", compareImages(migratedImage, validImage));
-  }
-
-  private static boolean compareImages(BufferedImage first, BufferedImage second) {
-    if (first.getWidth() != second.getWidth()
-        || first.getHeight() != second.getHeight()) {
-      return false;
-    }
-
-    for (int y = 0; y < first.getHeight(); y++) {
-      for (int x = 0; x < first.getWidth(); x++) {
-        if (first.getRGB(x, y) != second.getRGB(x, y)) {
-          return false;
+      for (var iframe : iframes) {
+        if (iframe.getAttribute("src").contains(expectedFilePath)) {
+          if(isImageFile(expectedFileName)) {
+            var imageUrl = projectUrl + expectedFilePath;
+            assertImageFileEquals(imageUrl, expectedFileContent);
+          } else {
+            assertMonacoTextFileEquals(iframe, expectedFileContent);
+          }
+          assertedFilesCount++;
         }
       }
     }
 
-    return true;
+    assertEquals(assertedFilesCount, expectedContentList.size());
+  }
+
+  private boolean isImageFile(String fileName) {
+    return fileName.toLowerCase().endsWith(".jpg")
+        || fileName.toLowerCase().endsWith(".png")
+        || fileName.toLowerCase().endsWith(".gif");
+  }
+
+  void assertImageFileEquals(String imageURL, byte[] expectedFileContent) throws IOException {
+    var migratedImage = getImageFileContent(new URL(imageURL));
+
+    assertArrayEquals("Images after migration must match expected content",
+        expectedFileContent, migratedImage);
+  }
+
+  void assertMonacoTextFileEquals(WebElement monacoTabIframe, byte[] expectedFileContent) {
+    var migratedTextFile = getTextFileContent(monacoTabIframe)
+        .replaceAll("\\s", "");
+    var expectedTextFile = new String(expectedFileContent, StandardCharsets.UTF_8)
+        .replaceAll("\\s", "");
+
+    assertEquals("Text files after migration must match expected content ",
+        expectedTextFile, migratedTextFile);
+  }
+
+  private byte[] getImageFileContent(URL imageUrl) throws IOException {
+    URLConnection connection = imageUrl.openConnection();
+    String basicAuth = "Basic " + new String(Base64.getEncoder().encode(DirigibleConnectionProperties.AUTH.getBytes()));
+    connection.setRequestProperty("Authorization", basicAuth);
+    BufferedInputStream migratedImageStream = new BufferedInputStream(connection.getInputStream());
+
+    return migratedImageStream.readAllBytes();
+  }
+
+  String getTextFileContent(WebElement iframe) {
+    webBrowser.switchToDefaultContent();
+    webBrowser.switchToIframe(iframe);
+    webBrowser.sleep(3000);
+    var migratedText = webBrowser.executeJavascript("return monaco.editor.getModels().at(0).getValue();");
+    webBrowser.switchToDefaultContent();
+
+    return migratedText;
   }
 
   @After
-  public void quitBrowser() {
-    if (browser != null) {
-      browser.quit();
-    }
+  public void afterTest() {
+    webBrowser.quit();
   }
 }

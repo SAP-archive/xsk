@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth:  
+        fetch-depth:  0
        
     - name: Download sapmachine JDK 11
       run: |

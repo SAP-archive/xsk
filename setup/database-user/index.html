@@ -737,12 +737,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
       
       
@@ -758,6 +760,62 @@
           Setup
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Database User
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Database User
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
           
             
               
@@ -971,10 +1029,16 @@ The default/admin <code>DBADMIN</code> database user is not recommended to be us
 <p>To create a new database user go through the following steps:</p>
 <ol>
 <li>Navigate to the <code>SAP HANA Cockpit</code> for your <code>SAP HANA Cloud</code> instance.</li>
-<li>Switch to the <code>User Management</code> application.</li>
-<li>Click on the <code>+</code> button and select <code>Create User</code></li>
+<li>
+<p>Switch to the <code>User Management</code> application.</p>
+<p><img alt="XSK - Migration Architecture" src="/img/setup/database-user/1-user-management.png" /></p>
+</li>
+<li>
+<p>Click on the <code>+</code> button and select <code>Create User</code></p>
+</li>
 <li>
 <p>Provide the user details.</p>
+<p><img alt="XSK - Migration Architecture" src="/img/setup/database-user/2-create-user.png" /></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Switch the <code>Force Password Change on Next Logon</code> option to <code>No</code>, so that the provided password for the migration database user won't be changed and could be used in the XSK setup steps.</p>
@@ -982,11 +1046,17 @@ The default/admin <code>DBADMIN</code> database user is not recommended to be us
 </li>
 <li>
 <p>Switch to the <code>Assign Priviliges</code> application.</p>
+<p><img alt="XSK - Migration Architecture" src="/img/setup/database-user/3-assign-privilege.png" /></p>
 </li>
-<li>Search for the newly created database user.</li>
+<li>
+<p>Search for the newly created database user.</p>
+</li>
 <li>From the <code>SYSTEM PRIVILEGES</code> tab click the <code>Edit</code> button and then the <code>Add</code> button.</li>
 <li>Search for the <code>CREATE SCHEMA</code> privilege.</li>
-<li>Save the changes.</li>
+<li>
+<p>Save the changes.</p>
+<p><img alt="XSK - Migration Architecture" src="/img/setup/database-user/4-create-schema-privilege.png" /></p>
+</li>
 </ol>
                 
                   
@@ -1005,6 +1075,41 @@ The default/admin <code>DBADMIN</code> database user is not recommended to be us
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../api/web/" class="md-footer__link md-footer__link--prev" aria-label="Previous: $.web" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              $.web
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../" class="md-footer__link md-footer__link--next" aria-label="Next: Local" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Local
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

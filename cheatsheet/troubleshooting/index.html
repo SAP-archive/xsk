@@ -1024,13 +1024,14 @@
                 <h1 id="troubleshooting">Troubleshooting</h1>
 <h2 id="insufficient-privilege">Insufficient Privilege</h2>
 <hr />
+<p>The bellow error message is related to insufficient privileges:</p>
 <div class="admonition failure">
 <p class="admonition-title">Error message</p>
-<div class="highlight"><pre><span></span><code>SAP DBTech JDBC: [258]: insufficient privilege: Detailed info for this error can be found with guid &#39;D59E64...&#39;
+<div class="highlight"><pre><span></span><code>Insufficient privilege: Detailed info for this error can be found with guid &#39;D59E64...&#39;
 </code></pre></div>
 </div>
 <p>To check the error code, execute the following script:</p>
-<div class="highlight"><pre><span></span><code><span class="k">call</span> <span class="n">SYS</span><span class="p">.</span><span class="n">GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS</span> <span class="p">(</span><span class="s1">&#39;&lt;GUID in &quot;insufficient privilege&quot; error&gt;&#39;</span><span class="p">,</span> <span class="o">?</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">call</span> <span class="n">SYS</span><span class="p">.</span><span class="n">GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS</span> <span class="p">(</span><span class="s1">&#39;&lt;GUID&gt;&#39;</span><span class="p">,</span> <span class="o">?</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="two-factor-authentication">Two-Factor Authentication</h2>
 <hr />

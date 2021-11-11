@@ -11,6 +11,10 @@ HANA Database User
 To execute successful migration a database user is needed.
 The default/admin `DBADMIN` database user is not recommended to be used, but rather new database user to be created.
 
+
+## Steps
+---
+
 To create a new database user go through the following steps:
 
 1. Navigate to the `SAP HANA Cockpit` for your `SAP HANA Cloud` instance.

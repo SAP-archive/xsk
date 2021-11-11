@@ -23,6 +23,7 @@ call SYS.GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS ('<GUID>', ?)
 ```
 
 ## Grant HDI Privileges
+---
 
 To grant HDI priviliges to the HANA database user, execute the following script:
 

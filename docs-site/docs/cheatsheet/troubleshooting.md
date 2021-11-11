@@ -39,7 +39,7 @@ DROP TABLE #PRIVILEGES;
 
 !!! note
 
-    Replace the _**`<HANA-USERNAME>`**_ placeholder with the HANA database user, used for the migration
+    Replace the `<HANA-USERNAME>` placeholder with the HANA database user, used for the migration
 
 ## Two-Factor Authentication
 ---

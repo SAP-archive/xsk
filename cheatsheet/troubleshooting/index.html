@@ -934,7 +934,7 @@
       
         <li class="md-nav__item">
   <a href="#two-factor-authentication" class="md-nav__link">
-    Two Factor Authentication
+    Two-Factor Authentication
   </a>
   
 </li>
@@ -967,10 +967,11 @@
 <p>To check the error code, execute the following script:</p>
 <div class="highlight"><pre><span></span><code><span class="k">call</span> <span class="n">SYS</span><span class="p">.</span><span class="n">GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS</span> <span class="p">(</span><span class="s1">&#39;&lt;GUID in &quot;insufficient privilege&quot; error&gt;&#39;</span><span class="p">,</span> <span class="o">?</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="two-factor-authentication">Two Factor Authentication</h2>
-<p>If the migration failed on step 1 and you are sure that you've provide correct information and still have problem, please check whether your account has Two-Factor Authentication (2FA/MFA) enabled.
-You can use technical user without Two-Factor Authentication (2FA/MFA) enabled.
-More info could be found <a href="https://github.com/SAP/xsk/issues/625">here</a>.</p>
+<h2 id="two-factor-authentication">Two-Factor Authentication</h2>
+<hr />
+<p>If the migration fails to load <strong>Delivery Units</strong> and you are sure that you've provide correct information, please check whether your account has <code>Two-Factor Authentication</code> (2FA/MFA) enabled.
+<code>Two-Factor Authentication</code> is currently not supported, more info could be found <a href="https://github.com/SAP/xsk/issues/625">here</a>.
+You can use technical user without <code>Two-Factor Authentication</code> (2FA/MFA) enabled to complete the migration.</p>
                 
                   
                 

@@ -181,6 +181,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://www.xsk.io/setup/database-user/</loc>
+         <lastmod>2021-11-11</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://www.xsk.io/setup/environment-variables/</loc>
          <lastmod>2021-11-11</lastmod>
          <changefreq>daily</changefreq>

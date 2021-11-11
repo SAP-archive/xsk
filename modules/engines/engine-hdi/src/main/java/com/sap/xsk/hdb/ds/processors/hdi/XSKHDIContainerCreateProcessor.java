@@ -79,7 +79,7 @@ public class XSKHDIContainerCreateProcessor {
       logger.error(e.getMessage(), e);
     }
 
-    logger.info("Done rocessing HDI Containers.");
+    logger.info("Done processing HDI Containers.");
   }
 
 }

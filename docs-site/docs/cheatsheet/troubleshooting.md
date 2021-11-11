@@ -8,16 +8,18 @@ Troubleshooting
 ## Insufficient Privilege
 ---
 
+The bellow error message is related to insufficient privileges:
+
 !!! failure "Error message"
 
     ```
-    SAP DBTech JDBC: [258]: insufficient privilege: Detailed info for this error can be found with guid 'D59E64...'
+    Insufficient privilege: Detailed info for this error can be found with guid 'D59E64...'
     ```
 
 To check the error code, execute the following script:
 
 ```sql
-call SYS.GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS ('<GUID in "insufficient privilege" error>', ?)
+call SYS.GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS ('<GUID>', ?)
 ```
 
 ## Two-Factor Authentication

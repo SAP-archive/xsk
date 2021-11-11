@@ -11,7 +11,6 @@ HANA Database User
 To execute successful migration a database user is needed.
 The default/admin `DBADMIN` database user is not recommended to be used, but rather new database user to be created.
 
-
 ## Steps
 ---
 
@@ -22,7 +21,7 @@ To create a new database user go through the following steps:
 
     ![XSK - Migration Architecture](/img/setup/database-user/1-user-management.png)
 
-3. Click on the `+` button and select `Create User`
+3. Click on the `+` button and select `Create User`.
 4. Provide the user details.
 
     ![XSK - Migration Architecture](/img/setup/database-user/2-create-user.png)

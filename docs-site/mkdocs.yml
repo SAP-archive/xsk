@@ -38,6 +38,7 @@ nav:
       - $.util.codec: 'api/util.codec.md'
       - $.web: 'api/web.md'
     - Setup: 
+      - Database User: 'setup/database-user.md'
       - Local: 'setup/index.md'
       - Cloud Foundry: 'setup/cloud-foundry.md'
       - Kyma: 'setup/kyma.md'

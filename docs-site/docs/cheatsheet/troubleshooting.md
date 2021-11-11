@@ -5,7 +5,7 @@ title: Troubleshooting
 Troubleshooting
 ===
 
-## Insufficient Privilege
+## Insufficient Privileges
 ---
 
 The bellow error message is related to insufficient privileges:
@@ -21,6 +21,21 @@ To check the error code, execute the following script:
 ```sql
 call SYS.GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS ('<GUID>', ?)
 ```
+
+## Grant HDI Privileges
+
+To grant HDI priviliges to the HANA database user, execute the following script:
+
+```sql
+CREATE LOCAL TEMPORARY TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;
+INSERT INTO #PRIVILEGES (PRINCIPAL_NAME, PRIVILEGE_NAME, OBJECT_NAME) SELECT '<HANA-USERNAME>', PRIVILEGE_NAME, OBJECT_NAME FROM _SYS_DI.T_DEFAULT_DI_ADMIN_PRIVILEGES;
+CALL _SYS_DI.GRANT_CONTAINER_GROUP_API_PRIVILEGES('_SYS_DI', #PRIVILEGES, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);
+DROP TABLE #PRIVILEGES;
+```
+
+!!! note
+
+    Replace the _**`<HANA-USERNAME>`**_ placeholder with the HANA database user, used for the migration
 
 ## Two-Factor Authentication
 ---

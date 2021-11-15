@@ -50,6 +50,12 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
   private static final Map<String, XSKAccessDefinition> ACCESS_PREDELIVERED = Collections
       .synchronizedMap(new HashMap<>());
 
+  private static final Set<XSKPrivilegeDefinition> PRIVILEGES_TO_BE_PROCESSED = Collections.synchronizedSet(
+      new HashSet<>());
+
+  private static final Set<XSKAccessDefinition> ACCESS_TO_BE_PROCESSED = Collections
+      .synchronizedSet(new HashSet<>());
+
   private static final Set<String> PRIVILEGES_SYNCHRONIZED = Collections.synchronizedSet(new HashSet<>());
 
   private static final Set<String> ACCESS_SYNCHRONIZED = Collections.synchronizedSet(new HashSet<>());
@@ -91,6 +97,7 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
 
           int mutablePrivilegesCount = PRIVILEGES_SYNCHRONIZED.size();
           int mutableAccessCount = ACCESS_SYNCHRONIZED.size();
+          processArtifacts();
           cleanup();
           clearCache();
           successfulSynchronization(SYNCHRONIZER_NAME,
@@ -157,7 +164,9 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
    */
   private void clearCache() {
     PRIVILEGES_SYNCHRONIZED.clear();
+    PRIVILEGES_TO_BE_PROCESSED.clear();
     ACCESS_SYNCHRONIZED.clear();
+    ACCESS_TO_BE_PROCESSED.clear();
     xskAccessCoreService.clearCache();
   }
 
@@ -186,6 +195,21 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
   }
 
   /**
+   * Process the privilege and access artifacts.
+   *
+   * @throws SynchronizationException the synchronization exception
+   */
+  private void processArtifacts() throws SynchronizationException {
+    for (XSKPrivilegeDefinition xskPrivilegeDefinition : PRIVILEGES_TO_BE_PROCESSED) {
+      synchronizePrivilege(xskPrivilegeDefinition);
+    }
+
+    for (XSKAccessDefinition xskAccessDefinition : ACCESS_TO_BE_PROCESSED) {
+      synchronizeAccess(xskAccessDefinition);
+    }
+  }
+
+  /**
    * Synchronize privileges.
    *
    * @param xskPrivilegeDefinition the privilege definition
@@ -206,7 +230,7 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
 
       }
 
-      ACCESS_SYNCHRONIZED.add(xskPrivilegeDefinition.getName());
+      PRIVILEGES_SYNCHRONIZED.add(xskPrivilegeDefinition.getName());
     } catch (XSKPrivilegeException e) {
       throw new SynchronizationException(e);
     }
@@ -269,7 +293,7 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     if (resourceName.equals(IXSKPrivilegeCoreService.XSK_FILE_EXTENSION_PRIVILEGE)) {
       XSKPrivilegeArtifact xskPrivilegeArtifact = XSKPrivilegeArtifact.parse(resource.getContent());
       for (XSKPrivilegeDefinition xskPrivilegeDefinition : xskPrivilegeArtifact.divide()) {
-        synchronizePrivilege(xskPrivilegeDefinition);
+        PRIVILEGES_TO_BE_PROCESSED.add(xskPrivilegeDefinition);
       }
 
     }
@@ -280,7 +304,7 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
       String hash = DigestUtils.md5Hex(resource.getContent());
       xskAccessDefinition.setHash(hash);
 
-      synchronizeAccess(xskAccessDefinition);
+      ACCESS_TO_BE_PROCESSED.add(xskAccessDefinition);
     }
   }
 
@@ -295,7 +319,7 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     try {
       List<XSKPrivilegeDefinition> privilegeDefinitions = xskPrivilegeCoreService.getXSKPrivileges();
       for (XSKPrivilegeDefinition xskPrivilegeDefinition : privilegeDefinitions) {
-        if (!ACCESS_SYNCHRONIZED.contains(xskPrivilegeDefinition.getName())) {
+        if (!PRIVILEGES_SYNCHRONIZED.contains(xskPrivilegeDefinition.getName())) {
 
           xskPrivilegeCoreService.removeXSKPrivilegeByName(xskPrivilegeDefinition.getName());
           logger.warn("Cleaned up XSK Privilege [{}]", xskPrivilegeDefinition.getName());
@@ -306,7 +330,8 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
       for (XSKAccessDefinition xskAccessDefinition : accessDefinitions) {
         if (!ACCESS_SYNCHRONIZED.contains(xskAccessDefinition.getPath())) {
           xskAccessCoreService.removeXSKAccessDefinition(xskAccessDefinition.getPath());
-          logger.warn("Cleaned up XSK Access definition [[{}]-[{}]-[{}]] from location: {}", xskAccessDefinition.getAuthenticationMethodsAsList(),
+          logger.warn("Cleaned up XSK Access definition [[{}]-[{}]-[{}]] from location: {}",
+              xskAccessDefinition.getAuthenticationMethodsAsList(),
               String.join(",", xskAccessDefinition.getAuthorizationRolesAsList()), xskAccessDefinition.getPath());
         }
       }

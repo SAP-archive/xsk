@@ -39,7 +39,7 @@ public class MigrationITest {
   private List<ExpectedContent> expectedContentList;
 
   @Test
-  @Parameters({"Chrome-Hana1", /*"Chrome-Hana2",*/ "Firefox-Hana1", /*"Firefox-Hana2"*/})
+  @Parameters({"Migration-Chrome-Hana1", /*"Migration-Chrome-Hana2",*/ "Migration-Firefox-Hana1", /*"Migration-Firefox-Hana2"*/})
   public void migrationTest(String param) throws IOException {
     setup(param);
     navigateToMigrationPerspective();
@@ -60,6 +60,7 @@ public class MigrationITest {
   private void navigateToMigrationPerspective() {
     webBrowser.clickItem(By.xpath("//*[@title=\"XS Migration\"]"));
     webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-migration/migration-launch.html']"));
+    webBrowser.log();
   }
 
   private void enterNeoDBTunnelCredentials() {
@@ -67,6 +68,7 @@ public class MigrationITest {
     webBrowser.selectAndAssertDropdown("regionList", credentials.getRegion());
     webBrowser.enterAndAssertField(By.id("neo-username"), credentials.getUsername());
     webBrowser.enterAndAssertField(By.id("neo-password"), credentials.getPassword());
+    webBrowser.log();
     webBrowser.clickItem(By.xpath("//*[@ng-click='nextClicked()']"));
   }
 
@@ -74,12 +76,14 @@ public class MigrationITest {
     webBrowser.selectAndAssertDropdown("databasesList", credentials.getSchema());
     webBrowser.enterAndAssertField(By.id("username"), credentials.getHanaUsername());
     webBrowser.enterAndAssertField(By.id("password"), credentials.getHanaPassword());
+    webBrowser.log();
     webBrowser.clickItem(By.xpath("//*[@ng-click='nextClicked()']"));
   }
 
   private void selectDeliveryUnits() {
     webBrowser.selectAndAssertDropdown("workspacesList", "workspace");
     webBrowser.selectAndAssertDropdown("deliveryUnitList", ExpectedContentProvider.getExpectedDeliveryUnitName());
+    webBrowser.log();
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"finishClicked()\"]"));
   }
 
@@ -87,6 +91,7 @@ public class MigrationITest {
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"));
     webBrowser.waitForPageWithTitle("Workspace | XSK WebIDE");
     webBrowser.switchToDefaultContent();
+    webBrowser.log();
   }
 
   private void openFilesFromJstree() {
@@ -94,6 +99,7 @@ public class MigrationITest {
     webBrowser.switchToDefaultContent();
     webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-workspace/workspace.html']"));
     webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
+    webBrowser.log();
     webBrowser.executeJavascript("$(\".jstree\").jstree(\"open_all\")");
 
     // Double-click all jstree anchors by their file name (text content).
@@ -102,6 +108,7 @@ public class MigrationITest {
       By anchorXpath = By.xpath("//*[text()='" + fileName + "']");
       webBrowser.doubleClickVisibleElementBy(anchorXpath);
       webBrowser.sleep(500);
+      webBrowser.log();
     }
 
     webBrowser.switchToDefaultContent();

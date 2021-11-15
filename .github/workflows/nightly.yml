@@ -72,14 +72,34 @@ jobs:
           ITESTS_SELENIUM_HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
           ITESTS_SELENIUM_HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}
 
-      # Upload screenshots to a GitHub artifact
-      - name: Save screenshots
-        uses: actions/upload-artifact@v2
+      - name: Get current Time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
         with:
-          name: selenium-test-screenshots
-          path: /home/runner/work/xsk/xsk/*.jpg
-          retention-days: 2
-        if: always()
+          format: YYYY-MM-DD_HH-mm-ss
+          utcOffset: "+02:00"
+
+      # Copy logs to '/xsk/test_results' and commit the directory
+      - name: Create Results Dir
+        run: mkdir /home/runner/work/xsk/xsk/test_results
+      - name: Copy Tomcat Logs
+        run: docker cp $(docker ps -aqf "name=dirigible"):/usr/local/tomcat/logs/.  /home/runner/work/xsk/xsk/test_results/tomcat_logs
+      - name: Copy Surefire Reports
+        run: find ./ -name 'surefire-reports' -exec cp -prv '{}' '/home/runner/work/xsk/xsk/test_results/surefire-reports' ';'
+      - name: Copy Selenium Output
+        run: find ./ -name 'selenium' -exec cp -prv '{}' '/home/runner/work/xsk/xsk/test_results/selenium_logs' ';'
+      - name: Commit test_results directory
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.REPO_TOKEN }}
+        with:
+          source_file: '/home/runner/work/xsk/xsk/test_results'
+          destination_repo: "${{ secrets.REPO_NAME }}"
+          destination_branch: "master"
+          destination_folder: "nightly/results_${{ steps.current-time.outputs.formattedTime }}_gmtplus_2"
+          user_email: "${{ secrets.REPO_MAIL }}"
+          user_name: "${{ secrets.REPO_UNAME }}"
+          commit_message: "Nighty results from: ${{ steps.current-time.outputs.readableTime }}"
 
       - name: Slack Notification
         if: ${{ failure() }}

@@ -20,11 +20,11 @@ public class XSKDeployContainerContentProcessor extends XSKHDIAbstractProcessor 
     executeUpdate(connection, "CREATE LOCAL TEMPORARY COLUMN TABLE #DEPLOY_PATHS LIKE _SYS_DI.TT_FILESFOLDERS;");
     executeUpdate(connection, "INSERT INTO #DEPLOY_PATHS (PATH) VALUES ('.hdiconfig');");
     for (String next : deployPaths) {
-      executeUpdate(connection, "INSERT INTO #DEPLOY_PATHS (PATH) VALUES ('" + next.substring(1) + "');");
+      executeUpdate(connection, "INSERT INTO #DEPLOY_PATHS (PATH) VALUES (?);", next.substring(1));
     }
     executeUpdate(connection, "CREATE LOCAL TEMPORARY COLUMN TABLE #UNDEPLOY_PATHS LIKE _SYS_DI.TT_FILESFOLDERS;");
     for (String next : undeployPaths) {
-      executeUpdate(connection, "INSERT INTO #UNDEPLOY_PATHS (PATH) VALUES ('" + next.substring(1) + "');");
+      executeUpdate(connection, "INSERT INTO #UNDEPLOY_PATHS (PATH) VALUES (?);", next.substring(1));
     }
     executeUpdate(connection, "CREATE LOCAL TEMPORARY COLUMN TABLE #PATH_PARAMETERS LIKE _SYS_DI.TT_FILESFOLDERS_PARAMETERS;");
 

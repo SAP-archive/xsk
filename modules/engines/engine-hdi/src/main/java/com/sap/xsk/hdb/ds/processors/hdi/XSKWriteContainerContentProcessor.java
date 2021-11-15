@@ -47,13 +47,13 @@ public class XSKWriteContainerContentProcessor extends XSKHDIAbstractProcessor {
 
     String content = RegistryFacade.getText(configuration);
 
-    executeUpdate(connection, "INSERT INTO #PATHS (PATH, CONTENT) VALUES ('.hdiconfig', '" + content + "')");
+    executeUpdate(connection, "INSERT INTO #PATHS (PATH, CONTENT) VALUES ('.hdiconfig', ?)", content);
     for (String folder : folders) {
-      executeUpdate(connection, "INSERT INTO #PATHS (PATH, CONTENT) VALUES ('" + folder + "', NULL);");
+      executeUpdate(connection, "INSERT INTO #PATHS (PATH, CONTENT) VALUES (?, NULL);", folder);
     }
     for (String file : files) {
       content = RegistryFacade.getText(file);
-      executeUpdate(connection, "INSERT INTO #PATHS (PATH, CONTENT) VALUES ('" + file.substring(1) + "', '" + content + "');");
+      executeUpdate(connection, "INSERT INTO #PATHS (PATH, CONTENT) VALUES (?, ?);", file.substring(1), content);
     }
     executeQuery(connection, "CALL " + container + "#DI.WRITE(#PATHS, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);");
     executeUpdate(connection, "DROP TABLE #PATHS;");

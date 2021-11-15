@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class XSKHDIContainerCreateProcessor {
 
-  private static final Logger logger = LoggerFactory.getLogger(XSKHDIContainerCreateProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(XSKHDIContainerCreateProcessor.class);
 
   private XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor = new XSKGrantPrivilegesContainerGroupAPIProcessor();
   private XSKCreateContainerGroupProcessor createContainerGroupProcessor = new XSKCreateContainerGroupProcessor();
@@ -37,9 +37,9 @@ public class XSKHDIContainerCreateProcessor {
   private XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor = new XSKGrantPrivilegesContainerTargetSchemaProcessor();
 
   public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
-    logger.info("Start processing HDI Containers...");
+    LOGGER.info("Start processing HDI Containers...");
     try {
-      logger.info("Start processing HDI Container [{0}] from [{1}] ...", hdiModel.getContainer(), hdiModel.getLocation());
+      LOGGER.info("Start processing HDI Container [{}] from [{}] ...", hdiModel.getContainer(), hdiModel.getLocation());
 
       // Grant Privileges to Container Group API
       this.grantPrivilegesContainerGroupAPIProcessor.execute(connection, hdiModel.getUsers());
@@ -71,15 +71,15 @@ public class XSKHDIContainerCreateProcessor {
       // Grant Privileges to the Container Schema
       this.grantPrivilegesContainerSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
 
-      logger.info("HDI Container [{0}] from [{1}] finished successfully.", hdiModel.getContainer(), hdiModel.getLocation());
+      LOGGER.info("HDI Container [{}] from [{}] finished successfully.", hdiModel.getContainer(), hdiModel.getLocation());
     } catch (SQLException | IOException | ScriptingException e) {
       String errorMessage = String.format("HDI Container %s from %s failed.", hdiModel.getContainer(), hdiModel.getLocation());
       XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdiModel.getLocation(), XSKCommonsConstants.HDI_PROCESSOR);
-      logger.error(errorMessage);
-      logger.error(e.getMessage(), e);
+      LOGGER.error(errorMessage);
+      LOGGER.error(e.getMessage(), e);
     }
 
-    logger.info("Done processing HDI Containers.");
+    LOGGER.info("Done processing HDI Containers.");
   }
 
 }

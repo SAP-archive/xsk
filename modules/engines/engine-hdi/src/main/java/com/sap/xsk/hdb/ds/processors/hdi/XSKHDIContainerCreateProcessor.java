@@ -75,8 +75,7 @@ public class XSKHDIContainerCreateProcessor {
     } catch (SQLException | IOException | ScriptingException e) {
       String errorMessage = String.format("HDI Container %s from %s failed.", hdiModel.getContainer(), hdiModel.getLocation());
       XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdiModel.getLocation(), XSKCommonsConstants.HDI_PROCESSOR);
-      LOGGER.error(errorMessage);
-      LOGGER.error(e.getMessage(), e);
+      LOGGER.error(errorMessage, e);
     }
 
     LOGGER.info("Done processing HDI Containers.");

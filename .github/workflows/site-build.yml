@@ -11,10 +11,13 @@ jobs:
     - uses: actions/checkout@v2
       with:
         token: ${{secrets.GH_TOKEN}}
+    - name: Set MkDocs Material Version
+      run: echo MKDOCS_MATERIAL_VERSION=7.3.6 >> $GITHUB_ENV
+
     - name: Build the site with squidfunk/mkdocs-material container
       run: |
-        docker pull squidfunk/mkdocs-material
-        docker run -v ${{ github.workspace }}/docs-site:/docs squidfunk/mkdocs-material build
+        docker pull squidfunk/mkdocs-material:$MKDOCS_MATERIAL_VERSION
+        docker run -v ${{ github.workspace }}/docs-site:/docs squidfunk/mkdocs-material:$MKDOCS_MATERIAL_VERSION build
     - name: Clean-up and Copy Build Output
       run: |
         mkdir ../temp/

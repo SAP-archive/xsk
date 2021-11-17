@@ -16,6 +16,7 @@ import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.XSKSchedulerManager;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
 import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -26,52 +27,59 @@ import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 
 public class XSKJobFacade {
 
-  public static final void newJob(String job, String jobPath) throws ParseException, SchedulerException {
-    XSKJobCoreService jobService = new XSKJobCoreService();
+  private static XSKJobCoreService jobService = new XSKJobCoreService();
+
+  public static final ArrayList<String> newJob(String job) throws ParseException, SchedulerException {
     XSKJobArtifact xskJobArtifact = jobService.parseJob(job);
     XSKJobToXSKJobDefinitionTransformer xskJobToXSKJobDefinitionTransformer = new XSKJobToXSKJobDefinitionTransformer();
     ArrayList<XSKJobDefinition> xskJobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
+    ArrayList<String> names = new ArrayList<>();
     for (XSKJobDefinition jobDefinition : xskJobDefinitions) {
-      if (!jobService.existsJob(jobPath)) {
-        jobService.createJob(jobPath, jobDefinition.getGroup(), jobDefinition.getDescription(),
+      if (!jobService.existsJob(jobDefinition.getName())) {
+        jobService.createJob(jobDefinition.getName(), jobDefinition.getGroup(), jobDefinition.getDescription(),
             jobDefinition.getModule(), jobDefinition.getFunction(), jobDefinition.getCronExpression(), jobDefinition.getParametersAsMap());
       }
+      names.add(jobDefinition.getName());
+    }
+
+    return names;
+  }
+
+  public static final void activate(ArrayList<String> names) throws SchedulerException {
+    for (String name : names) {
+      XSKJobDefinition jobDefinition = jobService.getJob(name);
+
+      XSKSchedulerManager.scheduleJob(jobDefinition);
     }
   }
 
-  public static final void activate(String name) throws SchedulerException {
-    XSKJobCoreService jobService = new XSKJobCoreService();
-    XSKJobDefinition jobDefinition = jobService.getJob(name);
+  public static final void deactivate(ArrayList<String> names) throws SchedulerException {
+    for (String name : names) {
+      XSKJobDefinition jobDefinition = jobService.getJob(name);
 
-    XSKSchedulerManager.scheduleJob(jobDefinition);
+      XSKSchedulerManager.unscheduleJob(name, jobDefinition.getGroup());
+    }
   }
 
-  public static final void deactivate(String name) throws SchedulerException {
-    XSKJobCoreService jobService = new XSKJobCoreService();
-    XSKJobDefinition jobDefinition = jobService.getJob(name);
+  public static final void configure(ArrayList<String> names, boolean status, Timestamp startAt, Timestamp endAt)
+      throws SchedulerException {
+    deactivate(names);
 
-    XSKSchedulerManager.unscheduleJob(name, jobDefinition.getGroup());
-  }
+    for (String name : names) {
+      XSKJobDefinition jobDefinition = jobService.getJob(name);
 
-  public static final void configure(String name, boolean status, Timestamp startAt, Timestamp endAt) throws SchedulerException {
-    XSKJobCoreService jobService = new XSKJobCoreService();
-    XSKJobDefinition jobDefinition = jobService.getJob(name);
-
-    deactivate(name);
-
-    jobService.updateJob(jobDefinition.getName(), jobDefinition.getGroup(), jobDefinition.getDescription(),
-        jobDefinition.getModule(), jobDefinition.getFunction(), jobDefinition.getCronExpression(), startAt,
-        endAt,
-        jobDefinition.getParametersAsMap());
+      jobService.updateJob(jobDefinition.getName(), jobDefinition.getGroup(), jobDefinition.getDescription(),
+          jobDefinition.getModule(), jobDefinition.getFunction(), jobDefinition.getCronExpression(), startAt,
+          endAt,
+          jobDefinition.getParametersAsMap());
+    }
 
     if (status) {
-      activate(name);
+      activate(names);
     }
   }
 
   public static final XSKJobDefinition getConfiguration(String name) throws SchedulerException {
-    XSKJobCoreService jobService = new XSKJobCoreService();
-
     return jobService.getJob(name);
   }
 

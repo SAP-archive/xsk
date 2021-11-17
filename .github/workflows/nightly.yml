@@ -198,14 +198,23 @@ jobs:
           EOF
         shell: bash
 
-      # - name: Delete Kyma deployment
-        # run: |
-        #   kubectl delete deployment xsk -n ${{ secrets.namespace }}
-        #   kubectl delete service xsk -n ${{ secrets.namespace }}
-        #   kubectl delete apirules xsk -n ${{ secrets.namespace }}
-        #   kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.namespace }}
-        #   kubectl get delete job-test -n ${{ secrets.namespace }}
-        # shell: bash  
+      # Wait for XSK Kyma Deployment to Startup
+      - name: Wait XSK Kyma Startup
+        uses: nick-invision/retry@v2
+        with:
+          timeout_seconds: 15
+          max_attempts: 10
+          warning_on_retry: false
+          command: curl -m 5 --silent --fail --request GET https://xsk.xsk-it.promart.shoot.canary.k8s-hana.ondemand.com/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
+
+      # Delete XSK Kyma deployment
+      - name: Delete the deployment
+        run: |
+          kubectl delete deployment xsk -n ${{ secrets.namespace }}
+          kubectl delete service xsk -n ${{ secrets.namespace }}
+          kubectl delete apirules xsk -n ${{ secrets.namespace }}
+          kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.namespace }}
+        shell: bash   
 
       # Upload screenshots to a GitHub artifact
       - name: Save screenshots

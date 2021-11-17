@@ -1061,7 +1061,9 @@
 </div>
 <h2 id="sample">Sample</h2>
 <hr />
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Sample XSJS service (<code>*.xsjs</code>)</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Sample XSJS service (<code>*.xsjs</code>)</label><label for="__tabbed_1_2">Sample XSJS library (<code>*.xsjslib</code>)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">ProductsService</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="k">import</span><span class="p">(</span><span class="s2">&quot;products.xsjs&quot;</span><span class="p">,</span> <span class="s2">&quot;ProductsLib&quot;</span><span class="p">).</span><span class="nx">Products</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">connection</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">({</span>
     <span class="nx">treatDateAsUTC</span><span class="o">:</span> <span class="kc">true</span>
@@ -1118,7 +1120,7 @@
 <span class="p">}());</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Sample XSJS library (<code>*.xsjslib</code>)</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">hdbConnection</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">hdb</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">({</span>
     <span class="nx">treatDateAsUTC</span><span class="o">:</span> <span class="kc">true</span>
 <span class="p">});</span>
@@ -1177,6 +1179,7 @@
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+</div>
 </div>
 </div>
                 

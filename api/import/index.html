@@ -1063,7 +1063,9 @@
 <p>If you want to use sample usage code, file structure of project in your workspace browser should look like this:</p>
 <p><img alt="img" src="/assets/images/api/import-filestructure.png" /></p>
 </div>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">import.xsjs</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">import.xsjs</label><label for="__tabbed_1_2">math.xsjslib</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// Import .xsjslib to our file using $.import api (&quot;package&quot;,&quot;library&quot;)</span>
 <span class="c1">// In our case package equals to &quot;sap.myapp.lib&quot;</span>
 
@@ -1080,7 +1082,7 @@
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>   
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">math.xsjslib</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">square</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1093,6 +1095,7 @@
     <span class="k">return</span> <span class="nx">x</span> <span class="o">/</span> <span class="nx">y</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
+</div>
 </div>
 </div>
 <h2 id="parameters">Parameters</h2>

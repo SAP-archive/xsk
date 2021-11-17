@@ -1086,16 +1086,19 @@
 </div>
 <h2 id="sample">Sample</h2>
 <hr />
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">HANA XS Classic syntax</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">HANA XS Classic syntax</label><label for="__tabbed_1_2">HANA XS Advanced syntax</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">schema</span><span class="o">=</span><span class="ss">&quot;MYSCHEMA&quot;</span><span class="p">;</span>
 <span class="n">query</span><span class="o">=</span><span class="ss">&quot;SELECT T1.\&quot;</span><span class="n">Column2</span><span class="err">\</span><span class="ss">&quot; FROM \&quot;</span><span class="n">MYSCHEMA</span><span class="err">\</span><span class="ss">&quot;.\&quot;</span><span class="n">acme</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">test</span><span class="p">.</span><span class="n">views</span><span class="p">::</span><span class="n">MY_VIEW1</span><span class="err">\</span><span class="ss">&quot; AS T1 LEFT JOIN \&quot;</span><span class="n">MYSCHEMA</span><span class="err">\</span><span class="ss">&quot;.\&quot;</span><span class="n">acme</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">test</span><span class="p">.</span><span class="n">views</span><span class="p">::</span><span class="n">MY_VIEW2</span><span class="err">\</span><span class="ss">&quot; AS T2 ON T1.\&quot;</span><span class="n">Column1</span><span class="err">\</span><span class="ss">&quot; = T2.\&quot;</span><span class="n">Column1</span><span class="err">\</span><span class="ss">&quot;&quot;</span><span class="p">;</span>
 <span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="ss">&quot;acme.com.test.views::MY_VIEW1&quot;</span><span class="p">,</span> <span class="ss">&quot;acme.com.test.views::MY_VIEW2&quot;</span><span class="p">];</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">HANA XS Advanced syntax</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">VIEW</span> <span class="ss">&quot;hdb_view.db::ItemsByOrderHANAv2&quot;</span>
 <span class="k">AS</span> <span class="k">SELECT</span> <span class="ss">&quot;Id&quot;</span> <span class="k">FROM</span> <span class="ss">&quot;hdb_view::Item&quot;</span><span class="p">;</span>
 </code></pre></div>
+</div>
 </div>
 </div>
 <p><strong>Which syntax does the parser support?</strong></p>

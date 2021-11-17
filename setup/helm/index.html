@@ -1170,7 +1170,9 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </details>
 <h4 id="setup-on-kyma">Setup on Kyma</h4>
 <p>You can choose to set up XSK in Helm on Kyma following either the basic or the PostgreSQL setup instructions:</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Basic</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Basic</label><label for="__tabbed_1_2">PostgreSQL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
 --set kyma.enabled=true \
 --set kyma.apirule.host=&lt;kyma-host&gt;
@@ -1179,7 +1181,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <details class="info" open="open"><summary>Configuration Options</summary><p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</a>.</p>
 </details>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">PostgreSQL</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
 --set kyma.enabled=true \
 --set kyma.apirule.host=&lt;kyma-host&gt; \
@@ -1188,6 +1190,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <p>This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.</p>
 <details class="info" open="open"><summary>Configuration Options</summary><p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</a>.</p>
 </details>
+</div>
 </div>
 </div>
 </li>

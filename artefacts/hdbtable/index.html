@@ -1085,7 +1085,9 @@
 </div>
 <h2 id="sample">Sample</h2>
 <hr />
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">HANA XS Classic syntax</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">HANA XS Classic syntax</label><label for="__tabbed_1_2">HANA XS Advanced syntax</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kc">ta</span><span class="err">ble.schemaName</span> <span class="err">=</span> <span class="s2">&quot;MYSCHEMA&quot;</span><span class="err">;</span>
 <span class="kc">ta</span><span class="err">ble.</span><span class="kc">ta</span><span class="err">bleType</span> <span class="err">=</span> <span class="err">COLUMNSTORE;</span>
 <span class="kc">ta</span><span class="err">ble.colum</span><span class="kc">ns</span> <span class="err">=</span> <span class="p">[</span>
@@ -1101,7 +1103,7 @@
 <span class="kc">ta</span><span class="err">ble.primaryKey.pkcolum</span><span class="kc">ns</span> <span class="err">=</span> <span class="p">[</span><span class="s2">&quot;Col1&quot;</span><span class="p">,</span> <span class="s2">&quot;Col2&quot;</span><span class="p">]</span><span class="err">;</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">HANA XS Advanced syntax</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">COLUMN</span> <span class="k">TABLE</span> <span class="ss">&quot;MYSCHEMA::MYTABLE&quot;</span> <span class="p">(</span> 
     <span class="ss">&quot;ID&quot;</span> <span class="nb">INTEGER</span> <span class="k">DEFAULT</span> <span class="mi">555</span><span class="p">,</span>
     <span class="ss">&quot;NAME&quot;</span> <span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">256</span><span class="p">),</span>
@@ -1110,6 +1112,7 @@
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="ss">&quot;ID&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
+</div>
 </div>
 </div>
                 

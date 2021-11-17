@@ -1064,7 +1064,9 @@
 </div>
 <h2 id="sample">Sample</h2>
 <hr />
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">HANA XS Classic syntax</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">HANA XS Classic syntax</label><label for="__tabbed_1_2">HANA XS Advanced syntax</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="err">schema=</span> <span class="s2">&quot;TEST_DUMMY&quot;</span><span class="err">;</span>
 <span class="err">s</span><span class="kc">tart</span><span class="err">_wi</span><span class="kc">t</span><span class="err">h=</span> <span class="mi">10</span><span class="err">;</span>
 <span class="err">maxvalue=</span> <span class="mi">30</span><span class="err">;</span>
@@ -1076,11 +1078,12 @@
 <span class="err">depe</span><span class="kc">n</span><span class="err">ds_o</span><span class="kc">n</span><span class="err">=</span><span class="p">[</span><span class="s2">&quot;com.acme.test.tables::MY_TABLE1&quot;</span><span class="p">,</span> <span class="s2">&quot;com.acme.test.tables::MY_TABLE2&quot;</span><span class="p">]</span><span class="err">;</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">HANA XS Advanced syntax</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">SEQUENCE</span> <span class="ss">&quot;com.sap.hana.example::CUSTOMER_ID&quot;</span> 
 <span class="k">RESET</span> <span class="k">BY</span> 
 <span class="k">SELECT</span> <span class="n">IFNULL</span><span class="p">(</span><span class="k">MAX</span><span class="p">(</span><span class="n">ID</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="ss">&quot;com.sap.hana.example::CUSTOMERS&quot;</span>
 </code></pre></div>
+</div>
 </div>
 </div>
 <p><strong>Configuration Schema</strong></p>

@@ -1131,7 +1131,9 @@
 </li>
 <li>
 <p>Deploy XSK:</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Docker</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Docker</label><label for="__tabbed_1_2">Buildpack</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>cf push xsk \
 --docker-image=dirigiblelabs/xsk-cf:latest \
 --hostname xsk-&lt;org-name&gt; \
@@ -1176,7 +1178,7 @@ cf set-env xsk HANA_PASSWORD &lt;hanaCloudPassword&gt;
 </li>
 </ul>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Buildpack</label><div class="tabbed-content">
+<div class="tabbed-block">
 <ul>
 <li>Download the <code>sap-cf</code> binaries from the downloads site: <a href="https://github.com/SAP/xsk/releases">https://github.com/SAP/xsk/releases</a></li>
 <li>Unzip the downloaded archive to extract the <code>ROOT.war</code> file.</li>
@@ -1214,6 +1216,7 @@ cf set-env xsk HANA_PASSWORD &lt;hanaCloudPassword&gt;
 </code></pre></div></p>
 </li>
 </ul>
+</div>
 </div>
 </div>
 </li>

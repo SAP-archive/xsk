@@ -1069,33 +1069,36 @@
 <h2 id="configuration-types">Configuration Types</h2>
 <hr />
 <p>Depending on the layer that defines the configuration variables, they have the following priorities:</p>
-<div class="tabbed-set" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Runtime</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Runtime</label><label for="__tabbed_1_2">Environment</label><label for="__tabbed_1_3">Deployment</label><label for="__tabbed_1_4">Module</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <p>Highest precedence:</p>
 <ul>
 <li>No rebuild or restart of the application is required when a configuration is changed.</li>
 <li>You can use the <a href="https://www.dirigible.io/api/core/configurations/">Configuration API</a> to apply changes in the <strong>Runtime</strong> configuration.</li>
 </ul>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Environment</label><div class="tabbed-content">
+<div class="tabbed-block">
 <p>Second precedence:</p>
 <ul>
 <li>No rebuild is required when a configuration is changed. However, you should restart the application to apply the environment changes.</li>
 <li>Usually, the <strong>Environment</strong> configurations are provided during the application deployment, as part of application descriptor <em>(e.g. <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/">Define environment variable for container in Kubernetes</a>, or in <a href="https://docs.cloudfoundry.org/devguide/deploy-apps/manifest-attributes.html#-add-variables-to-a-manifest">Cloud Foundry App Manifest</a>)</em>.</li>
 </ul>
 </div>
-<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">Deployment</label><div class="tabbed-content">
+<div class="tabbed-block">
 <p>Third precedence:</p>
 <ul>
 <li>Rebuild and redeployment are required.</li>
 <li>"Default" deployment <em>(<code>ROOT.war</code>)</em> configuration variables are taken from <code>dirigible.properties</code> properties file. You can find a sample <a href="https://github.com/eclipse/dirigible/blob/master/releng/server-all/src/main/resources/dirigible.properties">here</a>.</li>
 </ul>
 </div>
-<input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><label for="__tabbed_1_4">Module</label><div class="tabbed-content">
+<div class="tabbed-block">
 <p>Lowest precedence:</p>
 <ul>
 <li>Rebuild and redeployment are required.</li>
 <li>"Default" module <em>(e.g. <code>dirigible-database-custom.jar</code>, <code>dirigible-database-h2.jar</code>)</em> configuration variables are taken from <code>dirigible-xxx.properties</code> properties files. You can find samples <a href="https://github.com/eclipse/dirigible/blob/master/modules/database/database-h2/src/main/resources/dirigible-database-h2.properties">here</a> and <a href="https://github.com/eclipse/dirigible/blob/master/modules/database/database-custom/src/main/resources/dirigible-database-custom.properties">here</a>.</li>
 </ul>
+</div>
 </div>
 </div>
 <div class="admonition note">

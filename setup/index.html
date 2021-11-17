@@ -1044,7 +1044,9 @@
 <ol>
 <li>
 <p>Deploy as a Docker container or on Tomcat server.</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Docker</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Docker</label><label for="__tabbed_1_2">Tomcat</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="admonition info">
 <p class="admonition-title">Prerequisites</p>
 <p>Install <a href="https://docs.docker.com/engine/installation/">Docker</a>.</p>
@@ -1052,20 +1054,22 @@
 <ol>
 <li>Start the container:</li>
 </ol>
-<div class="tabbed-set" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Run</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Run</label><label for="__tabbed_2_2">with Mounted Volume</label><label for="__tabbed_2_3">with HANA Cloud</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>docker run --name xsk \
 --rm -p 8080:8080 -p 8081:8081 \
 dirigiblelabs/xsk:latest
 </code></pre></div>
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">with Mounted Volume</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>docker run --name xsk \
 -v &lt;your-local-directory&gt;:/usr/local/tomcat/target \
 --rm -p 8080:8080 -p 8081:8081 \
 dirigiblelabs/xsk:latest
 </code></pre></div>
 </div>
-<input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><label for="__tabbed_2_3">with HANA Cloud</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>docker run --name xsk \
 -e DIRIGIBLE_DATABASE_PROVIDER=&quot;custom&quot; \
 -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=&quot;HANA&quot; \
@@ -1097,7 +1101,8 @@ dirigiblelabs/xsk:latest
 </div>
 </div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Tomcat</label><div class="tabbed-content">
+</div>
+<div class="tabbed-block">
 <div class="admonition info">
 <p class="admonition-title">Prerequisites</p>
 <ul>
@@ -1155,6 +1160,7 @@ export HANA_PASSWORD=&lt;hanaPassword&gt;
 <p>Start the Tomcat server.</p>
 </li>
 </ol>
+</div>
 </div>
 </div>
 <div class="admonition tip">

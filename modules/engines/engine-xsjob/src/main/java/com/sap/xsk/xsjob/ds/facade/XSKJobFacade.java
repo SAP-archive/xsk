@@ -16,14 +16,10 @@ import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
 import com.sap.xsk.xsjob.ds.scheduler.XSKSchedulerManager;
 import com.sap.xsk.xsjob.ds.service.XSKJobCoreService;
 import com.sap.xsk.xsjob.ds.transformer.XSKJobToXSKJobDefinitionTransformer;
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
-import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
-import org.eclipse.dirigible.core.messaging.service.SchedulerManager;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
-
 
 public class XSKJobFacade {
 

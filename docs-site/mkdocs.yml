@@ -69,7 +69,8 @@ markdown_extensions:
     - pymdownx.keys
     - pymdownx.inlinehilite
     - pymdownx.superfences
-    - pymdownx.tabbed
+    - pymdownx.tabbed:
+        alternate_style: true
     - pymdownx.emoji
     - meta
     - footnotes

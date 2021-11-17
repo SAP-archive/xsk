@@ -207,7 +207,7 @@ jobs:
           warning_on_retry: false
           command: curl -m 5 --silent --fail --request GET https://xsk.xsk-it.promart.shoot.canary.k8s-hana.ondemand.com/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
 
-      # Delete XSK Kyma deployment
+      # Delete XSK Kyma deployment resources
       - name: Delete the deployment
         run: |
           kubectl delete deployment xsk -n ${{ secrets.namespace }}

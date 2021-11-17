@@ -1,3 +1,3 @@
 function logCreateConfigAfter() {
-    console.log("Create has just been triggred");
+    console.log("Create has just been triggered");
 }

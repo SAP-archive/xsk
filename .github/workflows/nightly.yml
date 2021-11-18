@@ -192,7 +192,7 @@ jobs:
               - HEAD
               path: /.*
             service:
-              host: ${{ secrets.${{ secrets.ITESTS_KYMA_DIRIGIBLE_HOST }}
+              host: secrets.${{ secrets.ITESTS_KYMA_DIRIGIBLE_HOST }}
               name: xsk
               port: 8080
           EOF

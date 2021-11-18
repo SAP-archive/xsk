@@ -25,12 +25,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
@@ -292,10 +294,15 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
     String resourceName = resource.getName();
     if (resourceName.equals(IXSKPrivilegeCoreService.XSK_FILE_EXTENSION_PRIVILEGE)) {
       XSKPrivilegeArtifact xskPrivilegeArtifact = XSKPrivilegeArtifact.parse(resource.getContent());
-      for (XSKPrivilegeDefinition xskPrivilegeDefinition : xskPrivilegeArtifact.divide()) {
-        PRIVILEGES_TO_BE_PROCESSED.add(xskPrivilegeDefinition);
-      }
 
+      // set name to use "path.to::Privilege" syntax
+      String[] splitPath = resource.getPath().split("/");
+      String path = String.join(".", Arrays.copyOfRange(splitPath, 3, splitPath.length - 1)); // remove /registry/public
+
+      for (XSKPrivilegeDefinition privilege : xskPrivilegeArtifact.divide()) {
+        privilege.setName(path + "::" + privilege.getName());
+        PRIVILEGES_TO_BE_PROCESSED.add(privilege);
+      }
     }
     if (resourceName.equals(IXSKAccessCoreService.XSK_FILE_EXTENSION_ACCESS)) {
       XSKAccessDefinition xskAccessDefinition = xskAccessCoreService.parseXSAccessArtifact(resource.getContent());

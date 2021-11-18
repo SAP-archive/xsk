@@ -83,6 +83,9 @@ edit_uri: ../../sap/xsk/edit/gh-pages/docs-site/docs/
 
 copyright: Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors.
 extra:
+  analytics:
+    provider: google
+    property: G-M0J229K798
   social:
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/dirigible_io
@@ -94,7 +97,3 @@ extra:
       link: https://www.youtube.com/c/dirigibleio
     - icon: fontawesome/brands/slack
       link: https://slack.xsk.io
-
-# google_analytics:
-#   - UA-49027147-1
-#   - auto

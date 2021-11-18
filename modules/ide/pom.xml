@@ -20,6 +20,7 @@
 		<module>ide-migration</module>
 		<module>ide-hdbti</module>
     <module>xsk-workspace-menu</module>
+    <module>xsk-job-menu</module>
 	</modules>
 
 	<properties>

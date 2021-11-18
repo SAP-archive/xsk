@@ -11,9 +11,21 @@
  */
 exports.getTemplate = function () {
 	return {
-		"name": "job",
+		"name": "xsjob",
 		"label": " XS Scheduled Job",
 		"extension": "xsjob",
-		"data": JSON.stringify(JSON.parse('{"expression":"0/10 * * * * ?","group":"dirigible-defined","handler":"myproject/myhandler.js","description":"My Job"}'), null, 2)
+		"data": JSON.stringify(JSON.parse('{\n' +
+        '    "description": "Read stock value",\n' +
+        '    "action": "yahoo:yahoo.xsjs::readStock",\n' +
+        '    "schedules": [\n' +
+        '       {\n' +
+        '          "description": "Read current stock value",\n' +
+        '          "xscron": "* * * * * * 59",\n' +
+        '          "parameter": {\n' +
+        '             "stock": "SAP.DE"\n' +
+        '             }\n' +
+        '       }\n' +
+        '    ]\n' +
+        '}'), null, 2)
 	};
 };

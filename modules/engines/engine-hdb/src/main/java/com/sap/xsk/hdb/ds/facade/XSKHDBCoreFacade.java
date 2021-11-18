@@ -32,10 +32,13 @@ import com.sap.xsk.hdb.ds.service.XSKDataStructureTopologicalSorter;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
+import com.sap.xsk.utils.XSKCommonsConstants;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -46,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -64,6 +68,8 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
   private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
+
+  private Map<String, String> parserTypes = XSKHDBModule.getParserTypes();
 
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
 
@@ -86,14 +92,21 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     String[] splitResourceName = resource.getName().split("\\.");
     String resourceExtension = "." + splitResourceName[splitResourceName.length - 1];
     String registryPath = getRegistryPath(resource);
-
     String contentAsString = getContent(resource);
+
+
     XSKDataStructureModel dataStructureModel;
     try {
+      if(isParsed(registryPath, contentAsString, resourceExtension)) {
+        return;
+      }
       dataStructureModel = xskCoreParserService.parseDataStructure(resourceExtension, registryPath, contentAsString);
       if (dataStructureModel == null) {
         return;
       }
+    } catch (ReflectiveOperationException e) {
+      logger.error(e.getMessage());
+      return;
     } catch (XSKDataStructuresException e) {
       logger.error("Synchronized artifact with path " + registryPath + " is not valid");
       logger.error(e.getMessage());
@@ -535,5 +548,38 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
       throw new SynchronizationException(e);
     }
     return contentAsString;
+  }
+
+  private String getType(String resourceExtension) {
+    return parserTypes.get(resourceExtension);
+  }
+
+  private void setXskDataStructureModelName(XSKDataStructureModel xskDataStructureModel, String content, String location)
+      throws XSKDataStructuresException {
+
+    if(xskDataStructureModel instanceof XSKDataStructureHDBProcedureModel) {
+      xskDataStructureModel.setName(XSKHDBUtils.extractProcedureNameFromContent(content, location));
+    } else if(xskDataStructureModel instanceof XSKDataStructureHDBTableFunctionModel) {
+      xskDataStructureModel
+          .setName(XSKHDBUtils.extractTableFunctionNameFromContent(content, location, XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER));
+    } else if(xskDataStructureModel instanceof XSKDataStructureCdsModel) {
+      xskDataStructureModel.setName(location);
+    } else {
+      xskDataStructureModel.setName(XSKCommonsUtils.getRepositoryBaseObjectName(location));
+    }
+  }
+
+  private boolean isParsed(String location, String content, String resourceExtension)
+      throws XSKDataStructuresException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+    String modelType = getType(resourceExtension);
+    Class<XSKDataStructureModel> clazz = xskCoreParserService.getDataStructureClass(modelType);
+    XSKDataStructureModel baseDataStructureModel = clazz.getDeclaredConstructor().newInstance();
+    baseDataStructureModel.setLocation(location);
+    baseDataStructureModel.setType(modelType);
+    baseDataStructureModel.setHash(DigestUtils.md5Hex(content));
+    setXskDataStructureModelName(baseDataStructureModel, content, location);
+
+    return managerServices.get(baseDataStructureModel.getType()).existsArtifactMetadata(baseDataStructureModel);
   }
 }

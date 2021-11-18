@@ -17,9 +17,14 @@ import java.util.stream.Collectors;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractDataStructureManagerService<T extends XSKDataStructureModel> implements IXSKDataStructureManager<T> {
+
+  private static final Logger logger = LoggerFactory.getLogger(AbstractDataStructureManagerService.class);
 
   private IXSKDataStructuresCoreService xskDataStructuresCoreService = new XSKDataStructuresCoreService();
 
@@ -42,5 +47,27 @@ public abstract class AbstractDataStructureManagerService<T extends XSKDataStruc
 
   public void setDataStructuresCoreService(IXSKDataStructuresCoreService dataStructuresCoreService) {
     this.xskDataStructuresCoreService = dataStructuresCoreService;
+  }
+
+  public void synchronizeParsedByRootMetadata(T tableModel) throws XSKDataStructuresException {
+    XSKDataStructureCdsModel existing = getDataStructuresCoreService()
+        .getDataStructure(tableModel.getLocation(), tableModel.getType());
+    if (existing == null) {
+      getDataStructuresCoreService()
+          .createDataStructure(tableModel.getLocation(), tableModel.getName(), tableModel.getHash(), tableModel.getType());
+      logger.info("Synchronized a new Entities file [{}] from location: {}", tableModel.getName(), tableModel.getLocation());
+    } else {
+      if (!tableModel.equals(existing)) {
+        getDataStructuresCoreService()
+            .updateDataStructure(tableModel.getLocation(), tableModel.getName(), tableModel.getHash(), tableModel.getType());
+        logger.info("Synchronized a modified Entities file [{}] from location: {}", tableModel.getName(), tableModel.getLocation());
+      }
+    }
+  }
+
+  public boolean existsArtifactMetadata(T tableModel) throws XSKDataStructuresException {
+    XSKDataStructureModel existingModel = getDataStructuresCoreService()
+        .getDataStructure(tableModel.getLocation(), tableModel.getType());
+    return existingModel != null && existingModel.equals(tableModel);
   }
 }

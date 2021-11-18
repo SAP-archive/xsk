@@ -48,6 +48,8 @@ public class XSKHDBModule extends AbstractDirigibleModule {
 
   private static Map<String, XSKDataStructureParser> parserServices;
 
+  private static Map<String, String> parserTypes;
+
   public static synchronized Map<String, IXSKDataStructureManager> getManagerServices() {
     if (managerServices == null) {
       managerServices = new HashMap<String, IXSKDataStructureManager>();
@@ -62,6 +64,14 @@ public class XSKHDBModule extends AbstractDirigibleModule {
       bindParsersToFileExtension(parserServices);
     }
     return parserServices;
+  }
+
+  public static synchronized Map<String, String> getParserTypes() {
+    if (parserTypes == null) {
+      parserTypes = new HashMap<String, String>();
+      bindParserTypeToFileExtension(parserTypes);
+    }
+    return parserTypes;
   }
 
   @Override
@@ -103,6 +113,19 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new XSKHDBSequenceParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION, new XSKHDBScalarFunctionParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new XSKTableTypeParser());
+  }
+
+  private static void bindParserTypeToFileExtension(Map<String, String> parserTypes) {
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, IXSKDataStructureModel.TYPE_HDBDD);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_TABLE, IXSKDataStructureModel.TYPE_HDB_TABLE);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_VIEW, IXSKDataStructureModel.TYPE_HDB_VIEW);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM, IXSKDataStructureModel.TYPE_HDB_SYNONYM);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION, IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA, IXSKDataStructureModel.TYPE_HDB_SCHEMA);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE, IXSKDataStructureModel.TYPE_HDB_PROCEDURE);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSEQUENCE, IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSCALARFUNCTION, IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION);
+    parserTypes.put(IXSKDataStructureModel.FILE_EXTENSION_STRUCTURE, IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
   }
 
   @Override

@@ -72,6 +72,150 @@ jobs:
           ITESTS_SELENIUM_HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
           ITESTS_SELENIUM_HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}
 
+      # Set XSK Kyma context 
+      - name: Kubernetes set context
+        uses: Azure/k8s-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.ITESTS_KYMA_CONFIG }}
+
+      # Deploy XSK on Kyma cluster
+      - name: Deploy xsk
+        run: |
+          kubectl apply -f - <<EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: xsk
+            namespace: ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: xsk
+            template:
+              metadata:
+                labels:
+                  app: xsk
+              spec:
+                serviceAccountName: ${{ secrets.ITESTS_KYMA_SERVICEACCOUNTNAME }}
+                containers:
+                - name: xsk
+                  image: dirigiblelabs/xsk-kyma:latest
+                  imagePullPolicy: Always
+                  env:
+                  - name: DIRIGIBLE_THEME_DEFAULT
+                    value: fiori
+                  - name: DIRIGIBLE_HOST
+                    value: https://${{ secrets.ITESTS_KYMA_DIRIGIBLE_HOST }}
+                  - name: url
+                    value: ${{ secrets.ITESTS_KYMA_URL }}
+                  - name: clientid
+                    value: ${{ secrets.ITESTS_KYMA_CLIENTID }}
+                  - name: clientsecret
+                    value: ${{ secrets.ITESTS_KYMA_CLIENTSECRET }}
+                  - name: verificationkey
+                    value: ${{ secrets.ITESTS_KYMA_VERIFICATIONKEY }}
+                  - name: xsappname
+                    value: ${{ secrets.ITESTS_KYMA_XSAPPNAME }}
+                  - name: DIRIGIBLE_DATABASE_PROVIDER
+                    value: custom
+                  - name: DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES
+                    value: HANA
+                  - name: DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT
+                    value: HANA
+                  - name: HANA_URL 
+                    value: ${{ secrets.ITESTS_KYMA_HANA_URL }}
+                  - name: HANA_DRIVER
+                    value: com.sap.db.jdbc.Driver
+                  - name: HANA_USERNAME
+                    value: ${{ secrets.ITESTS_KYMA_HANA_USERNAME }}
+                  - name: HANA_PASSWORD
+                    value: ${{ secrets.ITESTS_KYMA_HANA_PASSWORD }}
+                  volumeMounts:
+                  - name: xsk-volume
+                    mountPath: /usr/local/tomcat/target/dirigible/repository
+                  ports:
+                  - containerPort: 8080
+                    name: xsk
+                    protocol: TCP
+                volumes:
+                - name: xsk-volume
+                  persistentVolumeClaim:
+                    claimName: xsk-claim
+          ---
+          apiVersion: v1
+          kind: Service
+          metadata:
+            labels:
+              app: xsk
+            name: xsk
+            namespace: ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          spec:
+            ports:
+            - name: xsk
+              port: 8080
+              protocol: TCP
+              targetPort: 8080
+            selector:
+              app: xsk
+            type: ClusterIP
+          ---
+          apiVersion: v1
+          kind: PersistentVolumeClaim
+          metadata:
+            name: xsk-claim
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 1Gi
+          ---
+          apiVersion: gateway.kyma-project.io/v1alpha1
+          kind: APIRule
+          metadata:
+            name: xsk
+            namespace: ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          spec:
+            gateway: kyma-gateway.kyma-system.svc.cluster.local
+            rules:
+            - accessStrategies:
+              - config: {}
+                handler: noop
+              methods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - HEAD
+              path: /.*
+            service:
+              host: secrets.${{ secrets.ITESTS_KYMA_DIRIGIBLE_HOST }}
+              name: xsk
+              port: 8080
+          EOF
+        shell: bash
+
+      # Wait for XSK Kyma Deployment to Startup
+      - name: Wait XSK Kyma Startup
+        uses: nick-invision/retry@v2
+        with:
+          timeout_seconds: 15
+          max_attempts: 10
+          warning_on_retry: false
+          command: curl -m 5 --silent --fail --request GET https://xsk.xsk-it.promart.shoot.canary.k8s-hana.ondemand.com/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
+
+      # Delete XSK Kyma deployment resources
+      - name: Delete the deployment
+        run: |
+          kubectl delete deployment xsk -n ${{ secrets.namespace }}
+          kubectl delete service xsk -n ${{ secrets.namespace }}
+          kubectl delete apirules xsk -n ${{ secrets.namespace }}
+          kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.namespace }}
+        shell: bash   
+
       # Upload screenshots to a GitHub artifact
       - name: Save screenshots
         uses: actions/upload-artifact@v2

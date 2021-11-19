@@ -18,8 +18,6 @@ angular.module('page', [])
       let oldKey;
 
 
-
-
       $scope.openNewDialog = function (index) {
         $scope.actionType = 'new';
         $scope.entity = {};
@@ -29,12 +27,12 @@ angular.module('page', [])
 
       };
 
-      $scope.openEditDialog = function (index,key,value) {
-        console.log("OpenEditDialog", index,key,value);
+      $scope.openEditDialog = function (index, key, value) {
+        console.log("OpenEditDialog", index, key, value);
         $scope.actionType = 'update';
         oldKey = key;
         scheduleIndex = index;
-        $scope.entity = {name:key,description:value};
+        $scope.entity = {name: key, description: value};
         toggleEntityModal();
       };
 
@@ -42,6 +40,7 @@ angular.module('page', [])
         $('#entityModal').modal('toggle');
         $scope.error = null;
       }
+
       function getResource(resourcePath) {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', resourcePath, false);
@@ -67,8 +66,8 @@ angular.module('page', [])
 
       load();
 
-      $scope.addParameter = function (key,value) {
-        console.log("LOG Index ",scheduleIndex,"  KEY. ", key ,"  Value ",value)
+      $scope.addParameter = function (key, value) {
+        console.log("LOG Index ", scheduleIndex, "  KEY. ", key, "  Value ", value)
         $scope.job.schedules[scheduleIndex].parameter[key] = value;
         toggleEntityModal();
       }
@@ -78,19 +77,21 @@ angular.module('page', [])
         $scope.save();
       }
 
-
-
-      // $scope.addScheduler= function(){
-      //   let schedule = {
-      //         "description": "Read current stock value",
-      //         "xscron": "* * * * * * 59",
-      //         "parameter": {
-      //             "newsd12": "awww",
-      //             "new": "new",
-      //             "newaa": "a",
-      //         }};
-      //   $scope.job.schedules = {...$scope.job.schedules, schedule };
-      // }
+      $scope.deleteSchedule = function (scheduleIndex) {
+        console.log("Schedule to delete" + scheduleIndex);
+        $scope.job.schedules.splice(scheduleIndex, 1);
+        console.log("Schedule to delete" + scheduleIndex);
+        $scope.save();
+      }
+      $scope.addScheduler = function () {
+        var schedule = {
+          "description": "",
+          "xscron": "",
+          "parameter": {}
+        };
+        $scope.job.schedules.push(schedule);
+        $scope.save();
+      };
 
       $scope.hoverIn = function () {
         this.hoverEdit = true;
@@ -112,10 +113,10 @@ angular.module('page', [])
         }
       };
 
-      $scope.update = function (key,value) {
-        console.log("UPDATE ",key,value);
-        $scope.deleteParameter(scheduleIndex,oldKey)
-        $scope.addParameter(key,value);
+      $scope.update = function (key, value) {
+        console.log("UPDATE ", key, value);
+        $scope.deleteParameter(scheduleIndex, oldKey)
+        $scope.addParameter(key, value);
       };
 
       $scope.delete = function () {
@@ -137,8 +138,8 @@ angular.module('page', [])
             }
           };
           xhr.send(text);
-          messageHub.post({ data: $scope.file }, 'editor.file.saved');
-          messageHub.post({ data: 'File [' + $scope.file + '] saved.' }, 'status.message');
+          messageHub.post({data: $scope.file}, 'editor.file.saved');
+          messageHub.post({data: 'File [' + $scope.file + '] saved.'}, 'status.message');
         } else {
           console.error('file parameter is not present in the request');
         }
@@ -152,7 +153,7 @@ angular.module('page', [])
       $scope.$watch(function () {
         let xsjob = angular.toJson($scope.job);
         if (contents !== xsjob) {
-          messageHub.post({ data: $scope.file }, 'editor.file.dirty');
+          messageHub.post({data: $scope.file}, 'editor.file.dirty');
         }
       });
 

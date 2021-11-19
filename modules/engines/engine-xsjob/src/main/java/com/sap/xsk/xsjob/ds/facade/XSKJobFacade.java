@@ -29,16 +29,16 @@ public class XSKJobFacade {
     XSKJobArtifact xskJobArtifact = jobService.parseJob(job);
     XSKJobToXSKJobDefinitionTransformer xskJobToXSKJobDefinitionTransformer = new XSKJobToXSKJobDefinitionTransformer();
     ArrayList<XSKJobDefinition> xskJobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
-    ArrayList<String> names = new ArrayList<>();
+    ArrayList<String> scheduleNames = new ArrayList<>();
     for (XSKJobDefinition jobDefinition : xskJobDefinitions) {
       if (!jobService.existsJob(jobDefinition.getName())) {
         jobService.createJob(jobDefinition.getName(), jobDefinition.getGroup(), jobDefinition.getDescription(),
             jobDefinition.getModule(), jobDefinition.getFunction(), jobDefinition.getCronExpression(), jobDefinition.getParametersAsMap());
       }
-      names.add(jobDefinition.getName());
+      scheduleNames.add(jobDefinition.getName());
     }
 
-    return names;
+    return scheduleNames;
   }
 
   public static final void activate(ArrayList<String> names) throws SchedulerException {

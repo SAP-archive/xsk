@@ -38,6 +38,7 @@ nav:
       - $.util.codec: 'api/util.codec.md'
       - $.web: 'api/web.md'
     - Setup: 
+      - Database User: 'setup/database-user.md'
       - Local: 'setup/index.md'
       - Cloud Foundry: 'setup/cloud-foundry.md'
       - Kyma: 'setup/kyma.md'
@@ -45,6 +46,7 @@ nav:
       - Environment Variables: 'setup/environment-variables.md'
     - Cheat sheet: 
       - Create Delivery Unit: 'cheatsheet/delivery-unit.md'
+      - Troubleshooting: 'cheatsheet/troubleshooting.md'
     - Community: 'community.md'
     
 
@@ -67,7 +69,8 @@ markdown_extensions:
     - pymdownx.keys
     - pymdownx.inlinehilite
     - pymdownx.superfences
-    - pymdownx.tabbed
+    - pymdownx.tabbed:
+        alternate_style: true
     - pymdownx.emoji
     - meta
     - footnotes
@@ -80,6 +83,9 @@ edit_uri: ../../sap/xsk/edit/gh-pages/docs-site/docs/
 
 copyright: Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors.
 extra:
+  analytics:
+    provider: google
+    property: G-M0J229K798
   social:
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/dirigible_io
@@ -91,7 +97,3 @@ extra:
       link: https://www.youtube.com/c/dirigibleio
     - icon: fontawesome/brands/slack
       link: https://slack.xsk.io
-
-# google_analytics:
-#   - UA-49027147-1
-#   - auto

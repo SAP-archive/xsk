@@ -15,31 +15,29 @@ var registry = require("platform/v4/registry");
 exports.Job = function Job(constructJob) {
   if (!constructJob.uri) throw "URI not specified";
 
-  this.path = constructJob.uri;
-
-  com.sap.xsk.xsjob.ds.facade.XSKJobFacade.newJob(registry.getText(this.path), this.path);
+  this.schedules = com.sap.xsk.xsjob.ds.facade.XSKJobFacade.newJob(registry.getText(constructJob.uri));
 
   this.activate = function () {
-    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.activate(this.path);
+    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.activate(this.schedules);
   }
 
   this.deactivate = function () {
-    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.deactivate(this.path);
+    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.deactivate(this.schedules);
   }
 
   this.configure = function (config) {
     if(!config.start_time) throw "Start time must be provided";
 
-    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.configure(this.path, config.status, parseDate(config.start_time), config.end_time ? parseDate(config.end_time) : null);
+    com.sap.xsk.xsjob.ds.facade.XSKJobFacade.configure(this.schedules, config.status, parseDate(config.start_time), config.end_time ? parseDate(config.end_time) : null);
   }
 
   this.getConfiguration = function () {
-    let configuration = com.sap.xsk.xsjob.ds.facade.XSKJobFacade.getConfiguration(this.path);
+    let configuration = com.sap.xsk.xsjob.ds.facade.XSKJobFacade.getConfiguration(this.schedules[0]);
     let startAtTimestamp = configuration.getStartAt();
     let endAtTimestamp = configuration.getEndAt();
 
     return {
-      status: com.sap.xsk.xsjob.ds.facade.XSKJobFacade.isActive(this.path),
+      status: com.sap.xsk.xsjob.ds.facade.XSKJobFacade.isActive(this.schedules[0]),
       start_time: startAtTimestamp ? new Date(startAtTimestamp.getTime()) : null,
       end_time: endAtTimestamp ? new Date(endAtTimestamp.getTime()) : null
     };

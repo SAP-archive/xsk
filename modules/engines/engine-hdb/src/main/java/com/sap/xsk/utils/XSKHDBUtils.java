@@ -147,7 +147,7 @@ public class XSKHDBUtils {
     }
     String errMsg = "HDB Table Function file not correct";
     XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
-        "", XSKCommonsConstants.HDB_SCALAR_FUNCTION_PARSER, XSKCommonsConstants.MODULE_PARSERS,
+        "", parser, XSKCommonsConstants.MODULE_PARSERS,
         XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
     throw new XSKDataStructuresException(errMsg);
   }

@@ -28,12 +28,11 @@ import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctio
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
+import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.service.XSKDataStructureTopologicalSorter;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
-import com.sap.xsk.utils.XSKCommonsConstants;
-import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -69,6 +68,8 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
   private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
+  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
+
   private Map<String, String> parserTypes = XSKHDBModule.getParserTypes();
 
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
@@ -94,17 +95,19 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     String registryPath = getRegistryPath(resource);
     String contentAsString = getContent(resource);
 
-
     XSKDataStructureModel dataStructureModel;
     try {
-      if(isParsed(registryPath, contentAsString, resourceExtension)) {
+      if(!parserServices.containsKey(resourceExtension) || isParsed(registryPath, contentAsString, resourceExtension)) {
         return;
       }
+
       dataStructureModel = xskCoreParserService.parseDataStructure(resourceExtension, registryPath, contentAsString);
+
       if (dataStructureModel == null) {
         return;
       }
     } catch (ReflectiveOperationException e) {
+      logger.error("Preparse hash check failed for path " + registryPath);
       logger.error(e.getMessage());
       return;
     } catch (XSKDataStructuresException e) {
@@ -554,21 +557,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     return parserTypes.get(resourceExtension);
   }
 
-  private void setXskDataStructureModelName(XSKDataStructureModel xskDataStructureModel, String content, String location)
-      throws XSKDataStructuresException {
-
-    if(xskDataStructureModel instanceof XSKDataStructureHDBProcedureModel) {
-      xskDataStructureModel.setName(XSKHDBUtils.extractProcedureNameFromContent(content, location));
-    } else if(xskDataStructureModel instanceof XSKDataStructureHDBTableFunctionModel) {
-      xskDataStructureModel
-          .setName(XSKHDBUtils.extractTableFunctionNameFromContent(content, location, XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER));
-    } else if(xskDataStructureModel instanceof XSKDataStructureCdsModel) {
-      xskDataStructureModel.setName(location);
-    } else {
-      xskDataStructureModel.setName(XSKCommonsUtils.getRepositoryBaseObjectName(location));
-    }
-  }
-
   private boolean isParsed(String location, String content, String resourceExtension)
       throws XSKDataStructuresException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
@@ -578,7 +566,6 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     baseDataStructureModel.setLocation(location);
     baseDataStructureModel.setType(modelType);
     baseDataStructureModel.setHash(DigestUtils.md5Hex(content));
-    setXskDataStructureModelName(baseDataStructureModel, content, location);
 
     return managerServices.get(baseDataStructureModel.getType()).existsArtifactMetadata(baseDataStructureModel);
   }

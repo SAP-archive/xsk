@@ -57,14 +57,10 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
       dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
       logger.info("Synchronized a new Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
     } else {
-      XSKDataStructureCdsModel existing = getDataStructuresCoreService()
-          .getDataStructure(entitiesModel.getLocation(), entitiesModel.getType());
-      if (!entitiesModel.equals(existing)) {
-        getDataStructuresCoreService()
-            .updateDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
-        dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
-        logger.info("Synchronized a modified Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
-      }
+      getDataStructuresCoreService()
+          .updateDataStructure(entitiesModel.getLocation(), entitiesModel.getName(), entitiesModel.getHash(), entitiesModel.getType());
+      dataStructureEntitiesModel.put(entitiesModel.getName(), entitiesModel);
+      logger.info("Synchronized a modified Entities file [{}] from location: {}", entitiesModel.getName(), entitiesModel.getLocation());
     }
     if (!entitiesSynchronized.contains(entitiesModel.getLocation())) {
       entitiesSynchronized.add(entitiesModel.getLocation());

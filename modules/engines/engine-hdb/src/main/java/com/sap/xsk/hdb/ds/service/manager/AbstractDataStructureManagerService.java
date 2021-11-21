@@ -50,24 +50,14 @@ public abstract class AbstractDataStructureManagerService<T extends XSKDataStruc
   }
 
   public void synchronizeParsedByRootMetadata(T tableModel) throws XSKDataStructuresException {
-    XSKDataStructureCdsModel existing = getDataStructuresCoreService()
-        .getDataStructure(tableModel.getLocation(), tableModel.getType());
-    if (existing == null) {
-      getDataStructuresCoreService()
+    if (!getDataStructuresCoreService().existsDataStructure(tableModel.getLocation(), tableModel.getType())) {
+      xskDataStructuresCoreService
           .createDataStructure(tableModel.getLocation(), tableModel.getName(), tableModel.getHash(), tableModel.getType());
-      logger.info("Synchronized a new Entities file [{}] from location: {}", tableModel.getName(), tableModel.getLocation());
-    } else {
-      if (!tableModel.equals(existing)) {
-        getDataStructuresCoreService()
-            .updateDataStructure(tableModel.getLocation(), tableModel.getName(), tableModel.getHash(), tableModel.getType());
-        logger.info("Synchronized a modified Entities file [{}] from location: {}", tableModel.getName(), tableModel.getLocation());
-      }
+      logger.info("Root artifact synchronized a new Entities file [{}] from location: {}", tableModel.getName(), tableModel.getLocation());
     }
   }
 
   public boolean existsArtifactMetadata(T tableModel) throws XSKDataStructuresException {
-    XSKDataStructureModel existingModel = getDataStructuresCoreService()
-        .getDataStructure(tableModel.getLocation(), tableModel.getType());
-    return existingModel != null && existingModel.equals(tableModel);
+    return xskDataStructuresCoreService.existsDataStructureByLocationAndHash(tableModel.getLocation(), tableModel.getHash(), tableModel.getType());
   }
 }

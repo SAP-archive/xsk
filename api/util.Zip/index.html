@@ -974,9 +974,43 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#constructors" class="md-nav__link">
+    Constructors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     Parameters
   </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zip-object" class="md-nav__link">
+    Zip object
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config-object" class="md-nav__link">
+    config object
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settings-object" class="md-nav__link">
+    settings object
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1020,6 +1054,7 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
+<p>Create a new zip object.</p>
 <p><div class="highlight"><pre><span></span><code><span class="c1">// Create a new zip object</span>
 <span class="kd">var</span> <span class="nx">zip</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Zip</span><span class="p">();</span>
 <span class="c1">// Set content to the zip object</span>
@@ -1031,6 +1066,7 @@
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Disposition&#39;</span><span class="p">,</span> <span class="s1">&#39;attachment; filename = test.zip&#39;</span><span class="p">);</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">zip</span><span class="p">.</span><span class="nx">asArrayBuffer</span><span class="p">());</span>
 </code></pre></div>
+Create a zip object from byte array source.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// Zip byte array source</span>
 <span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">[</span><span class="mf">123</span><span class="p">,</span> <span class="mf">34</span><span class="p">,</span> <span class="mf">120</span><span class="p">,</span> <span class="mf">115</span><span class="p">,</span> <span class="mf">107</span><span class="p">,</span> <span class="mf">46</span><span class="p">,</span> <span class="mf">116</span><span class="p">,</span> <span class="mf">120</span><span class="p">,</span> <span class="mf">116</span><span class="p">,</span> <span class="mf">34</span><span class="p">,</span> <span class="mf">58</span><span class="p">,</span> <span class="mf">34</span><span class="p">,</span> <span class="mf">84</span><span class="p">,</span> <span class="mf">104</span><span class="p">,</span> <span class="mf">105</span><span class="p">,</span> <span class="mf">115</span><span class="p">,</span> <span class="mf">32</span><span class="p">,</span> <span class="mf">105</span><span class="p">,</span> <span class="mf">115</span><span class="p">,</span> <span class="mf">32</span><span class="p">,</span> <span class="mf">88</span><span class="p">,</span> <span class="mf">83</span><span class="p">,</span> <span class="mf">75</span><span class="p">,</span> <span class="mf">34</span><span class="p">,</span> <span class="mf">125</span><span class="p">];</span>
 
@@ -1050,8 +1086,12 @@
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s1">&#39;application/zip&#39;</span><span class="p">;</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Disposition&#39;</span><span class="p">,</span> <span class="s1">&#39;attachment; filename = test.zip&#39;</span><span class="p">);</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">zip</span><span class="p">.</span><span class="nx">asArrayBuffer</span><span class="p">());</span>
-</code></pre></div></p>
+</code></pre></div>
+<h2 id="constructors">Constructors</h2>
+<div class="highlight"><pre><span></span><code><span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Zip</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="parameters">Parameters</h2>
+<h3 id="zip-object">Zip object</h3>
 <table>
 <thead>
 <tr>
@@ -1062,9 +1102,58 @@
 </thead>
 <tbody>
 <tr>
-<td></td>
-<td></td>
-<td></td>
+<td><strong>config</strong></td>
+<td>Object containing new zip configuration parameters.</td>
+<td><em><code>object</code></em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="config-object">config object</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>source</strong></td>
+<td>Specifies the source for the compressed content. If no source is specified, an empty Zip object is created.</td>
+<td><em><code>byte array</code></em></td>
+</tr>
+<tr>
+<td><strong>index</strong></td>
+<td>If the first argument is of type ResultSet, the number specifies the index of a Blob column and is mandatory.</td>
+<td><em><code>number</code></em></td>
+</tr>
+<tr>
+<td><strong>settings</strong></td>
+<td>Used to specify zip options.</td>
+<td><em><code>object</code></em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="settings-object">settings object</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>password</strong></td>
+<td>The password is mandatory when creating a zip object from an existing encrypted archive.</td>
+<td><em><code>string</code></em></td>
+</tr>
+<tr>
+<td><strong>maxUncompressedSizeInBytes</strong></td>
+<td>A global restriction applies to the amount of data that can be uncompressed</td>
+<td><em><code>number</code></em></td>
 </tr>
 </tbody>
 </table>
@@ -1079,9 +1168,14 @@
 </thead>
 <tbody>
 <tr>
-<td></td>
-<td></td>
-<td></td>
+<td><strong><em>metadata</em></strong></td>
+<td>Contains meta information about the current zip object.</td>
+<td><em><code>object</code></em></td>
+</tr>
+<tr>
+<td><strong><em>password</em></strong></td>
+<td>Setting a value to this property changes the password used for encryption of the zip object. Assigning an empty string disables encryption. Accessing this property will return undefined.</td>
+<td><em><code>string</code></em></td>
 </tr>
 </tbody>
 </table>
@@ -1096,9 +1190,9 @@
 </thead>
 <tbody>
 <tr>
-<td></td>
-<td></td>
-<td></td>
+<td><strong>asArrayBuffer()</strong></td>
+<td>Returns the zip archive as byte array</td>
+<td><em><code>byte array</code></em></td>
 </tr>
 </tbody>
 </table>

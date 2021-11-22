@@ -200,4 +200,34 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
                 "table.tableType = COLUMNSTORE;";
         XSKDataStructureModelFactory.parseView("db/test.hdbtable", content);
     }
+
+    @Test
+    public void parseRowTableWithIndexes() throws Exception {
+      InputStream in = XSKTableParserTest.class.getResourceAsStream("/ParsingTableWithUniqueAndNoUniqueIndexes.hdbtable");
+      String contents = IOUtils.toString(in, StandardCharsets.UTF_8);
+      XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/ParsingTableWithUniqueAndNoUniqueIndexes.hdbtable", contents);
+
+      assertEquals(3, model.getColumns().size());
+      assertEquals("ParsingTableWithUniqueAndNoUniqueIndexes", model.getName());
+      assertEquals("DBADMIN", model.getSchema());
+      assertEquals("ROWSTORE", model.getTableType());
+      assertEquals("/ParsingTableWithUniqueAndNoUniqueIndexes.hdbtable", model.getLocation());
+      assertEquals("HDBTABLE", model.getType());
+      assertNotNull(model.getCreatedBy());
+      assertNotNull(model.getCreatedAt());
+      assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
+      assertEquals(contents, model.getRawContent());
+
+      assertEquals(1, model.getConstraints().getUniqueIndices().size());
+      assertEquals("l2", model.getConstraints().getUniqueIndices().get(0).getName());
+      assertEquals(1, model.getConstraints().getUniqueIndices().get(0).getColumns().length);
+      assertEquals("Col1", model.getConstraints().getUniqueIndices().get(0).getColumns()[0]);
+      assertEquals("ASC", model.getConstraints().getUniqueIndices().get(0).getOrder());
+      assertEquals("BTREE", model.getConstraints().getUniqueIndices().get(0).getIndexType());
+      assertEquals(1,model.getIndexes().size());
+      assertEquals("l1", model.getIndexes().get(0).getIndexName());
+      assertEquals("DESC", model.getIndexes().get(0).getOrder());
+      assertEquals("CPBTREE", model.getIndexes().get(0).getIndexType());
+      assertEquals(2, model.getIndexes().get(0).getIndexColumns().size());
+    }
 }

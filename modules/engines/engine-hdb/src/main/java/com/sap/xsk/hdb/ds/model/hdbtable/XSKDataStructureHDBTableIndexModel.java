@@ -11,21 +11,25 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbtable;
 
-/**
- * The Data Structure Table Constraint Unique Model.
- */
-public class XSKDataStructureHDBTableConstraintUniqueModel extends XSKDataStructureHDBTableConstraintModel {
+import java.util.Set;
 
-  private String name;
+public class XSKDataStructureHDBTableIndexModel {
+
+  private String indexName;
   private String indexType;
   private String order;
+  private boolean unique;
+  private Set<String> indexColumns;
 
-  public String getName() {
-    return name;
+  public XSKDataStructureHDBTableIndexModel() {
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public String getIndexName() {
+    return indexName;
+  }
+
+  public void setIndexName(String indexName) {
+    this.indexName = indexName;
   }
 
   public String getIndexType() {
@@ -44,4 +48,19 @@ public class XSKDataStructureHDBTableConstraintUniqueModel extends XSKDataStruct
     this.order = order;
   }
 
+  public boolean isUnique() {
+    return unique;
+  }
+
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
+
+  public Set<String> getIndexColumns() {
+    return indexColumns;
+  }
+
+  public void setIndexColumns(Set<String> indexColumns) {
+    this.indexColumns = indexColumns;
+  }
 }

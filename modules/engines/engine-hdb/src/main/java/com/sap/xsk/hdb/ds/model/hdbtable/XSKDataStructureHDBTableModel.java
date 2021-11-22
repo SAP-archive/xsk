@@ -28,6 +28,8 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
 
   private XSKDataStructureHDBTableConstraintsModel constraints = new XSKDataStructureHDBTableConstraintsModel();
 
+  private List<XSKDataStructureHDBTableIndexModel> indexes = new ArrayList<>();
+
   private Boolean publicProp;
 
   private String loggingType;
@@ -125,5 +127,14 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
 
   public Boolean getTemporary() {
     return temporary;
+  }
+
+
+  public List<XSKDataStructureHDBTableIndexModel> getIndexes() {
+    return indexes;
+  }
+
+  public void setIndexes(List<XSKDataStructureHDBTableIndexModel> indexes) {
+    this.indexes = indexes;
   }
 }

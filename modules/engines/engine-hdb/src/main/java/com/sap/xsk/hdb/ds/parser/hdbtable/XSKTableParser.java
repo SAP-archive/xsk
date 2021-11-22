@@ -20,9 +20,11 @@ import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableIndexModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.transformer.HDBTableDefinitionModelToHDBTableColumnModelTransformer;
+import com.sap.xsk.hdb.ds.transformer.HDBTableDefinitionModelToHDBTableIndexModelTransformer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
 import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLECoreVisitor;
@@ -30,13 +32,11 @@ import com.sap.xsk.parser.hdbtable.custom.XSKHDBTABLESyntaxErrorListener;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEColumnsModel;
 import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
-import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEIndexesModel;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -52,6 +52,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableParser.class);
   private HDBTableDefinitionModelToHDBTableColumnModelTransformer columnModelTransformer = new HDBTableDefinitionModelToHDBTableColumnModelTransformer();
+  private HDBTableDefinitionModelToHDBTableIndexModelTransformer indexModelTransformer = new HDBTableDefinitionModelToHDBTableIndexModelTransformer();
 
   @Override
   public String getType() {
@@ -143,39 +144,13 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
       }
     });
 
-    List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndices = new ArrayList<>();
-
     if (hdbtableDefinitionModel.getIndexes() != null) {
-      for (XSKHDBTABLEIndexesModel index : hdbtableDefinitionModel.getIndexes()) {
-        try {
-          index.checkForAllIndexMandatoryFieldsPresence();
-        } catch (Exception e) {
-          XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
-              XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_TABLE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
-              XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-          throw new XSKHDBTableMissingPropertyException(
-              String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
-        }
-        XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex = new XSKDataStructureHDBTableConstraintUniqueModel();
-        uniqueIndex.setName(index.getIndexName());
-        uniqueIndex.setColumns(index.getIndexColumns().toArray(String[]::new));
+      XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex = new XSKDataStructureHDBTableConstraintUniqueModel();
+      XSKDataStructureHDBTableIndexModel tableIndex = new XSKDataStructureHDBTableIndexModel();
 
-        index.getIndexColumns().forEach(col -> {
-          List<XSKHDBTABLEColumnsModel> foundMatch = hdbtableDefinitionModel.getColumns().stream().filter(x -> x.getName().equals(col))
-              .collect(Collectors.toList());
-          if (foundMatch.size() != 1) {
-            String errMsg = String.format("%s: the column does not have a definition but is specified as an index", col);
-            XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
-                "", XSKCommonsConstants.HDB_TABLE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
-                XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-            throw new IllegalStateException(errMsg);
-          }
-        });
-
-        uniqueIndices.add(uniqueIndex);
+      dataStructureHDBTableModel.setIndexes(indexModelTransformer.transform(hdbtableDefinitionModel, location, tableIndex));
+      dataStructureHDBTableModel.getConstraints().setUniqueIndices(indexModelTransformer.transform(hdbtableDefinitionModel, location, uniqueIndex));
       }
-      dataStructureHDBTableModel.getConstraints().setUniqueIndices(uniqueIndices);
-    }
     return dataStructureHDBTableModel;
   }
 

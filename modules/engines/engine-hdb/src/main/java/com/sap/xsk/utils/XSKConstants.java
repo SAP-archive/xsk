@@ -28,6 +28,9 @@ public final class XSKConstants {
   public static final String XSK_HDBTABLE_DROP = "DROP ";
   public static final String XSK_SYNONYM_PUBLIC_SCHEMA = "PUBLIC";
   public static final String XSK_HDBTABLETYPE_CREATE = "CREATE ";
+  public static final String HDBTABLE_INDEX_ORDER_HANA_V1_DSC = "DSC";
+  public static final String HDBTABLE_INDEX_ORDER_HANA_DESC = "DESC";
+
   /**
    * The Unix separator character.
    */

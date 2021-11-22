@@ -17,7 +17,7 @@ exports.getEditor = function () {
 		"region": "center-top",
 		"label": "XSJob",
     "defaultEditor": false,
-		"link": "../xsk-job-menu/editor/editor.html",
+		"link": "../xsk-ide-xsjob/editor/editor.html",
 		"contentTypes": ["application/json+xsjob"]
 	};
 };

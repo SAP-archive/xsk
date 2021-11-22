@@ -15,17 +15,16 @@ exports.getTemplate = function () {
 		"label": " XS Scheduled Job",
 		"extension": "xsjob",
 		"data": JSON.stringify(JSON.parse('{\n' +
-        '    "description": "Read stock value",\n' +
-        '    "action": "yahoo:yahoo.xsjs::readStock",\n' +
-        '    "schedules": [\n' +
-        '       {\n' +
-        '          "description": "Read current stock value",\n' +
-        '          "xscron": "* * * * * * 59",\n' +
-        '          "parameter": {\n' +
-        '             "stock": "SAP.DE"\n' +
-        '             }\n' +
-        '       }\n' +
-        '    ]\n' +
-        '}'), null, 2)
-	};
+			'    "description": "Read stock value",\n' +
+			'    "action": "yahoo:yahoo.xsjs::readStock",\n' +
+			'    "schedules": [\n' +
+			'       {\n' +
+			'          "description": "Read current stock value",\n' +
+			'          "xscron": "* * * * * * 59",\n' +
+			'          "parameter": {\n' +
+			'             "stock": "SAP.DE"\n' +
+			'             }\n' +
+			'       }\n' +
+			'    ]\n' +
+			'}'), null, 2)	};
 };

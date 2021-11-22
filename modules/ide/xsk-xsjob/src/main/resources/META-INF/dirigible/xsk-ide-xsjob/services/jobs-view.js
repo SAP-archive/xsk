@@ -16,6 +16,6 @@ exports.getView = function () {
 		"factory": "frame",
 		"region": "center-middle",
 		"label": "XSJobs",
-		"link": "../xsk-job-menu/view/jobs.html"
+		"link": "../xsk-ide-xsjob/view/jobs.html"
 	};
 };

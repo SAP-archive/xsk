@@ -45,7 +45,13 @@
         <input type="text" class="form-control input" placeholder="Schedule description"
                ng-model="schedule.description">
         <label data-toggle="tooltip" data-placement="top"
-               title="Year 4-digit,1 to 12 Day-31 to 31 DayofWeekmon,tue,wed,thu,fri,sat,sunHour 0 to 23 Minute	0 to 59.Second	0 to 59">XSCron</label>
+               title="Year 4-digit,
+                      Month: +1 to 12,
+                      Day: -31 to 31
+                      Day of Week: mon,tue,wed,thu,fri,sat,sun,
+                      Hour: 0 to 23,
+                      Minute: 0 to 59,
+                      Second: 0 to 59">XSCron</label>
 
         <input type="text" class="form-control" ng- placeholder="XSCron" ng-model="schedule.xscron" ng-mouseover="hoverIn()"
                ng-mouseleave="hoverOut()">
@@ -82,7 +88,7 @@
           <br>
         </div>
       </div>
-      <button type="button" ng-click="addScheduler()" class="btn btn-lg"><i class="fa fa-plus" aria-hidden="false"> Scheduler</i>
+      <button type="button" ng-click="addScheduler()" class="btn btn-lg"><i class="fa fa-plus" aria-hidden="false"> Schedule</i>
       </button>
     </div>
 

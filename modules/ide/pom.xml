@@ -20,8 +20,9 @@
 		<module>ide-migration</module>
 		<module>ide-hdbti</module>
     <module>xsk-workspace-menu</module>
-    <module>xsk-job-menu</module>
-	</modules>
+    <module>xsk-xsjob-menu</module>
+    <module>xsk-xsjob</module>
+  </modules>
 
 	<properties>
 		<license.header.location>../../licensing-header.txt</license.header.location>

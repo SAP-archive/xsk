@@ -35,7 +35,6 @@ nav:
       - $.session: 'api/session.md'
       - $.trace: 'api/trace.md'
       - $.util: 'api/util.md'
-        - $.util.Zip: 'api/util.Zip.md'
       - $.util.codec: 'api/util.codec.md'
       - $.web: 'api/web.md'
     - Setup: 

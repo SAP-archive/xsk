@@ -1020,8 +1020,37 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
-<div class="highlight"><pre><span></span><code>
+<p><div class="highlight"><pre><span></span><code><span class="c1">// Create a new zip object</span>
+<span class="kd">var</span> <span class="nx">zip</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Zip</span><span class="p">();</span>
+<span class="c1">// Set content to the zip object</span>
+<span class="nx">zip</span><span class="p">[</span><span class="s1">&#39;xsk.txt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;This is XSK&#39;</span><span class="p">;</span>
+
+<span class="c1">// Download the zip file</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">OK</span><span class="p">;</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s1">&#39;application/zip&#39;</span><span class="p">;</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Disposition&#39;</span><span class="p">,</span> <span class="s1">&#39;attachment; filename = test.zip&#39;</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">zip</span><span class="p">.</span><span class="nx">asArrayBuffer</span><span class="p">());</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1">// Zip byte array source</span>
+<span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">[</span><span class="mf">123</span><span class="p">,</span> <span class="mf">34</span><span class="p">,</span> <span class="mf">120</span><span class="p">,</span> <span class="mf">115</span><span class="p">,</span> <span class="mf">107</span><span class="p">,</span> <span class="mf">46</span><span class="p">,</span> <span class="mf">116</span><span class="p">,</span> <span class="mf">120</span><span class="p">,</span> <span class="mf">116</span><span class="p">,</span> <span class="mf">34</span><span class="p">,</span> <span class="mf">58</span><span class="p">,</span> <span class="mf">34</span><span class="p">,</span> <span class="mf">84</span><span class="p">,</span> <span class="mf">104</span><span class="p">,</span> <span class="mf">105</span><span class="p">,</span> <span class="mf">115</span><span class="p">,</span> <span class="mf">32</span><span class="p">,</span> <span class="mf">105</span><span class="p">,</span> <span class="mf">115</span><span class="p">,</span> <span class="mf">32</span><span class="p">,</span> <span class="mf">88</span><span class="p">,</span> <span class="mf">83</span><span class="p">,</span> <span class="mf">75</span><span class="p">,</span> <span class="mf">34</span><span class="p">,</span> <span class="mf">125</span><span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">zip</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Zip</span><span class="p">({</span>
+    <span class="nx">source</span><span class="o">:</span> <span class="nx">source</span>
+<span class="p">});</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">entry</span> <span class="ow">in</span> <span class="nx">zip</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Loop through zip entries and modify if needed</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">entry</span> <span class="o">===</span> <span class="s1">&#39;xsk.txt&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">zip</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;XSK is great&#39;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Download the zip file</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">OK</span><span class="p">;</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s1">&#39;application/zip&#39;</span><span class="p">;</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Content-Disposition&#39;</span><span class="p">,</span> <span class="s1">&#39;attachment; filename = test.zip&#39;</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">zip</span><span class="p">.</span><span class="nx">asArrayBuffer</span><span class="p">());</span>
+</code></pre></div></p>
 <h2 id="parameters">Parameters</h2>
 <table>
 <thead>

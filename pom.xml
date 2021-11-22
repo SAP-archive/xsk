@@ -31,7 +31,7 @@
 		<module>modules</module>
 		<module>resources</module>
 		<module>releng</module>
-  </modules>
+    </modules>
 
 	<profiles>
 		<profile>

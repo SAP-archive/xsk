@@ -15,81 +15,12 @@ $.web
 
 ## Classes
 
-### $.web.Body
-
-#### Functions
-
-| Function            | Description                                                        | Returns              |
-|---------------------|--------------------------------------------------------------------|----------------------|
-| **asArrayBuffer()** | Returns the content of an HTTP request entity body as ArrayBuffer. | _`ArrayBuffer`_      |
-| **asArrayBuffer()** | Returns the content of an HTTP request entity body as ArrayBuffer. | _`string`_           |
-| **asWebRequest()**  | Returns the content of an HTTP request entity body as WebRequest.  | _`$.web.WebRequest`_ |
-
-### $.web.EntityList
-
-#### Properties
-
-| Name       | Description                  | Type        |
-|------------|------------------------------|-------------|
-| **length** | The size of the entity list. | _`integer`_ |
-
-#### Functions
-
-| Function     | Description                                                         | Returns                     |
-|--------------|---------------------------------------------------------------------|-----------------------------|
-| **create()** | Creates a sub-entity in the current list of entities in EntityList. | _`$.web.WebEntityResponse`_ |
-
-### $.web.TupelList
-
-#### Properties
-
-| Name       | Description                 | Type        |
-|------------|-----------------------------|-------------|
-| **length** | The size of the tupel list. | _`integer`_ |
-
-#### Functions
-
-| Function             | Description                          | Returns     |
-|----------------------|--------------------------------------|-------------|
-| **get(name)**        | Returns the values for a given name. | _`string`_  |
-| **remove(name)**     | Removes the value for a given name.  | _`-`_       |
-| **set(name, value)** | Sets the value for a given name.     | _`boolean`_ |
-
-### $.web.WebEntityRequest
-
-#### Properties
-
-| Name            | Description                     | Type                 |
-|-----------------|---------------------------------|----------------------|
-| **body**        | The body of the request.        | _`$.web.Body`_       |
-| **contentType** | The content type of the entity. | _`string`_           |
-| **entities**    | The sub-entities of the entity. | _`$.web.EntityList`_ |
-| **headers**     | The headers of the entity.      | _`$.web.TupelList`_  |
-| **parameters**  | The parameters of the entity.   | _`$.web.TupelList`_  |
-
-#### Functions
-
-| Function                 | Description                  | Returns |
-|--------------------------|------------------------------|---------|
-| **setBody(body, index)** | Sets the body of the entity. | _`-`_   |
-
-### $.web.WebEntityResponse
-
-#### Properties
-
-| Name            | Description                     | Type                 |
-|-----------------|---------------------------------|----------------------|
-| **body**        | The body of the response.       | _`$.web.Body`_       |
-| **contentType** | The content type of the entity. | _`string`_           |
-| **entities**    | The sub-entities of the entity. | _`$.web.EntityList`_ |
-| **headers**     | The headers of the entity.      | _`$.web.TupelList`_  |
-
-#### Functions
-
-| Function                 | Description                  | Returns |
-|--------------------------|------------------------------|---------|
-| **setBody(body, index)** | Sets the body of the entity. | _`-`_   |
-
-### [`$.web.WebRequest`](../request)
-
-### [`$.web.WebResponse`](../response)
+| Classes                                        | Description                                               |
+|------------------------------------------------|-----------------------------------------------------------|
+| **[Body](../web.Body/)**                     | Class for representing the body of an HTTP request entity. |
+| **[EntityList](../web.Zip/)** | Class representing a list of request or response entities. |
+| **[TupelList](../web.SAXParser/)**                     | Class representing a list of name-value pairs. |
+| **[WebEntityRequest](../web.Zip/)** | Class representing an HTTP request entity. |
+| **[WebEntityResponse](../web.SAXParser/)**                     | Class representing an HTTP response entity. |
+| **[WebRequest](../request/)** | Class representing the client HTTP request currently being processed. |
+| **[WebResponse](../response/)**                     | Class representing the HTTP response currently being populated. |

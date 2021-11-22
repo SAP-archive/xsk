@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/setup/helm/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.0b1">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.0b2">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.450eaa28.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0c73cc44.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.9204c3b2.min.css">
@@ -1133,7 +1133,7 @@
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
-                
+
 <h1 id="setup-with-helm">Setup with Helm</h1>
 <h2 id="overview">Overview</h2>
 <hr />
@@ -1161,7 +1161,9 @@ helm repo update
 <h4 id="default-setup">Default Setup</h4>
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk
 </code></pre></div>
-<details class="info" open="open"><summary>Accessing the XSK Instance</summary><p>Running this command will install XSK Deployment and Service with ClusterIP only.
+<details class="info" open="open">
+<summary>Accessing the XSK Instance</summary>
+<p>Running this command will install XSK Deployment and Service with ClusterIP only.
 To access the XSK instance, execute the command that was printed in the console.</p>
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code>export POD_NAME=$(kubectl get pods --namespace default -l &quot;app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk&quot; -o jsonpath=&quot;{.items[0].metadata.name}&quot;)
@@ -1183,7 +1185,9 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 --set kyma.apirule.host=&lt;kyma-host&gt;
 </code></pre></div>
 <p>This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.</p>
-<details class="info" open="open"><summary>Configuration Options</summary><p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</a>.</p>
+<details class="info" open="open">
+<summary>Configuration Options</summary>
+<p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</a>.</p>
 </details>
 </div>
 <div class="tabbed-block">
@@ -1193,7 +1197,9 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 --set database.enabled=true
 </code></pre></div>
 <p>This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.</p>
-<details class="info" open="open"><summary>Configuration Options</summary><p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</a>.</p>
+<details class="info" open="open">
+<summary>Configuration Options</summary>
+<p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</a>.</p>
 </details>
 </div>
 </div>
@@ -1302,7 +1308,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </tr>
 </tbody>
 </table>
-                
+
               
             </article>
           </div>
@@ -1423,7 +1429,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.01824240.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.0d86bc28.min.js"></script>
+      <script src="../../assets/javascripts/bundle.0885dc41.min.js"></script>
       
     
   </body>

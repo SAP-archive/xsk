@@ -8,14 +8,14 @@
       
       
       
-        <link rel="canonical" href="https://www.xsk.io/api/web.Body/">
+        <link rel="canonical" href="https://www.xsk.io/api/web.EntityList/">
       
       <link rel="icon" href="/img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.0b2">
     
     
       
-        <title>$.web.Body - Project XSK</title>
+        <title>$.web.EntityList - Project XSK</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#webbody" class="md-skip">
+        <a href="#webentitylist" class="md-skip">
           Skip to content
         </a>
       
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              $.web.Body
+              $.web.EntityList
             
           </span>
         </div>
@@ -967,6 +967,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#functions" class="md-nav__link">
     Functions
   </a>
@@ -985,19 +992,36 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/sap/xsk/edit/gh-pages/docs-site/docs/api/web.Body.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/sap/xsk/edit/gh-pages/docs-site/docs/api/web.EntityList.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-<h1 id="webbody">$.web.Body</h1>
-<p><code>$.web.Body</code> represents the body of an HTTP request entity.</p>
+<h1 id="webentitylist">$.web.EntityList</h1>
+<p><code>$.web.Entitylist</code> represents a list of request or response entities.</p>
 <h2 id="overview">Overview</h2>
 <ul>
 <li>Definition: <a href="https://github.com/SAP/xsk/issues/22">https://github.com/SAP/xsk/issues/22</a></li>
 <li>Module: <a href="https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/web/web.js">web/web.js</a></li>
 <li>Status: <code>alpha</code></li>
 </ul>
+<h2 id="properties">Properties</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>length</strong></td>
+<td>The size of the entity list.</td>
+<td><em><code>integer</code></em></td>
+</tr>
+</tbody>
+</table>
 <h2 id="functions">Functions</h2>
 <table>
 <thead>
@@ -1009,19 +1033,9 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>asArrayBuffer()</strong></td>
-<td>Returns the content of an HTTP request entity body as ArrayBuffer.</td>
-<td><em><code>ArrayBuffer</code></em></td>
-</tr>
-<tr>
-<td><strong>asArrayBuffer()</strong></td>
-<td>Returns the content of an HTTP request entity body as ArrayBuffer.</td>
-<td><em><code>string</code></em></td>
-</tr>
-<tr>
-<td><strong>asWebRequest()</strong></td>
-<td>Returns the content of an HTTP request entity body as WebRequest.</td>
-<td><em><code>$.web.WebRequest</code></em></td>
+<td><strong>create()</strong></td>
+<td>Creates a sub-entity in the current list of entities in EntityList.</td>
+<td><em><code>$.web.WebEntityResponse</code></em></td>
 </tr>
 </tbody>
 </table>

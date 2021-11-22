@@ -18,9 +18,9 @@ $.web
 | Classes                                        | Description                                               |
 |------------------------------------------------|-----------------------------------------------------------|
 | **[Body](../web.Body/)**                     | Class for representing the body of an HTTP request entity. |
-| **[EntityList](../web.Zip/)** | Class representing a list of request or response entities. |
-| **[TupelList](../web.SAXParser/)**                     | Class representing a list of name-value pairs. |
-| **[WebEntityRequest](../web.Zip/)** | Class representing an HTTP request entity. |
-| **[WebEntityResponse](../web.SAXParser/)**                     | Class representing an HTTP response entity. |
+| **[EntityList](../web.EntityList/)** | Class representing a list of request or response entities. |
+| **[TupelList](../web.TupelList/)**                     | Class representing a list of name-value pairs. |
+| **[WebEntityRequest](../web.WebEntityRequest/)** | Class representing an HTTP request entity. |
+| **[WebEntityResponse](../web.WebEntityResponse/)**                     | Class representing an HTTP response entity. |
 | **[WebRequest](../request/)** | Class representing the client HTTP request currently being processed. |
 | **[WebResponse](../response/)**                     | Class representing the HTTP response currently being populated. |

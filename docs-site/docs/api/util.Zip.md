@@ -73,7 +73,7 @@ Name              | Description                                             | Ty
 
 Name              | Description                                             | Type
 ----------------- | ------------------------------------------------------- | -----------------
-**source** | Specifies the source for the compressed content. If no source is specified, an empty Zip object is created. | _`byte array`_ | _`$.db.ResultSet`_ | _`$.web.Body`_
+**source** | Specifies the source for the compressed content. If no source is specified, an empty Zip object is created. | _`byte array`_ / _`$.db.ResultSet`_ / _`$.web.Body`_
 **index** | If the first argument is of type ResultSet, the number specifies the index of a Blob column and is mandatory. | _`number`_
 **settings** | Used to specify zip options. | _`object`_
 

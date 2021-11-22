@@ -11,11 +11,17 @@
  */
 package com.sap.xsk.xsodata.ds.filter;
 
-import com.sap.xsk.xsodata.utils.XSKODataWrappedHttpServletRequest;
-import javax.servlet.*;
+import com.sap.xsk.utils.XSKWrappedHttpServletRequest;
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @WebFilter("/*")
 public class XSODataForwardFilter implements Filter {
@@ -28,25 +34,27 @@ public class XSODataForwardFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    XSKODataWrappedHttpServletRequest wrappedHttpServletRequest = new XSKODataWrappedHttpServletRequest((HttpServletRequest) request);
+    XSKWrappedHttpServletRequest wrappedHttpServletRequest = new XSKWrappedHttpServletRequest((HttpServletRequest) request);
 
     //only on production case
     String editorHeader = wrappedHttpServletRequest.getHeader("Dirigible-Editor");
     String requestMethod = wrappedHttpServletRequest.getMethod();
 
-    if (editorHeader == null && requestMethod.equals("POST")) {
-      wrappedHttpServletRequest.putHeader("Dirigible-Editor", "Workspace");
-    } else if (editorHeader == null) {
+    if (editorHeader == null) {
       String uri = wrappedHttpServletRequest.getRequestURI();
       int index = uri.indexOf(".xsodata");
       if (index > 0) {
-        String parameters = "";
-        if (uri.length() > index + (".xsodata".length() - 1)) {
-          parameters = uri.substring(index + ".xsodata".length());
-        }
+        if (requestMethod.equals("POST")) {
+          wrappedHttpServletRequest.putHeader("Dirigible-Editor", "Workspace");
+        } else {
+          String parameters = "";
+          if (uri.length() > index + (".xsodata".length() - 1)) {
+            parameters = uri.substring(index + ".xsodata".length());
+          }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/odata/v2/" + parameters);
-        dispatcher.forward(request, response);
+          RequestDispatcher dispatcher = request.getRequestDispatcher("/odata/v2/" + parameters);
+          dispatcher.forward(request, response);
+        }
       }
     }
 

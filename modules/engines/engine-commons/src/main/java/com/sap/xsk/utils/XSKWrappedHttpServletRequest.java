@@ -9,21 +9,17 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.xsodata.utils;
+package com.sap.xsk.utils;
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import java.util.*;
 
-public class XSKODataWrappedHttpServletRequest extends HttpServletRequestWrapper {
+public class XSKWrappedHttpServletRequest extends HttpServletRequestWrapper {
 
   private final Map<String, String> customHeaders;
 
-  public XSKODataWrappedHttpServletRequest(HttpServletRequest request) {
+  public XSKWrappedHttpServletRequest(HttpServletRequest request) {
     super(request);
     this.customHeaders = new HashMap<String, String>();
   }

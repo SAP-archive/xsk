@@ -96,6 +96,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://www.xsk.io/api/util.Zip/</loc>
+         <lastmod>2021-11-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://www.xsk.io/api/util.codec/</loc>
          <lastmod>2021-11-22</lastmod>
          <changefreq>daily</changefreq>

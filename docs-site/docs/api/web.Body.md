@@ -13,7 +13,7 @@ $.web.Body
 - Module: [web/web.js](https://github.com/SAP/xsk/blob/main/modules/api/api-xsjs/src/main/resources/META-INF/dirigible/xsk/web/web.js)
 - Status: `alpha`
 
-#### Functions
+## Functions
 
 | Function            | Description                                                        | Returns              |
 |---------------------|--------------------------------------------------------------------|----------------------|

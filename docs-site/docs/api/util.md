@@ -32,6 +32,13 @@ result += `\nconvertedBuff is: ${arrayBuffer} `;
 $.response.setBody(result);
 ```
 
+## Classes
+
+| Classes                                        | Description                                               |
+|------------------------------------------------|-----------------------------------------------------------|
+| **[SAXParser](../util.SAXParser/)**                     | Class for parsing XML. It is based on expat. |
+| **[Zip](../util.Zip/)** | Class for manipulation of zip archives. |
+
 ## Functions
 
 | Members             | Description                                            | Returns     |

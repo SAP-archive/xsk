@@ -12,17 +12,16 @@
 var dClient = require("http/v4/client");
 var repositoryManager = require("platform/v4/repository");
 var streams = require("io/v4/streams");
-var bytes= require("io/v4/bytes");
 var web = require("xsk/web/web");
 
-exports.OPTIONS	= 0;
-exports.GET	= 1;
+exports.OPTIONS = 0;
+exports.GET = 1;
 exports.HEAD = 2;
 exports.POST = 3;
 exports.PUT = 4;
-exports.DEL	= 5;
+exports.DEL = 5;
 exports.TRACE = 6;
-exports.CONNECT	= 7;
+exports.CONNECT = 7;
 exports.PATCH = 8;
 
 exports.CONTINUE = 100;
@@ -67,274 +66,290 @@ exports.GATEWAY_TIMEOUT = 504;
 exports.HTTP_VERSION_NOT_SUPPORTED = 505;
 
 var SET_COOKIE_HEADER = "Set-Cookie";
+var CONTENT_LENGTH_HEADER = "Content-Length";
 
-exports.readDestination = function(destinationPackage, destinationName) {
-	const DESTINATION_EXTENSION = ".xshttpdest";
-	var destinationFullFileName = destinationName + DESTINATION_EXTENSION;
-	var validPackage = destinationPackage.split('.').join('/') + '/';
-	var resource = repositoryManager.getResource('/registry/public/' + validPackage + destinationFullFileName);
-	var resourceByteArray = resource.getContent();
-	var resourceInputStream = streams.createByteArrayInputStream(resourceByteArray);
+exports.readDestination = function (destinationPackage, destinationName) {
+  const DESTINATION_EXTENSION = ".xshttpdest";
+  var destinationFullFileName = destinationName + DESTINATION_EXTENSION;
+  var validPackage = destinationPackage.split('.').join('/') + '/';
+  var resource = repositoryManager.getResource('/registry/public/' + validPackage + destinationFullFileName);
+  var resourceByteArray = resource.getContent();
+  var resourceInputStream = streams.createByteArrayInputStream(resourceByteArray);
 
-	var destResourceContent = resourceInputStream.readText();
-	resourceInputStream.close();
+  var destResourceContent = resourceInputStream.readText();
+  resourceInputStream.close();
 
-	var destResourceLineArray = destResourceContent.split(";");
+  var destResourceLineArray = destResourceContent.split(";");
 
   var destination = new exports.Destination();
 
-	destResourceLineArray.forEach(destResourceLine =>  {
-		var splitKeyValueArray = destResourceLine.split("=");
+  destResourceLineArray.forEach(destResourceLine => {
+    var splitKeyValueArray = destResourceLine.split("=");
 
-		var processedDestValue = processDestValue(splitKeyValueArray[1]);
-		var destKey = splitKeyValueArray[0].trim();
+    var processedDestValue = processDestValue(splitKeyValueArray[1]);
+    var destKey = splitKeyValueArray[0].trim();
     destination[destKey] = processedDestValue;
 
-	});
+  });
 
-	return destination;
+  return destination;
 };
 
-exports.Client = function() {
+exports.Client = function () {
 
-	var clientResponse;
-	var connectionTimeout;
+  var clientResponse;
+  var connectionTimeout;
 
-	this.request = function(param1, param2, param3) {
-		if (typeof param1 === "string") {
-			sendRequestWithHttpMethod(param1, param2, param3);
-			return;
-		} else if (typeof param2 === "string") {
-			sendRequestObjToUrl(param1, param2, param3);
-			return;
-		}
+  this.request = function (param1, param2, param3) {
+    if (typeof param1 === "string") {
+      sendRequestWithHttpMethod(param1, param2, param3);
+      return;
+    } else if (typeof param2 === "string") {
+      sendRequestObjToUrl(param1, param2, param3);
+      return;
+    }
 
-		sendRequestObjToDestination(param1, param2);
-	};
+    sendRequestObjToDestination(param1, param2);
+  };
 
-	this.close = function() {
-		// Empty. Called automatically inside HttpClientFacade
-	};
+  this.close = function () {
+    // Empty. Called automatically inside HttpClientFacade
+  };
 
-	this.getResponse = function() {
-		return getWebResponseByDirigibleResponse(clientResponse);
-	};
+  this.getResponse = function () {
+    return getWebResponseByDirigibleResponse(clientResponse);
+  };
 
-	this.setTrustStore = function(trustStore) {
-		// TODO No dirigible functionality
-	};
+  this.setTrustStore = function (trustStore) {
+    // TODO No dirigible functionality
+  };
 
-	this.setTimeout = function(timeout) {
-		connectionTimeout = timeout;
-	};
+  this.setTimeout = function (timeout) {
+    connectionTimeout = timeout;
+  };
 
-	function sendRequestObjToDestination(requestObj, destination) {
-		var fullUrl = destination.host + destination.pathPrefix + requestObj.queryPath;
+  function sendRequestObjToDestination(requestObj, destination) {
+    var fullUrl = destination.host + destination.pathPrefix + requestObj.queryPath;
 
-		destination.headers = [];
-		destination.headers = getHeadersArrFormTupel(requestObj.headers);
-		destination.contentType = requestObj.contentType;
-		addCookieToHeadersFromTupel(requestObj.cookies, destination.headers);
-		addTimeoutToOptions(destination);
+    destination.headers = [];
+    var requestHeaders = getHeadersArrFormTupel(requestObj.headers);
+    requestHeaders = removeContentLengthHeaderIfPost(requestHeaders, requestObj.method);
+    destination.headers = requestHeaders;
+    addCookieToHeadersFromTupel(requestObj.cookies, destination.headers);
+    addTimeoutToOptions(destination);
 
-		if (requestObj.parameters !== undefined) {
-			fullUrl = addQueryParametersToUrl(fullUrl, requestObj.parameters);
-		}
+    if (requestObj.contentType) {
+      destination.contentType = requestObj.contentType;
+    }
 
-		clientResponse = executeRequest(fullUrl, requestObj.method, destination, requestObj.body);
-	}
+    if (requestObj.parameters !== undefined) {
+      fullUrl = addQueryParametersToUrl(fullUrl, requestObj.parameters);
+    }
 
-	function sendRequestObjToUrl(requestObj, url, proxy) {
-		var fullUrl = url + requestObj.queryPath;
+    clientResponse = executeRequest(fullUrl, requestObj.method, destination, requestObj.body);
+  }
 
-		var options = {};
-		if (proxy) {
-			options = proxyUrlToOptionsObject(proxy);
-		}
+  function sendRequestObjToUrl(requestObj, url, proxy) {
+    var fullUrl = url + requestObj.queryPath;
 
-		options.headers = [];
-		options.headers = getHeadersArrFormTupel(requestObj.headers);
-		addCookieToHeadersFromTupel(requestObj.cookies, options.headers);
-		addTimeoutToOptions(options);
-		options.contentType = requestObj.contentType;
+    var options = {};
+    if (proxy) {
+      options = proxyUrlToOptionsObject(proxy);
+    }
 
-		if (requestObj.parameters !== undefined) {
-			fullUrl = addQueryParametersToUrl(fullUrl, requestObj.parameters);
-		}
+    options.headers = [];
+    var requestHeaders = getHeadersArrFormTupel(requestObj.headers);
+    requestHeaders = removeContentLengthHeaderIfPost(requestHeaders, requestObj.method);
+    options.headers = requestHeaders;
+    addCookieToHeadersFromTupel(requestObj.cookies, options.headers);
+    addTimeoutToOptions(options);
 
-		clientResponse = executeRequest(fullUrl, requestObj.method, options, requestObj.body);
-	}
+    if (requestObj.contentType) {
+      options.contentType = requestObj.contentType;
+    }
 
+    if (requestObj.parameters !== undefined) {
+      fullUrl = addQueryParametersToUrl(fullUrl, requestObj.parameters);
+    }
 
-	 function sendRequestWithHttpMethod(requestHttpMethod, url, proxy) {
-		var options = {};
+    clientResponse = executeRequest(fullUrl, requestObj.method, options, requestObj.body);
+  }
 
-		if (proxy) {
-			options = proxyUrlToOptionsObject(proxy);
-		}
+  function sendRequestWithHttpMethod(requestHttpMethod, url, proxy) {
+    var options = {};
 
-		addTimeoutToOptions(options);
-		clientResponse = executeRequest(url, requestHttpMethod, options);
-	}
+    if (proxy) {
+      options = proxyUrlToOptionsObject(proxy);
+    }
 
-	function proxyUrlToOptionsObject(proxyUrl) {
-		var options = {};
+    addTimeoutToOptions(options);
+    clientResponse = executeRequest(url, requestHttpMethod, options);
+  }
 
-		var proxyHostPortPair = proxyUrl.split(":");
-		options.proxyHost = proxyHostPortPair[0].trim();
-		options.proxyPort =  Number.parseInt(proxyHostPortPair[1]).trim();
+  function proxyUrlToOptionsObject(proxyUrl) {
+    var options = {};
 
-		return options;
-	}
+    var proxyHostPortPair = proxyUrl.split(":");
+    options.proxyHost = proxyHostPortPair[0].trim();
+    options.proxyPort = Number.parseInt(proxyHostPortPair[1]).trim();
 
-	function addTimeoutToOptions(options) {
-		options.connectionRequestTimeout = connectionTimeout;
-	}
+    return options;
+  }
 
-	function executeRequest(url, requestMethod, options, requestBody) {
-		if (requestBody) {
-			options.text = JSON.stringify(requestBody);
-		}
+  function addTimeoutToOptions(options) {
+    options.connectionRequestTimeout = connectionTimeout;
+  }
 
-		switch(requestMethod) {
-			case exports.GET:
-				return dClient.get(url, options);
-			case exports.POST:
-				return dClient.post(url, options);
-			case exports.PUT:
-				return dClient.put(url, options);
-			case exports.DEL:
-				return dClient.delete(url, options);
-			default:
-				throw new Error("Not supported request method.");
-		}
-	}
+  function executeRequest(url, requestMethod, options, requestBody) {
+    if (requestBody) {
+      options.text = JSON.stringify(requestBody);
+    }
 
-	function getWebResponseByDirigibleResponse(dResponse) {
-		var webResponse = new web.WebEntityResponse();
-		webResponse.headers = new web.TupelList(dResponse.headers);
-		webResponse.status = dResponse.statusCode;
-		webResponse.cookies = getTupelCookieFromDirigibleResponse(dResponse);
-		webResponse.setBody(dResponse.text);
+    switch (requestMethod) {
+      case exports.GET:
+        return dClient.get(url, options);
+      case exports.POST:
+        return dClient.post(url, options);
+      case exports.PUT:
+        return dClient.put(url, options);
+      case exports.DEL:
+        return dClient.delete(url, options);
+      default:
+        throw new Error("Not supported request method.");
+    }
+  }
 
-		return webResponse;
-	}
+  function getWebResponseByDirigibleResponse(dResponse) {
+    var webResponse = new web.WebEntityResponse();
+    webResponse.headers = new web.TupelList(dResponse.headers);
+    webResponse.status = dResponse.statusCode;
+    webResponse.cookies = getTupelCookieFromDirigibleResponse(dResponse);
+    webResponse.setBody(dResponse.text);
 
-	function getHeadersArrFormTupel(headersTupel) {
-		if (!headersTupel) {
-			return;
-		}
+    return webResponse;
+  }
 
-		var headersArr = [];
-		for (var i = 0; i < headersTupel.length; i++) {
-			headersArr.push(headersTupel[i]);
-		}
+  function getHeadersArrFormTupel(headersTupel) {
+    if (!headersTupel) {
+      return;
+    }
 
-		return headersArr;
-	}
+    var headersArr = [];
+    for (var i = 0; i < headersTupel.length; i++) {
+      headersArr.push(headersTupel[i]);
+    }
 
-	function getUrlParametersFromTupel(tupelParameters) {
-		var queryParameterPairs = [];
-	    for (var i = 0; i < tupelParameters.length; i++) {
-			var name = tupelParameters[i].name;
-			var value = tupelParameters[i].value;
+    return headersArr;
+  }
 
-			if (typeof value === "array") {
-				value = value.join(",");
-			}
+  function getUrlParametersFromTupel(tupelParameters) {
+    var queryParameterPairs = [];
+    for (var i = 0; i < tupelParameters.length; i++) {
+      var name = tupelParameters[i].name;
+      var value = tupelParameters[i].value;
 
-			var queryPair = name + "=" + value;
+      if (typeof value === "array") {
+        value = value.join(",");
+      }
 
-			queryParameterPairs.push(queryPair);
-	    }
+      var queryPair = name + "=" + value;
 
-	    return queryParameterPairs.join("&");
-	}
+      queryParameterPairs.push(queryPair);
+    }
 
-	function addQueryParametersToUrl(url, parametersTupel) {
-        if (parametersTupel.length === 0) {
-            return url;
-        }
+    return queryParameterPairs.join("&");
+  }
 
-		var urlQueryParameters = getUrlParametersFromTupel(parametersTupel);
-		return url + "?" + urlQueryParameters;
-	}
+  function addQueryParametersToUrl(url, parametersTupel) {
+    if (parametersTupel.length === 0) {
+      return url;
+    }
 
-	function addCookieToHeadersFromTupel(tupelCookie, headersArray) {
-		if (tupelCookie === undefined && tupelCookie.length === 0) {
-			return;
-		}
+    var urlQueryParameters = getUrlParametersFromTupel(parametersTupel);
+    return url + "?" + urlQueryParameters;
+  }
 
-		var cookiesArray = [];
-		for (var i = 0; i < tupelCookie.length; i++) {
-			var cookieName = tupelCookie[i].name;
-			var cookieValue = tupelCookie[i].value;
+  function addCookieToHeadersFromTupel(tupelCookie, headersArray) {
+    if (tupelCookie === undefined && tupelCookie.length === 0) {
+      return;
+    }
 
-			cookiesArray.push(cookieName + "=" + cookieValue + ";");
-		}
+    var cookiesArray = [];
+    for (var i = 0; i < tupelCookie.length; i++) {
+      var cookieName = tupelCookie[i].name;
+      var cookieValue = tupelCookie[i].value;
 
-		headersArray.push({ name: "Cookie", value: cookiesArray.join(" ") });
-	}
+      cookiesArray.push(cookieName + "=" + cookieValue + ";");
+    }
 
-	function getTupelCookieFromDirigibleResponse(dResponse) {
-		var headers = dResponse.headers;
-		var cookieObjArray = [];
-			headers.forEach(header => {
-			if (header.name === SET_COOKIE_HEADER) {
-				var cookieKeyValue = header.value.split(";")[0].trim();
-				var cookieKeyValueArray = cookieKeyValue.split("=");
-				var cookieObj = { name: cookieKeyValueArray[0], value: cookieKeyValueArray[1] };
-				cookieObjArray.push(cookieObj);
-			}
-		});
+    headersArray.push({name: "Cookie", value: cookiesArray.join(" ")});
+  }
 
-		return new web.TupelList(cookieObjArray);
-	}
+  function getTupelCookieFromDirigibleResponse(dResponse) {
+    var headers = dResponse.headers;
+    var cookieObjArray = [];
+    headers.forEach(header => {
+      if (header.name === SET_COOKIE_HEADER) {
+        var cookieKeyValue = header.value.split(";")[0].trim();
+        var cookieKeyValueArray = cookieKeyValue.split("=");
+        var cookieObj = {name: cookieKeyValueArray[0], value: cookieKeyValueArray[1]};
+        cookieObjArray.push(cookieObj);
+      }
+    });
+
+    return new web.TupelList(cookieObjArray);
+  }
+
+  function removeContentLengthHeaderIfPost(headers, method) {
+    if (method === exports.POST) {
+      headers = headers.filter(header => header.name.toUpperCase() !== CONTENT_LENGTH_HEADER.toUpperCase())
+    }
+    return headers;
+  }
 };
 
-exports.Request = function(method, path) {
+exports.Request = function (method, queryPath) {
+  this.parameters = new web.TupelList([]);
+  this.cookies = new web.TupelList([]);
+  this.body;
+  this.contentType;
+  this.entities;
+  this.headers = new web.TupelList([]);
+  this.method = method;
+  this.queryPath = queryPath;
 
-	this.parameters = new web.TupelList([]);
-	this.cookies = new web.TupelList([]);
-	this.body;
-	this.contentType;
-	this.entities;
-	this.headers = new web.TupelList([]);
-    this.method = method;
-    this.queryPath = path;
-
-    this.setBody = function(newBody) {
-    	this.body = newBody;
-    }.bind(this);
+  this.setBody = function (newBody) {
+    this.body = newBody;
+  }.bind(this);
 };
 
 function processDestValue(destValueArg) {
-	if (!destValueArg) {
-		return;
-	}
+  if (!destValueArg) {
+    return;
+  }
 
-	var splitDestValueArray = destValueArg.split('"');
-	var destValue;
-	if (splitDestValueArray.length > 1) {
-		destValue = splitDestValueArray[1].trim();
-	} else {
-		destValue = splitDestValueArray[0].trim();
-	}
+  var splitDestValueArray = destValueArg.split('"');
+  var destValue;
+  if (splitDestValueArray.length > 1) {
+    destValue = splitDestValueArray[1].trim();
+  } else {
+    destValue = splitDestValueArray[0].trim();
+  }
 
-	return parseDestValue(destValue);
+  return parseDestValue(destValue);
 
 }
 
 function parseDestValue(destValue) {
-	if (Number.isInteger(destValue)) {
-		return Number.parseInt(destValue);
-	} else if (destValue === "true" || destValue === "false") {
-		return new Boolean(destValue);
-	}
+  if (Number.isInteger(destValue)) {
+    return Number.parseInt(destValue);
+  } else if (destValue === "true" || destValue === "false") {
+    return new Boolean(destValue);
+  }
 
-	return destValue;
+  return destValue;
 }
 
-exports.Destination = function() {
+exports.Destination = function () {
 
 }

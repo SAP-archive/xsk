@@ -46,7 +46,7 @@ exports.TupelList = function (dArrayOfContents) {
 
   this.set = function (name, value, options) {
     let element = internalDArrayOfContents.find(function (element) {
-      return element.name === name;
+      return element.name.toUpperCase() === name.toUpperCase();
     });
     if (element) {
       element.value = value;
@@ -128,7 +128,7 @@ Body = function (bodyValue) {
   };
 };
 
-exports.WebRequest = function () {
+exports.WebRequest = function (method, queryPath) {
   const XSJS_FILE_EXTENSION_LENGTH = 5;
   const XSJS_FILE_EXTENSION = ".xsjs";
 
@@ -197,7 +197,9 @@ exports.WebRequest = function () {
 
   this.language = session.language;
 
-  if (dRequest.getMethod() === 'OPTIONS') {
+  if (method) {
+    this.method = method;
+  } else if (dRequest.getMethod() === 'OPTIONS') {
     this.method = http.OPTIONS;
   } else if (dRequest.getMethod() === 'GET') {
     this.method = http.GET;
@@ -230,16 +232,20 @@ exports.WebRequest = function () {
     return dRequestURI.substring(0, filePlaceInURI + XSJS_FILE_EXTENSION_LENGTH);
   }();
 
-  this.queryPath = function () {
-    var dRequestURI = dRequest.getRequestURI();
-    var filePlaceInURI = dRequestURI.search(XSJS_FILE_EXTENSION);
-    return dRequestURI.substring(filePlaceInURI + XSJS_FILE_EXTENSION_LENGTH, dRequestURI.length);
-  }();
+  if (queryPath) {
+    this.queryPath = queryPath;
+  } else {
+    this.queryPath = function () {
+      var dRequestURI = dRequest.getRequestURI();
+      var filePlaceInURI = dRequestURI.search(XSJS_FILE_EXTENSION);
+      return dRequestURI.substring(filePlaceInURI + XSJS_FILE_EXTENSION_LENGTH, dRequestURI.length);
+    }();
+  }
 
   this.contentType = dRequest.getContentType();
 
   this.setBody = function (body, index) {
-    //ToDo;
+    this.body = body;
   };
 
   function transformParametersObject(dParametersObject) {

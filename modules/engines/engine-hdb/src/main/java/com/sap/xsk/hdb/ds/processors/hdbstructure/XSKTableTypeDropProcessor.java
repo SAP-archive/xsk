@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableTypeModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableTypeDropProcessor.class);
-  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.MANAGER_SERVICES;
+  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
   @Override
   public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)

@@ -254,6 +254,6 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
   private void synchronizeNodeMetadataFromRoot(String location, String content) throws XSKDataStructuresException {
     XSKDataStructureCdsModel nodeCdsModel = getCdsModelBaseData(location, content);
-    XSKHDBModule.MANAGER_SERVICES.get(getType()).synchronizeParsedByRootMetadata(nodeCdsModel);
+    XSKHDBModule.getManagerServices().get(getType()).synchronizeParsedByRootMetadata(nodeCdsModel);
   }
 }

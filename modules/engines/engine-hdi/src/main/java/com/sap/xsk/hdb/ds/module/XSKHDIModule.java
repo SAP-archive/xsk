@@ -32,7 +32,7 @@ public class XSKHDIModule extends AbstractDirigibleModule {
 //    MapBinder<String, XSKDataStructureParser> mapBinder
 //        = MapBinder.newMapBinder(binder(), String.class, XSKDataStructureParser.class);
 
-	  Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.PARSER_SERVICES;
+	  Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
       parserServices.put(IXSKDataStructureModel.TYPE_HDI, new XSKHDIParser());
   }
 

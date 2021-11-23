@@ -111,7 +111,7 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
 		// HANA db, and leading to inconsistent test results
 		// that is why we are clearing and reentering the managerServices
 		// see: XSKHDBModule.bindManagerServicesToFileExtensions()
-		Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.MANAGER_SERVICES;
+		Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 		managerServices.clear();
 		managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
 		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());

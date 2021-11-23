@@ -66,11 +66,11 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.MANAGER_SERVICES;
+  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
-  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.PARSER_SERVICES;
+  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
 
-  private Map<String, String> parserTypes = XSKHDBModule.PARSER_TYPES;
+  private Map<String, String> parserTypes = XSKHDBModule.getParserTypes();
 
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
 

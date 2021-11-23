@@ -44,11 +44,23 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
 
 public class XSKHDBModule extends AbstractDirigibleModule {
 
-  public static final Map<String, IXSKDataStructureManager> MANAGER_SERVICES = bindManagerServicesToFileExtensions();
+  private static final Map<String, IXSKDataStructureManager> MANAGER_SERVICES = bindManagerServicesToFileExtensions();
 
-  public static final Map<String, XSKDataStructureParser> PARSER_SERVICES = bindParsersToFileExtension();
+  private static final Map<String, XSKDataStructureParser> PARSER_SERVICES = bindParsersToFileExtension();
 
-  public static final Map<String, String> PARSER_TYPES = bindParserTypeToFileExtension();
+  private static final Map<String, String> PARSER_TYPES = bindParserTypeToFileExtension();
+
+  public static synchronized Map<String, IXSKDataStructureManager> getManagerServices() {
+    return MANAGER_SERVICES;
+  }
+
+  public static synchronized Map<String, XSKDataStructureParser> getParserServices() {
+    return PARSER_SERVICES;
+  }
+
+  public static synchronized Map<String, String> getParserTypes() {
+    return PARSER_TYPES;
+  }
 
   @Override
   public void configure() {

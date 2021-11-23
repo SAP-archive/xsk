@@ -31,7 +31,7 @@ nav:
         - $.net.Destination: 'api/net/net.Destination.md'
         - $.net.Mail.Part: 'api/net/net.Mail.Part.md'
         - $.net.Mail: 'api/net/net.Mail.md'
-        - $.net.SMTPConnection: 'api/net.SMTPConnection.md'
+        - $.net.SMTPConnection: 'api/net/net.SMTPConnection.md'
       - $.request: 'api/request.md'
       - $.response: 'api/response.md'
       - $.session: 'api/session.md'

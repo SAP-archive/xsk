@@ -9,27 +9,24 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-const process = require('bpm/v4/process');
-
-const execution = process.getExecutionContext();
-const userDataJson = process.getVariable(execution.getId(), 'userData');
-const userData = JSON.parse(userDataJson);
-
-process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_OPENING');
-
 try {
-  const tunnelData = {
-    account: userData.neo.subaccount,
-    host: userData.neo.hostName,
-    user: userData.neo.username,
-    password: userData.neo.password,
-    db: userData.hana.databaseSchema
-  };
-  
+  const process = require('bpm/v4/process');
+
+  const execution = process.getExecutionContext();
+  const userDataJson = process.getVariable(execution.getId(), 'userData');
+  const userJwtToken = process.getVariable(execution.getId(), 'userJwtToken');
+  const userData = JSON.parse(userDataJson);
+
+  process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_OPENING');
+
+  const account = userData.neo.subaccount;
+  const host = userData.neo.hostName;
+  const databaseId = userData.hana.databaseSchema;
+
   const NeoTunnelService = require('ide-migration/server/migration/api/neo-tunnel-service');
   const neoTunnelService = new NeoTunnelService();
-  const openedTunnelData = neoTunnelService.openTunnel(tunnelData);
-  
+  const openedTunnelData = neoTunnelService.openTunnel(account, host, userJwtToken, databaseId);
+
   userData.sessionId = openedTunnelData.sessionId;
   process.setVariable(execution.getId(), 'userData', JSON.stringify(userData));
   process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_OPENED');

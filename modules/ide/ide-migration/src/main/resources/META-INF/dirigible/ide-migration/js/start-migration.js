@@ -28,17 +28,20 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
     function startMigration(duData) {
         selectedWorkspace = duData.workspace;
         body = {
-            neo: neoData,
+            neo: {
+                hostName: neoData.hostName,
+                subaccount: neoData.subaccount,
+            },
             hana: hanaData,
             connectionId: duData.connectionId,
             workspace: duData.workspace,
             du: {
-              name: duData.du.name,
-              vendor: duData.du.vendor
+                name: duData.du.name,
+                vendor: duData.du.vendor
             },
             processInstanceId: duData.processId
         };
-          $http.post(
+        $http.post(
             "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/continue-process",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }

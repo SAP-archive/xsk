@@ -11,11 +11,16 @@
  */
 package com.sap.xsk.xsodata.ds.filter;
 
-import com.sap.xsk.xsodata.utils.XSKODataWrappedHttpServletRequest;
-import javax.servlet.*;
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @WebFilter("/*")
 public class XSODataForwardFilter implements Filter {
@@ -28,29 +33,21 @@ public class XSODataForwardFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    XSKODataWrappedHttpServletRequest wrappedHttpServletRequest = new XSKODataWrappedHttpServletRequest((HttpServletRequest) request);
-
+    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
     //only on production case
-    String editorHeader = wrappedHttpServletRequest.getHeader("Dirigible-Editor");
-    String requestMethod = wrappedHttpServletRequest.getMethod();
-
-    if (editorHeader == null && requestMethod.equals("POST")) {
-      wrappedHttpServletRequest.putHeader("Dirigible-Editor", "Workspace");
-    } else if (editorHeader == null) {
-      String uri = wrappedHttpServletRequest.getRequestURI();
+    if (httpServletRequest.getHeader("Dirigible-Editor") == null) {
+      String uri = httpServletRequest.getRequestURI();
       int index = uri.indexOf(".xsodata");
       if (index > 0) {
         String parameters = "";
         if (uri.length() > index + (".xsodata".length() - 1)) {
           parameters = uri.substring(index + ".xsodata".length());
         }
-
         RequestDispatcher dispatcher = request.getRequestDispatcher("/odata/v2/" + parameters);
         dispatcher.forward(request, response);
       }
     }
-
-    chain.doFilter(wrappedHttpServletRequest, response);
+    chain.doFilter(request, response);
   }
 
   @Override

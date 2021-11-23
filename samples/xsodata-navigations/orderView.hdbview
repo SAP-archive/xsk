@@ -1,4 +1,4 @@
-schema="DBADMIN";
+schema="XSK_SAMPLES_XSODATA_NAVIGATIONS";
 query="SELECT * FROM \"xsodata-navigations::order\"";
 depends_on= ["xsodata-navigations-xsodata::order"];
 

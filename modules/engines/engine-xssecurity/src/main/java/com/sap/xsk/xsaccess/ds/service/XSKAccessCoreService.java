@@ -39,12 +39,18 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
   private XSKPrivilegeCoreService xskPrivilegeCoreService = new XSKPrivilegeCoreService();
 
   @Override
-  public XSKAccessDefinition createXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed,
+  public XSKAccessDefinition createXSKAccessDefinition(String path, List<String> authenticationMethodsAsList, String hash, boolean exposed,
       List<String> authorizationRolesAsList) throws XSKAccessException {
     try {
       XSKAccessDefinition xskAccessDefinition = new XSKAccessDefinition();
       xskAccessDefinition.setPath(path);
-      xskAccessDefinition.setAuthenticationMethod(authenticationMethod);
+
+      if (authenticationMethodsAsList == null) {
+        authenticationMethodsAsList = new ArrayList<String>();
+        xskAccessDefinition.setAuthenticationMethodsAsList(new ArrayList<String>());
+      }
+      xskAccessDefinition.setAuthenticationMethods(objectToByteArray(authenticationMethodsAsList));
+
       xskAccessDefinition.setHash(hash);
       xskAccessDefinition.setExposed(exposed);
       if (authorizationRolesAsList == null) {
@@ -75,11 +81,13 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
   }
 
   @Override
-  public XSKAccessDefinition updateXSKAccessDefinition(String path, String authenticationMethod, String hash, boolean exposed,
+  public XSKAccessDefinition updateXSKAccessDefinition(String path, List<String> authenticationMethodsAsList, String hash, boolean exposed,
       List<String> authorizationRolesAsList) throws XSKAccessException {
     try {
       XSKAccessDefinition xskAccessDefinition = getXSKAccessDefinition(path);
-      xskAccessDefinition.setAuthenticationMethod(authenticationMethod);
+      if (authenticationMethodsAsList != null && !authenticationMethodsAsList.isEmpty()) {
+        xskAccessDefinition.setAuthenticationMethods(objectToByteArray(authenticationMethodsAsList));
+      }
       xskAccessDefinition.setHash(hash);
       xskAccessDefinition.setExposed(exposed);
       if (authorizationRolesAsList != null && !authorizationRolesAsList.isEmpty()) {
@@ -113,6 +121,9 @@ public class XSKAccessCoreService implements IXSKAccessCoreService {
         if (xskAccessDefinition == null) {
           return null;
         }
+
+        List<String> authenticationMethods = XSKUtils.byteArrayToObject(xskAccessDefinition.getAuthenticationMethods());
+        xskAccessDefinition.setAuthenticationMethodsAsList(authenticationMethods);
 
         List<String> authorizationRoles = XSKUtils.byteArrayToObject(xskAccessDefinition.getAuthorizationRoles());
         xskAccessDefinition.setAuthorizationRolesAsList(authorizationRoles);

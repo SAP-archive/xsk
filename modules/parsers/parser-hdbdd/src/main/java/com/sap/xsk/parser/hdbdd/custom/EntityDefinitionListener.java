@@ -40,7 +40,6 @@ import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
@@ -67,6 +66,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
   private final Set<String> packagesUsed = new HashSet<>();
   private final SymbolFactory symbolFactory = new SymbolFactory();
   private String packageId;
+  private static final String NOKEY_ANNOTATION = "nokey";
 
   @Override
   public void enterNamespaceRule(CdsParser.NamespaceRuleContext ctx) {
@@ -393,11 +393,21 @@ public class EntityDefinitionListener extends CdsBaseListener {
     String annId = ctx.ID().getText();
     AnnotationObj expectedAnnObject = this.symbolTable.getAnnotation(annId);
     Symbol symbolToBeAssigned = this.symbolsByParseTreeContext.get(ctx.getParent());
-    validateAnnotation(ctx.ID().getSymbol(), symbolToBeAssigned);
+    Token annIdToken = ctx.ID().getSymbol();
+    validateAnnotation(annIdToken, symbolToBeAssigned);
 
     if (expectedAnnObject.getKeysNumber() != 0) {
       throw new CDSRuntimeException(String.format("Error at line: %d col: %d.Annotation with name: %s cannot be used as a marker.",
-          ctx.ID().getSymbol().getLine(), ctx.ID().getSymbol().getCharPositionInLine(), annId));
+          annIdToken.getLine(), annIdToken.getCharPositionInLine(), annId));
+    }
+    if(annId.equals(NOKEY_ANNOTATION)){
+      for(int i =0; i<= ctx.getParent().children.size(); i++){
+        if(ctx.getParent().getChild(i) instanceof DataTypeRuleContext && ctx.getParent().getChild(i).getChild(0).toString().equalsIgnoreCase("key")){
+          throw new CDSRuntimeException(
+              String.format("Error at line: %d col: %d. Annotation %s has been specified for entity with keys.", annIdToken.getLine(),
+                  annIdToken.getCharPositionInLine(), expectedAnnObject.getName()));
+        }
+      }
     }
 
     AnnotationObj annToAssign = new AnnotationObj();

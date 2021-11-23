@@ -21,8 +21,8 @@ class MigrationService {
     connection = null;
     repo = null;
 
-    setupConnection(databaseName, databaseUser, databaseUserPassword) {
-        database.createDataSource(databaseName, "com.sap.db.jdbc.Driver", "jdbc:sap://localhost:30015/", databaseUser, databaseUserPassword, null);
+    setupConnection(databaseName, databaseUser, databaseUserPassword, connectionUrl) {
+        database.createDataSource(databaseName, "com.sap.db.jdbc.Driver", connectionUrl, databaseUser, databaseUserPassword, null);
 
         this.connection = database.getConnection('dynamic', databaseName);
         this.repo = new HanaRepository(this.connection);
@@ -43,7 +43,6 @@ class MigrationService {
 
         let context = {};
         const filesAndPackagesObject = this.repo.getAllFilesForDu(context, du)
-        console.log("Files list: " + JSON.stringify(filesAndPackagesObject.files));
         this.dumpSourceFiles(workspaceName, filesAndPackagesObject.files, du)
     }
 
@@ -101,8 +100,10 @@ class MigrationService {
 
     handlePossibleDeployableArtifacts(deployables) {
         for (const deployable of deployables) {
-            const hdiConfigPath = this.createHdiConfigFile(deployable.project);
-            this.createHdiFile(deployable.project, hdiConfigPath, deployable.artifacts);
+            if (deployable.artifacts && deployable.artifacts.length > 0) {
+                const hdiConfigPath = this.createHdiConfigFile(deployable.project);
+                this.createHdiFile(deployable.project, hdiConfigPath, deployable.artifacts);
+            }    
         }
     }
 

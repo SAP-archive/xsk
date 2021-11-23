@@ -37,7 +37,10 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
 
     function getDUData() {
         body = {
-            neo: neoData,
+            neo: {
+                hostName: neoData.hostName,
+                subaccount: neoData.subaccount,
+            },
             hana: hanaData,
             processInstanceId: processId
         }
@@ -53,7 +56,14 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
                     JSON.stringify(body),
                     { headers: { 'Content-Type': 'application/json' } }
                 ).then(function (response) {
-                    if (response.data.workspaces && response.data.deliveryUnits && response.data.connectionId) {
+                    if (response.data && response.data.failed) {
+                        clearInterval(timer);
+                        $messageHub.announceAlertError(
+                            defaultErrorTitle,
+                            defaultErrorDesc
+                        );
+                        errorOccurred();
+                    } else if (response.data.workspaces && response.data.deliveryUnits && response.data.connectionId) {
                         clearInterval(timer);
                         connectionId = response.data.connectionId;
                         $scope.workspaces = response.data.workspaces;

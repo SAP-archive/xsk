@@ -29,6 +29,7 @@ import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
 import com.sap.xsk.hdbti.module.HdbtiTestModule;
 import com.sap.xsk.hdbti.service.XSKHDBTICoreService;
+import com.sap.xsk.parser.hdbti.exception.TablePropertySyntaxException;
 import com.sap.xsk.parser.hdbti.exception.XSKHDBTISyntaxErrorException;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel;
 import java.io.File;
@@ -37,6 +38,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -45,6 +47,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
@@ -314,6 +317,27 @@ public class XSKHDBTIProcessorTest {
     }
   }
 
+  @Test
+  public void testKeysProperlyFilterRecords()
+      throws XSKDataStructuresException, SQLException, IOException, XSKTableImportException {
+    XSKTableImportConfigurationDefinition importConfigurationDefinition = new XSKTableImportConfigurationDefinition();
+    importConfigurationDefinition.setFile(CSV_FILE_LOCATION);
+    importConfigurationDefinition.setHdbtiFileName(HDBTI_LOCATION);
+    importConfigurationDefinition.setTable(STUDENTS_TABLE_NAME);
+
+    Map<String, ArrayList<String>> keys = Map.of("FIRST_NAME", new ArrayList<String>(Arrays.asList("Georgi")));
+    importConfigurationDefinition.setKeysAsMap(keys);
+
+    try (Connection connection = datasource.getConnection()) {
+      writeToFile(STUDENTS_CSV_LOCATION, getInitialContent());
+      processor.process(importConfigurationDefinition, connection);
+
+      List<Student> students = studentManager.findAll(connection, Student.class);
+      assertEquals(1, students.size());
+      assertEquals("Georgi", students.get(0).getFirstName());
+    }
+  }
+
   private XSKTableImportToCsvRelation getXskTableImportToCsvRelation() {
     XSKTableImportToCsvRelation csvRelation = new XSKTableImportToCsvRelation();
     csvRelation.setCsv(CSV_FILE_LOCATION);
@@ -494,6 +518,68 @@ public class XSKHDBTIProcessorTest {
   }
 
   @Test
+  public void testParseHdbtiToJSONSuccessfullyWhenTablePropHasDoubleColon()
+      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
+    String hdbtiSample = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/doubleColonTableProp.hdbti"), StandardCharsets.UTF_8);
+
+    List<XSKHDBTIImportConfigModel> model = processor.parseHdbtiToJSON("doubleColonTableProp.hdbti",
+        hdbtiSample.getBytes(StandardCharsets.UTF_8));
+    assertEquals(model.size(), 1);
+
+    XSKHDBTIImportConfigModel import1 = model.get(0);
+    assertEquals(import1.getDelimEnclosing(), "\"");
+    assertEquals(import1.getSchemaName(), "mySchema");
+    assertTrue(import1.getDistinguishEmptyFromNull());
+    assertFalse(import1.getHeader());
+    assertEquals(import1.getTableName(), "sap.demo::mytable");
+    assertFalse(import1.getUseHeaderNames());
+    assertEquals(import1.getDelimField(), ";");
+    assertEquals(import1.getFileName(), "/sap/ti2/demo/myData.csv");
+    assertEquals(import1.getKeys().size(), 1);
+    assertEquals(import1.getKeys().get(0).getColumn(), "GROUP_TYPE");
+    assertEquals(import1.getKeys().get(0).getValues().size(), 3);
+    assertEquals(import1.getKeys().get(0).getValues().get(0), "BW_CUBE");
+    assertEquals(import1.getKeys().get(0).getValues().get(1), "BW_DSO");
+    assertEquals(import1.getKeys().get(0).getValues().get(2), "BW_PSA");
+  }
+
+  @Test
+  public void testParseHdbtiToJSONSuccessfullyWhenMissingSchemaName()
+      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
+    String hdbtiSample = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/missingSchemaName.hdbti"), StandardCharsets.UTF_8);
+
+    List<XSKHDBTIImportConfigModel> model = processor.parseHdbtiToJSON("missingSchemaName.hdbti",
+        hdbtiSample.getBytes(StandardCharsets.UTF_8));
+    assertEquals(model.size(), 1);
+
+    XSKHDBTIImportConfigModel import1 = model.get(0);
+    assertEquals(import1.getDelimEnclosing(), "\"");
+    assertTrue(import1.getDistinguishEmptyFromNull());
+    assertFalse(import1.getHeader());
+    assertEquals(import1.getTableName(), "sap.demo::mytable");
+    assertFalse(import1.getUseHeaderNames());
+    assertEquals(import1.getDelimField(), ";");
+    assertEquals(import1.getFileName(), "/sap/ti2/demo/myData.csv");
+    assertEquals(import1.getKeys().size(), 1);
+    assertEquals(import1.getKeys().get(0).getColumn(), "GROUP_TYPE");
+    assertEquals(import1.getKeys().get(0).getValues().size(), 3);
+    assertEquals(import1.getKeys().get(0).getValues().get(0), "BW_CUBE");
+    assertEquals(import1.getKeys().get(0).getValues().get(1), "BW_DSO");
+    assertEquals(import1.getKeys().get(0).getValues().get(2), "BW_PSA");
+  }
+
+  @Test(expected = TablePropertySyntaxException.class)
+  public void testParseHdbtiToJSONFailWhenTablePropHasSingleColon()
+      throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
+    String hdbtiSample = org.apache.commons.io.IOUtils
+        .toString(XSKHDBTIProcessorTest.class.getResourceAsStream("/singleColonTableProp.hdbti"), StandardCharsets.UTF_8);
+
+    processor.parseHdbtiToJSON("singleColonTableProp.hdbti", hdbtiSample.getBytes(StandardCharsets.UTF_8));
+  }
+
+  @Test
   public void testParseJSONtoHdbtiSuccessfully()
       throws IOException, XSKArtifactParserException, XSKHDBTISyntaxErrorException {
     String hdbtiSample = org.apache.commons.io.IOUtils
@@ -582,6 +668,77 @@ public class XSKHDBTIProcessorTest {
     model.setSchemaName("schema");
     model.setHeader(true);
     model.setTableName("table-Name_cAN|be@bear ʕ•ᴥ•ʔ");
+    model.setFileName("myData2.csv");
+
+    processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+  }
+
+  @Test
+  public void testParseJSONtoHdbtiSuccessfullyWithDoubleColonTableName() {
+    XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+
+    model.setDelimEnclosing("'");
+    model.setSchemaName("schema");
+    model.setHeader(true);
+    model.setTableName("sap_xsk.test::c_users");
+    model.setFileName("myData2.csv");
+
+    String actualValue = processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+
+    String expectedValue = "import = [\n" +
+        "{\n" +
+        "\tdelimEnclosing=\"'\";\n" +
+        "\tschema = \"schema\";\n" +
+        "\theader = true;\n" +
+        "\ttable = \"sap_xsk.test::c_users\";\n" +
+        "\tfile = \"myData2.csv\";\n" +
+        "}];";
+
+    assertEquals(expectedValue, actualValue);
+  }
+
+  @Test
+  public void testParseJSONtoHdbtiSuccessfullyWithMissingSchemaName() {
+    XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+
+    model.setDelimEnclosing("'");
+    model.setHeader(true);
+    model.setTableName("sap_xsk.test::c_users");
+    model.setFileName("myData2.csv");
+
+    String actualValue = processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+
+    String expectedValue = "import = [\n" +
+        "{\n" +
+        "\tdelimEnclosing=\"'\";\n" +
+        "\theader = true;\n" +
+        "\ttable = \"sap_xsk.test::c_users\";\n" +
+        "\tfile = \"myData2.csv\";\n" +
+        "}];";
+
+    assertEquals(expectedValue, actualValue);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testParseJSONtoHdbtiFailWithSingleColonTableName() {
+    XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+
+    model.setDelimEnclosing("'");
+    model.setSchemaName("schema");
+    model.setHeader(true);
+    model.setTableName("sap_xsk:i_users");
+    model.setFileName("myData2.csv");
+
+    processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testParseJSONtoHdbtiFailWithMissingSchemaName() {
+    XSKHDBTIImportConfigModel model = new XSKHDBTIImportConfigModel();
+
+    model.setDelimEnclosing("'");
+    model.setHeader(true);
+    model.setTableName("i_users");
     model.setFileName("myData2.csv");
 
     processor.parseJSONtoHdbti(new ArrayList<>(Arrays.asList(model)));

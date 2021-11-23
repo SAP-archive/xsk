@@ -20,14 +20,9 @@ class NeoDatabasesService {
     this.migrationToolExecutor = new MigrationToolExecutor();
   }
 
-  getAvailableDatabases(credentials) {
-    const account = credentials.account;
-    const host = credentials.host;
-    const user = credentials.user;
-    const password = credentials.password;
-    const db = credentials.db;
+  getAvailableDatabases(account, host, jwtToken) {
 
-    const script = `${neoClientPath} list-dbs -a "${account}" -h "${host}" -u "${user}" -p "${password}" --output json`
+    const script = `${neoClientPath} list-dbs -a "${account}" -h "${host}" -u JWT -p "${jwtToken}" --output json`
     
     const rawCommandResult = this.migrationToolExecutor.execute(script, {
       "JAVA_HOME": config.get("JAVA8_HOME"),

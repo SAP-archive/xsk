@@ -9,15 +9,11 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.ide.migration;
-
-import static org.junit.Assert.assertTrue;
-
-import org.graalvm.polyglot.HostAccess;
-
-public class AssertHolder {
-  @HostAccess.Export
-  public void callAssertTrue(Boolean res) {
-      assertTrue(res);
-  }
-}
+exports.getTemplate = function() {
+	return {
+			"name":"html",
+			"label":"HTML5 Page",
+			"extension":"html",
+			"data":'<!DOCTYPE html>\n<head>\n</head>\n<body>\n</body>\n</html>'
+	};
+};

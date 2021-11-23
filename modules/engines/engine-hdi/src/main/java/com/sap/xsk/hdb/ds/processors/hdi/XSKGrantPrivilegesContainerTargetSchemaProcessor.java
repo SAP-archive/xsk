@@ -16,11 +16,12 @@ import java.sql.SQLException;
 
 public class XSKGrantPrivilegesContainerTargetSchemaProcessor extends XSKHDIAbstractProcessor {
 
-  public final void execute(Connection connection, String container, String[] users) throws SQLException {
-    for (String user : users) {
-      executeUpdate(connection, "GRANT SELECT ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTION;");
-      executeUpdate(connection, "GRANT EXECUTE ON SCHEMA " + user + "  TO " + container + "#OO WITH GRANT OPTION;");
-    }
-  }
+	public final void execute(Connection connection, String container, String[] schemas) throws SQLException {
+		for (String schema : schemas) {
+			String containerOwner = container + "#OO";
+			executeUpdate(connection, "GRANT SELECT ON SCHEMA \"" + schema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;");
+			executeUpdate(connection, "GRANT EXECUTE ON SCHEMA \"" + schema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;");
+		}
+	}
 
 }

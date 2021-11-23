@@ -24,11 +24,18 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$htt
     ];
     $scope.descriptionText = descriptionList[0];
     let neoData = undefined;
+    let defaultErrorTitle = "Error listing databases";
+    let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
 
     function getAvailableHanaDatabases() {
         body = {
-            neo: neoData
-        }
+            neo: {
+                hostName: neoData.hostName,
+                subaccount: neoData.subaccount,
+                username: neoData.username,
+                password: neoData.password,
+            }
+        };
 
         $http.post(
             "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/start-process",
@@ -42,7 +49,14 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$htt
                     JSON.stringify(body),
                     { headers: { 'Content-Type': 'application/json' } }
                 ).then(function (response) {
-                    if (response.data.databases) {
+                    if (response.data && response.data.failed) {
+                        clearInterval(timer);
+                        $messageHub.announceAlertError(
+                            defaultErrorTitle,
+                            defaultErrorDesc
+                        );
+                        errorOccurred();
+                    } else if (response.data.databases) {
                         clearInterval(timer);
                         $scope.areDatabasesLoaded = true;
                         $scope.descriptionText = descriptionList[1];
@@ -90,6 +104,11 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$htt
             }
             errorOccurred();
         });
+    }
+
+    function errorOccurred() {
+        $scope.$parent.previousClicked();
+        $scope.$parent.setBottomNavEnabled(true);
     }
 
     $scope.userInput = function () {

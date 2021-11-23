@@ -1,4 +1,4 @@
-table.schemaName = "DBADMIN";
+table.schemaName = "XSK_SAMPLES_XSODATA_NAVIGATIONS";
 table.tableType = COLUMNSTORE; 
 table.columns = [
 	{name = "COMPANY_ID"; sqlType = INTEGER; nullable = false;},

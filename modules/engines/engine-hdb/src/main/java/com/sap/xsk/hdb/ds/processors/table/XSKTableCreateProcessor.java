@@ -38,7 +38,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableCreateProcessor.class);
 
-  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
+  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.MANAGER_SERVICES;
 
   /**
    * Execute the corresponding statement.

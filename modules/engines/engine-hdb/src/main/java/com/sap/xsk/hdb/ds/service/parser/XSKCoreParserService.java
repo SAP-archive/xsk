@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class XSKCoreParserService implements IXSKCoreParserService {
 
-  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
+  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.PARSER_SERVICES;
 
   @Override
   public XSKDataStructureModel parseDataStructure(String type, String location, String content)

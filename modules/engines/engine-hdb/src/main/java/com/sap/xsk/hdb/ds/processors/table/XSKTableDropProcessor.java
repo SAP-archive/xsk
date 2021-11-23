@@ -39,7 +39,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableDropProcessor.class);
 
-  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
+  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.MANAGER_SERVICES;
 
   /**
    * Execute the corresponding statement.

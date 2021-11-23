@@ -29,8 +29,13 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$htt
 
     function getAvailableHanaDatabases() {
         body = {
-            neo: neoData
-        }
+            neo: {
+                hostName: neoData.hostName,
+                subaccount: neoData.subaccount,
+                username: neoData.username,
+                password: neoData.password,
+            }
+        };
 
         $http.post(
             "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/start-process",

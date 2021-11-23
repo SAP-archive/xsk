@@ -11,6 +11,7 @@
  */
 const tasksService = require('bpm/v4/tasks');
 const processService = require('bpm/v4/process');
+const httpClient = require("http/v4/client");
 
 const rs = require("http/v4/rs");
 rs.service()
@@ -23,10 +24,14 @@ rs.service()
   .execute();
 
 function startProcess(ctx, req, res) {
-  var process = require('bpm/v4/process');
-  const userDataJson = req.getJSON(); 
+  const userDataJson = req.getJSON();
+  const neoData = userDataJson.neo;
 
-  const processInstanceId = process.start('migrationProcess', { "userData": JSON.stringify(userDataJson) });
+  const jwtToken = getJwtToken(neoData.hostName, neoData.username, neoData.password);
+  const processInstanceId = processService.start('migrationProcess', {
+    userData: JSON.stringify(userDataJson),
+    userJwtToken: jwtToken,
+  });
 
   const response = {
     processInstanceId: processInstanceId
@@ -35,13 +40,30 @@ function startProcess(ctx, req, res) {
   res.print(JSON.stringify(response));
 }
 
+function getJwtToken(host, username, password) {
+  const jwtTokenServiceUrl = `https://oauthasservices.${host}/oauth2/api/v1/token?grant_type=password&username=${username}&password=${password}`;
+  const jwtTokenResponse = httpClient.post(jwtTokenServiceUrl, {
+    headers: [{
+      name: "Content-Type",
+      value: "application/x-www-form-urlencoded"
+    }]
+  });
+
+  const jwtTokenResponseJson = JSON.parse(jwtTokenResponse.text);
+  const jwtToken = jwtTokenResponseJson.access_token;
+  return jwtToken;
+}
+
 function continueProcess(ctx, req, res) {
   const userDataJson = req.getJSON();
+
   const tasksJson = org.eclipse.dirigible.api.v3.bpm.BpmFacade.getTasks();
   const tasks = JSON.parse(tasksJson);
   for (const task of tasks) {
     if (task.processInstanceId === userDataJson.processInstanceId.toString()) {
-      tasksService.completeTask(task.id, { "userData": JSON.stringify(userDataJson) });
+      tasksService.completeTask(task.id, {
+        userData: JSON.stringify(userDataJson)
+      });
       break;
     }
   }

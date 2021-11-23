@@ -41,5 +41,7 @@ public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
 
   void clearCache();
 
-  boolean isParsed(T tableModel, boolean parsedByRoot) throws XSKDataStructuresException;
+  void synchronizeParsedByRootMetadata(T tableModel) throws XSKDataStructuresException;
+
+  boolean existsArtifactMetadata(T tableModel) throws XSKDataStructuresException;
 }

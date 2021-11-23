@@ -103,9 +103,4 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
   public void clearCache() {
     dataStructureTableModels.clear();
   }
-
-  @Override
-  public boolean isParsed(XSKDataStructureHDBTableModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
-    return false;
-  }
 }

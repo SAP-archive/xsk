@@ -93,4 +93,15 @@ public interface IXSKDataStructuresCoreService extends ICoreService {
    * the type of the DataStructure
    */
   public <T extends XSKDataStructureModel> List<T> getDataStructuresByType(String type) throws XSKDataStructuresException;
+
+  /**
+   * Checks if DataStructure with given location and hash exists.
+   *
+   * @param location the location
+   * @param hash     the hash of the file contents
+   * @param type     the type of the DataStructure
+   * @return true, if the DataStructure exists
+   * @throws XSKDataStructuresException the data structures exception
+   */
+  public boolean existsDataStructureByLocationAndHash(String location, String hash, String type) throws XSKDataStructuresException;
 }

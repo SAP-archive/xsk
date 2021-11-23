@@ -66,11 +66,11 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
+  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.MANAGER_SERVICES;
 
-  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
+  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.PARSER_SERVICES;
 
-  private Map<String, String> parserTypes = XSKHDBModule.getParserTypes();
+  private Map<String, String> parserTypes = XSKHDBModule.PARSER_TYPES;
 
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
 
@@ -561,6 +561,10 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
       throws XSKDataStructuresException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
     String modelType = getType(resourceExtension);
+    if (modelType == null) {
+      return false;
+    }
+
     Class<XSKDataStructureModel> clazz = xskCoreParserService.getDataStructureClass(modelType);
     XSKDataStructureModel baseDataStructureModel = clazz.getDeclaredConstructor().newInstance();
     baseDataStructureModel.setLocation(location);

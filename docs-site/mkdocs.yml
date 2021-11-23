@@ -21,12 +21,13 @@ nav:
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'
       - $.jobs: 'api/jobs.md'
-      - $.net.http.Client: 'api/net.http.Client.md'
-      - $.net.http.Destination: 'api/net.http.Destination.md'
-      - $.net.http.Request: 'api/net.http.Request.md'
-      - $.net.http: 'api/net.http.md'
       - $.net: 
         - 'api/net.md'
+        - $.net.http: 
+          - 'api/net.http.md'
+          - $.net.http.Client: 'api/net.http.Client.md'
+          - $.net.http.Destination: 'api/net.http.Destination.md'
+          - $.net.http.Request: 'api/net.http.Request.md'
         - $.net.Destination: 'api/net.Destination.md'
         - $.net.Mail.Part: 'api/net.Mail.Part.md'
         - $.net.Mail: 'api/net.Mail.md'
@@ -36,9 +37,9 @@ nav:
       - $.session: 'api/session.md'
       - $.trace: 'api/trace.md'
       - $.util: 
-        - 'api/util.md'
-        - $.util.Zip: 'api/util.Zip.md'
-        - $.util.codec: 'api/util.codec.md'
+        - api/util.md
+        - $.util.codec: api/util.codec.md
+        - $.util.Zip: api/util.Zip.md
       - $.web: 
         - 'api/web.md'
         - $.web.Body: 'api/web.Body.md'

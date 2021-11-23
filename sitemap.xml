@@ -66,11 +66,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.xsk.io/api/net.http/</loc>
-         <lastmod>2021-11-23</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://www.xsk.io/api/request/</loc>
          <lastmod>2021-11-23</lastmod>
          <changefreq>daily</changefreq>
@@ -107,6 +102,11 @@
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/</loc>
+         <lastmod>2021-11-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.xsk.io/api/net/http/</loc>
          <lastmod>2021-11-23</lastmod>
          <changefreq>daily</changefreq>
     </url>

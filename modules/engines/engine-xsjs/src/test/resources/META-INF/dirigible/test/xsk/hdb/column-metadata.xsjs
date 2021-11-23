@@ -1,5 +1,6 @@
 var hdb = $.hdb;
 var response = require('http/v4/response');
+var assertTrue = require('utils/assert').assertTrue;
 
 var conn = hdb.getConnection();
 conn.executeUpdate('CREATE SCHEMA EXAMPLE');
@@ -37,4 +38,4 @@ for (var i = 0; i < columnCount; i++) {
 response.contentType = "text/plain";
 response.println(body);
 
-conn != null&& resultSet != null && columnCount !=null && body != null && lastColumnName ==="WEIGHT"&& lastColumnTypeName==="DOUBLE";
+assertTrue(conn != null&& resultSet != null && columnCount !=null && body != null && lastColumnName ==="WEIGHT"&& lastColumnTypeName==="DOUBLE");

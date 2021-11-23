@@ -33,4 +33,4 @@ try {
   console.error(e.message);
 }
 
-$;
+module.exports = $;

@@ -1,5 +1,5 @@
 var db = $.db;
-
+var assertTrue = require('utils/assert').assertTrue;
 // tests isClosed() too
 function close(){
   var connection = db.getConnection();
@@ -26,4 +26,4 @@ function prepareStatement(){
   return statement.constructor.name == "XscPreparedStatement"
 }
 
-close() && prepareCall() && prepareStatement();
+assertTrue(close() && prepareCall() && prepareStatement());

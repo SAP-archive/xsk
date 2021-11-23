@@ -1,3 +1,4 @@
+var assertTrue = require('utils/assert').assertTrue;
 var codec = $.util.codec;
 var util = $.util;
 
@@ -13,4 +14,4 @@ var valueFromBase64 = util.stringify(decodedBase64);
 
 
 
-valueFromHex === "dirigible as hex" && valueFromBase64 ==="dirigible as base64"
+assertTrue(valueFromHex === "dirigible as hex" && valueFromBase64 ==="dirigible as base64");

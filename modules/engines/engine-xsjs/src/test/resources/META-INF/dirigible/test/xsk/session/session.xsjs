@@ -1,3 +1,4 @@
+var assertTrue = require('utils/assert').assertTrue;
 let username = $.session.getUsername()
 let appPrivileges = $.session.hasAppPrivilege("Developer")
 if (appPrivileges) {
@@ -25,4 +26,4 @@ $.response.setBody("Timeout: " +timeout);
 $.response.setBody("Token: " +token);
 $.response.setBody("Auth Type: " +authType);
 
-username === "tester" && appPrivileges !== null && sysPrivileges != null && timeout !== null && authType !== null && token != null
+assertTrue(username === "tester" && appPrivileges !== null && sysPrivileges != null && timeout !== null && authType !== null && token != null);

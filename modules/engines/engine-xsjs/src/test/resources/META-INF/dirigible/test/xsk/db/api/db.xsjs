@@ -1,5 +1,5 @@
 var db = $.db;
-
+var assertTrue = require('utils/assert').assertTrue;
 var connection = db.getConnection();
 
-connection != null && connection != undefined;
+assertTrue(connection != null && connection != undefined);

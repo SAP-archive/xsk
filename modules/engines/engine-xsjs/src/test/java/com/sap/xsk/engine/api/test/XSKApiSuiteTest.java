@@ -12,6 +12,7 @@
 package com.sap.xsk.engine.api.test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -128,10 +129,9 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
           extensionsCoreService.createExtensionPoint("/test_extpoint1", "test_extpoint1", "Test");
           extensionsCoreService.createExtension("/test_ext1", "/test_ext_module1", "test_extpoint1", "Test");
 
-          Object result = runTest(executor, repository, testModule);
+          Object error = runTest(executor, repository, testModule);
 
-          assertNotNull(result);
-          assertTrue("API test failed: " + testModule, Boolean.parseBoolean(result.toString()));
+          assertNull("API test failed: " + testModule, error);
 
         } finally {
           extensionsCoreService.removeExtension("/test_ext1");
@@ -174,10 +174,10 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     }
 
     long start = System.currentTimeMillis();
-    Object result = executor.evalModule(testModule, null);
+    Object error = executor.executeServiceModule(testModule, null);
     long time = System.currentTimeMillis() - start;
     System.out.printf("API test [%s] on engine [%s] passed for: %d ms%n", testModule, executor.getType(), time);
-    return result;
+    return error;
   }
 
   private class StubServletOutputStream extends ServletOutputStream {

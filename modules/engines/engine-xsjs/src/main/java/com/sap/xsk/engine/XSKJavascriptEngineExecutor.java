@@ -22,6 +22,7 @@ import org.eclipse.dirigible.engine.js.api.IJavascriptModuleSourceProvider;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,8 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
   @Override
   protected void beforeEval(Context context) throws IOException {
     String xskApi = getXskApi();
-    context.getBindings(ENGINE_JAVA_SCRIPT).putMember("$", context.eval(ENGINE_JAVA_SCRIPT, xskApi));
+    context.getBindings(ENGINE_JAVA_SCRIPT).putMember("XSK_API", xskApi);
+    context.getBindings(ENGINE_JAVA_SCRIPT).putMember("$", context.eval(ENGINE_JAVA_SCRIPT, "mainModule.loadScriptString(XSK_API)"));
     super.beforeEval(context);
   }
 
@@ -81,7 +83,7 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
   @Override
   public Object executeService(String moduleOrCode, Map<Object, Object> executionContext, boolean isModule, boolean commonJSModule)
       throws ScriptingException {
-    return super.executeService(moduleOrCode, executionContext, isModule, false);
+    return super.executeService(moduleOrCode, executionContext, isModule, commonJSModule);
   }
 
   // TODO: Handle XSK Job calls -> callXSKJobFunction(...)

@@ -37,18 +37,18 @@ nav:
       - $.session: 'api/session.md'
       - $.trace: 'api/trace.md'
       - $.util: 
-        - api/util.md
-        - $.util.codec: api/util.codec.md
-        - $.util.Zip: api/util.Zip.md
+        - 'api/util.md'
+        - $.util.codec: 'api/util.codec.md'
+        - $.util.Zip: 'api/util.Zip.md'
       - $.web: 
-        - 'api/web.md'
-        - $.web.Body: 'api/web.Body.md'
-        - $.web.EntityList: 'api/web.EntityList.md'
-        - $.web.TupelList: 'api/web.TupelList.md'
-        - $.web.WebEntityRequest: 'api/web.WebEntityRequest.md'
-        - $.web.WebEntityResponse: 'api/web.WebEntityResponse.md'
-        - $.web.WebRequest: 'api/request.md'
-        - $.web.WebResponse: 'api/response.md'
+        - 'api/web/index.md'
+        - $.web.Body: 'api/web/web.Body.md'
+        - $.web.EntityList: 'api/web/web.EntityList.md'
+        - $.web.TupelList: 'api/web/web.TupelList.md'
+        - $.web.WebEntityRequest: 'api/web/web.WebEntityRequest.md'
+        - $.web.WebEntityResponse: 'api/web/web.WebEntityResponse.md'
+        - $.web.WebRequest: 'api/web/request.md'
+        - $.web.WebResponse: 'api/web/response.md'
     - Setup: 
       - Database User: 'setup/database-user.md'
       - Local: 'setup/index.md'

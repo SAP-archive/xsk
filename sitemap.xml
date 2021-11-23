@@ -31,16 +31,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.xsk.io/api/net.Destination/</loc>
-         <lastmod>2021-11-23</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.xsk.io/api/net.Mail.Part/</loc>
-         <lastmod>2021-11-23</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://www.xsk.io/api/request/</loc>
          <lastmod>2021-11-23</lastmod>
          <changefreq>daily</changefreq>
@@ -77,6 +67,16 @@
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/</loc>
+         <lastmod>2021-11-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.xsk.io/api/net/net.Destination/</loc>
+         <lastmod>2021-11-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.xsk.io/api/net/net.Mail.Part/</loc>
          <lastmod>2021-11-23</lastmod>
          <changefreq>daily</changefreq>
     </url>

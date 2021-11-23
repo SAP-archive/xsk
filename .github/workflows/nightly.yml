@@ -239,14 +239,14 @@ jobs:
       - name: Commit test_results directory
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.REPO_TOKEN }}
+          API_TOKEN_GITHUB: ${{ secrets.INTEGRATION_TESTS_RESULTS_REPO_TOKEN }}
         with:
           source_file: '/home/runner/work/xsk/xsk/test_results'
-          destination_repo: "${{ secrets.REPO_NAME }}"
+          destination_repo: "${{ secrets.INTEGRATION_TESTS_RESULTS_REPO_NAME }}"
           destination_branch: "master"
           destination_folder: "nightly/results_${{ steps.current-time.outputs.formattedTime }}_gmtplus_2"
-          user_email: "${{ secrets.REPO_MAIL }}"
-          user_name: "${{ secrets.REPO_UNAME }}"
+          user_email: "${{ secrets.INTEGRATION_TESTS_RESULTS_REPO_MAIL }}"
+          user_name: "${{ secrets.INTEGRATION_TESTS_RESULTS_REPO_UNAME }}"
           commit_message: "Nighty results from: ${{ steps.current-time.outputs.readableTime }}"
 
       - name: Slack Notification

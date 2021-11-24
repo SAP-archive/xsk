@@ -148,6 +148,10 @@
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-workspace-menu</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-ide-ui-jobs-menu</artifactId>
+        </exclusion>
 			</exclusions>
 		</dependency>
 	</dependencies>

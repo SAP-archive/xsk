@@ -1,0 +1,36 @@
+apiVersion: v2
+name: xsk
+description: Compatible environment for SAP HANA Extended Application Services (XS) based applications outside of SAP HANA instance running in a container deployed on Kubernetes.
+
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: #{XSKVersion}#
+
+# XSK version
+appVersion: #{XSKVersion}#
+
+keywords:
+  - sap
+  - xsc
+  - hana
+  - neo
+  - xsk
+  - kyma
+  - platform
+  - development
+  - applications
+  - in-system
+
+home: https://github.com/sap/xsk
+
+maintainers:
+  - email: yordan.pavlov@sap.com
+    name: Yordan Pavlov
+    url: https://github.com/ThuF
+
+sources:
+  - https://github.com/sap/xsk
+
+icon: https://raw.githubusercontent.com/eclipse/dirigible/master/logo/dirigible-logo-symbol.png

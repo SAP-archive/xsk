@@ -4,15 +4,6 @@
 
 replicaCount: 1
 
-install:
-  clusterBuilder: false
-  imageBuilder: false
-
-create:
-  image: false
-  secret: false
-  application: false
-
 docker:
   server:
   username:
@@ -21,21 +12,8 @@ docker:
   secretName: docker-registry-secret
   serviceAccountName: docker-registry-service-account
 
-imageBuilder:
-  repository:
-  buildpack: dirigiblelabs/kneo-xsk-buildpack
-
-image:
-  repository:
-  source:
-  serviceAccountName: docker-registry-service-account
-
-clusterBuilder:
-  buildImage: dirigiblelabs/kneo-xsk-stack-build
-  runImage: dirigiblelabs/kneo-xsk-stack-run
-  serviceAccountName: docker-registry-service-account
-
 kyma:
+  enabled:
   host:
 
 application:
@@ -45,6 +23,7 @@ application:
   fastBootstrap: false
 
 hana:
+  enabled:
   secretName: hana-secret
   url:
   username:

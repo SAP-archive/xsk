@@ -1591,24 +1591,9 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </thead>
 <tbody>
 <tr>
-<td><code>xsk.image</code></td>
-<td>Different version image</td>
-<td><code>""</code></td>
-</tr>
-<tr>
-<td><code>image.repository</code></td>
+<td><code>application.image</code></td>
 <td>XSK image repo</td>
 <td><code>dirigiblelabs/xsk</code></td>
-</tr>
-<tr>
-<td><code>image.repositoryKyma</code></td>
-<td>XSK Kyma image repo</td>
-<td><code>dirigiblelabs/xsk-kyma</code></td>
-</tr>
-<tr>
-<td><code>image.repositoryCF</code></td>
-<td>XSK Cloud Foundry image repo</td>
-<td><code>dirigiblelabs/xsk-cf</code></td>
 </tr>
 <tr>
 <td><code>image.pullPolicy</code></td>
@@ -1619,6 +1604,16 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td><code>replicaCount</code></td>
 <td>Number of replicas</td>
 <td><code>1</code></td>
+</tr>
+<tr>
+<td><code>homeUrl</code></td>
+<td>Application Home url</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>fastBootstrap</code></td>
+<td>Fast Boostrap secret</td>
+<td><code>false</code></td>
 </tr>
 </tbody>
 </table>

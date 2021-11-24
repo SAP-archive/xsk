@@ -306,7 +306,7 @@ jobs:
                 kind: Builder
               source:
                 blob:
-                  url: https://github.com/SAP/xsk/raw/main/samples/products.zip
+                  url: https://github.com/SAP/xsk/releases/download/v${{ env.XSK_VERSION }}/products.zip
             ```
 
             > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._

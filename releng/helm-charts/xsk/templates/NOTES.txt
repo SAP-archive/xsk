@@ -1,27 +1,14 @@
-{{- if .Values.install.clusterBuilder }}
-Kpack XSK ClusterStore and ClusterStack installed. To create image Builder execute the following command:
+{{- if .Values.kyma.enabled }}
 
-    helm install xsk-image-builder xsk/xsk \
-    --set install.imageBuilder=true \
-    --set imageBuilder.repository=<your-image-builder-docker-repository>
-
-{{- end }}
-
-{{- if .Values.install.imageBuilder }}
-
-Kpack XSK Builder installed. To trigger Docker image build, execute the following command: https://github.com/SAP/xsk/tree/main/releng/buildpacks/xsk
-
-{{- end }}
-
-{{- if .Values.create.image }}
-
-Docker image will be published in the following repository: https://hub.docker.com/r/{{ .Values.image.repository }}
-
-{{- end }}
-
-
-{{- if .Values.create.application }}
-
+1.
 Application will be deployed and accessible via the following URL: https://{{ .Release.Name }}.{{ .Values.kyma.host }}
+
+{{- end }}
+
+{{- if ne "true" (.Values.kyma.enabled  | toString) }}
+2. 
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk" -o jsonpath="{.items[0].metadata.name}")
+echo "Visit http://127.0.0.1:8080 to use your application"
+kubectl --namespace default port-forward $POD_NAME 8080:8080
 
 {{- end }}

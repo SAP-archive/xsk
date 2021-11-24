@@ -1,25 +1,12 @@
 {{- if .Values.install.clusterBuilder }}
-{{- if .Values.create.secret }}
-{{- if .Values.docker.server }}
 apiVersion: v1
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
 kind: Secret
 metadata:
   name: {{ .Values.docker.secretName }}
-type: kubernetes.io/dockerconfigjson
-stringData:
-  .dockerconfigjson: |
-    {
-      "auths": {
-          "{{ .Values.docker.server }}": {
-            "username": "{{ .Values.docker.username }}",
-            "password": "{{ .Values.docker.password }}",
-            "email": "{{ .Values.docker.email }}",
-            {{- with .Values.docker }}
-            {{- printf "\"auth\": \"%s\"" (printf "%s:%s" .username .password | b64enc) }}
-            {{- end }}
-          }
-      }
-    }
+  namespace: default
+type: kubernetes.io/dockerconfigjson    
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -29,8 +16,6 @@ imagePullSecrets:
 - name: {{ .Values.docker.secretName }}
 secrets:
 - name: {{ .Values.docker.secretName }}
-{{- end }}
-{{- end }}
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStore

@@ -1526,12 +1526,12 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </details>
 <h4 id="setup-on-kyma">Setup on Kyma</h4>
 <p>You can choose to set up XSK in Helm on Kyma following either the basic or the PostgreSQL setup instructions:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Basic</label><label for="__tabbed_1_2">PostgreSQL</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Basic</label><label for="__tabbed_1_2">SAP HANA database</label><label for="__tabbed_1_3">PostgreSQL</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
 --set kyma.enabled=true \
---set kyma.apirule.host=&lt;kyma-host&gt;
+--set kyma.host=&lt;kyma-host&gt;
 </code></pre></div>
 <p>This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.</p>
 <details class="info" open="open">
@@ -1540,9 +1540,24 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </details>
 </div>
 <div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>helm install xsk xsk \
+--set hana.enabled=true \
+--set hana.url=&lt;hana-url&gt; \
+--set hana.username=&lt;hana-username&gt; \
+--set hana.password=&lt;hana-password&gt; \
+--set kyma.enabled=true \
+--set kyma.host=&lt;kyma-apirule-host&gt;
+</code></pre></div>
+<p>This will install additionally an ApiRule, XSUAA ServiceInstance, ServiceBinding and HANA instance. The appropriate roles should be assigned to the user.</p>
+<details class="info" open="open">
+<summary>Configuration Options</summary>
+<p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</a>.</p>
+</details>
+</div>
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
 --set kyma.enabled=true \
---set kyma.apirule.host=&lt;kyma-host&gt; \
+--set kyma.host=&lt;kyma-host&gt; \
 --set database.enabled=true
 </code></pre></div>
 <p>This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.</p>
@@ -1576,84 +1591,34 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </thead>
 <tbody>
 <tr>
-<td><code>dirigible.image</code></td>
-<td>Custom Dirigible image</td>
+<td><code>xsk.image</code></td>
+<td>Different version image</td>
 <td><code>""</code></td>
 </tr>
 <tr>
 <td><code>image.repository</code></td>
-<td>Dirigible image repo</td>
-<td><code>dirigiblelabs/dirigible-all</code></td>
+<td>XSK image repo</td>
+<td><code>dirigiblelabs/xsk</code></td>
 </tr>
 <tr>
 <td><code>image.repositoryKyma</code></td>
-<td>Dirigible Kyma image repo</td>
-<td><code>dirigiblelabs/dirigible-sap-kyma</code></td>
+<td>XSK Kyma image repo</td>
+<td><code>dirigiblelabs/xsk-kyma</code></td>
 </tr>
 <tr>
-<td><code>image.repositoryKeycloak</code></td>
-<td>Dirigible Keycloak image repo</td>
-<td><code>dirigiblelabs/dirigible-keycloak</code></td>
+<td><code>image.repositoryCF</code></td>
+<td>XSK Cloud Foundry image repo</td>
+<td><code>dirigiblelabs/xsk-cf</code></td>
 </tr>
 <tr>
 <td><code>image.pullPolicy</code></td>
 <td>Image pull policy</td>
-<td><code>IfNotPresent</code></td>
-</tr>
-<tr>
-<td><code>service.type</code></td>
-<td>Service type</td>
-<td><code>ClusterIP</code></td>
-</tr>
-<tr>
-<td><code>service.port</code></td>
-<td>Service port</td>
-<td><code>8080</code></td>
+<td><code>Always</code></td>
 </tr>
 <tr>
 <td><code>replicaCount</code></td>
 <td>Number of replicas</td>
 <td><code>1</code></td>
-</tr>
-<tr>
-<td><code>imagePullSecrets</code></td>
-<td>Image pull secrets</td>
-<td><code>[]</code></td>
-</tr>
-<tr>
-<td><code>nameOverride</code></td>
-<td>Name override</td>
-<td><code>""</code></td>
-</tr>
-<tr>
-<td><code>fullnameOverride</code></td>
-<td>Fullname override</td>
-<td><code>""</code></td>
-</tr>
-<tr>
-<td><code>podSecurityContext</code></td>
-<td>Pod security context</td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>nodeSelector</code></td>
-<td>Node selector</td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>tolerations</code></td>
-<td>Tolerations</td>
-<td><code>[]</code></td>
-</tr>
-<tr>
-<td><code>affinity</code></td>
-<td>Affinity</td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>resources</code></td>
-<td>Resources</td>
-<td><code>{}</code></td>
 </tr>
 </tbody>
 </table>

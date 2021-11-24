@@ -12,14 +12,18 @@ stringData:
   DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE: "false"
   DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE: "false"
   DIRIGIBLE_SCHEDULER_DATABASE_DRIVER: com.sap.db.jdbc.Driver
-  DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD: {{ required "Missing hana password!" .Values.hana.password }}
-  DIRIGIBLE_SCHEDULER_DATABASE_URL: jdbc:sap://{{ required "Missing hana url!" .Values.hana.url }}/?encrypt=true&validateCertificate=false
-  DIRIGIBLE_SCHEDULER_DATABASE_USER: {{ required "Missing hana username" .Values.hana.username }}
+  DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD: {{ required "Missing HANA password" .Values.hana.password }}
+  DIRIGIBLE_SCHEDULER_DATABASE_URL: jdbc:sap://{{ required "Missing HANA url" .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  DIRIGIBLE_SCHEDULER_DATABASE_USER: {{ required "Missing HANA username" .Values.hana.username }}
   HANA_DRIVER: com.sap.db.jdbc.Driver
-  HANA_PASSWORD: {{ required "Missing hana password!" .Values.hana.password }}
-  HANA_URL: jdbc:sap://{{ required "Missing hana url!" .Values.hana.url }}/?encrypt=true&validateCertificate=false
-  HANA_USERNAME: {{ required "Missing hana username" .Values.hana.username }}
+  HANA_PASSWORD: {{ required "Missing HANA password" .Values.hana.password }}
+  HANA_URL: jdbc:sap://{{ required "Missing HANA url" .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  HANA_USERNAME: {{ required "Missing HANA username" .Values.hana.username }}
 ---
+{{- else }}
+{{- if or .Values.hana.username .Values.hana.password .Values.hana.url }}
+{{ required "Missing HANA set configuration 'hana.enabled=true' " .Values.hana.enabled }}
+{{- end }}
 {{- end }}
 {{- if .Values.application.fastBootstrap }}
 apiVersion: v1
@@ -31,9 +35,6 @@ stringData:
   DIRIGIBLE_JOB_DEFAULT_TIMEOUT: "1"
   DIRIGIBLE_SCHEDULER_MEMORY_STORE: "true"
 ---
-{{- end }}
-{{- if or .Values.hana.username .Values.hana.password }}
-{{ required "Missing set configuration hana.enabled=true !" .Values.hana.enabled }} 
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment
@@ -67,7 +68,7 @@ spec:
           env:
             {{- if .Values.kyma.enabled }}
             - name: DIRIGIBLE_HOST
-              value: https://{{ .Release.Name }}.{{ required "Missing kyma host!" .Values.kyma.host }}
+              value: https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
             {{- end }}
             {{- if .Values.application.homeUrl }}
             - name: DIRIGIBLE_HOME_URL
@@ -114,9 +115,6 @@ spec:
   selector:
     {{- include "xsk.selectorLabels" . | nindent 4 }}
 ---
-{{- if .Values.kyma.host }}
-{{ required "Missing set configuration kyma.enabled=true !" .Values.kyma.enabled }} 
-{{- end }}
 {{- if .Values.kyma.enabled }}
 apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
@@ -155,7 +153,7 @@ spec:
     xsappname: {{ include "xsk.fullname" . }}-xsuaa
     oauth2-configuration:
       redirect-uris:
-      - https://{{ .Release.Name }}.{{ required "Missing kyma host!" .Values.kyma.host }}
+      - https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
       token-validity: 7200
     role-collections:
     - description: XSK Developer
@@ -202,5 +200,9 @@ spec:
   usedBy:
     kind: deployment
     name: {{ include "xsk.fullname" . }}
+{{- else }}
+{{- if or .Values.kyma.host }}
+{{ required "Missing Kyma set configuration 'kyma.enabled=true' " .Values.kyma.enabled }}
+{{- end }}
 {{- end }}
 

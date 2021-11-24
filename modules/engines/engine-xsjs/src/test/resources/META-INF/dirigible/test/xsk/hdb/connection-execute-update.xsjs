@@ -1,5 +1,6 @@
 var db = $.hdb;
  var response = require('http/v4/response');
+ var assertTrue = require('utils/assert').assertTrue;
    var connection = db.getConnection();
    var insertStatement = "INSERT INTO EXAMPLE.TEST_USERS (ID, FIRSTNAME, LASTNAME, AGE, WEIGHT) VALUES (?,?,?,?,?)";
  	var insertResult = connection.executeUpdate(insertStatement, 4, 'PETKO', 'MOMCHEV', 24 ,89);
@@ -20,4 +21,4 @@ var db = $.hdb;
  	response.println("Warnings: " + connection.getLastWarning());
  	response.println("is connection closed: " + connection.isClosed());
 
-  insertResult ===1 && updateResult === 4
+  assertTrue(insertResult ===1 && updateResult === 4);

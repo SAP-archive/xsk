@@ -9,5 +9,3 @@ $.request.path;
 $.request.queryPath;
 
 // ToDo $.request.setBody
-
-true

@@ -1,5 +1,5 @@
 let net = $.net;
-
+var assertTrue = require('utils/assert').assertTrue;
 let mail = new net.Mail({
   sender: {address: "sender@sap.com"},
   to: [{name: "John Doe", address: "john.doe@sap.com", nameEncoding: "US-ASCII"}, {name: "Jane Doe", address: "jane.doe@sap.com"}],
@@ -21,4 +21,4 @@ let to = mail.to.map(e => e.address)
 let cc = mail.cc.map(e => e.address)
 let bcc = mail.bcc.map(e => e.address)
 
-to !== "" && to !== undefined && cc !== "" && cc !== undefined && bcc !== "" && bcc !== undefined && smtp.isClosed()
+assertTrue(to !== "" && to !== undefined && cc !== "" && cc !== undefined && bcc !== "" && bcc !== undefined && smtp.isClosed());

@@ -1,6 +1,6 @@
 // Importing xsjs lib and adding the module to the $ object.
 $.import("test.xsk.import.sap.test.lib", "basic");
-
+var assertTrue = require('utils/assert').assertTrue;
 // Assigning the module to a variable from the $ object.
 var mathbasic = $.test.xsk.import.sap.test.lib.basic;
 
@@ -17,5 +17,5 @@ var multiply = mathlib.multiply(4, 9);
 var division = mathlib.division(9, 3);
 
 // Verifying the results.
-square === 36 && multiply === 36 && division === 3 && sum === 10 && sub === 5
+assertTrue(square === 36 && multiply === 36 && division === 3 && sum === 10 && sub === 5);
 

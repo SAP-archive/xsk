@@ -1,4 +1,5 @@
 var db = $.db;
+var assertTrue = require('utils/assert').assertTrue;
 
 var connection = db.getConnection();
 
@@ -32,4 +33,4 @@ var scaleAssertion = metadata.getScale(1) == 0;
 
 var tableNameAssertion = metadata.getTableName(1) == "TEST_USERS";
 
-columnCountAssertion && labelAssertion && nameAssertion && typeAssertion && typeNameAssertion && precisionAssertion && scaleAssertion && tableNameAssertion
+assertTrue(columnCountAssertion && labelAssertion && nameAssertion && typeAssertion && typeNameAssertion && precisionAssertion && scaleAssertion && tableNameAssertion);

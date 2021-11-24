@@ -126,6 +126,7 @@ jobs:
       run: |
         cd samples/
         zip -r products products/*
+        zip -r api-util api-util/*
         zip -r hdb_hdbsequence_simple hdb_hdbsequence_simple/*
         zip -r hdb_hdbstructure_simple hdb_hdbstructure_simple/*
         zip -r hdb_hdbtable_simple hdb_hdbtable_simple/*
@@ -173,6 +174,7 @@ jobs:
 
           #### Available for download `*.zip` samples:
             - _**[products](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/products.zip) - Products Sample Application.**_
+            - [api-util](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-util.zip) - XSJS API $.util
             - [xsjs-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs-simple.zip) - XSJS Hello World.
             - [xsjs](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs.zip) - XSJS APIs.
             - [hdb-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-simple.zip) - HDB Table.
@@ -318,7 +320,7 @@ jobs:
         asset_content_type: application/zip
 
     - name: Upload Sample - products
-      id: upload-sample-products 
+      id: upload-sample-products
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -326,6 +328,17 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./samples/products.zip
         asset_name: products.zip
+        asset_content_type: application/zip
+
+    - name: Upload Sample - api-util
+      id: upload-sample-api-util
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./samples/api-util.zip
+        asset_name: api-util.zip
         asset_content_type: application/zip
 
     - name: Upload Sample - hdb_hdbsequence_simple

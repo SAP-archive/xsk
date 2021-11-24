@@ -17,6 +17,7 @@ import java.util.List;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableIndexModel;
 
 /**
  * The table model representation.
@@ -26,6 +27,8 @@ public class XSKDataStructureEntityModel extends XSKDataStructureModel {
   private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<XSKDataStructureHDBTableColumnModel>();
 
   private XSKDataStructureHDBTableConstraintsModel constraints = new XSKDataStructureHDBTableConstraintsModel();
+
+  private List<XSKDataStructureHDBTableIndexModel> indexes = new ArrayList<>();
 
   private String namespace;
 
@@ -77,4 +80,7 @@ public class XSKDataStructureEntityModel extends XSKDataStructureModel {
     this.namespace = namespace;
   }
 
+  public List<XSKDataStructureHDBTableIndexModel> getIndexes() {
+    return indexes;
+  }
 }

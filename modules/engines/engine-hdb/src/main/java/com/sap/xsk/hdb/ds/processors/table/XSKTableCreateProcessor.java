@@ -22,6 +22,7 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -87,6 +88,32 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     if (shouldCreatePublicSynonym) {
       XSKHDBUtils.createPublicSynonymForArtifact(managerServices
           .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
+    }
+  }
+
+  @Override
+  public void executeSql(String sql, Connection connection) throws SQLException {
+    String[] queries = sql.split(String.format("((?=%1$s))", "CREATE"));
+    String createTableQuery = queries[0];
+
+    try (PreparedStatement statement = connection.prepareStatement(createTableQuery)) {
+      logger.info(createTableQuery);
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      logger.error(sql);
+      logger.error(e.getMessage(), e);
+      throw e;
+    }
+
+    for(int i=1;i<queries.length;i++){
+      try (PreparedStatement statement= connection.prepareStatement(queries[i])) {
+        logger.info(queries[i]);
+        statement.executeUpdate();
+      } catch (SQLException exception) {
+        logger.error(sql);
+        logger.error(exception.getMessage(), exception);
+        throw exception;
+      }
     }
   }
 }

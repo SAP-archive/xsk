@@ -1,7 +1,7 @@
 import = [
 	{
-		table = "hdb_hdbtable_simple::Cities";
-		file = "hdb_hdbtable_simple:Cities_data.csv";
+		table = "hdb-hdbtable-simple::Cities";
+		file = "hdb-hdbtable-simple:Cities_data.csv";
 		header = false;
 		useHeaderNames = false;
 		delimField = ",";

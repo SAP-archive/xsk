@@ -3,617 +3,721 @@ name: Release
 on:
   push:
     tags:
-    - 'v*'
+      - 'v*'
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.GH_TOKEN }}
-        fetch-depth: 0
-    - name: Download sapmachine JDK 11
-      run: |
-        download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
-        wget -O "${RUNNER_TEMP}/sapmachine-jdk-11.0.11.tar.gz" "${download_url}"
-    - name: Setup sapmachine JDK 11
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'jdkfile'
-        jdkFile: ${{ runner.temp }}/sapmachine-jdk-11.0.11.tar.gz
-        java-version: '11.0.11'
-        architecture: x64
-    - name: Set XSK Version
-      run: echo XSK_VERSION=${GITHUB_REF#refs/*/} | tr v " " | sed 's/ //'  >> $GITHUB_ENV
-    - name: Maven Build
-      run: mvn clean install
-    - name: Docker Login
-      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
-    - name: Push XSK
-      run: |
-        cd releng/server
-        cp -r "${JAVA_HOME}" jdk
-        docker build -t dirigiblelabs/xsk:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
-        docker push dirigiblelabs/xsk:${{ env.XSK_VERSION }}
-        cd ../../
-    - name: Push XSK for SAP Cloud Foundry
-      run: |
-        cd releng/sap-cf
-        cp -r "${JAVA_HOME}" jdk
-        docker build -t dirigiblelabs/xsk-cf:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
-        docker push dirigiblelabs/xsk-cf:${{ env.XSK_VERSION }}
-        cd ../../
-    - name: Push XSK for SAP Kyma
-      run: |
-        cd releng/sap-kyma
-        cp -r "${JAVA_HOME}" jdk
-        docker build -t dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
-        docker push dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
-        cd ../../
-    - uses: buildpacks/github-actions/setup-pack@v4.1.0
-    - name: XSK Buildpack
-      run: |
-        cd releng/buildpacks/xsk/
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk . --target base
-        docker tag dirigiblelabs/buildpacks-stack-base-xsk dirigiblelabs/buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
-        docker tag dirigiblelabs/buildpacks-stack-run-xsk dirigiblelabs/buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
-        docker tag dirigiblelabs/buildpacks-stack-build-xsk dirigiblelabs/buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
-        cd buildpack/
-        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-        pack buildpack package dirigiblelabs/buildpacks-xsk --config ./package.toml
-        docker tag dirigiblelabs/buildpacks-xsk dirigiblelabs/buildpacks-xsk:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-xsk:${{ env.XSK_VERSION }}
-        pack builder create dirigiblelabs/buildpacks-builder-xsk --config ./builder.toml
-        docker tag dirigiblelabs/buildpacks-builder-xsk dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }}
-        cd ../../../../
-    - name: XSK Kyma Buildpack
-      run: |
-        cd releng/buildpacks/xsk-kyma/
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
-        docker tag dirigiblelabs/buildpacks-stack-base-xsk-kyma dirigiblelabs/buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
-        docker tag dirigiblelabs/buildpacks-stack-run-xsk-kyma dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
-        docker tag dirigiblelabs/buildpacks-stack-build-xsk-kyma dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
-        cd buildpack/
-        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-        pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
-        docker tag dirigiblelabs/buildpacks-xsk-kyma dirigiblelabs/buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
-        pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
-        docker tag dirigiblelabs/buildpacks-builder-xsk-kyma dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
-        cd ../../../../
-    - name: XSK Cloud Foundry Buildpack
-      run: |
-        cd releng/buildpacks/xsk-cf/
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
-        docker tag dirigiblelabs/buildpacks-stack-base-xsk-cf dirigiblelabs/buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
-        docker tag dirigiblelabs/buildpacks-stack-run-xsk-cf dirigiblelabs/buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
-        docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
-        docker tag dirigiblelabs/buildpacks-stack-build-xsk-cf dirigiblelabs/buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
-        cd buildpack/
-        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-        pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
-        docker tag dirigiblelabs/buildpacks-xsk-cf dirigiblelabs/buildpacks-xsk-cf:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-xsk-cf:${{ env.XSK_VERSION }}
-        pack builder create dirigiblelabs/buildpacks-builder-xsk-cf --config ./builder.toml
-        docker tag dirigiblelabs/buildpacks-builder-xsk-cf dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
-        docker push dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
-        cd ../../../../
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
+      - name: Download sapmachine JDK 11
+        run: |
+          download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
+          wget -O "${RUNNER_TEMP}/sapmachine-jdk-11.0.11.tar.gz" "${download_url}"
+      - name: Setup sapmachine JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'jdkfile'
+          jdkFile: ${{ runner.temp }}/sapmachine-jdk-11.0.11.tar.gz
+          java-version: '11.0.11'
+          architecture: x64
+      - name: Set XSK Version
+        run: echo XSK_VERSION=${GITHUB_REF#refs/*/} | tr v " " | sed 's/ //'  >> $GITHUB_ENV
+      - name: Maven Build
+        run: mvn clean install
+      - name: Docker Login
+        run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: Push XSK
+        run: |
+          cd releng/server
+          cp -r "${JAVA_HOME}" jdk
+          docker build -t dirigiblelabs/xsk:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          docker push dirigiblelabs/xsk:${{ env.XSK_VERSION }}
+          cd ../../
+      - name: Push XSK for SAP Cloud Foundry
+        run: |
+          cd releng/sap-cf
+          cp -r "${JAVA_HOME}" jdk
+          docker build -t dirigiblelabs/xsk-cf:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          docker push dirigiblelabs/xsk-cf:${{ env.XSK_VERSION }}
+          cd ../../
+      - name: Push XSK for SAP Kyma
+        run: |
+          cd releng/sap-kyma
+          cp -r "${JAVA_HOME}" jdk
+          docker build -t dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          docker push dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
+          cd ../../
+      - uses: buildpacks/github-actions/setup-pack@v4.1.0
+      - name: XSK Buildpack
+        run: |
+          cd releng/buildpacks/xsk/
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk . --target base
+          docker tag dirigiblelabs/buildpacks-stack-base-xsk dirigiblelabs/buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
+          docker tag dirigiblelabs/buildpacks-stack-run-xsk dirigiblelabs/buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
+          docker tag dirigiblelabs/buildpacks-stack-build-xsk dirigiblelabs/buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
+          cd buildpack/
+          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          pack buildpack package dirigiblelabs/buildpacks-xsk --config ./package.toml
+          docker tag dirigiblelabs/buildpacks-xsk dirigiblelabs/buildpacks-xsk:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-xsk:${{ env.XSK_VERSION }}
+          pack builder create dirigiblelabs/buildpacks-builder-xsk --config ./builder.toml
+          docker tag dirigiblelabs/buildpacks-builder-xsk dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }}
+          cd ../../../../
+      - name: XSK Kyma Buildpack
+        run: |
+          cd releng/buildpacks/xsk-kyma/
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
+          docker tag dirigiblelabs/buildpacks-stack-base-xsk-kyma dirigiblelabs/buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
+          docker tag dirigiblelabs/buildpacks-stack-run-xsk-kyma dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
+          docker tag dirigiblelabs/buildpacks-stack-build-xsk-kyma dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
+          cd buildpack/
+          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
+          docker tag dirigiblelabs/buildpacks-xsk-kyma dirigiblelabs/buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
+          pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
+          docker tag dirigiblelabs/buildpacks-builder-xsk-kyma dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
+          cd ../../../../
+      - name: XSK Cloud Foundry Buildpack
+        run: |
+          cd releng/buildpacks/xsk-cf/
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
+          docker tag dirigiblelabs/buildpacks-stack-base-xsk-cf dirigiblelabs/buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
+          docker tag dirigiblelabs/buildpacks-stack-run-xsk-cf dirigiblelabs/buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
+          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
+          docker tag dirigiblelabs/buildpacks-stack-build-xsk-cf dirigiblelabs/buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
+          cd buildpack/
+          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
+          docker tag dirigiblelabs/buildpacks-xsk-cf dirigiblelabs/buildpacks-xsk-cf:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-xsk-cf:${{ env.XSK_VERSION }}
+          pack builder create dirigiblelabs/buildpacks-builder-xsk-cf --config ./builder.toml
+          docker tag dirigiblelabs/buildpacks-builder-xsk-cf dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
+          docker push dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
+          cd ../../../../
 
-#----------------Publish GitHub Release------------------#
+      #----------------Publish GitHub Release------------------#
 
-    - name: Package WAR files
-      run: |
-        zip --junk-paths server releng/server/target/ROOT.war
-        zip --junk-paths sap-cf releng/sap-cf/target/ROOT.war
+      - name: Package WAR files
+        run: |
+          zip --junk-paths server releng/server/target/ROOT.war
+          zip --junk-paths sap-cf releng/sap-cf/target/ROOT.war
 
-    - name: Package Samples
-      run: |
-        cd samples/
-        zip -r products products/*
-        zip -r api-util api-util/*
-        zip -r hdb_hdbsequence_simple hdb_hdbsequence_simple/*
-        zip -r hdb_hdbstructure_simple hdb_hdbstructure_simple/*
-        zip -r hdb_hdbtable_simple hdb_hdbtable_simple/*
-        zip -r hdb_hdbti_simple hdb_hdbti_simple/*
-        zip -r hdb-hdbdd-simple hdb-hdbdd-simple/*
-        zip -r hdb-procedure-simple hdb-procedure-simple/*
-        zip -r hdb-schema-simple hdb-schema-simple/*
-        zip -r hdb-simple hdb-simple/*
-        zip -r hdb-synonym-simple hdb-synonym-simple/*
-        zip -r hdb-tablefunction-simple hdb-tablefunction-simple/*
-        zip -r hdb-view-simple hdb-view-simple/*
-        zip -r hdi-cube hdi-cube/*
-        zip -r hdi-ext hdi-ext/*
-        zip -r hdi-simple hdi-simple/*
-        zip -r xsjs xsjs/*
-        zip -r xsjs-simple xsjs-simple/*
-        zip -r xsodata-navigations xsodata-navigations/*
-        zip -r xsodata-simple xsodata-simple/*
+      - name: Package Samples
+        run: |
+          cd samples/
+          zip -r api-db api-db/*
+          zip -r api-hdb api-hdb/*
+          zip -r api-import api-import/*
+          zip -r api-jobs api-jobs/*
+          zip -r api-net api-net/*
+          zip -r api-session api-session/*
+          zip -r api-trace api-trace/*
+          zip -r api-util api-util/*
+          zip -r api-web api-web/*
+          zip -r hdb-hdbdd-simple hdb-hdbdd-simple/*
+          zip -r hdb-hdbsequence-simple hdb-hdbsequence-simple/*
+          zip -r hdb-hdbstructure-simple hdb-hdbstructure-simple/*
+          zip -r hdb-hdbtable-simple hdb-hdbtable-simple/*
+          zip -r hdb-hdbti-simple hdb-hdbti-simple/*
+          zip -r hdb-procedure-simple hdb-procedure-simple/*
+          zip -r hdb-schema-simple hdb-schema-simple/*
+          zip -r hdb-simple hdb-simple/*
+          zip -r hdb-synonym-simple hdb-synonym-simple/*
+          zip -r hdb-tablefunction-simple hdb-tablefunction-simple/*
+          zip -r hdb-view-simple hdb-view-simple/*
+          zip -r hdi-cube hdi-cube/*
+          zip -r hdi-ext hdi-ext/*
+          zip -r hdi-simple hdi-simple/*
+          zip -r products products/*
+          zip -r xsjs xsjs/*
+          zip -r xsjs-simple xsjs-simple/*
+          zip -r xsodata-navigations xsodata-navigations/*
+          zip -r xsodata-simple xsodata-simple/*
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        tag_name: v${{ env.XSK_VERSION }}
-        release_name: ${{ env.XSK_VERSION }}
-        draft: false
-        prerelease: false
-        body: |
-          ## XSK - ${{ env.XSK_VERSION }}
-         
-          #### Docker images:
-            - [dirigiblelabs/xsk](https://hub.docker.com/r/dirigiblelabs/xsk/tags?page=1&ordering=last_updated) - XSK Server.
-            - [dirigiblelabs/xsk-cf](https://hub.docker.com/r/dirigiblelabs/xsk-cf/tags?page=1&ordering=last_updated) - XSK Cloud Foundry.
-            - [dirigiblelabs/xsk-kyma](https://hub.docker.com/r/dirigiblelabs/xsk-kyma/tags?page=1&ordering=last_updated) - XSK Kyma.
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: v${{ env.XSK_VERSION }}
+          release_name: ${{ env.XSK_VERSION }}
+          draft: false
+          prerelease: false
+          body: |
+            ## XSK - ${{ env.XSK_VERSION }}
 
-          #### Available for download `*.war` packages:
-            - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server.zip) - XSK Server.
-            - [sap-cf](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/sap-cf.zip) - XSK Cloud Foundry.
-            
-          > _**Note:** Unzip the downloaded file to extract the `ROOT.war` binary._
-          
-          For more information go to [https://www.dirigible.io/help/setup/](https://www.dirigible.io/help/setup/).
+            #### Docker images:
+              - [dirigiblelabs/xsk](https://hub.docker.com/r/dirigiblelabs/xsk/tags?page=1&ordering=last_updated) - XSK Server.
+              - [dirigiblelabs/xsk-cf](https://hub.docker.com/r/dirigiblelabs/xsk-cf/tags?page=1&ordering=last_updated) - XSK Cloud Foundry.
+              - [dirigiblelabs/xsk-kyma](https://hub.docker.com/r/dirigiblelabs/xsk-kyma/tags?page=1&ordering=last_updated) - XSK Kyma.
 
-          #### Available for download `*.zip` samples:
-            - _**[products](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/products.zip) - Products Sample Application.**_
-            - [api-util](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-util.zip) - XSJS API $.util
-            - [xsjs-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs-simple.zip) - XSJS Hello World.
-            - [xsjs](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs.zip) - XSJS APIs.
-            - [hdb-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-simple.zip) - HDB Table.
-            - [hdb-view-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-view-simple.zip) - HDB View - Simple.
-            - [xsodata-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsodata-simple.zip) - XSOData - Simple.
-            - [xsodata-navigations](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsodata-navigations.zip) - XSOData - Navigations.
-            - [hdi-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-simple.zip) - HDI.
-            - [hdi-ext](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-ext.zip) - HDI Ext.
-            - [hdi-cube](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-cube.zip) - HDI Cube.
-            - [hdb_hdbtable_simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb_hdbtable_simple.zip) - HDBTable - Simple.
-            - [hdb-hdbdd-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-hdbdd-simple.zip) - HDBDD - Simple.
-            - [hdb_hdbstructure_simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb_hdbstructure_simple.zip) - HDBStructure - Simple.
-            - [hdb_hdbti_simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb_hdbti_simple.zip) - HDBTI - Simple.
-            - [hdb-schema-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-schema-simple.zip) - HDBSchema - Simple.
-            - [hdb-synonym-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-synonym-simple.zip) - HDBSynonym - Simple.
-            - [hdb_hdbsequence_simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb_hdbsequence_simple.zip) - HDBSequence - Simple.
-            - [hdb-procedure-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-procedure-simple.zip) - HDBProcedure - Simple.
-            - [hdb-tablefunction-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-tablefunction-simple.zip) - HDBTableFunction - Simple.
-          
-          ### Cloud Native Buildpacks
-          
-          #### Pack
-          
-          Available Buildpack Builders:
-          - [dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk) - builder for local deployments.
-          - [dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk-kyma) - builder for Kyma ready deployments.
-          - [dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk-cf) - builder for Cloud Foundry ready deployments
-          
-          Building Docker Image with **pack**:
-          ```
-          pack build --builder dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }} <my-org>/<my-repository>
-          ```
-          > _**Note:** The command will package all sub-folders (`project1`, `project2`, etc.) into a XSK docker image with the application sources._
-          
-          ### Cloud Foundry - SAP Java Buildpack
-          
-          **manifest.yaml**
+            #### Available for download `*.war` packages:
+              - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server.zip) - XSK Server.
+              - [sap-cf](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/sap-cf.zip) - XSK Cloud Foundry.
 
-          ```yaml
-          applications:
-          - name: <application-name>
-            host: <host>
-            memory: 2G
-            buildpack: sap_java_buildpack
-            path: ROOT.war
-            env:
-              JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jdk.SAPMachineJDK']"
-              JBP_CONFIG_SAP_MACHINE_JRE: 'jre: { version: 11.+ }'
-            services:
-              - <service-binding>
-          ```
-          
-          #### Kpack
-          
-          - Install [Kpack](https://github.com/pivotal/kpack) on your Kubernetes/Kyma cluster
-          - Create `ClusterStore`, `ClusterStack` and `Builder`:
+            > _**Note:** Unzip the downloaded file to extract the `ROOT.war` binary._
 
-          ```yaml
-          apiVersion: kpack.io/v1alpha1
-          kind: ClusterStore
-          metadata:
-            name: xsk-store
-          spec:
-            sources:
-            - image: dirigiblelabs/buildpacks-xsk:${{ env.XSK_VERSION }}
-          ---
-          apiVersion: kpack.io/v1alpha1
-          kind: ClusterStack
-          metadata:
-            name: xsk-stack
-          spec:
-            id: com.sap.kneo.xsk
-            buildImage:
-              image: dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
-            runImage:
-              image: dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
-          ---
-          apiVersion: kpack.io/v1alpha1
-          kind: Builder
-          metadata:
-            name: xsk-builder
-          spec:
-            serviceAccount: <your-service-account>
-            tag: <your-docker-organization>/<your-docker-builder-repository>
-            stack:
-              name: xsk-stack
-              kind: ClusterStack
-            store:
+            For more information go to [https://www.dirigible.io/help/setup/](https://www.dirigible.io/help/setup/).
+
+            #### Available for download `*.zip` samples:
+              - _**[products](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/products.zip) - Products Sample Application.**_
+              - [api-db](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-db.zip) - XSJS API $.db.
+              - [api-hdb](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-hdb.zip) - XSJS API $.hdb.
+              - [api-import](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-import.zip) - XSJS API $.import.
+              - [api-jobs](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-jobs.zip) - XSJS API $.jobs.
+              - [api-net](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-net.zip) - XSJS API $.net.
+              - [api-session](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-session.zip) - XSJS API $.session.
+              - [api-trace](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-trace.zip) - XSJS API $.trace.
+              - [api-util](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-util.zip) - XSJS API $.util.
+              - [api-web](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/api-web.zip) - XSJS API $.web.
+              - [hdb-hdbdd-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-hdbdd-simple.zip) - HDBDD - Simple.
+              - [hdb-hdbsequence-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-hdbsequence-simple.zip) - HDBSequence - Simple.
+              - [hdb-hdbstructure-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-hdbstructure-simple.zip) - HDBStructure - Simple.
+              - [hdb-hdbtable-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-hdbtable-simple.zip) - HDBTable - Simple.
+              - [hdb-hdbti-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-hdbti-simple.zip) - HDBTI - Simple.
+              - [hdb-procedure-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-procedure-simple.zip) - HDBProcedure - Simple.
+              - [hdb-schema-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-schema-simple.zip) - HDBSchema - Simple.
+              - [hdb-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-simple.zip) - HDB Table.
+              - [hdb-synonym-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-synonym-simple.zip) - HDBSynonym - Simple.
+              - [hdb-tablefunction-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-tablefunction-simple.zip) - HDBTableFunction - Simple.
+              - [hdb-view-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdb-view-simple.zip) - HDBView - Simple.
+              - [hdi-cube](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-cube.zip) - HDI Cube.
+              - [hdi-ext](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-ext.zip) - HDI Ext.
+              - [hdi-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/hdi-simple.zip) - HDI.
+              - [xsjs](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs.zip) - XSJS APIs.
+              - [xsjs-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsjs-simple.zip) - XSJS Hello World.
+              - [xsodata-navigations](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsodata-navigations.zip) - XSOData - Navigations.
+              - [xsodata-simple](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/xsodata-simple.zip) - XSOData - Simple.
+
+            ### Cloud Native Buildpacks
+
+            #### Pack
+
+            Available Buildpack Builders:
+            - [dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk) - builder for local deployments.
+            - [dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk-kyma) - builder for Kyma ready deployments.
+            - [dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}](https://hub.docker.com/r/dirigiblelabs/buildpacks-builder-xsk-cf) - builder for Cloud Foundry ready deployments
+
+            Building Docker Image with **pack**:
+            ```
+            pack build --builder dirigiblelabs/buildpacks-builder-xsk:${{ env.XSK_VERSION }} <my-org>/<my-repository>
+            ```
+            > _**Note:** The command will package all sub-folders (`project1`, `project2`, etc.) into a XSK docker image with the application sources._
+
+            ### Cloud Foundry - SAP Java Buildpack
+
+            **manifest.yaml**
+
+            ```yaml
+            applications:
+            - name: <application-name>
+              host: <host>
+              memory: 2G
+              buildpack: sap_java_buildpack
+              path: ROOT.war
+              env:
+                JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jdk.SAPMachineJDK']"
+                JBP_CONFIG_SAP_MACHINE_JRE: 'jre: { version: 11.+ }'
+              services:
+                - <service-binding>
+            ```
+
+            #### Kpack
+
+            - Install [Kpack](https://github.com/pivotal/kpack) on your Kubernetes/Kyma cluster
+            - Create `ClusterStore`, `ClusterStack` and `Builder`:
+
+            ```yaml
+            apiVersion: kpack.io/v1alpha1
+            kind: ClusterStore
+            metadata:
               name: xsk-store
-              kind: ClusterStore
-            order:
-            - group:
-              - id: dirigiblelabs/buildpacks-xsk
-          ```
-
-          > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
-
-          > _**Note**: Also replace `<your-docker-organization>/<your-docker-builder-repository>` with your Docker Repository, where the Docker Image Builder will be hosted (e.g. `my-organization/my-builder`)_
-
-          #### Usage
-
-          ```yaml
-          apiVersion: kpack.io/v1alpha1
-          kind: Image
-          metadata:
-            name: xsk-application
-            namespace: default
-          spec:
-            tag: <your-docker-organization>/<your-application-docker-image-repository>
-            serviceAccount: <your-service-account>
-            builder:
+            spec:
+              sources:
+              - image: dirigiblelabs/buildpacks-xsk:${{ env.XSK_VERSION }}
+            ---
+            apiVersion: kpack.io/v1alpha1
+            kind: ClusterStack
+            metadata:
+              name: xsk-stack
+            spec:
+              id: com.sap.kneo.xsk
+              buildImage:
+                image: dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
+              runImage:
+                image: dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
+            ---
+            apiVersion: kpack.io/v1alpha1
+            kind: Builder
+            metadata:
               name: xsk-builder
-              kind: Builder
-            source:
-              blob:
-                url: https://github.com/SAP/xsk/raw/main/samples/products.zip
-          ```
+            spec:
+              serviceAccount: <your-service-account>
+              tag: <your-docker-organization>/<your-docker-builder-repository>
+              stack:
+                name: xsk-stack
+                kind: ClusterStack
+              store:
+                name: xsk-store
+                kind: ClusterStore
+              order:
+              - group:
+                - id: dirigiblelabs/buildpacks-xsk
+            ```
 
-          > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
+            > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
 
-          > _**Note**: Also replace `<your-docker-organization>/<your-application-docker-image-repository>` with your Docker Repository, where the Docker Image Builder will be hosted (e.g. `my-organization/my-application`)_
+            > _**Note**: Also replace `<your-docker-organization>/<your-docker-builder-repository>` with your Docker Repository, where the Docker Image Builder will be hosted (e.g. `my-organization/my-builder`)_
 
-    - name: Upload Server
-      id: upload-server 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./server.zip
-        asset_name: server.zip
-        asset_content_type: application/zip
+            #### Usage
 
-    - name: Upload SAP CF
-      id: upload-sap-cf 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./sap-cf.zip
-        asset_name: sap-cf.zip
-        asset_content_type: application/zip
+            ```yaml
+            apiVersion: kpack.io/v1alpha1
+            kind: Image
+            metadata:
+              name: xsk-application
+              namespace: default
+            spec:
+              tag: <your-docker-organization>/<your-application-docker-image-repository>
+              serviceAccount: <your-service-account>
+              builder:
+                name: xsk-builder
+                kind: Builder
+              source:
+                blob:
+                  url: https://github.com/SAP/xsk/raw/main/samples/products.zip
+            ```
 
-    - name: Upload Sample - products
-      id: upload-sample-products
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/products.zip
-        asset_name: products.zip
-        asset_content_type: application/zip
+            > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
 
-    - name: Upload Sample - api-util
-      id: upload-sample-api-util
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/api-util.zip
-        asset_name: api-util.zip
-        asset_content_type: application/zip
+            > _**Note**: Also replace `<your-docker-organization>/<your-application-docker-image-repository>` with your Docker Repository, where the Docker Image Builder will be hosted (e.g. `my-organization/my-application`)_
 
-    - name: Upload Sample - hdb_hdbsequence_simple
-      id: upload-sample-hdb_hdbsequence_simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb_hdbsequence_simple.zip
-        asset_name: hdb_hdbsequence_simple.zip
-        asset_content_type: hdb_hdbsequence_simple/zip
+      - name: Upload Server
+        id: upload-server
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./server.zip
+          asset_name: server.zip
+          asset_content_type: application/zip
 
-    - name: Upload Sample - hdb_hdbstructure_simple
-      id: upload-sample-hdb_hdbstructure_simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb_hdbstructure_simple.zip
-        asset_name: hdb_hdbstructure_simple.zip
-        asset_content_type: hdb_hdbstructure_simple/zip
+      - name: Upload SAP CF
+        id: upload-sap-cf
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./sap-cf.zip
+          asset_name: sap-cf.zip
+          asset_content_type: application/zip
 
-    - name: Upload Sample - hdb_hdbtable_simple
-      id: upload-sample-hdb_hdbtable_simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb_hdbtable_simple.zip
-        asset_name: hdb_hdbtable_simple.zip
-        asset_content_type: hdb_hdbtable_simple/zip
+      - name: Upload Sample - api-db
+        id: upload-sample-api-db
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-db.zip
+          asset_name: api-db.zip
+          asset_content_type: api-db/zip
 
-    - name: Upload Sample - hdb_hdbti_simple
-      id: upload-sample-hdb_hdbti_simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb_hdbti_simple.zip
-        asset_name: hdb_hdbti_simple.zip
-        asset_content_type: hdb_hdbti_simple/zip
+      - name: Upload Sample - api-hdb
+        id: upload-sample-api-hdb
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-hdb.zip
+          asset_name: api-hdb.zip
+          asset_content_type: api-hdb/zip
 
-    - name: Upload Sample - hdb-hdbdd-simple
-      id: upload-sample-hdb-hdbdd-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-hdbdd-simple.zip
-        asset_name: hdb-hdbdd-simple.zip
-        asset_content_type: hdb-hdbdd-simple/zip
+      - name: Upload Sample - api-import
+        id: upload-sample-api-import
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-import.zip
+          asset_name: api-import.zip
+          asset_content_type: api-import/zip
 
-    - name: Upload Sample - hdb-procedure-simple
-      id: upload-sample-hdb-procedure-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-procedure-simple.zip
-        asset_name: hdb-procedure-simple.zip
-        asset_content_type: hdb-procedure-simple/zip
+      - name: Upload Sample - api-jobs
+        id: upload-sample-api-jobs
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-jobs.zip
+          asset_name: api-jobs.zip
+          asset_content_type: api-jobs/zip
 
-    - name: Upload Sample - hdb-schema-simple
-      id: upload-sample-hdb-schema-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-schema-simple.zip
-        asset_name: hdb-schema-simple.zip
-        asset_content_type: hdb-schema-simple/zip
+      - name: Upload Sample - api-net
+        id: upload-sample-api-net
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-net.zip
+          asset_name: api-net.zip
+          asset_content_type: api-net/zip
 
-    - name: Upload Sample - hdb-simple
-      id: upload-sample-hdb-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-simple.zip
-        asset_name: hdb-simple.zip
-        asset_content_type: hdb-simple/zip
+      - name: Upload Sample - api-session
+        id: upload-sample-api-session
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-session.zip
+          asset_name: api-session.zip
+          asset_content_type: api-session/zip
 
-    - name: Upload Sample - hdb-synonym-simple
-      id: upload-sample-hdb-synonym-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-synonym-simple.zip
-        asset_name: hdb-synonym-simple.zip
-        asset_content_type: hdb-synonym-simple/zip
+      - name: Upload Sample - api-trace
+        id: upload-sample-api-trace
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-trace.zip
+          asset_name: api-trace.zip
+          asset_content_type: api-trace/zip
 
-    - name: Upload Sample - hdb-tablefunction-simple
-      id: upload-sample-hdb-tablefunction-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-tablefunction-simple.zip
-        asset_name: hdb-tablefunction-simple.zip
-        asset_content_type: hdb-tablefunction-simple/zip
+      - name: Upload Sample - api-util
+        id: upload-sample-api-util
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-util.zip
+          asset_name: api-util.zip
+          asset_content_type: api-util/zip
 
-    - name: Upload Sample - hdb-view-simple
-      id: upload-sample-hdb-view-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdb-view-simple.zip
-        asset_name: hdb-view-simple.zip
-        asset_content_type: hdb-view-simple/zip
+      - name: Upload Sample - api-web
+        id: upload-sample-api-web
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/api-web.zip
+          asset_name: api-web.zip
+          asset_content_type: api-web/zip
 
-    - name: Upload Sample - hdi-cube
-      id: upload-sample-hdi-cube
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdi-cube.zip
-        asset_name: hdi-cube.zip
-        asset_content_type: hdi-cube/zip
+      - name: Upload Sample - products
+        id: upload-sample-products
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/products.zip
+          asset_name: products.zip
+          asset_content_type: application/zip
 
-    - name: Upload Sample - hdi-ext
-      id: upload-sample-hdi-ext
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdi-ext.zip
-        asset_name: hdi-ext.zip
-        asset_content_type: hdi-ext/zip
+      - name: Upload Sample - hdb-hdbsequence-simple
+        id: upload-sample-hdb-hdbsequence-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-hdbsequence-simple.zip
+          asset_name: hdb-hdbsequence-simple.zip
+          asset_content_type: hdb-hdbsequence-simple/zip
 
-    - name: Upload Sample - hdi-simple
-      id: upload-sample-hdi-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/hdi-simple.zip
-        asset_name: hdi-simple.zip
-        asset_content_type: hdi-simple/zip
+      - name: Upload Sample - hdb-hdbstructure-simple
+        id: upload-sample-hdb-hdbstructure-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-hdbstructure-simple.zip
+          asset_name: hdb-hdbstructure-simple.zip
+          asset_content_type: hdb-hdbstructure-simple/zip
 
-    - name: Upload Sample - xsjs
-      id: upload-sample-xsjs
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/xsjs.zip
-        asset_name: xsjs.zip
-        asset_content_type: xsjs/zip
+      - name: Upload Sample - hdb-hdbtable-simple
+        id: upload-sample-hdb-hdbtable-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-hdbtable-simple.zip
+          asset_name: hdb-hdbtable-simple.zip
+          asset_content_type: hdb-hdbtable-simple/zip
 
-    - name: Upload Sample - xsjs-simple
-      id: upload-sample-xsjs-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/xsjs-simple.zip
-        asset_name: xsjs-simple.zip
-        asset_content_type: xsjs-simple/zip
+      - name: Upload Sample - hdb-hdbti-simple
+        id: upload-sample-hdb-hdbti-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-hdbti-simple.zip
+          asset_name: hdb-hdbti-simple.zip
+          asset_content_type: hdb-hdbti-simple/zip
 
-    - name: Upload Sample - xsodata-navigations
-      id: upload-sample-xsodata-navigations
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/xsodata-navigations.zip
-        asset_name: xsodata-navigations.zip
-        asset_content_type: xsodata-navigations/zip
+      - name: Upload Sample - hdb-hdbdd-simple
+        id: upload-sample-hdb-hdbdd-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-hdbdd-simple.zip
+          asset_name: hdb-hdbdd-simple.zip
+          asset_content_type: hdb-hdbdd-simple/zip
 
-    - name: Upload Sample - xsodata-simple
-      id: upload-sample-xsodata-simple
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./samples/xsodata-simple.zip
-        asset_name: xsodata-simple.zip
-        asset_content_type: xsodata-simple/zip
+      - name: Upload Sample - hdb-procedure-simple
+        id: upload-sample-hdb-procedure-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-procedure-simple.zip
+          asset_name: hdb-procedure-simple.zip
+          asset_content_type: hdb-procedure-simple/zip
 
-#----------------Publish GitHub Release------------------#
+      - name: Upload Sample - hdb-schema-simple
+        id: upload-sample-hdb-schema-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-schema-simple.zip
+          asset_name: hdb-schema-simple.zip
+          asset_content_type: hdb-schema-simple/zip
 
-#----------------Publish Helm Release------------------#
+      - name: Upload Sample - hdb-simple
+        id: upload-sample-hdb-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-simple.zip
+          asset_name: hdb-simple.zip
+          asset_content_type: hdb-simple/zip
 
-    - name: Helm tool installer
-      uses: Azure/setup-helm@v1
-    - name: Helm Charts Release - Checkout gh-pages
-      run: |
-        mkdir charts-temp
-        cp -r releng/helm-charts/ charts-temp/
-        #### Git Checkout Workaround
-        git add .github/
-        git add .reuse/
-        git add LICENSES/
-        git add modules/
-        git add releng/
-        git add samples/
-        git reset --hard
-        ####
-        git fetch
-        git checkout gh-pages
+      - name: Upload Sample - hdb-synonym-simple
+        id: upload-sample-hdb-synonym-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-synonym-simple.zip
+          asset_name: hdb-synonym-simple.zip
+          asset_content_type: hdb-synonym-simple/zip
 
-        cp charts/* .
-    - name: Helm Charts Release - Set Chart Version - XSK
-      run: |
-        cd charts-temp/helm-charts/xsk/
-        find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-    - name: Helm Charts Release
-      run: |
-        cp charts/* charts-temp/helm-charts/
-        cd charts-temp/helm-charts/
-        helm package xsk
-        cd ..
-        helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
+      - name: Upload Sample - hdb-tablefunction-simple
+        id: upload-sample-hdb-tablefunction-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-tablefunction-simple.zip
+          asset_name: hdb-tablefunction-simple.zip
+          asset_content_type: hdb-tablefunction-simple/zip
 
-        cp helm-charts/index.yaml ../.
-        cp helm-charts/xsk-${{ env.XSK_VERSION }}.tgz ../charts/
-        cd ..
-        git config user.name "$GITHUB_ACTOR"
-        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-        git add index.yaml
-        git add charts/
-        git commit -m "Updates Helm Charts - Release ${{ env.XSK_VERSION }} - ci skip"
-        git push origin gh-pages
-        git add .
-        git reset --hard
-        git checkout main
-#----------------Publish Helm Release------------------#
+      - name: Upload Sample - hdb-view-simple
+        id: upload-sample-hdb-view-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdb-view-simple.zip
+          asset_name: hdb-view-simple.zip
+          asset_content_type: hdb-view-simple/zip
 
-#-----------------Create GitHub Branch-------------------#
+      - name: Upload Sample - hdi-cube
+        id: upload-sample-hdi-cube
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdi-cube.zip
+          asset_name: hdi-cube.zip
+          asset_content_type: hdi-cube/zip
 
-    - name: Create GitHub Branch
-      run: |
-        git checkout -b ${{ env.XSK_VERSION }}
-        git push origin ${{ env.XSK_VERSION }}
+      - name: Upload Sample - hdi-ext
+        id: upload-sample-hdi-ext
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdi-ext.zip
+          asset_name: hdi-ext.zip
+          asset_content_type: hdi-ext/zip
 
-#-----------------Create GitHub Branch-------------------#
+      - name: Upload Sample - hdi-simple
+        id: upload-sample-hdi-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/hdi-simple.zip
+          asset_name: hdi-simple.zip
+          asset_content_type: hdi-simple/zip
 
-#------------------Update XSK Instance-------------------#
+      - name: Upload Sample - xsjs
+        id: upload-sample-xsjs
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/xsjs.zip
+          asset_name: xsjs.zip
+          asset_content_type: xsjs/zip
 
-    - name: Kubectl tool installer
-      uses: Azure/setup-kubectl@v1
-    - name: Setup Kube Config File
-      run: |
-        mkdir $HOME/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
-    - name: Update XSK Instance
-      run: kubectl set image deployment/xsk-trial xsk-trial=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
+      - name: Upload Sample - xsjs-simple
+        id: upload-sample-xsjs-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/xsjs-simple.zip
+          asset_name: xsjs-simple.zip
+          asset_content_type: xsjs-simple/zip
 
-#------------------Update XSK Instance-------------------#
+      - name: Upload Sample - xsodata-navigations
+        id: upload-sample-xsodata-navigations
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/xsodata-navigations.zip
+          asset_name: xsodata-navigations.zip
+          asset_content_type: xsodata-navigations/zip
 
-    - name: Slack Notification
-      if: ${{ failure() }}
-      uses: slackapi/slack-github-action@v1.14.0
-      with:
-        payload: "{\"type\":\"Release\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Upload Sample - xsodata-simple
+        id: upload-sample-xsodata-simple
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./samples/xsodata-simple.zip
+          asset_name: xsodata-simple.zip
+          asset_content_type: xsodata-simple/zip
+
+      #----------------Publish GitHub Release------------------#
+
+      #----------------Publish Helm Release------------------#
+
+      - name: Helm tool installer
+        uses: Azure/setup-helm@v1
+      - name: Helm Charts Release - Checkout gh-pages
+        run: |
+          mkdir charts-temp
+          cp -r releng/helm-charts/ charts-temp/
+          #### Git Checkout Workaround
+          git add .github/
+          git add .reuse/
+          git add LICENSES/
+          git add modules/
+          git add releng/
+          git add samples/
+          git reset --hard
+          ####
+          git fetch
+          git checkout gh-pages
+
+          cp charts/* .
+      - name: Helm Charts Release - Set Chart Version - XSK
+        run: |
+          cd charts-temp/helm-charts/xsk/
+          find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+      - name: Helm Charts Release
+        run: |
+          cp charts/* charts-temp/helm-charts/
+          cd charts-temp/helm-charts/
+          helm package xsk
+          cd ..
+          helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
+
+          cp helm-charts/index.yaml ../.
+          cp helm-charts/xsk-${{ env.XSK_VERSION }}.tgz ../charts/
+          cd ..
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git add index.yaml
+          git add charts/
+          git commit -m "Updates Helm Charts - Release ${{ env.XSK_VERSION }} - ci skip"
+          git push origin gh-pages
+          git add .
+          git reset --hard
+          git checkout main
+      #----------------Publish Helm Release------------------#
+
+      #-----------------Create GitHub Branch-------------------#
+
+      - name: Create GitHub Branch
+        run: |
+          git checkout -b ${{ env.XSK_VERSION }}
+          git push origin ${{ env.XSK_VERSION }}
+
+      #-----------------Create GitHub Branch-------------------#
+
+      #------------------Update XSK Instance-------------------#
+
+      - name: Kubectl tool installer
+        uses: Azure/setup-kubectl@v1
+      - name: Setup Kube Config File
+        run: |
+          mkdir $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
+      - name: Update XSK Instance
+        run: kubectl set image deployment/xsk-trial xsk-trial=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
+
+      #------------------Update XSK Instance-------------------#
+
+      - name: Slack Notification
+        if: ${{ failure() }}
+        uses: slackapi/slack-github-action@v1.14.0
+        with:
+          payload: "{\"type\":\"Release\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -1,7 +1,7 @@
 import = [
 	{
-		table = "hdb_hdbti_simple::Products.Orders";
-		file = "hdb_hdbti_simple:Products_Orders.csv";
+		table = "hdb-hdbti-simple::Products.Orders";
+		file = "hdb-hdbti-simple:Products_Orders.csv";
 		header = false;
 		useHeaderNames = false;
 		delimField = ",";

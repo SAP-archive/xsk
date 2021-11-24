@@ -52,8 +52,6 @@ spec:
       labels:
         {{- include "xsk.selectorLabels" . | nindent 8 }}
     spec:
-      imagePullSecrets:
-        - name: {{ .Values.docker.secretName }}
       containers:
         - name: {{ .Chart.Name }}
           envFrom:

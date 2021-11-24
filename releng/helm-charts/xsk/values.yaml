@@ -4,14 +4,6 @@
 
 replicaCount: 1
 
-docker:
-  server:
-  username:
-  password:
-  email:
-  secretName: docker-registry-secret
-  serviceAccountName: docker-registry-service-account
-
 kyma:
   enabled:
   host:

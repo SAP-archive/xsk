@@ -115,9 +115,8 @@ The following table lists all the configurable parameters exposed by the XSK cha
 
 |             Name             |          Description            |            Default                 |
 |------------------------------|---------------------------------|------------------------------------|
-| `xsk.image`                  | Different version image         | `""`                               |
-| `image.repository`           | XSK image repo                  | `dirigiblelabs/xsk`                |
-| `image.repositoryKyma`       | XSK Kyma image repo             | `dirigiblelabs/xsk-kyma`           |
-| `image.repositoryCF`         | XSK Cloud Foundry image repo    | `dirigiblelabs/xsk-cf`             |
+| `application.image`          | XSK image repo                  | `dirigiblelabs/xsk`                |
 | `image.pullPolicy`           | Image pull policy               | `Always`                           |
 | `replicaCount`               | Number of replicas              | `1`                                |
+| `homeUrl`                    | Application Home url            | `false`                            |
+| `fastBootstrap`              | Fast Boostrap secret            | `false`                            |

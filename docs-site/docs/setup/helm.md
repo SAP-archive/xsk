@@ -59,10 +59,27 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         ```
         helm install xsk xsk/xsk \
         --set kyma.enabled=true \
-        --set kyma.apirule.host=<kyma-host>
+        --set kyma.host=<kyma-host>
         ```
 
         This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.
+        
+        ???+ info "Configuration Options"
+            You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values).
+
+    === "SAP HANA database"
+
+        ```
+        helm install xsk xsk \
+        --set hana.enabled=true \
+        --set hana.url=<hana-url> \
+        --set hana.username=<hana-username> \
+        --set hana.password=<hana-password> \
+        --set kyma.enabled=true \
+        --set kyma.host=<kyma-apirule-host>
+        ```
+
+        This will install additionally an ApiRule, XSUAA ServiceInstance, ServiceBinding and HANA instance. The appropriate roles should be assigned to the user.
         
         ???+ info "Configuration Options"
             You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values).
@@ -72,7 +89,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         ```
         helm install xsk xsk/xsk \
         --set kyma.enabled=true \
-        --set kyma.apirule.host=<kyma-host> \
+        --set kyma.host=<kyma-host> \
         --set database.enabled=true
         ```
 
@@ -98,19 +115,9 @@ The following table lists all the configurable parameters exposed by the XSK cha
 
 |             Name             |          Description            |            Default                 |
 |------------------------------|---------------------------------|------------------------------------|
-| `dirigible.image`            | Custom Dirigible image          | `""`                               |
-| `image.repository`           | Dirigible image repo            | `dirigiblelabs/dirigible-all`      |
-| `image.repositoryKyma`       | Dirigible Kyma image repo       | `dirigiblelabs/dirigible-sap-kyma` |
-| `image.repositoryKeycloak`   | Dirigible Keycloak image repo   | `dirigiblelabs/dirigible-keycloak` |
-| `image.pullPolicy`           | Image pull policy               | `IfNotPresent`                     |
-| `service.type`               | Service type                    | `ClusterIP`                        |
-| `service.port`               | Service port                    | `8080`                             |
+| `xsk.image`                  | Different version image         | `""`                               |
+| `image.repository`           | XSK image repo                  | `dirigiblelabs/xsk`                |
+| `image.repositoryKyma`       | XSK Kyma image repo             | `dirigiblelabs/xsk-kyma`           |
+| `image.repositoryCF`         | XSK Cloud Foundry image repo    | `dirigiblelabs/xsk-cf`             |
+| `image.pullPolicy`           | Image pull policy               | `Always`                           |
 | `replicaCount`               | Number of replicas              | `1`                                |
-| `imagePullSecrets`           | Image pull secrets              | `[]`                               |
-| `nameOverride`               | Name override                   | `""`                               |
-| `fullnameOverride`           | Fullname override               | `""`                               |
-| `podSecurityContext`         | Pod security context            | `{}`                               |
-| `nodeSelector`               | Node selector                   | `{}`                               |
-| `tolerations`                | Tolerations                     | `[]`                               |
-| `affinity`                   | Affinity                        | `{}`                               |
-| `resources`                  | Resources                       | `{}`                               |

@@ -2,7 +2,6 @@ namespace hdb-hdbdd-simple.db;
 
 @Schema: 'DBADMIN'
 
-
 context CountryForHdbdd {
 
       entity Country {

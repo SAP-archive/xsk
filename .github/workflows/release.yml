@@ -670,16 +670,20 @@ jobs:
         run: |
           cd charts-temp/helm-charts/xsk/
           find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          cd charts-temp/helm-charts/xsk-kpack
+          find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
       - name: Helm Charts Release
         run: |
           cp charts/* charts-temp/helm-charts/
           cd charts-temp/helm-charts/
           helm package xsk
+          helm package xsk-kpack
           cd ..
           helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
 
           cp helm-charts/index.yaml ../.
           cp helm-charts/xsk-${{ env.XSK_VERSION }}.tgz ../charts/
+          cp helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz ../charts/
           cd ..
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"

@@ -670,7 +670,7 @@ jobs:
         run: |
           cd charts-temp/helm-charts/xsk/
           find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-          cd charts-temp/helm-charts/xsk-kpack/
+          cd ../xsk-kpack/
           find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
       - name: Helm Charts Release
         run: |

@@ -72,13 +72,6 @@ jobs:
           ITESTS_SELENIUM_HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
           ITESTS_SELENIUM_HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}
 
-      - name: Get current Time
-        uses: 1466587594/get-current-time@v2
-        id: current-time
-        with:
-          format: YYYY-MM-DD_HH-mm-ss
-          utcOffset: "+02:00"
-
       # Set XSK Kyma context 
       - name: Kubernetes set context
         uses: Azure/k8s-set-context@v1
@@ -221,22 +214,30 @@ jobs:
           kubectl delete service xsk -n ${{ secrets.namespace }}
           kubectl delete apirules xsk -n ${{ secrets.namespace }}
           kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.namespace }}
-        shell: bash   
-
-      # Upload screenshots to a GitHub artifact
-      - name: Save screenshots
-        uses: actions/upload-artifact@v2
+        shell: bash
 
       # Copy logs to '/xsk/test_results' and commit the directory
+      - name: Get current Time
+        if: ${{ failure() }}
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DD_HH-mm-ss
+          utcOffset: "+02:00"
       - name: Create Results Dir
+        if: ${{ failure() }}
         run: mkdir /home/runner/work/xsk/xsk/test_results
       - name: Copy Tomcat Logs
+        if: ${{ failure() }}
         run: docker cp $(docker ps -aqf "name=dirigible"):/usr/local/tomcat/logs/.  /home/runner/work/xsk/xsk/test_results/tomcat_logs
       - name: Copy Surefire Reports
+        if: ${{ failure() }}
         run: find ./ -name 'surefire-reports' -exec cp -prv '{}' '/home/runner/work/xsk/xsk/test_results/surefire-reports' ';'
       - name: Copy Selenium Output
+        if: ${{ failure() }}
         run: find ./ -name 'selenium' -exec cp -prv '{}' '/home/runner/work/xsk/xsk/test_results/selenium_logs' ';'
       - name: Commit test_results directory
+        if: ${{ failure() }}
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.INTEGRATION_TESTS_RESULTS_REPO_TOKEN }}

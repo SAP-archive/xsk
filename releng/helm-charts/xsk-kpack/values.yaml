@@ -29,7 +29,7 @@ image:
   serviceAccountName: docker-registry-service-account
 
 clusterBuilder:
-  buildImage: dirigiblelabs/buildpacks-stack-build-xsk
-  runImage: dirigiblelabs/buildpacks-stack-build-xsk
+  buildImage: dirigiblelabs/buildpacks-stack-build-xsk:#{XSKVersion}#
+  runImage: dirigiblelabs/buildpacks-stack-run-xsk:#{XSKVersion}#
   serviceAccountName: docker-registry-service-account
 

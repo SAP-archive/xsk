@@ -2,7 +2,7 @@ var hdbConnection = $.hdb.getConnection({
 	treatDateAsUTC: true
 });
 
-var schema = "DBADMIN";
+var schema = "XSK_SAMPLES_PRODUCTS";
 var PRODUCTS_TABLE = "products.db::Products.Orders";
 var ITEMS_TABLE = "products.db::Products.Item";
 
@@ -10,7 +10,7 @@ function Products(connection, schema) {
 	connection = connection || $.hdb.getConnection({
 		treatDateAsUTC: true
 	});
-	schema = schema || "DBADMIN";
+	schema = schema || "XSK_SAMPLES_PRODUCTS";
 
 	/** Create a new UUID */
 	function createUUID() {
@@ -48,7 +48,7 @@ function Products(connection, schema) {
 function deleteOrder(paramObject) {
 	try {
 		var oConnection = paramObject.connection;
-		var sQuery = 'delete from "DBADMIN"."products.db::Products.Orders" where "Id" = (select "Id" from "' + paramObject.beforeTableName +
+		var sQuery = 'delete from "XSK_SAMPLES_PRODUCTS"."products.db::Products.Orders" where "Id" = (select "Id" from "' + paramObject.beforeTableName +
 			'")';
 
 		var pstmt = oConnection.prepareStatement(sQuery);

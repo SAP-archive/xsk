@@ -1,4 +1,4 @@
-table.schemaName = "TEST_PROCEDURE_SIMPLE";
+table.schemaName = "XSK_SAMPLES_HDB_PROCEDURE_SIMPLE";
 table.tableType = COLUMNSTORE;
 table.columns = [    
     {

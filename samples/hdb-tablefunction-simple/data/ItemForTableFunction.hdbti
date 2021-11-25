@@ -6,7 +6,7 @@ import = [
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
-		schema = "TEST_TABLEFUNCTION_SIMPLE";
+		schema = "XSK_SAMPLES_HDB_TABLEFUNCTION_SIMPLE";
 	}
 ];
 

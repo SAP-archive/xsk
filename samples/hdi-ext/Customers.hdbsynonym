@@ -2,7 +2,7 @@
   "Customers": {
     "target": {
       "object": "hdi-ext::Customers",
-      "schema": "DBADMIN"
+      "schema": "XSK_SAMPLES_HDI_EXT"
     }
   }
 }

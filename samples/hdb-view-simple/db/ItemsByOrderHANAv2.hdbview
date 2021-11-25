@@ -1,2 +1,2 @@
-VIEW "TEST_VIEW_SIMPLE"."hdb-view-simple.db::ItemsByOrderHANAv2"
+VIEW "XSK_SAMPLES_HDB_VIEW_SIMPLE"."hdb-view-simple.db::ItemsByOrderHANAv2"
 AS SELECT T1."OrderId", T1."ItemId", T2."Status" FROM "hdb-view-simple.db::OrderForView" T1 INNER JOIN "hdb-view-simple.db::ItemForView" T2 ON T1."ItemId" = T2."Id";

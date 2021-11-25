@@ -1,4 +1,4 @@
-table.schemaName = "TEST_HDBTABLE_SIMPLE";
+table.schemaName = "XSK_SAMPLES_HDB_HDBTABLE_SIMPLE";
 table.temporary = true;
 table.tableType = COLUMNSTORE;
 table.loggingType = NOLOGGING;

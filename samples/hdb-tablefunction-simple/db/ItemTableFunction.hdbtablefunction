@@ -1,4 +1,4 @@
-FUNCTION "TEST_TABLEFUNCTION_SIMPLE"."hdb-tablefunction-simple.db::ItemTableFunction" ()
+FUNCTION "XSK_SAMPLES_HDB_TABLEFUNCTION_SIMPLE"."hdb-tablefunction-simple.db::ItemTableFunction" ()
 	RETURNS TABLE (
 		"Id" NVARCHAR(32),
 		"Status" NVARCHAR(32)

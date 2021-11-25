@@ -1,4 +1,4 @@
-table.schemaName = "TEST_SYNONYM_SIMPLE";
+table.schemaName = "XSK_SAMPLES_HDB_SYNONYM_SIMPLE";
 table.tableType = COLUMNSTORE;
 table.columns = [
 	{name = "ID"; sqlType = INTEGER; nullable = false; },

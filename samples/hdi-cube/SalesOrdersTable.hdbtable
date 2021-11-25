@@ -1,4 +1,4 @@
-table.schemaName = "DBADMIN";
+table.schemaName = "XSK_SAMPLES_HDI_CUBE";
 table.tableType = COLUMNSTORE;
 table.columns = [
 	{name = "SalesOrderId"; sqlType = INTEGER; nullable = false;},

@@ -6,6 +6,6 @@ import = [
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
-	  schema = "DBADMIN";
+	  schema = "XSK_SAMPLES_HDI_EXT";
 	}
 ];

@@ -1,6 +1,6 @@
 {
     "configuration": "/hdi-simple/config.hdiconfig",
-    "users": ["DBADMIN"],
+    "users": ["XSK_SAMPLES_HDI_SIMPLE"],
     "group": "XSK_HDI_SIMPLE_GROUP",
     "container": "XSK_HDI_SIMPLE",
     "deploy": [

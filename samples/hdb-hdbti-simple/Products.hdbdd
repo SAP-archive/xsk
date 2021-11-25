@@ -1,9 +1,8 @@
 namespace hdb-hdbti-simple;
 
-@Schema: 'TEST_HDBTI_SIMPLE'
+@Schema: 'XSK_SAMPLES_HDB_HDBTI_SIMPLE'
 
 context Products {
-
     entity  Orders{
         key Id               : String(32);
         CustomerName         : String(500);

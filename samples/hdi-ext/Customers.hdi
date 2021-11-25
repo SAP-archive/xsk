@@ -1,6 +1,6 @@
 {
     "configuration": "/hdi-ext/config.hdiconfig",
-    "users": ["DBADMIN"],
+    "users": ["XSK_SAMPLES_HDI_EXT"],
     "group": "XSK_HDI_EXT_GROUP",
     "container": "XSK_HDI_EXT",
     "deploy": [

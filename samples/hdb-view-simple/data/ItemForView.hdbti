@@ -6,7 +6,7 @@ import = [
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
-		schema = "TEST_VIEW_SIMPLE";
+		schema = "XSK_SAMPLES_HDB_VIEW_SIMPLE";
 	},
 	{
 		table = "hdb-view-simple.db::OrderForView";
@@ -15,7 +15,7 @@ import = [
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
-		schema = "TEST_VIEW_SIMPLE";
+		schema = "XSK_SAMPLES_HDB_VIEW_SIMPLE";
 	}
 ];
 

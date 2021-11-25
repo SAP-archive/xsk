@@ -2,7 +2,7 @@
   "SalesOrdersTable": {
     "target": {
       "object": "hdi-cube::SalesOrdersTable",
-      "schema": "DBADMIN"
+      "schema": "XSK_SAMPLES_HDI_CUBE"
     }
   }
 }

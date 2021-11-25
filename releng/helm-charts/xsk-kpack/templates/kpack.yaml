@@ -23,7 +23,7 @@ metadata:
   name: kneo-xsk-store
 spec:
   sources:
-  - image: {{ .Values.imageBuilder.buildpack }}
+  - image: "{{ .Values.imageBuilder.buildpack }}:#{XSKVersion}#"
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack
@@ -44,7 +44,7 @@ metadata:
   name: kneo-xsk
 spec:
   serviceAccount: {{ .Values.clusterBuilder.serviceAccountName }}
-  tag: {{ .Values.imageBuilder.repository }}
+  tag: {{ required "Missing imageBuilder repository" .Values.imageBuilder.repository }}
   stack:
     name: kneo-xsk-stack
     kind: ClusterStack
@@ -62,12 +62,12 @@ kind: Image
 metadata:
   name: {{ .Release.Name }}
 spec:
-  tag: {{ .Values.image.repository }}
+  tag: {{ required "Missing image repository" .Values.image.repository }}
   serviceAccount: {{ .Values.image.serviceAccountName }}
   builder:
     name: kneo-xsk
     kind: Builder
   source:
     blob:
-      url: {{ .Values.image.source }}
+      url: {{ required "Missing image source" .Values.image.source }}
 {{- end }}

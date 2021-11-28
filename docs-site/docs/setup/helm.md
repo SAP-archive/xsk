@@ -168,10 +168,18 @@ You can choose to set up your application source with Helm and Kpack in XSK foll
 
         and download the OCI image and run it with docker
 
-        docker run -p 8080:8080 <latest-image-with-digest>
+        `docker run -p 8080:8080 <latest-image-with-digest>`
 
         ???+ info "Configuration Options"
             You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart).
+
+## Next Steps
+---
+
+- If you want to uninstall Helm kpack chart, run:
+    ```
+    helm uninstall xsk-kpack
+    ```            
 
 ## Configuration Options for xsk-kpack chart
 ---
@@ -186,7 +194,6 @@ The following table lists all the configurable parameters exposed by the xsk-kpa
 | `install.clusterBuilder`            | Kpack cluster store and stack   | `false`                                            |
 | `install.imageBuilder`              | Kpack builder                   | `false`                                            |
 | `create.image`                      | Kpack create OCI image          | `false`                                            |
-| `fastBootstrap`                     | Fast Boostrap secret            | `false`                                            |
 | `docker.server`                     | Docker server url               | ``                                                 |
 | `docker.username`                   | Docker username                 | ``                                                 |
 | `docker.password`                   | Docker password                 | ``                                                 |

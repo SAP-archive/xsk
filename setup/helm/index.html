@@ -1275,6 +1275,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#next-steps_1" class="md-nav__link">
+    Next Steps
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#configuration-options-for-xsk-kpack-chart" class="md-nav__link">
     Configuration Options for xsk-kpack chart
   </a>
@@ -1501,6 +1508,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#next-steps_1" class="md-nav__link">
+    Next Steps
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#configuration-options-for-xsk-kpack-chart" class="md-nav__link">
     Configuration Options for xsk-kpack chart
   </a>
@@ -1705,7 +1719,7 @@ helm repo update
 <p>You can check your image with</p>
 <p><code>kubectl -n default get image xsk-kpack</code></p>
 <p>and download the OCI image and run it with docker</p>
-<p>docker run -p 8080:8080 <latest-image-with-digest></p>
+<p><code>docker run -p 8080:8080 &lt;latest-image-with-digest&gt;</code></p>
 <details class="info" open="open">
 <summary>Configuration Options</summary>
 <p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart">List of All Configurable Parameters and Their Values</a>.</p>
@@ -1715,6 +1729,13 @@ helm repo update
 </div>
 </li>
 </ol>
+<h2 id="next-steps_1">Next Steps</h2>
+<hr />
+<ul>
+<li>If you want to uninstall Helm kpack chart, run:
+    <div class="highlight"><pre><span></span><code>helm uninstall xsk-kpack
+</code></pre></div></li>
+</ul>
 <h2 id="configuration-options-for-xsk-kpack-chart">Configuration Options for xsk-kpack chart</h2>
 <hr />
 <p>The following table lists all the configurable parameters exposed by the xsk-kpack chart and their default values:</p>
@@ -1746,11 +1767,6 @@ helm repo update
 <tr>
 <td><code>create.image</code></td>
 <td>Kpack create OCI image</td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>fastBootstrap</code></td>
-<td>Fast Boostrap secret</td>
 <td><code>false</code></td>
 </tr>
 <tr>

@@ -672,6 +672,8 @@ jobs:
           find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
           cd ../xsk-kpack/
           find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          cd templates/
+          find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
       - name: Helm Charts Release
         run: |
           cp charts/* charts-temp/helm-charts/

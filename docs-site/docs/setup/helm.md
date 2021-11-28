@@ -124,9 +124,9 @@ The following table lists all the configurable parameters exposed by the XSK cha
 | `fastBootstrap`              | Fast Boostrap secret            | `false`                            |
 
 
- ## Kpack Setup
+## Kpack Setup
 
-You can choose to set up your application source with Helm and Kpack in XSKL following setup instructions:
+You can choose to set up your application source with Helm and Kpack in XSK following setup instructions:
 
 1. Add the XSK kpack Helm repository:
 
@@ -135,12 +135,15 @@ You can choose to set up your application source with Helm and Kpack in XSKL fol
 
     helm repo update
     ```
+
 2. Deployment
 
+    If you don't have kpack you can install with https://github.com/pivotal/kpack/blob/main/docs/install.md
+    
     === "Kpack"
 
         ```
-       helm install xsk-kpack xsk/xsk-kpack \
+        helm install xsk-kpack xsk/xsk-kpack \
         --set install.clusterBuilder=true \
         --set install.imageBuilder=true \
         --set create.image=true \

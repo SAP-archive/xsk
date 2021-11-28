@@ -1248,16 +1248,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-options" class="md-nav__link">
-    Configuration Options
+  <a href="#configuration-options-for-xsk-chart" class="md-nav__link">
+    Configuration Options for xsk chart
   </a>
   
-    <nav class="md-nav" aria-label="Configuration Options">
+    <nav class="md-nav" aria-label="Configuration Options for xsk chart">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#list-of-all-configurable-parameters-and-their-values" class="md-nav__link">
     List of All Configurable Parameters and Their Values
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-options-for-xsk-kpack-chart" class="md-nav__link">
+    Configuration Options for xsk-kpack chart
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Options for xsk-kpack chart">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart" class="md-nav__link">
+    List of All Configurable Parameters and Their Values for XSK kpack chart
   </a>
   
 </li>
@@ -1447,16 +1467,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-options" class="md-nav__link">
-    Configuration Options
+  <a href="#configuration-options-for-xsk-chart" class="md-nav__link">
+    Configuration Options for xsk chart
   </a>
   
-    <nav class="md-nav" aria-label="Configuration Options">
+    <nav class="md-nav" aria-label="Configuration Options for xsk chart">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#list-of-all-configurable-parameters-and-their-values" class="md-nav__link">
     List of All Configurable Parameters and Their Values
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-options-for-xsk-kpack-chart" class="md-nav__link">
+    Configuration Options for xsk-kpack chart
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Options for xsk-kpack chart">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart" class="md-nav__link">
+    List of All Configurable Parameters and Their Values for XSK kpack chart
   </a>
   
 </li>
@@ -1577,7 +1617,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
     <div class="highlight"><pre><span></span><code>helm uninstall xsk
 </code></pre></div></li>
 </ul>
-<h2 id="configuration-options">Configuration Options</h2>
+<h2 id="configuration-options-for-xsk-chart">Configuration Options for xsk chart</h2>
 <hr />
 <p>The following table lists all the configurable parameters exposed by the XSK chart and their default values:</p>
 <h4 id="list-of-all-configurable-parameters-and-their-values">List of All Configurable Parameters and Their Values</h4>
@@ -1614,6 +1654,164 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td><code>fastBootstrap</code></td>
 <td>Fast Boostrap secret</td>
 <td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>## Kpack Setup</p>
+<p>You can choose to set up your application source with Helm and Kpack in XSKL following setup instructions:</p>
+<ol>
+<li>
+<p>Add the XSK kpack Helm repository:</p>
+<p><div class="highlight"><pre><span></span><code>helm repo add xsk https://www.xsk.io
+
+helm repo update
+</code></pre></div>
+2. Deployment</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Kpack</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>```</p>
+</div>
+</div>
+</div>
+<p>helm install xsk-kpack xsk/xsk-kpack \
+    --set install.clusterBuilder=true \
+    --set install.imageBuilder=true \
+    --set create.image=true \
+    --set docker.server=https://index.docker.io/v1/ \
+    --set docker.username=<your-docker-username> \
+    --set docker.password=<your-docker-password> \
+    --set docker.email=<your-email> \
+    --set image.repository=<your-repository-for-your-OCI-image> \
+    --set imageBuilder.repository=<builder-image> \
+    --set image.source=<your-application-source>
+    ```</p>
+<div class="highlight"><pre><span></span><code>This will build your application source with Kpack and XSK and place your source code in repository/public/.
+
+You can tail the logs for your image that is currently building using the [kp cli](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md).
+
+`kp build logs xsk-kpack -n default`
+
+You can check your image with
+
+`kubectl -n default get image xsk-kpack`
+
+and download the OCI image and run it with docker
+
+docker run -p 8080:8080 &lt;latest-image-with-digest&gt;
+
+???+ info &quot;Configuration Options&quot;
+    You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart).
+</code></pre></div>
+</li>
+</ol>
+<h2 id="configuration-options-for-xsk-kpack-chart">Configuration Options for xsk-kpack chart</h2>
+<hr />
+<p>The following table lists all the configurable parameters exposed by the xsk-kpack chart and their default values:</p>
+<h4 id="list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart">List of All Configurable Parameters and Their Values for XSK kpack chart</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Number instanof replicas</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>install.clusterBuilder</code></td>
+<td>Kpack cluster store and stack</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>install.imageBuilder</code></td>
+<td>Kpack builder</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>create.image</code></td>
+<td>Kpack create OCI image</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>fastBootstrap</code></td>
+<td>Fast Boostrap secret</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>docker.server</code></td>
+<td>Docker server url</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>docker.username</code></td>
+<td>Docker username</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>docker.password</code></td>
+<td>Docker password</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>docker.email</code></td>
+<td>Docker email</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>docker.secretName</code></td>
+<td>Docker secret name</td>
+<td><code>docker-registry-secret</code></td>
+</tr>
+<tr>
+<td><code>docker.serviceAccountName</code></td>
+<td>Docker service account name</td>
+<td><code>docker-registry-service-account</code></td>
+</tr>
+<tr>
+<td><code>imageBuilder.repository</code></td>
+<td>Docker service account name</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>imageBuilder.buildpack</code></td>
+<td>Docker service account name</td>
+<td><code>dirigiblelabs/buildpacks-xsk</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>Docker service account name</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>image.source</code></td>
+<td>Docker service account name</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>image.serviceAccountName</code></td>
+<td>Docker service account name</td>
+<td><code>dirigiblelabs/buildpacks-stack-build-xsk:latest</code></td>
+</tr>
+<tr>
+<td><code>clusterBuilder.buildImage</code></td>
+<td>Docker service account name</td>
+<td><code>docker-registry-service-account</code></td>
+</tr>
+<tr>
+<td><code>clusterBuilder.runImage</code></td>
+<td>Docker service account name</td>
+<td><code>docker-registry-service-account</code></td>
+</tr>
+<tr>
+<td><code>clusterBuilder.serviceAccountName</code></td>
+<td>Docker service account name</td>
+<td><code>docker-registry-service-account</code></td>
 </tr>
 </tbody>
 </table>

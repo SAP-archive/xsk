@@ -26,5 +26,9 @@ Application will be deployed and accessible via the following URL: https://{{ .R
 
 {{- end }}
 
-
+{{- if not (default .Values.install.clusterBuilder .Values.install.imageBuilder .Values.create.image false) }}
+{{- if not (default .Values.create.image false) }}
+    You need to set 'install.clusterBuilder=true', 'install.imageBuilder=true' or 'create.image=true'.
+{{- end }}
+{{- end }}
 

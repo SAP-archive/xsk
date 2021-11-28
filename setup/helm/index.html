@@ -1268,6 +1268,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#kpack-setup" class="md-nav__link">
+    Kpack Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#configuration-options-for-xsk-kpack-chart" class="md-nav__link">
     Configuration Options for xsk-kpack chart
   </a>
@@ -1487,6 +1494,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#kpack-setup" class="md-nav__link">
+    Kpack Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#configuration-options-for-xsk-kpack-chart" class="md-nav__link">
     Configuration Options for xsk-kpack chart
   </a>
@@ -1657,52 +1671,48 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </tr>
 </tbody>
 </table>
-<p>## Kpack Setup</p>
-<p>You can choose to set up your application source with Helm and Kpack in XSKL following setup instructions:</p>
+<h2 id="kpack-setup">Kpack Setup</h2>
+<p>You can choose to set up your application source with Helm and Kpack in XSK following setup instructions:</p>
 <ol>
 <li>
 <p>Add the XSK kpack Helm repository:</p>
-<p><div class="highlight"><pre><span></span><code>helm repo add xsk https://www.xsk.io
+<div class="highlight"><pre><span></span><code>helm repo add xsk https://www.xsk.io
 
 helm repo update
 </code></pre></div>
-2. Deployment</p>
+</li>
+<li>
+<p>Deployment</p>
+<p>If you don't have kpack you can install with https://github.com/pivotal/kpack/blob/main/docs/install.md</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Kpack</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>```</p>
-</div>
-</div>
-</div>
-<p>helm install xsk-kpack xsk/xsk-kpack \
-    --set install.clusterBuilder=true \
-    --set install.imageBuilder=true \
-    --set create.image=true \
-    --set docker.server=https://index.docker.io/v1/ \
-    --set docker.username=<your-docker-username> \
-    --set docker.password=<your-docker-password> \
-    --set docker.email=<your-email> \
-    --set image.repository=<your-repository-for-your-OCI-image> \
-    --set imageBuilder.repository=<builder-image> \
-    --set image.source=<your-application-source>
-    ```</p>
-<div class="highlight"><pre><span></span><code>This will build your application source with Kpack and XSK and place your source code in repository/public/.
-
-You can tail the logs for your image that is currently building using the [kp cli](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md).
-
-`kp build logs xsk-kpack -n default`
-
-You can check your image with
-
-`kubectl -n default get image xsk-kpack`
-
-and download the OCI image and run it with docker
-
-docker run -p 8080:8080 &lt;latest-image-with-digest&gt;
-
-???+ info &quot;Configuration Options&quot;
-    You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart).
+<div class="highlight"><pre><span></span><code>helm install xsk-kpack xsk/xsk-kpack \
+--set install.clusterBuilder=true \
+--set install.imageBuilder=true \
+--set create.image=true \
+--set docker.server=https://index.docker.io/v1/ \
+--set docker.username=&lt;your-docker-username&gt; \
+--set docker.password=&lt;your-docker-password&gt; \
+--set docker.email=&lt;your-email&gt; \
+--set image.repository=&lt;your-repository-for-your-OCI-image&gt; \
+--set imageBuilder.repository=&lt;builder-image&gt; \
+--set image.source=&lt;your-application-source&gt;
 </code></pre></div>
+<p>This will build your application source with Kpack and XSK and place your source code in repository/public/.</p>
+<p>You can tail the logs for your image that is currently building using the <a href="https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md">kp cli</a>.</p>
+<p><code>kp build logs xsk-kpack -n default</code></p>
+<p>You can check your image with</p>
+<p><code>kubectl -n default get image xsk-kpack</code></p>
+<p>and download the OCI image and run it with docker</p>
+<p>docker run -p 8080:8080 <latest-image-with-digest></p>
+<details class="info" open="open">
+<summary>Configuration Options</summary>
+<p>You can also use other configuration parameters. See <a href="#list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart">List of All Configurable Parameters and Their Values</a>.</p>
+</details>
+</div>
+</div>
+</div>
 </li>
 </ol>
 <h2 id="configuration-options-for-xsk-kpack-chart">Configuration Options for xsk-kpack chart</h2>

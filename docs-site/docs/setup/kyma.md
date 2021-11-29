@@ -143,7 +143,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         - Create a new service instance.
         - Provide the following additional parameters:
 
-            ```json
+        ```json
             {
               "xsappname": "xsk-xsuaa",
               "oauth2-configuration": {
@@ -195,12 +195,12 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
                   }
               ]	
             }
-            ```        
+        ```        
         - Bind the servce instance to the **`xsk`** application.
     
     === "Yaml"
 
-        ```yaml
+      ```yaml
       apiVersion: servicecatalog.k8s.io/v1beta1
       kind: ServiceInstance
       metadata:
@@ -263,7 +263,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         usedBy:
           kind: deployment
           name: xsk
-    ```
+      ```
 
     !!! Note
             Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host (e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**).

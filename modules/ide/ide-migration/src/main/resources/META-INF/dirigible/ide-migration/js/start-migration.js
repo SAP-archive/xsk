@@ -25,6 +25,7 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
     let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
     let selectedWorkspace = '';
 
+
     function startMigration(duData) {
         selectedWorkspace = duData.workspace;
         body = {
@@ -35,19 +36,18 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
             hana: hanaData,
             connectionId: duData.connectionId,
             workspace: duData.workspace,
-            du: {
-                name: duData.du.name,
-                vendor: duData.du.vendor
-            },
+            du: duData.du,             
             processInstanceId: duData.processId
         };
+        $scope.statusMessage = duData.du.length > 1 ? `Migrating ${duData.du.length} projects` : `Migrating project`;
+
         $http.post(
             "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/continue-process",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
-        ).then(function (response) {
+        ).then(function (response) {                        
             $scope.progressTitle = titleList[1];
-            $scope.statusMessage = `Project was successfully created.`;
+            $scope.statusMessage = `Project(s) created successfully. `;            
             $scope.migrationFinished = true;
         }, function (response) {
             if (response.data) {

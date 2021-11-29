@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/setup/kyma/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.0">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.1">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ad626c1e.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.816931ca.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.9204c3b2.min.css">
@@ -1530,13 +1530,18 @@
 </li>
 <li>
 <p>Create an XSUAA service instance:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Json</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
 <ul>
 <li>From the Kyma dashboard, go to <strong>Service Management</strong> <strong>&rarr;</strong> <strong>Catalog</strong>.</li>
 <li>Find the <code>Authorization &amp; Trust Management</code> service.</li>
 <li>Create a new service instance.</li>
 <li>
 <p>Provide the following additional parameters:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<p><div class="highlight"><pre><span></span><code><span class="p">{</span>
    <span class="nt">&quot;xsappname&quot;</span><span class="p">:</span> <span class="s2">&quot;xsk-xsuaa&quot;</span><span class="p">,</span>
    <span class="nt">&quot;oauth2-configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="nt">&quot;token-validity&quot;</span><span class="p">:</span> <span class="mi">7200</span><span class="p">,</span>
@@ -1588,15 +1593,81 @@
    <span class="p">]</span>    
 <span class="p">}</span>
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Replace the <strong><code>&lt;your-kyma-cluster-host&gt;</code></strong> placeholder with your Kyma cluster host (e.g. <strong><code>c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com</code></strong>).</p>
-</div>
-</li>
-<li>
-<p>Bind the servce instance to the <strong><code>xsk</code></strong> application.</p>
+    - Bind the servce instance to the <strong><code>xsk</code></strong> application.</p>
 </li>
 </ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Yaml</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><pre><span></span><code>  <span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">servicecatalog.k8s.io/v1beta1</span>
+  <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ServiceInstance</span>
+  <span class="nt">metadata</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsuaa-xsk</span>
+  <span class="nt">spec</span><span class="p">:</span>
+    <span class="nt">clusterServiceClassExternalName</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsuaa</span>
+    <span class="nt">clusterServiceClassRef</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsuaa</span>
+    <span class="nt">clusterServicePlanExternalName</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">broker</span>
+    <span class="nt">parameters</span><span class="p">:</span>
+      <span class="nt">xsappname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-xsuaa</span>
+      <span class="nt">oauth2-configuration</span><span class="p">:</span>
+        <span class="nt">redirect-uris</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://xsk.&lt;your-kyma-cluster-host&gt;</span>
+        <span class="nt">token-validity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">7200</span>
+      <span class="nt">role-collections</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">XSK Developer</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">XSK Developer</span>
+        <span class="nt">role-template-references</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$XSAPPNAME.Developer</span>
+      <span class="p p-Indicator">-</span> <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">XSK Operator</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">XSK Operator</span>
+        <span class="nt">role-template-references</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$XSAPPNAME.Operator</span>  
+      <span class="nt">role-templates</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Developer related roles</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Developer</span>
+        <span class="nt">scope-references</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$XSAPPNAME.Developer</span>
+      <span class="p p-Indicator">-</span> <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Operator related roles</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Operator</span>
+        <span class="nt">scope-references</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$XSAPPNAME.Operator</span>
+      <span class="nt">scopes</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Developer scope</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$XSAPPNAME.Developer</span>
+      <span class="p p-Indicator">-</span> <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Operator scope</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$XSAPPNAME.Operator</span>
+  <span class="l l-Scalar l-Scalar-Plain">---</span>
+  <span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">servicecatalog.k8s.io/v1beta1</span>
+  <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ServiceBinding</span>
+  <span class="nt">metadata</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsuaa-xsk-binding</span>
+  <span class="nt">spec</span><span class="p">:</span>
+    <span class="nt">instanceRef</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsuaa-xsk</span>
+    <span class="nt">parameters</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+    <span class="nt">secretName</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsuaa-xsk-binding</span>
+  <span class="l l-Scalar l-Scalar-Plain">---</span>
+  <span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">servicecatalog.kyma-project.io/v1alpha1</span>
+  <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ServiceBindingUsage</span>
+  <span class="nt">metadata</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsuaa-xsk-usage</span>
+  <span class="nt">spec</span><span class="p">:</span>
+    <span class="nt">parameters</span><span class="p">:</span>
+      <span class="nt">envPrefix</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;&quot;</span>
+    <span class="nt">serviceBindingRef</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsuaa-xsk-binding</span>
+    <span class="nt">usedBy</span><span class="p">:</span>
+      <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">deployment</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note<p>Replace the <strong><code>&lt;your-kyma-cluster-host&gt;</code></strong> placeholder with your Kyma cluster host (e.g. <strong><code>c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com</code></strong>).</p>
+</p>
+</div>
 </li>
 <li>
 <p>Assign the <code>Developer</code> and <code>Operator</code> roles.</p>
@@ -1738,7 +1809,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.01824240.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.e8a254df.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a87c2adc.min.js"></script>
       
     
   </body>

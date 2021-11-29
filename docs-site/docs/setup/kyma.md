@@ -138,69 +138,69 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     === "Json"
 
-    - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
-    - Find the `Authorization & Trust Management` service.
-    - Create a new service instance.
-    - Provide the following additional parameters:
+        - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
+        - Find the `Authorization & Trust Management` service.
+        - Create a new service instance.
+        - Provide the following additional parameters:
 
-        ```json
-        {
-           "xsappname": "xsk-xsuaa",
-           "oauth2-configuration": {
-              "token-validity": 7200,
-              "redirect-uris": [
-                 "https://xsk.<your-kyma-cluster-host>"
-              ]
-           },
-           "scopes": [
-              {
-                 "name": "$XSAPPNAME.Developer",
-                 "description": "Developer scope"
+            ```json
+            {
+              "xsappname": "xsk-xsuaa",
+              "oauth2-configuration": {
+                  "token-validity": 7200,
+                  "redirect-uris": [
+                    "https://xsk.<your-kyma-cluster-host>"
+                  ]
               },
-              {
-                 "name": "$XSAPPNAME.Operator",
-                 "description": "Operator scope"
-              }
-           ],
-           "role-templates": [
-              {
-                 "name": "Developer",
-                 "description": "Developer related roles",
-                 "scope-references": [
-                    "$XSAPPNAME.Developer"
-                 ]
-              },
-              {
-                 "name": "Operator",
-                 "description": "Operator related roles",
-                 "scope-references": [
-                    "$XSAPPNAME.Operator"
-                 ]
-              }
-           ],
-           "role-collections": [
-              {
-                 "name": "XSK Developer",
-                 "description": "XSK Developer",
-                 "role-template-references": [ 
-                    "$XSAPPNAME.Developer"
-                 ]
-              },
-              {
-                 "name": "XSK Operator",
-                 "description": "XSK Operator",
-                 "role-template-references": [ 
-                    "$XSAPPNAME.Operator"
-                 ]
-              }
-           ]	
-        }
-        ```        
-    - Bind the servce instance to the **`xsk`** application.
+              "scopes": [
+                  {
+                    "name": "$XSAPPNAME.Developer",
+                    "description": "Developer scope"
+                  },
+                  {
+                    "name": "$XSAPPNAME.Operator",
+                    "description": "Operator scope"
+                  }
+              ],
+              "role-templates": [
+                  {
+                    "name": "Developer",
+                    "description": "Developer related roles",
+                    "scope-references": [
+                        "$XSAPPNAME.Developer"
+                    ]
+                  },
+                  {
+                    "name": "Operator",
+                    "description": "Operator related roles",
+                    "scope-references": [
+                        "$XSAPPNAME.Operator"
+                    ]
+                  }
+              ],
+              "role-collections": [
+                  {
+                    "name": "XSK Developer",
+                    "description": "XSK Developer",
+                    "role-template-references": [ 
+                        "$XSAPPNAME.Developer"
+                    ]
+                  },
+                  {
+                    "name": "XSK Operator",
+                    "description": "XSK Operator",
+                    "role-template-references": [ 
+                        "$XSAPPNAME.Operator"
+                    ]
+                  }
+              ]	
+            }
+            ```        
+        - Bind the servce instance to the **`xsk`** application.
     
     === "Yaml"
 
-    ```yaml
+        ```yaml
       apiVersion: servicecatalog.k8s.io/v1beta1
       kind: ServiceInstance
       metadata:

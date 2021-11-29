@@ -1539,7 +1539,7 @@
 <li>Create a new service instance.</li>
 <li>Provide the following additional parameters:</li>
 </ul>
-<p><div class="highlight"><pre><span></span><code>    <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
       <span class="nt">&quot;xsappname&quot;</span><span class="p">:</span> <span class="s2">&quot;xsk-xsuaa&quot;</span><span class="p">,</span>
       <span class="nt">&quot;oauth2-configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="nt">&quot;token-validity&quot;</span><span class="p">:</span> <span class="mi">7200</span><span class="p">,</span>
@@ -1591,11 +1591,11 @@
       <span class="p">]</span> 
     <span class="p">}</span>
 </code></pre></div>
-- Bind the servce instance to the <strong><code>xsk</code></strong> application.</p>
+<ul>
+<li>Bind the servce instance to the <strong><code>xsk</code></strong> application.</li>
+</ul>
 </div>
-<div class="tabbed-block"></div>
-</div>
-</div>
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">servicecatalog.k8s.io/v1beta1</span>
 <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ServiceInstance</span>
 <span class="nt">metadata</span><span class="p">:</span>
@@ -1609,7 +1609,7 @@
     <span class="nt">xsappname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-xsuaa</span>
     <span class="nt">oauth2-configuration</span><span class="p">:</span>
       <span class="nt">redirect-uris</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://xsk.&lt;your-kyma-cluster-host&gt;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://xsk.&lt;your-kyma-host&gt;</span>
       <span class="nt">token-validity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">7200</span>
     <span class="nt">role-collections</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">XSK Developer</span>
@@ -1659,6 +1659,9 @@
     <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">deployment</span>
     <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
 </code></pre></div>
+</div>
+</div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note<p>Replace the <strong><code>&lt;your-kyma-cluster-host&gt;</code></strong> placeholder with your Kyma cluster host (e.g. <strong><code>c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com</code></strong>).</p>
 </p>

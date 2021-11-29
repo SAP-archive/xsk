@@ -136,7 +136,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
 1. Create an XSUAA service instance:
 
-=== "Json"
+    === "Json"
         - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
         - Find the `Authorization & Trust Management` service.
         - Create a new service instance.

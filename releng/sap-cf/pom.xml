@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-releng-parent</artifactId>
-		<version>0.11.0-SNAPSHOT</version>
+		<version>0.12.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Releng - Cloud Foundry</name>
 	<artifactId>xsk-releng-cf</artifactId>
-	<version>0.11.0-SNAPSHOT</version>
+	<version>0.12.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<build>

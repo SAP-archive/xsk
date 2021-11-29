@@ -22,22 +22,33 @@ helm repo update
 
 ## Deployment
 
-### Basic:
+```
+helm install xsk-kpack xsk/xsk-kpack \
+--set install.clusterBuilder=true \
+--set install.imageBuilder=true \
+--set create.image=true \
+--set docker.server=https://index.docker.io/v1/ \
+--set docker.username=<your-docker-username> \
+--set docker.password=<your-docker-password> \
+--set docker.email=<your-email> \
+--set image.repository=<your-repository-for-your-OCI-image> \
+--set imageBuilder.repository=<builder-image> \
+--set image.source=<your-application-source>
 
 ```
-helm install xsk xsk/xsk
-```
-Running this command will install XSK Deployment and Service with ClusterIP only. To access the XSK instance, execute the command that was printed in the console.
+Running this command will build your application source code with Kpack and XSK and place your source code in repository/public/.
 
-Example:
+You can tail the logs for your image that is currently building using the kp cli.
 
-```
-export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk" -o jsonpath="{.items[0].metadata.name}")
-echo "Visit http://127.0.0.1:8080 to use your application"
-kubectl --namespace default port-forward $POD_NAME 8080:8080    
-``
-* Navigate to: http://127.0.0.1:8080
-* Log in with these username and password: dirigible/dirigible
+`kp build logs xsk-kpack -n default`
+
+You can check your image with
+
+`kubectl -n default get image xsk-kpack`
+
+and download the OCI image and run it with docker
+
+`docker run -p 8080:8080 <latest-image-with-digest>`
 
 Resources:
 - [XSK](https://github.com/SAP/xsk)
@@ -52,17 +63,17 @@ Resources:
     ```
     cd releng/helm-charts/
     ```
-1. Set the XSK version in `xsk/Chart.yaml`:
+1. Set the XSK version in `xsk-kpack/Chart.yaml`, `xsk-kpack/Chart.yaml`, `xsk-kpack/templates/kpack.yaml`:
 
     > Replace the `#{XSKVersion}#` placeholder.
 
 1. Package Helm Chart:
 
     ```
-    helm package xsk
+    helm package xsk-kpack
     ```
 
-1. Copy the `xsk-1.0.0.tgz` somewhere outside the Git repository.
+1. Copy the `xsk-kpack-0.11.0.tgz` somewhere outside the Git repository.
 
 1. Reset all changes:
 
@@ -79,7 +90,7 @@ Resources:
     git pull origin gh-pages
     ```
 
-1. Paste the `xsk-1.0.0.tgz` chart into the `charts` directory.
+1. Paste the `xsk-kpack-0.11.0.tgz` chart into the `charts` directory.
 
 1. Build Helm Index:
 

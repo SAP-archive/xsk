@@ -136,6 +136,8 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
 1. Create an XSUAA service instance:
 
+    === "Json"
+
     - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
     - Find the `Authorization & Trust Management` service.
     - Create a new service instance.
@@ -193,13 +195,79 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
               }
            ]	
         }
-        ```
-
-        !!! Note
-            Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host (e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**).
-
+        ```        
     - Bind the servce instance to the **`xsk`** application.
+    
+    === "Yaml"
 
+    ```yaml
+      apiVersion: servicecatalog.k8s.io/v1beta1
+      kind: ServiceInstance
+      metadata:
+        name: xsuaa-xsk
+      spec:
+        clusterServiceClassExternalName: xsuaa
+        clusterServiceClassRef:
+          name: xsuaa
+        clusterServicePlanExternalName: broker
+        parameters:
+          xsappname: xsk-xsuaa
+          oauth2-configuration:
+            redirect-uris:
+            - https://xsk.<your-kyma-cluster-host>
+            token-validity: 7200
+          role-collections:
+          - description: XSK Developer
+            name: XSK Developer
+            role-template-references:
+            - $XSAPPNAME.Developer
+          - description: XSK Operator
+            name: XSK Operator
+            role-template-references:
+            - $XSAPPNAME.Operator  
+          role-templates:
+          - description: Developer related roles
+            name: Developer
+            scope-references:
+            - $XSAPPNAME.Developer
+          - description: Operator related roles
+            name: Operator
+            scope-references:
+            - $XSAPPNAME.Operator
+          scopes:
+          - description: Developer scope
+            name: $XSAPPNAME.Developer
+          - description: Operator scope
+            name: $XSAPPNAME.Operator
+      ---
+      apiVersion: servicecatalog.k8s.io/v1beta1
+      kind: ServiceBinding
+      metadata:
+        name: xsuaa-xsk-binding
+      spec:
+        instanceRef:
+          name: xsuaa-xsk
+        parameters: {}
+        secretName: xsuaa-xsk-binding
+      ---
+      apiVersion: servicecatalog.kyma-project.io/v1alpha1
+      kind: ServiceBindingUsage
+      metadata:
+        name: xsuaa-xsk-usage
+      spec:
+        parameters:
+          envPrefix:
+            name: ""
+        serviceBindingRef:
+          name: xsuaa-xsk-binding
+        usedBy:
+          kind: deployment
+          name: xsk
+    ```
+
+    !!! Note
+            Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host (e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**).
+    
 1. Assign the `Developer` and `Operator` roles.
 
 1. Log in.

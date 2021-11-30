@@ -153,16 +153,20 @@ public class XSKHDBSEQUENCEModel {
     this.dependsOnView = dependsOnView;
   }
 
+  public Boolean getPublic() { return this.publicProp; }
+
   public void setPublic(Boolean publicProp) {
     this.publicProp = publicProp;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
     XSKHDBSEQUENCEModel that = (XSKHDBSEQUENCEModel) o;
     return Objects.equals(missingProps, that.missingProps) && Objects.equals(schema, that.schema) && Objects.equals(incrementBy,
         that.incrementBy) && Objects.equals(startWith, that.startWith) && Objects.equals(maxValue, that.maxValue) && Objects.equals(

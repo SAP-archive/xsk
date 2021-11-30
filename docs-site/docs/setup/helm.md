@@ -167,9 +167,9 @@ You can choose to build and package your XSK application from source with Helm a
         | `imageBuilder.buildpack`            | Docker service account name     | `dirigiblelabs/buildpacks-xsk`                     |
         | `image.repository`                  | Docker service account name     | ``                                                 |
         | `image.source`                      | Docker service account name     | ``                                                 |
-        | `image.serviceAccountName`          | Docker service account name     | `dirigiblelabs/buildpacks-stack-build-xsk:latest`  |
-        | `clusterBuilder.buildImage`         | Docker service account name     | `docker-registry-service-account`                  |
-        | `clusterBuilder.runImage`           | Docker service account name     | `docker-registry-service-account`                  |
+        | `image.serviceAccountName`          | Docker service account name     | `docker-registry-service-account`                  |
+        | `clusterBuilder.buildImage`         | Docker service account name     | `dirigiblelabs/buildpacks-stack-build-xsk:latest`  |
+        | `clusterBuilder.runImage`           | Docker service account name     | `dirigiblelabs/buildpacks-stack-run-xsk:latest`    |
         | `clusterBuilder.serviceAccountName` | Docker service account name     | `docker-registry-service-account`                  |
 
 1. Uninstall

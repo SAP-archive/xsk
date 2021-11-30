@@ -67,11 +67,6 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
   @Override
   public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException {
-    XSKDataStructureCdsModel cdsModel = getCdsModelBaseData(location, content);
-    if (XSKHDBModule.getManagerServices().get(getType()).isParsed(cdsModel, dependencyStructure.get(location) != null)) {
-      return null;
-    }
-
     for (String fileLocation : this.getFilesToProcess(location)) {
       IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
       String fileContent = new String(loadedResource.getContent());
@@ -84,7 +79,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       }
     }
 
-    getCdsModelWithParsedData(cdsModel);
+    XSKDataStructureCdsModel cdsModel = populateXSKDataStructureCdsModel(location, content);
     this.symbolTable.clearSymbolsByFullName();
     this.symbolTable.clearEntityGraph();
     parsedNodes.clear();
@@ -136,9 +131,11 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
       try {
         IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
-        parseHdbdd(fileLocation, new String(loadedResource.getContent()));
+        String loadedResourceContent = new String(loadedResource.getContent());
+        parseHdbdd(fileLocation, loadedResourceContent);
         parsedNodes.add(fileLocation);
-      } catch (IOException | XSKArtifactParserException e) {
+        synchronizeNodeMetadataFromRoot(fileLocation, loadedResourceContent);
+      } catch (IOException | XSKArtifactParserException | XSKDataStructuresException e) {
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
             "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
             XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
@@ -201,6 +198,13 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     });
   }
 
+  private XSKDataStructureCdsModel populateXSKDataStructureCdsModel(String location, String content) {
+    XSKDataStructureCdsModel cdsModel = getCdsModelBaseData(location, content);
+    getCdsModelWithParsedData(cdsModel);
+
+    return cdsModel;
+  }
+
   private XSKDataStructureCdsModel getCdsModelBaseData(String location, String content) {
     XSKDataStructureCdsModel cdsModel = new XSKDataStructureCdsModel();
     cdsModel.setName(location);
@@ -246,5 +250,10 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     fileLocation = fileLocation + ".hdbdd";
 
     return XSKConstants.UNIX_SEPARATOR + fileLocation;
+  }
+
+  private void synchronizeNodeMetadataFromRoot(String location, String content) throws XSKDataStructuresException {
+    XSKDataStructureCdsModel nodeCdsModel = getCdsModelBaseData(location, content);
+    XSKHDBModule.getManagerServices().get(getType()).synchronizeParsedByRootMetadata(nodeCdsModel);
   }
 }

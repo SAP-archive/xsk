@@ -26,9 +26,6 @@ public class XSKCoreParserService implements IXSKCoreParserService {
   @Override
   public XSKDataStructureModel parseDataStructure(String type, String location, String content)
       throws XSKDataStructuresException, IOException, XSKArtifactParserException {
-    if (!parserServices.containsKey(type)) {
-      return null;
-    }
 
     XSKDataStructureParser<?> parser = parserServices.get(type);
     return parser.parse(location, content);

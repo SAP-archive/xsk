@@ -1,0 +1,6 @@
+schema   = "XSK_SAMPLES_HDB_HDBSEQUENCE_SIMPLE";
+minvalue = 1;
+cycles   = false;
+reset_by = "select ifnull(max(id),0) + 5 as id from
+        (select max(id) as id from \"hdb-hdbsequence-simple::SequenceSampleTable\" )";
+depends_on_table = "hdb-hdbsequence-simple::SequenceSampleTable";

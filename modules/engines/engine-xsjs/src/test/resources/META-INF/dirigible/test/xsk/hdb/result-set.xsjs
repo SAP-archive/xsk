@@ -1,5 +1,6 @@
 var hdb = $.hdb;
 var response = require('http/v4/response');
+var assertTrue = require('utils/assert').assertTrue;
 
 try {
 	var connection = hdb.getConnection();
@@ -27,4 +28,4 @@ try {
 	connection.close();
 }
 
-row0['FIRSTNAME'] === "IVAN" && row0['LASTNAME']==="VOLKOV" && row0['AGE']===29
+assertTrue(row0['FIRSTNAME'] === "IVAN" && row0['LASTNAME']==="VOLKOV" && row0['AGE']===29);

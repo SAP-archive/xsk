@@ -1,5 +1,5 @@
 var db = $.db;
-
+var assertTrue = require('utils/assert').assertTrue;
 var connection = db.getConnection();
 
 try {
@@ -44,7 +44,7 @@ try {
   closeAssertion = false;
 } catch {}
 
-batchExecutes == 2 && !executeResult && closeAssertion && updatedRows == 3 && metadataAssertion && moreResultsAssertion && parameterMetaDataAssertion && isClosedAssertion && closeAssertion;
+assertTrue(batchExecutes == 2 && !executeResult && closeAssertion && updatedRows == 3 && metadataAssertion && moreResultsAssertion && parameterMetaDataAssertion && isClosedAssertion && closeAssertion);
 
 function setStatementFields() {
   var inputStream = Java.type('java.io.ByteArrayInputStream');

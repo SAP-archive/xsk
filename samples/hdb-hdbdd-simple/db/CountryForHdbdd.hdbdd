@@ -1,12 +1,10 @@
 namespace hdb-hdbdd-simple.db;
 
-@Schema: 'DBADMIN'
-
+@Schema: 'XSK_SAMPLES_HDB_HDBDD_SIMPLE'
 
 context CountryForHdbdd {
-
-      entity Country {
-        key Id              : String(32);
-        Name                : String(32);
+     entity Country {
+          key Id              : String(32);
+          Name                : String(32);
     };
 };

@@ -16,7 +16,7 @@ This chart bootstraps a [XSK](https://github.com/sap/xsk) deployment on a [Kuber
 Add the XSK chart repository:
 
 ```
-helm repo add dirigible https://eclipse.github.io/dirigible
+helm repo add xsk https://sap.github.io/xsk
 helm repo update
 ```
 
@@ -25,169 +25,81 @@ helm repo update
 ### Basic:
 
 ```
-helm install dirigible dirigible/dirigible
+helm install xsk xsk/xsk
 ```
+Running this command will install XSK Deployment and Service with ClusterIP only. To access the XSK instance, execute the command that was printed in the console.
 
-> _**Note:** This will install XSK **Deployment** and **Service** with **ClusterIP** only._
-
-To access the Dirigible instance execute the command that was printed in the console, similar to this one:
+Example:
 
 ```
-export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=dirigible,app.kubernetes.io/instance=dirigible" -o jsonpath="{.items[0].metadata.name}")
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk" -o jsonpath="{.items[0].metadata.name}")
 echo "Visit http://127.0.0.1:8080 to use your application"
 kubectl --namespace default port-forward $POD_NAME 8080:8080    
-```
+``
+* Navigate to: http://127.0.0.1:8080
+* Log in with these username and password: dirigible/dirigible
 
-Navigate to: [http://127.0.0.1:8080](http://127.0.0.1:8080)
+Resources:
+- [XSK](https://github.com/SAP/xsk)
+- [dirigible.io](https://www.dirigible.io)
+- [github.com/eclipse/dirigible](https://github.com/eclipse/dirigible)
+- [youtube.com/c/dirigibleio](https://www.youtube.com/c/dirigibleio)
 
-Login with: `dirigible`/`dirigible`
 
-### Kyma
+## Manual Helm Charts Update:
 
-#### Basic:
+1. Navigate to the `helm-chart` folder:
+    ```
+    cd releng/helm-charts/
+    ```
+1. Set the XSK version in `xsk/Chart.yaml`:
 
-```
-helm install dirigible dirigible/dirigible \
---set kyma.enabled=true \
---set kyma.apirule.host=<kyma-host>
-```
+    > Replace the `#{XSKVersion}#` placeholder.
 
-> _**Note:** This will install additionally an **ApiRule** and **XSUAA** **ServiceInstance** and **ServiceBinding**. The appropriate roles should be assigned to the user._
+1. Package Helm Chart:
 
-#### Basic with PostgreSQL:
+    ```
+    helm package xsk
+    ```
 
-```
-helm install dirigible dirigible/dirigible \
---set kyma.enabled=true \
---set kyma.apirule.host=<kyma-host> \
---set database.enabled=true
-```
+1. Copy the `xsk-1.0.0.tgz` somewhere outside the Git repository.
 
-> _**Note:** This will install also **PostgreSQL** database with **1Gi** storage and update the Dirigible datasource configuration to consume the database._
+1. Reset all changes:
 
-#### Basic with PostgreSQL and Keycloak:
+    ```
+    git add .
+    git reset --hard
+    cd ../../
+    ```
 
-```
-helm install dirigible dirigible/dirigible \
---set kyma.enabled=true \
---set kyma.apirule.host=<kyma-host> \
---set database.enabled=true \
---set keycloak.enabled=true \
---set keycloak.install=true
-```
+1. Switch to the `gh-pages` branch:
 
-> _**Note:** In addition **Keycloak** will be deployed and configured._
+    ```
+    git checkout gh-pages
+    git pull origin gh-pages
+    ```
 
-#### Custom Configurations
+1. Paste the `xsk-1.0.0.tgz` chart into the `charts` directory.
 
-The deployment configuration can be customized by specifying the customization parameters with the `helm install` command using the `--values` or `--set` arguments. Find more information in the [configuration section](#configuration) of this document.
+1. Build Helm Index:
 
-## Upgrading
+    ```
+    helm repo index charts/ --url https://sap.github.io/xsk/charts
+    ```
 
-Upgrade the chart deployment using:
+1. Move the `charts/index.yaml` to the root folder:
 
-```
-helm upgrade dirigible dirigible/dirigible
-```
+    ```
+    mv charts/index.yaml .
+    ```
 
-The command upgrades the existing `dirigible` deployment with the most latest release of the chart.
+1. Push the changes:
 
-**TIP**: Use `helm repo update` to update information on available charts in the chart repositories.
+    ```
+    git add index.yaml
+    git add charts/
 
-## Uninstalling
+    git commit -m "Helm Charts Updated"
 
-Uninstall the `dirigible` deployment using:
-
-```
-helm uninstall dirigible
-```
-
-The command uninstall the release named `dirigible` and frees all the kubernetes resources associated with the release.
-
-## Configuration
-
-The following table lists all the configurable parameters expose by the Dirigible chart and their default values.
-
-#### Generic
-
-|             Name             |          Description            |            Default                 |
-|------------------------------|---------------------------------|------------------------------------|
-| `dirigible.image`            | Custom Dirigible image          | `""`                               |
-| `image.repository`           | Dirigible image repo            | `dirigiblelabs/dirigible-all`      |
-| `image.repositoryKyma`       | Dirigible Kyma image repo       | `dirigiblelabs/dirigible-sap-kyma` |
-| `image.repositoryKeycloak`   | Dirigible Keycloak image repo   | `dirigiblelabs/dirigible-keycloak` |
-| `image.pullPolicy`           | Image pull policy               | `IfNotPresent`                     |
-| `service.type`               | Service type                    | `ClusterIP`                        |
-| `service.port`               | Service port                    | `8080`                             |
-| `replicaCount`               | Number of replicas              | `1`                                |
-| `imagePullSecrets`           | Image pull secrets              | `[]`                               |
-| `nameOverride`               | Name override                   | `""`                               |
-| `fullnameOverride`           | Fullname override               | `""`                               |
-| `podSecurityContext`         | Pod security context            | `{}`                               |
-| `nodeSelector`               | Node selector                   | `{}`                               |
-| `tolerations`                | Tolerations                     | `[]`                               |
-| `affinity`                   | Affinity                        | `{}`                               |
-| `resources`                  | Resources                       | `{}`                               |
-
-#### Basic
-
-|             Name             |          Description            |            Default                 |
-|------------------------------|---------------------------------|------------------------------------|
-| `volume.enabled`             | Volume to be mounted            | `true`                             |
-| `volume.storage`             | Volume storage size             | `1Gi`                              |
-| `database.enabled`           | Database to be deployed         | `false`                            |
-| `database.image`             | Database image                  | `postgres:13`                      |
-| `database.driver`            | Database JDBC driver            | `org.postgresql.Driver`            |
-| `database.storage`           | Database storage size           | `1Gi`                              |
-| `database.username`          | Database username               | `dirigible`                        |
-| `database.password`          | Database password               | `dirigible`                        |
-| `ingress.enabled`            | Ingress to be created           | `false`                            |
-| `ingress.annotations`        | Ingress annotations             | `{}`                               |
-| `ingress.host`               | Ingress host                    | `""`                               |
-| `ingress.tls`                | Ingress tls                     | `false`                            |
-
-#### Kyma
-
-|             Name             |          Description            |            Default                 |
-|------------------------------|---------------------------------|------------------------------------|
-| `kyma.enabled`               | Kyma environment to be used     | `false`                            |
-| `kyma.apirule.enabled`       | Kyma ApiRule to be created      | `true`                             |
-| `kyma.apirule.host`          | Kyma host to be used in ApiRule | `""`                               |
-
-#### Keycloak
-
-|             Name             |          Description            |            Default                 |
-|------------------------------|---------------------------------|------------------------------------|
-| `keycloak.enabled`           | Keycloak environment to be used | `false`                            |
-| `keycloak.install`           | Keycloak to be installed        | `false`                            |
-| `keycloak.name`              | Keycloak deployment name        | `keycloak`                         |
-| `keycloak.image`             | Keycloak image                  | `jboss/keycloak:12.0.4`            |
-| `keycloak.username`          | Keycloak username               | `admin`                            |
-| `keycloak.password`          | Keycloak password               | `admin`                            |
-| `keycloak.replicaCount`      | Keycloak number of replicas     | `1`                                |
-| `keycloak.realm`             | Keycloak realm to be set        | `master`                           |
-| `keycloak.clientId`          | Keycloak clientId to be used    | `dirigible`                        |
-| `keycloak.database.enabled`  | Keycloak database to be used    | `false`                            |
-| `keycloak.database.enabled`  | Keycloak database to be used    | `true`                             |
-| `keycloak.database.image`    | Keycloak database image         | `postgres:13`                      |
-| `keycloak.database.storage`  | Keycloak database storage size  | `1Gi`                              |
-| `keycloak.database.username` | Keycloak database username      | `keycloak`                         |
-| `keycloak.database.password` | Keycloak database password      | `keycloak`                         |
-
-#### Usage
-
-Specify the parameters you which to customize using the `--set` argument to the `helm install` command. For instance,
-
-```
-helm install dirigible dirigible/dirigible --set ingress.enabled=true --set ingress.host=my-ingress-host.com
-```
-
-The above command sets the `ingress.host` to `my-ingress-host.com`.
-
-Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
-
-```
-helm install dirigible dirigible/dirigible --values values.yaml
-```
-
-**Tip**: You can use the default **values.yaml**.
+    git push origin gh-pages
+    ```

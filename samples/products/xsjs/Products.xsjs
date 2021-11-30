@@ -27,7 +27,7 @@ function positiveResult(oResponse) {
 function doPost() {
     
 	var request = JSON.parse($.request.body.asString());
-	var productsService = new ProductsService(connection, "DBADMIN");
+	var productsService = new ProductsService(connection, "XSK_SAMPLES_PRODUCTS");
 	var response = productsService.handlePostRequest(request);
 	connection.close();
 	positiveResult(response);
@@ -36,7 +36,7 @@ function doPost() {
 function doGet() {
     
 	var response;
-	var productsService = new ProductsService(connection, "DBADMIN");
+	var productsService = new ProductsService(connection, "XSK_SAMPLES_PRODUCTS");
 	response = productsService.handleGetRequest();
 	connection.close();
 	positiveResult(response);

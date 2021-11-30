@@ -1,0 +1,11 @@
+table.schemaName = "DBADMIN";
+table.temporary = true;
+table.tableType = ROWSTORE;
+table.loggingType = NOLOGGING;
+table.columns = [
+	{name = "Col1"; sqlType = NVARCHAR; nullable = false; length = 20; comment = "dummy comment";},
+	{name = "Col2"; sqlType = INTEGER; nullable = false;},
+  {name = "Col66"; sqlType = NVARCHAR; nullable = true; length = 20; defaultValue = "Defaultvalue";}];
+table.indexes =  [
+	{name = "l1"; unique = false; order = DSC; indexType = CPB_TREE; indexColumns = ["Col2", "Col66"];},
+	{name = "l2"; unique = true; order = ASC; indexType = B_TREE; indexColumns = ["Col1"];}];

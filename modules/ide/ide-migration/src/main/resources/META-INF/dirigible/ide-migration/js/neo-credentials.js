@@ -9,22 +9,25 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
+
 migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$messageHub', function ($scope, $messageHub) {
+    $scope.passwordHintMessage = "If you have enabled 2FA for your account, append your 2FA code after the password";
     $scope.isVisible = true;
     $scope.passwordVisible = false;
-    $scope.regionDropdownText = "---Please select---";
+    $scope.regionDropdownInitText = "---Please select---";
+    $scope.regionDropdownText = $scope.regionDropdownInitText;
     $scope.regions = [
         { name: 'Australia (Sydney) | ap1.hana.ondemand.com', region: 'ap1.hana.ondemand.com' },
-        { name: 'Europe (Rot) | hana.ondemand.com', region: 'hana.ondemand.com' },
-        { name: 'Europe (Rot) EU1 | eu1.hana.ondemand.com', region: 'eu1.hana.ondemand.com' },
-        { name: 'Europe (Amsterdam) | eu3.hana.ondemand.com', region: 'eu3.hana.ondemand.com' },
+        { name: 'Europe (Rot) | eu1.hana.ondemand.com', region: 'eu1.hana.ondemand.com' },
         { name: 'Europe (Frankfurt) | eu2.hana.ondemand.com', region: 'eu2.hana.ondemand.com' },
+        { name: 'Europe (Amsterdam) | eu3.hana.ondemand.com', region: 'eu3.hana.ondemand.com' },
         { name: 'Japan (Tokyo) | jp1.hana.ondemand.com', region: 'jp1.hana.ondemand.com' },
         { name: 'US East (Ashburn) | us1.hana.ondemand.com', region: 'us1.hana.ondemand.com' },
         { name: 'US East (Sterling) | us3.hana.ondemand.com', region: 'us3.hana.ondemand.com' }
     ];
     $scope.regionList = $scope.regions;
-
+    $scope.hostName = '';
+    
     $scope.userInput = function () {
         if ($scope.hostName && $scope.subaccount && $scope.username && $scope.password) {
             $scope.$parent.setNextEnabled(true);
@@ -37,15 +40,15 @@ migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$mess
         $scope.passwordVisible = !$scope.passwordVisible;
     };
 
-    $scope.regionSelected = function (regionObject) {
+    $scope.isSelected = (regionObject) => {
+        return $scope.hostName === regionObject.region ? "selected" : '';
+    }
+
+    $scope.regionSelected = function (regionObject) {                            
+            
             $scope.hostName = regionObject.region;
-
-            if (regionObject.isUserEnteredRegion) {
-              $scope.regionDropdownText = regionObject.region;
-            } else {
-              $scope.regionDropdownText = regionObject.name;
-            }
-
+            $scope.regionDropdownText = regionObject.name;
+            
             $scope.$parent.setFinishEnabled(true);
         };
 
@@ -91,10 +94,10 @@ migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$mess
             if (msg.data.getData === "all") {
                 $messageHub.message(msg.data.controller, {
                     neoData: {
-                        "hostName": $scope.hostName,
-                        "subaccount": $scope.subaccount,
-                        "username": $scope.username,
-                        "password": $scope.password
+                        hostName: $scope.hostName,
+                        subaccount: $scope.subaccount,
+                        username: $scope.username,
+                        password: $scope.password,
                     }
                 });
             }

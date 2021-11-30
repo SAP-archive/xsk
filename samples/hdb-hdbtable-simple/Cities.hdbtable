@@ -1,0 +1,15 @@
+table.schemaName = "XSK_SAMPLES_HDB_HDBTABLE_SIMPLE";
+table.temporary = true;
+table.tableType = COLUMNSTORE;
+table.loggingType = NOLOGGING;
+table.public = true;
+table.columns = [
+	{name = "Name"; sqlType = NVARCHAR; nullable = false; length = 20; comment = "dummy comment";},
+	{name = "Code"; sqlType = INTEGER; nullable = false;},
+	{name = "Location"; sqlType = NVARCHAR; nullable = false; length = 20; defaultValue = "Defaultvalue";},
+   {name = "Description"; sqlType = NVARCHAR; nullable = true; length = 50;},
+   {name = "Size"; sqlType = DECIMAL; nullable = true; precision = 20; scale = 3;}];
+table.indexes =  [
+	{name = "Index1"; unique = true; order = DSC; indexColumns = ["Code","Size"];},
+	{name = "Index2"; unique = true; order = DSC; indexType = B_TREE; indexColumns = ["Name"];}];
+table.primaryKey.pkcolumns = ["Name", "Code","Location"];

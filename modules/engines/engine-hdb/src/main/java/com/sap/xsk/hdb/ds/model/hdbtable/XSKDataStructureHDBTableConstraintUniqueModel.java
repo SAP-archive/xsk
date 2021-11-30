@@ -16,4 +16,32 @@ package com.sap.xsk.hdb.ds.model.hdbtable;
  */
 public class XSKDataStructureHDBTableConstraintUniqueModel extends XSKDataStructureHDBTableConstraintModel {
 
+  private String name;
+  private String indexType;
+  private String order;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getIndexType() {
+    return indexType;
+  }
+
+  public void setIndexType(String indexType) {
+    this.indexType = indexType;
+  }
+
+  public String getOrder() {
+    return order;
+  }
+
+  public void setOrder(String order) {
+    this.order = order;
+  }
+
 }

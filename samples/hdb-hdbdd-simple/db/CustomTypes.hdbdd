@@ -1,6 +1,6 @@
 namespace hdb-hdbdd-simple.db;
 
-@Schema: 'DBADMIN'
+@Schema: 'XSK_SAMPLES_HDB_HDBDD_SIMPLE'
 
 context CustomTypes {
      type MyString {

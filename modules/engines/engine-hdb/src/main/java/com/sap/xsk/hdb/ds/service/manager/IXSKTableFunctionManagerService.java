@@ -107,11 +107,6 @@ public class IXSKTableFunctionManagerService extends AbstractDataStructureManage
   }
 
   @Override
-  public boolean isParsed(XSKDataStructureHDBTableFunctionModel tableModel, boolean parsedByRoot) throws XSKDataStructuresException {
-    return false;
-  }
-
-  @Override
   public Map<String, XSKDataStructureHDBTableFunctionModel> getDataStructureModels() {
     return Collections.unmodifiableMap(this.dataStructureTableFunctionsModels);
   }

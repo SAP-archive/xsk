@@ -1,0 +1,13 @@
+table.schemaName = "XSK_SAMPLES_HDB_HDBSEQUENCE_SIMPLE";
+table.temporary = true;
+table.tableType = COLUMNSTORE;
+table.loggingType = NOLOGGING;
+table.public = true;
+table.columns = [
+	{name = "NAME"; sqlType = NVARCHAR; nullable = false; length = 20; comment = "dummy comment";},
+	{name = "ID"; sqlType = INTEGER; nullable = false;},
+	{name = "LOCATION"; sqlType = NVARCHAR; nullable = false; length = 20; defaultValue = "Defaultvalue";}];
+table.indexes =  [
+	{name = "Index1"; unique = true; order = DSC; indexColumns = ["ID"];},
+	{name = "Index2"; unique = true; order = DSC; indexType = B_TREE; indexColumns = ["NAME"];}];
+table.primaryKey.pkcolumns = ["NAME", "ID"];

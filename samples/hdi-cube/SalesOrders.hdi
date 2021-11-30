@@ -1,6 +1,6 @@
 {
     "configuration": "/hdi-cube/config.hdiconfig",
-    "users": ["DBADMIN"],
+    "users": ["XSK_SAMPLES_HDI_CUBE"],
     "group": "XSK_HDI_CUBE_GROUP",
     "container": "XSK_HDI_CUBE",
     "deploy": [

@@ -12,6 +12,7 @@
 package com.sap.xsk.utils;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
@@ -122,4 +123,32 @@ public class XSKHDBUtils {
         model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
         return model;
     }
+
+  public static String extractProcedureNameFromContent(String content, String location) throws XSKDataStructuresException {
+    int indexOfBracket = content.indexOf('(');
+    int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("procedure") + "procedure".length();
+    if (indexOfBracket > -1 && indexOfEndOfProcKeyword > -1) {
+      String procNameWithWhiteSymbols = content.substring(indexOfEndOfProcKeyword, indexOfBracket);
+      return procNameWithWhiteSymbols.replace("\\s", "").trim();
+    }
+    String errMsg = "HDB Procedure file not correct";
+    XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
+        "", XSKCommonsConstants.HDB_PROCEDURE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
+        XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+    throw new XSKDataStructuresException(errMsg);
+  }
+
+  public static String extractTableFunctionNameFromContent(String content, String location, String parser) throws XSKDataStructuresException {
+    int indexOfBracket = content.indexOf('(');
+    int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("function") + "function".length();
+    if (indexOfBracket > -1 && indexOfEndOfProcKeyword > -1) {
+      String procNameWithWhiteSymbols = content.substring(indexOfEndOfProcKeyword, indexOfBracket);
+      return procNameWithWhiteSymbols.replace("\\s", "").trim();
+    }
+    String errMsg = "HDB Table Function file not correct";
+    XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
+        "", parser, XSKCommonsConstants.MODULE_PARSERS,
+        XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+    throw new XSKDataStructuresException(errMsg);
+  }
 }

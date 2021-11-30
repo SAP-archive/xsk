@@ -237,7 +237,7 @@ public class XSKDataStructureHDBTableColumnModel {
   }
 
   /**
-   * Setter for the unique.
+   * Setter for the comment.
    *
    * @param comment the comment value
    */

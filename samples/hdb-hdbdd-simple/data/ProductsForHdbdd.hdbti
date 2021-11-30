@@ -6,7 +6,7 @@ import = [
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
-		schema = "DBADMIN";
+		schema = "XSK_SAMPLES_HDB_HDBDD_SIMPLE";
 	},
 	{
 		table = "hdb-hdbdd-simple.db::ProductsForHdbdd.Orders";
@@ -15,7 +15,7 @@ import = [
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
-		schema = "DBADMIN";
+		schema = "XSK_SAMPLES_HDB_HDBDD_SIMPLE";
 	},
 	{
 		table = "hdb-hdbdd-simple.db::ProductsForHdbdd.Item";
@@ -24,9 +24,7 @@ import = [
 		useHeaderNames = false;
 		delimField = ",";
 		distinguishEmptyFromNull = true;
-		schema = "DBADMIN";
+		schema = "XSK_SAMPLES_HDB_HDBDD_SIMPLE";
 	}
-	
-	
 ];
 

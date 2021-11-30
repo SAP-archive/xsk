@@ -1,5 +1,6 @@
 var database = $.hdb;
 var response = require('http/v4/response');
+var assertTrue = require('utils/assert').assertTrue;
 
 try {
 	var connection = database.getConnection();
@@ -29,4 +30,4 @@ try {
 response.flush();
 response.close();
 
-resultSet[0][1].toString() == "IVAN" && resultSet2.length.toString() == 2
+assertTrue(resultSet[0][1].toString() == "IVAN" && resultSet2.length.toString() == 2);

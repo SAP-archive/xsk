@@ -1,5 +1,40 @@
 # Drumbeats
 
+## 2021 Week 46 (1 November - 7 November)
+
+#### Focus topics:
+
+- `.hdbfunction` with schema fix
+- Process `.xsprivilege` artifacts prior to `.xsaccess` artifacts
+- Integration test for Kyma deployment
+- Helm Charts updated
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-15..2021-11-21) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-15..2021-11-21) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-11-15..2021-11-21) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-11-15..2021-11-21) PRs
+
+----
+
+## 2021 Week 45 (8 November - 14 November)
+
+#### Focus topics:
+
+- XSJob multiple schedules
+- $.uril.Zip API added
+- Multiple authentication methods in `.xsaccess`
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-08..2021-11-14) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-08..2021-11-14) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-11-08..2021-11-14) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-11-08..2021-11-14) PRs
+
+----
+
 ## 2021 Week 44 (1 November - 7 November)
 
 #### Focus topics:

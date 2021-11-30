@@ -8,7 +8,7 @@
   <origin/>
   <descriptions defaultDescription="SalesOrdersCalculationView"/>
   <metadata changedAt="2021-02-02 15:24:42.005"/>
-  <defaultSchema schemaName="DBADMIN"/>
+  <defaultSchema schemaName="XSK_SAMPLES_HDI_CUBE"/>
   <localVariables/>
   <variableMappings/>
   <dataSources>

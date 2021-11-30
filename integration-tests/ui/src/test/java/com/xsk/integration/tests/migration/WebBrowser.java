@@ -12,6 +12,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ class WebBrowser {
   private WebDriverWait browserWait;
   private Actions browserActions;
   private JavascriptExecutor jsExecutor;
+  private SeleniumLogger logger;
   private final String baseUrl;
   private final boolean isHeadless;
 
@@ -38,17 +40,8 @@ class WebBrowser {
     } else {
       setupFirefox();
     }
-  }
 
-  private void setupBrowserCommon(WebDriver webDriver) {
-    browser = webDriver;
-    browser.navigate().to(baseUrl);
-    browser.manage().window().maximize();
-    browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
-    jsExecutor = (JavascriptExecutor) (browser);
-    browserWait = new WebDriverWait(browser, 60);
-    browserActions = new Actions(browser);
+    logger = new SeleniumLogger(browser, param);
   }
 
   private void setupChrome() {
@@ -70,6 +63,17 @@ class WebBrowser {
     options.addArguments("--height=1080", "--width=1920", "-private");
 
     setupBrowserCommon(new FirefoxDriver(options));
+  }
+
+  private void setupBrowserCommon(WebDriver webDriver) {
+    browser = webDriver;
+    browser.navigate().to(baseUrl);
+    browser.manage().window().maximize();
+    browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+    jsExecutor = (JavascriptExecutor) (browser);
+    browserWait = new WebDriverWait(browser, 60);
+    browserActions = new Actions(browser);
   }
 
   void clickItem(By by) {
@@ -133,6 +137,14 @@ class WebBrowser {
       Thread.sleep(millis);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  void log() {
+    try {
+      logger.save();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

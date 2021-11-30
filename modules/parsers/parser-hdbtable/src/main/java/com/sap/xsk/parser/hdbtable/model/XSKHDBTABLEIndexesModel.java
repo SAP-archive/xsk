@@ -15,8 +15,8 @@ import com.google.gson.annotations.SerializedName;
 import com.sap.xsk.parser.hdbtable.constants.HdbtablePropertiesConstants;
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class XSKHDBTABLEIndexesModel {
 
@@ -25,7 +25,7 @@ public class XSKHDBTABLEIndexesModel {
 
   private boolean unique;
   private String order;
-  private List<String> indexColumns;
+  private Set<String> indexColumns;
   private String indexType;
 
   public String getIndexName() {
@@ -52,11 +52,11 @@ public class XSKHDBTABLEIndexesModel {
     this.order = order;
   }
 
-  public List<String> getIndexColumns() {
+  public Set<String> getIndexColumns() {
     return indexColumns;
   }
 
-  public void setIndexColumns(List<String> indexColumns) {
+  public void setIndexColumns(Set<String> indexColumns) {
     this.indexColumns = indexColumns;
   }
 

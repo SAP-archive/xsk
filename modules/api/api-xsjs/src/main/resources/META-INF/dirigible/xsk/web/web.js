@@ -18,6 +18,8 @@ var dResponse = require('http/v4/response');
 var dUpload = require('http/v4/upload');
 var http = require('xsk/http/http');
 var session = require('xsk/session/session');
+var zip = require('io/v4/zip');
+var bytes = require("io/v4/bytes");
 
 exports.TupelList = function (dArrayOfContents) {
   var internalDArrayOfContents = dArrayOfContents ? dArrayOfContents : [];
@@ -44,7 +46,7 @@ exports.TupelList = function (dArrayOfContents) {
 
   this.set = function (name, value, options) {
     let element = internalDArrayOfContents.find(function (element) {
-      return element.name === name;
+      return element.name.toUpperCase() === name.toUpperCase();
     });
     if (element) {
       element.value = value;
@@ -126,7 +128,7 @@ Body = function (bodyValue) {
   };
 };
 
-exports.WebRequest = function () {
+exports.WebRequest = function (method, queryPath) {
   const XSJS_FILE_EXTENSION_LENGTH = 5;
   const XSJS_FILE_EXTENSION = ".xsjs";
 
@@ -195,7 +197,9 @@ exports.WebRequest = function () {
 
   this.language = session.language;
 
-  if (dRequest.getMethod() === 'OPTIONS') {
+  if (method) {
+    this.method = method;
+  } else if (dRequest.getMethod() === 'OPTIONS') {
     this.method = http.OPTIONS;
   } else if (dRequest.getMethod() === 'GET') {
     this.method = http.GET;
@@ -228,16 +232,20 @@ exports.WebRequest = function () {
     return dRequestURI.substring(0, filePlaceInURI + XSJS_FILE_EXTENSION_LENGTH);
   }();
 
-  this.queryPath = function () {
-    var dRequestURI = dRequest.getRequestURI();
-    var filePlaceInURI = dRequestURI.search(XSJS_FILE_EXTENSION);
-    return dRequestURI.substring(filePlaceInURI + XSJS_FILE_EXTENSION_LENGTH, dRequestURI.length);
-  }();
+  if (queryPath) {
+    this.queryPath = queryPath;
+  } else {
+    this.queryPath = function () {
+      var dRequestURI = dRequest.getRequestURI();
+      var filePlaceInURI = dRequestURI.search(XSJS_FILE_EXTENSION);
+      return dRequestURI.substring(filePlaceInURI + XSJS_FILE_EXTENSION_LENGTH, dRequestURI.length);
+    }();
+  }
 
   this.contentType = dRequest.getContentType();
 
   this.setBody = function (body, index) {
-    //ToDo;
+    this.body = body;
   };
 
   function transformParametersObject(dParametersObject) {
@@ -252,25 +260,17 @@ exports.WebRequest = function () {
 };
 
 exports.WebResponse = function () {
+  var responseHeaders = getResponseHeaders();
+
   this.body = new Body();
   this.cacheControl;
   this.contentType;
   this.cookies = new exports.TupelList([]);
   this.entities = new EntityList([], "$.response");
   this.headers = function () {
-    var dHeadersArray = [];
-    var headerNamesArray = dResponse.getHeaderNames();
-    headerNamesArray.forEach(element =>
-        dHeadersArray.push(
-            {
-              "name": element,
-              "value": dRequest.getHeader(element)
-            }));
-
-    var wXscTupelList = new exports.TupelList(dHeadersArray);
+    var wXscTupelList = new exports.TupelList(responseHeaders);
     return wXscTupelList;
   }();
-
   this.status; // from $.net.http
 
   this.followUp = function (followUpObject) {
@@ -305,7 +305,7 @@ exports.WebResponse = function () {
     }
   };
 
-  this.setBody = function (text) {
+  this.setBody = function (content) {
     if (this.contentType) {
       dResponse.setContentType(this.contentType);
     }
@@ -314,11 +314,50 @@ exports.WebResponse = function () {
       dResponse.setStatus(this.status);
     }
 
-    dResponse.println(text);
-    dResponse.flush();
-    dResponse.close();
+    syncHeaders();
+
+    if (typeof content === 'string' || content instanceof String) {
+      dResponse.println(content);
+      dResponse.flush();
+      dResponse.close();
+    } else if (content instanceof Array && this.contentType === 'application/zip') {
+      var parsedContent = JSON.parse(bytes.byteArrayToText(content));
+      var outputStream = dResponse.getOutputStream();
+      if (outputStream.isValid()) {
+        try {
+          var zipOutputStream = zip.createZipOutputStream(outputStream);
+          for (let file in parsedContent) {
+            zipOutputStream.createZipEntry(file);
+            zipOutputStream.writeText(parsedContent[file]);
+          }
+        } finally {
+          zipOutputStream.close();
+        }
+      }
+    }
   };
 
+  function syncHeaders() {
+    for (var headerId = 0; headerId < responseHeaders.length; headerId++) {
+      var header = responseHeaders[headerId];
+      dResponse.setHeader(header.name, header.value);
+    }
+  }
+
+  function getResponseHeaders() {
+    var dHeadersArray = [];
+    var headerNamesArray = dResponse.getHeaderNames();
+    headerNamesArray.forEach(element =>
+        dHeadersArray.push(
+            {
+              "name": element,
+              "value": dRequest.getHeader(element)
+            }
+        )
+    );
+
+    return dHeadersArray;
+  }
 };
 
 WebEntityRequest = function () {

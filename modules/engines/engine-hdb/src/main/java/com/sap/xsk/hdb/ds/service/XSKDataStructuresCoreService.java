@@ -153,4 +153,16 @@ public class XSKDataStructuresCoreService implements IXSKDataStructuresCoreServi
   public boolean existsDataStructure(String location, String type) throws XSKDataStructuresException {
     return getDataStructure(location, type) != null;
   }
+
+  @Override
+  public boolean existsDataStructureByLocationAndHash(String location, String hash, String type) throws XSKDataStructuresException {
+    try (Connection connection = dataSource.getConnection()) {
+      String sql = SqlFactory.getNative(connection).select().column("*").from("XSK_DATA_STRUCTURES")
+          .where("DS_LOCATION = ? AND DS_HASH = ?").toString();
+      return !persistenceManager.query(connection, xskCoreParserService.getDataStructureClass(type), sql,
+          Arrays.asList(location, hash)).isEmpty();
+    } catch (SQLException e) {
+      throw new XSKDataStructuresException(e);
+    }
+  }
 }

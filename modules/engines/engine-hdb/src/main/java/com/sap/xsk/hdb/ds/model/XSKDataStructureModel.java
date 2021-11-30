@@ -57,9 +57,6 @@ public class XSKDataStructureModel {
   @Transient
   private transient XSKDBContentType dbContentType;
 
-  @Transient
-  private transient boolean createDataStructure = false;
-
   /**
    * Gets the location.
    *
@@ -224,14 +221,6 @@ public class XSKDataStructureModel {
     this.dbContentType = dbContentType;
   }
 
-  public boolean isCreateDataStructure() {
-    return createDataStructure;
-  }
-
-  public void setCreateDataStructure(boolean createDataStructure) {
-    this.createDataStructure = createDataStructure;
-  }
-
   /**
    * To json.
    *
@@ -296,20 +285,6 @@ public class XSKDataStructureModel {
         return false;
       }
     } else if (!location.equals(other.location)) {
-      return false;
-    }
-    if (name == null) {
-      if (other.name != null) {
-        return false;
-      }
-    } else if (!name.equals(other.name)) {
-      return false;
-    }
-    if (type == null) {
-      if (other.type != null) {
-        return false;
-      }
-    } else if (!type.equals(other.type)) {
       return false;
     }
     return true;

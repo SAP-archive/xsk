@@ -5,8 +5,7 @@
 
     create events(before "products.xsjs:ProductsLib.xsjslib::beforeCreateOrder")
     delete using "products.xsjs:ProductsLib.xsjslib::deleteOrder";
- 
-   
+
   "products.db::Products.Item" as "Items"
     create events(before "products.xsjs:ProductsLib.xsjslib::beforeCreateItem") 
     update forbidden;
@@ -15,8 +14,7 @@
        multiplicity "1" dependent "Items"("OrderId") multiplicity "*";
       
  }
- 
- 
+
  annotations {
    enable OData4SAP;
 }

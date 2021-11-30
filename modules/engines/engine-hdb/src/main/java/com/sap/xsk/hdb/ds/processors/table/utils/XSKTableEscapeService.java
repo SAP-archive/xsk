@@ -16,6 +16,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintCheck
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableIndexModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
@@ -42,7 +43,11 @@ public class XSKTableEscapeService {
   public XSKTableEscapeService(Connection connection, XSKDataStructureHDBTableModel tableModel) {
     this.tableModel = tableModel;
     String escapedName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
-    this.createTableBuilder = SqlFactory.getNative(connection).create().table(escapedName);
+    if(tableModel.getTableType() !=null ) {
+      this.createTableBuilder = SqlFactory.getNative(connection).create().table(escapedName,tableModel.getTableType());
+    }else {
+      this.createTableBuilder = SqlFactory.getNative(connection).create().table(escapedName);
+    }
     this.connection = connection;
     this.shouldEscapeArtefactPropertyName =
         caseSensitive && !SqlFactory.deriveDialect(connection).getClass().equals(PostgresSqlDialect.class);
@@ -51,7 +56,20 @@ public class XSKTableEscapeService {
   public String getDatabaseSpecificSQL() {
     this.escapeHDBTableColumnModel();
     this.escapedConstraintsModel();
+    this.escapeHDBTableIndexModel();
     return this.createTableBuilder.build();
+  }
+
+  private void escapeHDBTableIndexModel() {
+    List<XSKDataStructureHDBTableIndexModel> indexes = this.tableModel.getIndexes();
+    for (XSKDataStructureHDBTableIndexModel indexModel : indexes) {
+      String name = (this.shouldEscapeArtefactPropertyName)
+          ? XSKHDBUtils.escapeArtifactName(this.connection, indexModel.getIndexName())
+          : indexModel.getIndexName();
+
+      this.createTableBuilder
+          .index(name, indexModel.isUnique(), indexModel.getOrder(), indexModel.getIndexType(),indexModel.getIndexColumns());
+    }
   }
 
   protected void escapeHDBTableColumnModel() {
@@ -175,7 +193,9 @@ public class XSKTableEscapeService {
               : uniqueIndexName;
         }
         String[] uniqueIndexColumns = this.getEscapedColumns(uniqueIndex.getColumns());
-        builder.unique(uniqueIndexName, uniqueIndexColumns);
+        String indexOrder = uniqueIndex.getOrder();
+        String indexType = uniqueIndex.getIndexType();
+        builder.unique(uniqueIndexName, uniqueIndexColumns, indexType, indexOrder);
       }
     }
   }

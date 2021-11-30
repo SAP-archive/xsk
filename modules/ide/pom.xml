@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-parent</artifactId>
-		<version>0.11.0-SNAPSHOT</version>
+		<version>0.12.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Modules - IDE - Parent</name>
 	<artifactId>xsk-modules-ide-parent</artifactId>
-	<version>0.11.0-SNAPSHOT</version>
+	<version>0.12.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -20,7 +20,9 @@
 		<module>ide-migration</module>
 		<module>ide-hdbti</module>
     <module>xsk-workspace-menu</module>
-	</modules>
+    <module>xsk-ide-xsjob</module>
+    <module>xsk-xsjob-menu</module>
+  </modules>
 
 	<properties>
 		<license.header.location>../../licensing-header.txt</license.header.location>

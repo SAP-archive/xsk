@@ -11,7 +11,7 @@
  */
 exports.getPerspective = function () {
     var perspective = {
-        "name": "XS Migration",
+        "name": "SAP HANA XS Classic Migration",
         "link": "../ide-migration/migration-perspective.html",
         "order": "820",
         "image": "exchange"

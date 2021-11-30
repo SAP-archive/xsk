@@ -1,6 +1,4 @@
-{{- if .Values.create.application }}
-{{- if .Values.create.secret }}
-{{- if .Values.hana.url }}
+{{- if .Values.hana.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -14,14 +12,17 @@ stringData:
   DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE: "false"
   DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE: "false"
   DIRIGIBLE_SCHEDULER_DATABASE_DRIVER: com.sap.db.jdbc.Driver
-  DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD: {{ .Values.hana.password }}
-  DIRIGIBLE_SCHEDULER_DATABASE_URL: jdbc:sap://{{ .Values.hana.url }}/?encrypt=true&validateCertificate=false
-  DIRIGIBLE_SCHEDULER_DATABASE_USER: {{ .Values.hana.username }}
+  DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD: {{ required "Missing HANA password" .Values.hana.password }}
+  DIRIGIBLE_SCHEDULER_DATABASE_URL: jdbc:sap://{{ required "Missing HANA url" .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  DIRIGIBLE_SCHEDULER_DATABASE_USER: {{ required "Missing HANA username" .Values.hana.username }}
   HANA_DRIVER: com.sap.db.jdbc.Driver
-  HANA_PASSWORD: {{ .Values.hana.password }}
-  HANA_URL: jdbc:sap://{{ .Values.hana.url }}/?encrypt=true&validateCertificate=false
-  HANA_USERNAME: {{ .Values.hana.username }}
+  HANA_PASSWORD: {{ required "Missing HANA password" .Values.hana.password }}
+  HANA_URL: jdbc:sap://{{ required "Missing HANA url" .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  HANA_USERNAME: {{ required "Missing HANA username" .Values.hana.username }}
 ---
+{{- else }}
+{{- if or .Values.hana.username .Values.hana.password .Values.hana.url }}
+{{ required "Missing HANA set configuration 'hana.enabled=true' " .Values.hana.enabled }}
 {{- end }}
 {{- end }}
 {{- if .Values.application.fastBootstrap }}
@@ -51,12 +52,10 @@ spec:
       labels:
         {{- include "xsk.selectorLabels" . | nindent 8 }}
     spec:
-      imagePullSecrets:
-        - name: {{ .Values.docker.secretName }}
       containers:
         - name: {{ .Chart.Name }}
           envFrom:
-          {{- if .Values.hana.secretName }}
+          {{- if .Values.hana.enabled }}
             - secretRef:
                 name: {{ .Values.hana.secretName }}
           {{- end }}
@@ -65,15 +64,19 @@ spec:
                 name: fast-boostrap-secret
           {{- end }}
           env:
-            {{- if .Values.kyma.host }}
+            {{- if .Values.kyma.enabled }}
             - name: DIRIGIBLE_HOST
-              value: https://{{ .Release.Name }}.{{ .Values.kyma.host }}
+              value: https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
             {{- end }}
             {{- if .Values.application.homeUrl }}
             - name: DIRIGIBLE_HOME_URL
               value: {{ .Values.application.homeUrl }}
             {{- end }}
-          image: {{ .Values.application.image }}
+          {{- if .Values.application.image }}
+          image: {{ .Values.application.image }}                    
+          {{- else }}
+          image: dirigiblelabs/xsk
+          {{- end }}  
           imagePullPolicy: {{ .Values.application.imagePullPolicy }}
           ports:
             - name: http
@@ -82,12 +85,14 @@ spec:
           livenessProbe:
             failureThreshold: 10
             periodSeconds: 10
+            initialDelaySeconds: 20
             httpGet:
               path: /
               port: http
           readinessProbe:
             failureThreshold: 10
             periodSeconds: 10
+            initialDelaySeconds: 20
             httpGet:
               path: /services/v4/healthcheck
               port: http
@@ -108,8 +113,7 @@ spec:
   selector:
     {{- include "xsk.selectorLabels" . | nindent 4 }}
 ---
-
-{{- if .Values.kyma.host }}
+{{- if .Values.kyma.enabled }}
 apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
 metadata:
@@ -147,7 +151,7 @@ spec:
     xsappname: {{ include "xsk.fullname" . }}-xsuaa
     oauth2-configuration:
       redirect-uris:
-      - https://{{ .Release.Name }}.{{ .Values.kyma.host }}
+      - https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
       token-validity: 7200
     role-collections:
     - description: XSK Developer
@@ -194,5 +198,9 @@ spec:
   usedBy:
     kind: deployment
     name: {{ include "xsk.fullname" . }}
+{{- else }}
+{{- if or .Values.kyma.host }}
+{{ required "Missing Kyma set configuration 'kyma.enabled=true' " .Values.kyma.enabled }}
 {{- end }}
 {{- end }}
+

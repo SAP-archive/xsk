@@ -1,0 +1,18 @@
+namespace hdb-hdbti-simple;
+
+@Schema: 'XSK_SAMPLES_HDB_HDBTI_SIMPLE'
+
+context Products {
+    entity  Orders{
+        key Id               : String(32);
+        CustomerName         : String(500);
+        CustomerSurname      : String(500);
+        Status               : String(100);
+        CreatedAt            : UTCTimestamp;
+        CreatedBy            : String(5000);
+        Description          : String(100);
+        Address              : String(5000);
+        Phone                : String(200);
+        Email                : String(300);
+     };
+};

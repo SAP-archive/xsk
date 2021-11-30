@@ -1,0 +1,9 @@
+table.schemaName = "XSK_SAMPLES_HDB_HDBSTRUCTURE_SIMPLE";
+table.public = false;
+table.columns = [
+    {name = "NAME";              sqlType=VARCHAR; nullable=false; length=32; },
+    {name = "AVG_WEIGHT";        sqlType=DECIMAL; nullable=false; precision = 20; scale = 3; },
+    {name = "FAMILY";            sqlType=VARCHAR; length=32; },
+    {name = "AVG_LIFESPAN";      sqlType=INTEGER; nullable=true; comment=""; }
+];
+table.primaryKey.pkcolumns = ["NAME"];

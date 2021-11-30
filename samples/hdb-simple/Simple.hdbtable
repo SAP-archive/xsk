@@ -1,0 +1,42 @@
+table.schemaName = "XSK_SAMPLES_HDB_SIMPLE";
+table.tableType = COLUMNSTORE;
+table.columns = [    
+    {
+        name = "Col1";
+        sqlType = VARCHAR;
+        nullable = false;
+        length = 20;
+        comment = "dummy comment";
+    },
+    {
+        name = "Col2";
+        sqlType = INTEGER;
+        nullable = false;
+    },
+    {
+        name = "Col3";
+        sqlType = NVARCHAR;
+        nullable = true;
+        length = 20;
+    },
+    {
+        name = "Col4";
+        sqlType = DECIMAL;
+        nullable = false;
+        precision = 2;
+        scale = 2;
+    }];
+table.indexes =  [
+    {
+        name = "MYINDEX1";
+        unique = true;
+        order = DSC;
+        indexColumns = ["Col2"];
+    },
+    {
+        name = "MYINDEX2";
+        unique = true;
+        order = DSC;
+        indexColumns = ["Col1", "Col4"];
+    }];
+table.primaryKey.pkcolumns = ["Col1", "Col2"];

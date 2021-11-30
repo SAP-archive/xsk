@@ -20,14 +20,8 @@ class NeoTunnelService {
     this.migrationToolExecutor = new MigrationToolExecutor();
   }
 
-  openTunnel(credentials, completion) {
-    const account = credentials.account;
-    const host = credentials.host;
-    const user = credentials.user;
-    const password = credentials.password;
-    const db = credentials.db;
-
-    const script = `${neoClientPath} open-db-tunnel -a "${account}" -h "${host}" -u "${user}" -p "${password}" -i "${db}" --output json --background`;
+  openTunnel(account, host, jwtToken, databaseId) {
+    const script = `${neoClientPath} open-db-tunnel -a "${account}" -h "${host}" -u JWT -p "${jwtToken}" -i "${databaseId}" --output json --background`;
 
     const rawCommandResult = this.migrationToolExecutor.execute(script, {
       "JAVA_HOME": config.get("JAVA8_HOME"),
@@ -40,11 +34,7 @@ class NeoTunnelService {
       throw "[NEO CLIENT ERROR]" + neoOutput.errorMsg
     }
 
-    if (completion) {
-      completion(null, commandResult.result);
-    } else {
-      return commandResult.result;
-    }
+    return commandResult.result;
   }
 
   closeTunnel(sessionId) {

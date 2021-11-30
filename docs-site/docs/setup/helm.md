@@ -14,7 +14,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
     - Install the [Helm CLI](https://helm.sh/docs/intro/install/#helm).
     - Make sure you have access to a [Kubernetes Cluster](https://kubernetes.io/docs/setup/).
 
-## Steps
+## Setup
 ---
 
 1. Add the XSK Helm repository:
@@ -27,34 +27,31 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
 
 1. Deployment
 
-    To deploy XSK, you can either use the default or the Kyma setup instructions:
+    To deploy XSK, you can use the following instructions:
 
-    #### Default Setup
-
-    ```
-    helm install xsk xsk/xsk
-    ```
-
-    ???+ info "Accessing the XSK Instance"
-        Running this command will install XSK Deployment and Service with ClusterIP only.
-        To access the XSK instance, execute the command that was printed in the console.
-
-        Example:
-
-        ```
-        export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk" -o jsonpath="{.items[0].metadata.name}")
-        echo "Visit http://127.0.0.1:8080 to use your application"
-        kubectl --namespace default port-forward $POD_NAME 8080:8080    
-        ```
-
-        - Navigate to: [http://127.0.0.1:8080](http://127.0.0.1:8080)
-        - Log in with these username and password: `dirigible`/`dirigible`
-
-    #### Setup on Kyma
-
-    You can choose to set up XSK in Helm on Kyma following either the basic or the PostgreSQL setup instructions:
 
     === "Basic"
+
+        ```
+        helm install xsk xsk/xsk
+        ```
+
+        ???+ info "Accessing the XSK Instance"
+            
+            Running this command will install XSK `Deployment` and `Service` with `ClusterIP` only. To access the XSK instance, execute the command that was printed in the console.
+
+            Example:
+
+            ```
+            export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk" -o jsonpath="{.items[0].metadata.name}")
+            echo "Visit http://127.0.0.1:8080 to use your application"
+            kubectl --namespace default port-forward $POD_NAME 8080:8080    
+            ```
+
+            - Navigate to: [http://127.0.0.1:8080](http://127.0.0.1:8080)
+            - Log in with these username and password: `dirigible`/`dirigible`
+
+    === "Kyma"
 
         ```
         helm install xsk xsk/xsk \
@@ -63,11 +60,8 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         ```
 
         This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.
-        
-        ???+ info "Configuration Options"
-            You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values).
 
-    === "SAP HANA database"
+    === "Kyma with SAP HANA database"
 
         ```
         helm install xsk xsk \
@@ -79,54 +73,29 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         --set kyma.host=<kyma-apirule-host>
         ```
 
-        This will install additionally an ApiRule, XSUAA ServiceInstance, ServiceBinding and HANA instance. The appropriate roles should be assigned to the user.
+        This will install additionally an `ApiRule`, XSUAA `ServiceInstance`, `ServiceBinding` and HANA instance. The appropriate roles should be assigned to the user.
+
+    !!! info "Configuration Options"
         
-        ???+ info "Configuration Options"
-            You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values).
+        |             Name             |          Description            |            Default                 |
+        |------------------------------|---------------------------------|------------------------------------|
+        | `application.image`          | XSK image repo                  | `dirigiblelabs/xsk`                |
+        | `image.pullPolicy`           | Image pull policy               | `Always`                           |
+        | `replicaCount`               | Number of replicas              | `1`                                |
+        | `homeUrl`                    | Application Home url            | `/services/v4/web/ide/`            |
+        | `fastBootstrap`              | Fast Boostrap secret            | `false`                            |
 
+1. Uninstall
 
-    === "PostgreSQL"
+    If you want to uninstall Helm, run:
 
-        ```
-        helm install xsk xsk/xsk \
-        --set kyma.enabled=true \
-        --set kyma.host=<kyma-host> \
-        --set database.enabled=true
-        ```
-
-        This will install also PostgreSQL database with 1Gi storage and update the XSK datasource configuration to consume the database.
-        
-        ???+ info "Configuration Options"
-            You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values).
-
-
-## Next Steps
----
-
-- If you want to uninstall Helm, run:
     ```
     helm uninstall xsk
     ```
 
-## Configuration Options for xsk chart
----
+## Setup - Kpack
 
-The following table lists all the configurable parameters exposed by the XSK chart and their default values:
-
-#### List of All Configurable Parameters and Their Values
-
-|             Name             |          Description            |            Default                 |
-|------------------------------|---------------------------------|------------------------------------|
-| `application.image`          | XSK image repo                  | `dirigiblelabs/xsk`                |
-| `image.pullPolicy`           | Image pull policy               | `Always`                           |
-| `replicaCount`               | Number of replicas              | `1`                                |
-| `homeUrl`                    | Application Home url            | `false`                            |
-| `fastBootstrap`              | Fast Boostrap secret            | `false`                            |
-
-
-## Kpack Setup
-
-You can choose to set up your application source with Helm and Kpack in XSK following setup instructions:
+You can choose to build and package your XSK application from source with Helm and Kpack by following these instructions:
 
 1. Add the XSK kpack Helm repository:
 
@@ -136,9 +105,11 @@ You can choose to set up your application source with Helm and Kpack in XSK foll
     helm repo update
     ```
 
-2. Deployment
+1. Deployment
 
-    If you don't have kpack you can install with https://github.com/pivotal/kpack/blob/main/docs/install.md
+    !!! Prerequisites
+
+        Install [kpack](https://github.com/pivotal/kpack/blob/main/docs/install.md).
     
     === "Kpack"
 
@@ -156,55 +127,55 @@ You can choose to set up your application source with Helm and Kpack in XSK foll
         --set image.source=<your-application-source>
         ```
 
-        This will build your application source with Kpack and XSK and place your source code in repository/public/.
+        This will build and package an OCI image for your application.
 
-        You can tail the logs for your image that is currently building using the [kp cli](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md).
+        !!! tip
 
-        `kp build logs xsk-kpack -n default`
+            You can tail the logs for your image that is currently building using the [Kpack CLI](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md).
 
-        You can check your image with
+            ```
+            kp build logs xsk-kpack -n default
+            ```
 
-        `kubectl -n default get image xsk-kpack`
+            You can check your image with:
 
-        and download the OCI image and run it with docker
+            ```
+            kubectl -n default get image xsk-kpack
+            ```
 
-        `docker run -p 8080:8080 <latest-image-with-digest>`
+            To download and run the newly created OCI image execute:
 
-        ???+ info "Configuration Options"
-            You can also use other configuration parameters. See [List of All Configurable Parameters and Their Values](#list-of-all-configurable-parameters-and-their-values-for-xsk-kpack-chart).
+            ```
+            docker run -p 8080:8080 <latest-image-with-digest>
+            ```
 
-## Next Steps
----
+    !!! info "Configuration Options"
 
-- If you want to uninstall Helm kpack chart, run:
+        |             Name                    |          Description            |            Default                                 |
+        |-------------------------------------|---------------------------------|----------------------------------------------------|
+        | `replicaCount`                      | Number instanof replicas        | `1`                                                |
+        | `install.clusterBuilder`            | Kpack cluster store and stack   | `false`                                            |
+        | `install.imageBuilder`              | Kpack builder                   | `false`                                            |
+        | `create.image`                      | Kpack create OCI image          | `false`                                            |
+        | `docker.server`                     | Docker server url               | ``                                                 |
+        | `docker.username`                   | Docker username                 | ``                                                 |
+        | `docker.password`                   | Docker password                 | ``                                                 |
+        | `docker.email`                      | Docker email                    | ``                                                 |
+        | `docker.secretName`                 | Docker secret name              | `docker-registry-secret`                           |
+        | `docker.serviceAccountName`         | Docker service account name     | `docker-registry-service-account`                  |
+        | `imageBuilder.repository`           | Docker service account name     | ``                                                 |
+        | `imageBuilder.buildpack`            | Docker service account name     | `dirigiblelabs/buildpacks-xsk`                     |
+        | `image.repository`                  | Docker service account name     | ``                                                 |
+        | `image.source`                      | Docker service account name     | ``                                                 |
+        | `image.serviceAccountName`          | Docker service account name     | `dirigiblelabs/buildpacks-stack-build-xsk:latest`  |
+        | `clusterBuilder.buildImage`         | Docker service account name     | `docker-registry-service-account`                  |
+        | `clusterBuilder.runImage`           | Docker service account name     | `docker-registry-service-account`                  |
+        | `clusterBuilder.serviceAccountName` | Docker service account name     | `docker-registry-service-account`                  |
+
+1. Uninstall
+
+    If you want to uninstall Helm kpack chart, run:
+
     ```
     helm uninstall xsk-kpack
     ```            
-
-## Configuration Options for xsk-kpack chart
----
-
-The following table lists all the configurable parameters exposed by the xsk-kpack chart and their default values:
-
-#### List of All Configurable Parameters and Their Values for XSK kpack chart
-
-|             Name                    |          Description            |            Default                                 |
-|-------------------------------------|---------------------------------|----------------------------------------------------|
-| `replicaCount`                      | Number instanof replicas        | `1`                                                |
-| `install.clusterBuilder`            | Kpack cluster store and stack   | `false`                                            |
-| `install.imageBuilder`              | Kpack builder                   | `false`                                            |
-| `create.image`                      | Kpack create OCI image          | `false`                                            |
-| `docker.server`                     | Docker server url               | ``                                                 |
-| `docker.username`                   | Docker username                 | ``                                                 |
-| `docker.password`                   | Docker password                 | ``                                                 |
-| `docker.email`                      | Docker email                    | ``                                                 |
-| `docker.secretName`                 | Docker secret name              | `docker-registry-secret`                           |
-| `docker.serviceAccountName`         | Docker service account name     | `docker-registry-service-account`                  |
-| `imageBuilder.repository`           | Docker service account name     | ``                                                 |
-| `imageBuilder.buildpack`            | Docker service account name     | `dirigiblelabs/buildpacks-xsk`                     |
-| `image.repository`                  | Docker service account name     | ``                                                 |
-| `image.source`                      | Docker service account name     | ``                                                 |
-| `image.serviceAccountName`          | Docker service account name     | `dirigiblelabs/buildpacks-stack-build-xsk:latest`  |
-| `clusterBuilder.buildImage`         | Docker service account name     | `docker-registry-service-account`                  |
-| `clusterBuilder.runImage`           | Docker service account name     | `docker-registry-service-account`                  |
-| `clusterBuilder.serviceAccountName` | Docker service account name     | `docker-registry-service-account`                  |

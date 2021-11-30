@@ -18,8 +18,7 @@ migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$mess
     $scope.regionDropdownText = $scope.regionDropdownInitText;
     $scope.regions = [
         { name: 'Australia (Sydney) | ap1.hana.ondemand.com', region: 'ap1.hana.ondemand.com' },
-        { name: 'Europe (Rot) | hana.ondemand.com', region: 'hana.ondemand.com' },
-        { name: 'Europe (Rot) EU1 | eu1.hana.ondemand.com', region: 'eu1.hana.ondemand.com' },
+        { name: 'Europe (Rot) | eu1.hana.ondemand.com', region: 'eu1.hana.ondemand.com' },
         { name: 'Europe (Frankfurt) | eu2.hana.ondemand.com', region: 'eu2.hana.ondemand.com' },
         { name: 'Europe (Amsterdam) | eu3.hana.ondemand.com', region: 'eu3.hana.ondemand.com' },
         { name: 'Japan (Tokyo) | jp1.hana.ondemand.com', region: 'jp1.hana.ondemand.com' },

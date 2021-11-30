@@ -15,7 +15,7 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
     $scope.progressBarPercentage = 100;
     let titleList = [
         "Migration in progress",
-        "Migration complete"
+        "One last step"
     ]
     $scope.progressTitle = titleList[0];
     $scope.statusMessage = "Configuration processing...";
@@ -47,7 +47,7 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {                        
             $scope.progressTitle = titleList[1];
-            $scope.statusMessage = `Project(s) created successfully. `;            
+            $scope.statusMessage = `Project "${duData.du.name}" has been successfully created. Go to workspace "${duData.workspace}" and publish it.`;
             $scope.migrationFinished = true;
         }, function (response) {
             if (response.data) {

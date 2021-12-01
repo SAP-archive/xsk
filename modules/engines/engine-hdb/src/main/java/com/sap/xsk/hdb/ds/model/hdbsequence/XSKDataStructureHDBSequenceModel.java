@@ -12,6 +12,7 @@
 package com.sap.xsk.hdb.ds.model.hdbsequence;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.parser.hdbsequence.models.XSKHDBSEQUENCEModel;
 import com.sap.xsk.parser.hdbsequence.utils.HDBSequenceConstants;
 
 public class XSKDataStructureHDBSequenceModel extends XSKDataStructureModel {
@@ -27,6 +28,23 @@ public class XSKDataStructureHDBSequenceModel extends XSKDataStructureModel {
   private String dependsOnTable;
   private String dependsOnView;
   private Boolean publicProp = HDBSequenceConstants.PUBLIC_DEFAULT_VALUE;
+
+  public XSKDataStructureHDBSequenceModel(){}
+
+  public XSKDataStructureHDBSequenceModel(XSKHDBSEQUENCEModel model){
+    this.incrementBy = model.getIncrementBy();
+    this.startWith = model.getStartWith();
+    this.maxValue = model.getMaxValue();
+    this.noMaxValue = model.getNoMaxValue();
+    this.noMinValue = model.getNoMinValue();
+    this.minValue = model.getMinValue();
+    this.cycles = model.getCycles();
+    this.resetBy = model.getResetBy();
+    this.dependsOnTable = model.getDependsOnTable();
+    this.dependsOnView = model.getDependsOnView();
+    this.publicProp = model.getPublic();
+    this.setSchema(model.getSchema());
+  }
 
   public Integer getIncrementBy() {
     return incrementBy;

@@ -39,9 +39,6 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.config.Configuration;
-import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,13 +99,9 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
         .registerTypeAdapter(XSKHDBSEQUENCEModel.class, new XSKHDBSEQUENCEModelAdapter())
         .create();
     XSKHDBSEQUENCEModel antlr4Model = gson.fromJson(parsedResult, XSKHDBSEQUENCEModel.class);
-    ModelMapper modelMapper = new ModelMapper();
-    modelMapper.getConfiguration()
-        .setFieldMatchingEnabled(true)
-        .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
-        .setMatchingStrategy(MatchingStrategies.STRICT);
 
-    XSKDataStructureHDBSequenceModel hdbSequenceModel = modelMapper.map(antlr4Model, XSKDataStructureHDBSequenceModel.class);
+    XSKDataStructureHDBSequenceModel hdbSequenceModel = new XSKDataStructureHDBSequenceModel(antlr4Model);
+
     XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSequenceModel, IXSKDataStructureModel.TYPE_HDB_SEQUENCE,
         XSKDBContentType.XS_CLASSIC);
 

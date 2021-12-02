@@ -109,15 +109,15 @@ jobs:
                   - name: DIRIGIBLE_HOST
                     value: https://${{ secrets.ITESTS_KYMA_DIRIGIBLE_HOST }}
                   - name: url
-                    value: ${{ secrets.ITESTS_KYMA_URL }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_URL }}
                   - name: clientid
-                    value: ${{ secrets.ITESTS_KYMA_CLIENTID }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_CLIENT_ID }}
                   - name: clientsecret
-                    value: ${{ secrets.ITESTS_KYMA_CLIENTSECRET }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_CLIENT_SECRET }}
                   - name: verificationkey
-                    value: ${{ secrets.ITESTS_KYMA_VERIFICATIONKEY }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_VERIFICATION_KEY }}
                   - name: xsappname
-                    value: ${{ secrets.ITESTS_KYMA_XSAPPNAME }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_XSAPP_NAME }}
                   - name: DIRIGIBLE_DATABASE_PROVIDER
                     value: custom
                   - name: DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES

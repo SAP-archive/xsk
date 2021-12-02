@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/setup/helm/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.1">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.2">
     
     
       
@@ -1529,10 +1529,10 @@ helm repo update
 <p class="admonition-title">Prerequisites</p>
 <p>Install <a href="https://github.com/pivotal/kpack/blob/main/docs/install.md">kpack</a>.</p>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Kpack</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">All in One</label><label for="__tabbed_2_2">Cluster Builder (Only)</label><label for="__tabbed_2_3">Image Builder (Only)</label><label for="__tabbed_2_4">Image (Only)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>helm install xsk-kpack xsk/xsk-kpack \
+<div class="highlight"><pre><span></span><code>helm install xsk-image xsk/xsk-kpack \
 --set install.clusterBuilder=true \
 --set install.imageBuilder=true \
 --set create.image=true \
@@ -1545,21 +1545,51 @@ helm repo update
 --set image.source=&lt;your-application-source&gt;
 </code></pre></div>
 <p>This will build and package an OCI image for your application.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>helm install xsk-cluster-builder xsk/xsk-kpack \
+--set install.clusterBuilder=true \
+--set docker.server=https://index.docker.io/v1/ \
+--set docker.username=&lt;your-docker-username&gt; \
+--set docker.password=&lt;your-docker-password&gt; \
+--set docker.email=&lt;your-email&gt; \
+</code></pre></div>
+<p>This will install a kpack <code>ClusterStore</code> and <code>ClusterStack</code> resources.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>helm install xsk-image-builder xsk/xsk-kpack \
+--set install.imageBuilder=true \
+--set imageBuilder.repository=&lt;builder-image&gt;
+</code></pre></div>
+<p>This will install a kpack <code>Builder</code> resource.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>helm install xsk-image xsk/xsk-kpack \
+--set create.image=true \
+--set image.repository=&lt;your-repository-for-your-OCI-image&gt; \
+--set image.source=&lt;your-application-source&gt;
+</code></pre></div>
+<p>This will build and package an OCI image for your application.</p>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Due to synchronization issues the <code>All in One</code> setup could fail. To overcome this issue you could execute the <code>Cluster Builder (Only)</code>, <code>Image Builder (Only)</code> and <code>Image (Only)</code> steps.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can tail the logs for your image that is currently building using the <a href="https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md">Kpack CLI</a>.</p>
-<div class="highlight"><pre><span></span><code>kp build logs xsk-kpack -n default
+<div class="highlight"><pre><span></span><code>kp build logs xsk-image -n default
 </code></pre></div>
 <p>You can check your image with:</p>
-<div class="highlight"><pre><span></span><code>kubectl -n default get image xsk-kpack
+<div class="highlight"><pre><span></span><code>kubectl -n default get image xsk-image
 </code></pre></div>
 <p>To download and run the newly created OCI image execute:</p>
 <div class="highlight"><pre><span></span><code>docker run -p 8080:8080 &lt;latest-image-with-digest&gt;
 </code></pre></div>
 </div>
-</div>
-</div>
-</div>
+<p>The application image that was built could be used as well in the installation of XSK with <a href="#setup">Helm</a>, <a href="../kyma/">Kyma</a> and <a href="../cloud-foundry">Cloud Foundry</a>.</p>
 <div class="admonition info">
 <p class="admonition-title">Configuration Options</p>
 <table>
@@ -1793,7 +1823,7 @@ helm repo update
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.01824240.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a87c2adc.min.js"></script>
+      <script src="../../assets/javascripts/bundle.ff0eccb3.min.js"></script>
       
     
   </body>

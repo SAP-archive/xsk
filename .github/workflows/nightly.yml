@@ -60,7 +60,7 @@ jobs:
 
       # Run Selenium tests on XSK
       - name: Run Selenium Tests
-        run: mvn clean install -P itests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
+        run: mvn clean install -Pfae itests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
 
         env:
           ITESTS_SELENIUM_NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}

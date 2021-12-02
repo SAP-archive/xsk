@@ -59,7 +59,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         --set kyma.host=<kyma-host>
         ```
 
-        This will install additionally an ApiRule and XSUAA ServiceInstance and ServiceBinding. The appropriate roles should be assigned to the user.
+        This will install additionally an `ApiRule` and XSUAA `ServiceInstance` and `ServiceBinding`. The appropriate roles should be assigned to the user.
 
     === "Kyma with SAP HANA database"
 

@@ -110,11 +110,11 @@ You can choose to build and package your XSK application from source with Helm a
     !!! Prerequisites
 
         Install [kpack](https://github.com/pivotal/kpack/blob/main/docs/install.md).
-    
-    === "Kpack"
+
+    === "All in One"
 
         ```
-        helm install xsk-kpack xsk/xsk-kpack \
+        helm install xsk-image xsk/xsk-kpack \
         --set install.clusterBuilder=true \
         --set install.imageBuilder=true \
         --set create.image=true \
@@ -129,25 +129,65 @@ You can choose to build and package your XSK application from source with Helm a
 
         This will build and package an OCI image for your application.
 
-        !!! tip
+    === "Cluster Builder (Only)"
 
-            You can tail the logs for your image that is currently building using the [Kpack CLI](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md).
+        ```
+        helm install xsk-cluster-builder xsk/xsk-kpack \
+        --set install.clusterBuilder=true \
+        --set docker.server=https://index.docker.io/v1/ \
+        --set docker.username=<your-docker-username> \
+        --set docker.password=<your-docker-password> \
+        --set docker.email=<your-email> \
+        ```
 
-            ```
-            kp build logs xsk-kpack -n default
-            ```
+        This will install a kpack `ClusterStore` and `ClusterStack` resources.
 
-            You can check your image with:
+    === "Image Builder (Only)"
 
-            ```
-            kubectl -n default get image xsk-kpack
-            ```
+        ```
+        helm install xsk-image-builder xsk/xsk-kpack \
+        --set install.imageBuilder=true \
+        --set imageBuilder.repository=<builder-image>
+        ```
 
-            To download and run the newly created OCI image execute:
+        This will install a kpack `Builder` resource.
 
-            ```
-            docker run -p 8080:8080 <latest-image-with-digest>
-            ```
+    === "Image (Only)"
+
+        ```
+        helm install xsk-image xsk/xsk-kpack \
+        --set create.image=true \
+        --set image.repository=<your-repository-for-your-OCI-image> \
+        --set image.source=<your-application-source>
+        ```
+
+        This will build and package an OCI image for your application.
+
+    !!! note
+
+        Due to synchronization issues the `All in One` setup could fail. To overcome this issue you could execute the `Cluster Builder (Only)`, `Image Builder (Only)` and `Image (Only)` steps.
+
+    !!! tip
+
+        You can tail the logs for your image that is currently building using the [Kpack CLI](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md).
+
+        ```
+        kp build logs xsk-image -n default
+        ```
+
+        You can check your image with:
+
+        ```
+        kubectl -n default get image xsk-image
+        ```
+
+        To download and run the newly created OCI image execute:
+
+        ```
+        docker run -p 8080:8080 <latest-image-with-digest>
+        ```
+        
+    The application image that was built could be used as well in the installation of XSK with [Helm](#setup), [Kyma](../kyma/) and [Cloud Foundry](../cloud-foundry).
 
     !!! info "Configuration Options"
 

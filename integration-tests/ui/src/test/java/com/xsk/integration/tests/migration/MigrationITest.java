@@ -58,7 +58,9 @@ public class MigrationITest {
   }
 
   private void navigateToMigrationPerspective() {
-    webBrowser.clickItem(By.xpath("//*[@title=\"XS Migration\"]"));
+    webBrowser.clickItem(By.xpath("//*[@title=\"SAP HANA XS Classic Migration\"]"));
+    webBrowser.waitForPageWithTitle("SAP HANA XS Classic Migration | XSK WebIDE");
+    webBrowser.switchToDefaultContent();
     webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-migration/migration-launch.html']"));
     webBrowser.log();
   }
@@ -83,6 +85,7 @@ public class MigrationITest {
   private void selectDeliveryUnits() {
     webBrowser.selectAndAssertDropdown("workspacesList", "workspace");
     webBrowser.selectAndAssertDropdown("deliveryUnitList", ExpectedContentProvider.getExpectedDeliveryUnitName());
+    webBrowser.clickItem(By.xpath("//*[@ng-disabled=\"duDropdownDisabled\"]"));
     webBrowser.log();
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"finishClicked()\"]"));
   }

@@ -1,0 +1,16 @@
+service namespace "np" {
+
+    "TestCalcView" as "CalcView1"
+        keys generate local "ID";
+
+    "TestCalcView" as "CalcView2"  without("COLUMN1","COLUMN3")
+        keys generate local "ID";
+
+    "TestCalcView" as "CalcView3"  with("COLUMN1","COLUMN3")
+        keys generate local "ID";
+
+}
+
+annotations {
+	  enable OData4SAP;
+}

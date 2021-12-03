@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableRelationModel;
@@ -392,6 +393,41 @@ public class XSKODataUtilsTest {
         new ArrayList<>());
     model.setTableType("CALC VIEW");
     when(dbMetadataUtil.getTableMetadata("kneo.test.calcviews::calc", null)).thenReturn(model);
+
+    ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
+
+    assertEquals(3, oDataDefinition.getEntities().get(0).getProperties().size());
+    assertEquals(1, oDataDefinition.getEntities().get(1).getProperties().size());
+    assertEquals(2, oDataDefinition.getEntities().get(2).getProperties().size());
+  }
+
+  @Test
+  public void testSynonym() throws Exception {
+    XSKODataParser parser = new XSKODataParser();
+    String content = org.apache.commons.io.IOUtils
+        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_synonym.xsodata"), StandardCharsets.UTF_8);
+    XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_synonym.xsodata", content);
+
+    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COLUMN1", "Edm.Int32", false);
+    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("COLUMN2", "Edm.Int32", false);
+    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("COLUMN3", "Edm.Int32", false);
+
+    PersistenceTableModel calcViewModel = new PersistenceTableModel("kneo.test.calcviews::calc", Arrays.asList(column1, column2, column3),
+        new ArrayList<>());
+    calcViewModel.setTableType(ISqlKeywords.METADATA_CALC_VIEW);
+
+    PersistenceTableModel synonymModel = new PersistenceTableModel("TestCalcView", Arrays.asList(column1, column2, column3),
+        new ArrayList<>());
+    synonymModel.setTableType(ISqlKeywords.METADATA_SYNONYM);
+
+    HashMap<String, String> synonymTargetObjectMetadata = new HashMap<String, String>();
+    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_TABLE, "kneo.test.calcviews::calc");
+    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_SCHEMA, null);
+    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_TABLE_TYPE, ISqlKeywords.METADATA_CALC_VIEW);
+
+    when(dbMetadataUtil.getTableMetadata("TestCalcView", null)).thenReturn(synonymModel);
+    when(dbMetadataUtil.getTableMetadata("kneo.test.calcviews::calc", null)).thenReturn(calcViewModel);
+    when(dbMetadataUtil.getSynonymTargetObjectMetadata(synonymModel.getTableName())).thenReturn(synonymTargetObjectMetadata);
 
     ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 

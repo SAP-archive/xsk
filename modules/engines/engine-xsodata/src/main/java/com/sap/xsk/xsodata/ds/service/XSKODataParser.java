@@ -32,6 +32,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
@@ -45,6 +46,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
+import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,10 +57,13 @@ public class XSKODataParser implements IXSKODataParser {
 
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  private static final List<String> METADATA_VIEW_TYPES = List.of("CALC VIEW", ISqlKeywords.KEYWORD_VIEW);
-  private static final List<String> METADATA_CALC_ANALYTIC_TYPES = List.of("CALC VIEW");
+  private static final List<String> METADATA_VIEW_TYPES = List.of(ISqlKeywords.METADATA_CALC_VIEW, ISqlKeywords.METADATA_VIEW);
+  private static final List<String> METADATA_CALC_ANALYTIC_TYPES = List.of(ISqlKeywords.METADATA_CALC_VIEW);
+  private static final List<String> METADATA_SYNONYM_TYPES = List.of(ISqlKeywords.METADATA_SYNONYM);
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataParser.class);
+
+  private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
   /**
    * Creates a odata model from the raw content.
@@ -159,7 +164,9 @@ public class XSKODataParser implements IXSKODataParser {
   private void applyKeysCondition(XSKODataModel odataModel) throws SQLException {
     for (XSKHDBXSODATAEntity entity : odataModel.getService().getEntities()) {
       if (entity.getKeyList().size() > 0) {
-        if (!checkIfEntityIsOfViewType(entity.getRepositoryObject().getCatalogObjectName())) {
+        String catalogObjectName = getCorrectCatalogObjectName(entity);
+
+        if (!checkIfEntityIsOfViewType(catalogObjectName)) {
           throw new XSKOData2TransformerException(String
               .format("Keys cannot be specified for source %s. They must only be applied to objects referring a view type",
                   entity.getRepositoryObject().getCatalogObjectName()));
@@ -293,7 +300,9 @@ public class XSKODataParser implements IXSKODataParser {
   private void applyParametersToViewsCondition(XSKODataModel odataModel) throws SQLException {
     for (XSKHDBXSODATAEntity entity : odataModel.getService().getEntities()) {
       if (entity.getParameterEntitySet() != null) {
-        if (!checkIfEntityIsOfCalcAndAnalyticViewType(entity.getRepositoryObject().getCatalogObjectName())) {
+        String catalogObjectName = getCorrectCatalogObjectName(entity);
+
+        if (!checkIfEntityIsOfCalcAndAnalyticViewType(catalogObjectName)) {
           throw new XSKOData2TransformerException(String
               .format("Parameters are not allowed for entity %s as it is not a calculation or analytical view.",
                   entity.getRepositoryObject().getCatalogObjectName()));
@@ -326,6 +335,10 @@ public class XSKODataParser implements IXSKODataParser {
     }
   }
 
+  private boolean checkIfEntityIsOfSynonymType(String artifactName) throws SQLException {
+    return checkIfEntityIsFromAGivenDBType(artifactName, METADATA_SYNONYM_TYPES);
+  }
+
   private boolean checkIfEntityIsOfViewType(String artifactName) throws SQLException {
     return checkIfEntityIsFromAGivenDBType(artifactName, METADATA_VIEW_TYPES);
   }
@@ -348,5 +361,23 @@ public class XSKODataParser implements IXSKODataParser {
       ResultSet rs = databaseMetaData.getTables(null, null, artifactName, null);
       return rs.next();
     }
+  }
+
+  private String getCorrectCatalogObjectName(XSKHDBXSODATAEntity entity) throws SQLException {
+    HashMap<String, String> targetObjectMetadata = new HashMap<String, String>();
+    String catalogObjectName;
+
+    if (checkIfEntityIsOfSynonymType(entity.getRepositoryObject().getCatalogObjectName())) {
+      targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(entity.getRepositoryObject().getCatalogObjectName());
+    }
+
+    if (targetObjectMetadata.isEmpty()) {
+      catalogObjectName = entity.getRepositoryObject().getCatalogObjectName();
+    }
+    else {
+      catalogObjectName = targetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE);
+    }
+
+    return catalogObjectName;
   }
 }

@@ -57,6 +57,13 @@ public class XSKHDBSYNONYMDefinitionModel {
     String object;
     String schema;
 
+    public Target() {}
+
+    public Target(String object, String schema) {
+      this.object = object;
+      this.schema = schema;
+    }
+
     public String getObject() {
       return object;
     }

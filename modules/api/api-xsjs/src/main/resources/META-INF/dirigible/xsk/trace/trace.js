@@ -13,7 +13,7 @@ var jobFunctionName = __context.get("xsk-job-function");
 var jobDescription  = __context.get("jobDescription");
 
 function appendJobException(message){
-  return "[JobException]" + " [JobDescription] " + jobDescription + " [JobFunctionName]: " + jobFunctionName  + " [Exception] " + message;
+  return "[JobExecution]" + "[" + jobDescription + "]" + "[" + jobFunctionName + "]" + "[Exception] " + message;
 }
 
 exports.debug = function(message) {

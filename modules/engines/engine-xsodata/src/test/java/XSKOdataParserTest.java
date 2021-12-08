@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
@@ -27,9 +28,13 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
 import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.eclipse.dirigible.database.sql.ISqlKeywords;
+import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,10 +51,16 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private Connection mockConnection;
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private DBMetadataUtil dbMetadataUtil;
   @Mock
   private DatabaseMetaData mockDatabaseMetaData;
   @Mock
+  private HashMap<String, String> mockSynonymTargetObjectMetadata;
+  @Mock
   private ResultSet mockResultSet;
+  @Mock
+  private ResultSet mockResultSetWhenSynonym;
   @Mock
   private ResultSet mockResultSetEntityExist;
   @Mock
@@ -101,9 +112,23 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
     parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
   }
 
+  @Test
+  public void testApplyKeysConditionSuccessfullyWhenSynonym() throws IOException, SQLException, XSKArtifactParserException {
+    mockGetTablesSuccessfullyWhenSynonym();
+    String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
+    parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
+  }
+
   @Test(expected = XSKOData2TransformerException.class)
   public void testApplyKeysConditionFail() throws IOException, SQLException, XSKArtifactParserException {
     mockGetTablesFail();
+    String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
+    parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
+  }
+
+  @Test(expected = XSKOData2TransformerException.class)
+  public void testApplyKeysConditionFailWhenSynonym() throws IOException, SQLException, XSKArtifactParserException {
+    mockGetTablesFailWhenSynonym();
     String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
   }
@@ -181,6 +206,13 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
     parser.parseXSODataArtifact("/entity_with_params.xsodata", content);
   }
 
+  @Test(expected = XSKOData2TransformerException.class)
+  public void testApplyParametersToViewsConditionWhenSynonym() throws IOException, SQLException, XSKArtifactParserException {
+    mockGetTablesFailWhenSynonym();
+    String content = IOUtils.toString(XSKOdataParserTest.class.getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
+    parser.parseXSODataArtifact("/entity_with_params.xsodata", content);
+  }
+
   @Test
   public void testApplyOmittedParamResultCondition() throws IOException, SQLException, XSKArtifactParserException {
     mockGetTablesSuccessfully();
@@ -193,12 +225,34 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   private void mockGetTablesSuccessfully() throws SQLException {
     mockGetTable();
     when(mockResultSetEntityExist.next()).thenReturn(true);
+    when(mockResultSetWhenSynonym.next()).thenReturn(false);
+    when(mockResultSet.next()).thenReturn(true);
+  }
+
+  private void mockGetTablesSuccessfullyWhenSynonym() throws SQLException {
+    mockGetTable();
+    when(mockResultSetEntityExist.next()).thenReturn(true);
+    when(mockResultSetWhenSynonym.next()).thenReturn(true);
+    when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
+    when(mockSynonymTargetObjectMetadata.isEmpty()).thenReturn(false);
+    when(mockSynonymTargetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE)).thenReturn("MyTestSynonym");
     when(mockResultSet.next()).thenReturn(true);
   }
 
   private void mockGetTablesFail() throws SQLException {
     mockGetTable();
     when(mockResultSetEntityExist.next()).thenReturn(true);
+    when(mockResultSetWhenSynonym.next()).thenReturn(false);
+    when(mockResultSet.next()).thenReturn(false);
+  }
+
+  private void mockGetTablesFailWhenSynonym() throws SQLException {
+    mockGetTable();
+    when(mockResultSetEntityExist.next()).thenReturn(true);
+    when(mockResultSetWhenSynonym.next()).thenReturn(true);
+    when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
+    when(mockSynonymTargetObjectMetadata.isEmpty()).thenReturn(false);
+    when(mockSynonymTargetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE)).thenReturn("MyTestSynonym");
     when(mockResultSet.next()).thenReturn(false);
   }
 
@@ -206,6 +260,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
     when(mockDataSource.getConnection()).thenReturn(mockConnection);
     when(mockConnection.getMetaData()).thenReturn(mockDatabaseMetaData);
     when(mockDatabaseMetaData.getTables(isNull(), isNull(), anyString(), any(String[].class))).thenReturn(mockResultSet);
+    when(mockDatabaseMetaData.getTables(isNull(), isNull(), anyString(), eq(List.of(ISqlKeywords.METADATA_SYNONYM).toArray(String[]::new)))).thenReturn(mockResultSetWhenSynonym);
     when(mockDatabaseMetaData.getTables(isNull(), isNull(), anyString(), isNull())).thenReturn(mockResultSetEntityExist);
   }
 }

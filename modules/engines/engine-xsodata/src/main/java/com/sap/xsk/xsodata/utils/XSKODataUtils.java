@@ -21,6 +21,7 @@ import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
@@ -105,6 +106,17 @@ public class XSKODataUtils {
         PersistenceTableModel tableMetadata = dbMetadataUtil
             .getTableMetadata(tableName, dbMetadataUtil.getOdataArtifactTypeSchema(tableName));
         List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
+
+        if (ISqlKeywords.METADATA_SYNONYM.equals(tableMetadata.getTableType())) {
+          HashMap<String, String> targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(tableMetadata.getTableName());
+
+          if (targetObjectMetadata.isEmpty()) {
+            logger.error("Failed to get details for synonym - " + tableMetadata.getTableName());
+            continue;
+          }
+
+          tableMetadata = dbMetadataUtil.getTableMetadata(targetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE), targetObjectMetadata.get(ISqlKeywords.KEYWORD_SCHEMA));
+        }
 
         if (ISqlKeywords.METADATA_CALC_VIEW.equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity
             .getWithoutPropertyProjections().isEmpty()) {

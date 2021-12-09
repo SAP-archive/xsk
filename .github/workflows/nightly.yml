@@ -2,7 +2,7 @@ name: Nightly Build
 
 on:
   schedule:
-    - cron: "0 22 * * *"
+    - cron: "0 10 * * *"
 
 jobs:
   integration-tests:
@@ -202,8 +202,8 @@ jobs:
       - name: Wait XSK Kyma Startup
         uses: nick-invision/retry@v2
         with:
-          timeout_seconds: 15
-          max_attempts: 10
+          timeout_seconds: 120
+          max_attempts: 50
           warning_on_retry: false
           command: curl -m 5 --silent --fail --request GET https://xsk.xsk-it.promart.shoot.canary.k8s-hana.ondemand.com/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
 

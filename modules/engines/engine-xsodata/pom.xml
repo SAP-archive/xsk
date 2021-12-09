@@ -89,6 +89,11 @@
             <artifactId>dirigible-ext-acorn</artifactId>
             <version>${dirigible.version}</version>
         </dependency>
+        <dependency>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-core-publisher</artifactId>
+          <version>${dirigible.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>

@@ -31,13 +31,6 @@ $.net.http.Request
     client.request(request, dest);
     ```
 
-=== "service.xshttpdest"
-
-    ```javascript
-    host=https://services.odata.org;
-    pathPrefix=/V4/Northwind/Northwind.svc/;
-    ```
-
 ## Properties
 
 | Name            | Description                                                                                                                                                                                                                                                                                             | Type                 |
@@ -56,6 +49,6 @@ $.net.http.Request
 ## Functions
 
 
-| Function                           | Description                                                                                                                                                                        | Returns |
-|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| **setBody(body, index(optional))** | Sets the body of the entity; the method supports all elemental JavaScript types and ArrayBuffers as a body and numbers as an index. Throws an error if the parameters are invalid. | _`void`_|
+| Function                           | Description                                                                                                                                                                        | Returns  |
+|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| **setBody(body, index(optional))** | Sets the body of the entity; the method supports all elemental JavaScript types and ArrayBuffers as a body and numbers as an index. Throws an error if the parameters are invalid. | _`void`_ |

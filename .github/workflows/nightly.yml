@@ -2,7 +2,7 @@ name: Nightly Build
 
 on:
   schedule:
-    - cron: "0 10 * * *"
+    - cron: "0 11 * * *"
 
 jobs:
   integration-tests:
@@ -210,10 +210,10 @@ jobs:
       # Delete XSK Kyma deployment resources
       - name: Delete the deployment
         run: |
-          kubectl delete deployment xsk -n ${{ secrets.namespace }}
-          kubectl delete service xsk -n ${{ secrets.namespace }}
-          kubectl delete apirules xsk -n ${{ secrets.namespace }}
-          kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.namespace }}
+          kubectl delete deployment xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete service xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete apirules xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
         shell: bash
 
       # Copy logs to '/xsk/test_results' and commit the directory

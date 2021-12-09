@@ -45,9 +45,14 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
             "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/continue-process",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
-        ).then(function (response) {                        
+        ).then(function (response) {
+            var duNames = [];
+            duData.du.forEach(du => {
+                duNames.push(du.name);
+            });
+            var duNamesFormatted = `["${duNames.join("\", \"")}"]`; // quoted with comma - ["name1", "name2"]
             $scope.progressTitle = titleList[1];
-            $scope.statusMessage = `Project "${duData.du.name}" has been successfully created. Go to workspace "${duData.workspace}" and publish it.`;
+            $scope.statusMessage = `Successfully migrated Delivery Units to the following projects: ${duNamesFormatted}. Go to workspace "${duData.workspace}" and publish them.`;
             $scope.migrationFinished = true;
         }, function (response) {
             if (response.data) {

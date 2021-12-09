@@ -27,10 +27,20 @@ function startProcess(ctx, req, res) {
   const userDataJson = req.getJSON();
   const neoData = userDataJson.neo;
 
-  const jwtToken = getJwtToken(neoData.hostName, neoData.username, neoData.password);
+  const tokenResponse = getJwtToken(neoData.hostName, neoData.username, neoData.password);
+  if (tokenResponse.error) {
+    res.setStatus(403);
+    res.print(JSON.stringify({
+      error: {
+        message: tokenResponse.error_description
+      }
+    }))
+    return;
+  }
+
   const processInstanceId = processService.start('migrationProcess', {
     userData: JSON.stringify(userDataJson),
-    userJwtToken: jwtToken,
+    userJwtToken: tokenResponse.access_token,
   });
 
   const response = {
@@ -50,8 +60,7 @@ function getJwtToken(host, username, password) {
   });
 
   const jwtTokenResponseJson = JSON.parse(jwtTokenResponse.text);
-  const jwtToken = jwtTokenResponseJson.access_token;
-  return jwtToken;
+  return jwtTokenResponseJson;
 }
 
 function continueProcess(ctx, req, res) {

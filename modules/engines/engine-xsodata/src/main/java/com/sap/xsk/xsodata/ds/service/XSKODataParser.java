@@ -23,6 +23,7 @@ import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAService;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsodata.ds.api.IXSKODataParser;
+import com.sap.xsk.xsodata.ds.model.XSKDBArtifactModel;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -32,8 +33,10 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -44,6 +47,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
@@ -60,6 +64,9 @@ public class XSKODataParser implements IXSKODataParser {
   private static final List<String> METADATA_VIEW_TYPES = List.of(ISqlKeywords.METADATA_CALC_VIEW, ISqlKeywords.METADATA_VIEW);
   private static final List<String> METADATA_CALC_ANALYTIC_TYPES = List.of(ISqlKeywords.METADATA_CALC_VIEW);
   private static final List<String> METADATA_SYNONYM_TYPES = List.of(ISqlKeywords.METADATA_SYNONYM);
+  private static final List<String> METADATA_ENTITY_TYPES = List.of(ISqlKeywords.METADATA_TABLE, ISqlKeywords.METADATA_CALC_VIEW,
+      ISqlKeywords.METADATA_VIEW);
+  private static final String PUBLIC_SCHEMA = "PUBLIC";
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataParser.class);
 
@@ -348,19 +355,19 @@ public class XSKODataParser implements IXSKODataParser {
   }
 
   private boolean checkIfEntityIsFromAGivenDBType(String artifactName, List<String> dbTypes) throws SQLException {
-    try (Connection connection = dataSource.getConnection()) {
-      DatabaseMetaData databaseMetaData = connection.getMetaData();
-      ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, artifactName, dbTypes.toArray(String[]::new));
-      return rs.next();
-    }
+    List<XSKDBArtifactModel> artifacts = getDBArtifactsByName(artifactName);
+    Optional<XSKDBArtifactModel> filteredArtifact = artifacts.stream()
+        .parallel()
+        .filter(artifact -> dbTypes.contains(artifact.getType()))
+        .findAny();
+
+    XSKDBArtifactModel dbArtifact = filteredArtifact.isPresent()? filteredArtifact.get() : filterSynonymObjects(artifacts, dbTypes, artifactName);
+
+    return null != dbArtifact;
   }
 
   private boolean checkIfEntityExist(String artifactName) throws SQLException {
-    try (Connection connection = dataSource.getConnection()) {
-      DatabaseMetaData databaseMetaData = connection.getMetaData();
-      ResultSet rs = databaseMetaData.getTables(null, null, artifactName, null);
-      return rs.next();
-    }
+    return checkIfEntityIsFromAGivenDBType(artifactName, METADATA_ENTITY_TYPES);
   }
 
   private String getCorrectCatalogObjectName(XSKHDBXSODATAEntity entity) throws SQLException {
@@ -368,7 +375,8 @@ public class XSKODataParser implements IXSKODataParser {
     String catalogObjectName;
 
     if (checkIfEntityIsOfSynonymType(entity.getRepositoryObject().getCatalogObjectName())) {
-      targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(entity.getRepositoryObject().getCatalogObjectName());
+      targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(entity.getRepositoryObject().getCatalogObjectName(),
+          entity.getRepositoryObject().getCatalogObjectSchema());
     }
 
     if (targetObjectMetadata.isEmpty()) {
@@ -379,5 +387,42 @@ public class XSKODataParser implements IXSKODataParser {
     }
 
     return catalogObjectName;
+  }
+
+  private XSKDBArtifactModel filterSynonymObjects(List<XSKDBArtifactModel> artifacts, List<String> dbTypes, String artifactName)
+      throws SQLException {
+    Optional<XSKDBArtifactModel> synonym = artifacts.stream()
+        .parallel()
+        .filter(artifact -> ISqlKeywords.METADATA_SYNONYM.equalsIgnoreCase(artifact.getType())).findAny();
+
+    String targetSchema = synonym.isPresent()? synonym.get().getSchema() : PUBLIC_SCHEMA;
+    return getTargetObjectOfSynonymIfAny(targetSchema, artifactName, dbTypes);
+  }
+
+  private XSKDBArtifactModel getTargetObjectOfSynonymIfAny(String schemaName, String artifactName, List<String> dbTypes)
+      throws SQLException {
+    HashMap<String, String> targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(artifactName, schemaName);
+
+    String type = targetObjectMetadata.get("TYPE");
+    if (type != null && dbTypes.contains(type)) {
+      String name = targetObjectMetadata.get("TABLE");
+      String schema = targetObjectMetadata.get("SCHEMA");
+      return new XSKDBArtifactModel(name, type, schema);
+    }
+
+    return null;
+  }
+
+  private List<XSKDBArtifactModel> getDBArtifactsByName(String artifactName) throws SQLException {
+    try (Connection connection = dataSource.getConnection()) {
+      DatabaseMetaData databaseMetaData = connection.getMetaData();
+      ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), Configuration.get("HANA_USERNAME"), artifactName, null);
+      List<XSKDBArtifactModel> artifacts = new ArrayList<>();
+      while (rs.next()) {
+        artifacts.add(new XSKDBArtifactModel(rs.getString("TABLE_NAME"), rs.getString("TABLE_TYPE"),
+            rs.getString("TABLE_SCHEM")));
+      }
+      return artifacts;
+    }
   }
 }

@@ -427,7 +427,7 @@ public class XSKODataUtilsTest {
 
     when(dbMetadataUtil.getTableMetadata("TestCalcView", null)).thenReturn(synonymModel);
     when(dbMetadataUtil.getTableMetadata("kneo.test.calcviews::calc", null)).thenReturn(calcViewModel);
-    when(dbMetadataUtil.getSynonymTargetObjectMetadata(synonymModel.getTableName())).thenReturn(synonymTargetObjectMetadata);
+    when(dbMetadataUtil.getSynonymTargetObjectMetadata(synonymModel.getTableName(), null)).thenReturn(synonymTargetObjectMetadata);
 
     ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 

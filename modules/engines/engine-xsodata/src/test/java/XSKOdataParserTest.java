@@ -233,7 +233,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
     mockGetTable();
     when(mockResultSetEntityExist.next()).thenReturn(true);
     when(mockResultSetWhenSynonym.next()).thenReturn(true);
-    when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
+    when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class), any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
     when(mockSynonymTargetObjectMetadata.isEmpty()).thenReturn(false);
     when(mockSynonymTargetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE)).thenReturn("MyTestSynonym");
     when(mockResultSet.next()).thenReturn(true);
@@ -250,7 +250,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
     mockGetTable();
     when(mockResultSetEntityExist.next()).thenReturn(true);
     when(mockResultSetWhenSynonym.next()).thenReturn(true);
-    when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
+    when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class), any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
     when(mockSynonymTargetObjectMetadata.isEmpty()).thenReturn(false);
     when(mockSynonymTargetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE)).thenReturn("MyTestSynonym");
     when(mockResultSet.next()).thenReturn(false);

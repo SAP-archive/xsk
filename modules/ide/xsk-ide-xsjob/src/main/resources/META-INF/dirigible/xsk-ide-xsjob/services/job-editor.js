@@ -16,7 +16,7 @@ exports.getEditor = function () {
 		"factory": "frame",
 		"region": "center-top",
 		"label": "XSJob",
-    "defaultEditor": false,
+		"defaultEditor": false,
 		"link": "../xsk-ide-xsjob/editor/editor.html",
 		"contentTypes": ["application/json+xsjob"]
 	};

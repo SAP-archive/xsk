@@ -59,7 +59,7 @@ jobs:
           command: curl -m 5 --silent --fail --request GET http://127.0.0.1:8080/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
 
       # Run Selenium tests on XSK
-      - name: Run Selenium Tests
+      - name: Run Integration & Selenium Tests
         run: mvn clean install -P itests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
 
         env:
@@ -109,15 +109,15 @@ jobs:
                   - name: DIRIGIBLE_HOST
                     value: https://${{ secrets.ITESTS_KYMA_DIRIGIBLE_HOST }}
                   - name: url
-                    value: ${{ secrets.ITESTS_KYMA_URL }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_URL }}
                   - name: clientid
-                    value: ${{ secrets.ITESTS_KYMA_CLIENTID }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_CLIENT_ID }}
                   - name: clientsecret
-                    value: ${{ secrets.ITESTS_KYMA_CLIENTSECRET }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_CLIENT_SECRET }}
                   - name: verificationkey
-                    value: ${{ secrets.ITESTS_KYMA_VERIFICATIONKEY }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_VERIFICATION_KEY }}
                   - name: xsappname
-                    value: ${{ secrets.ITESTS_KYMA_XSAPPNAME }}
+                    value: ${{ secrets.ITESTS_KYMA_XSUAA_XSAPP_NAME }}
                   - name: DIRIGIBLE_DATABASE_PROVIDER
                     value: custom
                   - name: DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES
@@ -192,7 +192,7 @@ jobs:
               - HEAD
               path: /.*
             service:
-              host: secrets.${{ secrets.ITESTS_KYMA_DIRIGIBLE_HOST }}
+              host: ${{ secrets.ITESTS_KYMA_DIRIGIBLE_HOST }}
               name: xsk
               port: 8080
           EOF
@@ -202,18 +202,18 @@ jobs:
       - name: Wait XSK Kyma Startup
         uses: nick-invision/retry@v2
         with:
-          timeout_seconds: 15
-          max_attempts: 10
+          timeout_seconds: 120
+          max_attempts: 50
           warning_on_retry: false
           command: curl -m 5 --silent --fail --request GET https://xsk.xsk-it.promart.shoot.canary.k8s-hana.ondemand.com/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
 
       # Delete XSK Kyma deployment resources
       - name: Delete the deployment
         run: |
-          kubectl delete deployment xsk -n ${{ secrets.namespace }}
-          kubectl delete service xsk -n ${{ secrets.namespace }}
-          kubectl delete apirules xsk -n ${{ secrets.namespace }}
-          kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.namespace }}
+          kubectl delete deployment xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete service xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete apirules xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
         shell: bash
 
       # Copy logs to '/xsk/test_results' and commit the directory

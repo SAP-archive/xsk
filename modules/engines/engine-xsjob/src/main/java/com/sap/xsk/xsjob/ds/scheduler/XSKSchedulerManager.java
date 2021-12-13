@@ -47,10 +47,6 @@ public class XSKSchedulerManager {
   private static Scheduler scheduler = SchedulerManager.getScheduler();
 
   public static void scheduleJob(XSKJobDefinition jobDefinition) throws SchedulerException {
-    if (jobDefinition.getStartAt() == null) {
-      return;
-    }
-
     try {
       JobKey jobKey = new JobKey(jobDefinition.getName(), jobDefinition.getGroup());
       TriggerKey triggerKey = new TriggerKey(jobDefinition.getName(), jobDefinition.getGroup());
@@ -88,8 +84,11 @@ public class XSKSchedulerManager {
         }, matcher);
 
         TriggerBuilder<CronTrigger> triggerBuilder = newTrigger().withIdentity(triggerKey)
-            .startAt(new Date(jobDefinition.getStartAt().getTime()))
             .withSchedule(cronSchedule(jobDefinition.getCronExpression()).withMisfireHandlingInstructionDoNothing());
+
+        if (jobDefinition.getStartAt() != null) {
+          triggerBuilder.startAt(new Date(jobDefinition.getStartAt().getTime()));
+        }
 
         if (jobDefinition.getEndAt() != null) {
           triggerBuilder.endAt(new Date(jobDefinition.getEndAt().getTime()));
@@ -103,7 +102,8 @@ public class XSKSchedulerManager {
     } catch (ObjectAlreadyExistsException e) {
       logger.warn(e.getMessage());
     } catch (org.quartz.SchedulerException e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.SCHEDULER_ERROR, jobDefinition.getName(), XSKCommonsConstants.XSK_JOB_PARSER);
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.SCHEDULER_ERROR, jobDefinition.getName(),
+          XSKCommonsConstants.XSK_JOB_PARSER);
       throw new SchedulerException(e);
     }
   }

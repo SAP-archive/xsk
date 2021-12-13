@@ -81,34 +81,33 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
     if (Boolean.parseBoolean(Configuration.get(XSK_SYNCHRONIZER_XSJOB_ENABLED, "false"))) {
       synchronized (XSKJobSynchronizer.class) {
         if (beforeSynchronizing()) {
-          if (beforeSynchronizing()) {
-            logger.trace("Synchronizing Jobs...");
+          logger.trace("Synchronizing Jobs...");
+          try {
+            startSynchronization(SYNCHRONIZER_NAME);
+            clearCache();
+            synchronizePredelivered();
+            synchronizeRegistry();
+            startJobs();
+            int immutableCount = JOBS_PREDELIVERED.size();
+            int mutableCount = JOBS_SYNCHRONIZED.size();
+            cleanup();
+            clearCache();
+            successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
+          } catch (Exception e) {
+            logger.error("Synchronizing process for Jobs failed.", e);
             try {
-              startSynchronization(SYNCHRONIZER_NAME);
-              clearCache();
-              synchronizePredelivered();
-              synchronizeRegistry();
-              startJobs();
-              int immutableCount = JOBS_PREDELIVERED.size();
-              int mutableCount = JOBS_SYNCHRONIZED.size();
-              cleanup();
-              clearCache();
-              successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
-            } catch (Exception e) {
-              logger.error("Synchronizing process for Jobs failed.", e);
-              try {
-                failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
-              } catch (SchedulerException e1) {
-                logger.error("Synchronizing process for Jobs files failed in registering the state log.", e);
-              }
+              failedSynchronization(SYNCHRONIZER_NAME, e.getMessage());
+            } catch (SchedulerException e1) {
+              logger.error("Synchronizing process for Jobs files failed in registering the state log.", e);
             }
-            logger.trace("Done synchronizing Jobs.");
-            afterSynchronizing();
           }
+          logger.trace("Done synchronizing Jobs.");
+          afterSynchronizing();
         }
       }
     }
   }
+
 
   /**
    * Register predelivered job.

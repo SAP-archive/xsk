@@ -1,6 +1,41 @@
 # Drumbeats
 
-## 2021 Week 46 (1 November - 7 November)
+## 2021 Week 48 (29 November - 05 December)
+
+#### Focus topics:
+
+- Selection of multiple Delivery Units
+- Using Connectivity Proxy in Kyma
+- Automatic scheduling of XSJobs
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-29..2021-12-05) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-29..2021-12-05) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-11-29..2021-12-05) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-11-29..2021-12-05) PRs
+
+----
+
+## 2021 Week 47 (22 November - 28 November)
+
+#### Focus topics:
+
+- Optimization of database artefact processing during synchronization
+- Form-based editor for XSJob 
+- Kpack updates
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-22..2021-11-28) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-11-22..2021-11-28) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-11-22..2021-11-28) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-11-22..2021-11-28) PRs
+
+----
+
+
+## 2021 Week 46 (15 November - 21 November)
 
 #### Focus topics:
 

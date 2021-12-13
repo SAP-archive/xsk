@@ -38,6 +38,10 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
     let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
     let processId = undefined;
 
+    $('.multi-selectable').on('click', function (e) {
+        e.stopPropagation();
+    });
+
     function getDUData() {
         body = {
             neo: {
@@ -159,35 +163,35 @@ migrationLaunchView.controller('DeliveryUnitViewController', ['$scope', '$http',
         $scope.duDropdownDisabled = false;
     };
 
-    $scope.isDUSelected = (du) => {        
+    $scope.isDUSelected = (du) => {
         return selectedDeliveyUnit.includes(du) ? "selected" : '';
-        
+
     };
 
     $scope.allDUSelectable = () => {
         return selectedDeliveyUnit.length < $scope.deliveryUnitList.length ? "selected" : "";
     }
 
-    $scope.toggleSelectAllDU = () => {        
+    $scope.toggleSelectAllDU = () => {
         let compare_value = (selectedDeliveyUnit.length != $scope.deliveryUnitList.length);
         for (let i = 0; i < $scope.deliveryUnitList.length; i++)
-         if (Boolean($scope.isDUSelected($scope.deliveryUnitList[i])) !== compare_value)
-          $scope.duSelected($scope.deliveryUnitList[i]); 
-    }; 
+            if (Boolean($scope.isDUSelected($scope.deliveryUnitList[i])) !== compare_value)
+                $scope.duSelected($scope.deliveryUnitList[i]);
+    };
 
     $scope.duSelected = function (deliveryUnit) {
         if (selectedDeliveyUnit.includes(deliveryUnit)) {
-                selectedDeliveyUnit = selectedDeliveyUnit.filter((elem) => elem != deliveryUnit);
-                $scope.duSelectedUItext = $scope.duSelectedUItext.filter((elem) => elem != deliveryUnit.name);
-            } else {
-                selectedDeliveyUnit.push(deliveryUnit);
-                $scope.duSelectedUItext.push(deliveryUnit.name);
-            }
-            
-              $scope.duDropdownText = $scope.duSelectedUItext.length ? $scope.duSelectedUItext.join(", ") : $scope.duDropdownInitText;
-            
-            $scope.selectAllText = selectedDeliveyUnit.length == $scope.deliveryUnitList.length ? "Unselect all" : "Select all"; 
-            $scope.$parent.setFinishEnabled(true);
+            selectedDeliveyUnit = selectedDeliveyUnit.filter((elem) => elem != deliveryUnit);
+            $scope.duSelectedUItext = $scope.duSelectedUItext.filter((elem) => elem != deliveryUnit.name);
+        } else {
+            selectedDeliveyUnit.push(deliveryUnit);
+            $scope.duSelectedUItext.push(deliveryUnit.name);
+        }
+
+        $scope.duDropdownText = $scope.duSelectedUItext.length ? $scope.duSelectedUItext.join(", ") : $scope.duDropdownInitText;
+
+        $scope.selectAllText = selectedDeliveyUnit.length == $scope.deliveryUnitList.length ? "Unselect all" : "Select all";
+        $scope.$parent.setFinishEnabled(true);
 
     };
 

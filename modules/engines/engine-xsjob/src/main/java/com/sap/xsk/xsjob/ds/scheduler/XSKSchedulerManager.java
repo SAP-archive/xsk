@@ -26,13 +26,17 @@ import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.manager.SchedulerManager;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
+import org.quartz.JobListener;
+import org.quartz.Matcher;
 import org.quartz.ObjectAlreadyExistsException;
 import org.quartz.Scheduler;
-import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.quartz.impl.matchers.KeyMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +61,27 @@ public class XSKSchedulerManager {
         } else {
           return;
         }
+        Matcher<JobKey> matcher = KeyMatcher.keyEquals(job.getKey());
+
+        scheduler.getListenerManager().addJobListener(new JobListener() {
+          @Override
+          public String getName() { return job.getKey().getName();}
+
+          @Override
+          public void jobToBeExecuted(JobExecutionContext jobExecutionContext) {}
+
+          @Override
+          public void jobExecutionVetoed(JobExecutionContext jobExecutionContext) {}
+
+          @Override
+          public void jobWasExecuted(JobExecutionContext jobExecutionContext, JobExecutionException e) {
+            if (e == null){
+              logger.info("[Job][{}][{}]", jobDefinition.getDescription(), jobDefinition.getFunction());
+            }
+            else
+              logger.info("[JobException][{}]", e.getMessage());
+          }
+        }, matcher);
 
         TriggerBuilder<CronTrigger> triggerBuilder = newTrigger().withIdentity(triggerKey)
             .withSchedule(cronSchedule(jobDefinition.getCronExpression()).withMisfireHandlingInstructionDoNothing());

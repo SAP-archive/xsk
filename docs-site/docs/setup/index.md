@@ -21,6 +21,12 @@ You can deploy XSK locally using Docker or Tomcat server.
         !!! info "Prerequisites"
             Install [Docker](https://docs.docker.com/engine/installation/).
 
+        1. Pull the XSK Docker Image:
+
+            ```
+            docker pull dirigiblelabs/xsk:latest
+            ```
+
         1. Start the container:
 
         === "Run"

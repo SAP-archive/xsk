@@ -143,7 +143,7 @@ public class XSKHDBSequenceParserTest {
     @Test(expected = XSKArtifactParserException.class)
     public void parseHanaXSClassicContentWithLexerErrorFail() throws Exception {
         String content = "start_with= 10;\n" +
-                "nomaxvalue=dddddfalse;";
+                "nomaxvalue=false;";
         XSKDataStructureModelFactory.parseView("db/test.hdbsequence", content);
     }
 

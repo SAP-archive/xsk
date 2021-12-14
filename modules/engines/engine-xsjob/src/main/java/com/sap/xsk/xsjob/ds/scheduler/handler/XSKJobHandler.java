@@ -24,7 +24,8 @@ import org.quartz.JobExecutionException;
 
 public class XSKJobHandler implements Job {
 
-  private static final String XSJOB_HANDLER = "xsjob/wrappers/handler.xsjs";
+  private static final String XSJOB_HANDLER               = "xsjob/wrappers/handler.xsjs";
+  private static final String XSJOB_EXCEPTION_DESCRIPTION = "jobDescription";
 
   private XSKJavascriptEngineExecutor xskJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
 
@@ -40,6 +41,7 @@ public class XSKJobHandler implements Job {
         .put(IXSKJobCoreService.XSK_JOB_FUNCTION, context.getJobDetail().getJobDataMap().get(IXSKJobCoreService.XSK_JOB_FUNCTION));
     executionContext.put(IXSKJobCoreService.XSK_JOB_PARAMETERS, parametersArray);
     executionContext.put(IXSKJobCoreService.XSK_JOB_MODULE, module);
+    executionContext.put(XSJOB_EXCEPTION_DESCRIPTION , context.getJobDetail().getDescription());
     try {
       xskJavascriptEngineExecutor.executeService(XSJOB_HANDLER, executionContext, true, true);
     } catch (ScriptingException e) {

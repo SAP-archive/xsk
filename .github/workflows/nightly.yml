@@ -2,7 +2,7 @@ name: Nightly Build
 
 on:
   schedule:
-    - cron: "0 10 * * *"
+    - cron: "0 22 * * *"
 
 jobs:
   integration-tests:
@@ -202,18 +202,18 @@ jobs:
       - name: Wait XSK Kyma Startup
         uses: nick-invision/retry@v2
         with:
-          timeout_seconds: 15
-          max_attempts: 10
+          timeout_seconds: 120
+          max_attempts: 50
           warning_on_retry: false
           command: curl -m 5 --silent --fail --request GET https://xsk.xsk-it.promart.shoot.canary.k8s-hana.ondemand.com/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
 
       # Delete XSK Kyma deployment resources
       - name: Delete the deployment
         run: |
-          kubectl delete deployment xsk -n ${{ secrets.namespace }}
-          kubectl delete service xsk -n ${{ secrets.namespace }}
-          kubectl delete apirules xsk -n ${{ secrets.namespace }}
-          kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.namespace }}
+          kubectl delete deployment xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete service xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete apirules xsk -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
+          kubectl delete persistentVolumeClaim xsk-claim -n ${{ secrets.ITESTS_KYMA_NAMESPACE }}
         shell: bash
 
       # Copy logs to '/xsk/test_results' and commit the directory

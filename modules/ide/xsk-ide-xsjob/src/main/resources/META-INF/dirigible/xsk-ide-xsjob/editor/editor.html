@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="page">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" sizes="any" href="data:;base64,iVBORw0KGgo=">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css">
-  <link type="text/css" rel="stylesheet" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css">
-  <link type="image/png" rel="shortcut icon" href="/services/v4/web/resources/images/favicon.png"/>
+    <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css">
 
-  <!-- Custom IDE Styles -->
-  <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/ide.css"/>
-  <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/xsjob.css"/>
+    <!-- Custom IDE Styles -->
+    <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/ide.css" />
+    <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/xsjob.css" />
 
-  <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-  <script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular.min.js"></script>
-  <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular-resource.min.js"></script>
-  <script type="text/javascript" src="/services/v4/web/ide-core/ui/message-hub.js"></script>
-</head>
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular.min.js"></script>
+    <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular-resource.min.js"></script>
+    <script type="text/javascript" src="/services/v4/web/ide-core/ui/message-hub.js"></script>
+  </head>
 
-<body ng-controller="PageController">
-<div class="container">
-  <div class="page-header">
-    <h1>XSJob Description: {{file}}</h1>
-  </div>
-  <form>
-    <div class="form-group">
-      <label>Description</label>
-      <input type="text" class="form-control" ng-model="job.description" value="dirigible-defined">
-    </div>
-    <div class="form-group">
-      <label>Action</label>
-      <input type="text" class="form-control" placeholder="0 0/5 * * * ?" ng-model="job.action">
-    </div>
-    <h2>Schedules</h2>
-    <div class="form-group" style="border:1px solid black; padding: 20px;">
-      <div class="form-group" ng-repeat="schedule in job.schedules track by $index" style="border:1px solid black; padding: 20px;">
-        <i class="close fa fa-2x fa-remove pull-right" ng-click="deleteSchedule($index)"></i>
-        <label>Description</label>
-        <input type="text" class="form-control input" placeholder="Schedule description"
-               ng-model="schedule.description">
-        <label data-toggle="tooltip" data-placement="top"
-               title="Year 4-digit,
+  <body ng-controller="PageController">
+    <div class="container">
+      <div class="page-header">
+        <h1>XSJob Description: {{file}}</h1>
+      </div>
+      <form>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" class="form-control" ng-model="job.description" value="dirigible-defined">
+        </div>
+        <div class="form-group">
+          <label>Action</label>
+          <input type="text" class="form-control" placeholder="0 0/5 * * * ?" ng-model="job.action">
+        </div>
+        <h2>Schedules</h2>
+        <div class="form-group" style="border:1px solid black; padding: 20px;">
+          <div class="form-group" ng-repeat="schedule in job.schedules track by $index"
+            style="border:1px solid black; padding: 20px;">
+            <i class="close fa fa-2x fa-remove pull-right" ng-click="deleteSchedule($index)"></i>
+            <label>Description</label>
+            <input type="text" class="form-control input" placeholder="Schedule description"
+              ng-model="schedule.description">
+            <label data-toggle="tooltip" data-placement="top" title="Year 4-digit,
                       Month: +1 to 12,
                       Day: -31 to 31
                       Day of Week: mon,tue,wed,thu,fri,sat,sun,
@@ -53,98 +53,98 @@
                       Minute: 0 to 59,
                       Second: 0 to 59">XSCron</label>
 
-        <input type="text" class="form-control" ng- placeholder="XSCron" ng-model="schedule.xscron" ng-mouseover="hoverIn()"
-               ng-mouseleave="hoverOut()">
+            <input type="text" class="form-control" ng- placeholder="XSCron" ng-model="schedule.xscron"
+              ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
 
-        <div>
-          <table class="table product-table">
-            <thead>
+            <div>
+              <table class="table product-table">
+                <thead>
 
-            <tr class="style">
-              <th>Parameter name</th>
-              <th>Parameter value</th>
-              <th></th>
-            </tr>
-            </thead>
-            <tr ng-repeat="(key, value) in schedule.parameter">
-              <td>
-                {{key}}
-              </td>
-              <td>
-                {{schedule.parameter[key]}}
-              </td>
-              <td>
-                <i class="close fa fa-2x fa-remove" ng-click="deleteParameter($parent.$index,key)"></i>
-                <i class="close fa fa-2x fa-edit" ng-click="openEditDialog($parent.$index, key ,schedule.parameter[key])"
-                   style="margin-right: 1em"></i>
-              </td>
+                  <tr class="style">
+                    <th>Parameter name</th>
+                    <th>Parameter value</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tr ng-repeat="(key, value) in schedule.parameter">
+                  <td>
+                    {{key}}
+                  </td>
+                  <td>
+                    {{schedule.parameter[key]}}
+                  </td>
+                  <td>
+                    <i class="close fa fa-2x fa-remove" ng-click="deleteParameter($parent.$index,key)"></i>
+                    <i class="close fa fa-2x fa-edit"
+                      ng-click="openEditDialog($parent.$index, key ,schedule.parameter[key])"
+                      style="margin-right: 1em"></i>
+                  </td>
 
-            </tr>
+                </tr>
 
-          </table>
-          <button type="button" ng-click="openNewDialog($index)" class="btn btn-lg  pull-right">
-            <i class="fa fa-plus" aria-hidden="false"> Parameter</i>
+              </table>
+              <button type="button" ng-click="openNewDialog($index)" class="btn btn-lg  pull-right">
+                <i class="fa fa-plus" aria-hidden="false"> Parameter</i>
+              </button>
+              <br>
+            </div>
+          </div>
+          <button type="button" ng-click="addScheduler()" class="btn btn-lg"><i class="fa fa-plus" aria-hidden="false">
+              Schedule</i>
           </button>
-          <br>
         </div>
-      </div>
-      <button type="button" ng-click="addScheduler()" class="btn btn-lg"><i class="fa fa-plus" aria-hidden="false"> Schedule</i>
-      </button>
+
+        <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
+      </form>
     </div>
 
-    <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
-  </form>
-</div>
-
-<div class="dirigible-modal modal fade" id="entityModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 ng-show="actionType === 'new'" class="modal-title" id="exampleModalLabel">Create Role</h3>
-        <h3 ng-show="actionType === 'update'" class="modal-title" id="exampleModalLabel">Update Parameter</h3>
-        <h3 ng-show="actionType === 'delete'" class="modal-title" id="exampleModalLabel">Delete Role</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-danger" ng-show="error">
-          {{error}}
-        </div>
-        <form ng-hide="actionType === 'delete'">
-          <div class="form-group">
-            <label>Name</label>
-            <input type="text" class="form-control" placeholder="Enter name" ng-model="entity.name">
+    <div class="dirigible-modal modal fade" id="entityModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 ng-show="actionType === 'new'" class="modal-title" id="exampleModalLabel">Create Role</h3>
+            <h3 ng-show="actionType === 'update'" class="modal-title" id="exampleModalLabel">Update Parameter</h3>
+            <h3 ng-show="actionType === 'delete'" class="modal-title" id="exampleModalLabel">Delete Role</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div class="form-group">
-            <label>Value</label>
-            <input type="text" class="form-control" placeholder="Enter value"
-                   ng-model="entity.description">
-          </div>
+          <div class="modal-body">
+            <div class="alert alert-danger" ng-show="error">
+              {{error}}
+            </div>
+            <form ng-hide="actionType === 'delete'">
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" placeholder="Enter name" ng-model="entity.name">
+              </div>
+              <div class="form-group">
+                <label>Value</label>
+                <input type="text" class="form-control" placeholder="Enter value" ng-model="entity.description">
+              </div>
 
-        </form>
-        <div ng-show="actionType === 'delete'">
-          You are going to delete <b>Role</b> with <b>name = {{entity.name}}</b>?
+            </form>
+            <div ng-show="actionType === 'delete'">
+              You are going to delete <b>Role</b> with <b>name = {{entity.name}}</b>?
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-show="actionType === 'new'"
+              ng-click="addParameter(entity.name,entity.description)">Save
+            </button>
+            <button type="button" class="btn btn-primary" ng-show="actionType === 'update'"
+              ng-click="update(entity.name,entity.description)">Update
+            </button>
+            <button type="button" class="btn btn-primary" ng-show="actionType === 'delete'" ng-click="delete()">Delete
+            </button>
+            <button type="button" class="btn" data-dismiss="modal">Close</button>
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-show="actionType === 'new'"
-                ng-click="addParameter(entity.name,entity.description)">Save
-        </button>
-        <button type="button" class="btn btn-primary" ng-show="actionType === 'update'"
-                ng-click="update(entity.name,entity.description)">Update
-        </button>
-        <button type="button" class="btn btn-primary" ng-show="actionType === 'delete'"
-                ng-click="delete()">Delete
-        </button>
-        <button type="button" class="btn" data-dismiss="modal">Close</button>
       </div>
     </div>
-  </div>
-</div>
 
-<script type="text/javascript" src="editor.js"></script>
+    <script type="text/javascript" src="editor.js"></script>
 
-</body>
+  </body>
 
 </html>

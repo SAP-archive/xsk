@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
@@ -10,11 +9,11 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-try {
-    const process = require('bpm/v4/process');
-    const execution = process.getExecutionContext();
-    const workspaceManager = require("platform/v4/workspace");
+const process = require('bpm/v4/process');
+const execution = process.getExecutionContext();
+const workspaceManager = require("platform/v4/workspace");
 
+try {
     process.setVariable(execution.getId(), 'migrationState', 'WORKSPACES_LISTING');
 
     const workspaces = workspaceManager.getWorkspacesNames();

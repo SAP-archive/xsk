@@ -222,6 +222,7 @@ You can choose to build and package your XSK application from source with Helm a
     !!! note
 
         You can use for build Kyma (which is default), local and Cloud Foundry.
+        
         - For ClusterStack build image you can use `--set clusterBuilder.buildImage` and choose one of this:
 
         ```
@@ -242,7 +243,8 @@ You can choose to build and package your XSK application from source with Helm a
         --set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-kyma - Kyma
         --set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-cf - Cloud Foundry   
         --set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk - Local  
-     
+        ```
+        
     !!! info "Configuration Options"     
      
         |             Name                    |          Description            |            Default                                     |

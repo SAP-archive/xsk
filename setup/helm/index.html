@@ -1699,21 +1699,26 @@ helm repo update
 <p class="admonition-title">Note</p>
 <p>You can use for build Kyma (which is default), local and Cloud Foundry.
 - For ClusterStack build image you can use <code>--set clusterBuilder.buildImage</code> and choose one of this:</p>
-<p><code>dirigiblelabs/buildpacks-stack-build-xsk-kyma</code> - Kyma
-<code>dirigiblelabs/buildpacks-stack-build-xsk-cf</code> - Cloud Foundry
-<code>dirigiblelabs/buildpacks-stack-build-xsk</code> - Local</p>
+<div class="highlight"><pre><span></span><code>dirigiblelabs/buildpacks-stack-build-xsk-kyma - Kyma
+dirigiblelabs/buildpacks-stack-build-xsk-cf - Cloud Foundry
+dirigiblelabs/buildpacks-stack-build-xsk - Local
+</code></pre></div>
 <ul>
-<li>For ClusterStack run image you can use <code>--set clusterBuilder.runImage</code> and choose one of this:</li>
+<li>
+<p>For ClusterStack run image you can use <code>--set clusterBuilder.runImage</code> and choose one of this:
+<div class="highlight"><pre><span></span><code>dirigiblelabs/buildpacks-stack-run-xsk-kyma - Kyma
+dirigiblelabs/buildpacks-stack-run-xsk-cf - Cloud Foundry
+dirigiblelabs/buildpacks-stack-run-xsk - Local
+</code></pre></div></p>
+</li>
+<li>
+<p>For Builder image you can use <code>--set imageBuilder.buildpack</code> and choose one of this:
+```
+--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-kyma - Kyma
+--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-cf - Cloud Foundry <br />
+--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk - Local  </p>
+</li>
 </ul>
-<p><code>dirigiblelabs/buildpacks-stack-run-xsk-kyma</code> - Kyma
-<code>dirigiblelabs/buildpacks-stack-run-xsk-cf</code> - Cloud Foundry
-<code>dirigiblelabs/buildpacks-stack-run-xsk</code> - Local</p>
-<ul>
-<li>For Builder image you can use <code>--set imageBuilder.buildpack</code> and choose one of this:</li>
-</ul>
-<p><code>--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-kyma</code> - Kyma
-<code>--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-cf</code> - Cloud Foundry <br />
-<code>--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk</code> - Local  </p>
 </div>
 <div class="admonition info">
 <p class="admonition-title">Configuration Options</p>

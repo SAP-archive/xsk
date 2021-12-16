@@ -16,9 +16,22 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name:
 
-# Name override the Dirigible deployment
+securityContext:
+  # Allow privileged escalation required to effectively enforce MustRunAsNonRoot.
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    # Enable seccomp profile
+    type: RuntimeDefault
+
+service:
+  # Type of service when you expose
+  type: ClusterIP
+  # Port dor the XSK instance
+  port: 8080
+
+# Name override the XSK deployment
 nameOverride: ""
-# Full name override Dirigible deployment
+# Full name override XSK deployment
 fullNameOverride: "" 
 
 kyma:

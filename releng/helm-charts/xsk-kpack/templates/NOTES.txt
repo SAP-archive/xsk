@@ -1,4 +1,14 @@
+{{- if .Values.install.allInOne }}
+
+Check your image status with command: `kubectl -n {{ .Values.create.namespace }} get image xsk-image`
+
+You can tail the logs for your image that is currently building using the Kpack CLI command.
+`kp build logs xsk-image -n {{ .Values.create.namespace }}`
+
+{{- end }}
+
 {{- if .Values.install.clusterBuilder }}
+
 Kpack XSK ClusterStore and ClusterStack installed. To create image Builder execute the following command:
 
     helm install xsk-image-builder xsk/xsk \
@@ -9,8 +19,12 @@ Kpack XSK ClusterStore and ClusterStack installed. To create image Builder execu
 
 {{- if .Values.install.imageBuilder }}
 
-Kpack XSK Builder installed. To trigger Docker image build, execute the following command: https://github.com/SAP/xsk/tree/main/releng/buildpacks/xsk
+Kpack XSK Builder installed. To trigger Docker image build, execute the following command: https://github.com/SAP/xsk/tree/main/releng/buildpacks/xsk or you can run this commands to tri:
 
+helm install xsk-image xsk/xsk-kpack \
+--set create.image=true \
+--set image.repository=<your-repository-for-your-OCI-image> \
+--set image.source=<your-application-source>
 {{- end }}
 
 {{- if .Values.create.image }}
@@ -18,17 +32,3 @@ Kpack XSK Builder installed. To trigger Docker image build, execute the followin
 Docker image will be published in the following repository: https://hub.docker.com/r/{{ .Values.image.repository }}
 
 {{- end }}
-
-
-{{- if .Values.create.application }}
-
-Application will be deployed and accessible via the following URL: https://{{ .Release.Name }}.{{ .Values.kyma.host }}
-
-{{- end }}
-
-{{- if not (default .Values.install.clusterBuilder .Values.install.imageBuilder .Values.create.image false) }}
-{{- if not (default .Values.create.image false) }}
-    You need to set 'install.clusterBuilder=true', 'install.imageBuilder=true' or 'create.image=true'.
-{{- end }}
-{{- end }}
-

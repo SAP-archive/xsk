@@ -2,59 +2,59 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-    name: {{ .Values.create.namespace }}
+    name: {{ required "Missing namespace" .Values.create.namespace }}
 {{- end }}  
 ---
-{{- if .Values.install.clusterBuilder }}
+{{- if or .Values.install.clusterBuilder .Values.install.allInOne }}
 apiVersion: v1
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
 kind: Secret
 metadata:
-  name: {{ .Values.docker.secretName }}
-  namespace: {{ .Values.create.namespace }}
+  name: {{ required "Missing docker secret name" .Values.docker.secretName }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 type: kubernetes.io/dockerconfigjson    
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ .Values.docker.serviceAccountName }}
-  namespace: {{ .Values.create.namespace }}
+  name: {{ required "Missing docker service account name" .Values.docker.serviceAccountName }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 imagePullSecrets:
-- name: {{ .Values.docker.secretName }}
+- name: {{ required "Missing docker secret name" .Values.docker.secretName }}
 secrets:
-- name: {{ .Values.docker.secretName }}
+- name: {{ required "Missing docker secret name" .Values.docker.secretName }}
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStore
 metadata:
   name: kneo-xsk-store
-  namespace: {{ .Values.create.namespace }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 spec:
   sources:
-  - image: "{{ .Values.imageBuilder.buildpack }}:#{XSKVersion}#"
+  - image: "{{ required "Missing image builder buildpack" .Values.imageBuilder.buildpack }}:#{XSKVersion}#"
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack
 metadata:
   name: kneo-xsk-stack
-  namespace: {{ .Values.create.namespace }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 spec:
   id: com.sap.kneo.xsk
   buildImage:
-    image: {{ .Values.clusterBuilder.buildImage }}
+    image: {{ required "Missing cluster build image" .Values.clusterBuilder.buildImage }}
   runImage:
-    image: {{ .Values.clusterBuilder.runImage }}
+    image: {{ required "Missing cluster run image" .Values.clusterBuilder.runImage }}
 {{- end }}
 ---
-{{- if .Values.install.imageBuilder }}
+{{- if or .Values.install.imageBuilder .Values.install.allInOne}}
 apiVersion: kpack.io/v1alpha1
 kind: Builder
 metadata:
   name: kneo-xsk
-  namespace: {{ .Values.create.namespace }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 spec:
-  serviceAccount: {{ .Values.clusterBuilder.serviceAccountName }}
+  serviceAccount: {{ required "Missing service account name" .Values.clusterBuilder.serviceAccountName }}
   tag: {{ required "Missing imageBuilder repository" .Values.imageBuilder.repository }}
   stack:
     name: kneo-xsk-stack
@@ -64,18 +64,18 @@ spec:
     kind: ClusterStore
   order:
   - group:
-    - id: {{ .Values.imageBuilder.buildpack }}
+    - id: {{ required "Missing buildpack image" .Values.imageBuilder.buildpack }}
 {{- end }}
 ---
-{{- if .Values.create.image }}
+{{- if or .Values.create.image .Values.install.allInOne }}
 apiVersion: kpack.io/v1alpha1
 kind: Image
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Values.create.namespace }}
+  name: {{ required "Missing release name" .Release.Name }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 spec:
   tag: {{ required "Missing image repository" .Values.image.repository }}
-  serviceAccount: {{ .Values.image.serviceAccountName }}
+  serviceAccount: {{ required "Missing service account name" .Values.image.serviceAccountName }}
   builder:
     name: kneo-xsk
     kind: Builder

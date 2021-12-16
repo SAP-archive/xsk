@@ -7,6 +7,7 @@ install:
   clusterBuilder: false
   # Image builder is kpack configuration for a builder image.
   imageBuilder: false
+  allInOne: false
 
 create:
   # Image option kpack should build and manage.

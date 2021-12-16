@@ -4,19 +4,84 @@
 
 replicaCount: 1
 
+create:
+  namespace: default
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+# Name override the Dirigible deployment
+nameOverride: ""
+# Full name override Dirigible deployment
+fullNameOverride: "" 
+
 kyma:
-  enabled:
+  # Enable kyma deployment
+  enabled: 
+  # Host to expose the xsk instance 
   host:
+  addRoles: false
+  # Roles for custom usage 
+  roles:
+  # Default Roles
+  roleCollections:
+    # Description for role collections
+  - description: XSK Developer
+    # Name for role collections
+    name: xsk-Developer
+    # Role template references for role collections
+    role-template-references:
+    - $XSAPPNAME.Developer
+  - description: XSK Operator
+    name: xsk-Operator
+    role-template-references:
+    - $XSAPPNAME.Operator  
+
+  roleTemplates:
+    # Description for role templates
+  - description: Developer related roles
+    # Name for role templates
+    name: "Developer"
+    # Scope references for role templates
+    scopeReferences:
+    - $XSAPPNAME.Developer
+  - description: Operator related roles
+    name: "Operator"
+    scopeReferences:
+    - $XSAPPNAME.Operator
+
+  scopes:
+    # Description for scope
+  - description: Developer scope
+    # Name for scope
+    name: $XSAPPNAME.Developer 
+  - description: Operator scope
+    name: $XSAPPNAME.Operator
 
 application:
+  # Image application image
   image:
+  # Home url for XSK
   homeUrl:
+  # Image pull policy 
   imagePullPolicy: Always
+  # Fast boot strap option
   fastBootstrap: false
 
 hana:
+  # Enable HANA configuration
   enabled:
+  # Secret name for HANA
   secretName: hana-secret
+  # Url for HANA instance
   url:
+  # Username for HANA instance
   username:
+  # Password for HANA instance
   password:

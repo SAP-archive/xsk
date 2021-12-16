@@ -1,3 +1,10 @@
+{{- if ne .Values.create.namespace "default" }}
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: {{ .Values.create.namespace }}
+{{- end }}  
+---
 {{- if .Values.install.clusterBuilder }}
 apiVersion: v1
 data:
@@ -5,13 +12,14 @@ data:
 kind: Secret
 metadata:
   name: {{ .Values.docker.secretName }}
-  namespace: default
+  namespace: {{ .Values.create.namespace }}
 type: kubernetes.io/dockerconfigjson    
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ .Values.docker.serviceAccountName }}
+  namespace: {{ .Values.create.namespace }}
 imagePullSecrets:
 - name: {{ .Values.docker.secretName }}
 secrets:
@@ -21,14 +29,16 @@ apiVersion: kpack.io/v1alpha1
 kind: ClusterStore
 metadata:
   name: kneo-xsk-store
+  namespace: {{ .Values.create.namespace }}
 spec:
   sources:
-  - image: "{{ .Values.imageBuilder.buildpack }}:#{XSKVersion}#"
+  - image: "{{ .Values.imageBuilder.buildpack }}:0.11.0"
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack
 metadata:
   name: kneo-xsk-stack
+  namespace: {{ .Values.create.namespace }}
 spec:
   id: com.sap.kneo.xsk
   buildImage:
@@ -42,6 +52,7 @@ apiVersion: kpack.io/v1alpha1
 kind: Builder
 metadata:
   name: kneo-xsk
+  namespace: {{ .Values.create.namespace }}
 spec:
   serviceAccount: {{ .Values.clusterBuilder.serviceAccountName }}
   tag: {{ required "Missing imageBuilder repository" .Values.imageBuilder.repository }}
@@ -61,6 +72,7 @@ apiVersion: kpack.io/v1alpha1
 kind: Image
 metadata:
   name: {{ .Release.Name }}
+  namespace: {{ .Values.create.namespace }}
 spec:
   tag: {{ required "Missing image repository" .Values.image.repository }}
   serviceAccount: {{ .Values.image.serviceAccountName }}

@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/setup/helm/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.0">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.2">
     
     
       
@@ -19,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.82f3c0b9.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f7951f6f.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.9204c3b2.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
         
       
     
@@ -1425,7 +1425,7 @@ helm repo update
 <li>
 <p>Deployment</p>
 <p>To deploy XSK, you can use the following instructions:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Basic</label><label for="__tabbed_1_2">Kyma</label><label for="__tabbed_1_3">Kyma with SAP HANA database</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Basic</label><label for="__tabbed_1_2">Kyma</label><label for="__tabbed_1_3">Kyma with SAP HANA database</label><label for="__tabbed_1_4">Kyma with custom roles</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk
@@ -1452,7 +1452,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <p>This will install additionally an <code>ApiRule</code> and XSUAA <code>ServiceInstance</code> and <code>ServiceBinding</code>. The appropriate roles should be assigned to the user.</p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>helm install xsk xsk \
+<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \
 --set hana.enabled=true \
 --set hana.url=&lt;hana-url&gt; \
 --set hana.username=&lt;hana-username&gt; \
@@ -1461,6 +1461,15 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 --set kyma.host=&lt;kyma-apirule-host&gt;
 </code></pre></div>
 <p>This will install additionally an <code>ApiRule</code>, XSUAA <code>ServiceInstance</code>, <code>ServiceBinding</code> and HANA instance. The appropriate roles should be assigned to the user.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>helm install xsk xsk \            
+--set kyma.enabled=true \
+--set kyma.host=&lt;kyma-apirule-host&gt; \
+--set kyma.addRoles=true \
+--set kyma.roles={&quot;&lt;new-role&gt;&quot;\,&quot;&lt;new-role&gt;&quot;}
+</code></pre></div>
+<p>This will install additionally an <code>ApiRule</code> and XSUAA <code>ServiceInstance</code> and <code>ServiceBinding</code> with default roles <code>Developer</code> and <code>Operator</code> and will add your new roles. The appropriate roles should be assigned to the user.</p>
 </div>
 </div>
 </div>
@@ -1476,29 +1485,129 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </thead>
 <tbody>
 <tr>
-<td><code>application.image</code></td>
-<td>XSK image repo</td>
-<td><code>dirigiblelabs/xsk</code></td>
-</tr>
-<tr>
-<td><code>image.pullPolicy</code></td>
-<td>Image pull policy</td>
-<td><code>Always</code></td>
-</tr>
-<tr>
 <td><code>replicaCount</code></td>
 <td>Number of replicas</td>
 <td><code>1</code></td>
 </tr>
 <tr>
-<td><code>homeUrl</code></td>
-<td>Application Home url</td>
-<td><code>/services/v4/web/ide/</code></td>
+<td><code>create.namespace</code></td>
+<td>Create namespace</td>
+<td><code>default</code></td>
 </tr>
 <tr>
-<td><code>fastBootstrap</code></td>
-<td>Fast Boostrap secret</td>
+<td><code>serviceAccount.create</code></td>
+<td>Create service account</td>
 <td><code>false</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>Add annotations to sa</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>Service account name</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>securityContext.allowPrivilegeEscalation</code></td>
+<td>Allow privileged escalation</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>securityContext.seccompProfile.type</code></td>
+<td>Enable seccomp profile</td>
+<td><code>RuntimeDefault</code></td>
+</tr>
+<tr>
+<td><code>service.type</code></td>
+<td>Type of service</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Port of service</td>
+<td><code>8080</code></td>
+</tr>
+<tr>
+<td><code>nameOverride</code></td>
+<td>Name override</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>fullNameOverride</code></td>
+<td>Full name override</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>fullNameOverride</code></td>
+<td>Full name override</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>kyma.enabled</code></td>
+<td>Enable Kyma</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>kyma.host</code></td>
+<td>Kyma host</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>kyma.addRoles</code></td>
+<td>Enable add new roles</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>kyma.roles</code></td>
+<td>Name for new roles</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>application.image</code></td>
+<td>Application image</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>application.homeUrl</code></td>
+<td>Home url for XSK</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>application.imagePullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>Always</code></td>
+</tr>
+<tr>
+<td><code>application.fastBootstrap</code></td>
+<td>Fast boot strap option</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>hana.enabled</code></td>
+<td>Hana enable option</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>hana.secretName</code></td>
+<td>Hana secret name</td>
+<td><code>hana-secret</code></td>
+</tr>
+<tr>
+<td>`hana.url</td>
+<td>Hana url instance</td>
+<td>``</td>
+</tr>
+<tr>
+<td>`hana.username</td>
+<td>Hana username</td>
+<td>``</td>
+</tr>
+<tr>
+<td>`hana.password</td>
+<td>Hana password</td>
+<td>``</td>
 </tr>
 </tbody>
 </table>
@@ -1531,16 +1640,14 @@ helm repo update
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>helm install xsk-image xsk/xsk-kpack \
---set install.clusterBuilder=true \
---set install.imageBuilder=true \
---set create.image=true \
+--set install.all=true \
 --set docker.server=https://index.docker.io/v1/ \
 --set docker.username=&lt;your-docker-username&gt; \
 --set docker.password=&lt;your-docker-password&gt; \
 --set docker.email=&lt;your-email&gt; \
 --set image.repository=&lt;your-repository-for-your-OCI-image&gt; \
 --set imageBuilder.repository=&lt;builder-image&gt; \
---set image.source=&lt;your-application-source&gt;
+--set image.source=&lt;your-application-source&gt; 
 </code></pre></div>
 <p>This will build and package an OCI image for your application.</p>
 </div>
@@ -1588,6 +1695,26 @@ helm repo update
 </code></pre></div>
 </div>
 <p>The application image that was built could be used as well in the installation of XSK with <a href="#setup">Helm</a>, <a href="../kyma/">Kyma</a> and <a href="../cloud-foundry">Cloud Foundry</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use for build Kyma (which is default), local and Cloud Foundry.
+- For ClusterStack build image you can use <code>--set clusterBuilder.buildImage</code> and choose one of this:</p>
+<p><code>dirigiblelabs/buildpacks-stack-build-xsk-kyma</code> - Kyma
+<code>dirigiblelabs/buildpacks-stack-build-xsk-cf</code> - Cloud Foundry
+<code>dirigiblelabs/buildpacks-stack-build-xsk</code> - Local</p>
+<ul>
+<li>For ClusterStack run image you can use <code>--set clusterBuilder.runImage</code> and choose one of this:</li>
+</ul>
+<p><code>dirigiblelabs/buildpacks-stack-run-xsk-kyma</code> - Kyma
+<code>dirigiblelabs/buildpacks-stack-run-xsk-cf</code> - Cloud Foundry
+<code>dirigiblelabs/buildpacks-stack-run-xsk</code> - Local</p>
+<ul>
+<li>For Builder image you can use <code>--set imageBuilder.buildpack</code> and choose one of this:</li>
+</ul>
+<p><code>--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-kyma</code> - Kyma
+<code>--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-cf</code> - Cloud Foundry <br />
+<code>--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk</code> - Local  </p>
+</div>
 <div class="admonition info">
 <p class="admonition-title">Configuration Options</p>
 <table>
@@ -1600,11 +1727,6 @@ helm repo update
 </thead>
 <tbody>
 <tr>
-<td><code>replicaCount</code></td>
-<td>Number instanof replicas</td>
-<td><code>1</code></td>
-</tr>
-<tr>
 <td><code>install.clusterBuilder</code></td>
 <td>Kpack cluster store and stack</td>
 <td><code>false</code></td>
@@ -1615,9 +1737,19 @@ helm repo update
 <td><code>false</code></td>
 </tr>
 <tr>
+<td><code>install.allInOne</code></td>
+<td>Option to build all</td>
+<td><code>false</code></td>
+</tr>
+<tr>
 <td><code>create.image</code></td>
 <td>Kpack create OCI image</td>
 <td><code>false</code></td>
+</tr>
+<tr>
+<td><code>create.namespace</code></td>
+<td>Create namespace</td>
+<td><code>default</code></td>
 </tr>
 <tr>
 <td><code>docker.server</code></td>
@@ -1677,12 +1809,12 @@ helm repo update
 <tr>
 <td><code>clusterBuilder.buildImage</code></td>
 <td>Docker service account name</td>
-<td><code>dirigiblelabs/buildpacks-stack-build-xsk:latest</code></td>
+<td><code>dirigiblelabs/buildpacks-stack-build-xsk-kyma:latest</code></td>
 </tr>
 <tr>
 <td><code>clusterBuilder.runImage</code></td>
 <td>Docker service account name</td>
-<td><code>dirigiblelabs/buildpacks-stack-run-xsk:latest</code></td>
+<td><code>dirigiblelabs/buildpacks-stack-run-xskyma:latest</code></td>
 </tr>
 <tr>
 <td><code>clusterBuilder.serviceAccountName</code></td>
@@ -1818,10 +1950,10 @@ helm repo update
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.cefbb252.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.0bbba5b5.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.17f42bbf.min.js"></script>
+      <script src="../../assets/javascripts/bundle.649a939e.min.js"></script>
       
     
   </body>

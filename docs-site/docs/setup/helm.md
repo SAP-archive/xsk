@@ -243,7 +243,8 @@ You can choose to build and package your XSK application from source with Helm a
         --set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-kyma - Kyma
         --set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-cf - Cloud Foundry   
         --set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk - Local  
-     
+        ```
+        
     !!! info "Configuration Options"     
      
         |             Name                    |          Description            |            Default                                     |

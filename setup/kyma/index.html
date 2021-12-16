@@ -1598,59 +1598,59 @@
 <p class="admonition-title">Info</p>
 <p>Appling this definition will create <code>Service</code> and <code>APIRule</code> resoures only. To install XSK with single definition file, use the <code>All in One</code> section.</p>
 </div>
-<div class="highlight"><pre><span></span><code>apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: xsk
-  name: xsk
-  namespace: default
-spec:
-  ports:
-  - name: xsk
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    app: xsk
-  type: ClusterIP
----
-apiVersion: gateway.kyma-project.io/v1alpha1
-kind: APIRule
-metadata:
-  name: xsk
-  namespace: default
-spec:
-  gateway: kyma-gateway.kyma-system.svc.cluster.local
-  rules:
-  - accessStrategies:
-    - config: {}
-      handler: noop
-    methods:
-    - GET
-    - POST
-    - PUT
-    - PATCH
-    - DELETE
-    - HEAD
-    path: /.*
-  service:
-    host: xsk.&lt;your-kyma-cluster-host&gt;
-    name: xsk
-    port: 8080
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">ports</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+    <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TCP</span>
+    <span class="nt">targetPort</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
+  <span class="nt">selector</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gateway.kyma-project.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">APIRule</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kyma-gateway.kyma-system.svc.cluster.local</span>
+  <span class="nt">rules</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">accessStrategies</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">config</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+      <span class="nt">handler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">noop</span>
+    <span class="nt">methods</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">GET</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">POST</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PUT</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PATCH</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DELETE</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">HEAD</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/.*</span>
+  <span class="nt">service</span><span class="p">:</span>
+    <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk.&lt;your-kyma-cluster-host&gt;</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
+    <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<ol>
+<ul>
 <li>Copy the content into YAML file(s) <em>(e.g. <code>all.yaml</code>, <code>deployment.yaml</code> or <code>apirule.yaml</code>)</em>.</li>
 <li>Replace the placeholders:<ul>
 <li><code>&lt;your-kyma-cluster-host&gt;</code> with your Kyma cluster host <em>(e.g. <code>c-xxx.kyma.xxx.ondemand.com</code>)</em>.</li>
 </ul>
 </li>
-</ol>
+</ul>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">XSK versions</p>
@@ -1666,12 +1666,12 @@ spec:
 </li>
 <li>
 <p>Click the <strong>Deploy new resource</strong> button and select the <code>all.yaml</code>, <code>deployment.yaml</code> or <code>apirule.yaml</code> file(s).</p>
-</li>
-</ul>
 <div class="admonition info">
 <p class="admonition-title">Note</p>
 <p>Alternatively, you can use the <code>kubectl apply -f &lt;file-name&gt;</code> to deploy the desired resources <em>(e.g. <code>all.yaml</code>, <code>deployment.yaml</code> or <code>apirule.yaml</code>)</em>.</p>
 </div>
+</li>
+</ul>
 </li>
 <li>
 <p>Create an XSUAA service instance:</p>
@@ -1741,9 +1741,7 @@ spec:
 </ul>
 </div>
 <div class="tabbed-block">
-<ul>
-<li>Copy and paste the following content into <code>xsuaa.yaml</code>:</li>
-</ul>
+<p>Copy and paste the following content into <code>xsuaa.yaml</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">servicecatalog.k8s.io/v1beta1</span>
 <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ServiceInstance</span>
 <span class="nt">metadata</span><span class="p">:</span>
@@ -1827,7 +1825,7 @@ spec:
 <ul>
 <li>Navigate to the <code>SAP BTP Cockpit</code>.</li>
 <li>Login to your subaccount.</li>
-<li>Go to <code>Security</code> -&gt; <code>Users</code>.</li>
+<li>Go to <code>Security</code> <strong>&rarr;</strong> <code>Users</code>.</li>
 <li>Select your username.</li>
 <li>Click the <code>Assign Role Collection</code> button.</li>
 <li>From the list of roles select the <code>XSK Developer</code> and <code>XSK Operator</code> roles.</li>
@@ -1837,7 +1835,7 @@ spec:
 <li>
 <p>Log in.</p>
 <ul>
-<li>Go to <code>https://xsk.&lt;your-kyma-cluster-host&gt;</code> or navigate to <code>Configurations</code> -&gt; <code>APIRules</code> section from the Kyma dashboard.</li>
+<li>Go to <code>https://xsk.&lt;your-kyma-cluster-host&gt;</code> or navigate to <code>Configurations</code> <strong>&rarr;</strong> <code>APIRules</code> section from the Kyma dashboard.</li>
 </ul>
 </li>
 </ol>

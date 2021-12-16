@@ -213,7 +213,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         !!! info
             Appling this definition will create `Service` and `APIRule` resoures only. To install XSK with single definition file, use the `All in One` section.
 
-        ```
+        ```yaml
         apiVersion: v1
         kind: Service
         metadata:
@@ -257,8 +257,8 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         ```
 
     !!! Note
-        1. Copy the content into YAML file(s) _(e.g. `all.yaml`, `deployment.yaml` or `apirule.yaml`)_.
-        1. Replace the placeholders:
+        - Copy the content into YAML file(s) _(e.g. `all.yaml`, `deployment.yaml` or `apirule.yaml`)_.
+        - Replace the placeholders:
             - `<your-kyma-cluster-host>` with your Kyma cluster host _(e.g. `c-xxx.kyma.xxx.ondemand.com`)_.
 
     !!! tip "XSK versions"
@@ -271,8 +271,8 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     - Click the **Deploy new resource** button and select the `all.yaml`, `deployment.yaml` or `apirule.yaml` file(s).
 
-    !!! info "Note"
-        Alternatively, you can use the `kubectl apply -f <file-name>` to deploy the desired resources _(e.g. `all.yaml`, `deployment.yaml` or `apirule.yaml`)_.
+        !!! info "Note"
+            Alternatively, you can use the `kubectl apply -f <file-name>` to deploy the desired resources _(e.g. `all.yaml`, `deployment.yaml` or `apirule.yaml`)_.
 
 1. Create an XSUAA service instance:
 
@@ -340,7 +340,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     === "with kubectl"
 
-         - Copy and paste the following content into `xsuaa.yaml`:
+         Copy and paste the following content into `xsuaa.yaml`:
 
          ```yaml
          apiVersion: servicecatalog.k8s.io/v1beta1
@@ -420,7 +420,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     - Navigate to the `SAP BTP Cockpit`.
     - Login to your subaccount.
-    - Go to `Security` -> `Users`.
+    - Go to `Security` **&rarr;** `Users`.
     - Select your username.
     - Click the `Assign Role Collection` button.
     - From the list of roles select the `XSK Developer` and `XSK Operator` roles.
@@ -428,4 +428,4 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
 1. Log in.
 
-    - Go to `https://xsk.<your-kyma-cluster-host>` or navigate to `Configurations` -> `APIRules` section from the Kyma dashboard.
+    - Go to `https://xsk.<your-kyma-cluster-host>` or navigate to `Configurations` **&rarr;** `APIRules` section from the Kyma dashboard.

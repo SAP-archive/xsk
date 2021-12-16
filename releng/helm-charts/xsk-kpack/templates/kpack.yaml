@@ -32,7 +32,7 @@ metadata:
   namespace: {{ .Values.create.namespace }}
 spec:
   sources:
-  - image: "{{ .Values.imageBuilder.buildpack }}:0.11.0"
+  - image: "{{ .Values.imageBuilder.buildpack }}:#{XSKVersion}#"
 ---
 apiVersion: kpack.io/v1alpha1
 kind: ClusterStack

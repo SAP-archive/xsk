@@ -11,7 +11,7 @@ version: #{XSKVersion}#
 # XSK version
 appVersion: #{XSKVersion}#
 
-#Require kubernetes version
+# Require kubernetes version
 kubeVersion: "> 1.19"
 
 keywords:

@@ -2,34 +2,51 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 install:
+  # Cluster builder option to enable Secret, ServiceAccount, ClusterStore, ClusterStack.
   clusterBuilder: false
+  # Image builder is kpack configuration for a builder image.
   imageBuilder: false
 
 create:
+  # Image option kpack should build and manage.
   image: false
+  # Name space for kpack deployment
+  namespace: default
 
 docker:
+  # Server is registry prefix for its corresponding registry.
   server:
+  # Username registry user
   username:
+  # Password for the docker user
   password:
+  # Email for the docker user
   email:
+  # Secret name for your corresponding registry
   secretName: docker-registry-secret
+  # Service account that references the registry secret created above
   serviceAccountName: docker-registry-service-account
 
 imageBuilder:
+  # Repository is tag in your registry
   repository:
-  buildpack: dirigiblelabs/buildpacks-xsk
+  # Buildpack is buildpacks image
+  buildpack: dirigiblelabs/buildpacks-xsk-kyma
 
 image:
+  # Repository is registry where will build the image
   repository:
+  # Source is your application source
   source:
+  # Service account that references the registry secret
   serviceAccountName: docker-registry-service-account
 
 clusterBuilder:
-  buildImage: dirigiblelabs/buildpacks-stack-build-xsk:#{XSKVersion}#
-  runImage: dirigiblelabs/buildpacks-stack-run-xsk:#{XSKVersion}#
+  # Build image is used during build
+  buildImage: dirigiblelabs/buildpacks-stack-build-xsk-kyma:#{XSKVersion}#
+  # Run image is used during build
+  runImage: dirigiblelabs/buildpacks-stack-run-xsk-kyma:#{XSKVersion}#
+  # Service account that references the registry secret
   serviceAccountName: docker-registry-service-account
 

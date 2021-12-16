@@ -1,8 +1,16 @@
+{{- if ne .Values.create.namespace "default" }}
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: {{ .Values.create.namespace }}
+{{- end }}  
+---
 {{- if .Values.hana.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .Values.hana.secretName }}
+  namespace: {{ .Values.create.namespace }}
 type: Opaque
 stringData:
   DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES: HANA
@@ -30,6 +38,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: fast-boostrap-secret
+  namespace: {{ .Values.create.namespace }}
 type: Opaque
 stringData:
   DIRIGIBLE_JOB_DEFAULT_TIMEOUT: "1"
@@ -40,6 +49,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "xsk.fullname" . }}
+  namespace: {{ .Values.create.namespace }}
   labels:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
@@ -52,6 +62,7 @@ spec:
       labels:
         {{- include "xsk.selectorLabels" . | nindent 8 }}
     spec:
+      serviceAccountName: {{ include "xsk.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           envFrom:
@@ -101,6 +112,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "xsk.fullname" . }}
+  namespace: {{ .Values.create.namespace }}
   labels:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
@@ -118,6 +130,7 @@ apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
 metadata:
   name: {{ include "xsk.fullname" . }}
+  namespace: {{ .Values.create.namespace }}
 spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
   rules:
@@ -141,6 +154,7 @@ apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceInstance
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}
+  namespace: {{ .Values.create.namespace }}
 spec:
   clusterServiceClassExternalName: xsuaa
   clusterServiceClassRef:
@@ -154,30 +168,40 @@ spec:
       - https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
       token-validity: 7200
     role-collections:
-    - description: XSK Developer
-      name: {{ include "xsk.fullname" . }}
+    {{- toYaml .Values.kyma.roleCollections | nindent 4 }}
+    {{- if .Values.kyma.addRoles }}
+    {{ range .Values.kyma.roles }}
+    - description: XSK {{ . }}
+      name: xsk-{{ . }}
       role-template-references:
-      - $XSAPPNAME.Developer
-      - $XSAPPNAME.Operator
+      - $XSAPPNAME.{{ . }}  
+    {{- end }}
+    {{- end }}
     role-templates:
-    - description: Developer related roles
-      name: Developer
+    {{- toYaml .Values.kyma.roleTemplates | nindent 4 }}
+    {{- if .Values.kyma.addRoles }}
+    {{ range .Values.kyma.roles }}
+    - description: {{ . }}  related roles
+      name: {{ . }} 
       scope-references:
-      - $XSAPPNAME.Developer
-    - description: Operator related roles
-      name: Operator
-      scope-references:
-      - $XSAPPNAME.Operator
+      - $XSAPPNAME.{{ . }}
+    {{- end }}
+    {{- end }}
     scopes:
-    - description: Developer scope
-      name: $XSAPPNAME.Developer
-    - description: Operator scope
-      name: $XSAPPNAME.Operator
+    {{- toYaml .Values.kyma.scopes | nindent 4 }}
+    {{- if .Values.kyma.addRoles }}
+    {{ range .Values.kyma.roles }}
+    - description: {{ . }} scope
+      name: $XSAPPNAME.{{ . }}
+    {{- end }}
+    {{- end }}
+      
 ---
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceBinding
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-binding
+  namespace: {{ .Values.create.namespace }}
 spec:
   externalID: {{ uuidv4 }}
   instanceRef:
@@ -189,6 +213,7 @@ apiVersion: servicecatalog.kyma-project.io/v1alpha1
 kind: ServiceBindingUsage
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-usage
+  namespace: {{ .Values.create.namespace }}
 spec:
   parameters:
     envPrefix:

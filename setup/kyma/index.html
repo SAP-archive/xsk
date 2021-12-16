@@ -1400,7 +1400,14 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>At the time of writing these setup instructions <em>(19.08.2021)</em>, creating a HANA Cloud service instance in the SAP BTP Kyma environment was not possible, thus the setup is currently suitable only for <strong>test</strong> &amp; <strong>demo</strong> purposes. You can find a workaround solution <a href="https://github.com/SAP/xsk/discussions/394">here</a>.</p>
+<p>At the time of writing these setup instructions <em>(20.12.2021)</em>, creating a HANA Cloud service instance in the SAP BTP Kyma environment was not possible, thus the setup is currently suitable only for <strong>test</strong> &amp; <strong>demo</strong> purposes. To workaround this limitation:</p>
+<ul>
+<li>Create HANA Cloud service instance in <code>Cloud Foundry</code>, allowing traffic coming outside of the <code>SAP BTP Cloud Foundry</code> environment.</li>
+<li>Add manually some environment variables in the Kubernetes <code>Deployment</code> _(described bellow)).</li>
+</ul>
+<blockquote>
+<p>To learn more about this limitation and join the GitHub discussion go <a href="https://github.com/SAP/xsk/discussions/394">here</a>.</p>
+</blockquote>
 </div>
 <h2 id="steps">Steps</h2>
 <hr />
@@ -1417,16 +1424,15 @@
 <p class="admonition-title">Prerequisites</p>
 <p>Follow the <a href="/setup/database-user/">Database User</a> setup guide.</p>
 </div>
-<p><code>kubectl create secret generic hana-cloud-database \
-    --from-literal=DIRIGIBLE_DATABASE_PROVIDER=custom \
-    --from-literal=DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
-    --from-literal=DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
-    --from-literal=HANA_DRIVER=com.sap.db.jdbc.Driver \
-    --from-literal=HANA_URL='jdbc:sap://&lt;your-hana-cloud-host&gt;/?encrypt=true&amp;validateCertificate=false' \
-    --from-literal=HANA_USERNAME=&lt;your-hana-cloud-username&gt; \
-    --from-literal=HANA_PASSWORD=&lt;your-hana-cloud-password&gt;</code></p>
-</li>
-</ul>
+<div class="highlight"><pre><span></span><code>kubectl create secret generic hana-cloud-database \
+--from-literal=DIRIGIBLE_DATABASE_PROVIDER=custom \
+--from-literal=DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
+--from-literal=DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
+--from-literal=HANA_DRIVER=com.sap.db.jdbc.Driver \
+--from-literal=HANA_URL=&#39;jdbc:sap://&lt;your-hana-cloud-host&gt;/?encrypt=true&amp;validateCertificate=false&#39; \
+--from-literal=HANA_USERNAME=&lt;your-hana-cloud-username&gt; \
+--from-literal=HANA_PASSWORD=&lt;your-hana-cloud-password&gt;
+</code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Before executing the command, replace the placeholders:</p>
@@ -1436,17 +1442,16 @@
 <li><code>&lt;your-hana-cloud-password&gt;</code> with the HANA Cloud password.</li>
 </ul>
 </div>
-<ul>
+</li>
 <li>
 <p>Copy and paste the following content into <code>deployment.yaml</code>:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Deployment (Only)</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
-</div>
-</div>
+<div class="tabbed-block">
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p>Appling this definition will create <code>Deployment</code> and <code>PersistentVolumeClaim</code> resoures only. To install XSK with single definition file, use the <code>All in One</code> section.</p>
+</div>
 <p>```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -1492,6 +1497,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: xsk-claim</p>
 </div>
+</div>
+</div>
 <p>namespace: default
     spec:
       accessModes:
@@ -1500,101 +1507,104 @@ metadata:
         requests:
           storage: 1Gi
 ```</p>
-</li>
-</ul>
 <p>=== "APIRule (Only)</p>
 <div class="highlight"><pre><span></span><code>!!! info
     Appling this definition will create `Service` and `APIRule` resoures only. To install XSK with single definition file, use the `All in One` section.
 
 ```yaml
-    apiVersion: v1
-    kind: Service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xsk
+  name: xsk
+  namespace: default
+spec:
+  ports:
+  - name: xsk
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: xsk
+  type: ClusterIP
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: xsk
+  namespace: default
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+  - accessStrategies:
+    - config: {}
+      handler: noop
+    methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - HEAD
+    path: /.*
+  service:
+    host: xsk.&lt;your-kyma-cluster-host&gt;
+    name: xsk
+    port: 8080
+```
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">All in One</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xsk
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xsk
+  template:
     metadata:
       labels:
         app: xsk
-      name: xsk
-      namespace: default
     spec:
-      ports:
+      containers:
       - name: xsk
-        port: 8080
-        protocol: TCP
-        targetPort: 8080
-      selector:
-        app: xsk
-      type: ClusterIP
-    ---
-    apiVersion: gateway.kyma-project.io/v1alpha1
-    kind: APIRule
-    metadata:
-      name: xsk
-      namespace: default
-    spec:
-      gateway: kyma-gateway.kyma-system.svc.cluster.local
-      rules:
-      - accessStrategies:
-        - config: {}
-          handler: noop
-        methods:
-        - GET
-        - POST
-        - PUT
-        - PATCH
-        - DELETE
-        - HEAD
-        path: /.*
-      service:
-        host: xsk.&lt;your-kyma-cluster-host&gt;
-        name: xsk
-        port: 8080
-    ```
-
-=== &quot;All in One&quot;
-    ```yaml
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: xsk
-      namespace: default
-    spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: xsk
-      template:
-        metadata:
-          labels:
-            app: xsk
-        spec:
-          containers:
-          - name: xsk
-            image: dirigiblelabs/xsk-kyma:latest
-            imagePullPolicy: Always
-        envFrom:
-        - secretRef:
-          name: hana-cloud-database
-            env:
-            - name: DIRIGIBLE_THEME_DEFAULT
-              value: fiori
-            - name: DIRIGIBLE_HOST
-              value: https://xsk.&lt;your-kyma-cluster-host&gt;
-            volumeMounts:
-            - name: xsk-volume
-              mountPath: /usr/local/tomcat/target/dirigible/repository
-            ports:
-            - containerPort: 8080
-              name: xsk
-              protocol: TCP
-          volumes:
-          - name: xsk-volume
-            persistentVolumeClaim:
-              claimName: xsk-claim
-    ---
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: xsk-claim
-  namespace: default
+        image: dirigiblelabs/xsk-kyma:latest
+        imagePullPolicy: Always
+    envFrom:
+    - secretRef:
+      name: hana-cloud-database
+        env:
+        - name: DIRIGIBLE_THEME_DEFAULT
+          value: fiori
+        - name: DIRIGIBLE_HOST
+          value: https://xsk.<your-kyma-cluster-host>
+        volumeMounts:
+        - name: xsk-volume
+          mountPath: /usr/local/tomcat/target/dirigible/repository
+        ports:
+        - containerPort: 8080
+          name: xsk
+          protocol: TCP
+      volumes:
+      - name: xsk-volume
+        persistentVolumeClaim:
+          claimName: xsk-claim</p>
+<hr />
+<p>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xsk-claim</p>
+</div>
+</div>
+</div>
+<p>namespace: default
     spec:
       accessModes:
       - ReadWriteOnce
@@ -1639,11 +1649,12 @@ metadata:
         - HEAD
         path: /.*
       service:
-        host: xsk.&lt;your-kyma-cluster-host&gt;
+        host: xsk.<your-kyma-cluster-host>
         name: xsk
         port: 8080
-    ```
-</code></pre></div>
+    ```</p>
+</li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Replace the <code>&lt;your-kyma-cluster-host&gt;</code> placeholder with your Kyma cluster host <em>(e.g. <strong><code>c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com</code></strong>)</em>.</p>
@@ -1671,7 +1682,7 @@ metadata:
 </li>
 <li>
 <p>Create an XSUAA service instance:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">with Kyma dashboard</label><label for="__tabbed_2_2">with kubectl</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">with Kyma dashboard</label><label for="__tabbed_3_2">with kubectl</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ul>

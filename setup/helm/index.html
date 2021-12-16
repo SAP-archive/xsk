@@ -1697,8 +1697,10 @@ helm repo update
 <p>The application image that was built could be used as well in the installation of XSK with <a href="#setup">Helm</a>, <a href="../kyma/">Kyma</a> and <a href="../cloud-foundry">Cloud Foundry</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You can use for build Kyma (which is default), local and Cloud Foundry.
-- For ClusterStack build image you can use <code>--set clusterBuilder.buildImage</code> and choose one of this:</p>
+<p>You can use for build Kyma (which is default), local and Cloud Foundry.</p>
+<ul>
+<li>For ClusterStack build image you can use <code>--set clusterBuilder.buildImage</code> and choose one of this:</li>
+</ul>
 <div class="highlight"><pre><span></span><code>dirigiblelabs/buildpacks-stack-build-xsk-kyma - Kyma
 dirigiblelabs/buildpacks-stack-build-xsk-cf - Cloud Foundry
 dirigiblelabs/buildpacks-stack-build-xsk - Local
@@ -1713,10 +1715,10 @@ dirigiblelabs/buildpacks-stack-run-xsk - Local
 </li>
 <li>
 <p>For Builder image you can use <code>--set imageBuilder.buildpack</code> and choose one of this:
-```
---set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-kyma - Kyma
---set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-cf - Cloud Foundry <br />
---set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk - Local  </p>
+<div class="highlight"><pre><span></span><code>--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-kyma - Kyma
+--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-cf - Cloud Foundry   
+--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk - Local  
+</code></pre></div></p>
 </li>
 </ul>
 </div>

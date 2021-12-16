@@ -39,6 +39,12 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 * Navigate to: http://127.0.0.1:8080
 * Log in with these username and password: dirigible/dirigible
 
+### Kyma:
+helm install xsk xsk/xsk \
+--set kyma.enabled=true \
+--set kyma.host=<kyma-host>
+
+
 Resources:
 - [XSK](https://github.com/SAP/xsk)
 - [dirigible.io](https://www.dirigible.io)

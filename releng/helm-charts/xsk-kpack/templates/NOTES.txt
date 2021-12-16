@@ -19,8 +19,9 @@ Kpack XSK ClusterStore and ClusterStack installed. To create image Builder execu
 
 {{- if .Values.install.imageBuilder }}
 
-Kpack XSK Builder installed. To trigger Docker image build, execute the following command: https://github.com/SAP/xsk/tree/main/releng/buildpacks/xsk or you can run this commands to tri:
-
+Kpack XSK Builder installed. 
+To trigger Docker image build, execute the following command:
+https://github.com/SAP/xsk/tree/main/releng/buildpacks/xsk or you can run this commands:
 helm install xsk-image xsk/xsk-kpack \
 --set create.image=true \
 --set image.repository=<your-repository-for-your-OCI-image> \

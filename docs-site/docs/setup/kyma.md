@@ -26,117 +26,251 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
 1. Deploy XSK:
 
+    - Create HANA Cloud secret:
+
+        !!! info "Prerequisites"
+            Follow the [Database User](/setup/database-user/) setup guide.
+
+        ```
+	kubectl create secret generic hana-cloud-database \
+	--from-literal=DIRIGIBLE_DATABASE_PROVIDER=custom \
+	--from-literal=DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
+	--from-literal=DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
+	--from-literal=HANA_DRIVER=com.sap.db.jdbc.Driver \
+	--from-literal=HANA_URL='jdbc:sap://<your-hana-cloud-host>/?encrypt=true&validateCertificate=false' \
+	--from-literal=HANA_USERNAME=<your-hana-cloud-username> \
+	--from-literal=HANA_PASSWORD=<your-hana-cloud-password>
+	```
+	
+	!!! note
+	    Before executing the command, replace the placeholders:
+
+	    - `<your-hana-cloud-host>` with the HANA Cloud host URL _(e.g. `bc6e8e95-xxx.hanacloud.ondemand.com`)_.
+	    - `<your-hana-cloud-username>` with the HANA Cloud username _(e.g. `XSK_USER`)_.
+	    - `<your-hana-cloud-password>` with the HANA Cloud password.
+
     - Copy and paste the following content into `deployment.yaml`:
 
-        ```yaml
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: xsk
-          namespace: default
-        spec:
-          replicas: 1
-          selector:
-            matchLabels:
-              app: xsk
-          template:
+        === "Deployment (Only)"
+
+	    !!! info
+	        Appling this definition will create `Deployment` and `PersistentVolumeClaim` resoures only. To install XSK with single definition file, use the `All in One` section.
+
+            ```yaml
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: xsk
+              namespace: default
+            spec:
+              replicas: 1
+              selector:
+                matchLabels:
+                  app: xsk
+              template:
+                metadata:
+                  labels:
+                    app: xsk
+                spec:
+                  containers:
+                  - name: xsk
+                    image: dirigiblelabs/xsk-kyma:latest
+                    imagePullPolicy: Always
+	            envFrom:
+	            - secretRef:
+	              name: hana-cloud-database
+                    env:
+                    - name: DIRIGIBLE_THEME_DEFAULT
+                      value: fiori
+                    - name: DIRIGIBLE_HOST
+                      value: https://xsk.<your-kyma-cluster-host>
+                    volumeMounts:
+                    - name: xsk-volume
+                      mountPath: /usr/local/tomcat/target/dirigible/repository
+                    ports:
+                    - containerPort: 8080
+                      name: xsk
+                      protocol: TCP
+                  volumes:
+                  - name: xsk-volume
+                    persistentVolumeClaim:
+                      claimName: xsk-claim
+            ---
+            apiVersion: v1
+            kind: PersistentVolumeClaim
+            metadata:
+              name: xsk-claim
+	      namespace: default
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
+	    ```
+
+	=== "APIRule (Only)
+
+	    !!! info
+	        Appling this definition will create `Service` and `APIRule` resoures only. To install XSK with single definition file, use the `All in One` section.
+
+	    ```yaml
+            apiVersion: v1
+            kind: Service
             metadata:
               labels:
                 app: xsk
+              name: xsk
+              namespace: default
             spec:
-              containers:
+              ports:
               - name: xsk
-                image: dirigiblelabs/xsk-kyma:latest
-                imagePullPolicy: Always
-                env:
-                - name: DIRIGIBLE_THEME_DEFAULT
-                  value: fiori
-                - name: DIRIGIBLE_HOST
-                  value: https://xsk.<your-kyma-cluster-host>
-                volumeMounts:
-                - name: xsk-volume
-                  mountPath: /usr/local/tomcat/target/dirigible/repository
-                ports:
-                - containerPort: 8080
-                  name: xsk
-                  protocol: TCP
-              volumes:
-              - name: xsk-volume
-                persistentVolumeClaim:
-                  claimName: xsk-claim
-        ---
-        apiVersion: v1
-        kind: Service
-        metadata:
-          labels:
-            app: xsk
-          name: xsk
-          namespace: default
-        spec:
-          ports:
-          - name: xsk
-            port: 8080
-            protocol: TCP
-            targetPort: 8080
-          selector:
-            app: xsk
-          type: ClusterIP
-        ---
-        apiVersion: v1
-        kind: PersistentVolumeClaim
-        metadata:
-          name: xsk-claim
-        spec:
-          accessModes:
-          - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
-        ---
-        apiVersion: gateway.kyma-project.io/v1alpha1
-        kind: APIRule
-        metadata:
-          name: xsk
-          namespace: default
-        spec:
-          gateway: kyma-gateway.kyma-system.svc.cluster.local
-          rules:
-          - accessStrategies:
-            - config: {}
-              handler: noop
-            methods:
-            - GET
-            - POST
-            - PUT
-            - PATCH
-            - DELETE
-            - HEAD
-            path: /.*
-          service:
-            host: xsk.<your-kyma-cluster-host>
-            name: xsk
-            port: 8080
-        ```
-	
-        !!! Note
-            Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host _(e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**)_.
+                port: 8080
+                protocol: TCP
+                targetPort: 8080
+              selector:
+                app: xsk
+              type: ClusterIP
+            ---
+            apiVersion: gateway.kyma-project.io/v1alpha1
+            kind: APIRule
+            metadata:
+              name: xsk
+              namespace: default
+            spec:
+              gateway: kyma-gateway.kyma-system.svc.cluster.local
+              rules:
+              - accessStrategies:
+                - config: {}
+                  handler: noop
+                methods:
+                - GET
+                - POST
+                - PUT
+                - PATCH
+                - DELETE
+                - HEAD
+                path: /.*
+              service:
+                host: xsk.<your-kyma-cluster-host>
+                name: xsk
+                port: 8080
+            ```
 
-        !!! tip "XSK versions"
-            Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:
+        === "All in One"
+            ```yaml
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: xsk
+              namespace: default
+            spec:
+              replicas: 1
+              selector:
+                matchLabels:
+                  app: xsk
+              template:
+                metadata:
+                  labels:
+                    app: xsk
+                spec:
+                  containers:
+                  - name: xsk
+                    image: dirigiblelabs/xsk-kyma:latest
+                    imagePullPolicy: Always
+	            envFrom:
+	            - secretRef:
+	              name: hana-cloud-database
+                    env:
+                    - name: DIRIGIBLE_THEME_DEFAULT
+                      value: fiori
+                    - name: DIRIGIBLE_HOST
+                      value: https://xsk.<your-kyma-cluster-host>
+                    volumeMounts:
+                    - name: xsk-volume
+                      mountPath: /usr/local/tomcat/target/dirigible/repository
+                    ports:
+                    - containerPort: 8080
+                      name: xsk
+                      protocol: TCP
+                  volumes:
+                  - name: xsk-volume
+                    persistentVolumeClaim:
+                      claimName: xsk-claim
+            ---
+            apiVersion: v1
+            kind: PersistentVolumeClaim
+            metadata:
+              name: xsk-claim
+	      namespace: default
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
+            ---
+            apiVersion: v1
+            kind: Service
+            metadata:
+              labels:
+                app: xsk
+              name: xsk
+              namespace: default
+            spec:
+              ports:
+              - name: xsk
+                port: 8080
+                protocol: TCP
+                targetPort: 8080
+              selector:
+                app: xsk
+              type: ClusterIP
+            ---
+            apiVersion: gateway.kyma-project.io/v1alpha1
+            kind: APIRule
+            metadata:
+              name: xsk
+              namespace: default
+            spec:
+              gateway: kyma-gateway.kyma-system.svc.cluster.local
+              rules:
+              - accessStrategies:
+                - config: {}
+                  handler: noop
+                methods:
+                - GET
+                - POST
+                - PUT
+                - PATCH
+                - DELETE
+                - HEAD
+                path: /.*
+              service:
+                host: xsk.<your-kyma-cluster-host>
+                name: xsk
+                port: 8080
+            ```
 
-            - You can find all released versions [here](https://github.com/sap/xsk/releases/).
-            - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
+    !!! Note
+        Replace the `<your-kyma-cluster-host>` placeholder with your Kyma cluster host _(e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**)_.
+
+    !!! tip "XSK versions"
+        Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:
+
+        - You can find all released versions [here](https://github.com/sap/xsk/releases/).
+        - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
 
     - Navigate to your Kyma dashboard and select the **`default`** namespace.
 
     - Click the **Deploy new resource** button and select the `deployment.yaml` file.
 
     !!! info "Note"
-        Alternatively, you can use the `kubectl -f deployment.yaml` to deploy the resources.
+        Alternatively, you can use the `kubectl apply -f deployment.yaml` to deploy the resources.
 
 1. Create an XSUAA service instance:
 
-    === "Json"
+    === "with Kyma dashboard"
         - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
         - Find the `Authorization & Trust Management` service.
         - Create a new service instance.
@@ -198,13 +332,16 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
          - Bind the servce instance to the **`xsk`** application.
 
-    === "Yaml"
+    === "with kubectl"
+
+         - Copy and paste the following content into `xsuaa.yaml`:
 
         ```yaml
         apiVersion: servicecatalog.k8s.io/v1beta1
         kind: ServiceInstance
         metadata:
           name: xsuaa-xsk
+	  namespace: default
         spec:
           clusterServiceClassExternalName: xsuaa
           clusterServiceClassRef:
@@ -244,6 +381,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         kind: ServiceBinding
         metadata:
           name: xsuaa-xsk-binding
+          namespace: default
         spec:
           instanceRef:
             name: xsuaa-xsk
@@ -254,6 +392,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         kind: ServiceBindingUsage
         metadata:
           name: xsuaa-xsk-usage
+          namespace: default
         spec:
           parameters:
             envPrefix:
@@ -265,12 +404,22 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
             name: xsk
         ```
 
+        !!! info "Note"
+            Execute the following command to apply the XSUAA configuration: `kubectl apply -f xsuaa.yaml` or use the **Deploy new resource** functionality.
+
     !!! Note
             Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host (e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**).
     
 1. Assign the `Developer` and `Operator` roles.
 
+    - Navigate to the `SAP BTP Cockpit`.
+    - Login to your subaccount.
+    - Go to `Security` -> `Users`.
+    - Select your username.
+    - Click the `Assign Role Collection` button.
+    - From the list of roles select the `XSK Developer` and `XSK Operator` roles.
+    - Click the `Assign Role Collection` button to update the assigned role collections.
+
 1. Log in.
 
-!!! example "Additional Materials"
-    You can find a step-by-step tutorial [here](https://blogs.sap.com/2020/10/13/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-kyma-environment/).
+    - Go to `https://xsk.<your-kyma-cluster-host>` or navigate to `Configurations` -> `APIRules` section from the Kyma dashboard.

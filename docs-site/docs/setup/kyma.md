@@ -17,7 +17,12 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
     - Navigate to your SAP BTP global account. You can access your Trial account in the SAP BTP cockpit from [here](https://account.hanatrial.ondemand.com/).
 
 !!! warning "Warning"
-    At the time of writing these setup instructions _(19.08.2021)_, creating a HANA Cloud service instance in the SAP BTP Kyma environment was not possible, thus the setup is currently suitable only for **test** & **demo** purposes. You can find a workaround solution [here](https://github.com/SAP/xsk/discussions/394).
+    At the time of writing these setup instructions _(20.12.2021)_, creating a HANA Cloud service instance in the SAP BTP Kyma environment was not possible, thus the setup is currently suitable only for **test** & **demo** purposes. To workaround this limitation:
+    
+    - Create HANA Cloud service instance in `Cloud Foundry`, allowing traffic coming outside of the `SAP BTP Cloud Foundry` environment.
+    - Add manually some environment variables in the Kubernetes `Deployment` _(described bellow)).
+
+    > To learn more about this limitation and join the GitHub discussion go [here](https://github.com/SAP/xsk/discussions/394).
 
 ## Steps
 ---
@@ -32,29 +37,29 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
             Follow the [Database User](/setup/database-user/) setup guide.
 
         ```
-	kubectl create secret generic hana-cloud-database \
-	--from-literal=DIRIGIBLE_DATABASE_PROVIDER=custom \
-	--from-literal=DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
-	--from-literal=DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
-	--from-literal=HANA_DRIVER=com.sap.db.jdbc.Driver \
-	--from-literal=HANA_URL='jdbc:sap://<your-hana-cloud-host>/?encrypt=true&validateCertificate=false' \
-	--from-literal=HANA_USERNAME=<your-hana-cloud-username> \
-	--from-literal=HANA_PASSWORD=<your-hana-cloud-password>
-	```
-	
-	!!! note
-	    Before executing the command, replace the placeholders:
+        kubectl create secret generic hana-cloud-database \
+        --from-literal=DIRIGIBLE_DATABASE_PROVIDER=custom \
+        --from-literal=DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=HANA \
+        --from-literal=DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=HANA \
+        --from-literal=HANA_DRIVER=com.sap.db.jdbc.Driver \
+        --from-literal=HANA_URL='jdbc:sap://<your-hana-cloud-host>/?encrypt=true&validateCertificate=false' \
+        --from-literal=HANA_USERNAME=<your-hana-cloud-username> \
+        --from-literal=HANA_PASSWORD=<your-hana-cloud-password>
+        ```
 
-	    - `<your-hana-cloud-host>` with the HANA Cloud host URL _(e.g. `bc6e8e95-xxx.hanacloud.ondemand.com`)_.
-	    - `<your-hana-cloud-username>` with the HANA Cloud username _(e.g. `XSK_USER`)_.
-	    - `<your-hana-cloud-password>` with the HANA Cloud password.
+        !!! note
+            Before executing the command, replace the placeholders:
+
+            - `<your-hana-cloud-host>` with the HANA Cloud host URL _(e.g. `bc6e8e95-xxx.hanacloud.ondemand.com`)_.
+            - `<your-hana-cloud-username>` with the HANA Cloud username _(e.g. `XSK_USER`)_.
+            - `<your-hana-cloud-password>` with the HANA Cloud password.
 
     - Copy and paste the following content into `deployment.yaml`:
 
         === "Deployment (Only)"
 
-	    !!! info
-	        Appling this definition will create `Deployment` and `PersistentVolumeClaim` resoures only. To install XSK with single definition file, use the `All in One` section.
+            !!! info
+                Appling this definition will create `Deployment` and `PersistentVolumeClaim` resoures only. To install XSK with single definition file, use the `All in One` section.
 
             ```yaml
             apiVersion: apps/v1
@@ -109,12 +114,12 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
                   storage: 1Gi
 	    ```
 
-	=== "APIRule (Only)
+        === "APIRule (Only)
 
-	    !!! info
-	        Appling this definition will create `Service` and `APIRule` resoures only. To install XSK with single definition file, use the `All in One` section.
+            !!! info
+                Appling this definition will create `Service` and `APIRule` resoures only. To install XSK with single definition file, use the `All in One` section.
 
-	    ```yaml
+            ```yaml
             apiVersion: v1
             kind: Service
             metadata:

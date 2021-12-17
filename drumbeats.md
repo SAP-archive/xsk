@@ -1,5 +1,39 @@
 # Drumbeats
 
+
+## 2021 Week 50 (13 December - 19 December)
+
+#### Focus topics:
+
+- Analytic Privileges initial support
+- Helm Chart improvements
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-13..2021-12-19) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-13..2021-12-19) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-12-13..2021-12-19) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-12-13..2021-12-19) PRs
+
+----
+
+## 2021 Week 49 (06 December - 12 December)
+
+#### Focus topics:
+
+- Grant HDI container privileges on external artefacts' schemas
+- Allow xsodata entity definition use synonym
+- Add support for all HANA Cloud data types
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-06..2021-12-12) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-06..2021-12-12) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-12-06..2021-12-12) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-12-06..2021-12-12) PRs
+
+----
+
 ## 2021 Week 48 (29 November - 05 December)
 
 #### Focus topics:

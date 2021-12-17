@@ -114,17 +114,6 @@ jobs:
         docker tag dirigiblelabs/buildpacks-builder-xsk-cf dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
         docker push dirigiblelabs/buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
         cd ../../../../
-#------------------Update XSK Instance-------------------#
-
-    - name: Kubectl tool installer
-      uses: Azure/setup-kubectl@v1
-    - name: Setup Kube Config File
-      run: |
-        mkdir $HOME/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
-    - name: Update XSK Instance
-      run: kubectl set image deployment/xsk-trial xsk-trial=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
-
 
 #----------------Helm Release------------------#
     - id: install-secret-key
@@ -166,6 +155,17 @@ jobs:
 
         helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk
         helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-kpack
+
+#------------------Update XSK Instance-------------------#
+
+    - name: Kubectl tool installer
+      uses: Azure/setup-kubectl@v1
+    - name: Setup Kube Config File
+      run: |
+        mkdir $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
+    - name: Update XSK Instance
+      run: kubectl set image deployment/xsk-trial xsk-trial=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
 
 #------------------Update XSK Instance-------------------#
 

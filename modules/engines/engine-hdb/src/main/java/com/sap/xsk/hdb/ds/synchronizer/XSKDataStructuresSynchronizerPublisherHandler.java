@@ -12,11 +12,11 @@
 package com.sap.xsk.hdb.ds.synchronizer;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import org.eclipse.dirigible.core.publisher.api.PublisherHandler;
+import org.eclipse.dirigible.core.publisher.api.AbstractPublisherHandler;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-public class XSKDataStructuresSynchronizerPublisherHandler extends PublisherHandler {
+public class XSKDataStructuresSynchronizerPublisherHandler extends AbstractPublisherHandler {
 
   @Override
   public void beforePublish(String location) {
@@ -35,8 +35,6 @@ public class XSKDataStructuresSynchronizerPublisherHandler extends PublisherHand
 
   @Override
   public void afterUnpublish(String location) throws SchedulerException {
-    String locationQueryParam = getLocationQueryParam(location, true);
-
-    removeMetadata(new PersistenceManager<XSKDataStructureModel>(), "XSK_DATA_STRUCTURES", "DS_LOCATION", locationQueryParam);
+    removeMetadata(new PersistenceManager<XSKDataStructureModel>(), "XSK_DATA_STRUCTURES", "DS_LOCATION", location, true);
   }
 }

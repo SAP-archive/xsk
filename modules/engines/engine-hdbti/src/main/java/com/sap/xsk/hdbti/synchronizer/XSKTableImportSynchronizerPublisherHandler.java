@@ -13,11 +13,11 @@ package com.sap.xsk.hdbti.synchronizer;
 
 import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
-import org.eclipse.dirigible.core.publisher.api.PublisherHandler;
+import org.eclipse.dirigible.core.publisher.api.AbstractPublisherHandler;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-public class XSKTableImportSynchronizerPublisherHandler extends PublisherHandler {
+public class XSKTableImportSynchronizerPublisherHandler extends AbstractPublisherHandler {
 
   @Override
   public void beforePublish(String location) {
@@ -36,9 +36,7 @@ public class XSKTableImportSynchronizerPublisherHandler extends PublisherHandler
 
   @Override
   public void afterUnpublish(String location) throws SchedulerException {
-    String locationQueryParam = getLocationQueryParam(location, true);
-
-    removeMetadata(new PersistenceManager<XSKImportedCSVRecordModel>(), "XSK_IMPORTED_CSV_RECORDS", "HDBTI_LOCATION", locationQueryParam);
-    removeMetadata(new PersistenceManager<XSKTableImportToCsvRelation>(), "XSK_TABLE_IMPORT_TO_CSV", "HDBTI_LOCATION", locationQueryParam);
+    removeMetadata(new PersistenceManager<XSKImportedCSVRecordModel>(), "XSK_IMPORTED_CSV_RECORDS", "HDBTI_LOCATION", location, true);
+    removeMetadata(new PersistenceManager<XSKTableImportToCsvRelation>(), "XSK_TABLE_IMPORT_TO_CSV", "HDBTI_LOCATION", location, true);
   }
 }

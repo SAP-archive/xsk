@@ -12,11 +12,11 @@
 package com.sap.xsk.xsjob.ds.synchronizer;
 
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
-import org.eclipse.dirigible.core.publisher.api.PublisherHandler;
+import org.eclipse.dirigible.core.publisher.api.AbstractPublisherHandler;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-public class XSKJobSynchronizerPublisherHandler extends PublisherHandler {
+public class XSKJobSynchronizerPublisherHandler extends AbstractPublisherHandler {
 
   @Override
   public void beforePublish(String location) {
@@ -35,8 +35,6 @@ public class XSKJobSynchronizerPublisherHandler extends PublisherHandler {
 
   @Override
   public void afterUnpublish(String location) throws SchedulerException {
-    String locationQueryParam = getLocationQueryParam(location, false);
-
-    removeMetadata(new PersistenceManager<XSKJobDefinition>(), "XSK_JOBS", "MODULE", locationQueryParam);
+    removeMetadata(new PersistenceManager<XSKJobDefinition>(), "XSK_JOBS", "MODULE", location, false);
   }
 }

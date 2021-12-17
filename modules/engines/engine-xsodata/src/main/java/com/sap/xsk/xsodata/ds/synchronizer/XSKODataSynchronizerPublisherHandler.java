@@ -12,11 +12,11 @@
 package com.sap.xsk.xsodata.ds.synchronizer;
 
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
-import org.eclipse.dirigible.core.publisher.api.PublisherHandler;
+import org.eclipse.dirigible.core.publisher.api.AbstractPublisherHandler;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-public class XSKODataSynchronizerPublisherHandler extends PublisherHandler {
+public class XSKODataSynchronizerPublisherHandler extends AbstractPublisherHandler {
 
   @Override
   public void beforePublish(String location) {
@@ -35,9 +35,7 @@ public class XSKODataSynchronizerPublisherHandler extends PublisherHandler {
 
   @Override
   public void afterUnpublish(String location) throws SchedulerException {
-    String locationQueryParam = getLocationQueryParam(location, true);
-
-    removeMetadata(new PersistenceManager<XSKODataModel>(), "XSK_ODATA", "OD_LOCATION", locationQueryParam);
+    removeMetadata(new PersistenceManager<XSKODataModel>(), "XSK_ODATA", "OD_LOCATION", location, true);
   }
 }
 

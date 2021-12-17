@@ -1405,7 +1405,7 @@
 <li>Create HANA Cloud service instance in <code>Cloud Foundry</code>, allowing traffic coming outside of the <code>SAP BTP Cloud Foundry</code> environment.</li>
 <li>Add manually some environment variables in the Kubernetes <code>Deployment</code> _(described bellow)).</li>
 </ul>
-<p><em>To learn more about this limitation and join the GitHub discussion go <a href="https://github.com/SAP/xsk/discussions/394">here</a>.</em></p>
+<p><em>To learn more about this limitation go to the GitHub <a href="https://github.com/SAP/xsk/discussions/394">discussion</a>.</em></p>
 </div>
 <h2 id="steps">Steps</h2>
 <hr />
@@ -1462,10 +1462,10 @@
       <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
         <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dirigiblelabs/xsk-kyma:latest</span>
         <span class="nt">imagePullPolicy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Always</span>
-    <span class="nt">envFrom</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">secretRef</span><span class="p">:</span>
-      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hana-cloud-database</span>
-        <span class="l l-Scalar l-Scalar-Plain">env</span><span class="p p-Indicator">:</span>
+        <span class="nt">envFrom</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">secretRef</span><span class="p">:</span>
+            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hana-cloud-database</span>
+        <span class="nt">env</span><span class="p">:</span>
         <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DIRIGIBLE_THEME_DEFAULT</span>
           <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fiori</span>
         <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DIRIGIBLE_HOST</span>
@@ -1486,7 +1486,7 @@
 <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PersistentVolumeClaim</span>
 <span class="nt">metadata</span><span class="p">:</span>
   <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-claim</span>
-<span class="nt">mespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
 <span class="nt">spec</span><span class="p">:</span>
   <span class="nt">accessModes</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span>
@@ -1560,10 +1560,10 @@
       <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk</span>
         <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dirigiblelabs/xsk-kyma:latest</span>
         <span class="nt">imagePullPolicy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Always</span>
-    <span class="nt">envFrom</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">secretRef</span><span class="p">:</span>
-      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hana-cloud-database</span>
-        <span class="l l-Scalar l-Scalar-Plain">env</span><span class="p p-Indicator">:</span>
+        <span class="nt">envFrom</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">secretRef</span><span class="p">:</span>
+            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hana-cloud-database</span>
+        <span class="nt">env</span><span class="p">:</span>
         <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DIRIGIBLE_THEME_DEFAULT</span>
           <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fiori</span>
         <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DIRIGIBLE_HOST</span>
@@ -1584,7 +1584,7 @@
 <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PersistentVolumeClaim</span>
 <span class="nt">metadata</span><span class="p">:</span>
   <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xsk-claim</span>
-<span class="nt">mespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
 <span class="nt">spec</span><span class="p">:</span>
   <span class="nt">accessModes</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span>

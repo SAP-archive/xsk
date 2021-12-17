@@ -20,9 +20,9 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
     At the time of writing these setup instructions _(20.12.2021)_, creating a HANA Cloud service instance in the SAP BTP Kyma environment was not possible, thus the setup is currently suitable only for **test** & **demo** purposes. To workaround this limitation:
     
     - Create HANA Cloud service instance in `Cloud Foundry`, allowing traffic coming outside of the `SAP BTP Cloud Foundry` environment.
-    - Add manually some environment variables in the Kubernetes `Deployment` _(described bellow)).
+    - Add HANA related environment variables in the Kubernetes `Deployment` _(described in detail bellow)_.
 
-    _To learn more about this limitation go to the GitHub [discussion](https://github.com/SAP/xsk/discussions/394)._
+    _To learn more about this limitation visit the [GitHub discussion](https://github.com/SAP/xsk/discussions/394)._
 
 ## Steps
 ---

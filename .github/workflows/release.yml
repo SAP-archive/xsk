@@ -716,7 +716,7 @@ jobs:
           mkdir $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
       - name: Update XSK Instance
-        run: kubectl set image deployment/xsk-trial xsk-trial=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
+        run: kubectl set image deployment/xsk-trial xsk=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} -n xsk-trial
 
       #------------------Update XSK Instance-------------------#
 

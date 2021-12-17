@@ -125,6 +125,48 @@ jobs:
     - name: Update XSK Instance
       run: kubectl set image deployment/xsk-trial xsk-trial=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
 
+
+#----------------Helm Release------------------#
+    - id: install-secret-key
+      name: Install gpg secret key
+      run: |
+        cat <(echo -e "${{ secrets.GPG_KEY_HELM }}") | gpg --batch --import  --no-tty --batch --yes
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v1
+    - name: Helm Charts Release - Checkout gh-pages
+      run: |
+        mkdir charts-temp
+        cp -r releng/helm-charts/ charts-temp/
+        #### Git Checkout Workaround
+        git add .github/
+        git add .reuse/
+        git add LICENSES/
+        git add modules/
+        git add releng/
+        git add samples/
+        git reset --hard
+        ####
+        git fetch
+        git checkout gh-pages
+        cp charts/* .
+    - name: Helm Charts Release - Set Chart Version - XSK
+      run: |
+        cd charts-temp/helm-charts/xsk/
+        find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+        cd ../xsk-kpack/
+        find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+        cd templates/
+        find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+    - name: Helm Charts Release
+      run: |
+        cp charts/* charts-temp/helm-charts/
+        cd charts-temp/helm-charts/
+
+        gpg --no-tty --batch --export-secret-keys > ~/.gnupg/secring.gpg
+
+        helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk
+        helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-kpack
+
 #------------------Update XSK Instance-------------------#
 
     - name: Slack Notification

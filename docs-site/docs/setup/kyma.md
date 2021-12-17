@@ -22,7 +22,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
     - Create HANA Cloud service instance in `Cloud Foundry`, allowing traffic coming outside of the `SAP BTP Cloud Foundry` environment.
     - Add manually some environment variables in the Kubernetes `Deployment` _(described bellow)).
 
-    _To learn more about this limitation and join the GitHub discussion go [here](https://github.com/SAP/xsk/discussions/394)._
+    _To learn more about this limitation go to the GitHub [discussion](https://github.com/SAP/xsk/discussions/394)._
 
 ## Steps
 ---
@@ -76,9 +76,9 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
               - name: xsk
                 image: dirigiblelabs/xsk-kyma:latest
                 imagePullPolicy: Always
-            envFrom:
-            - secretRef:
-              name: hana-cloud-database
+                envFrom:
+                - secretRef:
+                    name: hana-cloud-database
                 env:
                 - name: DIRIGIBLE_THEME_DEFAULT
                   value: fiori
@@ -100,7 +100,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         kind: PersistentVolumeClaim
         metadata:
           name: xsk-claim
-        mespace: default
+          namespace: default
         spec:
           accessModes:
           - ReadWriteOnce
@@ -175,9 +175,9 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
               - name: xsk
                 image: dirigiblelabs/xsk-kyma:latest
                 imagePullPolicy: Always
-            envFrom:
-            - secretRef:
-              name: hana-cloud-database
+                envFrom:
+                - secretRef:
+                    name: hana-cloud-database
                 env:
                 - name: DIRIGIBLE_THEME_DEFAULT
                   value: fiori
@@ -199,7 +199,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         kind: PersistentVolumeClaim
         metadata:
           name: xsk-claim
-        mespace: default
+          namespace: default
         spec:
           accessModes:
           - ReadWriteOnce

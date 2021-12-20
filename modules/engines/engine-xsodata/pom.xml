@@ -93,6 +93,12 @@
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-core-publisher</artifactId>
           <version>${dirigible.version}</version>
+          <exclusions>
+            <exclusion>
+              <groupId>org.eclipse.dirigible</groupId>
+              <artifactId>dirigible-database-persistence</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
 
         <dependency>

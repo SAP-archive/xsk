@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.xsodata.ds.model.XSKDBArtifactModel;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
@@ -65,6 +66,8 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   private ResultSet mockResultSetEntityExist;
   @Mock
   private DataSource mockDataSource;
+  @Mock
+  private XSKDBArtifactModel artifactReturnType;
   @InjectMocks
   private final XSKODataParser parser = new XSKODataParser();
 
@@ -129,6 +132,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   @Test(expected = XSKOData2TransformerException.class)
   public void testApplyKeysConditionFailWhenSynonym() throws IOException, SQLException, XSKArtifactParserException {
     mockGetTablesFailWhenSynonym();
+    mockGetTable();
     String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
   }
@@ -224,36 +228,40 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
 
   private void mockGetTablesSuccessfully() throws SQLException {
     mockGetTable();
-    when(mockResultSetEntityExist.next()).thenReturn(true);
+    when(mockResultSetEntityExist.next()).thenReturn(true).thenReturn(false);
     when(mockResultSetWhenSynonym.next()).thenReturn(false);
-    when(mockResultSet.next()).thenReturn(true);
+    when(mockResultSet.next()).thenReturn(true).thenReturn(false);
+    when(artifactReturnType.getType()).thenReturn(ISqlKeywords.METADATA_TABLE);
   }
 
   private void mockGetTablesSuccessfullyWhenSynonym() throws SQLException {
     mockGetTable();
-    when(mockResultSetEntityExist.next()).thenReturn(true);
-    when(mockResultSetWhenSynonym.next()).thenReturn(true);
+    when(mockResultSetEntityExist.next()).thenReturn(true).thenReturn(false);
+    when(mockResultSetWhenSynonym.next()).thenReturn(true).thenReturn(false);
     when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class), any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
     when(mockSynonymTargetObjectMetadata.isEmpty()).thenReturn(false);
     when(mockSynonymTargetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE)).thenReturn("MyTestSynonym");
-    when(mockResultSet.next()).thenReturn(true);
+    when(mockResultSet.next()).thenReturn(true).thenReturn(false);
+    when(artifactReturnType.getType()).thenReturn(ISqlKeywords.METADATA_SYNONYM);
   }
 
   private void mockGetTablesFail() throws SQLException {
     mockGetTable();
-    when(mockResultSetEntityExist.next()).thenReturn(true);
+    when(mockResultSetEntityExist.next()).thenReturn(true).thenReturn(false);
     when(mockResultSetWhenSynonym.next()).thenReturn(false);
     when(mockResultSet.next()).thenReturn(false);
+    when(artifactReturnType.getType()).thenReturn("PLACEHOLDER");
   }
 
   private void mockGetTablesFailWhenSynonym() throws SQLException {
     mockGetTable();
-    when(mockResultSetEntityExist.next()).thenReturn(true);
-    when(mockResultSetWhenSynonym.next()).thenReturn(true);
+    when(mockResultSetEntityExist.next()).thenReturn(true).thenReturn(false);
+    when(mockResultSetWhenSynonym.next()).thenReturn(true).thenReturn(false);
     when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class), any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
     when(mockSynonymTargetObjectMetadata.isEmpty()).thenReturn(false);
     when(mockSynonymTargetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE)).thenReturn("MyTestSynonym");
     when(mockResultSet.next()).thenReturn(false);
+    when(artifactReturnType.getType()).thenReturn("PLACEHOLDER");
   }
 
   private void mockGetTable() throws SQLException {

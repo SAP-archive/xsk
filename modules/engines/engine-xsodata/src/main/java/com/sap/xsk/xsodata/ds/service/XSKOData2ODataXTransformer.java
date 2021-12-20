@@ -19,7 +19,7 @@ import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataXTransformer;
 
 public class XSKOData2ODataXTransformer {
 
-  private OData2ODataXTransformer oData2ODataXTransformer = new OData2ODataXTransformer();
+  private OData2ODataXTransformer oData2ODataXTransformer = new OData2ODataXTransformer(new XSKTableMetadataProvider());
 
   public String[] transform(ODataDefinition oDataDefinition) throws SQLException {
     try {

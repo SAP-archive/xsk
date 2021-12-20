@@ -223,7 +223,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     List<XSKDataStructureHDBTableModel> tableModels = new ArrayList<>();
     parsedEntities.forEach(e -> {
-      tableModels.add(this.hdbddTransformer.transformEntitySymbolToTableModel(e));
+      tableModels.add(this.hdbddTransformer.transformEntitySymbolToTableModel(e, cdsModel.getLocation()));
 
       //One HDBDD file have only one schema, with apply to all entities inside the hdbdd file
       cdsModel.setSchema(e.getSchema());

@@ -103,7 +103,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertNull(orderDataStructure.getPublicProp());
     assertNull(orderDataStructure.getLoggingType());
     assertNull(orderDataStructure.getTemporary());
-    assertNull(orderDataStructure.getLocation());
+    assertNotNull(orderDataStructure.getLocation());
     assertNull(orderDataStructure.getType());
     assertNull(orderDataStructure.getTableType());
     assertNull(orderDataStructure.getDescription());
@@ -231,7 +231,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertNull(personDataStructure.getPublicProp());
     assertNull(personDataStructure.getLoggingType());
     assertNull(personDataStructure.getTemporary());
-    assertNull(personDataStructure.getLocation());
+    assertNotNull(personDataStructure.getLocation());
     assertNull(personDataStructure.getType());
     assertNull(personDataStructure.getTableType());
     assertNull(personDataStructure.getDescription());
@@ -397,7 +397,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertNull(orderDataStructure.getPublicProp());
     assertNull(orderDataStructure.getLoggingType());
     assertNull(orderDataStructure.getTemporary());
-    assertNull(orderDataStructure.getLocation());
+    assertNotNull(orderDataStructure.getLocation());
     assertNull(orderDataStructure.getType());
     assertNull(orderDataStructure.getTableType());
     assertNull(orderDataStructure.getDescription());

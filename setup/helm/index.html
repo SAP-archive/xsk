@@ -1419,19 +1419,17 @@ helm repo update
 </li>
 <li>
 <p>Verify XSK Helm charts:</p>
-</li>
-<li>
 <p>From key server</p>
 <div class="highlight"><pre><span></span><code>helm pull xsk/xsk --prov
 gpg --keyserver keys.openpgp.org --recv-key 734B0E32368A2283290E0B966010F454D1819484
 gpg --export &gt; ~/.gnupg/pubring.gpg
 helm verify xsk-&lt;version&gt;.tgz 
 </code></pre></div>
-</li>
-<li>
-<p>From github
-    !!! info "Note"
-        Use command <code>wget</code> for download public key instead of <code>curl</code></p>
+<p>From github</p>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<p>Use command <code>wget</code> for download public key instead of <code>curl</code></p>
+</div>
 <div class="highlight"><pre><span></span><code>helm pull xsk/xsk --prov
 wget https://sap.github.io/xsk/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
 helm verify xsk-&lt;version&gt;.tgz 

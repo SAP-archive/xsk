@@ -27,7 +27,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
 
 1. Verify XSK Helm charts:
 
-   - From key server
+    From key server
 
     ```
     helm pull xsk/xsk --prov
@@ -36,7 +36,8 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
     helm verify xsk-<version>.tgz 
     ```
 
-   - From github
+    From github
+    
     !!! info "Note"
         Use command `wget` for download public key instead of `curl`
 

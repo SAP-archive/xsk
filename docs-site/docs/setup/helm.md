@@ -25,6 +25,27 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
     helm repo update
     ```
 
+1. Verify XSK Helm charts:
+
+   - From key server
+
+    ```
+    helm pull xsk/xsk --prov
+    gpg --keyserver keys.openpgp.org --recv-key 734B0E32368A2283290E0B966010F454D1819484
+    gpg --export > ~/.gnupg/pubring.gpg
+    helm verify xsk-<version>.tgz 
+    ```
+
+   - From github
+    !!! info "Note"
+        Use command `wget` for download public key instead of `curl`
+
+    ```
+    helm pull xsk/xsk --prov
+    wget https://sap.github.io/xsk/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
+    helm verify xsk-<version>.tgz 
+    ```
+
 1. Deployment
 
     To deploy XSK, you can use the following instructions:

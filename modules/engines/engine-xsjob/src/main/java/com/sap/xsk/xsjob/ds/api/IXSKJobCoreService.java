@@ -29,6 +29,8 @@ public interface IXSKJobCoreService {
 
   String XSK_JOB_MODULE = "xsk-job-module";
 
+  String XSK_JOB_DESCRIPTION = "jobDescription";
+
   XSKJobDefinition createJob(String name, String group, String description, String module, String action, String cronExpression,
       Map<String, String> parametersAsMap) throws SchedulerException;
 

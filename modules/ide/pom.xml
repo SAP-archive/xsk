@@ -17,7 +17,6 @@
 
 	<modules>
 		<module>ide-all</module>
-		<module>ide-migration</module>
 		<module>ide-hdbti</module>
     <module>xsk-workspace-menu</module>
     <module>xsk-ide-xsjob</module>

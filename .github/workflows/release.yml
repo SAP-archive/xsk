@@ -690,7 +690,9 @@ jobs:
 
           cp helm-charts/index.yaml ../.
           cp helm-charts/xsk-${{ env.XSK_VERSION }}.tgz ../charts/
+          cp helm-charts/xsk-${{ env.XSK_VERSION }}.tgz.prov ../charts/
           cp helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz ../charts/
+          cp helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz.prov ../charts/
           cd ..
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"

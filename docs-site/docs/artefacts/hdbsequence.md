@@ -60,3 +60,7 @@ The information on this page will help you lesrn how to develop the design-time 
 | depends_on_table | Enables you to define a dependency to one or more specific tables. | List(String) | None | No |
 | depends_on_view | Enables you to define a dependency to one or more specific views. | List(String) | None | No |
 | depends_on | Enables you to define a dependency to one or more specific tables or views, for example, when using the reset_by option to specify the query to use when resetting the sequence. | List(String) | None | No |
+
+!!! warning "Caution"
+
+    [Reserved keywords](https://help.sap.com/viewer/f381aa9c4b99457fb3c6b53a2fd29c02/2.0.02/en-US/888f434c5e494d6c9af82bc5db854a14.html), used as table or column names in queries, must be escaped.

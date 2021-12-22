@@ -35,3 +35,7 @@ BEGIN
     SELECT * FROM "hdb_view::Item";
 END
 ```
+
+!!! warning "Caution"
+
+    [Reserved keywords](https://help.sap.com/viewer/f381aa9c4b99457fb3c6b53a2fd29c02/2.0.02/en-US/888f434c5e494d6c9af82bc5db854a14.html), used as table or column names, must be escaped.

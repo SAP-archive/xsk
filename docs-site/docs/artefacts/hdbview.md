@@ -17,7 +17,7 @@ The information on this page will help you learn how to develop the design-time 
 
     There are currently some [issues](https://github.com/SAP/xsk/issues/108) in the behavior of the HANA version 1.x of the parser:
 
-    - Currently, the parser takes into account if a given property is mandatory.
+    - Currently, the parser takes into accouцnt if a given property is mandatory.
     - If the property order is misplaced, the parser will still parse the values.
     - If more than one value of one property is provided, then only the last one is taken.     
 
@@ -30,6 +30,10 @@ The information on this page will help you learn how to develop the design-time 
 
 ## Sample
 ---
+
+!!! warning "Caution"
+
+    [Reserved keywords](https://help.sap.com/viewer/f381aa9c4b99457fb3c6b53a2fd29c02/2.0.02/en-US/888f434c5e494d6c9af82bc5db854a14.html), used as table or column names in queries, must be escaped.
 
 === "HANA XS Classic syntax"
 
@@ -56,3 +60,7 @@ The information on this page will help you learn how to develop the design-time 
 | depends_on              | depends_on                     |              |
 | depends_on_table        | depends_on_table               |              |
 | depends_on_view         | depends_on_view                |              |
+
+!!! warning "Caution"
+
+    [Reserved keywords](https://help.sap.com/viewer/f381aa9c4b99457fb3c6b53a2fd29c02/2.0.02/en-US/888f434c5e494d6c9af82bc5db854a14.html), used as table or column names in queries, must be escaped.

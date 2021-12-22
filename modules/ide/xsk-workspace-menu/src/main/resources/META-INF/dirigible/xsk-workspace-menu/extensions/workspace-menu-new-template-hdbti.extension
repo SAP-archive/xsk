@@ -1,0 +1,5 @@
+{
+    "module": "xsk-workspace-menu/services/workspace-menu-new-template-hdbti.js",
+    "extensionPoint": "ide-workspace-menu-new-template",
+    "description": "HDBTI Workspace New Menu Extension"
+}

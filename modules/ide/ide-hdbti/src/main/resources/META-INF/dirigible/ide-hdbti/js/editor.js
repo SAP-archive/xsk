@@ -507,11 +507,11 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
             }
             $scope.dataLoaded = true;
         }, function (response) {
+            console.error(response);
             $messageHub.announceAlertError(
                 "Error while loading file",
                 response.data.error.message
             );
-            console.error(response);
         });
     }
 

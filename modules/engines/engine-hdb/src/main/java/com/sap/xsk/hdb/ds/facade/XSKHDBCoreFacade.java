@@ -88,40 +88,53 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     return buff.toString();
   }
 
-  @Override
-  public void handleResourceSynchronization(IResource resource) throws SynchronizationException, XSKDataStructuresException {
-    String[] splitResourceName = resource.getName().split("\\.");
+  public XSKDataStructureModel parseDataStructureModel(String fileName, String path, String content)
+      throws SynchronizationException {
+    String[] splitResourceName = fileName.split("\\.");
     String resourceExtension = "." + splitResourceName[splitResourceName.length - 1];
-    String registryPath = getRegistryPath(resource);
-    String contentAsString = getContent(resource);
+    String registryPath = path;
+    String contentAsString = content;
 
     XSKDataStructureModel dataStructureModel;
     try {
       if(!parserServices.containsKey(resourceExtension) || isParsed(registryPath, contentAsString, resourceExtension)) {
-        return;
+        return null;
       }
 
       dataStructureModel = xskCoreParserService.parseDataStructure(resourceExtension, registryPath, contentAsString);
 
       if (dataStructureModel == null) {
-        return;
+        return null;
       }
     } catch (ReflectiveOperationException e) {
       logger.error("Preparse hash check failed for path " + registryPath);
       logger.error(e.getMessage());
-      return;
+      return null;
     } catch (XSKDataStructuresException e) {
       logger.error("Synchronized artifact with path " + registryPath + " is not valid");
       logger.error(e.getMessage());
-      return;
+      return null;
     } catch (XSKArtifactParserException e) {
       logger.error(e.getMessage());
-      return;
+      return null;
     } catch (Exception e) {
       throw new SynchronizationException(e);
     }
     dataStructureModel.setLocation(registryPath);
-    managerServices.get(dataStructureModel.getType()).synchronizeRuntimeMetadata(dataStructureModel);
+    return dataStructureModel;
+  }
+
+  public XSKDataStructureModel parseDataStructureModel(IResource resource) throws SynchronizationException {
+    return this.parseDataStructureModel(resource.getName(), getRegistryPath(resource), getContent(resource));
+  }
+
+  @Override
+  public void handleResourceSynchronization(IResource resource) throws SynchronizationException, XSKDataStructuresException {
+    XSKDataStructureModel dataStructureModel = parseDataStructureModel(resource);
+    if(dataStructureModel == null) {
+      return;
+    }
+    managerServices.get(dataStructureModel.getType()).synchronizeRuntimeMetadata(dataStructureModel); // 4. we synchronize the metadata
   }
 
   @Override

@@ -72,6 +72,11 @@ public interface IXSKDataStructureModel {
   public static final String FILE_EXTENSION_STRUCTURE = ".hdbstructure";
 
   /**
+   * File extension for *.hdbtabletype files
+   */
+  public static final String FILE_EXTENSION_HDB_TABLE_TYPE = ".hdbtabletype";
+
+  /**
    * Type hdbdd
    */
   public static final String TYPE_HDBDD = "HDBDD";

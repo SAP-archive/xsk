@@ -24,7 +24,7 @@ const StringWriter = Java.type("java.io.StringWriter");
 const ByteArrayInputStream = Java.type("java.io.ByteArrayInputStream");
 const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
 const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor")
-
+const XSKHDBCoreFacade = Java.type("com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade");
 
 class MigrationService {
 
@@ -75,6 +75,12 @@ class MigrationService {
                 },
                 analyticprivilege: {
                     plugin_name: "com.sap.hana.di.analyticprivilege"
+                },
+                hdbsynonym: {
+                    plugin_name: "com.sap.hana.di.synonym",
+                },
+                hdbpublicsynonym: {
+                    plugin_name: "com.sap.hana.di.publicsynonym",
                 }
             }
         };
@@ -130,6 +136,19 @@ class MigrationService {
 
     copyFilesLocally(workspaceName, lists) {
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const facade = new XSKHDBCoreFacade();
+
+        // Copy artifacts required for hdbdd parser to /registry/public
+        for(const file of lists) {
+            let content = this.repo.getContentForObject(file._name, file._packageName, file._suffix);
+            const fileName = file._name + "." + file._suffix;
+            const filePath = file._packageName.replaceAll('.', "/") + "/" + fileName;
+            const fileContent = String.fromCharCode.apply(String, content).replace(/\0/g,'');
+
+            if(fileName.endsWith(".hdbdd") || fileName.endsWith(".hdbti")) {
+                repositoryManager.createResource("/registry/public/" + filePath, fileContent, 'text/plain');
+            }
+        }
 
         const locals = [];
         for (const file of lists) {
@@ -152,6 +171,23 @@ class MigrationService {
             const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
             const localResource = projectCollection.createResource(fileRunLocation, content);
 
+            const fileName = file._name + "." + file._suffix;
+            const filePath = file._packageName.replaceAll('.', "/") + "/" + fileName;
+            const fileContent = String.fromCharCode.apply(String, content).replace(/\0/g,'');
+
+            // Parse current artifacts and generate synonym files for it if necessary
+            const parsedData = facade.parseDataStructureModel(fileName, filePath, fileContent);
+            const generatedSynonymFiles = this.handleParsedData(parsedData, workspaceName, projectName, fileRunLocation);
+
+            for(const generatedSynonymFile of generatedSynonymFiles) {
+                locals.push({
+                    repositoryPath: generatedSynonymFile.getPath(),
+                    relativePath: generatedSynonymFile.getPath().split(projectName).pop(),
+                    projectName: projectName,
+                    runLocation: generatedSynonymFile.getPath().split(workspaceName).pop()
+                })
+            }
+
             locals.push({
                 repositoryPath: localResource.getPath(),
                 relativePath: fileRunLocation,
@@ -159,7 +195,88 @@ class MigrationService {
                 runLocation: file.RunLocation
             })
         }
+
+        // Delete artifacts copies required for hdbdd parser from /registry/public
+        for(const file of lists) {
+            const fileName = file._name + "." + file._suffix;
+            const filePath = file._packageName.replaceAll('.', "/") + "/" + fileName;
+            if(fileName.endsWith(".hdbdd") || fileName.endsWith(".hdbti")) {
+                repositoryManager.deleteResource("/registry/public/" + filePath);
+            }
+        }
+
         return locals;
+    }
+
+    handleParsedData(parsedData, workspaceName, projectName, relativePath) {
+        if(!parsedData) {
+            return [];
+        }
+
+        const dataModelType = parsedData.getClass().getName();
+        const hdbDDModel = "com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel";
+
+        var generatedSynonymFiles = [];
+        if(dataModelType == hdbDDModel) {
+            for(const item of parsedData.tableModels) {
+               generatedSynonymFiles.push(this.createHdbPublicSynonymFile(workspaceName, projectName, item.getName(), relativePath));
+               generatedSynonymFiles.push(this.createHdbSynonymFile(workspaceName, projectName, item.getName(), item.getSchema(), relativePath));
+            }
+
+            for(const item of parsedData.tableTypeModels) {
+               generatedSynonymFiles.push(this.createHdbPublicSynonymFile(workspaceName, projectName, item.getName(), relativePath));
+               generatedSynonymFiles.push(this.createHdbSynonymFile(workspaceName, projectName, item.getName(), item.getSchema(), relativePath));
+            }
+        }
+        else {
+            generatedSynonymFiles.push(this.createHdbPublicSynonymFile(workspaceName, projectName, parsedData.getName(), relativePath));
+            generatedSynonymFiles.push(this.createHdbSynonymFile(workspaceName, projectName, parsedData.getName(), parsedData.getSchema(), relativePath));
+        }
+
+        return generatedSynonymFiles;
+    }
+
+    createHdbSynonymFile(workspaceName, projectName, name, schemaName, relativePath) {
+        // input name should be like: xsk-test-app::SamplePostgreXSClassicTable
+        const trimmedName = name.split(':').pop();
+        var hdbSynonym = {};
+        hdbSynonym[name] = {
+            "target" : {
+                "object" : trimmedName,
+                "schema" : schemaName
+            }
+        };
+
+        const hdbSynonymPath = relativePath.substring(0, relativePath.lastIndexOf("/") + 1) + `${trimmedName}.hdbsynonym`;
+        const hdbSynonymJson = JSON.stringify(hdbSynonym, null, 4);
+        const hdbSynonymJsonBytes = bytes.textToByteArray(hdbSynonymJson);
+
+        const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
+        let localResource = projectCollection.createResource(hdbSynonymPath, hdbSynonymJsonBytes);
+
+        return localResource;
+    }
+
+    createHdbPublicSynonymFile(workspaceName, projectName, name, relativePath) {
+        // input name should be like: xsk-test-app::SamplePostgreXSClassicTable
+        const trimmedName = name.split(':').pop();
+        var hdbSynonym = {};
+        hdbSynonym[name] = {
+            "target" : {
+                "object" : name,
+            }
+        };
+
+        const hdbSynonymPath = relativePath.substring(0, relativePath.lastIndexOf("/") + 1) + `${trimmedName}.hdbpublicsynonym`;
+        const hdbSynonymJson = JSON.stringify(hdbSynonym, null, 4);
+        const hdbSynonymJsonBytes = bytes.textToByteArray(hdbSynonymJson);
+
+        const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
+        let localResource = projectCollection.createResource(hdbSynonymPath, hdbSynonymJsonBytes);
+
+        return localResource;
     }
 
     _isFileCalculationView(filePath) {
@@ -257,7 +374,9 @@ class MigrationService {
         if (filePath.endsWith('.hdbcalculationview')
             || filePath.endsWith('.calculationview')
             || filePath.endsWith('.analyticprivilege')
-            || filePath.endsWith('.hdbanalyticprivilege')) {
+            || filePath.endsWith('.hdbanalyticprivilege')
+            || filePath.endsWith('.hdbsynonym')
+            || filePath.endsWith('.hdbpublicsynonym')) {
             deployables.find(x => x.projectName === projectName).artifacts.push(runLocation);
         }
 

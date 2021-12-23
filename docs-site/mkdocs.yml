@@ -51,7 +51,7 @@ nav:
         - $.web.WebResponse: 'api/response.md'
     - Setup: 
       - Database User: 'setup/database-user.md'
-      - Local: 'setup/index.md'
+      - Local: 'setup/local.md'
       - Cloud Foundry: 'setup/cloud-foundry.md'
       - Kyma: 'setup/kyma.md'
       - Helm: 'setup/helm.md'

@@ -186,7 +186,7 @@ public class XSKTableEscapeService {
     List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndices = this.tableModel.getConstraints().getUniqueIndices();
     if (Objects.nonNull(uniqueIndices)) {
       for (XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex : uniqueIndices) {
-        String uniqueIndexName = uniqueIndex.getName();
+        String uniqueIndexName = uniqueIndex.getIndexName();
         if (this.caseSensitive) {
           uniqueIndexName = (this.shouldEscapeArtefactPropertyName)
               ? XSKHDBUtils.escapeArtifactName(this.connection, uniqueIndexName)

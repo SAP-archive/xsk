@@ -260,6 +260,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_2">
@@ -436,6 +438,20 @@
     <li class="md-nav__item">
       <a href="../../../../artefacts/xsodata/" class="md-nav__link">
         xsodata
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../artefacts/xshttpdest/" class="md-nav__link">
+        xshttpdest
       </a>
     </li>
   
@@ -1415,7 +1431,7 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">client-sample.xsjs</label><label for="__tabbed_1_2">service.xshttpdest</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">client-sample.xsjs</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">net</span><span class="p">.</span><span class="nx">http</span><span class="p">;</span>
@@ -1450,11 +1466,6 @@
 
 <span class="c1">// check the contents of the response</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;status: &quot;</span> <span class="o">+</span> <span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">+</span> <span class="s2">&quot; cookies: &quot;</span> <span class="o">+</span> <span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">cookies</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; headers: &quot;</span> <span class="o">+</span> <span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">headers</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; body: &quot;</span> <span class="o">+</span> <span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">asString</span><span class="p">());</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nx">host</span><span class="o">=</span><span class="nx">https</span><span class="o">:</span><span class="c1">//services.odata.org;</span>
-<span class="nx">pathPrefix</span><span class="o">=</span><span class="err">/V4/Northwind/Northwind.svc/;</span>
 </code></pre></div>
 </div>
 </div>

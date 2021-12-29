@@ -16,6 +16,7 @@ nav:
       - xsjs: 'artefacts/xsjs.md'
       - xsjslib: 'artefacts/xsjs.md'
       - xsodata: 'artefacts/xsodata.md'
+      - xshttpdest: 'artefacts/xshttpdest.md'
     - API:
       - $.db: 'api/db.md'
       - $.hdb: 'api/hdb.md'

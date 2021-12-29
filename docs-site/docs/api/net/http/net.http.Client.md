@@ -56,13 +56,6 @@ This `HttpClient` is equipped with a cookie database. If a previous response sen
     $.response.setBody("status: " + response.status + " cookies: " + JSON.stringify(cookies) + " headers: " + JSON.stringify(headers) + " body: " + response.body.asString());
     ```
 
-=== "service.xshttpdest"
-
-    ```javascript
-    host=https://services.odata.org;
-    pathPrefix=/V4/Northwind/Northwind.svc/;
-    ```
-
 ## Functions
 
 | Function                                                   | Description                                                                                                                               | Returns               |

@@ -11,14 +11,17 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbsequence;
 
+import com.sap.xsk.hdb.ds.artefacts.HDBSequenceSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
@@ -29,6 +32,8 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
 
 
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceCreateProcessor.class);
+  private static final HDBSequenceSynchronizationArtefactType SEQUENCE_ARTEFACT = new HDBSequenceSynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
   public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
@@ -48,14 +53,19 @@ public class XSKHDBSequenceCreateProcessor extends AbstractXSKProcessor<XSKDataS
         } else {
           String errorMessage = String.format("Sequences are not supported for %s !", dialect.getDatabaseName(connection));
           XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdbSequenceModel.getLocation(), XSKCommonsConstants.HDB_SEQUENCE_PARSER);
+          dataStructuresSynchronizer.applyArtefactState(hdbSequenceModel.getName(), hdbSequenceModel.getLocation(), SEQUENCE_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
           throw new IllegalStateException(errorMessage);
         }
       }
     }
     try {
       executeSql(sql, connection);
+      String message = String.format("Create sequence %s successfully", hdbSequenceModel.getName());
+      dataStructuresSynchronizer.applyArtefactState(hdbSequenceModel.getName(), hdbSequenceModel.getLocation(), SEQUENCE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
     } catch (SQLException ex) {
+      String message = String.format("Create sequence [%s] skipped due to an error: %s", hdbSequenceModel.getName(), ex.getMessage());
       XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbSequenceModel.getLocation(), XSKCommonsConstants.HDB_SEQUENCE_PARSER);
+      dataStructuresSynchronizer.applyArtefactState(hdbSequenceModel.getName(), hdbSequenceModel.getLocation(), SEQUENCE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
     }
   }
 

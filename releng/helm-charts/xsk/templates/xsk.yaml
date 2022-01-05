@@ -1,8 +1,16 @@
+{{- if ne .Values.create.namespace "default" }}
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: {{ required "Missing namespace" .Values.create.namespace }}
+{{- end }}
+---
 {{- if .Values.hana.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .Values.hana.secretName }}
+  namespace: {{ .Values.create.namespace }}
 type: Opaque
 stringData:
   DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES: HANA
@@ -30,6 +38,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: fast-boostrap-secret
+  namespace: {{ .Values.create.namespace }}
 type: Opaque
 stringData:
   DIRIGIBLE_JOB_DEFAULT_TIMEOUT: "1"
@@ -40,10 +49,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "xsk.fullname" . }}
+  namespace: {{ .Values.create.namespace }}
   labels:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ required "Missing replica count" .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "xsk.selectorLabels" . | nindent 6 }}
@@ -52,12 +62,15 @@ spec:
       labels:
         {{- include "xsk.selectorLabels" . | nindent 8 }}
     spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ include "xsk.serviceAccountName" . }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ required "Missing chart name" .Chart.Name }}
           envFrom:
           {{- if .Values.hana.enabled }}
             - secretRef:
-                name: {{ .Values.hana.secretName }}
+                name: {{ required "Missing HANA secret name" .Values.hana.secretName }}
           {{- end }}
           {{- if .Values.application.fastBootstrap }}
             - secretRef:
@@ -66,18 +79,18 @@ spec:
           env:
             {{- if .Values.kyma.enabled }}
             - name: DIRIGIBLE_HOST
-              value: https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
+              value: https://{{ required "Missing release name" .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
             {{- end }}
             {{- if .Values.application.homeUrl }}
             - name: DIRIGIBLE_HOME_URL
-              value: {{ .Values.application.homeUrl }}
+              value: {{ required "Missing application home url" .Values.application.homeUrl }}
             {{- end }}
           {{- if .Values.application.image }}
-          image: {{ .Values.application.image }}                    
+          image: {{ required "Missing application image" .Values.application.image }}                    
           {{- else }}
           image: dirigiblelabs/xsk
           {{- end }}  
-          imagePullPolicy: {{ .Values.application.imagePullPolicy }}
+          imagePullPolicy: {{ required "Missing application image pull policy" .Values.application.imagePullPolicy }}
           ports:
             - name: http
               containerPort: 8080
@@ -101,12 +114,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "xsk.fullname" . }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
   labels:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
-  type: ClusterIP
+  type: {{ required "Missing service type" .Values.service.type }}
   ports:
-    - port: 8080
+    - port: {{ required "Missing service port" .Values.service.port }}
       targetPort: http
       protocol: TCP
       name: http
@@ -118,6 +132,7 @@ apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
 metadata:
   name: {{ include "xsk.fullname" . }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
   rules:
@@ -133,7 +148,7 @@ spec:
     - HEAD
     path: /.*
   service:
-    host: {{ .Release.Name }}
+    host: {{ required "Missing release name" .Release.Name }}
     name: {{ include "xsk.fullname" . }}
     port: 8080
 ---
@@ -141,6 +156,7 @@ apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceInstance
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 spec:
   clusterServiceClassExternalName: xsuaa
   clusterServiceClassRef:
@@ -154,30 +170,40 @@ spec:
       - https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
       token-validity: 7200
     role-collections:
-    - description: XSK Developer
-      name: {{ include "xsk.fullname" . }}
+    {{- toYaml .Values.kyma.roleCollections | nindent 4 }}
+    {{- if .Values.kyma.addRoles }}
+    {{ range .Values.kyma.roles }}
+    - description: XSK {{ . }}
+      name: xsk-{{ . }}
       role-template-references:
-      - $XSAPPNAME.Developer
-      - $XSAPPNAME.Operator
+      - $XSAPPNAME.{{ . }}  
+    {{- end }}
+    {{- end }}
     role-templates:
-    - description: Developer related roles
-      name: Developer
+    {{- toYaml .Values.kyma.roleTemplates | nindent 4 }}
+    {{- if .Values.kyma.addRoles }}
+    {{ range .Values.kyma.roles }}
+    - description: {{ . }}  related roles
+      name: {{ . }} 
       scope-references:
-      - $XSAPPNAME.Developer
-    - description: Operator related roles
-      name: Operator
-      scope-references:
-      - $XSAPPNAME.Operator
+      - $XSAPPNAME.{{ . }}
+    {{- end }}
+    {{- end }}
     scopes:
-    - description: Developer scope
-      name: $XSAPPNAME.Developer
-    - description: Operator scope
-      name: $XSAPPNAME.Operator
+    {{- toYaml .Values.kyma.scopes | nindent 4 }}
+    {{- if .Values.kyma.addRoles }}
+    {{ range .Values.kyma.roles }}
+    - description: {{ . }} scope
+      name: $XSAPPNAME.{{ . }}
+    {{- end }}
+    {{- end }}
+      
 ---
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceBinding
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-binding
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 spec:
   externalID: {{ uuidv4 }}
   instanceRef:
@@ -189,6 +215,7 @@ apiVersion: servicecatalog.kyma-project.io/v1alpha1
 kind: ServiceBindingUsage
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-usage
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
 spec:
   parameters:
     envPrefix:

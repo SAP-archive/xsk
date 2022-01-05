@@ -33,6 +33,7 @@ public class HdbTestModule extends AbstractDirigibleModule {
   public void configure() {
     StaticObjects.set(StaticObjects.REPOSITORY, new TestRepository());
     StaticObjects.set(StaticObjects.DATASOURCE, getDataSource());
+    StaticObjects.set(StaticObjects.SYSTEM_DATASOURCE, getSystemDataSource());
   }
 
   private static DataSource getDataSource() {

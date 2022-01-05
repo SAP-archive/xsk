@@ -9,10 +9,10 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-try {
-    const process = require('bpm/v4/process');
-    const execution = process.getExecutionContext();
+const process = require('bpm/v4/process');
+const execution = process.getExecutionContext();
 
+try {
     process.setVariable(execution.getId(), 'migrationState', 'TUNNEL_CLOSING');
 
     const userDataJson = process.getVariable(execution.getId(), 'userData');

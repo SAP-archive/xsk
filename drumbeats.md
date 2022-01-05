@@ -1,5 +1,71 @@
 # Drumbeats
 
+
+## 2021 Week 52 (27 December - 02 January)
+
+#### Focus topics:
+
+- Infrastructure work
+- Various refactorings and bugfixes
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-27..2022-01-02) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-27..2022-01-02) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-12-27..2022-01-02) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-12-27..2022-01-02) PRs
+
+----
+
+## 2021 Week 51 (20 December - 26 December)
+
+#### Focus topics:
+
+- Helm Chart improvements
+- Add 'hdbti' to new file menu
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-20..2021-12-26) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-20..2021-12-26) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-12-20..2021-12-26) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-12-20..2021-12-26) PRs
+
+----
+
+## 2021 Week 50 (13 December - 19 December)
+
+#### Focus topics:
+
+- Analytic Privileges initial support
+- Helm Chart improvements
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-13..2021-12-19) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-13..2021-12-19) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-12-13..2021-12-19) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-12-13..2021-12-19) PRs
+
+----
+
+## 2021 Week 49 (06 December - 12 December)
+
+#### Focus topics:
+
+- Grant HDI container privileges on external artefacts' schemas
+- Allow xsodata entity definition use synonym
+- Add support for all HANA Cloud data types
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-06..2021-12-12) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2021-12-06..2021-12-12) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2021-12-06..2021-12-12) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2021-12-06..2021-12-12) PRs
+
+----
+
 ## 2021 Week 48 (29 November - 05 December)
 
 #### Focus topics:

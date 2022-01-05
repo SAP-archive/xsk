@@ -34,7 +34,7 @@ public class HdbddTransformer {
 
   private static final String UNMANAGED_ASSOCIATION_MARKER = "@";
 
-  public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol) {
+  public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol, String location) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
     tableModel.setDbContentType(XSKDBContentType.XS_CLASSIC);
     tableModel.setName(entitySymbol.getFullName());
@@ -98,6 +98,7 @@ public class HdbddTransformer {
     });
 
     tableModel.setColumns(tableColumns);
+    tableModel.setLocation(location);
     return tableModel;
   }
 

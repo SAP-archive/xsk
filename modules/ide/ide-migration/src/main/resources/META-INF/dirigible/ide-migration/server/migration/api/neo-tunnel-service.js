@@ -31,7 +31,8 @@ class NeoTunnelService {
     const commandResult = JSON.parse(rawCommandResult);
     console.log(commandResult)
     if (commandResult.errorMsg) {
-      throw "[NEO CLIENT ERROR]" + neoOutput.errorMsg
+      const message = JSON.stringify(commandResult);
+      throw "[NEO CLIENT ERROR]" + message;
     }
 
     return commandResult.result;

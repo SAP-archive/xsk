@@ -1,7 +1,11 @@
+1.
+Assign the required roles to your user.
+
 {{- if .Values.kyma.enabled }}
 
-1.
+2.
 Application will be deployed and accessible via the following URL: https://{{ .Release.Name }}.{{ .Values.kyma.host }}
+NOTE: It may take a few minutes for the APIRule to be accessible.
 
 {{- end }}
 

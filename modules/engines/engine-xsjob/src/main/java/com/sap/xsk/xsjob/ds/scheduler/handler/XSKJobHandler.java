@@ -40,6 +40,7 @@ public class XSKJobHandler implements Job {
         .put(IXSKJobCoreService.XSK_JOB_FUNCTION, context.getJobDetail().getJobDataMap().get(IXSKJobCoreService.XSK_JOB_FUNCTION));
     executionContext.put(IXSKJobCoreService.XSK_JOB_PARAMETERS, parametersArray);
     executionContext.put(IXSKJobCoreService.XSK_JOB_MODULE, module);
+    executionContext.put(IXSKJobCoreService.XSK_JOB_DESCRIPTION , context.getJobDetail().getDescription());
     try {
       xskJavascriptEngineExecutor.executeService(XSJOB_HANDLER, executionContext, true, true);
     } catch (ScriptingException e) {

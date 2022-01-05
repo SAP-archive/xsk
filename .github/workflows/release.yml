@@ -646,7 +646,10 @@ jobs:
       #----------------Publish GitHub Release------------------#
 
       #----------------Publish Helm Release------------------#
-
+      - id: install-secret-key
+        name: Install gpg secret key
+        run: |
+          cat <(echo -e "${{ secrets.GPG_KEY_HELM }}") | gpg --batch --import  --no-tty --batch --yes
       - name: Helm tool installer
         uses: Azure/setup-helm@v1
       - name: Helm Charts Release - Checkout gh-pages
@@ -678,14 +681,18 @@ jobs:
         run: |
           cp charts/* charts-temp/helm-charts/
           cd charts-temp/helm-charts/
-          helm package xsk
-          helm package xsk-kpack
+          
+          gpg --no-tty --batch --export-secret-keys > ~/.gnupg/secring.gpg
+          helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk
+          helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-kpack
           cd ..
           helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
 
           cp helm-charts/index.yaml ../.
           cp helm-charts/xsk-${{ env.XSK_VERSION }}.tgz ../charts/
+          cp helm-charts/xsk-${{ env.XSK_VERSION }}.tgz.prov ../charts/
           cp helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz ../charts/
+          cp helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz.prov ../charts/
           cd ..
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
@@ -716,7 +723,7 @@ jobs:
           mkdir $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
       - name: Update XSK Instance
-        run: kubectl set image deployment/xsk-trial xsk-trial=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
+        run: kubectl set image deployment/xsk-trial xsk=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} -n xsk-trial
 
       #------------------Update XSK Instance-------------------#
 

@@ -34,7 +34,7 @@ public abstract class XSKHDIAbstractProcessor {
 	 * @param parameters - SQL parameters
 	 * @throws SQLException - in case of failure
 	 */
-	protected void executeUpdate(Connection connection, String sql, String... parameters) throws SQLException {
+  public void executeUpdate(Connection connection, String sql, String... parameters) throws SQLException {
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			setStatementParams(statement, parameters);
 			statement.executeUpdate();

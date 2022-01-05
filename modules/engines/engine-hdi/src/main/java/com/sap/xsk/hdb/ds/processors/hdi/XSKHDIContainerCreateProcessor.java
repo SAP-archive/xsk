@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdi;
 
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
@@ -35,6 +36,10 @@ public class XSKHDIContainerCreateProcessor {
   private XSKDeployContainerContentProcessor deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
   private XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
   private XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor = new XSKGrantPrivilegesContainerTargetSchemaProcessor();
+  private XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor = new XSKGrantPrivilegesExternalArtifactsSchemaProcessor();
+  //TODO
+  //Once the processing of artifacts is adjusted to have separate one for HDI container's artifacts should be fixed and the synonym model shouldn't be empty
+  private XSKDataStructureHDBSynonymModel synonymModel = new XSKDataStructureHDBSynonymModel();
 
   public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
     LOGGER.info("Start processing HDI Containers...");
@@ -64,6 +69,9 @@ public class XSKHDIContainerCreateProcessor {
 
       // Grant Privileges on the Target Schema
       this.grantPrivilegesContainerTargetSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
+
+      //Grant Privileges on the external artifacts' schemas
+      this.grantPrivilegesExternalArtifactsSchemaProcessor.execute(connection,hdiModel.getContainer(), hdiModel.getDeploy(), synonymModel);
 
       // Deploy the Content
       this.deployContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getUndeploy());

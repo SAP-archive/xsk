@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
+import com.sap.xsk.utils.XSKCommonsDBUtils;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
@@ -41,12 +42,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import javax.sql.DataSource;
 
 @RunWith(MockitoJUnitRunner.class)
 public class XSKODataUtilsTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private DBMetadataUtil dbMetadataUtil;
+  @Mock
+  private DataSource mockDataSource;
 
   @Test
   public void testConvertMultiplicityOneToMany() throws Exception {
@@ -55,17 +59,17 @@ public class XSKODataUtilsTest {
         .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_multiplicity_one_to_many.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_multiplicity_one_to_many.xsodata", content);
 
-    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", true);
-    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("EMPLOYEE_NUMBER", "Edm.Int32", true);
-    PersistenceTableColumnModel column9 = new PersistenceTableColumnModel("ORDER_ID", "Edm.Int32", true);
+    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("EMPLOYEE_NUMBER", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column9 = new PersistenceTableColumnModel("ORDER_ID", "Edm.Int32", false, true);
     column9.setNullable(true);
     PersistenceTableModel model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::employee",
         Arrays.asList(column1, column2, column9), new ArrayList<>());
     model.setTableType(ISqlKeywords.METADATA_TABLE);
     when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee", null)).thenReturn(model);
 
-    PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", true);
-    PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", false);
+    PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", true, false);
     PersistenceTableRelationModel relPhone = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::address", "PHONES",
         "FK_PHONE", "ID", "CONSTRAINT_8C9F7", "CONSTRAINT_INDEX_E67");
     model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::address", Arrays.asList(column7, column8),
@@ -73,10 +77,10 @@ public class XSKODataUtilsTest {
     model.setTableType(ISqlKeywords.METADATA_TABLE);
     when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address", null)).thenReturn(model);
 
-    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", true);
-    PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", false);
-    PersistenceTableColumnModel column5 = new PersistenceTableColumnModel("FK_EMPLOYEE_NUMBER", "Edm.Int32", false);
-    PersistenceTableColumnModel column6 = new PersistenceTableColumnModel("FK_ADDRESS_ID", "Edm.Int32", false);
+    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column5 = new PersistenceTableColumnModel("FK_EMPLOYEE_NUMBER", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column6 = new PersistenceTableColumnModel("FK_ADDRESS_ID", "Edm.Int32", true, false);
     PersistenceTableRelationModel rel = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones",
         "kneo.test.helloodata.CompositeKey::employee", "FK_COMPANY_ID", "COMPANY_ID", "CONSTRAINT_8C", "CONSTRAINT_INDEX_4");
     PersistenceTableRelationModel rel2 = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones",
@@ -101,17 +105,17 @@ public class XSKODataUtilsTest {
         .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_without_set_of_prop.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_without_set_of_prop.xsodata", content);
 
-    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", true);
-    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("EMPLOYEE_NUMBER", "Edm.Int32", true);
-    PersistenceTableColumnModel column9 = new PersistenceTableColumnModel("ORDER_ID", "Edm.Int32", true);
+    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("EMPLOYEE_NUMBER", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column9 = new PersistenceTableColumnModel("ORDER_ID", "Edm.Int32", false, true);
     column9.setNullable(true);
     PersistenceTableModel model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::employee",
         Arrays.asList(column1, column2, column9), new ArrayList<>());
     model.setTableType(ISqlKeywords.METADATA_TABLE);
     when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee", null)).thenReturn(model);
 
-    PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", true);
-    PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", false);
+    PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", true, false);
     PersistenceTableRelationModel relPhone = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::address", "PHONES",
         "FK_PHONE", "ID", "CONSTRAINT_8C9F7", "CONSTRAINT_INDEX_E67");
     model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::address", Arrays.asList(column7, column8),
@@ -119,10 +123,10 @@ public class XSKODataUtilsTest {
     model.setTableType(ISqlKeywords.METADATA_TABLE);
     when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address", null)).thenReturn(model);
 
-    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", true);
-    PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", false);
-    PersistenceTableColumnModel column5 = new PersistenceTableColumnModel("FK_EMPLOYEE_NUMBER", "Edm.Int32", false);
-    PersistenceTableColumnModel column6 = new PersistenceTableColumnModel("FK_ADDRESS_ID", "Edm.Int32", false);
+    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column5 = new PersistenceTableColumnModel("FK_EMPLOYEE_NUMBER", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column6 = new PersistenceTableColumnModel("FK_ADDRESS_ID", "Edm.Int32", true, false);
     PersistenceTableRelationModel rel = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones",
         "kneo.test.helloodata.CompositeKey::employee", "FK_COMPANY_ID", "COMPANY_ID", "CONSTRAINT_8C", "CONSTRAINT_INDEX_4");
     PersistenceTableRelationModel rel2 = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones",
@@ -192,19 +196,19 @@ public class XSKODataUtilsTest {
         .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_set_of_prop.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_set_of_prop.xsodata", content);
 
-    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", true);
-    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("EMPLOYEE_NUMBER", "Edm.Int32", true);
-    PersistenceTableColumnModel column9 = new PersistenceTableColumnModel("ORDER_ID", "Edm.Int32", false);
+    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("EMPLOYEE_NUMBER", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column9 = new PersistenceTableColumnModel("ORDER_ID", "Edm.Int32", true, false);
     column9.setNullable(true);
-    PersistenceTableColumnModel column10 = new PersistenceTableColumnModel("ORDER_ID_2", "Edm.Int32", false);
+    PersistenceTableColumnModel column10 = new PersistenceTableColumnModel("ORDER_ID_2", "Edm.Int32", true, false);
     column10.setNullable(true);
     PersistenceTableModel model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::employee",
         Arrays.asList(column1, column2, column9, column10), new ArrayList<>());
     model.setTableType(ISqlKeywords.METADATA_TABLE);
     when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::employee", null)).thenReturn(model);
 
-    PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", true);
-    PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", false);
+    PersistenceTableColumnModel column7 = new PersistenceTableColumnModel("ID", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column8 = new PersistenceTableColumnModel("FK_PHONE", "Edm.Int32", true, false);
     PersistenceTableRelationModel relPhone = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::address", "PHONES",
         "FK_PHONE", "ID", "CONSTRAINT_8C9F7", "CONSTRAINT_INDEX_E67");
     model = new PersistenceTableModel("kneo.test.helloodata.CompositeKey::address", Arrays.asList(column7, column8),
@@ -212,10 +216,10 @@ public class XSKODataUtilsTest {
     model.setTableType(ISqlKeywords.METADATA_TABLE);
     when(dbMetadataUtil.getTableMetadata("kneo.test.helloodata.CompositeKey::address", null)).thenReturn(model);
 
-    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", true);
-    PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", false);
-    PersistenceTableColumnModel column5 = new PersistenceTableColumnModel("FK_EMPLOYEE_NUMBER", "Edm.Int32", false);
-    PersistenceTableColumnModel column6 = new PersistenceTableColumnModel("FK_ADDRESS_ID", "Edm.Int32", false);
+    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("NUMBER", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column4 = new PersistenceTableColumnModel("FK_COMPANY_ID", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column5 = new PersistenceTableColumnModel("FK_EMPLOYEE_NUMBER", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column6 = new PersistenceTableColumnModel("FK_ADDRESS_ID", "Edm.Int32", true, false);
     PersistenceTableRelationModel rel = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones",
         "kneo.test.helloodata.CompositeKey::employee", "FK_COMPANY_ID", "COMPANY_ID", "CONSTRAINT_8C", "CONSTRAINT_INDEX_4");
     PersistenceTableRelationModel rel2 = new PersistenceTableRelationModel("kneo.test.helloodata.CompositeKey::phones",
@@ -386,9 +390,9 @@ public class XSKODataUtilsTest {
         .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_calc_view.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_calc_view.xsodata", content);
 
-    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COLUMN1", "Edm.Int32", false);
-    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("COLUMN2", "Edm.Int32", false);
-    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("COLUMN3", "Edm.Int32", false);
+    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COLUMN1", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("COLUMN2", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("COLUMN3", "Edm.Int32", true, false);
     PersistenceTableModel model = new PersistenceTableModel("kneo.test.calcviews::calc", Arrays.asList(column1, column2, column3),
         new ArrayList<>());
     model.setTableType("CALC VIEW");
@@ -408,9 +412,9 @@ public class XSKODataUtilsTest {
         .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_synonym.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_synonym.xsodata", content);
 
-    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COLUMN1", "Edm.Int32", false);
-    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("COLUMN2", "Edm.Int32", false);
-    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("COLUMN3", "Edm.Int32", false);
+    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COLUMN1", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("COLUMN2", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("COLUMN3", "Edm.Int32", true, false);
 
     PersistenceTableModel calcViewModel = new PersistenceTableModel("kneo.test.calcviews::calc", Arrays.asList(column1, column2, column3),
         new ArrayList<>());

@@ -1,11 +1,11 @@
-1,1,Europe,United Kingdom,London,1,Jacket,210,1,John,Smith,male,+441234567890
-2,2,North America,United States,New York,2,Shoulder Bag,140,2,Claudia,Davis,female,+12345678900
-3,3,Asia,India,Bangalore,3,Trousers,54,3,Tarun,Kumar,male,+912345678900
-4,4,Europe,United Kingdom,London,4,Shoes,160,1,John,Smith,male,+441234567890
-5,5,Australia,Australia,Sydney,2,Shoulder Bag,140,4,Emily,Stewart,female,+612345678900
-6,6,Africa,Egypt,Cairo,1,Jacket,210,5,Youssef,Fattah,male,+201234567890
-7,1,Europe,Germany,Berlin,3,Trousers,54,6,Thomas,Mueller,male,+491234567890
-8,7,South America,Brazil,Rio de Janeiro,4,Shoes,160,7,Fernanda,Rosa,female,+551234567890
-9,3,Asia,India,Delhi,1,Jacket,210,8,Rajesh,Sharma,male,+912345678901
-10,1,Europe,United Kingdom,London,4,Shoes,160,1,John,Smith,male,+441234567890
-11,2,North America,United States,San Francisco,4,Shoes,160,9,Monica,Breed,female,+12345678901
+1,1,Europe,United Kingdom,London,1,Jacket,210,1,John,Smith,male,+441234567890,john@mail.com
+2,2,North America,United States,New York,2,Shoulder Bag,140,2,Claudia,Davis,female,+12345678900,claudia@mail.com
+3,3,Asia,India,Bangalore,3,Trousers,54,3,Tarun,Kumar,male,+912345678900,tarun@mail.com
+4,4,Europe,United Kingdom,London,4,Shoes,160,1,John,Smith,male,+441234567890,john@mail.com
+5,5,Australia,Australia,Sydney,2,Shoulder Bag,140,4,Emily,Stewart,female,+612345678900,emily@mail.com
+6,6,Africa,Egypt,Cairo,1,Jacket,210,5,Youssef,Fattah,male,+201234567890,youssef@mail.com
+7,1,Europe,Germany,Berlin,3,Trousers,54,6,Thomas,Mueller,male,+491234567890,thomas@mail.com
+8,7,South America,Brazil,Rio de Janeiro,4,Shoes,160,7,Fernanda,Rosa,female,+551234567890,fernanda@mail.com
+9,3,Asia,India,Delhi,1,Jacket,210,8,Rajesh,Sharma,male,+912345678901,rajesh@mail.com
+10,1,Europe,United Kingdom,London,4,Shoes,160,1,John,Smith,male,+441234567890,john@mail.com
+11,2,North America,United States,San Francisco,4,Shoes,160,9,Monica,Breed,female,+12345678901,monica@mail.com

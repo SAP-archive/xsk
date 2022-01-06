@@ -9,6 +9,7 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
+package com.sap.xsk.xsodata.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -16,17 +17,24 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATANavigation;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
 import com.sap.xsk.xsodata.utils.XSKODataUtils;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.function.Consumer;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableRelationModel;
@@ -52,7 +60,7 @@ public class XSKODataUtilsTest {
   public void testConvertMultiplicityOneToMany() throws Exception {
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_multiplicity_one_to_many.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_multiplicity_one_to_many.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_multiplicity_one_to_many.xsodata", content);
 
     PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", false, true);
@@ -98,7 +106,7 @@ public class XSKODataUtilsTest {
   public void testConvertWithoutSetOfPropAndLimitedExposedNavigations() throws Exception {
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_without_set_of_prop.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_without_set_of_prop.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_without_set_of_prop.xsodata", content);
 
     PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", false, true);
@@ -189,7 +197,7 @@ public class XSKODataUtilsTest {
   public void testConvertWithSetOfPropAndLimitedExposedNavigations() throws Exception {
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_set_of_prop.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_set_of_prop.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_set_of_prop.xsodata", content);
 
     PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COMPANY_ID", "Edm.Int32", false, true);
@@ -287,7 +295,7 @@ public class XSKODataUtilsTest {
   public void testConvertOfEvents() throws Exception {
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_events.xsodata", content);
 
     // when(dbMetadataUtil.getTableMetadata("sample.odata::table1")).thenReturn(model);
@@ -383,7 +391,7 @@ public class XSKODataUtilsTest {
   public void testCalcView() throws Exception {
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_calc_view.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_calc_view.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_calc_view.xsodata", content);
 
     PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COLUMN1", "Edm.Int32", true, false);
@@ -405,7 +413,7 @@ public class XSKODataUtilsTest {
   public void testSynonym() throws Exception {
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_synonym.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_synonym.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_synonym.xsodata", content);
 
     PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COLUMN1", "Edm.Int32", true, false);
@@ -420,7 +428,7 @@ public class XSKODataUtilsTest {
         new ArrayList<>());
     synonymModel.setTableType(ISqlKeywords.METADATA_SYNONYM);
 
-    HashMap<String, String> synonymTargetObjectMetadata = new HashMap<String, String>();
+    HashMap<String, String> synonymTargetObjectMetadata = new HashMap<>();
     synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_TABLE, "kneo.test.calcviews::calc");
     synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_SCHEMA, null);
     synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_TABLE_TYPE, ISqlKeywords.METADATA_CALC_VIEW);
@@ -434,6 +442,23 @@ public class XSKODataUtilsTest {
     assertEquals(3, oDataDefinition.getEntities().get(0).getProperties().size());
     assertEquals(1, oDataDefinition.getEntities().get(1).getProperties().size());
     assertEquals(2, oDataDefinition.getEntities().get(2).getProperties().size());
+  }
+
+  @Test
+  public void testProperNavigationConstruction() throws IOException, XSKArtifactParserException, SQLException {
+    XSKODataParser parser = new XSKODataParser();
+    String content = IOUtils
+        .toString(this.getClass().getResourceAsStream("/entity_with_3_navigations.xsodata"), StandardCharsets.UTF_8);
+    XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_3_navigations.xsodata", content);
+
+    ODataDefinition oDataDefinitionModel = new ODataDefinition();
+    for (XSKHDBXSODATAEntity entity : xskoDataModel.getService().getEntities()) {
+      ODataEntityDefinition oDataEntityDefinition = new ODataEntityDefinition();
+      entity.getNavigates().forEach(XSKODataUtils.processNavigation(xskoDataModel, oDataDefinitionModel, oDataEntityDefinition));
+
+      assertEquals("Unexpected number of navigations for entity: " + entity.getAlias(), entity.getNavigates().size(), oDataEntityDefinition.getNavigations().size());
+    }
+
   }
 }
 

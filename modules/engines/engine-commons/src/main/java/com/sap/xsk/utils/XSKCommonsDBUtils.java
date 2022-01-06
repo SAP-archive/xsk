@@ -11,11 +11,13 @@
  */
 package com.sap.xsk.utils;
 
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -31,5 +33,25 @@ public class XSKCommonsDBUtils {
             return null;
         }
     }
+
+  public static PersistenceTableModel getSynonymTargetObjectMetadata(DataSource dataSource, String synonymName, String schemaName) throws SQLException {
+    PersistenceTableModel tableMetadata = new PersistenceTableModel();
+
+    try (Connection connection = dataSource.getConnection()) {
+      PreparedStatement prepareStatement = connection.prepareStatement("SELECT * FROM \"SYS\".\"SYNONYMS\" WHERE \"SYNONYM_NAME\" = ? AND \"SCHEMA_NAME\" = ?");
+      prepareStatement.setString(1, synonymName);
+      prepareStatement.setString(2, schemaName);
+
+      try (ResultSet resultSet = prepareStatement.executeQuery()) {
+        if (resultSet.next()) {
+          tableMetadata.setTableName(resultSet.getString("OBJECT_NAME"));
+          tableMetadata.setSchemaName(resultSet.getString("OBJECT_SCHEMA"));
+          tableMetadata.setTableType(resultSet.getString("OBJECT_TYPE"));
+        }
+      }
+    }
+
+    return tableMetadata;
+  }
 }
 

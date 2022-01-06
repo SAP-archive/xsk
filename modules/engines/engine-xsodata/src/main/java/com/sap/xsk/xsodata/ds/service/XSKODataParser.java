@@ -49,10 +49,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.sap.xsk.utils.XSKCommonsDBUtils.getSynonymTargetObjectMetadata;
 
 /**
  * The factory for creation of the data structure models from source content.
@@ -371,19 +374,18 @@ public class XSKODataParser implements IXSKODataParser {
   }
 
   private String getCorrectCatalogObjectName(XSKHDBXSODATAEntity entity) throws SQLException {
-    HashMap<String, String> targetObjectMetadata = new HashMap<String, String>();
+    PersistenceTableModel targetObjectMetadata = new PersistenceTableModel();
     String catalogObjectName;
 
     if (checkIfEntityIsOfSynonymType(entity.getRepositoryObject().getCatalogObjectName())) {
-      targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(entity.getRepositoryObject().getCatalogObjectName(),
+      targetObjectMetadata = getSynonymTargetObjectMetadata(dataSource, entity.getRepositoryObject().getCatalogObjectName(),
           entity.getRepositoryObject().getCatalogObjectSchema());
     }
 
-    if (targetObjectMetadata.isEmpty()) {
+    if (targetObjectMetadata.getTableName() == null) {
       catalogObjectName = entity.getRepositoryObject().getCatalogObjectName();
-    }
-    else {
-      catalogObjectName = targetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE);
+    } else {
+      catalogObjectName = targetObjectMetadata.getTableName();
     }
 
     return catalogObjectName;
@@ -401,12 +403,12 @@ public class XSKODataParser implements IXSKODataParser {
 
   private XSKDBArtifactModel getTargetObjectOfSynonymIfAny(String schemaName, String artifactName, List<String> dbTypes)
       throws SQLException {
-    HashMap<String, String> targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(artifactName, schemaName);
+    PersistenceTableModel targetObjectMetadata = getSynonymTargetObjectMetadata(dataSource, artifactName, schemaName);
 
-    String type = targetObjectMetadata.get("TYPE");
+    String type = targetObjectMetadata.getTableType();
     if (type != null && dbTypes.contains(type)) {
-      String name = targetObjectMetadata.get("TABLE");
-      String schema = targetObjectMetadata.get("SCHEMA");
+      String name = targetObjectMetadata.getTableName();
+      String schema = targetObjectMetadata.getSchemaName();
       return new XSKDBArtifactModel(name, type, schema);
     }
 

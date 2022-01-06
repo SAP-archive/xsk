@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.utils.XSKCommonsDBUtils;
 import com.sap.xsk.xsodata.ds.model.XSKDBArtifactModel;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
@@ -34,6 +35,7 @@ import java.util.List;
 import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.junit.Before;
@@ -57,7 +59,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   @Mock
   private DatabaseMetaData mockDatabaseMetaData;
   @Mock
-  private HashMap<String, String> mockSynonymTargetObjectMetadata;
+  private PersistenceTableModel mockSynonymTargetObjectMetadata;
   @Mock
   private ResultSet mockResultSet;
   @Mock
@@ -238,9 +240,9 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
     mockGetTable();
     when(mockResultSetEntityExist.next()).thenReturn(true).thenReturn(false);
     when(mockResultSetWhenSynonym.next()).thenReturn(true).thenReturn(false);
-    when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class), any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
-    when(mockSynonymTargetObjectMetadata.isEmpty()).thenReturn(false);
-    when(mockSynonymTargetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE)).thenReturn("MyTestSynonym");
+    when(XSKCommonsDBUtils.getSynonymTargetObjectMetadata(mockDataSource, any(String.class), any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
+    when(mockSynonymTargetObjectMetadata.getTableName() == null).thenReturn(false);
+    when(mockSynonymTargetObjectMetadata.getTableName()).thenReturn("MyTestSynonym");
     when(mockResultSet.next()).thenReturn(true).thenReturn(false);
     when(artifactReturnType.getType()).thenReturn(ISqlKeywords.METADATA_SYNONYM);
   }
@@ -257,9 +259,9 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
     mockGetTable();
     when(mockResultSetEntityExist.next()).thenReturn(true).thenReturn(false);
     when(mockResultSetWhenSynonym.next()).thenReturn(true).thenReturn(false);
-    when(dbMetadataUtil.getSynonymTargetObjectMetadata(any(String.class), any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
-    when(mockSynonymTargetObjectMetadata.isEmpty()).thenReturn(false);
-    when(mockSynonymTargetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE)).thenReturn("MyTestSynonym");
+    when(XSKCommonsDBUtils.getSynonymTargetObjectMetadata(mockDataSource, any(String.class), any(String.class))).thenReturn(mockSynonymTargetObjectMetadata);
+    when(mockSynonymTargetObjectMetadata.getTableName() == null).thenReturn(false);
+    when(mockSynonymTargetObjectMetadata.getTableName()).thenReturn("MyTestSynonym");
     when(mockResultSet.next()).thenReturn(false);
     when(artifactReturnType.getType()).thenReturn("PLACEHOLDER");
   }

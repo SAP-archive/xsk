@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
+import com.sap.xsk.utils.XSKCommonsDBUtils;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
@@ -41,12 +42,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import javax.sql.DataSource;
 
 @RunWith(MockitoJUnitRunner.class)
 public class XSKODataUtilsTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private DBMetadataUtil dbMetadataUtil;
+  @Mock
+  private DataSource mockDataSource;
 
   @Test
   public void testConvertMultiplicityOneToMany() throws Exception {
@@ -420,14 +424,14 @@ public class XSKODataUtilsTest {
         new ArrayList<>());
     synonymModel.setTableType(ISqlKeywords.METADATA_SYNONYM);
 
-    HashMap<String, String> synonymTargetObjectMetadata = new HashMap<String, String>();
-    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_TABLE, "kneo.test.calcviews::calc");
-    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_SCHEMA, null);
-    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_TABLE_TYPE, ISqlKeywords.METADATA_CALC_VIEW);
+    PersistenceTableModel synonymTargetObjectMetadata = new PersistenceTableModel();
+    synonymTargetObjectMetadata.setTableName("kneo.test.calcviews::calc");
+    synonymTargetObjectMetadata.setSchemaName(null);
+    synonymTargetObjectMetadata.setTableType(ISqlKeywords.METADATA_CALC_VIEW);
 
     when(dbMetadataUtil.getTableMetadata("TestCalcView", null)).thenReturn(synonymModel);
     when(dbMetadataUtil.getTableMetadata("kneo.test.calcviews::calc", null)).thenReturn(calcViewModel);
-    when(dbMetadataUtil.getSynonymTargetObjectMetadata(synonymModel.getTableName(), null)).thenReturn(synonymTargetObjectMetadata);
+    when(XSKCommonsDBUtils.getSynonymTargetObjectMetadata(mockDataSource, synonymModel.getTableName(), null)).thenReturn(synonymTargetObjectMetadata);
 
     ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 

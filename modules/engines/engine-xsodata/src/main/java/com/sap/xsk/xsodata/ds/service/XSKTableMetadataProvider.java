@@ -16,9 +16,9 @@ import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
+import org.eclipse.dirigible.engine.odata2.api.ITableMetadataProvider;
 import org.eclipse.dirigible.engine.odata2.definition.ODataEntityDefinition;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
-import org.eclipse.dirigible.engine.odata2.transformers.TableMetadataProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
@@ -31,7 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-public class XSKTableMetadataProvider extends TableMetadataProvider {
+import static com.sap.xsk.utils.XSKCommonsDBUtils.getSynonymTargetObjectMetadata;
+
+public class XSKTableMetadataProvider implements ITableMetadataProvider {
 
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
@@ -43,7 +45,7 @@ public class XSKTableMetadataProvider extends TableMetadataProvider {
       ISqlKeywords.METADATA_VIEW);
   private static final String PUBLIC_SCHEMA = "PUBLIC";
 
-  public PersistenceTableModel getPersistenceTableModel(ODataEntityDefinition oDataEntityDefinition, StringBuilder buff) throws SQLException {
+  public PersistenceTableModel getPersistenceTableModel(ODataEntityDefinition oDataEntityDefinition) throws SQLException {
 
     PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(oDataEntityDefinition.getName(), Configuration.get("HANA_USERNAME"));
 
@@ -53,19 +55,16 @@ public class XSKTableMetadataProvider extends TableMetadataProvider {
 
     String targetSchema = ISqlKeywords.METADATA_SYNONYM.equals(tableMetadata.getTableType())? tableMetadata.getSchemaName() : PUBLIC_SCHEMA;
 
-    HashMap<String, String> targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(tableMetadata.getTableName(), targetSchema);
+    PersistenceTableModel targetObjectMetadata = getSynonymTargetObjectMetadata(dataSource, tableMetadata.getTableName(), targetSchema);
 
-    if (targetObjectMetadata.isEmpty()) {
-      logger.error("Failed to get details for synonym - " + tableMetadata.getTableName());
+    if (targetObjectMetadata.getTableName() == null) {
+      logger.error("We cannot find view/table/synonym with name " + tableMetadata.getTableName() + " in schema" + targetSchema +
+          " and there is no public synonym with that name. Make sure that you are using view/table/synonym which is in your user default "
+          + "schema or is a public synonym.");
       return null;
     }
 
-    if (!METADATA_ENTITY_TYPES.contains(targetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE_TYPE))) {
-      logger.error("Unsupported object type for {}", targetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE));
-      return null;
-    }
-
-    tableMetadata = dbMetadataUtil.getTableMetadata(targetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE), targetObjectMetadata.get(ISqlKeywords.KEYWORD_SCHEMA));
+    tableMetadata = dbMetadataUtil.getTableMetadata(targetObjectMetadata.getTableName(), targetObjectMetadata.getSchemaName());
 
     return tableMetadata;
   }

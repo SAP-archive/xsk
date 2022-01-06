@@ -228,7 +228,7 @@
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dirigible.version>6.1.12</dirigible.version>
+		<dirigible.version>6.1.13</dirigible.version>
 
 		<maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
 		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>

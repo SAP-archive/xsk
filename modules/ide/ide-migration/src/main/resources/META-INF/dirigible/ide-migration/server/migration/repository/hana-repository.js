@@ -100,7 +100,7 @@ class HanaRepository {
             const object = objects[i];
             let repositoryObject = new RepositoryObject(object.name, object.package, object.suffix);
 
-            const result = hanaRepositoryInstance._addLanguageAndContent(repositoryObject)
+            const result = hanaRepositoryInstance._addLanguage(repositoryObject)
             repositoryObjects.push(result);
 
             if (repositoryObjects.length === objects.length) {
@@ -109,11 +109,9 @@ class HanaRepository {
         }
     }
 
-    _addLanguageAndContent(repositoryObject) {
+    _addLanguage(repositoryObject) {
         const originalLanguage = this._getOriginalLanguage(repositoryObject.PackageName.packageName)
-        const content = this._getFileContent(repositoryObject);
         repositoryObject.originalLanguage = originalLanguage;
-        repositoryObject.content = content;
         return repositoryObject;
     }
 
@@ -175,6 +173,11 @@ class HanaRepository {
         let filteredPackages = packageFilter.filterPackages(globalContext, packages) || [];
         const packagesAndFilesListObject = this._getAllObjectsForPackages(filteredPackages)
         return this._packagesCollected(packagesAndFilesListObject.packages, packagesAndFilesListObject.fileList);
+    }
+
+    getContentForObject(name, packageName, suffix) {
+        let object = new RepositoryObject(name, packageName, suffix);
+        return this._getFileContent(object);
     }
 
     _executeRequest(repositoryRequest) {

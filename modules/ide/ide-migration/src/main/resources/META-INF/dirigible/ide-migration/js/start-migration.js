@@ -9,7 +9,8 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http', '$messageHub', function ($scope, $http, $messageHub) {
+migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http', '$messageHub', 'migrationDataState', function ($scope, $http, $messageHub, migrationDataState) {
+    $scope.migrationDataState = migrationDataState;
     $scope.isVisible = false;
     $scope.migrationFinished = false;
     $scope.progressBarPercentage = 100;
@@ -19,40 +20,39 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
     ]
     $scope.progressTitle = titleList[0];
     $scope.statusMessage = "Configuration processing...";
-    let neoData = undefined;
-    let hanaData = undefined;
     let defaultErrorTitle = "Error migrating project";
     let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
-    let selectedWorkspace = '';
 
 
-    function startMigration(duData) {
-        selectedWorkspace = duData.workspace;
+    function startMigration() {
         body = {
             neo: {
-                hostName: neoData.hostName,
-                subaccount: neoData.subaccount,
+                hostName: migrationDataState.neoHostName,
+                subaccount: migrationDataState.neoSubaccount,
             },
-            hana: hanaData,
-            connectionId: duData.connectionId,
-            workspace: duData.workspace,
-            du: duData.du,             
-            processInstanceId: duData.processId
+            hana: {
+                databaseSchema: migrationDataState.schemaName,
+                username: migrationDataState.dbUsername,
+                password: migrationDataState.dbPassword
+            },
+            connectionId: migrationDataState.connectionId,
+            workspace: migrationDataState.selectedWorkspace,
+            du: migrationDataState.selectedDeliveryUnits,
+            processInstanceId: migrationDataState.processInstanceId
         };
-        $scope.statusMessage = duData.du.length > 1 ? `Migrating ${duData.du.length} projects` : `Migrating project`;
+
+        const selectedDeliveryUnitsCount = migrationDataState.selectedDeliveryUnits.length;
+        $scope.statusMessage = selectedDeliveryUnitsCount > 1 ? `Migrating ${selectedDeliveryUnitsCount} projects` : `Migrating project`;
 
         $http.post(
             "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/continue-process",
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {
-            var duNames = [];
-            duData.du.forEach(du => {
-                duNames.push(du.name);
-            });
-            var duNamesFormatted = `["${duNames.join("\", \"")}"]`; // quoted with comma - ["name1", "name2"]
+            const duNames = migrationDataState.selectedDeliveryUnits.map(x => x.name);
+            const duNamesFormatted = `["${duNames.join("\", \"")}"]`; // quoted with comma - ["name1", "name2"]
             $scope.progressTitle = titleList[1];
-            $scope.statusMessage = `Successfully migrated Delivery Units to the following projects: ${duNamesFormatted}. Go to workspace "${duData.workspace}" and publish them.`;
+            $scope.statusMessage = `Successfully migrated Delivery Units to the following projects: ${duNamesFormatted}. Go to workspace "${migrationDataState.selectedWorkspace}" and publish them.`;
             $scope.migrationFinished = true;
         }, function (response) {
             if (response.data) {
@@ -93,7 +93,7 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
         $messageHub.message(
             "workspace.set",
             {
-                workspace: selectedWorkspace
+                workspace: migrationDataState.selectedWorkspace
             }
         );
         $messageHub.message(
@@ -110,19 +110,8 @@ migrationLaunchView.controller('StartMigrationViewController', ['$scope', '$http
                 $scope.isVisible = msg.data.isVisible;
             });
             if (msg.data.isVisible) {
-                $messageHub.message('migration.neo-credentials', { controller: "migration.start-migration", getData: "all" });
-                $messageHub.message('migration.hana-credentials', { controller: "migration.start-migration", getData: "all" });
-                $messageHub.message('migration.delivery-unit', { controller: "migration.start-migration", getData: "all" });
+                startMigration();
             }
-        }
-        if ("neoData" in msg.data) {
-            neoData = msg.data.neoData;
-        }
-        if ("hanaData" in msg.data) {
-            hanaData = msg.data.hanaData;
-        }
-        if ("duData" in msg.data) {
-            startMigration(msg.data.duData);
         }
     }.bind(this));
 }]);

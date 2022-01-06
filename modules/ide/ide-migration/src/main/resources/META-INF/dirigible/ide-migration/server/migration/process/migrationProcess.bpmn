@@ -17,13 +17,6 @@
         </flowable:field>
       </extensionElements>
     </serviceTask>
-    <serviceTask id="executeMigrationTask" name="ExecuteMigrationTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
-      <extensionElements>
-        <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/execute-migration-task.js]]></flowable:string>
-        </flowable:field>
-      </extensionElements>
-    </serviceTask>
     <serviceTask id="closeHanaTunnelTask" name="CloseHanaTunnelTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
@@ -51,19 +44,14 @@
     <sequenceFlow id="sid-4C28ADD1-E977-440B-B421-ECF5F231BC62" sourceRef="userProvideCredentialsTask" targetRef="openHanaTunnelTask"/>
     <sequenceFlow id="sid-0597DAD6-1953-4AC0-BDDD-5FE6172DA252" sourceRef="closeHanaTunnelTask" targetRef="sid-70B488C1-384A-4E19-8091-1B12D1AEC7FD"/>
     <exclusiveGateway id="sid-FFB6E58B-1F4A-4F09-9C3A-ADAEC8D387F9"/>
-    <sequenceFlow id="sid-2DCD47B8-B173-4497-B3CF-ABB8B70B71C0" sourceRef="executeMigrationTask" targetRef="sid-FFB6E58B-1F4A-4F09-9C3A-ADAEC8D387F9"/>
-    <sequenceFlow id="sid-983EFE4C-0C0D-403E-B55E-1AC7E62761C2" sourceRef="userSelectDeliveryUnitAndWorkspaceTask" targetRef="executeMigrationTask"/>
+    <sequenceFlow id="sid-983EFE4C-0C0D-403E-B55E-1AC7E62761C2" sourceRef="userSelectDeliveryUnitAndWorkspaceTask" targetRef="copyFilesTask"/>
     <exclusiveGateway id="sid-58D007AC-E8EE-4056-9ECE-0F4F884D1781"/>
     <userTask id="userProvideNeoCredentialsTask" name="UserProvideNeoCredentialsTask"/>
     <sequenceFlow id="sid-A63BFE98-F96B-4D92-AD0C-7B46B1D39E79" sourceRef="userProvideNeoCredentialsTask" targetRef="listAvailableDatabasesTask"/>
     <exclusiveGateway id="sid-93CC6A31-AD25-49DC-BE62-D185717D7D5A"/>
     <exclusiveGateway id="sid-CD320F3E-0B53-4A91-8913-025A89A3476E"/>
     <exclusiveGateway id="sid-100493A6-AE3F-431E-932A-90AAE26B8CAB"/>
-    <sequenceFlow id="sid-376953E6-6C74-43D2-B5B5-3FE20D22EBE9" sourceRef="openHanaTunnelTask" targetRef="sid-100493A6-AE3F-431E-932A-90AAE26B8CAB"/>
     <sequenceFlow id="sid-6A23207D-34EC-405E-A43D-1C730B11158F" sourceRef="listDeliveryUnitsTask" targetRef="sid-CD320F3E-0B53-4A91-8913-025A89A3476E"/>
-    <sequenceFlow id="sid-772428AA-7E10-46EE-A757-32A49713378A" sourceRef="sid-FFB6E58B-1F4A-4F09-9C3A-ADAEC8D387F9" targetRef="userSelectDeliveryUnitAndWorkspaceTask">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'MIGRATION_FAILED'}]]></conditionExpression>
-    </sequenceFlow>
     <sequenceFlow id="sid-91E0686B-EAFF-4623-9DD0-78652272AE99" sourceRef="sid-FFB6E58B-1F4A-4F09-9C3A-ADAEC8D387F9" targetRef="closeHanaTunnelTask">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'MIGRATION_EXECUTED'}]]></conditionExpression>
     </sequenceFlow>
@@ -80,12 +68,6 @@
     <sequenceFlow id="sid-DE4193B5-FB6E-4394-9E25-28270ACB2BE4" sourceRef="sid-CD320F3E-0B53-4A91-8913-025A89A3476E" targetRef="userProvideCredentialsTask">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'DELIVERY_UNITS_LISTING_FAILED'}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="sid-0118E262-FF7B-4F26-AEEF-AA45BB084203" sourceRef="sid-100493A6-AE3F-431E-932A-90AAE26B8CAB" targetRef="listDeliveryUnitsTask">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'TUNNEL_OPENED'}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="sid-537C316B-123B-4AE3-9FEE-B34B45337BE4" sourceRef="sid-100493A6-AE3F-431E-932A-90AAE26B8CAB" targetRef="userProvideCredentialsTask">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'TUNNEL_OPENING_FAILED'}]]></conditionExpression>
-    </sequenceFlow>
     <sequenceFlow id="sid-CF6DCDDC-1EC1-4433-AF4E-6D36F863F23A" sourceRef="listAvailableDatabasesTask" targetRef="sid-58D007AC-E8EE-4056-9ECE-0F4F884D1781"/>
     <sequenceFlow id="sid-4280E3CA-DD12-4743-9C5B-70DB5EA19700" sourceRef="sid-58D007AC-E8EE-4056-9ECE-0F4F884D1781" targetRef="userProvideCredentialsTask">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'DATABASES_LISTED'}]]></conditionExpression>
@@ -93,6 +75,48 @@
     <sequenceFlow id="sid-887CDDE8-90D3-4F6B-8437-B6E4ECA0EC69" sourceRef="sid-58D007AC-E8EE-4056-9ECE-0F4F884D1781" targetRef="userProvideNeoCredentialsTask">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'DATABASES_LISTING_FAILED'}]]></conditionExpression>
     </sequenceFlow>
+    <serviceTask id="handleDeployablesTask" name="HandleDeployablesTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
+      <extensionElements>
+        <flowable:field name="handler">
+          <flowable:string><![CDATA[ide-migration/server/migration/process/handle-deployables-task.js]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="createWorkspaceTask" name="CreateWorkspaceTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
+      <extensionElements>
+        <flowable:field name="handler">
+          <flowable:string><![CDATA[ide-migration/server/migration/process/create-workspace-task.js]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="copyFilesTask" name="CopyFilesTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
+      <extensionElements>
+        <flowable:field name="handler">
+          <flowable:string><![CDATA[ide-migration/server/migration/process/copy-files-task.js]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="populateProjectsTask" name="PopulateProjectsTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
+      <extensionElements>
+        <flowable:field name="handler">
+          <flowable:string><![CDATA[ide-migration/server/migration/process/populate-projects-task.js]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="sid-376953E6-6C74-43D2-B5B5-3FE20D22EBE9" sourceRef="openHanaTunnelTask" targetRef="sid-100493A6-AE3F-431E-932A-90AAE26B8CAB"/>
+    <sequenceFlow id="sid-0118E262-FF7B-4F26-AEEF-AA45BB084203" sourceRef="sid-100493A6-AE3F-431E-932A-90AAE26B8CAB" targetRef="listDeliveryUnitsTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'TUNNEL_OPENED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-537C316B-123B-4AE3-9FEE-B34B45337BE4" sourceRef="sid-100493A6-AE3F-431E-932A-90AAE26B8CAB" targetRef="userProvideCredentialsTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'TUNNEL_OPENING_FAILED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-1A03A3BF-84FC-465A-9ED6-3E4CDD697E3D" sourceRef="createWorkspaceTask" targetRef="handleDeployablesTask"/>
+    <sequenceFlow id="sid-3C8CE926-63DD-4F4F-AFEE-8AA5A0F456AE" sourceRef="handleDeployablesTask" targetRef="populateProjectsTask"/>
+    <sequenceFlow id="sid-9685B04E-ED2D-4C26-943C-C34C442DE37D" sourceRef="populateProjectsTask" targetRef="sid-FFB6E58B-1F4A-4F09-9C3A-ADAEC8D387F9"/>
+    <sequenceFlow id="sid-772428AA-7E10-46EE-A757-32A49713378A" sourceRef="sid-FFB6E58B-1F4A-4F09-9C3A-ADAEC8D387F9" targetRef="userSelectDeliveryUnitAndWorkspaceTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${migrationState == 'MIGRATION_FAILED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-1B647715-A769-4A06-A38A-0260EC9F92D8" sourceRef="copyFilesTask" targetRef="createWorkspaceTask"/>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_migrationProcess">
     <bpmndi:BPMNPlane bpmnElement="migrationProcess" id="BPMNPlane_migrationProcess">
@@ -108,14 +132,11 @@
       <bpmndi:BPMNShape bpmnElement="listDeliveryUnitsTask" id="BPMNShape_listDeliveryUnitsTask">
         <omgdc:Bounds height="80.0" width="100.0" x="495.0" y="75.0"/>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="executeMigrationTask" id="BPMNShape_executeMigrationTask">
-        <omgdc:Bounds height="80.0" width="100.0" x="1005.0" y="285.0"/>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="closeHanaTunnelTask" id="BPMNShape_closeHanaTunnelTask">
         <omgdc:Bounds height="80.0" width="100.0" x="1005.0" y="75.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="userSelectDeliveryUnitAndWorkspaceTask" id="BPMNShape_userSelectDeliveryUnitAndWorkspaceTask">
-        <omgdc:Bounds height="80.0" width="100.0" x="855.0" y="285.0"/>
+        <omgdc:Bounds height="80.0" width="100.0" x="735.0" y="225.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="listWorkspacesTask" id="BPMNShape_listWorkspacesTask">
         <omgdc:Bounds height="80.0" width="100.0" x="720.0" y="70.0"/>
@@ -144,6 +165,18 @@
       <bpmndi:BPMNShape bpmnElement="sid-100493A6-AE3F-431E-932A-90AAE26B8CAB" id="BPMNShape_sid-100493A6-AE3F-431E-932A-90AAE26B8CAB">
         <omgdc:Bounds height="40.0" width="40.0" x="420.0" y="90.0"/>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="handleDeployablesTask" id="BPMNShape_handleDeployablesTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="1035.0" y="390.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="createWorkspaceTask" id="BPMNShape_createWorkspaceTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="885.0" y="390.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="copyFilesTask" id="BPMNShape_copyFilesTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="735.0" y="390.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="populateProjectsTask" id="BPMNShape_populateProjectsTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="1020.0" y="285.0"/>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="sid-6A23207D-34EC-405E-A43D-1C730B11158F" id="BPMNEdge_sid-6A23207D-34EC-405E-A43D-1C730B11158F">
         <omgdi:waypoint x="594.95" y="112.6190476190476"/>
         <omgdi:waypoint x="630.9090909090907" y="110.9068181818182"/>
@@ -165,16 +198,22 @@
         <omgdi:waypoint x="384.95" y="290.87301587301585"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-12790E31-88FB-4511-A911-297A6C4391E6" id="BPMNEdge_sid-12790E31-88FB-4511-A911-297A6C4391E6">
-        <omgdi:waypoint x="905.0" y="129.94536262203624"/>
-        <omgdi:waypoint x="905.0" y="285.0"/>
+        <omgdi:waypoint x="905.0" y="129.93513412816694"/>
+        <omgdi:waypoint x="905.0" y="177.0"/>
+        <omgdi:waypoint x="785.0" y="177.0"/>
+        <omgdi:waypoint x="785.0" y="225.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-4280E3CA-DD12-4743-9C5B-70DB5EA19700" id="BPMNEdge_sid-4280E3CA-DD12-4743-9C5B-70DB5EA19700">
         <omgdi:waypoint x="219.94261658030808" y="325.0"/>
         <omgdi:waypoint x="285.0" y="325.0"/>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-1A03A3BF-84FC-465A-9ED6-3E4CDD697E3D" id="BPMNEdge_sid-1A03A3BF-84FC-465A-9ED6-3E4CDD697E3D">
+        <omgdi:waypoint x="984.9499999999999" y="430.0"/>
+        <omgdi:waypoint x="1034.9999999999363" y="430.0"/>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-772428AA-7E10-46EE-A757-32A49713378A" id="BPMNEdge_sid-772428AA-7E10-46EE-A757-32A49713378A">
-        <omgdi:waypoint x="1042.7551020408164" y="237.73571428571432"/>
-        <omgdi:waypoint x="954.9499999999999" y="293.33333333333337"/>
+        <omgdi:waypoint x="1037.295081967213" y="232.28934426229515"/>
+        <omgdi:waypoint x="834.9499999999996" y="258.51851851851853"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-376953E6-6C74-43D2-B5B5-3FE20D22EBE9" id="BPMNEdge_sid-376953E6-6C74-43D2-B5B5-3FE20D22EBE9">
         <omgdi:waypoint x="384.95000000000005" y="112.61904761904762"/>
@@ -184,9 +223,13 @@
         <omgdi:waypoint x="890.4777070063694" y="115.46401273885351"/>
         <omgdi:waypoint x="384.95000000000005" y="306.140350877193"/>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-1B647715-A769-4A06-A38A-0260EC9F92D8" id="BPMNEdge_sid-1B647715-A769-4A06-A38A-0260EC9F92D8">
+        <omgdi:waypoint x="834.9499999999999" y="430.0"/>
+        <omgdi:waypoint x="884.9999999999363" y="430.0"/>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-983EFE4C-0C0D-403E-B55E-1AC7E62761C2" id="BPMNEdge_sid-983EFE4C-0C0D-403E-B55E-1AC7E62761C2">
-        <omgdi:waypoint x="954.9499999999999" y="325.0"/>
-        <omgdi:waypoint x="1005.0" y="325.0"/>
+        <omgdi:waypoint x="785.0" y="304.95000000000005"/>
+        <omgdi:waypoint x="785.0" y="390.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-91E0686B-EAFF-4623-9DD0-78652272AE99" id="BPMNEdge_sid-91E0686B-EAFF-4623-9DD0-78652272AE99">
         <omgdi:waypoint x="1055.0" y="210.0"/>
@@ -200,13 +243,17 @@
         <omgdi:waypoint x="180.0" y="325.0"/>
         <omgdi:waypoint x="99.95" y="325.0"/>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-9685B04E-ED2D-4C26-943C-C34C442DE37D" id="BPMNEdge_sid-9685B04E-ED2D-4C26-943C-C34C442DE37D">
+        <omgdi:waypoint x="1063.6842105263158" y="285.0"/>
+        <omgdi:waypoint x="1057.7204545454545" y="247.1997497725206"/>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-72EFFD88-9AA0-4C2F-9B40-3B1EC900289E" id="BPMNEdge_sid-72EFFD88-9AA0-4C2F-9B40-3B1EC900289E">
         <omgdi:waypoint x="669.9416944213154" y="110.0"/>
         <omgdi:waypoint x="719.9999999999977" y="110.0"/>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="sid-2DCD47B8-B173-4497-B3CF-ABB8B70B71C0" id="BPMNEdge_sid-2DCD47B8-B173-4497-B3CF-ABB8B70B71C0">
-        <omgdi:waypoint x="1055.0" y="285.0"/>
-        <omgdi:waypoint x="1055.0" y="249.91045837723928"/>
+      <bpmndi:BPMNEdge bpmnElement="sid-3C8CE926-63DD-4F4F-AFEE-8AA5A0F456AE" id="BPMNEdge_sid-3C8CE926-63DD-4F4F-AFEE-8AA5A0F456AE">
+        <omgdi:waypoint x="1079.2857142857142" y="390.0"/>
+        <omgdi:waypoint x="1075.7071428571428" y="364.95000000000005"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-A63BFE98-F96B-4D92-AD0C-7B46B1D39E79" id="BPMNEdge_sid-A63BFE98-F96B-4D92-AD0C-7B46B1D39E79">
         <omgdi:waypoint x="50.0" y="285.0"/>

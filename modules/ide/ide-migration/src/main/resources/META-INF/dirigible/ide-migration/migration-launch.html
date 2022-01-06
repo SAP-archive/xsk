@@ -10,71 +10,86 @@
   -->
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" sizes="any" href="data:;base64,iVBORw0KGgo=">
 
-	<title>SAP HANA XS Classic Migration</title>
+		<title>SAP HANA XS Classic Migration</title>
 
-	<!-- jQuery -->
-	<script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-	
-	<!-- AngularJS -->
-	<script type="text/javascript" src="/webjars/angularjs/1.8.2/angular.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.8.2/angular-resource.min.js"></script>
+		<!-- jQuery -->
+		<script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
 
-    <!-- FontAwesome icon set -->
-    <link type="text/css" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<!-- AngularJS -->
+		<script type="text/javascript" src="/webjars/angularjs/1.8.2/angular.min.js"></script>
+		<script type="text/javascript" src="/webjars/angularjs/1.8.2/angular-resource.min.js"></script>
 
-	<!-- Twitter Bootstrap with Theme Support -->
-	<link rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css">
-	<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<!-- FontAwesome icon set -->
+		<link type="text/css" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-	<!-- MessageHub -->
-	<script type="text/javascript" src="/services/v4/web/ide-core/ui/message-hub.js"></script>
+		<!-- Twitter Bootstrap with Theme Support -->
+		<link rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css">
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-	<!-- Custom IDE Styles -->
-	<link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/ide.css" />
+		<!-- MessageHub -->
+		<script type="text/javascript" src="/services/v4/web/ide-core/ui/message-hub.js"></script>
 
-	<!-- Project-specific stuff -->
-	<script type="text/javascript" src="js/migration-launch.js"></script>
-	<script type="text/javascript" src="js/delivery-unit.js"></script>
-	<script type="text/javascript" src="js/neo-credentials.js"></script>
-	<script type="text/javascript" src="js/hana-credentials.js"></script>
-	<script type="text/javascript" src="js/start-migration.js"></script>
-	<link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/migration.css" />
-	<link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/dropdown.css" />
+		<!-- Custom IDE Styles -->
+		<link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/ide.css" />
 
-</head>
+		<!-- Project-specific stuff -->
+		<script type="text/javascript" src="js/migration-launch.js"></script>
+		<script type="text/javascript" src="js/migration-statistic.js"></script>
+		<script type="text/javascript" src="js/delivery-unit.js"></script>
+		<script type="text/javascript" src="js/neo-credentials.js"></script>
+		<script type="text/javascript" src="js/hana-credentials.js"></script>
+		<script type="text/javascript" src="js/start-migration.js"></script>
+		<link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/migration.css" />
+		<link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/dropdown.css" />
 
-<body ng-app="migration-launch" ng-controller="MigrationLaunchViewController" class="view migration-launch-body">
-	<div class="migration-title"><span>SAP HANA XS Classic Migration</span></div>
-	<div class="flex-container">
-		<div class="migration-nav">
-			<div class="nav-progress">
-				<div class="nav-progress-line">
+	</head>
+
+	<body ng-app="migration-launch" ng-controller="MigrationLaunchViewController" class="view migration-launch-body">
+		<div class="migration-title">
+			<span class="pull-left">
+				SAP HANA XS Classic Migration
+			</span>
+			<button type="button" class="btn btn-primary btn-big pull-right" ng-click="showMigrationScreen()" ng-show="onStatisticsPage">
+				Migrate a project
+			</button>
+		</div>
+
+		<div ng-include="'partials/migration-statistic.html'" ng-show="onStatisticsPage"></div>
+		
+		<div class="flex-container" ng-hide="onStatisticsPage">
+			<div class="migration-nav">
+				<div class="nav-progress">
+					<div class="nav-progress-line">
+					</div>
+					<div class="nav-item" ng-repeat="step in steps" ng-class="isStepActive(step.id)">
+						<div class="nav-item-indicator"></div>
+						<div class="nav-item-label">{{step.name}}</div>
+					</div>
 				</div>
-				<div class="nav-item" ng-repeat="step in steps" ng-class="isStepActive(step.id)">
-					<div class="nav-item-indicator"></div>
-					<div class="nav-item-label">{{step.name}}</div>
+			</div>
+			<div class="migration-main">
+				<div class="steps-container">
+					<div ng-include="'partials/delivery-unit.html'"></div>
+					<div ng-include="'partials/neo-credentials.html'"></div>
+					<div ng-include="'partials/hana-credentials.html'"></div>
+					<div ng-include="'partials/start-migration.html'"></div>
+
+					<div class="bottom-nav margin-top-bottom-lg" ng-hide="bottomNavHidden">
+						<button type="button" class="btn btn-default btn-big pull-left" ng-click="previousClicked()"
+							ng-disabled="previousDisabled" ng-show="previousVisible">Previous</button>
+						<button type="button" class="btn btn-primary btn-big pull-right" ng-click="nextClicked()"
+							ng-disabled="nextDisabled" ng-show="nextVisible">Next</button>
+						<button type="button" class="btn btn-primary btn-big pull-right" ng-click="finishClicked()"
+							ng-disabled="finishDisabled" ng-show="finishVisible">Finish</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="migration-main">
-			<div class="steps-container">
-				<div ng-include="'partials/delivery-unit.html'"></div>
-				<div ng-include="'partials/neo-credentials.html'"></div>
-				<div ng-include="'partials/hana-credentials.html'"></div>
-				<div ng-include="'partials/start-migration.html'"></div>
-
-				<div class="bottom-nav margin-top-bottom-lg" ng-hide="bottomNavHidden">
-					<button type="button" class="btn btn-default btn-big pull-left" ng-click="previousClicked()" ng-disabled="previousDisabled" ng-show="previousVisible">Previous</button>
-					<button type="button" class="btn btn-primary btn-big pull-right" ng-click="nextClicked()" ng-disabled="nextDisabled" ng-show="nextVisible">Next</button>
-					<button type="button" class="btn btn-primary btn-big pull-right" ng-click="finishClicked()" ng-disabled="finishDisabled" ng-show="finishVisible">Finish</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</body>
+	</body>
 
 </html>

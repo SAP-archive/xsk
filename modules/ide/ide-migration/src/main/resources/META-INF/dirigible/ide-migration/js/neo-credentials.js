@@ -9,8 +9,8 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-
-migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$messageHub', function ($scope, $messageHub) {
+migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$messageHub', 'migrationDataState', function ($scope, $messageHub, migrationDataState) {
+    $scope.migrationDataState = migrationDataState;
     $scope.passwordHintMessage = "If you have enabled 2FA for your account, append your 2FA code after the password";
     $scope.isVisible = true;
     $scope.passwordVisible = false;
@@ -29,7 +29,7 @@ migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$mess
     $scope.hostName = '';
     
     $scope.userInput = function () {
-        if ($scope.hostName && $scope.subaccount && $scope.username && $scope.password) {
+        if (migrationDataState.neoHostName && migrationDataState.neoSubaccount && migrationDataState.neoUsername && migrationDataState.neoPassword) {
             $scope.$parent.setNextEnabled(true);
         } else {
             $scope.$parent.setNextEnabled(false);
@@ -46,8 +46,8 @@ migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$mess
 
     $scope.regionSelected = function (regionObject) {                            
             
-            $scope.hostName = regionObject.region;
-            $scope.regionDropdownText = regionObject.name;
+        migrationDataState.neoHostName = regionObject.region;
+        $scope.regionDropdownText = regionObject.name;
             
             $scope.$parent.setFinishEnabled(true);
         };
@@ -89,18 +89,6 @@ migrationLaunchView.controller('NeoCredentialsViewController', ['$scope', '$mess
                     $scope.$parent.setFinishVisible(false);
                 }
             });
-        }
-        if ("getData" in msg.data) {
-            if (msg.data.getData === "all") {
-                $messageHub.message(msg.data.controller, {
-                    neoData: {
-                        hostName: $scope.hostName,
-                        subaccount: $scope.subaccount,
-                        username: $scope.username,
-                        password: $scope.password,
-                    }
-                });
-            }
         }
     }.bind(this));
 }]);

@@ -9,31 +9,30 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$http', '$messageHub', function ($scope, $http, $messageHub) {
+migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$http', '$messageHub', 'migrationDataState', function ($scope, $http, $messageHub, migrationDataState) {
+    $scope.migrationDataState = migrationDataState;
     $scope.isVisible = false;
     $scope.passwordVisible = false;
     $scope.areDatabasesLoaded = false;
     $scope.databasesDropdownText = "---Please select---";
     $scope.databases = [];
     $scope.databasesList = $scope.databases;
-    let processId = undefined;
 
     let descriptionList = [
         "Please wait while we get all available databases...",
         "Provide the SAP HANA Credentials"
     ];
     $scope.descriptionText = descriptionList[0];
-    let neoData = undefined;
     let defaultErrorTitle = "Error listing databases";
     let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
 
     function getAvailableHanaDatabases() {
         body = {
             neo: {
-                hostName: neoData.hostName,
-                subaccount: neoData.subaccount,
-                username: neoData.username,
-                password: neoData.password,
+                hostName: migrationDataState.neoHostName,
+                subaccount: migrationDataState.neoSubaccount,
+                username: migrationDataState.neoUsername,
+                password: migrationDataState.neoPassword
             }
         };
 
@@ -42,7 +41,7 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$htt
             JSON.stringify(body),
             { headers: { 'Content-Type': 'application/json' } }
         ).then(function (response) {
-            processId = body.processInstanceId = response.data.processInstanceId;
+            migrationDataState.processInstanceId = body.processInstanceId = response.data.processInstanceId;
             const timer = setInterval(function () {
                 $http.post(
                     "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/get-process",
@@ -112,7 +111,7 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$htt
     }
 
     $scope.userInput = function () {
-        if ($scope.schemaName && $scope.username && $scope.password && $scope.areDatabasesLoaded) {
+        if (migrationDataState.schemaName && migrationDataState.dbUsername && migrationDataState.dbPassword && $scope.areDatabasesLoaded) {
             $scope.$parent.setNextEnabled(true);
         } else {
             $scope.$parent.setNextEnabled(false);
@@ -138,7 +137,7 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$htt
     };
 
     $scope.databaseSelected = function (database) {
-        $scope.schemaName = database;
+        migrationDataState.schemaName = database;
         $scope.databasesDropdownText = database;
     };
 
@@ -152,25 +151,9 @@ migrationLaunchView.controller('HanaCredentialsViewController', ['$scope', '$htt
                 $scope.$parent.setNextVisible(false);
                 $scope.$parent.setNextEnabled(false);
                 if (msg.data.isVisible) {
-                    $messageHub.message('migration.neo-credentials', { controller: "migration.hana-credentials", getData: "all" });
+                    getAvailableHanaDatabases();
                 }
             });
-        }
-        if ("neoData" in msg.data) {
-            neoData = msg.data.neoData;
-            getAvailableHanaDatabases();
-        }
-        if ("getData" in msg.data) {
-            if (msg.data.getData === "all") {
-                $messageHub.message(msg.data.controller, {
-                    hanaData: {
-                        "databaseSchema": $scope.schemaName,
-                        "username": $scope.username,
-                        "password": $scope.password,
-                        "processId": processId
-                    }
-                });
-            }
         }
     }.bind(this));
 }]);

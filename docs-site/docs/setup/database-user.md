@@ -41,7 +41,7 @@ To create a new database user go through the following steps:
     8. Search for the `CREATE SCHEMA` privilege.
     9. Save the changes.
 
-        ![XSK - SAP HANA Cockpit - Create Schema](/img/setup/database-user/4-create-schema-privilege.png)
+        ![XSK - SAP HANA Cockpit - Create Schema](/img/setup/database-user/4-create-schema-privileges.png)
 
     10. From the `Object Privileges` tab click the `Edit` button and then the `Add` button and add the following object privileges:
 
@@ -61,7 +61,7 @@ To create a new database user go through the following steps:
 
     11. Save the changes.
 
-        ![XSK - SAP HANA Cockpit - Object Privileges](/img/setup/database-user/4-create-schema-privilege.png)
+        ![XSK - SAP HANA Cockpit - Object Privileges](/img/setup/database-user/5-create-object-privileges.png)
 
 === "SQL Console"
 

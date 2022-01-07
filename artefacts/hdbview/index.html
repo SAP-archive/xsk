@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/artefacts/hdbview/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.3">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.edf004c2.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bb3983ee.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -1460,14 +1460,14 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">HANA XS Classic syntax</label><label for="__tabbed_1_2">HANA XS Advanced syntax</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="k">schema</span><span class="o">=</span><span class="ss">&quot;MYSCHEMA&quot;</span><span class="p">;</span>
-<span class="n">query</span><span class="o">=</span><span class="ss">&quot;SELECT T1.\&quot;</span><span class="n">Column2</span><span class="err">\</span><span class="ss">&quot; FROM \&quot;</span><span class="n">MYSCHEMA</span><span class="err">\</span><span class="ss">&quot;.\&quot;</span><span class="n">acme</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">test</span><span class="p">.</span><span class="n">views</span><span class="p">::</span><span class="n">MY_VIEW1</span><span class="err">\</span><span class="ss">&quot; AS T1 LEFT JOIN \&quot;</span><span class="n">MYSCHEMA</span><span class="err">\</span><span class="ss">&quot;.\&quot;</span><span class="n">acme</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">test</span><span class="p">.</span><span class="n">views</span><span class="p">::</span><span class="n">MY_VIEW2</span><span class="err">\</span><span class="ss">&quot; AS T2 ON T1.\&quot;</span><span class="n">Column1</span><span class="err">\</span><span class="ss">&quot; = T2.\&quot;</span><span class="n">Column1</span><span class="err">\</span><span class="ss">&quot;&quot;</span><span class="p">;</span>
-<span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="ss">&quot;acme.com.test.views::MY_VIEW1&quot;</span><span class="p">,</span> <span class="ss">&quot;acme.com.test.views::MY_VIEW2&quot;</span><span class="p">];</span>
+<div class="highlight"><pre><span></span><code><span class="k">schema</span><span class="o">=</span><span class="ss">&quot;MYSCHEMA&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="n">query</span><span class="o">=</span><span class="ss">&quot;SELECT T1.\&quot;</span><span class="n">Column2</span><span class="err">\</span><span class="ss">&quot; FROM \&quot;</span><span class="n">MYSCHEMA</span><span class="err">\</span><span class="ss">&quot;.\&quot;</span><span class="n">acme</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">test</span><span class="p">.</span><span class="n">views</span><span class="p">::</span><span class="n">MY_VIEW1</span><span class="err">\</span><span class="ss">&quot; AS T1 LEFT JOIN \&quot;</span><span class="n">MYSCHEMA</span><span class="err">\</span><span class="ss">&quot;.\&quot;</span><span class="n">acme</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">test</span><span class="p">.</span><span class="n">views</span><span class="p">::</span><span class="n">MY_VIEW2</span><span class="err">\</span><span class="ss">&quot; AS T2 ON T1.\&quot;</span><span class="n">Column1</span><span class="err">\</span><span class="ss">&quot; = T2.\&quot;</span><span class="n">Column1</span><span class="err">\</span><span class="ss">&quot;&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="ss">&quot;acme.com.test.views::MY_VIEW1&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;acme.com.test.views::MY_VIEW2&quot;</span><span class="p">];</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="k">VIEW</span> <span class="ss">&quot;hdb_view.db::ItemsByOrderHANAv2&quot;</span>
-<span class="k">AS</span> <span class="k">SELECT</span> <span class="ss">&quot;Id&quot;</span> <span class="k">FROM</span> <span class="ss">&quot;hdb_view::Item&quot;</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">VIEW</span><span class="w"> </span><span class="ss">&quot;hdb_view.db::ItemsByOrderHANAv2&quot;</span><span class="w"></span>
+<span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="ss">&quot;Id&quot;</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="ss">&quot;hdb_view::Item&quot;</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 </div>
 </div>
@@ -1636,10 +1636,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.0bbba5b5.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.361d90f1.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.e1a181d9.min.js"></script>
+      <script src="../../assets/javascripts/bundle.289a2a4b.min.js"></script>
       
     
   </body>

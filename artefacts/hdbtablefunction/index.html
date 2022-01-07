@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/artefacts/hdbtablefunction/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.3">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.edf004c2.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bb3983ee.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -1428,18 +1428,18 @@
 </div>
 <h2 id="sample">Sample</h2>
 <hr />
-<div class="highlight"><pre><span></span><code><span class="k">FUNCTION</span> <span class="ss">&quot;MYSCHEMA&quot;</span><span class="p">.</span><span class="ss">&quot;hdb_view::OrderTableFunction&quot;</span> <span class="p">()</span>
-    <span class="k">RETURNS</span> <span class="k">TABLE</span> <span class="p">(</span>
-        <span class="ss">&quot;Id&quot;</span> <span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span>
-        <span class="ss">&quot;CustomerName&quot;</span> <span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="k">LANGUAGE</span> <span class="n">SQLSCRIPT</span>
-    <span class="k">SQL</span> <span class="k">SECURITY</span> <span class="k">INVOKER</span> <span class="k">AS</span>
-<span class="k">BEGIN</span>
+<div class="highlight"><pre><span></span><code><span class="k">FUNCTION</span><span class="w"> </span><span class="ss">&quot;MYSCHEMA&quot;</span><span class="p">.</span><span class="ss">&quot;hdb_view::OrderTableFunction&quot;</span><span class="w"> </span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="k">RETURNS</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="ss">&quot;Id&quot;</span><span class="w"> </span><span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="ss">&quot;CustomerName&quot;</span><span class="w"> </span><span class="n">NVARCHAR</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">SQLSCRIPT</span><span class="w"></span>
+<span class="w">    </span><span class="k">SQL</span><span class="w"> </span><span class="k">SECURITY</span><span class="w"> </span><span class="k">INVOKER</span><span class="w"> </span><span class="k">AS</span><span class="w"></span>
+<span class="k">BEGIN</span><span class="w"></span>
 
-<span class="k">RETURN</span>  <span class="k">SELECT</span> <span class="ss">&quot;Id&quot;</span><span class="p">,</span> <span class="ss">&quot;CustomerName&quot;</span> <span class="k">FROM</span> <span class="ss">&quot;hdb_view::Item&quot;</span><span class="p">;</span>
+<span class="k">RETURN</span><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="ss">&quot;Id&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;CustomerName&quot;</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="ss">&quot;hdb_view::Item&quot;</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">END</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Caution</p>
@@ -1563,10 +1563,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.0bbba5b5.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.361d90f1.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.e1a181d9.min.js"></script>
+      <script src="../../assets/javascripts/bundle.289a2a4b.min.js"></script>
       
     
   </body>

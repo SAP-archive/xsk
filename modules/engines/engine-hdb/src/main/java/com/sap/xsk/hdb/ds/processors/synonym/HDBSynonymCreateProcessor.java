@@ -11,15 +11,16 @@
  */
 package com.sap.xsk.hdb.ds.processors.synonym;
 
-import static java.text.MessageFormat.format;
-
+import com.sap.xsk.hdb.ds.artefacts.HDBSynonymSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -31,6 +32,8 @@ import org.slf4j.LoggerFactory;
 public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSynonymModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(HDBSynonymCreateProcessor.class);
+  private static final HDBSynonymSynchronizationArtefactType SYNONYM_ARTEFACT = new HDBSynonymSynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   /**
    * Execute :
@@ -56,20 +59,29 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
           if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
             String errorMessage = String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection));
             XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, synonymModel.getLocation(), XSKCommonsConstants.HDB_SYNONYM_PARSER);
+            dataStructuresSynchronizer.applyArtefactState(synonymName, synonymModel.getLocation(), SYNONYM_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
             throw new IllegalStateException(errorMessage);
           } else {
             String sql = SqlFactory.getNative(connection).create().synonym(synonymName).forSource(targetObjectName).build();
             try {
               executeSql(sql, connection);
+              String message = String.format("Create synonym %s successfully", synonymName);
+              dataStructuresSynchronizer.applyArtefactState(synonymName, synonymModel.getLocation(), SYNONYM_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
             } catch (SQLException ex) {
+              String errorMessage = String.format("Create synonym [%s] skipped due to an error: %s", synonymName, ex.getMessage());
               XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, synonymModel.getLocation(), XSKCommonsConstants.HDB_SYNONYM_PARSER);
+              dataStructuresSynchronizer.applyArtefactState(synonymName, synonymModel.getLocation(), SYNONYM_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
             }
           }
         } else {
-          logger.warn(format("Synonym [{0}] already exists during the create process", value.getSynonymSchema() + "." + key));
+          String warningMessage = String.format("Synonym [%s] already exists during the create process", synonymName);
+          logger.warn(warningMessage);
+          dataStructuresSynchronizer.applyArtefactState(synonymName, synonymModel.getLocation(), SYNONYM_ARTEFACT, ArtefactState.FAILED_DELETE, warningMessage);
         }
       } catch (SQLException exception) {
+        String errorMessage = String.format("Create synonym [%s] skipped due to an error: %s", synonymName, exception.getMessage());
         logger.error(exception.getMessage(), exception);
+        dataStructuresSynchronizer.applyArtefactState(synonymName, synonymModel.getLocation(), SYNONYM_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
       }
     });
   }

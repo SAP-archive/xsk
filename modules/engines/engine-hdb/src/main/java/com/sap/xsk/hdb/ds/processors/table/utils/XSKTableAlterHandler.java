@@ -11,8 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.processors.table.utils;
 
+import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -30,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -43,6 +46,9 @@ public class XSKTableAlterHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableAlterHandler.class);
   private static final String INCOMPATIBLE_CHANGE_OF_TABLE = "Incompatible change of table [%s] by adding a column [%s] which is [%s]"; //$NON-NLS-1$
+  private static final HDBTableSynchronizationArtefactType TABLE_ARTEFACT = new HDBTableSynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
+
   XSKDataStructureHDBTableModel tableModel;
   private Map<String, String> dbColumnTypes;
   private List<String> modelColumnNames;
@@ -116,6 +122,7 @@ public class XSKTableAlterHandler {
         String errorMessage = String
             .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to " + type);
         XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+        dataStructuresSynchronizer.applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_UPDATE, errorMessage);
         throw new SQLException(errorMessage);
       }
     }
@@ -251,10 +258,14 @@ public class XSKTableAlterHandler {
       PreparedStatement statement = connection.prepareStatement(sql);
       try {
         statement.executeUpdate();
+        String messageSuccess = String.format("Update table %s successfully", this.tableModel.getName());
+        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_UPDATE, messageSuccess);
       } catch (SQLException e) {
         logger.error(sql);
         logger.error(e.getMessage(), e);
         XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, this.tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+        String messageFail = String.format("Update table [%s] skipped due to an error: {%s}", this.tableModel, e.getMessage());
+        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_UPDATE, messageFail);
         throw new SQLException(e.getMessage(), e);
       } finally {
         if (statement != null) {

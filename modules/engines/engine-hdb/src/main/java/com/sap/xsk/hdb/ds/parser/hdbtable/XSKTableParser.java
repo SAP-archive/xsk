@@ -154,7 +154,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         if (index.isUnique()) {
           XSKDataStructureHDBTableConstraintUniqueModel uniqueIndexModel = new XSKDataStructureHDBTableConstraintUniqueModel();
           if(index.getIndexName() != null){
-            uniqueIndexModel.setName(index.getIndexName());
+            uniqueIndexModel.setIndexName(index.getIndexName());
           }
           if (index.getIndexType() != null) {
             uniqueIndexModel.setIndexType(this.convertIfHanaClassicSyntax(index));

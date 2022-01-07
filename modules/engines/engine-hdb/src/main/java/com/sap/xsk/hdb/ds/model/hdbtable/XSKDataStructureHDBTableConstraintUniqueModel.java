@@ -16,16 +16,16 @@ package com.sap.xsk.hdb.ds.model.hdbtable;
  */
 public class XSKDataStructureHDBTableConstraintUniqueModel extends XSKDataStructureHDBTableConstraintModel {
 
-  private String name;
+  private String indexName;
   private String indexType;
   private String order;
 
-  public String getName() {
-    return name;
+  public String getIndexName() {
+    return indexName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setIndexName(String indexName) {
+    this.indexName = indexName;
   }
 
   public String getIndexType() {

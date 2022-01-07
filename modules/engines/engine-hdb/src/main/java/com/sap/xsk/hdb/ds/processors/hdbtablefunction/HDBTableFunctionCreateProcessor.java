@@ -11,15 +11,16 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbtablefunction;
 
-import static java.text.MessageFormat.format;
-
+import com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -30,6 +31,8 @@ import org.slf4j.LoggerFactory;
 public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableFunctionModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionCreateProcessor.class);
+  private static final HDBTableFunctionSynchronizationArtefactType TABLE_FUNCTION_ARTEFACT = new HDBTableFunctionSynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
       throws SQLException {
@@ -43,17 +46,24 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
       if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
         String errorMessage = String.format("TableFunctions are not supported for %s", dialect.getDatabaseName(connection));
         XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdbTableFunction.getLocation(), XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
+        dataStructuresSynchronizer.applyArtefactState(hdbTableFunction.getName(),hdbTableFunction.getLocation(),TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
         throw new IllegalStateException(errorMessage);
       } else {
         String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getContent();
         try {
           executeSql(sql, connection);
+          String message = String.format("Create table function %s successfully", hdbTableFunction.getName());
+          dataStructuresSynchronizer.applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
         } catch (SQLException ex) {
+          String errorMessage = String.format("Create table function [%s] skipped due to an error: %s", hdbTableFunction.getName(), ex.getMessage());
           XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbTableFunction.getLocation(), XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
+          dataStructuresSynchronizer.applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
         }
       }
     } else {
-      logger.warn(format("TableFunction [{0}] already exists during the create process", hdbTableFunction.getName()));
+      String warningMessage = String.format("TableFunction [%s] already exists during the create process", hdbTableFunction.getName());
+      logger.warn(warningMessage);
+      dataStructuresSynchronizer.applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_CREATE, warningMessage);
     }
   }
 }

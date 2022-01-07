@@ -11,15 +11,16 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdbschema;
 
-import static java.text.MessageFormat.format;
-
+import com.sap.xsk.hdb.ds.artefacts.HDBSchemaSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -30,6 +31,8 @@ import org.slf4j.LoggerFactory;
 public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructureHDBSchemaModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(HDBSchemaDropProcessor.class);
+  private static final HDBSchemaSynchronizationArtefactType SCHEMA_ARTEFACT = new HDBSchemaSynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema)
       throws SQLException {
@@ -39,6 +42,7 @@ public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructur
     if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
       String errorMessage = String.format("%s does not support Schema", dialect.getDatabaseName(connection));
       XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdbSchema.getLocation(), XSKCommonsConstants.HDB_SCHEMA_PARSER);
+      dataStructuresSynchronizer.applyArtefactState(hdbSchema.getName(), hdbSchema.getLocation(), SCHEMA_ARTEFACT, ArtefactState.FAILED_DELETE, errorMessage);
       throw new IllegalStateException(errorMessage);
     } else {
       if (SqlFactory.getNative(connection).exists(connection, hdbSchema.getSchema(), DatabaseArtifactTypes.SCHEMA)) {
@@ -46,11 +50,17 @@ public class HDBSchemaDropProcessor extends AbstractXSKProcessor<XSKDataStructur
         String sql = SqlFactory.getNative(connection).drop().schema(schemaName).build();
         try {
           executeSql(sql, connection);
+          String message = String.format("Drop schema %s successfully", hdbSchema.getName());
+          dataStructuresSynchronizer.applyArtefactState(hdbSchema.getName(), hdbSchema.getLocation(), SCHEMA_ARTEFACT, ArtefactState.SUCCESSFUL_DELETE, message);
         } catch (SQLException ex) {
+          String message = String.format("Drop schema[%s] skipped due to an error: %s", hdbSchema, ex.getMessage());
           XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbSchema.getLocation(), XSKCommonsConstants.HDB_SCHEMA_PARSER);
+          dataStructuresSynchronizer.applyArtefactState(hdbSchema.getName(), hdbSchema.getLocation(), SCHEMA_ARTEFACT, ArtefactState.FAILED_DELETE, message);
         }
       } else {
-        logger.warn(format("Schema [{0}] does not exists during the drop process", hdbSchema.getSchema()));
+        String warningMessage = String.format("Schema [%s] does not exists during the drop process", hdbSchema.getSchema());
+        logger.warn(warningMessage);
+        dataStructuresSynchronizer.applyArtefactState(hdbSchema.getName(), hdbSchema.getLocation(), SCHEMA_ARTEFACT, ArtefactState.FAILED_DELETE, warningMessage);
       }
     }
   }

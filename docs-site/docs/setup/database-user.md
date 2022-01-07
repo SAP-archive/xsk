@@ -67,33 +67,33 @@ To create a new database user go through the following steps:
 
     1. Create the user:
 
-    ```sql
-    CREATE USER <XSK-USERNAME> PASSWORD <XSK-PASSWORD> NO FORCE_FIRST_PASSWORD_CHANGE SET USERGROUP DEFAULT;
-    ```
+        ```sql
+        CREATE USER <XSK-USERNAME> PASSWORD <XSK-PASSWORD> NO FORCE_FIRST_PASSWORD_CHANGE SET USERGROUP DEFAULT;
+        ```
 
-    !!! note
-        Replace the `<XSK-USERNAME>` placeholder with the username and `<XSK-PASSWORD>` with the password.
+        !!! note
+            Replace the `<XSK-USERNAME>` placeholder with the username and `<XSK-PASSWORD>` with the password.
 
     2. Grant `CREATE SCHEMA` privileges:
 
-    ```sql
-    GRANT CREATE SCHEMA TO <XSK-USERNAME>;
-    ```
+        ```sql
+        GRANT CREATE SCHEMA TO <XSK-USERNAME>;
+        ```
 
-    !!! note
-        Replace the `<XSK-USERNAME>` placeholder with the username.
+        !!! note
+            Replace the `<XSK-USERNAME>` placeholder with the username.
 
     3. Grant HDI administrator privileges:
 
-    ```sql
-    CREATE LOCAL TEMPORARY TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;
+        ```sql
+        CREATE LOCAL TEMPORARY TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;
 
-    INSERT INTO #PRIVILEGES (PRINCIPAL_NAME, PRIVILEGE_NAME, OBJECT_NAME) SELECT '<XSK-USERNAME>', PRIVILEGE_NAME, OBJECT_NAME FROM _SYS_DI.T_DEFAULT_DI_ADMIN_PRIVILEGES;
+        INSERT INTO #PRIVILEGES (PRINCIPAL_NAME, PRIVILEGE_NAME, OBJECT_NAME) SELECT '<XSK-USERNAME>', PRIVILEGE_NAME, OBJECT_NAME FROM _SYS_DI.T_DEFAULT_DI_ADMIN_PRIVILEGES;
     
-    CALL _SYS_DI.GRANT_CONTAINER_GROUP_API_PRIVILEGES('_SYS_DI', #PRIVILEGES, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);
+        CALL _SYS_DI.GRANT_CONTAINER_GROUP_API_PRIVILEGES('_SYS_DI', #PRIVILEGES, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);
 
-    DROP TABLE #PRIVILEGES;
-    ```
+        DROP TABLE #PRIVILEGES;
+        ```
 
-    !!! note
-        Replace the `<XSK-USERNAME>` placeholder with the username.
+        !!! note
+            Replace the `<XSK-USERNAME>` placeholder with the username.

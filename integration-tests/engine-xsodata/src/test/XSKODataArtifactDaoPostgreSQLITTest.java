@@ -82,7 +82,7 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     initializeDBStructure();
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_all_set_of_navigations.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_all_set_of_navigations.xsodata"), StandardCharsets.UTF_8);
     return parser.parseXSODataArtifact("np/entity_with_all_set_of_navigations.xsodata", content);
   }
 
@@ -90,7 +90,7 @@ public class XSKODataArtifactDaoPostgreSQLITTest {
     initializeDBStructure();
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
     return parser.parseXSODataArtifact("my.demo.namespace/entity_with_events.xsodata", content);
   }
 

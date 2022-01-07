@@ -14,15 +14,17 @@ package com.sap.xsk.xsodata.utils;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAModification;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAMultiplicityType;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATANavigation;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
@@ -37,6 +39,7 @@ import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes;
 import org.eclipse.dirigible.engine.odata2.definition.ODataNavigation;
 import org.eclipse.dirigible.engine.odata2.definition.ODataProperty;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,43 +66,7 @@ public class XSKODataUtils {
       oDataEntityDefinition.setAlias(entity.getAlias());
       oDataEntityDefinition.setTable(tableName);
 
-      entity.getNavigates().forEach(navigate -> {
-        ODataNavigation oDataNavigation = new ODataNavigation();
-        oDataNavigation.setName(navigate.getAliasNavigation());
-        oDataNavigation.setAssociation(navigate.getAssociation());
-        oDataEntityDefinition.setNavigations(Collections.singletonList(oDataNavigation));
-
-        //set navigations
-        ODataAssociationDefinition oDataAssociationDefinition = new ODataAssociationDefinition();
-        oDataAssociationDefinition.setName(navigate.getAssociation());
-        XSKHDBXSODATAAssociation xsOdataAssoc = XSKODataCoreService
-            .getAssociation(xskoDataModel, navigate.getAssociation(), navigate.getAliasNavigation());
-
-        ODataAssociationEndDefinition fromDef = new ODataAssociationEndDefinition();
-        fromDef.setEntity(xsOdataAssoc.getPrincipal().getEntitySetName());
-
-        //The Multiplicity of the Principal role must be 1 or 0..1
-        validateEdmMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText(), navigate.getAssociation());
-        fromDef.setMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText());
-        fromDef.setProperties((ArrayList<String>) xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
-        ODataAssociationEndDefinition toDef = new ODataAssociationEndDefinition();
-        toDef.setEntity(xsOdataAssoc.getDependent().getEntitySetName());
-
-        //The Multiplicity of the Principal role must be 1, 0..1, 1..*, *
-        //convert 1..* to *, because odata do not support it
-        if (xsOdataAssoc.getDependent().getMultiplicityType().getText().equals(XSKHDBXSODATAMultiplicityType.ONE_TO_MANY.getText())) {
-          toDef.setMultiplicity(EdmMultiplicity.MANY.toString());
-        } else {
-          validateEdmMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText(), navigate.getAssociation());
-          toDef.setMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText());
-        }
-
-        toDef.setProperties((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
-        oDataAssociationDefinition.setFrom(fromDef);
-        oDataAssociationDefinition.setTo(toDef);
-
-        oDataDefinitionModel.getAssociations().add(oDataAssociationDefinition);
-      });
+      entity.getNavigates().forEach(processNavigation(xskoDataModel, oDataDefinitionModel, oDataEntityDefinition));
 
       //set properties
       try {
@@ -111,8 +78,7 @@ public class XSKODataUtils {
           HashMap<String, String> targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(tableMetadata.getTableName());
 
           if (targetObjectMetadata.isEmpty()) {
-            logger.error("Failed to get details for synonym - " + tableMetadata.getTableName());
-            continue;
+            throw new XSKOData2TransformerException("Failed to build ODataEntityDefinition for entity: " + entity.getAlias() + ". Reason: cannot find details for synonym - " + tableMetadata.getTableName());
           }
 
           tableMetadata = dbMetadataUtil.getTableMetadata(targetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE), targetObjectMetadata.get(ISqlKeywords.KEYWORD_SCHEMA));
@@ -160,31 +126,7 @@ public class XSKODataUtils {
       }
 
       List<ODataHandler> handlers = new ArrayList<>();
-      entity.getModifications().forEach(modification -> {
-        modification.getSpecification().getEvents().forEach(event -> {
-          if (validateHandlerType(event.getType())) {
-            ODataHandler oDataHandler = new ODataHandler();
-            oDataHandler.setHandler(event.getAction());
-            oDataHandler.setType(event.getType().getOdataHandlerType());
-            oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
-            handlers.add(oDataHandler);
-          }
-        });
-        if (modification.getSpecification().isForbidden()) {
-          ODataHandler oDataHandler = new ODataHandler();
-          oDataHandler.setType(ODataHandlerTypes.forbid.name());
-          oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
-          handlers.add(oDataHandler);
-          oDataEntityDefinition.getAnnotationsEntitySet().put(modification.getMethod().getOdataSAPAnnotation(), "false");
-        }
-        if (modification.getSpecification().getModificationAction() != null) {
-          ODataHandler oDataHandler = new ODataHandler();
-          oDataHandler.setHandler(modification.getSpecification().getModificationAction());
-          oDataHandler.setType(ODataHandlerTypes.on.name());
-          oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
-          handlers.add(oDataHandler);
-        }
-      });
+      entity.getModifications().forEach(processModification(oDataEntityDefinition, handlers));
       handlers.forEach(el -> oDataEntityDefinition.getHandlers().add(el));
 
       if (!entity.getKeyList().isEmpty()) {
@@ -201,6 +143,77 @@ public class XSKODataUtils {
       oDataDefinitionModel.getEntities().add(oDataEntityDefinition);
     }
     return oDataDefinitionModel;
+  }
+
+  @NotNull
+  private static Consumer<XSKHDBXSODATAModification> processModification(ODataEntityDefinition oDataEntityDefinition, List<ODataHandler> handlers) {
+    return modification -> {
+      modification.getSpecification().getEvents().forEach(event -> {
+        if (validateHandlerType(event.getType())) {
+          ODataHandler oDataHandler = new ODataHandler();
+          oDataHandler.setHandler(event.getAction());
+          oDataHandler.setType(event.getType().getOdataHandlerType());
+          oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+          handlers.add(oDataHandler);
+        }
+      });
+      if (modification.getSpecification().isForbidden()) {
+        ODataHandler oDataHandler = new ODataHandler();
+        oDataHandler.setType(ODataHandlerTypes.forbid.name());
+        oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+        handlers.add(oDataHandler);
+        oDataEntityDefinition.getAnnotationsEntitySet().put(modification.getMethod().getOdataSAPAnnotation(), "false");
+      }
+      if (modification.getSpecification().getModificationAction() != null) {
+        ODataHandler oDataHandler = new ODataHandler();
+        oDataHandler.setHandler(modification.getSpecification().getModificationAction());
+        oDataHandler.setType(ODataHandlerTypes.on.name());
+        oDataHandler.setMethod(modification.getMethod().getOdataHandlerType());
+        handlers.add(oDataHandler);
+      }
+    };
+  }
+
+  @NotNull
+  static Consumer<XSKHDBXSODATANavigation> processNavigation(XSKODataModel xskoDataModel,
+      ODataDefinition oDataDefinitionModel, ODataEntityDefinition oDataEntityDefinition) {
+    return navigate -> {
+      ODataNavigation oDataNavigation = new ODataNavigation();
+      oDataNavigation.setName(navigate.getAliasNavigation());
+      oDataNavigation.setAssociation(navigate.getAssociation());
+      oDataEntityDefinition.getNavigations().add(oDataNavigation);
+
+      //set navigations
+      ODataAssociationDefinition oDataAssociationDefinition = new ODataAssociationDefinition();
+      oDataAssociationDefinition.setName(navigate.getAssociation());
+      XSKHDBXSODATAAssociation xsOdataAssoc = XSKODataCoreService
+          .getAssociation(xskoDataModel, navigate.getAssociation(), navigate.getAliasNavigation());
+
+      ODataAssociationEndDefinition fromDef = new ODataAssociationEndDefinition();
+      fromDef.setEntity(xsOdataAssoc.getPrincipal().getEntitySetName());
+
+      //The Multiplicity of the Principal role must be 1 or 0..1
+      validateEdmMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText(), navigate.getAssociation());
+      fromDef.setMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText());
+      fromDef.setProperties((ArrayList<String>) xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
+      ODataAssociationEndDefinition toDef = new ODataAssociationEndDefinition();
+      toDef.setEntity(xsOdataAssoc.getDependent().getEntitySetName());
+
+      //The Multiplicity of the Principal role must be 1, 0..1, 1..*, *
+      //convert 1..* to *, because odata do not support it
+      if (xsOdataAssoc.getDependent().getMultiplicityType().getText().equals(XSKHDBXSODATAMultiplicityType.ONE_TO_MANY.getText())) {
+        toDef.setMultiplicity(EdmMultiplicity.MANY.toString());
+      } else {
+        validateEdmMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText(), navigate.getAssociation());
+        toDef.setMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText());
+      }
+
+      toDef.setProperties((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
+      oDataAssociationDefinition.setFrom(fromDef);
+      oDataAssociationDefinition.setTo(toDef);
+
+      oDataDefinitionModel.getAssociations().add(oDataAssociationDefinition);
+    };
   }
 
   /**

@@ -97,7 +97,7 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
         assertNull(model.getConstraints().getPrimaryKey().getModifiers());
         assertEquals(0, model.getConstraints().getForeignKeys().size());
         assertEquals(1, model.getConstraints().getUniqueIndices().size());
-        assertEquals("INDEX1", model.getConstraints().getUniqueIndices().get(0).getName());
+        assertEquals("INDEX1", model.getConstraints().getUniqueIndices().get(0).getIndexName());
         assertEquals(1, model.getConstraints().getUniqueIndices().get(0).getColumns().length);
         assertEquals("MATCH_ID", model.getConstraints().getUniqueIndices().get(0).getColumns()[0]);
         assertEquals(0, model.getConstraints().getChecks().size());
@@ -219,7 +219,7 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
       assertEquals(contents, model.getRawContent());
 
       assertEquals(1, model.getConstraints().getUniqueIndices().size());
-      assertEquals("l2", model.getConstraints().getUniqueIndices().get(0).getName());
+      assertEquals("l2", model.getConstraints().getUniqueIndices().get(0).getIndexName());
       assertEquals(1, model.getConstraints().getUniqueIndices().get(0).getColumns().length);
       assertEquals("Col1", model.getConstraints().getUniqueIndices().get(0).getColumns()[0]);
       assertEquals("ASC", model.getConstraints().getUniqueIndices().get(0).getOrder());

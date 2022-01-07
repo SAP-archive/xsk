@@ -1,0 +1,36 @@
+<div ng-controller="MigrationStatisticsController as msvc">
+  <div class="container">
+    <div class="page-header">
+      <div style="text-align: center;">
+        <h2>XSK Migrations History</h2>
+        <h1 ng-show="hideTable"> There's no migrations executed yet.</h1>
+      </div>
+      <div ng-hide="hideTable">
+        <table class="table product-table panel panel-default">
+          <thead>
+            <tr class="style">
+              <th>Executed by</th>
+              <th>Started at</th>
+              <th>Updated at</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tr ng-repeat="migrationEntry in migrations">
+            <td>
+              {{migrationEntry.EXECUTED_BY}}
+            </td>
+            <td>
+              {{migrationEntry.STARTED_ON |date : 'HH:mm:ss dd/MM/yyyy'}}
+            </td>
+            <td>
+              {{migrationEntry.LAST_UPDATED |date : 'HH:mm:ss dd/MM/yyyy'}}
+            </td>
+            <td>
+              {{migrationEntry.STATUS}}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

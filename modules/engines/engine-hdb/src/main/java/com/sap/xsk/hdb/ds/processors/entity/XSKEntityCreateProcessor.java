@@ -11,10 +11,12 @@
  */
 package com.sap.xsk.hdb.ds.processors.entity;
 
+import com.sap.xsk.hdb.ds.artefacts.HDBDDEntitySynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
@@ -22,6 +24,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -35,6 +38,8 @@ import org.slf4j.LoggerFactory;
 public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStructureEntityModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKEntityCreateProcessor.class);
+  private static final HDBDDEntitySynchronizationArtefactType ENTITY_ARTEFACT = new HDBDDEntitySynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   /**
    * Execute the corresponding statement.
@@ -116,8 +121,12 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
     String sql = createTableBuilder.build();
     try {
       executeSql(sql, connection);
+      String message = String.format("Create entity %s successfully", entityModel.getName());
+      dataStructuresSynchronizer.applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
     } catch (SQLException ex) {
+      String message = String.format("Create entity [%s] skipped due to an error: %s", entityModel, ex.getMessage());
       XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
+      dataStructuresSynchronizer.applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, message);
     }
   }
 

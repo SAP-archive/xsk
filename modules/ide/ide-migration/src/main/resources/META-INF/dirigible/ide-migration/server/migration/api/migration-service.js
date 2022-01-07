@@ -11,10 +11,18 @@
  */
 const HanaRepository = require('ide-migration/server/migration/repository/hana-repository');
 const workspaceManager = require("platform/v4/workspace");
+const repositoryManager = require("platform/v4/repository");
 const bytes = require("io/v4/bytes");
 const database = require("db/v4/database");
 const config = require("core/v4/configurations");
 const HANA_USERNAME = "HANA_USERNAME";
+const TransformerFactory = Java.type("javax.xml.transform.TransformerFactory");
+const StreamSource = Java.type("javax.xml.transform.stream.StreamSource");
+const StreamResult = Java.type("javax.xml.transform.stream.StreamResult")
+const StringReader = Java.type("java.io.StringReader");
+const StringWriter = Java.type("java.io.StringWriter");
+const ByteArrayInputStream = Java.type("java.io.ByteArrayInputStream");
+const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
 
 class MigrationService {
 
@@ -36,78 +44,22 @@ class MigrationService {
         return this.repo.getAllDeliveryUnits();
     }
 
-    copyAllFilesForDu(du, workspaceName) {
-        if (!this.repo) {
-            throw new Error("Repository not initialized");
-        }
-
-        let context = {};
-        const filesAndPackagesObject = this.repo.getAllFilesForDu(context, du)
-        this.dumpSourceFiles(workspaceName, filesAndPackagesObject.files, du)
-    }
-
-    dumpSourceFiles(workspaceName, lists, du) {
-        let workspace;
-        if (!workspaceName) {
-            workspace = workspaceManager.getWorkspace(du.name)
-            if (!workspace) {
-                workspaceManager.createWorkspace(du.name)
-                workspace = workspaceManager.getWorkspace(du.name)
-            }
-        }
-        workspace = workspaceManager.getWorkspace(workspaceName);
-
-        const deployables = [];
-
-        for (let i = 0; i < lists.length; i++) {
-            const file = lists[i];
-            // each file's package id is based on its directory
-            // if we do not get only the first part of the package id, we would have several XSK projects created for directories in the same XS app
-            const projectName = file.packageId.split('.')[0];
-
-            let project = workspace.getProject(projectName)
-            if (!project) {
-                workspace.createProject(projectName)
-                project = workspace.getProject(projectName)
-            }
-
-            if (!deployables.find(x => x.projectName === projectName)) {
-                deployables.push({
-                    project: project,
-                    projectName: projectName,
-                    artifacts: []
-                });
-            }
-
-            let fileRunLocation = file.RunLocation;
-
-            if (fileRunLocation.startsWith("/" + projectName)) {
-                // remove package id from file location in order to remove XSK project and folder nesting
-                fileRunLocation = fileRunLocation.slice(projectName.length + 1);
-            }
-
-            let projectFile = project.createFile(fileRunLocation);
-            projectFile.setContent(file._content);
-
-            if (fileRunLocation.endsWith('hdbcalculationview')
-                || fileRunLocation.endsWith('calculationview')) {
-                deployables.find(x => x.projectName === projectName).artifacts.push(file.RunLocation);
-            }
-        }
-
-        this.handlePossibleDeployableArtifacts(deployables);
-    }
-
-    handlePossibleDeployableArtifacts(deployables) {
+    handlePossibleDeployableArtifacts(workspaceName, deployables) {
+        let generatedFiles = [];
+        let updatedFiles = [];
         for (const deployable of deployables) {
             if (deployable.artifacts && deployable.artifacts.length > 0) {
-                const hdiConfigPath = this.createHdiConfigFile(deployable.project);
-                this.createHdiFile(deployable.project, hdiConfigPath, deployable.artifacts);
-            }    
+                const hdiConfigPath = this.createHdiConfigFile(workspaceName, deployable.project);
+                generatedFiles.push(hdiConfigPath);
+                let hdiPath = this.createHdiFile(workspaceName, deployable.project, hdiConfigPath, deployable.artifacts);
+                generatedFiles.push(hdiPath);
+            }
         }
+
+        return { generated: generatedFiles, updated: updatedFiles };
     }
 
-    createHdiConfigFile(project) {
+    createHdiConfigFile(workspaceName, project) {
         const hdiConfig = {
             file_suffixes: {
                 hdbcalculationview: {
@@ -121,17 +73,25 @@ class MigrationService {
             }
         };
 
+
+
         const projectName = project.getName();
         const hdiConfigPath = `${projectName}.hdiconfig`;
-        const hdiConfigFile = project.createFile(hdiConfigPath);
         const hdiConfigJson = JSON.stringify(hdiConfig, null, 4);
         const hdiConfigJsonBytes = bytes.textToByteArray(hdiConfigJson);
-        hdiConfigFile.setContent(hdiConfigJsonBytes);
 
-        return hdiConfigPath;
+        const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
+        let localResource = projectCollection.createResource(hdiConfigPath, hdiConfigJsonBytes);
+
+        return {
+            repositoryPath: localResource.getPath(),
+            relativePath: hdiConfigPath,
+            projectName: projectName
+        }
     }
 
-    createHdiFile(project, hdiConfigPath, deployables) {
+    createHdiFile(workspaceName, project, hdiConfigPath, deployables) {
         const projectName = project.getName();
         const defaultHanaUser = this.getDefaultHanaUser();
 
@@ -145,20 +105,172 @@ class MigrationService {
         };
 
         const hdiPath = `${projectName}.hdi`;
-        const hdiFile = project.createFile(`${projectName}.hdi`);
         const hdiJson = JSON.stringify(hdi, null, 4);
         const hdiJsonBytes = bytes.textToByteArray(hdiJson);
-        hdiFile.setContent(hdiJsonBytes);
 
-        return hdiPath;
+        const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
+        let localResource = projectCollection.createResource(hdiPath, hdiJsonBytes);
+
+        return {
+            repositoryPath: localResource.getPath(),
+            relativePath: hdiPath,
+            projectName: projectName
+        }
     }
 
     getDefaultHanaUser() {
         return config.get(HANA_USERNAME, "DBADMIN");
     }
 
+    copyFilesLocally(workspaceName, lists) {
+        const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+
+        const locals = [];
+        for (const file of lists) {
+            let fileRunLocation = file.RunLocation;
+
+            // each file's package id is based on its directory
+            // if we do not get only the first part of the package id, we would have several XSK projects created for directories in the same XS app
+            const projectName = file.packageId.split('.')[0];
+
+            if (fileRunLocation.startsWith("/" + projectName)) {
+                // remove package id from file location in order to remove XSK project and folder nesting
+                fileRunLocation = fileRunLocation.slice(projectName.length + 1);
+            }
+            let content = this.repo.getContentForObject(file._name, file._packageName, file._suffix);
+
+            if (this._isFileCalculationView(fileRunLocation)) {
+                content = this._transformColumnObject(content);
+            }
+
+            const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
+            const localResource = projectCollection.createResource(fileRunLocation, content);
+
+            locals.push({
+                repositoryPath: localResource.getPath(),
+                relativePath: fileRunLocation,
+                projectName: projectName,
+                runLocation: file.RunLocation
+            })
+        }
+        return locals;
+    }
+
+    _isFileCalculationView(filePath) {
+        return filePath.endsWith('hdbcalculationview') || filePath.endsWith('calculationview');
+    }
+
+    _transformColumnObject(calculationViewXmlBytes) {
+        try {
+            const columnObjectToResourceUriXslt = `<?xml version="1.0" encoding="UTF8"?>
+            <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+                <xsl:template match="node()|@*">
+                    <xsl:copy>
+                        <xsl:apply-templates select="node()|@*"/>
+                    </xsl:copy>
+                </xsl:template>
+
+                <xsl:template match="DataSource[@type='DATA_BASE_TABLE']/columnObject[@columnObjectName]">
+                    <xsl:element name="resourceUri">
+                        <xsl:value-of select="@columnObjectName"/>
+                    </xsl:element>
+                </xsl:template>
+            </xsl:stylesheet>
+        `;
+
+        const factory = TransformerFactory.newInstance();
+        const source = new StreamSource(new StringReader(columnObjectToResourceUriXslt));
+        const transformer = factory.newTransformer(source);
+
+        const text = new StreamSource(new ByteArrayInputStream(calculationViewXmlBytes));
+        const bout = new ByteArrayOutputStream();
+
+        transformer.transform(text, new StreamResult(bout));
+        return bout.toByteArray();
+        } catch (e) {
+            console.log("Error json: " + JSON.stringify(e));
+        }
+    }
+
+    _getOrCreateTemporaryWorkspaceCollection(workspaceName) {
+        const existing = repositoryManager.getCollection(workspaceName);
+        if (existing) {
+            return existing;
+        }
+
+        return repositoryManager.createCollection(workspaceName);
+    }
+
+    _getOrCreateTemporaryProjectCollection(workspaceCollection, projectName) {
+        const existing = workspaceCollection.getCollection(projectName);
+        if (existing) {
+            return existing;
+        }
+
+        return workspaceCollection.createCollection(projectName);
+    }
+
+    createMigratedWorkspace(workspaceName) {
+        let workspace;
+        if (!workspaceName) {
+            workspace = workspaceManager.getWorkspace(workspaceName);
+            if (!workspace) {
+                workspaceManager.createWorkspace(workspaceName);
+            }
+        }
+        workspace = workspaceManager.getWorkspace(workspaceName);
+
+        return workspace;
+    }
+
+    collectDeployables(workspaceName, filePath, runLocation, projectName, oldDeployables) {
+
+        let workspace = workspaceManager.getWorkspace(workspaceName)
+        if (!workspace) {
+            workspaceManager.createWorkspace(workspaceName)
+            workspace = workspaceManager.getWorkspace(workspaceName)
+        }
+
+        const deployables = oldDeployables;
+
+        let project = workspace.getProject(projectName)
+        if (!project) {
+            workspace.createProject(projectName)
+            project = workspace.getProject(projectName)
+        }
+
+        if (!deployables.find(x => x.projectName === projectName)) {
+            deployables.push({
+                project: project,
+                projectName: projectName,
+                artifacts: []
+            });
+        }
+
+        if (filePath.endsWith('hdbcalculationview')
+            || filePath.endsWith('calculationview')) {
+            deployables.find(x => x.projectName === projectName).artifacts.push(runLocation);
+        }
+
+        return deployables;
+    }
+
+    addFileToWorkspace(workspaceName, repositoryPath, relativePath, projectName) {
+        const workspace = workspaceManager.getWorkspace(workspaceName)
+        const project = workspace.getProject(projectName)
+        const projectFile = project.createFile(relativePath);
+        const resource = repositoryManager.getResource(repositoryPath);
+        projectFile.setContent(resource.getContent());
+    }
+
+    getAllFilesForDU(du) {
+        let context = {};
+        const filesAndPackagesObject = this.repo.getAllFilesForDu(context, du);
+        return filesAndPackagesObject.files;
+    }
+
 }
 
 module.exports = MigrationService;
-
-

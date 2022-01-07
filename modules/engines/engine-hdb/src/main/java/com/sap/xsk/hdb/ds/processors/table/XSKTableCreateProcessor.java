@@ -12,11 +12,13 @@
 package com.sap.xsk.hdb.ds.processors.table;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableEscapeService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
@@ -25,6 +27,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -38,6 +41,8 @@ import org.slf4j.LoggerFactory;
 public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableCreateProcessor.class);
+  private static final HDBTableSynchronizationArtefactType TABLE_ARTEFACT = new HDBTableSynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
@@ -73,14 +78,19 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         } else {
           String errorMessage = String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection));
           XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+          dataStructuresSynchronizer.applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
           throw new IllegalStateException(errorMessage);
         }
       }
     }
     try {
       executeSql(sql, connection);
+      String message = String.format("Create table %s successfully", tableModel.getName());
+      dataStructuresSynchronizer.applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
     } catch (SQLException ex) {
       XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+      String message = String.format("Create table [%s] skipped due to an error: %s", tableModel, ex.getMessage());
+      dataStructuresSynchronizer.applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
     }
 
     boolean shouldCreatePublicSynonym = SqlFactory.getNative(connection)

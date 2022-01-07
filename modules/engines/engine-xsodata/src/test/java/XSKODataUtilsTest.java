@@ -14,7 +14,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
 
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
@@ -27,7 +29,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableRelationModel;
@@ -41,10 +42,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import javax.sql.DataSource;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PowerMockIgnore("javax.management.*")
+@PrepareForTest({XSKCommonsDBUtils.class})
 public class XSKODataUtilsTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
@@ -407,6 +413,9 @@ public class XSKODataUtilsTest {
 
   @Test
   public void testSynonym() throws Exception {
+    PowerMockito.mockStatic(XSKCommonsDBUtils.class);
+//    doReturn(synonymTargetObjectMetadata).when(XSKCommonsDBUtils.class, "getSynonymTargetObjectMetadata", mockDataSource, anyString(), null);
+
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
         .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_synonym.xsodata"), StandardCharsets.UTF_8);
@@ -431,7 +440,7 @@ public class XSKODataUtilsTest {
 
     when(dbMetadataUtil.getTableMetadata("TestCalcView", null)).thenReturn(synonymModel);
     when(dbMetadataUtil.getTableMetadata("kneo.test.calcviews::calc", null)).thenReturn(calcViewModel);
-    when(XSKCommonsDBUtils.getSynonymTargetObjectMetadata(mockDataSource, synonymModel.getTableName(), null)).thenReturn(synonymTargetObjectMetadata);
+    doReturn(synonymTargetObjectMetadata).when(XSKCommonsDBUtils.class, "getSynonymTargetObjectMetadata", null, synonymModel.getTableName(), null);
 
     ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 

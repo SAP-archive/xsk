@@ -415,7 +415,7 @@ public class XSKODataParser implements IXSKODataParser {
     return null;
   }
 
-  private List<XSKDBArtifactModel> getDBArtifactsByName(String artifactName) throws SQLException {
+  public List<XSKDBArtifactModel> getDBArtifactsByName(String artifactName) throws SQLException {
     try (Connection connection = dataSource.getConnection()) {
       DatabaseMetaData databaseMetaData = connection.getMetaData();
       ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), Configuration.get("HANA_USERNAME"), artifactName, null);

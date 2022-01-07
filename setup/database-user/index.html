@@ -1520,26 +1520,26 @@ The default/admin <code>DBADMIN</code> database user is not recommended to be us
 </div>
 <div class="tabbed-block">
 <ol>
-<li>Create the user:</li>
-</ol>
+<li>
+<p>Create the user:</p>
 <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="o">&lt;</span><span class="n">XSK</span><span class="o">-</span><span class="n">USERNAME</span><span class="o">&gt;</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="o">&lt;</span><span class="n">XSK</span><span class="o">-</span><span class="n">PASSWORD</span><span class="o">&gt;</span><span class="w"> </span><span class="k">NO</span><span class="w"> </span><span class="n">FORCE_FIRST_PASSWORD_CHANGE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">USERGROUP</span><span class="w"> </span><span class="k">DEFAULT</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Replace the <code>&lt;XSK-USERNAME&gt;</code> placeholder with the username and <code>&lt;XSK-PASSWORD&gt;</code> with the password.</p>
 </div>
-<ol>
-<li>Grant <code>CREATE SCHEMA</code> privileges:</li>
-</ol>
+</li>
+<li>
+<p>Grant <code>CREATE SCHEMA</code> privileges:</p>
 <div class="highlight"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="o">&lt;</span><span class="n">XSK</span><span class="o">-</span><span class="n">USERNAME</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Replace the <code>&lt;XSK-USERNAME&gt;</code> placeholder with the username.</p>
 </div>
-<ol>
-<li>Grant HDI administrator privileges:</li>
-</ol>
+</li>
+<li>
+<p>Grant HDI administrator privileges:</p>
 <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="k">TEMPORARY</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">TT_API_PRIVILEGES</span><span class="p">;</span><span class="w"></span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="p">(</span><span class="n">PRINCIPAL_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">PRIVILEGE_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">OBJECT_NAME</span><span class="p">)</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;&lt;XSK-USERNAME&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">PRIVILEGE_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">OBJECT_NAME</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">T_DEFAULT_DI_ADMIN_PRIVILEGES</span><span class="p">;</span><span class="w"></span>
@@ -1552,6 +1552,8 @@ The default/admin <code>DBADMIN</code> database user is not recommended to be us
 <p class="admonition-title">Note</p>
 <p>Replace the <code>&lt;XSK-USERNAME&gt;</code> placeholder with the username.</p>
 </div>
+</li>
+</ol>
 </div>
 </div>
 </div>

@@ -1,49 +1,49 @@
 ---
-title: Database User
+title: SAP HANA Database User
 ---
 
-HANA Database User
+SAP HANA Database User
 ===
 
 ## Overview
 ---
 
-To execute successful migration a database user is needed.
-The default/admin `DBADMIN` database user is not recommended to be used, but rather new database user to be created.
+To perform a successful migration, you need a database user.
+We recommend that you create a new database user instead of the default/admin `DBADMIN` database user.
 
 ## Steps
 ---
 
-To create a new database user go through the following steps:
+To create a new database user, go through the following steps:
 
 === "SAP HANA Cockpit"
 
-    1. Navigate to the `SAP HANA Cockpit` for your `SAP HANA Cloud` instance.
-    2. Switch to the `User Management` application.
+    1. Navigate to the **SAP HANA Cockpit** for your `SAP HANA Cloud` instance.
+    2. Switch to the **User Management** application.
 
         ![XSK - SAP HANA Cockpit - User Management](/img/setup/database-user/1-user-management.png)
 
-    3. Click on the `+` button and select `Create User`.
+    3. Choose the **+** button and select **Create User**.
     4. Provide the user details.
 
         ![XSK - SAP HANA Cockpit - Create User](/img/setup/database-user/2-create-user.png)
 
         !!! note
 
-            Switch the `Force Password Change on Next Logon` option to `No`, so that the provided password for the migration database user won't be changed and could be used in the XSK setup steps.
+            Switch the **Force Password Change on Next Logon** option to **No**, so that the provided password for the migration database user won't be changed and could be used in the XSK setup steps.
 
-    5. Switch to the `Privilege Assignment` application.
+    5. Switch to the **Privilege Assignment** application.
 
         ![XSK - SAP HANA Cockpit - Privilege Assignment](/img/setup/database-user/3-assign-privilege.png)
 
     6. Search for the newly created database user.
-    7. From the `System Privileges` tab click the `Edit` button and then the `Add` button.
+    7. From the **System Privileges** tab, choose **Edit** and then **Add**.
     8. Search for the `CREATE SCHEMA` privilege.
     9. Save the changes.
 
         ![XSK - SAP HANA Cockpit - Create Schema](/img/setup/database-user/4-create-schema-privileges.png)
 
-    10. From the `Object Privileges` tab click the `Edit` button and then the `Add` button and add the following object privileges:
+    10. From the `Object Privileges` tab, choose **Edit**, then **Add**, and add the following object privileges:
 
         Object                                         | Schema  | Privilege
         ---------------------------------------------- | ------- | ---------

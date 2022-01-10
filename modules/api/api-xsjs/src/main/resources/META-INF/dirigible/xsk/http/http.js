@@ -202,7 +202,10 @@ exports.Client = function () {
 
   function executeRequest(url, requestMethod, options, requestBody) {
     if (requestBody) {
-      options.text = JSON.stringify(requestBody);
+      if(typeof requestBody === 'string' || requestBody instanceof String)
+        options.text = requestBody;
+      else
+        options.text = JSON.stringify(requestBody);
     }
 
     switch (requestMethod) {

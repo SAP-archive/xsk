@@ -11,15 +11,15 @@
         <link rel="canonical" href="https://www.xsk.io/setup/database-user/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.5">
     
     
       
-        <title>Database User - Project XSK</title>
+        <title>SAP HANA Database User - Project XSK</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.bb3983ee.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ee0f47ba.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#hana-database-user" class="md-skip">
+        <a href="#sap-hana-database-user" class="md-skip">
           Skip to content
         </a>
       
@@ -104,7 +104,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Database User
+              SAP HANA Database User
             
           </span>
         </div>
@@ -1402,49 +1402,49 @@
 </a>
 
 
-<h1 id="hana-database-user">HANA Database User</h1>
+<h1 id="sap-hana-database-user">SAP HANA Database User</h1>
 <h2 id="overview">Overview</h2>
 <hr />
-<p>To execute successful migration a database user is needed.
-The default/admin <code>DBADMIN</code> database user is not recommended to be used, but rather new database user to be created.</p>
+<p>To perform a successful migration, you need a database user.
+We recommend that you create a new database user instead of the default/admin <code>DBADMIN</code> database user.</p>
 <h2 id="steps">Steps</h2>
 <hr />
-<p>To create a new database user go through the following steps:</p>
+<p>To create a new database user, go through the following steps:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">SAP HANA Cockpit</label><label for="__tabbed_1_2">SQL Console</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ol>
-<li>Navigate to the <code>SAP HANA Cockpit</code> for your <code>SAP HANA Cloud</code> instance.</li>
+<li>Navigate to the <strong>SAP HANA Cockpit</strong> for your <code>SAP HANA Cloud</code> instance.</li>
 <li>
-<p>Switch to the <code>User Management</code> application.</p>
+<p>Switch to the <strong>User Management</strong> application.</p>
 <p><img alt="XSK - SAP HANA Cockpit - User Management" src="/img/setup/database-user/1-user-management.png" /></p>
 </li>
 <li>
-<p>Click on the <code>+</code> button and select <code>Create User</code>.</p>
+<p>Choose the <strong>+</strong> button and select <strong>Create User</strong>.</p>
 </li>
 <li>
 <p>Provide the user details.</p>
 <p><img alt="XSK - SAP HANA Cockpit - Create User" src="/img/setup/database-user/2-create-user.png" /></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Switch the <code>Force Password Change on Next Logon</code> option to <code>No</code>, so that the provided password for the migration database user won't be changed and could be used in the XSK setup steps.</p>
+<p>Switch the <strong>Force Password Change on Next Logon</strong> option to <strong>No</strong>, so that the provided password for the migration database user won't be changed and could be used in the XSK setup steps.</p>
 </div>
 </li>
 <li>
-<p>Switch to the <code>Privilege Assignment</code> application.</p>
+<p>Switch to the <strong>Privilege Assignment</strong> application.</p>
 <p><img alt="XSK - SAP HANA Cockpit - Privilege Assignment" src="/img/setup/database-user/3-assign-privilege.png" /></p>
 </li>
 <li>
 <p>Search for the newly created database user.</p>
 </li>
-<li>From the <code>System Privileges</code> tab click the <code>Edit</code> button and then the <code>Add</code> button.</li>
+<li>From the <strong>System Privileges</strong> tab, choose <strong>Edit</strong> and then <strong>Add</strong>.</li>
 <li>Search for the <code>CREATE SCHEMA</code> privilege.</li>
 <li>
 <p>Save the changes.</p>
 <p><img alt="XSK - SAP HANA Cockpit - Create Schema" src="/img/setup/database-user/4-create-schema-privileges.png" /></p>
 </li>
 <li>
-<p>From the <code>Object Privileges</code> tab click the <code>Edit</code> button and then the <code>Add</code> button and add the following object privileges:</p>
+<p>From the <code>Object Privileges</code> tab, choose <strong>Edit</strong>, then <strong>Add</strong>, and add the following object privileges:</p>
 <table>
 <thead>
 <tr>
@@ -1675,10 +1675,10 @@ The default/admin <code>DBADMIN</code> database user is not recommended to be us
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.361d90f1.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.b6ff8c07.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.289a2a4b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5e13d264.min.js"></script>
       
     
   </body>

@@ -47,6 +47,7 @@ If you have an **existing** [SAP HANA Extended Application Services](https://hel
 
 XSK is an **open source project** provided by SAP on [GitHub](https://github.com/SAP/xsk). It is under the [Apache 2.0 License](https://github.com/SAP/xsk/blob/main/LICENSE). You can help us improve the project by following the [Contribution Guidelines](https://github.com/SAP/xsk/blob/main/CONTRIBUTING.md) and creating [issues](https://github.com/SAP/xsk/issues).
 
+
 ## Releases
 ---
 

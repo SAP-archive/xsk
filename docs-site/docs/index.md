@@ -57,3 +57,5 @@ You can find all the different distributions of the XSK project at [https://gith
 
 We run the project in compliance with the high standard of transparency and openness. In case of questions or suggestions you are welcome to our public [discussions](https://github.com/SAP/xsk/discussions) space. We have a public [Slack channel](https://slack.xsk.io) as well.
 
+
+

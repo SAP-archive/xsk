@@ -13,9 +13,9 @@ You can deploy XSK in the SAP BTP[^1], Cloud Foundry environment.
 [^1]: SAP Cloud Platform is called SAP Business Technology Platform (SAP BTP) as of 2021.
     
 !!! info "Prerequisites"
-    - Install [Cloud Foundry Command Line Interface](http://docs.cloudfoundry.org/devguide/installcf/install-go-cli.html).
-    - Access to SAP BTP account _(the Trial landscape can be accessed [here](https://account.hanatrial.ondemand.com/))._
-    - Create `HANA Cloud` service instance in SAP BTP Cloud Foundry space.
+    - Install the [Cloud Foundry Command Line Interface](http://docs.cloudfoundry.org/devguide/installcf/install-go-cli.html).
+    - Access to an SAP BTP account. To create an SAP BTP Trial account, navigate to the [SAP BTP Trial home page](https://account.hanatrial.ondemand.com/)).
+    - Create a `HANA Cloud` service instance in SAP BTP Cloud Foundry space.
     - Create a separate `HANA Cloud` user that will be used from the XSK engine.
 
 ## Steps
@@ -115,8 +115,8 @@ You can deploy XSK in the SAP BTP[^1], Cloud Foundry environment.
         !!! tip "XSK versions"
             Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:
             
-            - You can find all released versions [here](https://github.com/sap/xsk/releases/).
-            - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
+            - You can find all released versions at [https://github.com/sap/xsk/releases/](https://github.com/sap/xsk/releases/).
+            - You can find all XSK Docker images and tags (versions) at [https://hub.docker.com/u/dirigiblelabs](https://hub.docker.com/u/dirigiblelabs).
 
         - Bind the XSUAA and HANA Cloud service instances to the XSK deployment:
 

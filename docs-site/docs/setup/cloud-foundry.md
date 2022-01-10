@@ -178,4 +178,4 @@ You can deploy XSK in the SAP BTP[^1], Cloud Foundry environment.
 1. Log in.
 
 !!! example "Additional Information"
-    You can find a step-by-step tutorial [here](https://blogs.sap.com/2020/03/15/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-cloud-foundry-environment/).
+    For more details, see the step-by-step tutorial [How to deploy Eclipse Dirigible in the SAP Cloud Platform Cloud Foundry environment](https://blogs.sap.com/2020/03/15/how-to-deploy-eclipse-dirigible-in-the-sap-cloud-platform-cloud-foundry-environment/) on SAP Community.

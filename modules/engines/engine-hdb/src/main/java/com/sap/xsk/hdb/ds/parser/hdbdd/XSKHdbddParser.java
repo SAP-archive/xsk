@@ -14,6 +14,7 @@ package com.sap.xsk.hdb.ds.parser.hdbdd;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.artefacts.HDBDDEntitySynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
@@ -21,6 +22,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.hdb.ds.transformer.hdbdd.HdbddTransformer;
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
@@ -50,6 +52,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
@@ -64,6 +67,8 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   private SymbolTable symbolTable = new SymbolTable();
   private Map<String, Set<String>> dependencyStructure = new HashMap<>();
   private Set<String> parsedNodes = new HashSet<>();
+  private HDBDDEntitySynchronizationArtefactType ENTITY_ARTEFACT = new HDBDDEntitySynchronizationArtefactType();
+  private XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
   public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException {
@@ -119,6 +124,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
           "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
       throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
     }
 
@@ -139,6 +145,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
             "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
             XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+        dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
       }
     });
 
@@ -155,6 +162,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
           "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
       throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
     }
   }

@@ -141,12 +141,6 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     String refFullPath = entityName + "." + reference;
     Symbol resolvedSymbol = resolveReferenceChain(refFullPath, associationSymbol, new HashSet<>(Arrays.asList(associationSymbol)));
 
-    EntityElementSymbol entityElement = new EntityElementSymbol((EntityElementSymbol) resolvedSymbol);
-
-    if (ctx.alias != null) {
-      entityElement.setAlias(ctx.alias.getText());
-    }
-
     if (resolvedSymbol == null) {
       throw new CDSRuntimeException(String.format(
           "Error at line: %s. No such field found in entity: %s.",
@@ -155,6 +149,11 @@ public class ReferenceResolvingListener extends CdsBaseListener {
       throw new CDSRuntimeException(String.format(
           "Error at line: %s. Only an entity element could be referenced as a foreign key.",
           resolvedSymbol.getIdToken().getLine()));
+    }
+
+    EntityElementSymbol entityElement = new EntityElementSymbol((EntityElementSymbol) resolvedSymbol);
+    if (ctx.alias != null) {
+      entityElement.setAlias(ctx.alias.getText());
     }
 
     associationSymbol.addForeignKey(entityElement);

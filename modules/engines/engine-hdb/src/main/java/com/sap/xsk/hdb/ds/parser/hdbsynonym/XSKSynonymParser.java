@@ -16,8 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.sap.xsk.hdb.ds.artefacts.HDBSynonymSynchronizationArtefactType;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,8 @@ import com.sap.xsk.utils.XSKHDBUtils;
 
 public class XSKSynonymParser implements XSKDataStructureParser {
   private static final Logger logger = LoggerFactory.getLogger(XSKSynonymParser.class);
+  private static final HDBSynonymSynchronizationArtefactType SYNONYM_ARTEFACT = new HDBSynonymSynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
   public XSKDataStructureHDBSynonymModel parse(String location, String content) throws XSKDataStructuresException, IOException {
@@ -50,8 +55,9 @@ public class XSKSynonymParser implements XSKDataStructureParser {
     for (Entry<String, JsonElement> entry : jsonObject.entrySet()) {
       XSKHDBSYNONYMDefinitionModel definitionModel = gson.fromJson(entry.getValue(),
           XSKHDBSYNONYMDefinitionModel.class);
+
       try {
-        definitionModel.getTarget().checkForAllMandatoryFieldsPresence();
+        definitionModel.checkForAllMandatoryFieldsPresence();
         synonymDefinitions.put(entry.getKey(), definitionModel);
         //aligned with HANA XS Classic, where the synonym name must match the artifact name and multiple synonym definitions are not supported
         //synonymDefinitions.put(hdbSynonymModel.getName(), definitionModel);
@@ -60,6 +66,7 @@ public class XSKSynonymParser implements XSKDataStructureParser {
             String.format("Missing mandatory field for synonym %s!", entry.getKey()), XSKCommonsConstants.EXPECTED_FIELDS,
             XSKCommonsConstants.HDB_SYNONYM_PARSER,XSKCommonsConstants.MODULE_PARSERS,XSKCommonsConstants.SOURCE_PUBLISH_REQUEST,
             XSKCommonsConstants.PROGRAM_XSK);
+        dataStructuresSynchronizer.applyArtefactState(entry.getKey(),location,SYNONYM_ARTEFACT, ArtefactState.FAILED_CREATE, exception.getMessage());
       }
     }
     hdbSynonymModel.setSynonymDefinitions(synonymDefinitions);

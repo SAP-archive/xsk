@@ -23,7 +23,10 @@ const StringReader = Java.type("java.io.StringReader");
 const StringWriter = Java.type("java.io.StringWriter");
 const ByteArrayInputStream = Java.type("java.io.ByteArrayInputStream");
 const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
+const CalculationViewModifierService = require("ide-migration/server/migration/api/calculationViewModifierService");
+const calculationViewModifier = new CalculationViewModifierService()
 const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor")
+
 
 class MigrationService {
 
@@ -57,7 +60,7 @@ class MigrationService {
             }
         }
 
-        return { generated: generatedFiles, updated: updatedFiles };
+        return {generated: generatedFiles, updated: updatedFiles};
     }
 
     createHdiConfigFile(workspaceName, project) {
@@ -70,10 +73,17 @@ class MigrationService {
                 calculationview: {
                     plugin_name: "com.sap.hana.di.calculationview",
                     plugin_version: "12.1.0"
+                },
+                hdbanalyticprivilege: {
+                    plugin_name: "com.sap.hana.di.analyticprivilege",
+                    plugin_version: "12.1.0"
+                },
+                analyticprivilege: {
+                    plugin_name: "com.sap.hana.di.analyticprivilege",
+                    plugin_version: "12.1.0"
                 }
             }
         };
-
 
 
         const projectName = project.getName();
@@ -106,10 +116,8 @@ class MigrationService {
         };
 
         const hdiPath = `${projectName}.hdi`;
-        const hdiFile = project.createFile(`${projectName}.hdi`);
         const hdiJson = JSON.stringify(hdi, null, 4);
         const hdiJsonBytes = bytes.textToByteArray(hdiJson);
-        hdiFile.setContent(hdiJsonBytes);
 
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
         const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
@@ -183,15 +191,15 @@ class MigrationService {
             </xsl:stylesheet>
         `;
 
-        const factory = TransformerFactory.newInstance();
-        const source = new StreamSource(new StringReader(columnObjectToResourceUriXslt));
-        const transformer = factory.newTransformer(source);
+            const factory = TransformerFactory.newInstance();
+            const source = new StreamSource(new StringReader(columnObjectToResourceUriXslt));
+            const transformer = factory.newTransformer(source);
 
-        const text = new StreamSource(new ByteArrayInputStream(calculationViewXmlBytes));
-        const bout = new ByteArrayOutputStream();
+            const text = new StreamSource(new ByteArrayInputStream(calculationViewXmlBytes));
+            const bout = new ByteArrayOutputStream();
 
-        transformer.transform(text, new StreamResult(bout));
-        return bout.toByteArray();
+            transformer.transform(text, new StreamResult(bout));
+            return bout.toByteArray();
         } catch (e) {
             console.log("Error json: " + JSON.stringify(e));
         }
@@ -265,7 +273,14 @@ class MigrationService {
         const project = workspace.getProject(projectName)
         const projectFile = project.createFile(relativePath);
         const resource = repositoryManager.getResource(repositoryPath);
-        projectFile.setContent(resource.getContent());
+        const xskModificator = new XSKProjectMigrationInterceptor();
+
+        if (relativePath.endsWith('hdbcalculationview') || relativePath.endsWith('calculationview') || repositoryPath.endsWith('hdbcalculationview') || repositoryPath.endsWith('calculationview')) {
+            const modifiedContent = xskModificator.modify(resource.getContent());
+            projectFile.setContent(modifiedContent);
+        } else {
+            projectFile.setContent(resource.getContent());
+        }
     }
 
     getAllFilesForDU(du) {
@@ -277,5 +292,3 @@ class MigrationService {
 }
 
 module.exports = MigrationService;
-
-

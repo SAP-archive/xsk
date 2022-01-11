@@ -1,0 +1,34 @@
+service namespace "np" {
+
+  "TEST.VIEWS::USERS" as "Users"
+    navigates (
+	    "UserToGroups" as "Groups",
+	    "UserToLog" as "Logs",
+	    "UserToApps" as "Apps");
+
+	"TEST.VIEWS::GROUPS" as "Groups";
+
+	"TEST.VIEWS::APP" as "Apps";
+
+	"TEST.VIEWS::LOGUSER" as "UserLogs";
+
+	//------ASSOCIATIONS------
+	association "UserToLog"
+	principal "Users"("Id") multiplicity "1"
+	dependent "UserLogs"("UserId") multiplicity "*";
+
+	association "UserToGroups"
+	principal "Users"("Id") multiplicity "*"
+	dependent "Groups"("Id") multiplicity "*"
+	over "TEST.DATA::data.UserToGroup" principal ("UserId") dependent ("GroupId");
+
+	association "UserToApps"
+	principal "Users"("Id") multiplicity "1"
+	dependent "Apps"("Id") multiplicity "*"
+	over "TEST.VIEWS::USERTOAPP" principal ("UserId") dependent ("AppId");
+
+}
+
+annotations {
+   enable OData4SAP;
+}

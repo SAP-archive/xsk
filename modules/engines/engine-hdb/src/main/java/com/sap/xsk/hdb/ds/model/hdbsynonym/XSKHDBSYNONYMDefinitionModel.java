@@ -80,15 +80,17 @@ public class XSKHDBSYNONYMDefinitionModel {
       this.schema = schema;
     }
 
-    public void checkForAllMandatoryFieldsPresence() {
-      checkPresence(object, "object");
-      checkPresence(schema, "schema");
-    }
+  }
 
-    private <T> void checkPresence(T field, String fieldName) {
-      if (Objects.isNull(field)) {
-        throw new XSKHDBSYNONYMMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
-      }
+  public void checkForAllMandatoryFieldsPresence() {
+    checkPresence(target, "target");
+    checkPresence(this.getTarget().getObject(), "object");
+    checkPresence(this.getTarget().getSchema(), "schema");
+  }
+
+  private <T> void checkPresence(T field, String fieldName) {
+    if (Objects.isNull(field)) {
+      throw new XSKHDBSYNONYMMissingPropertyException(String.format("Missing mandatory field %s!", fieldName));
     }
   }
 }

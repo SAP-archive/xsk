@@ -70,14 +70,6 @@ class MigrationService {
                 calculationview: {
                     plugin_name: "com.sap.hana.di.calculationview",
                     plugin_version: "12.1.0"
-                },
-                hdbanalyticprivilege: {
-                    plugin_name: "com.sap.hana.di.analyticprivilege",
-                    plugin_version: "12.1.0"
-                },
-                analyticprivilege: {
-                    plugin_name: "com.sap.hana.di.analyticprivilege",
-                    plugin_version: "12.1.0"
                 }
             }
         };
@@ -114,8 +106,10 @@ class MigrationService {
         };
 
         const hdiPath = `${projectName}.hdi`;
+        const hdiFile = project.createFile(`${projectName}.hdi`);
         const hdiJson = JSON.stringify(hdi, null, 4);
         const hdiJsonBytes = bytes.textToByteArray(hdiJson);
+        hdiFile.setContent(hdiJsonBytes);
 
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
         const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
@@ -271,12 +265,7 @@ class MigrationService {
         const project = workspace.getProject(projectName)
         const projectFile = project.createFile(relativePath);
         const resource = repositoryManager.getResource(repositoryPath);
-        const xskModificator = new XSKProjectMigrationInterceptor();
-      if (relativePath.endsWith('hdbcalculationview') || relativePath.endsWith('calculationview') || repositoryPath.endsWith('hdbcalculationview') || repositoryPath.endsWith('calculationview')) {
-        projectFile.setContent(xskModificator.modify(resource.getContent()));
-      } else {
         projectFile.setContent(resource.getContent());
-      }
     }
 
     getAllFilesForDU(du) {
@@ -288,3 +277,5 @@ class MigrationService {
 }
 
 module.exports = MigrationService;
+
+

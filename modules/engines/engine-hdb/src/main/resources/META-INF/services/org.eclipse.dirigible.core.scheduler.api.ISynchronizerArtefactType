@@ -1,0 +1,9 @@
+com.sap.xsk.hdb.ds.artefacts.HDBDDEntitySynchronizationArtefactType       #HDBDD Entity
+com.sap.xsk.hdb.ds.artefacts.HDBProcedureSynchronizationArtefactType      #HDBProcedure
+com.sap.xsk.hdb.ds.artefacts.HDBSequenceSynchronizationArtefactType       #HDBSequence
+com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType          #HDBTable
+com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType  #HDBTableFunction
+com.sap.xsk.hdb.ds.artefacts.HDBSynonymSynchronizationArtefactType        #HDBSynonym
+com.sap.xsk.hdb.ds.artefacts.HDBSchemaSynchronizationArtefactType         #HDBSchema
+com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType           #HDBView
+com.sap.xsk.hdb.ds.artefacts.HDBTableTypeSynchronizationArtefactType      #HDBStructure

@@ -11,47 +11,42 @@
  */
 package com.sap.xsk.modificators;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.xml.transform.TransformerException;
 import org.eclipse.dirigible.api.v3.platform.WorkspaceFacade;
 import org.eclipse.dirigible.core.workspace.api.IFile;
 import org.eclipse.dirigible.core.workspace.api.IFolder;
 
 public class XSKModificator {
-  List<IFile>filesForProject= new ArrayList<>();
+
+  List<IFile> filesForProject;
 
   public byte[] modify(byte[] fileContent) throws TransformerException {
     return new XSLTTransform().removeTypeArtifact(fileContent);
   }
 
   public void handleXSKProject(String workspace, String project) {
+    List<IFile> filesForProject = new ArrayList<>();
     List<IFolder> folders = WorkspaceFacade.getWorkspace(workspace).getProject(project).getFolders();
     List<IFile> rootFiles = WorkspaceFacade.getWorkspace(workspace).getProject(project).getFiles();
-    if(rootFiles!=null || !rootFiles.isEmpty()){
-      System.out.println("ADD ROOTFILES");
+    if (!Objects.requireNonNull(rootFiles).isEmpty()) {
       filesForProject.addAll(rootFiles);
     }
-    System.out.println("List for folders in root");
     for (IFolder folder : folders) {
       listFiles(folder);
     }
 
-    System.out.println("ALL FILES FOR PROJECT");
-
-    for (IFile file : filesForProject) {
-      System.out.println("FILENAME " + file.getName() + "FILE EXTENSION" + file.getContentType());
-    }
-    filesForProject.clear();
-    }
+    // filesForProject.clear();
+  }
 
 
   public void listFiles(IFolder folder) {
     filesForProject.addAll(folder.getFiles());
     System.out.println("List in nested folders");
-    if(!folder.getFolders().isEmpty() || folder.getFolders() != null ){
-      for (int i = 0; i <folder.getFolders().size() ; i++) {
+    if (!folder.getFolders().isEmpty() || folder.getFolders() != null) {
+      for (int i = 0; i < folder.getFolders().size(); i++) {
         System.out.println("Recursive call for nested folder" + folder.getFolders().get(i).getName());
         listFiles(folder.getFolders().get(i));
       }

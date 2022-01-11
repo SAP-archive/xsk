@@ -14,9 +14,11 @@ package com.sap.xsk.hdb.ds.parser.hdbschema;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.artefacts.HDBSchemaSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.parser.hdbschema.core.HdbschemaLexer;
 import com.sap.xsk.parser.hdbschema.core.HdbschemaParser;
 import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMACoreListener;
@@ -31,12 +33,15 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureHDBSchemaModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKSchemaParser.class);
+  private static final HDBSchemaSynchronizationArtefactType SCHEMA_ARTEFACT = new HDBSchemaSynchronizationArtefactType();
+  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
   public String getType() {
@@ -70,6 +75,12 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
     hdbschemaParser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
+    if(parserErrorListener.getErrors().size() !=0 ){
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, parserErrorListener.getErrors().get(0).getMsg());
+    }
+    if(lexerErrorListener.getErrors().size() != 0) {
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, lexerErrorListener.getErrors().get(0).getMsg());
+    }
     XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_SCHEMA_PARSER);
     XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_SCHEMA_PARSER);
 

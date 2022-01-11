@@ -6,7 +6,7 @@
 		"DIRIGIBLE_LOGS_DIR -> CATALINA_BASE ->  CATALINA_HOME" in this order 
 		or use ".." if none of the environment variables exist
 	-->
-	<propty name="LOGS_DIR" value="${DIRIGIBLE_LOGS_DIR:-${CATALINA_BASE:-${CATALINA_HOME:-..}}}" />
+	<property name="LOGS_DIR" value="${DIRIGIBLE_LOGS_DIR:-${CATALINA_BASE:-${CATALINA_HOME:-..}}}" />
 
 	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
 		<resetJUL>true</resetJUL>

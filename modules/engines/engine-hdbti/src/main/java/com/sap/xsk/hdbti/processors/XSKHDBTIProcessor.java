@@ -11,7 +11,30 @@
  */
 package com.sap.xsk.hdbti.processors;
 
-import com.ibm.icu.impl.IllegalIcuArgumentException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
+import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
+import org.eclipse.dirigible.repository.api.IRepository;
+import org.eclipse.dirigible.repository.api.IResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdbti.api.IXSKHDBTICoreService;
@@ -28,28 +51,6 @@ import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportConfigModel.Pair;
 import com.sap.xsk.parser.hdbti.models.XSKHDBTIImportModel;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
-import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
-import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
-import org.eclipse.dirigible.repository.api.IRepository;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
 
@@ -219,24 +220,24 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
       if (!el.getTableName().contains("::") && el.getSchemaName() == null) {
         String errMsg = "Missing schema property";
         XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
-        throw new IllegalIcuArgumentException(errMsg);
+        throw new IllegalArgumentException(errMsg);
       }
       if (el.getSchemaName() != null && !XSKHDBTIUtils.isCorrectPropertySyntax(el.getSchemaName())) {
         String errMsg = "Schema property contains unsupported symbols: " + el.getSchemaName();
         XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
-        throw new IllegalIcuArgumentException(errMsg);
+        throw new IllegalArgumentException(errMsg);
       }
       if (!XSKHDBTIUtils.isCorrectTablePropertySyntax(el.getTableName())) {
         String errMsg = "Table property contains unsupported symbols: " + el.getTableName();
         XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(), XSKCommonsConstants.HDBTI_PARSER);
-        throw new IllegalIcuArgumentException(errMsg);
+        throw new IllegalArgumentException(errMsg);
       }
       for (Pair key : el.getKeys()) {
         if (!XSKHDBTIUtils.isCorrectPropertySyntax(key.getColumn())) {
           String errMsg = "key column property contains unsupported symbols: " + key.getColumn();
           XSKCommonsUtils.logProcessorErrors(errMsg, XSKCommonsConstants.PROCESSOR_ERROR, el.getFileName(),
               XSKCommonsConstants.HDBTI_PARSER);
-          throw new IllegalIcuArgumentException(errMsg);
+          throw new IllegalArgumentException(errMsg);
         }
       }
     }

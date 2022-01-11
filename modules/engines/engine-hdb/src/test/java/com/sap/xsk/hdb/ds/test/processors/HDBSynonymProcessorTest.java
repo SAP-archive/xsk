@@ -12,17 +12,23 @@
 package com.sap.xsk.hdb.ds.test.processors;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doNothing;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -42,11 +48,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
-import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
+import org.powermock.reflect.Whitebox;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SqlFactory.class, Configuration.class, ProblemsFacade.class})
@@ -64,6 +66,8 @@ public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
   private DropBranchingBuilder drop;
   @Mock
   private DropSynonymBuilder mockDropSynonymBuilder;
+  @Mock
+  private XSKDataStructuresSynchronizer dataStructuresSynchronizer;
 
   @Before
   public void openMocks() {
@@ -92,8 +96,12 @@ public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any()).build()).thenReturn(mockSQL);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
+    Whitebox.setInternalState(HDBSynonymCreateProcessor.class, dataStructuresSynchronizer);
+    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+
     processorSpy.execute(mockConnection, model);
     verify(processorSpy, times(3)).executeSql(mockSQL, mockConnection);
+    verify(dataStructuresSynchronizer, times(3)).applyArtefactState(any(),any(), any(), eq(ArtefactState.SUCCESSFUL_CREATE), any());
   }
 
   @Test(expected = IllegalStateException.class)
@@ -110,6 +118,10 @@ public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+
+    Whitebox.setInternalState(HDBSynonymCreateProcessor.class, dataStructuresSynchronizer);
+    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+
     processorSpy.execute(mockConnection, model);
   }
 
@@ -134,8 +146,12 @@ public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection).drop().synonym(any()).build()).thenReturn(mockSQL);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
+    Whitebox.setInternalState(HDBSynonymDropProcessor.class, dataStructuresSynchronizer);
+    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+
     processorSpy.execute(mockConnection, model);
     verify(processorSpy, times(3)).executeSql(mockSQL, mockConnection);
+    verify(dataStructuresSynchronizer, times(3)).applyArtefactState(any(),any(), any(), eq(ArtefactState.SUCCESSFUL_DELETE), any());
   }
 
   @Test(expected = IllegalStateException.class)
@@ -154,6 +170,9 @@ public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, null,"PAL_TRIPLE_EXPSMOOTH", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, null, "PROCEDURES", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
     doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+
+    Whitebox.setInternalState(HDBSynonymDropProcessor.class, dataStructuresSynchronizer);
+    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
 
     processorSpy.execute(mockConnection, model);
   }

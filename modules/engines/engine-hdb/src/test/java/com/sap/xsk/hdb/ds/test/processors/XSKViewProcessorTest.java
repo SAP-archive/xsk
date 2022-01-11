@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.test.processors;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -25,6 +26,7 @@ import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.processors.view.XSKViewCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.view.XSKViewDropProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.hdb.ds.test.parser.XSKViewParserTest;
 import com.sap.xsk.utils.XSKConstants;
 import java.nio.charset.StandardCharsets;
@@ -32,6 +34,7 @@ import java.sql.Connection;
 import java.util.Map;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
@@ -52,6 +55,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SqlFactory.class, Configuration.class, ProblemsFacade.class})
@@ -69,10 +73,10 @@ public class XSKViewProcessorTest extends AbstractDirigibleTest {
   private DropBranchingBuilder drop;
   @Mock
   private DropViewBuilder mockDropViewBuilder;
-
   @Mock
   private Map<String, IXSKDataStructureManager> managerServices;
-
+  @Mock
+  private XSKDataStructuresSynchronizer dataStructuresSynchronizer;
   @InjectMocks
   private XSKViewCreateProcessor processor = new XSKViewCreateProcessor();
 
@@ -101,9 +105,13 @@ public class XSKViewProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection).create().view(any()).asSelect(any()).build()).thenReturn(mockSQL);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
+    Whitebox.setInternalState(XSKViewCreateProcessor.class, dataStructuresSynchronizer);
+    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+
     processorSpy.execute(mockConnection, model);
     assertEquals(model.getDBContentType(), XSKDBContentType.XS_CLASSIC);
     verify(processorSpy, times(1)).executeSql(mockSQL, mockConnection);
+    verify(dataStructuresSynchronizer, times(1)).applyArtefactState(any(),any(), any(), eq(ArtefactState.SUCCESSFUL_CREATE), any());
   }
 
   @Test
@@ -122,9 +130,13 @@ public class XSKViewProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.VIEW)).thenReturn(false);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
+    Whitebox.setInternalState(XSKViewCreateProcessor.class, dataStructuresSynchronizer);
+    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+
     processorSpy.execute(mockConnection, model);
     assertEquals(model.getDBContentType(), XSKDBContentType.OTHERS);
     verify(processorSpy, times(1)).executeSql(sql, mockConnection);
+    verify(dataStructuresSynchronizer, times(1)).applyArtefactState(any(),any(), any(), eq(ArtefactState.SUCCESSFUL_CREATE), any());
   }
 
   @Test(expected = IllegalStateException.class)
@@ -140,7 +152,8 @@ public class XSKViewProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
     when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
     doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
-
+    Whitebox.setInternalState(XSKViewCreateProcessor.class, dataStructuresSynchronizer);
+    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
     processorSpy.execute(mockConnection, model);
   }
 
@@ -161,8 +174,11 @@ public class XSKViewProcessorTest extends AbstractDirigibleTest {
     when(SqlFactory.getNative(mockConnection).drop().view(any())).thenReturn(mockDropViewBuilder);
     when(SqlFactory.getNative(mockConnection).drop().view(any()).build()).thenReturn(mockSQL);
     when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
+    Whitebox.setInternalState(XSKViewDropProcessor.class, dataStructuresSynchronizer);
+    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
 
     processorSpy.execute(mockConnection, model);
     verify(processorSpy, times(1)).executeSql(mockSQL, mockConnection);
+    verify(dataStructuresSynchronizer, times(1)).applyArtefactState(any(),any(), any(), eq(ArtefactState.SUCCESSFUL_DELETE), any());
   }
 }

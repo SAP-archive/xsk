@@ -23,11 +23,13 @@ import com.sap.xsk.xsodata.ds.model.XSKDBArtifactModel;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
@@ -85,7 +87,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   public void parseXsodataFileSuccessfully() throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_all_set_of_navigations.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_all_set_of_navigations.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_all_set_of_navigations.xsodata", content);
     assertEquals("entity_with_all_set_of_navigations.xsodata", xskoDataModel.getName());
     assertEquals("np/entity_with_all_set_of_navigations.xsodata", xskoDataModel.getLocation());
@@ -100,7 +102,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   @Test(expected = XSKArtifactParserException.class)
   public void testValidateEdmMultiplicity() throws Exception {
     mockGetTablesSuccessfully();
-    String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_wrong_syntax.xsodata"), StandardCharsets.UTF_8);
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_wrong_syntax.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("np/entity_wrong_syntax.xsodata", content);
   }
 
@@ -108,7 +110,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   public void testApplyEmptyNamespaceCondition() throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_no_namespace.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_no_namespace.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
     assertEquals("a_1.b-2.c.entity_with_no_namespace", xskoDataModel.getService().getNamespace());
   }
@@ -116,21 +118,21 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   @Test
   public void testApplyKeysConditionSuccessfully() throws Exception {
     mockGetTablesSuccessfully();
-    String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
   }
 
   @Test
   public void testApplyKeysConditionSuccessfullyWhenSynonym() throws Exception {
     mockGetTablesSuccessfullyWhenSynonym();
-    String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
   }
 
   @Test(expected = XSKOData2TransformerException.class)
   public void testApplyKeysConditionFail() throws Exception {
     mockGetTablesFail();
-    String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
   }
 
@@ -138,7 +140,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   public void testApplyKeysConditionFailWhenSynonym() throws Exception {
     mockGetTablesFailWhenSynonym();
     mockGetTable();
-    String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
   }
 
@@ -146,7 +148,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   public void testApplyEntitySetCondition() throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_no_namespace.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_no_namespace.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("/entity_with_no_namespace.xsodata", content);
     assertEquals(xskoDataModel.getService().getEntities().get(0).getAlias(), "MyView");
     assertEquals(xskoDataModel.getService().getEntities().get(1).getAlias(), "view");
@@ -159,7 +161,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
       throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_navigation.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_navigation.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("/entity_with_navigation.xsodata", content);
     assertEquals(2, xskoDataModel.getService().getEntities().size());
     assertEquals(1, xskoDataModel.getService().getAssociations().size());
@@ -169,7 +171,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   public void testApplyNavEntryFromEndConditionFail() throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_navigation_error.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_navigation_error.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/entity_with_navigation_error.xsodata", content);
   }
 
@@ -178,7 +180,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
       throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_wrong_join_prop.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_wrong_join_prop.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/entity_with_wrong_join_prop.xsodata", content);
   }
 
@@ -186,7 +188,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
   public void testApplyOrderOfJoinPropertiesCondition() throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_wrong_over_join_prop.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_wrong_over_join_prop.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/entity_with_wrong_over_join_prop.xsodata", content);
   }
 
@@ -195,7 +197,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
       throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_wrong_implicit_aggregation.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_wrong_implicit_aggregation.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/entity_with_wrong_implicit_aggregation.xsodata", content);
   }
 
@@ -204,28 +206,28 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
       throws Exception {
     mockGetTablesSuccessfully();
     String content = IOUtils
-        .toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_wrong_explicit_aggregation.xsodata"), StandardCharsets.UTF_8);
+        .toString(this.getClass().getResourceAsStream("/entity_with_wrong_explicit_aggregation.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/entity_with_wrong_explicit_aggregation.xsodata", content);
   }
 
   @Test(expected = XSKOData2TransformerException.class)
   public void testApplyParametersToViewsCondition() throws Exception {
     mockGetTablesFail();
-    String content = IOUtils.toString(XSKOdataParserTest.class.getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/entity_with_params.xsodata", content);
   }
 
   @Test(expected = XSKOData2TransformerException.class)
   public void testApplyParametersToViewsConditionWhenSynonym() throws Exception {
     mockGetTablesFailWhenSynonym();
-    String content = IOUtils.toString(XSKOdataParserTest.class.getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
     parser.parseXSODataArtifact("/entity_with_params.xsodata", content);
   }
 
   @Test
   public void testApplyOmittedParamResultCondition() throws Exception {
     mockGetTablesSuccessfully();
-    String content = IOUtils.toString(XSKODataUtilsTest.class.getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_params.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("/entity_with_params.xsodata", content);
     assertEquals("CalcViewParameters", xskoDataModel.getService().getEntities().get(0).getParameterEntitySet().getParameterEntitySetName());
     assertEquals("Results", xskoDataModel.getService().getEntities().get(0).getParameterEntitySet().getParameterResultsProperty());
@@ -237,6 +239,7 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
     mockProblemsFacade();
     when(mockResultSetEntityExist.next()).thenReturn(true).thenReturn(false);
     when(mockResultSetWhenSynonym.next()).thenReturn(false);
+    when(mockResultSet.next()).thenReturn(true);
   }
 
   private void mockGetTablesSuccessfullyWhenSynonym() throws Exception {

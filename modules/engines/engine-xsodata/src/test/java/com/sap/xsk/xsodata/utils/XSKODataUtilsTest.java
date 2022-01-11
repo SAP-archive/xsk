@@ -15,12 +15,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
+import com.sap.xsk.utils.XSKCommonsDBUtils;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATANavigation;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
@@ -48,13 +51,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import javax.sql.DataSource;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PowerMockIgnore("javax.management.*")
+@PrepareForTest({XSKCommonsDBUtils.class})
 public class XSKODataUtilsTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private DBMetadataUtil dbMetadataUtil;
+  @Mock
+  private DataSource mockDataSource;
 
   @Test
   public void testConvertMultiplicityOneToMany() throws Exception {
@@ -411,6 +422,9 @@ public class XSKODataUtilsTest {
 
   @Test
   public void testSynonym() throws Exception {
+    PowerMockito.mockStatic(XSKCommonsDBUtils.class);
+//    doReturn(synonymTargetObjectMetadata).when(XSKCommonsDBUtils.class, "getSynonymTargetObjectMetadata", mockDataSource, anyString(), null);
+
     XSKODataParser parser = new XSKODataParser();
     String content = org.apache.commons.io.IOUtils
         .toString(this.getClass().getResourceAsStream("/entity_synonym.xsodata"), StandardCharsets.UTF_8);
@@ -428,14 +442,14 @@ public class XSKODataUtilsTest {
         new ArrayList<>());
     synonymModel.setTableType(ISqlKeywords.METADATA_SYNONYM);
 
-    HashMap<String, String> synonymTargetObjectMetadata = new HashMap<>();
-    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_TABLE, "kneo.test.calcviews::calc");
-    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_SCHEMA, null);
-    synonymTargetObjectMetadata.put(ISqlKeywords.KEYWORD_TABLE_TYPE, ISqlKeywords.METADATA_CALC_VIEW);
+    PersistenceTableModel synonymTargetObjectMetadata = new PersistenceTableModel();
+    synonymTargetObjectMetadata.setTableName("kneo.test.calcviews::calc");
+    synonymTargetObjectMetadata.setSchemaName(null);
+    synonymTargetObjectMetadata.setTableType(ISqlKeywords.METADATA_CALC_VIEW);
 
     when(dbMetadataUtil.getTableMetadata("TestCalcView", null)).thenReturn(synonymModel);
     when(dbMetadataUtil.getTableMetadata("kneo.test.calcviews::calc", null)).thenReturn(calcViewModel);
-    when(dbMetadataUtil.getSynonymTargetObjectMetadata(synonymModel.getTableName())).thenReturn(synonymTargetObjectMetadata);
+    doReturn(synonymTargetObjectMetadata).when(XSKCommonsDBUtils.class, "getSynonymTargetObjectMetadata", null, synonymModel.getTableName(), null);
 
     ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 

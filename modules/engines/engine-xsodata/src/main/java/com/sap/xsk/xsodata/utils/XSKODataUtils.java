@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -42,10 +43,14 @@ import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.sql.DataSource;
+
+import static com.sap.xsk.utils.XSKCommonsDBUtils.getSynonymTargetObjectMetadata;
 
 public class XSKODataUtils {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataUtils.class);
+  private static final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
   private XSKODataUtils() {
   }
@@ -75,13 +80,14 @@ public class XSKODataUtils {
         List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
 
         if (ISqlKeywords.METADATA_SYNONYM.equals(tableMetadata.getTableType())) {
-          HashMap<String, String> targetObjectMetadata = dbMetadataUtil.getSynonymTargetObjectMetadata(tableMetadata.getTableName());
+          PersistenceTableModel targetObjectMetadata = getSynonymTargetObjectMetadata(dataSource,tableMetadata.getTableName(),
+              tableMetadata.getSchemaName());
 
-          if (targetObjectMetadata.isEmpty()) {
+          if (targetObjectMetadata.getTableName() == null) {
             throw new XSKOData2TransformerException("Failed to build ODataEntityDefinition for entity: " + entity.getAlias() + ". Reason: cannot find details for synonym - " + tableMetadata.getTableName());
           }
 
-          tableMetadata = dbMetadataUtil.getTableMetadata(targetObjectMetadata.get(ISqlKeywords.KEYWORD_TABLE), targetObjectMetadata.get(ISqlKeywords.KEYWORD_SCHEMA));
+          tableMetadata = dbMetadataUtil.getTableMetadata(targetObjectMetadata.getTableName(), targetObjectMetadata.getSchemaName());
         }
 
         if (ISqlKeywords.METADATA_CALC_VIEW.equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity

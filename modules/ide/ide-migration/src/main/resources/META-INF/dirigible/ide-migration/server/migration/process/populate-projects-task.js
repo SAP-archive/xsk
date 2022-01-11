@@ -17,7 +17,7 @@ const repositoryManager = require("platform/v4/repository");
 
 const TrackService = require('ide-migration/server/migration/api/track-service');
 const trackService = new TrackService();
-const XSKModificator = Java.type("com.sap.xsk.modificators.XSKModificator")
+const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor")
 
 try {
 	process.setVariable(execution.getId(), 'migrationState', 'POPULATING_PROJECTS');
@@ -27,7 +27,7 @@ try {
 
 	const migrationService = new MigrationService();
 	const workspace = userData.workspace;
-	const modificator = new XSKModificator();
+	const modificator = new XSKProjectMigrationInterceptor();
 
     for (const deliveryUnit of userData.du) {
         const locals = deliveryUnit.locals;
@@ -38,7 +38,9 @@ try {
             migrationService.addFileToWorkspace(workspace, local.repositoryPath, local.relativePath, local.projectName);
 
         }
-        modificator.handleXSKProject(workspace, locals.projectName)
+
+        const projectName = locals[0].projectName;
+        modificator.interceptXSKProject(workspace, projectName);
         git.initRepository('migration', '', workspace, locals[0].projectName, locals[0].projectName, "Migration initial commit");
 
         const generated = deliveryUnit['deployableArtifactsResult']['generated'];

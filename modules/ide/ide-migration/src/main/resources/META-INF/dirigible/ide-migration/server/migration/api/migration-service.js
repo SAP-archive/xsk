@@ -23,7 +23,7 @@ const StringReader = Java.type("java.io.StringReader");
 const StringWriter = Java.type("java.io.StringWriter");
 const ByteArrayInputStream = Java.type("java.io.ByteArrayInputStream");
 const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
-const XSKModificator = Java.type("com.sap.xsk.modificators.XSKModificator")
+const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor")
 
 class MigrationService {
 
@@ -271,7 +271,7 @@ class MigrationService {
         const project = workspace.getProject(projectName)
         const projectFile = project.createFile(relativePath);
         const resource = repositoryManager.getResource(repositoryPath);
-        const xskModificator = new XSKModificator();
+        const xskModificator = new XSKProjectMigrationInterceptor();
       if (relativePath.endsWith('hdbcalculationview') || relativePath.endsWith('calculationview') || repositoryPath.endsWith('hdbcalculationview') || repositoryPath.endsWith('calculationview')) {
         projectFile.setContent(xskModificator.modify(resource.getContent()));
       } else {

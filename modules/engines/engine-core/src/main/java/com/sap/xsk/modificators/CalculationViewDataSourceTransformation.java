@@ -21,33 +21,20 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 
-public class XSLTTransform {
+public class CalculationViewDataSourceTransformation {
 
-  String xslt = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-      + "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:exsl=\"http://exslt.org/common\">\n"
-      + "\n"
-      + "  <!-- Remove from specified children. -->\n"
-      + "  <xsl:variable name=\"remove\">\n"
-      + "  </xsl:variable>\n"
-      + "\n"
-      + "  <!-- Match \"type\" attribute. -->\n"
-      + "  <xsl:template match=\"DataSource/@type\">\n"
-      + "    <xsl:if test=\"not(exsl:node-set($remove))\">\n"
-      + "      <xsl:copy/>\n"
-      + "    </xsl:if>\n"
-      + "  </xsl:template>\n"
-      + "\n"
-      + "  <!-- Copy all nodes and attributes unless another rule indicates otherwise. -->\n"
-      + "  <xsl:template match=\"@*|node()\">\n"
-      + "    <xsl:copy>\n"
-      + "      <xsl:apply-templates select=\"@*|node()\"/>\n"
-      + "    </xsl:copy>\n"
-      + "  </xsl:template>\n"
-      + "</xsl:stylesheet>\n";
+  private static final String CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT = "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n"
+      + "    <xsl:template match=\"DataSource/@type\" />\n"
+      + "    <xsl:template match=\"@*|node()\">\n"
+      + "        <xsl:copy>\n"
+      + "            <xsl:apply-templates select=\"@*|node()\"/>\n"
+      + "        </xsl:copy>\n"
+      + "    </xsl:template>\n"
+      + "</xsl:stylesheet>";
 
   public byte[] removeTypeArtifact(byte[] bytes) throws TransformerException {
     TransformerFactory factory = TransformerFactory.newInstance();
-    Source source = new StreamSource(new StringReader(xslt));
+    Source source = new StreamSource(new StringReader(CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT));
     Transformer transformer = factory.newTransformer(source);
     StreamSource text = new StreamSource(new ByteArrayInputStream(bytes));
     ByteArrayOutputStream bout = new ByteArrayOutputStream();

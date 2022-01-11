@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.xsodata.ds.service;
 
-import com.sap.xsk.xsodata.ds.model.XSKDBArtifactModel;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
@@ -22,14 +21,8 @@ import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import static com.sap.xsk.utils.XSKCommonsDBUtils.getSynonymTargetObjectMetadata;
 

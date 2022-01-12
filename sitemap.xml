@@ -216,11 +216,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.xsk.io/setup/database-user/</loc>
-         <lastmod>2022-01-12</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://www.xsk.io/setup/environment-variables/</loc>
          <lastmod>2022-01-12</lastmod>
          <changefreq>daily</changefreq>
@@ -237,6 +232,11 @@
     </url>
     <url>
          <loc>https://www.xsk.io/setup/local/</loc>
+         <lastmod>2022-01-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.xsk.io/setup/sap-hana-database-user/</loc>
          <lastmod>2022-01-12</lastmod>
          <changefreq>daily</changefreq>
     </url>

@@ -67,20 +67,16 @@ class MigrationService {
         const hdiConfig = {
             file_suffixes: {
                 hdbcalculationview: {
-                    plugin_name: "com.sap.hana.di.calculationview",
-                    plugin_version: "12.1.0"
+                    plugin_name: "com.sap.hana.di.calculationview"
                 },
                 calculationview: {
-                    plugin_name: "com.sap.hana.di.calculationview",
-                    plugin_version: "12.1.0"
+                    plugin_name: "com.sap.hana.di.calculationview"
                 },
                 hdbanalyticprivilege: {
-                    plugin_name: "com.sap.hana.di.analyticprivilege",
-                    plugin_version: "12.1.0"
+                    plugin_name: "com.sap.hana.di.analyticprivilege"
                 },
                 analyticprivilege: {
-                    plugin_name: "com.sap.hana.di.analyticprivilege",
-                    plugin_version: "12.1.0"
+                    plugin_name: "com.sap.hana.di.analyticprivilege"
                 }
             }
         };

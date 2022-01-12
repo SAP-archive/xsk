@@ -51,7 +51,7 @@ nav:
         - $.web.WebRequest: 'api/request.md'
         - $.web.WebResponse: 'api/response.md'
     - Setup: 
-      - Database User: 'setup/database-user.md'
+      - SAP HANA Database User: 'setup/sap-hana-database-user.md'
       - Local: 'setup/local.md'
       - Cloud Foundry: 'setup/cloud-foundry.md'
       - Kyma: 'setup/kyma.md'

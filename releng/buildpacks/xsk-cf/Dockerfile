@@ -1,6 +1,8 @@
 ARG XSK_VERSION=latest
 FROM dirigiblelabs/xsk-cf:$XSK_VERSION as base
 
+USER root
+
 ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000
 ENV CNB_STACK_ID="com.sap.kneo.xsk"

@@ -50,4 +50,8 @@ ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 
 EXPOSE 8080
 
+RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible && chown -R dirigible:dirigible $CATALINA_HOME
+
+USER dirigible
+
 CMD ["catalina.sh", "jpda", "run"]

@@ -25,7 +25,7 @@
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
-				<version>4.0.2</version>
+				<version>${git-commit-id-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>get-the-git-infos</id>
@@ -40,5 +40,6 @@
 
 	<properties>
 		<license.header.location>../licensing-header.txt</license.header.location>
+		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
 	</properties>
 </project>

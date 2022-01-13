@@ -273,6 +273,8 @@
 		<selenium.version>3.141.59</selenium.version>
 		<selenium.webdriver.manager.version>3.8.1</selenium.webdriver.manager.version>
 		<neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>
+		<ngdbc.version>2.11.14</ngdbc.version>
+
 		<profile.content.phase>none</profile.content.phase>
 
 		<content.scm.url>https://github.com/dirigiblelabs/${content.repository.name}</content.scm.url>

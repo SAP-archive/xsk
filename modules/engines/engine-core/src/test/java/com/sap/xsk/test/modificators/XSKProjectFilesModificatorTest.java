@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.test.modificators;
 
 import com.sap.xsk.modificators.XSKProjectFilesModificator;
@@ -23,7 +34,7 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
     IWorkspace workspace = WorkspaceFacade.createWorkspace("test");
     IProject project = workspace.createProject("test");
 
-    List<IFile> files = new ArrayList<>();
+    List<IFile> projectFiles = new ArrayList<>();
 
     byte[] xsjsFile = org.apache.commons.io.IOUtils.toString(XSKProjectFilesModificatorTest.class.getResourceAsStream("/test.xsjs"),
         StandardCharsets.UTF_8).getBytes();
@@ -40,11 +51,17 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
 
     IFile hdiIFile = project.createFile("test.hdi", hdiFile);
 
-    files.add(xsjsIFile);
-    files.add(analyticPrivilegeIFile);
-    files.add(hdiIFile);
+    projectFiles.add(xsjsIFile);
+    projectFiles.add(analyticPrivilegeIFile);
+    projectFiles.add(hdiIFile);
 
-    projectFilesModificator.modifyProjectFiles(project, files);
+    projectFilesModificator.modifyProjectFiles(project, projectFiles);
+
+    for (IFile projectFile : projectFiles) {
+      System.out.println("------FILE NAME: " + projectFile.getName() + "\n");
+      System.out.println(new String(projectFile.getContent()));
+      System.out.println("\n-------------------------------------\n");
+    }
   }
 
 

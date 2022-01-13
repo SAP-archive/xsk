@@ -11,18 +11,12 @@
  */
 package com.sap.xsk.modificators;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -30,17 +24,25 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.core.workspace.api.IFile;
 import org.eclipse.dirigible.core.workspace.api.IProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKProjectFilesModificator {
 
-  public void modifyProjectFiles(IProject project, List<IFile> projectFiles) throws TransformerException, IOException {
+  private static final Logger logger = LoggerFactory.getLogger(XSKProjectFilesModificator.class);
+
+  private static String XSLT_RESOURCE_PATH = "META-INF/xslt/analyticprivilege.xslt";
+  private static String XSLT_STANDALONE_PROPERTY = "http://www.oracle.com/xml/is-standalone";
+
+  public void modifyProjectFiles(IProject project, List<IFile> projectFiles) {
     for (IFile projectFile : projectFiles) {
-      modifyProjectFileIfNecessary(projectFile, projectFiles);
+
+      modifyProjectFileIfNecessary(projectFile);
       addNewProjectFileIfNecessary(project);
     }
   }
 
-  private void modifyProjectFileIfNecessary(IFile projectFile, List<IFile> projectFiles) throws TransformerException, IOException {
+  private void modifyProjectFileIfNecessary(IFile projectFile) {
     String fileExtension = getProjectFileExtension(projectFile);
 
     switch (fileExtension) {
@@ -57,18 +59,10 @@ public class XSKProjectFilesModificator {
         modifyAnalyticPrivilegeFile(projectFile);
         break;
       }
-      case "hdi": {
-        modifyHdiFile(projectFile, projectFiles);
-        break;
-      }
     }
   }
 
   private void addNewProjectFileIfNecessary(IProject project) {
-    // // public IFile createFile(String path, byte[] content) {}
-    // // public IFile createFile(String path, byte[] content, boolean isBinary, String contentType) {}
-
-    // project.createFile()
   }
 
   private void replaceSessionUser(IFile projectFile) {
@@ -76,44 +70,34 @@ public class XSKProjectFilesModificator {
     projectFile.setContent(new String(currentContent).replace("SESSION_USER", "SESSION_CONTEXT(APPLICATIONUSER)").getBytes());
   }
 
-  private void modifyAnalyticPrivilegeFile(IFile analyticPrivilegeFile) throws TransformerException, IOException {
+  private void modifyAnalyticPrivilegeFile(IFile analyticPrivilegeFile) {
     byte[] currentContent = analyticPrivilegeFile.getContent();
 
-    String xslt = IOUtils.toString(
-        XSKProjectFilesModificator.class.getClassLoader().getResourceAsStream("META-INF/xslt/analyticprivilege.xslt"),
-        StandardCharsets.UTF_8);
+    if (currentContent.length != 0) {
+      try {
+        String xslt = IOUtils.toString(
+            XSKProjectFilesModificator.class.getClassLoader().getResourceAsStream(XSLT_RESOURCE_PATH),
+            StandardCharsets.UTF_8);
 
-    StringWriter writer = new StringWriter();
-    StreamResult result = new StreamResult(writer);
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
 
-    TransformerFactory factory = TransformerFactory.newInstance();
-    Source xsltSource = new StreamSource(new StringReader(xslt));
-    Transformer transformer = factory.newTransformer(xsltSource);
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Source xsltSource = new StreamSource(new StringReader(xslt));
+        Transformer transformer = factory.newTransformer(xsltSource);
+        transformer.setOutputProperty(XSLT_STANDALONE_PROPERTY, "yes");
 
-    Source contentSource = new StreamSource(new StringReader(new String(currentContent)));
-    transformer.transform(contentSource, result);
+        Source contentSource = new StreamSource(new StringReader(new String(currentContent)));
+        transformer.transform(contentSource, result);
 
-    String processedAnalyticPrivilege = writer.toString();
+        String processedAnalyticPrivilege = writer.toString();
 
-    analyticPrivilegeFile.setContent(processedAnalyticPrivilege.getBytes());
-  }
-
-  private void modifyHdiFile(IFile hdiFile, List<IFile> projectFiles) {
-    byte[] currentContent = hdiFile.getContent();
-
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    JsonParser jsonParser = new JsonParser();
-    JsonObject hdiContentJson = jsonParser.parse(new String(currentContent)).getAsJsonObject();
-
-    for (IFile projectFile : projectFiles) {
-      String fileExtension = getProjectFileExtension(projectFile);
-
-      if (fileExtension.equals("analyticprivilege") || fileExtension.equals("hdbanalyticprivilege")) {
-        hdiContentJson.getAsJsonArray("deploy").add(projectFile.getPath());
+        analyticPrivilegeFile.setContent(processedAnalyticPrivilege.getBytes());
+      } catch (Exception e) {
+        logger.error("Incorrect analytic privilege file content format.");
       }
-    }
 
-    hdiFile.setContent(gson.toJson(hdiContentJson).getBytes());
+    }
   }
 
   private String getProjectFileExtension(IFile projectFile) {

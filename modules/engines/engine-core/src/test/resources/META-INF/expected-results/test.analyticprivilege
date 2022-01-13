@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="APGroup" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
+<descriptions defaultDescription="APGroup"/>
+<securedModels>
+  <modelUri>test.tinydb::myview1</modelUri>
+  <modelUri>myview2</modelUri>
+  <modelUri>myview3</modelUri>
+</securedModels>
+<whereSql>(UPPER(SESSION_CONTEXT(APPLICATIONUSER)) = 'SCPUSER')
+OR
+SESSION_CONTEXT(APPLICATIONUSER) IN
+(SELECT "HANAUserName" FROM "CVUSERADMIN")
+OR
+"AppId" IN
+(SELECT "Id"
+FROM "TORII"."ZCORTO0030812.DATA::data.App"
+WHERE "DomainId" IN (SELECT UserToDomain."DomainId" FROM "TORII"."ZCORTO0030812.DATA::data.UserToDomain" UserToDomain
+INNER JOIN "TORII"."ZCORTO0030812.DATA::data.User" Users ON Users."Id" = UserToDomain."UserId"
+WHERE UPPER(Users."HANAUserName") = UPPER(SESSION_CONTEXT(APPLICATIONUSER))))</whereSql>
+</Privilege:analyticPrivilege>

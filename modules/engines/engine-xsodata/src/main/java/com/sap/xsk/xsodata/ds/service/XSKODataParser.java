@@ -61,7 +61,7 @@ import static com.sap.xsk.utils.XSKCommonsDBUtils.getSynonymTargetObjectMetadata
  */
 public class XSKODataParser implements IXSKODataParser {
 
-  private final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
   private static final List<String> METADATA_VIEW_TYPES = List.of(ISqlKeywords.METADATA_CALC_VIEW, ISqlKeywords.METADATA_VIEW);
   private static final List<String> METADATA_SYNONYM_TYPES = List.of(ISqlKeywords.METADATA_SYNONYM);
@@ -71,7 +71,7 @@ public class XSKODataParser implements IXSKODataParser {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataParser.class);
 
-  private final DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
+  private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
   /**
    * Creates a odata model from the raw content.

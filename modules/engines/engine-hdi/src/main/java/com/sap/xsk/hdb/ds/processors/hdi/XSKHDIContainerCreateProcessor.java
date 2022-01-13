@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -18,10 +18,13 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +41,6 @@ public class XSKHDIContainerCreateProcessor {
   private final XSKConfigureLibrariesProcessor configureLibrariesProcessor = new XSKConfigureLibrariesProcessor();
   private final XSKDeployContainerContentProcessor deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
   private final XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
-  private final XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor = new XSKGrantPrivilegesContainerTargetSchemaProcessor();
   private final XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor = new XSKGrantPrivilegesExternalArtifactsSchemaProcessor();
 
   public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
@@ -52,14 +54,18 @@ public class XSKHDIContainerCreateProcessor {
       // Create a Container Group
       this.createContainerGroupProcessor.execute(connection, hdiModel.getGroup());
 
+      List<String> users = new ArrayList<>(Arrays.asList(hdiModel.getUsers()));
+      users.add(Configuration.get("HANA_USERNAME"));
+      String[] usersAsArray = users.toArray(new String[0]);
+
       // Grant Privileges to the Container Group
-      this.grantPrivilegesContainerGroupProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getUsers());
+      this.grantPrivilegesContainerGroupProcessor.execute(connection, hdiModel.getGroup(), usersAsArray);
 
       // Create a Container
       this.createContainerProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getContainer());
 
       // Grant Privileges to Container API
-      this.grantPrivilegesContainerAPIProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getContainer(), hdiModel.getUsers());
+      this.grantPrivilegesContainerAPIProcessor.execute(connection, hdiModel.getGroup(), hdiModel.getContainer(), usersAsArray);
 
       // Write the files content to the Container
       this.writeContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getConfiguration());
@@ -68,9 +74,6 @@ public class XSKHDIContainerCreateProcessor {
       Set<String> pluginsToBEActivated = new HashSet<>(List.of("com.sap.hana.di.publicsynonym"));
       this.configureLibrariesProcessor.execute(connection, hdiModel.getContainer(), pluginsToBEActivated);
 
-      // Grant Privileges on the Target Schema
-      this.grantPrivilegesContainerTargetSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
-
       //Grant Privileges on the external artifacts' schemas
       grantPrivilegesExternalArtifactsSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy());
 
@@ -78,7 +81,7 @@ public class XSKHDIContainerCreateProcessor {
       this.deployContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getUndeploy());
 
       // Grant Privileges to the Container Schema
-      this.grantPrivilegesContainerSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
+      this.grantPrivilegesContainerSchemaProcessor.execute(connection, hdiModel.getContainer(), usersAsArray);
 
       LOGGER.info("HDI Container [{}] from [{}] finished successfully.", hdiModel.getContainer(), hdiModel.getLocation());
     } catch (SQLException | IOException | ScriptingException | XSKDataStructuresException e) {

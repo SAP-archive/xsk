@@ -196,6 +196,23 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
                   claimName: xsk-claim
         ---
         apiVersion: v1
+        kind: Service
+        metadata:
+          labels:
+            app: xsk
+          name: xsk
+          namespace: default
+        spec:
+          ports:
+          - name: xsk
+            port: 8080
+            protocol: TCP
+            targetPort: 8080
+          selector:
+            app: xsk
+          type: ClusterIP
+        ---
+        apiVersion: v1
         kind: PersistentVolumeClaim
         metadata:
           name: xsk-claim
@@ -214,23 +231,6 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
             Appling this definition will create `Service` and `APIRule` resoures only. To install XSK with single definition file, use the `All in One` section.
 
         ```yaml
-        apiVersion: v1
-        kind: Service
-        metadata:
-          labels:
-            app: xsk
-          name: xsk
-          namespace: default
-        spec:
-          ports:
-          - name: xsk
-            port: 8080
-            protocol: TCP
-            targetPort: 8080
-          selector:
-            app: xsk
-          type: ClusterIP
-        ---
         apiVersion: gateway.kyma-project.io/v1alpha1
         kind: APIRule
         metadata:

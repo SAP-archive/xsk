@@ -28,11 +28,11 @@ import static com.sap.xsk.utils.XSKCommonsDBUtils.getSynonymTargetObjectMetadata
 
 public class XSKTableMetadataProvider implements ITableMetadataProvider {
 
-  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableMetadataProvider.class);
 
-  private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
+  private final DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
   private static final List<String> METADATA_ENTITY_TYPES = List.of(ISqlKeywords.METADATA_TABLE, ISqlKeywords.METADATA_CALC_VIEW,
       ISqlKeywords.METADATA_VIEW);
@@ -40,7 +40,7 @@ public class XSKTableMetadataProvider implements ITableMetadataProvider {
 
   public PersistenceTableModel getPersistenceTableModel(ODataEntityDefinition oDataEntityDefinition) throws SQLException {
 
-    PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(oDataEntityDefinition.getName(), Configuration.get("HANA_USERNAME"));
+    PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(oDataEntityDefinition.getTable(), Configuration.get("HANA_USERNAME"));
 
     if(METADATA_ENTITY_TYPES.contains(tableMetadata.getTableType())) {
       return tableMetadata;

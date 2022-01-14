@@ -58,4 +58,10 @@ ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 
 EXPOSE 8080 8081 8000
 
-CMD ["catalina.sh", "jpda", "run"]
+ADD entrypoint.sh /entrypoint.sh
+
+RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD /usr/local/tomcat/bin/catalina.sh jpda run

@@ -31,8 +31,7 @@ public class XSKProjectFilesModificator {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKProjectFilesModificator.class);
 
-  private static String XSLT_RESOURCE_PATH = "META-INF/xslt/analyticprivilege.xslt";
-  private static String XSLT_STANDALONE_PROPERTY = "http://www.oracle.com/xml/is-standalone";
+  private static String XSLT_RESOURCE_PATH = "META-INF/modificators/xslt/analyticprivilege.xslt";
 
   public void modifyProjectFiles(IProject project, List<IFile> projectFiles) {
     for (IFile projectFile : projectFiles) {
@@ -85,7 +84,6 @@ public class XSKProjectFilesModificator {
         TransformerFactory factory = TransformerFactory.newInstance();
         Source xsltSource = new StreamSource(new StringReader(xslt));
         Transformer transformer = factory.newTransformer(xsltSource);
-        transformer.setOutputProperty(XSLT_STANDALONE_PROPERTY, "yes");
 
         Source contentSource = new StreamSource(new StringReader(new String(currentContent)));
         transformer.transform(contentSource, result);

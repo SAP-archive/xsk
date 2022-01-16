@@ -9,12 +9,11 @@
  * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.test.modificators;
+package com.sap.xsk.modificators;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-import com.sap.xsk.modificators.XSKProjectFilesModificator;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -191,13 +190,13 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
   public void modifyProjectAnalyticPrivilegeFileWithoutWhereSql() {
     List<IFile> projectFiles = new ArrayList<>();
 
-    String analyticPrivilegeFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        + "<Privilege:analyticPrivilege xmlns:Privilege=\"http://www.sap.com/ndb/BiModelPrivilege.ecore\" id=\"APGroup\" privilegeType=\"SQL_ANALYTIC_PRIVILEGE\" schemaVersion=\"1.1\">\n"
-        + "<descriptions defaultDescription=\"APGroup\"/>\n"
-        + "<securedModels>\n"
-        + "  <modelUri>test.tinydb::myview</modelUri>\n"
-        + "</securedModels>\n"
-        + "</Privilege:analyticPrivilege>";
+    String analyticPrivilegeFileContent =
+        "<Privilege:analyticPrivilege xmlns:Privilege=\"http://www.sap.com/ndb/BiModelPrivilege.ecore\" id=\"APGroup\" privilegeType=\"SQL_ANALYTIC_PRIVILEGE\" schemaVersion=\"1.1\">\n"
+            + "<descriptions defaultDescription=\"APGroup\"/>\n"
+            + "<securedModels>\n"
+            + "  <modelUri>test.tinydb::myview</modelUri>\n"
+            + "</securedModels>\n"
+            + "</Privilege:analyticPrivilege>";
 
     IFile analyticPrivilegeIFile = project.createFile("test.analyticprivilege", analyticPrivilegeFileContent.getBytes());
     projectFiles.add(analyticPrivilegeIFile);

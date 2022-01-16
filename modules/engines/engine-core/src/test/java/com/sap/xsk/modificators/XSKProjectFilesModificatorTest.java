@@ -44,32 +44,32 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
   public void modifyProjectFilesSuccessfully() throws IOException {
     List<IFile> projectFiles = new ArrayList<>();
 
-    byte[] xsjsFile = IOUtils.toString(XSKProjectFilesModificatorTest.class.getResourceAsStream("/META-INF/files-to-modify/test.xsjs"),
+    byte[] xsjsFile = IOUtils.toString(XSKProjectFilesModificatorTest.class.getResourceAsStream("/META-INF/modificators/files-to-modify/test.xsjs"),
         StandardCharsets.UTF_8).getBytes();
     IFile xsjsIFile = project.createFile("test.xsjs", xsjsFile);
 
     byte[] xsjslibFile = IOUtils.toString(
-        XSKProjectFilesModificatorTest.class.getResourceAsStream("/META-INF/files-to-modify/test.xsjslib"),
+        XSKProjectFilesModificatorTest.class.getResourceAsStream("/META-INF/modificators/files-to-modify/test.xsjslib"),
         StandardCharsets.UTF_8).getBytes();
     IFile xsjslibIFile = project.createFile("test.xsjslib", xsjslibFile);
 
     byte[] hdbprocedureFile = IOUtils.toString(XSKProjectFilesModificatorTest.class.getResourceAsStream(
-            "/META-INF/files-to-modify/test.hdbprocedure"),
+            "/META-INF/modificators/files-to-modify/test.hdbprocedure"),
         StandardCharsets.UTF_8).getBytes();
     IFile hdbprocedureIFile = project.createFile("test.hdbprocedure", hdbprocedureFile);
 
     byte[] hdbtablefunctionFile = IOUtils.toString(XSKProjectFilesModificatorTest.class.getResourceAsStream(
-            "/META-INF/files-to-modify/test.hdbtablefunction"),
+            "/META-INF/modificators/files-to-modify/test.hdbtablefunction"),
         StandardCharsets.UTF_8).getBytes();
     IFile hdbtablefunctionIFile = project.createFile("test.hdbtablefunction", hdbtablefunctionFile);
 
     byte[] analyticPrivilegeFile = IOUtils.toString(
-        XSKProjectFilesModificatorTest.class.getResourceAsStream("/META-INF/files-to-modify/test.analyticprivilege"),
+        XSKProjectFilesModificatorTest.class.getResourceAsStream("/META-INF/modificators/files-to-modify/test.analyticprivilege"),
         StandardCharsets.UTF_8).getBytes();
     IFile analyticPrivilegeIFile = project.createFile("test.analyticprivilege", analyticPrivilegeFile);
 
     byte[] hdbanalyticPrivilegeFile = IOUtils.toString(
-        XSKProjectFilesModificatorTest.class.getResourceAsStream("/META-INF/files-to-modify/test.hdbanalyticprivilege"),
+        XSKProjectFilesModificatorTest.class.getResourceAsStream("/META-INF/modificators/files-to-modify/test.hdbanalyticprivilege"),
         StandardCharsets.UTF_8).getBytes();
     IFile hdbanalyticPrivilegeIFile = project.createFile("test.hdbanalyticprivilege", hdbanalyticPrivilegeFile);
 
@@ -83,17 +83,17 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
     projectFilesModificator.modifyProjectFiles(project, projectFiles);
 
     byte[] expectedModifiedXsjsFile = XSKProjectFilesModificatorTest.class.getResourceAsStream(
-        "/META-INF/expected-results/test.xsjs").readAllBytes();
+        "/META-INF/modificators/expected-results/test.xsjs").readAllBytes();
     byte[] expectedModifiedXsjslibFile = XSKProjectFilesModificatorTest.class.getResourceAsStream(
-        "/META-INF/expected-results/test.xsjslib").readAllBytes();
+        "/META-INF/modificators/expected-results/test.xsjslib").readAllBytes();
     byte[] expectedModifiedHdbProcedureFile = XSKProjectFilesModificatorTest.class.getResourceAsStream(
-        "/META-INF/expected-results/test.hdbprocedure").readAllBytes();
+        "/META-INF/modificators/expected-results/test.hdbprocedure").readAllBytes();
     byte[] expectedModifiedHdbtablefunctionFile = XSKProjectFilesModificatorTest.class.getResourceAsStream(
-        "/META-INF/expected-results/test.hdbtablefunction").readAllBytes();
+        "/META-INF/modificators/expected-results/test.hdbtablefunction").readAllBytes();
     byte[] expectedModifiedAnalyticprivilegeFile = XSKProjectFilesModificatorTest.class.getResourceAsStream(
-        "/META-INF/expected-results/test.analyticprivilege").readAllBytes();
+        "/META-INF/modificators/expected-results/test.analyticprivilege").readAllBytes();
     byte[] expectedModifiedHdbanalyticprivilegeFile = XSKProjectFilesModificatorTest.class.getResourceAsStream(
-        "/META-INF/expected-results/test.hdbanalyticprivilege").readAllBytes();
+        "/META-INF/modificators/expected-results/test.hdbanalyticprivilege").readAllBytes();
 
     for (IFile projectFile : projectFiles) {
       switch (projectFile.getName()) {

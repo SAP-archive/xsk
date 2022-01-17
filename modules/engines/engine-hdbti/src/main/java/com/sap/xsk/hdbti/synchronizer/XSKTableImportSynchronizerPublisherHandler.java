@@ -13,11 +13,11 @@ package com.sap.xsk.hdbti.synchronizer;
 
 import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
 import com.sap.xsk.hdbti.model.XSKTableImportToCsvRelation;
-import org.eclipse.dirigible.core.publisher.api.AbstractPublisherHandler;
+import org.eclipse.dirigible.core.publisher.api.handlers.MetadataPublisherHandler;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-public class XSKTableImportSynchronizerPublisherHandler extends AbstractPublisherHandler {
+public class XSKTableImportSynchronizerPublisherHandler extends MetadataPublisherHandler {
 
   @Override
   public void beforePublish(String location) {

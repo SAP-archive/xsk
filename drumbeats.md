@@ -1,6 +1,43 @@
 # Drumbeats
 
 
+## 2022 Week 02 (10 December - 16 January)
+
+#### Focus topics:
+
+- Javascript Git API to be used in migration wizard
+- Synonyms validation handling improvements
+- Target artefacts for synonym from different schema
+- HDI version removed from the configuration file
+- Logs directory related fixes
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-10..2022-01-16) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-10..2022-01-16) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-01-10..2022-01-16) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-01-10..2022-01-16) PRs
+
+----
+
+## 2022 Week 01 (03 January - 09 January)
+
+#### Focus topics:
+
+- XSOData navigations fixes
+- Artefacts processing state fixes
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-03..2022-01-09) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-03..2022-01-09) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-01-03..2022-01-09) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-01-03..2022-01-09) PRs
+
+----
+
 ## 2021 Week 52 (27 December - 02 January)
 
 #### Focus topics:

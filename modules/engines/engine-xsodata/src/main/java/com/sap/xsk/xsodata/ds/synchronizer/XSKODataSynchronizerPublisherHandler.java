@@ -12,11 +12,11 @@
 package com.sap.xsk.xsodata.ds.synchronizer;
 
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
-import org.eclipse.dirigible.core.publisher.api.AbstractPublisherHandler;
+import org.eclipse.dirigible.core.publisher.api.handlers.MetadataPublisherHandler;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-public class XSKODataSynchronizerPublisherHandler extends AbstractPublisherHandler {
+public class XSKODataSynchronizerPublisherHandler extends MetadataPublisherHandler {
 
   @Override
   public void beforePublish(String location) {

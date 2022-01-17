@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?><Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="2.3" id="PO_HEADER" applyPrivilegeType="ANALYTIC_PRIVILEGE" checkAnalyticPrivileges="true" defaultClient="$$client$$" defaultLanguage="$$language$$" visibility="internal" calculationScenarioType="TREE_BASED" dataCategory="DEFAULT" enforceSqlExecution="false" executionSemantic="UNDEFINED" outputViewType="Projection">
+  <origin/>
+  <descriptions defaultDescription="P_HEADER"/>
+  <metadata changedAt="2015-04-27 16:34:39.893" createdAt="2015-04-27 16:34:39.893"/>
+  <localVariables/>
+  <variableMappings/>
+  <dataSources>
+    <DataSource id="sap.hana.democontent.epm.data::PO.Header">
+      <viewAttributes allViewAttributes="true"/>
+      <resourceUri>sap.hana.democontent.epm.data::PO.Header</resourceUri>
+    </DataSource>
+    <DataSource id="sap.hana.democontent.epm.data::Util.Constants">
+      <viewAttributes allViewAttributes="true"/>
+      <resourceUri>sap.hana.democontent.epm.data::Util.Constants</resourceUri>
+    </DataSource>
+    <DataSource id="CF$$$$sap.hana.democontent.epm.data::Util.Constants$$">
+      <viewAttributes allViewAttributes="true"/>
+      <resourceUri>sap.hana.democontent.epm.data::Util.Constants</resourceUri>
+    </DataSource>
+    <DataSource id="LC$$$$sap.hana.democontent.epm.data::Util.Constants$$">
+      <viewAttributes allViewAttributes="true"/>
+      <resourceUri>sap.hana.democontent.epm.data::Util.Constants</resourceUri>
+    </DataSource>
+    <DataSource id="OR$$$$sap.hana.democontent.epm.data::Util.Constants$$">
+      <viewAttributes allViewAttributes="true"/>
+      <resourceUri>sap.hana.democontent.epm.data::Util.Constants</resourceUri>
+    </DataSource>
+  </dataSources>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:ProjectionView" id="PO_Base">
+      <viewAttributes>
+        <viewAttribute id="PURCHASEORDERID"/>
+        <viewAttribute id="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CREATEDAT"/>
+        <viewAttribute id="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CHANGEDAT"/>
+        <viewAttribute id="NOTEID"/>
+        <viewAttribute id="PARTNER_PARTNERID"/>
+        <viewAttribute id="CURRENCY"/>
+        <viewAttribute id="GROSSAMOUNT"/>
+        <viewAttribute id="NETAMOUNT"/>
+        <viewAttribute id="TAXAMOUNT"/>
+        <viewAttribute id="LIFECYCLESTATUS"/>
+        <viewAttribute id="APPROVALSTATUS"/>
+        <viewAttribute id="CONFIRMSTATUS"/>
+        <viewAttribute id="ORDERINGSTATUS"/>
+        <viewAttribute id="INVOICINGSTATUS"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#sap.hana.democontent.epm.data::PO.Header">
+        <mapping xsi:type="Calculation:AttributeMapping" target="PURCHASEORDERID" source="PURCHASEORDERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDBY_EMPLOYEEID" source="HISTORY.CREATEDBY.EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDAT" source="HISTORY.CREATEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDBY_EMPLOYEEID" source="HISTORY.CHANGEDBY.EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDAT" source="HISTORY.CHANGEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NOTEID" source="NOTEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="PARTNER_PARTNERID" source="PARTNER.PARTNERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="GROSSAMOUNT" source="GROSSAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NETAMOUNT" source="NETAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LIFECYCLESTATUS" source="LIFECYCLESTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUS" source="APPROVALSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUS" source="CONFIRMSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="ORDERINGSTATUS" source="ORDERINGSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="INVOICINGSTATUS" source="INVOICINGSTATUS"/>
+      </input>
+    </calculationView>
+    <calculationView xsi:type="Calculation:ProjectionView" id="AP">
+      <viewAttributes>
+        <viewAttribute id="DOMAIN"/>
+        <viewAttribute id="FIXEDVALUE"/>
+        <viewAttribute id="LANGUAGE"/>
+        <viewAttribute id="DESCRIPTION"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#sap.hana.democontent.epm.data::Util.Constants">
+        <mapping xsi:type="Calculation:AttributeMapping" target="DOMAIN" source="DOMAIN"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="FIXEDVALUE" source="FIXEDVALUE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      </input>
+      <filter>(in("DOMAIN",'D_PO_AP'))</filter>
+    </calculationView>
+    <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_1" joinType="textTable" languageColumn="LANGUAGE">
+      <viewAttributes>
+        <viewAttribute id="PURCHASEORDERID"/>
+        <viewAttribute id="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CREATEDAT"/>
+        <viewAttribute id="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CHANGEDAT"/>
+        <viewAttribute id="NOTEID"/>
+        <viewAttribute id="PARTNER_PARTNERID"/>
+        <viewAttribute id="CURRENCY"/>
+        <viewAttribute id="GROSSAMOUNT"/>
+        <viewAttribute id="NETAMOUNT"/>
+        <viewAttribute id="TAXAMOUNT"/>
+        <viewAttribute id="LIFECYCLESTATUS"/>
+        <viewAttribute id="APPROVALSTATUS"/>
+        <viewAttribute id="CONFIRMSTATUS"/>
+        <viewAttribute id="ORDERINGSTATUS"/>
+        <viewAttribute id="INVOICINGSTATUS"/>
+        <viewAttribute id="APPROVALSTATUSDESC"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#PO_Base">
+        <mapping xsi:type="Calculation:AttributeMapping" target="PURCHASEORDERID" source="PURCHASEORDERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDBY_EMPLOYEEID" source="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDAT" source="HISTORY_CREATEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDBY_EMPLOYEEID" source="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDAT" source="HISTORY_CHANGEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NOTEID" source="NOTEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="PARTNER_PARTNERID" source="PARTNER_PARTNERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="GROSSAMOUNT" source="GROSSAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NETAMOUNT" source="NETAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LIFECYCLESTATUS" source="LIFECYCLESTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUS" source="APPROVALSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUS" source="CONFIRMSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="ORDERINGSTATUS" source="ORDERINGSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="INVOICINGSTATUS" source="INVOICINGSTATUS"/>
+      </input>
+      <input node="#AP">
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUSDESC" source="DESCRIPTION"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUS" source="FIXEDVALUE"/>
+      </input>
+      <joinAttribute name="APPROVALSTATUS"/>
+    </calculationView>
+    <calculationView xsi:type="Calculation:ProjectionView" id="CF">
+      <viewAttributes>
+        <viewAttribute id="DOMAIN"/>
+        <viewAttribute id="FIXEDVALUE"/>
+        <viewAttribute id="LANGUAGE"/>
+        <viewAttribute id="DESCRIPTION"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#CF$$$$sap.hana.democontent.epm.data::Util.Constants$$">
+        <mapping xsi:type="Calculation:AttributeMapping" target="DOMAIN" source="DOMAIN"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="FIXEDVALUE" source="FIXEDVALUE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      </input>
+      <filter>("DOMAIN"='D_PO_CF')</filter>
+    </calculationView>
+    <calculationView xsi:type="Calculation:JoinView" id="Join_2" cardinality="C1_1" joinType="textTable" languageColumn="LANGUAGE">
+      <viewAttributes>
+        <viewAttribute id="PURCHASEORDERID"/>
+        <viewAttribute id="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CREATEDAT"/>
+        <viewAttribute id="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CHANGEDAT"/>
+        <viewAttribute id="NOTEID"/>
+        <viewAttribute id="PARTNER_PARTNERID"/>
+        <viewAttribute id="CURRENCY"/>
+        <viewAttribute id="GROSSAMOUNT"/>
+        <viewAttribute id="NETAMOUNT"/>
+        <viewAttribute id="TAXAMOUNT"/>
+        <viewAttribute id="LIFECYCLESTATUS"/>
+        <viewAttribute id="APPROVALSTATUS"/>
+        <viewAttribute id="CONFIRMSTATUS"/>
+        <viewAttribute id="ORDERINGSTATUS"/>
+        <viewAttribute id="INVOICINGSTATUS"/>
+        <viewAttribute id="APPROVALSTATUSDESC"/>
+        <viewAttribute id="CONFIRMSTATUSDESC"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#Join_1">
+        <mapping xsi:type="Calculation:AttributeMapping" target="PURCHASEORDERID" source="PURCHASEORDERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDBY_EMPLOYEEID" source="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDAT" source="HISTORY_CREATEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDBY_EMPLOYEEID" source="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDAT" source="HISTORY_CHANGEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NOTEID" source="NOTEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="PARTNER_PARTNERID" source="PARTNER_PARTNERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="GROSSAMOUNT" source="GROSSAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NETAMOUNT" source="NETAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LIFECYCLESTATUS" source="LIFECYCLESTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUS" source="APPROVALSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUS" source="CONFIRMSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="ORDERINGSTATUS" source="ORDERINGSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="INVOICINGSTATUS" source="INVOICINGSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUSDESC" source="APPROVALSTATUSDESC"/>
+      </input>
+      <input node="#CF">
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUSDESC" source="DESCRIPTION"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUS" source="FIXEDVALUE"/>
+      </input>
+      <joinAttribute name="CONFIRMSTATUS"/>
+    </calculationView>
+    <calculationView xsi:type="Calculation:ProjectionView" id="LC">
+      <viewAttributes>
+        <viewAttribute id="DOMAIN"/>
+        <viewAttribute id="FIXEDVALUE"/>
+        <viewAttribute id="LANGUAGE"/>
+        <viewAttribute id="DESCRIPTION"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#LC$$$$sap.hana.democontent.epm.data::Util.Constants$$">
+        <mapping xsi:type="Calculation:AttributeMapping" target="DOMAIN" source="DOMAIN"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="FIXEDVALUE" source="FIXEDVALUE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      </input>
+      <filter>("DOMAIN"='D_PO_LC')</filter>
+    </calculationView>
+    <calculationView xsi:type="Calculation:JoinView" id="Join_3" cardinality="C1_1" joinType="textTable" languageColumn="LANGUAGE">
+      <viewAttributes>
+        <viewAttribute id="PURCHASEORDERID"/>
+        <viewAttribute id="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CREATEDAT"/>
+        <viewAttribute id="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CHANGEDAT"/>
+        <viewAttribute id="NOTEID"/>
+        <viewAttribute id="PARTNER_PARTNERID"/>
+        <viewAttribute id="CURRENCY"/>
+        <viewAttribute id="GROSSAMOUNT"/>
+        <viewAttribute id="NETAMOUNT"/>
+        <viewAttribute id="TAXAMOUNT"/>
+        <viewAttribute id="LIFECYCLESTATUS"/>
+        <viewAttribute id="APPROVALSTATUS"/>
+        <viewAttribute id="CONFIRMSTATUS"/>
+        <viewAttribute id="ORDERINGSTATUS"/>
+        <viewAttribute id="INVOICINGSTATUS"/>
+        <viewAttribute id="APPROVALSTATUSDESC"/>
+        <viewAttribute id="CONFIRMSTATUSDESC"/>
+        <viewAttribute id="LIFECYCLESTATUSDESC"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#Join_2">
+        <mapping xsi:type="Calculation:AttributeMapping" target="PURCHASEORDERID" source="PURCHASEORDERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDBY_EMPLOYEEID" source="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDAT" source="HISTORY_CREATEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDBY_EMPLOYEEID" source="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDAT" source="HISTORY_CHANGEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NOTEID" source="NOTEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="PARTNER_PARTNERID" source="PARTNER_PARTNERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="GROSSAMOUNT" source="GROSSAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NETAMOUNT" source="NETAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LIFECYCLESTATUS" source="LIFECYCLESTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUS" source="APPROVALSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUS" source="CONFIRMSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="ORDERINGSTATUS" source="ORDERINGSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="INVOICINGSTATUS" source="INVOICINGSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUSDESC" source="APPROVALSTATUSDESC"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUSDESC" source="CONFIRMSTATUSDESC"/>
+      </input>
+      <input node="#LC">
+        <mapping xsi:type="Calculation:AttributeMapping" target="LIFECYCLESTATUSDESC" source="DESCRIPTION"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LIFECYCLESTATUS" source="FIXEDVALUE"/>
+      </input>
+      <joinAttribute name="LIFECYCLESTATUS"/>
+    </calculationView>
+    <calculationView xsi:type="Calculation:ProjectionView" id="OR">
+      <viewAttributes>
+        <viewAttribute id="DOMAIN"/>
+        <viewAttribute id="FIXEDVALUE"/>
+        <viewAttribute id="LANGUAGE"/>
+        <viewAttribute id="DESCRIPTION"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#OR$$$$sap.hana.democontent.epm.data::Util.Constants$$">
+        <mapping xsi:type="Calculation:AttributeMapping" target="DOMAIN" source="DOMAIN"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="FIXEDVALUE" source="FIXEDVALUE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      </input>
+      <filter>("DOMAIN"='D_PO_OR')</filter>
+    </calculationView>
+    <calculationView xsi:type="Calculation:JoinView" id="Join_4" cardinality="C1_1" joinType="textTable" languageColumn="LANGUAGE">
+      <viewAttributes>
+        <viewAttribute id="PURCHASEORDERID"/>
+        <viewAttribute id="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CREATEDAT"/>
+        <viewAttribute id="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <viewAttribute id="HISTORY_CHANGEDAT"/>
+        <viewAttribute id="NOTEID"/>
+        <viewAttribute id="PARTNER_PARTNERID"/>
+        <viewAttribute id="CURRENCY"/>
+        <viewAttribute id="GROSSAMOUNT"/>
+        <viewAttribute id="NETAMOUNT"/>
+        <viewAttribute id="TAXAMOUNT"/>
+        <viewAttribute id="LIFECYCLESTATUS"/>
+        <viewAttribute id="APPROVALSTATUS"/>
+        <viewAttribute id="CONFIRMSTATUS"/>
+        <viewAttribute id="ORDERINGSTATUS"/>
+        <viewAttribute id="INVOICINGSTATUS"/>
+        <viewAttribute id="APPROVALSTATUSDESC"/>
+        <viewAttribute id="CONFIRMSTATUSDESC"/>
+        <viewAttribute id="LIFECYCLESTATUSDESC"/>
+        <viewAttribute id="ORDERINGSTATUSDESC"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#Join_3">
+        <mapping xsi:type="Calculation:AttributeMapping" target="PURCHASEORDERID" source="PURCHASEORDERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDBY_EMPLOYEEID" source="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CREATEDAT" source="HISTORY_CREATEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDBY_EMPLOYEEID" source="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="HISTORY_CHANGEDAT" source="HISTORY_CHANGEDAT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NOTEID" source="NOTEID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="PARTNER_PARTNERID" source="PARTNER_PARTNERID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="GROSSAMOUNT" source="GROSSAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="NETAMOUNT" source="NETAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LIFECYCLESTATUS" source="LIFECYCLESTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUS" source="APPROVALSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUS" source="CONFIRMSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="ORDERINGSTATUS" source="ORDERINGSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="INVOICINGSTATUS" source="INVOICINGSTATUS"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="APPROVALSTATUSDESC" source="APPROVALSTATUSDESC"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="CONFIRMSTATUSDESC" source="CONFIRMSTATUSDESC"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="LIFECYCLESTATUSDESC" source="LIFECYCLESTATUSDESC"/>
+      </input>
+      <input node="#OR">
+        <mapping xsi:type="Calculation:AttributeMapping" target="ORDERINGSTATUSDESC" source="DESCRIPTION"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="ORDERINGSTATUS" source="FIXEDVALUE"/>
+      </input>
+      <joinAttribute name="ORDERINGSTATUS"/>
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Join_4">
+    <attributes>
+      <attribute id="PURCHASEORDERID" key="true" order="1" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="PURCHASEORDERID"/>
+        <keyMapping columnObjectName="Join_4" columnName="PURCHASEORDERID"/>
+      </attribute>
+      <attribute id="HISTORY_CREATEDBY_EMPLOYEEID" order="2" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="HISTORY_CREATEDBY_EMPLOYEEID"/>
+        <keyMapping columnObjectName="Join_4" columnName="HISTORY_CREATEDBY_EMPLOYEEID"/>
+      </attribute>
+      <attribute id="HISTORY_CHANGEDBY_EMPLOYEEID" order="4" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+        <keyMapping columnObjectName="Join_4" columnName="HISTORY_CHANGEDBY_EMPLOYEEID"/>
+      </attribute>
+      <attribute id="NOTEID" order="6" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="NOTEID"/>
+        <keyMapping columnObjectName="Join_4" columnName="NOTEID"/>
+      </attribute>
+      <attribute id="PARTNER_PARTNERID" order="7" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="PARTNER_PARTNERID"/>
+        <keyMapping columnObjectName="Join_4" columnName="PARTNER_PARTNERID"/>
+      </attribute>
+      <attribute id="CURRENCY" order="8" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="CURRENCY"/>
+        <keyMapping columnObjectName="Join_4" columnName="CURRENCY"/>
+      </attribute>
+      <attribute id="LIFECYCLESTATUS" order="12" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="LIFECYCLESTATUS"/>
+        <keyMapping columnObjectName="Join_4" columnName="LIFECYCLESTATUS"/>
+      </attribute>
+      <attribute id="APPROVALSTATUS" order="13" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="APPROVALSTATUS"/>
+        <keyMapping columnObjectName="Join_4" columnName="APPROVALSTATUS"/>
+      </attribute>
+      <attribute id="CONFIRMSTATUS" order="14" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="CONFIRMSTATUS"/>
+        <keyMapping columnObjectName="Join_4" columnName="CONFIRMSTATUS"/>
+      </attribute>
+      <attribute id="ORDERINGSTATUS" order="15" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="ORDERINGSTATUS"/>
+        <keyMapping columnObjectName="Join_4" columnName="ORDERINGSTATUS"/>
+      </attribute>
+      <attribute id="INVOICINGSTATUS" order="16" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="INVOICINGSTATUS"/>
+        <keyMapping columnObjectName="Join_4" columnName="INVOICINGSTATUS"/>
+      </attribute>
+      <attribute id="APPROVALSTATUSDESC" order="17" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="DESCRIPTION"/>
+        <keyMapping columnObjectName="Join_4" columnName="APPROVALSTATUSDESC"/>
+      </attribute>
+      <attribute id="CONFIRMSTATUSDESC" order="18" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="DESCRIPTION"/>
+        <keyMapping columnObjectName="Join_4" columnName="CONFIRMSTATUSDESC"/>
+      </attribute>
+      <attribute id="LIFECYCLESTATUSDESC" order="19" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="DESCRIPTION"/>
+        <keyMapping columnObjectName="Join_4" columnName="LIFECYCLESTATUSDESC"/>
+      </attribute>
+      <attribute id="ORDERINGSTATUSDESC" order="20" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="DESCRIPTION"/>
+        <keyMapping columnObjectName="Join_4" columnName="ORDERINGSTATUSDESC"/>
+      </attribute>
+    </attributes>
+    <calculatedAttributes/>
+    <privateDataFoundation>
+      <tableProxies/>
+      <joins/>
+      <layout>
+        <shapes/>
+      </layout>
+    </privateDataFoundation>
+    <baseMeasures>
+      <measure id="HISTORY_CREATEDAT" order="3" aggregationType="min" measureType="simple">
+        <descriptions defaultDescription="HISTORY_CREATEDAT"/>
+        <measureMapping columnObjectName="Join_4" columnName="HISTORY_CREATEDAT"/>
+      </measure>
+      <measure id="HISTORY_CHANGEDAT" order="5" aggregationType="min" measureType="simple">
+        <descriptions defaultDescription="HISTORY_CHANGEDAT"/>
+        <measureMapping columnObjectName="Join_4" columnName="HISTORY_CHANGEDAT"/>
+      </measure>
+      <measure id="GROSSAMOUNT" order="9" aggregationType="sum" measureType="simple">
+        <descriptions defaultDescription="GROSSAMOUNT"/>
+        <measureMapping columnObjectName="Join_4" columnName="GROSSAMOUNT"/>
+      </measure>
+      <measure id="NETAMOUNT" order="10" aggregationType="sum" measureType="simple">
+        <descriptions defaultDescription="NETAMOUNT"/>
+        <measureMapping columnObjectName="Join_4" columnName="NETAMOUNT"/>
+      </measure>
+      <measure id="TAXAMOUNT" order="11" aggregationType="sum" measureType="simple">
+        <descriptions defaultDescription="TAXAMOUNT"/>
+        <measureMapping columnObjectName="Join_4" columnName="TAXAMOUNT"/>
+      </measure>
+    </baseMeasures>
+    <calculatedMeasures/>
+    <restrictedMeasures/>
+    <localDimensions/>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="40" y="85"/>
+        <rectangleSize/>
+      </shape>
+      <shape expanded="true" modelObjectName="PO_Base" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="0" y="500"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="AP" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="210" y="510"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="30" y="410"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="CF" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="210" y="419"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="10" y="320"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="LC" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="190" y="336"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Join_3" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="10" y="228"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="OR" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="190" y="237"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Join_4" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="100" y="156"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

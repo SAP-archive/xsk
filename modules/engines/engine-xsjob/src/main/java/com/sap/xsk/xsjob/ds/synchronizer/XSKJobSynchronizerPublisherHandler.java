@@ -12,11 +12,12 @@
 package com.sap.xsk.xsjob.ds.synchronizer;
 
 import com.sap.xsk.xsjob.ds.model.XSKJobDefinition;
-import org.eclipse.dirigible.core.publisher.api.AbstractPublisherHandler;
+import org.eclipse.dirigible.core.publisher.api.handlers.MetadataPublisherHandler;
+import org.eclipse.dirigible.core.publisher.api.handlers.MetadataPublisherHandler;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 
-public class XSKJobSynchronizerPublisherHandler extends AbstractPublisherHandler {
+public class XSKJobSynchronizerPublisherHandler extends MetadataPublisherHandler {
 
   @Override
   public void beforePublish(String location) {

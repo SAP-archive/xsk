@@ -20,6 +20,11 @@
 			<artifactId>dirigible-commons-api</artifactId>
 			<version>${dirigible.version}</version>
 		</dependency>
+    <dependency>
+      <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
+      <artifactId>scp-cf</artifactId>
+      <version>3.60.0</version>
+    </dependency>
 	</dependencies>
 
 	<properties>

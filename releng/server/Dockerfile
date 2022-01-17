@@ -51,15 +51,11 @@ RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgre
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
 #Activate DEBUG mode
-#ENV JPDA_ADDRESS=0.0.0.0:8000
-#ENV JPDA_TRANSPORT=dt_socket
+ENV JPDA_ADDRESS=0.0.0.0:8000
+ENV JPDA_TRANSPORT=dt_socket
 
 ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 
 EXPOSE 8080 8081 8000
-
-RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible && chown -R dirigible:dirigible $CATALINA_HOME
-
-USER dirigible
 
 CMD ["catalina.sh", "jpda", "run"]

@@ -12,6 +12,10 @@
 exports.http = require("xsk/http/http");
 var mail = require("mail/v4/client");
 
+exports.getDestination = function (name) {
+  return com.sap.xsk.api.CloudPlatformDestinationFacade.getDestination(name);
+}
+
 exports.Mail = function (mailObject) {
   mailObject = mailObject || {};
   this.to = mailObject.to || [];

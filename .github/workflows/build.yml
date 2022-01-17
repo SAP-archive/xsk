@@ -21,10 +21,6 @@ jobs:
         jdkFile: ${{ runner.temp }}/sapmachine-jdk-11.0.11.tar.gz
         java-version: '11.0.11'
         architecture: x64
-    - name: Maven Build
-      run: mvn clean install
-    - name: Docker Login
-      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
       with:
@@ -33,6 +29,10 @@ jobs:
       uses: docker/setup-buildx-action@v1
       with:
           install: true
+    - name: Maven Build
+      run: mvn clean install
+    - name: Docker Login
+      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Push XSK
       run: |
         cd releng/server

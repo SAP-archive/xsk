@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="APGroup" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
+<descriptions defaultDescription="APGroup"/>
+<securedModels>
+  <modelUri></modelUri>
+</securedModels>
+<whereSql>(UPPER(SESSION_USER) = 'SCPUSER')
+OR
+SESSION_USER IN
+(SELECT &quot;HANAUserName&quot; FROM &quot;_SYS_BIC&quot;.&quot;ZCORTO0030812.VIEWS/CVUSERADMIN&quot;)
+OR
+&quot;AppId&quot; IN
+(SELECT &quot;Id&quot;
+FROM &quot;TORII&quot;.&quot;ZCORTO0030812.DATA::data.App&quot;
+WHERE &quot;DomainId&quot; IN (SELECT UserToDomain.&quot;DomainId&quot; FROM &quot;TORII&quot;.&quot;ZCORTO0030812.DATA::data.UserToDomain&quot; UserToDomain
+INNER JOIN &quot;TORII&quot;.&quot;ZCORTO0030812.DATA::data.User&quot; Users ON Users.&quot;Id&quot; = UserToDomain.&quot;UserId&quot;
+WHERE UPPER(Users.&quot;HANAUserName&quot;) = UPPER(SESSION_USER)))</whereSql>
+</Privilege:analyticPrivilege>

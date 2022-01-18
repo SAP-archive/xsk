@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="APGroup" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
+<descriptions defaultDescription="APGroup"/>
+<securedModels>
+  <modelUri>/ZCORTO0030812.VIEWS/calculationviews/myview</modelUri>
+</securedModels>
+<whereSql>
+&quot;AppId&quot; IN
+(SELECT &quot;Id&quot;
+FROM &quot;TORII&quot;.&quot;ZCORTO0030812.DATA::data.App&quot;
+</whereSql>
+</Privilege:analyticPrivilege>

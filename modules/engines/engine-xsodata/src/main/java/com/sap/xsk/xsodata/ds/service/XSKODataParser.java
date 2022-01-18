@@ -34,7 +34,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,7 +64,6 @@ public class XSKODataParser implements IXSKODataParser {
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
   private static final List<String> METADATA_VIEW_TYPES = List.of(ISqlKeywords.METADATA_CALC_VIEW, ISqlKeywords.METADATA_VIEW);
-  private static final List<String> METADATA_CALC_ANALYTIC_TYPES = List.of(ISqlKeywords.METADATA_CALC_VIEW);
   private static final List<String> METADATA_SYNONYM_TYPES = List.of(ISqlKeywords.METADATA_SYNONYM);
   private static final List<String> METADATA_ENTITY_TYPES = List.of(ISqlKeywords.METADATA_TABLE, ISqlKeywords.METADATA_CALC_VIEW,
       ISqlKeywords.METADATA_VIEW);
@@ -312,7 +310,7 @@ public class XSKODataParser implements IXSKODataParser {
       if (entity.getParameterEntitySet() != null) {
         String catalogObjectName = getCorrectCatalogObjectName(entity);
 
-        if (!checkIfEntityIsOfCalcAndAnalyticViewType(catalogObjectName)) {
+        if (!checkIfEntityIsOfViewType(catalogObjectName)) {
           throw new XSKOData2TransformerException(String
               .format("Parameters are not allowed for entity %s as it is not a calculation or analytical view.",
                   entity.getRepositoryObject().getCatalogObjectName()));
@@ -351,10 +349,6 @@ public class XSKODataParser implements IXSKODataParser {
 
   private boolean checkIfEntityIsOfViewType(String artifactName) throws SQLException {
     return checkIfEntityIsFromAGivenDBType(artifactName, METADATA_VIEW_TYPES);
-  }
-
-  private boolean checkIfEntityIsOfCalcAndAnalyticViewType(String artifactName) throws SQLException {
-    return checkIfEntityIsFromAGivenDBType(artifactName, METADATA_CALC_ANALYTIC_TYPES);
   }
 
   private boolean checkIfEntityIsFromAGivenDBType(String artifactName, List<String> dbTypes) throws SQLException {

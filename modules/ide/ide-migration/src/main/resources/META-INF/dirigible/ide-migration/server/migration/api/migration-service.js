@@ -23,8 +23,6 @@ const StringReader = Java.type("java.io.StringReader");
 const StringWriter = Java.type("java.io.StringWriter");
 const ByteArrayInputStream = Java.type("java.io.ByteArrayInputStream");
 const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
-const CalculationViewModifierService = require("ide-migration/server/migration/api/calculationViewModifierService");
-const calculationViewModifier = new CalculationViewModifierService()
 const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor")
 
 
@@ -256,8 +254,10 @@ class MigrationService {
             });
         }
 
-        if (filePath.endsWith('hdbcalculationview')
-            || filePath.endsWith('calculationview')) {
+        if (filePath.endsWith('.hdbcalculationview')
+            || filePath.endsWith('.calculationview')
+            || filePath.endsWith('.analyticprivilege')
+            || filePath.endsWith('.hdbanalyticprivilege')) {
             deployables.find(x => x.projectName === projectName).artifacts.push(runLocation);
         }
 
@@ -271,7 +271,7 @@ class MigrationService {
         const resource = repositoryManager.getResource(repositoryPath);
         const xskModificator = new XSKProjectMigrationInterceptor();
 
-        if (relativePath.endsWith('hdbcalculationview') || relativePath.endsWith('calculationview') || repositoryPath.endsWith('hdbcalculationview') || repositoryPath.endsWith('calculationview')) {
+        if (relativePath.endsWith('.hdbcalculationview') || relativePath.endsWith('.calculationview') || repositoryPath.endsWith('.hdbcalculationview') || repositoryPath.endsWith('.calculationview')) {
             const modifiedContent = xskModificator.modify(resource.getContent());
             projectFile.setContent(modifiedContent);
         } else {

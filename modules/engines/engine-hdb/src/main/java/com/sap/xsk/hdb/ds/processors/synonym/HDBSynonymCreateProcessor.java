@@ -54,7 +54,8 @@ public class HDBSynonymCreateProcessor extends AbstractXSKProcessor<XSKDataStruc
           .escapeArtifactName(connection, value.getTarget().getObject(),
               value.getTarget().getSchema());
       try {
-        if (!SqlFactory.getNative(connection).exists(connection, value.getSynonymSchema(), key, DatabaseArtifactTypes.SYNONYM)) {
+        String synonymSchema = null != value.getSynonymSchema() ? value.getSynonymSchema() : connection.getMetaData().getUserName();
+        if (!SqlFactory.getNative(connection).exists(connection, synonymSchema, key, DatabaseArtifactTypes.SYNONYM)) {
           ISqlDialect dialect = SqlFactory.deriveDialect(connection);
           if (!(dialect.getClass().equals(HanaSqlDialect.class))) {
             String errorMessage = String.format("Synonyms are not supported for %s !", dialect.getDatabaseName(connection));

@@ -12,8 +12,7 @@
 const process = require('bpm/v4/process');
 const execution = process.getExecutionContext();
 const MigrationService = require('ide-migration/server/migration/api/migration-service');
-const git = require('utils/git');
-const repositoryManager = require("platform/v4/repository");
+const git = require('git/v4/client'); 
 
 const TrackService = require('ide-migration/server/migration/api/track-service');
 const trackService = new TrackService();

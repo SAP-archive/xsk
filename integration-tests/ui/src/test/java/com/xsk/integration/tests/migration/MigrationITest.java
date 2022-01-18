@@ -62,6 +62,7 @@ public class MigrationITest {
     webBrowser.waitForPageWithTitle("SAP HANA XS Classic Migration | XSK WebIDE");
     webBrowser.switchToDefaultContent();
     webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-migration/migration-launch.html']"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click='showMigrationScreen()']"));
     webBrowser.log();
   }
 

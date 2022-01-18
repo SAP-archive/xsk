@@ -14,8 +14,6 @@ package com.sap.xsk.api.destination;
 import com.google.gson.JsonObject;
 import com.sap.cloud.sdk.cloudplatform.ScpCfCloudPlatform;
 import com.sap.cloud.sdk.cloudplatform.exception.CloudPlatformException;
-import com.sap.cloud.sdk.cloudplatform.exception.MultipleServiceBindingsException;
-import com.sap.cloud.sdk.cloudplatform.exception.NoServiceBindingException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -34,7 +32,7 @@ public class CloudPlatformKyma extends ScpCfCloudPlatform {
   @Nonnull
   @Override
   public JsonObject getServiceCredentials(@Nonnull String serviceName, @Nullable String servicePlan)
-      throws CloudPlatformException, NoServiceBindingException, MultipleServiceBindingsException {
+      throws CloudPlatformException {
     String clientId = this.getEnvironmentVariable(DESTINATION_CLIENTID).get();
     String clientSecret = this.getEnvironmentVariable(DESTINATION_CLIENTSECRET).get();
     String url = this.getEnvironmentVariable(DESTINATION_URL).get();

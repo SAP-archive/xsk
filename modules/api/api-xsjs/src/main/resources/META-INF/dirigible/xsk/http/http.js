@@ -74,14 +74,6 @@ exports.readDestination = function (destinationPackage, destinationName) {
   return destination;
 };
 
-exports.doTest = function () {
-  var destination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination("test");
-  var request = new exports.Request(exports.GET, "/");
-  var response = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(request), destination);
-  console.log(response)
-  return response;
-}
-
 exports.Client = function () {
 
   var clientResponse;
@@ -116,7 +108,21 @@ exports.Client = function () {
   };
 
   function sendRequestObjToDestination(requestObj, destination) {
-    clientResponse = JSON.parse(com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination));
+    var requestHeaders = getHeadersArrFormTupel(requestObj.headers);
+    requestHeaders = removeContentLengthHeaderIfPost(requestHeaders, requestObj.method);
+    addCookieToHeadersFromTupel(requestObj.cookies, requestHeaders);
+
+    if (requestObj.contentType) {
+      requestHeaders.push( { name: "Content-Type", value: requestObj.contentType } );
+    }
+
+    if (requestObj.parameters !== undefined) {
+      requestObj.queryPath = addQueryParametersToUrl(requestObj.queryPath, requestObj.parameters);
+    }
+
+    requestObj.headers = requestHeaders;
+
+    clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination);
   }
 
   function sendRequestObjToUrl(requestObj, url, proxy) {
@@ -193,6 +199,11 @@ exports.Client = function () {
   }
 
   function getWebResponseByDirigibleResponse(dResponse) {
+    if (typeof dResponse === 'string' || dResponse instanceof String) {
+      dResponse = JSON.parse(dResponse);
+      dResponse.text = JSON.stringify(dResponse.text);
+    }
+
     var webResponse = new web.WebEntityResponse();
     webResponse.headers = new web.TupelList(dResponse.headers);
     webResponse.status = dResponse.statusCode;

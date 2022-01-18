@@ -17,10 +17,8 @@ import io.vavr.control.Try;
 import javax.annotation.Nonnull;
 
 public class CloudPlatformKymaFacade implements CloudPlatformFacade {
-  private Try<CloudPlatform> cloudPlatform;
 
-  public CloudPlatformKymaFacade() {
-  }
+  private Try<CloudPlatform> cloudPlatform;
 
   @Nonnull
   public Try<CloudPlatform> tryGetCloudPlatform() {

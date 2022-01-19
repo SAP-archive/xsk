@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
@@ -33,6 +34,7 @@ import com.sap.xsk.hdb.ds.service.XSKDataStructureTopologicalSorter;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -88,7 +90,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     return buff.toString();
   }
 
-  public XSKDataStructureModel parseDataStructureModel(String fileName, String path, String content)
+  public XSKDataStructureModel parseDataStructureModel(String fileName, String path, String content, String workspace)
       throws SynchronizationException {
     String[] splitResourceName = fileName.split("\\.");
     String resourceExtension = "." + splitResourceName[splitResourceName.length - 1];
@@ -101,7 +103,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
         return null;
       }
 
-      dataStructureModel = xskCoreParserService.parseDataStructure(resourceExtension, registryPath, contentAsString);
+      XSKDataStructureParametersModel parametersModel =
+          new XSKDataStructureParametersModel(resourceExtension, registryPath, contentAsString, workspace);
+      dataStructureModel = xskCoreParserService.parseDataStructure(parametersModel);
 
       if (dataStructureModel == null) {
         return null;
@@ -125,7 +129,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
   }
 
   public XSKDataStructureModel parseDataStructureModel(IResource resource) throws SynchronizationException {
-    return this.parseDataStructureModel(resource.getName(), getRegistryPath(resource), getContent(resource));
+    return this.parseDataStructureModel(resource.getName(), getRegistryPath(resource), getContent(resource), XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
   }
 
   @Override

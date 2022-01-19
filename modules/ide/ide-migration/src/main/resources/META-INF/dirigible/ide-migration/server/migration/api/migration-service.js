@@ -176,7 +176,7 @@ class MigrationService {
             const fileContent = String.fromCharCode.apply(String, content).replace(/\0/g,'');
 
             // Parse current artifacts and generate synonym files for it if necessary
-            const parsedData = facade.parseDataStructureModel(fileName, filePath, fileContent);
+            const parsedData = facade.parseDataStructureModel(fileName, filePath, fileContent, "/workspace/");
             const generatedSynonymFiles = this.handleParsedData(parsedData, workspaceName, projectName, fileRunLocation);
 
             for(const generatedSynonymFile of generatedSynonymFiles) {

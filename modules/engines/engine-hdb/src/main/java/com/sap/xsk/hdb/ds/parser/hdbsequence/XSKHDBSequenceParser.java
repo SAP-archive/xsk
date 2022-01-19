@@ -19,6 +19,7 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceBaseVisitor;
@@ -48,14 +49,14 @@ public class XSKHDBSequenceParser implements XSKDataStructureParser {
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceParser.class);
 
   @Override
-  public XSKDataStructureModel parse(String location, String content)
+  public XSKDataStructureModel parse(XSKDataStructureParametersModel parametersModel)
       throws XSKDataStructuresException, IOException, XSKArtifactParserException {
     Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*SEQUENCE", Pattern.CASE_INSENSITIVE);
-    Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
+    Matcher matcher = pattern.matcher(parametersModel.getContent().trim().toUpperCase(Locale.ROOT));
     boolean matchFound = matcher.find();
     return (matchFound)
-        ? parseHanaXSAdvancedContent(location, content)
-        : parseHanaXSClassicContent(location, content);
+        ? parseHanaXSAdvancedContent(parametersModel.getLocation(), parametersModel.getContent())
+        : parseHanaXSClassicContent(parametersModel.getLocation(), parametersModel.getContent());
   }
 
 

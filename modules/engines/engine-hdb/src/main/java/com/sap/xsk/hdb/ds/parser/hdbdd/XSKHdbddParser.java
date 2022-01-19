@@ -17,6 +17,7 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.artefacts.HDBDDEntitySynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
@@ -71,9 +72,9 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   private XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
-  public XSKDataStructureModel parse(String location, String content) throws XSKDataStructuresException, IOException {
-    for (String fileLocation : this.getFilesToProcess(location)) {
-      IResource loadedResource = this.repository.getResource("/registry/public/" + fileLocation);
+  public XSKDataStructureModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException, IOException {
+    for (String fileLocation : this.getFilesToProcess(parametersModel.getLocation())) {
+      IResource loadedResource = this.repository.getResource(parametersModel.getWorkspacePath() + fileLocation);
       String fileContent = new String(loadedResource.getContent());
       try {
         parseHdbdd(fileLocation, fileContent);
@@ -84,7 +85,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       }
     }
 
-    XSKDataStructureCdsModel cdsModel = populateXSKDataStructureCdsModel(location, content);
+    XSKDataStructureCdsModel cdsModel = populateXSKDataStructureCdsModel(parametersModel.getLocation(), parametersModel.getContent());
     this.symbolTable.clearSymbolsByFullName();
     this.symbolTable.clearEntityGraph();
     parsedNodes.clear();

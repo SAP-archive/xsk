@@ -50,4 +50,15 @@ ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 
 EXPOSE 8080
 
-CMD ["catalina.sh", "jpda", "run"]
+ADD entrypoint.sh /entrypoint.sh
+
+RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible
+
+# Add gosu utility for privilege drop
+RUN apt-get update && \
+    apt-get install gosu && \
+    apt-get clean
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/usr/local/tomcat/bin/catalina.sh","jpda","run"]

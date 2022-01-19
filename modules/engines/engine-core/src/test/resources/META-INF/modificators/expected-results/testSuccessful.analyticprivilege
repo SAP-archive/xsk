@@ -1,19 +1,12 @@
-<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="APGroup" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
-<descriptions defaultDescription="APGroup"/>
+<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="TestAP" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
+<descriptions defaultDescription="TestAP"/>
 <securedModels>
-  <modelUri>test.tinydb::myview1</modelUri>
-  <modelUri>myview2</modelUri>
-  <modelUri>myview3</modelUri>
+  <modelUri>test.mydb::Myview1</modelUri>
+  <modelUri>Myview2</modelUri>
+  <modelUri>Myview3</modelUri>
 </securedModels>
-<whereSql>(UPPER(SESSION_CONTEXT(APPLICATIONUSER)) = 'SCPUSER')
+<whereSql>(UPPER(SESSION_CONTEXT(APPLICATIONUSER)) = 'TESTUSER')
 OR
 SESSION_CONTEXT(APPLICATIONUSER) IN
-(SELECT "HANAUserName" FROM "CVUSERADMIN")
-OR
-"AppId" IN
-(SELECT "Id"
-FROM "TORII"."ZCORTO0030812.DATA::data.App"
-WHERE "DomainId" IN (SELECT UserToDomain."DomainId" FROM "TORII"."ZCORTO0030812.DATA::data.UserToDomain" UserToDomain
-INNER JOIN "TORII"."ZCORTO0030812.DATA::data.User" Users ON Users."Id" = UserToDomain."UserId"
-WHERE UPPER(Users."HANAUserName") = UPPER(SESSION_CONTEXT(APPLICATIONUSER))))</whereSql>
+(SELECT "Name" FROM "MYTESTVIEW")</whereSql>
 </Privilege:analyticPrivilege>

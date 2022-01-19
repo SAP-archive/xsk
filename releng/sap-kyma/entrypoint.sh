@@ -4,4 +4,4 @@ set -e
 
 chown -R dirigible:dirigible $CATALINA_HOME
 
-exec su dirigible -c "$@" 
+exec gosu dirigible $@

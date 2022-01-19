@@ -62,6 +62,11 @@ ADD entrypoint.sh /entrypoint.sh
 
 RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible
 
+# Add gosu utility for privilege drop
+RUN apt-get update && \
+    apt-get install gosu && \
+    apt-get clean
+
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD /usr/local/tomcat/bin/catalina.sh jpda run
+CMD ["/usr/local/tomcat/bin/catalina.sh","jpda","run"]

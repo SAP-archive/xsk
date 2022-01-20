@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.modificators;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.transform.TransformerException;
@@ -30,13 +31,13 @@ public class XSKProjectMigrationInterceptor {
   }
 
   @XSKToolingHook
-  public void interceptXSKProject(String workspaceName, String projectName) {
+  public void interceptXSKProject(String workspaceName, String projectName) throws IOException {
     IWorkspace workspace = WorkspaceFacade.getWorkspace(workspaceName);
     IProject project = workspace.getProject(projectName);
 
     List<IFile> allProjectFiles = collectAllProjectFiles(project);
 
-    projectFilesModificator.modifyProjectFiles(project, allProjectFiles);
+    projectFilesModificator.modifyProjectFiles(allProjectFiles);
   }
 
   private static List<IFile> collectAllProjectFiles(IProject project) {

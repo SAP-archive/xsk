@@ -1,0 +1,11 @@
+<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="TestAP" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
+<descriptions defaultDescription="TestAP"/>
+<securedModels>
+  <modelUri>Myview</modelUri>
+</securedModels>
+<whereSql>
+"TESTAPPID" IN
+(SELECT "Id"
+FROM "TESTAPP"."TESTPROJECT.DATA::Users"
+</whereSql>
+</Privilege:analyticPrivilege>

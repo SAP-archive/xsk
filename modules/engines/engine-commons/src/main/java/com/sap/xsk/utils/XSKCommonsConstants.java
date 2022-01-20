@@ -26,6 +26,7 @@ public final class XSKCommonsConstants {
     public static final String MODULE_PARSERS = "Parsers";
     public static final String MODULE_PROCESSORS = "Processors";
     public static final String SOURCE_PUBLISH_REQUEST = "Publish Request";
+    public static final String SOURCE_DELIVERY_UNIT_MIGRATION = "Delivery Unit Migration";
     public static final String PROGRAM_XSK = "XSK";
     /**
      * Problems facade error type constants
@@ -34,6 +35,7 @@ public final class XSKCommonsConstants {
     public static final String PROCESSOR_ERROR = "PROCESSOR";
     public static final String LEXER_ERROR = "LEXER";
     public static final String SCHEDULER_ERROR = "SCHEDULER";
+    public static final String MIGRATION_ERROR = "MIGRATION";
     /**
      * Problems facade error message constants
      */
@@ -57,4 +59,5 @@ public final class XSKCommonsConstants {
     public static final String HDB_ENTITY_PROCESSOR = "HDB Entity";
     public static final String XSK_ENTITY_PROCESSOR = "XSK Entity";
     public static final String HDI_PROCESSOR = "HDI";
+    public static final String HDB_ANALYTIC_PRIVILEGE = "HDB Analytic Privilege";
 }

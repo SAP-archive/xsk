@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -72,7 +73,7 @@ class WebBrowser {
     browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
     jsExecutor = (JavascriptExecutor) (browser);
-    browserWait = new WebDriverWait(browser, 60);
+    browserWait = new WebDriverWait(browser, 120);
     browserActions = new Actions(browser);
   }
 
@@ -95,13 +96,18 @@ class WebBrowser {
         value, field.getAttribute("value"));
   }
 
-  void selectAndAssertDropdown(String listName, String selectionValue) {
+  void selectAndAssertDropdown(String listName, Predicate<String> dropDownItemMatcher) {
     var dropdownList = browserWait.until(
         ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@ng-repeat=\"option in " + listName + "\"]")));
     WebElement dropdownButton = dropdownList.get(0).findElement(By.xpath("./../../button"));
     browserWait.until(ExpectedConditions.elementToBeClickable(dropdownButton)).click();
-    var selection = dropdownList.stream()
-        .filter((WebElement it) -> it.getAttribute("innerHTML").contains(selectionValue)).collect(Collectors.toList());
+    var selection = dropdownList
+        .stream()
+        .filter((WebElement it) -> {
+          var innerHtml = it.getAttribute("innerHTML").trim();
+          return dropDownItemMatcher.test(innerHtml);
+        })
+        .collect(Collectors.toList());
     browserWait.until(ExpectedConditions.elementToBeClickable(selection.get(0)));
     assertEquals("Only one dropdown item should be selected.", 1, selection.size());
     selection.get(0).click();

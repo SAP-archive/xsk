@@ -11,6 +11,7 @@
  */
 package com.xsk.integration.tests.migration;
 
+import com.google.common.base.Strings;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.After;
@@ -26,14 +27,22 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RunWith(JUnitParamsRunner.class)
 public class MigrationITest {
 
+  private ExpectedContentProvider expectedContentProvider = ExpectedContentProvider.getInstance();
   private WebBrowser webBrowser;
   private MigrationCredentials credentials;
   private List<ExpectedContent> expectedContentList;
@@ -54,7 +63,7 @@ public class MigrationITest {
   private void setup(String param) {
     webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
     credentials = new MigrationCredentials(param.contains("Hana2"));
-    expectedContentList = ExpectedContentProvider.getExpectedContentList();
+    expectedContentList = expectedContentProvider.getExpectedContentList();
   }
 
   private void navigateToMigrationPerspective() {
@@ -68,7 +77,7 @@ public class MigrationITest {
 
   private void enterNeoDBTunnelCredentials() {
     webBrowser.enterAndAssertField(By.id("subaccount"), credentials.getSubaccount());
-    webBrowser.selectAndAssertDropdown("regionList", credentials.getRegion());
+    webBrowser.selectAndAssertDropdown("regionList", (item) -> item.contains(credentials.getRegion()));
     webBrowser.enterAndAssertField(By.id("neo-username"), credentials.getUsername());
     webBrowser.enterAndAssertField(By.id("neo-password"), credentials.getPassword());
     webBrowser.log();
@@ -76,7 +85,7 @@ public class MigrationITest {
   }
 
   private void enterHanaCredentials() {
-    webBrowser.selectAndAssertDropdown("databasesList", credentials.getSchema());
+    webBrowser.selectAndAssertDropdown("databasesList", (item) -> item.equals(credentials.getSchema()));
     webBrowser.enterAndAssertField(By.id("username"), credentials.getHanaUsername());
     webBrowser.enterAndAssertField(By.id("password"), credentials.getHanaPassword());
     webBrowser.log();
@@ -84,8 +93,8 @@ public class MigrationITest {
   }
 
   private void selectDeliveryUnits() {
-    webBrowser.selectAndAssertDropdown("workspacesList", "workspace");
-    webBrowser.selectAndAssertDropdown("deliveryUnitList", ExpectedContentProvider.getExpectedDeliveryUnitName());
+    webBrowser.selectAndAssertDropdown("workspacesList", (item) -> item.equals(expectedContentProvider.getExpectedWorkspaceName()));
+    webBrowser.selectAndAssertDropdown("deliveryUnitList", (item) -> item.equals(expectedContentProvider.getExpectedDeliveryUnitName()));
     webBrowser.clickItem(By.xpath("//*[@ng-disabled=\"duDropdownDisabled\"]"));
     webBrowser.log();
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"finishClicked()\"]"));
@@ -107,7 +116,7 @@ public class MigrationITest {
     webBrowser.executeJavascript("$(\".jstree\").jstree(\"open_all\")");
 
     // Double-click all jstree anchors by their file name (text content).
-    for(var expectedContent : expectedContentList) {
+    for (var expectedContent : expectedContentList) {
       var fileName = Paths.get(expectedContent.getFilePath()).getFileName();
       By anchorXpath = By.xpath("//*[text()='" + fileName + "']");
       webBrowser.doubleClickVisibleElementBy(anchorXpath);
@@ -122,20 +131,25 @@ public class MigrationITest {
     var workspaceUrl = "http://"
         + DirigibleConnectionProperties.HOST
         + ":" + DirigibleConnectionProperties.PORT
-        + "/services/v4/ide/workspaces/workspace/";
+        + "/services/v4/ide/workspaces/"
+        + expectedContentProvider.getExpectedWorkspaceName()
+        + "/";
 
-    var projectUrl =  workspaceUrl + ExpectedContentProvider.getExpectedProjectName();
+    var projectUrl = workspaceUrl + expectedContentProvider.getExpectedProjectName();
     var iframes = webBrowser.findElementsBy(By.tagName("iframe"));
     int assertedFilesCount = 0;
 
-    for(var expectedContent : expectedContentList) {
+    for (var expectedContent : expectedContentList) {
       var expectedFilePath = expectedContent.getFilePath();
       var expectedFileContent = expectedContent.getContent();
       var expectedFileName = Paths.get(expectedFilePath).getFileName().toString();
 
       for (var iframe : iframes) {
-        if (iframe.getAttribute("src").contains(expectedFilePath)) {
-          if(isImageFile(expectedFileName)) {
+        var srcAttribute = iframe.getAttribute("src");
+        var parsedSrc = splitQuery(new URL(srcAttribute));
+        var fileQueryParameter = parsedSrc.get("file");
+        if (collectionHasElementEndingWith(fileQueryParameter, expectedFilePath)) {
+          if (isImageFile(expectedFileName)) {
             var imageUrl = projectUrl + expectedFilePath;
             assertImageFileEquals(imageUrl, expectedFileContent);
           } else {
@@ -147,6 +161,26 @@ public class MigrationITest {
     }
 
     assertEquals(assertedFilesCount, expectedContentList.size());
+  }
+
+  private Map<String, List<String>> splitQuery(URL url) {
+    if (Strings.isNullOrEmpty(url.getQuery())) {
+      return Collections.emptyMap();
+    }
+    return Arrays.stream(url.getQuery().split("&"))
+        .map(this::splitQueryParameter)
+        .collect(Collectors
+            .groupingBy(SimpleImmutableEntry::getKey, LinkedHashMap::new, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+  }
+
+  private SimpleImmutableEntry<String, String> splitQueryParameter(String it) {
+    final int idx = it.indexOf("=");
+    final String key = idx > 0 ? it.substring(0, idx) : it;
+    final String value = idx > 0 && it.length() > idx + 1 ? it.substring(idx + 1) : null;
+    return new SimpleImmutableEntry<>(
+        URLDecoder.decode(key, StandardCharsets.UTF_8),
+        URLDecoder.decode(value, StandardCharsets.UTF_8)
+    );
   }
 
   private boolean isImageFile(String fileName) {
@@ -189,6 +223,14 @@ public class MigrationITest {
     webBrowser.switchToDefaultContent();
 
     return migratedText;
+  }
+
+  private static <T> boolean collectionHasElementEndingWith(List<String> list, String endingWith) {
+    if (list == null || list.isEmpty()) {
+      return false;
+    }
+
+    return list.stream().anyMatch(x -> x.endsWith(endingWith));
   }
 
   @After

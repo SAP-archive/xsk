@@ -25,47 +25,44 @@ class ExpectedContentProvider {
   private static final String deliveryUnitPath = "/migration";
   private static final String getDeliveryUnitName = "MIGR_TOOLS";
   private static final String projectName = "xsk-test-app";
+  private static final String workspaceName = "workspace";
   private static final String contentPath = deliveryUnitPath + "/" + getDeliveryUnitName + "/" + projectName;
 
   private final List<ExpectedContent> expectedContentList;
 
+  private static ExpectedContentProvider instance;
+
   private ExpectedContentProvider() {
-    expectedContentList = new ArrayList<>();
+    expectedContentList = getValidationProjectFiles();
+  }
 
+  static ExpectedContentProvider getInstance() {
+    if (instance == null) {
+      instance = new ExpectedContentProvider();
+    }
+    return instance;
+  }
+
+  private ArrayList<ExpectedContent> getValidationProjectFiles() {
+    var expectedContentList = new ArrayList<ExpectedContent>();
     try {
-      loadValidationProjectFiles();
+      for (var fileName : getResourceFilePaths(contentPath)) {
+        var trimmedFileName = fileName.replace(contentPath, "");
+        ExpectedContent file = new ExpectedContent(trimmedFileName, getResourceFileContent(fileName));
+        expectedContentList.add(file);
+      }
     } catch (IOException e) {
-      throw new ExceptionInInitializerError(e);
+      throw new RuntimeException("Could not load expected files", e);
     }
-  }
-
-  static List<ExpectedContent> getExpectedContentList() {
-    return contentProvider.expectedContentList;
-  }
-
-  static String getExpectedDeliveryUnitName() {
-    return getDeliveryUnitName;
-  }
-
-  static String getExpectedProjectName() {
-    return projectName;
-  }
-
-  private void loadValidationProjectFiles() throws IOException {
-    var files = getResourceFilePaths(contentPath);
-    for (var fileName : files) {
-      var trimmedFileName = fileName.replace(contentPath, "");
-      ExpectedContent file = new ExpectedContent(trimmedFileName, getResourceFileContent(fileName));
-      expectedContentList.add(file);
-    }
+    return expectedContentList;
   }
 
   private List<String> getResourceFilePaths(String path) throws IOException {
     List<String> filenames = new ArrayList<>();
 
     try (
-      InputStream in = getResourceAsStream(path);
-      BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+        InputStream in = getResourceAsStream(path);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
       String resource;
 
       while ((resource = reader.readLine()) != null) {
@@ -83,9 +80,9 @@ class ExpectedContentProvider {
   }
 
   private byte[] getResourceFileContent(String path) throws IOException {
-      InputStream in = getResourceAsStream(path);
-      BufferedInputStream bis = new BufferedInputStream(in);
-      return bis.readAllBytes();
+    InputStream in = getResourceAsStream(path);
+    BufferedInputStream bis = new BufferedInputStream(in);
+    return bis.readAllBytes();
   }
 
   private InputStream getResourceAsStream(String resource) {
@@ -95,5 +92,21 @@ class ExpectedContentProvider {
 
   private ClassLoader getContextClassLoader() {
     return Thread.currentThread().getContextClassLoader();
+  }
+
+  List<ExpectedContent> getExpectedContentList() {
+    return contentProvider.expectedContentList;
+  }
+
+  String getExpectedDeliveryUnitName() {
+    return getDeliveryUnitName;
+  }
+
+  String getExpectedProjectName() {
+    return projectName;
+  }
+
+  String getExpectedWorkspaceName() {
+    return workspaceName;
   }
 }

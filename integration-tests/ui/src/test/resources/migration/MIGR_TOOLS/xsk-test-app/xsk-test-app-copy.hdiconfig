@@ -1,0 +1,16 @@
+{
+    "file_suffixes": {
+        "hdbcalculationview": {
+            "plugin_name": "com.sap.hana.di.calculationview"
+        },
+        "calculationview": {
+            "plugin_name": "com.sap.hana.di.calculationview"
+        },
+        "hdbanalyticprivilege": {
+            "plugin_name": "com.sap.hana.di.analyticprivilege"
+        },
+        "analyticprivilege": {
+            "plugin_name": "com.sap.hana.di.analyticprivilege"
+        }
+    }
+}

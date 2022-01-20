@@ -101,7 +101,7 @@ class MigrationService {
         const defaultHanaUser = this.getDefaultHanaUser();
 
         const hdi = {
-            configuration: `/${projectName}/${hdiConfigPath}`,
+            configuration: `/${projectName}/${hdiConfigPath.relativePath}`,
             users: [defaultHanaUser],
             group: projectName,
             container: projectName,

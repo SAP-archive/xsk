@@ -4,6 +4,7 @@ site_url: https://www.xsk.io
 nav:
     - Welcome: 'index.md'
     - Artefacts: 
+      - artefacts/index.md
       - hdbtable: 'artefacts/hdbtable.md'
       - hdbview: 'artefacts/hdbview.md'
       - hdbtablefunction: 'artefacts/hdbtablefunction.md'

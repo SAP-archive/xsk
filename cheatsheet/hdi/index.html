@@ -1950,7 +1950,7 @@
 <p>SAP HANA Deployment Infrastructure (HDI) is a service that enables you to deploy database development artifacts to so-called containers. HDI is supported in XSK via the <code>*.hdi</code> and <code>*.hdiconfig</code> files.</p>
 <div class="admonition note">
 <p class="admonition-title">SAP Help Portal</p>
-<p>For more information, see <a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/4077972509f5437c85d6a03e01509417.html">The SAP HANA Deployment Infrastructure Reference</a>.</p>
+<p>For more information, see <a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/4077972509f5437c85d6a03e01509417.html">SAP HANA Deployment Infrastructure Reference (SAP HANA Cloud)</a>.</p>
 </div>
 <h2 id="overview">Overview</h2>
 <p>To support the deployment of database development artifacts via HDI, create <code>*.hdi</code> and <code>*.hdiconfig</code> files in your project:</p>
@@ -1990,78 +1990,78 @@
 </div>
 <h2 id="hdi-plugins">HDI Plugins</h2>
 <p>List of HDI supported database development artifacts:</p>
-<h4 id="application-time-period-table-plug-in-hdbapplicationtime"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/73c7b80318ba4405a8769e6ceb41ec64.html">Application Time-Period Table Plug-in (.hdbapplicationtime)</a></h4>
+<h4 id="application-time-period-table-plug-in-hdbapplicationtime"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/73c7b80318ba4405a8769e6ceb41ec64.html">Application Time-Period Table Plug-in (.hdbapplicationtime)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbapplicationtime&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.applicationtime&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="analytic-privileges-hdbanalyticprivilege"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/2d3056363053436898fcf5a3141b482f.html">Analytic Privileges (.hdbanalyticprivilege)</a></h4>
+<h4 id="analytic-privileges-hdbanalyticprivilege"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/2d3056363053436898fcf5a3141b482f.html">Analytic Privileges (.hdbanalyticprivilege)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbanalyticprivilege&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.analyticprivilege&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="calculation-views-hdbcalculationview"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/3db2a35e714e4f6e9711fb62997d0c5c.html">Calculation Views (.hdbcalculationview)</a></h4>
+<h4 id="calculation-views-hdbcalculationview"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/3db2a35e714e4f6e9711fb62997d0c5c.html">Calculation Views (.hdbcalculationview)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbcalculationview&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.calculationview&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="constraints-hdbconstraint"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/bda54706fbda4910908871743b675ad1.html">Constraints (.hdbconstraint)</a></h4>
+<h4 id="constraints-hdbconstraint"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/bda54706fbda4910908871743b675ad1.html">Constraints (.hdbconstraint)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbconstraint&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.constraint&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="copy-only-txt"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/64459f1b9aa24163bbac5d9229e05aac.html">Copy Only (.txt)</a></h4>
+<h4 id="copy-only-txt"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/64459f1b9aa24163bbac5d9229e05aac.html">Copy Only (.txt)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;txt&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.copyonly&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="document-store-collections-hdbcollection"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/fe16b635277c4aea825c72973f159359.html">Document Store Collections (.hdbcollection)</a></h4>
+<h4 id="document-store-collections-hdbcollection"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/fe16b635277c4aea825c72973f159359.html">Document Store Collections (.hdbcollection)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbcollection&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.collection&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h4 id="document-store-collection-index-hdbcollectionindex"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/b4b1b5c8714a4af7a53e906a85c633f1.html">Document Store Collection Index (.hdbcollectionindex)</a></h4>
-<h4 id="flowgraph-hdbflowgraph"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/6d4fc4a30e1d428bbb2b3dc5a73ab786.html">Flowgraph (.hdbflowgraph)</a></h4>
+<h4 id="flowgraph-hdbflowgraph"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/6d4fc4a30e1d428bbb2b3dc5a73ab786.html">Flowgraph (.hdbflowgraph)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbflowgraph&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="nt">&quot;plugin_name&quot;</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.flowgraph&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="functions-hdbfunction"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/cbf136986c98430ea50ddf4b95bc1efe.html">Functions (.hdbfunction)</a></h4>
+<h4 id="functions-hdbfunction"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/cbf136986c98430ea50ddf4b95bc1efe.html">Functions (.hdbfunction)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbfunction&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.function&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="graph-workspaces-hdbgraphworkspace"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/ff893731c8514b098223e4a47a6d5f39.html">Graph Workspaces (.hdbgraphworkspace)</a></h4>
+<h4 id="graph-workspaces-hdbgraphworkspace"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/ff893731c8514b098223e4a47a6d5f39.html">Graph Workspaces (.hdbgraphworkspace)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbgraphworkspace&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.graphworkspace&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="indexes-hdbindex"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/58fdf2d2ffae44b6a3dd0e9a3f5ae8c5.html">Indexes (.hdbindex)</a></h4>
+<h4 id="indexes-hdbindex"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/58fdf2d2ffae44b6a3dd0e9a3f5ae8c5.html">Indexes (.hdbindex)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbindex&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.index&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="libraries-hdblibrary"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/7475cf480ad8498c9991c8a9392d6fc7.html">Libraries (.hdblibrary)</a></h4>
+<h4 id="libraries-hdblibrary"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/7475cf480ad8498c9991c8a9392d6fc7.html">Libraries (.hdblibrary)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdblibrary&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.library&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="logical-schema-definition-hdblogicalschema"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/fa9cda8b540a486dacd12e06f9a60330.html">Logical Schema Definition (.hdblogicalschema)</a></h4>
+<h4 id="logical-schema-definition-hdblogicalschema"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/fa9cda8b540a486dacd12e06f9a60330.html">Logical Schema Definition (.hdblogicalschema)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdblogicalschema&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.logicalschema&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="migration-tables-hdbmigrationtable"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/52d1f5acfa754a7887e21226641eb261.html">Migration Tables (.hdbmigrationtable)</a></h4>
+<h4 id="migration-tables-hdbmigrationtable"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/52d1f5acfa754a7887e21226641eb261.html">Migration Tables (.hdbmigrationtable)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbmigrationtable&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.table.migration&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="procedures-hdbprocedure"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/93de88bf2c8242179647e40f958c24e5.html">Procedures (.hdbprocedure)</a></h4>
+<h4 id="procedures-hdbprocedure"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/93de88bf2c8242179647e40f958c24e5.html">Procedures (.hdbprocedure)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbprocedure&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.procedure&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="projection-views-hdbprojectionview"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/d8a3392c1287420ca82ac3090cd5049b.html">Projection Views (.hdbprojectionview)</a></h4>
+<h4 id="projection-views-hdbprojectionview"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/d8a3392c1287420ca82ac3090cd5049b.html">Projection Views (.hdbprojectionview)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbprojectionview&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.projectionview&quot;</span><span class="w"></span>
 <span class="p">},</span><span class="w"> </span>
@@ -2069,22 +2069,22 @@
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.projectionview.config&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="public-synonym-hdbpublicsynonym"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/d131415cbf7349158d2654e0fcf73487.html">Public Synonym (.hdbpublicsynonym)</a></h4>
+<h4 id="public-synonym-hdbpublicsynonym"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/d131415cbf7349158d2654e0fcf73487.html">Public Synonym (.hdbpublicsynonym)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbpublicsynonym&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.publicsynonym&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="replication-task-hdbreptask"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/0194ba9e421148dd9712400e449fc61f.html">Replication Task (.hdbreptask)</a></h4>
+<h4 id="replication-task-hdbreptask"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/0194ba9e421148dd9712400e449fc61f.html">Replication Task (.hdbreptask)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbreptask&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.reptask&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="result-cache-hdbresultcache"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/a3e2b70fc35845e58aff72f992bafca7.html">Result Cache (.hdbresultcache)</a></h4>
+<h4 id="result-cache-hdbresultcache"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/a3e2b70fc35845e58aff72f992bafca7.html">Result Cache (.hdbresultcache)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbresultcache&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.resultcache&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="roles-hdbrole"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/625d7733c30b4666b4a522d7fa68a550.html">Roles (.hdbrole)</a></h4>
+<h4 id="roles-hdbrole"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/625d7733c30b4666b4a522d7fa68a550.html">Roles (.hdbrole)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbrole&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.role&quot;</span><span class="w"></span>
 <span class="p">},</span><span class="w"> </span>
@@ -2092,32 +2092,32 @@
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.role.config&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="search-rule-set-hdbsearchruleset"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/e9d52ba816b04577a450f87032d7dbda.html">Search Rule Set (.hdbsearchruleset)</a></h4>
+<h4 id="search-rule-set-hdbsearchruleset"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/e9d52ba816b04577a450f87032d7dbda.html">Search Rule Set (.hdbsearchruleset)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbsearchruleset&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.searchruleset&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="sequence-hdbsequence"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/b295c2e0a5d547f8b1717ad7dd52cc90.html">Sequence (.hdbsequence)</a></h4>
+<h4 id="sequence-hdbsequence"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/b295c2e0a5d547f8b1717ad7dd52cc90.html">Sequence (.hdbsequence)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbsequence&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.sequence&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="sql-views-hdbview"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/2bf9a6f2db824fbd84315196a9c318d5.html">SQL Views (.hdbview)</a></h4>
+<h4 id="sql-views-hdbview"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/2bf9a6f2db824fbd84315196a9c318d5.html">SQL Views (.hdbview)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbview&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.view&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="statistics-hdbstatistics"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/435423d28f2d40f5979ec17b6141d3f1.html">Statistics (.hdbstatistics)</a></h4>
+<h4 id="statistics-hdbstatistics"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/435423d28f2d40f5979ec17b6141d3f1.html">Statistics (.hdbstatistics)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbstatistics&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.statistics&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="structured-privilege-hdbstructuredprivilege"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/c3827df3a9dc4c45b5b4e2f7b1070b08.html">Structured Privilege (.hdbstructuredprivilege)</a></h4>
+<h4 id="structured-privilege-hdbstructuredprivilege"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/c3827df3a9dc4c45b5b4e2f7b1070b08.html">Structured Privilege (.hdbstructuredprivilege)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbstructuredprivilege&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.structuredprivilege&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="synonyms-hdbsynonym-and-hdbsynonymconfig"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/aad1653a9b95422089fec53f48c2899e.html">Synonyms (.hdbsynonym and .hdbsynonymconfig)</a></h4>
+<h4 id="synonyms-hdbsynonym-and-hdbsynonymconfig"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/aad1653a9b95422089fec53f48c2899e.html">Synonyms (.hdbsynonym and .hdbsynonymconfig)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbsynonym&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.synonym&quot;</span><span class="w"></span>
 <span class="p">},</span><span class="w"> </span>
@@ -2125,12 +2125,12 @@
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.synonym.config&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="system-versioning-table-hdbsystemversioning"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/5794b348711f4963999266a2d2e6f8de.html">System Versioning Table (.hdbsystemversioning)</a></h4>
+<h4 id="system-versioning-table-hdbsystemversioning"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/5794b348711f4963999266a2d2e6f8de.html">System Versioning Table (.hdbsystemversioning)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbsystemversioning&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.systemversioning&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="tables-hdbtable-and-hdbdropcreatetable"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/453d48e28f6747799546236b4b432e58.html">Tables (.hdbtable and .hdbdropcreatetable)</a></h4>
+<h4 id="tables-hdbtable-and-hdbdropcreatetable"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/453d48e28f6747799546236b4b432e58.html">Tables (.hdbtable and .hdbdropcreatetable)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbtable&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">    </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.table&quot;</span><span class="w"></span>
 <span class="p">},</span><span class="w"> </span>
@@ -2138,7 +2138,7 @@
 <span class="w">    </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.dropcreatetable&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="table-data-hdbtabledata"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/35c4dd829d2046f29fc741505302f74d.html">Table Data (.hdbtabledata)</a></h4>
+<h4 id="table-data-hdbtabledata"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/35c4dd829d2046f29fc741505302f74d.html">Table Data (.hdbtabledata)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbtabledata&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.tabledata.properties&quot;</span><span class="w"></span>
 <span class="p">},</span><span class="w"> </span>
@@ -2146,7 +2146,7 @@
 <span class="w">  </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.tabledata.properties&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="table-data-properties-properties"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/f4da2181909f48a6a36904b7f5599780.html">Table Data Properties (.properties)</a></h4>
+<h4 id="table-data-properties-properties"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/f4da2181909f48a6a36904b7f5599780.html">Table Data Properties (.properties)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;properties&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.tabledata.properties&quot;</span><span class="w"></span>
 <span class="p">},</span><span class="w"> </span>
@@ -2154,17 +2154,17 @@
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.tabledata.properties&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="table-type-hdbtabletype"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/83275bd31c1e4acba9285813e64ee12f.html">Table Type (.hdbtabletype)</a></h4>
+<h4 id="table-type-hdbtabletype"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/83275bd31c1e4acba9285813e64ee12f.html">Table Type (.hdbtabletype)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbtabletype&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.tabletype&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="triggers-hdbtrigger"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/bbd06f5b88eb4d70a03a25a5c4274ec5.html">Triggers (.hdbtrigger)</a></h4>
+<h4 id="triggers-hdbtrigger"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/bbd06f5b88eb4d70a03a25a5c4274ec5.html">Triggers (.hdbtrigger)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbtrigger&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.trigger&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="virtual-functions-hdbvirtualfunction"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/73669ebdcef44bd9ab0eb57de6a8cf2a.html">Virtual Functions (.hdbvirtualfunction)</a></h4>
+<h4 id="virtual-functions-hdbvirtualfunction"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/73669ebdcef44bd9ab0eb57de6a8cf2a.html">Virtual Functions (.hdbvirtualfunction)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbvirtualfunction&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.virtualfunction&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
@@ -2172,7 +2172,7 @@
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.virtualfunction.config&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="virtual-procedures-hdbvirtualprocedure"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/6c8e6c1b62d54197bdaa786910295665.html">Virtual Procedures (.hdbvirtualprocedure)</a></h4>
+<h4 id="virtual-procedures-hdbvirtualprocedure"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/6c8e6c1b62d54197bdaa786910295665.html">Virtual Procedures (.hdbvirtualprocedure)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbvirtualprocedure&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.virtualprocedure&quot;</span><span class="w"></span>
 <span class="p">},</span><span class="w"> </span>
@@ -2180,7 +2180,7 @@
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.virtualprocedure.config&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="virtual-tables-hdbvirtualtable"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/08191144d5804c86af9395b110ac37be.html">Virtual Tables (.hdbvirtualtable)</a></h4>
+<h4 id="virtual-tables-hdbvirtualtable"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/08191144d5804c86af9395b110ac37be.html">Virtual Tables (.hdbvirtualtable)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbvirtualtable&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.virtualtable&quot;</span><span class="w"></span>
 <span class="p">},</span><span class="w"> </span>
@@ -2188,7 +2188,7 @@
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.virtualtable.config&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="virtual-packages-hdbvirtualpackage"><a href="https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/28fe43b7c5cc4374b85c67cadc8e9b3f.html">Virtual Packages (.hdbvirtualpackage)</a></h4>
+<h4 id="virtual-packages-hdbvirtualpackage"><a href="https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/28fe43b7c5cc4374b85c67cadc8e9b3f.html">Virtual Packages (.hdbvirtualpackage)</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;hdbvirtualpackagehadoop&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;plugin_name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.sap.hana.di.virtualpackage.hadoop&quot;</span><span class="w"> </span>
 <span class="p">},</span><span class="w"></span>

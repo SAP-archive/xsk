@@ -57,14 +57,6 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [AFL Language Procedures (.hdbafllangprocedure)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/7f630904dfe045beb114a6c25896649f.html)
-
-```json
-"hdbafllangprocedure" : {
-   "plugin_name" : "com.sap.hana.di.afllangprocedure"
-}
-```
-
 #### [Analytic Privileges (.hdbanalyticprivilege)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/2d3056363053436898fcf5a3141b482f.html)
 
 ```json
@@ -97,14 +89,6 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Core Data Services (.hdbcds)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/36257a5f611540f9b2f8e13110ddf97a.html)
-
-```json
-"hdbcds" : {
-   "plugin_name" : "com.sap.hana.di.cds"
-}
-```
-
 #### [Document Store Collections (.hdbcollection)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/fe16b635277c4aea825c72973f159359.html)
 
 ```json
@@ -113,27 +97,13 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Enterprise Search Configurations (.hdbeshconfig)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/eb019bb757404a0591182ac7acf05400.html)
-
-```json
-"hdbeshconfig": {
-   "plugin_name": "com.sap.hana.di.eshconfig"
-}
-```
+#### [Document Store Collection Index (.hdbcollectionindex)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/b4b1b5c8714a4af7a53e906a85c633f1.html)
 
 #### [Flowgraph (.hdbflowgraph)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/6d4fc4a30e1d428bbb2b3dc5a73ab786.html)
 
 ```json
 "hdbflowgraph" : {
   "plugin_name"   : "com.sap.hana.di.flowgraph"
-}
-```
-
-#### [Full-Text Indexes (.hdbfulltextindex)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/c4c24a7b9d174cec8012d832e4c060a6.html)
-    
-```json
-"hdbfulltextindex" : {
-   "plugin_name" : "com.sap.hana.di.fulltextindex"
 }
 ```
 
@@ -290,14 +260,6 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [_SYS_BIC Synonym (.hdbsysbicsynonym)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/0bf88516d12b40ee9605b9f75fae568e.html)
-
-```json
-"hdbsysbicsynonym": { 
-   "plugin_name" : "com.sap.hana.di.sysbicsynonym"
-}
-```
-
 #### [System Versioning Table (.hdbsystemversioning)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/5794b348711f4963999266a2d2e6f8de.html)
 
 ```json
@@ -344,54 +306,6 @@ List of HDI supported database development artifacts:
 ```json
 "hdbtabletype" : {
    "plugin_name" : "com.sap.hana.di.tabletype"
-}
-```
-
-#### [Text Analysis Configuration (.hdbtextconfig)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/1c566b54558f497f8f02ecffc96a074b.html)
-
-```json
-"hdbtextconfig" : {
-   "plugin_name" : "com.sap.hana.di.textconfig" 
-}
-```
-
-#### [Text Analysis Dictionaries (.hdbtextdict)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/ceb52314393a446cab213789e9638b9a.html)
-
-```json
-"hdbtextdict" : {
-   "plugin_name" : "com.sap.hana.di.textdictionary"
-}
-```
-
-#### [Text Analysis Extraction Rules (.hdbtextrule)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/6e69b4ac56214191a93e16e8fb19c296.html)
-
-```json
-"hdbtextrule" : {
-   "plugin_name" : "com.sap.hana.di.textrule"
-}
-```
-
-#### [Text Analysis Extraction Rules Includes (.hdbtextinclude)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/d33d03e8e7254c74b3c4fb5029afcb7e.html)
-
-```json
-"hdbtextinclude" : {
-   "plugin_name" : "com.sap.hana.di.textrule.include"
-}
-```
-
-#### [Text Analysis Extraction Rules Lexicon (.hdbtextlexicon)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/71f4a8deb2e94f7985770d9d72b10116.html)
-
-```json
-"hdbtextlexicon" : {
-   "plugin_name" : "com.sap.hana.di.textrule.lexicon"
-}
-```
-
-#### [Text Mining Configurations (.hdbtextminingconfig)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/00ef3767a5cd474bb71ce955bf6c539a.html)
-
-```json
-"hdbtextminingconfig" : {
-   "plugin_name" : "com.sap.hana.di.textminingconfig"
 }
 ```
 

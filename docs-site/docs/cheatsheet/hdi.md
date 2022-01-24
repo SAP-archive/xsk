@@ -5,7 +5,7 @@ SAP HANA Deployment Infrastructure (HDI) is a service that enables you to deploy
 
 !!! note "SAP Help Portal"
 
-    For more information, see [The SAP HANA Deployment Infrastructure Reference](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/4077972509f5437c85d6a03e01509417.html).
+    For more information, see [SAP HANA Deployment Infrastructure Reference (SAP HANA Cloud)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/4077972509f5437c85d6a03e01509417.html).
 
 ## Overview
 
@@ -49,7 +49,7 @@ To support the deployment of database development artifacts via HDI, create `*.h
 
 List of HDI supported database development artifacts:
 
-#### [Application Time-Period Table Plug-in (.hdbapplicationtime)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/73c7b80318ba4405a8769e6ceb41ec64.html)
+#### [Application Time-Period Table Plug-in (.hdbapplicationtime)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/73c7b80318ba4405a8769e6ceb41ec64.html)
     
 ```json
 "hdbapplicationtime" : {
@@ -57,7 +57,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Analytic Privileges (.hdbanalyticprivilege)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/2d3056363053436898fcf5a3141b482f.html)
+#### [Analytic Privileges (.hdbanalyticprivilege)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/2d3056363053436898fcf5a3141b482f.html)
 
 ```json
 "hdbanalyticprivilege" : {
@@ -65,7 +65,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Calculation Views (.hdbcalculationview)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/3db2a35e714e4f6e9711fb62997d0c5c.html)
+#### [Calculation Views (.hdbcalculationview)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/3db2a35e714e4f6e9711fb62997d0c5c.html)
 
 ```json
 "hdbcalculationview" : {
@@ -73,7 +73,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Constraints (.hdbconstraint)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/bda54706fbda4910908871743b675ad1.html)
+#### [Constraints (.hdbconstraint)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/bda54706fbda4910908871743b675ad1.html)
 
 ```json
 "hdbconstraint" : {
@@ -81,7 +81,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Copy Only (.txt)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/64459f1b9aa24163bbac5d9229e05aac.html)
+#### [Copy Only (.txt)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/64459f1b9aa24163bbac5d9229e05aac.html)
 
 ```json
 "txt" : {
@@ -89,7 +89,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Document Store Collections (.hdbcollection)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/fe16b635277c4aea825c72973f159359.html)
+#### [Document Store Collections (.hdbcollection)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/fe16b635277c4aea825c72973f159359.html)
 
 ```json
 "hdbcollection" : {
@@ -99,7 +99,7 @@ List of HDI supported database development artifacts:
 
 #### [Document Store Collection Index (.hdbcollectionindex)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/b4b1b5c8714a4af7a53e906a85c633f1.html)
 
-#### [Flowgraph (.hdbflowgraph)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/6d4fc4a30e1d428bbb2b3dc5a73ab786.html)
+#### [Flowgraph (.hdbflowgraph)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/6d4fc4a30e1d428bbb2b3dc5a73ab786.html)
 
 ```json
 "hdbflowgraph" : {
@@ -107,7 +107,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Functions (.hdbfunction)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/cbf136986c98430ea50ddf4b95bc1efe.html)
+#### [Functions (.hdbfunction)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/cbf136986c98430ea50ddf4b95bc1efe.html)
 
 ```json
 "hdbfunction" : {
@@ -115,7 +115,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Graph Workspaces (.hdbgraphworkspace)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/ff893731c8514b098223e4a47a6d5f39.html)
+#### [Graph Workspaces (.hdbgraphworkspace)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/ff893731c8514b098223e4a47a6d5f39.html)
 
 ```json
 "hdbgraphworkspace" : {
@@ -123,7 +123,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Indexes (.hdbindex)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/58fdf2d2ffae44b6a3dd0e9a3f5ae8c5.html)
+#### [Indexes (.hdbindex)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/58fdf2d2ffae44b6a3dd0e9a3f5ae8c5.html)
 
 ```json
 "hdbindex" : {
@@ -131,7 +131,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Libraries (.hdblibrary)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/7475cf480ad8498c9991c8a9392d6fc7.html)
+#### [Libraries (.hdblibrary)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/7475cf480ad8498c9991c8a9392d6fc7.html)
 
 ```json
 "hdblibrary" : {
@@ -139,7 +139,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Logical Schema Definition (.hdblogicalschema)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/fa9cda8b540a486dacd12e06f9a60330.html)
+#### [Logical Schema Definition (.hdblogicalschema)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/fa9cda8b540a486dacd12e06f9a60330.html)
 
 ```json
 "hdblogicalschema" : { 
@@ -147,7 +147,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Migration Tables (.hdbmigrationtable)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/52d1f5acfa754a7887e21226641eb261.html)
+#### [Migration Tables (.hdbmigrationtable)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/52d1f5acfa754a7887e21226641eb261.html)
 
 ```json
 "hdbmigrationtable" : {
@@ -155,7 +155,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Procedures (.hdbprocedure)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/93de88bf2c8242179647e40f958c24e5.html)
+#### [Procedures (.hdbprocedure)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/93de88bf2c8242179647e40f958c24e5.html)
 
 ```json
 "hdbprocedure" : {
@@ -163,7 +163,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Projection Views (.hdbprojectionview)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/d8a3392c1287420ca82ac3090cd5049b.html)
+#### [Projection Views (.hdbprojectionview)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/d8a3392c1287420ca82ac3090cd5049b.html)
     
 ```json
 "hdbprojectionview" : { 
@@ -174,7 +174,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Public Synonym (.hdbpublicsynonym)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/d131415cbf7349158d2654e0fcf73487.html)
+#### [Public Synonym (.hdbpublicsynonym)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/d131415cbf7349158d2654e0fcf73487.html)
 
 ```json
 "hdbpublicsynonym": { 
@@ -182,7 +182,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Replication Task (.hdbreptask)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/0194ba9e421148dd9712400e449fc61f.html)
+#### [Replication Task (.hdbreptask)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/0194ba9e421148dd9712400e449fc61f.html)
 
 ```json
 "hdbreptask" : {
@@ -190,7 +190,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Result Cache (.hdbresultcache)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/a3e2b70fc35845e58aff72f992bafca7.html)
+#### [Result Cache (.hdbresultcache)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/a3e2b70fc35845e58aff72f992bafca7.html)
 
 ```json
 "hdbresultcache": { 
@@ -198,7 +198,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Roles (.hdbrole)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/625d7733c30b4666b4a522d7fa68a550.html)
+#### [Roles (.hdbrole)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/625d7733c30b4666b4a522d7fa68a550.html)
 
 ```json
 "hdbrole" : { 
@@ -209,7 +209,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Search Rule Set (.hdbsearchruleset)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/e9d52ba816b04577a450f87032d7dbda.html)
+#### [Search Rule Set (.hdbsearchruleset)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/e9d52ba816b04577a450f87032d7dbda.html)
 
 ```json
 "hdbsearchruleset" : {
@@ -217,7 +217,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Sequence (.hdbsequence)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/b295c2e0a5d547f8b1717ad7dd52cc90.html)
+#### [Sequence (.hdbsequence)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/b295c2e0a5d547f8b1717ad7dd52cc90.html)
 
 ```json
 "hdbsequence" : {
@@ -225,7 +225,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [SQL Views (.hdbview)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/2bf9a6f2db824fbd84315196a9c318d5.html)
+#### [SQL Views (.hdbview)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/2bf9a6f2db824fbd84315196a9c318d5.html)
 
 ```json
 "hdbview" : {
@@ -233,7 +233,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Statistics (.hdbstatistics)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/435423d28f2d40f5979ec17b6141d3f1.html)
+#### [Statistics (.hdbstatistics)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/435423d28f2d40f5979ec17b6141d3f1.html)
 
 ```json
 "hdbstatistics" : {
@@ -241,7 +241,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Structured Privilege (.hdbstructuredprivilege)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/c3827df3a9dc4c45b5b4e2f7b1070b08.html)
+#### [Structured Privilege (.hdbstructuredprivilege)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/c3827df3a9dc4c45b5b4e2f7b1070b08.html)
 
 ```json
 "hdbstructuredprivilege" : {
@@ -249,7 +249,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Synonyms (.hdbsynonym and .hdbsynonymconfig)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/aad1653a9b95422089fec53f48c2899e.html)
+#### [Synonyms (.hdbsynonym and .hdbsynonymconfig)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/aad1653a9b95422089fec53f48c2899e.html)
 
 ```json
 "hdbsynonym" : { 
@@ -260,7 +260,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [System Versioning Table (.hdbsystemversioning)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/5794b348711f4963999266a2d2e6f8de.html)
+#### [System Versioning Table (.hdbsystemversioning)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/5794b348711f4963999266a2d2e6f8de.html)
 
 ```json
 "hdbsystemversioning" : { 
@@ -268,7 +268,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Tables (.hdbtable and .hdbdropcreatetable)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/453d48e28f6747799546236b4b432e58.html)
+#### [Tables (.hdbtable and .hdbdropcreatetable)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/453d48e28f6747799546236b4b432e58.html)
 
 ```json
 "hdbtable" : { 
@@ -279,7 +279,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Table Data (.hdbtabledata)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/35c4dd829d2046f29fc741505302f74d.html)
+#### [Table Data (.hdbtabledata)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/35c4dd829d2046f29fc741505302f74d.html)
 
 ```json
 "hdbtabledata" : {
@@ -290,7 +290,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Table Data Properties (.properties)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/f4da2181909f48a6a36904b7f5599780.html)
+#### [Table Data Properties (.properties)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/f4da2181909f48a6a36904b7f5599780.html)
 
 ```json
 "properties" : {
@@ -301,7 +301,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Table Type (.hdbtabletype)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/83275bd31c1e4acba9285813e64ee12f.html)
+#### [Table Type (.hdbtabletype)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/83275bd31c1e4acba9285813e64ee12f.html)
 
 ```json
 "hdbtabletype" : {
@@ -309,7 +309,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Triggers (.hdbtrigger)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/bbd06f5b88eb4d70a03a25a5c4274ec5.html)
+#### [Triggers (.hdbtrigger)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/bbd06f5b88eb4d70a03a25a5c4274ec5.html)
 
 ```json
 "hdbtrigger" : {
@@ -317,7 +317,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Virtual Functions (.hdbvirtualfunction)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/73669ebdcef44bd9ab0eb57de6a8cf2a.html)
+#### [Virtual Functions (.hdbvirtualfunction)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/73669ebdcef44bd9ab0eb57de6a8cf2a.html)
 
 ```json
 "hdbvirtualfunction" : {
@@ -328,7 +328,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Virtual Procedures (.hdbvirtualprocedure)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/6c8e6c1b62d54197bdaa786910295665.html)
+#### [Virtual Procedures (.hdbvirtualprocedure)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/6c8e6c1b62d54197bdaa786910295665.html)
 
 ```json
 "hdbvirtualprocedure" : { 
@@ -339,7 +339,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Virtual Tables (.hdbvirtualtable)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/08191144d5804c86af9395b110ac37be.html)
+#### [Virtual Tables (.hdbvirtualtable)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/08191144d5804c86af9395b110ac37be.html)
 
 ```json
 "hdbvirtualtable" : {
@@ -350,7 +350,7 @@ List of HDI supported database development artifacts:
 }
 ```
 
-#### [Virtual Packages (.hdbvirtualpackage)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/28fe43b7c5cc4374b85c67cadc8e9b3f.html)
+#### [Virtual Packages (.hdbvirtualpackage)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/28fe43b7c5cc4374b85c67cadc8e9b3f.html)
 
 ```json
 "hdbvirtualpackagehadoop" : {

@@ -269,7 +269,7 @@
 		<commons.lang3>3.9</commons.lang3>
 		<license-maven-plugin.version>4.2.rc2</license-maven-plugin.version>
 		<antlr4-runtime.version>4.9.3</antlr4-runtime.version>
-		<antlr4-maven-plugin.version>4.3</antlr4-maven-plugin.version>
+		<antlr4-maven-plugin.version>4.9.3</antlr4-maven-plugin.version>
 		<selenium.version>4.1.1</selenium.version>
 		<selenium.webdriver.manager.version>5.0.3</selenium.webdriver.manager.version>
 		<neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>

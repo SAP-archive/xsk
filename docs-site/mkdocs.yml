@@ -59,6 +59,7 @@ nav:
       - Helm: 'setup/helm.md'
       - Environment Variables: 'setup/environment-variables.md'
     - Cheat sheet: 
+      - HDI: 'cheatsheet/hdi.md'
       - Create Delivery Unit: 'cheatsheet/delivery-unit.md'
       - Troubleshooting: 'cheatsheet/troubleshooting.md'
     - Community: 'community.md'

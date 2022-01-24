@@ -1,5 +1,21 @@
 # Drumbeats
 
+## 2022 Week 03 (17 January - 23 January)
+
+#### Focus topics:
+
+- Analytic Privileges support
+- SAP BTP Destination service integration
+- Automated migration of hdbtablefunctions in HDI container
+- Security hardening of docker images
+- Various refactorings and bugfixes
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-17..2022-01-23) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-17..2022-01-23) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-01-17..2022-01-23) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-01-17..2022-01-23) PRs
 
 ## 2022 Week 02 (10 December - 16 January)
 

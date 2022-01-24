@@ -206,6 +206,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://www.xsk.io/cheatsheet/hdi/</loc>
+         <lastmod>2022-01-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://www.xsk.io/cheatsheet/troubleshooting/</loc>
          <lastmod>2022-01-24</lastmod>
          <changefreq>daily</changefreq>

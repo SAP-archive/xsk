@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.parser.hdbdd.symbols.type;

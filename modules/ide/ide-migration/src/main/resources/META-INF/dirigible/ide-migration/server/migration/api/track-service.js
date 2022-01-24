@@ -6,10 +6,9 @@
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-
 const dao = require('db/v4/dao');
 const user = require('security/v4/user');
 const process = require('bpm/v4/process');

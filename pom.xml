@@ -277,6 +277,8 @@
 		<maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
 		<commons-csv.version>1.9.0</commons-csv.version>
 		<commons-dbcp2.version>2.9.0</commons-dbcp2.version>
+		<javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+		<javax.websocket-api.version>1.1</javax.websocket-api.version>
 
 		<profile.content.phase>none</profile.content.phase>
 

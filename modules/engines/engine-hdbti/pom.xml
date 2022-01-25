@@ -95,12 +95,12 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
+      <version>${javax.servlet-api.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.websocket</groupId>
       <artifactId>javax.websocket-api</artifactId>
-      <version>1.1</version>
+      <version>${javax.websocket-api.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -162,7 +162,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-dbcp2</artifactId>
-      <version>2.2.0</version>
+      <version>${commons-dbcp2.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

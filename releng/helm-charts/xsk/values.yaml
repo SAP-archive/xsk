@@ -39,6 +39,7 @@ kyma:
   enabled: 
   # Host to expose the xsk instance 
   host:
+  serverMaxHttpHeaderSize: "48000"
   addRoles: false
   # Roles for custom usage 
   roles:
@@ -79,7 +80,7 @@ kyma:
 
 application:
   # Image application image
-  image:
+  image: 
   # Home url for XSK
   homeUrl:
   # Image pull policy 

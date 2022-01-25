@@ -97,34 +97,22 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
     String registryPath = path;
     String contentAsString = content;
 
-    XSKDataStructureModel dataStructureModel;
+    XSKDataStructureModel dataStructureModel = null;
     try {
-      if(!parserServices.containsKey(resourceExtension) || isParsed(registryPath, contentAsString, resourceExtension)) {
-        return null;
-      }
-
-      XSKDataStructureParametersModel parametersModel =
-          new XSKDataStructureParametersModel(resourceExtension, registryPath, contentAsString, workspace);
-      dataStructureModel = xskCoreParserService.parseDataStructure(parametersModel);
-
-      if (dataStructureModel == null) {
-        return null;
+      if(parserServices.containsKey(resourceExtension) && !isParsed(registryPath, contentAsString, resourceExtension)) {
+        XSKDataStructureParametersModel parametersModel = new XSKDataStructureParametersModel(resourceExtension, registryPath, contentAsString, workspace);
+        dataStructureModel = xskCoreParserService.parseDataStructure(parametersModel);
+        dataStructureModel.setLocation(registryPath);
       }
     } catch (ReflectiveOperationException e) {
-      logger.error("Preparse hash check failed for path " + registryPath);
-      logger.error(e.getMessage());
-      return null;
+      logger.error("Preparse hash check failed for path " + registryPath + ". " + e.getMessage(), e);
     } catch (XSKDataStructuresException e) {
-      logger.error("Synchronized artifact with path " + registryPath + " is not valid");
-      logger.error(e.getMessage());
-      return null;
+      logger.error("Synchronized artifact with path " + registryPath + " is not valid. " + e.getMessage(), e);
     } catch (XSKArtifactParserException e) {
-      logger.error(e.getMessage());
-      return null;
+      logger.error(e.getMessage(), e);
     } catch (Exception e) {
       throw new SynchronizationException(e);
     }
-    dataStructureModel.setLocation(registryPath);
     return dataStructureModel;
   }
 
@@ -135,10 +123,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
   @Override
   public void handleResourceSynchronization(IResource resource) throws SynchronizationException, XSKDataStructuresException {
     XSKDataStructureModel dataStructureModel = parseDataStructureModel(resource);
-    if(dataStructureModel == null) {
-      return;
+    if(dataStructureModel != null) {
+      managerServices.get(dataStructureModel.getType()).synchronizeRuntimeMetadata(dataStructureModel); // 4. we synchronize the metadata
     }
-    managerServices.get(dataStructureModel.getType()).synchronizeRuntimeMetadata(dataStructureModel); // 4. we synchronize the metadata
   }
 
   @Override

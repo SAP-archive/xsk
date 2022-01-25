@@ -22,7 +22,6 @@ try {
 	const userData = JSON.parse(userDataJson);
 
 	const migrationService = new MigrationService();
-    var projectNames = [];
     for (const deliveryUnit of userData.du) {
         const locals = deliveryUnit.locals;
         let deployables = [];
@@ -34,20 +33,21 @@ try {
                 local.projectName,
                 deployables
             );
+        }
 
-            if(local.runLocation === "/" + local.projectName + "/" + migrationService.synonymFileName
-            || local.runLocation === "/" + local.projectName + "/" + migrationService.publicSynonymFileName) {
-                if(!projectNames.includes(local.projectName)) {
-                    projectNames.push(local.projectName);
-                }
+        // Get names of projects with generated synonyms and add them to deployables
+        const projectsWithSynonyms = migrationService.getProjectsWithSynonyms(locals);
+        if(projectsWithSynonyms) {
+            for(const projectName of projectsWithSynonyms) {
+                const hdbSynonymFilePath = migrationService.getSynonymFilePath(projectName);
+                const hdbPublicSynonymFilePath = migrationService.getPublicSynonymFilePath(projectName);
+                const projectDeployables = deployables.find(x => x.projectName === projectName).artifacts;
+
+                projectDeployables.push(hdbSynonymFilePath);
+                projectDeployables.push(hdbPublicSynonymFilePath);
             }
         }
 
-        // Add synonym files to deployables
-        for(const projectName of projectNames) {
-            deployables.find(x => x.projectName === projectName).artifacts.push("/" + projectName + "/" + migrationService.synonymFileName);
-            deployables.find(x => x.projectName === projectName).artifacts.push("/" + projectName + "/" + migrationService.publicSynonymFileName);
-        }
         deliveryUnit['deployableArtifactsResult'] = migrationService.handlePossibleDeployableArtifacts(userData.workspace, deployables);
     }
     process.setVariable(execution.getId(), 'userData', JSON.stringify(userData));

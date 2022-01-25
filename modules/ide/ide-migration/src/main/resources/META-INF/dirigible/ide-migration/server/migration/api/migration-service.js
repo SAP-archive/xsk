@@ -164,31 +164,19 @@ class MigrationService {
             const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
             const localResource = projectCollection.createResource(fileRunLocation, content);
 
-            const fileName = file._name + "." + file._suffix;
-            const filePath = file._packageName.replaceAll('.', "/") + "/" + fileName;
+            const fileName = this._getFileNameWithExtension(file);
+            const filePath = this._getAbsoluteFilePath(file);
             const fileContent = bytes.byteArrayToText(content);
 
             // Parse current artifacts and generate synonym files for it if necessary
             const parsedData = facade.parseDataStructureModel(fileName, filePath, fileContent, workspaceCollection.getPath() + "/");
             const synonymData = this._handleParsedData(parsedData, workspaceName, projectName, fileRunLocation);
-            var synonymLocals = [];
-
-            if(synonymData.hdbSynonyms) {
-                synonymLocals = synonymLocals.concat(
-                    this._appendOrCreateSynonymsFile(this.synonymFileName, synonymData.hdbSynonyms, workspaceName, projectName)
-                );
-            }
-
-            if(synonymData.hdbPublicSynonyms) {
-                synonymLocals = synonymLocals.concat(
-                    this._appendOrCreateSynonymsFile(this.publicSynonymFileName, synonymData.hdbPublicSynonyms, workspaceName, projectName)
-                );
-            }
+            const hdbSynonyms = this._appendOrCreateSynonymsFile(this.synonymFileName, synonymData.hdbSynonyms, workspaceName, projectName);
+            const hdbPublicSynonyms = this._appendOrCreateSynonymsFile(this.publicSynonymFileName, synonymData.hdbPublicSynonyms, workspaceName, projectName);
 
             // Add any generated synonym files to locals
-            for(const local of synonymLocals) {
-                locals.push(local);
-            }
+            locals.push(...hdbSynonyms);
+            locals.push(...hdbPublicSynonyms);
 
             locals.push({
                 repositoryPath: localResource.getPath(),
@@ -199,6 +187,15 @@ class MigrationService {
         }
 
         return locals;
+    }
+
+    _getFileNameWithExtension(file) {
+        return file._name + "." + file._suffix;
+    }
+
+    _getAbsoluteFilePath(file) {
+        const filePath = file._packageName.replaceAll('.', "/") + "/" ;
+        return filePath + this._getFileNameWithExtension(file);
     }
 
     _handleParsedData(parsedData, workspaceName, projectName, relativePath) {
@@ -255,13 +252,17 @@ class MigrationService {
     }
 
     _appendOrCreateSynonymsFile(fileName, synonyms, workspaceName, projectName) {
-        const locals = [];
+        const synonymLocalPaths = [];
+
+        if(!synonyms) {
+            return synonymLocalPaths;
+        }
 
         for(const synonym of synonyms) {
             const res = this._getOrCreateHdbSynonymFile(workspaceName, projectName, fileName);
             const synonymFile = res.resource;
-            if(res.local) {
-                locals.push(res.local);
+            if(res.localPaths) {
+                synonymLocalPaths.push(res.localPaths);
             }
 
             const content = JSON.parse(bytes.byteArrayToText(synonymFile.getContent()));
@@ -269,7 +270,7 @@ class MigrationService {
             synonymFile.setContent(bytes.textToByteArray(JSON.stringify(content, null, 4)));
         }
 
-        return locals;
+        return synonymLocalPaths;
     }
 
     _isFileCalculationView(filePath) {
@@ -335,14 +336,14 @@ class MigrationService {
         if (synonymFile.exists()) {
             return {
                 resource: synonymFile,
-                local: null
+                localPaths: null
             }
         }
 
         synonymFile = projectCollection.createResource(hdbSynonymFileName, bytes.textToByteArray("{}"));
         return {
             resource: synonymFile,
-            local: {
+            localPaths: {
                 repositoryPath: synonymFile.getPath(),
                 relativePath: synonymFile.getPath().split(projectName).pop(),
                 projectName: projectName,
@@ -396,6 +397,30 @@ class MigrationService {
         }
 
         return deployables;
+    }
+
+    getSynonymFilePath(projectName) {
+        return "/" + projectName + "/" + this.synonymFileName;
+    }
+
+    getPublicSynonymFilePath(projectName) {
+        return "/" + projectName + "/" + this.publicSynonymFileName;
+    }
+
+    getProjectsWithSynonyms(locals) {
+        const projectNames = [];
+        for (const local of locals) {
+            const projectSynonymPath = this.getSynonymFilePath(local.projectName)
+            const projectPublicSynonymPath = this.getPublicSynonymFilePath(local.projectName);
+
+            if(local.runLocation === projectSynonymPath
+            || local.runLocation === projectPublicSynonymPath) {
+                if(!projectNames.includes(local.projectName)) {
+                    projectNames.push(local.projectName);
+                }
+            }
+        }
+        return projectNames;
     }
 
     addFileToWorkspace(workspaceName, repositoryPath, relativePath, projectName) {

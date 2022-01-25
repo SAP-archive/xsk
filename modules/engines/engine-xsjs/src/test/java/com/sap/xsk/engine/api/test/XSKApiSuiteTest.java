@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.sap.cloud.sdk.cloudplatform.connectivity.DestinationAccessor;
+import com.sap.cloud.sdk.testutil.MockDestination;
+import com.sap.cloud.sdk.testutil.MockUtil;
 import org.apache.cxf.helpers.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ContextException;
 import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
@@ -114,6 +118,8 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
 
   private void runSuite(IJavascriptEngineExecutor executor, IRepository repository)
       throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException {
+    mockDestination();
+
     for (String testModule : TEST_MODULES) {
       try {
         HttpServletRequest mockedRequest = Mockito.mock(HttpServletRequest.class);
@@ -178,6 +184,16 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     long time = System.currentTimeMillis() - start;
     System.out.printf("API test [%s] on engine [%s] passed for: %d ms%n", testModule, executor.getType(), time);
     return error;
+  }
+
+  private void mockDestination() {
+    final MockUtil mockUtil = new MockUtil();
+
+    MockDestination destination = MockDestination
+        .builder("test-destination", URI.create("https://services.odata.org"))
+        .build();
+
+    mockUtil.mockDestination(destination);
   }
 
   private class StubServletOutputStream extends ServletOutputStream {

@@ -1,0 +1,9 @@
+<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="TestAP" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
+<descriptions defaultDescription="TestAP"/>
+<securedModels>
+</securedModels>
+<whereSql>(UPPER(SESSION_CONTEXT(APPLICATIONUSER)) = 'TESTUSER')
+OR
+SESSION_CONTEXT(APPLICATIONUSER) IN
+(SELECT "Name" FROM "MYTESTVIEW")</whereSql>
+</Privilege:analyticPrivilege>

@@ -1,12 +1,12 @@
 let http = $.net.http;
 var assertTrue = require('utils/assert').assertTrue;
-
 let client = new http.Client();
-var request = new $.net.http.Request($.net.http.GET, "/V4/Northwind/Northwind.svc/");
+let request = new http.Request(http.GET, "/");
+let destination = http.readDestination("test-destination");
 
 client.setTimeout(10);
-client.request(request, "https://services.odata.org");
 
+client.request(request, destination);
 let response = client.getResponse();
 
 assertTrue(response.status === http.OK && response.cookies != null && response.headers != null && response.body != null);

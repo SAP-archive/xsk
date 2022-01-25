@@ -201,7 +201,6 @@ exports.Client = function () {
   function getWebResponseByDirigibleResponse(dResponse) {
     if (typeof dResponse === 'string' || dResponse instanceof String) {
       dResponse = JSON.parse(dResponse);
-      dResponse.text = JSON.stringify(dResponse.text);
     }
 
     var webResponse = new web.WebEntityResponse();

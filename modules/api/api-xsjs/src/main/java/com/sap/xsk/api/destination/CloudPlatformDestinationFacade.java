@@ -11,14 +11,10 @@
  */
 package com.sap.xsk.api.destination;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.sap.cloud.sdk.cloudplatform.CloudPlatformAccessor;
 import com.sap.cloud.sdk.cloudplatform.connectivity.Destination;
 import com.sap.cloud.sdk.cloudplatform.connectivity.DestinationAccessor;
 import com.sap.cloud.sdk.cloudplatform.connectivity.HttpClientAccessor;
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.MethodNotSupportedException;
 import org.apache.http.client.HttpClient;
@@ -32,6 +28,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 import org.eclipse.dirigible.commons.api.scripting.IScriptingFacade;
 import java.io.IOException;
 import java.net.URI;
@@ -39,13 +36,13 @@ import java.util.Arrays;
 
 public class CloudPlatformDestinationFacade implements IScriptingFacade {
 
-  private static String QUERY_PATH = "queryPath";
-  private static String METHOD = "method";
-  private static String HEADERS = "headers";
-  private static String STATUS_CODE = "statusCode";
-  private static String TEXT = "text";
-  private static String NAME = "name";
-  private static String VALUE = "value";
+  private static final String QUERY_PATH = "queryPath";
+  private static final String METHOD = "method";
+  private static final String HEADERS = "headers";
+  private static final String STATUS_CODE = "statusCode";
+  private static final String TEXT = "text";
+  private static final String NAME = "name";
+  private static final String VALUE = "value";
 
   public static Destination getDestination(String name) {
     setKymaCloudPlatformFacade();
@@ -56,26 +53,24 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
   public static String executeRequest(String requestObject, Destination destination) throws IOException, MethodNotSupportedException {
     setKymaCloudPlatformFacade();
 
-    JsonParser jsonParser = new JsonParser();
-    JsonObject requestJson = jsonParser.parse(requestObject).getAsJsonObject();
+    DestinationRequest destinationRequest = GsonHelper.GSON.fromJson(requestObject, DestinationRequest.class);
 
     HttpClient client = HttpClientAccessor.getHttpClient(destination.asHttp());
-    HttpRequestBase request = getRequest(requestJson);
+    HttpRequestBase request = getRequest(destinationRequest);
 
-    request.setURI(URI.create(destination.asHttp().getUri() + requestJson.get(QUERY_PATH).getAsString()));
-    setRequestHeaders(requestJson, request);
+    request.setURI(URI.create(destination.asHttp().getUri() + destinationRequest.getQueryPath()));
+    setRequestHeaders(destinationRequest, request);
 
     HttpResponse response = client.execute(request);
 
-    JsonObject responseJson = new JsonObject();
-    JsonArray headers = new JsonArray();
-    Arrays.stream(response.getAllHeaders()).map(CloudPlatformDestinationFacade::createHeaderJson).forEach(headers::add);
+    Header[] headers = Arrays.stream(response.getAllHeaders()).map(CloudPlatformDestinationFacade::createHeader).toArray(Header[]::new);
 
-    responseJson.add(HEADERS, headers);
-    responseJson.addProperty(STATUS_CODE, response.getStatusLine().getStatusCode());
-    responseJson.add(TEXT, jsonParser.parse(EntityUtils.toString(response.getEntity())));
+    DestinationResponse destinationResponse = new DestinationResponse();
+    destinationResponse.setHeaders(headers);
+    destinationResponse.setStatusCode(response.getStatusLine().getStatusCode());
+    destinationResponse.setText(EntityUtils.toString(response.getEntity()));
 
-    return responseJson.toString();
+    return GsonHelper.GSON.toJson(destinationResponse);
   }
 
   private static void setKymaCloudPlatformFacade() {
@@ -86,8 +81,8 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
     CloudPlatformAccessor.setCloudPlatformFacade(new CloudPlatformKymaFacade());
   }
 
-  private static HttpRequestBase getRequest(JsonObject requestObject) throws MethodNotSupportedException {
-    switch (requestObject.get(METHOD).getAsInt()) {
+  private static HttpRequestBase getRequest(DestinationRequest destinationRequest) throws MethodNotSupportedException {
+    switch (destinationRequest.getMethod()) {
       case 0:
         return new HttpOptions();
       case 1:
@@ -111,16 +106,12 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
     }
   }
 
-  private static void setRequestHeaders(JsonObject requestJson, HttpRequestBase request) {
-    requestJson.get(HEADERS).getAsJsonArray()
-        .forEach(e -> request.setHeader(e.getAsJsonObject().get(NAME).getAsString(), e.getAsJsonObject().get(VALUE).getAsString()));
+  private static void setRequestHeaders(DestinationRequest destinationRequest, HttpRequestBase request) {
+    destinationRequest.getHeaders()
+        .forEach(e -> request.setHeader(e.getName(), e.getValue()));
   }
 
-  private static JsonObject createHeaderJson(Header header) {
-    JsonObject headerJson = new JsonObject();
-    headerJson.addProperty(NAME, header.getName());
-    headerJson.addProperty(VALUE, header.getValue());
-
-    return headerJson;
+  private static Header createHeader(org.apache.http.Header header) {
+    return new Header(header.getName(), header.getValue());
   }
 }

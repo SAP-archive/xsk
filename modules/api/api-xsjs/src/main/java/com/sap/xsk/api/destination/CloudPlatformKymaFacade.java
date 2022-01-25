@@ -11,19 +11,18 @@
  */
 package com.sap.xsk.api.destination;
 
-import com.sap.cloud.sdk.cloudplatform.CloudPlatform;
 import com.sap.cloud.sdk.cloudplatform.CloudPlatformFacade;
 import io.vavr.control.Try;
 import javax.annotation.Nonnull;
 
 public class CloudPlatformKymaFacade implements CloudPlatformFacade {
 
-  private Try<CloudPlatform> cloudPlatform;
+  private Try<com.sap.cloud.sdk.cloudplatform.CloudPlatform> cloudPlatform;
 
   @Nonnull
-  public Try<CloudPlatform> tryGetCloudPlatform() {
+  public Try<com.sap.cloud.sdk.cloudplatform.CloudPlatform> tryGetCloudPlatform() {
     if (this.cloudPlatform == null) {
-      this.cloudPlatform = Try.of(CloudPlatformKyma::new);
+      this.cloudPlatform = Try.of(CloudPlatform::new);
     }
 
     return this.cloudPlatform;

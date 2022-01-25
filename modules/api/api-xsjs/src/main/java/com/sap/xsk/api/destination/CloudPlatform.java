@@ -14,18 +14,15 @@ package com.sap.xsk.api.destination;
 import com.google.gson.JsonObject;
 import com.sap.cloud.sdk.cloudplatform.ScpCfCloudPlatform;
 import com.sap.cloud.sdk.cloudplatform.exception.CloudPlatformException;
+import org.eclipse.dirigible.kyma.KymaModule;
+import org.eclipse.dirigible.commons.config.Configuration;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CloudPlatformKyma extends ScpCfCloudPlatform {
+public class CloudPlatform extends ScpCfCloudPlatform {
 
-  private static final String DESTINATION_CLIENTID = "destination_clientid";
-  private static final String DESTINATION_CLIENTSECRET = "destination_clientsecret";
-  private static final String DESTINATION_URL = "destination_url";
-  private static final String DESTINATION_URI = "destination_uri";
-
-  private static final String CLIENTID = "clientid";
-  private static final String CLIENTSECRET = "clientsecret";
+  private static final String CLIENT_ID = "clientid";
+  private static final String CLIENT_SECRET = "clientsecret";
   private static final String URL = "url";
   private static final String URI = "uri";
 
@@ -33,19 +30,25 @@ public class CloudPlatformKyma extends ScpCfCloudPlatform {
   @Override
   public JsonObject getServiceCredentials(@Nonnull String serviceName, @Nullable String servicePlan)
       throws CloudPlatformException {
-    String clientId = this.getEnvironmentVariable(DESTINATION_CLIENTID).get();
-    String clientSecret = this.getEnvironmentVariable(DESTINATION_CLIENTSECRET).get();
-    String url = this.getEnvironmentVariable(DESTINATION_URL).get();
-    String uri = this.getEnvironmentVariable(DESTINATION_URI).get();
+    String destinationPrefix = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_PREFIX, "");
+
+    String clientId = getWithPrefix(destinationPrefix, KymaModule.DIRIGIBLE_DESTINATION_CLIENT_ID);
+    String clientSecret = getWithPrefix(destinationPrefix, KymaModule.DIRIGIBLE_DESTINATION_CLIENT_SECRET);
+    String url = getWithPrefix(destinationPrefix, KymaModule.DIRIGIBLE_DESTINATION_URL);
+    String uri = getWithPrefix(destinationPrefix, KymaModule.DIRIGIBLE_DESTINATION_URI);
 
     JsonObject credentialsObject = new JsonObject();
 
-    credentialsObject.addProperty(CLIENTID, clientId);
-    credentialsObject.addProperty(CLIENTSECRET, clientSecret);
+    credentialsObject.addProperty(CLIENT_ID, clientId);
+    credentialsObject.addProperty(CLIENT_SECRET, clientSecret);
     credentialsObject.addProperty(URL, url);
     credentialsObject.addProperty(URI, uri);
 
     return credentialsObject;
+  }
+
+  private String getWithPrefix(String prefix, String variableName) {
+    return prefix.isEmpty() ? Configuration.get(variableName) : Configuration.get(String.format("%s_%s", prefix, variableName));
   }
 
 }

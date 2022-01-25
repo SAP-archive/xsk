@@ -23,9 +23,15 @@
     <dependency>
       <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
       <artifactId>scp-cf</artifactId>
-      <version>3.60.0</version>
+      <version>${scp-cf.version}</version>
     </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.eclipse.dirigible</groupId>
+            <artifactId>dirigible-sap-cf-base</artifactId>
+            <version>${dirigible.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 	<properties>
 		<profile.content.phase>generate-sources</profile.content.phase>

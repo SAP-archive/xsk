@@ -80,7 +80,7 @@ kyma:
 
 application:
   # Image application image
-  image: 
+  image:
   # Home url for XSK
   homeUrl:
   # Image pull policy 

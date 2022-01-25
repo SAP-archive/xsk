@@ -1,0 +1,8 @@
+table.schemaName = "XSK_TEST_APP";
+table.tableType = COLUMNSTORE;
+table.columns = [
+    {name = "ID"; sqlType = INTEGER; nullable = false;},
+	{name = "Name"; sqlType = VARCHAR; nullable = false; length = 20;},
+	{name = "Age"; sqlType = INTEGER; nullable = false;}
+];
+table.primaryKey.pkcolumns = ["ID"];

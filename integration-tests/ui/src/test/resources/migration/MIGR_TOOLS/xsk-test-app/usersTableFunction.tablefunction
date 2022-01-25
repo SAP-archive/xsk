@@ -1,0 +1,13 @@
+FUNCTION xsk-test-app::usersTableFunction ()
+	RETURNS TABLE (
+		"ID" NVARCHAR(32),
+		"Name" NVARCHAR(32)
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER AS
+
+BEGIN
+
+	RETURN  SELECT "ID", "Name" FROM "xsk-test-app::usersTable" WHERE SESSION_USER = 'APPUSER';
+
+END;

@@ -20,6 +20,7 @@ import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
@@ -68,7 +69,9 @@ public class XSKTableTypeParserTest extends AbstractDirigibleTest {
         "\t{ name = \"PERIOD_ID\";\t\tsqlType = DECIMAL;}\n" +
         "];\n" +
         "table.primaryKey.pkcolumns = [\"SCENARIO_ID_WRONG\", \"PERIOD_ID\"];";
-    parser.parse("/temp.hdbstructure", content);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, "/temp.hdbstructure", content, null);
+    parser.parse(parametersModel);
   }
 
   @Test

@@ -22,19 +22,32 @@ try {
 	const userData = JSON.parse(userDataJson);
 
 	const migrationService = new MigrationService();
-
     for (const deliveryUnit of userData.du) {
         const locals = deliveryUnit.locals;
         let deployables = [];
         for (const local of locals) {
             deployables = migrationService.collectDeployables(
-				userData.workspace, 
-				local.repositoryPath, 
-				local.runLocation, 
-				local.projectName, 
-				deployables
-			);
+                userData.workspace,
+                local.repositoryPath,
+                local.runLocation,
+                local.projectName,
+                deployables
+            );
         }
+
+        // Get names of projects with generated synonyms and add them to deployables
+        const projectsWithSynonyms = migrationService.getProjectsWithSynonyms(locals);
+        if(projectsWithSynonyms) {
+            for(const projectName of projectsWithSynonyms) {
+                const hdbSynonymFilePath = migrationService.getSynonymFilePath(projectName);
+                const hdbPublicSynonymFilePath = migrationService.getPublicSynonymFilePath(projectName);
+                const projectDeployables = deployables.find(x => x.projectName === projectName).artifacts;
+
+                projectDeployables.push(hdbSynonymFilePath);
+                projectDeployables.push(hdbPublicSynonymFilePath);
+            }
+        }
+
         deliveryUnit['deployableArtifactsResult'] = migrationService.handlePossibleDeployableArtifacts(userData.workspace, deployables);
     }
     process.setVariable(execution.getId(), 'userData', JSON.stringify(userData));

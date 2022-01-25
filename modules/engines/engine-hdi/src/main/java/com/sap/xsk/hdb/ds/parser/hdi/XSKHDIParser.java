@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import java.io.File;
@@ -27,19 +28,19 @@ import org.eclipse.dirigible.api.v3.security.UserFacade;
 public class XSKHDIParser implements XSKDataStructureParser {
 
   @Override
-  public XSKDataStructureHDIModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+  public XSKDataStructureHDIModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException, IOException {
     Gson gson = new GsonBuilder()
         .registerTypeAdapter(XSKDataStructureHDIModel.class, new XSKHDIModelAdapter())
         .create();
 
-    XSKDataStructureHDIModel hdiModel = gson.fromJson(content, XSKDataStructureHDIModel.class);
-    hdiModel.setName(new File(location).getName());
-    hdiModel.setLocation(location);
+    XSKDataStructureHDIModel hdiModel = gson.fromJson(parametersModel.getContent(), XSKDataStructureHDIModel.class);
+    hdiModel.setName(new File(parametersModel.getLocation()).getName());
+    hdiModel.setLocation(parametersModel.getLocation());
     hdiModel.setType(getType());
-    hdiModel.setHash(DigestUtils.md5Hex(content));
+    hdiModel.setHash(DigestUtils.md5Hex(parametersModel.getContent()));
     hdiModel.setCreatedBy(UserFacade.getName());
     hdiModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    hdiModel.setContent(content);
+    hdiModel.setContent(parametersModel.getContent());
     return hdiModel;
   }
 

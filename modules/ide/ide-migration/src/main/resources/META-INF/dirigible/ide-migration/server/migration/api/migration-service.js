@@ -24,12 +24,17 @@ const StringWriter = Java.type("java.io.StringWriter");
 const ByteArrayInputStream = Java.type("java.io.ByteArrayInputStream");
 const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
 const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor")
-
+const XSKHDBCoreFacade = Java.type("com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade");
+const HanaVisitor = require('./HanaVisitor');
 
 class MigrationService {
 
     connection = null;
     repo = null;
+    tableFunctionPaths = [];
+
+    synonymFileName = 'hdi-synonyms.hdbsynonym';
+    publicSynonymFileName = 'hdi-public-synonyms.hdbpublicsynonym'
 
     setupConnection(databaseName, databaseUser, databaseUserPassword, connectionUrl) {
         database.createDataSource(databaseName, "com.sap.db.jdbc.Driver", connectionUrl, databaseUser, databaseUserPassword, null);
@@ -75,6 +80,12 @@ class MigrationService {
                 },
                 analyticprivilege: {
                     plugin_name: "com.sap.hana.di.analyticprivilege"
+                },
+                hdbsynonym: {
+                    plugin_name: "com.sap.hana.di.synonym"
+                },
+                hdbpublicsynonym: {
+                    plugin_name: "com.sap.hana.di.publicsynonym"
                 }
             }
         };
@@ -130,6 +141,7 @@ class MigrationService {
 
     copyFilesLocally(workspaceName, lists) {
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const facade = new XSKHDBCoreFacade();
 
         const locals = [];
         for (const file of lists) {
@@ -152,6 +164,20 @@ class MigrationService {
             const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
             const localResource = projectCollection.createResource(fileRunLocation, content);
 
+            const fileName = this._getFileNameWithExtension(file);
+            const filePath = this._getAbsoluteFilePath(file);
+            const fileContent = bytes.byteArrayToText(content);
+
+            // Parse current artifacts and generate synonym files for it if necessary
+            const parsedData = facade.parseDataStructureModel(fileName, filePath, fileContent, workspaceCollection.getPath() + "/");
+            const synonymData = this._handleParsedData(parsedData, workspaceName, projectName, fileRunLocation);
+            const hdbSynonyms = this._appendOrCreateSynonymsFile(this.synonymFileName, synonymData.hdbSynonyms, workspaceName, projectName);
+            const hdbPublicSynonyms = this._appendOrCreateSynonymsFile(this.publicSynonymFileName, synonymData.hdbPublicSynonyms, workspaceName, projectName);
+
+            // Add any generated synonym files to locals
+            locals.push(...hdbSynonyms);
+            locals.push(...hdbPublicSynonyms);
+
             locals.push({
                 repositoryPath: localResource.getPath(),
                 relativePath: fileRunLocation,
@@ -159,7 +185,92 @@ class MigrationService {
                 runLocation: file.RunLocation
             })
         }
+
         return locals;
+    }
+
+    _getFileNameWithExtension(file) {
+        return file._name + "." + file._suffix;
+    }
+
+    _getAbsoluteFilePath(file) {
+        const filePath = file._packageName.replaceAll('.', "/") + "/" ;
+        return filePath + this._getFileNameWithExtension(file);
+    }
+
+    _handleParsedData(parsedData, workspaceName, projectName, relativePath) {
+        if(!parsedData) {
+            return [];
+        }
+
+        const dataModelType = parsedData.getClass().getName();
+        const hdbDDModel = "com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel";
+
+        var synonyms = [];
+        var publicSynonyms = [];
+        if(dataModelType == hdbDDModel) {
+            for(const item of parsedData.tableModels) {
+               publicSynonyms.push(this._generateHdbPublicSynonym(item.getName()));
+               synonyms.push(this._generateHdbSynonym(item.getName(), item.getSchema()));
+            }
+
+            for(const item of parsedData.tableTypeModels) {
+               publicSynonyms.push(this._generateHdbPublicSynonym(item.getName()));
+               synonyms.push(this._generateHdbSynonym(item.getName(), item.getSchema()));
+            }
+        }
+        else {
+            publicSynonyms.push(this._generateHdbPublicSynonym(parsedData.getName()));
+            synonyms.push(this._generateHdbSynonym(parsedData.getName(), parsedData.getSchema()));
+        }
+
+        return { hdbSynonyms: synonyms, hdbPublicSynonyms: publicSynonyms };
+    }
+
+    _generateHdbSynonym(name, schemaName) {
+        const trimmedName = name.split(':').pop();
+        return {
+            name: name,
+            value: {
+               "target" : {
+                   "object" : trimmedName,
+                   "schema" : schemaName
+               }
+           }
+        }
+    }
+
+    _generateHdbPublicSynonym(name) {
+        return {
+            name: name,
+            value: {
+               "target" : {
+                   "object" : name,
+               }
+            }
+        }
+    }
+
+    _appendOrCreateSynonymsFile(fileName, synonyms, workspaceName, projectName) {
+        const synonymLocalPaths = [];
+
+        if(!synonyms) {
+            return synonymLocalPaths;
+        }
+
+        for(const synonym of synonyms) {
+            const res = this._getOrCreateHdbSynonymFile(workspaceName, projectName, fileName);
+            const synonymFile = res.resource;
+            if(res.localPaths) {
+                synonymLocalPaths.push(res.localPaths);
+            }
+
+            const content = JSON.parse(bytes.byteArrayToText(synonymFile.getContent()));
+            content[synonym.name] = synonym.value;
+            synonymFile.setContent(bytes.textToByteArray(JSON.stringify(content, null, 4)));
+        }
+
+        return synonymLocalPaths;
     }
 
     _isFileCalculationView(filePath) {
@@ -217,6 +328,30 @@ class MigrationService {
         return workspaceCollection.createCollection(projectName);
     }
 
+    _getOrCreateHdbSynonymFile(workspaceName, projectName, hdbSynonymFileName) {
+        const workspaceCollection = repositoryManager.getCollection(workspaceName);
+        const projectCollection = workspaceCollection.getCollection(projectName);
+
+        var synonymFile = projectCollection.getResource(hdbSynonymFileName);
+        if (synonymFile.exists()) {
+            return {
+                resource: synonymFile,
+                localPaths: null
+            }
+        }
+
+        synonymFile = projectCollection.createResource(hdbSynonymFileName, bytes.textToByteArray("{}"));
+        return {
+            resource: synonymFile,
+            localPaths: {
+                repositoryPath: synonymFile.getPath(),
+                relativePath: synonymFile.getPath().split(projectName).pop(),
+                projectName: projectName,
+                runLocation: synonymFile.getPath().split(workspaceName).pop()
+            }
+        }
+    }
+
     createMigratedWorkspace(workspaceName) {
         let workspace;
         if (!workspaceName) {
@@ -264,9 +399,38 @@ class MigrationService {
         return deployables;
     }
 
+    getSynonymFilePath(projectName) {
+        return "/" + projectName + "/" + this.synonymFileName;
+    }
+
+    getPublicSynonymFilePath(projectName) {
+        return "/" + projectName + "/" + this.publicSynonymFileName;
+    }
+
+    getProjectsWithSynonyms(locals) {
+        const projectNames = [];
+        for (const local of locals) {
+            const projectSynonymPath = this.getSynonymFilePath(local.projectName)
+            const projectPublicSynonymPath = this.getPublicSynonymFilePath(local.projectName);
+
+            if(local.runLocation === projectSynonymPath
+            || local.runLocation === projectPublicSynonymPath) {
+                if(!projectNames.includes(local.projectName)) {
+                    projectNames.push(local.projectName);
+                }
+            }
+        }
+        return projectNames;
+    }
+
     addFileToWorkspace(workspaceName, repositoryPath, relativePath, projectName) {
         const workspace = workspaceManager.getWorkspace(workspaceName)
         const project = workspace.getProject(projectName)
+
+        if (project.existsFile(relativePath)) {
+            project.deleteFile(relativePath);
+        }
+
         const projectFile = project.createFile(relativePath);
         const resource = repositoryManager.getResource(repositoryPath);
         const xskModificator = new XSKProjectMigrationInterceptor();
@@ -283,6 +447,80 @@ class MigrationService {
         let context = {};
         const filesAndPackagesObject = this.repo.getAllFilesForDu(context, du);
         return filesAndPackagesObject.files;
+    }
+
+    _visitCollection(project, collection, parentPath) {
+        let resNames = collection.getResourcesNames();
+        for (const resName of resNames) {
+            var path = collection.getPath() + "/" + resName;
+            let oldProjectRelativePath = parentPath + "/" + resName;
+            if (path.endsWith(".hdbtablefunction")) {
+                let resource = collection.getResource(resName);
+                let content = resource.getText();
+                let visitor = new HanaVisitor(content);
+                visitor.visit();
+                visitor.removeSchemaRefs();
+                visitor.removeViewRefs();
+                let splitted = resName.split(".");
+                splitted[splitted.length-1] = "tablefunction";
+                let newName = splitted.join(".");
+                let newProjectRelativePath = parentPath + "/" + newName;
+                this.tableFunctionPaths.push(newProjectRelativePath);
+                console.log("Creating new file at: " + newProjectRelativePath);
+                let newFile = project.createFile(newProjectRelativePath);
+                newFile.setText(visitor.content);
+                console.log("Creating new resource at: " + newName);
+                let newResource = collection.createResource(newName, [0]);
+                newResource.setText(visitor.content);
+                console.log("deleting file at: " + path);
+                project.deleteFile(oldProjectRelativePath);
+                console.log("deleting resource at: " + path);
+                resource.delete();
+            }
+        }
+
+        let collectionsNames = collection.getCollectionsNames();
+        for (const name of collectionsNames) {
+            let nestedCollection = collection.getCollection(name)
+            this._visitCollection(project, nestedCollection, parentPath + "/" + name);
+        }
+
+    }
+
+    handleHDBTableFunctions(workspaceName, projectName) {
+        const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
+
+        const workspace = workspaceManager.getWorkspace(workspaceName);
+        const project = workspace.getProject(projectName);
+        this._visitCollection(project, projectCollection, ".");
+
+        console.log("Adding tablefunctions to hdi file...")
+        this._addTableFunctionsToHDI(project, projectName, projectCollection);
+        this._resetTableFunctionPaths();
+    }
+
+    _resetTableFunctionPaths() {
+        this.tableFunctionPaths = [];
+    }
+
+    _addTableFunctionsToHDI(project, projectName, projectCollection) {
+        const hdiPath = `${projectName}.hdi`;
+        const hdiFile = project.getFile(hdiPath);
+        const hdiObject = JSON.parse(hdiFile.getText());
+
+        for (const path of this.tableFunctionPaths) {
+            let trimmed = path;
+            if (path.startsWith('./')) {
+                trimmed = path.substring(2);
+            }
+            hdiObject['deploy'].push(`/${projectName}/${trimmed}`);
+        }
+
+        const hdiJson = JSON.stringify(hdiObject, null, 4);
+        let resource = projectCollection.getResource(hdiPath);
+        resource.setText(hdiJson);
+        hdiFile.setText(hdiJson);
     }
 
 }

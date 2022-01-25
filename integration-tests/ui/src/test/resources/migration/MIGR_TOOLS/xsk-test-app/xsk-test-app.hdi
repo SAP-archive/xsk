@@ -9,7 +9,8 @@
         "/xsk-test-app/test.hdbcalculationview",
         "/xsk-test-app/usersAnalyticPrivilege.analyticprivilege",
         "/xsk-test-app/usersHDBAnalyticPrivilege.hdbanalyticprivilege",
-        "/xsk-test-app/usersView.calculationview"
+        "/xsk-test-app/usersView.calculationview",
+        "/xsk-test-app/usersTableFunction.tablefunction"
     ],
     "undeploy": []
 }

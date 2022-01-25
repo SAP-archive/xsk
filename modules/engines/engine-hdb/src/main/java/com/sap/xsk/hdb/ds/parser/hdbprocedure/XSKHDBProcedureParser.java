@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.parser.hdbprocedure;
 
 import java.sql.Timestamp;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
@@ -25,15 +26,15 @@ import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 public class XSKHDBProcedureParser implements XSKDataStructureParser {
 
   @Override
-  public XSKDataStructureHDBProcedureModel parse(String location, String content) throws XSKDataStructuresException {
+  public XSKDataStructureHDBProcedureModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException {
     XSKDataStructureHDBProcedureModel hdbProcedure = new XSKDataStructureHDBProcedureModel();
-    hdbProcedure.setName(XSKHDBUtils.extractProcedureNameFromContent(content, location));
-    hdbProcedure.setLocation(location);
+    hdbProcedure.setName(XSKHDBUtils.extractProcedureNameFromContent(parametersModel.getContent(), parametersModel.getLocation()));
+    hdbProcedure.setLocation(parametersModel.getLocation());
     hdbProcedure.setType(getType());
-    hdbProcedure.setHash(DigestUtils.md5Hex(content));
+    hdbProcedure.setHash(DigestUtils.md5Hex(parametersModel.getContent()));
     hdbProcedure.setCreatedBy(UserFacade.getName());
     hdbProcedure.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    hdbProcedure.setContent(content);
+    hdbProcedure.setContent(parametersModel.getContent());
     return hdbProcedure;
   }
 

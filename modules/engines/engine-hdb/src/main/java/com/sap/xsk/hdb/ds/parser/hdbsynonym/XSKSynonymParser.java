@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.sap.xsk.hdb.ds.artefacts.HDBSynonymSynchronizationArtefactType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
@@ -43,13 +44,14 @@ public class XSKSynonymParser implements XSKDataStructureParser {
   private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
-  public XSKDataStructureHDBSynonymModel parse(String location, String content) throws XSKDataStructuresException, IOException {
+  public XSKDataStructureHDBSynonymModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException, IOException {
     XSKDataStructureHDBSynonymModel hdbSynonymModel = new XSKDataStructureHDBSynonymModel();
-    XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSynonymModel, IXSKDataStructureModel.TYPE_HDB_SYNONYM, XSKDBContentType.XS_CLASSIC);
+    XSKHDBUtils.populateXSKDataStructureModel(parametersModel.getLocation(), parametersModel.getContent(), hdbSynonymModel,
+        IXSKDataStructureModel.TYPE_HDB_SYNONYM, XSKDBContentType.XS_CLASSIC);
 
     Gson gson = new Gson();
     JsonParser jsonParser = new JsonParser();
-    JsonObject jsonObject = jsonParser.parse(content).getAsJsonObject();
+    JsonObject jsonObject = jsonParser.parse(parametersModel.getContent()).getAsJsonObject();
 
     Map<String, XSKHDBSYNONYMDefinitionModel> synonymDefinitions = new HashMap<>();
     for (Entry<String, JsonElement> entry : jsonObject.entrySet()) {
@@ -62,11 +64,12 @@ public class XSKSynonymParser implements XSKDataStructureParser {
         //aligned with HANA XS Classic, where the synonym name must match the artifact name and multiple synonym definitions are not supported
         //synonymDefinitions.put(hdbSynonymModel.getName(), definitionModel);
       } catch (XSKHDBSYNONYMMissingPropertyException exception) {
-        XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "",
+        XSKCommonsUtils.logCustomErrors(parametersModel.getLocation(), XSKCommonsConstants.PARSER_ERROR, "", "",
             String.format("Missing mandatory field for synonym %s!", entry.getKey()), XSKCommonsConstants.EXPECTED_FIELDS,
             XSKCommonsConstants.HDB_SYNONYM_PARSER,XSKCommonsConstants.MODULE_PARSERS,XSKCommonsConstants.SOURCE_PUBLISH_REQUEST,
             XSKCommonsConstants.PROGRAM_XSK);
-        dataStructuresSynchronizer.applyArtefactState(entry.getKey(),location,SYNONYM_ARTEFACT, ArtefactState.FAILED_CREATE, exception.getMessage());
+        dataStructuresSynchronizer.applyArtefactState(entry.getKey(),parametersModel.getLocation(),SYNONYM_ARTEFACT,
+            ArtefactState.FAILED_CREATE, exception.getMessage());
       }
     }
     hdbSynonymModel.setSynonymDefinitions(synonymDefinitions);

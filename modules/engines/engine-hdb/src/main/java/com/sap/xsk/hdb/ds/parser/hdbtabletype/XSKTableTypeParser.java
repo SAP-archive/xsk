@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -17,6 +17,7 @@ import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypePrimaryKeyModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
@@ -50,14 +51,14 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
   private HDBTableDefinitionModelToHDBTableColumnModelTransformer columnModelTransformer = new HDBTableDefinitionModelToHDBTableColumnModelTransformer();
 
   @Override
-  public XSKDataStructureHDBTableTypeModel parse(String location, String content)
+  public XSKDataStructureHDBTableTypeModel parse(XSKDataStructureParametersModel parametersModel)
       throws XSKDataStructuresException, IOException, XSKArtifactParserException {
     Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*TYPE", Pattern.CASE_INSENSITIVE);
-    Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
+    Matcher matcher = pattern.matcher(parametersModel.getContent().trim().toUpperCase(Locale.ROOT));
     boolean matchFound = matcher.find();
     return (matchFound)
-        ? parseHanaXSAdvancedContent(location, content)
-        : parseHanaXSClassicContent(location, content);
+        ? parseHanaXSAdvancedContent(parametersModel.getLocation(), parametersModel.getContent())
+        : parseHanaXSClassicContent(parametersModel.getLocation(), parametersModel.getContent());
   }
 
   private XSKDataStructureHDBTableTypeModel parseHanaXSClassicContent(String location, String content)

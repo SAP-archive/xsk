@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -14,11 +14,12 @@ package com.sap.xsk.hdb.ds.service.parser;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import java.io.IOException;
 
 public interface IXSKCoreParserService {
 
-  XSKDataStructureModel parseDataStructure(String type, String location, String content)
+  XSKDataStructureModel parseDataStructure(XSKDataStructureParametersModel parametersModel)
       throws XSKDataStructuresException, IOException, XSKArtifactParserException;
 
   Class<XSKDataStructureModel> getDataStructureClass(String type);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
@@ -34,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
@@ -85,8 +87,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    */
   public void registerPredeliveredEntities(String contentPath) throws Exception {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureEntitiesModel model = (XSKDataStructureEntitiesModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, contentPath, data);
+        .parseDataStructure(parametersModel);
     ENTITIES_PREDELIVERED.put(contentPath, model);
   }
 
@@ -98,8 +102,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    */
   public void registerPredeliveredTable(String contentPath) throws Exception {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.FILE_EXTENSION_TABLE, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureHDBTableModel model = (XSKDataStructureHDBTableModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_TABLE, contentPath, data);
+        .parseDataStructure(parametersModel);
     TABLES_PREDELIVERED.put(contentPath, model);
   }
 
@@ -111,8 +117,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    */
   public void registerPredeliveredView(String contentPath) throws Exception {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.FILE_EXTENSION_VIEW, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureHDBViewModel model = (XSKDataStructureHDBViewModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_VIEW, contentPath, data);
+        .parseDataStructure(parametersModel);
     VIEWS_PREDELIVERED.put(contentPath, model);
   }
 
@@ -124,8 +132,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    */
   public void registerPredeliveredSynonym(String contentPath) throws Exception {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureHDBSynonymModel model = (XSKDataStructureHDBSynonymModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM, contentPath, data);
+        .parseDataStructure(parametersModel);
     SYNONYMS_PREDELIVERED.put(contentPath, model);
   }
 
@@ -139,9 +149,11 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
   public void registerPredeliveredHDBProcedure(String contentPath)
       throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureHDBProcedureModel model;
     model = (XSKDataStructureHDBProcedureModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE, contentPath, data);
+        .parseDataStructure(parametersModel);
     PROCEDURES_PREDELIVERED.put(contentPath, model);
   }
 
@@ -154,9 +166,11 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
   public void registerPredeliveredHDBTableFunction(String contentPath)
       throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureHDBTableFunctionModel model;
     model = (XSKDataStructureHDBTableFunctionModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION, contentPath, data);
+        .parseDataStructure(parametersModel);
     TABLEFUNCTIONS_PREDELIVERED.put(contentPath, model);
   }
 
@@ -170,9 +184,11 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
   public void registerPredeliveredHDBSchema(String contentPath)
       throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureHDBSchemaModel model;
     model = (XSKDataStructureHDBSchemaModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA, contentPath, data);
+        .parseDataStructure(parametersModel);
     SCHEMAS_PREDELIVERED.put(contentPath, model);
   }
 
@@ -184,8 +200,10 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
    */
   public void registerPredeliveredHDBStructure(String contentPath) throws Exception {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.FILE_EXTENSION_STRUCTURE, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureHDBTableTypeModel model = (XSKDataStructureHDBTableTypeModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.FILE_EXTENSION_STRUCTURE, contentPath, data);
+        .parseDataStructure(parametersModel);
     TABLE_TYPES_PREDELIVERED.put(contentPath, model);
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -16,6 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.nio.charset.StandardCharsets;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
@@ -61,7 +62,9 @@ public class XSKSynonymParserTest extends AbstractDirigibleTest {
         + "}";
     String errorMessage = "Missing mandatory field for synonym SY_DUMMY!";
     XSKSynonymParser parser = new XSKSynonymParser();
-    parser.parse("hdb_view/MySynonym.hdbsynonym", content);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, "hdb_view/MySynonym.hdbsynonym", content, null);
+    parser.parse(parametersModel);
     assertTrue(ProblemsFacade.fetchAllProblems().contains(errorMessage));
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -102,6 +102,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSEQUENCE, new XSKHDBSequenceParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSCALARFUNCTION, new XSKHDBScalarFunctionParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_STRUCTURE, new XSKTableTypeParser());
+    parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDB_TABLE_TYPE, new XSKTableTypeParser());
 
     parserServices.put(IXSKDataStructureModel.TYPE_HDBDD, new XSKHdbddParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new XSKTableParser());

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.parser.hdbtablefunction;
 
 import java.sql.Timestamp;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -26,15 +27,16 @@ import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKDataStructureHDBTableFunctionModel> {
 
   @Override
-  public XSKDataStructureHDBTableFunctionModel parse(String location, String content) throws XSKDataStructuresException {
+  public XSKDataStructureHDBTableFunctionModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException {
     XSKDataStructureHDBTableFunctionModel hdbTableFunction = new XSKDataStructureHDBTableFunctionModel();
-    hdbTableFunction.setName(XSKHDBUtils.extractTableFunctionNameFromContent(content, location, XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER));
-    hdbTableFunction.setLocation(location);
+    hdbTableFunction.setName(XSKHDBUtils.extractTableFunctionNameFromContent(parametersModel.getContent(), parametersModel.getLocation(),
+        XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER));
+    hdbTableFunction.setLocation(parametersModel.getLocation());
     hdbTableFunction.setType(getType());
-    hdbTableFunction.setHash(DigestUtils.md5Hex(content));
+    hdbTableFunction.setHash(DigestUtils.md5Hex(parametersModel.getContent()));
     hdbTableFunction.setCreatedBy(UserFacade.getName());
     hdbTableFunction.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    hdbTableFunction.setContent(content);
+    hdbTableFunction.setContent(parametersModel.getContent());
     return hdbTableFunction;
   }
 

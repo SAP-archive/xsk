@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -17,6 +17,7 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
 import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
 import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerDropProcessor;
@@ -37,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -150,8 +152,10 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
    */
   public void registerPredeliveredHDI(String contentPath) throws Exception {
     String data = loadResourceContent(contentPath);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(IXSKDataStructureModel.TYPE_HDI, contentPath, data, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
     XSKDataStructureHDIModel model = (XSKDataStructureHDIModel) xskCoreParserService
-        .parseDataStructure(IXSKDataStructureModel.TYPE_HDI, contentPath, data);
+        .parseDataStructure(parametersModel);
     HDI_PREDELIVERED.put(contentPath, model);
   }
 
@@ -259,8 +263,10 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
         String contentAsString = getContent(resource);
         XSKDataStructureHDIModel hdi;
         try {
+          XSKDataStructureParametersModel parametersModel =
+              new XSKDataStructureParametersModel(IXSKDataStructureModel.TYPE_HDI, registryPath, contentAsString, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
           hdi = (XSKDataStructureHDIModel) xskCoreParserService
-              .parseDataStructure(IXSKDataStructureModel.TYPE_HDI, registryPath, contentAsString);
+              .parseDataStructure(parametersModel);
         } catch (XSKDataStructuresException e) {
           logger.error("Synchronized hdi artifact is not valid");
           logger.error(e.getMessage());

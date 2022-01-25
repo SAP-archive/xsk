@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
@@ -71,14 +72,14 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
   }
 
   @Override
-  public XSKDataStructureHDBTableModel parse(String location, String content)
+  public XSKDataStructureHDBTableModel parse(XSKDataStructureParametersModel parametersModel)
       throws XSKDataStructuresException, IOException, XSKArtifactParserException {
     Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*(COLUMN)(\\t\\n)*(\\s)*(TABLE)", Pattern.CASE_INSENSITIVE);
-    Matcher matcher = pattern.matcher(content.trim().toUpperCase(Locale.ROOT));
+    Matcher matcher = pattern.matcher(parametersModel.getContent().trim().toUpperCase(Locale.ROOT));
     boolean matchFound = matcher.find();
     return (matchFound)
-        ? parseHanaXSAdvancedContent(location, content)
-        : parseHanaXSClassicContent(location, content);
+        ? parseHanaXSAdvancedContent(parametersModel.getLocation(), parametersModel.getContent())
+        : parseHanaXSClassicContent(parametersModel.getLocation(), parametersModel.getContent());
   }
 
   private XSKDataStructureHDBTableModel parseHanaXSClassicContent(String location, String content)

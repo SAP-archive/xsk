@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -23,14 +23,13 @@ const StringReader = Java.type("java.io.StringReader");
 const StringWriter = Java.type("java.io.StringWriter");
 const ByteArrayInputStream = Java.type("java.io.ByteArrayInputStream");
 const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
+
 const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor");
 const HanaVisitor = require('./HanaVisitor');
 const hdiFile = require('ide-migration/server/migration/repository/hdi-plugins')
 const xskModificator = new XSKProjectMigrationInterceptor();
 const git = require('git/v4/client');
-
-
-
+const XSKHDBCoreFacade = Java.type("com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade");
 
 
 class MigrationService {
@@ -38,6 +37,9 @@ class MigrationService {
     connection = null;
     repo = null;
     tableFunctionPaths = [];
+     synonymFileName = 'hdi-synonyms.hdbsynonym';
+    publicSynonymFileName = 'hdi-public-synonyms.hdbpublicsynonym'
+
 
     setupConnection(databaseName, databaseUser, databaseUserPassword, connectionUrl) {
         database.createDataSource(databaseName, "com.sap.db.jdbc.Driver", connectionUrl, databaseUser, databaseUserPassword, null);
@@ -70,7 +72,12 @@ class MigrationService {
     }
 
     createHdiConfigFile(workspaceName, project) {
+
         const hdiConfig = hdiFile.getHdiFilePlugins();
+
+            
+        };
+
 
 
         const projectName = project.getName();
@@ -123,6 +130,7 @@ class MigrationService {
 
     copyFilesLocally(workspaceName, lists) {
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const facade = new XSKHDBCoreFacade();
 
         const locals = [];
         for (const file of lists) {
@@ -145,6 +153,20 @@ class MigrationService {
             const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
             const localResource = projectCollection.createResource(fileRunLocation, content);
 
+            const fileName = this._getFileNameWithExtension(file);
+            const filePath = this._getAbsoluteFilePath(file);
+            const fileContent = bytes.byteArrayToText(content);
+
+            // Parse current artifacts and generate synonym files for it if necessary
+            const parsedData = facade.parseDataStructureModel(fileName, filePath, fileContent, workspaceCollection.getPath() + "/");
+            const synonymData = this._handleParsedData(parsedData, workspaceName, projectName, fileRunLocation);
+            const hdbSynonyms = this._appendOrCreateSynonymsFile(this.synonymFileName, synonymData.hdbSynonyms, workspaceName, projectName);
+            const hdbPublicSynonyms = this._appendOrCreateSynonymsFile(this.publicSynonymFileName, synonymData.hdbPublicSynonyms, workspaceName, projectName);
+
+            // Add any generated synonym files to locals
+            locals.push(...hdbSynonyms);
+            locals.push(...hdbPublicSynonyms);
+
             locals.push({
                 repositoryPath: localResource.getPath(),
                 relativePath: fileRunLocation,
@@ -152,7 +174,92 @@ class MigrationService {
                 runLocation: file.RunLocation
             })
         }
+
         return locals;
+    }
+
+    _getFileNameWithExtension(file) {
+        return file._name + "." + file._suffix;
+    }
+
+    _getAbsoluteFilePath(file) {
+        const filePath = file._packageName.replaceAll('.', "/") + "/" ;
+        return filePath + this._getFileNameWithExtension(file);
+    }
+
+    _handleParsedData(parsedData, workspaceName, projectName, relativePath) {
+        if(!parsedData) {
+            return [];
+        }
+
+        const dataModelType = parsedData.getClass().getName();
+        const hdbDDModel = "com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel";
+
+        var synonyms = [];
+        var publicSynonyms = [];
+        if(dataModelType == hdbDDModel) {
+            for(const item of parsedData.tableModels) {
+               publicSynonyms.push(this._generateHdbPublicSynonym(item.getName()));
+               synonyms.push(this._generateHdbSynonym(item.getName(), item.getSchema()));
+            }
+
+            for(const item of parsedData.tableTypeModels) {
+               publicSynonyms.push(this._generateHdbPublicSynonym(item.getName()));
+               synonyms.push(this._generateHdbSynonym(item.getName(), item.getSchema()));
+            }
+        }
+        else {
+            publicSynonyms.push(this._generateHdbPublicSynonym(parsedData.getName()));
+            synonyms.push(this._generateHdbSynonym(parsedData.getName(), parsedData.getSchema()));
+        }
+
+        return { hdbSynonyms: synonyms, hdbPublicSynonyms: publicSynonyms };
+    }
+
+    _generateHdbSynonym(name, schemaName) {
+        const trimmedName = name.split(':').pop();
+        return {
+            name: name,
+            value: {
+               "target" : {
+                   "object" : trimmedName,
+                   "schema" : schemaName
+               }
+           }
+        }
+    }
+
+    _generateHdbPublicSynonym(name) {
+        return {
+            name: name,
+            value: {
+               "target" : {
+                   "object" : name,
+               }
+            }
+        }
+    }
+
+    _appendOrCreateSynonymsFile(fileName, synonyms, workspaceName, projectName) {
+        const synonymLocalPaths = [];
+
+        if(!synonyms) {
+            return synonymLocalPaths;
+        }
+
+        for(const synonym of synonyms) {
+            const res = this._getOrCreateHdbSynonymFile(workspaceName, projectName, fileName);
+            const synonymFile = res.resource;
+            if(res.localPaths) {
+                synonymLocalPaths.push(res.localPaths);
+            }
+
+            const content = JSON.parse(bytes.byteArrayToText(synonymFile.getContent()));
+            content[synonym.name] = synonym.value;
+            synonymFile.setContent(bytes.textToByteArray(JSON.stringify(content, null, 4)));
+        }
+
+        return synonymLocalPaths;
     }
 
     _isFileCalculationView(filePath) {
@@ -210,6 +317,30 @@ class MigrationService {
         return workspaceCollection.createCollection(projectName);
     }
 
+    _getOrCreateHdbSynonymFile(workspaceName, projectName, hdbSynonymFileName) {
+        const workspaceCollection = repositoryManager.getCollection(workspaceName);
+        const projectCollection = workspaceCollection.getCollection(projectName);
+
+        var synonymFile = projectCollection.getResource(hdbSynonymFileName);
+        if (synonymFile.exists()) {
+            return {
+                resource: synonymFile,
+                localPaths: null
+            }
+        }
+
+        synonymFile = projectCollection.createResource(hdbSynonymFileName, bytes.textToByteArray("{}"));
+        return {
+            resource: synonymFile,
+            localPaths: {
+                repositoryPath: synonymFile.getPath(),
+                relativePath: synonymFile.getPath().split(projectName).pop(),
+                projectName: projectName,
+                runLocation: synonymFile.getPath().split(workspaceName).pop()
+            }
+        }
+    }
+
     createMigratedWorkspace(workspaceName) {
         let workspace;
         if (!workspaceName) {
@@ -255,6 +386,30 @@ class MigrationService {
         }
 
         return deployables;
+    }
+
+    getSynonymFilePath(projectName) {
+        return "/" + projectName + "/" + this.synonymFileName;
+    }
+
+    getPublicSynonymFilePath(projectName) {
+        return "/" + projectName + "/" + this.publicSynonymFileName;
+    }
+
+    getProjectsWithSynonyms(locals) {
+        const projectNames = [];
+        for (const local of locals) {
+            const projectSynonymPath = this.getSynonymFilePath(local.projectName)
+            const projectPublicSynonymPath = this.getPublicSynonymFilePath(local.projectName);
+
+            if(local.runLocation === projectSynonymPath
+            || local.runLocation === projectPublicSynonymPath) {
+                if(!projectNames.includes(local.projectName)) {
+                    projectNames.push(local.projectName);
+                }
+            }
+        }
+        return projectNames;
     }
 
     addFileToWorkspace(workspaceName, repositoryPath, relativePath, projectName) {
@@ -396,6 +551,7 @@ class MigrationService {
             xskModificator.interceptXSKProject(workspace, projectName);
         }
     }
+
 
 
 }

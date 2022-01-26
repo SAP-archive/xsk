@@ -102,9 +102,9 @@ You can deploy XSK in the SAP BTP[^1], Cloud Foundry environment.
 
     ```
     cf create-route <org-name> --hostname xsk 
-   cf map-route xsk <org-name> --hostname xsk
+    cf map-route xsk <org-name> --hostname xsk
     ```
-    
+
 1. Deploy XSK:
 
 
@@ -113,7 +113,6 @@ You can deploy XSK in the SAP BTP[^1], Cloud Foundry environment.
         ```
         cf push xsk \
         --docker-image=dirigiblelabs/xsk-cf:latest \
-        --hostname xsk-<org-name> \
         -m 2G -k 2G
         ```
         !!! info "Note"

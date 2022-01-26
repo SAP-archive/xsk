@@ -99,11 +99,10 @@ You can deploy XSK in the SAP BTP[^1], Cloud Foundry environment.
             Use the same `<applicationName>` as in the previous step.
 
 1. Create map route:
-
-    ```
-    cf create-route <org-name> --hostname xsk 
-    cf map-route xsk <org-name> --hostname xsk
-    ```
+      ```
+      cf create-route <org-name> --hostname xsk 
+      cf map-route xsk <org-name> --hostname xsk
+      ```
 
 1. Deploy XSK:
 

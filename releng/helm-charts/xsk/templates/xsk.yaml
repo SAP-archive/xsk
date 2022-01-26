@@ -54,6 +54,8 @@ metadata:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
   replicas: {{ required "Missing replica count" .Values.replicaCount }}
+  strategy:
+    type: {{ required "Missing deployment strategy type" .Values.deployment.strategyType }}
   selector:
     matchLabels:
       {{- include "xsk.selectorLabels" . | nindent 6 }}

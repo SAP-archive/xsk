@@ -4,6 +4,9 @@
 
 replicaCount: 1
 
+deployment:
+  strategyType: Recreate
+
 create:
   namespace: default
 

@@ -149,6 +149,13 @@
         </exclusion>
 			</exclusions>
 		</dependency>
+
+    <!-- Mail -->
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-modules-engines-mail-destination</artifactId>
+      <version>0.13.0-SNAPSHOT</version>
+    </dependency>
 	</dependencies>
 
 	<properties>

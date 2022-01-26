@@ -64,6 +64,8 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
           namespace: default
         spec:
           replicas: 1
+          strategy:
+            type: Recreate
           selector:
             matchLabels:
               app: xsk
@@ -165,6 +167,8 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
           namespace: default
         spec:
           replicas: 1
+          strategy:
+            type: Recreate
           selector:
             matchLabels:
               app: xsk

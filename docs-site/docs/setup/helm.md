@@ -114,6 +114,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         |             Name                          |          Description            |        Default         |
         |-------------------------------------------|---------------------------------|------------------------|
         | `replicaCount`                            | Number of replicas              | `1`                    |
+        | `deployment.strategyType`                 | Deployment strategy type        | `Recreate`             |
         | `create.namespace`                        | Create namespace                | `default`              |
         | `serviceAccount.create`                   | Create service account          | `false`                |
         | `serviceAccount.annotations`              | Add annotations to sa           | ``                     |
@@ -127,6 +128,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         | `fullNameOverride`                        | Full name override              | ``                     |
         | `kyma.enabled`                            | Enable Kyma                     | ``                     |
         | `kyma.host`                               | Kyma host                       | ``                     |
+        | `kyma.serverMaxHttpHeaderSize`            | Tomcat max http header size     | `48000`                |
         | `kyma.addRoles`                           | Enable add new roles            | ``                     |
         | `kyma.roles`                              | Name for new roles              | ``                     |
         | `application.image`                       | Application image               | ``                     |

@@ -29,6 +29,7 @@ const hdiFile = require('ide-migration/server/migration/repository/hdi-plugins')
 const xskModificator = new XSKProjectMigrationInterceptor();
 const git = require('git/v4/client');
 const XSKHDBCoreFacade = Java.type("com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade");
+const hdbDDModel = "com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel";
 
 
 class MigrationService {
@@ -67,7 +68,7 @@ class MigrationService {
       }
     }
 
-    return {generated: generatedFiles, updated: updatedFiles};
+    return { generated: generatedFiles, updated: updatedFiles };
   }
 
   createHdiConfigFile(workspaceName, project) {
@@ -124,7 +125,7 @@ class MigrationService {
 
   copyFilesLocally(workspaceName, lists) {
     const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
-    const facade = new XSKHDBCoreFacade();
+    const hdbFacade = new XSKHDBCoreFacade();
 
     const locals = [];
     for (const file of lists) {
@@ -152,7 +153,7 @@ class MigrationService {
       const fileContent = bytes.byteArrayToText(content);
 
       // Parse current artifacts and generate synonym files for it if necessary
-      const parsedData = facade.parseDataStructureModel(fileName, filePath, fileContent, workspaceCollection.getPath() + "/");
+      const parsedData = hdbFacade.parseDataStructureModel(fileName, filePath, fileContent, workspaceCollection.getPath() + "/");
       const synonymData = this._handleParsedData(parsedData, workspaceName, projectName, fileRunLocation);
       const hdbSynonyms = this._appendOrCreateSynonymsFile(this.synonymFileName, synonymData.hdbSynonyms, workspaceName, projectName);
       const hdbPublicSynonyms = this._appendOrCreateSynonymsFile(this.publicSynonymFileName, synonymData.hdbPublicSynonyms, workspaceName, projectName);
@@ -187,26 +188,41 @@ class MigrationService {
     }
 
     const dataModelType = parsedData.getClass().getName();
-    const hdbDDModel = "com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel";
 
     var synonyms = [];
     var publicSynonyms = [];
     if (dataModelType == hdbDDModel) {
-      for (const item of parsedData.tableModels) {
-        publicSynonyms.push(this._generateHdbPublicSynonym(item.getName()));
-        synonyms.push(this._generateHdbSynonym(item.getName(), item.getSchema()));
+      for (const tableModel of parsedData.tableModels) {
+        const tableModelName = tableModel.getName();
+        const tableModelSchema = tableModel.getSchema();
+        const hdbPublicSynonym = this._generateHdbPublicSynonym(tableModelName);
+        const hdbSynonym = this._generateHdbSynonym(tableModelName, tableModelSchema);
+
+        publicSynonyms.push(hdbPublicSynonym);
+        synonyms.push(hdbSynonym);
       }
 
-      for (const item of parsedData.tableTypeModels) {
-        publicSynonyms.push(this._generateHdbPublicSynonym(item.getName()));
-        synonyms.push(this._generateHdbSynonym(item.getName(), item.getSchema()));
+      for (const tableTypeModel of parsedData.tableTypeModels) {
+        const tableTypeModelName = tableTypeModel.getName();
+        const tableTypeModelSchema = tableTypeModel.getSchema();
+        const hdbPublicSynonym = this._generateHdbPublicSynonym(tableTypeModelName);
+        const hdbSynonym = this._generateHdbSynonym(tableTypeModelName, tableTypeModelSchema);
+
+        publicSynonyms.push(hdbPublicSynonym);
+        synonyms.push(hdbSynonym);
       }
-    } else {
-      publicSynonyms.push(this._generateHdbPublicSynonym(parsedData.getName()));
-      synonyms.push(this._generateHdbSynonym(parsedData.getName(), parsedData.getSchema()));
+    }
+    else {
+      const modelName = parsedData.getName();
+      const modelSchema = parsedData.getSchema();
+      const hdbPublicSynonym = this._generateHdbPublicSynonym(modelName);
+      const hdbSynonym = this._generateHdbSynonym(modelName, modelSchema);
+
+      publicSynonyms.push(hdbPublicSynonym);
+      synonyms.push(hdbSynonym);
     }
 
-    return {hdbSynonyms: synonyms, hdbPublicSynonyms: publicSynonyms};
+    return { hdbSynonyms: synonyms, hdbPublicSynonyms: publicSynonyms };
   }
 
   _generateHdbSynonym(name, schemaName) {
@@ -214,9 +230,9 @@ class MigrationService {
     return {
       name: name,
       value: {
-        "target": {
-          "object": trimmedName,
-          "schema": schemaName
+        target: {
+          object: trimmedName,
+          schema: schemaName
         }
       }
     }
@@ -226,8 +242,8 @@ class MigrationService {
     return {
       name: name,
       value: {
-        "target": {
-          "object": name,
+        target: {
+          object: name,
         }
       }
     }
@@ -241,15 +257,22 @@ class MigrationService {
     }
 
     for (const synonym of synonyms) {
-      const res = this._getOrCreateHdbSynonymFile(workspaceName, projectName, fileName);
-      const synonymFile = res.resource;
-      if (res.localPaths) {
-        synonymLocalPaths.push(res.localPaths);
+      const synonymResourceAndPaths = this._getOrCreateHdbSynonymFile(workspaceName, projectName, fileName);
+      const synonymFile = synonymResourceAndPaths.resource;
+      if (synonymResourceAndPaths.localPaths) {
+        synonymLocalPaths.push(synonymResourceAndPaths.localPaths);
       }
 
-      const content = JSON.parse(bytes.byteArrayToText(synonymFile.getContent()));
+      const synonymFileContent = synonymFile.getContent();
+      const synonymFileContentAsText = bytes.byteArrayToText(synonymFileContent);
+      const content = JSON.parse(synonymFileContentAsText);
+
       content[synonym.name] = synonym.value;
-      synonymFile.setContent(bytes.textToByteArray(JSON.stringify(content, null, 4)));
+
+      const newSynonymFileContent = JSON.stringify(content, null, 4);
+      const newSynonymFileBytes = bytes.textToByteArray(newSynonymFileContent);
+
+      synonymFile.setContent(newSynonymFileBytes);
     }
 
     return synonymLocalPaths;

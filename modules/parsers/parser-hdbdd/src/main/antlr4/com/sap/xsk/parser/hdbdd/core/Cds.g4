@@ -9,10 +9,10 @@ topLevelSymbol: dataTypeRule | artifactRule;
 
 dataTypeRule: type=ID name=ID ':' typeAssignRule ';';
 fieldDeclRule: (ID | '"' ID '"') ':' typeAssignRule ';';
-typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'           # AssignBuiltInTypeWithArgs
-                | HANA '.' ref=ID                                         # AssignHanaType
-                | HANA '.' ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
-                | TYPE_OF? pathSubMembers+=ID ('.'pathSubMembers+=ID)*      # AssignType
+typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'                        # AssignBuiltInTypeWithArgs
+                | hanaType=BUILT_IN_HANA_TYPE                                            # AssignHanaType
+                | hanaType=BUILT_IN_HANA_TYPE '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
+                | TYPE_OF? pathSubMembers+=ID ('.'pathSubMembers+=ID)*                   # AssignType
                 ;
 elementDeclRule: annotationRule* (key=ID)? (name=ID | '"' name=ID '"') ':' typeAssignRule elementDetails* ';';
 elementDetails: defaultValue | elementConstraints;
@@ -45,7 +45,9 @@ artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule 
 
 NAMESPACE: N A M E S P A C E;
 AS: 'as';
-HANA: 'hana';
+
+BUILT_IN_HANA_TYPE: HanaTypePrefix ('VARCHAR' | 'ALPHANUM' | 'SMALLINT' | 'TINYINT' | 'REAL' | 'SMALLDECIMAL' | 'CLOB' | 'BINARY' | 'ST_POINT' | 'ST_GEOMETRY');
+
 USING: U S I N G;
 ON: 'on';
 NULL: 'null';
@@ -65,15 +67,12 @@ UTC_TIMESTAMP: UTCTimestamp;
 STRING: '\'' (~["\\\r\n] | EscapeSequence)*? '\'' { setText(getText().substring(1, getText().length() - 1)); };
 VARBINARY: X '\'' ((A | B | C | D | E | F) | INTEGER)* '\'' { setText(getText().substring(1, getText().length() - 1)); };
 TYPE_OF: 'type' WS 'of';
-
-
 WS : [ \\\t\r\n]+ -> skip;
 LINE_COMMENT        : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
 LINE_COMMENT2        : '/*' .*? '*/' -> skip ; // Match "/* */" stuff
 
 fragment IdCharacters : ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_')*;
 fragment EscapedIdCharactes: '"' (~["\\\r\n] | EscapeSequence)*? '"';
-
 fragment EscapeSequence
     : '\\' [btnfr"'\\]
     | '\\' ([0-3]? [0-7])? [0-7]
@@ -119,6 +118,8 @@ fragment Date: Digit[4] '-' Digit[2] '-' Digit[2];
 fragment Time: Digit[2] ':' Digit[2] (':' Digit[2])?;
 fragment TimeWithPrecision: Digit[2] ':' Digit[2] ':' Digit[2] ('.' Digit[1-7])?;
 
+fragment HanaTypePrefix: 'hana.';
+
 A : 'A'|'a';
 B : 'B'|'b';
 C : 'C'|'c';
@@ -145,6 +146,3 @@ W : 'W'|'w';
 X : 'X'|'x';
 Y : 'Y'|'y';
 Z : 'Z'|'z';
-
-
-

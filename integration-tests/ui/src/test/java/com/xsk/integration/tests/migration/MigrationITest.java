@@ -74,8 +74,8 @@ public class MigrationITest {
       return; // assume we're already logged in
     }
 
-    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Username']"), "dirigible");
-    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Password']"), "dirigible");
+    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Username']"), DirigibleConnectionProperties.AUTH_USERNAME);
+    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Password']"), DirigibleConnectionProperties.AUTH_PASSWORD);
     webBrowser.clickItem(By.xpath("//button[text() = 'Log in']"));
   }
 

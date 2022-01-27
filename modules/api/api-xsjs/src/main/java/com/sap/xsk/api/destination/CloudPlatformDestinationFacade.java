@@ -35,15 +35,6 @@ import java.net.URI;
 import java.util.Arrays;
 
 public class CloudPlatformDestinationFacade implements IScriptingFacade {
-
-  private static final String QUERY_PATH = "queryPath";
-  private static final String METHOD = "method";
-  private static final String HEADERS = "headers";
-  private static final String STATUS_CODE = "statusCode";
-  private static final String TEXT = "text";
-  private static final String NAME = "name";
-  private static final String VALUE = "value";
-
   public static Destination getDestination(String name) {
     setKymaCloudPlatformFacade();
 

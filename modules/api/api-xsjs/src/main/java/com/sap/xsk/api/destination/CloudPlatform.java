@@ -30,12 +30,10 @@ public class CloudPlatform extends ScpCfCloudPlatform {
   @Override
   public JsonObject getServiceCredentials(@Nonnull String serviceName, @Nullable String servicePlan)
       throws CloudPlatformException {
-    String destinationPrefix = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_PREFIX, "");
-
-    String clientId = getWithPrefix(destinationPrefix, KymaModule.DIRIGIBLE_DESTINATION_CLIENT_ID);
-    String clientSecret = getWithPrefix(destinationPrefix, KymaModule.DIRIGIBLE_DESTINATION_CLIENT_SECRET);
-    String url = getWithPrefix(destinationPrefix, KymaModule.DIRIGIBLE_DESTINATION_URL);
-    String uri = getWithPrefix(destinationPrefix, KymaModule.DIRIGIBLE_DESTINATION_URI);
+    String clientId = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_CLIENT_ID);
+    String clientSecret = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_CLIENT_SECRET);
+    String url = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_URL);
+    String uri = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_URI);
 
     JsonObject credentialsObject = new JsonObject();
 
@@ -45,10 +43,6 @@ public class CloudPlatform extends ScpCfCloudPlatform {
     credentialsObject.addProperty(URI, uri);
 
     return credentialsObject;
-  }
-
-  private String getWithPrefix(String prefix, String variableName) {
-    return prefix.isEmpty() ? Configuration.get(variableName) : Configuration.get(String.format("%s_%s", prefix, variableName));
   }
 
 }

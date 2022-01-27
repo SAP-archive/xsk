@@ -59,4 +59,4 @@ Parameter               | Description                                           
 **XSK_SYNCHRONIZER_XSJOB_ENABLED** | Whether the XS Jobs synchronizer is enabled | _`false`_
 
 !!! example "Additional Information"
-	You can find all Eclipse Dirigible related environment variables [here](https://www.dirigible.io/help/setup/setup-environment-variables/).
+	To find all Eclipse Dirigible related environment variables, see [Environment Variables](https://www.dirigible.io/help/setup/setup-environment-variables/).

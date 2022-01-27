@@ -1141,10 +1141,75 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_1" type="checkbox" id="__nav_4_1" >
+      
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../prerequisites/">Prerequisites</a>
+          
+            <label for="__nav_4_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Prerequisites" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Prerequisites
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../sap-hana-database-user/" class="md-nav__link">
-        SAP HANA Database User
+      <a href="../prerequisites/delivery-unit/" class="md-nav__link">
+        Delivery Unit
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prerequisites/database-user/" class="md-nav__link">
+        Database User
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -1301,8 +1366,6 @@
         
           
         
-          
-        
       
       
         <label class="md-nav__link" for="__nav_5">
@@ -1325,20 +1388,6 @@
     <li class="md-nav__item">
       <a href="../../cheatsheet/hdi/" class="md-nav__link">
         HDI
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cheatsheet/delivery-unit/" class="md-nav__link">
-        Create Delivery Unit
       </a>
     </li>
   
@@ -1761,7 +1810,7 @@ helm repo update
 <p>You can check your image with:</p>
 <div class="highlight"><pre><span></span><code>kubectl -n default get image xsk-image
 </code></pre></div>
-<p>To download and run the newly created OCI image execute:</p>
+<p>To download and run the newly created OCI image, execute:</p>
 <div class="highlight"><pre><span></span><code>docker run -p 8080:8080 &lt;latest-image-with-digest&gt;
 </code></pre></div>
 </div>
@@ -1905,7 +1954,7 @@ dirigiblelabs/buildpacks-stack-run-xsk - Local
 </li>
 <li>
 <p>Uninstall</p>
-<p>If you want to uninstall Helm kpack chart, run:</p>
+<p>If you want to uninstall the Helm kpack chart, run:</p>
 <div class="highlight"><pre><span></span><code>helm uninstall xsk-kpack
 </code></pre></div>
 </li>

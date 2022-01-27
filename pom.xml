@@ -270,6 +270,8 @@
 		<selenium.version>4.1.1</selenium.version>
 		<selenium.webdriver.manager.version>5.0.3</selenium.webdriver.manager.version>
 		<neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>
+    <neo-java-web-sdk.javax.activation.version>1.2.0</neo-java-web-sdk.javax.activation.version>
+    <neo-java-web-sdk.jaxb.version>2.2.11</neo-java-web-sdk.jaxb.version>
 		<ngdbc.version>2.11.14</ngdbc.version>
 		<maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
 		<commons-csv.version>1.9.0</commons-csv.version>

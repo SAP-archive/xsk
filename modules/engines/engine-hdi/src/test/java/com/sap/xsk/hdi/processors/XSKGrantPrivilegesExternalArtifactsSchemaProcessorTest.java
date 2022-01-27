@@ -15,20 +15,22 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel.Target;
-import com.sap.xsk.hdb.ds.processors.hdi.XSKGrantPrivilegesExternalArtifactsSchemaProcessor;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(PowerMockRunner.class)
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel.Target;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKGrantPrivilegesExternalArtifactsSchemaProcessor;
+
+@RunWith(MockitoJUnitRunner.class)
 public class XSKGrantPrivilegesExternalArtifactsSchemaProcessorTest {
 
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)

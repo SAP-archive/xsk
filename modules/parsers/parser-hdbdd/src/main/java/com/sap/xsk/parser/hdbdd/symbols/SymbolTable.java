@@ -60,16 +60,16 @@ public class SymbolTable {
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCTimestamp",  Arrays.asList(CdsLexer.UTC_TIMESTAMP)));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Boolean",  Arrays.asList(CdsLexer.BOOLEAN)));
 
-    hanaBuiltInTypes.put("ALPHANUM", new BuiltInTypeSymbol("ALPHANUMERIC", 0,  Arrays.asList(CdsLexer.STRING), true));
-    hanaBuiltInTypes.put("SMALLINT", new BuiltInTypeSymbol("SMALLINT", 0,  Arrays.asList(CdsLexer.INTEGER), true));
-    hanaBuiltInTypes.put("TINYINT", new BuiltInTypeSymbol("TINYINT", 0,  Arrays.asList(CdsLexer.INTEGER), true));
-    hanaBuiltInTypes.put("REAL", new BuiltInTypeSymbol("REAL", 0,  Arrays.asList(CdsLexer.DECIMAL), true));
-    hanaBuiltInTypes.put("SMALLDECIMAL", new BuiltInTypeSymbol("SMALLDECIMAL", 0,  Arrays.asList(CdsLexer.DECIMAL), true));
-    hanaBuiltInTypes.put("VARCHAR", new BuiltInTypeSymbol("NVARCHAR", 1,  Arrays.asList(CdsLexer.STRING), true));
-    hanaBuiltInTypes.put("CLOB", new BuiltInTypeSymbol("CLOB", 0,  Arrays.asList(CdsLexer.VARBINARY), true));
-    hanaBuiltInTypes.put("BINARY", new BuiltInTypeSymbol("BINARY", 0,  Arrays.asList(CdsLexer.VARBINARY), true));
-    hanaBuiltInTypes.put("ST_POINT", new BuiltInTypeSymbol("ST_POINT", 0,  Arrays.asList(CdsLexer.STRING), true));
-    hanaBuiltInTypes.put("ST_GEOMETRY", new BuiltInTypeSymbol("ST_GEOMETRY", 0,  Arrays.asList(CdsLexer.STRING), true));
+    hanaBuiltInTypes.put("hana.ALPHANUM", new BuiltInTypeSymbol("ALPHANUMERIC", 0,  Arrays.asList(CdsLexer.STRING), true));
+    hanaBuiltInTypes.put("hana.SMALLINT", new BuiltInTypeSymbol("SMALLINT", 0,  Arrays.asList(CdsLexer.INTEGER), true));
+    hanaBuiltInTypes.put("hana.TINYINT", new BuiltInTypeSymbol("TINYINT", 0,  Arrays.asList(CdsLexer.INTEGER), true));
+    hanaBuiltInTypes.put("hana.REAL", new BuiltInTypeSymbol("REAL", 0,  Arrays.asList(CdsLexer.DECIMAL), true));
+    hanaBuiltInTypes.put("hana.SMALLDECIMAL", new BuiltInTypeSymbol("SMALLDECIMAL", 0,  Arrays.asList(CdsLexer.DECIMAL), true));
+    hanaBuiltInTypes.put("hana.VARCHAR", new BuiltInTypeSymbol("NVARCHAR", 1,  Arrays.asList(CdsLexer.STRING), true));
+    hanaBuiltInTypes.put("hana.CLOB", new BuiltInTypeSymbol("CLOB", 0,  Arrays.asList(CdsLexer.VARBINARY), true));
+    hanaBuiltInTypes.put("hana.BINARY", new BuiltInTypeSymbol("BINARY", 0,  Arrays.asList(CdsLexer.VARBINARY), true));
+    hanaBuiltInTypes.put("hana.ST_POINT", new BuiltInTypeSymbol("ST_POINT", 0,  Arrays.asList(CdsLexer.STRING), true));
+    hanaBuiltInTypes.put("hana.ST_GEOMETRY", new BuiltInTypeSymbol("ST_GEOMETRY", 0,  Arrays.asList(CdsLexer.STRING), true));
 
     initAnnotations();
   }

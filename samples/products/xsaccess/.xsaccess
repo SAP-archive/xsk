@@ -5,5 +5,5 @@
             "method": "Form"
          },
   "authorization":                // Privileges for application access
-       ["Developer", "Administrator"]
+       ["products.xsaccess::Developer", "products.xsaccess::Administrator"]
 }

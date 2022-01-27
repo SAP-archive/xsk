@@ -15,17 +15,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizationArtefactType;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 
 
 public abstract class AbstractXSKProcessor<T extends XSKDataStructureModel> implements IXSKHdbProcessor<T> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBCoreFacade.class);
+
+  private static final XSKDataStructuresSynchronizer DATA_STRUCTURES_SYNCHRONIZER = new XSKDataStructuresSynchronizer();
+
+  public void applyArtefactState(String artefactName, String artefactLocation, AbstractSynchronizationArtefactType type, ISynchronizerArtefactType.ArtefactState state, String message) {
+	  DATA_STRUCTURES_SYNCHRONIZER.applyArtefactState(artefactName, artefactLocation, type, state, message);
+  }
 
   public void executeSql(String sql, Connection connection) throws SQLException {
     try (PreparedStatement statement = connection.prepareStatement(sql)) {

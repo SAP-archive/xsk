@@ -11,20 +11,10 @@
  */
 package com.sap.xsk.hdb.ds.processors.view;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.module.XSKHDBModule;
-import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
-import com.sap.xsk.utils.XSKCommonsConstants;
-import com.sap.xsk.utils.XSKCommonsUtils;
-import com.sap.xsk.utils.XSKConstants;
-import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.ISqlDialect;
@@ -33,6 +23,17 @@ import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.hdb.ds.module.XSKHDBModule;
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.utils.XSKCommonsConstants;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKConstants;
+import com.sap.xsk.utils.XSKHDBUtils;
+
 /**
  * The View Create Processor.
  */
@@ -40,7 +41,6 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
 
   private static final Logger logger = LoggerFactory.getLogger(XSKViewCreateProcessor.class);
   private static final HDBViewSynchronizationArtefactType VIEW_ARTEFACT = new HDBViewSynchronizationArtefactType();
-  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
@@ -71,7 +71,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
           } else {
             String errorMessage = String.format("Views are not supported for %s !", dialect.getDatabaseName(connection));
             XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(), XSKCommonsConstants.HDB_VIEW_PARSER);
-            dataStructuresSynchronizer.applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
+            applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
             throw new IllegalStateException(errorMessage);
           }
         }
@@ -79,16 +79,16 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
       try {
         executeSql(sql, connection);
         String message = String.format("Create view %s successfully", viewModel.getName());
-        dataStructuresSynchronizer.applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+        applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
       } catch (SQLException ex) {
         String errorMessage = String.format("Create view [%s] skipped due to an error: %s", viewModel.getName(), ex.getMessage());
         XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(), XSKCommonsConstants.HDB_VIEW_PARSER);
-        dataStructuresSynchronizer.applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
+        applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
       }
     } else {
       String warningMessage = String.format("View [%s] already exists during the create process", viewModel.getName());
       logger.warn(warningMessage);
-      dataStructuresSynchronizer.applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, warningMessage);
+      applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, warningMessage);
     }
 
     //Create public synonym

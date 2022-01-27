@@ -12,7 +12,7 @@
 package com.sap.xsk.hdbti.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Mockito.when;
 
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import java.sql.Connection;
@@ -43,7 +43,7 @@ public class XSKCSVDefinitionsTopologicalSorterTest {
 
   @Before
   public void openMocks() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
   }
 
   @Test

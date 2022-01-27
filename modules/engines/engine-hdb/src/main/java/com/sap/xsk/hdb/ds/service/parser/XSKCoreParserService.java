@@ -11,24 +11,25 @@
  */
 package com.sap.xsk.hdb.ds.service.parser;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import java.io.IOException;
-import java.util.Map;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
 
 public class XSKCoreParserService implements IXSKCoreParserService {
 
-  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
+  private Map<String, AbstractXSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
 
   @Override
   public XSKDataStructureModel parseDataStructure(XSKDataStructureParametersModel parametersModel)
       throws XSKDataStructuresException, IOException, XSKArtifactParserException {
 
-    XSKDataStructureParser<?> parser = parserServices.get(parametersModel.getType());
+    AbstractXSKDataStructureParser<?> parser = parserServices.get(parametersModel.getType());
     return parser.parse(parametersModel);
   }
 

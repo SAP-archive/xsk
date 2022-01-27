@@ -16,11 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.sap.xsk.hdb.ds.artefacts.HDBSynonymSynchronizationArtefactType;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
-import com.sap.xsk.utils.XSKCommonsConstants;
-import com.sap.xsk.utils.XSKCommonsUtils;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,17 +26,20 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.artefacts.HDBSynonymSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.exceptions.XSKHDBSYNONYMMissingPropertyException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
+import com.sap.xsk.utils.XSKCommonsConstants;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 
-public class XSKSynonymParser implements XSKDataStructureParser {
+public class XSKSynonymParser extends AbstractXSKDataStructureParser {
   private static final Logger logger = LoggerFactory.getLogger(XSKSynonymParser.class);
   private static final HDBSynonymSynchronizationArtefactType SYNONYM_ARTEFACT = new HDBSynonymSynchronizationArtefactType();
-  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
   public XSKDataStructureHDBSynonymModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException, IOException {
@@ -68,7 +66,7 @@ public class XSKSynonymParser implements XSKDataStructureParser {
             String.format("Missing mandatory field for synonym %s!", entry.getKey()), XSKCommonsConstants.EXPECTED_FIELDS,
             XSKCommonsConstants.HDB_SYNONYM_PARSER,XSKCommonsConstants.MODULE_PARSERS,XSKCommonsConstants.SOURCE_PUBLISH_REQUEST,
             XSKCommonsConstants.PROGRAM_XSK);
-        dataStructuresSynchronizer.applyArtefactState(entry.getKey(),parametersModel.getLocation(),SYNONYM_ARTEFACT,
+        applyArtefactState(entry.getKey(),parametersModel.getLocation(),SYNONYM_ARTEFACT,
             ArtefactState.FAILED_CREATE, exception.getMessage());
       }
     }

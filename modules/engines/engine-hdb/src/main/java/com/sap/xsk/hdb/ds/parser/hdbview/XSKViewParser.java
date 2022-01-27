@@ -11,29 +11,12 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbview;
 
-import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
-import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureDependencyModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
-import com.sap.xsk.parser.hdbview.core.HdbviewLexer;
-import com.sap.xsk.parser.hdbview.core.HdbviewParser;
-import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWCoreListener;
-import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWErrorListener;
-import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
-import com.sap.xsk.utils.XSKCommonsConstants;
-import com.sap.xsk.utils.XSKCommonsUtils;
-import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -42,11 +25,28 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.Artefa
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDBViewModel> {
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureDependencyModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
+import com.sap.xsk.parser.hdbview.core.HdbviewLexer;
+import com.sap.xsk.parser.hdbview.core.HdbviewParser;
+import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWCoreListener;
+import com.sap.xsk.parser.hdbview.custom.XSKHDBVIEWErrorListener;
+import com.sap.xsk.parser.hdbview.models.XSKHDBVIEWDefinitionModel;
+import com.sap.xsk.utils.XSKCommonsConstants;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
+
+public class XSKViewParser extends AbstractXSKDataStructureParser<XSKDataStructureHDBViewModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKViewParser.class);
   private static final HDBViewSynchronizationArtefactType VIEW_ARTEFACT = new HDBViewSynchronizationArtefactType();
-  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
   public XSKDataStructureHDBViewModel parse(XSKDataStructureParametersModel parametersModel)
@@ -105,7 +105,7 @@ public class XSKViewParser implements XSKDataStructureParser<XSKDataStructureHDB
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
           XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_VIEW_PARSER,XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location, VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
+      applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location, VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
       throw new XSKDataStructuresException(String.format("Wrong format of HDB View: [%s] during parsing. [%s]", location, e.getMessage()));
     }
     hdbViewModel.setQuery(antlr4Model.getQuery());

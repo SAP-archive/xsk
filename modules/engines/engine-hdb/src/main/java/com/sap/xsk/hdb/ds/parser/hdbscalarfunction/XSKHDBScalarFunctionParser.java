@@ -11,18 +11,20 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbscalarfunction;
 
+import java.sql.Timestamp;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
+
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
-import java.sql.Timestamp;
 
-public class XSKHDBScalarFunctionParser implements XSKDataStructureParser<XSKDataStructureHDBTableFunctionModel> {
+public class XSKHDBScalarFunctionParser extends AbstractXSKDataStructureParser<XSKDataStructureHDBTableFunctionModel> {
 
   @Override
   public XSKDataStructureHDBTableFunctionModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException {

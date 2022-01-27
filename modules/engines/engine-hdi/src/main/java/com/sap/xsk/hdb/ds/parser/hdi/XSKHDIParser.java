@@ -11,21 +11,23 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdi;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import java.io.File;
-import java.io.IOException;
-import java.sql.Timestamp;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
 import com.sap.xsk.hdb.ds.parser.hdi.deserializer.XSKHDIModelAdapter;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
 
-public class XSKHDIParser implements XSKDataStructureParser {
+public class XSKHDIParser extends AbstractXSKDataStructureParser {
 
   @Override
   public XSKDataStructureHDIModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException, IOException {

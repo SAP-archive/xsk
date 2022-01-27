@@ -13,17 +13,17 @@ package com.sap.xsk.hdb.ds.parser.hdbprocedure;
 
 import java.sql.Timestamp;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
-import com.sap.xsk.utils.XSKHDBUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
+import com.sap.xsk.utils.XSKHDBUtils;
 
-public class XSKHDBProcedureParser implements XSKDataStructureParser {
+public class XSKHDBProcedureParser extends AbstractXSKDataStructureParser<XSKDataStructureHDBProcedureModel> {
 
   @Override
   public XSKDataStructureHDBProcedureModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException {
@@ -44,7 +44,7 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser {
   }
 
   @Override
-  public Class getDataStructureClass() {
+  public Class<XSKDataStructureHDBProcedureModel> getDataStructureClass() {
     return XSKDataStructureHDBProcedureModel.class;
   }
 }

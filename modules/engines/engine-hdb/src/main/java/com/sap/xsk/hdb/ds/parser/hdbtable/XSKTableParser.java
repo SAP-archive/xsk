@@ -11,6 +11,22 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbtable;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
@@ -24,8 +40,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqu
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableIndexModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
 import com.sap.xsk.hdb.ds.transformer.HDBTableDefinitionModelToHDBTableColumnModelTransformer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
@@ -39,27 +54,11 @@ import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHDBTableModel> {
+public class XSKTableParser extends AbstractXSKDataStructureParser<XSKDataStructureHDBTableModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableParser.class);
-  private HDBTableDefinitionModelToHDBTableColumnModelTransformer columnModelTransformer = new HDBTableDefinitionModelToHDBTableColumnModelTransformer();
   private static final HDBTableSynchronizationArtefactType TABLE_ARTEFACT = new HDBTableSynchronizationArtefactType();
-  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
   public String getType() {
@@ -117,15 +116,15 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
           XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_TABLE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-      dataStructuresSynchronizer.applyArtefactState(artefactName,location,TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
+      applyArtefactState(artefactName,location,TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
       throw new XSKHDBTableMissingPropertyException(
           String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
     }
 
     XSKDataStructureHDBTableModel dataStructureHDBTableModel = new XSKDataStructureHDBTableModel();
 
-    XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableModel, IXSKDataStructureModel.TYPE_HDB_TABLE,
-        XSKDBContentType.XS_CLASSIC);
+    XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableModel, IXSKDataStructureModel.TYPE_HDB_TABLE, XSKDBContentType.XS_CLASSIC);
+    HDBTableDefinitionModelToHDBTableColumnModelTransformer columnModelTransformer = new HDBTableDefinitionModelToHDBTableColumnModelTransformer();
     dataStructureHDBTableModel.setSchema(hdbtableDefinitionModel.getSchemaName());
     dataStructureHDBTableModel.setDescription(hdbtableDefinitionModel.getDescription());
     dataStructureHDBTableModel.setLoggingType(hdbtableDefinitionModel.getLoggingType());
@@ -149,7 +148,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
             "", XSKCommonsConstants.HDB_TABLE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
             XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-        dataStructuresSynchronizer.applyArtefactState(artefactName,location,TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, errMsg);
+        applyArtefactState(artefactName, location, TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, errMsg);
         throw new IllegalStateException(errMsg);
       }
     });
@@ -216,7 +215,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
           XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_TABLE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-      dataStructuresSynchronizer.applyArtefactState(artefactName,location,TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
+      applyArtefactState(artefactName,location,TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
       throw new XSKHDBTableMissingPropertyException(
           String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
     }
@@ -229,7 +228,7 @@ public class XSKTableParser implements XSKDataStructureParser<XSKDataStructureHD
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
             "", XSKCommonsConstants.HDB_TABLE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
             XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-        dataStructuresSynchronizer.applyArtefactState(artefactName,location,TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, errMsg);
+        applyArtefactState(artefactName,location,TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, errMsg);
         throw new IllegalStateException(errMsg);
       }
     });

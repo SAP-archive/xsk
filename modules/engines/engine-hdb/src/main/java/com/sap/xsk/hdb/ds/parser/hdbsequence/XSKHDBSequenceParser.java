@@ -11,6 +11,18 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbsequence;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -21,7 +33,7 @@ import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceBaseVisitor;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceLexer;
 import com.sap.xsk.parser.hdbsequence.core.HdbsequenceParser;
@@ -32,19 +44,8 @@ import com.sap.xsk.parser.hdbsequence.models.XSKHDBSEQUENCEModel;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class XSKHDBSequenceParser implements XSKDataStructureParser {
-
+public class XSKHDBSequenceParser extends AbstractXSKDataStructureParser {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceParser.class);
 

@@ -11,6 +11,20 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbtabletype;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
@@ -20,7 +34,7 @@ import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypePrimaryKeyModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
 import com.sap.xsk.hdb.ds.transformer.HDBTableDefinitionModelToHDBTableColumnModelTransformer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableLexer;
 import com.sap.xsk.parser.hdbtable.core.HdbtableParser;
@@ -32,20 +46,8 @@ import com.sap.xsk.parser.hdbtable.model.XSKHDBTABLEDefinitionModel;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructureHDBTableTypeModel> {
+public class XSKTableTypeParser extends AbstractXSKDataStructureParser<XSKDataStructureHDBTableTypeModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableTypeParser.class);
   private HDBTableDefinitionModelToHDBTableColumnModelTransformer columnModelTransformer = new HDBTableDefinitionModelToHDBTableColumnModelTransformer();

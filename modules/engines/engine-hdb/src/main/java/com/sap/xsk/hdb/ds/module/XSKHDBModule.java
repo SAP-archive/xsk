@@ -14,39 +14,38 @@ package com.sap.xsk.hdb.ds.module;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
-import com.sap.xsk.hdb.ds.service.manager.IXSKEntityManagerService;
-import com.sap.xsk.hdb.ds.parser.hdbscalarfunction.XSKHDBScalarFunctionParser;
-import com.sap.xsk.hdb.ds.service.manager.IXSKScalarFunctionManagerService;
-import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
-import com.sap.xsk.hdb.ds.service.manager.IXSKTableTypeManagerService;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
+import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
 //import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
 import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
+import com.sap.xsk.hdb.ds.parser.hdbscalarfunction.XSKHDBScalarFunctionParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionParser;
+import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.hdb.ds.service.manager.IXSKEntityManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKHDBSequenceManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKProceduresManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKScalarFunctionManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKSchemaManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKSynonymManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKTableFunctionManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKTableManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKTableTypeManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
 
 public class XSKHDBModule extends AbstractDirigibleModule {
 
   private static Map<String, IXSKDataStructureManager> managerServices;
 
-  private static Map<String, XSKDataStructureParser> parserServices;
+  private static Map<String, AbstractXSKDataStructureParser> parserServices;
 
   private static Map<String, String> parserTypes;
 
@@ -58,9 +57,9 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     return managerServices;
   }
 
-  public static synchronized Map<String, XSKDataStructureParser> getParserServices() {
+  public static synchronized Map<String, AbstractXSKDataStructureParser> getParserServices() {
     if (parserServices == null) {
-      parserServices = new HashMap<String, XSKDataStructureParser>();
+      parserServices = new HashMap<String, AbstractXSKDataStructureParser>();
       bindParsersToFileExtension(parserServices);
     }
     return parserServices;
@@ -91,7 +90,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new IXSKTableTypeManagerService());
   }
 
-  private static void bindParsersToFileExtension(Map<String, XSKDataStructureParser> parserServices) {
+  private static void bindParsersToFileExtension(Map<String, AbstractXSKDataStructureParser> parserServices) {
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, new XSKHdbddParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_TABLE, new XSKTableParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_VIEW, new XSKViewParser());

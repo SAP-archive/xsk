@@ -17,19 +17,22 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
@@ -37,6 +40,7 @@ import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableDuplicatePropertyExcept
 import com.sap.xsk.parser.hdbtable.exceptions.XSKHDBTableMissingPropertyException;
 
 public class XSKTableParserTest extends AbstractDirigibleTest {
+
     @Test
     public void parseTable() throws Exception {
         InputStream in = XSKTableParserTest.class.getResourceAsStream("/Sports.hdbtable");
@@ -114,19 +118,21 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
       assertThrows(XSKHDBTableDuplicatePropertyException.class, () -> new XSKTableParser().parse(parametersModel));
     }
 
-    @Ignore
-    @Test(expected = XSKHDBTableMissingPropertyException.class)
-    public void failIfParsingMissingMandatoryProperties() throws Exception {
-      InputStream in = XSKTableParserTest.class.getResourceAsStream("/MissingMandatoryTableProperties.hdbtable");
-      String content = IOUtils.toString(in, StandardCharsets.UTF_8);
-      XSKDataStructureParametersModel parametersModel =
-          new XSKDataStructureParametersModel(null, "/MissingMandatoryTableProperties.hdbtable", content, null);
-      new XSKTableParser().parse(parametersModel);
-    }
+	@Test(expected = XSKHDBTableMissingPropertyException.class)
+	public void failIfParsingMissingMandatoryProperties() throws Exception {
+		InputStream in = XSKTableParserTest.class.getResourceAsStream("/MissingMandatoryTableProperties.hdbtable");
+		String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+		XSKDataStructureParametersModel parametersModel = new XSKDataStructureParametersModel(null, "/MissingMandatoryTableProperties.hdbtable", content, null);
 
-    @Ignore
+		XSKTableParser parser = Mockito.mock(XSKTableParser.class);
+		when(parser.parse(any())).thenCallRealMethod();
+		doNothing().when(parser).applyArtefactState(any(), any(), any(), any(), any());
+
+		parser.parse(parametersModel);
+	}
+
     @Test
-    public void failIfParsingWrongPKDefinition() {
+    public void failIfParsingWrongPKDefinition() throws Exception {
       String content = "table.schemaName = \"SPORTS\";\n" +
               "table.tableType = COLUMNSTORE;\n" +
               "table.columns = [\n" +
@@ -135,14 +141,17 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
               "];\n" +
               "table.primaryKey.pkcolumns = [\"MATCH_ID_WRONG\", \"TEAM_ID\"];";
 
-      XSKDataStructureParametersModel parametersModel =
-          new XSKDataStructureParametersModel(null, "/someFileName.hdbtable", content, null);
-      assertThrows(IllegalStateException.class, () -> new XSKTableParser().parse(parametersModel));
+      XSKDataStructureParametersModel parametersModel = new XSKDataStructureParametersModel(null, "/someFileName.hdbtable", content, null);
+
+      XSKTableParser parser = Mockito.mock(XSKTableParser.class);
+      when(parser.parse(any())).thenCallRealMethod();
+      doNothing().when(parser).applyArtefactState(any(), any(), any(), any(), any());
+
+      assertThrows(IllegalStateException.class, () -> parser.parse(parametersModel));
     }
 
-    @Ignore
     @Test
-    public void failIfParsingWrongIndexDefinition() {
+    public void failIfParsingWrongIndexDefinition() throws Exception {
       String content = "table.schemaName = \"SPORTS\";\n" +
               "table.tableType = COLUMNSTORE;\n" +
               "table.columns = [\n" +
@@ -152,9 +161,13 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
               "table.primaryKey.pkcolumns = [\"MATCH_ID\", \"TEAM_ID\"];" +
               "table.indexes = [ {name = \"INDEX1\"; unique = true; indexColumns = [\"MATCH_ID_WRONG\"];}];";
 
-      XSKDataStructureParametersModel parametersModel =
-          new XSKDataStructureParametersModel(null, "/someFileName.hdbtable", content, null);
-      assertThrows(IllegalStateException.class, () -> new XSKTableParser().parse(parametersModel));
+      XSKDataStructureParametersModel parametersModel = new XSKDataStructureParametersModel(null, "/someFileName.hdbtable", content, null);
+
+      XSKTableParser parser = Mockito.mock(XSKTableParser.class);
+      when(parser.parse(any())).thenCallRealMethod();
+      doNothing().when(parser).applyArtefactState(any(), any(), any(), any(), any());
+
+      assertThrows(IllegalStateException.class, () -> parser.parse(parametersModel));
     }
 
     @Test

@@ -13,6 +13,34 @@ package com.sap.xsk.hdb.ds.facade;
 
 import static java.text.MessageFormat.format;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.repository.api.IResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
@@ -29,38 +57,13 @@ import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctio
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
 import com.sap.xsk.hdb.ds.service.XSKDataStructureTopologicalSorter;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import javax.sql.DataSource;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
@@ -70,7 +73,7 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
   private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
-  private Map<String, XSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
+  private Map<String, AbstractXSKDataStructureParser> parserServices = XSKHDBModule.getParserServices();
 
   private Map<String, String> parserTypes = XSKHDBModule.getParserTypes();
 

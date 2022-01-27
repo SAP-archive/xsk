@@ -11,25 +11,9 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbschema;
 
-import com.sap.xsk.exceptions.XSKArtifactParserException;
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.artefacts.HDBSchemaSynchronizationArtefactType;
-import com.sap.xsk.hdb.ds.model.XSKDBContentType;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
-import com.sap.xsk.parser.hdbschema.core.HdbschemaLexer;
-import com.sap.xsk.parser.hdbschema.core.HdbschemaParser;
-import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMACoreListener;
-import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMASyntaxErrorListener;
-import com.sap.xsk.parser.hdbschema.models.XSKHDBSCHEMADefinitionModel;
-import com.sap.xsk.utils.XSKCommonsConstants;
-import com.sap.xsk.utils.XSKCommonsUtils;
-import com.sap.xsk.utils.XSKHDBUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -38,11 +22,27 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.Artefa
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureHDBSchemaModel> {
+import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.artefacts.HDBSchemaSynchronizationArtefactType;
+import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
+import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
+import com.sap.xsk.hdb.ds.parser.AbstractXSKDataStructureParser;
+import com.sap.xsk.parser.hdbschema.core.HdbschemaLexer;
+import com.sap.xsk.parser.hdbschema.core.HdbschemaParser;
+import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMACoreListener;
+import com.sap.xsk.parser.hdbschema.custom.XSKHDBSCHEMASyntaxErrorListener;
+import com.sap.xsk.parser.hdbschema.models.XSKHDBSCHEMADefinitionModel;
+import com.sap.xsk.utils.XSKCommonsConstants;
+import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
+
+public class XSKSchemaParser extends AbstractXSKDataStructureParser<XSKDataStructureHDBSchemaModel> {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKSchemaParser.class);
   private static final HDBSchemaSynchronizationArtefactType SCHEMA_ARTEFACT = new HDBSchemaSynchronizationArtefactType();
-  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   @Override
   public String getType() {
@@ -77,11 +77,11 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
 
     ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
     if(parserErrorListener.getErrors().size() !=0 ){
-      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(parametersModel.getLocation()),
+      applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(parametersModel.getLocation()),
           parametersModel.getLocation(),SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, parserErrorListener.getErrors().get(0).getMsg());
     }
     if(lexerErrorListener.getErrors().size() != 0) {
-      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(parametersModel.getLocation()),
+      applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(parametersModel.getLocation()),
           parametersModel.getLocation(),SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, lexerErrorListener.getErrors().get(0).getMsg());
     }
     XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, parametersModel.getLocation(),

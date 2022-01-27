@@ -1551,6 +1551,11 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td><code>1</code></td>
 </tr>
 <tr>
+<td><code>deployment.strategyType</code></td>
+<td>Deployment strategy type</td>
+<td><code>Recreate</code></td>
+</tr>
+<tr>
 <td><code>create.namespace</code></td>
 <td>Create namespace</td>
 <td><code>default</code></td>
@@ -1614,6 +1619,11 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td><code>kyma.host</code></td>
 <td>Kyma host</td>
 <td>``</td>
+</tr>
+<tr>
+<td><code>kyma.serverMaxHttpHeaderSize</code></td>
+<td>Tomcat max http header size</td>
+<td><code>48000</code></td>
 </tr>
 <tr>
 <td><code>kyma.addRoles</code></td>

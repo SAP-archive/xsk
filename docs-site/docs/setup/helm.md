@@ -235,7 +235,7 @@ You can choose to build and package your XSK application from source with Helm a
         kubectl -n default get image xsk-image
         ```
 
-        To download and run the newly created OCI image execute:
+        To download and run the newly created OCI image, execute:
 
         ```
         docker run -p 8080:8080 <latest-image-with-digest>
@@ -295,7 +295,7 @@ You can choose to build and package your XSK application from source with Helm a
 
 1. Uninstall
 
-    If you want to uninstall Helm kpack chart, run:
+    If you want to uninstall the Helm kpack chart, run:
 
     ```
     helm uninstall xsk-kpack

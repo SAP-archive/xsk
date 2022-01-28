@@ -51,8 +51,11 @@ nav:
         - $.web.WebEntityResponse: 'api/web/web.WebEntityResponse.md'
         - $.web.WebRequest: 'api/request.md'
         - $.web.WebResponse: 'api/response.md'
-    - Setup: 
-      - SAP HANA Database User: 'setup/sap-hana-database-user.md'
+    - Setup:
+      - Prerequisites:
+        - 'setup/prerequisites/index.md'
+        - Delivery Unit: 'setup/prerequisites/delivery-unit.md'
+        - Database User: 'setup/prerequisites/database-user.md'
       - Local: 'setup/local.md'
       - Cloud Foundry: 'setup/cloud-foundry.md'
       - Kyma: 'setup/kyma.md'
@@ -60,7 +63,6 @@ nav:
       - Environment Variables: 'setup/environment-variables.md'
     - Cheat sheet: 
       - HDI: 'cheatsheet/hdi.md'
-      - Create Delivery Unit: 'cheatsheet/delivery-unit.md'
       - Troubleshooting: 'cheatsheet/troubleshooting.md'
     - Community: 'community.md'
     

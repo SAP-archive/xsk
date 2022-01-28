@@ -1,8 +1,8 @@
 ---
-title: SAP HANA Database User
+title: Database User
 ---
 
-SAP HANA Database User
+SAP HANA Cloud Database User
 ===
 
 ## Overview
@@ -18,12 +18,12 @@ To create a new database user, go through the following steps:
 
 === "SAP HANA Cockpit"
 
-    1. Navigate to the **SAP HANA Cockpit** for your `SAP HANA Cloud` instance.
+    1. Navigate to the SAP HANA Cockpit for your SAP HANA Cloud instance.
     2. Switch to the **User Management** application.
 
         ![XSK - SAP HANA Cockpit - User Management](/img/setup/database-user/1-user-management.png)
 
-    3. Choose the **+** button and select **Create User**.
+    3. Choose the **+** button and then **Create User**.
     4. Provide the user details.
 
         ![XSK - SAP HANA Cockpit - Create User](/img/setup/database-user/2-create-user.png)

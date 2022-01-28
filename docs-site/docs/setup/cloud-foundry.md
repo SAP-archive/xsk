@@ -14,9 +14,9 @@ You can deploy XSK in the SAP BTP[^1], Cloud Foundry environment.
     
 !!! info "Prerequisites"
     - Install the [Cloud Foundry Command Line Interface](http://docs.cloudfoundry.org/devguide/installcf/install-go-cli.html).
-    - Access to an SAP BTP account. To create an SAP BTP Trial account, navigate to the [SAP BTP Trial home page](https://account.hanatrial.ondemand.com/).
-    - Create a `HANA Cloud` service instance in SAP BTP Cloud Foundry space.
-    - Create a separate `HANA Cloud` user that will be used from the XSK engine.
+    - Access to an SAP BTP global account. To create an SAP BTP Trial account, navigate to the [SAP BTP Trial home page](https://account.hanatrial.ondemand.com/).
+    - Create a SAP HANA Cloud service instance in SAP BTP Cloud Foundry space.
+    - Create a separate SAP HANA Cloud user that will be used from the XSK engine.
 
 ## Steps
 ---

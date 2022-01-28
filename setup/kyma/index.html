@@ -1141,10 +1141,75 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_1" type="checkbox" id="__nav_4_1" >
+      
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../prerequisites/">Prerequisites</a>
+          
+            <label for="__nav_4_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Prerequisites" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Prerequisites
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../sap-hana-database-user/" class="md-nav__link">
-        SAP HANA Database User
+      <a href="../prerequisites/delivery-unit/" class="md-nav__link">
+        Delivery Unit
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prerequisites/database-user/" class="md-nav__link">
+        Database User
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -1294,8 +1359,6 @@
         
           
         
-          
-        
       
       
         <label class="md-nav__link" for="__nav_5">
@@ -1318,20 +1381,6 @@
     <li class="md-nav__item">
       <a href="../../cheatsheet/hdi/" class="md-nav__link">
         HDI
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cheatsheet/delivery-unit/" class="md-nav__link">
-        Create Delivery Unit
       </a>
     </li>
   
@@ -1437,8 +1486,8 @@
 <div class="admonition info">
 <p class="admonition-title">Prerequisites</p>
 <ul>
-<li>Install <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a> (optional)</li>
-<li>Navigate to your SAP BTP global account. You can access your Trial account in the SAP BTP cockpit from <a href="https://account.hanatrial.ondemand.com/">here</a>.</li>
+<li>(Optional) Install <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a>.</li>
+<li>Access to an SAP BTP global account. To create an SAP BTP Trial account, navigate to the <a href="https://account.hanatrial.ondemand.com/">SAP BTP Trial home page</a>.</li>
 </ul>
 </div>
 <div class="admonition warning">
@@ -1454,13 +1503,13 @@
 <hr />
 <ol>
 <li>
-<p>Access the SAP BTP, Kyma environment via the SAP BTP cockpit:</p>
+<p>Access the SAP BTP, Kyma environment via the SAP BTP cockpit.</p>
 </li>
 <li>
-<p>Create HANA Cloud secret:</p>
+<p>Create an SAP HANA Cloud secret.</p>
 <div class="admonition info">
 <p class="admonition-title">Prerequisites</p>
-<p>Follow the <a href="/setup/database-user/">Database User</a> setup guide.</p>
+<p>Follow the <a href="/setup/prerequisites/database-user/">Database User</a> setup guide.</p>
 </div>
 <div class="highlight"><pre><span></span><code>kubectl create secret generic hana-cloud-database \
 --from-literal=DIRIGIBLE_DATABASE_PROVIDER=custom \
@@ -1874,19 +1923,19 @@
 <li>
 <p>Assign the <code>Developer</code> and <code>Operator</code> roles.</p>
 <ul>
-<li>Navigate to the <code>SAP BTP Cockpit</code>.</li>
-<li>Login to your subaccount.</li>
-<li>Go to <code>Security</code> <strong>&rarr;</strong> <code>Users</code>.</li>
+<li>Navigate to the SAP BTP Cockpit.</li>
+<li>Log in to your subaccount.</li>
+<li>Go to <strong>Security</strong> <strong>&rarr;</strong> <strong>Users</strong>.</li>
 <li>Select your username.</li>
-<li>Click the <code>Assign Role Collection</code> button.</li>
-<li>From the list of roles select the <code>XSK Developer</code> and <code>XSK Operator</code> roles.</li>
-<li>Click the <code>Assign Role Collection</code> button to update the assigned role collections.</li>
+<li>Choose <strong>Assign Role Collection</strong>.</li>
+<li>From the list of roles, select the <code>XSK Developer</code> and <code>XSK Operator</code> roles.</li>
+<li>Choose <strong>Assign Role Collection</strong> to update the assigned role collections.</li>
 </ul>
 </li>
 <li>
 <p>Log in.</p>
 <ul>
-<li>Go to <code>https://xsk.&lt;your-kyma-cluster-host&gt;</code> or navigate to <code>Configurations</code> <strong>&rarr;</strong> <code>APIRules</code> section from the Kyma dashboard.</li>
+<li>Go to <code>https://xsk.&lt;your-kyma-cluster-host&gt;</code> or navigate to <strong>Configurations</strong> <strong>&rarr;</strong> <strong>APIRules</strong> section from the Kyma dashboard.</li>
 </ul>
 </li>
 </ol>

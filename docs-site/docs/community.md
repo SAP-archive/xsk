@@ -83,4 +83,4 @@ In this section we have outlined text stylizing options and for what elements th
 	
 ## Join the Discussion
 
-Reach out to other contributors and join in the discussion around XSK [here](https://github.com/SAP/xsk/discussions).
+Reach out to other contributors and join in the discussion around project XSK at our public [discussions](https://github.com/SAP/xsk/discussions) space in GitHub.

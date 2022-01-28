@@ -13,8 +13,8 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 [^1]: SAP Cloud Platform is called SAP Business Technology Platform (SAP BTP) as of 2021.
 
 !!! info "Prerequisites"
-    - Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (optional)
-    - Navigate to your SAP BTP global account. You can access your Trial account in the SAP BTP cockpit from [here](https://account.hanatrial.ondemand.com/).
+    - (Optional) Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+    - Access to an SAP BTP global account. To create an SAP BTP Trial account, navigate to the [SAP BTP Trial home page](https://account.hanatrial.ondemand.com/).
 
 !!! warning "Warning"
     At the time of writing these setup instructions _(20.12.2021)_, creating a HANA Cloud service instance in the SAP BTP Kyma environment was not possible, thus the setup is currently suitable only for **test** & **demo** purposes. To workaround this limitation:
@@ -27,12 +27,12 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 ## Steps
 ---
 
-1. Access the SAP BTP, Kyma environment via the SAP BTP cockpit:
+1. Access the SAP BTP, Kyma environment via the SAP BTP cockpit.
 
-1. Create HANA Cloud secret:
+1. Create an SAP HANA Cloud secret.
 
     !!! info "Prerequisites"
-        Follow the [Database User](/setup/database-user/) setup guide.
+        Follow the [Database User](/setup/prerequisites/database-user/) setup guide.
 
     ```
     kubectl create secret generic hana-cloud-database \
@@ -427,14 +427,14 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
     
 1. Assign the `Developer` and `Operator` roles.
 
-    - Navigate to the `SAP BTP Cockpit`.
-    - Login to your subaccount.
-    - Go to `Security` **&rarr;** `Users`.
+    - Navigate to the SAP BTP Cockpit.
+    - Log in to your subaccount.
+    - Go to **Security** **&rarr;** **Users**.
     - Select your username.
-    - Click the `Assign Role Collection` button.
-    - From the list of roles select the `XSK Developer` and `XSK Operator` roles.
-    - Click the `Assign Role Collection` button to update the assigned role collections.
+    - Choose **Assign Role Collection**.
+    - From the list of roles, select the `XSK Developer` and `XSK Operator` roles.
+    - Choose **Assign Role Collection** to update the assigned role collections.
 
 1. Log in.
 
-    - Go to `https://xsk.<your-kyma-cluster-host>` or navigate to `Configurations` **&rarr;** `APIRules` section from the Kyma dashboard.
+    - Go to `https://xsk.<your-kyma-cluster-host>` or navigate to **Configurations** **&rarr;** **APIRules** section from the Kyma dashboard.

@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-modules-api-parent</artifactId>
-		<version>0.13.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+  <parent>
+    <groupId>com.sap.xsk</groupId>
+    <artifactId>xsk-modules-api-parent</artifactId>
+    <version>0.13.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-	<name>XSK - Modules - API - XSJS</name>
-	<artifactId>xsk-modules-api-xsjs</artifactId>
-	<version>0.13.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+  <name>XSK - Modules - API - XSJS</name>
+  <artifactId>xsk-modules-api-xsjs</artifactId>
+  <version>0.13.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.eclipse.dirigible</groupId>
-			<artifactId>dirigible-commons-api</artifactId>
-			<version>${dirigible.version}</version>
-		</dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-commons-api</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -30,26 +31,26 @@
       <artifactId>scp-cf</artifactId>
       <version>${scp-cf.version}</version>
     </dependency>
-        <dependency>
-            <groupId>org.eclipse.dirigible</groupId>
-            <artifactId>dirigible-sap-cf-base</artifactId>
-            <version>${dirigible.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dirigible</groupId>
-            <artifactId>dirigible-sap-kyma-base</artifactId>
-            <version>7.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-sap-cf-base</artifactId>
+      <version>${dirigible.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-sap-kyma-base</artifactId>
+      <version>${dirigible.version}</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 
-	<properties>
-		<profile.content.phase>generate-sources</profile.content.phase>
-		<content.repository.name>xsk-api</content.repository.name>
-		<content.project.name>xsk</content.project.name>
-		<content.repository.branch>master</content.repository.branch>
+  <properties>
+    <profile.content.phase>generate-sources</profile.content.phase>
+    <content.repository.name>xsk-api</content.repository.name>
+    <content.project.name>xsk</content.project.name>
+    <content.repository.branch>master</content.repository.branch>
 
-		<license.header.location>../../../licensing-header.txt</license.header.location>
-	</properties>
+    <license.header.location>../../../licensing-header.txt</license.header.location>
+  </properties>
 </project>

@@ -280,8 +280,12 @@ public class XSKODataUtilsTest {
 		String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
 		XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_events.xsodata", content);
 
-		// when(dbMetadataUtil.getTableMetadata("sample.odata::table1")).thenReturn(model);
-		ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
+    mockTableMetadataInvocations("sample.odata::table1");
+    mockTableMetadataInvocations("sample.odata::table2");
+    mockTableMetadataInvocations("sample.odata::table3");
+    mockTableMetadataInvocations("sample.odata::table4");
+
+    ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(xskoDataModel, dbMetadataUtil);
 		assertEquals(4, oDataDefinition.getEntities().size());
 
 		ODataEntityDefinition entity1 = oDataDefinition.getEntities().get(0);
@@ -345,7 +349,12 @@ public class XSKODataUtilsTest {
 		assertEquals("false", entity4.getAnnotationsEntitySet().get(XSKHDBXSODATAHandlerMethod.DELETE.getOdataSAPAnnotation()));
 	}
 
-	@Test(expected = XSKOData2TransformerException.class)
+  private void mockTableMetadataInvocations(String tableName) throws SQLException {
+    PersistenceTableModel model = new PersistenceTableModel(tableName, null, null);
+    when(dbMetadataUtil.getTableMetadata(tableName, null)).thenReturn(model);
+  }
+
+  @Test(expected = XSKOData2TransformerException.class)
 	public void testValidateEdmMultiplicityFailed() {
 		XSKODataUtils.validateEdmMultiplicity("1..*", "ass_name");
 	}

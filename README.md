@@ -27,8 +27,6 @@ _Project documentation is available at: https://www.xsk.io_
 - [Project XSK](#background)
   - [Setup](#setup)
   - [Readiness](#readiness)
-  - [Limitations](#limitations)
-  - [Known Issues](#known-issues)
 - [Support](#how-to-obtain-support)
 - [Contributing](#contributing)
 
@@ -70,7 +68,7 @@ mvn clean install
 - [Cloud Foundry](https://www.xsk.io/setup/cloud-foundry/)
 - [Kyma](https://www.xsk.io/setup/kyma/)
 - [Helm](https://www.xsk.io/setup/helm/)
-- [Environment Variables](https://www.xsk.io/setup/setup-environment-variables/)
+- [Environment Variables](https://www.xsk.io/setup/environment-variables/)
 
 ## FAQ
 

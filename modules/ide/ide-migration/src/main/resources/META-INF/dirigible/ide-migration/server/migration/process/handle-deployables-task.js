@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 const process = require('bpm/v4/process');
@@ -22,19 +22,32 @@ try {
 	const userData = JSON.parse(userDataJson);
 
 	const migrationService = new MigrationService();
-
     for (const deliveryUnit of userData.du) {
         const locals = deliveryUnit.locals;
         let deployables = [];
         for (const local of locals) {
             deployables = migrationService.collectDeployables(
-				userData.workspace, 
-				local.repositoryPath, 
-				local.runLocation, 
-				local.projectName, 
-				deployables
-			);
+                userData.workspace,
+                local.repositoryPath,
+                local.runLocation,
+                local.projectName,
+                deployables
+            );
         }
+
+        // Get names of projects with generated synonyms and add them to deployables
+        const projectsWithSynonyms = migrationService.getProjectsWithSynonyms(locals);
+        if(projectsWithSynonyms) {
+            for(const projectName of projectsWithSynonyms) {
+                const hdbSynonymFilePath = migrationService.getSynonymFilePath(projectName);
+                const hdbPublicSynonymFilePath = migrationService.getPublicSynonymFilePath(projectName);
+                const projectDeployables = deployables.find(x => x.projectName === projectName).artifacts;
+
+                projectDeployables.push(hdbSynonymFilePath);
+                projectDeployables.push(hdbPublicSynonymFilePath);
+            }
+        }
+
         deliveryUnit['deployableArtifactsResult'] = migrationService.handlePossibleDeployableArtifacts(userData.workspace, deployables);
     }
     process.setVariable(execution.getId(), 'userData', JSON.stringify(userData));

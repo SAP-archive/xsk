@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.test.processors;
@@ -16,16 +16,11 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
-import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+
+import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
@@ -44,136 +39,138 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({SqlFactory.class, Configuration.class, ProblemsFacade.class})
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
+import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
+import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.synonym.HDBSynonymDropProcessor;
+
+@RunWith(MockitoJUnitRunner.class)
 public class HDBSynonymProcessorTest extends AbstractDirigibleTest {
 
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private Connection mockConnection;
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private SqlFactory mockSqlfactory;
-  @Mock
-  private CreateBranchingBuilder create;
-  @Mock
-  private CreateSynonymBuilder mockCreateSynonymBuilder;
-  @Mock
-  private DropBranchingBuilder drop;
-  @Mock
-  private DropSynonymBuilder mockDropSynonymBuilder;
-  @Mock
-  private XSKDataStructuresSynchronizer dataStructuresSynchronizer;
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	private Connection mockConnection;
 
-  @Before
-  public void openMocks() {
-    MockitoAnnotations.initMocks(this);
-    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-  }
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	private SqlFactory mockSqlfactory;
 
-  @Test
-  public void executeCreateSynonymHANAv1Successfully() throws Exception {
-    HDBSynonymCreateProcessor processorSpy = spy(HDBSynonymCreateProcessor.class);
-    String hdbsynonymSample = org.apache.commons.io.IOUtils
-        .toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
+	@Mock
+	private CreateBranchingBuilder create;
 
-    XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdbsynonymSample);
-    model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
-    String mockSQL = "testSQLScript";
+	@Mock
+	private CreateSynonymBuilder mockCreateSynonymBuilder;
 
-    //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, model.getName(), DatabaseArtifactTypes.SYNONYM)).thenReturn(false);
-    when(SqlFactory.getNative(mockConnection).create()).thenReturn(create);
-    when(SqlFactory.getNative(mockConnection).create().synonym(any())).thenReturn(mockCreateSynonymBuilder);
-    when(SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any())).thenReturn(mockCreateSynonymBuilder);
-    when(SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any()).build()).thenReturn(mockSQL);
-    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
+	@Mock
+	private DropBranchingBuilder drop;
 
-    Whitebox.setInternalState(HDBSynonymCreateProcessor.class, dataStructuresSynchronizer);
-    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+	@Mock
+	private DropSynonymBuilder mockDropSynonymBuilder;
 
-    processorSpy.execute(mockConnection, model);
-    verify(processorSpy, times(3)).executeSql(mockSQL, mockConnection);
-    verify(dataStructuresSynchronizer, times(3)).applyArtefactState(any(),any(), any(), eq(ArtefactState.SUCCESSFUL_CREATE), any());
-  }
+	@Before
+	public void openMocks() {
+		MockitoAnnotations.openMocks(this);
+		Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+	}
 
-  @Test(expected = IllegalStateException.class)
-  public void executeCreateSynonymPostgresSQLFailed() throws Exception {
-    HDBSynonymCreateProcessor processorSpy = spy(HDBSynonymCreateProcessor.class);
-    String hdbsynonymSample = org.apache.commons.io.IOUtils
-        .toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
+	@Test
+	public void executeCreateSynonymHANAv1Successfully() throws Exception {
+		HDBSynonymCreateProcessor processorSpy = spy(HDBSynonymCreateProcessor.class);
+		String hdbsynonymSample = IOUtils.toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
 
-    XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdbsynonymSample);
-    model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
+		XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdbsynonymSample);
+		model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
+		String mockSQL = "testSQLScript";
 
-    //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
+				MockedStatic<Configuration> configuration = Mockito.mockStatic(Configuration.class)) {
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+			sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).create()).thenReturn(create);
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).create().synonym(any())).thenReturn(mockCreateSynonymBuilder);
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any())).thenReturn(mockCreateSynonymBuilder);
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).create().synonym(any()).forSource(any()).build()).thenReturn(mockSQL);
+			configuration.when(() -> Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
-    Whitebox.setInternalState(HDBSynonymCreateProcessor.class, dataStructuresSynchronizer);
-    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+			Mockito.doNothing().when(processorSpy).applyArtefactState(any(), any(), any(), any(), any());
 
-    processorSpy.execute(mockConnection, model);
-  }
+			processorSpy.execute(mockConnection, model);
+			verify(processorSpy, times(3)).executeSql(mockSQL, mockConnection);
+			verify(processorSpy, times(3)).applyArtefactState(any(), any(), any(), eq(ArtefactState.SUCCESSFUL_CREATE), any());
+		}
+	}
 
-  @Test
-  public void executeDropSynonymSuccessfully() throws Exception {
-    HDBSynonymDropProcessor processorSpy = spy(HDBSynonymDropProcessor.class);
-    String hdsynonymSample = org.apache.commons.io.IOUtils
-        .toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
+	@Test(expected = IllegalStateException.class)
+	public void executeCreateSynonymPostgresSQLFailed() throws Exception {
+		HDBSynonymCreateProcessor processorSpy = spy(HDBSynonymCreateProcessor.class);
+		String hdbsynonymSample = IOUtils.toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
 
-    XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdsynonymSample);
-    model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
-    String mockSQL = "testSQLScript";
+		XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdbsynonymSample);
+		model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
 
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "LL","SY_DUMMY", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, null,"PAL_TRIPLE_EXPSMOOTH", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, null, "PROCEDURES", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
-    when(SqlFactory.getNative(mockConnection).drop().synonym(any())).thenReturn(mockDropSynonymBuilder);
-    when(SqlFactory.getNative(mockConnection).drop().synonym(any()).build()).thenReturn(mockSQL);
-    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
+		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
+				MockedStatic<ProblemsFacade> problemsFacade = Mockito.mockStatic(ProblemsFacade.class)) {
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+			sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+			problemsFacade.when(() -> ProblemsFacade.save(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())).thenAnswer((Answer<Void>) invocation -> null);
 
-    Whitebox.setInternalState(HDBSynonymDropProcessor.class, dataStructuresSynchronizer);
-    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+			Mockito.doNothing().when(processorSpy).applyArtefactState(any(), any(), any(), any(), any());
 
-    processorSpy.execute(mockConnection, model);
-    verify(processorSpy, times(3)).executeSql(mockSQL, mockConnection);
-    verify(dataStructuresSynchronizer, times(3)).applyArtefactState(any(),any(), any(), eq(ArtefactState.SUCCESSFUL_DELETE), any());
-  }
+			processorSpy.execute(mockConnection, model);
+		}
+	}
 
-  @Test(expected = IllegalStateException.class)
-  public void executeDropSynonymFailed() throws Exception {
-    HDBSynonymDropProcessor processorSpy = spy(HDBSynonymDropProcessor.class);
-    String hdsynonymSample = org.apache.commons.io.IOUtils
-        .toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
+	@Test
+	public void executeDropSynonymSuccessfully() throws Exception {
+		HDBSynonymDropProcessor processorSpy = spy(HDBSynonymDropProcessor.class);
+		String hdsynonymSample = IOUtils.toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
 
-    XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdsynonymSample);
-    model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
+		XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdsynonymSample);
+		model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
+		String mockSQL = "testSQLScript";
 
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, "LL","SY_DUMMY", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, null,"PAL_TRIPLE_EXPSMOOTH", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    when(SqlFactory.getNative(mockConnection).exists(mockConnection, null, "PROCEDURES", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
-    doNothing().when(ProblemsFacade.class, "save", any(), any(),any(), any(), any(), any(), any(), any(), any(), any());
+		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
+				MockedStatic<Configuration> configuration = Mockito.mockStatic(Configuration.class)) {
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+			sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, "LL", "SY_DUMMY", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, null, "PAL_TRIPLE_EXPSMOOTH", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, null, "PROCEDURES",DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).drop()).thenReturn(drop);
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).drop().synonym(any())).thenReturn(mockDropSynonymBuilder);
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).drop().synonym(any()).build()).thenReturn(mockSQL);
+			configuration.when(() -> Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
-    Whitebox.setInternalState(HDBSynonymDropProcessor.class, dataStructuresSynchronizer);
-    doNothing().when(dataStructuresSynchronizer).applyArtefactState(any(), any(), any(),any(), any());
+			Mockito.doNothing().when(processorSpy).applyArtefactState(any(), any(), any(), any(), any());
 
-    processorSpy.execute(mockConnection, model);
-  }
+			processorSpy.execute(mockConnection, model);
+			verify(processorSpy, times(3)).executeSql(mockSQL, mockConnection);
+			verify(processorSpy, times(3)).applyArtefactState(any(), any(), any(), eq(ArtefactState.SUCCESSFUL_DELETE), any());
+		}
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void executeDropSynonymFailed() throws Exception {
+		HDBSynonymDropProcessor processorSpy = spy(HDBSynonymDropProcessor.class);
+		String hdsynonymSample = IOUtils.toString(HDBSynonymProcessorTest.class.getResourceAsStream("/MySynonym.hdbsynonym"), StandardCharsets.UTF_8);
+
+		XSKDataStructureHDBSynonymModel model = XSKDataStructureModelFactory.parseSynonym("hdb_view/MySynonym.hdbsynonym", hdsynonymSample);
+		model.setName("\"MYSCHEMA\".\"hdb_view::MySynonym\"");
+
+		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
+				MockedStatic<ProblemsFacade> problemsFacade = Mockito.mockStatic(ProblemsFacade.class)) {
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+			sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, "LL", "SY_DUMMY", DatabaseArtifactTypes.SYNONYM)).thenReturn(true);
+			problemsFacade.when(() -> ProblemsFacade.save(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())).thenAnswer((Answer<Void>) invocation -> null);
+
+			Mockito.doNothing().when(processorSpy).applyArtefactState(any(), any(), any(), any(), any());
+
+			processorSpy.execute(mockConnection, model);
+		}
+	}
 }

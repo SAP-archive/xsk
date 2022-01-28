@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.parser.hdbdd.custom;
@@ -297,12 +297,12 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterAssignHanaType(AssignHanaTypeContext ctx) {
-    String hanaTypeId = ctx.ref.getText();
-    BuiltInTypeSymbol builtInHanaType = this.symbolTable.getHanaType(hanaTypeId);
+    String hanaType = ctx.hanaType.getText();
+    BuiltInTypeSymbol builtInHanaType = this.symbolTable.getHanaType(hanaType);
 
     Typeable typeable = typeables.get(ctx.getParent());
     if (builtInHanaType == null) {
-      throw new CDSRuntimeException(String.format("Error at line: %s. No such hana type found.", ctx.ref.getLine()));
+      throw new CDSRuntimeException(String.format("Error at line: %s. No such hana type found.", ctx.hanaType.getLine()));
     } else {
       typeable.setType(builtInHanaType);
     }
@@ -310,14 +310,14 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterAssignHanaTypeWithArgs(AssignHanaTypeWithArgsContext ctx) {
-    Token typeIdToken = ctx.ID().getSymbol();
+    Token typeIdToken = ctx.BUILT_IN_HANA_TYPE().getSymbol();
     String typeId = typeIdToken.getText();
     Symbol resolvedType = this.symbolTable.getHanaType(typeId);
 
     assignBuiltInType(resolvedType, ctx.args, typeIdToken, ctx);
     Typeable typeable = typeables.get(ctx.getParent());
 
-    typeable.setReference(ctx.ref.getText());
+    typeable.setReference(ctx.hanaType.getText());
   }
 
   @Override

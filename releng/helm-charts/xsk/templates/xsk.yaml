@@ -54,6 +54,8 @@ metadata:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
   replicas: {{ required "Missing replica count" .Values.replicaCount }}
+  strategy:
+    type: {{ required "Missing deployment strategy type" .Values.deployment.strategyType }}
   selector:
     matchLabels:
       {{- include "xsk.selectorLabels" . | nindent 6 }}
@@ -80,6 +82,8 @@ spec:
             {{- if .Values.kyma.enabled }}
             - name: DIRIGIBLE_HOST
               value: https://{{ required "Missing release name" .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
+            - name: SERVER_MAXHTTPHEADERSIZE
+              value: "{{ required "Missing Kyma server maximum http header size" .Values.kyma.serverMaxHttpHeaderSize }}"
             {{- end }}
             {{- if .Values.application.homeUrl }}
             - name: DIRIGIBLE_HOME_URL
@@ -87,6 +91,8 @@ spec:
             {{- end }}
           {{- if .Values.application.image }}
           image: {{ required "Missing application image" .Values.application.image }}                    
+          {{- else if .Values.kyma.enabled }}
+          image: dirigiblelabs/xsk-kyma:latest
           {{- else }}
           image: dirigiblelabs/xsk
           {{- end }}  

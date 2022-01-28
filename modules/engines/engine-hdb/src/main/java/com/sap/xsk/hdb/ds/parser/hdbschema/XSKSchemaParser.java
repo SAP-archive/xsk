@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.parser.hdbschema;
@@ -16,6 +16,7 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.artefacts.HDBSchemaSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
@@ -54,13 +55,13 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
   }
 
   @Override
-  public XSKDataStructureHDBSchemaModel parse(String location, String content)
+  public XSKDataStructureHDBSchemaModel parse(XSKDataStructureParametersModel parametersModel)
       throws XSKDataStructuresException, IOException, XSKArtifactParserException {
     XSKDataStructureHDBSchemaModel hdbSchemaModel = new XSKDataStructureHDBSchemaModel();
-    XSKHDBUtils.populateXSKDataStructureModel(location, content, hdbSchemaModel, IXSKDataStructureModel.TYPE_HDB_SCHEMA,
-        XSKDBContentType.XS_CLASSIC);
+    XSKHDBUtils.populateXSKDataStructureModel(parametersModel.getLocation(), parametersModel.getContent(), hdbSchemaModel,
+        IXSKDataStructureModel.TYPE_HDB_SCHEMA, XSKDBContentType.XS_CLASSIC);
 
-    ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
+    ByteArrayInputStream is = new ByteArrayInputStream(parametersModel.getContent().getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
     HdbschemaLexer lexer = new HdbschemaLexer(inputStream);
     XSKHDBSCHEMASyntaxErrorListener lexerErrorListener = new XSKHDBSCHEMASyntaxErrorListener();
@@ -76,13 +77,17 @@ public class XSKSchemaParser implements XSKDataStructureParser<XSKDataStructureH
 
     ParseTree parseTree = hdbschemaParser.hdbschemaDefinition();
     if(parserErrorListener.getErrors().size() !=0 ){
-      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, parserErrorListener.getErrors().get(0).getMsg());
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(parametersModel.getLocation()),
+          parametersModel.getLocation(),SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, parserErrorListener.getErrors().get(0).getMsg());
     }
     if(lexerErrorListener.getErrors().size() != 0) {
-      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, lexerErrorListener.getErrors().get(0).getMsg());
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(parametersModel.getLocation()),
+          parametersModel.getLocation(),SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, lexerErrorListener.getErrors().get(0).getMsg());
     }
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_SCHEMA_PARSER);
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_SCHEMA_PARSER);
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, parametersModel.getLocation(),
+        XSKCommonsConstants.HDB_SCHEMA_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, parametersModel.getLocation(),
+        XSKCommonsConstants.HDB_SCHEMA_PARSER);
 
     XSKHDBSCHEMACoreListener XSKHDBSCHEMACoreListener = new XSKHDBSCHEMACoreListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

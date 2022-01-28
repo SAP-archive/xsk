@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.test.processors;
@@ -16,7 +16,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
 
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureCreateProcessor;
@@ -29,6 +28,8 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
@@ -43,139 +44,132 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({SqlFactory.class, Configuration.class, ProblemsFacade.class})
+@RunWith(MockitoJUnitRunner.class)
 public class HDBProcedureProcessorTest extends AbstractDirigibleTest {
 
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private Connection mockConnection;
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private SqlFactory mockSqlfactory;
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private DefaultSqlDialect mockSqlDialect;
-  @Mock
-  private PreparedStatement mockStatement;
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	private Connection mockConnection;
 
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	private SqlFactory mockSqlfactory;
 
-  @Before
-  public void openMocks() {
-    MockitoAnnotations.initMocks(this);
-  }
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	private DefaultSqlDialect mockSqlDialect;
 
-  @Test
-  public void executeCreateProcedureIfDoNotExist() throws IOException, SQLException {
-    executeCreateProcedureSuccessfully(false, 1);
-  }
+	@Mock
+	private PreparedStatement mockStatement;
 
-  @Test
-  public void executeCreateProcedureIfAlreadyExist() throws IOException, SQLException {
-    executeCreateProcedureSuccessfully(true, 0);
-  }
+	@Before
+	public void openMocks() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-  public void executeCreateProcedureSuccessfully(boolean doExist, int expectedTimesOfInvocation)
-      throws IOException, SQLException {
-    //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
+	@Test
+	public void executeCreateProcedureIfDoNotExist() throws IOException, SQLException {
+		executeCreateProcedureSuccessfully(false, 1);
+	}
 
-    HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
-    String hdbprocedureSample = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/OrderProcedure.hdbprocedure"), StandardCharsets.UTF_8);
+	@Test
+	public void executeCreateProcedureIfAlreadyExist() throws IOException, SQLException {
+		executeCreateProcedureSuccessfully(true, 0);
+	}
 
-    XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-    model.setContent(hdbprocedureSample);
-    model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
-    String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + model.getContent();
-    when(SqlFactory.getNative(mockConnection)
-        .exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
-            DatabaseArtifactTypes.PROCEDURE)).thenReturn(doExist);
+	public void executeCreateProcedureSuccessfully(boolean doExist, int expectedTimesOfInvocation)
+			throws IOException, SQLException {
+		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
+				MockedStatic<Configuration> configuration = Mockito.mockStatic(Configuration.class)) {
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+			sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
+			configuration.when(() -> Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
-    when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
-    when(mockStatement.executeUpdate(any())).thenReturn(1);
-    processorSpy.execute(mockConnection, model);
+			HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
+			String hdbprocedureSample = IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/OrderProcedure.hdbprocedure"), StandardCharsets.UTF_8);
 
-    verify(processorSpy, times(expectedTimesOfInvocation)).executeSql(sql, mockConnection);
-  }
+			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
+			model.setContent(hdbprocedureSample);
+			model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+			String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + model.getContent();
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.PROCEDURE)).thenReturn(doExist);
 
-  @Test(expected = IllegalStateException.class)
-  public void executeCreateProcedurePostgresFailed() throws Exception {
-    //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+			when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
+			processorSpy.execute(mockConnection, model);
 
-    HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
-    String hdbprocedureSample = org.apache.commons.io.IOUtils
-        .toString(XSKViewParserTest.class.getResourceAsStream("/OrderProcedure.hdbprocedure"), StandardCharsets.UTF_8);
+			verify(processorSpy, times(expectedTimesOfInvocation)).executeSql(sql, mockConnection);
+		}
+	}
 
-    XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-    model.setContent(hdbprocedureSample);
-    model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
-    when(SqlFactory.getNative(mockConnection)
-        .exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
-            DatabaseArtifactTypes.PROCEDURE)).thenReturn(false);
-    doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
-    processorSpy.execute(mockConnection, model);
-  }
+	@Test(expected = IllegalStateException.class)
+	public void executeCreateProcedurePostgresFailed() throws Exception {
+		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
+				MockedStatic<ProblemsFacade> problemsFacade = Mockito.mockStatic(ProblemsFacade.class)) {
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+			sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
 
-  @Test
-  public void executeDropProcedureIfDoNotExist() throws IOException, SQLException {
-    executeDropProcedureSuccessfully(false, 0);
-  }
+			HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
+			String hdbprocedureSample = IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/OrderProcedure.hdbprocedure"), StandardCharsets.UTF_8);
 
-  @Test
-  public void executeDropProcedureIfAlreadyExist() throws IOException, SQLException {
-    executeDropProcedureSuccessfully(true, 1);
-  }
+			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
+			model.setContent(hdbprocedureSample);
+			model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.PROCEDURE)).thenReturn(false);
+			problemsFacade.when(() -> ProblemsFacade.save(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())).thenAnswer((Answer<Void>) invocation -> null);
+			processorSpy.execute(mockConnection, model);
+		}
+	}
 
-  public void executeDropProcedureSuccessfully(boolean doExist, int expectedTimesOfInvocation)
-      throws SQLException {
-    //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
-    when(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
+	@Test
+	public void executeDropProcedureIfDoNotExist() throws IOException, SQLException {
+		executeDropProcedureSuccessfully(false, 0);
+	}
 
-    HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);
+	@Test
+	public void executeDropProcedureIfAlreadyExist() throws IOException, SQLException {
+		executeDropProcedureSuccessfully(true, 1);
+	}
 
-    XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-    model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
-    String sql = XSKConstants.XSK_HDBPROCEDURE_DROP + model.getName();
-    when(SqlFactory.getNative(mockConnection)
-        .exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
-            DatabaseArtifactTypes.PROCEDURE)).thenReturn(doExist);
+	public void executeDropProcedureSuccessfully(boolean doExist, int expectedTimesOfInvocation) throws SQLException {
+		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
+				MockedStatic<Configuration> configuration = Mockito.mockStatic(Configuration.class)) {
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+			sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
+			configuration.when(() -> Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 
-    when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
-    when(mockStatement.executeUpdate(any())).thenReturn(1);
-    processorSpy.execute(mockConnection, model);
+			HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);
 
-    verify(processorSpy, times(expectedTimesOfInvocation)).executeSql(sql, mockConnection);
-  }
+			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
+			model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+			String sql = XSKConstants.XSK_HDBPROCEDURE_DROP + model.getName();
+			when(SqlFactory.getNative(mockConnection).exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.PROCEDURE)).thenReturn(doExist);
 
-  @Test(expected = IllegalStateException.class)
-  public void executeDropProcedurePostgresFailed() throws Exception {
-    //PowerMock do not support deep stub calls
-    PowerMockito.mockStatic(SqlFactory.class, Configuration.class, ProblemsFacade.class);
-    when(SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
-    when(SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
+			when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
+			processorSpy.execute(mockConnection, model);
 
-    HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);
+			verify(processorSpy, times(expectedTimesOfInvocation)).executeSql(sql, mockConnection);
+		}
+	}
 
-    XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-    model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+	@Test(expected = IllegalStateException.class)
+	public void executeDropProcedurePostgresFailed() throws Exception {
+		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
+				MockedStatic<ProblemsFacade> problemsFacade = Mockito.mockStatic(ProblemsFacade.class)) {
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlfactory);
+			sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new PostgresSqlDialect());
 
-    when(SqlFactory.getNative(mockConnection)
-        .exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1],
-            DatabaseArtifactTypes.PROCEDURE)).thenReturn(true);
+			HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);
 
-    doNothing().when(ProblemsFacade.class, "save", any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
-    processorSpy.execute(mockConnection, model);
-  }
+			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
+			model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+
+			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.PROCEDURE)).thenReturn(true);
+
+			problemsFacade.when(() -> ProblemsFacade.save(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())).thenAnswer((Answer<Void>) invocation -> null);
+			processorSpy.execute(mockConnection, model);
+		}
+	}
 }

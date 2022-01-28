@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.model;
@@ -26,6 +26,7 @@ import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
+import com.sap.xsk.utils.XSKCommonsConstants;
 
 //import com.sap.xsk.models.hdbdd.HdbDDStandaloneSetup;
 
@@ -53,7 +54,9 @@ public class XSKDataStructureModelFactory {
    */
   public static XSKDataStructureHDBTableModel parseTable(String location, String content) throws Exception {
     XSKTableParser parser = new XSKTableParser();
-    XSKDataStructureHDBTableModel result = parser.parse(location, content);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    XSKDataStructureHDBTableModel result = parser.parse(parametersModel);
     return result;
   }
 
@@ -75,13 +78,17 @@ public class XSKDataStructureModelFactory {
    */
   public static XSKDataStructureHDBViewModel parseView(String location, String content) throws Exception {
     XSKViewParser parser = new XSKViewParser();
-    XSKDataStructureHDBViewModel result = parser.parse(location, content);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    XSKDataStructureHDBViewModel result = parser.parse(parametersModel);
     return result;
   }
 
   public static XSKDataStructureModel parseHdbdd(String location, String content) throws Exception {
     XSKHdbddParser parser = new XSKHdbddParser();
-    XSKDataStructureModel result = parser.parse(location, content);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
+    XSKDataStructureModel result = parser.parse(parametersModel);
     return result;
   }
 
@@ -103,7 +110,9 @@ public class XSKDataStructureModelFactory {
    */
   public static XSKDataStructureHDBSynonymModel parseSynonym(String location, String content) throws Exception {
     XSKSynonymParser parser = new XSKSynonymParser();
-    XSKDataStructureHDBSynonymModel result = parser.parse(location, content);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    XSKDataStructureHDBSynonymModel result = parser.parse(parametersModel);
     return result;
   }
 
@@ -142,7 +151,9 @@ public class XSKDataStructureModelFactory {
    */
   public static XSKDataStructureHDBSchemaModel parseSchema(String location, String content) throws Exception {
     XSKSchemaParser parser = new XSKSchemaParser();
-    XSKDataStructureHDBSchemaModel result = parser.parse(location, content);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    XSKDataStructureHDBSchemaModel result = parser.parse(parametersModel);
     return result;
   }
 
@@ -196,7 +207,9 @@ public class XSKDataStructureModelFactory {
    */
   public static XSKDataStructureHDBTableTypeModel parseTableType(String location, String content) throws Exception {
     XSKTableTypeParser parser = new XSKTableTypeParser();
-    XSKDataStructureHDBTableTypeModel result = parser.parse(location, content);
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    XSKDataStructureHDBTableTypeModel result = parser.parse(parametersModel);
     return result;
   }
 

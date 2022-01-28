@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdi.parser;
@@ -14,6 +14,7 @@ package com.sap.xsk.hdi.parser;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
 import com.sap.xsk.hdb.ds.parser.hdi.XSKHDIParser;
 import org.junit.Test;
@@ -29,7 +30,10 @@ public class XSKHDIParserTest {
     String location = "/ValidHDIContent.hdi";
     String content = org.apache.commons.io.IOUtils
         .toString(XSKHDIParserTest.class.getResourceAsStream(location), StandardCharsets.UTF_8);
-    XSKDataStructureHDIModel model = new XSKHDIParser().parse(location, content);
+
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    XSKDataStructureHDIModel model = new XSKHDIParser().parse(parametersModel);
     assertEquals("/hdi-ext/config.hdiconfig", model.getConfiguration());
     assertEquals(new String[]{"DBADMIN"}, model.getUsers());
     assertEquals("/hdi-ext/config.hdiconfig", model.getConfiguration());
@@ -45,7 +49,9 @@ public class XSKHDIParserTest {
     String location = "/NonStringProperties.hdi";
     String content = org.apache.commons.io.IOUtils
         .toString(XSKHDIParserTest.class.getResourceAsStream(location), StandardCharsets.UTF_8);
-    assertThrows(JsonSyntaxException.class, () -> new XSKHDIParser().parse(location, content));
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    assertThrows(JsonSyntaxException.class, () -> new XSKHDIParser().parse(parametersModel));
   }
 
   @Test
@@ -53,7 +59,9 @@ public class XSKHDIParserTest {
     String location = "/MissingMandatoryProperty.hdi";
     String content = org.apache.commons.io.IOUtils
         .toString(XSKHDIParserTest.class.getResourceAsStream(location), StandardCharsets.UTF_8);
-    assertThrows(JsonParseException.class, () -> new XSKHDIParser().parse(location, content));
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    assertThrows(JsonParseException.class, () -> new XSKHDIParser().parse(parametersModel));
   }
 
   @Test
@@ -61,7 +69,9 @@ public class XSKHDIParserTest {
     String location = "/SameDeploymentFile.hdi";
     String content = org.apache.commons.io.IOUtils
         .toString(XSKHDIParserTest.class.getResourceAsStream(location), StandardCharsets.UTF_8);
-    assertThrows(JsonParseException.class, () -> new XSKHDIParser().parse(location, content));
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    assertThrows(JsonParseException.class, () -> new XSKHDIParser().parse(parametersModel));
   }
 
   @Test
@@ -69,6 +79,8 @@ public class XSKHDIParserTest {
     String location = "/NoDeploymentFiles.hdi";
     String content = org.apache.commons.io.IOUtils
         .toString(XSKHDIParserTest.class.getResourceAsStream(location), StandardCharsets.UTF_8);
-    assertThrows(JsonParseException.class, () -> new XSKHDIParser().parse(location, content));
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    assertThrows(JsonParseException.class, () -> new XSKHDIParser().parse(parametersModel));
   }
 }

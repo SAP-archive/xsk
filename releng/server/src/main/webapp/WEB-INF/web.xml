@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+    Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
 
     All rights reserved. This program and the accompanying materials
     are made available under the terms of the Apache License, v2.0
     which accompanies this distribution, and is available at
     http://www.apache.org/licenses/LICENSE-2.0
 
-    SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+    SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
     SPDX-License-Identifier: Apache-2.0
 
 -->
@@ -124,7 +124,12 @@
 	</resource-ref> -->
 	
 	<login-config>
-        <auth-method>BASIC</auth-method>
+        <auth-method>FORM</auth-method>
+        <realm-name>default</realm-name>
+        <form-login-config>
+          <form-login-page>/login-form.html</form-login-page>
+          <form-error-page>/login-error.html</form-error-page>
+        </form-login-config>
     </login-config>
 
 	<!-- Error Pages -->     

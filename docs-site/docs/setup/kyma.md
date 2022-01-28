@@ -266,6 +266,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     !!! Note
         - Copy the content into YAML file(s) _(e.g. `all.yaml`, `deployment.yaml` or `apirule.yaml`)_.
+        - By default deployment strategy type is `Recreate` which will recreate deployment resources when you apply new changes.
         - Replace the placeholders:
             - `<your-kyma-cluster-host>` with your Kyma cluster host _(e.g. `c-xxx.kyma.xxx.ondemand.com`)_.
 

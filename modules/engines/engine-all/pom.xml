@@ -5,54 +5,54 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-engines-parent</artifactId>
-		<version>0.13.0-SNAPSHOT</version>
+		<version>0.13.0</version>
 	</parent>
 
 	<name>XSK - Modules - Engines - All</name>
 	<artifactId>xsk-modules-engines-all</artifactId>
-	<version>0.13.0-SNAPSHOT</version>
+	<version>0.13.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-engines-core</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
+			<version>0.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-engines-hdb</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
+			<version>0.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-engines-hdbti</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
+			<version>0.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-engines-hdi</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
+			<version>0.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-engines-xsjob</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
+			<version>0.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-engines-xsjs</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
+			<version>0.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-engines-xsodata</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
+			<version>0.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-engines-xssecurity</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
+			<version>0.13.0</version>
 		</dependency>
 	</dependencies>
 

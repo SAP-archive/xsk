@@ -2,7 +2,7 @@ let http = $.net.http;
 var assertTrue = require('utils/assert').assertTrue;
 let client = new http.Client();
 let request = new http.Request(http.GET, "/");
-let destination = http.readDestination("test-destination");
+let destination = http.readDestination("test", "test-destination");
 
 client.setTimeout(10);
 

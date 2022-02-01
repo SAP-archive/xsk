@@ -11,15 +11,14 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
-import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableAlterHandler;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableModel> {
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
+import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableAlterHandler;
 
-  private XSKTableAlterHandler handler;
+public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableModel> {
 
   /**
    * Execute the corresponding statement.

@@ -2,9 +2,15 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Replica count for the instance
 replicaCount: 1
 
+deployment:
+  # Change deployment strategy type
+  strategyType: Recreate
+
 create:
+  # Deployment namespace
   namespace: default
 
 serviceAccount:
@@ -39,6 +45,7 @@ kyma:
   enabled: 
   # Host to expose the xsk instance 
   host:
+  # Change tomcat server max http header size
   serverMaxHttpHeaderSize: "48000"
   addRoles: false
   # Roles for custom usage 

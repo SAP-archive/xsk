@@ -297,12 +297,12 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterAssignHanaType(AssignHanaTypeContext ctx) {
-    String hanaTypeId = ctx.ref.getText();
-    BuiltInTypeSymbol builtInHanaType = this.symbolTable.getHanaType(hanaTypeId);
+    String hanaType = ctx.hanaType.getText();
+    BuiltInTypeSymbol builtInHanaType = this.symbolTable.getHanaType(hanaType);
 
     Typeable typeable = typeables.get(ctx.getParent());
     if (builtInHanaType == null) {
-      throw new CDSRuntimeException(String.format("Error at line: %s. No such hana type found.", ctx.ref.getLine()));
+      throw new CDSRuntimeException(String.format("Error at line: %s. No such hana type found.", ctx.hanaType.getLine()));
     } else {
       typeable.setType(builtInHanaType);
     }
@@ -310,14 +310,14 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterAssignHanaTypeWithArgs(AssignHanaTypeWithArgsContext ctx) {
-    Token typeIdToken = ctx.ID().getSymbol();
+    Token typeIdToken = ctx.BUILT_IN_HANA_TYPE().getSymbol();
     String typeId = typeIdToken.getText();
     Symbol resolvedType = this.symbolTable.getHanaType(typeId);
 
     assignBuiltInType(resolvedType, ctx.args, typeIdToken, ctx);
     Typeable typeable = typeables.get(ctx.getParent());
 
-    typeable.setReference(ctx.ref.getText());
+    typeable.setReference(ctx.hanaType.getText());
   }
 
   @Override

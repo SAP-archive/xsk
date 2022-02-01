@@ -11,6 +11,8 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdi;
 
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
 import com.sap.xsk.utils.XSKCommonsConstants;
@@ -18,6 +20,10 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.eclipse.dirigible.api.v3.platform.RegistryFacade;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +43,6 @@ public class XSKHDIContainerCreateProcessor {
   private XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
   private XSKGrantPrivilegesContainerTargetSchemaProcessor grantPrivilegesContainerTargetSchemaProcessor = new XSKGrantPrivilegesContainerTargetSchemaProcessor();
   private XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor = new XSKGrantPrivilegesExternalArtifactsSchemaProcessor();
-  //TODO
-  //Once the processing of artifacts is adjusted to have separate one for HDI container's artifacts should be fixed and the synonym model shouldn't be empty
-  private XSKDataStructureHDBSynonymModel synonymModel = new XSKDataStructureHDBSynonymModel();
 
   public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
     LOGGER.info("Start processing HDI Containers...");
@@ -71,7 +74,7 @@ public class XSKHDIContainerCreateProcessor {
       this.grantPrivilegesContainerTargetSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
 
       //Grant Privileges on the external artifacts' schemas
-      this.grantPrivilegesExternalArtifactsSchemaProcessor.execute(connection,hdiModel.getContainer(), hdiModel.getDeploy(), synonymModel);
+      grantPrivilegesExternalArtifactsSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy());
 
       // Deploy the Content
       this.deployContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getUndeploy());
@@ -80,7 +83,7 @@ public class XSKHDIContainerCreateProcessor {
       this.grantPrivilegesContainerSchemaProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getUsers());
 
       LOGGER.info("HDI Container [{}] from [{}] finished successfully.", hdiModel.getContainer(), hdiModel.getLocation());
-    } catch (SQLException | IOException | ScriptingException e) {
+    } catch (SQLException | IOException | ScriptingException | XSKDataStructuresException e) {
       String errorMessage = String.format("HDI Container %s from %s failed.", hdiModel.getContainer(), hdiModel.getLocation());
       XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, hdiModel.getLocation(), XSKCommonsConstants.HDI_PROCESSOR);
       LOGGER.error(errorMessage, e);

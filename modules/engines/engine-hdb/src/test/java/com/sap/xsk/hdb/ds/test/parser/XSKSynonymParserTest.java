@@ -20,6 +20,7 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
@@ -49,6 +50,7 @@ public class XSKSynonymParserTest extends AbstractDirigibleTest {
     assertEquals("DBADMIN", definitionModel.getTarget().getSchema());
   }
 
+  @Ignore
   @Test
   public void parseHdbsynonymFileMissingTargetSchemaFailed() throws Exception {
     ProblemsFacade.clearAllProblems();

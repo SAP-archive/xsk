@@ -69,28 +69,7 @@ var SET_COOKIE_HEADER = "Set-Cookie";
 var CONTENT_LENGTH_HEADER = "Content-Length";
 
 exports.readDestination = function (destinationPackage, destinationName) {
-  const DESTINATION_EXTENSION = ".xshttpdest";
-  var destinationFullFileName = destinationName + DESTINATION_EXTENSION;
-  var validPackage = destinationPackage.split('.').join('/') + '/';
-  var resource = repositoryManager.getResource('/registry/public/' + validPackage + destinationFullFileName);
-  var resourceByteArray = resource.getContent();
-  var resourceInputStream = streams.createByteArrayInputStream(resourceByteArray);
-
-  var destResourceContent = resourceInputStream.readText();
-  resourceInputStream.close();
-
-  var destResourceLineArray = destResourceContent.split(";");
-
-  var destination = new exports.Destination();
-
-  destResourceLineArray.forEach(destResourceLine => {
-    var splitKeyValueArray = destResourceLine.split("=");
-
-    var processedDestValue = processDestValue(splitKeyValueArray[1]);
-    var destKey = splitKeyValueArray[0].trim();
-    destination[destKey] = processedDestValue;
-
-  });
+  var destination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
 
   return destination;
 };
@@ -129,24 +108,21 @@ exports.Client = function () {
   };
 
   function sendRequestObjToDestination(requestObj, destination) {
-    var fullUrl = destination.host + destination.pathPrefix + requestObj.queryPath;
-
-    destination.headers = [];
     var requestHeaders = getHeadersArrFormTupel(requestObj.headers);
     requestHeaders = removeContentLengthHeaderIfPost(requestHeaders, requestObj.method);
-    destination.headers = requestHeaders;
-    addCookieToHeadersFromTupel(requestObj.cookies, destination.headers);
-    addTimeoutToOptions(destination);
+    addCookieToHeadersFromTupel(requestObj.cookies, requestHeaders);
 
     if (requestObj.contentType) {
-      destination.contentType = requestObj.contentType;
+      requestHeaders.push( { name: "Content-Type", value: requestObj.contentType } );
     }
 
     if (requestObj.parameters !== undefined) {
-      fullUrl = addQueryParametersToUrl(fullUrl, requestObj.parameters);
+      requestObj.queryPath = addQueryParametersToUrl(requestObj.queryPath, requestObj.parameters);
     }
 
-    clientResponse = executeRequest(fullUrl, requestObj.method, destination, requestObj.body);
+    requestObj.headers = requestHeaders;
+
+    clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination);
   }
 
   function sendRequestObjToUrl(requestObj, url, proxy) {
@@ -223,6 +199,10 @@ exports.Client = function () {
   }
 
   function getWebResponseByDirigibleResponse(dResponse) {
+    if (typeof dResponse === 'string' || dResponse instanceof String) {
+      dResponse = JSON.parse(dResponse);
+    }
+
     var webResponse = new web.WebEntityResponse();
     webResponse.headers = new web.TupelList(dResponse.headers);
     webResponse.status = dResponse.statusCode;

@@ -1,4 +1,4 @@
-FUNCTION "ProductsOrdersCustomerNames" ( )
+FUNCTION "XSK_SAMPLES_PRODUCTS"."ProductsOrdersCustomerNames" ( )
    RETURNS Table (
        "Id" NVARCHAR(50),
        "CustomerName" NVARCHAR(500)

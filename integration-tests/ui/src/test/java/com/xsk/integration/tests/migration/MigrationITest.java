@@ -51,6 +51,7 @@ public class MigrationITest {
   @Parameters({"Migration-Chrome-Hana1", /*"Migration-Chrome-Hana2",*/ "Migration-Firefox-Hana1", /*"Migration-Firefox-Hana2"*/})
   public void migrationTest(String param) throws IOException {
     setup(param);
+    loginIfNecessary();
     navigateToMigrationPerspective();
     enterNeoDBTunnelCredentials();
     enterHanaCredentials();
@@ -64,6 +65,18 @@ public class MigrationITest {
     webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
     credentials = new MigrationCredentials(param.contains("Hana2"));
     expectedContentList = expectedContentProvider.getExpectedContentList();
+  }
+
+  private void loginIfNecessary() {
+    try {
+      webBrowser.waitForVisibilityOfElement(By.xpath("/html/body/div/div/h3[text() = 'Sign in to Eclipse Dirigible']"));
+    } catch (Throwable t) {
+      return; // assume we're already logged in
+    }
+
+    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Username']"), DirigibleConnectionProperties.AUTH_USERNAME);
+    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Password']"), DirigibleConnectionProperties.AUTH_PASSWORD);
+    webBrowser.clickItem(By.xpath("//button[text() = 'Log in']"));
   }
 
   private void navigateToMigrationPerspective() {

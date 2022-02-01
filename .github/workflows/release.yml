@@ -62,13 +62,13 @@ jobs:
       - name: XSK Buildpack
         run: |
           cd releng/buildpacks/xsk/
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk . --target base
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk . --target base
           docker tag dirigiblelabs/buildpacks-stack-base-xsk dirigiblelabs/buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
           docker tag dirigiblelabs/buildpacks-stack-run-xsk dirigiblelabs/buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
           docker tag dirigiblelabs/buildpacks-stack-build-xsk dirigiblelabs/buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
           cd buildpack/
@@ -83,13 +83,13 @@ jobs:
       - name: XSK Kyma Buildpack
         run: |
           cd releng/buildpacks/xsk-kyma/
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
           docker tag dirigiblelabs/buildpacks-stack-base-xsk-kyma dirigiblelabs/buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
           docker tag dirigiblelabs/buildpacks-stack-run-xsk-kyma dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
           docker tag dirigiblelabs/buildpacks-stack-build-xsk-kyma dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
           cd buildpack/
@@ -104,13 +104,13 @@ jobs:
       - name: XSK Cloud Foundry Buildpack
         run: |
           cd releng/buildpacks/xsk-cf/
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
           docker tag dirigiblelabs/buildpacks-stack-base-xsk-cf dirigiblelabs/buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
           docker tag dirigiblelabs/buildpacks-stack-run-xsk-cf dirigiblelabs/buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
-          docker build --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
+          docker build --load --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
           docker tag dirigiblelabs/buildpacks-stack-build-xsk-cf dirigiblelabs/buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
           docker push dirigiblelabs/buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
           cd buildpack/

@@ -22,6 +22,22 @@
       <artifactId>dirigible-api-facade-mail</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
+    <dependency>
+        <groupId>com.sap.xsk</groupId>
+        <artifactId>xsk-modules-api-xsjs</artifactId>
+        <version>0.14.0-SNAPSHOT</version>
+    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.sap.cloud.sdk.cloudplatform</groupId>-->
+<!--      <artifactId>scp-cf</artifactId>-->
+<!--      <version>${scp-cf.version}</version>-->
+<!--    </dependency>-->
+    <dependency>
+      <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
+      <artifactId>cloudplatform-connectivity</artifactId>
+      <version>3.61.0</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <properties>

@@ -1,5 +1,23 @@
 # Drumbeats
 
+## 2022 Week 04 (24 January - 30 January)
+
+#### Focus topics:
+- Artifact synonym generation part of standard project structure
+- Handle restart of dev environment in Kyma
+- Migration wizard integration tests for analytic privileges
+- Fixes related to editor usage from Safari
+- Fixes related to migrating multiple Delivery Units
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-24..2022-01-30) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-01-24..2022-01-30) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-01-24..2022-01-30) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-01-24..2022-01-30) PRs
+
+
 ## 2022 Week 03 (17 January - 23 January)
 
 #### Focus topics:
@@ -13,7 +31,7 @@
 #### Issues and PRs:
 
 * [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-17..2022-01-23) issues
-* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-17..2022-01-23) issues 
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-01-17..2022-01-23) issues 
 * [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-01-17..2022-01-23) PRs
 * [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-01-17..2022-01-23) PRs
 

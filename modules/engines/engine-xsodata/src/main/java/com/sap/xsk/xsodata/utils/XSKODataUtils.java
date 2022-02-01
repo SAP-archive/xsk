@@ -77,6 +77,10 @@ public class XSKODataUtils {
       try {
         PersistenceTableModel tableMetadata = dbMetadataUtil
             .getTableMetadata(tableName, dbMetadataUtil.getOdataArtifactTypeSchema(tableName));
+        if (tableMetadata == null) {
+          logger.error("Table {} not available for entity {}, so it will be skipped.", tableName, entity.getAlias());
+          continue;
+        }
         List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
 
         if (ISqlKeywords.METADATA_SYNONYM.equals(tableMetadata.getTableType())) {

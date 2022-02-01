@@ -29,7 +29,9 @@ import com.sap.xsk.hdbti.model.XSKImportedCSVRecordModel;
 import com.sap.xsk.hdbti.model.XSKTableImportArtifact;
 import com.sap.xsk.hdbti.model.XSKTableImportConfigurationDefinition;
 import com.sap.xsk.hdbti.utils.XSKCsvRecordMetadata;
+import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsDBUtils;
+import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKUtils;
 import java.sql.SQLException;
 import java.util.Comparator;
@@ -67,7 +69,12 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
       XSKTableImportConfigurationDefinition tableImportConfigurationDefinition)
       throws SQLException {
     String tableName = convertToActualTableName(tableImportConfigurationDefinition.getTable());
-    PersistenceTableModel tableModel = dbMetadataUtil.getTableMetadata(tableName, tableImportConfigurationDefinition.getSchema());
+    String schema = tableImportConfigurationDefinition.getSchema();
+    PersistenceTableModel tableModel = dbMetadataUtil.getTableMetadata(tableName, schema);
+    if(null == tableModel) {
+      logTableNotFoundError(tableName, schema, tableImportConfigurationDefinition);
+      return;
+    }
     for (CSVRecord csvRecord : recordsToInsert) {
       try {
         XSKCsvRecordMetadata csvRecordMetadata = new XSKCsvRecordMetadata(csvRecord, tableModel, headerNames,
@@ -126,7 +133,12 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
       List<XSKImportedCSVRecordModel> importedCsvRecordsToUpdate,
       XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) throws SQLException {
     String tableName = convertToActualTableName(tableImportConfigurationDefinition.getTable());
-    PersistenceTableModel tableModel = dbMetadataUtil.getTableMetadata(tableName, XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
+    String schema = XSKCommonsDBUtils.getTableSchema(dataSource, tableName);
+    PersistenceTableModel tableModel = dbMetadataUtil.getTableMetadata(tableName, schema);
+    if(null == tableModel) {
+      logTableNotFoundError(tableName, schema, tableImportConfigurationDefinition);
+      return;
+    }
 
     for (CSVRecord csvRecord : csvRecords) {
       try {
@@ -140,6 +152,14 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
         logger.error(throwable.getMessage(), throwable);
       }
     }
+  }
+
+  private void logTableNotFoundError(String tableName, String schema, XSKTableImportConfigurationDefinition tableImportConfigurationDefinition) {
+    String errorMsg = "Error occurred while processing csv file."
+        + " Table with name [" + tableName + "] was not found in schema [" + schema + "].";
+    logger.error(errorMsg);
+    XSKCommonsUtils.logProcessorErrors(errorMsg, XSKCommonsConstants.PROCESSOR_ERROR,
+        tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
   }
 
   @Override
@@ -164,7 +184,12 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
 
   @Override
   public String getPkForCSVRecord(CSVRecord csvRecord, String tableName, List<String> headerNames) {
-    List<PersistenceTableColumnModel> columnModels = getTableMetadata(tableName).getColumns();
+    PersistenceTableModel tableMetadata = getTableMetadata(tableName);
+    if(null == tableMetadata){
+      logger.error("Error occurred while processing csv file."
+          + " Table with name [" + tableName + "] was not found.");
+    }
+    List<PersistenceTableColumnModel> columnModels = tableMetadata.getColumns();
     if (headerNames.size() > 0) {
       String pkColumnName = columnModels.stream().filter(PersistenceTableColumnModel::isPrimaryKey).findFirst().get().getName();
       int csvRecordPkValueIndex = headerNames.indexOf(pkColumnName);

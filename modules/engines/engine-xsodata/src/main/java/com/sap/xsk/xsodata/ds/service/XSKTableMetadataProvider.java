@@ -40,18 +40,23 @@ public class XSKTableMetadataProvider implements ITableMetadataProvider {
 
   public PersistenceTableModel getPersistenceTableModel(ODataEntityDefinition oDataEntityDefinition) throws SQLException {
 
-    PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(oDataEntityDefinition.getTable(), Configuration.get("HANA_USERNAME"));
+    String artifactName = oDataEntityDefinition.getTable();
+    String currentUserSchema = Configuration.get("HANA_USERNAME");
+    PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(artifactName, currentUserSchema);
 
-    if(METADATA_ENTITY_TYPES.contains(tableMetadata.getTableType())) {
+    if(null != tableMetadata && METADATA_ENTITY_TYPES.contains(tableMetadata.getTableType())) {
       return tableMetadata;
     }
 
-    String targetSchema = ISqlKeywords.METADATA_SYNONYM.equals(tableMetadata.getTableType())? tableMetadata.getSchemaName() : PUBLIC_SCHEMA;
+    PersistenceTableModel targetObjectMetadata = null;
+    if(null == tableMetadata){
+      targetObjectMetadata = getSynonymTargetObjectMetadata(dataSource, artifactName, PUBLIC_SCHEMA);
+    } else if(ISqlKeywords.METADATA_SYNONYM.equals(tableMetadata.getTableType())){
+      targetObjectMetadata = getSynonymTargetObjectMetadata(dataSource, artifactName, tableMetadata.getSchemaName());
+    }
 
-    PersistenceTableModel targetObjectMetadata = getSynonymTargetObjectMetadata(dataSource, tableMetadata.getTableName(), targetSchema);
-
-    if (targetObjectMetadata.getTableName() == null) {
-      logger.error("We cannot find view/table/synonym with name " + tableMetadata.getTableName() + " in schema" + targetSchema +
+    if (null == targetObjectMetadata || targetObjectMetadata.getTableName() == null) {
+      logger.error("We cannot find view/table/synonym with name " + tableMetadata.getTableName() + " in schema " + currentUserSchema +
           " and there is no public synonym with that name. Make sure that you are using view/table/synonym which is in your user default "
           + "schema or is a public synonym.");
       return null;

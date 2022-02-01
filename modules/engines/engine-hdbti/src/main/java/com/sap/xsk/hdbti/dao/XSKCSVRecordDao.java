@@ -21,6 +21,7 @@ import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.ds.model.transfer.TableColumn;
 import org.eclipse.dirigible.database.ds.model.transfer.TableMetadataHelper;
 import org.eclipse.dirigible.database.persistence.PersistenceException;
+import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.records.DeleteBuilder;
 import org.eclipse.dirigible.database.sql.builders.records.InsertBuilder;
@@ -110,7 +111,13 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-            String pkColumnName = dbMetadataUtil.getTableMetadata(tableName, XSKCommonsDBUtils.getTableSchema(dataSource, tableName)).getColumns().get(0).getName();
+          PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName,
+              XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
+          if(null == tableMetadata){
+            logger.debug("Table with name [" + tableName + "] was not found.");
+            return;
+          }
+          String pkColumnName = tableMetadata.getColumns().get(0).getName();
             DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
             deleteBuilder.from(tableName).where(String.format("%s IN (%s)", pkColumnName, String.join(",", ids)));
             try (PreparedStatement statement = connection.prepareStatement(deleteBuilder.build())) {
@@ -127,7 +134,13 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-            String pkColumnName = dbMetadataUtil.getTableMetadata(tableName, XSKCommonsDBUtils.getTableSchema(dataSource, tableName)).getColumns().get(0).getName();
+          PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName,
+              XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
+          if(null == tableMetadata){
+            logger.debug("Table with name [" + tableName + "] was not found.");
+            return;
+          }
+          String pkColumnName = tableMetadata.getColumns().get(0).getName();
             DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
             deleteBuilder.from(tableName).where(String.format("%s='%s'", pkColumnName, id));
             try (PreparedStatement statement = connection.prepareStatement(deleteBuilder.build())) {

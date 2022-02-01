@@ -2,10 +2,7 @@ let http = $.net.http;
 var assertTrue = require('utils/assert').assertTrue;
 let client = new http.Client();
 let request = new http.Request(http.GET, "/");
-let destination = new http.Destination()
-
-destination.host="https://services.odata.org";
-destination.pathPrefix="/V4/Northwind/Northwind.svc/";
+let destination = http.readDestination("test", "test-destination");
 
 client.setTimeout(10);
 

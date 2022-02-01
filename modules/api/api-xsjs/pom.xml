@@ -31,18 +31,6 @@
       <artifactId>scp-cf</artifactId>
       <version>${scp-cf.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-sap-cf-base</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-sap-kyma-base</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>compile</scope>
-    </dependency>
   </dependencies>
 
   <properties>

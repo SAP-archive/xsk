@@ -14,7 +14,6 @@ package com.sap.xsk.api.destination;
 import com.google.gson.JsonObject;
 import com.sap.cloud.sdk.cloudplatform.ScpCfCloudPlatform;
 import com.sap.cloud.sdk.cloudplatform.exception.CloudPlatformException;
-import org.eclipse.dirigible.kyma.KymaModule;
 import org.eclipse.dirigible.commons.config.Configuration;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,14 +25,19 @@ public class CloudPlatform extends ScpCfCloudPlatform {
   private static final String URL = "url";
   private static final String URI = "uri";
 
+  public static final String DIRIGIBLE_DESTINATION_CLIENT_ID = "DIRIGIBLE_DESTINATION_CLIENT_ID";
+  public static final String DIRIGIBLE_DESTINATION_CLIENT_SECRET = "DIRIGIBLE_DESTINATION_CLIENT_SECRET";
+  public static final String DIRIGIBLE_DESTINATION_URL = "DIRIGIBLE_DESTINATION_URL";
+  public static final String DIRIGIBLE_DESTINATION_URI = "DIRIGIBLE_DESTINATION_URI";
+
   @Nonnull
   @Override
   public JsonObject getServiceCredentials(@Nonnull String serviceName, @Nullable String servicePlan)
       throws CloudPlatformException {
-    String clientId = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_CLIENT_ID);
-    String clientSecret = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_CLIENT_SECRET);
-    String url = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_URL);
-    String uri = Configuration.get(KymaModule.DIRIGIBLE_DESTINATION_URI);
+    String clientId = Configuration.get(DIRIGIBLE_DESTINATION_CLIENT_ID);
+    String clientSecret = Configuration.get(DIRIGIBLE_DESTINATION_CLIENT_SECRET);
+    String url = Configuration.get(DIRIGIBLE_DESTINATION_URL);
+    String uri = Configuration.get(DIRIGIBLE_DESTINATION_URI);
 
     JsonObject credentialsObject = new JsonObject();
 

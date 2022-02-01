@@ -7,13 +7,13 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-modules-engines-parent</artifactId>
-    <version>0.13.0-SNAPSHOT</version>
+    <version>0.14.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Modules - Mail - Destination</name>
   <artifactId>xsk-modules-engines-mail-destination</artifactId>
-  <version>0.13.0-SNAPSHOT</version>
+  <version>0.14.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -27,16 +27,10 @@
         <artifactId>xsk-modules-api-xsjs</artifactId>
         <version>0.14.0-SNAPSHOT</version>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>com.sap.cloud.sdk.cloudplatform</groupId>-->
-<!--      <artifactId>scp-cf</artifactId>-->
-<!--      <version>${scp-cf.version}</version>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
-      <artifactId>cloudplatform-connectivity</artifactId>
-      <version>3.61.0</version>
-      <scope>compile</scope>
+      <artifactId>scp-cf</artifactId>
+      <version>${scp-cf.version}</version>
     </dependency>
   </dependencies>
 

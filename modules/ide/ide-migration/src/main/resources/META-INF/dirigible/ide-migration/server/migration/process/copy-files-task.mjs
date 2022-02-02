@@ -8,18 +8,18 @@ export class CopyFilesTask {
 
     run() {
         try {
-            process.setVariable(execution.getId(), "migrationState", "COPY_FILES_EXECUTING");
-            trackService.updateMigrationStatus("COPYING FILES");
+            process.setVariable(this.execution.getId(), "migrationState", "COPY_FILES_EXECUTING");
+            this.trackService.updateMigrationStatus("COPYING FILES");
 
-            const userDataJson = process.getVariable(execution.getId(), "userData");
+            const userDataJson = process.getVariable(this.execution.getId(), "userData");
             const userData = JSON.parse(userDataJson);
             const userDatabaseData = userData.hana;
-            const connectionUrl = process.getVariable(execution.getId(), "connectionUrl");
+            const connectionUrl = process.getVariable(this.execution.getId(), "connectionUrl");
 
             const migrationService = new MigrationService();
 
             for (const deliveryUnit of userData.du) {
-                trackService.updateMigrationStatus("COPYING FILES");
+                this.trackService.updateMigrationStatus("COPYING FILES");
                 migrationService.setupConnection(
                     userDatabaseData.databaseSchema,
                     userDatabaseData.username,
@@ -31,15 +31,15 @@ export class CopyFilesTask {
                 deliveryUnit.locals = locals;
             }
 
-            process.setVariable(execution.getId(), "userData", JSON.stringify(userData));
-            process.setVariable(execution.getId(), "migrationState", "COPY_FILES_EXECUTED");
-            trackService.updateMigrationStatus("COPYING FILES DONE");
+            process.setVariable(this.execution.getId(), "userData", JSON.stringify(userData));
+            process.setVariable(this.execution.getId(), "migrationState", "COPY_FILES_EXECUTED");
+            this.trackService.updateMigrationStatus("COPYING FILES DONE");
         } catch (e) {
             console.log("COPY_FILES failed with error:");
             console.log(e.message);
-            process.setVariable(execution.getId(), "migrationState", "COPY_FILES_FAILED");
-            trackService.updateMigrationStatus("COPYING FILES DONE");
-            process.setVariable(execution.getId(), "COPY_FILES_FAILED_REASON", e.toString());
+            process.setVariable(this.execution.getId(), "migrationState", "COPY_FILES_FAILED");
+            this.trackService.updateMigrationStatus("COPYING FILES DONE");
+            process.setVariable(this.execution.getId(), "COPY_FILES_FAILED_REASON", e.toString());
         }
     }
 }

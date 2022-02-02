@@ -8,23 +8,23 @@ export class ListDeliveryUnitsTask {
 
     run() {
         try {
-            process.setVariable(execution.getId(), "migrationState", "DELIVERY_UNITS_LISTING");
-            trackService.updateMigrationStatus("DELIVERY UNITS LISTING");
-            const userDataJson = process.getVariable(execution.getId(), "userData");
+            process.setVariable(this.execution.getId(), "migrationState", "DELIVERY_UNITS_LISTING");
+            this.trackService.updateMigrationStatus("DELIVERY UNITS LISTING");
+            const userDataJson = process.getVariable(this.execution.getId(), "userData");
             const userData = JSON.parse(userDataJson);
             const userDatabaseData = userData.hana;
-            const connectionUrl = process.getVariable(execution.getId(), "connectionUrl");
+            const connectionUrl = process.getVariable(this.execution.getId(), "connectionUrl");
 
             const migrationService = new MigrationService();
             migrationService.setupConnection(userDatabaseData.databaseSchema, userDatabaseData.username, userDatabaseData.password, connectionUrl);
             const deliveryUnits = migrationService.getAllDeliveryUnits();
-            process.setVariable(execution.getId(), "deliveryUnits", JSON.stringify(deliveryUnits));
-            process.setVariable(execution.getId(), "migrationState", "DELIVERY_UNITS_LISTED");
-            trackService.updateMigrationStatus("DELIVERY UNITS LISTED");
+            process.setVariable(this.execution.getId(), "deliveryUnits", JSON.stringify(deliveryUnits));
+            process.setVariable(this.execution.getId(), "migrationState", "DELIVERY_UNITS_LISTED");
+            this.trackService.updateMigrationStatus("DELIVERY UNITS LISTED");
         } catch (e) {
-            process.setVariable(execution.getId(), "migrationState", "DELIVERY_UNITS_LISTING_FAILED");
-            trackService.updateMigrationStatus("DELIVERY UNITS LISTING_FAILED");
-            process.setVariable(execution.getId(), "DELIVERY_UNITS_LISTING_FAILED_REASON", e.toString());
+            process.setVariable(this.execution.getId(), "migrationState", "DELIVERY_UNITS_LISTING_FAILED");
+            this.trackService.updateMigrationStatus("DELIVERY UNITS LISTING_FAILED");
+            process.setVariable(this.execution.getId(), "DELIVERY_UNITS_LISTING_FAILED_REASON", e.toString());
         }
     }
 }

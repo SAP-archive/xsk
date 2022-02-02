@@ -1,12 +1,12 @@
 import { workspace as workspaceManager, repository as repositoryManager } from "@dirigible/platform";
 import { bytes } from "@dirigible/io";
-import { database } from "@dirigible/database";
+import { database } from "@dirigible/db";
 import { configurations as config } from "@dirigible/core";
 import { client as git } from "@dirigible/git";
 
 import { HanaRepository } from "../repository/hana-repository";
 import { HanaVisitor } from "./hana-visitor.mjs";
-import { getHdiFilePlugins as hdiFile } from "../repository/hdi-plugins";
+import { getHdiFilePlugins } from "../repository/hdi-plugins";
 
 const HANA_USERNAME = "HANA_USERNAME";
 const TransformerFactory = Java.type("javax.xml.transform.TransformerFactory");
@@ -58,7 +58,7 @@ export class MigrationService {
     }
 
     createHdiConfigFile(workspaceName, project) {
-        const hdiConfig = hdiFile.getHdiFilePlugins();
+        const hdiConfig = getHdiFilePlugins();
 
         const projectName = project.getName();
         const hdiConfigPath = `${projectName}.hdiconfig`;

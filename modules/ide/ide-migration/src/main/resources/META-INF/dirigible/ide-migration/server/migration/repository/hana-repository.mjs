@@ -5,7 +5,7 @@ import { RepositoryPackage } from "./repository-package";
 import { PackageFilter } from "./package-filter";
 import { Utils } from "../utils";
 
-const packageFilter = PackageFilter();
+const packageFilter = new PackageFilter();
 const utf8 = org.eclipse.dirigible.api.v3.utils.UTF8Facade;
 
 export class HanaRepository {

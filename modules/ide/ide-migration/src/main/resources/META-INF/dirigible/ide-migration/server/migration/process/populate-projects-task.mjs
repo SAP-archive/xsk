@@ -8,9 +8,9 @@ export class PopulateProjectsTask {
 
     run() {
         try {
-            process.setVariable(execution.getId(), "migrationState", "POPULATING_PROJECTS");
-            trackService.updateMigrationStatus("POPULATING PROJECTS");
-            const userDataJson = process.getVariable(execution.getId(), "userData");
+            process.setVariable(this.execution.getId(), "migrationState", "POPULATING_PROJECTS");
+            this.trackService.updateMigrationStatus("POPULATING PROJECTS");
+            const userDataJson = process.getVariable(this.execution.getId(), "userData");
             const userData = JSON.parse(userDataJson);
 
             const migrationService = new MigrationService();
@@ -26,16 +26,16 @@ export class PopulateProjectsTask {
                 migrationService.addGeneratedFiles(userData, deliveryUnit, workspace, localFiles);
                 migrationService.modifyFiles(workspace, localFiles);
             }
-            process.setVariable(execution.getId(), "migrationState", "MIGRATION_EXECUTED");
-            trackService.updateMigrationStatus("MIGRATION EXECUTED");
+            process.setVariable(this.execution.getId(), "migrationState", "MIGRATION_EXECUTED");
+            this.trackService.updateMigrationStatus("MIGRATION EXECUTED");
         } catch (e) {
             console.log("POPULATING_PROJECTS failed with error:");
             console.log(e.message);
             console.log(e.stack);
-            process.setVariable(execution.getId(), "migrationState", "POPULATING_PROJECTS_FAILED");
-            trackService.updateMigrationStatus("POPULATING PROJECTS FAILED");
+            process.setVariable(this.execution.getId(), "migrationState", "POPULATING_PROJECTS_FAILED");
+            this.trackService.updateMigrationStatus("POPULATING PROJECTS FAILED");
             process.setVariable(
-                execution.getId(),
+                this.execution.getId(),
                 "POPULATING_PROJECTS_FAILED_REASON",
                 e.toString()
             );

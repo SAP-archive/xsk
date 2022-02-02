@@ -8,9 +8,9 @@ export class CreateWorkspaceTask {
 
     run() {
         try {
-            process.setVariable(execution.getId(), "migrationState", "EXECUTING_CREATE_WORKSPACE");
-            trackService.updateMigrationStatus("CREATING WORKSPACE");
-            const userDataJson = process.getVariable(execution.getId(), "userData");
+            process.setVariable(this.execution.getId(), "migrationState", "EXECUTING_CREATE_WORKSPACE");
+            this.trackService.updateMigrationStatus("CREATING WORKSPACE");
+            const userDataJson = process.getVariable(this.execution.getId(), "userData");
             const userData = JSON.parse(userDataJson);
 
             const migrationService = new MigrationService();
@@ -19,15 +19,15 @@ export class CreateWorkspaceTask {
                 migrationService.createMigratedWorkspace(userData.workspace, deliveryUnit);
             }
 
-            process.setVariable(execution.getId(), "userData", JSON.stringify(userData));
-            process.setVariable(execution.getId(), "migrationState", "WORKSPACE_CREATE_EXECUTED");
-            trackService.updateMigrationStatus("CREATING WORKSPACE EXECUTED");
+            process.setVariable(this.execution.getId(), "userData", JSON.stringify(userData));
+            process.setVariable(this.execution.getId(), "migrationState", "WORKSPACE_CREATE_EXECUTED");
+            this.trackService.updateMigrationStatus("CREATING WORKSPACE EXECUTED");
         } catch (e) {
             console.log("WORKSPACE_CREATE failed with error:");
             console.log(e.message);
-            process.setVariable(execution.getId(), "migrationState", "WORKSPACE_CREATE_FAILED");
-            trackService.updateMigrationStatus("CREATING WORKSPACE FAILED");
-            process.setVariable(execution.getId(), "WORKSPACE_CREATE_FAILED_REASON", e.toString());
+            process.setVariable(this.execution.getId(), "migrationState", "WORKSPACE_CREATE_FAILED");
+            this.trackService.updateMigrationStatus("CREATING WORKSPACE FAILED");
+            process.setVariable(this.execution.getId(), "WORKSPACE_CREATE_FAILED_REASON", e.toString());
         }
     }
 }

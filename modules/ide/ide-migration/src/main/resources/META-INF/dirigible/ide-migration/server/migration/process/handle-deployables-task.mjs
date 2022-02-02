@@ -20,12 +20,12 @@ export class HandleDeployablesTask {
     run() {
         try {
             process.setVariable(
-                execution.getId(),
+                this.execution.getId(),
                 "migrationState",
                 "HANDLE_DEPLOYABLES_EXECUTING"
             );
-            trackService.updateMigrationStatus("HANDLE DEPLOYABLES EXECUTING");
-            const userDataJson = process.getVariable(execution.getId(), "userData");
+            this.trackService.updateMigrationStatus("HANDLE DEPLOYABLES EXECUTING");
+            const userDataJson = process.getVariable(this.execution.getId(), "userData");
             const userData = JSON.parse(userDataJson);
 
             const migrationService = new MigrationService();
@@ -61,16 +61,16 @@ export class HandleDeployablesTask {
                         deployables
                     );
             }
-            process.setVariable(execution.getId(), "userData", JSON.stringify(userData));
-            process.setVariable(execution.getId(), "migrationState", "HANDLE_DEPLOYABLES_EXECUTED");
-            trackService.updateMigrationStatus("HANDLE DEPLOYABLES EXECUTED");
+            process.setVariable(this.execution.getId(), "userData", JSON.stringify(userData));
+            process.setVariable(this.execution.getId(), "migrationState", "HANDLE_DEPLOYABLES_EXECUTED");
+            this.trackService.updateMigrationStatus("HANDLE DEPLOYABLES EXECUTED");
         } catch (e) {
             console.log("HANDLE_DEPLOYABLES failed with error:");
             console.log(e.message);
-            process.setVariable(execution.getId(), "migrationState", "HANDLE_DEPLOYABLES_FAILED");
-            trackService.updateMigrationStatus("HANDLE DEPLOYABLES FAILED");
+            process.setVariable(this.execution.getId(), "migrationState", "HANDLE_DEPLOYABLES_FAILED");
+            this.trackService.updateMigrationStatus("HANDLE DEPLOYABLES FAILED");
             process.setVariable(
-                execution.getId(),
+                this.execution.getId(),
                 "HANDLE_DEPLOYABLES_FAILED_REASON",
                 e.toString()
             );

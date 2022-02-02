@@ -8,15 +8,15 @@ export class ListAvailableDatabasesTask {
 
     run() {
         try {
-            const userDataJson = process.getVariable(execution.getId(), "userData");
-            const userJwtToken = process.getVariable(execution.getId(), "userJwtToken");
+            const userDataJson = process.getVariable(this.execution.getId(), "userData");
+            const userJwtToken = process.getVariable(this.execution.getId(), "userJwtToken");
             const userData = JSON.parse(userDataJson);
 
-    process.setVariable(execution.getId(), "migrationState", "DATABASES_LISTING");
-    trackService.addEntry("DATABASES_LISTING");
-    process.setVariable(execution.getId(), "migrationIndex", trackService.getCurrentMigrationIndex());
-    const account = userData.neo.subaccount;
-    const host = userData.neo.hostName;
+            process.setVariable(this.execution.getId(), "migrationState", "DATABASES_LISTING");
+            this.trackService.addEntry("DATABASES_LISTING");
+            process.setVariable(this.execution.getId(), "migrationIndex", this.trackService.getCurrentMigrationIndex());
+            const account = userData.neo.subaccount;
+            const host = userData.neo.hostName;
 
             const neoDatabasesService = new NeoDatabasesService();
             const databases = neoDatabasesService.getAvailableDatabases(
@@ -25,13 +25,13 @@ export class ListAvailableDatabasesTask {
                 userJwtToken
             );
 
-            process.setVariable(execution.getId(), "databases", JSON.stringify(databases));
-            process.setVariable(execution.getId(), "migrationState", "DATABASES_LISTED");
-            trackService.updateMigrationStatus("DATABASES LISTED");
+            process.setVariable(this.execution.getId(), "databases", JSON.stringify(databases));
+            process.setVariable(this.execution.getId(), "migrationState", "DATABASES_LISTED");
+            this.trackService.updateMigrationStatus("DATABASES LISTED");
         } catch (e) {
-            process.setVariable(execution.getId(), "migrationState", "DATABASES_LISTING_FAILED");
-            trackService.updateMigrationStatus("DATABASES LISTING FAILED");
-            process.setVariable(execution.getId(), "DATABASES_LISTING_FAILED_REASON", e.toString());
+            process.setVariable(this.execution.getId(), "migrationState", "DATABASES_LISTING_FAILED");
+            this.trackService.updateMigrationStatus("DATABASES LISTING FAILED");
+            process.setVariable(this.execution.getId(), "DATABASES_LISTING_FAILED_REASON", e.toString());
         }
     }
 }

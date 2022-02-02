@@ -8,17 +8,17 @@ export class ListWorkspacesTask {
 
     run() {
         try {
-            process.setVariable(execution.getId(), "migrationState", "WORKSPACES_LISTING");
-            trackService.updateMigrationStatus("WORKSPACES LISTING");
+            process.setVariable(this.execution.getId(), "migrationState", "WORKSPACES_LISTING");
+            this.trackService.updateMigrationStatus("WORKSPACES LISTING");
             const workspaces = workspaceManager.getWorkspacesNames();
-            process.setVariable(execution.getId(), "workspaces", JSON.stringify(workspaces));
-            process.setVariable(execution.getId(), "migrationState", "WORKSPACES_LISTED");
-            trackService.updateMigrationStatus("WORKSPACES LISTED");
+            process.setVariable(this.execution.getId(), "workspaces", JSON.stringify(workspaces));
+            process.setVariable(this.execution.getId(), "migrationState", "WORKSPACES_LISTED");
+            this.trackService.updateMigrationStatus("WORKSPACES LISTED");
         } catch (e) {
-            process.setVariable(execution.getId(), "migrationState", "WORKSPACES_LISTING_FAILED");
-            trackService.updateMigrationStatus("WORKSPACES LISTING FAILED");
+            process.setVariable(this.execution.getId(), "migrationState", "WORKSPACES_LISTING_FAILED");
+            this.trackService.updateMigrationStatus("WORKSPACES LISTING FAILED");
             process.setVariable(
-                execution.getId(),
+                this.execution.getId(),
                 "WORKSPACES_LISTING_FAILED_REASON",
                 e.toString()
             );

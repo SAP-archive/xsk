@@ -15,6 +15,7 @@ import com.sap.cloud.sdk.cloudplatform.connectivity.exception.DestinationAccessE
 import com.sap.xsk.api.destination.CloudPlatformDestinationFacade;
 import org.eclipse.dirigible.api.v3.mail.api.IMailConfigurationProvider;
 import com.sap.cloud.sdk.cloudplatform.connectivity.Destination;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
@@ -34,7 +35,7 @@ public class DestMailConfigProvider implements IMailConfigurationProvider {
       MAIL_SMTPS_AUTH, MAIL_SMTP_HOST, MAIL_SMTP_PORT, MAIL_SMTP_AUTH);
 
   private static final String PROVIDER_NAME = "destination";
-  private static final String DESTINATION_NAME = "Mail";
+  private static final String DESTINATION_NAME = "MAIL_SERVER_DESTINATION_NAME";
 
   private static final Logger logger = LoggerFactory.getLogger(DestMailConfigProvider.class);
 
@@ -47,7 +48,8 @@ public class DestMailConfigProvider implements IMailConfigurationProvider {
   public Properties getProperties() {
     Properties properties = new Properties();
     try {
-      Destination destination = CloudPlatformDestinationFacade.getDestination(DESTINATION_NAME);
+      String destinationName = Configuration.get(DESTINATION_NAME);
+      Destination destination = CloudPlatformDestinationFacade.getDestination(destinationName);
       for (String key : MAIL_PROPERTIES) {
         if(!destination.get(key).isEmpty()) {
           properties.put(key, destination.get(key).get());

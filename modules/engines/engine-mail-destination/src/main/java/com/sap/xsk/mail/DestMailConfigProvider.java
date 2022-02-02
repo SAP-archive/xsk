@@ -56,7 +56,7 @@ public class DestMailConfigProvider implements IMailConfigurationProvider {
         }
       }
     } catch (DestinationAccessException e) {
-      logger.error("No Destination object with name " + DESTINATION_NAME + " found!");
+      logger.error("Cannot find destination for mail configuration. Please check if " + DESTINATION_NAME + " is set and the destination exists.");
     }
 
     if(properties.isEmpty()) {

@@ -13,144 +13,146 @@ exports.getHdiFilePlugins = function () {
     return {
         file_suffixes: {
             hdbconstraint: {
-                plugin_name: "com.sap.hana.di.constraint"
+                plugin_name: "com.sap.hana.di.constraint",
             },
             hdbsynonym: {
-                plugin_name: "com.sap.hana.di.synonym"
+                plugin_name: "com.sap.hana.di.synonym",
             },
             hdbview: {
-                plugin_name: "com.sap.hana.di.view"
+                plugin_name: "com.sap.hana.di.view",
             },
             hdbcalculationview: {
-                plugin_name: "com.sap.hana.di.calculationview"
+                plugin_name: "com.sap.hana.di.calculationview",
             },
             calculationview: {
-                plugin_name: "com.sap.hana.di.calculationview"
+                plugin_name: "com.sap.hana.di.calculationview",
             },
             hdbanalyticprivilege: {
-                plugin_name: "com.sap.hana.di.analyticprivilege"
+                plugin_name: "com.sap.hana.di.analyticprivilege",
             },
             analyticprivilege: {
-                plugin_name: "com.sap.hana.di.analyticprivilege"
+                plugin_name: "com.sap.hana.di.analyticprivilege",
             },
             hdbtabledata: {
-                plugin_name: "com.sap.hana.di.tabledata.properties"
+                plugin_name: "com.sap.hana.di.tabledata.properties",
             },
             csv: {
-                plugin_name: "com.sap.hana.di.tabledata.properties"
+                plugin_name: "com.sap.hana.di.tabledata.properties",
             },
             hdbapplicationtime: {
-                plugin_name: "com.sap.hana.di.applicationtime"
+                plugin_name: "com.sap.hana.di.applicationtime",
             },
             txt: {
-                plugin_name: "com.sap.hana.di.copyonly"
+                plugin_name: "com.sap.hana.di.copyonly",
             },
             hdbcollection: {
-                plugin_name: "com.sap.hana.di.collection"
+                plugin_name: "com.sap.hana.di.collection",
             },
             hdblogicalschema: {
-                plugin_name: "com.sap.hana.di.logicalschema"
+                plugin_name: "com.sap.hana.di.logicalschema",
             },
             hdblibrary: {
-                plugin_name: "com.sap.hana.di.library"
+                plugin_name: "com.sap.hana.di.library",
             },
             hdbindex: {
-                plugin_name: "com.sap.hana.di.index"
+                plugin_name: "com.sap.hana.di.index",
             },
             hdbgraphworkspace: {
-                plugin_name: "com.sap.hana.di.graphworkspace"
+                plugin_name: "com.sap.hana.di.graphworkspace",
             },
             hdbfunction: {
                 plugin_name: "com.sap.hana.di.function",
             },
             hdbflowgraph: {
-                plugin_name: "com.sap.hana.di.flowgraph"
+                plugin_name: "com.sap.hana.di.flowgraph",
             },
             hdbeshconfig: {
-                plugin_name: "com.sap.hana.di.eshconfig"
+                plugin_name: "com.sap.hana.di.eshconfig",
             },
             hdbtable: {
-                plugin_name: "com.sap.hana.di.table"
+                plugin_name: "com.sap.hana.di.table",
             },
             hdbdropcreatetable: {
-                plugin_name: "com.sap.hana.di.dropcreatetable"
+                plugin_name: "com.sap.hana.di.dropcreatetable",
             },
             hdbcollectionindex: {
-                plugin_name: "com.sap.hana.di.collection.index"
+                plugin_name: "com.sap.hana.di.collection.index",
             },
             hdbmigrationtable: {
-                plugin_name: "com.sap.hana.di.table.migration"
+                plugin_name: "com.sap.hana.di.table.migration",
             },
             hdbprocedure: {
-                plugin_name: "com.sap.hana.di.procedure"
+                plugin_name: "com.sap.hana.di.procedure",
             },
             hdbprojectionview: {
-                plugin_name: "com.sap.hana.di.projectionview"
+                plugin_name: "com.sap.hana.di.projectionview",
             },
             hdbprojectionviewconfig: {
-                plugin_name: "com.sap.hana.di.projectionview.config"
-            }, hdbpublicsynonym: {
-                plugin_name: "com.sap.hana.di.publicsynonym"
+                plugin_name: "com.sap.hana.di.projectionview.config",
+            },
+            hdbpublicsynonym: {
+                plugin_name: "com.sap.hana.di.publicsynonym",
             },
             hdbreptask: {
-                plugin_name: "com.sap.hana.di.reptask"
+                plugin_name: "com.sap.hana.di.reptask",
             },
             hdbrole: {
-                plugin_name: "com.sap.hana.di.role"
+                plugin_name: "com.sap.hana.di.role",
             },
             hdbroleconfig: {
-                plugin_name: "com.sap.hana.di.role.config"
+                plugin_name: "com.sap.hana.di.role.config",
             },
             hdbsearchruleset: {
-                plugin_name: "com.sap.hana.di.searchruleset"
+                plugin_name: "com.sap.hana.di.searchruleset",
             },
             hdbsequence: {
-                plugin_name: "com.sap.hana.di.sequence"
+                plugin_name: "com.sap.hana.di.sequence",
             },
             hdbsynonymconfig: {
-                plugin_name: "com.sap.hana.di.synonym.config"
+                plugin_name: "com.sap.hana.di.synonym.config",
             },
             hdbstatistics: {
-                plugin_name: "com.sap.hana.di.statistics"
+                plugin_name: "com.sap.hana.di.statistics",
             },
             hdbstructuredprivilege: {
-                plugin_name: "com.sap.hana.di.structuredprivilege"
-            }, hdbsystemversioning: {
-                plugin_name: "com.sap.hana.di.systemversioning"
+                plugin_name: "com.sap.hana.di.structuredprivilege",
+            },
+            hdbsystemversioning: {
+                plugin_name: "com.sap.hana.di.systemversioning",
             },
             properties: {
-                plugin_name: "com.sap.hana.di.tabledata.properties"
+                plugin_name: "com.sap.hana.di.tabledata.properties",
             },
             tags: {
-                plugin_name: "com.sap.hana.di.tabledata.properties"
+                plugin_name: "com.sap.hana.di.tabledata.properties",
             },
             hdbtabletype: {
-                plugin_name: "com.sap.hana.di.tabletype"
+                plugin_name: "com.sap.hana.di.tabletype",
             },
             hdbtrigger: {
-                plugin_name: "com.sap.hana.di.trigger"
+                plugin_name: "com.sap.hana.di.trigger",
             },
             hdbvirtualfunction: {
-                plugin_name: "com.sap.hana.di.virtualfunction"
+                plugin_name: "com.sap.hana.di.virtualfunction",
             },
             hdbvirtualfunctionconfig: {
-                plugin_name: "com.sap.hana.di.virtualfunction.config"
+                plugin_name: "com.sap.hana.di.virtualfunction.config",
             },
             hdbvirtualpackagehadoop: {
-                plugin_name: "com.sap.hana.di.virtualpackage.hadoop"
+                plugin_name: "com.sap.hana.di.virtualpackage.hadoop",
             },
             hdbvirtualpackagesparksql: {
-                plugin_name: "com.sap.hana.di.virtualpackage.sparksql"
+                plugin_name: "com.sap.hana.di.virtualpackage.sparksql",
             },
             hdbvirtualprocedure: {
-                plugin_name: "com.sap.hana.di.virtualprocedure"
+                plugin_name: "com.sap.hana.di.virtualprocedure",
             },
             hdbvirtualtable: {
-                plugin_name: "com.sap.hana.di.virtualtable"
+                plugin_name: "com.sap.hana.di.virtualtable",
             },
             hdbvirtualtableconfig: {
-                plugin_name: "com.sap.hana.di.virtualtable.config"
-            }
-        }
+                plugin_name: "com.sap.hana.di.virtualtable.config",
+            },
+        },
     };
-}
+};

@@ -1,0 +1,174 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: {{ required "Missing namespace" .Values.namespace.name }}
+    labels:
+      istio-injection: {{ required "Missing namespace label Istio injection" .Values.namespace.labelIstioInjection }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ required "Missing secret name" .Values.secretHana.nameSecret }}
+  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+type: Opaque
+stringData:
+  DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES: HANA
+  DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT: HANA
+  DIRIGIBLE_DATABASE_PROVIDER: custom
+  DIRIGIBLE_SCHEDULER_DATABASE_DRIVER: com.sap.db.jdbc.Driver
+  HANA_DRIVER: com.sap.db.jdbc.Driver
+  HANA_PASSWORD: {{ required "Missing HANA password" .Values.secretHana.hanaPassword }}
+  HANA_URL: jdbc:sap://{{ required "Missing HANA url" .Values.secretHana.hanaUrl }}/?encrypt=true&validateCertificate=false
+  HANA_USERNAME: {{ required "Missing HANA username" .Values.secretHana.hanaUsername }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ required "Missing secret name" .Values.secretXsuaa.nameSecret }}
+  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+type: Opaque
+stringData:
+  url: {{ required "Missing XSUAA url" .Values.secretXsuaa.url }}
+  clientid: {{ required "Missing XSUAA clientId" .Values.secretXsuaa.clientId }}
+  clientsecret: {{ required "Missing XSUAA clientSecret" .Values.secretXsuaa.clientSecret }}
+  verificationkey: {{ required "Missing XSUAA verificationKey" .Values.secretXsuaa.verificationKey }}
+  xsappname: {{ required "Missing XSUAA verificationKey" .Values.secretXsuaa.xsappname }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "xsk.fullname" . }}
+  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+  labels:
+    {{- include "xsk.labels" . | nindent 4 }}
+spec:
+  replicas: {{ required "Missing replica count" .Values.replicaCount }}
+  strategy:
+    type: {{ required "Missing deployment strategy type" .Values.deployment.strategyType }}
+  selector:
+    matchLabels:
+      {{- include "xsk.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "xsk.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ include "xsk.serviceAccountName" . }}
+      containers:
+      - name: {{ required "Missing chart name" .Chart.Name }}
+        image: {{ .Values.deployment.image }}
+        imagePullPolicy: {{ required "Missing application image pull policy" .Values.deployment.imagePullPolicy }}
+        envFrom:
+        - secretRef:
+            name: {{ required "Missing secret name" .Values.secretHana.nameSecret }}
+        - secretRef:
+            name: {{ required "Missing secret name" .Values.secretXsuaa.nameSecret }} 
+        env:
+        - name: DIRIGIBLE_THEME_DEFAULT
+          value: fiori
+        - name: DIRIGIBLE_HOST
+          value: https://{{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io
+        - name: SERVER_MAXHTTPHEADERSIZE
+          value: "48000"
+        volumeMounts:
+        - name: xsk-volume
+          mountPath: /usr/local/tomcat/target/dirigible/repository
+        ports:
+        - containerPort: 8080
+          name: xsk
+          protocol: TCP
+      volumes:
+      - name: xsk-volume
+        persistentVolumeClaim:
+          claimName: xsk-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "xsk.labels" . | nindent 4 }}
+  name: {{ include "xsk.fullname" . }}
+  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+spec:
+  ports:
+  - name: xsk
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    {{- include "xsk.selectorLabels" . | nindent 6 }}
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xsk-claim
+  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "xsk.fullname" . }}
+  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+spec:
+  gateways:
+  - xsk-landscape
+  hosts:
+  - {{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io
+  http:
+  - match:
+    - uri:
+        regex: /.*
+    route:
+    - destination:
+        host: {{ include "xsk.fullname" . }}.{{ required "Missing namespace name" .Values.namespace.name }}.svc.cluster.local
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: xsk-landscape
+  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - {{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+    tls:
+      httpsRedirect: true
+  - hosts:
+    - {{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io
+    port:
+      name: https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: wildcard-tls
+      mode: SIMPLE
+---
+apiVersion: dns.gardener.cloud/v1alpha1
+kind: DNSEntry
+metadata:
+  annotations:
+    dns.gardener.cloud/class: garden
+  name: {{ include "xsk.fullname" . }}
+  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+spec:
+  dnsName: "{{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io"
+  ttl: 600
+  targets:
+  - {{ required "Missing dnsentry target" .Values.dnsentry.targets }}

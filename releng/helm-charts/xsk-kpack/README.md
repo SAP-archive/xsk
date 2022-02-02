@@ -86,15 +86,23 @@ Resources:
 
     > Replace the `#{XSKVersion}#` placeholder.
 
-1. Package Helm Chart:
+1. Package Helm Chart and sign with gpg key:
 
-    ```
-    helm package xsk-kpack
-    ```
+    Obtain gpg key for XSK and convert keyring to the legacy gpg format.
 
-1. Copy the `xsk-kpack-0.11.0.tgz` somewhere outside the Git repository.
+    `gpg --export-secret-keys > ~/.gnupg/secring.gpg`
 
-1. Reset all changes:
+    Package with gpg key.
+
+    `helm package --sign --key 'XSK-gpg' --keyring ~/.gnupg/secring.gpg <chart>`
+
+    Verify the package.
+
+    helm verify --keyring ~/.gnupg/pubring.gpg xsk-<version>.tgz
+
+2. Copy the `xsk-<chart>-<version>.tgz` and `xsk-<chart>-<version>.tgz.prov` somewhere outside the Git repository.
+
+3. Reset all changes:
 
     ```
     git add .
@@ -102,28 +110,28 @@ Resources:
     cd ../../
     ```
 
-1. Switch to the `gh-pages` branch:
+4. Switch to the `gh-pages` branch:
 
     ```
     git checkout gh-pages
     git pull origin gh-pages
     ```
 
-1. Paste the `xsk-kpack-0.11.0.tgz` chart into the `charts` directory.
+5. Paste the `xsk-<chart>-<version>.tgz` and `xsk-<chart>-<version>.tgz.prov` chart into the `charts` directory.
 
-1. Build Helm Index:
+6. Build Helm Index:
 
     ```
     helm repo index charts/ --url https://sap.github.io/xsk/charts
     ```
 
-1. Move the `charts/index.yaml` to the root folder:
+7. Move the `charts/index.yaml` to the root folder:
 
     ```
     mv charts/index.yaml .
     ```
 
-1. Push the changes:
+8. Push the changes:
 
     ```
     git add index.yaml

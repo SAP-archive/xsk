@@ -21,17 +21,10 @@
 
         <!-- AngularJS -->
         <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular.min.js"></script>
-        <script
-            type="text/javascript"
-            src="/webjars/angularjs/1.8.2/angular-resource.min.js"
-        ></script>
+        <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular-resource.min.js"></script>
 
         <!-- FontAwesome icon set -->
-        <link
-            type="text/css"
-            href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"
-            rel="stylesheet"
-        />
+        <link type="text/css" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
         <!-- Twitter Bootstrap with Theme Support -->
         <link rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css" />
@@ -50,31 +43,14 @@
         <script type="text/javascript" src="js/neo-credentials.js"></script>
         <script type="text/javascript" src="js/hana-credentials.js"></script>
         <script type="text/javascript" src="js/start-migration.js"></script>
-        <link
-            type="text/css"
-            rel="stylesheet"
-            href="/services/v4/js/theme/resources.js/migration.css"
-        />
-        <link
-            type="text/css"
-            rel="stylesheet"
-            href="/services/v4/js/theme/resources.js/dropdown.css"
-        />
+        <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/migration.css" />
+        <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/dropdown.css" />
     </head>
 
-    <body
-        ng-app="migration-launch"
-        ng-controller="MigrationLaunchViewController"
-        class="view migration-launch-body"
-    >
+    <body ng-app="migration-launch" ng-controller="MigrationLaunchViewController" class="view migration-launch-body">
         <div class="migration-title">
             <span class="pull-left"> SAP HANA XS Classic Migration </span>
-            <button
-                type="button"
-                class="btn btn-primary btn-big pull-right"
-                ng-click="showMigrationScreen()"
-                ng-show="onStatisticsPage"
-            >
+            <button type="button" class="btn btn-primary btn-big pull-right" ng-click="showMigrationScreen()" ng-show="onStatisticsPage">
                 Migrate a project
             </button>
         </div>
@@ -85,11 +61,7 @@
             <div class="migration-nav">
                 <div class="nav-progress">
                     <div class="nav-progress-line"></div>
-                    <div
-                        class="nav-item"
-                        ng-repeat="step in steps"
-                        ng-class="isStepActive(step.id)"
-                    >
+                    <div class="nav-item" ng-repeat="step in steps" ng-class="isStepActive(step.id)">
                         <div class="nav-item-indicator"></div>
                         <div class="nav-item-label">{{step.name}}</div>
                     </div>

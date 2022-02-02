@@ -33,30 +33,13 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-searchable">
             <li class="dropdown-input">
-                <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Search..."
-                    ng-keyup="filterWorkspaces()"
-                    ng-model="workspacesSearch"
-                />
+                <input class="form-control" type="text" placeholder="Search..." ng-keyup="filterWorkspaces()" ng-model="workspacesSearch" />
             </li>
             <li role="separator" class="divider"></li>
-            <li
-                class="dropdown-item"
-                ng-repeat="option in workspacesList"
-                ng-click="workspaceSelected(option)"
-            >
-                {{option}}
-            </li>
+            <li class="dropdown-item" ng-repeat="option in workspacesList" ng-click="workspaceSelected(option)">{{option}}</li>
             <li role="separator" class="divider ng-hide" ng-show="showSeparator"></li>
-            <button
-                class="dropdown-item dropdown-btn"
-                ng-click="workspaceSelected(btnBottonText)"
-                ng-show="showCreateButton"
-            >
-                <i class="fa fa-plus-circle fa_margin" aria-hidden="true"></i> Create workspace:
-                "{{btnBottonText}}"
+            <button class="dropdown-item dropdown-btn" ng-click="workspaceSelected(btnBottonText)" ng-show="showCreateButton">
+                <i class="fa fa-plus-circle fa_margin" aria-hidden="true"></i> Create workspace: "{{btnBottonText}}"
             </button>
         </ul>
     </div>
@@ -74,28 +57,11 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-searchable multi-selectable">
             <li class="dropdown-input">
-                <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Search..."
-                    ng-keyup="filterDU()"
-                    ng-model="duSearch"
-                />
+                <input class="form-control" type="text" placeholder="Search..." ng-keyup="filterDU()" ng-model="duSearch" />
             </li>
             <li role="separator" class="divider"></li>
-            <li
-                class="dropdown-item dropdown-btn"
-                ng-class="allDUSelectable()"
-                ng-click="toggleSelectAllDU()"
-            >
-                {{selectAllText}}
-            </li>
-            <li
-                class="dropdown-item"
-                ng-repeat="option in deliveryUnitList"
-                ng-class="isDUSelected(option)"
-                ng-click="duSelected(option)"
-            >
+            <li class="dropdown-item dropdown-btn" ng-class="allDUSelectable()" ng-click="toggleSelectAllDU()">{{selectAllText}}</li>
+            <li class="dropdown-item" ng-repeat="option in deliveryUnitList" ng-class="isDUSelected(option)" ng-click="duSelected(option)">
                 {{option.name}}
             </li>
         </ul>

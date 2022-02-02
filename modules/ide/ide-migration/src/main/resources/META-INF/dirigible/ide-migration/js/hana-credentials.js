@@ -23,14 +23,10 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
         $scope.databases = [];
         $scope.databasesList = $scope.databases;
 
-        let descriptionList = [
-            "Please wait while we get all available databases...",
-            "Provide the SAP HANA Credentials",
-        ];
+        let descriptionList = ["Please wait while we get all available databases...", "Provide the SAP HANA Credentials"];
         $scope.descriptionText = descriptionList[0];
         let defaultErrorTitle = "Error listing databases";
-        let defaultErrorDesc =
-            "Please check if the information you provided is correct and try again.";
+        let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
 
         function getAvailableHanaDatabases() {
             body = {
@@ -43,19 +39,16 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
             };
 
             $http
-                .post(
-                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/start-process",
-                    JSON.stringify(body),
-                    { headers: { "Content-Type": "application/json" } }
-                )
+                .post("/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/start-process", JSON.stringify(body), {
+                    headers: { "Content-Type": "application/json" },
+                })
                 .then(
                     function (response) {
-                        migrationDataState.processInstanceId = body.processInstanceId =
-                            response.data.processInstanceId;
+                        migrationDataState.processInstanceId = body.processInstanceId = response.data.processInstanceId;
                         const timer = setInterval(function () {
                             $http
                                 .post(
-                                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/get-process",
+                                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/get-process",
                                     JSON.stringify(body),
                                     { headers: { "Content-Type": "application/json" } }
                                 )
@@ -63,10 +56,7 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
                                     function (response) {
                                         if (response.data && response.data.failed) {
                                             clearInterval(timer);
-                                            $messageHub.announceAlertError(
-                                                defaultErrorTitle,
-                                                defaultErrorDesc
-                                            );
+                                            $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
                                             errorOccurred();
                                         } else if (response.data.databases) {
                                             clearInterval(timer);
@@ -92,15 +82,9 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
                         if (response.data) {
                             if ("error" in response.data) {
                                 if ("message" in response.data.error) {
-                                    $messageHub.announceAlertError(
-                                        defaultErrorTitle,
-                                        response.data.error.message
-                                    );
+                                    $messageHub.announceAlertError(defaultErrorTitle, response.data.error.message);
                                 } else {
-                                    $messageHub.announceAlertError(
-                                        defaultErrorTitle,
-                                        defaultErrorDesc
-                                    );
+                                    $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
                                 }
                                 console.error(`HTTP $response.status`, response.data.error);
                             } else {
@@ -139,13 +123,9 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
         $scope.filterDatabases = function () {
             if ($scope.databasesSearch) {
                 let filtered = [];
-                for (let i = 0; i < $scope.databases.length; i++) {
-                    if (
-                        $scope.databases[i]
-                            .toLowerCase()
-                            .includes($scope.databasesSearch.toLowerCase())
-                    ) {
-                        filtered.push($scope.databases[i]);
+                for (const database of $scope.databases) {
+                    if (database.toLowerCase().includes($scope.databasesSearch.toLowerCase())) {
+                        filtered.push(database);
                     }
                 }
                 $scope.databasesList = filtered;

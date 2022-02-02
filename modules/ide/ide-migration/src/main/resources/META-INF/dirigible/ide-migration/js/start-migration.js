@@ -23,8 +23,7 @@ migrationLaunchView.controller("StartMigrationViewController", [
         $scope.progressTitle = titleList[0];
         $scope.statusMessage = "Configuration processing...";
         let defaultErrorTitle = "Error migrating project";
-        let defaultErrorDesc =
-            "Please check if the information you provided is correct and try again.";
+        let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
 
         function startMigration() {
             body = {
@@ -45,16 +44,12 @@ migrationLaunchView.controller("StartMigrationViewController", [
 
             const selectedDeliveryUnitsCount = migrationDataState.selectedDeliveryUnits.length;
             $scope.statusMessage =
-                selectedDeliveryUnitsCount > 1
-                    ? `Migrating ${selectedDeliveryUnitsCount} projects`
-                    : `Migrating project`;
+                selectedDeliveryUnitsCount > 1 ? `Migrating ${selectedDeliveryUnitsCount} projects` : `Migrating project`;
 
             $http
-                .post(
-                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/continue-process",
-                    JSON.stringify(body),
-                    { headers: { "Content-Type": "application/json" } }
-                )
+                .post("/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/continue-process", JSON.stringify(body), {
+                    headers: { "Content-Type": "application/json" },
+                })
                 .then(
                     function (response) {
                         const duNames = migrationDataState.selectedDeliveryUnits.map((x) => x.name);
@@ -67,15 +62,9 @@ migrationLaunchView.controller("StartMigrationViewController", [
                         if (response.data) {
                             if ("error" in response.data) {
                                 if ("message" in response.data.error) {
-                                    $messageHub.announceAlertError(
-                                        defaultErrorTitle,
-                                        response.data.error.message
-                                    );
+                                    $messageHub.announceAlertError(defaultErrorTitle, response.data.error.message);
                                 } else {
-                                    $messageHub.announceAlertError(
-                                        defaultErrorTitle,
-                                        defaultErrorDesc
-                                    );
+                                    $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
                                 }
                                 console.error(`HTTP $response.status`, response.data.error);
                             } else {

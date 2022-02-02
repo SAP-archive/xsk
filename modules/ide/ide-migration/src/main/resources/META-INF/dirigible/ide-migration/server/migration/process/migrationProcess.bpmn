@@ -5,7 +5,7 @@
     <serviceTask id="openHanaTunnelTask" name="OpenHanaTunnelTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/open-hana-tunnel-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/open-hana-tunnel-task.mjs/OpenHanaTunnelTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>
@@ -13,14 +13,14 @@
     <serviceTask id="listDeliveryUnitsTask" name="ListDeliveryUnitsTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/list-delivery-units-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/list-delivery-units-task.mjs/ListDeliveryUnitsTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>
     <serviceTask id="closeHanaTunnelTask" name="CloseHanaTunnelTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/close-hana-tunnel-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/close-hana-tunnel-task.mjs/CloseHanaTunnelTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>
@@ -28,14 +28,14 @@
     <serviceTask id="listWorkspacesTask" name="ListWorkspacesTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/list-workspaces-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/list-workspaces-task.mjs/ListWorkspacesTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>
     <serviceTask id="listAvailableDatabasesTask" name="ListAvailableDatabasesTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/list-available-databases-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/list-available-databases-task.mjs/ListAvailableDatabasesTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>
@@ -78,28 +78,28 @@
     <serviceTask id="handleDeployablesTask" name="HandleDeployablesTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/handle-deployables-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/handle-deployables-task.mjs/HandleDeployablesTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>
     <serviceTask id="createWorkspaceTask" name="CreateWorkspaceTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/create-workspace-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/create-workspace-task.mjs/CreateWorkspaceTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>
     <serviceTask id="copyFilesTask" name="CopyFilesTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/copy-files-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/copy-files-task.mjs/CopyFilesTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>
     <serviceTask id="populateProjectsTask" name="PopulateProjectsTask" flowable:class="org.eclipse.dirigible.bpm.flowable.DirigibleCallDelegate">
       <extensionElements>
         <flowable:field name="handler">
-          <flowable:string><![CDATA[ide-migration/server/migration/process/populate-projects-task.js]]></flowable:string>
+          <flowable:string><![CDATA[ide-migration/server/migration/process/populate-projects-task.mjs/PopulateProjectsTask/run]]></flowable:string>
         </flowable:field>
       </extensionElements>
     </serviceTask>

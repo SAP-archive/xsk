@@ -1,21 +1,10 @@
-/*
- * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Apache License, v2.0
- * which accompanies this distribution, and is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
- * SPDX-License-Identifier: Apache-2.0
- */
 let log = console;
 
 let GENERIC_FILTER_PACKAGES = [".externalToolBuilders", ".settings"];
 
 let QUOTE_PATTERN = /\"([^\"]*)\"/;
 
-function PackageFilter() {
+export function PackageFilter() {
     this.splitName = function (name) {
         let n = name;
         let paths = [];
@@ -93,5 +82,3 @@ function PackageFilter() {
         return newPackageList;
     };
 }
-
-module.exports = new PackageFilter();

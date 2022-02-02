@@ -1,20 +1,7 @@
-/*
- * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Apache License, v2.0
- * which accompanies this distribution, and is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
- * SPDX-License-Identifier: Apache-2.0
- */
-const tasksService = require("bpm/v4/tasks");
-const processService = require("bpm/v4/process");
-const httpClient = require("http/v4/client");
-const database = require("db/v4/database");
+import { tasks as tasksService, process as processService } from "@dirigible/bpm";
+import { client as httpClient, rs } from "@dirigible/http";
+import { database } from "@dirigible/db";
 
-const rs = require("http/v4/rs");
 rs.service()
     .resource("start-process")
     .post(startProcess)
@@ -95,10 +82,7 @@ function getProcessState(ctx, req, res) {
 
     if (migrationState.endsWith("_FAILED")) {
         response.failed = true;
-        const failureReason = processService.getVariable(
-            processInstanceIdString,
-            migrationState + "_REASON"
-        );
+        const failureReason = processService.getVariable(processInstanceIdString, migrationState + "_REASON");
         if (failureReason) {
             response.failureReason = failureReason;
         }
@@ -107,10 +91,7 @@ function getProcessState(ctx, req, res) {
         response.databases = JSON.parse(databasesJson);
     } else if (migrationState === "WORKSPACES_LISTED") {
         const workspacesJson = processService.getVariable(processInstanceIdString, "workspaces");
-        const deliveryUnitsJson = processService.getVariable(
-            processInstanceIdString,
-            "deliveryUnits"
-        );
+        const deliveryUnitsJson = processService.getVariable(processInstanceIdString, "deliveryUnits");
         const connectionId = processService.getVariable(processInstanceIdString, "connectionId");
         response.workspaces = JSON.parse(workspacesJson);
         response.deliveryUnits = JSON.parse(deliveryUnitsJson);

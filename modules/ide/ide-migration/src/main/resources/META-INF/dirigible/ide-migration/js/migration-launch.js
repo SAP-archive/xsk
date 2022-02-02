@@ -129,9 +129,9 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
 
         $scope.nextClicked = function () {
             $messageHub.message($scope.currentStep.topicId, { isVisible: false });
-            for (let i = 0; i < $scope.steps.length; i++) {
-                if ($scope.steps[i].id > $scope.currentStep.id) {
-                    $scope.currentStep = $scope.steps[i];
+            for (const step of $scope.steps) {
+                if (step.id > $scope.currentStep.id) {
+                    $scope.currentStep = step;
                     break;
                 }
             }

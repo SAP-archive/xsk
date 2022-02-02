@@ -1,40 +1,26 @@
-/*
- * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Apache License, v2.0
- * which accompanies this distribution, and is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
- * SPDX-License-Identifier: Apache-2.0
- */
-const HanaRepository = require("ide-migration/server/migration/repository/hana-repository");
-const workspaceManager = require("platform/v4/workspace");
-const repositoryManager = require("platform/v4/repository");
-const bytes = require("io/v4/bytes");
-const database = require("db/v4/database");
-const config = require("core/v4/configurations");
+import { workspace as workspaceManager, repository as repositoryManager } from "@dirigible/platform";
+import { bytes } from "@dirigible/io";
+import { database } from "@dirigible/database";
+import { configurations as config } from "@dirigible/core";
+import { client as git } from "@dirigible/git";
+
+import { HanaRepository } from "../repository/hana-repository";
+import { HanaVisitor } from "./hana-visitor.mjs";
+import { getHdiFilePlugins as hdiFile } from "../repository/hdi-plugins";
+
 const HANA_USERNAME = "HANA_USERNAME";
 const TransformerFactory = Java.type("javax.xml.transform.TransformerFactory");
 const StreamSource = Java.type("javax.xml.transform.stream.StreamSource");
 const StreamResult = Java.type("javax.xml.transform.stream.StreamResult");
 const StringReader = Java.type("java.io.StringReader");
-const StringWriter = Java.type("java.io.StringWriter");
 const ByteArrayInputStream = Java.type("java.io.ByteArrayInputStream");
 const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
-const XSKProjectMigrationInterceptor = Java.type(
-    "com.sap.xsk.modificators.XSKProjectMigrationInterceptor"
-);
+const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor");
 const XSKHDBCoreFacade = Java.type("com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade");
-const HanaVisitor = require("./HanaVisitor");
 const hdbDDModel = "com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel";
-const hdiFile = require("ide-migration/server/migration/repository/hdi-plugins");
 const xskModificator = new XSKProjectMigrationInterceptor();
-const git = require("git/v4/client");
 
-class MigrationService {
-    connection = null;
+export class MigrationService {
     repo = null;
     tableFunctionPaths = [];
 
@@ -42,17 +28,10 @@ class MigrationService {
     publicSynonymFileName = "hdi-public-synonyms.hdbpublicsynonym";
 
     setupConnection(databaseName, databaseUser, databaseUserPassword, connectionUrl) {
-        database.createDataSource(
-            databaseName,
-            "com.sap.db.jdbc.Driver",
-            connectionUrl,
-            databaseUser,
-            databaseUserPassword,
-            null
-        );
+        database.createDataSource(databaseName, "com.sap.db.jdbc.Driver", connectionUrl, databaseUser, databaseUserPassword, null);
 
-        this.connection = database.getConnection("dynamic", databaseName);
-        this.repo = new HanaRepository(this.connection);
+        const connection = database.getConnection("dynamic", databaseName);
+        this.repo = new HanaRepository(connection);
     }
 
     getAllDeliveryUnits() {
@@ -70,12 +49,7 @@ class MigrationService {
             if (deployable.artifacts && deployable.artifacts.length > 0) {
                 const hdiConfigPath = this.createHdiConfigFile(workspaceName, deployable.project);
                 generatedFiles.push(hdiConfigPath);
-                let hdiPath = this.createHdiFile(
-                    workspaceName,
-                    deployable.project,
-                    hdiConfigPath,
-                    deployable.artifacts
-                );
+                let hdiPath = this.createHdiFile(workspaceName, deployable.project, hdiConfigPath, deployable.artifacts);
                 generatedFiles.push(hdiPath);
             }
         }
@@ -92,10 +66,7 @@ class MigrationService {
         const hdiConfigJsonBytes = bytes.textToByteArray(hdiConfigJson);
 
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
-        const projectCollection = this._getOrCreateTemporaryProjectCollection(
-            workspaceCollection,
-            projectName
-        );
+        const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
         let localResource = projectCollection.createResource(hdiConfigPath, hdiConfigJsonBytes);
 
         return {
@@ -107,7 +78,7 @@ class MigrationService {
 
     createHdiFile(workspaceName, project, hdiConfigPath, deployables) {
         const projectName = project.getName();
-        const defaultHanaUser = this.getDefaultHanaUser();
+        const defaultHanaUser = config.get(HANA_USERNAME, "DBADMIN");
 
         const hdi = {
             configuration: `/${projectName}/${hdiConfigPath.relativePath}`,
@@ -123,10 +94,7 @@ class MigrationService {
         const hdiJsonBytes = bytes.textToByteArray(hdiJson);
 
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
-        const projectCollection = this._getOrCreateTemporaryProjectCollection(
-            workspaceCollection,
-            projectName
-        );
+        const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
         let localResource = projectCollection.createResource(hdiPath, hdiJsonBytes);
 
         return {
@@ -134,10 +102,6 @@ class MigrationService {
             relativePath: hdiPath,
             projectName: projectName,
         };
-    }
-
-    getDefaultHanaUser() {
-        return config.get(HANA_USERNAME, "DBADMIN");
     }
 
     copyFilesLocally(workspaceName, lists) {
@@ -156,20 +120,13 @@ class MigrationService {
                 // remove package id from file location in order to remove XSK project and folder nesting
                 fileRunLocation = fileRunLocation.slice(projectName.length + 1);
             }
-            let content = this.repo.getContentForObject(
-                file._name,
-                file._packageName,
-                file._suffix
-            );
+            let content = this.repo.getContentForObject(file._name, file._packageName, file._suffix);
 
             if (this._isFileCalculationView(fileRunLocation)) {
                 content = this._transformColumnObject(content);
             }
 
-            const projectCollection = this._getOrCreateTemporaryProjectCollection(
-                workspaceCollection,
-                projectName
-            );
+            const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
             const localResource = projectCollection.createResource(fileRunLocation, content);
 
             const fileName = this._getFileNameWithExtension(file);
@@ -177,24 +134,9 @@ class MigrationService {
             const fileContent = bytes.byteArrayToText(content);
 
             // Parse current artifacts and generate synonym files for it if necessary
-            const parsedData = hdbFacade.parseDataStructureModel(
-                fileName,
-                filePath,
-                fileContent,
-                workspaceCollection.getPath() + "/"
-            );
-            const synonymData = this._handleParsedData(
-                parsedData,
-                workspaceName,
-                projectName,
-                fileRunLocation
-            );
-            const hdbSynonyms = this._appendOrCreateSynonymsFile(
-                this.synonymFileName,
-                synonymData.hdbSynonyms,
-                workspaceName,
-                projectName
-            );
+            const parsedData = hdbFacade.parseDataStructureModel(fileName, filePath, fileContent, workspaceCollection.getPath() + "/");
+            const synonymData = this._handleParsedData(parsedData);
+            const hdbSynonyms = this._appendOrCreateSynonymsFile(this.synonymFileName, synonymData.hdbSynonyms, workspaceName, projectName);
             const hdbPublicSynonyms = this._appendOrCreateSynonymsFile(
                 this.publicSynonymFileName,
                 synonymData.hdbPublicSynonyms,
@@ -226,7 +168,7 @@ class MigrationService {
         return filePath + this._getFileNameWithExtension(file);
     }
 
-    _handleParsedData(parsedData, workspaceName, projectName, relativePath) {
+    _handleParsedData(parsedData) {
         if (!parsedData) {
             return [];
         }
@@ -250,10 +192,7 @@ class MigrationService {
                 const tableTypeModelName = tableTypeModel.getName();
                 const tableTypeModelSchema = tableTypeModel.getSchema();
                 const hdbPublicSynonym = this._generateHdbPublicSynonym(tableTypeModelName);
-                const hdbSynonym = this._generateHdbSynonym(
-                    tableTypeModelName,
-                    tableTypeModelSchema
-                );
+                const hdbSynonym = this._generateHdbSynonym(tableTypeModelName, tableTypeModelSchema);
 
                 publicSynonyms.push(hdbPublicSynonym);
                 synonyms.push(hdbSynonym);
@@ -303,11 +242,7 @@ class MigrationService {
         }
 
         for (const synonym of synonyms) {
-            const synonymResourceAndPaths = this._getOrCreateHdbSynonymFile(
-                workspaceName,
-                projectName,
-                fileName
-            );
+            const synonymResourceAndPaths = this._getOrCreateHdbSynonymFile(workspaceName, projectName, fileName);
             const synonymFile = synonymResourceAndPaths.resource;
             if (synonymResourceAndPaths.localPaths) {
                 synonymLocalPaths.push(synonymResourceAndPaths.localPaths);
@@ -395,10 +330,7 @@ class MigrationService {
             };
         }
 
-        synonymFile = projectCollection.createResource(
-            hdbSynonymFileName,
-            bytes.textToByteArray("{}")
-        );
+        synonymFile = projectCollection.createResource(hdbSynonymFileName, bytes.textToByteArray("{}"));
         return {
             resource: synonymFile,
             localPaths: {
@@ -472,10 +404,7 @@ class MigrationService {
             const projectSynonymPath = this.getSynonymFilePath(local.projectName);
             const projectPublicSynonymPath = this.getPublicSynonymFilePath(local.projectName);
 
-            if (
-                local.runLocation === projectSynonymPath ||
-                local.runLocation === projectPublicSynonymPath
-            ) {
+            if (local.runLocation === projectSynonymPath || local.runLocation === projectPublicSynonymPath) {
                 if (!projectNames.includes(local.projectName)) {
                     projectNames.push(local.projectName);
                 }
@@ -553,10 +482,7 @@ class MigrationService {
 
     handleHDBTableFunctions(workspaceName, projectName) {
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
-        const projectCollection = this._getOrCreateTemporaryProjectCollection(
-            workspaceCollection,
-            projectName
-        );
+        const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
 
         const workspace = workspaceManager.getWorkspace(workspaceName);
         const project = workspace.getProject(projectName);
@@ -592,12 +518,7 @@ class MigrationService {
 
     addFilesWithoutGenerated(userData, workspace, localFiles) {
         for (const localFile of localFiles) {
-            this.addFileToWorkspace(
-                workspace,
-                localFile.repositoryPath,
-                localFile.relativePath,
-                localFile.projectName
-            );
+            this.addFileToWorkspace(workspace, localFile.repositoryPath, localFile.relativePath, localFile.projectName);
             const projectName = localFile.projectName;
             let repos = git.getGitRepositories(workspace);
             let repoExists = false;
@@ -608,24 +529,10 @@ class MigrationService {
                 }
             }
             if (repoExists) {
-                git.commit(
-                    "migration",
-                    "",
-                    userData.workspace,
-                    projectName,
-                    "Overwrite existing project",
-                    true
-                );
+                git.commit("migration", "", userData.workspace, projectName, "Overwrite existing project", true);
             } else {
                 console.log("Initializing repository...");
-                git.initRepository(
-                    "migration",
-                    "",
-                    workspace,
-                    projectName,
-                    projectName,
-                    "Migration initial commit"
-                );
+                git.initRepository("migration", "", workspace, projectName, projectName, "Migration initial commit");
             }
         }
     }
@@ -633,27 +540,13 @@ class MigrationService {
     addGeneratedFiles(userData, deliveryUnit, workspace, localFiles) {
         for (const localFile of localFiles) {
             const projectName = localFile.projectName;
-            const generatedFiles = deliveryUnit["deployableArtifactsResult"]["generated"].filter(
-                (x) => x.projectName === projectName
-            );
+            const generatedFiles = deliveryUnit["deployableArtifactsResult"]["generated"].filter((x) => x.projectName === projectName);
             for (const generatedFile of generatedFiles) {
-                this.addFileToWorkspace(
-                    workspace,
-                    generatedFile.repositoryPath,
-                    generatedFile.relativePath,
-                    generatedFile.projectName
-                );
+                this.addFileToWorkspace(workspace, generatedFile.repositoryPath, generatedFile.relativePath, generatedFile.projectName);
             }
             git.commit("migration", "", userData.workspace, projectName, "Artifacts handled", true);
             this.handleHDBTableFunctions(workspace, projectName);
-            git.commit(
-                "migration",
-                "",
-                userData.workspace,
-                projectName,
-                "HDB Functions handled",
-                true
-            );
+            git.commit("migration", "", userData.workspace, projectName, "HDB Functions handled", true);
         }
     }
 
@@ -664,5 +557,3 @@ class MigrationService {
         }
     }
 }
-
-module.exports = MigrationService;

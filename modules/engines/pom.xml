@@ -26,6 +26,7 @@
 		<module>engine-xsodata</module>
 		<module>engine-xssecurity</module>
     <module>engine-commons</module>
+    <module>engine-mail-destination</module>
   </modules>
 
 	<properties>

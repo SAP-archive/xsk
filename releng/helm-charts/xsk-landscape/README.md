@@ -6,7 +6,7 @@
 
 This chart bootstraps a [XSK](https://github.com/sap/xsk) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-#### Prerequisites
+### Prerequisites
 
 - Kubernetes 1.19+
 - Helm 3+
@@ -15,49 +15,38 @@ This chart bootstraps a [XSK](https://github.com/sap/xsk) deployment on a [Kuber
 
 Add the XSK chart repository:
 
-```
+```commands
 helm repo add xsk https://sap.github.io/xsk
 helm repo update
 ```
 
 ## Deployment
 
-### Basic:
+1. Deploy XSK in the target namespace/landscape.
 
+```yaml
+helm upgrade <demo-..> xsk/xsk-landscape \
+--set namespace.name=<xsk-demo-..> \
+--set secretHana.hanaUsername=<HANA-Username> \
+--set secretHana.hanaPassword=<HANA-Password> \
+--set secretHana.hanaUrl=<HANA-Url> \
+--set secretXsuaa.url=<XSUAA-Url> \
+--set secretXsuaa.clientId='<XSUAA-client-id>' \
+--set secretXsuaa.clientSecret='<XSUAA-client-secret>' \
+--set secretXsuaa.verificationKey="<XSUAA-verification-key>" \
+--set secretXsuaa.xsappname='<XSUAA-xsappname>' \
+--set deployment.landscapeDomain=<landscape-domain-name> \
+--set dnsentry.targets=<dnsentry>
 ```
-helm install xsk xsk/xsk
-```
-Running this command will install XSK Deployment and Service with ClusterIP only. To access the XSK instance, execute the command that was printed in the console.
 
-Example:
-
-```
-export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk" -o jsonpath="{.items[0].metadata.name}")
-echo "Visit http://127.0.0.1:8080 to use your application"
-kubectl --namespace default port-forward $POD_NAME 8080:8080    
-``
-* Navigate to: http://127.0.0.1:8080
-* Log in with these username and password: dirigible/dirigible
-
-### Kyma:
-helm install xsk xsk/xsk \
---set kyma.enabled=true \
---set kyma.host=<kyma-host>
-
-
-Resources:
-- [XSK](https://github.com/SAP/xsk)
-- [dirigible.io](https://www.dirigible.io)
-- [github.com/eclipse/dirigible](https://github.com/eclipse/dirigible)
-- [youtube.com/c/dirigibleio](https://www.youtube.com/c/dirigibleio)
-
-
-## Manual Helm Charts Update:
+## Manual Helm Charts Update
 
 1. Navigate to the `helm-chart` folder:
+
     ```
     cd releng/helm-charts/
     ```
+
 1. Set the XSK version in `xsk/Chart.yaml`:
 
     > Replace the `#{XSKVersion}#` placeholder.
@@ -76,7 +65,7 @@ Resources:
 
     helm verify --keyring ~/.gnupg/pubring.gpg xsk-<version>.tgz
 
-1. Copy the `xsk-<chart>-<version>.tgz` and `xsk-<chart>-<version>.tgz.prov` somewhere outside the Git repository.
+1. Copy the `xsk-<chart>-<version>>.tgz` and `xsk-<chart>-<version>.tgz.prov` somewhere outside the Git repository.
 
 1. Reset all changes:
 
@@ -93,7 +82,7 @@ Resources:
     git pull origin gh-pages
     ```
 
-1. Paste the `xsk-<chart>-<version>.tgz` and `xsk-<chart>-<version>.tgz.prov` chart into the `charts` directory.
+1. Paste the `xsk-<chart>-<version>.tgz` and `xsk-<version>.tgz.prov` chart into the `charts` directory.
 
 1. Build Helm Index:
 
@@ -101,7 +90,7 @@ Resources:
     helm repo index charts/ --url https://sap.github.io/xsk/charts
     ```
 
-1. Move the `charts/index.yaml` to the root folder:
+1.  Move the `charts/index.yaml` to the root folder:
 
     ```
     mv charts/index.yaml .

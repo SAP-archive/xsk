@@ -1,0 +1,65 @@
+# Default values for XSK
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Replica count for the instance
+replicaCount: 1
+
+namespace:
+  # Namespace create
+  name:
+  # Label for Istio injection
+  labelIstioInjection: "enabled"
+
+secretHana:
+  # Name secret for HANA Cloud database
+  nameSecret: hana-cloud-database
+  # HanaUsername for HANA Cloud database
+  hanaUsername:
+  # HanaPassword for HANA Cloud database
+  hanaPassword:
+  # HanaPassword for HANA Cloud database
+  hanaUrl:
+
+secretXsuaa:
+  # Name for the secret
+  nameSecret: xsuaa-credentials
+  # Url for the XSUAA
+  url:
+  # Client id for the XSUAA
+  clientId:
+  # Client secret for the XSUAA
+  clientSecret:
+  # Verification key for the XSUAA
+  verificationKey:
+  # XSAPPNAME for for the XSUAA
+  xsappname:
+
+deployment:
+  # Change deployment strategy type
+  strategyType: Recreate
+  # Land scape domain
+  landscapeDomain:
+  # XSK image
+  image: dirigiblelabs/xsk-kyma:latest
+  imagePullPolicy: Always
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+securityContext:
+  # Allow privileged escalation required to effectively enforce MustRunAsNonRoot.
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    # Enable seccomp profile
+    type: RuntimeDefault
+
+dnsentry:
+  # Target for dns entry.
+  targets:

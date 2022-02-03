@@ -13,7 +13,6 @@ package com.sap.xsk.hdb.ds.processors.hdi;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class XSKConfigureLibrariesProcessorTest {
 
   @Test
   public void testExecuteWithPluginActivationWithMorePlugins() throws SQLException {
-    testExecute(new HashSet<>(Arrays.asList("test.plugin", "test.plugin2", "test.plugin3")));
+    testExecute(new HashSet<>(List.of("test.plugin", "test.plugin2", "test.plugin3")));
   }
 
   private void testExecute(Set<String> plugginsToBeActivated) throws SQLException {

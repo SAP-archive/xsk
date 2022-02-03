@@ -23,7 +23,6 @@ import com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableTypeSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
-import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.hdb.ds.util.Constants;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
@@ -53,7 +52,6 @@ public class XSKDeployContainerContentProcessor extends XSKHDIAbstractProcessor 
   private static final HDBTableFunctionSynchronizationArtefactType TABLE_FUNCTION_SYNCHRONIZATION_ARTEFACT_TYPE = new HDBTableFunctionSynchronizationArtefactType();
   private static final HDBTableTypeSynchronizationArtefactType TABLE_TYPE_SYNCHRONIZATION_ARTEFACT_TYPE = new HDBTableTypeSynchronizationArtefactType();
   private static final HDBViewSynchronizationArtefactType VIEW_SYNCHRONIZATION_ARTEFACT_TYPE = new HDBViewSynchronizationArtefactType();
-  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
 
   public final void execute(Connection connection, String container, String[] deployPaths, String[] undeployPaths) throws SQLException {
     executeUpdate(connection, "CREATE LOCAL TEMPORARY COLUMN TABLE #DEPLOY_PATHS LIKE _SYS_DI.TT_FILESFOLDERS;");
@@ -106,42 +104,42 @@ public class XSKDeployContainerContentProcessor extends XSKHDIAbstractProcessor 
     }
   }
 
-  private void applyState(String fileExtension, String fileName, ArtefactState artefactState, String location) {
+  protected void applyState(String fileExtension, String fileName, ArtefactState artefactState, String location) {
     switch (fileExtension) {
       case Constants.CALCULATION_VIEW_EXTENSION:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             CALCULATION_VIEW_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       case Constants.TABLE_EXTENSION:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             TABLE_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       case Constants.SCHEMA_EXTENSION:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             SCHEMA_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       case Constants.PROCEDURE_EXTENSION:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             PROCEDURE_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       case Constants.SYNONYM_EXTENSION:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             SYNONYM_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       case Constants.SEQUENCE_EXTENSION:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             SEQUENCE_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       case Constants.TABLE_FUNCTION_EXTENSION:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             TABLE_FUNCTION_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       case Constants.TABLE_TYPE_EXTENSION:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             TABLE_TYPE_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       case Constants.VIEW_EXTENSIONS:
-        dataStructuresSynchronizer.applyArtefactState(fileName, location,
+        applyArtefactState(fileName, location,
             VIEW_SYNCHRONIZATION_ARTEFACT_TYPE, artefactState, "");
         break;
       default:

@@ -181,7 +181,7 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
             $scope.duDropdownText = $scope.duSelectedUItext.length ? $scope.duSelectedUItext.join(", ") : $scope.duDropdownInitText;
             $scope.selectAllText =
                 migrationDataState.selectedDeliveryUnits.length == $scope.deliveryUnitList.length ? "Unselect all" : "Select all";
-            $scope.$parent.setFinishEnabled(true);
+            $scope.$parent.setNextEnabled(true);
         };
 
         $messageHub.on(
@@ -196,16 +196,12 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
                         $scope.descriptionText = descriptionList[0];
                         $scope.isVisible = msg.data.isVisible;
                         if (msg.data.isVisible) {
-                            if (migrationDataState.selectedDeliveryUnits) {
-                                $scope.$parent.setFinishEnabled(true);
-                            } else {
-                                $scope.$parent.setFinishEnabled(false);
-                            }
+                            $scope.$parent.setFullWidthEnabled(false);
                             $scope.$parent.setBottomNavEnabled(false);
                             $scope.$parent.setPreviousVisible(true);
                             $scope.$parent.setPreviousEnabled(true);
-                            $scope.$parent.setNextVisible(false);
-                            $scope.$parent.setFinishVisible(true);
+                            $scope.$parent.setNextEnabled(false);
+                            $scope.$parent.setNextVisible(true);
                         }
                     });
                     if (msg.data.isVisible) {

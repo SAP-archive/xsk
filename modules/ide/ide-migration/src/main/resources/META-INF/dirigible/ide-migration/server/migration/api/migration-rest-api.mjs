@@ -96,6 +96,9 @@ function getProcessState(ctx, req, res) {
         response.workspaces = JSON.parse(workspacesJson);
         response.deliveryUnits = JSON.parse(deliveryUnitsJson);
         response.connectionId = connectionId;
+    } else if (migrationState === "MIGRATION_EXECUTED") {
+        const diffViewData = processService.getVariable(processInstanceIdString, "diffViewData");
+        response.diffViewData = JSON.parse(diffViewData);
     }
 
     res.print(JSON.stringify(response));

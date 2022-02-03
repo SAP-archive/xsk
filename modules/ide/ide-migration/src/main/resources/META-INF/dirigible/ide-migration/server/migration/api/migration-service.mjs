@@ -106,6 +106,7 @@ export class MigrationService {
 
     copyFilesLocally(workspaceName, lists) {
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const unmodifiedWorkspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName + "_unmodified");
         const hdbFacade = new XSKHDBCoreFacade();
 
         const locals = [];
@@ -121,6 +122,12 @@ export class MigrationService {
                 fileRunLocation = fileRunLocation.slice(projectName.length + 1);
             }
             let content = this.repo.getContentForObject(file._name, file._packageName, file._suffix);
+
+            const unmodifiedProjectCollection = this._getOrCreateTemporaryProjectCollection(
+                unmodifiedWorkspaceCollection,
+                projectName
+            );
+            const unmodifiedLocalResource = unmodifiedProjectCollection.createResource(fileRunLocation, content);
 
             if (this._isFileCalculationView(fileRunLocation)) {
                 content = this._transformColumnObject(content);

@@ -97,6 +97,7 @@ migrationLaunchView.controller("StartMigrationViewController", [
                 if ("isVisible" in msg.data) {
                     $scope.$apply(function () {
                         $scope.isVisible = msg.data.isVisible;
+                        if (msg.data.isVisible) $scope.$parent.setFullWidthEnabled(false);
                     });
                     if (msg.data.isVisible) {
                         startMigration();

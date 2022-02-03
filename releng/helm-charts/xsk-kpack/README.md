@@ -54,19 +54,25 @@ You can use for build Kyma (which is default), local and Cloud Foundry.
 - For ClusterStack build image you can use `--set clusterBuilder.buildImage` and choose one of this:
 
 `dirigiblelabs/buildpacks-stack-build-xsk-kyma` - Kyma
+
 `dirigiblelabs/buildpacks-stack-build-xsk-cf` - Cloud Foundry
+
 `dirigiblelabs/buildpacks-stack-build-xsk` - Local
 
 - For ClusterStack run image you can use `--set clusterBuilder.runImage` and choose one of this:
 
 `dirigiblelabs/buildpacks-stack-run-xsk-kyma` - Kyma
+
 `dirigiblelabs/buildpacks-stack-run-xsk-cf` - Cloud Foundry
+
 `dirigiblelabs/buildpacks-stack-run-xsk` - Local
 
 - For Builder image you can use `--set imageBuilder.buildpack` and choose one of this:
 
 `--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-kyma` - Kyma
+
 `--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk-cf` - Cloud Foundry
+
 `--set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk` - Local
 
 Resources:
@@ -98,7 +104,7 @@ Resources:
 
     Verify the package.
 
-    helm verify --keyring ~/.gnupg/pubring.gpg xsk-<version>.tgz
+    helm verify --keyring ~/.gnupg/pubring.gpg `xsk-<version>.tgz`
 
 2. Copy the `xsk-<chart>-<version>.tgz` and `xsk-<chart>-<version>.tgz.prov` somewhere outside the Git repository.
 

@@ -74,7 +74,7 @@ Resources:
 
     Verify the package.
 
-    helm verify --keyring ~/.gnupg/pubring.gpg xsk-<version>.tgz
+    helm verify --keyring ~/.gnupg/pubring.gpg `xsk-<version>.tgz`
 
 1. Copy the `xsk-<chart>-<version>.tgz` and `xsk-<chart>-<version>.tgz.prov` somewhere outside the Git repository.
 

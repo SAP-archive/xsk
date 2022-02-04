@@ -1,0 +1,55 @@
+namespace products.db;
+
+@Schema: 'XSK_SAMPLES_PRODUCTS'
+
+context Products {
+@Catalog.tableType : #COLUMN 
+
+   entity Orders{
+          key Id               : String(32);
+          Status               : String(100);
+          CreatedAt            : UTCTimestamp;
+          DeliveryDate         : UTCTimestamp;
+          Description          : String(100);
+          orderLines           : Association[*] to OrderLine on orderLines.OrderId = Id;
+          Customer             : association to Products.Customers {Id};
+   };
+   
+   entity OrderLine {
+        key Id : String(32);
+        OrderId : String(32);
+        Item                :  association to Products.Item {Id};
+        Quantity            :  Integer;
+   };
+
+   entity Customers {
+      key Id               : String(32);
+      Username             : String(100);
+      FirstName            : String(500);
+      LastName             : String(500);
+      Phone                : String(200);
+      Email                : String(300);
+      ShippingAddress      : association to Products.ShippingAddresses { Id };
+   };
+
+   entity ShippingAddresses {
+         key Id             : String(32);
+         Country            : CountryType;
+         City               : String(32);
+         PostalCode         : String(32);
+   };
+     
+    entity Item {
+          key Id          : Integer;
+          Name                : String(500);
+          Type                : String(100);
+          Price               : String(100);
+          Currency            : String(100);
+          Comment             : String(1000);
+    };
+    
+    type CountryType {
+	   	"Code" :  String(10);
+	   	"Name" : String(50);
+    };
+};

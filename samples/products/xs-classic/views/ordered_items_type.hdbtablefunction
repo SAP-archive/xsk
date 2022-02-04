@@ -1,0 +1,15 @@
+FUNCTION "_SYS_BIC"."products.views::ordered_items_type" (itemType NVARCHAR(100))
+RETURNS TABLE ("Name" NVARCHAR(500), "Price" NVARCHAR(100))
+LANGUAGE SQLSCRIPT
+SQL SECURITY DEFINER
+  AS 
+
+/********* Begin Procedure Script ************/ 
+BEGIN 
+    var_out = SELECT "Name", "Price" FROM "XSK_SAMPLES_PRODUCTS"."products.db::Products.Item" WHERE "Id" IN 
+                (SELECT "Item.Id" FROM "XSK_SAMPLES_PRODUCTS"."products.db::Products.OrderLine" WHERE "OrderId" IN 
+                    (SELECT o."Id" FROM "XSK_SAMPLES_PRODUCTS"."products.db::Products.Orders" o JOIN "XSK_SAMPLES_PRODUCTS"."products.db::Products.Customers" c
+                        ON o."Customer.Id" = c."Id" WHERE c."Username" = UPPER(SESSION_USER)))
+                 AND "Type" = :itemType;
+return :var_out;
+END;

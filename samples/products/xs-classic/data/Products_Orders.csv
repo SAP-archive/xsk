@@ -1,0 +1,4 @@
+Id,Status,CreatedAt,DeliveryDate,Description,Customer.Id
+order1,In Progress,2020/01/01 14:25:10,2020/01/08 14:25:10,Migration of XS Classic application from Neo to Kubernetes,customerId1
+order2,In Progress,2020/01/01 14:27:33,2020/01/15 14:27:33,Migration of XS Classic application from Neo to Kubernetes,customerId1
+order3,Delivered,2020/01/01 14:26:10,2020/02/01 14:26:10,Migration of XS Classic application from Neo to Kubernetes,customerId2

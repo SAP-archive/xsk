@@ -115,7 +115,7 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
             $scope.setFinishVisible(true);
             $scope.setBottomNavEnabled(false);
             $scope.currentStep = $scope.zipsteps[0];
-        }
+        };
 
         $scope.setFinishVisible = function (visible) {
             $scope.finishVisible = visible;
@@ -123,6 +123,8 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
 
         $scope.setFinishEnabled = function (enabled) {
             $scope.finishDisabled = !enabled;
+        };
+
         $scope.setFullWidthEnabled = function (enabled) {
             $scope.fullWidthEnabled = enabled;
         };
@@ -210,5 +212,5 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
         };
 
         $messageHub.on("migration.launch", function (msg) { }.bind(this));
-    },
+    }
 ]);

@@ -32,23 +32,22 @@ export class DiffToolService {
 
                 if (modificationType.startsWith("A")) {
                     splits[1] = splits[0];
-                    fileName = splits[0];
                     splits[0] = "";
+                    fileName = splits[1];
                 } else if (modificationType.startsWith("R")) {
                     splits[0] = splits[0];
-                    fileName = splits[0];
                     splits[1] = splits[1];
+                    fileName = splits[1];
                 } else if (modificationType.startsWith("M")) {
                     splits[0] = splits[0];
-                    fileName = splits[0];
                     splits[1] = splits[0].replace("_unmodified", "");
+                    fileName = splits[0];
                 }
 
                 const res = {
                     firstFolderFile: splits[0],
                     secondFolderFile: splits[1],
-                    fileName: fileName,
-                    action: splits[2],
+                    fileName: fileName
                 }
 
                 console.log("!!! VM: res: " + JSON.stringify(res));

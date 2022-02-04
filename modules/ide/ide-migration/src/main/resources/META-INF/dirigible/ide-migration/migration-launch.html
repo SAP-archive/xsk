@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div class="migration-main">
-                <div class="steps-container">
+                <div class="steps-container" ng-style="fullWidthEnabled && {'max-width': '100%'}">
                     <div ng-include="'partials/zip-migration.html'" ng-show="migrationFromZip"></div>
                     <div ng-include="'partials/delivery-unit.html'"></div>
                     <div ng-include="'partials/neo-credentials.html'"></div>

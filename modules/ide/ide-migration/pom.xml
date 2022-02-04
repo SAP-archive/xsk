@@ -108,7 +108,7 @@
     <profile.content.phase>generate-sources</profile.content.phase>
     <content.repository.name>xsk-ide-migration</content.repository.name>
     <content.project.name>ide-migration</content.project.name>
-    <content.repository.branch>main</content.repository.branch>
+    <content.repository.branch>vmutafov/diff-demo</content.repository.branch>
 
     <license.header.location>../../../licensing-header.txt</license.header.location>
 

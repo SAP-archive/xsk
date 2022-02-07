@@ -452,17 +452,17 @@ To update the XSK version either use the **kubectl** or update the **Deployment 
 
 === "with Deployment YAML"
 
-        ```yaml
-        spec:
-          containers:
-          - name: xsk
-            image: dirigiblelabs/xsk-kyma:<xsk-version>
-            imagePullPolicy: Always
-        ```
+    ```yaml hl_lines="4"
+    spec:
+      containers:
+      - name: xsk
+        image: dirigiblelabs/xsk-kyma:<xsk-version>
+        imagePullPolicy: Always
+    ```
 
-    !!! tip "XSK versions"
+!!! tip "XSK versions"
 
-        Update the `xsk-version` placeholder with a stable release version:
+    Update the `xsk-version` placeholder with a stable release version:
 
-        - You can find all released versions [here](https://github.com/sap/xsk/releases/).
-        - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
+    - You can find all released versions [here](https://github.com/sap/xsk/releases/).
+    - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).

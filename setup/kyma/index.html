@@ -1957,29 +1957,32 @@
 <h2 id="version-update">Version Update</h2>
 <hr />
 <p>To update the XSK version either use the <strong>kubectl</strong> or update the <strong>Deployment YAML</strong> as follows:</p>
-<div class="highlight"><pre><span></span><code>=== &quot;with kubectl&quot;
-
-    ```
-    kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
-    ```
-
-=== &quot;with Deployment YAML&quot;
-
-    ```yaml hl_lines=&quot;4&quot;
-    spec:
-      containers:
-      - name: xsk
-        image: dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
-        imagePullPolicy: Always
-    ```
-
-!!! tip &quot;XSK versions&quot;
-
-    Update the `xsk-version` placeholder with a stable release version:
-
-    - You can find all released versions [here](https://github.com/sap/xsk/releases/).
-    - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">with kubectl</label><label for="__tabbed_3_2">with Deployment YAML</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>```yaml
+spec:
+  containers:
+  - name: xsk
+    image: dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
+    imagePullPolicy: Always
+```
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">XSK versions</p>
+<p>Update the <code>xsk-version</code> placeholder with a stable release version:</p>
+<ul>
+<li>You can find all released versions <a href="https://github.com/sap/xsk/releases/">here</a>.</li>
+<li>You can find all XSK Docker images and tags (versions) <a href="https://hub.docker.com/u/dirigiblelabs">here</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 <div class="footnote">
 <hr />
 <ol>

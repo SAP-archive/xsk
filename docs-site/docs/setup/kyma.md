@@ -444,15 +444,15 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
 To update the XSK version either use the **kubectl** or update the **Deployment YAML** as follows:
 
-    === "with kubectl"
+=== "with kubectl"
 
-        ```
-        kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:<xsk-version>
-        ```
+    ```
+    kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:<xsk-version>
+    ```
 
-    === "with Deployment YAML"
+=== "with Deployment YAML"
 
-        ```yaml hl_lines="4"
+        ```yaml
         spec:
           containers:
           - name: xsk

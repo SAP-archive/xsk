@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <!--
   ~ Copyright (c) 2010-2021 SAP and others.
   ~ All rights reserved. This program and the accompanying materials
@@ -8,63 +8,88 @@
   ~ Contributors:
   ~ SAP - initial API and implementation
   -->
-<html lang="en" ng-app="migration" ng-controller="MigrationViewController as mvc" xmlns="http://www.w3.org/1999/xhtml">
-
+<html
+    lang="en"
+    ng-app="migration"
+    ng-controller="MigrationViewController as mvc"
+    xmlns="http://www.w3.org/1999/xhtml"
+>
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <title brandtitle perspective-name="SAP HANA XS Classic Migration">SAP HANA XS Classic Migration</title>
+        <title brandtitle perspective-name="SAP HANA XS Classic Migration">
+            SAP HANA XS Classic Migration
+        </title>
 
         <link rel="icon" href="data:;base64,iVBORw0KGgo=" brandicon />
 
         <!-- Font Awesome -->
-        <link href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+        <link
+            href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"
+            type="text/css"
+            rel="stylesheet"
+        />
 
         <!-- jQuery -->
         <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
 
         <!-- AngularJS -->
         <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular.min.js"></script>
-        <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular-resource.min.js"></script>
+        <script
+            type="text/javascript"
+            src="/webjars/angularjs/1.8.2/angular-resource.min.js"
+        ></script>
 
         <!-- Bootstrap with Theme Support -->
-        <link rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css">
+        <link rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css" />
         <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
         <!-- GoldenLayout with Theme Support -->
-        <link type="text/css" rel="stylesheet"
-            href="/services/v4/web/resources/goldenlayout/1.5.9/goldenlayout-base.css" />
-        <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/goldenlayout-theme.css" />
-        <script type="text/javascript" src="/services/v4/web/resources/goldenlayout/1.5.9/goldenlayout.min.js">
-        </script>
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="/services/v4/web/resources/goldenlayout/1.5.9/goldenlayout-base.css"
+        />
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="/services/v4/js/theme/resources.js/goldenlayout-theme.css"
+        />
+        <script
+            type="text/javascript"
+            src="/services/v4/web/resources/goldenlayout/1.5.9/goldenlayout.min.js"
+        ></script>
 
         <!-- MessageHub -->
         <script src="/services/v4/web/ide-core/ui/message-hub.js"></script>
 
         <!-- IDE Core UI -->
         <script type="text/javascript" src="/services/v4/web/ide-core/ui/ui-layout.js"></script>
-        <script type="text/javascript" src="/services/v4/web/ide-core/ui/ui-core-ng-modules.js"></script>
+        <script
+            type="text/javascript"
+            src="/services/v4/web/ide-core/ui/ui-core-ng-modules.js"
+        ></script>
 
         <!-- Custom IDE Styles -->
         <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/ide.css" />
 
         <!-- Project-specific stuff -->
         <script type="text/javascript" src="js/migration-perspective.js"></script>
-
     </head>
 
     <body class="view migration-body">
-
         <div menu menu-data-url="/services/v4/js/ide-migration/services/menu/menu.js"></div>
         <div class="shell">
             <div class="sidebar list-group" sidebar active="SAP HANA XS Classic Migration"></div>
-            <div id="migration" class="plane" views-layout views-layout-model="mvc.layoutModel">
-            </div>
+            <div
+                id="migration"
+                class="plane"
+                views-layout
+                views-layout-model="mvc.layoutModel"
+            ></div>
         </div>
         <div alert></div>
         <div class="statusbar" status-bar>{{message}}</div>
-
     </body>
-
 </html>

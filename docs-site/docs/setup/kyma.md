@@ -439,8 +439,10 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     - Go to `https://xsk.<your-kyma-cluster-host>` or navigate to **Configurations** **&rarr;** **APIRules** section from the Kyma dashboard.
 
-## Version Update
+## Maintenance
 ---
+
+### Version Update
 
 To update the XSK version either use the **kubectl** or update the **Deployment YAML** as follows:
 
@@ -462,7 +464,29 @@ To update the XSK version either use the **kubectl** or update the **Deployment 
 
 !!! tip "XSK versions"
 
-    Update the `xsk-version` placeholder with a stable release version:
+    Update the `<xsk-version>` placeholder with a stable release version:
 
     - You can find all released versions [here](https://github.com/sap/xsk/releases/).
     - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
+
+### Scaling
+
+=== "Scale to Zero"
+
+    ```
+    kubectl scale deployment/xsk --replicas=0
+    ```
+
+=== "Scale Up"
+
+    ```
+    kubectl scale deployment/xsk --replicas=<number-of-replicas>
+    ```
+
+    !!! note
+
+        Replace the `<number-of-replicas>` placeholder with the desired replicas count _(e.g. 1)_.
+
+!!! note
+
+    To learn more about application scaling in Kubernetes, see [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/).

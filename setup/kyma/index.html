@@ -1964,14 +1964,15 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>```yaml
-spec:
-  containers:
-  - name: xsk
-    image: dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
-    imagePullPolicy: Always
-```
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xsk</span><span class="w"></span>
+<span class="hll"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;</span><span class="w"></span>
+</span><span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
 </code></pre></div>
+</div>
+</div>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">XSK versions</p>
 <p>Update the <code>xsk-version</code> placeholder with a stable release version:</p>
@@ -1979,9 +1980,6 @@ spec:
 <li>You can find all released versions <a href="https://github.com/sap/xsk/releases/">here</a>.</li>
 <li>You can find all XSK Docker images and tags (versions) <a href="https://hub.docker.com/u/dirigiblelabs">here</a>.</li>
 </ul>
-</div>
-</div>
-</div>
 </div>
 <div class="footnote">
 <hr />

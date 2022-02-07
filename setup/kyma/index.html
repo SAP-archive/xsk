@@ -1297,8 +1297,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#update-version" class="md-nav__link">
-    Update Version
+  <a href="#version-update" class="md-nav__link">
+    Version Update
   </a>
   
 </li>
@@ -1470,8 +1470,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#update-version" class="md-nav__link">
-    Update Version
+  <a href="#version-update" class="md-nav__link">
+    Version Update
   </a>
   
 </li>
@@ -1954,26 +1954,27 @@
 </ul>
 </li>
 </ol>
-<h2 id="update-version">Update Version</h2>
+<h2 id="version-update">Version Update</h2>
 <hr />
 <p>To update the XSK version either use the <strong>kubectl</strong> or update the <strong>Deployment YAML</strong> as follows:</p>
 <div class="highlight"><pre><span></span><code>=== &quot;with kubectl&quot;
 
-    ```
-    kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
-    ```
+     ```
+     kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
+     ```
 
 === &quot;with Deployment YAML&quot;
 
-    ```yaml hl_lines=&quot;4&quot;
-        spec:
-          containers:
-          - name: xsk
-            image: dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
-            imagePullPolicy: Always
-    ```
+     ```yaml hl_lines=&quot;4&quot;
+         spec:
+           containers:
+           - name: xsk
+             image: dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
+             imagePullPolicy: Always
+     ```
 
 !!! tip &quot;XSK versions&quot;
+
     Update the `xsk-version` placeholder with a stable release version:
 
     - You can find all released versions [here](https://github.com/sap/xsk/releases/).

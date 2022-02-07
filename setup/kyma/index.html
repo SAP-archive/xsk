@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/setup/kyma/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.9">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.10">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.2b4465f4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.d6be258b.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -1296,6 +1296,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#update-version" class="md-nav__link">
+    Update Version
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1458,6 +1465,13 @@
         <li class="md-nav__item">
   <a href="#steps" class="md-nav__link">
     Steps
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-version" class="md-nav__link">
+    Update Version
   </a>
   
 </li>
@@ -1940,6 +1954,31 @@
 </ul>
 </li>
 </ol>
+<h2 id="update-version">Update Version</h2>
+<hr />
+<p>To update the XSK version either use the <strong>kubectl</strong> or update the <strong>Deployment YAML</strong> as follows:</p>
+<div class="highlight"><pre><span></span><code>=== &quot;with kubectl&quot;
+
+    ```
+    kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
+    ```
+
+=== &quot;with Deployment YAML&quot;
+
+    ```yaml hl_lines=&quot;4&quot;
+        spec:
+          containers:
+          - name: xsk
+            image: dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
+            imagePullPolicy: Always
+    ```
+
+!!! tip &quot;XSK versions&quot;
+    Update the `xsk-version` placeholder with a stable release version:
+
+    - You can find all released versions [here](https://github.com/sap/xsk/releases/).
+    - You can find all XSK Docker images and tags (versions) [here](https://hub.docker.com/u/dirigiblelabs).
+</code></pre></div>
 <div class="footnote">
 <hr />
 <ol>
@@ -2066,10 +2105,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.092fa1f6.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.960e086b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.e3b2bf44.min.js"></script>
       
     
   </body>

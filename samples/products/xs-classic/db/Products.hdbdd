@@ -3,8 +3,9 @@ namespace products.db;
 @Schema: 'XSK_SAMPLES_PRODUCTS'
 
 context Products {
-@Catalog.tableType : #COLUMN 
 
+   @Catalog.tableType : #COLUMN
+   @Catalog.index: [ { name : 'ORDERSINDEX', unique : true, order : #DESC, elementNames : ['Id'] } ]
    entity Orders{
           key Id               : String(32);
           Status               : String(100);
@@ -14,7 +15,7 @@ context Products {
           orderLines           : Association[*] to OrderLine on orderLines.OrderId = Id;
           Customer             : association to Products.Customers {Id};
    };
-   
+
    entity OrderLine {
         key Id : String(32);
         OrderId : String(32);
@@ -38,7 +39,8 @@ context Products {
          City               : String(32);
          PostalCode         : String(32);
    };
-     
+
+    @Catalog.tableType : #ROW
     entity Item {
           key Id          : Integer;
           Name                : String(500);
@@ -47,9 +49,16 @@ context Products {
           Currency            : String(100);
           Comment             : String(1000);
     };
-    
+
     type CountryType {
 	   	"Code" :  String(10);
 	   	"Name" : String(50);
+    };
+
+    view OrderView as SELECT FROM Orders
+    {
+        Id,
+        CreatedAt,
+        Status
     };
 };

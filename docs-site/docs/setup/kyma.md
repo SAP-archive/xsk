@@ -446,19 +446,19 @@ To update the XSK version either use the **kubectl** or update the **Deployment 
 
     === "with kubectl"
 
-         ```
-         kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:<xsk-version>
-         ```
+        ```
+        kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:<xsk-version>
+        ```
 
     === "with Deployment YAML"
 
-         ```yaml hl_lines="4"
-             spec:
-               containers:
-               - name: xsk
-                 image: dirigiblelabs/xsk-kyma:<xsk-version>
-                 imagePullPolicy: Always
-         ```
+        ```yaml hl_lines="4"
+        spec:
+          containers:
+          - name: xsk
+            image: dirigiblelabs/xsk-kyma:<xsk-version>
+            imagePullPolicy: Always
+        ```
 
     !!! tip "XSK versions"
 

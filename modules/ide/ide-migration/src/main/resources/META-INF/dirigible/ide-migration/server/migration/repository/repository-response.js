@@ -9,15 +9,13 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-let RepositoryHeader = require('ide-migration/server/migration/repository/repository-header');
-let ResponseAttachmentParser = require('ide-migration/server/migration/repository/response-attachment-parser');
+let RepositoryHeader = require("ide-migration/server/migration/repository/repository-header");
+let ResponseAttachmentParser = require("ide-migration/server/migration/repository/response-attachment-parser");
 
 let utf8 = org.eclipse.dirigible.api.v3.utils.UTF8Facade;
 
 class RepositoryResponse {
-
     constructor(responseBuffer) {
-
         let headerBuffer = responseBuffer.slice(0, 14);
         this._header = RepositoryHeader.fromBuffer(headerBuffer);
         let contentEnd = 14 + this._header.contentLength;
@@ -26,9 +24,11 @@ class RepositoryResponse {
         this._attachments = [];
         if (this._header.attachmentCount > 1) {
             let attachmentBuffer = responseBuffer.slice(contentEnd, responseBuffer.length);
-            this._attachments = ResponseAttachmentParser.parse(attachmentBuffer, this._header.attachmentCount);
+            this._attachments = ResponseAttachmentParser.parse(
+                attachmentBuffer,
+                this._header.attachmentCount
+            );
         }
-
     }
 
     get header() {
@@ -43,7 +43,6 @@ class RepositoryResponse {
     get attachments() {
         return this._attachments;
     }
-
 }
 
 module.exports = RepositoryResponse;

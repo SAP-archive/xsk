@@ -10,13 +10,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 exports.getView = function () {
-	var view = {
-		"id": "migration-launch",
-		"name": "Migration Launch",
-		"factory": "frame",
-		"region": "main",
-		"label": "Migration Launch",
-		"link": "../ide-migration/migration-launch.html"
-	};
-	return view;
-}
+    var view = {
+        id: "migration-launch",
+        name: "Migration Launch",
+        factory: "frame",
+        region: "main",
+        label: "Migration Launch",
+        link: "../ide-migration/migration-launch.html",
+    };
+    return view;
+};

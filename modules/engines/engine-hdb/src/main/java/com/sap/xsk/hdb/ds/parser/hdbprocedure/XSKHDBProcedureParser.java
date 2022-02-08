@@ -28,9 +28,6 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser {
   @Override
   public XSKDataStructureHDBProcedureModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException {
     XSKDataStructureHDBProcedureModel hdbProcedure = new XSKDataStructureHDBProcedureModel();
-
-    parametersModel.setContent(parametersModel.getContent().replaceAll("--.*", "").trim()); // remove comment lines
-
     hdbProcedure.setName(XSKHDBUtils.extractProcedureNameFromContent(parametersModel.getContent(),
         parametersModel.getLocation()));
     hdbProcedure.setLocation(parametersModel.getLocation());

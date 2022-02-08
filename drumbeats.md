@@ -1,5 +1,21 @@
 # Drumbeats
 
+## 2022 Week 05 (31 January - 06 February)
+
+#### Focus topics:
+- Mail server configuration via destination in SAP BTP Destination service
+- All-in one helm chart for quick environment setup
+- Automatically configure HANA Cloud to support deployment of hdbpublicsynonyms
+- Fixes related to hdb artifact permissions
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-01-31..2022-02-06) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-01-31..2022-02-06) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-01-31..2022-02-06) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-01-31..2022-02-06) PRs
+
 ## 2022 Week 04 (24 January - 30 January)
 
 #### Focus topics:

@@ -1,0 +1,9 @@
+{{- if .Values.namespace.name }}
+1.
+Created namespace {{.Values.namespace.name}}
+{{- end }}
+
+{{- if .Values.deployment.landscapeDomain }}
+2.
+Created landscape with domain https://{{ .Values.deployment.landscapeDomain }}.apps.xsk.io
+{{- end }}

@@ -9,11 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-let extensions = require('core/v4/extensions');
-let response = require('http/v4/response');
+let extensions = require("core/v4/extensions");
+let response = require("http/v4/response");
 
 let mainmenu = [];
-let menuExtensions = extensions.getExtensions('ide-migration-menu');
+let menuExtensions = extensions.getExtensions("ide-migration-menu");
 for (let i = 0; i < menuExtensions.length; i++) {
     let module = menuExtensions[i];
     let menuExtension = require(module);
@@ -21,6 +21,6 @@ for (let i = 0; i < menuExtensions.length; i++) {
     mainmenu.push(menu);
 }
 mainmenu.sort(function (p, n) {
-    return (parseInt(p.order) - parseInt(n.order));
+    return parseInt(p.order) - parseInt(n.order);
 });
 response.println(JSON.stringify(mainmenu));

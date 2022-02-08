@@ -181,6 +181,7 @@ function setParamByType(dPreparedStatement, paramType, paramValue, paramIndex) {
 			dPreparedStatement.setString(paramIndex, paramValue);
 			break;
 		case 'NVARCHAR':
+		case 'NCHAR':
 		case 'SHORTTEXT':
 			dPreparedStatement.native.setNString(paramIndex, paramValue);
 			break;

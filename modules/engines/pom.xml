@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-parent</artifactId>
-		<version>0.13.0-SNAPSHOT</version>
+		<version>0.14.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Modules - Engines - Parent</name>
 	<artifactId>xsk-modules-engines-parent</artifactId>
-	<version>0.13.0-SNAPSHOT</version>
+	<version>0.14.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -26,6 +26,7 @@
 		<module>engine-xsodata</module>
 		<module>engine-xssecurity</module>
     <module>engine-commons</module>
+    <module>engine-mail-destination</module>
   </modules>
 
 	<properties>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
@@ -12,11 +12,10 @@
 let Parser = com.sap.xsk.parser.hana.core.HanaParser;
 let HanaLexer = com.sap.xsk.parser.hana.core.HanaLexer;
 let ByteArrayInputStream = java.io.ByteArrayInputStream;
-let ANTLRInputStream = org.antlr.v4.runtime.ANTLRInputStream
-let CommonTokenStream = org.antlr.v4.runtime.CommonTokenStream
+let ANTLRInputStream = org.antlr.v4.runtime.ANTLRInputStream;
+let CommonTokenStream = org.antlr.v4.runtime.CommonTokenStream;
 
 class HanaVisitor {
-
     content;
     impl;
     parser;
@@ -34,8 +33,9 @@ class HanaVisitor {
 
         this.parser = new Parser(tokenStream);
 
-
-        var HanaBaseVisitor = Java.extend(Java.type("com.sap.xsk.parser.hana.core.HanaBaseVisitor"));
+        var HanaBaseVisitor = Java.extend(
+            Java.type("com.sap.xsk.parser.hana.core.HanaBaseVisitor")
+        );
         var that = this;
         this.impl = new HanaBaseVisitor({
             visitProc_name: function (ctx) {
@@ -52,7 +52,7 @@ class HanaVisitor {
                 const text = ctx.getText();
                 that.addToViewRefsIfNeeded(text);
                 return that.fw_super.visitChildren(ctx);
-            }
+            },
         });
         this.fw_super = Java.super(this.impl);
     }
@@ -64,8 +64,8 @@ class HanaVisitor {
     }
 
     addToViewRefsIfNeeded(text) {
-        if (text.split('/').length > 1) {
-            this.viewRefs.push(text.replace(/['"]+/g, ''));
+        if (text.split("/").length > 1) {
+            this.viewRefs.push(text.replace(/['"]+/g, ""));
         }
     }
 
@@ -76,7 +76,7 @@ class HanaVisitor {
     removeSchemaRefs() {
         for (let i = 0; i < this.schemaRefs.length; i++) {
             let str = this.schemaRefs[i];
-            let edited = str.split('"."')[1].replace(/['"]+/g, '');
+            let edited = str.split('"."')[1].replace(/['"]+/g, "");
             this.content = this.replaceAll(this.content, str, edited);
         }
     }
@@ -84,13 +84,13 @@ class HanaVisitor {
     removeViewRefs() {
         for (let i = 0; i < this.viewRefs.length; i++) {
             let str = this.viewRefs[i];
-            let edited = str.split("/")[1].replace(/['"]+/g, '');
+            let edited = str.split("/")[1].replace(/['"]+/g, "");
             this.content = this.replaceAll(this.content, str, edited);
         }
     }
 
     replaceAll(str, find, replace) {
-        return str.replace(new RegExp(find, 'g'), replace);
+        return str.replace(new RegExp(find, "g"), replace);
     }
 }
 

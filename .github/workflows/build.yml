@@ -37,32 +37,32 @@ jobs:
       run: |
         cd releng/server
         cp -r "${JAVA_HOME}" jdk
-        docker build -t dirigiblelabs/xsk --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+        docker build --load -t dirigiblelabs/xsk --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         docker push dirigiblelabs/xsk
         cd ../../
     - name: Push XSK for SAP Cloud Foundry
       run: |
         cd releng/sap-cf
         cp -r "${JAVA_HOME}" jdk
-        docker build -t dirigiblelabs/xsk-cf --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+        docker build --load -t dirigiblelabs/xsk-cf --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         docker push dirigiblelabs/xsk-cf
         cd ../../
     - name: Push XSK for SAP Kyma
       run: |
         cd releng/sap-kyma
         cp -r "${JAVA_HOME}" jdk
-        docker build -t dirigiblelabs/xsk-kyma --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+        docker build --load -t dirigiblelabs/xsk-kyma --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         docker push dirigiblelabs/xsk-kyma
         cd ../../
     - uses: buildpacks/github-actions/setup-pack@v4.1.0
     - name: XSK Buildpack
       run: |
         cd releng/buildpacks/xsk/
-        docker build -t dirigiblelabs/buildpacks-stack-base-xsk . --target base
+        docker build --load -t dirigiblelabs/buildpacks-stack-base-xsk . --target base
         docker push dirigiblelabs/buildpacks-stack-base-xsk
-        docker build -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
+        docker build --load -t dirigiblelabs/buildpacks-stack-run-xsk . --target run
         docker push dirigiblelabs/buildpacks-stack-run-xsk
-        docker build -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
+        docker build --load -t dirigiblelabs/buildpacks-stack-build-xsk . --target build
         docker push dirigiblelabs/buildpacks-stack-build-xsk
         cd buildpack/
         find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
@@ -74,11 +74,11 @@ jobs:
     - name: XSK Kyma Buildpack
       run: |
         cd releng/buildpacks/xsk-kyma/
-        docker build -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
+        docker build --load -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
         docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma
-        docker build -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
+        docker build --load -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
         docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma
-        docker build -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
+        docker build --load -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
         docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma
         cd buildpack/
         find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
@@ -90,11 +90,11 @@ jobs:
     - name: XSK Cloud Foundry Buildpack
       run: |
         cd releng/buildpacks/xsk-cf/
-        docker build -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
+        docker build --load -t dirigiblelabs/buildpacks-stack-base-xsk-cf . --target base
         docker push dirigiblelabs/buildpacks-stack-base-xsk-cf
-        docker build -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
+        docker build --load -t dirigiblelabs/buildpacks-stack-run-xsk-cf . --target run
         docker push dirigiblelabs/buildpacks-stack-run-xsk-cf
-        docker build -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
+        docker build --load -t dirigiblelabs/buildpacks-stack-build-xsk-cf . --target build
         docker push dirigiblelabs/buildpacks-stack-build-xsk-cf
         cd buildpack/
         find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;

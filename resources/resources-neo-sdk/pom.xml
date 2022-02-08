@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-resources-parent</artifactId>
-		<version>0.13.0-SNAPSHOT</version>
+		<version>0.14.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Resources - Neo SDK</name>
 	<artifactId>xsk-resources-neo-sdk</artifactId>
-	<version>0.13.0-SNAPSHOT</version>
+	<version>0.14.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<build>
@@ -40,6 +40,49 @@
 							</artifactItems>
 						</configuration>
 					</execution>
+          <execution>
+            <id>copy</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.sun.activation</groupId>
+                  <artifactId>javax.activation</artifactId>
+                  <version>${neo-java-web-sdk.javax.activation.version}</version>
+                  <type>jar</type>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>javax.xml.bind</groupId>
+                  <artifactId>jaxb-api</artifactId>
+                  <version>${neo-java-web-sdk.jaxb.version}</version>
+                  <type>jar</type>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.sun.xml.bind</groupId>
+                  <artifactId>jaxb-core</artifactId>
+                  <version>${neo-java-web-sdk.jaxb.version}</version>
+                  <type>jar</type>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.sun.xml.bind</groupId>
+                  <artifactId>jaxb-impl</artifactId>
+                  <version>${neo-java-web-sdk.jaxb.version}</version>
+                  <type>jar</type>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
 				</executions>
 			</plugin>
 		</plugins>

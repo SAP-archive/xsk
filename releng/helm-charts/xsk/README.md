@@ -35,7 +35,7 @@ Example:
 export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=xsk,app.kubernetes.io/instance=xsk" -o jsonpath="{.items[0].metadata.name}")
 echo "Visit http://127.0.0.1:8080 to use your application"
 kubectl --namespace default port-forward $POD_NAME 8080:8080    
-``
+```
 * Navigate to: http://127.0.0.1:8080
 * Log in with these username and password: dirigible/dirigible
 
@@ -62,13 +62,21 @@ Resources:
 
     > Replace the `#{XSKVersion}#` placeholder.
 
-1. Package Helm Chart:
+1. Package Helm Chart and sign with gpg key:
 
-    ```
-    helm package xsk
-    ```
+    Obtain gpg key for XSK and convert keyring to the legacy gpg format.
 
-1. Copy the `xsk-1.0.0.tgz` somewhere outside the Git repository.
+    `gpg --export-secret-keys > ~/.gnupg/secring.gpg`
+
+    Package with gpg key.
+
+    `helm package --sign --key 'XSK-gpg' --keyring ~/.gnupg/secring.gpg <chart>`
+
+    Verify the package.
+
+    helm verify --keyring ~/.gnupg/pubring.gpg `xsk-<version>.tgz`
+
+1. Copy the `xsk-<chart>-<version>.tgz` and `xsk-<chart>-<version>.tgz.prov` somewhere outside the Git repository.
 
 1. Reset all changes:
 
@@ -85,7 +93,7 @@ Resources:
     git pull origin gh-pages
     ```
 
-1. Paste the `xsk-1.0.0.tgz` chart into the `charts` directory.
+1. Paste the `xsk-<chart>-<version>.tgz` and `xsk-<chart>-<version>.tgz.prov` chart into the `charts` directory.
 
 1. Build Helm Index:
 

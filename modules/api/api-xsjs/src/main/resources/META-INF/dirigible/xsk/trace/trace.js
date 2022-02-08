@@ -47,7 +47,7 @@ exports.warning = function(message) {
 }
 
 exports.isDebugEnabled = function() {
-	return com.sap.xsk.api.TraceFacade.isDebugEnabled();
+  return com.sap.xsk.api.TraceFacade.isDebugEnabled();
 }
 
 exports.isErrorEnabled = function() {

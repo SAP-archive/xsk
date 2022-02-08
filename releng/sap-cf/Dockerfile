@@ -4,7 +4,7 @@
 # (Optional) JDK_TYPE could be `default-jdk` or `external-jdk`
 ARG JDK_TYPE=default-jdk
 
-FROM tomcat:8.5.43-jdk11-openjdk AS base
+FROM tomcat:9.0.56-jre11-openjdk AS base
 
 FROM base AS xsk-external-jdk
 # If JDK_TYPE is set to `external-jdk`, then the JDK_HOME is required and it should point to the home directory of the jdk
@@ -19,7 +19,6 @@ RUN echo "The default OpenJDK will be used"
 
 FROM xsk-${JDK_TYPE} AS dependencies-base
 
-RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/
 
 RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/

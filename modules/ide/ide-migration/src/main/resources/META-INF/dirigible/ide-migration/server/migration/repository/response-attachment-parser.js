@@ -9,10 +9,9 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-const Utils = require('ide-migration/server/migration/utils');
+const Utils = require("ide-migration/server/migration/utils");
 
 class ResponseAttachmentParser {
-
     static parse(responseAttachmentBuffer, numberOfAttachments) {
         let attachments = [];
         let lengthStart = 0;
@@ -33,7 +32,6 @@ class ResponseAttachmentParser {
         }
         return attachments;
     }
-
 }
 
 module.exports = ResponseAttachmentParser;

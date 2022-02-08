@@ -11,6 +11,23 @@
  */
 package com.sap.xsk.utils;
 
+import static com.sap.xsk.utils.XSKCommonsConstants.HDB_PROCEDURE_PARSER;
+import static com.sap.xsk.utils.XSKCommonsConstants.MODULE_PARSERS;
+import static com.sap.xsk.utils.XSKCommonsConstants.PARSER_ERROR;
+import static com.sap.xsk.utils.XSKCommonsConstants.PROGRAM_XSK;
+import static com.sap.xsk.utils.XSKCommonsConstants.SOURCE_PUBLISH_REQUEST;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
+
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
@@ -19,15 +36,6 @@ import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
 
 public class XSKHDBUtils {
 
@@ -130,17 +138,15 @@ public class XSKHDBUtils {
 
   public static String extractProcedureNameFromContent(String content, String location) throws XSKDataStructuresException {
     content = removeCommentsFromContent(content);
-    int indexOfBracket = content.indexOf('(');
     int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("procedure") + "procedure".length();
-    if (indexOfBracket > -1 && indexOfEndOfProcKeyword > -1) {
-      String procNameWithWhiteSymbols = content.substring(indexOfEndOfProcKeyword, indexOfBracket);
-      return procNameWithWhiteSymbols.replace("\\s", "").trim();
+    int indexOfBracket = content.indexOf('(', indexOfEndOfProcKeyword);
+    if (indexOfEndOfProcKeyword < 0 || indexOfBracket < 0 ) {
+        String errorMessage = "HDB Procedure file not correct";
+        XSKCommonsUtils.logCustomErrors(location, PARSER_ERROR, "", "", errorMessage, "", HDB_PROCEDURE_PARSER, MODULE_PARSERS, SOURCE_PUBLISH_REQUEST, PROGRAM_XSK);
+        throw new XSKDataStructuresException(errorMessage);
     }
-    String errMsg = "HDB Procedure file not correct";
-    XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
-        "", XSKCommonsConstants.HDB_PROCEDURE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
-        XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-    throw new XSKDataStructuresException(errMsg);
+    String procedureName = content.substring(indexOfEndOfProcKeyword, indexOfBracket);
+    return procedureName.replace("\\s", "").trim();
   }
 
   public static String extractTableFunctionNameFromContent(String content, String location, String parser)

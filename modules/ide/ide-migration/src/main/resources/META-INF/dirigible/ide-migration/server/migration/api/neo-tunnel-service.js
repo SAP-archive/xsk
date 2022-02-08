@@ -15,35 +15,27 @@ const MigrationToolExecutor = require("ide-migration/server/migration/api/migrat
 const neoClientPath = config.get("user.dir") + "/target/dirigible/resources-neo-sdk/tools/neo.sh";
 
 class NeoTunnelService {
-
-  constructor() {
-    this.migrationToolExecutor = new MigrationToolExecutor();
-  }
-
-  openTunnel(account, host, jwtToken, databaseId) {
-    const script = `${neoClientPath} open-db-tunnel -a "${account}" -h "${host}" -u JWT -p "${jwtToken}" -i "${databaseId}" --output json --background`;
-
-    const rawCommandResult = this.migrationToolExecutor.execute(script, {
-      "JAVA_HOME": config.get("JAVA8_HOME"),
-      "PATH": config.get("JAVA8_HOME") + "/bin:" + config.get("PATH")
-    });
-
-    const commandResult = JSON.parse(rawCommandResult);
-    console.log(commandResult)
-    if (commandResult.errorMsg) {
-      throw "[NEO CLIENT ERROR]" + neoOutput.errorMsg
+    constructor() {
+        this.migrationToolExecutor = new MigrationToolExecutor();
     }
 
-    return commandResult.result;
-  }
+    openTunnel(account, host, jwtToken, databaseId) {
+        const script = `${neoClientPath} open-db-tunnel -a "${account}" -h "${host}" -u JWT -p "${jwtToken}" -i "${databaseId}" --output json --background`;
 
-  closeTunnel(sessionId) {
-    const script = `${neoClientPath} close-db-tunnel --session-id ${sessionId}`;
-    this.migrationToolExecutor.execute(script, {
-      "JAVA_HOME": config.get("JAVA8_HOME"),
-      "PATH": config.get("JAVA8_HOME") + "/bin:" + config.get("PATH")
-    });
-  }
+        const rawCommandResult = this.migrationToolExecutor.execute(script);
+
+        const commandResult = JSON.parse(rawCommandResult);
+        if (commandResult.errorMsg) {
+            throw "[NEO CLIENT ERROR]" + commandResult.errorMsg;
+        }
+
+        return commandResult.result;
+    }
+
+    closeTunnel(sessionId) {
+      const script = `${neoClientPath} close-db-tunnel --session-id ${sessionId}`;
+      this.migrationToolExecutor.execute(script);
+    }
 }
 
 module.exports = NeoTunnelService;

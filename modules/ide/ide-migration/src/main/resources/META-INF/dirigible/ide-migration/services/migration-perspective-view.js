@@ -11,10 +11,10 @@
  */
 exports.getPerspective = function () {
     var perspective = {
-        "name": "SAP HANA XS Classic Migration",
-        "link": "../ide-migration/migration-perspective.html",
-        "order": "820",
-        "image": "exchange"
+        name: "SAP HANA XS Classic Migration",
+        link: "../ide-migration/migration-perspective.html",
+        order: "820",
+        image: "exchange",
     };
     return perspective;
-}
+};

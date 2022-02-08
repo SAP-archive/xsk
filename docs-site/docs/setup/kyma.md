@@ -471,6 +471,8 @@ To update the XSK version either use the **kubectl** or update the **Deployment 
 
 ### Scaling
 
+The XSK **Deployment** could be scaled horizontally by adding/removing **Pods** as follows:
+
 === "Scale to Zero"
 
     ```
@@ -490,3 +492,12 @@ To update the XSK version either use the **kubectl** or update the **Deployment 
 !!! note
 
     To learn more about application scaling in Kubernetes, see [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/).
+
+
+### Debugging
+
+To debug the XSK engine via **Remote Java Debugging** execute the following command:
+
+```
+kubectl port-forward deployment/xsk 8000:8000
+```

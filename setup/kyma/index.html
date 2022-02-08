@@ -1318,6 +1318,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    Debugging
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1507,6 +1514,13 @@
           <li class="md-nav__item">
   <a href="#scaling" class="md-nav__link">
     Scaling
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    Debugging
   </a>
   
 </li>
@@ -2023,6 +2037,7 @@
 </ul>
 </div>
 <h3 id="scaling">Scaling</h3>
+<p>The XSK <strong>Deployment</strong> could be scaled horizontally by adding/removing <strong>Pods</strong> as follows:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Scale to Zero</label><label for="__tabbed_4_2">Scale Up</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2043,6 +2058,10 @@
 <p class="admonition-title">Note</p>
 <p>To learn more about application scaling in Kubernetes, see <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/">Horizontal Pod Autoscaling</a>.</p>
 </div>
+<h3 id="debugging">Debugging</h3>
+<p>To debug the XSK engine via <strong>Remote Java Debugging</strong> execute the following command:</p>
+<div class="highlight"><pre><span></span><code>kubectl port-forward deployment/xsk 8000:8000
+</code></pre></div>
 <div class="footnote">
 <hr />
 <ol>

@@ -38,101 +38,108 @@ import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 
 public class XSKHDBUtils {
-    private XSKHDBUtils() {
+
+  private static final String commentRegex = "(/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*/)|(--.*)";
+
+  private XSKHDBUtils() {
+  }
+
+  public static String getTableName(XSKDataStructureEntityModel model) {
+    return getTableName(model, model.getName());
+  }
+
+  public static String getTableName(XSKDataStructureEntityModel model, String tableName) {
+    return new StringBuilder()
+        .append(model.getNamespace()).append("::").append(model.getContext()).append(".").append(tableName)
+        .toString();
+  }
+
+  /**
+   * Escape artifact name if DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE is activated
+   *
+   * @param artifactName name of the artifact
+   * @param schemaName   name of the schema that will be assembled to the artifact name
+   * @return escaped in quotes artifact name
+   */
+  public static String escapeArtifactName(Connection connection, String artifactName, String schemaName) {
+    boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
+    String escapeSymbol = getEscapeSymbol(connection);
+    if (!artifactName.startsWith(escapeSymbol)) {
+      if (caseSensitive) {
+        artifactName = escapeSymbol + artifactName + escapeSymbol;
+      }
     }
 
-    public static String getTableName(XSKDataStructureEntityModel model) {
-        return getTableName(model, model.getName());
-    }
-
-    public static String getTableName(XSKDataStructureEntityModel model, String tableName) {
-        return new StringBuilder()
-                .append(model.getNamespace()).append("::").append(model.getContext()).append(".").append(tableName)
-                .toString();
-    }
-
-    /**
-     * Escape artifact name if DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE is activated
-     *
-     * @param artifactName name of the artifact
-     * @param schemaName   name of the schema that will be assembled to the artifact name
-     * @return escaped in quotes artifact name
-     */
-    public static String escapeArtifactName(Connection connection, String artifactName, String schemaName) {
-        boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
-        String escapeSymbol = getEscapeSymbol(connection);
-        if (!artifactName.startsWith(escapeSymbol)) {
-            if (caseSensitive) {
-            artifactName = escapeSymbol + artifactName + escapeSymbol;
-        }
-        }
-
-        if (schemaName != null && !schemaName.trim().isEmpty()) {
-            if (!schemaName.startsWith(escapeSymbol)) {
-                if (caseSensitive) {
-                    schemaName = escapeSymbol + schemaName + escapeSymbol + ".";
-                } else {
-                    schemaName = schemaName + ".";
-                }
-            }
+    if (schemaName != null && !schemaName.trim().isEmpty()) {
+      if (!schemaName.startsWith(escapeSymbol)) {
+        if (caseSensitive) {
+          schemaName = escapeSymbol + schemaName + escapeSymbol + ".";
         } else {
-            schemaName = "";
+          schemaName = schemaName + ".";
         }
-
-        return schemaName + artifactName;
+      }
+    } else {
+      schemaName = "";
     }
 
-    /**
-     * See also {@link #escapeArtifactName(Connection, String, String)}.
-     */
-    public static String escapeArtifactName(Connection connection, String artifactName) {
-        return escapeArtifactName(connection, artifactName, null);
-    }
+    return schemaName + artifactName;
+  }
 
-    public static String getEscapeSymbol(Connection connection) {
-        return (SqlFactory.deriveDialect(connection).getClass().equals(MySQLSqlDialect.class))
-                ? "`"
-                : "\"";
-    }
+  /**
+   * See also {@link #escapeArtifactName(Connection, String, String)}.
+   */
+  public static String escapeArtifactName(Connection connection, String artifactName) {
+    return escapeArtifactName(connection, artifactName, null);
+  }
 
-    public static void populateXSKDataStructureModel(String location, String content, XSKDataStructureModel model, String artifactType, XSKDBContentType DbContentType) {
-        model.setName(XSKCommonsUtils.getRepositoryBaseObjectName(location));
-        model.setLocation(location);
-        model.setType(artifactType);
-        model.setHash(DigestUtils.md5Hex(content));
-        model.setCreatedBy(UserFacade.getName());
-        model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-        model.setDbContentType(DbContentType);
-    }
+  public static String getEscapeSymbol(Connection connection) {
+    return (SqlFactory.deriveDialect(connection).getClass().equals(MySQLSqlDialect.class))
+        ? "`"
+        : "\"";
+  }
 
-    public static void createPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService, String artifactName, String artifactSchema, Connection connection)
-        throws SQLException {
-        xskSynonymManagerService.createDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
-    }
+  public static void populateXSKDataStructureModel(String location, String content, XSKDataStructureModel model, String artifactType,
+      XSKDBContentType DbContentType) {
+    model.setName(XSKCommonsUtils.getRepositoryBaseObjectName(location));
+    model.setLocation(location);
+    model.setType(artifactType);
+    model.setHash(DigestUtils.md5Hex(content));
+    model.setCreatedBy(UserFacade.getName());
+    model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    model.setDbContentType(DbContentType);
+  }
 
-    public static void dropPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService, String artifactName, String artifactSchema, Connection connection)
-        throws SQLException {
-        xskSynonymManagerService.dropDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
-    }
+  public static void createPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService,
+      String artifactName, String artifactSchema, Connection connection)
+      throws SQLException {
+    xskSynonymManagerService.createDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
+  }
 
-    public static XSKDataStructureHDBSynonymModel assemblePublicSynonym(String artifactName, String artifactSchema) {
-        XSKDataStructureHDBSynonymModel model = new XSKDataStructureHDBSynonymModel();
+  public static void dropPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService,
+      String artifactName, String artifactSchema, Connection connection)
+      throws SQLException {
+    xskSynonymManagerService.dropDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
+  }
 
-        XSKHDBSYNONYMDefinitionModel defModel = new XSKHDBSYNONYMDefinitionModel();
-        defModel.setSynonymSchema(XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA);
-        XSKHDBSYNONYMDefinitionModel.Target target = new XSKHDBSYNONYMDefinitionModel.Target();
-        target.setObject(artifactName);
-        target.setSchema(artifactSchema);
-        defModel.setTarget(target);
+  public static XSKDataStructureHDBSynonymModel assemblePublicSynonym(String artifactName, String artifactSchema) {
+    XSKDataStructureHDBSynonymModel model = new XSKDataStructureHDBSynonymModel();
 
-        model.getSynonymDefinitions().put(artifactName, defModel);
-        model.setType(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
-        model.setCreatedBy(UserFacade.getName());
-        model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-        return model;
-    }
+    XSKHDBSYNONYMDefinitionModel defModel = new XSKHDBSYNONYMDefinitionModel();
+    defModel.setSynonymSchema(XSKConstants.XSK_SYNONYM_PUBLIC_SCHEMA);
+    XSKHDBSYNONYMDefinitionModel.Target target = new XSKHDBSYNONYMDefinitionModel.Target();
+    target.setObject(artifactName);
+    target.setSchema(artifactSchema);
+    defModel.setTarget(target);
+
+    model.getSynonymDefinitions().put(artifactName, defModel);
+    model.setType(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
+    model.setCreatedBy(UserFacade.getName());
+    model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    return model;
+  }
 
   public static String extractProcedureNameFromContent(String content, String location) throws XSKDataStructuresException {
+    content = removeCommentsFromContent(content);
     int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("procedure") + "procedure".length();
     int indexOfBracket = content.indexOf('(', indexOfEndOfProcKeyword);
     if (indexOfEndOfProcKeyword < 0 || indexOfBracket < 0 ) {
@@ -144,7 +151,9 @@ public class XSKHDBUtils {
     return procedureName.replace("\\s", "").trim();
   }
 
-  public static String extractTableFunctionNameFromContent(String content, String location, String parser) throws XSKDataStructuresException {
+  public static String extractTableFunctionNameFromContent(String content, String location, String parser)
+      throws XSKDataStructuresException {
+    content = removeCommentsFromContent(content);
     int indexOfBracket = content.indexOf('(');
     int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("function") + "function".length();
     if (indexOfBracket > -1 && indexOfEndOfProcKeyword > -1) {
@@ -156,5 +165,9 @@ public class XSKHDBUtils {
         "", parser, XSKCommonsConstants.MODULE_PARSERS,
         XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
     throw new XSKDataStructuresException(errMsg);
+  }
+
+  private static String removeCommentsFromContent(String content) {
+    return content.replaceAll(commentRegex, "").trim();
   }
 }

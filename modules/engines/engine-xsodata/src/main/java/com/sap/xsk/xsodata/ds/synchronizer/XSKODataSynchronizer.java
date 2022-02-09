@@ -21,6 +21,7 @@ import com.sap.xsk.xsodata.ds.service.XSKOData2ODataHTransformer;
 import com.sap.xsk.xsodata.ds.service.XSKOData2ODataMTransformer;
 import com.sap.xsk.xsodata.ds.service.XSKOData2ODataXTransformer;
 import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
+import com.sap.xsk.xsodata.ds.service.XSKTableMetadataProvider;
 import com.sap.xsk.xsodata.utils.XSKODataUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -72,8 +73,6 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
   private XSKOData2ODataXTransformer xskOData2ODataXTransformer = new XSKOData2ODataXTransformer();
 
   private XSKOData2ODataHTransformer xskOData2ODataHTransformer = new XSKOData2ODataHTransformer();
-
-  private DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
   /**
    * Force synchronization.
@@ -317,7 +316,9 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
         //The xsk classic generate the odata properties without prettying them
         String oldValuePretty = Configuration.get(DBMetadataUtil.DIRIGIBLE_GENERATE_PRETTY_NAMES);
         Configuration.set(DBMetadataUtil.DIRIGIBLE_GENERATE_PRETTY_NAMES, "false");
-        ODataDefinition oDataDefinition = XSKODataUtils.convertXSKODataModelToODataDefinition(model, dbMetadataUtil);
+
+        XSKODataUtils oDataUtils = new XSKODataUtils(new XSKTableMetadataProvider());
+        ODataDefinition oDataDefinition = oDataUtils.convertXSKODataModelToODataDefinition(model);
 
         String[] odataxc = generateODataX(oDataDefinition);
         String odatax = odataxc[0];

@@ -20,12 +20,13 @@ import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATANavigation;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
+import com.sap.xsk.xsodata.ds.service.XSKTableMetadataProvider;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import javax.sql.DataSource;
 import org.apache.olingo.odata2.api.edm.EdmMultiplicity;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
@@ -39,23 +40,22 @@ import org.eclipse.dirigible.engine.odata2.definition.ODataHandler;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes;
 import org.eclipse.dirigible.engine.odata2.definition.ODataNavigation;
 import org.eclipse.dirigible.engine.odata2.definition.ODataProperty;
-import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.sql.DataSource;
-
-import static com.sap.xsk.utils.XSKCommonsDBUtils.getSynonymTargetObjectMetadata;
 
 public class XSKODataUtils {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataUtils.class);
   private static final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  private XSKODataUtils() {
+  private final XSKTableMetadataProvider metadataProvider;
+
+  public XSKODataUtils(XSKTableMetadataProvider metadataProvider) {
+    this.metadataProvider = metadataProvider;
   }
 
-  public static ODataDefinition convertXSKODataModelToODataDefinition(XSKODataModel xskoDataModel, DBMetadataUtil dbMetadataUtil) {
+  public ODataDefinition convertXSKODataModelToODataDefinition(XSKODataModel xskoDataModel) {
     ODataDefinition oDataDefinitionModel = new ODataDefinition();
 
     oDataDefinitionModel.setLocation(xskoDataModel.getLocation());
@@ -75,24 +75,12 @@ public class XSKODataUtils {
 
       //set properties
       try {
-        PersistenceTableModel tableMetadata = dbMetadataUtil
-            .getTableMetadata(tableName, dbMetadataUtil.getOdataArtifactTypeSchema(tableName));
+        PersistenceTableModel tableMetadata = metadataProvider.getPersistenceTableModel(tableName);
         if (tableMetadata == null) {
-          logger.error("Table {} not available for entity {}, so it will be skipped.", tableName, entity.getAlias());
+          logger.error("DB artifact {} not available for entity {}, so it will be skipped.", tableName, entity.getAlias());
           continue;
         }
         List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
-
-        if (ISqlKeywords.METADATA_SYNONYM.equals(tableMetadata.getTableType())) {
-          PersistenceTableModel targetObjectMetadata = getSynonymTargetObjectMetadata(dataSource,tableMetadata.getTableName(),
-              tableMetadata.getSchemaName());
-
-          if (targetObjectMetadata.getTableName() == null) {
-            throw new XSKOData2TransformerException("Failed to build ODataEntityDefinition for entity: " + entity.getAlias() + ". Reason: cannot find details for synonym - " + tableMetadata.getTableName());
-          }
-
-          tableMetadata = dbMetadataUtil.getTableMetadata(targetObjectMetadata.getTableName(), targetObjectMetadata.getSchemaName());
-        }
 
         if (ISqlKeywords.METADATA_CALC_VIEW.equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity
             .getWithoutPropertyProjections().isEmpty()) {
@@ -156,7 +144,8 @@ public class XSKODataUtils {
   }
 
   @NotNull
-  private static Consumer<XSKHDBXSODATAModification> processModification(ODataEntityDefinition oDataEntityDefinition, List<ODataHandler> handlers) {
+  private Consumer<XSKHDBXSODATAModification> processModification(ODataEntityDefinition oDataEntityDefinition,
+      List<ODataHandler> handlers) {
     return modification -> {
       modification.getSpecification().getEvents().forEach(event -> {
         if (validateHandlerType(event.getType())) {
@@ -185,7 +174,7 @@ public class XSKODataUtils {
   }
 
   @NotNull
-  static Consumer<XSKHDBXSODATANavigation> processNavigation(XSKODataModel xskoDataModel,
+  Consumer<XSKHDBXSODATANavigation> processNavigation(XSKODataModel xskoDataModel,
       ODataDefinition oDataDefinitionModel, ODataEntityDefinition oDataEntityDefinition) {
     return navigate -> {
       ODataNavigation oDataNavigation = new ODataNavigation();
@@ -229,7 +218,7 @@ public class XSKODataUtils {
   /**
    * Validate if provided multiplicity from xsodata can be mapped to olingo ones.
    */
-  public static void validateEdmMultiplicity(String actualValue, String assName) {
+  void validateEdmMultiplicity(String actualValue, String assName) {
     try {
       EdmMultiplicity.fromLiteral(actualValue);
     } catch (IllegalArgumentException ex) {
@@ -240,7 +229,7 @@ public class XSKODataUtils {
   /**
    * Validate if provided handler type is one of the org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes
    */
-  public static boolean validateHandlerType(XSKHDBXSODATAEventType eventType) {
+  boolean validateHandlerType(XSKHDBXSODATAEventType eventType) {
     try {
       ODataHandlerTypes.fromValue(eventType.getOdataHandlerType());
     } catch (IllegalArgumentException ex) {

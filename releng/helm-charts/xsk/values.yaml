@@ -96,7 +96,7 @@ kyma:
     name: "Operator"
     scopeReferences:
     - $XSAPPNAME.Operator
-    
+
   scopes:
     # Description for scope
   - description: Developer scope

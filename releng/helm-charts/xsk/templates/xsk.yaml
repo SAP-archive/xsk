@@ -65,8 +65,8 @@ spec:
         {{- include "xsk.selectorLabels" . | nindent 8 }}
     spec:
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      serviceAccountName: {{ include "xsk.serviceAccountName" . }}
+        {{- toYaml .Values.podSecurityContext | nindent 8 }} 
+      serviceAccountName: {{ include "xsk.serviceAccountName" . }}      
       containers:
         - name: {{ required "Missing chart name" .Chart.Name }}
           envFrom:
@@ -97,24 +97,41 @@ spec:
           image: dirigiblelabs/xsk
           {{- end }}  
           imagePullPolicy: {{ required "Missing application image pull policy" .Values.application.imagePullPolicy }}
+          volumeMounts:
+          - name: {{ required "Missing volume mounts name" .Values.deployment.volumeMountsName }}
+            mountPath: {{ required "Missing volume mounts path" .Values.deployment.volumeMountsMountPath }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
+          readinessProbe:  
+            tcpSocket:
+              port: {{ required "Missing deployment readiness probe http get port" .Values.deployment.readinessProbeHttpGetPort }}
+            initialDelaySeconds: {{ required "Missing deployment readiness initial delay seconds" .Values.deployment.readinessProbeInitialDelaySeconds }}
+            periodSeconds: {{ required "Missing deployment readiness probe period second" .Values.deployment.readinessProbePeriodSeconds }}
           livenessProbe:
-            failureThreshold: 10
-            periodSeconds: 10
-            initialDelaySeconds: 20
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            failureThreshold: 10
-            periodSeconds: 10
-            initialDelaySeconds: 20
-            httpGet:
-              path: /services/v4/healthcheck
-              port: http
+            tcpSocket:
+              port: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbeHttpGetPort}}
+            initialDelaySeconds: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbeInitialDelaySeconds}}
+            periodSeconds: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbePeriodSeconds}}
+      volumes:
+      - name: {{ required "Missing volume mounts name" .Values.deployment.volumesName }}
+        persistentVolumeClaim:
+          claimName: {{ required "Missing volume mounts name" .Values.deployment.volumespersistentVolumeClaimClaimName }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ required "Missing persistent volume claim name" .Values.persistentVolumeClaim.name }}
+  namespace: {{ required "Missing namespace" .Values.create.namespace }}
+spec:
+  accessModes:
+  - {{ required "Missing persistent volume claim access mode" .Values.persistentVolumeClaim.accessModes }}
+  resources:
+    requests:
+      storage: {{ required "Missing persistent volume claim resource storage" .Values.persistentVolumeClaim.resourcesStorage }}
 ---
 apiVersion: v1
 kind: Service

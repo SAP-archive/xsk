@@ -7,7 +7,25 @@ replicaCount: 1
 
 deployment:
   # Change deployment strategy type
-  strategyType: Recreate
+  strategyType: Recreate  
+  # ReadinessProbe
+  readinessProbePeriodSeconds: 10
+  readinessProbeInitialDelaySeconds: 5
+  readinessProbeHttpGetPort: 8080
+  # LivenessProbe
+  LivenessProbePeriodSeconds: 60
+  LivenessProbeInitialDelaySeconds: 60
+  LivenessProbeHttpGetPort: 8080
+  # Volume mounts for the deployment
+  volumeMountsName: xsk-volume
+  volumeMountsMountPath: /usr/local/tomcat/target/dirigible/repository
+  volumesName: xsk-volume
+  volumespersistentVolumeClaimClaimName: xsk-claim
+
+persistentVolumeClaim:
+  name: xsk-claim
+  accessModes: ReadWriteOnce
+  resourcesStorage: 1Gi
 
 create:
   # Deployment namespace
@@ -28,6 +46,8 @@ securityContext:
   seccompProfile:
     # Enable seccomp profile
     type: RuntimeDefault
+
+podSecurityContext: {}
 
 service:
   # Type of service when you expose
@@ -62,7 +82,7 @@ kyma:
   - description: XSK Operator
     name: xsk-Operator
     role-template-references:
-    - $XSAPPNAME.Operator  
+    - $XSAPPNAME.Operator
 
   roleTemplates:
     # Description for role templates
@@ -76,7 +96,7 @@ kyma:
     name: "Operator"
     scopeReferences:
     - $XSAPPNAME.Operator
-
+    
   scopes:
     # Description for scope
   - description: Developer scope

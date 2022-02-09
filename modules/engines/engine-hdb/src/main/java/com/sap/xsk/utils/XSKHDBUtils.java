@@ -39,6 +39,8 @@ import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 
 public class XSKHDBUtils {
 
+  private static final String commentRegex = "(/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*/)|(--.*)";
+
   private XSKHDBUtils() {
   }
 
@@ -166,6 +168,6 @@ public class XSKHDBUtils {
   }
 
   private static String removeCommentsFromContent(String content) {
-    return content.replaceAll("(/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*/)|(--.*)", "").trim();
+    return content.replaceAll(commentRegex, "").trim();
   }
 }

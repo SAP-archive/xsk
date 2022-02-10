@@ -6,6 +6,9 @@ SAP HANA Deployment Infrastructure (HDI) is a service that enables you to deploy
 !!! note "SAP Help Portal"
 
     For more information, see [SAP HANA Deployment Infrastructure Reference (SAP HANA Cloud)](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/4077972509f5437c85d6a03e01509417.html).
+    
+    - [HDI SQL API - Return Codes](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/035dbbe23ac14242b1f7d724dd102825.html#loio035dbbe23ac14242b1f7d724dd102825__section_nsr_1fb_31b)
+    - [HDI SQL API - Make Operation](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_2_QRC/en-US/7a0b4c53580f41759688a10cce573d15.html)
 
 ## Overview
 

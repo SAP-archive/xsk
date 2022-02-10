@@ -19,6 +19,7 @@ RUN echo "The default OpenJDK will be used"
 
 FROM xsk-${JDK_TYPE} AS dependencies-base
 
+RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/
 
 RUN rm /usr/local/tomcat/conf/tomcat-users.xml

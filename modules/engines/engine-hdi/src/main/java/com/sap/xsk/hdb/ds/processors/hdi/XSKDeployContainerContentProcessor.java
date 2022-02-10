@@ -41,6 +41,7 @@ public class XSKDeployContainerContentProcessor extends XSKHDIAbstractProcessor 
   private static final Logger LOGGER = LoggerFactory.getLogger(XSKDeployContainerContentProcessor.class);
   private static final String ERROR_LOCATION = "-";
   private static final String SQL_SELECT_FROM_DEPLOY_PATHS = "SELECT * FROM #DEPLOY_PATHS";
+  private static final String SQL_SELECT_FROM_UNDEPLOY_PATHS = "SELECT * FROM #UNDEPLOY_PATHS";
   private static final int FIRST_OUTPUT_PARAMETER_INDEX = 1;
 
   private static final CalculationViewSynchronizationArtefactType CALCULATION_VIEW_SYNCHRONIZATION_ARTEFACT_TYPE = new CalculationViewSynchronizationArtefactType();
@@ -80,27 +81,40 @@ public class XSKDeployContainerContentProcessor extends XSKHDIAbstractProcessor 
       try (ResultSet resultSet = statement.executeQuery()) {
         int returnCode = statement.getInt(FIRST_OUTPUT_PARAMETER_INDEX);        // 1st output parameter (Return_Code)
         parseResultSet(resultSet);
-        try (PreparedStatement prepareStatement = connection.prepareStatement(SQL_SELECT_FROM_DEPLOY_PATHS)) {
-          try (ResultSet rs = prepareStatement.executeQuery()) {
-            while (rs.next()) {
-              String deployPath = rs.getString(1);
-              if (deployPath.indexOf(Constants.UNIX_SEPARATOR) != -1) {
-                String fileExtension = getExtension(deployPath);
-                String fileName = deployPath.substring(deployPath.lastIndexOf(Constants.UNIX_SEPARATOR) + 1);
-                if (returnCode == RETURN_CODE_SUCCESS || returnCode == RETURN_CODE_WARNING) {
-                  applyState(fileExtension, fileName, ArtefactState.SUCCESSFUL_CREATE, deployPath);
-                } else {
-                  applyState(fileExtension, fileName, ArtefactState.FAILED_CREATE, deployPath);
-                }
-              }
-            }
-          }
-        }
+        checkPaths(connection, returnCode,  SQL_SELECT_FROM_DEPLOY_PATHS);
+        checkPaths(connection,returnCode, SQL_SELECT_FROM_UNDEPLOY_PATHS);
       }
     } catch (SQLException e) {
       LOGGER.error("Failed to execute SQL statement - " + sql, e);
       XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, ERROR_LOCATION,
           XSKCommonsConstants.HDI_PROCESSOR);
+    }
+  }
+
+  private void checkPaths(Connection connection, int returnCode, String sql) throws SQLException {
+    try (PreparedStatement prepareStatement = connection.prepareStatement(sql)) {
+      try (ResultSet rs = prepareStatement.executeQuery()) {
+        while (rs.next()) {
+          String path = rs.getString(1);
+          if (path.indexOf(Constants.UNIX_SEPARATOR) != -1) {
+            String fileExtension = getExtension(path);
+            String fileName = path.substring(path.lastIndexOf(Constants.UNIX_SEPARATOR) + 1);
+            if (returnCode == RETURN_CODE_SUCCESS || returnCode == RETURN_CODE_WARNING) {
+              if(sql.equals(SQL_SELECT_FROM_DEPLOY_PATHS)) {
+                applyState(fileExtension, fileName, ArtefactState.SUCCESSFUL_CREATE, path);
+              } else {
+                applyState(fileExtension, fileName, ArtefactState.SUCCESSFUL_DELETE, path);
+              }
+            } else {
+              if(sql.equals(SQL_SELECT_FROM_DEPLOY_PATHS)) {
+                applyState(fileExtension, fileName, ArtefactState.FAILED_CREATE, path);
+              } else {
+                applyState(fileExtension, fileName, ArtefactState.FAILED_DELETE, path);
+              }
+            }
+          }
+        }
+      }
     }
   }
 

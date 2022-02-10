@@ -27,9 +27,10 @@ persistentVolumeClaim:
   accessModes: ReadWriteOnce
   resourcesStorage: 1Gi
 
-create:
+namespace:
   # Deployment namespace
-  namespace: default
+  create: false
+  name: default
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -75,12 +76,12 @@ kyma:
     # Description for role collections
   - description: XSK Developer
     # Name for role collections
-    name: xsk-Developer
+    name: XSK-Developer
     # Role template references for role collections
     role-template-references:
     - $XSAPPNAME.Developer
   - description: XSK Operator
-    name: xsk-Operator
+    name: XSK-Operator
     role-template-references:
     - $XSAPPNAME.Operator
 

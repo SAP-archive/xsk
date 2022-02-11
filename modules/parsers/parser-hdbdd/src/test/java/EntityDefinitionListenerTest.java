@@ -75,9 +75,13 @@ public class EntityDefinitionListenerTest {
 
     assertEquals(0, parser.getNumberOfSyntaxErrors());
 
-    //product.Orders.items
+    // product.Orders.items
     assertEquals(0, parsedEntities.get(1).getAssociations().get(0).getForeignKeys().size());
     assertEquals(1, parsedEntities.get(1).getAssociations().get(1).getForeignKeys().size());
+
+    // An entity is supposed to be allowed to have a field with the same name
+    String itemsName = parsedEntities.get(2).getName();
+    assertEquals(itemsName, parsedEntities.get(2).getElements().get(0).getName());
   }
 
   //    @Test

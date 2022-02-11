@@ -48,7 +48,7 @@ public class EntitySymbol extends Symbol implements Scope {
 
     @Override
     public boolean isDuplicateName(String id) {
-        return elements.containsKey(id) || getName().equals(id);
+        return elements.containsKey(id);
     }
 
     public List<EntityElementSymbol> getKeys() {

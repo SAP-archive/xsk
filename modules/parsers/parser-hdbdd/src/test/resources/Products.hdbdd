@@ -11,7 +11,7 @@ context Products {
     };
 
     entity Item {
-      key ItemId          : String(32);
+      key Item            : String(32);
     	OrderId             : String(500);
     };
 

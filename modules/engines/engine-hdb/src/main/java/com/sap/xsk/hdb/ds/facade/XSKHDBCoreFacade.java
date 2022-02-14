@@ -99,8 +99,9 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
 
     XSKDataStructureModel dataStructureModel = null;
     try {
-      if(parserServices.containsKey(resourceExtension) && !isParsed(registryPath, contentAsString, resourceExtension)) {
-        XSKDataStructureParametersModel parametersModel = new XSKDataStructureParametersModel(resourceExtension, registryPath, contentAsString, workspace);
+      if (parserServices.containsKey(resourceExtension) && !isParsed(registryPath, contentAsString, resourceExtension)) {
+        XSKDataStructureParametersModel parametersModel = new XSKDataStructureParametersModel(resourceExtension, registryPath,
+            contentAsString, workspace);
         dataStructureModel = xskCoreParserService.parseDataStructure(parametersModel);
         dataStructureModel.setLocation(registryPath);
       }
@@ -117,13 +118,14 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
   }
 
   public XSKDataStructureModel parseDataStructureModel(IResource resource) throws SynchronizationException {
-    return this.parseDataStructureModel(resource.getName(), getRegistryPath(resource), getContent(resource), XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
+    return this.parseDataStructureModel(resource.getName(), getRegistryPath(resource), getContent(resource),
+        XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
   }
 
   @Override
   public void handleResourceSynchronization(IResource resource) throws SynchronizationException, XSKDataStructuresException {
     XSKDataStructureModel dataStructureModel = parseDataStructureModel(resource);
-    if(dataStructureModel != null) {
+    if (dataStructureModel != null) {
       managerServices.get(dataStructureModel.getType()).synchronizeRuntimeMetadata(dataStructureModel); // 4. we synchronize the metadata
     }
   }
@@ -385,14 +387,18 @@ public class XSKHDBCoreFacade implements IXSKHDBCoreFacade {
             XSKDataStructureHDBTableTypeModel model = (XSKDataStructureHDBTableTypeModel) dataStructureTableTypesModel.get(dsName);
             try {
               if (model != null) {
-                if (!SqlFactory.getNative(connection).exists(connection, model.getName())) {
+                String tableTypeSchema = model.getSchema();
+                String tableTypeName = model.getName();
+                boolean tableTypeExists = SqlFactory.getNative(connection)
+                    .exists(connection, tableTypeSchema, tableTypeName, DatabaseArtifactTypes.TABLE_TYPE);
+                if (!tableTypeExists) {
                   xskTableTypeManagerService.createDataStructure(connection, model);
                 } else {
-                  logger.warn(format("Table Type [{0}] already exists during the update process", dsName));
+                  logger.debug("Table Type [{}] in schema [{}] already exists during the update process", tableTypeName, tableTypeSchema);
                 }
               }
             } catch (Exception e) {
-              logger.error(e.getMessage(), e);
+              logger.error("Failed to create table type with name: {}", dsName, e);
               errors.add(e.getMessage());
             }
           }

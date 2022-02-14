@@ -15,6 +15,7 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
+import com.sap.xsk.hdb.ds.processors.hdbstructure.HDBSynonymRemover;
 import com.sap.xsk.hdb.ds.processors.hdbstructure.XSKTableTypeCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbstructure.XSKTableTypeDropProcessor;
 import java.sql.Connection;
@@ -35,10 +36,12 @@ public class IXSKTableTypeManagerService extends AbstractDataStructureManagerSer
   private final Map<String, XSKDataStructureHDBTableTypeModel> dataStructureHDBTableTypeModels;
   private final List<String> tableTypesSynchronized;
 
-  private IXSKHdbProcessor xskTableTypeCreateProcessor = new XSKTableTypeCreateProcessor();
-  private IXSKHdbProcessor xskTableTypeDropProcessor = new XSKTableTypeDropProcessor();
+  private final IXSKHdbProcessor xskTableTypeCreateProcessor;
+  private final IXSKHdbProcessor xskTableTypeDropProcessor;
 
-  public IXSKTableTypeManagerService() {
+  public IXSKTableTypeManagerService(HDBSynonymRemover synonymRemover) {
+    this.xskTableTypeCreateProcessor = new XSKTableTypeCreateProcessor();
+    this.xskTableTypeDropProcessor = new XSKTableTypeDropProcessor(synonymRemover);
     dataStructureHDBTableTypeModels = new LinkedHashMap<>();
     tableTypesSynchronized = Collections.synchronizedList(new ArrayList<>());
   }

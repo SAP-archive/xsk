@@ -149,8 +149,8 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
     $scope.openFile = function () {
         if ($scope.checkResource($scope.jsonData[$scope.activeItemId].file)) {
             let msg = {
+                "editor": "csv-editor",
                 "file": {
-                    "name": $scope.jsonData[$scope.activeItemId].name,
                     "path": `/${workspace}${$scope.jsonData[$scope.activeItemId].file}`,
                     "type": "file",
                     "contentType": "text/csv",
@@ -539,9 +539,18 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
         });
     }
 
+    function getViewParameters() {
+        if (window.frameElement.hasAttribute("data-parameters")) {
+            let params = JSON.parse(window.frameElement.getAttribute("data-parameters"));
+            $scope.file = params["file"];
+        } else {
+            let searchParams = new URLSearchParams(window.location.search);
+            $scope.file = searchParams.get('file');
+        }
+    }
+
     function loadFileContents() {
-        let searchParams = new URLSearchParams(window.location.search);
-        $scope.file = searchParams.get('file');
+        getViewParameters();
         if ($scope.file) {
             $http.get('/services/v4/ide/workspaces' + $scope.file)
                 .then(function (response) {
@@ -568,12 +577,11 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
                     }
                 });
         } else {
-            console.error('file parameter is not present in the URL');
+            console.error("HDBTI Editor: file parameter is missing");
         }
     }
 
     function saveContents(text) {
-        console.log('Save called...');
         if ($scope.file) {
             let xhr = new XMLHttpRequest();
             xhr.open('PUT', '/services/v4/ide/workspaces' + $scope.file);
@@ -581,15 +589,14 @@ editorView.controller('EditorViewController', ['$scope', '$http', '$messageHub',
             xhr.setRequestHeader('X-CSRF-Token', csrfToken);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
-                    console.log('file saved: ' + $scope.file);
+                    $messageHub.message('editor.file.saved', $scope.file);
+                    $messageHub.message('status.message', 'File [' + $scope.file.split("/").pop() + '] saved.');
                 }
             };
             xhr.send(text);
             isFileChanged = false;
-            $messageHub.message('editor.file.saved', $scope.file);
-            $messageHub.message('status.message', 'File [' + $scope.file + '] saved.');
         } else {
-            console.error('file parameter is not present in the request');
+            console.error("HDBTI Editor: file parameter is missing");
         }
     }
 

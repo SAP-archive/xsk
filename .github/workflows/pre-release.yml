@@ -184,3 +184,14 @@ jobs:
         payload: "{\"type\":\"Pre-release\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  Stage-release: 
+      uses: ./.github/workflows/stage-release.yaml
+      secrets:
+        STAGE_KYMA_CONFIG: ${{ secrets.STAGE_KYMA_CONFIG }}
+        STAGE_HANA_URL: ${{ secrets.STAGE_HANA_URL }}
+        STAGE_HANA_USERNAME: ${{ secrets.STAGE_HANA_USERNAME }}
+        STAGE_HANA_PASSWORD: ${{ secrets.STAGE_HANA_PASSWORD }}
+        STAGE_KYMA_HOST: ${{ secrets.STAGE_KYMA_HOST }}
+        STAGE_NAMESPACE: ${{ secrets.STAGE_NAMESPACE }}
+        STAGE_SERVICE_ACCOUNT: ${{ secrets.STAGE_SERVICE_ACCOUNT }}

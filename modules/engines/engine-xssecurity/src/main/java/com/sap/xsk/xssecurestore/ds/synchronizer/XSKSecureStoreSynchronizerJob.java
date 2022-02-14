@@ -16,23 +16,27 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
 
 public class XSKSecureStoreSynchronizerJob extends AbstractSynchronizerJob {
 
-  private XSKSecureStoreSynchronizer xskSecureStoreSynchronizer = new XSKSecureStoreSynchronizer();
+	private XSKSecureStoreSynchronizer xskSecureStoreSynchronizer = new XSKSecureStoreSynchronizer();
 
-  /*
-   * (non-Javadoc)
-   * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getSynchronizer()
-   */
-  @Override
-  protected ISynchronizer getSynchronizer() {
-    return xskSecureStoreSynchronizer;
-  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#
+	 * getSynchronizer()
+	 */
+	@Override
+	public ISynchronizer getSynchronizer() {
+		return xskSecureStoreSynchronizer;
+	}
 
-  /*
-   * (non-Javadoc)
-   * @see org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getName()
-   */
-  @Override
-  public String getName() {
-    return XSKSecureStoreSynchronizerJobDefinitionProvider.XSK_SECURE_STORE_SYNCHRONIZER_JOB;
-  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob#getName()
+	 */
+	@Override
+	public String getName() {
+		return XSKSecureStoreSynchronizerJobDefinitionProvider.XSK_SECURE_STORE_SYNCHRONIZER_JOB;
+	}
 }

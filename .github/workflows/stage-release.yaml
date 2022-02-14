@@ -58,16 +58,16 @@ jobs:
         echo "::set-output name=helm_verify::$OUTPUT"
       id: helm_pull  
 
-    # Get chart hash
-    - name: Get chart hash
+    # Get chart fingerprint
+    - name: Get chart fingerprint
       run: |
-        HELM_SHA=$(echo "The string is: ${{ steps.helm_pull.outputs.helm_verify }}" | tail -n1)
-        echo "::set-output name=helm_verify_sha::$HELM_SHA"
+        HELM_FINGERPRINT=$(echo "The string is: ${{ steps.helm_pull.outputs.helm_verify }}" | tail -n2)
+        echo "::set-output name=helm_verify_fingerprint::$HELM_FINGERPRINT"
       id: helm_verify_step
 
-    # Check chart hash
-    - name: Check chart hash
-      if: "steps.helm_verify_step.outputs.helm_verify_sha != 'Chart Hash Verified: sha256:bb929df66cce8e4524f60fa56aab591f5feb81124b7d011499cdc6985113fe83'"
+    # Check chart fingerprint
+    - name: Check chart fingerprint
+      if: "steps.helm_verify_step.outputs.helm_verify_fingerprint != 'Using Key With Fingerprint: 734B0E32368A2283290E0B966010F454D1819484'"
       run: |
         stop
 

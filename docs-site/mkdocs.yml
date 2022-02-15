@@ -3,21 +3,21 @@ site_url: https://www.xsk.io
 
 nav:
     - Welcome: 'index.md'
-    - Artefacts: 
-      - artefacts/index.md
-      - hdbtable: 'artefacts/hdbtable.md'
-      - hdbview: 'artefacts/hdbview.md'
-      - hdbtablefunction: 'artefacts/hdbtablefunction.md'
-      - hdbprocedure: 'artefacts/hdbprocedure.md'
-      - hdbschema: 'artefacts/hdbschema.md'
-      - hdbsynonym: 'artefacts/hdbsynonym.md'
-      - hdbdd: 'artefacts/hdbdd.md'
-      - hdbcds: 'artefacts/hdbdd.md'
-      - hdbsequence: 'artefacts/hdbsequence.md'
-      - xsjs: 'artefacts/xsjs.md'
-      - xsjslib: 'artefacts/xsjs.md'
-      - xsodata: 'artefacts/xsodata.md'
-      - xshttpdest: 'artefacts/xshttpdest.md'
+    - Artifacts: 
+      - artifacts/index.md
+      - hdbtable: 'artifacts/hdbtable.md'
+      - hdbview: 'artifacts/hdbview.md'
+      - hdbtablefunction: 'artifacts/hdbtablefunction.md'
+      - hdbprocedure: 'artifacts/hdbprocedure.md'
+      - hdbschema: 'artifacts/hdbschema.md'
+      - hdbsynonym: 'artifacts/hdbsynonym.md'
+      - hdbdd: 'artifacts/hdbdd.md'
+      - hdbcds: 'artifacts/hdbdd.md'
+      - hdbsequence: 'artifacts/hdbsequence.md'
+      - xsjs: 'artifacts/xsjs.md'
+      - xsjslib: 'artifacts/xsjs.md'
+      - xsodata: 'artifacts/xsodata.md'
+      - xshttpdest: 'artifacts/xshttpdest.md'
     - API:
       - $.db: 'api/db.md'
       - $.hdb: 'api/hdb.md'
@@ -60,9 +60,10 @@ nav:
       - Cloud Foundry: 'setup/cloud-foundry.md'
       - Kyma: 'setup/kyma.md'
       - Helm: 'setup/helm.md'
-      - Environment Variables: 'setup/environment-variables.md'
-    - Cheat sheet: 
-      - HDI: 'cheatsheet/hdi.md'
+      - Configurations:
+        - Environment Variables: 'setup/configurations/environment-variables.md'
+        - HDI: 'setup/configurations/hdi.md'
+    - Cheat Sheet:
       - Troubleshooting: 'cheatsheet/troubleshooting.md'
     - Community: 'community.md'
     

@@ -5,7 +5,7 @@ title: Welcome
 Project XSK
 ===
 
-## What is XSK?
+## What Is XSK?
 ---
 
 <iframe class="md-tabs" width="560" height="315" src="https://www.youtube-nocookie.com/embed/K0CY-vVbnnw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -24,7 +24,7 @@ You can deploy it separately from a [SAP HANA](https://www.sap.com/products/hana
 
 ![XSK - Migration Architecture](/img/xsk-migration-architecture.png)
 
-#### Comparison with other options
+#### Comparison with Other Solutions
 
 | Aspect                         | XSK  | Others  | Description |
 | ------------------------------ |:----:| :-----:| -----------
@@ -37,12 +37,12 @@ You can deploy it separately from a [SAP HANA](https://www.sap.com/products/hana
 | Open source                    |  ✅  |    ❌   | Entirely open source and free
 
 
-## Who uses it?
+## Who Uses It?
 ---
 
 If you have an **existing** [SAP HANA Extended Application Services](https://help.sap.com/viewer/52715f71adba4aaeb480d946c742d1f6/2.0.03/en-US/a6c0749255d84a81a154a7fc87dd33ce.html) (**XS classic application**), which currently runs on your SAP HANA database and you want to scale it out horizontally on a hyperscaler of your choice, XSK is your solution! It also provides the migration tooling for transferring the application code from your existing SAP HANA. By preserving the existing artifacts, APIs and development model, you can leverage your existing knowledge and experience to continue running existing applications and even to build new ones, if you want.
 
-## Is it free?
+## Is It Free?
 ---
 
 XSK is an **open source project** provided by SAP on [GitHub](https://github.com/SAP/xsk). It is under the [Apache 2.0 License](https://github.com/SAP/xsk/blob/main/LICENSE). You can help us improve the project by following the [Contribution Guidelines](https://github.com/SAP/xsk/blob/main/CONTRIBUTING.md) and creating [issues](https://github.com/SAP/xsk/issues).
@@ -53,7 +53,7 @@ XSK is an **open source project** provided by SAP on [GitHub](https://github.com
 
 You can find all the different distributions of the XSK project at [https://github.com/SAP/xsk/releases](https://github.com/SAP/xsk/releases) along with the instructions how to deploy them on the target platforms.
 
-## Contact us
+## Contact Us
 ---
 
 We run the project in compliance with the high standard of transparency and openness. In case of questions or suggestions you are welcome to our public [discussions](https://github.com/SAP/xsk/discussions) space. We have a public [Slack channel](https://slack.xsk.io) as well.

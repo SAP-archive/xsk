@@ -13,7 +13,7 @@ XSK is an open source project, which means that you can propose contributions by
 
 Before you get started, here are some prerequisites that you need to complete:
 
-### Legal considerations
+### Legal Considerations
 
 You must be aware of the Apache License (which describes contributions) and accept the Developer Certificate of Origin. This is common practice in major Open Source projects. To make this process as simple as possible, we are using [CLA assistant](https://cla-assistant.io/) for individual contributions. CLA assistant is an open source tool that integrates with GitHub very well and enables a one-click experience for accepting the CLA.
 
@@ -31,12 +31,12 @@ In this section we have outlined text stylizing options and for what elements th
 	Use it for: 
 	
 	* UI elements
-	
-	![File Names](/assets/images/community/ui-element.png)
+
+		![File Names](/img/community/ui-element.png)
 	
 	* Navigation paths
 	
-	![File Names](/assets/images/community//navigation-path.png)
+		![File Names](/img/community//navigation-path.png)
 	
 ??? Info "Monospace"
 	How it looks as text: `Monospace Text`
@@ -47,16 +47,16 @@ In this section we have outlined text stylizing options and for what elements th
 	
 	* File names and extensions
 
-	![File Names](/assets/images/community/file-name.png)
-	![File Names](/assets/images/community/file-extension.png)
+		![File Names](/img/community/file-name.png)
+		![File Names](/img/community/file-extension.png)
 	
 	* Terms
 	
-	![File Names](/assets/images/community/terms.png)
+		![File Names](/img/community/terms.png)
 	
 	* File paths
 	
-	![File Names](/assets/images/community/file-path.png)
+		![File Names](/img/community/file-path.png)
 	
 ??? Info "Monospace/Bold"
 	How it looks as text: **`Monospace/Bold Text`**
@@ -67,13 +67,13 @@ In this section we have outlined text stylizing options and for what elements th
 	
 	* User input
 	
-	![User Input](/assets/images/community/user-input.png)
-	![User Input](/assets/images/community/user-input-2.png)
+		![User Input](/img/community/user-input.png)
+		![User Input](/img/community/user-input-2.png)
 
 ??? Info "Headings"
 	How it looks: 
 	
-	![Headings](/assets/images/community/headings.png)
+	![Headings](/img/community/headings.png)
 	
 	* Use Heading 1 for the titles
 	* Heading 2 is for main topics

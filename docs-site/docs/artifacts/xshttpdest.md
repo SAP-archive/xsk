@@ -18,7 +18,7 @@ Below are all artifacts from XS Classic related to destination configuration and
 
 ### xshttpdest
 !!! warning
-    Artefact not supproted.
+    Artifact not supported.
     Destinations can be created in the [SAP BTP Destination service](https://help.sap.com/viewer/cca91383641e40ffbe03bdc78f00f681/Cloud/en-US/daca64dacc6148fcb5c70ed86082ef91.html). 
 
 | SAP HANA XS Classic | SAP BTP Destination service                                                                                                                                                                                                                                                                                             |
@@ -47,7 +47,7 @@ Below are all artifacts from XS Classic related to destination configuration and
 Documentation in [SAP Help Portal](https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/e5b5d3a830ff4beea17c3efafe452065.html)
 
 !!! warning
-    Artefact not supported.  
+    Artifact not supported.  
     Scopes can still be defined - use any of the OAuth flows and set the `scope` property in order to achieve the same as with `mandatoryScopes` ie see [OAuth Client Credentials Authentication](https://help.sap.com/viewer/cca91383641e40ffbe03bdc78f00f681/Cloud/en-US/4e1d742a3d45472d83b411e141729795.html) 
 
 
@@ -64,7 +64,7 @@ Documentation in [SAP Help Portal](https://help.sap.com/viewer/b3d0daf2a98e49ada
 Documentation in [SAP Help Portal](https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/4b9d546faeff48f2b0c3cb33abd6daeb.html)
 
 !!! warning
-    Artefact not supported.
+    Artifact not supported.
     Some of the properties are available as explicit configuration in the SAP BTP Destination service.
 
 | SAP HANA XS Classic      | SAP BTP Destination service                                                                                                                                                                                                          |
@@ -88,7 +88,7 @@ Documentation in [SAP Help Portal](https://help.sap.com/viewer/b3d0daf2a98e49ada
 Documentation in [SAP Help Portal](https://help.sap.com/viewer/b3d0daf2a98e49ada00bf31b7ca7a42e/2.0.03/en-US/6757a4e3ed9f42bd86c5b5c3b264e090.html)
 
 !!! warning
-    Artefact not supported.
+    Artifact not supported.
     Headers and query parameters can be defined as described in the [SAP BTP Destination service documentation](https://help.sap.com/viewer/cca91383641e40ffbe03bdc78f00f681/Cloud/en-US/4e1d742a3d45472d83b411e141729795.html)
 
 ## Reference

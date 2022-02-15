@@ -1,23 +1,23 @@
 ---
-title: Artefacts
+title: Artifacts
 ---
 
-Artefacts
+Artifacts
 ===
 
 ## Overview
 ---
 
-This page lists the HANA artefacts and whether they are supported by XSK.
+This page lists the HANA artifacts and whether they are supported by XSK.
 
 ## Reference
 ---
 
-!!! note "SAP HANA Cloud HDI Artefact types"
+!!! note "SAP HANA Cloud HDI Artifact types"
 
-    For more information on the HDI artefacts in SAP HANA Cloud, see [SAP Help Portal](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_4_QRC/en-US/9789224788a34d93a86080cab993575c.html).
+    For more information on the HDI artifacts in SAP HANA Cloud, see [SAP Help Portal](https://help.sap.com/viewer/c2cc2e43458d4abda6788049c58143dc/2021_4_QRC/en-US/9789224788a34d93a86080cab993575c.html).
 
-## Artefacts
+## Artifacts
 ---
 
 | Object Type                         | Supported                  |

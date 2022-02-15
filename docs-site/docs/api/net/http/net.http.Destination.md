@@ -14,7 +14,7 @@ HTTP(s) destination class that holds metadata (e.g., host, port, useSSL). The de
 - Status: `alpha`
 
 !!! note "API Changes"
-    Destinations in XSK make use of SAP BTP Destination service (see [xshttpdest](../../../artefacts/xshttpdest.md)).
+    Destinations in XSK make use of SAP BTP Destination service (see [xshttpdest](../../../artifacts/xshttpdest.md)).
     As such, destinations no longer live in the file tree, so the first parameter of `readDestination` representing the package is no longer needed. If provided, it will be ignored. Lookup for destinations happens based on the name.
 
 ## Sample Usage

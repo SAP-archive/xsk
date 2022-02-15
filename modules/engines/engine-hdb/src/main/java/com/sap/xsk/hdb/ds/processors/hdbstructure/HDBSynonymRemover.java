@@ -19,7 +19,7 @@ import java.sql.SQLException;
 
 public class HDBSynonymRemover {
 
-  IXSKDataStructureManager synonymManagerService;
+  private final IXSKDataStructureManager synonymManagerService;
 
   public HDBSynonymRemover(XSKSynonymManagerService synonymManagerService) {
     this.synonymManagerService = synonymManagerService;

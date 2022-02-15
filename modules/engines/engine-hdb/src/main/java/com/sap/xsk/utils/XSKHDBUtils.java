@@ -17,17 +17,6 @@ import static com.sap.xsk.utils.XSKCommonsConstants.PARSER_ERROR;
 import static com.sap.xsk.utils.XSKCommonsConstants.PROGRAM_XSK;
 import static com.sap.xsk.utils.XSKCommonsConstants.SOURCE_PUBLISH_REQUEST;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
@@ -36,6 +25,15 @@ import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.commons.config.Configuration;
+import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
 
 public class XSKHDBUtils {
 
@@ -142,10 +140,11 @@ public class XSKHDBUtils {
     content = removeCommentsFromContent(content);
     int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("procedure") + "procedure".length();
     int indexOfBracket = content.indexOf('(', indexOfEndOfProcKeyword);
-    if (indexOfEndOfProcKeyword < 0 || indexOfBracket < 0 ) {
-        String errorMessage = "HDB Procedure file not correct";
-        XSKCommonsUtils.logCustomErrors(location, PARSER_ERROR, "", "", errorMessage, "", HDB_PROCEDURE_PARSER, MODULE_PARSERS, SOURCE_PUBLISH_REQUEST, PROGRAM_XSK);
-        throw new XSKDataStructuresException(errorMessage);
+    if (indexOfEndOfProcKeyword < 0 || indexOfBracket < 0) {
+      String errorMessage = "HDB Procedure file not correct";
+      XSKCommonsUtils.logCustomErrors(location, PARSER_ERROR, "", "", errorMessage, "", HDB_PROCEDURE_PARSER, MODULE_PARSERS,
+          SOURCE_PUBLISH_REQUEST, PROGRAM_XSK);
+      throw new XSKDataStructuresException(errorMessage);
     }
     String procedureName = content.substring(indexOfEndOfProcKeyword, indexOfBracket);
     return procedureName.replace("\\s", "").trim();
@@ -168,6 +167,6 @@ public class XSKHDBUtils {
   }
 
   private static String removeCommentsFromContent(String content) {
-    return content.replaceAll(commentRegex, "").trim();
+    return content;
   }
 }

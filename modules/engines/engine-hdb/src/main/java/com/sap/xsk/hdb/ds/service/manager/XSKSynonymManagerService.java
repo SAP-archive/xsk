@@ -28,9 +28,9 @@ import javax.naming.OperationNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKSynonymManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBSynonymModel> {
+public class XSKSynonymManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBSynonymModel> {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKSynonymManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKSynonymManagerService.class);
   private final Map<String, XSKDataStructureHDBSynonymModel> dataStructureSynonymModels = new LinkedHashMap<>();
   private final List<String> synonymsSynchronized = Collections.synchronizedList(new ArrayList<>());
   private IXSKHdbProcessor xskSynonymCreateProcessor = new HDBSynonymCreateProcessor();

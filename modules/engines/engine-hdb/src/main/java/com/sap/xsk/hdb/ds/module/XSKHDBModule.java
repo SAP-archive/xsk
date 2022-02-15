@@ -11,36 +11,33 @@
  */
 package com.sap.xsk.hdb.ds.module;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
-import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
-import com.sap.xsk.hdb.ds.service.manager.IXSKEntityManagerService;
-import com.sap.xsk.hdb.ds.parser.hdbscalarfunction.XSKHDBScalarFunctionParser;
-import com.sap.xsk.hdb.ds.service.manager.IXSKScalarFunctionManagerService;
-import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
-import com.sap.xsk.hdb.ds.service.manager.IXSKTableTypeManagerService;
-import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-//import com.sap.xsk.hdb.ds.parser.hdbdd.XSKEntitiesParser;
+import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
 import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
+import com.sap.xsk.hdb.ds.parser.hdbscalarfunction.XSKHDBScalarFunctionParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
 import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionParser;
+import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
+import com.sap.xsk.hdb.ds.processors.hdbstructure.HDBSynonymRemover;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.hdb.ds.service.manager.IXSKEntityManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKHDBSequenceManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKProceduresManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKScalarFunctionManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKSchemaManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKSynonymManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKTableFunctionManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKTableManagerService;
+import com.sap.xsk.hdb.ds.service.manager.IXSKTableTypeManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKSynonymManagerService;
+import java.util.HashMap;
+import java.util.Map;
+import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
 public class XSKHDBModule extends AbstractDirigibleModule {
 
@@ -82,13 +79,15 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
     managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());
     managerServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new IXSKViewManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new IXSKSynonymManagerService());
+    XSKSynonymManagerService synonymManagerService = new XSKSynonymManagerService();
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, synonymManagerService);
     managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new IXSKTableFunctionManagerService());
     managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new IXSKSchemaManagerService());
     managerServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new IXSKProceduresManagerService());
     managerServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new IXSKHDBSequenceManagerService());
     managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION, new IXSKScalarFunctionManagerService());
-    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new IXSKTableTypeManagerService());
+    managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE,
+        new IXSKTableTypeManagerService(new HDBSynonymRemover(synonymManagerService)));
   }
 
   private static void bindParsersToFileExtension(Map<String, XSKDataStructureParser> parserServices) {

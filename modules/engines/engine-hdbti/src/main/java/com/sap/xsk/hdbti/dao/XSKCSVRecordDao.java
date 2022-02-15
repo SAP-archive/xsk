@@ -257,7 +257,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
             throws SQLException {
         logger.trace("setValue -> i: " + i + ", dataType: " + dataType + ", value: " + value);
 
-        if (value == null || value.isEmpty()) {
+        if (value == null || (value.isEmpty() && (dataType == Types.DATE || dataType == Types.TIME || dataType == Types.TIMESTAMP))) {
             preparedStatement.setNull(i, dataType);
         } else if (Types.VARCHAR == dataType) {
             preparedStatement.setString(i, sanitize(value));

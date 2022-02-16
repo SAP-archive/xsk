@@ -185,7 +185,6 @@ spec:
   clusterServiceClassRef:
     name: xsuaa
   clusterServicePlanExternalName: broker
-  externalID: {{ uuidv4 }}
   parameters:
     xsappname: {{ include "xsk.fullname" . }}-xsuaa
     oauth2-configuration:
@@ -228,7 +227,6 @@ metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-binding
   namespace: {{ required "Missing namespace" .Values.namespace.name }}
 spec:
-  externalID: {{ uuidv4 }}
   instanceRef:
     name: xsuaa-{{ include "xsk.fullname" . }}
   parameters: {}

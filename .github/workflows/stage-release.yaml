@@ -1,0 +1,90 @@
+name: Stage-release
+
+on:
+
+  workflow_call:
+    inputs:
+      XSK_VERSION:
+        required: true
+        type: string
+    secrets:
+      STAGE_KYMA_CONFIG:
+        required: true
+      STAGE_HANA_URL:
+        required: true
+      STAGE_HANA_USERNAME:
+        required: true
+      STAGE_HANA_PASSWORD:
+        required: true
+      STAGE_KYMA_HOST:
+        required: true
+      STAGE_NAMESPACE:
+        required: true
+      STAGE_SERVICE_ACCOUNT:
+        required: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    # Set XSK Kyma context 
+    - name: Kubernetes set context
+      uses: Azure/k8s-set-context@v1
+      with:
+        method: kubeconfig
+        kubeconfig: ${{ secrets.STAGE_KYMA_CONFIG }}
+
+    # Install helm
+    - uses: azure/setup-helm@v1
+      with:
+        version: 'latest' # default is latest stable
+      id: install
+
+    # Add repo
+    - name: Add XSK helm repo
+      run: |
+        helm repo add xsk https://www.xsk.io
+        helm repo update
+
+    # Download public gpg key
+    - name: Download gpg key with gpg
+      run: |
+        gpg --keyserver keys.openpgp.org --recv-key 734B0E32368A2283290E0B966010F454D1819484
+        gpg --export > ~/.gnupg/pubring.gpg
+
+    # Verify Helm XSK chart
+    - name: Pull Helm XSK chart with gpg
+      run: |
+        OUTPUT=$(helm pull xsk/xsk --verify)
+        OUTPUT="${OUTPUT//'%'/'%25'}"
+        OUTPUT="${OUTPUT//$'\n'/'%0A'}"
+        OUTPUT="${OUTPUT//$'\r'/'%0D'}"
+        echo "::set-output name=helm_verify::$OUTPUT"
+      id: helm_pull  
+
+    # Get chart fingerprint
+    - name: Get chart fingerprint
+      run: |
+        HELM_FINGERPRINT=$(echo "The string is: ${{ steps.helm_pull.outputs.helm_verify }}" | tail -n2)
+        echo "::set-output name=helm_verify_fingerprint::$HELM_FINGERPRINT"
+      id: helm_verify_step
+
+    # Check chart fingerprint
+    - name: Check chart fingerprint
+      if: "steps.helm_verify_step.outputs.helm_verify_fingerprint != 'Using Key With Fingerprint: 734B0E32368A2283290E0B966010F454D1819484'"
+      run: |
+        stop
+
+    # Deploy XSK on stage
+    - name: Deploy XSK helm chart
+      run: |
+        helm upgrade --install xsk-stage xsk/xsk -n ${{ secrets.STAGE_NAMESPACE }} \
+        --set hana.enabled=true \
+        --set hana.url=${{ secrets.STAGE_HANA_URL }} \
+        --set hana.username=${{ secrets.STAGE_HANA_USERNAME }} \
+        --set hana.password=${{ secrets.STAGE_HANA_PASSWORD }} \
+        --set kyma.enabled=true \
+        --set kyma.host=${{ secrets.STAGE_KYMA_HOST }} \
+        --set namespace.name=${{ secrets.STAGE_NAMESPACE }} \
+        --set serviceAccount.name=${{ secrets.STAGE_SERVICE_ACCOUNT }} \
+        --set application.image=dirigiblelabs/xsk-kyma:${{ inputs.XSK_VERSION }}

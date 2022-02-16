@@ -3,6 +3,10 @@ name: Stage-release
 on:
 
   workflow_call:
+    inputs:
+      XSK_VERSION:
+        required: true
+        type: string
     secrets:
       STAGE_KYMA_CONFIG:
         required: true
@@ -71,21 +75,10 @@ jobs:
       run: |
         stop
 
-    # Uninstall XSK chart
-    - name: Uninstall XSK chart
-      continue-on-error: true
-      run: |
-        helm uninstall xsk-stage -n ${{ secrets.STAGE_NAMESPACE }}
-
-    # Waiting uninstall XSK chart
-    - name: Wait uninstall XSK chart
-      run: |
-        sleep 1m
-
     # Deploy XSK on stage
     - name: Deploy XSK helm chart
       run: |
-        helm install xsk-stage xsk/xsk -n ${{ secrets.STAGE_NAMESPACE }} \
+        helm upgrade --install xsk-stage xsk/xsk -n ${{ secrets.STAGE_NAMESPACE }} \
         --set hana.enabled=true \
         --set hana.url=${{ secrets.STAGE_HANA_URL }} \
         --set hana.username=${{ secrets.STAGE_HANA_USERNAME }} \
@@ -93,4 +86,5 @@ jobs:
         --set kyma.enabled=true \
         --set kyma.host=${{ secrets.STAGE_KYMA_HOST }} \
         --set namespace.name=${{ secrets.STAGE_NAMESPACE }} \
-        --set serviceAccount.name=${{ secrets.STAGE_SERVICE_ACCOUNT }}
+        --set serviceAccount.name=${{ secrets.STAGE_SERVICE_ACCOUNT }} \
+        --set application.image=dirigiblelabs/xsk-kyma:${{ inputs.XSK_VERSION }}

@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      XSK_VERSION_BUILD: ${{ steps.XSK_VERSION_PRINT.outputs.XSK_VERSION_OUTPUT }}
     steps:
     - uses: actions/checkout@v2
       with:
@@ -25,6 +27,9 @@ jobs:
         architecture: x64
     - name: Set XSK Version
       run: echo XSK_VERSION=${GITHUB_REF#refs/*/} | tr pre " " | sed 's/   //'  >> $GITHUB_ENV
+    - name: XSK_VERSION_OUTPUT
+      run: echo "::set-output name=XSK_VERSION_OUTPUT::$XSK_VERSION"
+      id: XSK_VERSION_PRINT
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
       with:
@@ -187,6 +192,8 @@ jobs:
 
   Stage-release: 
       uses: ./.github/workflows/stage-release.yaml
+      with:
+        XSK_VERSION: ${{ needs.build.outputs.XSK_VERSION_BUILD }}
       secrets:
         STAGE_KYMA_CONFIG: ${{ secrets.STAGE_KYMA_CONFIG }}
         STAGE_HANA_URL: ${{ secrets.STAGE_HANA_URL }}

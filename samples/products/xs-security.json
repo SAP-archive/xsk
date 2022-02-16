@@ -1,0 +1,69 @@
+{
+  "xsappname":"xsk-xsuaa",
+  "oauth2-configuration":{
+    "token-validity":7200,
+    "redirect-uris":[
+      "https://xsk.<your-kyma-cluster-host>"
+    ]
+  },
+  "scopes":[
+    {
+      "name":"$XSAPPNAME.Developer",
+      "description":"Developer scope"
+    },
+    {
+      "name":"$XSAPPNAME.Operator",
+      "description":"Operator scope"
+    },
+    {
+      "name":"$XSAPPNAME.products.protected::Administrator",
+      "description":"Products Administrator scope"
+    }
+  ],
+  "role-templates":[
+    {
+      "name":"Developer",
+      "description":"Developer related roles",
+      "scope-references":[
+        "$XSAPPNAME.Developer"
+      ]
+    },
+    {
+      "name":"Operator",
+      "description":"Operator related roles",
+      "scope-references":[
+        "$XSAPPNAME.Operator"
+      ]
+    },
+    {
+      "name":"XSKProductsAdmin",
+      "description":"Products administrator role",
+      "scope-references":[
+        "$XSAPPNAME.products.protected::Administrator"
+      ]
+    }
+  ],
+  "role-collections":[
+    {
+      "name":"XSK Developer",
+      "description":"XSK Developer",
+      "role-template-references":[
+        "$XSAPPNAME.Developer"
+      ]
+    },
+    {
+      "name":"XSK Operator",
+      "description":"XSK Operator",
+      "role-template-references":[
+        "$XSAPPNAME.Operator"
+      ]
+    },
+    {
+      "name": "XSK Products Administrator",
+      "description":"XSK Products Administrator",
+      "role-template-references":[
+        "$XSAPPNAME.XSKProductsAdmin"
+      ]
+    }
+  ]
+}

@@ -4,5 +4,11 @@
             "object": "items_ordered_total",
             "schema": "PRODUCTS"
         }
+    },
+    "products.views::ordered_items_type_fn_view":{
+        "target": {
+            "object": "ordered_items_type_fn_view",
+            "schema": "PRODUCTS"
+        }
     }
-}  
+}

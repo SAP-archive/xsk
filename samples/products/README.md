@@ -21,4 +21,19 @@ This is a complex sample containing the following aspects:
   * `xsodata` - exposing one calculation view
 * `xsjob` - regularly prints the number of orders
 * `webapp` - `UI5` user interface
-* `PRODUCTS_DU.tgz` - DU exported from HANA 2 containing the original XS Classic code 
+* `PRODUCTS_DU.tgz` - DU exported from HANA 2 containing the original XS Classic code
+
+
+## Deployment guide
+1. Follow the deployment guide for [XSK on Kyma](https://www.xsk.io/setup/kyma/)
+   1. Use the provided xs-security.json which includes an additional role collection
+2. Create a SAP BTP Destination service instance and bind it to XSK with prefix `destination_`
+
+## Preparation
+1. Grant the analytic privilege (samples/products/views/items_ordered_total_ap.analyticprivilege) to the HANA Cloud user for XSK
+2. Modify/Create record in samples/products/data/Products_Customers.csv where `Username` is your username used to login to XSK
+3. Assign yourself the `XSKProductsAdmin` role from SAP BTP Cockpit
+4. Create a destination in SAP BTP Cockpit by importing the file `customers.properties`
+
+
+

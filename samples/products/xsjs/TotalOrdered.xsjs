@@ -1,24 +1,24 @@
-function doGet(){
-    try{
+function doGet() {
+    try {
         var connection = $.hdb.getConnection();
-        var st = connection.executeQuery('SELECT * FROM "_SYS_BIC"."products.views/ordered_items_type_fn"');
+        var st = connection.executeQuery('SELECT * FROM "products.views::ordered_items_type_fn_view"');
         $.response.status = $.net.http.OK;
-    	$.response.contentType = "application/json";
+        $.response.contentType = "application/json";
         $.response.setBody(JSON.stringify(st));
-    } catch (e){
+    } catch (e) {
         $.trace.error(e);
-    }finally{
+    } finally {
         connection.close();
     }
 }
 
 (function doService() {
-	var method = $.request.method;
+    var method = $.request.method;
 
-	if (method === $.net.http.GET) {
-		doGet();
-	} else {
-		$.response.status = $.net.http.BAD_REQUEST;
-		$.response.setBody("Only GET requests can be executed");
-	}
+    if (method === $.net.http.GET) {
+        doGet();
+    } else {
+        $.response.status = $.net.http.BAD_REQUEST;
+        $.response.setBody("Only GET requests can be executed");
+    }
 }());

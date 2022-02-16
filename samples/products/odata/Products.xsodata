@@ -21,7 +21,7 @@
     association "User4Order" principal "Orders"("Customer.Id")
        multiplicity "1" dependent "Buyers"("Id") multiplicity "1";
     
-    association "TotalToItem" principal "TotalPurchased"
+    association "TotalToItem" principal "TotalPurchased"("ItemName")
         multiplicity "1" dependent "Items"("Name") multiplicity "1";
        
     "products.views::items_ordered_total" as "TotalPurchased" keys ("ItemName")

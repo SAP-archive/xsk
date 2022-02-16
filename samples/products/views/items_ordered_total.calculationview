@@ -1,24 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="items_ordered_total" applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE" dataCategory="CUBE" schemaVersion="2.3" defaultClient="$$client$$" visibility="reportingEnabled" outputViewType="Aggregation" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
+<?xml version="1.0" encoding="UTF-8"?><Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="items_ordered_total" applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE" dataCategory="CUBE" schemaVersion="2.3" defaultClient="$$client$$" visibility="reportingEnabled" outputViewType="Aggregation" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
 <descriptions defaultDescription="items_ordered"/>
 <localVariables/>
 <variableMappings/>
 <dataSources>
-  <DataSource id="products.db::Products.OrderLine" type="DATA_BASE_TABLE">
+  <DataSource id="products.db::Products.OrderLine">
     <viewAttributes allViewAttributes="true"/>
-    <columnObject schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.OrderLine"/>
+    <resourceUri>products.db::Products.OrderLine</resourceUri>
   </DataSource>
-  <DataSource id="products.db::Products.Item" type="DATA_BASE_TABLE">
+  <DataSource id="products.db::Products.Item">
     <viewAttributes allViewAttributes="true"/>
-    <columnObject schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Item"/>
+    <resourceUri>products.db::Products.Item</resourceUri>
   </DataSource>
-  <DataSource id="products.db::Products.Orders" type="DATA_BASE_TABLE">
+  <DataSource id="products.db::Products.Orders">
     <viewAttributes allViewAttributes="true"/>
-    <columnObject schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Orders"/>
+    <resourceUri>products.db::Products.Orders</resourceUri>
   </DataSource>
-  <DataSource id="products.db::Products.Customers" type="DATA_BASE_TABLE">
+  <DataSource id="products.db::Products.Customers">
     <viewAttributes allViewAttributes="true"/>
-    <columnObject schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Customers"/>
+    <resourceUri>products.db::Products.Customers</resourceUri>
   </DataSource>
 </dataSources>
 <calculationViews>

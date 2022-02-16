@@ -1,4 +1,4 @@
-FUNCTION "XSK_SAMPLES_PRODUCTS"."products.db::ProductsOrdersCustomerNames" ()
+FUNCTION "products.db::ProductsOrdersCustomerNames" ()
    RETURNS Table (
        "Id" NVARCHAR(50),
        "FirstName" NVARCHAR(500),

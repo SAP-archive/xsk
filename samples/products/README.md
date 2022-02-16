@@ -21,9 +21,4 @@ This is a complex sample containing the following aspects:
   * `xsodata` - exposing one calculation view
 * `xsjob` - regularly prints the number of orders
 * `webapp` - `UI5` user interface
-
-
-## Folder content
-
-- `xs-classic` - contains files with syntax native to SAP HANA XS Classic developed in SAP HANA 2
-- `xsk` - contains files after migration of the `xs-classic` project via project XSK 
+* `PRODUCTS_DU.tgz` - DU exported from HANA 2 containing the original XS Classic code 

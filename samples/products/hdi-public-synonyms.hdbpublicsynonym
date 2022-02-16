@@ -1,0 +1,8 @@
+{
+    "products.views::items_ordered_total": {
+        "target": {
+            "object": "items_ordered_total",
+            "schema": "PRODUCTS"
+        }
+    }
+}  

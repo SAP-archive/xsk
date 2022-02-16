@@ -1,0 +1,32 @@
+{
+    "products.db::Products.Orders": {
+        "target": {
+            "object": "products.db::Products.Orders",
+            "schema": "XSK_SAMPLES_PRODUCTS"
+        }
+    },
+    "products.db::Products.OrderLine": {
+        "target": {
+            "object": "products.db::Products.OrderLine",
+            "schema": "XSK_SAMPLES_PRODUCTS"
+        }
+    },
+    "products.db::Products.Customers": {
+        "target": {
+            "object": "products.db::Products.Customers",
+            "schema": "XSK_SAMPLES_PRODUCTS"
+        }
+    },
+    "products.db::Products.ShippingAddresses": {
+        "target": {
+            "object": "products.db::Products.ShippingAddresses",
+            "schema": "XSK_SAMPLES_PRODUCTS"
+        }
+    },
+    "products.db::Products.Item": {
+        "target": {
+            "object": "products.db::Products.Item",
+            "schema": "XSK_SAMPLES_PRODUCTS"
+        }
+    }
+}

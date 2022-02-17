@@ -167,6 +167,6 @@ public class XSKHDBUtils {
   }
 
   private static String removeCommentsFromContent(String content) {
-    return content;
+    return content.replaceAll(commentRegex, "").trim();
   }
 }

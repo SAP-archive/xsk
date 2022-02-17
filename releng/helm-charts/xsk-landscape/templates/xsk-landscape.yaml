@@ -1,15 +1,8 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: {{ required "Missing namespace" .Values.namespace.name }}
-    labels:
-      istio-injection: {{ required "Missing namespace label Istio injection" .Values.namespace.labelIstioInjection }}
----
+
 apiVersion: v1
 kind: Secret
 metadata:
   name: {{ required "Missing secret name" .Values.secretHana.nameSecret }}
-  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
 type: Opaque
 stringData:
   DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES: HANA
@@ -25,7 +18,6 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ required "Missing secret name" .Values.secretXsuaa.nameSecret }}
-  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
 type: Opaque
 stringData:
   url: {{ required "Missing XSUAA url" .Values.secretXsuaa.url }}
@@ -37,8 +29,7 @@ stringData:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "xsk.fullname" . }}
-  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+  name: {{ required "Missing deployment name" .Values.deployment.name }}
   labels:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
@@ -57,7 +48,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       serviceAccountName: {{ include "xsk.serviceAccountName" . }}
       containers:
-      - name: {{ required "Missing chart name" .Chart.Name }}
+      - name: {{ required "Missing container name" .Values.deployment.containerName }}
         image: {{ .Values.deployment.image }}
         imagePullPolicy: {{ required "Missing application image pull policy" .Values.deployment.imagePullPolicy }}
         envFrom:
@@ -69,7 +60,7 @@ spec:
         - name: DIRIGIBLE_THEME_DEFAULT
           value: fiori
         - name: DIRIGIBLE_HOST
-          value: https://{{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io
+          value: https://{{ required "Missing release name" .Release.Name }}.apps.xsk.io
         - name: SERVER_MAXHTTPHEADERSIZE
           value: "48000"
         volumeMounts:
@@ -89,8 +80,7 @@ kind: Service
 metadata:
   labels:
     {{- include "xsk.labels" . | nindent 4 }}
-  name: {{ include "xsk.fullname" . }}
-  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+  name: xsk
 spec:
   ports:
   - name: xsk
@@ -105,7 +95,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: xsk-claim
-  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -116,20 +105,19 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "xsk.fullname" . }}
-  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+  name: {{ required "Missing release name" .Release.Name }}
 spec:
   gateways:
   - xsk-landscape
   hosts:
-  - {{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io
+  - {{ required "Missing release name" .Release.Name }}.apps.xsk.io
   http:
   - match:
     - uri:
         regex: /.*
     route:
     - destination:
-        host: {{ include "xsk.fullname" . }}.{{ required "Missing namespace name" .Values.namespace.name }}.svc.cluster.local
+        host: xsk.{{ required "Missing release name" .Release.Name }}.svc.cluster.local
         port:
           number: 8080
 ---
@@ -137,13 +125,12 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: xsk-landscape
-  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
 spec:
   selector:
     istio: ingressgateway
   servers:
   - hosts:
-    - {{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io
+    - {{ required "Missing release name" .Release.Name }}.apps.xsk.io
     port:
       name: http
       number: 80
@@ -151,7 +138,7 @@ spec:
     tls:
       httpsRedirect: true
   - hosts:
-    - {{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io
+    - {{ required "Missing release name" .Release.Name }}.apps.xsk.io
     port:
       name: https
       number: 443
@@ -165,10 +152,9 @@ kind: DNSEntry
 metadata:
   annotations:
     dns.gardener.cloud/class: garden
-  name: {{ include "xsk.fullname" . }}
-  namespace: {{ required "Missing namespace name" .Values.namespace.name }}
+  name: {{ required "Missing release name" .Release.Name }}
 spec:
-  dnsName: "{{ required "Missing landscape domain" .Values.deployment.landscapeDomain }}.apps.xsk.io"
+  dnsName: "{{ required "Missing release name" .Release.Name }}.apps.xsk.io"
   ttl: 600
   targets:
   - {{ required "Missing dnsentry target" .Values.dnsentry.targets }}

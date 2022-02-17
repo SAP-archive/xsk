@@ -5,12 +5,6 @@
 # Replica count for the instance
 replicaCount: 1
 
-namespace:
-  # Namespace create
-  name:
-  # Label for Istio injection
-  labelIstioInjection: "enabled"
-
 secretHana:
   # Name secret for HANA Cloud database
   nameSecret: hana-cloud-database
@@ -36,11 +30,11 @@ secretXsuaa:
   xsappname:
 
 deployment:
+  name: xsk
   # Change deployment strategy type
   strategyType: Recreate
-  # Land scape domain
-  landscapeDomain:
   # XSK image
+  containerName: xsk
   image: dirigiblelabs/xsk-kyma:latest
   imagePullPolicy: Always
 

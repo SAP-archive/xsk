@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ required "Missing secret name" .Values.secretHana.nameSecret }}
+  name: {{ required "Missing secret name" .Values.hana.secretName }}
 type: Opaque
 stringData:
   DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES: HANA
@@ -10,21 +10,21 @@ stringData:
   DIRIGIBLE_DATABASE_PROVIDER: custom
   DIRIGIBLE_SCHEDULER_DATABASE_DRIVER: com.sap.db.jdbc.Driver
   HANA_DRIVER: com.sap.db.jdbc.Driver
-  HANA_PASSWORD: {{ required "Missing HANA password" .Values.secretHana.hanaPassword }}
-  HANA_URL: jdbc:sap://{{ required "Missing HANA url" .Values.secretHana.hanaUrl }}/?encrypt=true&validateCertificate=false
-  HANA_USERNAME: {{ required "Missing HANA username" .Values.secretHana.hanaUsername }}
+  HANA_PASSWORD: {{ required "Missing HANA password" .Values.hana.password }}
+  HANA_URL: jdbc:sap://{{ required "Missing HANA url" .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  HANA_USERNAME: {{ required "Missing HANA username" .Values.hana.username }}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ required "Missing secret name" .Values.secretXsuaa.nameSecret }}
+  name: {{ required "Missing secret name" .Values.xsuaa.secretName }}
 type: Opaque
 stringData:
-  url: {{ required "Missing XSUAA url" .Values.secretXsuaa.url }}
-  clientid: {{ required "Missing XSUAA clientId" .Values.secretXsuaa.clientId }}
-  clientsecret: {{ required "Missing XSUAA clientSecret" .Values.secretXsuaa.clientSecret }}
-  verificationkey: {{ required "Missing XSUAA verificationKey" .Values.secretXsuaa.verificationKey }}
-  xsappname: {{ required "Missing XSUAA verificationKey" .Values.secretXsuaa.xsappname }}
+  url: {{ required "Missing XSUAA url" .Values.xsuaa.url }}
+  clientid: {{ required "Missing XSUAA clientId" .Values.xsuaa.clientId }}
+  clientsecret: {{ required "Missing XSUAA clientSecret" .Values.xsuaa.clientSecret }}
+  verificationkey: {{ required "Missing XSUAA verificationKey" .Values.xsuaa.verificationKey }}
+  xsappname: {{ required "Missing XSUAA verificationKey" .Values.xsuaa.xsappname }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -53,9 +53,9 @@ spec:
         imagePullPolicy: {{ required "Missing application image pull policy" .Values.deployment.imagePullPolicy }}
         envFrom:
         - secretRef:
-            name: {{ required "Missing secret name" .Values.secretHana.nameSecret }}
+            name: {{ required "Missing secret name" .Values.hana.secretName }}
         - secretRef:
-            name: {{ required "Missing secret name" .Values.secretXsuaa.nameSecret }} 
+            name: {{ required "Missing secret name" .Values.xsuaa.secretName }} 
         env:
         - name: DIRIGIBLE_THEME_DEFAULT
           value: fiori

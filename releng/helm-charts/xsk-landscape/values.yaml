@@ -5,19 +5,19 @@
 # Replica count for the instance
 replicaCount: 1
 
-secretHana:
+hana:
   # Name secret for HANA Cloud database
-  nameSecret: hana-cloud-database
+  secretName: hana-cloud-database
   # HanaUsername for HANA Cloud database
-  hanaUsername:
+  username:
   # HanaPassword for HANA Cloud database
-  hanaPassword:
+  password:
   # HanaPassword for HANA Cloud database
-  hanaUrl:
+  url:
 
-secretXsuaa:
+xsuaa:
   # Name for the secret
-  nameSecret: xsuaa-credentials
+  secretName: xsuaa-credentials
   # Url for the XSUAA
   url:
   # Client id for the XSUAA

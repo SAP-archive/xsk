@@ -207,7 +207,8 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  Stage-release: 
+  Stage-release:
+      needs: build 
       uses: ./.github/workflows/stage-release.yaml
       with:
         XSK_VERSION: ${{ needs.build.outputs.XSK_VERSION_BUILD }}

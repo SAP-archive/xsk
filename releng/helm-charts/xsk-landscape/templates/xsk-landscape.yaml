@@ -11,7 +11,7 @@ stringData:
   DIRIGIBLE_SCHEDULER_DATABASE_DRIVER: com.sap.db.jdbc.Driver
   HANA_DRIVER: com.sap.db.jdbc.Driver
   HANA_PASSWORD: {{ required "Missing HANA password" .Values.hana.password }}
-  HANA_URL: jdbc:sap://{{ required "Missing HANA url" .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  HANA_URL: {{ required "Missing HANA url" .Values.hana.url }}
   HANA_USERNAME: {{ required "Missing HANA username" .Values.hana.username }}
 ---
 apiVersion: v1

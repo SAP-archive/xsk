@@ -680,11 +680,10 @@ jobs:
       - name: Helm Charts Release - Set Chart Version - XSK
         run: |
           cd charts-temp/helm-charts/xsk/
-          find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-          cd ../xsk-kpack/
-          find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-          cd templates/
-          find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          find xsk/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          find xsk-kpack/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          find xsk-kpack/templates/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          find xsk-landscape/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
       - name: Helm Charts Release
         run: |
           cp charts/* charts-temp/helm-charts/
@@ -693,6 +692,7 @@ jobs:
           gpg --no-tty --batch --export-secret-keys > ~/.gnupg/secring.gpg
           helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk
           helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-kpack
+          helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-landscape
           cd ..
           helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
 
@@ -701,6 +701,8 @@ jobs:
           cp helm-charts/xsk-${{ env.XSK_VERSION }}.tgz.prov ../charts/
           cp helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz ../charts/
           cp helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz.prov ../charts/
+          cp helm-charts/xsk-landscape-${{ env.XSK_VERSION }}.tgz ../charts/
+          cp helm-charts/xsk-landscape-${{ env.XSK_VERSION }}.tgz.prov ../charts/
           cd ..
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"

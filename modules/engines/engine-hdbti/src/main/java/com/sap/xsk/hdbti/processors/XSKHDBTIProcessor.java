@@ -56,12 +56,11 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKHDBTIProcessor.class);
 
+  private static final String ERROR_MESSAGE_COLUMNS_COUNT = "Error while trying to process csv location [%s]. The number of csv records should be equal to the number of columns of a db entity.";
+
   private final DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
-
   private final IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
-
   private final IXSKHDBTICoreService xskHdbtiCoreService = new XSKHDBTICoreService();
-
   private final XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
 
   @Override
@@ -75,28 +74,25 @@ public class XSKHDBTIProcessor implements IXSKHDBTIProcessor {
       return;
     }
 
-    Map<String, XSKImportedCSVRecordModel> allImportedRecordsByCsv = xskHdbtiCoreService
-        .getImportedCSVRecordsByTableAndCSVLocation(tableName, tableImportConfigurationDefinition.getFile());
+    Map<String, XSKImportedCSVRecordModel> allImportedRecordsByCsv = xskHdbtiCoreService.getImportedCSVRecordsByTableAndCSVLocation(tableName, tableImportConfigurationDefinition.getFile());
 
     List<XSKImportedCSVRecordModel> importedCSVRecordsToUpdate = new ArrayList<>();
     List<CSVRecord> recordsToInsert = new ArrayList<>();
     List<CSVRecord> recordsToUpdate = new ArrayList<>();
 
+    Integer pkIndexForCSVRecord = null;
     for (CSVRecord csvRecord : csvParser) {
-      if (recordShouldBeIncluded(csvRecord, tableMetadata.getColumns(),
-          tableImportConfigurationDefinition
-              .getKeysAsMap())) {
+      if (recordShouldBeIncluded(csvRecord, tableMetadata.getColumns(), tableImportConfigurationDefinition.getKeysAsMap())) {
         if (csvRecord.size() != tableMetadata.getColumns().size()) {
-          String errorMessage = String.format("Error while trying to process csv with id %s with location %s."
-                  + "The number of csv records should be equal to the number of columns of a db entity",
-              xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames()),
-              tableImportConfigurationDefinition.getFile());
-          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR,
-              tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
+          String errorMessage = String.format(ERROR_MESSAGE_COLUMNS_COUNT, tableImportConfigurationDefinition.getFile());
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableImportConfigurationDefinition.getHdbtiFileName(), XSKCommonsConstants.HDBTI_PARSER);
           throw new XSKTableImportException(errorMessage);
         }
 
-        String pkForCSVRecord = xskHdbtiCoreService.getPkForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames());
+        if (pkIndexForCSVRecord == null) {
+          pkIndexForCSVRecord = xskHdbtiCoreService.getPkIndexForCSVRecord(csvRecord, tableName, csvParser.getHeaderNames());
+        }
+        String pkForCSVRecord = csvRecord.get(pkIndexForCSVRecord);
         String csvRecordHash = xskHdbtiCoreService.getCSVRecordHash(csvRecord);
         if (pkForCSVRecord != null && !allImportedRecordsByCsv.containsKey(pkForCSVRecord)) {
           recordsToInsert.add(csvRecord);

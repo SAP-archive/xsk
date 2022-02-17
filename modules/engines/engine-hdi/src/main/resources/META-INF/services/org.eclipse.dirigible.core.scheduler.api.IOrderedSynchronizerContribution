@@ -1,1 +1,1 @@
-com.sap.xsk.hdb.ds.hdi.synchronizer.XSKDataStructuresHDISynchronizerJobDefinitionProvider	# XSK Data Structures HDI Synchronizer Job Definition Provider
+com.sap.xsk.hdb.ds.hdi.synchronizer.XSKDataStructuresHDISynchronizer	# XSK Data Structures HDI Synchronizer

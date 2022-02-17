@@ -183,27 +183,25 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
   }
 
   @Override
-  public String getPkForCSVRecord(CSVRecord csvRecord, String tableName, List<String> headerNames) {
-    PersistenceTableModel tableMetadata = getTableMetadata(tableName);
-    if(null == tableMetadata){
-      logger.error("Error occurred while processing csv file."
-          + " Table with name [" + tableName + "] was not found.");
-    }
-    List<PersistenceTableColumnModel> columnModels = tableMetadata.getColumns();
-    if (headerNames.size() > 0) {
-      String pkColumnName = columnModels.stream().filter(PersistenceTableColumnModel::isPrimaryKey).findFirst().get().getName();
-      int csvRecordPkValueIndex = headerNames.indexOf(pkColumnName);
-      return csvRecord.get(csvRecordPkValueIndex);
-    }
+  public int getPkIndexForCSVRecord(CSVRecord csvRecord, String tableName, List<String> headerNames) {
+	  PersistenceTableModel tableMetadata = getTableMetadata(tableName);
+	    if(null == tableMetadata){
+	      logger.error("Error occurred while processing csv file."
+	          + " Table with name [" + tableName + "] was not found.");
+	    }
+	    List<PersistenceTableColumnModel> columnModels = tableMetadata.getColumns();
+	    if (headerNames.size() > 0) {
+	      String pkColumnName = columnModels.stream().filter(PersistenceTableColumnModel::isPrimaryKey).findFirst().get().getName();
+	      return headerNames.indexOf(pkColumnName);
+	    }
 
-    for (int i = 0; i < csvRecord.size(); i++) {
-      boolean isColumnPk = columnModels.get(i).isPrimaryKey();
-      if (isColumnPk && !StringUtils.isEmpty(csvRecord.get(i))) {
-        return csvRecord.get(i);
-      }
-    }
+	    for (int i = 0; i < csvRecord.size(); i++) {
+	     if (columnModels.get(i).isPrimaryKey()) {
+	        return i;
+	      }
+	    }
 
-    return null;
+	    return 0;
   }
 
   @Override

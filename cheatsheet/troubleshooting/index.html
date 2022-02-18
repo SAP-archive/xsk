@@ -1423,22 +1423,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#grant-hdi-privileges" class="md-nav__link">
-    Grant HDI Privileges
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#two-factor-authentication" class="md-nav__link">
     Two-Factor Authentication
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#drop-hdi-container" class="md-nav__link">
-    Drop HDI Container
   </a>
   
 </li>
@@ -1507,22 +1493,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#grant-hdi-privileges" class="md-nav__link">
-    Grant HDI Privileges
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#two-factor-authentication" class="md-nav__link">
     Two-Factor Authentication
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#drop-hdi-container" class="md-nav__link">
-    Drop HDI Container
   </a>
   
 </li>
@@ -1557,42 +1529,11 @@
 <p>To check the error code, execute the following script:</p>
 <div class="highlight"><pre><span></span><code><span class="k">call</span><span class="w"> </span><span class="n">SYS</span><span class="p">.</span><span class="n">GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;&lt;GUID&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
-<h2 id="grant-hdi-privileges">Grant HDI Privileges</h2>
-<hr />
-<p>To grant HDI priviliges to the HANA database user, execute the following script:</p>
-<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="k">TEMPORARY</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">TT_API_PRIVILEGES</span><span class="p">;</span><span class="w"></span>
-
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="p">(</span><span class="n">PRINCIPAL_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">PRIVILEGE_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">OBJECT_NAME</span><span class="p">)</span><span class="w"></span>
-<span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;&lt;HANA-USERNAME&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">PRIVILEGE_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">OBJECT_NAME</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">T_DEFAULT_DI_ADMIN_PRIVILEGES</span><span class="p">;</span><span class="w"></span>
-
-<span class="k">CALL</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">GRANT_CONTAINER_GROUP_API_PRIVILEGES</span><span class="p">(</span><span class="s1">&#39;_SYS_DI&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="p">,</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">T_NO_PARAMETERS</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">);</span><span class="w"></span>
-<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="p">;</span><span class="w"></span>
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Replace the <code>&lt;HANA-USERNAME&gt;</code> placeholder with the HANA database user, used for the migration</p>
-</div>
 <h2 id="two-factor-authentication">Two-Factor Authentication</h2>
 <hr />
 <p>If the migration fails to load <strong>Delivery Units</strong> and you are sure that you've provide correct information, please check whether your account has <code>Two-Factor Authentication</code> (2FA/MFA) enabled.
 <code>Two-Factor Authentication</code> is currently not supported, more info could be found <a href="https://github.com/SAP/xsk/issues/625">here</a>.
 You can use technical user without <code>Two-Factor Authentication</code> (2FA/MFA) enabled to complete the migration.</p>
-<h2 id="drop-hdi-container">Drop HDI Container</h2>
-<hr />
-<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="k">TEMPORARY</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">TT_PARAMETERS</span><span class="p">;</span><span class="w"></span>
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">VALUE</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;ignore_work&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">VALUE</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;ignore_deployed&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="k">CALL</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="o">#&lt;</span><span class="n">HDI</span><span class="o">-</span><span class="n">Container</span><span class="o">-</span><span class="k">Group</span><span class="o">&gt;</span><span class="p">.</span><span class="n">DROP_CONTAINER</span><span class="p">(</span><span class="s1">&#39;&lt;HDI-Container-Name&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">);</span><span class="w"></span>
-<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="p">;</span><span class="w"> </span>
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Replace the following placeholders:</p>
-<ul>
-<li><code>&lt;HDI-Container-Group&gt;</code> - the HDI Container Group</li>
-<li><code>&lt;HDI-Container-Name&gt;</code> - the HDI Container Name</li>
-</ul>
-</div>
 
               
             </article>

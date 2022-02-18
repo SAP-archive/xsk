@@ -45,6 +45,45 @@ To support the deployment of database development artifacts via HDI, create `*.h
     }
     ```
 
+## Maintenance
+
+=== "Drop HDI Container"
+
+    ```sql
+    CREATE LOCAL TEMPORARY COLUMN TABLE #DROP_CONTAINER_PARAMETERS LIKE _SYS_DI.TT_PARAMETERS;
+    INSERT INTO #DROP_CONTAINER_PARAMETERS (KEY, VALUE) VALUES ('ignore_work', 'true');
+    INSERT INTO #DROP_CONTAINER_PARAMETERS (KEY, VALUE) VALUES ('ignore_deployed', 'true');
+    CALL _SYS_DI#<HDI-Container-Group>.DROP_CONTAINER('<HDI-Container-Name>', #DROP_CONTAINER_PARAMETERS, ?, ?, ?);
+    DROP TABLE #DROP_CONTAINER_PARAMETERS;
+    ```
+
+    !!! note
+
+        Replace the following placeholders:
+
+        - `<HDI-Container-Group>` - the HDI Container Group
+        - `<HDI-Container-Name>` - the HDI Container Name
+
+        For more information, see: [Drop a Container](https://help.sap.com/viewer/6b94445c94ae495c83a19646e7c3fd56/2.0.02/en-US/fe51ebe5102c4991813a04b68843515f.html)
+
+=== "Grant HDI Privileges"
+
+    To grant HDI priviliges to HANA database user, execute the following script:
+
+    ```sql
+    CREATE LOCAL TEMPORARY TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;
+
+    INSERT INTO #PRIVILEGES (PRINCIPAL_NAME, PRIVILEGE_NAME, OBJECT_NAME)
+    SELECT '<HANA-Username>', PRIVILEGE_NAME, OBJECT_NAME FROM _SYS_DI.T_DEFAULT_DI_ADMIN_PRIVILEGES;
+
+    CALL _SYS_DI.GRANT_CONTAINER_GROUP_API_PRIVILEGES('_SYS_DI', #PRIVILEGES, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);
+    DROP TABLE #PRIVILEGES;
+    ```
+
+    !!! note
+
+        Replace the `<HANA-Username>` placeholder with the HANA database user, used for the migration.
+
 ## HDI Plugins
 
 List of HDI supported database development artifacts:

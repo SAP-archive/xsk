@@ -19,7 +19,7 @@ This is a complex sample containing the following aspects:
   * `xsaccess` - restricts access to Administrators
   * `xsjs` - simple service to check access
   * `xsodata` - exposing one calculation view
-* `xsjob` - regularly prints the number of orders
+* `xsjob` - regularly loads data from a specified destination
 * `webapp` - `UI5` user interface
 * `PRODUCTS_DU.tgz` - DU exported from HANA 2 containing the original XS Classic code
 
@@ -33,7 +33,7 @@ This is a complex sample containing the following aspects:
 1. Grant the analytic privilege (samples/products/views/items_ordered_total_ap.analyticprivilege) to the HANA Cloud user for XSK
 2. Modify/Create record in samples/products/data/Products_Customers.csv where `Username` is your username used to login to XSK
 3. Assign yourself the `XSKProductsAdmin` role from SAP BTP Cockpit
-4. Create a destination in SAP BTP Cockpit by importing the file `customers.properties`
+4. Create a destination in SAP BTP Cockpit by importing the file `products.properties`
 
 
 

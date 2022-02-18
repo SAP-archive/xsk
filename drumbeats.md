@@ -1,5 +1,20 @@
 # Drumbeats
 
+## 2022 Week 07 (14 February - 20 February)
+
+#### Focus topics:
+- Proof connect SAP Analytics Cloud to artifacts managed by XSK
+- Staging deployment of XSK for continuous validation
+- Improvements to process of applying hdb artifact
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-02-14..2022-02-21) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-02-14..2022-02-21) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-02-14..2022-02-21) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-02-14..2022-02-21) PRs
 
 ## 2022 Week 06 (07 February - 13 February)
 

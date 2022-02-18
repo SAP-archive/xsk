@@ -100,8 +100,14 @@ public class XSKGrantPrivilegesExternalArtifactsSchemaProcessorTest {
         String schema = definition.getTarget().getSchema();
         String mockSQLSelect = "GRANT SELECT ON SCHEMA \"" + schema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;";
         String mockSQLExecute = "GRANT EXECUTE ON SCHEMA \"" + schema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;";
-          verify(processorSpy, times(1)).executeUpdate(mockConnection,mockSQLExecute, new String[]{});
-          verify(processorSpy, times(1)).executeUpdate(mockConnection,mockSQLSelect, new String[]{});
+        String mockSQLInsert = "GRANT INSERT ON SCHEMA \"" + schema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;";
+        String mockSQLUpdate = "GRANT UPDATE ON SCHEMA \"" + schema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;";
+        String mockSQLDelete = "GRANT DELETE ON SCHEMA \"" + schema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;";
+          verify(processorSpy, times(1)).executeUpdate(mockConnection, mockSQLExecute, new String[]{});
+          verify(processorSpy, times(1)).executeUpdate(mockConnection, mockSQLSelect, new String[]{});
+          verify(processorSpy, times(1)).executeUpdate(mockConnection, mockSQLInsert, new String[]{});
+          verify(processorSpy, times(1)).executeUpdate(mockConnection, mockSQLUpdate, new String[]{});
+          verify(processorSpy, times(1)).executeUpdate(mockConnection, mockSQLDelete, new String[]{});
       }));
 
       verify(processorSpy, times(1)).getSynonymModel(eq(synonym.getLocation()), anyString());

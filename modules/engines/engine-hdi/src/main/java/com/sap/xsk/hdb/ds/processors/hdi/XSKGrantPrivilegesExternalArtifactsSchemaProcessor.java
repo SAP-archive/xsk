@@ -11,23 +11,23 @@
  */
 package com.sap.xsk.hdb.ds.processors.hdi;
 
+import static java.text.MessageFormat.format;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.commons.io.FilenameUtils;
+import org.eclipse.dirigible.api.v3.platform.RegistryFacade;
+import org.jetbrains.annotations.NotNull;
+
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModelFactory;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
-import liquibase.pro.packaged.ex;
-import org.apache.commons.io.FilenameUtils;
-import org.eclipse.dirigible.api.v3.platform.RegistryFacade;
-import org.jetbrains.annotations.NotNull;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class XSKGrantPrivilegesExternalArtifactsSchemaProcessor extends XSKHDIAbstractProcessor {
@@ -65,10 +65,11 @@ public class XSKGrantPrivilegesExternalArtifactsSchemaProcessor extends XSKHDIAb
   private void grantPrivileges(Connection connection, String container, Set<String> externalArtifactsSchemas) throws SQLException {
     String containerOwner = container + "#OO";
     for (String externalSchema: externalArtifactsSchemas) {
-      executeUpdate(connection,
-          "GRANT SELECT ON SCHEMA \"" + externalSchema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;");
-      executeUpdate(connection,
-          "GRANT EXECUTE ON SCHEMA \"" + externalSchema + "\" TO \"" + containerOwner + "\" WITH GRANT OPTION;");
+      executeUpdate(connection, format("GRANT SELECT ON SCHEMA \"{0}\" TO \"{1}\" WITH GRANT OPTION;", externalSchema, containerOwner));
+      executeUpdate(connection, format("GRANT EXECUTE ON SCHEMA \"{0}\" TO \"{1}\" WITH GRANT OPTION;", externalSchema, containerOwner));
+      executeUpdate(connection, format("GRANT INSERT ON SCHEMA \"{0}\" TO \"{1}\" WITH GRANT OPTION;", externalSchema, containerOwner));
+      executeUpdate(connection, format("GRANT UPDATE ON SCHEMA \"{0}\" TO \"{1}\" WITH GRANT OPTION;", externalSchema, containerOwner));
+      executeUpdate(connection, format("GRANT DELETE ON SCHEMA \"{0}\" TO \"{1}\" WITH GRANT OPTION;", externalSchema, containerOwner));
     }
   }
 

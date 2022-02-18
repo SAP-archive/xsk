@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/setup/configurations/hdi/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.11">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.1">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.50e68009.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.e8d9bf0c.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -1366,6 +1366,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#maintenance" class="md-nav__link">
+    Maintenance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hdi-plugins" class="md-nav__link">
     HDI Plugins
   </a>
@@ -1753,6 +1760,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#maintenance" class="md-nav__link">
+    Maintenance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hdi-plugins" class="md-nav__link">
     HDI Plugins
   </a>
@@ -2034,6 +2048,7 @@
 </a>
 
 
+
 <h1 id="hdi-hana-deployment-infrastructure">HDI - HANA Deployment Infrastructure</h1>
 <p>SAP HANA Deployment Infrastructure (HDI) is a service that enables you to deploy database development artifacts to so-called containers. HDI is supported in XSK via the <code>*.hdi</code> and <code>*.hdiconfig</code> files.</p>
 <div class="admonition note">
@@ -2073,6 +2088,43 @@
 <span class="w">   </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="maintenance">Maintenance</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Drop HDI Container</label><label for="__tabbed_2_2">Grant HDI Privileges</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="k">TEMPORARY</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">TT_PARAMETERS</span><span class="p">;</span><span class="w"></span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="w"> </span><span class="p">(</span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">VALUE</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;ignore_work&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="w"> </span><span class="p">(</span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">VALUE</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;ignore_deployed&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="k">CALL</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="o">#&lt;</span><span class="n">HDI</span><span class="o">-</span><span class="n">Container</span><span class="o">-</span><span class="k">Group</span><span class="o">&gt;</span><span class="p">.</span><span class="n">DROP_CONTAINER</span><span class="p">(</span><span class="s1">&#39;&lt;HDI-Container-Name&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">);</span><span class="w"></span>
+<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="n">DROP_CONTAINER_PARAMETERS</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace the following placeholders:</p>
+<ul>
+<li><code>&lt;HDI-Container-Group&gt;</code> - the HDI Container Group</li>
+<li><code>&lt;HDI-Container-Name&gt;</code> - the HDI Container Name</li>
+</ul>
+<p>For more information, see: <a href="https://help.sap.com/viewer/6b94445c94ae495c83a19646e7c3fd56/2.0.02/en-US/fe51ebe5102c4991813a04b68843515f.html">Drop a Container</a></p>
+</div>
+</div>
+<div class="tabbed-block">
+<p>To grant HDI priviliges to HANA database user, execute the following script:</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="k">TEMPORARY</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">TT_API_PRIVILEGES</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="p">(</span><span class="n">PRINCIPAL_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">PRIVILEGE_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">OBJECT_NAME</span><span class="p">)</span><span class="w"></span>
+<span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;&lt;HANA-Username&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">PRIVILEGE_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">OBJECT_NAME</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">T_DEFAULT_DI_ADMIN_PRIVILEGES</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">CALL</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">GRANT_CONTAINER_GROUP_API_PRIVILEGES</span><span class="p">(</span><span class="s1">&#39;_SYS_DI&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="p">,</span><span class="w"> </span><span class="n">_SYS_DI</span><span class="p">.</span><span class="n">T_NO_PARAMETERS</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">);</span><span class="w"></span>
+<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">#</span><span class="k">PRIVILEGES</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace the <code>&lt;HANA-Username&gt;</code> placeholder with the HANA database user, used for the migration.</p>
+</div>
 </div>
 </div>
 </div>
@@ -2402,10 +2454,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.092fa1f6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.5a9542cf.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.8aa65030.min.js"></script>
       
     
   </body>

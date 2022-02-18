@@ -485,10 +485,6 @@ The XSK **Deployment** could be scaled horizontally by adding/removing **Pods** 
     kubectl scale deployment/xsk --replicas=<number-of-replicas>
     ```
 
-    !!! note
-
-        Replace the `<number-of-replicas>` placeholder with the desired replicas count _(e.g. 1)_.
-
 !!! note
 
     To learn more about application scaling in Kubernetes, see [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/).

@@ -679,7 +679,7 @@ jobs:
           cp charts/* .
       - name: Helm Charts Release - Set Chart Version - XSK
         run: |
-          cd charts-temp/helm-charts/xsk/
+          cd charts-temp/helm-charts/
           find xsk/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
           find xsk-kpack/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
           find xsk-kpack/templates/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;

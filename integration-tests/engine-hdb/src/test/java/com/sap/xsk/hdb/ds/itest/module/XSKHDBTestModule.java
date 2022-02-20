@@ -33,16 +33,16 @@ import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.repository.TestRepository;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
-import com.sap.xsk.hdb.ds.service.manager.IXSKEntityManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKHDBSequenceManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKProceduresManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKScalarFunctionManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKSchemaManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKEntityManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKHDBSequenceManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKProceduresManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKScalarFunctionManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKSchemaManagerService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKSynonymManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKTableFunctionManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKTableManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKTableTypeManagerService;
-import com.sap.xsk.hdb.ds.service.manager.IXSKViewManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKTableFunctionManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKTableManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKTableTypeManagerService;
+import com.sap.xsk.hdb.ds.service.manager.XSKViewManagerService;
 
 public class XSKHDBTestModule extends AbstractDirigibleModule {
 
@@ -113,15 +113,15 @@ public class XSKHDBTestModule extends AbstractDirigibleModule {
 		// see: XSKHDBModule.bindManagerServicesToFileExtensions()
 		Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 		managerServices.clear();
-		managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new IXSKEntityManagerService());
-		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new IXSKTableManagerService());
-		managerServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new IXSKViewManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDBDD, new XSKEntityManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new XSKTableManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new XSKViewManagerService());
 		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new IXSKSynonymManagerService());
-		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new IXSKTableFunctionManagerService());
-		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new IXSKSchemaManagerService());
-		managerServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new IXSKProceduresManagerService());
-		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new IXSKHDBSequenceManagerService());
-		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION, new IXSKScalarFunctionManagerService());
-		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new IXSKTableTypeManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new XSKTableFunctionManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new XSKSchemaManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new XSKProceduresManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new XSKHDBSequenceManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_SCALAR_FUNCTION, new XSKScalarFunctionManagerService());
+		managerServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new XSKTableTypeManagerService());
 	}
 }

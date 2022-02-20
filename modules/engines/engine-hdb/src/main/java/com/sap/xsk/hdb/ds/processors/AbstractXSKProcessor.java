@@ -21,14 +21,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sap.xsk.hdb.ds.api.IXSKHdbProcessor;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 
 
 public abstract class AbstractXSKProcessor<T extends XSKDataStructureModel> implements IXSKHdbProcessor<T> {
 
-  private static final Logger logger = LoggerFactory.getLogger(XSKHDBCoreFacade.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKHDBCoreSynchronizationFacade.class);
 
   private static final XSKDataStructuresSynchronizer DATA_STRUCTURES_SYNCHRONIZER = new XSKDataStructuresSynchronizer();
 

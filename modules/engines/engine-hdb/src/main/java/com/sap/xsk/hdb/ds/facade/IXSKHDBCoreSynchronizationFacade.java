@@ -16,7 +16,7 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.api.IResource;
 
-public interface IXSKHDBCoreFacade {
+public interface IXSKHDBCoreSynchronizationFacade {
 
   void handleResourceSynchronization(IResource resource) throws SynchronizationException, XSKDataStructuresException;
 

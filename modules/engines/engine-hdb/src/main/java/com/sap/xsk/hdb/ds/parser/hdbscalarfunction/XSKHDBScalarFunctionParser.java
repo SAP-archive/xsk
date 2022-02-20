@@ -11,41 +11,42 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbscalarfunction;
 
+import java.sql.Timestamp;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.dirigible.api.v3.security.UserFacade;
+
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.dirigible.api.v3.security.UserFacade;
-import java.sql.Timestamp;
 
-public class XSKHDBScalarFunctionParser implements XSKDataStructureParser<XSKDataStructureHDBTableFunctionModel> {
+public class XSKHDBScalarFunctionParser implements XSKDataStructureParser<XSKDataStructureHDBScalarFunctionModel> {
 
   @Override
-  public XSKDataStructureHDBTableFunctionModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException {
-    XSKDataStructureHDBTableFunctionModel hdbTableFunction = new XSKDataStructureHDBTableFunctionModel();
-    hdbTableFunction.setName(XSKHDBUtils.extractTableFunctionNameFromContent(parametersModel.getContent(), parametersModel.getLocation(),
+  public XSKDataStructureHDBScalarFunctionModel parse(XSKDataStructureParametersModel parametersModel) throws XSKDataStructuresException {
+	  XSKDataStructureHDBScalarFunctionModel hdbScalarFunction = new XSKDataStructureHDBScalarFunctionModel();
+    hdbScalarFunction.setName(XSKHDBUtils.extractTableFunctionNameFromContent(parametersModel.getContent(), parametersModel.getLocation(),
         XSKCommonsConstants.HDB_SCALAR_FUNCTION_PARSER));
-    hdbTableFunction.setLocation(parametersModel.getLocation());
-    hdbTableFunction.setType(getType());
-    hdbTableFunction.setHash(DigestUtils.md5Hex(parametersModel.getContent()));
-    hdbTableFunction.setCreatedBy(UserFacade.getName());
-    hdbTableFunction.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    hdbTableFunction.setContent(parametersModel.getContent());
-    return hdbTableFunction;
+    hdbScalarFunction.setLocation(parametersModel.getLocation());
+    hdbScalarFunction.setType(getType());
+    hdbScalarFunction.setHash(DigestUtils.md5Hex(parametersModel.getContent()));
+    hdbScalarFunction.setCreatedBy(UserFacade.getName());
+    hdbScalarFunction.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    hdbScalarFunction.setContent(parametersModel.getContent());
+    return hdbScalarFunction;
   }
 
   @Override
   public String getType() {
-    return IXSKDataStructureModel.TYPE_HDB_SCALARFUNCTION;
+    return IXSKDataStructureModel.TYPE_HDB_SCALAR_FUNCTION;
   }
 
   @Override
-  public Class<XSKDataStructureHDBTableFunctionModel> getDataStructureClass() {
-    return XSKDataStructureHDBTableFunctionModel.class;
+  public Class<XSKDataStructureHDBScalarFunctionModel> getDataStructureClass() {
+    return XSKDataStructureHDBScalarFunctionModel.class;
   }
 }
 

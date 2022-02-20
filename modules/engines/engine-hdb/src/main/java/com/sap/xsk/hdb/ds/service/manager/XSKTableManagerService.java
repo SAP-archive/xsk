@@ -28,9 +28,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKTableManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBTableModel> {
+public class XSKTableManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBTableModel> {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKTableManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKTableManagerService.class);
 
   private final Map<String, XSKDataStructureHDBTableModel> dataStructureTableModels;
   private final List<String> tablesSynchronized;
@@ -40,7 +40,7 @@ public class IXSKTableManagerService extends AbstractDataStructureManagerService
   private IXSKHdbProcessor xskTableAlterProcessor = new XSKTableAlterProcessor();
 
 
-  public IXSKTableManagerService() {
+  public XSKTableManagerService() {
     dataStructureTableModels = new LinkedHashMap<>();
     tablesSynchronized = Collections.synchronizedList(new ArrayList<>());
   }

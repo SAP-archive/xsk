@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreSynchronizationFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
@@ -54,25 +54,17 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer implemen
 
   private static final Logger logger = LoggerFactory.getLogger(XSKDataStructuresSynchronizer.class);
 
-  private static final Map<String, XSKDataStructureEntitiesModel> ENTITIES_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBTableModel> TABLES_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBViewModel> VIEWS_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBProcedureModel> PROCEDURES_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBTableFunctionModel> TABLEFUNCTIONS_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBSchemaModel> SCHEMAS_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBSynonymModel> SYNONYMS_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBTableTypeModel> TABLE_TYPES_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureEntitiesModel> ENTITIES_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBTableModel> TABLES_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBViewModel> VIEWS_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBProcedureModel> PROCEDURES_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBTableFunctionModel> TABLEFUNCTIONS_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBSchemaModel> SCHEMAS_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBSynonymModel> SYNONYMS_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBTableTypeModel> TABLE_TYPES_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
-  private IXSKHDBCoreFacade xskHDBCoreFacade = new XSKHDBCoreFacade();
+  private IXSKHDBCoreSynchronizationFacade xskHDBCoreFacade = new XSKHDBCoreSynchronizationFacade();
 
   /**
    * Force synchronization.
@@ -259,8 +251,8 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer implemen
         clearCache();
 
         successfulSynchronization(SYNCHRONIZER_NAME,
-            format("Immutable: [Entities: {0}, Tables: {1}, Views: {2}, Procedures: {3}, Functions: {4}, Schemas: {5}, HDI: {6}], "
-                    + "Mutable: [Entities: {7}, Tables: {8}, Views: {9}, Procedures: {10}, Functions: {11}, Schemas: {12}, HDI: {13}, Syninyms: {13}]",
+            format("Immutable: [Entities: {0}, Tables: {1}, Views: {2}, Procedures: {3}, Functions: {4}, Schemas: {5}, Synonyms: {6}], Table Types: {7}],"
+                    + "Mutable: [Entities: {7}, Tables: {8}, Views: {9}, Procedures: {10}, Functions: {11}, Schemas: {12}, HDI: {13}, Synonyms: {13}]",
                 immutableEntitiesCount, immutableTablesCount, immutableViewsCount, immutableProceduresCount, immutableFunctionsCount,
                 immutableSchemasCount));
 //						mutableEntitiesCount, mutableTablesCount, mutableViewsCount, mutableProceduresCount, mutableFunctionsCount, mutableSchemasCount, mutableHDICount, immutableSynonymsCount));

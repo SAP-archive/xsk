@@ -28,15 +28,15 @@ import javax.naming.OperationNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKSchemaManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBSchemaModel> {
+public class XSKSchemaManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBSchemaModel> {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKSchemaManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKSchemaManagerService.class);
   private final Map<String, XSKDataStructureHDBSchemaModel> dataStructureSchemasModels;
   private final List<String> schemasSynchronized;
   private IXSKHdbProcessor hdbSchemaCreateProcessor = new HDBSchemaCreateProcessor();
   private IXSKHdbProcessor hdbSchemaDropProcessor = new HDBSchemaDropProcessor();
 
-  public IXSKSchemaManagerService() {
+  public XSKSchemaManagerService() {
     dataStructureSchemasModels = new LinkedHashMap<>();
     schemasSynchronized = Collections.synchronizedList(new ArrayList<>());
   }

@@ -170,7 +170,7 @@ jobs:
         helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-landscape        
     - name: Verify helm chart
       run: |
-        wget https://sap.github.io/xsk/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
+        wget https://xsk.io/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
         cd charts-temp/helm-charts/
         OUTPUT=$(helm verify --keyring ~/.gnupg/pubring.gpg xsk-${{ env.XSK_VERSION }}.tgz)
         OUTPUT="${OUTPUT//'%'/'%25'}"

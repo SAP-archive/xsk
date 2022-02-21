@@ -53,7 +53,7 @@ jobs:
     - name: Get XSK helm chart sha
       run: |
         mkdir ~/.gnupg
-        wget https://sap.github.io/xsk/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
+        wget https://xsk.io/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
         OUTPUT=$(helm pull xsk/xsk --version ${{ inputs.XSK_VERSION }} --verify)
         OUTPUT="${OUTPUT//'%'/'%25'}"
         OUTPUT="${OUTPUT//$'\n'/'%0A'}"
@@ -67,7 +67,8 @@ jobs:
     - name: Check chart sha
       if: "steps.XSK_HELM_SHA.outputs.XSK_HELM_SHA_PRINT != ${{ inputs.XSK_VERSION }}"
       run: |
-        stop
+        echo "Failed to verify sha!"
+        exit 1
 
     # Deploy XSK on stage
     - name: Deploy XSK helm chart

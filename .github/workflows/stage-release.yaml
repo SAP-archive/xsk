@@ -50,7 +50,7 @@ jobs:
         helm repo update
 
     # Verify Helm XSK chart
-    - name: Get XSH helm chart sha
+    - name: Get XSK helm chart sha
       run: |
         mkdir ~/.gnupg
         wget https://sap.github.io/xsk/charts/pubring.gpg -O ~/.gnupg/pubring.gpg

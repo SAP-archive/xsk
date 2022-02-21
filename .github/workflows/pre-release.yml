@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       XSK_VERSION_BUILD: ${{ steps.XSK_VERSION_PRINT.outputs.XSK_VERSION_OUTPUT }}
+      XSK_HELM_SHA: ${{ steps.XSK_HELM_SHA.outputs.XSK_HELM_SHA_PRINT }}
     steps:
     - uses: actions/checkout@v2
       with:
@@ -166,8 +167,21 @@ jobs:
         gpg --no-tty --batch --export-secret-keys > ~/.gnupg/secring.gpg
         helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk
         helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-kpack
-        helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-landscape
-        cd ..
+        helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-landscape        
+    - name: Verify helm chart
+      run: |
+        wget https://sap.github.io/xsk/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
+        cd charts-temp/helm-charts/
+        OUTPUT=$(helm verify --keyring ~/.gnupg/pubring.gpg xsk-${{ env.XSK_VERSION }}.tgz)
+        OUTPUT="${OUTPUT//'%'/'%25'}"
+        OUTPUT="${OUTPUT//$'\n'/'%0A'}"
+        OUTPUT="${OUTPUT//$'\r'/'%0D'}"
+        HELM_SHA=$(echo "$OUTPUT" | tail -n1)
+        SHA=$(sed -e 's#.*sha256:\(\)#\1#' <<< $HELM_SHA )
+        echo "::set-output name=XSK_HELM_SHA_PRINT::$SHA"
+      id: XSK_HELM_SHA
+    - name: Helm Chart Release Index    
+        cd charts-temp/
         helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
         cp -rf helm-charts/index.yaml ../.
         cp -rf helm-charts/xsk-${{ env.XSK_VERSION }}.tgz ../charts/
@@ -186,18 +200,6 @@ jobs:
         git add .
         git reset --hard
         git checkout main
-#------------------Update XSK Instance-------------------#
-
-    - name: Kubectl tool installer
-      uses: Azure/setup-kubectl@v1
-    - name: Setup Kube Config File
-      run: |
-        mkdir $HOME/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
-    - name: Update XSK Instance
-      run: kubectl set image deployment/xsk-trial xsk=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} -n xsk-trial
-
-#------------------Update XSK Instance-------------------#
 
     - name: Slack Notification
       if: ${{ failure() }}
@@ -212,6 +214,7 @@ jobs:
       uses: ./.github/workflows/stage-release.yaml
       with:
         XSK_VERSION: ${{ needs.build.outputs.XSK_VERSION_BUILD }}
+        XSK_HELM_SHA: ${{ needs.build.outputs.XSK_HELM_SHA }}
       secrets:
         STAGE_KYMA_CONFIG: ${{ secrets.STAGE_KYMA_CONFIG }}
         STAGE_HANA_URL: ${{ secrets.STAGE_HANA_URL }}

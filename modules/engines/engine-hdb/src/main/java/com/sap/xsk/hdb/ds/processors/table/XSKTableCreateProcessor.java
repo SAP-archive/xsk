@@ -16,22 +16,22 @@ import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.hdb.ds.processors.table.utils.TableSQLBuilder;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.ISqlDialect;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.Table;
-import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,39 +58,32 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
       throws SQLException {
     logger.info("Processing Create Table: " + tableModel.getName());
 
-    String sql = null;
+    Collection<String> statements = new ArrayList<>();
     String tableNameWithoutSchema = tableModel.getName();
-    String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
-
-    TableSQLBuilder escapeService = new TableSQLBuilder(connection, tableModel);
+    String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(tableModel.getName(), tableModel.getSchema());
 
     switch (tableModel.getDBContentType()) {
       case XS_CLASSIC: {
-        Table table = escapeService.getDatabaseSpecificSQL();
+        TableBuilder tableBuilder = new TableBuilder();
+        Table table = tableBuilder.build(tableModel);
+        statements.add(table.getCreateTableStatement());
+        statements.addAll(table.getCreateIndicesStatements());
         break;
       }
       case OTHERS: {
-        ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-        if (dialect.getClass().equals(HanaSqlDialect.class)) {
-          sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
-          break;
-        } else {
-          String errorMessage = String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection));
-          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
-              XSKCommonsConstants.HDB_TABLE_PARSER);
-          applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
-          throw new IllegalStateException(errorMessage);
-        }
+        statements.add(XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent());
+        break;
       }
     }
     try {
-      executeSql(sql, connection);
+      executeBatch(statements, connection);
       String message = String.format("Create table %s successfully", tableModel.getName());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
     } catch (SQLException ex) {
+      logger.error("Creation of table failed. Used SQL - {}", statements.stream().collect(Collectors.joining("; ")), ex);
       XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
           XSKCommonsConstants.HDB_TABLE_PARSER);
-      String message = String.format("Create table [%s] skipped due to an error: %s", tableModel, ex.getMessage());
+      String message = String.format("Create table [%s] failed due to an error: %s", tableModel, ex.getMessage());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
     }
 
@@ -102,29 +95,13 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     }
   }
 
-  @Override
-  public void executeSql(String sql, Connection connection) throws SQLException {
-    String[] queries = sql.split(String.format("((?=%1$s))", "CREATE"));
-    String createTableQuery = queries[0];
-
-    try (PreparedStatement statement = connection.prepareStatement(createTableQuery)) {
-      logger.info(createTableQuery);
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      logger.error(sql);
-      logger.error(e.getMessage(), e);
-      throw e;
-    }
-
-    for (int i = 1; i < queries.length; i++) {
-      try (PreparedStatement statement = connection.prepareStatement(queries[i])) {
-        logger.info(queries[i]);
-        statement.executeUpdate();
-      } catch (SQLException exception) {
-        logger.error(sql);
-        logger.error(exception.getMessage(), exception);
-        throw exception;
+  private void executeBatch(Collection<String> createStatements, Connection connection) throws SQLException {
+    try (Statement statement = connection.createStatement()) {
+      for (String createSQL : createStatements) {
+        logger.debug("Adding SQL statement to the batch - {}", createSQL);
+        statement.addBatch(createSQL);
       }
+      statement.executeBatch();
     }
   }
 }

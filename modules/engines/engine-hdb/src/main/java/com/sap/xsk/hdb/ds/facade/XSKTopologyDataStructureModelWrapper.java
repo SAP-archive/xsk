@@ -21,9 +21,7 @@ import com.sap.xsk.hdb.ds.artefacts.HDBTableTypeSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureDependencyModel;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
-import com.sap.xsk.hdb.ds.model.hdbscalarfunction.XSKDataStructureHDBScalarFunctionModel;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
@@ -193,7 +191,7 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
           break;
         case EXECUTE_TABLE_CREATE:
           if (model instanceof XSKDataStructureHDBTableModel) {
-            String escapedName = XSKHDBUtils.escapeArtifactName(connection, model.getName(), model.getSchema());
+            String escapedName = XSKHDBUtils.escapeArtifactName(model.getName(), model.getSchema());
             if (!SqlFactory.getNative(connection).exists(connection, escapedName)) {
               xskTableManagerService.createDataStructure(connection, this.model);
             } else {

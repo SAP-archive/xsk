@@ -59,7 +59,7 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
   }
 
   String escapeTableTypeName(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel) {
-    return XSKHDBUtils.escapeArtifactName(connection, tableTypeModel.getName(), tableTypeModel.getSchema());
+    return XSKHDBUtils.escapeArtifactName(tableTypeModel.getName(), tableTypeModel.getSchema());
   }
 
   String getDropTableTypeSQL(Connection connection, String tableTypeName) throws IllegalStateException {

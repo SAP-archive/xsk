@@ -42,8 +42,8 @@ public class HDBSynonymDropProcessor extends AbstractXSKProcessor<XSKDataStructu
   public void execute(Connection connection, XSKDataStructureHDBSynonymModel synonymModel) {
     synonymModel.getSynonymDefinitions().forEach((key, value) -> {
 
-      String synonymName = (value.getSynonymSchema() != null) ? XSKHDBUtils.escapeArtifactName(connection, key, value.getSynonymSchema())
-          : XSKHDBUtils.escapeArtifactName(connection, key);
+      String synonymName = (value.getSynonymSchema() != null) ? XSKHDBUtils.escapeArtifactName(key, value.getSynonymSchema())
+          : XSKHDBUtils.escapeArtifactName(key);
       try {
         if (SqlFactory.getNative(connection).exists(connection, value.getSynonymSchema(), key, DatabaseArtifactTypes.SYNONYM)) {
           String sql = SqlFactory.getNative(connection).drop().synonym(synonymName).build();

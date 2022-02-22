@@ -13,20 +13,6 @@ package com.sap.xsk.hdb.ds.processors.hdbstructure;
 
 import static java.text.MessageFormat.format;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.dirigible.database.sql.DataType;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.ISqlDialect;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.builders.tableType.CreateTableTypeBuilder;
-import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
@@ -37,6 +23,18 @@ import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import org.eclipse.dirigible.database.sql.DataType;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.builders.tableType.CreateTableTypeBuilder;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStructureHDBTableTypeModel> {
 
@@ -57,7 +55,7 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
     logger.info("Processing Create Table Type: " + tableTypeModel.getName());
 
     String tableTypeNameWithoutSchema = tableTypeModel.getName();
-    String tableTypeNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableTypeNameWithoutSchema, tableTypeModel.getSchema());
+    String tableTypeNameWithSchema = XSKHDBUtils.escapeArtifactName(tableTypeNameWithoutSchema, tableTypeModel.getSchema());
     List<XSKDataStructureHDBTableColumnModel> columns = tableTypeModel.getColumns();
 
     if (!SqlFactory.getNative(connection)
@@ -66,7 +64,7 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
       CreateTableTypeBuilder createTableTypeBuilder = SqlFactory.getNative(connection).create().tableType(tableTypeNameWithSchema);
 
       for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
-        String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName());
+        String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
         DataType type = DataType.valueOf(columnModel.getType());
         createTableTypeBuilder
             .column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), this.getColumnModelArgs(columnModel));
@@ -84,7 +82,8 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
             break;
           } else {
             String errorMessage = String.format("Table Types are not supported for %s !", dialect.getDatabaseName(connection));
-            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableTypeModel.getLocation(), XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
+            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableTypeModel.getLocation(),
+                XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
             throw new IllegalStateException(errorMessage);
           }
         }
@@ -92,7 +91,8 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
       try {
         executeSql(sql, connection);
       } catch (SQLException ex) {
-        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableTypeModel.getLocation(), XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableTypeModel.getLocation(),
+            XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
       }
     } else {
       logger.warn(format("Table Type [{0}] already exists during the create process", tableTypeNameWithoutSchema));

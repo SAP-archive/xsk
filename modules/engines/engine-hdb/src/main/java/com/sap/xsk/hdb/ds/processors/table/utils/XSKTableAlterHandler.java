@@ -14,6 +14,7 @@ package com.sap.xsk.hdb.ds.processors.table.utils;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.processors.table.TableBuilder;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
@@ -58,7 +59,7 @@ public class XSKTableAlterHandler {
 
     DatabaseMetaData dmd = connection.getMetaData();
     ResultSet rsColumns = dmd
-        .getColumns(null, null, DatabaseMetadataHelper.normalizeTableName(XSKHDBUtils.escapeArtifactName(connection, tableModel.getName())),
+        .getColumns(null, null, DatabaseMetadataHelper.normalizeTableName(XSKHDBUtils.escapeArtifactName(tableModel.getName())),
             null);
     while (rsColumns.next()) {
       this.dbColumnTypes.put(rsColumns.getString("COLUMN_NAME"), rsColumns.getString("TYPE_NAME"));
@@ -69,7 +70,7 @@ public class XSKTableAlterHandler {
   }
 
   public void addColumns(Connection connection) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
+    String tableName = XSKHDBUtils.escapeArtifactName(this.tableModel.getName(), this.tableModel.getSchema());
 
     for (XSKDataStructureHDBTableColumnModel columnModel : tableModel.getColumns()) {
       String name = columnModel.getName();
@@ -103,7 +104,7 @@ public class XSKTableAlterHandler {
 
         AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
 
-        alterTableBuilder.add().column(XSKHDBUtils.escapeArtifactName(connection, name), type, isPrimaryKey, isNullable, isUnique, args);
+        alterTableBuilder.add().column(XSKHDBUtils.escapeArtifactName(name), type, isPrimaryKey, isNullable, isUnique, args);
 
         if (!isNullable) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "NOT NULL");
@@ -137,7 +138,7 @@ public class XSKTableAlterHandler {
     for (String columnName : this.dbColumnTypes.keySet()) {
       if (!modelColumnNames.contains(columnName)) {
         AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter()
-            .table(XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema()));
+            .table(XSKHDBUtils.escapeArtifactName(tableModel.getName(), tableModel.getSchema()));
         if (caseSensitive) {
           columnName = "\"" + columnName + "\"";
         }
@@ -148,7 +149,7 @@ public class XSKTableAlterHandler {
   }
 
   public void updateColumns(Connection connection) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
+    String tableName = XSKHDBUtils.escapeArtifactName(this.tableModel.getName(), this.tableModel.getSchema());
     List<XSKDataStructureHDBTableColumnModel> columns = this.getColumnsToUpdate();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
       String name = columnModel.getName();
@@ -186,13 +187,13 @@ public class XSKTableAlterHandler {
         throw new SQLException(errorMessage);
       }
       AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
-      alterTableBuilder.alter().column(XSKHDBUtils.escapeArtifactName(connection, name), type, isPrimaryKey, isNullable, isUnique, args);
+      alterTableBuilder.alter().column(XSKHDBUtils.escapeArtifactName(name), type, isPrimaryKey, isNullable, isUnique, args);
       executeAlterBuilder(connection, alterTableBuilder);
     }
   }
 
   public void rebuildIndeces(Connection connection) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
+    String tableName = XSKHDBUtils.escapeArtifactName(this.tableModel.getName(), this.tableModel.getSchema());
     AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
 
     DatabaseMetaData dmd = connection.getMetaData();
@@ -204,9 +205,8 @@ public class XSKTableAlterHandler {
       dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
     }
 
-    TableSQLBuilder escapeService = new TableSQLBuilder(connection, this.tableModel);
-
-    escapeService.escapeTableBuilderUniqueIndices(alterTableBuilder);
+    TableBuilder tableBuilder = new TableBuilder();
+    tableBuilder.addUniqueIndicesToBuilder(alterTableBuilder, tableModel);
     executeAlterBuilder(connection, alterTableBuilder);
   }
 
@@ -246,8 +246,8 @@ public class XSKTableAlterHandler {
     if (!droppedIndices.contains(rsIndeces.getString("INDEX_NAME"))) {
 
       String sql = String.format("DROP INDEX %s.%s",
-          XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getSchema()),
-          XSKHDBUtils.escapeArtifactName(connection, rsIndeces.getString("INDEX_NAME")));
+          XSKHDBUtils.escapeArtifactName(this.tableModel.getSchema()),
+          XSKHDBUtils.escapeArtifactName(rsIndeces.getString("INDEX_NAME")));
       logger.info(sql);
       stmt.executeUpdate(sql);
       droppedIndices.add(rsIndeces.getString("INDEX_NAME"));

@@ -7,95 +7,50 @@
   ~ Contributors:
   ~ SAP - initial API and implementation
   -->
-<div ng-controller="DeliveryUnitViewController as duvc" ng-show="isVisible">
+<div ng-controller="DeliveryUnitViewController as duvc" ng-show="isVisible && !migrationFromZip">
     <h1 class="section-title">Delivery Units</h1>
     <p class="margin-top-bottom-nl">{{descriptionText}}</p>
     <div class="progress margin-top-bottom-lg" ng-hide="dataLoaded">
-        <div
-            class="progress-bar progress-bar-striped active"
-            role="progressbar"
-            aria-valuenow="100"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            style="width: 100%"
-        ></div>
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+            aria-valuemax="100" style="width: 100%"></div>
     </div>
     <div class="dropdown-container" ng-show="dataLoaded">
         <label>Workspace</label>
-        <button
-            class="btn btn-default btn-big dropdown-toggle"
-            type="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-        >
+        <button class="btn btn-default btn-big dropdown-toggle" type="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
             {{workspacesDropdownText}}<span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-searchable">
             <li class="dropdown-input">
-                <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Search..."
-                    ng-keyup="filterWorkspaces()"
-                    ng-model="workspacesSearch"
-                />
+                <input class="form-control" type="text" placeholder="Search..." ng-keyup="filterWorkspaces()"
+                    ng-model="workspacesSearch" />
             </li>
             <li role="separator" class="divider"></li>
-            <li
-                class="dropdown-item"
-                ng-repeat="option in workspacesList"
-                ng-click="workspaceSelected(option)"
-            >
-                {{option}}
-            </li>
+            <li class="dropdown-item" ng-repeat="option in workspacesList" ng-click="workspaceSelected(option)">
+                {{option}}</li>
             <li role="separator" class="divider ng-hide" ng-show="showSeparator"></li>
-            <button
-                class="dropdown-item dropdown-btn"
-                ng-click="workspaceSelected(btnBottonText)"
-                ng-show="showCreateButton"
-            >
-                <i class="fa fa-plus-circle fa_margin" aria-hidden="true"></i> Create workspace:
-                "{{btnBottonText}}"
+            <button class="dropdown-item dropdown-btn" ng-click="workspaceSelected(btnBottonText)"
+                ng-show="showCreateButton">
+                <i class="fa fa-plus-circle fa_margin" aria-hidden="true"></i> Create workspace: "{{btnBottonText}}"
             </button>
         </ul>
     </div>
     <div class="dropdown-container margin-top-sm" ng-show="dataLoaded">
         <label>Delivery Unit</label>
-        <button
-            class="btn btn-default btn-big dropdown-toggle"
-            type="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            ng-disabled="duDropdownDisabled"
-        >
+        <button class="btn btn-default btn-big dropdown-toggle" type="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" ng-disabled="duDropdownDisabled">
             {{duDropdownText}}<span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-searchable multi-selectable">
             <li class="dropdown-input">
-                <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Search..."
-                    ng-keyup="filterDU()"
-                    ng-model="duSearch"
-                />
+                <input class="form-control" type="text" placeholder="Search..." ng-keyup="filterDU()"
+                    ng-model="duSearch" />
             </li>
             <li role="separator" class="divider"></li>
-            <li
-                class="dropdown-item dropdown-btn"
-                ng-class="allDUSelectable()"
-                ng-click="toggleSelectAllDU()"
-            >
-                {{selectAllText}}
-            </li>
-            <li
-                class="dropdown-item"
-                ng-repeat="option in deliveryUnitList"
-                ng-class="isDUSelected(option)"
-                ng-click="duSelected(option)"
-            >
+            <li class="dropdown-item dropdown-btn" ng-class="allDUSelectable()" ng-click="toggleSelectAllDU()">
+                {{selectAllText}}</li>
+            <li class="dropdown-item" ng-repeat="option in deliveryUnitList" ng-class="isDUSelected(option)"
+                ng-click="duSelected(option)">
                 {{option.name}}
             </li>
         </ul>

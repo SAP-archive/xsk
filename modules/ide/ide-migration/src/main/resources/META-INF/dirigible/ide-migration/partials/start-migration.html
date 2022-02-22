@@ -7,30 +7,17 @@
   ~ Contributors:
   ~ SAP - initial API and implementation
   -->
-<div
-    class="margin-top-bottom-xxl"
-    ng-controller="StartMigrationViewController as smvc"
-    ng-show="isVisible"
->
+<div class="margin-top-bottom-xxl" ng-controller="StartMigrationViewController as smvc"
+    ng-show="isVisible || isZipMigrationVisible">
     <h1 class="text-center section-title">{{progressTitle}}</h1>
     <p class="margin-top-bottom-nl text-center">{{statusMessage}}</p>
     <div class="progress margin-top-bottom-lg" ng-hide="migrationFinished">
-        <div
-            class="progress-bar progress-bar-striped active"
-            role="progressbar"
-            aria-valuenow="{{progressBarPercentage}}"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            style="width: {{progressBarPercentage}}%"
-        ></div>
+        <div class="progress-bar progress-bar-striped active" role="progressbar"
+            aria-valuenow="{{progressBarPercentage}}" aria-valuemin="0" aria-valuemax="100"
+            style="width: {{progressBarPercentage}}%"></div>
     </div>
     <div class="text-center margin-top-bottom-lg">
-        <button
-            type="button"
-            class="btn btn-primary btn-big"
-            ng-click="goToWorkspace()"
-            ng-show="migrationFinished"
-        >
+        <button type="button" class="btn btn-primary btn-big" ng-click="goToWorkspace()" ng-show="migrationFinished">
             Go to project workspace
         </button>
     </div>

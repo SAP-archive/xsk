@@ -38,8 +38,6 @@ import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizationArtefactT
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +59,6 @@ import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
-import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
@@ -188,7 +183,10 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
 		}
 
 		Map<String, XSKDataStructureModel> XSK_DATA_STRUCTURE_MODELS = new HashMap<>();
-		XSK_DATA_STRUCTURE_MODELS.putAll(dataStructureCdsModels);
+		for (XSKDataStructureModel cds : dataStructureCdsModels.values()) {
+			((XSKDataStructureCdsModel) cds).getTableModels().stream().forEach(tableModel -> XSK_DATA_STRUCTURE_MODELS.put(tableModel.getName(), tableModel));
+			((XSKDataStructureCdsModel) cds).getTableTypeModels().stream().forEach(tableTypeModel -> XSK_DATA_STRUCTURE_MODELS.put(tableTypeModel.getName(), tableTypeModel));
+		}
 		XSK_DATA_STRUCTURE_MODELS.putAll(dataStructureTablesModels);
 		XSK_DATA_STRUCTURE_MODELS.putAll(dataStructureViewsModels);
 		XSK_DATA_STRUCTURE_MODELS.putAll(dataStructureProceduresModels);
@@ -345,15 +343,6 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
 					try {
 						List<XSKTopologyDataStructureModelWrapper> results = depleter.deplete(list, XSKTopologyDataStructureModelEnum.EXECUTE_SYNONYM_CREATE.toString());
 						printErrors(errors, results, XSKTopologyDataStructureModelEnum.EXECUTE_SYNONYM_CREATE.toString(), SYNONYM_SYNCHRONIZATION_ARTEFACT_TYPE, ArtefactState.FAILED_DELETE);
-					} catch (Exception e) {
-						logger.error(e.getMessage(), e);
-						errors.add(e.getMessage());
-					}
-					
-					// process HDBDD models in proper order
-					try {
-						List<XSKTopologyDataStructureModelWrapper> results = depleter.deplete(list, XSKTopologyDataStructureModelEnum.EXECUTE_HDBDD_CREATE.toString());
-						printErrors(errors, results, XSKTopologyDataStructureModelEnum.EXECUTE_HDBDD_CREATE.toString(), HDBDD_SYNCHRONIZATION_ARTEFACT_TYPE, ArtefactState.FAILED_DELETE);
 					} catch (Exception e) {
 						logger.error(e.getMessage(), e);
 						errors.add(e.getMessage());

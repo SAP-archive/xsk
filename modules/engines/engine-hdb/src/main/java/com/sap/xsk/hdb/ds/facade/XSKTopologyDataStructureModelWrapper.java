@@ -244,15 +244,6 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
             }
           }
           break;
-        case EXECUTE_HDBDD_CREATE:
-          if (model instanceof XSKDataStructureCdsModel) {
-            xskHdbddManagerService.createDataStructure(connection, this.model);
-            List<XSKDataStructureHDBTableTypeModel> tableTypeModels = ((XSKDataStructureCdsModel) model).getTableTypeModels();
-            for (XSKDataStructureHDBTableTypeModel tableTypeModel : tableTypeModels) {
-              processTableType(tableTypeModel);
-            }
-          }
-          break;
         case EXECUTE_SEQUENCE_CREATE:
           if (model instanceof XSKDataStructureHDBSequenceModel) {
             if (!SqlFactory.getNative(connection)

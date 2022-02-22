@@ -31,9 +31,9 @@ import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKEntityManagerService extends AbstractDataStructureManagerService<XSKDataStructureCdsModel> {
+public class XSKEntityManagerService extends AbstractDataStructureManagerService<XSKDataStructureCdsModel> {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKEntityManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKEntityManagerService.class);
 
   private final Map<String, XSKDataStructureCdsModel> dataStructureEntitiesModel;
   private final List<String> entitiesSynchronized;
@@ -44,7 +44,7 @@ public class IXSKEntityManagerService extends AbstractDataStructureManagerServic
 
   private XSKTableCreateProcessor xskTableCreateProcessor = new XSKTableCreateProcessor();
 
-  public IXSKEntityManagerService() {
+  public XSKEntityManagerService() {
     dataStructureEntitiesModel = Collections.synchronizedMap(new LinkedHashMap<>());
     entitiesSynchronized = Collections.synchronizedList(new ArrayList<>());
   }

@@ -29,9 +29,9 @@ import javax.naming.OperationNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKHDBSequenceManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBSequenceModel> {
+public class XSKHDBSequenceManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBSequenceModel> {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKHDBSequenceManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKHDBSequenceManagerService.class);
 
   private final Map<String, XSKDataStructureHDBSequenceModel> dataStructureSequenceModels;
   private final List<String> sequencesSynchronized;
@@ -40,7 +40,7 @@ public class IXSKHDBSequenceManagerService extends AbstractDataStructureManagerS
   private IXSKHdbProcessor xskHdbSequenceCreateProcessor = new XSKHDBSequenceCreateProcessor();
   private IXSKHdbProcessor xskHdbSequenceUpdateProcessor = new XSKHDBSequenceUpdateProcessor();
 
-  public IXSKHDBSequenceManagerService() {
+  public XSKHDBSequenceManagerService() {
     dataStructureSequenceModels = new LinkedHashMap<>();
     sequencesSynchronized = Collections.synchronizedList(new ArrayList<>());
   }

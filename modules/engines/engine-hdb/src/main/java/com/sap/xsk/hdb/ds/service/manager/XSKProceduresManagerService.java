@@ -28,9 +28,9 @@ import javax.naming.OperationNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKProceduresManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBProcedureModel> {
+public class XSKProceduresManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBProcedureModel> {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKProceduresManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKProceduresManagerService.class);
 
 
   private final Map<String, XSKDataStructureHDBProcedureModel> dataStructureProceduresModels;
@@ -39,7 +39,7 @@ public class IXSKProceduresManagerService extends AbstractDataStructureManagerSe
   private IXSKHdbProcessor hdbProcedureDropProcessor = new HDBProcedureDropProcessor();
   private IXSKHdbProcessor hdbProcedureCreateProcessor = new HDBProcedureCreateProcessor();
 
-  public IXSKProceduresManagerService() {
+  public XSKProceduresManagerService() {
     dataStructureProceduresModels = new LinkedHashMap<>();
     proceduresSynchronized = Collections.synchronizedList(new ArrayList<>());
   }

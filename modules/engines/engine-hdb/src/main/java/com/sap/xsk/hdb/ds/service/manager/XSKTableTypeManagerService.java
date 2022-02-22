@@ -29,9 +29,9 @@ import javax.naming.OperationNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKTableTypeManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBTableTypeModel> {
+public class XSKTableTypeManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBTableTypeModel> {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKTableTypeManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKTableTypeManagerService.class);
 
   private final Map<String, XSKDataStructureHDBTableTypeModel> dataStructureHDBTableTypeModels;
   private final List<String> tableTypesSynchronized;
@@ -39,7 +39,7 @@ public class IXSKTableTypeManagerService extends AbstractDataStructureManagerSer
   private final IXSKHdbProcessor xskTableTypeCreateProcessor;
   private final IXSKHdbProcessor xskTableTypeDropProcessor;
 
-  public IXSKTableTypeManagerService(HDBSynonymRemover synonymRemover) {
+  public XSKTableTypeManagerService(HDBSynonymRemover synonymRemover) {
     this.xskTableTypeCreateProcessor = new XSKTableTypeCreateProcessor();
     this.xskTableTypeDropProcessor = new XSKTableTypeDropProcessor(synonymRemover);
     dataStructureHDBTableTypeModels = new LinkedHashMap<>();

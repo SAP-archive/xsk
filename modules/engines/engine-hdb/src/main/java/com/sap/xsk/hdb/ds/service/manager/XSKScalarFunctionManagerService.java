@@ -15,9 +15,9 @@ import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKScalarFunctionManagerService extends IXSKTableFunctionManagerService {
+public class XSKScalarFunctionManagerService extends XSKTableFunctionManagerService {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKScalarFunctionManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKScalarFunctionManagerService.class);
 
   @Override
   public String getDataStructureType() {

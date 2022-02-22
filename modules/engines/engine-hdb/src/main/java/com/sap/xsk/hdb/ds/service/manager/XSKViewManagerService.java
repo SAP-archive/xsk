@@ -28,9 +28,9 @@ import javax.naming.OperationNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IXSKViewManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBViewModel> {
+public class XSKViewManagerService extends AbstractDataStructureManagerService<XSKDataStructureHDBViewModel> {
 
-  private static final Logger logger = LoggerFactory.getLogger(IXSKViewManagerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSKViewManagerService.class);
 
   private final Map<String, XSKDataStructureHDBViewModel> dataStructureViewsModels = new LinkedHashMap<>();
   private final List<String> viewsSynchronized = Collections.synchronizedList(new ArrayList<>());

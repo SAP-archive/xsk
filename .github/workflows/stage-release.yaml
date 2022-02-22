@@ -7,6 +7,9 @@ on:
       XSK_VERSION:
         required: true
         type: string
+      XSK_HELM_SHA:
+        required: true
+        type: string  
     secrets:
       STAGE_KYMA_CONFIG:
         required: true
@@ -46,39 +49,31 @@ jobs:
         helm repo add xsk https://www.xsk.io
         helm repo update
 
-    # Download public gpg key
-    - name: Download gpg key with gpg
-      run: |
-        gpg --keyserver keys.openpgp.org --recv-key 734B0E32368A2283290E0B966010F454D1819484
-        gpg --export > ~/.gnupg/pubring.gpg
-
     # Verify Helm XSK chart
-    - name: Pull Helm XSK chart with gpg
+    - name: Get XSK helm chart sha
       run: |
-        OUTPUT=$(helm pull xsk/xsk --verify)
+        mkdir ~/.gnupg
+        wget https://xsk.io/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
+        OUTPUT=$(helm pull xsk/xsk --version ${{ inputs.XSK_VERSION }} --verify)
         OUTPUT="${OUTPUT//'%'/'%25'}"
         OUTPUT="${OUTPUT//$'\n'/'%0A'}"
         OUTPUT="${OUTPUT//$'\r'/'%0D'}"
-        echo "::set-output name=helm_verify::$OUTPUT"
-      id: helm_pull  
+        HELM_SHA=$(echo "$OUTPUT" | tail -n1)
+        SHA=$(sed -e 's#.*sha256:\(\)#\1#' <<< $HELM_SHA)
+        echo "::set-output name=XSK_HELM_SHA_PRINT::$SHA"
+      id: XSK_HELM_SHA  
 
-    # Get chart fingerprint
-    - name: Get chart fingerprint
+    # Check chart sha
+    - name: Check chart sha
+      if: "steps.XSK_HELM_SHA.outputs.XSK_HELM_SHA_PRINT != ${{ inputs.XSK_VERSION }}"
       run: |
-        HELM_FINGERPRINT=$(echo "The string is: ${{ steps.helm_pull.outputs.helm_verify }}" | tail -n2)
-        echo "::set-output name=helm_verify_fingerprint::$HELM_FINGERPRINT"
-      id: helm_verify_step
-
-    # Check chart fingerprint
-    - name: Check chart fingerprint
-      if: "steps.helm_verify_step.outputs.helm_verify_fingerprint != 'Using Key With Fingerprint: 734B0E32368A2283290E0B966010F454D1819484'"
-      run: |
-        stop
+        echo "Failed to verify sha!"
+        exit 1
 
     # Deploy XSK on stage
     - name: Deploy XSK helm chart
       run: |
-        helm upgrade --install xsk-stage xsk/xsk -n ${{ secrets.STAGE_NAMESPACE }} \
+        helm upgrade --install xsk-stage xsk/xsk --version ${{ inputs.XSK_VERSION }} -n ${{ secrets.STAGE_NAMESPACE }} \
         --set hana.enabled=true \
         --set hana.url=${{ secrets.STAGE_HANA_URL }} \
         --set hana.username=${{ secrets.STAGE_HANA_USERNAME }} \

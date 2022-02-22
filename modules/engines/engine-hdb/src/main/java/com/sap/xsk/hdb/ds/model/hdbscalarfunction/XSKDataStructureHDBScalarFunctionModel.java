@@ -9,20 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.parser.hdbscalarfunction;
+package com.sap.xsk.hdb.ds.model.hdbscalarfunction;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 
-public class XSKDataStructureHDBScalarFunctionModel extends XSKDataStructureModel {
+public class XSKDataStructureHDBScalarFunctionModel extends XSKDataStructureHDBTableFunctionModel {
 
-  private String content;
-
-  public String getContent() {
-    return content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
-  }
-
+  
 }

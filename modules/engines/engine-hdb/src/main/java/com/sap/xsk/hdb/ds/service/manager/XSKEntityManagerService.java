@@ -72,7 +72,7 @@ public class XSKEntityManagerService extends AbstractDataStructureManagerService
       throws SQLException {
     if (entitiesModel != null) {
       for (XSKDataStructureHDBTableModel entityModel : entitiesModel.getTableModels()) {
-        String tableName = XSKHDBUtils.escapeArtifactName(connection, entityModel.getName(), entityModel.getSchema());
+        String tableName = XSKHDBUtils.escapeArtifactName(entityModel.getName(), entityModel.getSchema());
         if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
           this.xskTableCreateProcessor.execute(connection, entityModel);
         } else {

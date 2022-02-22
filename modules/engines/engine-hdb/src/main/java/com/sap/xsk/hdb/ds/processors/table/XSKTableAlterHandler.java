@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.processors.table.utils;
+package com.sap.xsk.hdb.ds.processors.table;
 
 import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
@@ -58,7 +58,7 @@ public class XSKTableAlterHandler {
 
     DatabaseMetaData dmd = connection.getMetaData();
     ResultSet rsColumns = dmd
-        .getColumns(null, null, DatabaseMetadataHelper.normalizeTableName(XSKHDBUtils.escapeArtifactName(connection, tableModel.getName())),
+        .getColumns(null, null, DatabaseMetadataHelper.normalizeTableName(XSKHDBUtils.escapeArtifactName(tableModel.getName())),
             null);
     while (rsColumns.next()) {
       this.dbColumnTypes.put(rsColumns.getString("COLUMN_NAME"), rsColumns.getString("TYPE_NAME"));
@@ -69,7 +69,7 @@ public class XSKTableAlterHandler {
   }
 
   public void addColumns(Connection connection) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
+    String tableName = XSKHDBUtils.escapeArtifactName(this.tableModel.getName(), this.tableModel.getSchema());
 
     for (XSKDataStructureHDBTableColumnModel columnModel : tableModel.getColumns()) {
       String name = columnModel.getName();
@@ -103,16 +103,18 @@ public class XSKTableAlterHandler {
 
         AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
 
-        alterTableBuilder.add().column(XSKHDBUtils.escapeArtifactName(connection, name), type, isPrimaryKey, isNullable, isUnique, args);
+        alterTableBuilder.add().column(XSKHDBUtils.escapeArtifactName(name), type, isPrimaryKey, isNullable, isUnique, args);
 
         if (!isNullable) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "NOT NULL");
-          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+              XSKCommonsConstants.HDB_TABLE_PARSER);
           throw new SQLException(errorMessage);
         }
         if (isPrimaryKey) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "PRIMARY KEY");
-          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+              XSKCommonsConstants.HDB_TABLE_PARSER);
           throw new SQLException(errorMessage);
         }
 
@@ -121,8 +123,10 @@ public class XSKTableAlterHandler {
       } else if (!dbColumnTypes.get(name).equals(type.toString())) {
         String errorMessage = String
             .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to " + type);
-        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
-        dataStructuresSynchronizer.applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_UPDATE, errorMessage);
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+            XSKCommonsConstants.HDB_TABLE_PARSER);
+        dataStructuresSynchronizer.applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT,
+            ArtefactState.FAILED_UPDATE, errorMessage);
         throw new SQLException(errorMessage);
       }
     }
@@ -133,7 +137,7 @@ public class XSKTableAlterHandler {
     for (String columnName : this.dbColumnTypes.keySet()) {
       if (!modelColumnNames.contains(columnName)) {
         AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter()
-            .table(XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema()));
+            .table(XSKHDBUtils.escapeArtifactName(tableModel.getName(), tableModel.getSchema()));
         if (caseSensitive) {
           columnName = "\"" + columnName + "\"";
         }
@@ -144,7 +148,7 @@ public class XSKTableAlterHandler {
   }
 
   public void updateColumns(Connection connection) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
+    String tableName = XSKHDBUtils.escapeArtifactName(this.tableModel.getName(), this.tableModel.getSchema());
     List<XSKDataStructureHDBTableColumnModel> columns = this.getColumnsToUpdate();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
       String name = columnModel.getName();
@@ -177,17 +181,18 @@ public class XSKTableAlterHandler {
       if (!dbColumnTypes.get(name).equals(type.toString())) {
         String errorMessage = String
             .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to" + type);
-        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+            XSKCommonsConstants.HDB_TABLE_PARSER);
         throw new SQLException(errorMessage);
       }
       AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
-      alterTableBuilder.alter().column(XSKHDBUtils.escapeArtifactName(connection, name), type, isPrimaryKey, isNullable, isUnique, args);
+      alterTableBuilder.alter().column(XSKHDBUtils.escapeArtifactName(name), type, isPrimaryKey, isNullable, isUnique, args);
       executeAlterBuilder(connection, alterTableBuilder);
     }
   }
 
   public void rebuildIndeces(Connection connection) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getName(), this.tableModel.getSchema());
+    String tableName = XSKHDBUtils.escapeArtifactName(this.tableModel.getName(), this.tableModel.getSchema());
     AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
 
     DatabaseMetaData dmd = connection.getMetaData();
@@ -199,9 +204,8 @@ public class XSKTableAlterHandler {
       dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
     }
 
-    XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, this.tableModel);
-
-    escapeService.escapeTableBuilderUniqueIndices(alterTableBuilder);
+    TableBuilder tableBuilder = new TableBuilder();
+    tableBuilder.addUniqueIndicesToBuilder(alterTableBuilder, tableModel);
     executeAlterBuilder(connection, alterTableBuilder);
   }
 
@@ -221,7 +225,8 @@ public class XSKTableAlterHandler {
     if (!isPKListUnchanged) {
       String errorMessage = String
           .format("Incompatible change of table [%s] by trying to change its primary key list", this.tableModel.getName());
-      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+          XSKCommonsConstants.HDB_TABLE_PARSER);
       throw new SQLException(errorMessage);
     }
   }
@@ -240,8 +245,8 @@ public class XSKTableAlterHandler {
     if (!droppedIndices.contains(rsIndeces.getString("INDEX_NAME"))) {
 
       String sql = String.format("DROP INDEX %s.%s",
-          XSKHDBUtils.escapeArtifactName(connection, this.tableModel.getSchema()),
-          XSKHDBUtils.escapeArtifactName(connection, rsIndeces.getString("INDEX_NAME")));
+          XSKHDBUtils.escapeArtifactName(this.tableModel.getSchema()),
+          XSKHDBUtils.escapeArtifactName(rsIndeces.getString("INDEX_NAME")));
       logger.info(sql);
       stmt.executeUpdate(sql);
       droppedIndices.add(rsIndeces.getString("INDEX_NAME"));
@@ -259,13 +264,16 @@ public class XSKTableAlterHandler {
       try {
         statement.executeUpdate();
         String messageSuccess = String.format("Update table %s successfully", this.tableModel.getName());
-        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_UPDATE, messageSuccess);
+        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT,
+            ArtefactState.SUCCESSFUL_UPDATE, messageSuccess);
       } catch (SQLException e) {
         logger.error(sql);
         logger.error(e.getMessage(), e);
-        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, this.tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, this.tableModel.getLocation(),
+            XSKCommonsConstants.HDB_TABLE_PARSER);
         String messageFail = String.format("Update table [%s] skipped due to an error: {%s}", this.tableModel, e.getMessage());
-        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_UPDATE, messageFail);
+        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT,
+            ArtefactState.FAILED_UPDATE, messageFail);
         throw new SQLException(e.getMessage(), e);
       } finally {
         if (statement != null) {

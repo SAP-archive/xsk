@@ -11,30 +11,29 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Map;
-
-import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.ISqlDialect;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableEscapeService;
+import com.sap.xsk.hdb.ds.processors.table.utils.TableSQLBuilder;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Map;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.Table;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Table Create Processor.
@@ -63,11 +62,11 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     String tableNameWithoutSchema = tableModel.getName();
     String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
 
-    XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, tableModel);
+    TableSQLBuilder escapeService = new TableSQLBuilder(connection, tableModel);
 
     switch (tableModel.getDBContentType()) {
       case XS_CLASSIC: {
-        sql = escapeService.getDatabaseSpecificSQL();
+        Table table = escapeService.getDatabaseSpecificSQL();
         break;
       }
       case OTHERS: {
@@ -77,7 +76,8 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           break;
         } else {
           String errorMessage = String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection));
-          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+              XSKCommonsConstants.HDB_TABLE_PARSER);
           applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
           throw new IllegalStateException(errorMessage);
         }
@@ -88,7 +88,8 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
       String message = String.format("Create table %s successfully", tableModel.getName());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
     } catch (SQLException ex) {
-      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+          XSKCommonsConstants.HDB_TABLE_PARSER);
       String message = String.format("Create table [%s] skipped due to an error: %s", tableModel, ex.getMessage());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
     }
@@ -115,8 +116,8 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
       throw e;
     }
 
-    for(int i=1;i<queries.length;i++){
-      try (PreparedStatement statement= connection.prepareStatement(queries[i])) {
+    for (int i = 1; i < queries.length; i++) {
+      try (PreparedStatement statement = connection.prepareStatement(queries[i])) {
         logger.info(queries[i]);
         statement.executeUpdate();
       } catch (SQLException exception) {

@@ -107,12 +107,14 @@ public class XSKTableAlterHandler {
 
         if (!isNullable) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "NOT NULL");
-          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+              XSKCommonsConstants.HDB_TABLE_PARSER);
           throw new SQLException(errorMessage);
         }
         if (isPrimaryKey) {
           String errorMessage = String.format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "PRIMARY KEY");
-          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+              XSKCommonsConstants.HDB_TABLE_PARSER);
           throw new SQLException(errorMessage);
         }
 
@@ -121,8 +123,10 @@ public class XSKTableAlterHandler {
       } else if (!dbColumnTypes.get(name).equals(type.toString())) {
         String errorMessage = String
             .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to " + type);
-        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
-        dataStructuresSynchronizer.applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_UPDATE, errorMessage);
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+            XSKCommonsConstants.HDB_TABLE_PARSER);
+        dataStructuresSynchronizer.applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT,
+            ArtefactState.FAILED_UPDATE, errorMessage);
         throw new SQLException(errorMessage);
       }
     }
@@ -177,7 +181,8 @@ public class XSKTableAlterHandler {
       if (!dbColumnTypes.get(name).equals(type.toString())) {
         String errorMessage = String
             .format(INCOMPATIBLE_CHANGE_OF_TABLE, tableName, name, "of type " + dbColumnTypes.get(name) + " to be changed to" + type);
-        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+        XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+            XSKCommonsConstants.HDB_TABLE_PARSER);
         throw new SQLException(errorMessage);
       }
       AlterTableBuilder alterTableBuilder = SqlFactory.getNative(connection).alter().table(tableName);
@@ -199,7 +204,7 @@ public class XSKTableAlterHandler {
       dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
     }
 
-    XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, this.tableModel);
+    TableSQLBuilder escapeService = new TableSQLBuilder(connection, this.tableModel);
 
     escapeService.escapeTableBuilderUniqueIndices(alterTableBuilder);
     executeAlterBuilder(connection, alterTableBuilder);
@@ -221,7 +226,8 @@ public class XSKTableAlterHandler {
     if (!isPKListUnchanged) {
       String errorMessage = String
           .format("Incompatible change of table [%s] by trying to change its primary key list", this.tableModel.getName());
-      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+      XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+          XSKCommonsConstants.HDB_TABLE_PARSER);
       throw new SQLException(errorMessage);
     }
   }
@@ -259,13 +265,16 @@ public class XSKTableAlterHandler {
       try {
         statement.executeUpdate();
         String messageSuccess = String.format("Update table %s successfully", this.tableModel.getName());
-        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_UPDATE, messageSuccess);
+        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT,
+            ArtefactState.SUCCESSFUL_UPDATE, messageSuccess);
       } catch (SQLException e) {
         logger.error(sql);
         logger.error(e.getMessage(), e);
-        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, this.tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, this.tableModel.getLocation(),
+            XSKCommonsConstants.HDB_TABLE_PARSER);
         String messageFail = String.format("Update table [%s] skipped due to an error: {%s}", this.tableModel, e.getMessage());
-        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_UPDATE, messageFail);
+        dataStructuresSynchronizer.applyArtefactState(this.tableModel.getName(), this.tableModel.getLocation(), TABLE_ARTEFACT,
+            ArtefactState.FAILED_UPDATE, messageFail);
         throw new SQLException(e.getMessage(), e);
       } finally {
         if (statement != null) {

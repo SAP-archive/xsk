@@ -27,56 +27,53 @@ import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.database.sql.DataType;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.Table;
 import org.eclipse.dirigible.database.sql.builders.table.AbstractTableBuilder;
-import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
-import org.eclipse.dirigible.database.sql.dialects.postgres.PostgresSqlDialect;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaCreateTableBuilder;
 
-public class XSKTableEscapeService {
+public class TableSQLBuilder {
 
   private XSKDataStructureHDBTableModel tableModel;
-  private CreateTableBuilder createTableBuilder;
+  private HanaCreateTableBuilder createTableBuilder;
   private Connection connection;
-  private boolean shouldEscapeArtefactPropertyName;
   private boolean caseSensitive = Boolean
       .parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
 
-  public XSKTableEscapeService(Connection connection, XSKDataStructureHDBTableModel tableModel) {
+  public TableSQLBuilder(Connection connection, XSKDataStructureHDBTableModel tableModel) {
     this.tableModel = tableModel;
     String escapedName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
-    if(tableModel.getTableType() !=null ) {
-      this.createTableBuilder = SqlFactory.getNative(connection).create().table(escapedName,tableModel.getTableType());
-    }else {
-      this.createTableBuilder = SqlFactory.getNative(connection).create().table(escapedName);
+    if (tableModel.getTableType() != null) {
+      createTableBuilder = (HanaCreateTableBuilder) SqlFactory.getNative(connection).create().table(escapedName, tableModel.getTableType());
+    } else {
+      createTableBuilder = (HanaCreateTableBuilder) SqlFactory.getNative(connection).create().table(escapedName);
     }
     this.connection = connection;
-    this.shouldEscapeArtefactPropertyName =
-        caseSensitive && !SqlFactory.deriveDialect(connection).getClass().equals(PostgresSqlDialect.class);
   }
 
-  public String getDatabaseSpecificSQL() {
+  public Table getDatabaseSpecificSQL() {
     this.escapeHDBTableColumnModel();
     this.escapedConstraintsModel();
     this.escapeHDBTableIndexModel();
-    return this.createTableBuilder.build();
+    return this.createTableBuilder.buildTable();
   }
 
   private void escapeHDBTableIndexModel() {
     List<XSKDataStructureHDBTableIndexModel> indexes = this.tableModel.getIndexes();
     for (XSKDataStructureHDBTableIndexModel indexModel : indexes) {
-      String name = (this.shouldEscapeArtefactPropertyName)
-          ? XSKHDBUtils.escapeArtifactName(this.connection, indexModel.getIndexName())
+      String name = caseSensitive
+          ? XSKHDBUtils.escapeArtifactName(connection, indexModel.getIndexName())
           : indexModel.getIndexName();
 
-      this.createTableBuilder
-          .index(name, indexModel.isUnique(), indexModel.getOrder(), indexModel.getIndexType(),indexModel.getIndexColumns());
+      createTableBuilder
+          .index(name, indexModel.isUnique(), indexModel.getOrder(), indexModel.getIndexType(), indexModel.getIndexColumns());
     }
   }
 
   protected void escapeHDBTableColumnModel() {
     List<XSKDataStructureHDBTableColumnModel> columns = this.tableModel.getColumns();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
-      String name = (this.shouldEscapeArtefactPropertyName)
-          ? XSKHDBUtils.escapeArtifactName(this.connection, columnModel.getName())
+      String name = caseSensitive
+          ? XSKHDBUtils.escapeArtifactName(connection, columnModel.getName())
           : columnModel.getName();
       DataType type = DataType.valueOf(columnModel.getType());
 
@@ -87,23 +84,22 @@ public class XSKTableEscapeService {
   }
 
   protected void escapedConstraintsModel() {
-    XSKDataStructureHDBTableConstraintsModel constraintsModel = this.tableModel.getConstraints();
+    XSKDataStructureHDBTableConstraintsModel constraintsModel = tableModel.getConstraints();
     if (Objects.nonNull(constraintsModel)) {
       if (Objects.nonNull(constraintsModel.getPrimaryKey())) {
         createTableBuilder
-            .primaryKey(this.getEscapedColumns(constraintsModel.getPrimaryKey().getColumns()));
+            .primaryKey(getEscapedColumns(constraintsModel.getPrimaryKey().getColumns()));
       }
 
-      this.escapeTableBuilderForeignKeys();
-
-      this.escapeTableBuilderUniqueIndices(this.createTableBuilder);
+      escapeTableBuilderForeignKeys();
+      escapeTableBuilderUniqueIndices(createTableBuilder);
 
       List<XSKDataStructureHDBTableConstraintCheckModel> checks = constraintsModel.getChecks();
       if (Objects.nonNull(checks)) {
         for (XSKDataStructureHDBTableConstraintCheckModel check : checks) {
           String checkName = check.getName();
           if (caseSensitive) {
-            checkName = (shouldEscapeArtefactPropertyName)
+            checkName = caseSensitive
                 ? XSKHDBUtils.escapeArtifactName(connection, checkName)
                 : checkName;
           }
@@ -147,7 +143,7 @@ public class XSKTableEscapeService {
     String[] primaryKeyColumns = new String[columns.length];
     int i = 0;
     for (String column : columns) {
-      if (this.caseSensitive && this.shouldEscapeArtefactPropertyName) {
+      if (caseSensitive) {
         primaryKeyColumns[i++] = XSKHDBUtils.escapeArtifactName(this.connection, column);
       } else {
         primaryKeyColumns[i++] = column;
@@ -164,19 +160,16 @@ public class XSKTableEscapeService {
         String foreignKeyName = foreignKey.getName();
         String foreignKeyReferencedTable = foreignKey.getReferencedTable();
         if (caseSensitive) {
-          foreignKeyName = (shouldEscapeArtefactPropertyName)
-              ? XSKHDBUtils.escapeArtifactName(connection, foreignKeyName)
-              : foreignKeyName;
+          XSKHDBUtils.escapeArtifactName(connection, foreignKeyName);
 
-          foreignKeyReferencedTable = (shouldEscapeArtefactPropertyName)
-              ? XSKHDBUtils.escapeArtifactName(connection, foreignKeyReferencedTable)
-              : foreignKeyReferencedTable;
+          foreignKeyReferencedTable = XSKHDBUtils.escapeArtifactName(connection, foreignKeyReferencedTable);
         }
         String[] foreignKeyColumns = this.getEscapedColumns(foreignKey.getColumns());
 
         String[] foreignKeyReferencedColumns = this.getEscapedColumns(foreignKey.getReferencedColumns());
 
-        createTableBuilder.foreignKey(foreignKeyName, foreignKeyColumns, foreignKeyReferencedTable,XSKHDBUtils.escapeArtifactName(connection, foreignKey.getReferencedTableSchema()),
+        createTableBuilder.foreignKey(foreignKeyName, foreignKeyColumns, foreignKeyReferencedTable,
+            XSKHDBUtils.escapeArtifactName(connection, foreignKey.getReferencedTableSchema()),
             foreignKeyReferencedColumns);
       }
     }
@@ -188,9 +181,7 @@ public class XSKTableEscapeService {
       for (XSKDataStructureHDBTableConstraintUniqueModel uniqueIndex : uniqueIndices) {
         String uniqueIndexName = uniqueIndex.getIndexName();
         if (this.caseSensitive) {
-          uniqueIndexName = (this.shouldEscapeArtefactPropertyName)
-              ? XSKHDBUtils.escapeArtifactName(this.connection, uniqueIndexName)
-              : uniqueIndexName;
+          uniqueIndexName = XSKHDBUtils.escapeArtifactName(this.connection, uniqueIndexName);
         }
         String[] uniqueIndexColumns = this.getEscapedColumns(uniqueIndex.getColumns());
         String indexOrder = uniqueIndex.getOrder();

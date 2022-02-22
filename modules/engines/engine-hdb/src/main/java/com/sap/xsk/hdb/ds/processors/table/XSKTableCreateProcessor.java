@@ -27,7 +27,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -58,7 +57,8 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
       throws SQLException {
     logger.info("Processing Create Table: " + tableModel.getName());
 
-    Collection<String> statements = new ArrayList<>();
+    Collection<String> indicesStatements = new ArrayList<>();
+    String tableCreateStatement;
     String tableNameWithoutSchema = tableModel.getName();
     String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(tableModel.getName(), tableModel.getSchema());
 
@@ -66,21 +66,29 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
       case XS_CLASSIC: {
         TableBuilder tableBuilder = new TableBuilder();
         Table table = tableBuilder.build(tableModel);
-        statements.add(table.getCreateTableStatement());
-        statements.addAll(table.getCreateIndicesStatements());
+        tableCreateStatement = table.getCreateTableStatement();
+        indicesStatements.addAll(table.getCreateIndicesStatements());
         break;
       }
       case OTHERS: {
-        statements.add(XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent());
+        tableCreateStatement = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
         break;
       }
+      default:
+        throw new IllegalStateException("Unsupported content type: " + tableModel.getDBContentType());
     }
     try {
-      executeBatch(statements, connection);
+      executeSql(tableCreateStatement, connection);
+
+      if (!indicesStatements.isEmpty()) {
+        executeBatch(indicesStatements, connection);
+      }
+
       String message = String.format("Create table %s successfully", tableModel.getName());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
     } catch (SQLException ex) {
-      logger.error("Creation of table failed. Used SQL - {}", statements.stream().collect(Collectors.joining("; ")), ex);
+      logger.error("Creation of table failed. Used SQL - create table {}, indices {}", tableCreateStatement,
+          String.join("; ", indicesStatements), ex);
       XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
           XSKCommonsConstants.HDB_TABLE_PARSER);
       String message = String.format("Create table [%s] failed due to an error: %s", tableModel, ex.getMessage());

@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-modules-parsers-parent</artifactId>
-		<version>0.14.0-SNAPSHOT</version>
+		<version>0.13.5</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Modules - Parsers - All</name>
 	<artifactId>xsk-modules-parsers-all</artifactId>
-	<version>0.14.0-SNAPSHOT</version>
+	<version>0.13.5</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -23,42 +23,42 @@
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-commons</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.13.5</version>
     </dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-xsodata</artifactId>
-			<version>0.14.0-SNAPSHOT</version>
+			<version>0.13.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-hdbti</artifactId>
-			<version>0.14.0-SNAPSHOT</version>
+			<version>0.13.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-hdbtable</artifactId>
-			<version>0.14.0-SNAPSHOT</version>
+			<version>0.13.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-hdbview</artifactId>
-			<version>0.14.0-SNAPSHOT</version>
+			<version>0.13.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-			<version>0.14.0-SNAPSHOT</version>
+			<version>0.13.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.xsk</groupId>
 			<artifactId>xsk-modules-parsers-hdbschema</artifactId>
-			<version>0.14.0-SNAPSHOT</version>
+			<version>0.13.5</version>
 		</dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hana</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.13.5</version>
     </dependency>
 	</dependencies>
 

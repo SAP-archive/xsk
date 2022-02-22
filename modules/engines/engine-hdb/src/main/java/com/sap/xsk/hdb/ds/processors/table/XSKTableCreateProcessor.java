@@ -42,7 +42,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
   private static final Logger logger = LoggerFactory.getLogger(XSKTableCreateProcessor.class);
   private static final HDBTableSynchronizationArtefactType TABLE_ARTEFACT = new HDBTableSynchronizationArtefactType();
 
-  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
+  private final Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
   /**
    * Execute the corresponding statement.
@@ -64,8 +64,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
     switch (tableModel.getDBContentType()) {
       case XS_CLASSIC: {
-        TableBuilder tableBuilder = new TableBuilder();
-        Table table = tableBuilder.build(tableModel);
+        Table table = new TableBuilder().build(tableModel);
         tableCreateStatement = table.getCreateTableStatement();
         indicesStatements.addAll(table.getCreateIndicesStatements());
         break;
@@ -77,6 +76,23 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
       default:
         throw new IllegalStateException("Unsupported content type: " + tableModel.getDBContentType());
     }
+
+    processStatements(connection, tableModel, indicesStatements, tableCreateStatement);
+    processSynonym(connection, tableModel, tableNameWithoutSchema, tableNameWithSchema);
+  }
+
+  private void processSynonym(Connection connection, XSKDataStructureHDBTableModel tableModel, String tableNameWithoutSchema,
+      String tableNameWithSchema) throws SQLException {
+    boolean shouldCreatePublicSynonym = SqlFactory.getNative(connection)
+        .exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE);
+    if (shouldCreatePublicSynonym) {
+      XSKHDBUtils.createPublicSynonymForArtifact(managerServices
+          .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
+    }
+  }
+
+  private void processStatements(Connection connection, XSKDataStructureHDBTableModel tableModel, Collection<String> indicesStatements,
+      String tableCreateStatement) {
     try {
       executeSql(tableCreateStatement, connection);
 
@@ -93,13 +109,6 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           XSKCommonsConstants.HDB_TABLE_PARSER);
       String message = String.format("Create table [%s] failed due to an error: %s", tableModel, ex.getMessage());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
-    }
-
-    boolean shouldCreatePublicSynonym = SqlFactory.getNative(connection)
-        .exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE);
-    if (shouldCreatePublicSynonym) {
-      XSKHDBUtils.createPublicSynonymForArtifact(managerServices
-          .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
     }
   }
 

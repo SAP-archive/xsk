@@ -43,6 +43,11 @@ jobs:
         version: 'latest' # default is latest stable
       id: install
 
+    # Wait to update helm chart
+    - name: Wait to update helm chart
+      run: |
+        sleep 30s
+
     # Add repo
     - name: Add XSK helm repo
       run: |

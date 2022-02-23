@@ -16,7 +16,7 @@ typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'               
                 ;
 elementDeclRule: annotationRule* (key=ID)? (name=ID | '"' name=ID '"') ':' typeAssignRule elementDetails* ';';
 elementDetails: defaultValue | elementConstraints;
-elementConstraints: 'null' | 'not null';
+elementConstraints: 'null' | 'not null' | 'NULL' | 'NOT NULL';
 
 association: ascId=ID ':' ascKeyword=ID cardinality? toKeyword=ID associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
 associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;

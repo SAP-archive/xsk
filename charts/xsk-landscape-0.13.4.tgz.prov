@@ -24,7 +24,7 @@ maintainers:
 - - email: yordan.pavlov@sap.com
   name: Yordan Pavlov
   url: https://github.com/ThuF
-name: xsk-kpack
+name: xsk-landscape
 sources:
 - - https://github.com/sap/xsk
 type: application
@@ -32,17 +32,17 @@ version: 0.13.4
 
 ...
 files:
-  xsk-kpack-0.13.4.tgz: sha256:e040131925f4d5c3a37b4986f908f753179f201703511f97ac351e583c83aff6
+  xsk-landscape-0.13.4.tgz: sha256:6b40120a7e1804f29ac12d32f77405ce0f35a184fb6d38edb0a4489234fe2457
 -----BEGIN PGP SIGNATURE-----
 
-wsDcBAEBCgAQBQJiFcvkCRBgEPRU0YGUhAAAzgkMAE+UkUlHnWhjznM4p5JKtuzq
-NDhXYy1GDDxZPInRXg5agt88xuA/pC6zOT4mgmItkanCeXxc7O3dbU/0Hb+rFfv/
-jNXSbU40r+eF5tgPG6NClHKYZVFQe2KSl2urdcVOY91Alb4wODJk8I99Tf5KPn0s
-T5OmfrdOxqrNvRV48FVsTPHtoWVpSiqjRq8op/AdUm+ZZZ9DH4S0ps4qPZwAxtRe
-/Lmbf2RZzY8l1dPAZZ4S+9wKKcafUmiGuWPxhAoaNXaK4LxYAYP5upEDgooK/2k+
-r4TkMPc1JSnQgSptSs2GuOOmM2QsKJSlXKZwRZ0OPedoqCpYXiEQHSCSVapU0Tuc
-Su0Nce121lcA3NcOL4c1E/+PjJM84mTfzn8aYYcHL2P+AJRhdQphyoqLxS91gcV1
-VjkSnMH/Xg3JVF4OVT8phyScwfc+r2fakpG9wUvjmqG1g87Kv9fl41RgOiTrV+rj
-Rt/Xnl7oihnH8rTUiSw0l9xKQp78Bco2gbRhY7A2/g==
-=q6SP
+wsDcBAEBCgAQBQJiFcvkCRBgEPRU0YGUhAAAk6gMABXqAi3pp8lhh62SbYCikNTx
+kWwnRLWTRBHeUp3qlw7gr1raqVKj6QmT+jsurM7TJp9eo5vviPdZMa57FTfNKTqn
+tV4RdQvkqogsS5/HSguTUEm12H/6h89kXkN1uOBftEQvlfFJukZuEdSmK+NsFRNY
+n/YO7up1FE8SoBUXUbr+JtLNtYTqVpjTQB6v3+q5Bh3O0ZwzGZsWgnwxev415+xM
+9c3zm5Xq5Kyg7aIbdITLjgpf+VQR9/hiY3DvV9AbWdFdnqHCCKnEZqYSJ9e3Y8T1
+2i+n0wO9DjRDIJbbndNUxqFU33pwMh/Ad0F3ncEbVVT/8tdaXm/NLK38UOgt4Dtk
+9KhfDWXwVS/x3v8oUCmq9VL9FpJEKZ+4iy7ZPQbbBCS+edwxZsrls8RRtHvNgcPw
+/VyZnymW3xoFejzM7msjfFM2n48bINn4U0Zb6pcUzaCmYZm2nwtslAXCoqSs1K6Y
+fdCW4FH3CTXb2tKDLK3brufz9iBhChypAoDIUsQUAA==
+=u1N0
 -----END PGP SIGNATURE-----

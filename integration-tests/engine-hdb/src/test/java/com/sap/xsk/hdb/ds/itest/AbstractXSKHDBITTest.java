@@ -26,8 +26,8 @@ import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreSynchronizationFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade;
 import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
@@ -39,7 +39,7 @@ public abstract class AbstractXSKHDBITTest {
 	protected static DataSource datasource;
 	protected static DataSource systemDatasource;
 
-	protected static IXSKHDBCoreFacade facade;
+	protected static IXSKHDBCoreSynchronizationFacade facade;
 
 	@BeforeClass
 	public static void setUp() {
@@ -48,7 +48,7 @@ public abstract class AbstractXSKHDBITTest {
 		xskhdbTestModule.configure();
 		datasource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 		systemDatasource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
-		facade = new XSKHDBCoreFacade();
+		facade = new XSKHDBCoreSynchronizationFacade();
 		facade.clearCache();
 	}
 
@@ -66,7 +66,7 @@ public abstract class AbstractXSKHDBITTest {
 		return datasource;
 	}
 
-	public IXSKHDBCoreFacade getFacade() {
+	public IXSKHDBCoreSynchronizationFacade getFacade() {
 		return facade;
 	}
 }

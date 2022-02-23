@@ -32,12 +32,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.mysql.MySQLSqlDialect;
 
 public class XSKHDBUtils {
 
   private static final String commentRegex = "(/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*/)|(--.*)";
+  private static final String ESCAPE_SYMBOL = "\"";
 
   private XSKHDBUtils() {
   }
@@ -59,19 +58,18 @@ public class XSKHDBUtils {
    * @param schemaName   name of the schema that will be assembled to the artifact name
    * @return escaped in quotes artifact name
    */
-  public static String escapeArtifactName(Connection connection, String artifactName, String schemaName) {
+  public static String escapeArtifactName(String artifactName, String schemaName) {
     boolean caseSensitive = Boolean.parseBoolean(Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true"));
-    String escapeSymbol = getEscapeSymbol(connection);
-    if (!artifactName.startsWith(escapeSymbol)) {
+    if (!artifactName.startsWith(ESCAPE_SYMBOL)) {
       if (caseSensitive) {
-        artifactName = escapeSymbol + artifactName + escapeSymbol;
+        artifactName = ESCAPE_SYMBOL + artifactName + ESCAPE_SYMBOL;
       }
     }
 
     if (schemaName != null && !schemaName.trim().isEmpty()) {
-      if (!schemaName.startsWith(escapeSymbol)) {
+      if (!schemaName.startsWith(ESCAPE_SYMBOL)) {
         if (caseSensitive) {
-          schemaName = escapeSymbol + schemaName + escapeSymbol + ".";
+          schemaName = ESCAPE_SYMBOL + schemaName + ESCAPE_SYMBOL + ".";
         } else {
           schemaName = schemaName + ".";
         }
@@ -84,16 +82,10 @@ public class XSKHDBUtils {
   }
 
   /**
-   * See also {@link #escapeArtifactName(Connection, String, String)}.
+   * See also {@link #escapeArtifactName(String, String)}.
    */
-  public static String escapeArtifactName(Connection connection, String artifactName) {
-    return escapeArtifactName(connection, artifactName, null);
-  }
-
-  public static String getEscapeSymbol(Connection connection) {
-    return (SqlFactory.deriveDialect(connection).getClass().equals(MySQLSqlDialect.class))
-        ? "`"
-        : "\"";
+  public static String escapeArtifactName(String artifactName) {
+    return escapeArtifactName(artifactName, null);
   }
 
   public static void populateXSKDataStructureModel(String location, String content, XSKDataStructureModel model, String artifactType,

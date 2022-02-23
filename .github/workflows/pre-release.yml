@@ -180,7 +180,8 @@ jobs:
         SHA=$(sed -e 's#.*sha256:\(\)#\1#' <<< $HELM_SHA )
         echo "::set-output name=XSK_HELM_SHA_PRINT::$SHA"
       id: XSK_HELM_SHA
-    - name: Helm Chart Release Index    
+    - name: Helm Chart Release Index
+      run: |
         cd charts-temp/
         helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
         cp -rf helm-charts/index.yaml ../.

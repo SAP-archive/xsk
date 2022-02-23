@@ -27,7 +27,7 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade;
 import com.sap.xsk.hdb.ds.itest.AbstractXSKHDBITTest;
 import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
 import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
@@ -206,7 +206,7 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
 					"/registry/public/hdbtable-itest/incompatible-primary-key-change-hana.hdbtable", //
 					"/hdbtable-itest/incompatible-primary-key-change-hana.hdbtable" //
 			);
-			LogCaptor logCaptor = LogCaptor.forClass(XSKHDBCoreFacade.class);
+			LogCaptor logCaptor = LogCaptor.forClass(XSKHDBCoreSynchronizationFacade.class);
 
 			try {
 				facade.handleResourceSynchronization(resource);
@@ -236,7 +236,7 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
 					"/registry/public/hdbtable-itest/adding-new-column-to-pk-list-hana.hdbtable", //
 					"/hdbtable-itest/adding-new-column-to-pk-list-hana.hdbtable" //
 			);
-			LogCaptor logCaptor = LogCaptor.forClass(XSKHDBCoreFacade.class);
+			LogCaptor logCaptor = LogCaptor.forClass(XSKHDBCoreSynchronizationFacade.class);
 
 			try {
 				facade.handleResourceSynchronization(resource);
@@ -264,7 +264,7 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
 					"/registry/public/hdbtable-itest/adding-new-not-nullable-column-hana.hdbtable", //
 					"/hdbtable-itest/adding-new-not-nullable-column-hana.hdbtable" //
 			);
-			LogCaptor logCaptor = LogCaptor.forClass(XSKHDBCoreFacade.class);
+			LogCaptor logCaptor = LogCaptor.forClass(XSKHDBCoreSynchronizationFacade.class);
 
 			try {
 				facade.handleResourceSynchronization(resource);
@@ -292,7 +292,7 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
 					"/registry/public/hdbtable-itest/incompatible-column-type-change-hana.hdbtable", //
 					"/hdbtable-itest/incompatible-column-type-change-hana.hdbtable" //
 			);
-			LogCaptor logCaptor = LogCaptor.forClass(XSKHDBCoreFacade.class);
+			LogCaptor logCaptor = LogCaptor.forClass(XSKHDBCoreSynchronizationFacade.class);
 
 			try {
 				facade.handleResourceSynchronization(resource);

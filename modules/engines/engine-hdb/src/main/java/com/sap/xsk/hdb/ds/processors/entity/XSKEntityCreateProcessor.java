@@ -11,19 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.entity;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
-import org.eclipse.dirigible.database.sql.DataType;
-import org.eclipse.dirigible.database.sql.ISqlKeywords;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.artefacts.HDBDDEntitySynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
@@ -32,6 +19,17 @@ import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
+import org.eclipse.dirigible.database.sql.DataType;
+import org.eclipse.dirigible.database.sql.ISqlKeywords;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.builders.table.CreateTableBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Entity Create Processor.
@@ -49,13 +47,13 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
    * @throws SQLException the SQL exception
    */
   public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel));
+    String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Create Table: {}", tableName);
     CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
     List<XSKDataStructureHDBTableColumnModel> columns = entityModel.getColumns();
     List<String> primaryKeyColumns = new ArrayList<>();
     for (XSKDataStructureHDBTableColumnModel columnModel : columns) {
-      String name = XSKHDBUtils.escapeArtifactName(connection, columnModel.getName());
+      String name = XSKHDBUtils.escapeArtifactName(columnModel.getName());
       DataType type = DataType.valueOf(columnModel.getType());
       String length = columnModel.getLength();
       boolean isNullable = columnModel.isNullable();
@@ -104,14 +102,14 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
           String foreignKeyName = "FK_" + foreignKey.getName();
           String[] fkColumns = foreignKey.getColumns();
           String referencedTable = XSKHDBUtils
-              .escapeArtifactName(connection, XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
+              .escapeArtifactName(XSKHDBUtils.getTableName(entityModel, foreignKey.getReferencedTable()));
           String[] referencedColumns = foreignKey.getReferencedColumns();
-          foreignKeyName = XSKHDBUtils.escapeArtifactName(connection, foreignKeyName);
+          foreignKeyName = XSKHDBUtils.escapeArtifactName(foreignKeyName);
           for (int i = 0; i < fkColumns.length; i++) {
-            fkColumns[i] = XSKHDBUtils.escapeArtifactName(connection, fkColumns[i]);
+            fkColumns[i] = XSKHDBUtils.escapeArtifactName(fkColumns[i]);
           }
           for (int i = 0; i < referencedColumns.length; i++) {
-            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(connection, referencedColumns[i]);
+            referencedColumns[i] = XSKHDBUtils.escapeArtifactName(referencedColumns[i]);
           }
           createTableBuilder.foreignKey(foreignKeyName, fkColumns, referencedTable, referencedColumns);
         }
@@ -125,7 +123,8 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
       applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
     } catch (SQLException ex) {
       String message = String.format("Create entity [%s] skipped due to an error: %s", entityModel, ex.getMessage());
-      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(), XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(),
+          XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
       applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, message);
     }
   }

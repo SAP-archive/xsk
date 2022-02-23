@@ -133,7 +133,7 @@ public interface IXSKDataStructureModel {
   /**
    * Type hdbscalarfunction
    */
-  public static final String TYPE_HDB_SCALARFUNCTION = "HDBSCALARFUNCTION";
+  public static final String TYPE_HDB_SCALAR_FUNCTION = "HDBSCALARFUNCTION";
 
   /**
    * Type hdbtabletype

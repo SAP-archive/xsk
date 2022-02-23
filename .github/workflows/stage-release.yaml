@@ -55,6 +55,8 @@ jobs:
         mkdir ~/.gnupg
         wget https://xsk.io/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
         OUTPUT=$(helm pull xsk/xsk --version ${{ inputs.XSK_VERSION }} --verify)
+        echo "$OUTPUT"
+        echo "${{ inputs.XSK_HELM_SHA }}"
         OUTPUT="${OUTPUT//'%'/'%25'}"
         OUTPUT="${OUTPUT//$'\n'/'%0A'}"
         OUTPUT="${OUTPUT//$'\r'/'%0D'}"

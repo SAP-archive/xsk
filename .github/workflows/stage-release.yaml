@@ -65,7 +65,7 @@ jobs:
 
     # Check chart sha
     - name: Check chart sha
-      if: "steps.XSK_HELM_SHA.outputs.XSK_HELM_SHA_PRINT != ${{ inputs.XSK_HELM_SHA }}"
+      if: "${{ steps.XSK_HELM_SHA.outputs.XSK_HELM_SHA_PRINT }} != ${{ inputs.XSK_HELM_SHA }}"
       run: |
         echo "Failed to verify sha!"
         exit 1

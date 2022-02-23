@@ -69,19 +69,19 @@ public class XSKSchemaManagerService extends AbstractDataStructureManagerService
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel)
+  public boolean createDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel)
       throws SQLException {
-    this.hdbSchemaCreateProcessor.execute(connection, schemaModel);
+	return this.hdbSchemaCreateProcessor.execute(connection, schemaModel);
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel)
+  public boolean dropDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel)
       throws SQLException {
-    this.hdbSchemaDropProcessor.execute(connection, schemaModel);
+	return this.hdbSchemaDropProcessor.execute(connection, schemaModel);
   }
 
   @Override
-  public void updateDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel)
+  public boolean updateDataStructure(Connection connection, XSKDataStructureHDBSchemaModel schemaModel)
       throws OperationNotSupportedException {
     throw new OperationNotSupportedException();
   }

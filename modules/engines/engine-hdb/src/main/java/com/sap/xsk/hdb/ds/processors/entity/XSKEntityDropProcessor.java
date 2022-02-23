@@ -42,7 +42,7 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @param entityModel the table model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+  public boolean execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
     String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Drop Table: {}", tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
@@ -96,6 +96,7 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
                 XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
             String message = String.format("Drop entity [%s] skipped due to an error: %s", entityModel, ex.getMessage());
             applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.FAILED_DELETE, message);
+            return false;
           }
         }
       }
@@ -105,14 +106,16 @@ public class XSKEntityDropProcessor extends AbstractXSKProcessor<XSKDataStructur
         executeSql(sql, connection);
         String message = String.format("Drop entity %s successfully", entityModel.getName());
         applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.SUCCESSFUL_DELETE, message);
+        return true;
       } catch (SQLException ex) {
         String message = String.format("Drop entity [%s] skipped due to an error: %s", entityModel, ex.getMessage());
         XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(),
             XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
         applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.FAILED_DELETE, message);
+        return false;
       }
-      return;
     }
     logger.warn("Trying to delete non existing Table: {}", tableName);
+    return true;
   }
 }

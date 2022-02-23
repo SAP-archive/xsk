@@ -60,19 +60,19 @@ public class XSKViewManagerService extends AbstractDataStructureManagerService<X
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel)
+  public boolean createDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel)
       throws SQLException {
-    this.xskViewCreateProcessor.execute(connection, viewModel);
+    return this.xskViewCreateProcessor.execute(connection, viewModel);
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel)
+  public boolean dropDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel)
       throws SQLException {
-    this.xskViewDropProcessor.execute(connection, viewModel);
+    return this.xskViewDropProcessor.execute(connection, viewModel);
   }
 
   @Override
-  public void updateDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel)
+  public boolean updateDataStructure(Connection connection, XSKDataStructureHDBViewModel viewModel)
       throws OperationNotSupportedException {
     throw new OperationNotSupportedException();
   }

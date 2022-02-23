@@ -46,7 +46,7 @@ public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureH
    * @param viewModel  the view model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
+  public boolean execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
       throws SQLException {
     logger.info("Processing Drop View: " + viewModel.getName());
     String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(viewModel.getName(), viewModel.getSchema());
@@ -64,16 +64,19 @@ public class XSKViewDropProcessor extends AbstractXSKProcessor<XSKDataStructureH
         executeSql(sql, connection);
         String message = String.format("Drop view %s successfully", viewModel.getName());
         applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.SUCCESSFUL_DELETE, message);
+        return true;
       } catch (SQLException ex) {
         String errorMessage = String.format("Drop view [%s] skipped due to an error: %s", viewModel.getName(), ex.getMessage());
         XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(),
             XSKCommonsConstants.HDB_VIEW_PARSER);
         applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_DELETE, errorMessage);
+        return false;
       }
     } else {
       String warningMessage = String.format("View [%s] does not exists during the drop process", viewModel.getName());
       logger.warn(warningMessage);
       applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_DELETE, warningMessage);
+      return true;
     }
   }
 

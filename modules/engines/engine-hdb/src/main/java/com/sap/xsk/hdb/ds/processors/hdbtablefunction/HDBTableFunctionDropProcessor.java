@@ -34,7 +34,7 @@ public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataS
   private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionDropProcessor.class);
   private static final HDBTableFunctionSynchronizationArtefactType TABLE_FUNCTION_ARTEFACT = new HDBTableFunctionSynchronizationArtefactType();
 
-  public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
+  public boolean execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
       throws SQLException {
     logger.info("Processing Drop TableFunction: " + hdbTableFunction.getName());
 
@@ -54,16 +54,19 @@ public class HDBTableFunctionDropProcessor extends AbstractXSKProcessor<XSKDataS
           executeSql(sql, connection);
           String message = String.format("Drop table function %s successfully", hdbTableFunction.getName());
           applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.SUCCESSFUL_DELETE, message);
+          return true;
         } catch (SQLException ex) {
           String errorMessage = String.format("Drop table function [%s] skipped due to an error: %s", hdbTableFunction.getName(), ex.getMessage());
           XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbTableFunction.getLocation(), XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
           applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_DELETE, errorMessage);
+          return false;
         }
       }
     } else {
       String warningMessage = String.format("TableFunction [%s] does not exists during the drop process", hdbTableFunction.getName());
       logger.warn(warningMessage);
       applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_DELETE, warningMessage);
+      return true;
     }
   }
 

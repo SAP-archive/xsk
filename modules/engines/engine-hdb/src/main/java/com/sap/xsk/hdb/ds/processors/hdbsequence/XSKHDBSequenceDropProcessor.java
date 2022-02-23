@@ -34,7 +34,7 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
   private static final HDBSequenceSynchronizationArtefactType SEQUENCE_ARTEFACT = new HDBSequenceSynchronizationArtefactType();
 
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
+  public boolean execute(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel) throws SQLException {
     String hdbSequenceName = XSKHDBUtils.escapeArtifactName(hdbSequenceModel.getName(), hdbSequenceModel.getSchema());
     logger.info("Processing Drop HdbSequence: " + hdbSequenceName);
 
@@ -65,18 +65,21 @@ public class XSKHDBSequenceDropProcessor extends AbstractXSKProcessor<XSKDataStr
         String message = String.format("Drop sequence %s successfully", hdbSequenceModel.getName());
         applyArtefactState(hdbSequenceModel.getName(), hdbSequenceModel.getLocation(), SEQUENCE_ARTEFACT, ArtefactState.SUCCESSFUL_DELETE,
             message);
+        return true;
       } catch (SQLException ex) {
         String message = String.format("Drop sequence [%s] skipped due to an error: %s", hdbSequenceModel.getName(), ex.getMessage());
         XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbSequenceModel.getLocation(),
             XSKCommonsConstants.HDB_SEQUENCE_PARSER);
         applyArtefactState(hdbSequenceModel.getName(), hdbSequenceModel.getLocation(), SEQUENCE_ARTEFACT, ArtefactState.FAILED_DELETE,
             message);
+        return false;
       }
     } else {
       String warningMessage = String.format("Sequence [%s] does not exists during the drop process", hdbSequenceModel.getName());
       logger.warn(warningMessage);
       applyArtefactState(hdbSequenceModel.getName(), hdbSequenceModel.getLocation(), SEQUENCE_ARTEFACT, ArtefactState.FAILED_DELETE,
           warningMessage);
+      return true;
     }
   }
 

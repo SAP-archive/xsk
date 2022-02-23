@@ -59,19 +59,19 @@ public class XSKSynonymManagerService extends AbstractDataStructureManagerServic
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureHDBSynonymModel synonymModel)
+  public boolean createDataStructure(Connection connection, XSKDataStructureHDBSynonymModel synonymModel)
       throws SQLException {
-    this.xskSynonymCreateProcessor.execute(connection, synonymModel);
+	return this.xskSynonymCreateProcessor.execute(connection, synonymModel);
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBSynonymModel synonymModel)
+  public boolean dropDataStructure(Connection connection, XSKDataStructureHDBSynonymModel synonymModel)
       throws SQLException {
-    this.xskSynonymDropProcessor.execute(connection, synonymModel);
+	return this.xskSynonymDropProcessor.execute(connection, synonymModel);
   }
 
   @Override
-  public void updateDataStructure(Connection connection, XSKDataStructureHDBSynonymModel synonymModel)
+  public boolean updateDataStructure(Connection connection, XSKDataStructureHDBSynonymModel synonymModel)
       throws SQLException, OperationNotSupportedException {
     throw new OperationNotSupportedException();
   }

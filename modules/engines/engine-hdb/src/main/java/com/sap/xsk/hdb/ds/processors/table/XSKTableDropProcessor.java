@@ -51,7 +51,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
    * @param tableModel the table model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
+  public boolean execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
     logger.info("Processing Drop Table: " + tableModel.getName());
 
@@ -101,7 +101,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
                 XSKCommonsConstants.HDB_TABLE_PARSER);
             logger.error(errorMessage);
             applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_DELETE, errorMessage);
-            return;
+            return false;
           }
         }
       } catch (SQLException e) {
@@ -111,6 +111,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
         logger.error(sql);
         logger.error(e.getMessage(), e);
         applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_DELETE, errorMessage);
+        return false;
       } finally {
         if (statement != null) {
           statement.close();
@@ -125,11 +126,12 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
       }
 
       sql = SqlFactory.getNative(connection).drop().table(tableName).build();
-      executeUpdate(connection, sql, tableModel);
+      return executeUpdate(connection, sql, tableModel);
     }
+    return true;
   }
 
-  private void executeUpdate(Connection connection, String sql, XSKDataStructureHDBTableModel tableModel)
+  private boolean executeUpdate(Connection connection, String sql, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
     PreparedStatement statement = null;
     try {
@@ -138,6 +140,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
       statement.executeUpdate();
       String message = String.format("Drop table %s successfully", tableModel.getName());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_DELETE, message);
+      return true;
     } catch (SQLException e) {
       String message = String.format("Drop table[%s] skipped due to an error: {%s}", tableModel, e.getMessage());
       XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
@@ -145,6 +148,7 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
       logger.error(sql);
       logger.error(e.getMessage(), e);
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_DELETE, message);
+      return false;
     } finally {
       if (statement != null) {
         statement.close();

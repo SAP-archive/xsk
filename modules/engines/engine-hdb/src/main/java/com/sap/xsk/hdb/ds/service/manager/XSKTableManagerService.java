@@ -68,22 +68,22 @@ public class XSKTableManagerService extends AbstractDataStructureManagerService<
     }
   }
 
-  public void createDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
+  public boolean createDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
-    this.xskTableCreateProcessor.execute(connection, tableModel);
+	return this.xskTableCreateProcessor.execute(connection, tableModel);
   }
 
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
+  public boolean dropDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
-    this.xskTableDropProcessor.execute(connection, tableModel);
+	return this.xskTableDropProcessor.execute(connection, tableModel);
   }
 
-  public void updateDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
+  public boolean updateDataStructure(Connection connection, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
     //TODO: Create logic for updating hdb table
     logger.error("Altering of a non-empty table is not implemented yet.");
     // TableAlterProcessor.execute(connection, tableModel);
-    xskTableAlterProcessor.execute(connection, tableModel);
+    return xskTableAlterProcessor.execute(connection, tableModel);
   }
 
   public Map<String, XSKDataStructureHDBTableModel> getDataStructureModels() {

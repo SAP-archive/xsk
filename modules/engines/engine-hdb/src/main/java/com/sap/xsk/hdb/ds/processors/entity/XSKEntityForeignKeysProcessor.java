@@ -39,7 +39,7 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
    * @param entityModel the entity model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureEntityModel entityModel)
+  public boolean execute(Connection connection, XSKDataStructureEntityModel entityModel)
       throws SQLException {
     String tableName = XSKHDBUtils.getTableName(entityModel);
     logger.info("Processing Foreign Keys to the Table: {}", tableName);
@@ -63,6 +63,7 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
         } catch (SQLException ex) {
           XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(),
               XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
+          return false;
         }
       } else {
         String reason = "Table does not exist - " + sourceTable;
@@ -72,6 +73,7 @@ public class XSKEntityForeignKeysProcessor extends AbstractXSKProcessor<XSKDataS
         throw new SQLException(reason);
       }
     }
+    return true;
   }
 
 }

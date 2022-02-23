@@ -34,7 +34,7 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
   private static final Logger logger = LoggerFactory.getLogger(HDBTableFunctionCreateProcessor.class);
   private static final HDBTableFunctionSynchronizationArtefactType TABLE_FUNCTION_ARTEFACT = new HDBTableFunctionSynchronizationArtefactType();
 
-  public void execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
+  public boolean execute(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunction)
       throws SQLException {
     logger.info("Processing Create TableFunction: " + hdbTableFunction.getName());
 
@@ -54,16 +54,19 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
           executeSql(sql, connection);
           String message = String.format("Create table function %s successfully", hdbTableFunction.getName());
           applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+          return true;
         } catch (SQLException ex) {
           String errorMessage = String.format("Create table function [%s] skipped due to an error: %s", hdbTableFunction.getName(), ex.getMessage());
           XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbTableFunction.getLocation(), XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
           applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
+          return false;
         }
       }
     } else {
       String warningMessage = String.format("TableFunction [%s] already exists during the create process", hdbTableFunction.getName());
       logger.warn(warningMessage);
       applyArtefactState(hdbTableFunction.getName(), hdbTableFunction.getLocation(), TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_CREATE, warningMessage);
+      return false;
     }
   }
 }

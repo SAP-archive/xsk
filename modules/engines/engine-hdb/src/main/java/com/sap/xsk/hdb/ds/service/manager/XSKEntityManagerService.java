@@ -68,29 +68,34 @@ public class XSKEntityManagerService extends AbstractDataStructureManagerService
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel)
+  public boolean createDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel)
       throws SQLException {
     if (entitiesModel != null) {
       for (XSKDataStructureHDBTableModel entityModel : entitiesModel.getTableModels()) {
         String tableName = XSKHDBUtils.escapeArtifactName(entityModel.getName(), entityModel.getSchema());
         if (!SqlFactory.getNative(connection).exists(connection, tableName)) {
-          this.xskTableCreateProcessor.execute(connection, entityModel);
+          if (!this.xskTableCreateProcessor.execute(connection, entityModel)) {
+        	  return false;
+          }
         } else {
-          this.xskTableAlterProcessor.execute(connection, entityModel);
+          if (!this.xskTableAlterProcessor.execute(connection, entityModel)) {
+        	  return false;
+          }
         }
       }
     }
-
+    return true;
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel) throws SQLException {
-
+  public boolean dropDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel) throws SQLException {
+	  return true;
   }
 
   @Override
-  public void updateDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel)
+  public boolean updateDataStructure(Connection connection, XSKDataStructureCdsModel entitiesModel)
       throws SQLException, OperationNotSupportedException {
+	  return true;
   }
 
   @Override

@@ -77,19 +77,19 @@ public class XSKTableTypeManagerService extends AbstractDataStructureManagerServ
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel structureModel)
+  public boolean createDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel structureModel)
       throws SQLException {
-    this.xskTableTypeCreateProcessor.execute(connection, structureModel);
+	return this.xskTableTypeCreateProcessor.execute(connection, structureModel);
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
+  public boolean dropDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
       throws SQLException {
-    this.xskTableTypeDropProcessor.execute(connection, tableTypeModel);
+	return this.xskTableTypeDropProcessor.execute(connection, tableTypeModel);
   }
 
   @Override
-  public void updateDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
+  public boolean updateDataStructure(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
       throws SQLException, OperationNotSupportedException {
     throw new OperationNotSupportedException();
   }

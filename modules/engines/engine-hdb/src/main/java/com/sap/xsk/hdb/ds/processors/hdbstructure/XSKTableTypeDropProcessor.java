@@ -34,21 +34,23 @@ public class XSKTableTypeDropProcessor extends AbstractXSKProcessor<XSKDataStruc
   }
 
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel) throws SQLException {
+  public boolean execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel) throws SQLException {
     synonymRemover.removePublicSynonym(connection, tableTypeModel.getSchema(), tableTypeModel.getName());
 
     if (tableTypeDoesNotExist(connection, tableTypeModel)) {
       logger.debug("Table Type [{}] in schema [{}] does not exists during the drop process", tableTypeModel.getName(),
           tableTypeModel.getSchema());
-      return;
+      return true;
     }
 
     String tableTypeName = escapeTableTypeName(connection, tableTypeModel);
     try {
       String sql = getDropTableTypeSQL(connection, tableTypeName);
       executeSql(sql, connection);
+      return true;
     } catch (SQLException | IllegalStateException ex) {
       processException(tableTypeModel, ex);
+      return false;
     }
   }
 

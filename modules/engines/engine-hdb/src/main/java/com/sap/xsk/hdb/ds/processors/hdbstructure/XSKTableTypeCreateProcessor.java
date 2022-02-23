@@ -50,9 +50,11 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
    * @throws SQLException the SQL exception
    */
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
+  public boolean execute(Connection connection, XSKDataStructureHDBTableTypeModel tableTypeModel)
       throws SQLException {
     logger.info("Processing Create Table Type: " + tableTypeModel.getName());
+    
+    boolean success = false;
 
     String tableTypeNameWithoutSchema = tableTypeModel.getName();
     String tableTypeNameWithSchema = XSKHDBUtils.escapeArtifactName(tableTypeNameWithoutSchema, tableTypeModel.getSchema());
@@ -88,9 +90,12 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
           }
         }
       }
+      
       try {
         executeSql(sql, connection);
+        success = true;
       } catch (SQLException ex) {
+    	logger.error(format("Table Type [{0}] failed during the create process", tableTypeNameWithoutSchema));
         XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableTypeModel.getLocation(),
             XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
       }
@@ -104,6 +109,7 @@ public class XSKTableTypeCreateProcessor extends AbstractXSKProcessor<XSKDataStr
       XSKHDBUtils.createPublicSynonymForArtifact(managerServices
           .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableTypeNameWithoutSchema, tableTypeModel.getSchema(), connection);
     }
+    return success;
   }
 
   private String getColumnModelArgs(XSKDataStructureHDBTableColumnModel columnModel) {

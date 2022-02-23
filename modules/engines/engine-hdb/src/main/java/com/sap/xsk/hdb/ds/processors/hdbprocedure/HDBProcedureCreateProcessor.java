@@ -34,7 +34,7 @@ public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStr
   private static final Logger logger = LoggerFactory.getLogger(HDBProcedureCreateProcessor.class);
   private static final HDBProcedureSynchronizationArtefactType PROCEDURE_ARTEFACT = new HDBProcedureSynchronizationArtefactType();
 
-  public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure)
+  public boolean execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure)
       throws SQLException {
     logger.info("Processing Create Procedure: " + hdbProcedure.getName());
     String procedureNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[1];
@@ -53,16 +53,19 @@ public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStr
           String message = String.format("Create procedure %s successfully", hdbProcedure.getName());
           executeSql(sql, connection);
           applyArtefactState(hdbProcedure.getName(), hdbProcedure.getLocation(), PROCEDURE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+          return true;
         } catch (SQLException ex) {
           String message = String.format("Create procedure[%s] skipped due to an error: %s", hdbProcedure, ex.getMessage());
           XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbProcedure.getLocation(), XSKCommonsConstants.HDB_PROCEDURE_PARSER);
           applyArtefactState(hdbProcedure.getName(), hdbProcedure.getLocation(), PROCEDURE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
+          return false;
         }
       }
     } else {
       String warningMessage = String.format("Procedure [%s] already exists during the create process", hdbProcedure.getName());
       logger.warn(warningMessage);
       applyArtefactState(hdbProcedure.getName(), hdbProcedure.getLocation(), PROCEDURE_ARTEFACT, ArtefactState.FAILED_CREATE, warningMessage);
+      return false;
     }
   }
 }

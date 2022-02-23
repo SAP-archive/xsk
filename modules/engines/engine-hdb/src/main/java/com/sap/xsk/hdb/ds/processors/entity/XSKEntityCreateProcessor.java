@@ -46,7 +46,7 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
    * @param entityModel the entity model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
+  public boolean execute(Connection connection, XSKDataStructureEntityModel entityModel) throws SQLException {
     String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Create Table: {}", tableName);
     CreateTableBuilder createTableBuilder = SqlFactory.getNative(connection).create().table(tableName);
@@ -121,11 +121,13 @@ public class XSKEntityCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
       executeSql(sql, connection);
       String message = String.format("Create entity %s successfully", entityModel.getName());
       applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+      return true;
     } catch (SQLException ex) {
       String message = String.format("Create entity [%s] skipped due to an error: %s", entityModel, ex.getMessage());
       XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, entityModel.getLocation(),
           XSKCommonsConstants.XSK_ENTITY_PROCESSOR);
       applyArtefactState(entityModel.getName(), entityModel.getLocation(), ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, message);
+      return false;
     }
   }
 

@@ -74,19 +74,19 @@ public class XSKTableFunctionManagerService extends AbstractDataStructureManager
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunctionModel)
+  public boolean createDataStructure(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunctionModel)
       throws SQLException {
-    this.hdbTableFunctionCreateProcessor.execute(connection, hdbTableFunctionModel);
+	return this.hdbTableFunctionCreateProcessor.execute(connection, hdbTableFunctionModel);
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunctionModel)
+  public boolean dropDataStructure(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunctionModel)
       throws SQLException {
-    this.hdbTableFunctionDropProcessor.execute(connection, hdbTableFunctionModel);
+	return this.hdbTableFunctionDropProcessor.execute(connection, hdbTableFunctionModel);
   }
 
   @Override
-  public void updateDataStructure(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunctionModel)
+  public boolean updateDataStructure(Connection connection, XSKDataStructureHDBTableFunctionModel hdbTableFunctionModel)
       throws SQLException, OperationNotSupportedException {
     throw new OperationNotSupportedException();
   }

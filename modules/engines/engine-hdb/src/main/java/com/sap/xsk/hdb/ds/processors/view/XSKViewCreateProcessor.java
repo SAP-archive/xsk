@@ -49,9 +49,12 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @param viewModel  the view model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
+  public boolean execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
       throws SQLException {
     logger.info("Processing Create View: " + viewModel.getName());
+    
+    boolean success = false;
+    
     String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(viewModel.getName(), viewModel.getSchema());
 
     if (!SqlFactory.getNative(connection).exists(connection, viewNameWithSchema, DatabaseArtifactTypes.VIEW)) {
@@ -79,6 +82,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
         executeSql(sql, connection);
         String message = String.format("Create view %s successfully", viewModel.getName());
         applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+        success = true;
       } catch (SQLException ex) {
         String errorMessage = String.format("Create view [%s] skipped due to an error: %s", viewModel.getName(), ex.getMessage());
         XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(),
@@ -98,6 +102,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
             .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), viewModel.getName(), viewModel.getSchema(), connection);
       }
     }
+    return success;
   }
 
 }

@@ -34,7 +34,7 @@ public class HDBProcedureDropProcessor extends AbstractXSKProcessor<XSKDataStruc
   private static final Logger logger = LoggerFactory.getLogger(HDBProcedureDropProcessor.class);
   private static final HDBProcedureSynchronizationArtefactType PROCEDURE_ARTEFACT = new HDBProcedureSynchronizationArtefactType();
 
-  public void execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure)
+  public boolean execute(Connection connection, XSKDataStructureHDBProcedureModel hdbProcedure)
       throws SQLException {
     logger.info("Processing Drop Procedure: " + hdbProcedure.getName());
     String procedureNameWithoutSchema = XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(hdbProcedure.getName())[1];
@@ -53,16 +53,19 @@ public class HDBProcedureDropProcessor extends AbstractXSKProcessor<XSKDataStruc
           executeSql(sql, connection);
           String message = String.format("Drop procedure %s successfully", hdbProcedure.getName());
           applyArtefactState(hdbProcedure.getName(), hdbProcedure.getLocation(), PROCEDURE_ARTEFACT, ArtefactState.SUCCESSFUL_DELETE, message);
+          return true;
         } catch (SQLException ex) {
           String message = String.format("Drop procedure[%s] skipped due to an error: %s", hdbProcedure, ex.getMessage());
           XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbProcedure.getLocation(), XSKCommonsConstants.HDB_PROCEDURE_PARSER);
           applyArtefactState(hdbProcedure.getName(), hdbProcedure.getLocation(), PROCEDURE_ARTEFACT, ArtefactState.FAILED_DELETE, message);
+          return false;
         }
       }
     } else {
       String warningMessage = String.format("Procedure [%s] does not exists during the drop process", hdbProcedure.getName());
       logger.warn(warningMessage);
       applyArtefactState(hdbProcedure.getName(), hdbProcedure.getLocation(), PROCEDURE_ARTEFACT, ArtefactState.FAILED_DELETE, warningMessage);
+      return true;
     }
   }
 }

@@ -76,21 +76,21 @@ public class XSKHDBSequenceManagerService extends AbstractDataStructureManagerSe
   }
 
   @Override
-  public void createDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
+  public boolean createDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
       throws SQLException {
-    this.xskHdbSequenceCreateProcessor.execute(connection, hdbSequenceModel);
+    return this.xskHdbSequenceCreateProcessor.execute(connection, hdbSequenceModel);
   }
 
   @Override
-  public void dropDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
+  public boolean dropDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
       throws SQLException {
-    this.xskHdbSequenceDropProcessor.execute(connection, hdbSequenceModel);
+	return this.xskHdbSequenceDropProcessor.execute(connection, hdbSequenceModel);
   }
 
   @Override
-  public void updateDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
+  public boolean updateDataStructure(Connection connection, XSKDataStructureHDBSequenceModel hdbSequenceModel)
       throws SQLException, OperationNotSupportedException {
-    this.xskHdbSequenceUpdateProcessor.execute(connection, hdbSequenceModel);
+	return this.xskHdbSequenceUpdateProcessor.execute(connection, hdbSequenceModel);
   }
 
   @Override

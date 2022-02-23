@@ -35,19 +35,20 @@ public class XSKEntityUpdateProcessor extends AbstractXSKProcessor<XSKDataStruct
    * @param entityModel the entity model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureEntityModel entityModel)
+  public boolean execute(Connection connection, XSKDataStructureEntityModel entityModel)
       throws SQLException {
     String tableName = XSKHDBUtils.escapeArtifactName(XSKHDBUtils.getTableName(entityModel));
     logger.info("Processing Update Entity: {}", tableName);
     if (SqlFactory.getNative(connection).exists(connection, tableName)) {
       if (SqlFactory.getNative(connection).count(connection, tableName) == 0) {
-        xskEntityDropProcessor.execute(connection, entityModel);
-        xskEntityCreateProcessor.execute(connection, entityModel);
+        return (xskEntityDropProcessor.execute(connection, entityModel) && xskEntityCreateProcessor.execute(connection, entityModel));
       } else {
         // XSKEntityAlterProcessor.execute(connection, entityModel);
+    	  logger.error(tableName + " not empty");
+    	  return false;
       }
     } else {
-      xskEntityCreateProcessor.execute(connection, entityModel);
+      return xskEntityCreateProcessor.execute(connection, entityModel);
     }
   }
 }

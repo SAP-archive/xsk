@@ -57,25 +57,25 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
 
   private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskProceduresManagerService = managerServices.get(
+  private final IXSKDataStructureManager<XSKDataStructureHDBProcedureModel> xskProceduresManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_PROCEDURE);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskTableFunctionManagerService = managerServices.get(
+  private final IXSKDataStructureManager<XSKDataStructureHDBTableFunctionModel> xskTableFunctionManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskScalarFunctionManagerService = managerServices.get(
-      IXSKDataStructureModel.TYPE_HDB_SCALAR_FUNCTION);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService = managerServices.get(
+//  private final IXSKDataStructureManager<XSKDataStructureModel> xskScalarFunctionManagerService = managerServices.get(
+//      IXSKDataStructureModel.TYPE_HDB_SCALAR_FUNCTION);
+  private final IXSKDataStructureManager<XSKDataStructureHDBSynonymModel> xskSynonymManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_SYNONYM);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskViewManagerService = managerServices.get(
+  private final IXSKDataStructureManager<XSKDataStructureHDBViewModel> xskViewManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_VIEW);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskTableManagerService = managerServices.get(
+  private final IXSKDataStructureManager<XSKDataStructureHDBTableModel> xskTableManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_TABLE);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskTableTypeManagerService = managerServices.get(
+  private final IXSKDataStructureManager<XSKDataStructureHDBTableTypeModel> xskTableTypeManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskSchemaManagerService = managerServices.get(
+  private final IXSKDataStructureManager<XSKDataStructureHDBSchemaModel> xskSchemaManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_SCHEMA);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskHdbddManagerService = managerServices.get(
-      IXSKDataStructureModel.TYPE_HDBDD);
-  private final IXSKDataStructureManager<XSKDataStructureModel> xskSequenceManagerService = managerServices.get(
+//  private final IXSKDataStructureManager<XSKDataStructureModel> xskHdbddManagerService = managerServices.get(
+//      IXSKDataStructureModel.TYPE_HDBDD);
+  private final IXSKDataStructureManager<XSKDataStructureHDBSequenceModel> xskSequenceManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
 
   private static final HDBTableSynchronizationArtefactType TABLE_SYNCHRONIZATION_ARTEFACT_TYPE = new HDBTableSynchronizationArtefactType();
@@ -131,23 +131,23 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
       switch (flag) {
         case EXECUTE_PROCEDURE_DROP:
           if (model instanceof XSKDataStructureHDBProcedureModel) {
-            xskProceduresManagerService.dropDataStructure(connection, this.model);
+            return xskProceduresManagerService.dropDataStructure(connection, (XSKDataStructureHDBProcedureModel) this.model);
           }
           break;
         case EXECUTE_SCALAR_FUNCTION_DROP:
         case EXECUTE_TABLE_FUNCTION_DROP:
           if (model instanceof XSKDataStructureHDBTableFunctionModel) {
-            xskTableFunctionManagerService.dropDataStructure(connection, this.model);
+        	return xskTableFunctionManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableFunctionModel) this.model);
           }
           break;
         case EXECUTE_SYNONYM_DROP:
           if (model instanceof XSKDataStructureHDBSynonymModel) {
-            xskSynonymManagerService.dropDataStructure(connection, this.model);
+        	return xskSynonymManagerService.dropDataStructure(connection, (XSKDataStructureHDBSynonymModel) this.model);
           }
           break;
         case EXECUTE_VIEW_DROP:
           if (model instanceof XSKDataStructureHDBViewModel) {
-            xskViewManagerService.dropDataStructure(connection, this.model);
+        	return xskViewManagerService.dropDataStructure(connection, (XSKDataStructureHDBViewModel) this.model);
           }
           break;
         case EXECUTE_TABLE_DROP:
@@ -158,53 +158,55 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
             }
             if (SqlFactory.getNative(connection).exists(connection, modelName)) {
               if (SqlFactory.getNative(connection).count(connection, modelName) == 0) {
-                xskTableManagerService.dropDataStructure(connection, this.model);
+            	return xskTableManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableModel) this.model);
               } else {
                 String message = format("Table [{0}] cannot be deleted during the update process, because it is not empty",
                     this.model.getName());
                 logger.warn(message);
                 applyArtefactState(this.model.getName(), this.model.getLocation(), TABLE_SYNCHRONIZATION_ARTEFACT_TYPE,
                     ArtefactState.FAILED, message);
+                return false;
               }
             }
           }
           break;
         case EXECUTE_TABLE_TYPE_DROP:
           if (model instanceof XSKDataStructureHDBTableTypeModel) {
-            xskTableTypeManagerService.dropDataStructure(connection, this.model);
+        	 return xskTableTypeManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableTypeModel) this.model);
           }
           break;
         case EXECUTE_SCHEMA_DROP:
           if (model instanceof XSKDataStructureHDBSchemaModel) {
-            xskSchemaManagerService.dropDataStructure(connection, this.model);
+        	 return xskSchemaManagerService.dropDataStructure(connection, (XSKDataStructureHDBSchemaModel) this.model);
           }
           break;
         case EXECUTE_SCHEMA_CREATE:
           if (model instanceof XSKDataStructureHDBSchemaModel) {
-            xskSchemaManagerService.createDataStructure(connection, this.model);
+        	 return xskSchemaManagerService.createDataStructure(connection, (XSKDataStructureHDBSchemaModel) this.model);
           }
           break;
         case EXECUTE_TABLE_TYPE_CREATE:
           if (model instanceof XSKDataStructureHDBTableTypeModel) {
-            processTableType((XSKDataStructureHDBTableTypeModel) model);
+        	 return processTableType((XSKDataStructureHDBTableTypeModel) model);
           }
           break;
         case EXECUTE_TABLE_CREATE:
           if (model instanceof XSKDataStructureHDBTableModel) {
             String escapedName = XSKHDBUtils.escapeArtifactName(model.getName(), model.getSchema());
             if (!SqlFactory.getNative(connection).exists(connection, escapedName)) {
-              xskTableManagerService.createDataStructure(connection, this.model);
+              return xskTableManagerService.createDataStructure(connection, (XSKDataStructureHDBTableModel) this.model);
             } else {
               String message = format("Table [{0}] in schema [{1}] already exists during the update process", this.model.getName(),
                   this.model.getSchema());
               logger.warn(message);
               if (SqlFactory.getNative(connection).count(connection, escapedName) == 0) {
                 try {
-                  xskTableManagerService.updateDataStructure(connection, this.model);
+                  return xskTableManagerService.updateDataStructure(connection, (XSKDataStructureHDBTableModel) this.model);
                 } catch (OperationNotSupportedException e) {
                   logger.error(e.getMessage(), e);
                   applyArtefactState(this.model.getName(), this.model.getLocation(), TABLE_SYNCHRONIZATION_ARTEFACT_TYPE,
                       ArtefactState.FAILED, e.getMessage());
+                  return false;
                 }
               } else {
                 message = format("Table [{0}] in schema [{1}] already exists and it is not empty during the update process",
@@ -219,7 +221,7 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
         case EXECUTE_VIEW_CREATE:
           if (model instanceof XSKDataStructureHDBViewModel) {
             if (!SqlFactory.getNative(connection).exists(connection, model.getSchema(), model.getName(), DatabaseArtifactTypes.VIEW)) {
-              xskViewManagerService.createDataStructure(connection, this.model);
+              return xskViewManagerService.createDataStructure(connection, (XSKDataStructureHDBViewModel) this.model);
             } else {
               String message = format("View [{0}] in schema [{1}] already exists during the update process", this.model.getName(),
                   this.model.getSchema());
@@ -232,7 +234,7 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
         case EXECUTE_SYNONYM_CREATE:
           if (model instanceof XSKDataStructureHDBSynonymModel) {
             if (!SqlFactory.getNative(connection).exists(connection, model.getSchema(), model.getName(), DatabaseArtifactTypes.SYNONYM)) {
-              xskSynonymManagerService.createDataStructure(connection, this.model);
+              return xskSynonymManagerService.createDataStructure(connection, (XSKDataStructureHDBSynonymModel) this.model);
             } else {
               String message = format("Synonym [{0}] in schema [{1}] already exists during the update process", this.model.getName(),
                   this.model.getSchema());
@@ -246,27 +248,28 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
           if (model instanceof XSKDataStructureHDBSequenceModel) {
             if (!SqlFactory.getNative(connection)
                 .exists(connection, model.getSchema(), this.model.getName(), DatabaseArtifactTypes.SEQUENCE)) {
-              xskSequenceManagerService.createDataStructure(connection, model);
+              return xskSequenceManagerService.createDataStructure(connection, (XSKDataStructureHDBSequenceModel) this.model);
             } else {
               try {
-                xskSequenceManagerService.updateDataStructure(connection, this.model);
+                return xskSequenceManagerService.updateDataStructure(connection, (XSKDataStructureHDBSequenceModel) this.model);
               } catch (OperationNotSupportedException e) {
                 logger.error(e.getMessage(), e);
                 applyArtefactState(this.model.getName(), this.model.getLocation(), SEQUENCE_SYNCHRONIZATION_ARTEFACT_TYPE,
                     ArtefactState.FAILED, e.getMessage());
+                return false;
               }
             }
           }
           break;
         case EXECUTE_PROCEDURE_CREATE:
           if (model instanceof XSKDataStructureHDBProcedureModel) {
-            xskProceduresManagerService.createDataStructure(connection, this.model);
+            return xskProceduresManagerService.createDataStructure(connection, (XSKDataStructureHDBProcedureModel) this.model);
           }
           break;
         case EXECUTE_SCALAR_FUNCTION_CREATE:
         case EXECUTE_TABLE_FUNCTION_CREATE:
           if (model instanceof XSKDataStructureHDBTableFunctionModel) {
-            xskTableFunctionManagerService.createDataStructure(connection, this.model);
+            return xskTableFunctionManagerService.createDataStructure(connection, (XSKDataStructureHDBTableFunctionModel) this.model);
           }
           break;
 
@@ -280,18 +283,16 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
     }
   }
 
-  private void processTableType(XSKDataStructureHDBTableTypeModel tableType) throws SQLException {
-    if (!SqlFactory.getNative(connection)
-        .exists(connection, tableType.getSchema(), tableType.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {
-
-      xskTableTypeManagerService.createDataStructure(connection, tableType);
-
+  private boolean processTableType(XSKDataStructureHDBTableTypeModel tableType) throws SQLException {
+    if (!SqlFactory.getNative(connection).exists(connection, tableType.getSchema(), tableType.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {
+    	return xskTableTypeManagerService.createDataStructure(connection, (XSKDataStructureHDBTableTypeModel) tableType);
     } else {
       String message = format("Table Type [{0}] in schema [{1}] already exists during the update process", tableType.getName(),
           tableType.getSchema());
       logger.warn(message);
       applyArtefactState(tableType.getName(), tableType.getLocation(), TABLE_TYPE_SYNCHRONIZATION_ARTEFACT_TYPE,
           ArtefactState.FAILED, message);
+      return true;
     }
   }
 

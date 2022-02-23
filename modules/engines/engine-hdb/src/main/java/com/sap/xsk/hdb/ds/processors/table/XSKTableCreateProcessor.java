@@ -53,7 +53,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
    * @throws SQLException the SQL exception
    * @see <a href="https://github.com/SAP/xsk/wiki/Parser-hdbtable">hdbtable against postgresql itest</a>
    */
-  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
+  public boolean execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
     logger.info("Processing Create Table: " + tableModel.getName());
 
@@ -77,8 +77,9 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
         throw new IllegalStateException("Unsupported content type: " + tableModel.getDBContentType());
     }
 
-    processStatements(connection, tableModel, indicesStatements, tableCreateStatement);
+    boolean success = processStatements(connection, tableModel, indicesStatements, tableCreateStatement);
     processSynonym(connection, tableModel, tableNameWithoutSchema, tableNameWithSchema);
+    return success;
   }
 
   private void processSynonym(Connection connection, XSKDataStructureHDBTableModel tableModel, String tableNameWithoutSchema,
@@ -91,7 +92,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     }
   }
 
-  private void processStatements(Connection connection, XSKDataStructureHDBTableModel tableModel, Collection<String> indicesStatements,
+  private boolean processStatements(Connection connection, XSKDataStructureHDBTableModel tableModel, Collection<String> indicesStatements,
       String tableCreateStatement) {
     try {
       executeSql(tableCreateStatement, connection);
@@ -102,6 +103,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
       String message = String.format("Create table %s successfully", tableModel.getName());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+      return true;
     } catch (SQLException ex) {
       logger.error("Creation of table failed. Used SQL - create table {}, indices {}", tableCreateStatement,
           String.join("; ", indicesStatements), ex);
@@ -109,6 +111,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
           XSKCommonsConstants.HDB_TABLE_PARSER);
       String message = String.format("Create table [%s] failed due to an error: %s", tableModel, ex.getMessage());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
+      return false;
     }
   }
 

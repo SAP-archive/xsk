@@ -32,7 +32,7 @@ public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
   private static final Logger logger = LoggerFactory.getLogger(HDBSchemaCreateProcessor.class);
   private static final HDBSchemaSynchronizationArtefactType SCHEMA_ARTEFACT = new HDBSchemaSynchronizationArtefactType();
 
-  public void execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
+  public boolean execute(Connection connection, XSKDataStructureHDBSchemaModel hdbSchema) throws SQLException {
     logger.info("Processing Create Schema: " + hdbSchema.getSchema());
 
     ISqlDialect dialect = SqlFactory.deriveDialect(connection);
@@ -50,16 +50,19 @@ public class HDBSchemaCreateProcessor extends AbstractXSKProcessor<XSKDataStruct
           executeSql(sql, connection);
           String message = String.format("Create schema %s successfully", hdbSchema.getName());
           applyArtefactState(hdbSchema.getName(), hdbSchema.getLocation(), SCHEMA_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+          return true;
         } catch (SQLException ex) {
           String errorMessage = String.format("Create schema [%s] skipped due to an error: %s", hdbSchema, ex.getMessage());
           XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, hdbSchema.getLocation(),
               XSKCommonsConstants.HDB_SCHEMA_PARSER);
           applyArtefactState(hdbSchema.getName(), hdbSchema.getLocation(), SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
+          return false;
         }
       } else {
         String warningMessage = String.format("Schema [%s] already exists during the create process", hdbSchema.getSchema());
         logger.warn(warningMessage);
         applyArtefactState(hdbSchema.getName(), hdbSchema.getLocation(), SCHEMA_ARTEFACT, ArtefactState.FAILED_CREATE, warningMessage);
+        return false;
       }
     }
   }

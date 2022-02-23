@@ -26,13 +26,14 @@ public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @throws SQLException the SQL exception
    */
   @Override
-  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
+  public boolean execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
     XSKTableAlterHandler handler = createTableAlterHandler(connection, tableModel);
     handler.addColumns(connection);
     handler.removeColumns(connection);
     handler.updateColumns(connection);
     handler.rebuildIndeces(connection);
     handler.ensurePrimaryKeyIsUnchanged(connection);
+    return true;
   }
 
   public XSKTableAlterHandler createTableAlterHandler(Connection connection, XSKDataStructureHDBTableModel tableModel)

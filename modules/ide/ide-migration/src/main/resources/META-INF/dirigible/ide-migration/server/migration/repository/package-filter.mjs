@@ -1,25 +1,12 @@
-/*
- * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Apache License, v2.0
- * which accompanies this distribution, and is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
- * SPDX-License-Identifier: Apache-2.0
- */
-let log = console;
+export class PackageFilter {
+    QUOTE_PATTERN = /\"([^\"]*)\"/;
+    GENERIC_FILTER_PACKAGES = [".externalToolBuilders", ".settings"];
 
-let GENERIC_FILTER_PACKAGES = [".externalToolBuilders", ".settings"];
-
-let QUOTE_PATTERN = /\"([^\"]*)\"/;
-
-function PackageFilter() {
-    this.splitName = function (name) {
+    splitName(name){
         let n = name;
+        let m;
         let paths = [];
-        while (n.length > 0 && (m = n.match(QUOTE_PATTERN)) != null) {
+        while (n.length > 0 && (m = n.match(this.QUOTE_PATTERN)) != null) {
             let pre = n.substring(0, m.index);
             if (pre[pre.length - 1] === ".") {
                 pre = pre.substring(0, pre.length - 1);
@@ -39,16 +26,15 @@ function PackageFilter() {
         return paths;
     };
 
-    this.filterGenericPackages = function (packageList) {
-        let that = this;
+    filterGenericPackages(packageList) {
         let filteredPackages = [];
-        packageList.forEach(function (pkg) {
+        packageList.forEach((pkg) => {
             let name = pkg.packageName;
-            let paths = that.splitName(name);
+            let paths = this.splitName(name);
             let filtered = false;
-            for (let i = 0; i < GENERIC_FILTER_PACKAGES.length; i++) {
-                if (paths[paths.length - 1] === GENERIC_FILTER_PACKAGES[i]) {
-                    log.trace("Filtered package " + name);
+            for (let i = 0; i < this.GENERIC_FILTER_PACKAGES.length; i++) {
+                if (paths[paths.length - 1] === this.GENERIC_FILTER_PACKAGES[i]) {
+                    console.trace("Filtered package " + name);
                     filtered = true;
                     break;
                 }
@@ -60,7 +46,7 @@ function PackageFilter() {
         return filteredPackages;
     };
 
-    this.filterPackages = function (context, opackageList) {
+    filterPackages(context, opackageList) {
         let packageList = this.filterGenericPackages(opackageList);
         let newPackageList = [];
         if ("exclude-packages" in context) {
@@ -71,13 +57,13 @@ function PackageFilter() {
                     if (excludePackage.subpackages) {
                         if (!candPackage.packageName.startsWith(excludePackage.package)) {
                         } else {
-                            log.debug("Filtered package " + candPackage.packageName);
+                            console.debug("Filtered package " + candPackage.packageName);
                             filtered = true;
                         }
                     } else {
                         if (candPackage.packageName !== excludePackage.package) {
                         } else {
-                            log.debug("Filtered package " + candPackage.packageName);
+                            console.debug("Filtered package " + candPackage.packageName);
                             filtered = true;
                         }
                     }
@@ -89,9 +75,7 @@ function PackageFilter() {
         } else {
             newPackageList = packageList;
         }
-        log.trace("filtered " + (opackageList.length - newPackageList.length) + " packages.");
+        console.trace("filtered " + (opackageList.length - newPackageList.length) + " packages.");
         return newPackageList;
     };
 }
-
-module.exports = new PackageFilter();

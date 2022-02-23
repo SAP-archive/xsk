@@ -9,19 +9,19 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-const config = require("core/v4/configurations");
-const MigrationToolExecutor = require("ide-migration/server/migration/api/migration-tool-executor");
+import { configurations as config } from "@dirigible/core";
+import { MigrationToolExecutor } from "./migration-tool-executor";
 
 const neoClientPath = config.get("user.dir") + "/target/dirigible/resources-neo-sdk/tools/neo.sh";
 
-class NeoDatabasesService {
+export class NeoDatabasesService {
     constructor() {
         this.migrationToolExecutor = new MigrationToolExecutor();
     }
 
     getAvailableDatabases(account, host, jwtToken) {
-        const script = `${neoClientPath} list-dbs -a "${account}" -h "${host}" -u JWT -p "${jwtToken}" --output json`
-    
+        const script = `${neoClientPath} list-dbs -a "${account}" -h "${host}" -u JWT -p "${jwtToken}" --output json`;
+
         const rawCommandResult = this.migrationToolExecutor.execute(script);
         const commandResult = JSON.parse(rawCommandResult);
 
@@ -51,5 +51,3 @@ class NeoDatabasesService {
         return databasesList;
     }
 }
-
-module.exports = NeoDatabasesService;

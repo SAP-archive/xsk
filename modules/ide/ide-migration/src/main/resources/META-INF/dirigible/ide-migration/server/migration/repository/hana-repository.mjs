@@ -1,24 +1,14 @@
-/*
- * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Apache License, v2.0
- * which accompanies this distribution, and is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
- * SPDX-License-Identifier: Apache-2.0
- */
-const RepositoryResponse = require("ide-migration/server/migration/repository/repository-response");
-const RepositoryObject = require("ide-migration/server/migration/repository/repository-object");
-const RepositoryPackage = require("ide-migration/server/migration/repository/repository-package");
+import { bytes as bytesUtils } from "@dirigible/io";
+import { RepositoryResponse } from "./repository-response";
+import { RepositoryObject } from "./repository-object";
+import { RepositoryPackage } from "./repository-package";
+import { PackageFilter } from "./package-filter";
+import { Utils } from "../utils";
 
-const packageFilter = require("ide-migration/server/migration/repository/package-filter");
+const packageFilter = new PackageFilter();
 const utf8 = org.eclipse.dirigible.api.v3.utils.UTF8Facade;
-const Utils = require("ide-migration/server/migration/utils");
-const bytesUtils = require("io/v4/bytes");
 
-class HanaRepository {
+export class HanaRepository {
     constructor(hdbClient) {
         this.hdbClient = hdbClient;
     }
@@ -54,19 +44,18 @@ class HanaRepository {
         //This needs to be done because the repo-api names the package-name as "package" while halm refers to it as "packageName"
         let repositoryPackages = [];
 
-        for (let i = 0; i < packages.length; i++) {
-            let pkg = packages[i];
+        for (const pkg of packages) {
             let repositoryPackage = new RepositoryPackage(pkg);
             repositoryPackages.push(repositoryPackage);
         }
+
         return repositoryPackages;
     }
 
     _getAllObjectsForPackages(packages) {
         let done = 0;
         let result = [];
-        for (let i = 0; i < packages.length; i++) {
-            const pkg = packages[i];
+        for (const pkg of packages) {
             const objects = this._listObjects(pkg);
 
             done++;
@@ -94,8 +83,7 @@ class HanaRepository {
     _convertObjectsToRepositoryObjects(objects) {
         let hanaRepositoryInstance = this;
         let repositoryObjects = [];
-        for (let i = 0; i < objects.length; i++) {
-            const object = objects[i];
+        for (const object of objects) {
             let repositoryObject = new RepositoryObject(object.name, object.package, object.suffix);
 
             const result = hanaRepositoryInstance._addLanguage(repositoryObject);
@@ -108,9 +96,7 @@ class HanaRepository {
     }
 
     _addLanguage(repositoryObject) {
-        const originalLanguage = this._getOriginalLanguage(
-            repositoryObject.PackageName.packageName
-        );
+        const originalLanguage = this._getOriginalLanguage(repositoryObject.PackageName.packageName);
         repositoryObject.originalLanguage = originalLanguage;
         return repositoryObject;
     }
@@ -169,12 +155,12 @@ class HanaRepository {
 
     getAllFilesForDu(globalContext, deliveryUnit) {
         const packages = this._getAllPackagesForDu(deliveryUnit);
+        if (packages.length === 0) {
+            return null;
+        }
         let filteredPackages = packageFilter.filterPackages(globalContext, packages) || [];
         const packagesAndFilesListObject = this._getAllObjectsForPackages(filteredPackages);
-        return this._packagesCollected(
-            packagesAndFilesListObject.packages,
-            packagesAndFilesListObject.fileList
-        );
+        return this._packagesCollected(packagesAndFilesListObject.packages, packagesAndFilesListObject.fileList);
     }
 
     getContentForObject(name, packageName, suffix) {
@@ -194,12 +180,7 @@ class HanaRepository {
 
         if (response.content["error-code"] && response.content["error-code"] != 0) {
             throw new Error(
-                "" +
-                    response.content["error-code"] +
-                    " " +
-                    response.content["error-msg"] +
-                    " " +
-                    response.content["error-arg"]
+                "" + response.content["error-code"] + " " + response.content["error-msg"] + " " + response.content["error-arg"]
             );
         }
         return response;
@@ -226,13 +207,13 @@ class HanaRepository {
         let finalRequestArray = [];
         let byteCount = 0;
 
-        for (let i = 0; i < finalByteArray.length; i++) {
-            let byteArray = finalByteArray[i];
-            for (let u = 0; u < byteArray.length; u++) {
-                finalRequestArray.push(byteArray[u]);
+        for (const byteArray of finalByteArray) {
+            for (const innerByteArray of byteArray) {
+                finalRequestArray.push(innerByteArray);
                 byteCount += 1;
             }
         }
+
         return finalRequestArray;
     }
 
@@ -251,5 +232,3 @@ class HanaRepository {
         return json;
     }
 }
-
-module.exports = HanaRepository;

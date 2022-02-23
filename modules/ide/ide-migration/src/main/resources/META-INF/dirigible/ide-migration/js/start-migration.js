@@ -18,13 +18,13 @@ migrationLaunchView.controller("StartMigrationViewController", [
         $scope.migrationDataState = migrationDataState;
         $scope.isVisible = false;
         $scope.migrationFinished = false;
+        $scope.isZipMigrationVisible = false;
         $scope.progressBarPercentage = 100;
         let titleList = ["Migration in progress", "One last step"];
         $scope.progressTitle = titleList[0];
         $scope.statusMessage = "Configuration processing...";
         let defaultErrorTitle = "Error migrating project";
-        let defaultErrorDesc =
-            "Please check if the information you provided is correct and try again.";
+        let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
 
         function startMigration() {
             body = {
@@ -45,16 +45,12 @@ migrationLaunchView.controller("StartMigrationViewController", [
 
             const selectedDeliveryUnitsCount = migrationDataState.selectedDeliveryUnits.length;
             $scope.statusMessage =
-                selectedDeliveryUnitsCount > 1
-                    ? `Migrating ${selectedDeliveryUnitsCount} projects`
-                    : `Migrating project`;
+                selectedDeliveryUnitsCount > 1 ? `Migrating ${selectedDeliveryUnitsCount} projects` : `Migrating project`;
 
             $http
-                .post(
-                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/continue-process",
-                    JSON.stringify(body),
-                    { headers: { "Content-Type": "application/json" } }
-                )
+                .post("/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/continue-process", JSON.stringify(body), {
+                    headers: { "Content-Type": "application/json" },
+                })
                 .then(
                     function (response) {
                         const duNames = migrationDataState.selectedDeliveryUnits.map((x) => x.name);
@@ -67,15 +63,9 @@ migrationLaunchView.controller("StartMigrationViewController", [
                         if (response.data) {
                             if ("error" in response.data) {
                                 if ("message" in response.data.error) {
-                                    $messageHub.announceAlertError(
-                                        defaultErrorTitle,
-                                        response.data.error.message
-                                    );
+                                    $messageHub.announceAlertError(defaultErrorTitle, response.data.error.message);
                                 } else {
-                                    $messageHub.announceAlertError(
-                                        defaultErrorTitle,
-                                        defaultErrorDesc
-                                    );
+                                    $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
                                 }
                                 console.error(`HTTP $response.status`, response.data.error);
                             } else {
@@ -115,5 +105,24 @@ migrationLaunchView.controller("StartMigrationViewController", [
                 }
             }.bind(this)
         );
+        $messageHub.on('migration.start-zip-migration', function (msg) {
+            if ("isVisible" in msg.data) {
+                $scope.$apply(function () {
+                    $scope.isZipMigrationVisible = msg.data.isVisible;
+                });
+            }
+            if ("migrationFinished" in msg.data) {
+                $scope.$apply(function () {
+                    $scope.migrationFinished = msg.data.migrationFinished;
+                    if ("workspace" in msg.data)
+                        migrationDataState.selectedWorkspace = msg.data.workspace;
+                    $scope.progressTitle = titleList[1];
+                    $scope.statusMessage = ("status" in msg.data) ? msg.data.status : ("workspace" in msg.data)
+                        ? `Successfully migrated uploaded Delivery Unit(s)! Go to workspace "${msg.data.workspace}" and publish them.` :
+                        "Successfully migrated uploaded Delivery Unit(s)!";
+
+                });
+            }
+        }.bind(this));
     },
 ]);

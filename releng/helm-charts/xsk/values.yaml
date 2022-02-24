@@ -23,6 +23,7 @@ deployment:
   volumespersistentVolumeClaimClaimName: xsk-claim
 
 persistentVolumeClaim:
+  enabled: true
   name: xsk-claim
   accessModes: ReadWriteOnce
   resourcesStorage: 1Gi

@@ -116,11 +116,14 @@ spec:
               port: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbeHttpGetPort}}
             initialDelaySeconds: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbeInitialDelaySeconds}}
             periodSeconds: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbePeriodSeconds}}
+      {{- if .Values.persistentVolumeClaim.enabled }}
       volumes:
       - name: {{ required "Missing volume mounts name" .Values.deployment.volumesName }}
         persistentVolumeClaim:
           claimName: {{ required "Missing volume mounts name" .Values.deployment.volumespersistentVolumeClaimClaimName }}
+      {{- end }}
 ---
+{{- if .Values.persistentVolumeClaim.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -132,6 +135,7 @@ spec:
   resources:
     requests:
       storage: {{ required "Missing persistent volume claim resource storage" .Values.persistentVolumeClaim.resourcesStorage }}
+{{- end }}
 ---
 apiVersion: v1
 kind: Service

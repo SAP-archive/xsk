@@ -43,39 +43,32 @@ jobs:
         version: 'latest' # default is latest stable
       id: install
 
-    # Wait to update helm chart
-    - name: Wait to update helm chart
-      run: |
-        sleep 30s
-
     # Add repo
     - name: Add XSK helm repo
       run: |
         helm repo add xsk https://www.xsk.io
-        helm repo update
-
-    # Verify Helm XSK chart
-    - name: Get XSK helm chart sha
-      run: |
         mkdir ~/.gnupg
         wget https://xsk.io/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
-        OUTPUT=$(helm pull xsk/xsk --version ${{ inputs.XSK_VERSION }} --verify)
-        echo "$OUTPUT"
-        echo "${{ inputs.XSK_HELM_SHA }}"
-        OUTPUT="${OUTPUT//'%'/'%25'}"
-        OUTPUT="${OUTPUT//$'\n'/'%0A'}"
-        OUTPUT="${OUTPUT//$'\r'/'%0D'}"
-        HELM_SHA=$(echo "$OUTPUT" | tail -n1)
-        SHA=$(sed -e 's#.*sha256:\(\)#\1#' <<< $HELM_SHA)
-        echo "::set-output name=XSK_HELM_SHA_PRINT::$SHA"
-      id: XSK_HELM_SHA  
 
-    # Check chart sha
     - name: Check chart sha
-      if: "${{ steps.XSK_HELM_SHA.outputs.XSK_HELM_SHA_PRINT }} != ${{ inputs.XSK_HELM_SHA }}"
-      run: |
-        echo "Failed to verify sha!"
-        exit 1
+      uses: nick-fields/retry@v2
+      with:
+        timeout_seconds: 5
+        max_attempts: 10
+        retry_on: error
+        command: |
+          helm repo update
+          OUTPUT=$(helm pull xsk/xsk --version ${{ inputs.XSK_VERSION }} --verify)
+          OUTPUT="${OUTPUT//'%'/'%25'}"
+          OUTPUT="${OUTPUT//$'\n'/'%0A'}"
+          OUTPUT="${OUTPUT//$'\r'/'%0D'}"
+          HELM_SHA=$(echo "$OUTPUT" | tail -n1)
+          SHA=$(sed -e 's#.*sha256:\(\)#\1#' <<< $HELM_SHA)
+          if [[ $SHA != ${{ inputs.XSK_HELM_SHA }} ]]
+          then
+            echo "Failed to verify sha!"
+            exit 1
+          fi
 
     # Deploy XSK on stage
     - name: Deploy XSK helm chart

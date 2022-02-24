@@ -63,6 +63,8 @@ nav:
       - Configurations:
         - Environment Variables: 'setup/configurations/environment-variables.md'
         - HDI: 'setup/configurations/hdi.md'
+    - Lifecycle:
+      - CI/CD: 'lifecycle/cicd.md'
     - Cheat Sheet:
       - Troubleshooting: 'cheatsheet/troubleshooting.md'
     - Community: 'community.md'

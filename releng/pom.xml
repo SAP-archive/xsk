@@ -4,13 +4,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-parent</artifactId>
-		<version>0.13.6</version>
+		<version>0.14.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Releng - Parent</name>
 	<artifactId>xsk-releng-parent</artifactId>
-	<version>0.13.6</version>
+	<version>0.14.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>

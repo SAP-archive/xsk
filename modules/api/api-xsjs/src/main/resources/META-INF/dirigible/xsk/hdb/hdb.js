@@ -14,64 +14,213 @@
  */
 var database = require('db/v4/database');
 
-//var response = require('http/v4/response');
-exports.getConnection = function() {
+const aA = 5;
+const aa = 5;
+
+const PROCEDURE_IN_PARAMETER = 1;
+const PROCEDURE_IN_OUT_PARAMETER = 2;
+const PROCEDURE_OUT_PARAMETER = 3;
+const PROCEDURE_UNKNOWN_PARAMETER = 4;
+
+exports.getConnection = function () {
 	var dConnection = database.getConnection();
 	return new XscConnection(dConnection);
 }
 
+exports.ProcedureResult = function () {
+	this.$resultSets = [];
+}
+
+exports.ResultSet = XscResultSet;
+
 function XscConnection(dConnection) {
-	this.close = function() {
+	this.close = function () {
 		dConnection.close();
 	};
-	this.commit = function() {
+	this.commit = function () {
 		dConnection.commit();
 	};
-	this.executeQuery = function(query) {
+
+	this.executeQuery = function (query) {
 		var dPreparedStatement = dConnection.prepareStatement(query);
 		var args = Array.prototype.slice.call(arguments, 1);
-		setParams(dPreparedStatement, args);
+		setStatementParams(dPreparedStatement, args);
 		var dResultSet = dPreparedStatement.executeQuery();
 		return new XscResultSet(dResultSet);
 	}
 
-	this.executeUpdate = function(statement) {
+	this.executeUpdate = function (statement) {
 		var dPreparedStatement = dConnection.prepareStatement(statement);
 		var args = Array.prototype.slice.call(arguments, 1);
 
 		if (args.length === 1 && Array.isArray(args[0]) && Array.isArray(args[0][0])) {
 			return executeBatchUpdate(dConnection, dPreparedStatement, args[0]);
 		} else {
-			setParams(dPreparedStatement, args);
+			setStatementParams(dPreparedStatement, args);
 			return dPreparedStatement.executeUpdate();
 		}
 	};
 
 	// Returns always null. I need to think of conditions where it returns an object
-	this.getLastWarning = function() {
+	this.getLastWarning = function () {
+
 		return dConnection.native.getWarnings();
 	}
 
-	// TODO: blocker, need to expose stored procedures in dirigible
-	this.loadProcedure = function(schema, procedure) {
+	this.loadProcedure = function (schema, procedure) {
+		let conn;
+		let procedureINParameters;
+		let procedureOUTParameters;
+		let procedureParametersResultSet;
+		let procedureCallStatement
+		try {
+			conn = $.db.getConnection();
+			procedureCallStatement = `CALL "` + schema + `"."` + procedure + `"`;
+			let procedureParametersStatement = `
+			DO BEGIN
+				DECLARE matcher string;
+				DECLARE res string;
+				DECLARE occn integer;
+				DECLARE definition string;
+				DECLARE parameter_names VARCHAR(100) ARRAY;
+				DECLARE parameter_types VARCHAR(10) ARRAY;
 
+				SELECT DEFINITION INTO definition FROM "SYS"."PROCEDURES" WHERE PROCEDURE_NAME = '` + procedure + `';
+
+				matcher := '(in|out|IN|OUT) \\w+';
+
+				occn := 1;
+				res := '';
+				
+				WHILE (:res IS NOT NULL) DO
+					res := SUBSTR_REGEXPR(:matcher FLAG 'i' IN :definition OCCURRENCE :occn);
+					IF (:res IS NOT NULL) THEN
+						parameter_names[:occn] = SUBSTR_AFTER(:res,' ');
+						parameter_types[:occn] = SUBSTR_BEFORE(:res,' ');
+						
+						occn := occn + 1;
+					ELSE
+						BREAK;
+					END IF;
+				END while; 
+
+				procedure_parameters = UNNEST(:parameter_names, :parameter_types) AS ("PARAMETER_NAME", "PARAMETER_TYPE");
+				SELECT * From :procedure_parameters;
+			END;
+		`;
+			procedureINParameters = [];
+			procedureOUTParameters = [];
+			procedureParametersResultSet = conn.prepareStatement(procedureParametersStatement).executeQuery();
+		} catch (e) {
+			throw new Error(e)
+		} finally {
+			conn.close()
+		}
+
+		while (procedureParametersResultSet.next()) {
+			let parameterName = procedureParametersResultSet.getString("PARAMETER_NAME");
+			let parameterType = procedureParametersResultSet.getString("PARAMETER_TYPE");
+
+			if (parameterType === 'in' || parameterType === 'IN') {
+				procedureINParameters.push(parameterName);
+			} else if (parameterType === 'out' || parameterType === 'OUT') {
+				procedureOUTParameters.push(parameterName);
+			}
+		}
+
+		let modifiedProcedureINParameters = procedureINParameters.map(inParam => {
+			return inParam + " => ?";
+		});
+
+		let modifiedProcedureOUTParameters = procedureOUTParameters.map(outParam => {
+			return outParam + " => ?";
+		})
+
+		let procedureParameters = modifiedProcedureINParameters.concat(modifiedProcedureOUTParameters);
+		procedureCallStatement = procedureCallStatement + `(` + procedureParameters.toString() + `)`;
+
+		function procedureCall() {
+			let args = Array.prototype.slice.call(arguments);
+			let finalArgs = [];
+			if (args.length === 1 && typeof args[0] === 'object' && !Array.isArray(args[0]) && args[0] !== null) {
+				args = args[0];
+				let newArgs = {};
+
+				for (let arg in args) {
+					let lowerCaseArg = arg.toLowerCase();
+					newArgs[lowerCaseArg] = args[arg];
+				}
+
+				procedureINParameters.forEach(inParam => {
+					finalArgs.push(newArgs[inParam.toLowerCase()]);
+				})
+			} else {
+				finalArgs = args;
+			}
+
+			let procedureResult = new $.hdb.ProcedureResult;
+			let procedureStatement;
+			let dConnection;
+			try {
+				dConnection = database.getConnection();
+				procedureStatement = dConnection.prepareStatement(procedureCallStatement);
+				setProcedureParams(procedureStatement, finalArgs);
+
+				let hasResults = procedureStatement.execute();
+				let resultSets = [];
+
+				do {
+					if (hasResults) {
+						let resultSet = procedureStatement.getResultSet();
+						resultSets.push(new $.hdb.ResultSet(resultSet));
+						resultSet.close();
+					}
+					hasResults = procedureStatement.getMoreResults();
+				} while (hasResults);
+
+				procedureResult.$resultSets = resultSets;
+
+
+				for (const resultSet in resultSets) {
+					let singleResultSet = resultSets[resultSet];
+					let oneObj = {};
+					let length = 0;
+					for (let i = 0; i < singleResultSet.length; i++) {
+						let rowObj = singleResultSet[i];
+						oneObj[i] = rowObj;
+						length++;
+					}
+					oneObj.length = length;
+					procedureResult[procedureOUTParameters[resultSet]] = oneObj;
+				}
+				return procedureResult;
+			} catch (e) {
+				throw new Error(e)
+			} finally {
+				procedureStatement.close();
+				dConnection.close();
+			}
+
+		}
+
+		return procedureCall;
 	}
 
-	this.rollback = function() {
+	this.rollback = function () {
 		return dConnection.rollback();
 	};
 
-	this.setAutoCommit = function(autoCommit) {
+	this.setAutoCommit = function (autoCommit) {
 		dConnection.setAutoCommit(autoCommit);
 	};
 
 	// this method is not part of XS API, I exposed it only for testing purposes
-	this.getAutoCommit = function() {
+	this.getAutoCommit = function () {
 		return dConnection.getAutoCommit();
 	};
 
 	// not part of the API, just for testing purposes
-	this.isClosed = function() {
+	this.isClosed = function () {
 		return dConnection.isClosed();
 	}
 }
@@ -80,7 +229,7 @@ function XscResultSet(dResultSet) {
 	this.length = 0;
 	this.metadata = new XscResultSetMetaData(dResultSet.native.getMetaData());
 	syncResultSet.call(this);
-	this.getIterator = function() {
+	this.getIterator = function () {
 		return new XscResultSetIterator(this);
 	};
 
@@ -112,12 +261,12 @@ function XscResultSet(dResultSet) {
 function XscResultSetIterator(myResultSet) {
 	var currentSetRow = -1;
 
-	this.next = function() {
+	this.next = function () {
 		++currentSetRow;
 		return currentSetRow < myResultSet.length;
 	};
 
-	this.value = function() {
+	this.value = function () {
 		if (currentSetRow < 0 || myResultSet.length === 0) {
 			throw new Error("Error: ResultSet is empty or you haven't called next() before calling value()");
 		}
@@ -131,10 +280,11 @@ function XscResultSetMetaData(dResultSetMetaData) {
 }
 
 // To Do
-function SQLException() {}
+function SQLException() {
+}
 
 // UTIL FUNCTIONS
-function setParams(dPreparedStatement, args) {
+function setStatementParams(dPreparedStatement, args) {
 	var parameterMetaData = dPreparedStatement.native.getParameterMetaData();
 	var paramsCount = parameterMetaData.getParameterCount();
 
@@ -142,6 +292,30 @@ function setParams(dPreparedStatement, args) {
 		throw new Error('Invalid arguments count!');
 	}
 
+	setParams(dPreparedStatement, args, paramsCount, parameterMetaData);
+}
+
+function setProcedureParams(dPreparedStatement, args) {
+	var parameterMetaData = dPreparedStatement.native.getParameterMetaData();
+	var paramsCount = parameterMetaData.getParameterCount();
+	var inParamsCount = 0;
+
+	for (var i = 0, paramIndex = 1; i < paramsCount; i++, paramIndex++) {
+		var paramMode = parameterMetaData.getParameterMode(paramIndex);
+
+		if (paramMode === PROCEDURE_IN_PARAMETER || paramMode === PROCEDURE_OUT_PARAMETER) {
+			inParamsCount++;
+		}
+	}
+
+	if (inParamsCount !== args.length) {
+		throw new Error('Invalid arguments count!');
+	}
+
+	setParams(dPreparedStatement, args, inParamsCount, parameterMetaData)
+}
+
+function setParams(dPreparedStatement, args, paramsCount, parameterMetaData) {
 	for (var i = 0, paramIndex = 1; i < paramsCount; i++, paramIndex++) {
 		var paramType = parameterMetaData.getParameterTypeName(paramIndex);
 		var paramValue = args[i];
@@ -231,7 +405,7 @@ function executeBatchUpdate(dConnection, dPreparedStatement, batchArguments) {
 		dConnection.setAutoCommit(false);
 
 		for (var i = 0; i < batchArguments.length; i++) {
-			setParams(dPreparedStatement, batchArguments[i]);
+			setStatementParams(dPreparedStatement, batchArguments[i]);
 			var currentResult = dPreparedStatement.executeUpdate();
 			resultsArray.push(currentResult);
 		}

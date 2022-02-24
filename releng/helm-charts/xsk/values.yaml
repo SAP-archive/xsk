@@ -28,11 +28,6 @@ persistentVolumeClaim:
   accessModes: ReadWriteOnce
   resourcesStorage: 1Gi
 
-namespace:
-  # Deployment namespace
-  create: false
-  name: default
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -114,8 +109,6 @@ application:
   homeUrl:
   # Image pull policy 
   imagePullPolicy: Always
-  # Fast boot strap option
-  fastBootstrap: false
 
 hana:
   # Enable HANA configuration

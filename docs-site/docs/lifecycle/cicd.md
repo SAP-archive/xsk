@@ -133,6 +133,7 @@ TODO
 === "Build (Only)"
 
     ```yaml
+
     name: Build Application Image
 
     on:
@@ -195,6 +196,7 @@ TODO
 === "Deployment (Only)"
 
     ```yaml
+
     name: Deploy Application Image
 
     on:
@@ -237,17 +239,17 @@ TODO
 
 **Required GitHub Secrets:**
 
-|       Name        |          Description                                                                          |
-|-------------------|-----------------------------------------------------------------------------------------------|
-| `DOCKER_REGISTRY` | The Docker Registry URL _(e.g. `https://index.docker.io/v1/`)_                                |
-| `DOCKER_USERNAME` | The Docker Username _(`<your-docker-username>`)_                                              |
-| `DOCKER_PASSWORD` | The Docker Password _(`<your-docker-password>`)_                                              |
+|       Name        |          Description                                           |
+|-------------------|----------------------------------------------------------------|
+| `DOCKER_REGISTRY` | The Docker Registry URL _(e.g. `https://index.docker.io/v1/`)_ |
+| `DOCKER_USERNAME` | The Docker Username _(`<your-docker-username>`)_               |
+| `DOCKER_PASSWORD` | The Docker Password _(`<your-docker-password>`)_               |
 | `HANA_URL`        | The HANA Cloud URL _(e.g. `jdbc:sap://7512c2q1-.../?encrypt=true&validateCertificate=false`)_ |
-| `HANA_USERNAME`   | The HANA Cloud Username _(`<your-hana-cloud-username>`)_                                      |
-| `HANA_PASSWORD`   | The HANA Cloud Password _(`<your-hana-cloud-password>`)_                                      |
-| `KYMA_HOST`       | The Kyma host _(e.g. `c-a7db1c6...ondemand.com`)_                                             |
-| `GH_TOKEN`        | The GitHub Token _(`<your-github-token>`)_                                                    |
-| `KUBE_CONFIG`     | The Kyma kubeconfig file template* _(see more details bellow)_                                |
+| `HANA_USERNAME`   | The HANA Cloud Username _(`<your-hana-cloud-username>`)_       |
+| `HANA_PASSWORD`   | The HANA Cloud Password _(`<your-hana-cloud-password>`)_       |
+| `KYMA_HOST`       | The Kyma host _(e.g. `c-a7db1c6...ondemand.com`)_              |
+| `GH_TOKEN`        | The GitHub Token _(`<your-github-token>`)_                     |
+| `KUBE_CONFIG`     | The Kyma kubeconfig file template* _(see more details bellow)_ |
 
 !!! info "Kyma kubeconfig file template"
 

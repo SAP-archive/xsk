@@ -133,7 +133,6 @@ TODO
 === "Build (Only)"
 
     ```yaml
-
     name: Build Application Image
 
     on:
@@ -191,12 +190,11 @@ TODO
               docker tag ${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }} ${{ github.event.inputs.applicationRepository }}:latest
               docker push ${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}
               docker push ${{ github.event.inputs.applicationRepository }}:latest
-        ```
+    ```
 
 === "Deployment (Only)"
 
     ```yaml
-
     name: Deploy Application Image
 
     on:
@@ -235,7 +233,7 @@ TODO
               --set persistentVolumeClaim.enabled=false \
               --set deployment.strategyType=RollingUpdate \
               --set application.image=${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}
-        ```
+    ```
 
 **Required GitHub Secrets:**
 

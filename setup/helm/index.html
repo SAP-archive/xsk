@@ -1621,8 +1621,8 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </div>
 </div>
 </div>
-<div class="admonition info">
-<p class="admonition-title">Configuration Options</p>
+<details class="info">
+<summary>Configuration Options</summary>
 <table>
 <thead>
 <tr>
@@ -1643,9 +1643,74 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td><code>Recreate</code></td>
 </tr>
 <tr>
-<td><code>create.namespace</code></td>
-<td>Create namespace</td>
-<td><code>default</code></td>
+<td><code>deployment.readinessProbePeriodSeconds</code></td>
+<td>Readiness probe period seconds</td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td><code>deployment.readinessProbeInitialDelaySeconds</code></td>
+<td>Readiness probe initial delay</td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>deployment.readinessProbeHttpGetPort</code></td>
+<td>Readiness probe http get port</td>
+<td><code>8080</code></td>
+</tr>
+<tr>
+<td><code>deployment.LivenessProbePeriodSeconds</code></td>
+<td>Liveness probe period seconds</td>
+<td><code>60</code></td>
+</tr>
+<tr>
+<td><code>deployment.LivenessProbeInitialDelaySeconds</code></td>
+<td>Liveness probe initial delay</td>
+<td><code>60</code></td>
+</tr>
+<tr>
+<td><code>deployment.LivenessProbeHttpGetPort</code></td>
+<td>Liveness probe http get port</td>
+<td><code>8080</code></td>
+</tr>
+<tr>
+<td><code>deployment.volumeMountsName</code></td>
+<td>Volume mount name</td>
+<td><code>xsk-volume</code></td>
+</tr>
+<tr>
+<td><code>deployment.volumeMountsMountPath</code></td>
+<td>Volume mounts mount Path</td>
+<td><code>/usr/local/tomcat/target/dirigible/repository</code></td>
+</tr>
+<tr>
+<td><code>deployment.volumesName</code></td>
+<td>Volume name</td>
+<td><code>xsk-volume</code></td>
+</tr>
+<tr>
+<td><code>deployment.volumespersistentVolumeClaimClaimName</code></td>
+<td>Volume spersistent volume claim</td>
+<td><code>xsk-claim</code></td>
+</tr>
+<tr>
+<td><code>persistentVolumeClaim.enabled</code></td>
+<td>Persistent volume claim enable</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>persistentVolumeClaim.Name</code></td>
+<td>Persistent volume claim name</td>
+<td><code>xsk-claim</code></td>
+</tr>
+<tr>
+<td><code>persistentVolumeClaim.accessModes</code></td>
+<td>Persistent volume claim access modes</td>
+<td><code>ReadWriteOnce</code></td>
+</tr>
+<tr>
+<td><code>persistentVolumeClaim.resourcesStorage</code></td>
+<td>Persistent volume claim resources storage</td>
+<td><code>1Gi</code></td>
 </tr>
 <tr>
 <td><code>serviceAccount.create</code></td>
@@ -1673,6 +1738,11 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td><code>RuntimeDefault</code></td>
 </tr>
 <tr>
+<td><code>podSecurityContext</code></td>
+<td>Pod Security Context</td>
+<td>``</td>
+</tr>
+<tr>
 <td><code>service.type</code></td>
 <td>Type of service</td>
 <td><code>ClusterIP</code></td>
@@ -1685,11 +1755,6 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <tr>
 <td><code>nameOverride</code></td>
 <td>Name override</td>
-<td>``</td>
-</tr>
-<tr>
-<td><code>fullNameOverride</code></td>
-<td>Full name override</td>
 <td>``</td>
 </tr>
 <tr>
@@ -1723,6 +1788,46 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td>``</td>
 </tr>
 <tr>
+<td><code>kyma.roleCollections.description</code></td>
+<td>Set role collections description</td>
+<td><code>XSK Developer</code>, <code>XSK Operator</code></td>
+</tr>
+<tr>
+<td><code>kyma.roleCollections.name</code></td>
+<td>Set role collections name</td>
+<td><code>XSK-Developer</code>, <code>XSK Operator</code></td>
+</tr>
+<tr>
+<td><code>kyma.roleCollections.role-template-references</code></td>
+<td>Set role collections role template</td>
+<td><code>$XSAPPNAME.Developer</code>, <code>$XSAPPNAME.Operator</code></td>
+</tr>
+<tr>
+<td><code>kyma.roleTemplates.description</code></td>
+<td>Set role templates description</td>
+<td><code>Developer related roles</code>, <code>Operator related roles</code></td>
+</tr>
+<tr>
+<td><code>kyma.roleTemplates.name</code></td>
+<td>Set role templates name</td>
+<td><code>Developer</code>, <code>Operator</code></td>
+</tr>
+<tr>
+<td><code>kyma.roleTemplates.scopeReferences</code></td>
+<td>Set role templates scope references</td>
+<td><code>$XSAPPNAME.Developer</code>, <code>$XSAPPNAME.Operator</code></td>
+</tr>
+<tr>
+<td><code>kyma.scopes.description</code></td>
+<td>Set scopes description</td>
+<td><code>Developer scope</code>, <code>Operator scope</code></td>
+</tr>
+<tr>
+<td><code>kyma.scopes.name</code></td>
+<td>Set scopes name</td>
+<td><code>$XSAPPNAME.Developer</code>, <code>$XSAPPNAME.Operator</code></td>
+</tr>
+<tr>
 <td><code>application.image</code></td>
 <td>Application image</td>
 <td>``</td>
@@ -1736,11 +1841,6 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td><code>application.imagePullPolicy</code></td>
 <td>Image pull policy</td>
 <td><code>Always</code></td>
-</tr>
-<tr>
-<td><code>application.fastBootstrap</code></td>
-<td>Fast boot strap option</td>
-<td><code>false</code></td>
 </tr>
 <tr>
 <td><code>hana.enabled</code></td>
@@ -1769,13 +1869,17 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 </li>
 <li>
 <p>Uninstall</p>
 <p>If you want to uninstall Helm, run:</p>
 <div class="highlight"><pre><span></span><code>helm uninstall xsk
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you created namespace with <code>helm install --create-namespace namespace &lt;your-namespace&gt;</code>. If you want the namespace to be deleted you need to delete you namespace manually <code>kubectl delete namespace &lt;your-namespace&gt;</code>.</p>
+</div>
 </li>
 </ol>
 <h2 id="setup-kpack">Setup - Kpack</h2>
@@ -1880,8 +1984,8 @@ dirigiblelabs/buildpacks-stack-run-xsk - Local
 </li>
 </ul>
 </div>
-<div class="admonition info">
-<p class="admonition-title">Configuration Options</p>
+<details class="info">
+<summary>Configuration Options</summary>
 <table>
 <thead>
 <tr>
@@ -1988,7 +2092,7 @@ dirigiblelabs/buildpacks-stack-run-xsk - Local
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 </li>
 <li>
 <p>Uninstall</p>

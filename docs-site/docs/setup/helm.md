@@ -109,45 +109,69 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
 
         This will install additionally an `ApiRule` and XSUAA `ServiceInstance` and `ServiceBinding` with default roles `Developer` and `Operator` and will add your new roles. The appropriate roles should be assigned to the user.
 
-    !!! info "Configuration Options"
+    ??? info "Configuration Options"
         
-        |             Name                          |          Description            |        Default         |
-        |-------------------------------------------|---------------------------------|------------------------|
-        | `replicaCount`                            | Number of replicas              | `1`                    |
-        | `deployment.strategyType`                 | Deployment strategy type        | `Recreate`             |
-        | `create.namespace`                        | Create namespace                | `default`              |
-        | `serviceAccount.create`                   | Create service account          | `false`                |
-        | `serviceAccount.annotations`              | Add annotations to sa           | ``                     |
-        | `serviceAccount.name`                     | Service account name            | ``                     |
-        | `securityContext.allowPrivilegeEscalation`| Allow privileged escalation     | `false`                |
-        | `securityContext.seccompProfile.type`     | Enable seccomp profile          | `RuntimeDefault`       |
-        | `service.type`                            | Type of service                 | `ClusterIP`            |
-        | `service.port`                            | Port of service                 | `8080`                 |
-        | `nameOverride`                            | Name override                   | ``                     |
-        | `fullNameOverride`                        | Full name override              | ``                     |
-        | `fullNameOverride`                        | Full name override              | ``                     |
-        | `kyma.enabled`                            | Enable Kyma                     | ``                     |
-        | `kyma.host`                               | Kyma host                       | ``                     |
-        | `kyma.serverMaxHttpHeaderSize`            | Tomcat max http header size     | `48000`                |
-        | `kyma.addRoles`                           | Enable add new roles            | ``                     |
-        | `kyma.roles`                              | Name for new roles              | ``                     |
-        | `application.image`                       | Application image               | ``                     |
-        | `application.homeUrl`                     | Home url for XSK                | ``                     |
-        | `application.imagePullPolicy`             | Image pull policy               | `Always`               |
-        | `application.fastBootstrap`               | Fast boot strap option          | `false`                |
-        | `hana.enabled`                            | Hana enable option              | ``                     |
-        | `hana.secretName`                         | Hana secret name                | `hana-secret`          |
-        | `hana.url                                 | Hana url instance               | ``                     |
-        | `hana.username                            | Hana username                   | ``                     |
-        | `hana.password                            | Hana password                   | ``                     |
+        |             Name                                   |          Description                      |                 Default                             |
+        |----------------------------------------------------|-------------------------------------------|-----------------------------------------------------|
+        | `replicaCount`                                     | Number of replicas                        | `1`                                                 |
+        | `deployment.strategyType`                          | Deployment strategy type                  | `Recreate`                                          |
+        | `deployment.readinessProbePeriodSeconds`           | Readiness probe period seconds            | `10`                                                |
+        | `deployment.readinessProbeInitialDelaySeconds`     | Readiness probe initial delay             | `5`                                                 |
+        | `deployment.readinessProbeHttpGetPort`             | Readiness probe http get port             | `8080`                                              |
+        | `deployment.LivenessProbePeriodSeconds`            | Liveness probe period seconds             | `60`                                                |
+        | `deployment.LivenessProbeInitialDelaySeconds`      | Liveness probe initial delay              | `60`                                                |
+        | `deployment.LivenessProbeHttpGetPort`              | Liveness probe http get port              | `8080`                                              |
+        | `deployment.volumeMountsName`                      | Volume mount name                         | `xsk-volume`                                        |
+        | `deployment.volumeMountsMountPath`                 | Volume mounts mount Path                  | `/usr/local/tomcat/target/dirigible/repository`     |
+        | `deployment.volumesName`                           | Volume name                               | `xsk-volume`                                        |
+        | `deployment.volumespersistentVolumeClaimClaimName` | Volume spersistent volume claim           | `xsk-claim`                                         |
+        | `persistentVolumeClaim.enabled`                    | Persistent volume claim enable            | `true`                                              |
+        | `persistentVolumeClaim.Name`                       | Persistent volume claim name              | `xsk-claim`                                         |
+        | `persistentVolumeClaim.accessModes`                | Persistent volume claim access modes      | `ReadWriteOnce`                                     |
+        | `persistentVolumeClaim.resourcesStorage`           | Persistent volume claim resources storage | `1Gi`                                               |
+        | `serviceAccount.create`                            | Create service account                    | `false`                                             |
+        | `serviceAccount.annotations`                       | Add annotations to sa                     | ``                                                  |
+        | `serviceAccount.name`                              | Service account name                      | ``                                                  |
+        | `securityContext.allowPrivilegeEscalation`         | Allow privileged escalation               | `false`                                             |
+        | `securityContext.seccompProfile.type`              | Enable seccomp profile                    | `RuntimeDefault`                                    |
+        | `podSecurityContext`                               | Pod Security Context                      | ``                                                  |
+        | `service.type`                                     | Type of service                           | `ClusterIP`                                         |
+        | `service.port`                                     | Port of service                           | `8080`                                              |
+        | `nameOverride`                                     | Name override                             | ``                                                  |
+        | `fullNameOverride`                                 | Full name override                        | ``                                                  |
+        | `kyma.enabled`                                     | Enable Kyma                               | ``                                                  |
+        | `kyma.host`                                        | Kyma host                                 | ``                                                  |
+        | `kyma.serverMaxHttpHeaderSize`                     | Tomcat max http header size               | `48000`                                             |
+        | `kyma.addRoles`                                    | Enable add new roles                      | ``                                                  |
+        | `kyma.roles`                                       | Name for new roles                        | ``                                                  |
+        | `kyma.roleCollections.description`                 | Set role collections description          | `XSK Developer`, `XSK Operator`                     |
+        | `kyma.roleCollections.name`                        | Set role collections name                 | `XSK-Developer`, `XSK Operator`                     |
+        | `kyma.roleCollections.role-template-references`    | Set role collections role template        | `$XSAPPNAME.Developer`, `$XSAPPNAME.Operator`       |
+        | `kyma.roleTemplates.description`                   | Set role templates description            | `Developer related roles`, `Operator related roles` |
+        | `kyma.roleTemplates.name`                          | Set role templates name                   | `Developer`, `Operator`                             |
+        | `kyma.roleTemplates.scopeReferences`               | Set role templates scope references       | `$XSAPPNAME.Developer`, `$XSAPPNAME.Operator`       |
+        | `kyma.scopes.description`                          | Set scopes description                    | `Developer scope`, `Operator scope`                 |
+        | `kyma.scopes.name`                                 | Set scopes name                           | `$XSAPPNAME.Developer`, `$XSAPPNAME.Operator`       |
+        | `application.image`                                | Application image                         | ``                                                  |
+        | `application.homeUrl`                              | Home url for XSK                          | ``                                                  |
+        | `application.imagePullPolicy`                      | Image pull policy                         | `Always`                                            |
+        | `hana.enabled`                                     | Hana enable option                        | ``                                                  |
+        | `hana.secretName`                                  | Hana secret name                          | `hana-secret`                                       |
+        | `hana.url                                          | Hana url instance                         | ``                                                  |
+        | `hana.username                                     | Hana username                             | ``                                                  |
+        | `hana.password                                     | Hana password                             | ``                                                  |
 
-1. Uninstall
+2. Uninstall
 
     If you want to uninstall Helm, run:
 
     ```
     helm uninstall xsk
     ```
+
+    !!! note
+
+        If you created namespace with `helm install --create-namespace namespace <your-namespace>`. If you want the namespace to be deleted you need to delete you namespace manually `kubectl delete namespace <your-namespace>`.
 
 ## Setup - Kpack
 
@@ -269,7 +293,7 @@ You can choose to build and package your XSK application from source with Helm a
         --set imageBuilder.buildpack=dirigiblelabs/buildpacks-xsk - Local  
         ```
         
-    !!! info "Configuration Options"     
+    ??? info "Configuration Options"     
      
         |             Name                    |          Description            |            Default                                     |
         |-------------------------------------|---------------------------------|--------------------------------------------------------|

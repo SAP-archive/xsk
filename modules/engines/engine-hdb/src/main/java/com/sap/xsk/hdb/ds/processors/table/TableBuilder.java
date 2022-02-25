@@ -160,8 +160,7 @@ public class TableBuilder {
         String foreignKeyName = foreignKey.getName();
         String foreignKeyReferencedTable = foreignKey.getReferencedTable();
         if (caseSensitive) {
-          XSKHDBUtils.escapeArtifactName(foreignKeyName);
-
+          foreignKeyName = XSKHDBUtils.escapeArtifactName(foreignKeyName);
           foreignKeyReferencedTable = XSKHDBUtils.escapeArtifactName(foreignKeyReferencedTable);
         }
         String[] foreignKeyColumns = this.getEscapedColumns(foreignKey.getColumns());

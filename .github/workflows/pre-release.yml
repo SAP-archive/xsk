@@ -11,6 +11,14 @@ jobs:
       XSK_VERSION_BUILD: ${{ steps.XSK_VERSION_PRINT.outputs.XSK_VERSION_OUTPUT }}
       XSK_HELM_SHA: ${{ steps.XSK_HELM_SHA.outputs.XSK_HELM_SHA_PRINT }}
     steps:
+    #--------Restore success job-------#
+    - name: Previous succeeded job
+      id: success
+      uses: actions/cache@v2
+      with:
+          path: success-job-${{ github.sha }}-${{ matrix.name }}
+          key: success-job-job-${{ github.sha }}-${{ matrix.name }}
+    #--------Restore success job-------# 
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.GH_TOKEN }}
@@ -216,6 +224,7 @@ jobs:
       with:
         XSK_VERSION: ${{ needs.build.outputs.XSK_VERSION_BUILD }}
         XSK_HELM_SHA: ${{ needs.build.outputs.XSK_HELM_SHA }}
+        XSK_DISPATCH: 'false'
       secrets:
         STAGE_KYMA_CONFIG: ${{ secrets.STAGE_KYMA_CONFIG }}
         STAGE_HANA_URL: ${{ secrets.STAGE_HANA_URL }}

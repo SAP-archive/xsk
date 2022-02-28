@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/lifecycle/cicd/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.1">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.3">
     
     
       
@@ -31,7 +31,7 @@
       
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
@@ -1423,6 +1423,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#prerequisite" class="md-nav__link">
+    Prerequisite
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     Setup
   </a>
@@ -1545,6 +1552,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#prerequisite" class="md-nav__link">
+    Prerequisite
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     Setup
   </a>
@@ -1572,127 +1586,22 @@
 <h1 id="cicd-with-github-actions">CI/CD with GitHub Actions</h1>
 <h2 id="overview">Overview</h2>
 <hr />
-<p>TODO</p>
+<p>The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeline for building, releasing and deploying Docker image with XSK packaged with your application content.</p>
+<h2 id="prerequisite">Prerequisite</h2>
+<p>Create <code>Service Account</code> in Kyma for the CI/CD pipeline, as described bellow:</p>
 <h2 id="setup">Setup</h2>
 <hr />
 <ol>
-<li>Setup</li>
+<li>Navigate to your GitHub repository.</li>
+<li>Create <code>.github/workflows/&lt;pipeline-name&gt;.yaml</code> file with the following content:</li>
 </ol>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">All in One</label><label for="__tabbed_1_2">Build (Only)</label><label for="__tabbed_1_3">Deployment (Only)</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Build <em>(<code>build.yaml</code>)</em></label><label for="__tabbed_1_2">Deployment <em>(<code>deploy.yaml</code>)</em></label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Release Application Image</span><span class="w"></span>
-
-<span class="nt">on</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">inputs</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">releaseType</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">choice</span><span class="w"></span>
-<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Release Type</span><span class="w"></span>
-<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">image</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">image-release</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">image-release-deploy</span><span class="w"></span>
-<span class="w">      </span><span class="nt">xskRepository</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">XSK Repository</span><span class="w"></span>
-<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">choice</span><span class="w"></span>
-<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;dirigiblelabs/xsk-kyma&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;dirigiblelabs/xsk-cf&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;dirigiblelabs/xsk&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">xskVersion</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">XSK Version</span><span class="w"></span>
-<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;latest&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">applicationRepository</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Application Repository</span><span class="w"></span>
-<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;thuf/test-xsjs&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">applicationReleaseVersion</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Application Release Version</span><span class="w"></span>
-<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">kymaAccessToken</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Kyma Access Token</span><span class="w"></span>
-
-<span class="nt">jobs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span><span class="w"></span>
-<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Release Input Parameters</span><span class="w"></span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">          </span><span class="no">echo &quot;Release Type: ${{ github.event.inputs.releaseType }}&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="no">echo &quot;Application Repository: ${{ github.event.inputs.applicationRepository }}&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="no">echo &quot;Application Release Version: ${{ github.event.inputs.applicationReleaseVersion }}&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Dockerfile</span><span class="w"></span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">          </span><span class="no">DOCKERFILE_CONTENT=$(cat &lt;&lt; EOF</span><span class="w"></span>
-<span class="w">          </span><span class="no">FROM ${{ github.event.inputs.xskRepository }}:${{ github.event.inputs.xskVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="no">RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/</span><span class="w"></span>
-<span class="w">          </span><span class="no">COPY . /usr/local/tomcat/target/dirigible/repository/root/registry/public/</span><span class="w"></span>
-<span class="w">          </span><span class="no">RUN rm -rf /usr/local/tomcat/target/dirigible/repository/root/registry/public/Dockerfile</span><span class="w"></span>
-<span class="w">          </span><span class="no">RUN rm -rf /usr/local/tomcat/target/dirigible/repository/root/registry/public/.github/</span><span class="w"></span>
-<span class="w">          </span><span class="no">EOF</span><span class="w"></span>
-<span class="w">          </span><span class="no">)</span><span class="w"></span>
-<span class="w">          </span><span class="no">echo &quot;$DOCKERFILE_CONTENT&quot; &gt;&gt; Dockerfile</span><span class="w"></span>
-<span class="w">          </span><span class="no">echo &quot;$DOCKERFILE_CONTENT&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Docker Login</span><span class="w"></span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}} ${{secrets.DOCKER_REGISTRY}}</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Application Image</span><span class="w"></span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker build . -t ${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker tag ${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }} ${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker push ${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker push ${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
-<span class="w">  </span><span class="nt">release</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${{</span><span class="nv"> </span><span class="s">github.event.inputs.releaseType</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;image-release&#39;}}</span><span class="nv"> </span><span class="s">||</span><span class="nv"> </span><span class="s">${{</span><span class="nv"> </span><span class="s">github.event.inputs.releaseType</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;image-release-deploy&#39;}}&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">build</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span><span class="w"></span>
-<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create Release</span><span class="w"></span>
-<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/create-release@v1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">GITHUB_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GH_TOKEN }}</span><span class="w"></span>
-<span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">tag_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="nt">release_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="nt">draft</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="w">          </span><span class="nt">prerelease</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="w">          </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">            </span><span class="no">## Application Image - ${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-<span class="w">            </span><span class="no">#### Docker images:</span><span class="w"></span>
-<span class="w">              </span><span class="no">- [${{ github.event.inputs.applicationRepository }}](https://hub.docker.com/r/${{ github.event.inputs.applicationRepository }}/tags?page=1&amp;ordering=last_updated) - Application Image</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${{</span><span class="nv"> </span><span class="s">github.event.inputs.releaseType</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;image-release-deploy&#39;}}&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">build</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">release</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span><span class="w"></span>
-<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Kube Config File</span><span class="w"></span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">          </span><span class="no">mkdir $HOME/.kube</span><span class="w"></span>
-<span class="w">          </span><span class="no">echo &quot;${{ secrets.KUBE_CONFIG }}&quot; &gt;&gt; $HOME/.kube/config</span><span class="w"></span>
-<span class="w">          </span><span class="no">find $HOME/.kube/config -type f -exec sed -i &#39;&#39;s/#{AccessToken}#/${{ github.event.inputs.kymaAccessToken }}/g&#39;&#39; {} \;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Helm Upgrade Application Instance</span><span class="w"></span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">          </span><span class="no">helm repo add xsk https://www.xsk.io</span><span class="w"></span>
-<span class="w">          </span><span class="no">helm repo update</span><span class="w"></span>
-<span class="w">          </span><span class="no">helm upgrade --install xsk xsk/xsk \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set kyma.enabled=true \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set kyma.host=${{ secrets.KYMA_HOST }} \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set hana.enabled=true \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set hana.url=&#39;${{ secrets.HANA_URL }}&#39; \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set hana.username=${{ secrets.HANA_USERNAME }} \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set hana.password=&#39;${{ secrets.HANA_PASSWORD }}&#39; \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set persistentVolumeClaim.enabled=false \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set deployment.strategyType=RollingUpdate \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set application.image=${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The following GitHub Action builds XSK based Docker image for your application and push it to your Docker registry.</p>
 </div>
-<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Application Image</span><span class="w"></span>
 
 <span class="nt">on</span><span class="p">:</span><span class="w"></span>
@@ -1743,16 +1652,20 @@
 <span class="w">          </span><span class="no">echo &quot;$DOCKERFILE_CONTENT&quot; &gt;&gt; Dockerfile</span><span class="w"></span>
 <span class="w">          </span><span class="no">echo &quot;$DOCKERFILE_CONTENT&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Docker Login</span><span class="w"></span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}} ${{secrets.DOCKER_REGISTRY}}</span><span class="w"></span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker login ${{secrets.DOCKER_REGISTRY}} -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Application Image</span><span class="w"></span>
 <span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker build . -t ${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker tag ${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }} ${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker push ${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker push ${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
+<span class="w">          </span><span class="no">docker build . -t ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
+<span class="w">          </span><span class="no">docker tag ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }} ${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
+<span class="w">          </span><span class="no">docker push ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
+<span class="w">          </span><span class="no">docker push ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The following GitHub Action deploys your XSK based Docker image to your Kyma cluster via Helm.</p>
+</div>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy Application Image</span><span class="w"></span>
 
 <span class="nt">on</span><span class="p">:</span><span class="w"></span>
@@ -1765,37 +1678,67 @@
 <span class="w">      </span><span class="nt">applicationReleaseVersion</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Application Release Version</span><span class="w"></span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">kymaAccessToken</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Kyma Access Token</span><span class="w"></span>
 
 <span class="nt">jobs</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span><span class="w"></span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Kube Config File</span><span class="w"></span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">KYMA_CERTIFICATE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.KYMA_CERTIFICATE }}</span><span class="w"></span>
+<span class="w">          </span><span class="nt">KYMA_SERVER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.KYMA_SERVER }}</span><span class="w"></span>
+<span class="w">          </span><span class="nt">KYMA_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.KYMA_TOKEN }}</span><span class="w"></span>
 <span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">          </span><span class="no">mkdir $HOME/.kube</span><span class="w"></span>
-<span class="w">          </span><span class="no">echo &quot;${{ secrets.KUBE_CONFIG }}&quot; &gt;&gt; $HOME/.kube/config</span><span class="w"></span>
-<span class="w">          </span><span class="no">find $HOME/.kube/config -type f -exec sed -i &#39;&#39;s/#{AccessToken}#/${{ github.event.inputs.kymaAccessToken }}/g&#39;&#39; {} \;</span><span class="w"></span>
+<span class="w">          </span><span class="no">echo &quot;</span><span class="w"></span>
+<span class="w">          </span><span class="no">apiVersion: v1</span><span class="w"></span>
+<span class="w">          </span><span class="no">kind: Config</span><span class="w"></span>
+<span class="w">          </span><span class="no">current-context: xsk</span><span class="w"></span>
+<span class="w">          </span><span class="no">clusters:</span><span class="w"></span>
+<span class="w">          </span><span class="no">- name: xsk</span><span class="w"></span>
+<span class="w">            </span><span class="no">cluster:</span><span class="w"></span>
+<span class="w">              </span><span class="no">certificate-authority-data: $KYMA_CERTIFICATE</span><span class="w"></span>
+<span class="w">              </span><span class="no">server: $KYMA_SERVER</span><span class="w"></span>
+<span class="w">          </span><span class="no">contexts:</span><span class="w"></span>
+<span class="w">          </span><span class="no">- name: xsk</span><span class="w"></span>
+<span class="w">            </span><span class="no">context:</span><span class="w"></span>
+<span class="w">              </span><span class="no">cluster: xsk</span><span class="w"></span>
+<span class="w">              </span><span class="no">user: xsk</span><span class="w"></span>
+<span class="w">          </span><span class="no">users:</span><span class="w"></span>
+<span class="w">          </span><span class="no">- name: xsk</span><span class="w"></span>
+<span class="w">            </span><span class="no">user:</span><span class="w"></span>
+<span class="w">              </span><span class="no">token: $KYMA_TOKEN&quot; &gt; $HOME/.kube/config</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Export Kyma Host</span><span class="w"></span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">          </span><span class="no">export KYMA_API_SERVER=${{ secrets.KYMA_SERVER }}</span><span class="w"></span>
+<span class="w">          </span><span class="no">echo &quot;KYMA_HOST=${KYMA_API_SERVER:12}&quot; &gt;&gt; $GITHUB_ENV</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Helm Upgrade Application Instance</span><span class="w"></span>
 <span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">          </span><span class="no">helm repo add xsk https://www.xsk.io</span><span class="w"></span>
 <span class="w">          </span><span class="no">helm repo update</span><span class="w"></span>
 <span class="w">          </span><span class="no">helm upgrade --install xsk xsk/xsk \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set kyma.enabled=true \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set kyma.host=${{ secrets.KYMA_HOST }} \</span><span class="w"></span>
+<span class="w">          </span><span class="no">--set kyma.host=$KYMA_HOST \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set hana.enabled=true \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set hana.url=&#39;${{ secrets.HANA_URL }}&#39; \</span><span class="w"></span>
+<span class="w">          </span><span class="no">--set hana.url=&#39;jdbc:sap://${{ secrets.HANA_URL }}/?encrypt=true&amp;validateCertificate=false`&#39; \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set hana.username=${{ secrets.HANA_USERNAME }} \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set hana.password=&#39;${{ secrets.HANA_PASSWORD }}&#39; \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set persistentVolumeClaim.enabled=false \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set deployment.strategyType=RollingUpdate \</span><span class="w"></span>
-<span class="w">          </span><span class="no">--set application.image=${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
+<span class="w">          </span><span class="no">--set application.image=${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
 </code></pre></div>
 </div>
 </div>
 </div>
-<p><strong>Required GitHub Secrets:</strong></p>
+<div class="admonition note">
+<p class="admonition-title">GitHub Secrets</p>
+<p>The following GitHub Secrets are required in order to successfully run the previously created GitHub Actions. To create GitHub secret:</p>
+<ol>
+<li>Navigate to your GitHub repository.</li>
+<li>Open the <code>Settings</code> tab.</li>
+<li>Go to <code>Secrets</code> &#8594; <code>Actions</code>.</li>
+<li>Click the <code>New Repository Secret</code> button.</li>
+</ol>
 <table>
 <thead>
 <tr>
@@ -1806,7 +1749,7 @@
 <tbody>
 <tr>
 <td><code>DOCKER_REGISTRY</code></td>
-<td>The Docker Registry URL <em>(e.g. <code>https://index.docker.io/v1/</code>)</em></td>
+<td>The Docker Registry <em>(e.g. <code>docker.io</code>, <code>ghcr.io</code>, etc.)</em></td>
 </tr>
 <tr>
 <td><code>DOCKER_USERNAME</code></td>
@@ -1818,7 +1761,7 @@
 </tr>
 <tr>
 <td><code>HANA_URL</code></td>
-<td>The HANA Cloud URL <em>(e.g. <code>jdbc:sap://7512c2q1-.../?encrypt=true&amp;validateCertificate=false</code>)</em></td>
+<td>The HANA Cloud URL <em>(e.g. <code>7512c2q1-...:443</code>)</em></td>
 </tr>
 <tr>
 <td><code>HANA_USERNAME</code></td>
@@ -1829,40 +1772,23 @@
 <td>The HANA Cloud Password <em>(<code>&lt;your-hana-cloud-password&gt;</code>)</em></td>
 </tr>
 <tr>
-<td><code>KYMA_HOST</code></td>
-<td>The Kyma host <em>(e.g. <code>c-a7db1c6...ondemand.com</code>)</em></td>
+<td><code>KYMA_CERTIFICATE</code></td>
+<td>The Kyma Certificate <em>(e.g. <code>LS0tLS1CRUdJTiBDRVJUS...</code>)</em></td>
+</tr>
+<tr>
+<td><code>KYMA_SERVER</code></td>
+<td>The Kyma Server <em>(e.g. <code>https://api.c-a7b1c6...ondemand.com</code>)</em></td>
+</tr>
+<tr>
+<td><code>KYMA_TOKEN</code></td>
+<td>The Kyma Token <em>(e.g. <code>eyJhbGciOiJSUzI1NiIsImtpZCI6In...</code>)</em></td>
 </tr>
 <tr>
 <td><code>GH_TOKEN</code></td>
 <td>The GitHub Token <em>(<code>&lt;your-github-token&gt;</code>)</em></td>
 </tr>
-<tr>
-<td><code>KUBE_CONFIG</code></td>
-<td>The Kyma kubeconfig file template* <em>(see more details bellow)</em></td>
-</tr>
 </tbody>
 </table>
-<div class="admonition info">
-<p class="admonition-title">Kyma kubeconfig file template</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
-<span class="nt">clusters</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cluster</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">certificate-authority-data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LS0tLS1CRUdJTiBD...==</span><span class="w"></span>
-<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://apiserver.c-a7db1c6...ondemand.com</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c-a7db1c6...ondemand.com</span><span class="w"></span>
-<span class="nt">contexts</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">context</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c-a7db1c6...ondemand.com</span><span class="w"></span>
-<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OIDCUser</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c-a7db1c6...ondemand.com</span><span class="w"></span>
-<span class="nt">current-context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c-a7db1c6...ondemand.com</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Config</span><span class="w"></span>
-<span class="nt">preferences</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
-<span class="nt">users</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OIDCUser</span><span class="w"></span>
-<span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="c1">#{AccessToken}#</span><span class="w"></span>
-</code></pre></div>
 </div>
 
               
@@ -1985,7 +1911,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.8aa65030.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b88e97c5.min.js"></script>
       
     
   </body>

@@ -157,9 +157,9 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         | `application.imagePullPolicy`                      | Image pull policy                         | `Always`                                            |
         | `hana.enabled`                                     | Hana enable option                        | ``                                                  |
         | `hana.secretName`                                  | Hana secret name                          | `hana-secret`                                       |
-        | `hana.url                                          | Hana url instance                         | ``                                                  |
-        | `hana.username                                     | Hana username                             | ``                                                  |
-        | `hana.password                                     | Hana password                             | ``                                                  |
+        | `hana.url`                                         | Hana url instance                         | ``                                                  |
+        | `hana.username`                                    | Hana username                             | ``                                                  |
+        | `hana.password`                                    | Hana password                             | ``                                                  |
 
 2. Uninstall
 

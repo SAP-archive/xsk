@@ -8,11 +8,54 @@ CI/CD with GitHub Actions
 ## Overview
 ---
 
-The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeline for building, releasing and deploying Docker image with XSK packaged with your application content.
+The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeline for building, releasing and deploying Docker image with XSK packaged with your application content. 
 
-## Prerequisite
+!!! Prerequisites
 
-Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
+    Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
+
+      1. Navigate to your Kyma cluster.
+      1. Select your namespace _(e.g. `default`)_.
+      1. Go to `Configuration` &#8594; `Service Accounts`.
+      1. Click the `Create Service Account` button.
+      1. Enter the service account name _(e.g. `xsk`)_.
+
+    Create `Cluster Role` in Kyma for the CI/CD pipeline, as described bellow:
+
+      1. Navigate to your Kyma cluster.
+      1. Go to `Configuration` &#8594; `Cluster Roles`.
+      1. Click the `Create Cluster Role` button.
+      1. Enter the cluster role name _(e.g. `xsk`)_.
+      1. Add the following `API Groups`:
+        - **(core)**
+        - **apps**
+        - **servicecatalog.k8s.io**
+        - **networking.istio.io**
+        - **servicecatalog.kyma-project.io**
+        - **gateway.kyma-project.io**
+      1. Select `*` in the `Resources` dropdown, to match all resources.
+      1. Select `*` in the `Verbs` dropdown, to match all verbs.
+      1. Click the `Create` button.
+
+    Create `Cluster Role Binding` of the `Cluster Role` to the `Service Account`:
+
+      1. Navigate to your Kyma cluster.
+      1. Go to `Cluster Role Bindings` &#8594; `Cluster Roles`.
+      1. Enter the cluster role binding name _(e.g. `xsk-default`, note that the name is not namespace specific and should be unique for the whole cluster)_.
+      1. Select the `Cluster Role` _(e.g. `xsk`)_.
+      1. Switch the `Kind` to `ServiceAccount`.
+      1. Select the desired namespace _(e.g. `default`)_.
+      1. Select the service account _(e.g. `xsk`)_.
+
+    Copy the `Service Account` token as later will be needed for the `KYMA_TOKEN` secret:
+
+      1. Navigate to your Kyma cluster.
+      1. Go to `Configuration` &#8594; `Service Accounts`.
+      1. Select the `Service Account` _(e.g. `xsk`)_.
+      1. Select the secret for more details _(e.g. `xsk-token-wf6jk`)_.
+      1. Click the `Decode` button to decode the secret. 
+      1. Copy the `token` value _(e.g. `eyJhbGciOiJS...`)_.
+
 
 ## Setup
 ---

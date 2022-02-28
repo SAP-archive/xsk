@@ -25,6 +25,8 @@ Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
     !!! info
         The following GitHub Action builds XSK based Docker image for your application and push it to your Docker registry.
 
+        Replace the `<your-organization>/<your-repository>` placeholder with a default organization and repository where the Docker image will be pushed _(can be changed when triggering the GitHub Action)_.
+
     ```yaml
     name: Build Application Image
 
@@ -46,7 +48,7 @@ Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
           applicationRepository:
             description: Application Repository
             required: true
-            default: 'thuf/test-xsjs'
+            default: '<your-organization>/<your-repository>'
           applicationReleaseVersion:
             description: Application Release Version
             required: true
@@ -89,6 +91,8 @@ Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
 
     !!! info
         The following GitHub Action deploys your XSK based Docker image to your Kyma cluster via Helm.
+        
+        Replace the `<your-organization>/<your-repository>` placeholder with a default organization and repository where the Docker image will be pushed _(can be changed when triggering the GitHub Action)_.
 
     ```yaml
     name: Deploy Application Image
@@ -99,7 +103,7 @@ Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
           applicationRepository:
             description: Application Repository
             required: true
-            default: 'thuf/test-xsjs'
+            default: '<your-organization>/<your-repository>'
           applicationReleaseVersion:
             description: Application Release Version
             required: true
@@ -173,5 +177,5 @@ Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
     | `KYMA_CERTIFICATE` | The Kyma Certificate _(e.g. `LS0tLS1CRUdJTiBDRVJUS...`)_       |
     | `KYMA_SERVER`      | The Kyma Server _(e.g. `https://api.c-a7b1c6...ondemand.com`)_ |
     | `KYMA_TOKEN`       | The Kyma Token _(e.g. `eyJhbGciOiJSUzI1NiIsImtpZCI6In...`)_    |
-    | `GH_TOKEN`         | The GitHub Token _(`<your-github-token>`)_                     |
+    | `GH_TOKEN`         | The GitHub Token _(e.g. `a385f4...`)_                          |
 

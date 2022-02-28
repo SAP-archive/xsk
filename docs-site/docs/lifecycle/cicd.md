@@ -25,7 +25,7 @@ Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
     !!! info
         The following GitHub Action builds XSK based Docker image for your application and push it to your Docker registry.
 
-        Replace the `<your-organization>/<your-repository>` placeholder with a default organization and repository where the Docker image will be pushed _(can be changed when triggering the GitHub Action)_.
+        _**Note:** Replace the `<your-organization>/<your-repository>` placeholder with a default organization and repository where the Docker image will be pushed (can be changed when triggering the GitHub Action)_.
 
     ```yaml
     name: Build Application Image
@@ -92,7 +92,7 @@ Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
     !!! info
         The following GitHub Action deploys your XSK based Docker image to your Kyma cluster via Helm.
         
-        Replace the `<your-organization>/<your-repository>` placeholder with a default organization and repository where the Docker image will be pushed _(can be changed when triggering the GitHub Action)_.
+        _**Note:** Replace the `<your-organization>/<your-repository>` placeholder with a default organization and repository where the Docker image will be pushed (can be changed when triggering the GitHub Action)_.
 
     ```yaml
     name: Deploy Application Image

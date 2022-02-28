@@ -170,7 +170,7 @@ function XscCallableStatement(callableStatement) {
 
 	this.setNull = function(index, sqlTypeStr) {
 		var sqlTypeStr = callableStatement.getResultSet().getMetaData()
-				.getColumnTypeName(index);
+			.getColumnTypeName(index);
 		callableStatement.setNull(index, sqlTypeStr);
 	};
 
@@ -428,6 +428,7 @@ function XscPreparedStatement(dPreparedStatement) {
 }
 
 function XscResultSet(dResultSet) {
+
 	this.close = function() {
 		dResultSet.close();
 	};

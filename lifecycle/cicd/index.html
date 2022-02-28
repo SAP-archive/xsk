@@ -1573,8 +1573,8 @@
 <h2 id="overview">Overview</h2>
 <hr />
 <p>The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeline for building, releasing and deploying Docker image with XSK packaged with your application content. </p>
-<div class="admonition prerequisites">
-<p class="admonition-title">Prerequisites</p>
+<details class="prerequisites" open="open">
+<summary>Prerequisites</summary>
 <p>Create <code>Service Account</code> in Kyma for the CI/CD pipeline, as described bellow:</p>
 <ol>
 <li>Navigate to your Kyma cluster.</li>
@@ -1621,7 +1621,7 @@
 <li>Click the <code>Decode</code> button to decode the secret. </li>
 <li>Copy the <code>token</code> value <em>(e.g. <code>eyJhbGciOiJS...</code>)</em>.</li>
 </ol>
-</div>
+</details>
 <h2 id="setup">Setup</h2>
 <hr />
 <ol>
@@ -1690,7 +1690,7 @@
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Application Image</span><span class="w"></span>
 <span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">          </span><span class="no">docker build . -t ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="no">docker tag ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }} ${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
+<span class="w">          </span><span class="no">docker tag ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }} ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
 <span class="w">          </span><span class="no">docker push ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
 <span class="w">          </span><span class="no">docker push ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:latest</span><span class="w"></span>
 </code></pre></div>
@@ -1765,8 +1765,8 @@
 </div>
 </div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">GitHub Secrets</p>
+<details class="note" open="open">
+<summary>GitHub Secrets</summary>
 <p>The following GitHub Secrets are required in order to successfully run the previously created GitHub Actions. To create GitHub secret:</p>
 <ol>
 <li>Navigate to your GitHub repository.</li>
@@ -1824,7 +1824,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 
               
             </article>

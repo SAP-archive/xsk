@@ -14,13 +14,8 @@
  */
 var database = require('db/v4/database');
 
-const aA = 5;
-const aa = 5;
-
 const PROCEDURE_IN_PARAMETER = 1;
 const PROCEDURE_IN_OUT_PARAMETER = 2;
-const PROCEDURE_OUT_PARAMETER = 3;
-const PROCEDURE_UNKNOWN_PARAMETER = 4;
 
 exports.getConnection = function () {
 	var dConnection = database.getConnection();
@@ -37,6 +32,7 @@ function XscConnection(dConnection) {
 	this.close = function () {
 		dConnection.close();
 	};
+
 	this.commit = function () {
 		dConnection.commit();
 	};
@@ -63,81 +59,91 @@ function XscConnection(dConnection) {
 
 	// Returns always null. I need to think of conditions where it returns an object
 	this.getLastWarning = function () {
-
 		return dConnection.native.getWarnings();
 	}
 
 	this.loadProcedure = function (schema, procedure) {
-		let conn;
-		let procedureINParameters;
-		let procedureOUTParameters;
-		let procedureParametersResultSet;
-		let procedureCallStatement
+		let dConnection = null;
+		let procedureParametersStatement = null;
+
+		let procedureINParameters = [];
+		let procedureOUTParameters = [];
+		let procedureParametersCount = 0;
+
 		try {
-			conn = $.db.getConnection();
-			procedureCallStatement = `CALL "` + schema + `"."` + procedure + `"`;
-			let procedureParametersStatement = `
-			DO BEGIN
-				DECLARE matcher string;
-				DECLARE res string;
-				DECLARE occn integer;
-				DECLARE definition string;
-				DECLARE parameter_names VARCHAR(100) ARRAY;
-				DECLARE parameter_types VARCHAR(10) ARRAY;
+			dConnection = database.getConnection();
 
-				SELECT DEFINITION INTO definition FROM "SYS"."PROCEDURES" WHERE PROCEDURE_NAME = '` + procedure + `';
+			let procedureParametersSql = `
+				DO BEGIN
+					DECLARE matcher string;
+					DECLARE res string;
+					DECLARE occn integer;
+					DECLARE definition string;
+					DECLARE parameter_names VARCHAR(100) ARRAY;
+					DECLARE parameter_types VARCHAR(10) ARRAY;
 
-				matcher := '(in|out|IN|OUT) \\w+';
+					SELECT DEFINITION INTO definition FROM "SYS"."PROCEDURES" WHERE PROCEDURE_NAME = '$procedure';
 
-				occn := 1;
-				res := '';
-				
-				WHILE (:res IS NOT NULL) DO
-					res := SUBSTR_REGEXPR(:matcher FLAG 'i' IN :definition OCCURRENCE :occn);
-					IF (:res IS NOT NULL) THEN
-						parameter_names[:occn] = SUBSTR_AFTER(:res,' ');
-						parameter_types[:occn] = SUBSTR_BEFORE(:res,' ');
-						
-						occn := occn + 1;
-					ELSE
-						BREAK;
-					END IF;
-				END while; 
+					matcher := '(?:(?:in|out) \\w+)(?=[\\s\\S]*BEGIN)';
 
-				procedure_parameters = UNNEST(:parameter_names, :parameter_types) AS ("PARAMETER_NAME", "PARAMETER_TYPE");
-				SELECT * From :procedure_parameters;
-			END;
-		`;
-			procedureINParameters = [];
-			procedureOUTParameters = [];
-			procedureParametersResultSet = conn.prepareStatement(procedureParametersStatement).executeQuery();
+					occn := 1;
+					res := '';
+					
+					WHILE (:res IS NOT NULL) DO
+						res := SUBSTR_REGEXPR(:matcher FLAG 'i' IN :definition OCCURRENCE :occn);
+						IF (:res IS NOT NULL) THEN
+							parameter_names[:occn] = SUBSTR_AFTER(:res,' ');
+							parameter_types[:occn] = SUBSTR_BEFORE(:res,' ');
+							
+							occn := occn + 1;
+						ELSE
+							BREAK;
+						END IF;
+					END while; 
+
+					procedure_parameters = UNNEST(:parameter_names, :parameter_types) AS ("PARAMETER_NAME", "PARAMETER_TYPE");
+					SELECT * From :procedure_parameters;
+				END;
+			`;
+			procedureParametersStatement = dConnection.prepareStatement(procedureParametersSql.replace('$procedure', procedure));
+
+			let procedureParametersResultSet = procedureParametersStatement.executeQuery();
+
+			while (procedureParametersResultSet.next()) {
+				let parameterName = procedureParametersResultSet.getString('PARAMETER_NAME');
+				let parameterType = procedureParametersResultSet.getString('PARAMETER_TYPE');
+
+				if (parameterType === 'in' || parameterType === 'IN') {
+					procedureINParameters.push(parameterName);
+				}
+				else if (parameterType === 'out' || parameterType === 'OUT') {
+					procedureOUTParameters.push(parameterName);
+				}
+				else if (parameterType === 'inout' || parameterType === 'INOUT') {
+					procedureINParameters.push(parameterName);
+					procedureOUTParameters.push(parameterName);
+				}
+
+				procedureParametersCount++;
+			}
+
 		} catch (e) {
 			throw new Error(e)
 		} finally {
-			conn.close()
-		}
-
-		while (procedureParametersResultSet.next()) {
-			let parameterName = procedureParametersResultSet.getString("PARAMETER_NAME");
-			let parameterType = procedureParametersResultSet.getString("PARAMETER_TYPE");
-
-			if (parameterType === 'in' || parameterType === 'IN') {
-				procedureINParameters.push(parameterName);
-			} else if (parameterType === 'out' || parameterType === 'OUT') {
-				procedureOUTParameters.push(parameterName);
+			if (procedureParametersStatement !== null) {
+				procedureParametersStatement.close();
+			}
+			if (dConnection !== null) {
+				dConnection.close();
 			}
 		}
 
-		let modifiedProcedureINParameters = procedureINParameters.map(inParam => {
-			return inParam + " => ?";
-		});
+		let procedureParameters = [];
+		for (let i = 0; i < procedureParametersCount; i++) {
+			procedureParameters.push("?");
+		}
 
-		let modifiedProcedureOUTParameters = procedureOUTParameters.map(outParam => {
-			return outParam + " => ?";
-		})
-
-		let procedureParameters = modifiedProcedureINParameters.concat(modifiedProcedureOUTParameters);
-		procedureCallStatement = procedureCallStatement + `(` + procedureParameters.toString() + `)`;
+		let procedureCallSql = `CALL "$schema"."$procedure" (` + procedureParameters.toString() + `)`;
 
 		function procedureCall() {
 			let args = Array.prototype.slice.call(arguments);
@@ -159,27 +165,28 @@ function XscConnection(dConnection) {
 			}
 
 			let procedureResult = new $.hdb.ProcedureResult;
-			let procedureStatement;
-			let dConnection;
+
+			let dConnection = null;
+			let procedureCallStatement = null;
+
 			try {
 				dConnection = database.getConnection();
-				procedureStatement = dConnection.prepareStatement(procedureCallStatement);
-				setProcedureParams(procedureStatement, finalArgs);
+				procedureCallStatement = dConnection.prepareStatement(procedureCallSql.replace('$schema', schema).replace('$procedure', procedure));
+				setProcedureParams(procedureCallStatement, finalArgs);
 
-				let hasResults = procedureStatement.execute();
+				let hasResults = procedureCallStatement.execute();
 				let resultSets = [];
 
 				do {
 					if (hasResults) {
-						let resultSet = procedureStatement.getResultSet();
+						let resultSet = procedureCallStatement.getResultSet();
 						resultSets.push(new $.hdb.ResultSet(resultSet));
 						resultSet.close();
 					}
-					hasResults = procedureStatement.getMoreResults();
+					hasResults = procedureCallStatement.getMoreResults();
 				} while (hasResults);
 
 				procedureResult.$resultSets = resultSets;
-
 
 				for (const resultSet in resultSets) {
 					let singleResultSet = resultSets[resultSet];
@@ -197,12 +204,14 @@ function XscConnection(dConnection) {
 			} catch (e) {
 				throw new Error(e)
 			} finally {
-				procedureStatement.close();
-				dConnection.close();
+				if (procedureCallStatement !== null) {
+					procedureCallStatement.close();
+				}
+				if (dConnection !== null) {
+					dConnection.close();
+				}
 			}
-
 		}
-
 		return procedureCall;
 	}
 
@@ -227,7 +236,7 @@ function XscConnection(dConnection) {
 
 function XscResultSet(dResultSet) {
 	this.length = 0;
-	this.metadata = new XscResultSetMetaData(dResultSet.native.getMetaData());
+	this.metadata = new XscResultSetMetaData(dResultSet.getMetaData());
 	syncResultSet.call(this);
 	this.getIterator = function () {
 		return new XscResultSetIterator(this);
@@ -288,9 +297,7 @@ function setStatementParams(dPreparedStatement, args) {
 	var parameterMetaData = dPreparedStatement.native.getParameterMetaData();
 	var paramsCount = parameterMetaData.getParameterCount();
 
-	if (paramsCount !== args.length) {
-		throw new Error('Invalid arguments count!');
-	}
+	validateParamsCount(paramsCount, args);
 
 	setParams(dPreparedStatement, args, paramsCount, parameterMetaData);
 }
@@ -303,14 +310,12 @@ function setProcedureParams(dPreparedStatement, args) {
 	for (var i = 0, paramIndex = 1; i < paramsCount; i++, paramIndex++) {
 		var paramMode = parameterMetaData.getParameterMode(paramIndex);
 
-		if (paramMode === PROCEDURE_IN_PARAMETER || paramMode === PROCEDURE_OUT_PARAMETER) {
+		if (paramMode === PROCEDURE_IN_PARAMETER || paramMode === PROCEDURE_IN_OUT_PARAMETER) {
 			inParamsCount++;
 		}
 	}
 
-	if (inParamsCount !== args.length) {
-		throw new Error('Invalid arguments count!');
-	}
+	validateParamsCount(inParamsCount, args);
 
 	setParams(dPreparedStatement, args, inParamsCount, parameterMetaData)
 }
@@ -396,6 +401,12 @@ function setParamByType(dPreparedStatement, paramType, paramValue, paramIndex) {
 		case 'ST_POINT':
 			// TODO
 			break;
+	}
+}
+
+function validateParamsCount(paramsCount, args) {
+	if (paramsCount !== args.length) {
+		throw new Error('Invalid arguments count!');
 	}
 }
 

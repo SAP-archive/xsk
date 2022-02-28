@@ -428,7 +428,6 @@ function XscPreparedStatement(dPreparedStatement) {
 }
 
 function XscResultSet(dResultSet) {
-	this.native = dResultSet.native;
 
 	this.close = function() {
 		dResultSet.close();

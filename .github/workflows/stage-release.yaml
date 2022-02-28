@@ -81,13 +81,12 @@ jobs:
               OUTPUT="${OUTPUT//$'\r'/'%0D'}"
               HELM_SHA=$(echo "$OUTPUT" | tail -n1)
               SHA=$(sed -e 's#.*sha256:\(\)#\1#' <<< $HELM_SHA)
-              XSK_VERSION=${{ inputs.XSK_VERSION }} >> $GITHUB_ENV
               if [ $SHA != ${{ inputs.XSK_HELM_SHA }} ]
                 then
                   echo "Failed to verify sha!"
                   exit 1
               fi
-              echo "::set-output name=XSK_VERSION_OUTPUT::$XSK_VERSION"
+              echo "::set-output name=XSK_VERSION_OUTPUT::${{ inputs.XSK_VERSION }}"
           else 
             helm pull xsk/xsk --version ${{ github.event.inputs.XSK_VERSION }} --verify
             XSK_VERSION=${{ github.event.inputs.XSK_VERSION }}

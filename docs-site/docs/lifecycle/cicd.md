@@ -10,7 +10,7 @@ CI/CD with GitHub Actions
 
 The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeline for building, releasing and deploying Docker image with XSK packaged with your application content. 
 
-!!! Prerequisites
+???+ Prerequisites
 
     Create `Service Account` in Kyma for the CI/CD pipeline, as described bellow:
 
@@ -125,7 +125,7 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
           - name: Build Application Image
             run: |
               docker build . -t ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}
-              docker tag ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }} ${{ github.event.inputs.applicationRepository }}:latest
+              docker tag ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }} ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:latest
               docker push ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}
               docker push ${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:latest
     ```
@@ -200,7 +200,7 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
               --set application.image=${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}
     ```
 
-!!! note "GitHub Secrets"
+???+ note "GitHub Secrets"
 
     The following GitHub Secrets are required in order to successfully run the previously created GitHub Actions. To create GitHub secret:
     

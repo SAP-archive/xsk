@@ -1423,13 +1423,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#prerequisite" class="md-nav__link">
-    Prerequisite
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     Setup
   </a>
@@ -1552,13 +1545,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#prerequisite" class="md-nav__link">
-    Prerequisite
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     Setup
   </a>
@@ -1586,9 +1572,56 @@
 <h1 id="cicd-with-github-actions">CI/CD with GitHub Actions</h1>
 <h2 id="overview">Overview</h2>
 <hr />
-<p>The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeline for building, releasing and deploying Docker image with XSK packaged with your application content.</p>
-<h2 id="prerequisite">Prerequisite</h2>
+<p>The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeline for building, releasing and deploying Docker image with XSK packaged with your application content. </p>
+<div class="admonition prerequisites">
+<p class="admonition-title">Prerequisites</p>
 <p>Create <code>Service Account</code> in Kyma for the CI/CD pipeline, as described bellow:</p>
+<ol>
+<li>Navigate to your Kyma cluster.</li>
+<li>Select your namespace <em>(e.g. <code>default</code>)</em>.</li>
+<li>Go to <code>Configuration</code> &#8594; <code>Service Accounts</code>.</li>
+<li>Click the <code>Create Service Account</code> button.</li>
+<li>Enter the service account name <em>(e.g. <code>xsk</code>)</em>.</li>
+</ol>
+<p>Create <code>Cluster Role</code> in Kyma for the CI/CD pipeline, as described bellow:</p>
+<ol>
+<li>Navigate to your Kyma cluster.</li>
+<li>Go to <code>Configuration</code> &#8594; <code>Cluster Roles</code>.</li>
+<li>Click the <code>Create Cluster Role</code> button.</li>
+<li>Enter the cluster role name <em>(e.g. <code>xsk</code>)</em>.</li>
+<li>Add the following <code>API Groups</code>:<ul>
+<li><strong>(core)</strong></li>
+<li><strong>apps</strong></li>
+<li><strong>servicecatalog.k8s.io</strong></li>
+<li><strong>networking.istio.io</strong></li>
+<li><strong>servicecatalog.kyma-project.io</strong></li>
+<li><strong>gateway.kyma-project.io</strong></li>
+</ul>
+</li>
+<li>Select <code>*</code> in the <code>Resources</code> dropdown, to match all resources.</li>
+<li>Select <code>*</code> in the <code>Verbs</code> dropdown, to match all verbs.</li>
+<li>Click the <code>Create</code> button.</li>
+</ol>
+<p>Create <code>Cluster Role Binding</code> of the <code>Cluster Role</code> to the <code>Service Account</code>:</p>
+<ol>
+<li>Navigate to your Kyma cluster.</li>
+<li>Go to <code>Cluster Role Bindings</code> &#8594; <code>Cluster Roles</code>.</li>
+<li>Enter the cluster role binding name <em>(e.g. <code>xsk-default</code>, note that the name is not namespace specific and should be unique for the whole cluster)</em>.</li>
+<li>Select the <code>Cluster Role</code> <em>(e.g. <code>xsk</code>)</em>.</li>
+<li>Switch the <code>Kind</code> to <code>ServiceAccount</code>.</li>
+<li>Select the desired namespace <em>(e.g. <code>default</code>)</em>.</li>
+<li>Select the service account <em>(e.g. <code>xsk</code>)</em>.</li>
+</ol>
+<p>Copy the <code>Service Account</code> token as later will be needed for the <code>KYMA_TOKEN</code> secret:</p>
+<ol>
+<li>Navigate to your Kyma cluster.</li>
+<li>Go to <code>Configuration</code> &#8594; <code>Service Accounts</code>.</li>
+<li>Select the <code>Service Account</code> <em>(e.g. <code>xsk</code>)</em>.</li>
+<li>Select the secret for more details <em>(e.g. <code>xsk-token-wf6jk</code>)</em>.</li>
+<li>Click the <code>Decode</code> button to decode the secret. </li>
+<li>Copy the <code>token</code> value <em>(e.g. <code>eyJhbGciOiJS...</code>)</em>.</li>
+</ol>
+</div>
 <h2 id="setup">Setup</h2>
 <hr />
 <ol>

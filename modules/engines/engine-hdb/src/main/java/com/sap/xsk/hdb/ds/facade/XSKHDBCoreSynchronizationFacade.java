@@ -186,7 +186,8 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
 		for (XSKDataStructureModel cds : dataStructureCdsModels.values()) {
 			((XSKDataStructureCdsModel) cds).getTableModels().stream().forEach(tableModel -> XSK_DATA_STRUCTURE_MODELS.put(tableModel.getName(), tableModel));
 			((XSKDataStructureCdsModel) cds).getTableTypeModels().stream().forEach(tableTypeModel -> XSK_DATA_STRUCTURE_MODELS.put(tableTypeModel.getName(), tableTypeModel));
-		}
+      ((XSKDataStructureCdsModel) cds).getViewModels().stream().forEach(viewModel -> XSK_DATA_STRUCTURE_MODELS.put(viewModel.getName(), viewModel));
+    }
 		XSK_DATA_STRUCTURE_MODELS.putAll(dataStructureTablesModels);
 		XSK_DATA_STRUCTURE_MODELS.putAll(dataStructureViewsModels);
 		XSK_DATA_STRUCTURE_MODELS.putAll(dataStructureProceduresModels);

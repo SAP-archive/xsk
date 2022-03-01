@@ -28,7 +28,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
               |  '[' ']'                                         # NoCardinality
               ;
 
-defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | VARBINARY | DATETIME_VALUE_FUNCTION| NULL);
+defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | VARBINARY | NULL);
 
 annotationRule: '@' ID ':' annValue                       #AnnObjectRule
               | '@' annId=ID '.' prop=ID ':' annValue     #AnnPropertyRule
@@ -42,9 +42,12 @@ obj: '{' keyValue (',' keyValue)* '}';
 keyValue: ID ':' annValue;
 
 artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | viewRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
-viewRule: DEFINE artifactType=VIEW artifactName=ID AS SELECT FROM dependsOnTable=ID (AS dependingTableAlias=ID)? joinRule? '{' selectedColumnsRule '}' ';'*;
+
+viewRule: DEFINE artifactType=VIEW artifactName=ID AS selectRule*;
+selectRule: isUnion=UNION? SELECT FROM dependsOnTable=ID (AS dependingTableAlias=ID)? joinRule? isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'* whereRule?;
 joinRule: .*?;
 selectedColumnsRule: .*?;
+whereRule: .*?;
 
 NAMESPACE: N A M E S P A C E;
 
@@ -54,12 +57,16 @@ SELECT: S E L E C T;
 FROM: F R O M;
 DEFINE: D E F I N E;
 VIEW: V I E W;
+UNION: U N I O N;
+DISTINCT: D I S T I N C T;
 
 BUILT_IN_HANA_TYPE: HanaTypePrefix ('VARCHAR' | 'ALPHANUM' | 'SMALLINT' | 'TINYINT' | 'REAL' | 'SMALLDECIMAL' | 'CLOB' | 'BINARY' | 'ST_POINT' | 'ST_GEOMETRY');
-DATETIME_VALUE_FUNCTION: ( 'CURRENT_DATE' | 'CURRENT_TIME' | 'CURRENT_TIMESTAMP' | 'CURRENT_UTCDATE' | 'CURRENT_UTCTIME' | 'CURRENT_UTCTIMESTAMP' ) {setText(getText().substring(1, getText().length()-1));};
 
 USING: U S I N G;
 NULL: 'null';
+
+CONCATENATION: '||';
+NOT_EQUAL_TO: '<>';
 
 DEFAULT: D E F A U L T;
 ASSOCIATION_MIN: INTEGER '..';

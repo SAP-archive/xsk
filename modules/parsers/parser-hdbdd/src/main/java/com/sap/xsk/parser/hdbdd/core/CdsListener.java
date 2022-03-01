@@ -348,4 +348,34 @@ public interface CdsListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArtifactRule(CdsParser.ArtifactRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#viewRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterViewRule(CdsParser.ViewRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#viewRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitViewRule(CdsParser.ViewRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#joinRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoinRule(CdsParser.JoinRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#joinRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoinRule(CdsParser.JoinRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#selectedColumnsRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#selectedColumnsRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx);
 }

@@ -19,6 +19,7 @@ import com.sap.xsk.parser.hdbdd.symbols.context.CDSFileScope;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class SymbolTable {
   private Map<String, Symbol> symbolsByFullName = new HashMap<>();
   private Map<String, AnnotationObj> annotations;
   private Map<String, List<String>> entityGraph = new HashMap<>();
+  private Map<String, List<String>> viewGraph = new HashMap<>();
   private Map<String, BuiltInTypeSymbol> hanaBuiltInTypes = new HashMap<>();
   private AnnotationTemplateFactory annotationTemplateFactory = new AnnotationTemplateFactory();
 
@@ -92,6 +94,9 @@ public class SymbolTable {
   public void addEntityToGraph(String fullName) {
     this.entityGraph.put(fullName, null);
   }
+  public void addViewToGraph(String fullName) {
+    this.viewGraph.put(fullName, null);
+  }
 
   public void addChildToEntity(String entityName, String childName) {
     if (entityGraph.get(entityName) == null) {
@@ -119,6 +124,14 @@ public class SymbolTable {
     entityGraph.keySet().forEach(entityName -> traverseEntityGraph(entityName, orderedEntities, passedEntities));
 
     return orderedEntities;
+  }
+
+  public List<ViewSymbol> getSortedViews() {
+    Set<String> passedViews = new HashSet<>();
+    List<ViewSymbol> orderedViews = new ArrayList<>();
+    viewGraph.keySet().forEach(viewName -> traverseViewGraph(viewName, orderedViews, passedViews));
+
+    return orderedViews;
   }
 
   public List<StructuredDataTypeSymbol> getTableTypes() {
@@ -167,5 +180,27 @@ public class SymbolTable {
     children.forEach(child -> traverseEntityGraph(child, orderedSymbol, passedEntities));
 
     orderedSymbol.add((EntitySymbol) this.symbolsByFullName.get(entityName));
+  }
+
+  private void traverseViewGraph(String viewName, List<ViewSymbol> orderedSymbol, Set<String> passedViews) {
+    if (passedViews.contains(viewName)) {
+      return;
+    }
+
+    passedViews.add(viewName);
+    List<String> children = viewGraph.get(viewName);
+    if (children == null) {
+      ViewSymbol bottomView =  (ViewSymbol) this.symbolsByFullName.get(viewName);
+      if (bottomView == null) {
+        throw new CDSRuntimeException(String.format("No view with name: %s found in symbol table.", viewName));
+      }
+
+      orderedSymbol.add(bottomView);
+      return;
+    }
+
+    children.forEach(child -> traverseViewGraph(child, orderedSymbol, passedViews));
+
+    orderedSymbol.add((ViewSymbol) this.symbolsByFullName.get(viewName));
   }
 }

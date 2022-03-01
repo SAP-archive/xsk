@@ -13,6 +13,7 @@ package com.sap.xsk.parser.hdbdd.factory;
 
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ArtifactRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ViewRuleContext;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTypeEnum;
@@ -25,17 +26,26 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import org.antlr.v4.runtime.Token;
 
 public class SymbolFactory {
 
   public Symbol getSymbol(ArtifactRuleContext artifactRuleContext, Scope currentScope, String schema) {
-    String symbolId = HdbddUtils.processEscapedSymbolName(artifactRuleContext.artifactName.getText());
-    checkForDuplicateName(symbolId, currentScope, artifactRuleContext.artifactName.getLine());
-    SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(artifactRuleContext.artifactType);
+    return getSymbol(currentScope, schema, artifactRuleContext.artifactName, artifactRuleContext.artifactType);
+  }
 
-    Symbol newSymbol = createSymbol(symbolId, currentScope, schema, artifactRuleContext.artifactName);
+  public Symbol getSymbol(ViewRuleContext viewRuleContext, Scope currentScope, String schema) {
+    return getSymbol(currentScope, schema, viewRuleContext.artifactName, viewRuleContext.artifactType);
+  }
+
+  private Symbol getSymbol(Scope currentScope, String schema, Token artifactName, Token artifactType) {
+    String symbolId = HdbddUtils.processEscapedSymbolName(artifactName.getText());
+    checkForDuplicateName(symbolId, currentScope, artifactName.getLine());
+    SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(artifactType);
+
+    Symbol newSymbol = createSymbol(symbolId, currentScope, schema, artifactName);
     switch (symbolTypeEnum) {
       case context:
         ContextSymbol contextSymbol = new ContextSymbol(newSymbol);
@@ -49,6 +59,10 @@ public class SymbolFactory {
         StructuredDataTypeSymbol dataTypeSymbol = new StructuredDataTypeSymbol(newSymbol);
         currentScope.define(dataTypeSymbol);
         return dataTypeSymbol;
+      case view:
+        ViewSymbol viewSymbol = new ViewSymbol(newSymbol);
+        currentScope.define(viewSymbol);
+        return viewSymbol;
       default:
         return null;
     }

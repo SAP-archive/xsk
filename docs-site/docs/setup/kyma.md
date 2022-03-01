@@ -24,6 +24,16 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     _To learn more about this limitation visit the [GitHub discussion](https://github.com/SAP/xsk/discussions/394)._
 
+!!! note "HANA Cloud Network Visibility"
+
+    To update the HANA Cloud network visibility:
+    
+    - Navigate to your SAP BTP subaccount.
+    - Go to the `SAP HANA Cloud` section.
+    - Find your HANA Cloud database and from the `Actions` dropdown select `SAP HANA Cloud Central`.
+    - Find your database instance, click the more details button (`...`) and select `Manage Configuration`.
+    - Click the `Edit` button and in the `Connections` section make the desired changes.
+
 ## Steps
 ---
 

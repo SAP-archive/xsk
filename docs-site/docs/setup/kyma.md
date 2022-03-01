@@ -33,6 +33,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
     - Find your HANA Cloud database and from the `Actions` dropdown select `SAP HANA Cloud Central`.
     - Find your database instance, click the more details button (`...`) and select `Manage Configuration`.
     - Click the `Edit` button and in the `Connections` section make the desired changes.
+    - To apply your changes click the `Save` button.
 
 ## Steps
 ---

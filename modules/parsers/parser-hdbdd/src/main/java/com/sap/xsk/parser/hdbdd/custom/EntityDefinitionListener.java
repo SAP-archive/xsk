@@ -22,6 +22,9 @@ import com.sap.xsk.parser.hdbdd.core.CdsParser.ArtifactRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeWithArgsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.JoinRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.SelectedColumnsRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ViewRuleContext;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.factory.SymbolFactory;
 import com.sap.xsk.parser.hdbdd.symbols.CDSLiteralEnum;
@@ -37,6 +40,8 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
+import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -44,9 +49,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
-import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
@@ -96,6 +101,40 @@ public class EntityDefinitionListener extends CdsBaseListener {
     } else {
       cdsFileScope.defineWithCustomName(ctx.alias.getText(), externalSymbol);
     }
+  }
+
+  @Override
+  public void enterViewRule(ViewRuleContext ctx) {
+    String joinSql = new String();
+    String columnsSql = new String();
+
+    JoinRuleContext joinRuleContext = ctx.joinRule();
+    if (joinRuleContext.children != null) {
+      int a = joinRuleContext.start.getStartIndex();
+      int b = joinRuleContext.stop.getStopIndex();
+      Interval joinRuleSqlInterval = new Interval(a,b);
+      joinSql = ctx.start.getInputStream().getText(joinRuleSqlInterval);
+    }
+
+    SelectedColumnsRuleContext selectedColumnsRuleContext = ctx.selectedColumnsRule();
+    if (selectedColumnsRuleContext.children != null) {
+      int c = selectedColumnsRuleContext.start.getStartIndex();
+      int d = selectedColumnsRuleContext.stop.getStopIndex();
+      Interval selectedColumnsRuleSqlInterval = new Interval(c, d);
+      columnsSql = ctx.start.getInputStream().getText(selectedColumnsRuleSqlInterval);
+    }
+
+    ViewSymbol newSymbol = (ViewSymbol) this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
+
+    newSymbol.setJoinSql(joinSql);
+    newSymbol.setColumnsSql(columnsSql);
+
+    symbolsByParseTreeContext.put(ctx, newSymbol);
+    registerSymbolToSymbolTable(newSymbol);
+    fullSymbolName.push(newSymbol.getName());
+    this.currentScope = (Scope) newSymbol;
+    this.symbolTable.addViewToGraph(newSymbol.getFullName());
+
   }
 
   @Override

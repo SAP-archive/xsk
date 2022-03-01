@@ -59,6 +59,12 @@ public class EntityDefinitionListenerTest {
   }
 
   @Test
+  public void parseViewSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/ParseView.hdbdd", "sap/table/ParseView.hdbdd");
+    System.out.println("JUST A TEST");
+  }
+
+  @Test
   public void parseContextSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/ParseContext.hdbdd", "sap/table/ParseContext.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities

@@ -1,0 +1,42 @@
+namespace gstr2;
+
+@Schema: 'ADMIN'
+context justParse {
+
+    entity City {
+        key Id              : String(32);
+        key Name            : String(32);
+        key PostalCode      : String(32);
+    };
+
+    define view talent_imt_so_facview as
+        select from talent_imt_so_facilitator as SO_F left join talent_imt_so_stadminview AS FH on "H"."SO_ID" = "FH"."ScheduledOfferingID" AND "SO_F"."FAC_ID" = "FH"."Instructor_id"
+    {
+      "talent_imt_itempool_facilitator"."ITEM_ID" as "ITEM_ID",
+      "talent_imt_itempool_facilitator"."FAC_ID" as "FAC_ID",
+      "H"."ITEM_NAME" as "ITEM_NAME"
+    };
+
+    define view talent_imt_so_stadminview as
+        select from talent_imt_so_stadmin as ADM join talent_imt_facilitator_profile as P on "P"."USER_ID" = "ADM"."STF_ID"
+    {
+      "ADM"."SO_ID" as "SO_ID",
+      "ADM"."STF_ID" as "STF_ID",
+      "ADM"."CREATE_USER" as "CREATE_USER",
+      "ADM"."UPDATE_USER" as "UPDATE_USER" ,
+      "ADM"."CREATE_DT" as "CREATE_DT",
+      "ADM"."UPDATE_DT" as "UPDATE_DT",
+      "P"."FIRST_NAME" as "FIRST_NAME",
+      "P"."LAST_NAME" as "LAST_NAME",
+      "P"."EMAIL_ID" as "EMAIL_ID",
+      "P"."COUNTRY" as "COUNTRY"
+    };
+
+    define view talent_imt_useritempool_view as
+        select from talent_imt_itempool_facilitator left join talent_imt_itempool_header as H on "talent_imt_itempool_facilitator"."ITEM_ID" = "H"."ITEM_ID"
+      {
+        "talent_imt_itempool_facilitator"."ITEM_ID" as "ITEM_ID",
+        "talent_imt_itempool_facilitator"."FAC_ID" as "FAC_ID",
+        "H"."ITEM_NAME" as "ITEM_NAME"
+      };
+};

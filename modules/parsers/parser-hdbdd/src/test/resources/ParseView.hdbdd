@@ -1,0 +1,23 @@
+namespace sap.table;
+@Schema : 'TEST_SCHEMA'
+
+context ParseView {
+
+  entity products {
+    Key GSTIN : hana.VARCHAR(25);
+    KeY FIN_PERIOD : hana.VARCHAR(10);
+    keY CDN_NUM : hana.VARCHAR(16);
+    key SUPP_GSTIN : hana.VARCHAR(25) default '';
+    INV_ITM_NUM : Integer DEFAULT 0;
+    TYPE : hana.VARCHAR(5) default '';
+  };
+
+  define view talent_imt_useritempool_view as
+    select from talent_imt_itempool_facilitator left join talent_imt_itempool_header as H on "talent_imt_itempool_facilitator"."ITEM_ID" = "H"."ITEM_ID"
+  {
+    "talent_imt_itempool_facilitator"."ITEM_ID" as "ITEM_ID",
+    "talent_imt_itempool_facilitator"."FAC_ID" as "FAC_ID",
+    "H"."ITEM_NAME" as "ITEM_NAME"
+  };
+
+}

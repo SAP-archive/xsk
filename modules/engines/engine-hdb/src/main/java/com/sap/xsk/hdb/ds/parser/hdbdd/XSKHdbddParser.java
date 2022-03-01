@@ -34,6 +34,7 @@ import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
@@ -229,6 +230,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
   private void getCdsModelWithParsedData(XSKDataStructureCdsModel cdsModel) {
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+    List<ViewSymbol> parsedViews = this.symbolTable.getSortedViews();
 
     List<XSKDataStructureHDBTableModel> tableModels = new ArrayList<>();
     parsedEntities.forEach(e -> {
@@ -237,6 +239,14 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       //One HDBDD file have only one schema, with apply to all entities inside the hdbdd file
       cdsModel.setSchema(e.getSchema());
     });
+
+//    parsedViews.forEach(v -> {
+//      String viewSql = new String();
+//
+//      viewSql = "CREATE VIEW " + v.getSchema() + "." + v.getFullName() + " AS SELECT " + v.getColumnsSql() + " FROM " + " $table " + v.getJoinSql();
+//
+//      System.out.println(viewSql);
+//    });
 
     List<StructuredDataTypeSymbol> structuredDataTypes = this.symbolTable.getTableTypes();
     List<XSKDataStructureHDBTableTypeModel> hdbTableTypeModels = new ArrayList<>();

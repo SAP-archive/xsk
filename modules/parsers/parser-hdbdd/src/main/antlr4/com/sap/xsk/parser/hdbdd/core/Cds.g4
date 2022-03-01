@@ -28,7 +28,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
               |  '[' ']'                                         # NoCardinality
               ;
 
-defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | NULL | VARBINARY);
+defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | VARBINARY | DATETIME_VALUE_FUNCTION| NULL);
 
 annotationRule: '@' ID ':' annValue                       #AnnObjectRule
               | '@' annId=ID '.' prop=ID ':' annValue     #AnnPropertyRule
@@ -41,15 +41,24 @@ arrRule: '[' annValue (',' annValue)* ']';
 obj: '{' keyValue (',' keyValue)* '}';
 keyValue: ID ':' annValue;
 
-artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
+artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | viewRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
+viewRule: DEFINE artifactType=VIEW artifactName=ID AS SELECT FROM dependsOnTable=ID (AS dependingTableAlias=ID)? joinRule? '{' selectedColumnsRule '}' ';'*;
+joinRule: .*?;
+selectedColumnsRule: .*?;
 
 NAMESPACE: N A M E S P A C E;
-AS: 'as';
+
+AS: A S;
+ON: O N;
+SELECT: S E L E C T;
+FROM: F R O M;
+DEFINE: D E F I N E;
+VIEW: V I E W;
 
 BUILT_IN_HANA_TYPE: HanaTypePrefix ('VARCHAR' | 'ALPHANUM' | 'SMALLINT' | 'TINYINT' | 'REAL' | 'SMALLDECIMAL' | 'CLOB' | 'BINARY' | 'ST_POINT' | 'ST_GEOMETRY');
+DATETIME_VALUE_FUNCTION: ( 'CURRENT_DATE' | 'CURRENT_TIME' | 'CURRENT_TIMESTAMP' | 'CURRENT_UTCDATE' | 'CURRENT_UTCTIME' | 'CURRENT_UTCTIMESTAMP' ) {setText(getText().substring(1, getText().length()-1));};
 
 USING: U S I N G;
-ON: 'on';
 NULL: 'null';
 
 DEFAULT: D E F A U L T;
@@ -68,8 +77,10 @@ STRING: '\'' (~["\\\r\n] | EscapeSequence)*? '\'' { setText(getText().substring(
 VARBINARY: X '\'' ((A | B | C | D | E | F) | INTEGER)* '\'' { setText(getText().substring(1, getText().length() - 1)); };
 TYPE_OF: 'type' WS 'of';
 WS : [ \\\t\r\n]+ -> skip;
-LINE_COMMENT        : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
+
+LINE_COMMENT1        : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
 LINE_COMMENT2        : '/*' .*? '*/' -> skip ; // Match "/* */" stuff
+LINE_COMMENT3        : '--' ~[\r\n]*  -> skip ; // Match "--" stuff
 
 fragment IdCharacters : ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_')*;
 fragment EscapedIdCharactes: '"' (~["\\\r\n] | EscapeSequence)*? '"';
@@ -146,3 +157,4 @@ W : 'W'|'w';
 X : 'X'|'x';
 Y : 'Y'|'y';
 Z : 'Z'|'z';
+UNDERLINE : '_';

@@ -394,6 +394,42 @@ public class CdsBaseListener implements CdsListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArtifactRule(CdsParser.ArtifactRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterViewRule(CdsParser.ViewRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitViewRule(CdsParser.ViewRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJoinRule(CdsParser.JoinRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJoinRule(CdsParser.JoinRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

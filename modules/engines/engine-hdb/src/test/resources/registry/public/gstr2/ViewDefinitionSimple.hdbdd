@@ -1,0 +1,16 @@
+namespace gstr2;
+
+@Schema: 'DBADMIN'
+
+context ViewDefinitionSimple {
+
+    define view employees_view_basic as
+        select from "gstr2::ViewDefinitionSimple.employees" as EMP
+        {
+            "EMP"."ID" as "EmployeeID",
+            "EMP"."NAME" as "EmployeeName",
+            "EMP"."ADDRESS" as "EmployeeAddress",
+            "EMP"."AGE" as "EmployeeAge",
+            "EMP"."PHONE" as "EmployeePhone"
+        };
+}

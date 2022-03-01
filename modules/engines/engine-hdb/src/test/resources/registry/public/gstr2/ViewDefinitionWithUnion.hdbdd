@@ -1,0 +1,28 @@
+namespace gstr2;
+
+@Schema: 'DBADMIN'
+
+context ViewDefinitionWithUnion {
+
+    define view employees_view_with_union as
+        select from "gstr2::ViewDefinitionWithUnion.employees"
+            join employee_roles as ER
+                on "ER"."ID" = "gstr2::ViewDefinitionWithUnion.employees"."ID"
+            join employee_salaries as ES
+                on "ES"."ID" = "gstr2::ViewDefinitionWithUnion.employees"."ID"
+        {
+          "gstr2::ViewDefinitionWithUnion.employees"."ID" as "EmployeeId",
+          "gstr2::ViewDefinitionWithUnion.employees"."NAME" as "EmployeeName",
+          "ER"."TYPE" as "EmployeeRoleType",
+          "ES"."AMOUNT" as "EmployeeSalary"
+        }
+        where "gstr2::ViewDefinitionWithUnion.employees"."NAME" = 'John'
+        union
+        select from DUMMY
+        {
+          0 as "EmployeeId",
+          'Ben' as "EmployeeName",
+          'Developer' as "EmployeeRoleType",
+          '2200' as "EmployeeSalary"
+        };
+}

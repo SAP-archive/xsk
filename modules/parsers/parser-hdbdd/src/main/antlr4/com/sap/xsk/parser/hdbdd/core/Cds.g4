@@ -16,7 +16,7 @@ typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'               
                 ;
 elementDeclRule: annotationRule* (key=ID)? (name=ID | '"' name=ID '"') ':' typeAssignRule elementDetails* ';';
 elementDetails: defaultValue | elementConstraints;
-elementConstraints: 'null' | 'not null' | 'NULL' | 'NOT NULL';
+elementConstraints: NULL | NOT_NULL;
 
 association: ascId=ID ':' ascKeyword=ID cardinality? toKeyword=ID associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
 associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
@@ -31,7 +31,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
 defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | VARBINARY | DATETIME_VALUE_FUNCTION | NULL);
 
 annotationRule: '@' ID ':' annValue                       #AnnObjectRule
-              | '@' annId=ID ('.' prop=ID)* ':' annValue     #AnnPropertyRule
+              | '@' annId=ID ('.' prop=ID)* ':' annValue  #AnnPropertyRule
               | '@' ID                                    #AnnMarkerRule
               ;
 
@@ -41,17 +41,34 @@ arrRule: '[' annValue (',' annValue)* ']';
 obj: '{' keyValue (',' keyValue)* '}';
 keyValue: ID ':' annValue;
 
-artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
+artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | viewRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
+
+viewRule: DEFINE artifactType=VIEW artifactName=ID AS selectRule*;
+selectRule: isUnion=UNION? SELECT FROM dependsOnTable=ID (AS dependingTableAlias=ID)? joinRule? isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'* whereRule?;
+joinRule: .*?;
+selectedColumnsRule: .*?;
+whereRule: .*?;
 
 NAMESPACE: N A M E S P A C E;
-AS: 'as';
+
+AS: A S;
+ON: O N;
+SELECT: S E L E C T;
+FROM: F R O M;
+DEFINE: D E F I N E;
+VIEW: V I E W;
+UNION: U N I O N;
+DISTINCT: D I S T I N C T;
 
 BUILT_IN_HANA_TYPE: HanaTypePrefix ('VARCHAR' | 'ALPHANUM' | 'SMALLINT' | 'TINYINT' | 'REAL' | 'SMALLDECIMAL' | 'CLOB' | 'BINARY' | 'ST_POINT' | 'ST_GEOMETRY');
 DATETIME_VALUE_FUNCTION: ( 'CURRENT_DATE' | 'CURRENT_TIME' | 'CURRENT_TIMESTAMP' | 'CURRENT_UTCDATE' | 'CURRENT_UTCTIME' | 'CURRENT_UTCTIMESTAMP' );
 
 USING: U S I N G;
-ON: 'on';
-NULL: 'null';
+NULL: N U L L;
+NOT_NULL: N O T ' ' N U L L;
+
+CONCATENATION: '||';
+NOT_EQUAL_TO: '<>';
 
 DEFAULT: D E F A U L T;
 ASSOCIATION_MIN: INTEGER '..';
@@ -69,8 +86,10 @@ STRING: '\'' (~["\\\r\n] | EscapeSequence)*? '\'' { setText(getText().substring(
 VARBINARY: X '\'' ((A | B | C | D | E | F) | INTEGER)* '\'' { setText(getText().substring(1, getText().length() - 1)); };
 TYPE_OF: 'type' WS 'of';
 WS : [ \\\t\r\n]+ -> skip;
-LINE_COMMENT        : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
+
+LINE_COMMENT1        : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
 LINE_COMMENT2        : '/*' .*? '*/' -> skip ; // Match "/* */" stuff
+LINE_COMMENT3        : '--' ~[\r\n]*  -> skip ; // Match "--" stuff
 
 fragment IdCharacters : ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_')*;
 fragment EscapedIdCharactes: '"' (~["\\\r\n] | EscapeSequence)*? '"';

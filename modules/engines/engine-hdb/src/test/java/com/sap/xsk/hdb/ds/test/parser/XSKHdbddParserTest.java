@@ -26,6 +26,7 @@ import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
@@ -40,7 +41,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHanaXSClassicContentWithSyntaxErrorFail() {
+  public void testParseHanaXSClassicContentWithSyntaxErrorFail() {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG.hdbdd", "")
@@ -51,7 +52,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHanaXSClassicContentWithLexerErrorFail() {
+  public void testParseHanaXSClassicContentWithLexerErrorFail() {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG1.hdbdd", "")
@@ -62,7 +63,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithManagedAss() throws Exception {
+  public void testParseHDBDDWithManagedAss() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ProductsWithManagedAss.hdbdd", "");
 
     assertEquals(3, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
@@ -179,7 +180,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithManagedAssAndAlias() throws Exception {
+  public void testParseHDBDDWithManagedAssAndAlias() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ClientsWithManagedAssAndAlias.hdbdd", "");
 
     assertEquals(2, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
@@ -377,7 +378,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithUnManagedAss() throws Exception {
+  public void testParseHDBDDWithUnManagedAss() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ProductsWithUnManagedAss.hdbdd", "");
 
     assertEquals(2, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
@@ -466,7 +467,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithNoKeyAnnotation() throws Exception {
+  public void testParseHDBDDWithNoKeyAnnotation() throws Exception {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/NoKeyAnnSample.hdbdd", "")
@@ -477,7 +478,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithGenerateTableTypeAnnotation() throws Exception {
+  public void testParseHDBDDWithGenerateTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/GenerateTableTypeAnnotationSample.hdbdd", "");
     assertEquals(1, ((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().size());
 
@@ -510,14 +511,14 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithTableTypeAnnotationColumn() throws Exception {
+  public void testParseHDBDDWithTableTypeAnnotationColumn() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeColumn.hdbdd", "");
     assertEquals("COLUMN", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
     assertEquals("COLUMN", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getTableType());
   }
 
   @Test
-  public void parseHDBDDWithTableTypeAnnotationRow() throws Exception {
+  public void testParseHDBDDWithTableTypeAnnotationRow() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeRow.hdbdd", "");
     assertEquals("ROW", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
     assertEquals("ROW", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getTableType());
@@ -527,8 +528,89 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
    * When the table type is null a COLUMN table is always created
    */
   @Test
-  public void parseHDBDDWithNoTableTypeAnnotation() throws Exception {
+  public void testParseHDBDDWithNoTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/NoTableType.hdbdd", "");
     assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), null);
+  }
+
+  @Test
+  public void testParseHDBDDWithViewDefinitionSimple() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionSimple.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(""
+        + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionSimple.employees_view_basic\" AS "
+        + "SELECT \"EMP\".\"ID\" as \"EmployeeID\",\n"
+        + "            \"EMP\".\"NAME\" as \"EmployeeName\",\n"
+        + "            \"EMP\".\"ADDRESS\" as \"EmployeeAddress\",\n"
+        + "            \"EMP\".\"AGE\" as \"EmployeeAge\",\n"
+        + "            \"EMP\".\"PHONE\" as \"EmployeePhone\" "
+        + "FROM \"gstr2::ViewDefinitionSimple.employees\" AS \"EMP\""
+        + "", viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testParseHDBDDWithViewDefinitionWithJoin() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithJoin.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(""
+        + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithJoin.employees_view_with_join\" AS "
+        + "SELECT \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\" as \"EmployeeId\",\n"
+        + "          \"gstr2::ViewDefinitionWithJoin.employees\".\"NAME\" as \"EmployeeName\",\n"
+        + "          \"ER\".\"TYPE\" as \"EmployeeRoleName\",\n"
+        + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
+        + "FROM \"gstr2::ViewDefinitionWithJoin.employees\" "
+        + "join \"gstr2::ViewDefinitionWithJoin.employee_roles\" AS \"ER\" "
+        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\" "
+        + "join \"gstr2::ViewDefinitionWithJoin.employee_salaries\" AS \"ES\" "
+        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\""
+        + "", viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testParseHDBDDWithViewDefinitionWithWhere() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithWhere.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(""
+        + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithWhere.employees_view_with_where\" AS "
+        + "SELECT \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\" as \"EmployeeId\",\n"
+        + "          \"gstr2::ViewDefinitionWithWhere.employees\".\"NAME\" as \"EmployeeName\",\n"
+        + "          \"ER\".\"TYPE\" as \"EmployeeRoleType\",\n"
+        + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
+        + "FROM \"gstr2::ViewDefinitionWithWhere.employees\" "
+        + "join \"gstr2::ViewDefinitionWithWhere.employee_roles\" AS \"ER\" "
+        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\" "
+        + "join \"gstr2::ViewDefinitionWithWhere.employee_salaries\" AS \"ES\" "
+        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\"  "
+        + "WHERE \"gstr2::employees\".\"NAME\" = 'John'"
+        + "", viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testParseHDBDDWithViewDefinitionWithUnion() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithUnion.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(""
+        + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithUnion.employees_view_with_union\" AS "
+        + "SELECT \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\" as \"EmployeeId\",\n"
+        + "          \"gstr2::ViewDefinitionWithUnion.employees\".\"NAME\" as \"EmployeeName\",\n"
+        + "          \"ER\".\"TYPE\" as \"EmployeeRoleType\",\n"
+        + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
+        + "FROM \"gstr2::ViewDefinitionWithUnion.employees\" "
+        + "join \"gstr2::ViewDefinitionWithUnion.employee_roles\" AS \"ER\" "
+        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\" "
+        + "join \"gstr2::ViewDefinitionWithUnion.employee_salaries\" AS \"ES\" "
+        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\"  "
+        + "WHERE \"gstr2::ViewDefinitionWithUnion.employees\".\"NAME\" = 'John' "
+        + "UNION "
+        + "SELECT 0 as \"EmployeeId\",\n"
+        + "          'Ben' as \"EmployeeName\",\n"
+        + "          'Developer' as \"EmployeeRoleType\",\n"
+        + "          '2200' as \"EmployeeSalary\" "
+        + "FROM \"DUMMY\""
+        + "", viewModel.getRawContent().trim());
   }
 }

@@ -1,0 +1,21 @@
+namespace gstr2;
+
+@Schema: 'DBADMIN'
+
+context ViewDefinitionWithWhere {
+
+    define view employees_view_with_where as
+        select from "gstr2::ViewDefinitionWithWhere.employees"
+            join employee_roles as ER
+                on "ER"."ID" = "gstr2::ViewDefinitionWithWhere.employees"."ID"
+            join employee_salaries as ES
+                on "ES"."ID" = "gstr2::ViewDefinitionWithWhere.employees"."ID"
+        {
+          "gstr2::ViewDefinitionWithWhere.employees"."ID" as "EmployeeId",
+          "gstr2::ViewDefinitionWithWhere.employees"."NAME" as "EmployeeName",
+          "ER"."TYPE" as "EmployeeRoleType",
+          "ES"."AMOUNT" as "EmployeeSalary"
+        }
+        where "gstr2::employees"."NAME" = 'John';
+
+}

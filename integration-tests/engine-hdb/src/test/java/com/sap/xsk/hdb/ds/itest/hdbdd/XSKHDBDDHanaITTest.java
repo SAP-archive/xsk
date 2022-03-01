@@ -33,89 +33,90 @@ import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
 
 public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
 
-	@Before
-	public void setUpBeforeTest() throws SQLException {
-		HanaITestUtils.clearDataFromXSKDataStructure(systemDatasource, Arrays.asList( //
-				"'/itest/ProductsWithManagedAssItest.hdbdd'", //
-				"'/itest/Status.hdbdd'", //
-				"'/itest/ProductsWithManagedAssWithUsingItest.hdbdd'" //
-		));
-		Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-		facade.clearCache();
-	}
+  @Before
+  public void setUpBeforeTest() throws SQLException {
+    HanaITestUtils.clearDataFromXSKDataStructure(systemDatasource, Arrays.asList( //
+        "'/itest/ProductsWithManagedAssItest.hdbdd'", //
+        "'/itest/Status.hdbdd'", //
+        "'/itest/ProductsWithManagedAssWithUsingItest.hdbdd'", //
+        "'/itest/EmployeesWithViewDefinitions.hdbdd'" //
+    ));
+    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
+    facade.clearCache();
+  }
 
-	@Test
-	public void testHDBDDWithManagedAssOnDiffSchema() throws Exception {
-		try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
-			try {
-				HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+  @Test
+  public void testHDBDDWithManagedAssOnDiffSchema() throws Exception {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
+      try {
+        HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
 
-				LocalResource resource = XSKHDBTestModule.getResources( //
-						"/usr/local/target/dirigible/repository/root", //
-						"/registry/public/itest/ProductsWithManagedAssItest.hdbdd", //
-						"/registry/public/itest/ProductsWithManagedAssItest.hdbdd" //
-				);
+        LocalResource resource = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/ProductsWithManagedAssItest.hdbdd", //
+            "/registry/public/itest/ProductsWithManagedAssItest.hdbdd" //
+        );
 
-				facade.handleResourceSynchronization(resource);
-				facade.updateEntities();
+        facade.handleResourceSynchronization(resource);
+        facade.updateEntities();
 
-				assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Orders", TEST_SCHEMA));
-				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Orders"));
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Orders", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Orders"));
 
-				assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Country", TEST_SCHEMA));
-				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Country"));
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Country", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Country"));
 
-			} finally {
-				HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssItest.Orders", TEST_SCHEMA);
-				HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssItest.Country", TEST_SCHEMA);
-				HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
-			}
-		}
-	}
+      } finally {
+        HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssItest.Orders", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssItest.Country", TEST_SCHEMA);
+        HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+      }
+    }
+  }
 
-	@Test
-	public void testHDBDDWithManagedAssWithUsingOnDiffSchema()
-			throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
-		try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
-			String schemaName2 = "TEST_SCHEMA 2";
-			try {
-				HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
-				HanaITestUtils.createSchema(stmt, schemaName2);
+  @Test
+  public void testHDBDDWithManagedAssWithUsingOnDiffSchema()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
+      String schemaName2 = "TEST_SCHEMA 2";
+      try {
+        HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+        HanaITestUtils.createSchema(stmt, schemaName2);
 
-				LocalResource resource = XSKHDBTestModule.getResources( //
-						"/usr/local/target/dirigible/repository/root", //
-						"/registry/public/itest/ProductsWithManagedAssWithUsingItest.hdbdd", //
-						"/registry/public/itest/ProductsWithManagedAssWithUsingItest.hdbdd" //
-				);
+        LocalResource resource = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/ProductsWithManagedAssWithUsingItest.hdbdd", //
+            "/registry/public/itest/ProductsWithManagedAssWithUsingItest.hdbdd" //
+        );
 
-				LocalResource resource2 = XSKHDBTestModule.getResources( //
-						"/usr/local/target/dirigible/repository/root", //
-						"/registry/public/itest/Status.hdbdd", //
-						"/registry/public/itest/Status.hdbdd" //
-				);
+        LocalResource resource2 = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/Status.hdbdd", //
+            "/registry/public/itest/Status.hdbdd" //
+        );
 
-				facade.handleResourceSynchronization(resource);
-				facade.handleResourceSynchronization(resource2);
-				facade.updateEntities();
+        facade.handleResourceSynchronization(resource);
+        facade.handleResourceSynchronization(resource2);
+        facade.updateEntities();
 
-				assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders", TEST_SCHEMA));
-				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders"));
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders"));
 
-				assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Country", TEST_SCHEMA));
-				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Country"));
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Country", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Country"));
 
-				assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::Status.StatusEntity", schemaName2));
-				assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::Status.StatusEntity"));
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::Status.StatusEntity", schemaName2));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::Status.StatusEntity"));
 
-			} finally {
-				HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssWithUsingItest.Orders", TEST_SCHEMA);
-				HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssWithUsingItest.Country", TEST_SCHEMA);
-				HanaITestUtils.dropTable(connection, stmt, "itest::Status.StatusEntity", schemaName2);
-				HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
-				HanaITestUtils.dropSchema(stmt, schemaName2);
-			}
-		}
-	}
+      } finally {
+        HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssWithUsingItest.Orders", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssWithUsingItest.Country", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::Status.StatusEntity", schemaName2);
+        HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+        HanaITestUtils.dropSchema(stmt, schemaName2);
+      }
+    }
+  }
 
   @Test
   public void testHDBDDWithDateTimeFunctionDefaultValue()
@@ -152,7 +153,6 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
       try {
         HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
 
-
         LocalResource resource = XSKHDBTestModule.getResources( //
             "/usr/local/target/dirigible/repository/root", //
             "/registry/public/itest/CatalogTableTypes.hdbdd", //
@@ -179,6 +179,62 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
         HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION2", TEST_SCHEMA);
         HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION3", TEST_SCHEMA);
         HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION4", TEST_SCHEMA);
+
+        HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+      }
+    }
+  }
+
+  @Test
+  public void testHDBDDWithViewDefinitions()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
+
+      try {
+        HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+
+        LocalResource resource = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/EmployeesWithViewDefinitions.hdbdd", //
+            "/registry/public/itest/EmployeesWithViewDefinitions.hdbdd" //
+        );
+
+        facade.handleResourceSynchronization(resource);
+        facade.updateEntities();
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employees", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees"));
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employee_roles", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employee_roles"));
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employee_salaries", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employee_salaries"));
+
+        assertTrue(HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_basic", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_basic"));
+
+        assertTrue(
+            HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_join", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_join"));
+
+        assertTrue(
+            HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_where", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_where"));
+
+        assertTrue(
+            HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_union", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_union"));
+
+      } finally {
+        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_basic", TEST_SCHEMA);
+        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_join", TEST_SCHEMA);
+        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_where", TEST_SCHEMA);
+        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_union", TEST_SCHEMA);
+
+        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employees", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employee_roles", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employee_salaries", TEST_SCHEMA);
 
         HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
       }

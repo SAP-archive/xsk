@@ -192,8 +192,7 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
                 "table.description = \"nvarchar(4000)\";\n" +
                 "table.columns = [\n" +
                 "    {name = \"TEXT\"; sqlType = NVARCHAR; length = 4000; nullable = true; comment = \"nvarchar(4000)\";}\n" +
-                "];\n" +
-                "table.indexes = [];";
+                "];";
         XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable("/test.hdbtable", content);
         assertEquals(XSKDBContentType.XS_CLASSIC, model.getDBContentType());
         assertEquals(content, model.getRawContent());

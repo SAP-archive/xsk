@@ -209,16 +209,15 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
       1. Go to `Secrets` &#8594; `Actions`.
       1. Click the `New Repository Secret` button.
 
-    |       Name         |          Description                                           |
-    |--------------------|----------------------------------------------------------------|
-    | `DOCKER_REGISTRY`  | The Docker Registry _(e.g. `docker.io`, `ghcr.io`, etc.)_      |
-    | `DOCKER_USERNAME`  | The Docker Username _(`<your-docker-username>`)_               |
-    | `DOCKER_PASSWORD`  | The Docker Password _(`<your-docker-password>`)_               |
-    | `HANA_URL`         | The HANA Cloud URL _(e.g. `7512c2q1-...:443`)_                 |
-    | `HANA_USERNAME`    | The HANA Cloud Username _(`<your-hana-cloud-username>`)_       |
-    | `HANA_PASSWORD`    | The HANA Cloud Password _(`<your-hana-cloud-password>`)_       |
-    | `KYMA_CERTIFICATE` | The Kyma Certificate _(e.g. `LS0tLS1CRUdJTiBDRVJUS...`)_       |
-    | `KYMA_SERVER`      | The Kyma Server _(e.g. `https://api.c-a7b1c6...ondemand.com`)_ |
-    | `KYMA_TOKEN`       | The Kyma Token _(e.g. `eyJhbGciOiJSUzI1NiIsImtpZCI6In...`)_    |
-    | `GH_TOKEN`         | The GitHub Token _(e.g. `a385f4...`)_                          |
+    |       Name         |          Description                                           | Required for |
+    |--------------------|----------------------------------------------------------------|--------------|
+    | `DOCKER_REGISTRY`  | The Docker Registry _(e.g. `docker.io`, `ghcr.io`, etc.)_      |  _`Build`_   |
+    | `DOCKER_USERNAME`  | The Docker Username _(`<your-docker-username>`)_               |  _`Build`_   |
+    | `DOCKER_PASSWORD`  | The Docker Password _(`<your-docker-password>`)_               |  _`Build`_   |
+    | `HANA_URL`         | The HANA Cloud URL _(e.g. `7512c2q1-...:443`)_                 |  _`Deploy`_  |
+    | `HANA_USERNAME`    | The HANA Cloud Username _(`<your-hana-cloud-username>`)_       |  _`Deploy`_  |
+    | `HANA_PASSWORD`    | The HANA Cloud Password _(`<your-hana-cloud-password>`)_       |  _`Deploy`_  |
+    | `KYMA_CERTIFICATE` | The Kyma Certificate _(e.g. `LS0tLS1CRUdJTiBDRVJUS...`)_       |  _`Deploy`_  |
+    | `KYMA_SERVER`      | The Kyma Server _(e.g. `https://api.c-a7b1c6...ondemand.com`)_ |  _`Deploy`_  |
+    | `KYMA_TOKEN`       | The Kyma Token _(e.g. `eyJhbGciOiJSUzI1NiIsImtpZCI6In...`)_    |  _`Deploy`_  |
 

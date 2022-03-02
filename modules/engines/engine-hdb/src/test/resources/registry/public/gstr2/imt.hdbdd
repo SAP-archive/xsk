@@ -1,0 +1,1039 @@
+namespace gstr2;
+
+@Schema: 'LEARNING'
+
+context imt {
+
+ 	type SDate : UTCTimestamp;
+
+ 	type tt_RAFAC_param {
+      FAC_ID: String(50);
+      COMMENTS: String(350);
+    };
+
+    type tt_EmailStatus_param {
+        ML_AUDIT_ID: Integer64;
+        AUDT_FLAG: String(25);
+    };
+
+    type tt_CreateDt_param {
+        CREATE_DT: SDate;
+    };
+
+    type tt_SFUSR_param {
+        USER_ID: String(100);
+ 		IS_EXT_FLG: String(10);
+ 		TITLE: String(255);
+ 		FIRST_NAME: String(128);
+ 		LAST_NAME: String(128);
+ 		FULL_NAME: String(256);
+ 		SUFFIX: String(128);
+ 		STATUS: String(100);
+ 		EMAIL_ID: String(100);
+		START_DT: SDate;
+ 		PHONE_1: String(50);
+ 		PHONE_2: String(50);
+ 		FAX: String(50);
+ 		TIME_ZONE: String(50);
+ 		COUNTRY: String(255);
+ 		WORK_LOCATION: String(400);
+ 		STATE_OR_PROVINCE: String(80);
+ 		ZIPCODE: String(20);
+ 		AREA: String(255);
+ 		CNTRY_HIRE_DATE: String(80);
+ 		GRADE: String(255);
+ 		BU_UNIT: String(255);
+ 		SUB_MAG_UNIT: String(200);
+ 		SERV_LINE: String(255);
+ 		FAC_RANK: String(255);
+ 		VENDOR: String(80);
+ 		CURRENT_ROLE: String(255);
+ 		PAST_ROLE: String(255);
+ 		LAST_QUALIFICATION_CONFIRM_DT: SDate;
+    };
+
+ 	@Catalog.tableType : #COLUMN
+ 	Entity talent_app_privacy_stmt {
+ 		key APP_ID: String(25);
+        key USER_ID: String(50);
+        ACCEPTANCE_FLAG: String(3);
+        UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_facilitator_item_interest {
+ 		key USER_ID: String(50);
+ 		key ITEM_ID: String(100);
+ 		ITEM_TYPE: String(100);
+ 		ITEM_NAME: String(4000);
+ 		ITEM_DETAILS: String(300);
+ 		EDIT_MODE: String(7);
+ 		RCD_TYPE: String(5);
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+        UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_facilitator_profile {
+ 		key USER_ID: String(100);
+ 		IS_EXT_FLG: String(10);
+ 		TITLE: String(255);
+ 		FIRST_NAME: String(128);
+ 		LAST_NAME: String(128);
+ 		FULL_NAME: String(256);
+ 		SUFFIX: String(128);
+ 		CNTRY_HIRE_DATE: String(80);
+ 		IS_ACTIVE_FLG: String(10);
+ 		STATUS: String(128);
+ 		EMAIL_ID: String(100);
+ 		START_DT: SDate;
+ 		PHONE_1: String(50);
+ 		PHONE_2: String(50);
+ 		FAX: String(50);
+ 		TIME_ZONE: String(50);
+ 		FAC_RANK: String(255);
+ 		GRADE: String(255);
+ 		BU_UNIT: String(255);
+ 		SUB_MAG_UNIT: String(200);
+ 		SERV_LINE: String(255);
+ 		ADDRESS1: String (400);
+ 		ADDRESS2: String (400);
+ 		COUNTRY: String(255);
+ 		WORK_LOCATION: String(400);
+ 		STATE_OR_PROVINCE: String(80);
+ 		ZIPCODE: String(20);
+ 		AREA: String(255);
+ 		VENDOR: String(80);
+ 		CURRENT_ROLE: String(255);
+ 		PAST_ROLE: String(255);
+ 		LAST_QUALIFICATION_CONFIRM_DT: SDate;
+ 		RECOMMENDATION: String(1000);
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+        UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_facilitator_availability {
+ 		key USER_ID: String(50);
+ 		key CREATE_DT: SDate;
+ 		START_DT: SDate;
+        END_DT: SDate;
+ 		TIME_ZONE: String(20);
+ 		AV_TYPE: String(20);
+ 		AV_COMMENT: String(255);
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_preptraining_list {
+ 		key ITEM_ID: String(100);
+ 		ITEM_NAME: String(4000);
+ 		ACTIVE_FLG: String(5);
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+ 		UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_itempool_header {
+ 		key ITEM_ID: String(100);
+ 		ITEM_NAME: String(4000);
+ 		POOL_CREATED: String(5);
+ 		SERVICE_LINE: String(100);
+ 		DELIVERY_METHOD: String(50);
+ 		FAC_COUNT: Integer;
+        COACH_COUNT: Integer;
+        GST_SPKR_COUNT: Integer;
+        OBSVR_COUNT: Integer;
+        RL_PLAYER_COUNT: Integer;
+        ALT_FAC_COUNT: Integer;
+        PRDCR_COUNT: Integer;
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+ 		UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_itempool_qualification {
+ 		key ITEM_ID: String(100);
+ 		key QUAL_ITEM_ID: String(100);
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+ 		UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_itempool_facilitator {
+ 		key ITEM_ID: String(100);
+ 		key FAC_ID: String(50);
+ 		INVOLVEMENT: String(30);
+ 		FAC_ROLE: String(30);
+ 		COM_TO_TEACH: String(5);
+ 		POOL_STAT: String(30);
+ 		SFPUSH_FLAG: String(8);
+ 		COMMENTS: String(350);
+ 		POOL_STAT_UPD_USER_ID: String(50);
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+ 		UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_att_push_pool_stat {
+ 		ITEM_ID: String(100);
+ 		FAC_ID: String(50);
+ 		ACTION: String(10);
+ 		PROCESS_FLG: String(30);
+ 		CREATE_USER: String(50);
+ 		Key CREATE_DT: SDate;
+ 	}
+
+ 	@Catalog.tableType : #COLUMN
+ 	Entity talent_imt_ghrdb_config_filter {
+ 		Key LOOKUP_KEY: String(100);
+ 		Key KEY_DESP: String(300);
+ 		Key KEY_VAL: String(10);
+ 		ORD: Integer;
+ 		Key ACTIVE_FLG: String(2);
+ 		CREATE_USER: String(50);
+ 		CREATE_DT: SDate;
+ 	}
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_so_header {
+ 		key SO_ID: String(100);
+ 		SO_NAME: String(4000);
+ 		ITEM_NAME: String(4000);
+ 		ITEM_ID: String(100);
+ 		SO_LOCATION: String(4000);
+ 		SO_CLASSROOM: String(2000);
+ 		SERVICE_LINE: String(100);
+ 		DELIVERY_METHOD: String(50);
+ 		START_DT: SDate;
+        END_DT: SDate;
+        STAFF_COMPLETE: String(8);
+        FAC_COUNT: Integer;
+        COACH_COUNT: Integer;
+        GST_SPKR_COUNT: Integer;
+        OBSVR_COUNT: Integer;
+        RL_PLAYER_COUNT: Integer;
+        ALT_FAC_COUNT: Integer;
+        PRDCR_COUNT: Integer;
+        TIMEZONE_ID: String(100);
+        TIMEZONE_ID_DISP: String(100);
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+ 		UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_so_stadmin {
+ 		key SO_ID: String(100);
+ 		key STF_ID: String(50);
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+ 		UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_so_facilitator {
+ 		key SO_ID: String(100);
+ 		key FAC_ID: String(50);
+ 		PRIME_FAC: String(5);
+ 		FAC_ROLE: String(30);
+ 		ASSIGN_STAT: String(50);
+ 		SFPUSH_FLAG: String(8);
+        ASSIGN_STAT_UPD_USER_ID: String(50);
+        FAC_COMMENTS: String(350);
+ 		STF_COMMENTS: String(350);
+ 		EVAL_SCORE: DecimalFloat;
+ 		CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+ 		CREATE_DT: SDate;
+ 		UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_imt_so_assignstat_push {
+ 		SO_ID: String(100);
+ 		FAC_ID: String(50);
+ 		ASSIGN_STAT: String(50);
+ 		ASSIGN_STAT_UPD_USER_ID: String(50);
+ 		ACTION: String(10);
+ 		PROCESS_FLG: String(30);
+ 		CREATE_USER: String(50);
+ 		Key CREATE_DT: SDate;
+ 	}
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_application_role {
+ 		key APP_ID: String(25);
+        key ROLE_ID: String(50);
+        ROLE_DESCRIPTION: String(100);
+    	CREATE_DT: SDate;
+        UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+ 	Entity talent_application_user_role {
+ 		key APP_ID: String(25);
+ 		key USER_ID: String(50);
+        key ROLE_ID: String(50);
+        ACTIVE_FLG: String(5);
+        CREATE_USER: String(50);
+ 		UPDATE_USER: String(50);
+    	CREATE_DT: SDate;
+        UPDATE_DT: SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+    Entity talent_mlbdy_templates {
+        key MLBDY_TEMPLATE_IND:	String(100);
+        MLBDY_PREVW:    LargeString;
+        MLBDY_EML:	LargeString;
+        MLBDY_TXT:	String(4000);
+        CREATE_USER:	String(50);
+        UPDATE_USER:	String(50);
+        CREATE_DT:	SDate;
+        UPDATE_DT:	SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+    Entity talent_email_templates {
+        key TEMPLATE_ID:	Integer;
+        TEMPLATE_NAME:	String(1000);
+        MLBDY_TEMPLATE_IND: String(100);
+        SAL_TXT: String(200);
+        MSG_TXT:    String(4000);
+        MAIL_BDY:	LargeString;
+        MAIL_BDY_EML:	LargeString;
+        MAIL_SUBJ:	String(4000);
+        CADENCE_RULE:	String(200);
+        ACTIVE_FLG:	String(5);
+        CREATE_USER:	String(50);
+        UPDATE_USER:	String(50);
+        CREATE_DT:	SDate;
+        UPDATE_DT:	SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+    Entity talent_sofac_email {
+        key SOFAC_EML_ID:	Integer64;
+        key RCD_TIMESTAMP: SDate;
+        MODULE: String(5);
+        SO_ID: String(100);
+        FAC_ID: String(50);
+        TEMPLATE_ID: Integer;
+        PERS_MAIL_BDY:    LargeString;
+        PERS_SUBJ:	String(4000);
+        FLAG: String(20);
+        REM_DT: SDate;
+        REM_FLAG: String(20);
+        CREATE_USER:	String(50);
+        UPDATE_USER:	String(50);
+        CREATE_DT:	SDate;
+        UPDATE_DT:	SDate;
+    };
+
+    @Catalog.tableType : #COLUMN
+    Entity talent_emailsent_audit {
+        Key ML_AUDIT_ID: Integer64;
+        SOFAC_EML_ID:	Integer64;
+        RCD_TIMESTAMP: SDate;
+        MAIL_TO: String(2000);
+        MAIL_BDY: LargeString;
+        MAIL_SUBJ:	String(4000);
+        AUDT_FLAG: String(25);
+        SENT_DT: SDate;
+        SO_ID: String(100);
+        FAC_ID: String(50);
+        TEMPLATE_ID: Integer;
+        SOFAC_EMAIL_FLAG: String(20);
+        SOFAC_EMAIL_REM_DT: SDate;
+        SOFAC_EMAIL_REM_FLAG: String(20);
+    };
+
+    @Catalog.tableType : #COLUMN
+    Entity talent_imt_lookup {
+        Key ORD: Integer64;
+        Key LOOKUP_KEY:	String(200);
+        Key VAL: String(500);
+        ACTIVE_FLG:	String(5);
+    };
+
+    @Catalog.tableType : #COLUMN
+    Entity talent_imt_timezone_lookup {
+        Key ID: Integer64;
+        TDDH_TIMEZONE_ID:	String(100);
+        LKUP_STATUS: String(50);
+        LKUP_TIMEZONE_ID: String(100);
+        COMMENTS: String(100);
+    };
+
+    define view talent_imt_itempool_qualview as
+        select from talent_imt_itempool_qualification
+                        join talent_imt_preptraining_list as P
+                             on "P"."ITEM_ID" = "talent_imt_itempool_qualification"."QUAL_ITEM_ID"
+        {
+          "talent_imt_itempool_qualification"."ITEM_ID" as "ITEM_ID",
+          "talent_imt_itempool_qualification"."QUAL_ITEM_ID" as "QUAL_ITEM_ID",
+          "P"."ITEM_NAME" as "ITEM_NAME",
+          "talent_imt_itempool_qualification"."CREATE_USER" as "CREATE_USER",
+          "talent_imt_itempool_qualification"."UPDATE_USER" as "UPDATE_USER",
+          "talent_imt_itempool_qualification"."CREATE_DT" as "CREATE_DT",
+          "talent_imt_itempool_qualification"."UPDATE_DT" as "UPDATE_DT"
+
+        };
+
+	define view talent_imt_att_push_pool_stat_view as
+ 	Select from
+            talent_imt_att_push_pool_stat as "PST"
+                LEFT JOIN "ey.learning::imt.talent_tddh_api_layer.items" as "I"
+                    ON "PST"."ITEM_ID" = "I"."ItemID"
+                    {
+                         "PST"."ITEM_ID" as "ITEM_ID"
+                        ,"PST"."FAC_ID" as "FAC_ID"
+                        ,"PST"."ACTION" as "ACTION"
+                        ,"PST"."PROCESS_FLG" as "PROCESS_FLG"
+                        ,"PST"."CREATE_USER" as "CREATE_USER"
+                        ,"PST"."CREATE_DT" as "CREATE_DT"
+                        ,"I"."Itemtype" as "CPNT_TYP_ID"
+                        ,"I"."RevisionDate" as "REV_DTE"
+                    };
+
+    define view talent_imt_itempool_facview as
+        select from talent_imt_itempool_facilitator
+            join talent_imt_facilitator_profile as P
+                on "P"."USER_ID" = "talent_imt_itempool_facilitator"."FAC_ID"
+            Left join talent_imt_facilitator_profile as UPD
+                on "UPD"."USER_ID" = "talent_imt_itempool_facilitator"."POOL_STAT_UPD_USER_ID"
+        {
+          "talent_imt_itempool_facilitator"."ITEM_ID" as "ITEM_ID",
+          "talent_imt_itempool_facilitator"."FAC_ID" as "FAC_ID",
+          "talent_imt_itempool_facilitator"."INVOLVEMENT" as "INVOLVEMENT",
+          "talent_imt_itempool_facilitator"."FAC_ROLE" as "FAC_ROLE",
+          "talent_imt_itempool_facilitator"."COM_TO_TEACH" as "COM_TO_TEACH",
+          "talent_imt_itempool_facilitator"."POOL_STAT" as "POOL_STAT",
+          "talent_imt_itempool_facilitator"."SFPUSH_FLAG" as "SFPUSH_FLAG",
+          "talent_imt_itempool_facilitator"."COMMENTS" as "COMMENTS",
+          "talent_imt_itempool_facilitator"."POOL_STAT_UPD_USER_ID" as "POOL_STAT_UPD_USER_ID",
+          "P"."FIRST_NAME" as "FIRST_NAME",
+          "P"."LAST_NAME" as "LAST_NAME",
+          "P"."SERV_LINE" as "SERV_LINE",
+          "P"."FAC_RANK" as "FAC_RANK",
+          "P"."BU_UNIT" as "BU_UNIT",
+          "P"."STATUS" as "STATUS",
+          "P"."FULL_NAME" as "FULL_NAME",
+          "UPD"."FULL_NAME" as "POOL_STAT_UPD_USR_NM",
+          "talent_imt_itempool_facilitator"."CREATE_USER" as "CREATE_USER",
+          "talent_imt_itempool_facilitator"."UPDATE_USER" as "UPDATE_USER",
+          "talent_imt_itempool_facilitator"."CREATE_DT" as "CREATE_DT",
+          "talent_imt_itempool_facilitator"."UPDATE_DT" as "UPDATE_DT"
+        };
+
+    define view talent_imt_useritempool_view as
+        select from talent_imt_itempool_facilitator left join talent_imt_itempool_header as H on "talent_imt_itempool_facilitator"."ITEM_ID" = "H"."ITEM_ID"
+        {
+          "talent_imt_itempool_facilitator"."ITEM_ID" as "ITEM_ID",
+          "talent_imt_itempool_facilitator"."FAC_ID" as "FAC_ID",
+          "H"."ITEM_NAME" as "ITEM_NAME"
+        };
+
+    define view talent_imt_so_facview as
+        select
+        from talent_imt_so_facilitator as SO_F
+		join talent_imt_facilitator_profile as P
+			on "P"."USER_ID" = "SO_F"."FAC_ID"
+		left join talent_imt_so_header as H
+		    on SO_F."SO_ID" = "H"."SO_ID"
+		left join talent_imt_itempool_facilitator as ITM_F
+			on "SO_F"."FAC_ID" = "ITM_F"."FAC_ID" AND "H"."ITEM_ID" = "ITM_F"."ITEM_ID"
+		left join tddh_facilitator_history AS FH
+		    on "H"."SO_ID" = "FH"."ScheduledOfferingID" AND "SO_F"."FAC_ID" = "FH"."Instructor_id"
+		left join talent_sofac_email AS SOFACEML
+		    on "H"."SO_ID" = "SOFACEML"."SO_ID" AND "SO_F"."FAC_ID" = "SOFACEML"."FAC_ID" AND
+		        "SOFACEML"."TEMPLATE_ID" = 3
+        {
+			"SO_F"."SO_ID" as "SO_ID",
+			"SO_F"."FAC_ID" as "FAC_ID",
+			"H"."ITEM_ID" as "ITEM_ID",
+			"SO_F"."PRIME_FAC" as "PRIME_FAC",
+			"SO_F"."FAC_ROLE" as "FAC_ROLE",
+			"SO_F"."ASSIGN_STAT" as "ASSIGN_STAT",
+			CASE WHEN "SO_F"."ASSIGN_STAT" = 'Available' then 'sap-icon://employee-approvals'
+                          WHEN "SO_F"."ASSIGN_STAT" = 'Not available' then 'sap-icon://employee-rejections'
+                          WHEN "SO_F"."ASSIGN_STAT" = 'Confirmed' then 'sap-icon://kpi-managing-my-area'
+                          WHEN "SO_F"."ASSIGN_STAT" = 'Requested' then 'sap-icon://request'
+                          WHEN "SO_F"."ASSIGN_STAT" = 'Cancelled by admin' OR "SO_F"."ASSIGN_STAT" = 'Cancelled by facilitator'
+                                then 'sap-icon://cancel'
+                          ELSE ''
+            END AS "ASSIGN_ICON",
+			"SO_F"."FAC_COMMENTS" as "FAC_COMMENTS",
+			CASE WHEN IFNULL("SO_F"."FAC_COMMENTS",'') <> '' THEN 'True' ELSE 'False' END AS "FAC_COMVIS",
+			"SO_F"."STF_COMMENTS" as "STF_COMMENTS",
+			CASE WHEN IFNULL("SO_F"."STF_COMMENTS",'') <> '' THEN 'True' ELSE 'False' END AS "STF_COMMVIS",
+			"FH"."EvaluationScore" as "EVAL_SCORE",
+			"ITM_F"."POOL_STAT" as "POOL_STAT",
+			CASE WHEN IFNULL("ITM_F"."POOL_STAT",'') = '' THEN null
+			     WHEN IFNULL("ITM_F"."POOL_STAT",'') = 'ATT' THEN  'Yes'
+			     ELSE 'No'
+			END AS "ATT",
+			CASE WHEN "ITM_F"."ITEM_ID" IS NOT null AND "ITM_F"."FAC_ID" IS NOT null THEN 'sap-icon://edit-icon'
+			     ELSE ''
+			END AS "ATT_EDIT_ICON_VIS",
+			"H"."DELIVERY_METHOD" AS "DELIVERY_METHOD",
+			"P"."FIRST_NAME" as "FIRST_NAME",
+			"P"."LAST_NAME" as "LAST_NAME",
+			"P"."SERV_LINE" as "SERV_LINE",
+			"P"."FAC_RANK" as "FAC_RANK",
+			"P"."BU_UNIT" as "BU_UNIT",
+			"P"."GRADE" as "GRADE",
+			"P"."WORK_LOCATION" as "WORK_LOCATION",
+			"P"."AREA" as "AREA",
+			"P"."SUB_MAG_UNIT" as "SUB_MAG_UNIT",
+			CASE WHEN "SO_F"."ASSIGN_STAT" IN ('Confirmed','Requested') AND SOFACEML.SOFAC_EML_ID IS NULL
+			            THEN 'True'
+			     ELSE 'False'
+			END As "EML_ICON",
+			"SO_F"."SFPUSH_FLAG" as "SFPUSH_FLAG",
+			"SO_F"."ASSIGN_STAT_UPD_USER_ID" as "ASSIGN_STAT_UPD_USER_ID",
+			"SO_F"."CREATE_USER" as "CREATE_USER",
+			"SO_F"."UPDATE_USER" as "UPDATE_USER",
+			"SO_F"."CREATE_DT" as "CREATE_DT",
+			"SO_F"."UPDATE_DT" as "UPDATE_DT"
+        };
+
+    define view talent_imt_so_stadminview as
+        select from talent_imt_so_stadmin as ADM
+        join talent_imt_facilitator_profile as P
+			on "P"."USER_ID" = "ADM"."STF_ID"
+			{
+                "ADM"."SO_ID" as "SO_ID",
+                "ADM"."STF_ID" as "STF_ID",
+                "ADM"."CREATE_USER" as "CREATE_USER",
+                "ADM"."UPDATE_USER" as "UPDATE_USER" ,
+                "ADM"."CREATE_DT" as "CREATE_DT",
+                "ADM"."UPDATE_DT" as "UPDATE_DT",
+                "P"."FIRST_NAME" as "FIRST_NAME",
+			    "P"."LAST_NAME" as "LAST_NAME",
+			    "P"."EMAIL_ID" as "EMAIL_ID",
+			    "P"."COUNTRY" as "COUNTRY"
+			};
+
+	define view tddh_Items as
+	    select from "ey.learning::imt.talent_tddh_api_layer.items" as ITM
+	    {
+	        "ITM"."ItemID" as "ItemID",
+            "ITM"."Itemtype" as "Itemtype",
+            "ITM"."RevisionDate" as "RevisionDate",
+            "ITM"."Assignmenttype" as "Assignmenttype",
+            "ITM"."DMN_ID" as "DMN_ID",
+            "ITM"."DeliveryMethod" as "DeliveryMethod",
+            "ITM"."NOTACTIVE" as "NOTACTIVE",
+            "ITM"."ItemTitle" as "ItemTitle",
+            "ITM"."CreationDate" as "CreationDate",
+            "ITM"."MIN_ENRL" as "MIN_ENRL",
+            "ITM"."MAX_ENRL" as "MAX_ENRL",
+            "ITM"."Duration" as "Duration",
+            "ITM"."CREDIT_HRS" as "CREDIT_HRS",
+            "ITM"."CPE_HRS" as "CPE_HRS",
+            "ITM"."Comments" as "Comments",
+            "ITM"."Delete_Flag" as "Delete_Flag",
+            "ITM"."Coursecode" as "Coursecode",
+            "ITM"."Id" as "Id",
+            "ITM"."Course_PK" as "Course_PK",
+            "ITM"."Inserted_JobId" as "Inserted_JobId",
+            "ITM"."Inserted_Date" as "Inserted_Date",
+            "ITM"."Updated_JobId" as "Updated_JobId",
+            "ITM"."Updated_Date" as "Updated_Date",
+            "ITM"."CPNT_SRC_ID" as "CPNT_SRC_ID",
+            "ITM"."CataLog_SKU" as "CataLog_SKU",
+            "ITM"."Cpnt_Classification" as "Cpnt_Classification",
+            "ITM"."Rev_Num" as "Rev_Num",
+            "ITM"."Cpnt_Key" as "Cpnt_Key",
+            "ITM"."DMN_Desc" as "DMN_Desc",
+            "ITM"."Catalog_Id" as "Catalog_Id",
+            "ITM"."Catalog_Desc" as "Catalog_Desc"
+	    };
+
+	define view tddh_facilitator_history as
+	    select from "ey.learning::imt.talent_tddh_api_layer.facilitator_history" as ITM
+	    {
+	        "ITM"."Instructor_id" as "Instructor_id",
+            "ITM"."ItemTitle" as "ItemTitle",
+            "ITM"."Cpnt_id" as "Cpnt_id",
+            "ITM"."Cpnt_Typ_id" as "Cpnt_Typ_id",
+            "ITM"."Rev_Dte" as "Rev_Dte",
+            "ITM"."ScheduledOfferingID" as "ScheduledOfferingID",
+            "ITM"."SO_Name" as "SO_Name",
+            "ITM"."FACILITY_Name" as "FACILITY_Name",
+            "ITM"."LOCN_ID" as "LOCN_ID",
+            "ITM"."LOCN_DESC" as "LOCN_DESC",
+            "ITM"."START_DTE" as "START_DTE",
+            "ITM"."END_DTE" as "END_DTE",
+            "ITM"."Count" as "Count",
+            "ITM"."SumOfRating" as "SumOfRating",
+            "ITM"."EvaluationScore" as "EvaluationScore"
+	    };
+
+	define view tddh_instructor_minevalscore as
+	    select from "ey.learning::imt.talent_tddh_api_layer.instructor_minevalscore" as ITM
+	    {
+    	    "ITM"."Instructor_Id" as "Instructor_Id",
+            "ITM"."Min_EvalScore" as "Min_EvalScore"
+	    };
+
+	define view tddh_learner_history as
+	    select from "ey.learning::imt.talent_tddh_api_layer.learner_history" as ITM
+    	{
+        	"ITM"."STUD_ID" as "STUD_ID",
+            "ITM"."CPNT_TYP_ID" as "CPNT_TYP_ID",
+            "ITM"."CPNT_ID" as "CPNT_ID",
+            "ITM"."REV_DTE" as "REV_DTE",
+            "ITM"."CMPL_STAT_ID" as "CMPL_STAT_ID",
+            "ITM"."COMPL_DTE" as "COMPL_DTE",
+            "ITM"."SCHD_ID" as "SCHD_ID",
+            "ITM"."GRADE" as "GRADE",
+            "ITM"."Inserted_JobId" as "Inserted_JobId",
+            "ITM"."Inserted_Date" as "Inserted_Date",
+            "ITM"."Updated_JobId" as "Updated_JobId",
+            "ITM"."Updated_Date" as "Updated_Date",
+            "ITM"."Delete_Flag" as "Delete_Flag",
+            "ITM"."TOTAL_HRS" as "TOTAL_HRS",
+            "ITM"."CREDIT_HRS" as "CREDIT_HRS",
+            "ITM"."CPE_HRS" as "CPE_HRS",
+            "ITM"."CONTACT_HRS" as "CONTACT_HRS",
+            "ITM"."LastAccess" as "LastAccess",
+            "ITM"."Initial_Date" as "Initial_Date",
+            "ITM"."Lst_Upd_Usr" as "Lst_Upd_Usr",
+            "ITM"."Lst_upd_Tstmp" as "Lst_upd_Tstmp",
+            "ITM"."Cpnt_Key" as "Cpnt_Key",
+            "ITM"."Cpnt_Evthst_Key" as "Cpnt_Evthst_Key",
+            "ITM"."RevisionNumber" as "RevisionNumber",
+            "ITM"."Inst_Name" as "Inst_Name",
+            "ITM"."Comments" as "Comments",
+            "ITM"."Esig_Meaning_Code_Id" as "Esig_Meaning_Code_Id",
+            "ITM"."Esig_Meaning_Code_Desc" as "Esig_Meaning_Code_Desc",
+            "ITM"."Es_Username" as "Es_Username",
+            "ITM"."Order_Item_id" as "Order_Item_id",
+            "ITM"."Currency_Code" as "Currency_Code",
+            "ITM"."SO_Description" as "SO_Description",
+            "ITM"."SO_Facility_ID" as "SO_Facility_ID",
+            "ITM"."SOD_START_DTE" as "SOD_START_DTE",
+            "ITM"."SOD_END_DTE" as "SOD_END_DTE",
+            "ITM"."SOD_CLASS_HRS" as "SOD_CLASS_HRS",
+            "ITM"."SOD_LOCN_ID" as "SOD_LOCN_ID",
+            "ITM"."SOD_INST_ID" as "SOD_INST_ID",
+            "ITM"."LOCN_DESC" as "LOCN_DESC",
+            "ITM"."ESD_ENRL_SLOT_ID" as "ESD_ENRL_SLOT_ID",
+            "ITM"."ESD_ENRL_STAT_ID" as "ESD_ENRL_STAT_ID",
+            "ITM"."ESD_ENRL_DTE" as "ESD_ENRL_DTE",
+            "ITM"."ESD_Enroll_Status_Description" as "ESD_Enroll_Status_Description"
+    	};
+
+    define view tddh_scheduleoffering as
+	    select from "ey.learning::imt.talent_tddh_api_layer.scheduleoffering" as ITM
+	    {
+	        "ITM"."ScheduledOfferingID" as "ScheduledOfferingID",
+            "ITM"."Description" as "Description",
+            "ITM"."DMN_ID" as "DMN_ID",
+            "ITM"."ComponentType" as "ComponentType",
+            "ITM"."ComponentID" as "ComponentID",
+            "ITM"."REV_DTE" as "REV_DTE",
+            "ITM"."MIN_ENRL" as "MIN_ENRL",
+            "ITM"."MAX_ENRL" as "MAX_ENRL",
+            "ITM"."Enroll_DTE" as "Enroll_DTE",
+            "ITM"."SELF_ENRL" as "SELF_ENRL",
+            "ITM"."Comments" as "Comments",
+            "ITM"."NOTACTIVE" as "NOTACTIVE",
+            "ITM"."Facility_ID" as "Facility_ID",
+            "ITM"."CANCELLED" as "CANCELLED",
+            "ITM"."CANCEL_DTE" as "CANCEL_DTE",
+            "ITM"."AUTO_FILL_ENRL" as "AUTO_FILL_ENRL",
+            "ITM"."TOTAL_LEARNING_COST" as "TOTAL_LEARNING_COST",
+            "ITM"."CLOSED_DATE" as "CLOSED_DATE",
+            "ITM"."CHGBCK_METHOD" as "CHGBCK_METHOD",
+            "ITM"."APPROVAL_REQD" as "APPROVAL_REQD",
+            "ITM"."TIMEZONE_ID" as "TIMEZONE_ID",
+            "ITM"."ItemID" as "ItemID",
+            "ITM"."Delete_Flag" as "Delete_Flag",
+            "ITM"."Inserted_JobId" as "Inserted_JobId",
+            "ITM"."Inserted_Date" as "Inserted_Date",
+            "ITM"."Updated_JobId" as "Updated_JobId",
+            "ITM"."Updated_Date" as "Updated_Date",
+            "ITM"."CONTACT" as "CONTACT",
+            "ITM"."LST_UPD_USR" as "LST_UPD_USR",
+            "ITM"."EY_Legacy_SO" as "EY_Legacy_SO",
+            "ITM"."SOD_START_DTE" as "SOD_START_DTE",
+            "ITM"."SOD_END_DTE" as "SOD_END_DTE",
+            "ITM"."SOD_CLASS_HRS" as "SOD_CLASS_HRS",
+            "ITM"."SOD_LOCN_ID" as "SOD_LOCN_ID",
+            "ITM"."SOD_INST_ID" as "SOD_INST_ID",
+            "ITM"."LOCN_DESC" as "LOCN_DESC",
+            "ITM"."FACILITY_Name" as "FACILITY_Name",
+            "ITM"."DeliveryMethod" as "DeliveryMethod",
+            "ITM"."CPNT_SRC_ID" as "CPNT_SRC_ID",
+            "ITM"."ItemTitle" as "ItemTitle"
+	    };
+
+	 define view DistinctItemsFromFac as
+	    Select from "talent_imt_itempool_facilitator" F
+	        left join  "talent_imt_itempool_header" as H
+	            On F."ITEM_ID" = H."ITEM_ID"
+	           distinct  { F.ITEM_ID, H.ITEM_NAME};
+
+	 define view ItemMaster as
+	    Select from "ey.learning::imt.talent_tddh_api_layer.items" as I
+	        left join  "talent_imt_itempool_header" as H
+	            On I."ItemID" = H."ITEM_ID"
+/*	        left join "ey.learning::imt.DistinctItemsFromFac" as DITM
+	            On DITM."ITEM_ID" = H."ITEM_ID" */
+	            {
+	            	COALESCE(H."ITEM_ID",I."ItemID") as "ITEM_ID",
+	            	COALESCE(H."ITEM_NAME",I."ItemTitle") as "ITEM_NAME",
+	            	COALESCE(H."DELIVERY_METHOD",I."Itemtype") as "DELIVERY_METHOD",
+	            	COALESCE(H."SERVICE_LINE",I."CPNT_SRC_ID") as "SERVICE_LINE",
+/*                	Case when DITM."ITEM_ID" is null then 'No'
+                	     else 'Yes'
+                	End as "Flag",  */
+                	Case when H."POOL_CREATED" is null then 'No'
+                	     else H."POOL_CREATED"
+                	End as "Flag",
+                	Case when H."ITEM_ID" is null then 'No'
+                	     else 'Yes'
+                	End as "HDR_FLAG",
+                	I."NOTACTIVE"
+	            };
+
+	 define view SOMaster as
+	    Select from "ey.learning::imt.talent_tddh_api_layer.scheduleoffering" as I
+	        left join "talent_imt_so_header" as H
+    	        On H."SO_ID" = I."ScheduledOfferingID"
+    	        {
+	            	COALESCE(H."SO_ID",I."ScheduledOfferingID") as "SO_ID",
+                    "I"."NOTACTIVE" as "NOTACTIVE",
+                    COALESCE(H."SO_NAME",I."Description") as "SO_NAME",
+                    COALESCE(H."ITEM_NAME",I."ItemTitle") as "ITEM_NAME",
+                    COALESCE(H."ITEM_ID",I."ItemID") as "ITEM_ID",
+                    I."ComponentType" as "COMPONENTTYPE",
+                    COALESCE(H."START_DT",I."SOD_START_DTE") as "START_DT",
+                    COALESCE(H."END_DT",I."SOD_END_DTE") as "END_DT",
+                	COALESCE(H."SO_LOCATION",I."FACILITY_Name") as "SO_LOCATION",
+                	COALESCE(H."SO_CLASSROOM",I."LOCN_DESC") as "SO_CLASSROOM",
+                	COALESCE(H."SERVICE_LINE",I."CPNT_SRC_ID") as "SERVICE_LINE",
+                	COALESCE(H."DELIVERY_METHOD",I."DeliveryMethod") as "DELIVERY_METHOD",
+                	"I"."TIMEZONE_ID" as "TIMEZONE_ID",
+                	"H"."TIMEZONE_ID_DISP" as "TIMEZONE_ID_DISP",
+                	Case when H."SO_ID" is null then 'no'
+                         else 'yes'
+                    End as "Flag"
+	            };
+
+    define view AppUserRole as
+        SELECT FROM "talent_application_user_role" as "UR"
+            LEFT OUTER JOIN "talent_imt_facilitator_profile" AS "P"
+                ON "UR"."USER_ID" = "P"."USER_ID"
+                {
+                     "UR"."APP_ID" AS "APP_ID"
+                    ,"UR"."USER_ID" AS "USER_ID"
+                    ,"UR"."ROLE_ID" AS "ROLE_ID"
+                    ,"UR"."ACTIVE_FLG" AS "ACTIVE_FLG"
+                    ,"UR"."CREATE_USER" AS "CREATE_USER"
+                    ,"UR"."UPDATE_USER" AS "UPDATE_USER"
+                    ,"UR"."CREATE_DT" AS "CREATE_DT"
+                    ,"UR"."UPDATE_DT" AS "UPDATE_DT"
+                    ,("P"."FIRST_NAME" || ' ' || "P"."LAST_NAME") as NAME
+                    ,"P"."EMAIL_ID" AS "EMAIL_ID"
+                    ,"P"."COUNTRY" AS "COUNTRY"
+                };
+
+    define view FacTraningAssignmnt as
+        SELECT FROM "talent_imt_so_facilitator" as SO_F
+            JOIN "talent_imt_facilitator_profile" as P
+    	        ON "P"."USER_ID" = "SO_F"."FAC_ID"
+            LEFT JOIN "talent_imt_so_header" as H
+                ON SO_F."SO_ID" = "H"."SO_ID"
+            LEFT JOIN "talent_imt_itempool_facilitator" as ITM_F
+            	ON "SO_F"."FAC_ID" = "ITM_F"."FAC_ID" AND "H"."ITEM_ID" = "ITM_F"."ITEM_ID"
+            LEFT JOIN "talent_imt_so_stadminview" AS STADM
+                ON "H"."SO_ID" = "STADM"."SO_ID" AND "SO_F"."CREATE_USER" = STADM.STF_ID
+            {
+                 "H"."SO_ID" AS "SO_ID"
+                ,"SO_F"."FAC_ID" AS "FAC_ID"
+                ,"H"."SO_NAME" AS "SO_NAME"
+                ,"STADM"."FIRST_NAME" || ' ' || "STADM"."LAST_NAME" as "STAFFING_ADMIN"
+                ,"H"."START_DT" AS "START_DT"
+                ,"H"."END_DT" AS "END_DT"
+                ,"H"."TIMEZONE_ID" AS "TIMEZONE_ID"
+                ,"H"."TIMEZONE_ID_DISP" AS "TIMEZONE_ID_DISP"
+                ,TO_VARCHAR("H"."START_DT", 'DD-MON-YYYY') || ' | ' || TO_VARCHAR("H"."START_DT", 'HH:MI')  as "SO_START"
+                ,TO_VARCHAR("H"."END_DT", 'DD-MON-YYYY') || ' | ' || TO_VARCHAR("H"."END_DT", 'HH:MI')  as "SO_END"
+                ,IFNULL("H"."SO_LOCATION",'') as "SO_LOC"
+                ,IFNULL("H"."SO_CLASSROOM",'') as "SO_CLASS"
+                ,"SO_F"."FAC_ROLE" as "FAC_ROLE"
+                ,"SO_F"."ASSIGN_STAT" as "ASSIGN_STAT"
+                ,CASE WHEN "SO_F"."ASSIGN_STAT" = 'Available' then 'sap-icon://employee-approvals'
+                              WHEN "SO_F"."ASSIGN_STAT" = 'Not available' then 'sap-icon://employee-rejections'
+                              WHEN "SO_F"."ASSIGN_STAT" = 'Confirmed' then 'sap-icon://kpi-managing-my-area'
+                              WHEN "SO_F"."ASSIGN_STAT" = 'Requested' then 'sap-icon://request'
+                              WHEN "SO_F"."ASSIGN_STAT" = 'Cancelled by admin' OR "SO_F"."ASSIGN_STAT" = 'Cancelled by facilitator'
+                                    then 'sap-icon://cancel'
+                              ELSE ''
+                END AS "ASSIGN_ICON"
+                ,"SO_F"."FAC_COMMENTS" as "FAC_COMMENTS"
+                ,CASE WHEN IFNULL("SO_F"."FAC_COMMENTS",'') <> '' THEN 'True' ELSE 'False' END AS "FAC_COMVIS"
+                ,"SO_F"."STF_COMMENTS" as "STF_COMMENTS"
+                ,CASE WHEN IFNULL("SO_F"."STF_COMMENTS",'') <> '' THEN 'True' ELSE 'False' END AS "STF_COMMVIS"
+                ,"ITM_F"."POOL_STAT" as "POOL_STAT"
+                ,CASE   WHEN IFNULL("ITM_F"."POOL_STAT",'') = '' THEN null
+                	    WHEN IFNULL("ITM_F"."POOL_STAT",'') = 'ATT' THEN  'Yes'
+                		ELSE 'No'
+                 END AS "ATT"
+                ,CASE WHEN "SO_F"."ASSIGN_STAT" = 'Requested' then 'True' ELSE 'False' END AS ENABLE_ACTION
+
+                ,"SO_F"."CREATE_USER" AS "CREATE_USER"
+            };
+
+       define view ReqAvaSOList as
+       SELECT FROM "talent_imt_so_stadmin" as "STA"
+            INNER JOIN "talent_imt_so_header" as "H"
+                ON "STA"."SO_ID" = "H"."SO_ID"
+            INNER JOIN "SOMaster" as "SO_M"
+                ON "STA"."SO_ID" = "SO_M"."SO_ID"
+                {
+                    "STA"."STF_ID" as "STF_ID"
+                    ,"H"."SO_ID" as "SO_ID"
+                    ,CASE WHEN "SO_M"."NOTACTIVE" = 'N' then 'Y'
+                          WHEN "SO_M"."NOTACTIVE" = 'Y' then 'N'
+                          ELSE '' END
+                    as "ACTIVE"
+                    ,"H"."SO_NAME" as "SO_NAME"
+                    ,"H"."START_DT" as "START_DT"
+                    ,"H"."END_DT" as "END_DTS"
+                    ,"H"."TIMEZONE_ID" as "TIMEZONE_ID"
+                    ,"H"."TIMEZONE_ID_DISP" as "TIMEZONE_ID_DISP"
+                    ,IFNULL("H"."SERVICE_LINE",'') as "SERVICE_LINE"
+                    ,IFNULL("H"."SO_LOCATION",'') as "SO_LOCATION"
+                    ,IFNULL("H"."SO_CLASSROOM",'') as "CLS_RM"
+                    ,IFNULL("H"."DELIVERY_METHOD",'') as "DELIVERY_METHOD"
+                };
+
+        define view ATTConnector as
+        SELECT
+        FROM "talent_imt_att_push_pool_stat" as "ITM"
+                LEFT JOIN "ey.learning::imt.talent_tddh_api_layer.items" as "ITM_MS"
+                    ON "ITM"."ITEM_ID" = "ITM_MS"."ItemID"
+        {
+            /*ROW_NUMBER() OVER (ORDER BY "ITM"."CREATE_DT") as "SER_NO", */
+            "ITM"."CREATE_DT" as "CREATE_DT",
+            "ITM"."ITEM_ID" as "CPNT_ID",
+            "ITM_MS"."Itemtype" as "CPNT_TYP_ID",
+            TO_VARCHAR("ITM_MS"."RevisionDate",'MON-DD-YYYY HH24:MI:ss') as "REV_DTE",
+            "ITM"."FAC_ID" as "INST_ID",
+            "ITM"."ACTION" as "ACTION",
+            "ITM"."PROCESS_FLG" as "PROCESS_FLG"
+        };
+
+        define view SOFacConnector as
+        SELECT
+        from "talent_imt_so_assignstat_push" AS "SF"
+                INNER JOIN "talent_imt_so_header" AS "H"
+                    ON SF.SO_ID = H.SO_ID
+                    {
+                         'EY' AS "DMN_ID"
+                        ,"H"."DELIVERY_METHOD" AS "CPNT_TYP_ID"
+                        ,"SF"."SO_ID" AS "SCHD_ID"
+                        ,"SF"."ACTION" AS "ACTION"
+                        ,"H"."ITEM_ID" AS "ACT_CPNT_ID"
+                        ,'1' AS "SSG_SEG_NUM"
+                        ,null AS "SEG_DESC"
+                        ,TO_VARCHAR("H"."START_DT",'MON-DD-YYYY HH24:MI:ss') AS "START_TME"
+                        ,TO_VARCHAR("H"."END_DT",'MON-DD-YYYY HH24:MI:ss') AS "END_TME"
+                        ,null as "FACILITY_ID"
+                        ,null as "LOCN_ID1"
+                        ,null as "COL_NUM99_VAL"
+                        ,"SF"."FAC_ID" as INST_ID1
+                        ,null as INST_ID2
+                        ,null as INST_ID3
+                        ,null as INST_ID4
+                        ,null as INST_ID5
+                        ,null as INST_ID6
+                        ,null as INST_ID7
+                        ,null as INST_ID8
+                        ,null as INST_ID9
+                        ,null as INST_ID10
+                        ,'N' as NOTACTIVE
+                        ,"SF"."FAC_ID" as FAC_ID
+                        ,"SF"."CREATE_USER" AS "CREATE_USER"
+                        ,"SF"."ASSIGN_STAT" AS "ASSIGN_STAT"
+                        ,"SF"."ASSIGN_STAT_UPD_USER_ID" AS "ASSIGN_STAT_UPD_USER_ID"
+                        ,"SF"."PROCESS_FLG" AS "PROCESS_FLG"
+                        ,"SF"."CREATE_DT" AS "CREATE_DT"
+                    };
+
+        define view ItemsOfInterest as
+        SELECT from "talent_imt_facilitator_item_interest" AS II
+        LEFT JOIN "ItemMaster" AS TI
+            ON II.ITEM_ID = TI.ITEM_ID
+        LEFT JOIN "talent_imt_itempool_facilitator" AS ITMFAC
+                ON II.ITEM_ID = ITMFAC.ITEM_ID AND ITMFAC.FAC_ID = II.USER_ID
+            {
+                 II.USER_ID
+                ,II.ITEM_ID
+                ,II.ITEM_TYPE
+                ,II.ITEM_NAME
+                ,II.ITEM_DETAILS
+                ,II.EDIT_MODE
+                ,II.RCD_TYPE
+                ,II.CREATE_USER
+                ,II.UPDATE_USER
+                ,II.CREATE_DT
+                ,II.UPDATE_DT
+                ,CASE WHEN II.RCD_TYPE = 'I' THEN
+                            CASE WHEN ITMFAC."FAC_ID" IS NOT NULL then 'Yes'
+                              ELSE 'No'
+                            END
+                    ELSE 'N/A'
+                END  AS "IN_ITMFAC_PL"
+                ,CASE WHEN TI."NOTACTIVE" = 'N' THEN 'Yes'
+                      WHEN TI."NOTACTIVE" = 'Y' THEN 'No'
+                      ELSE '' END AS "ITEM_ACTIVE"
+                ,CASE WHEN UPPER(II.RCD_TYPE) = 'TE' THEN 'TRUE'
+                      ELSE 'FALSE' END AS "EDIT_FLG"
+            };
+
+        define view advSrchfilters as
+
+        SELECT FROM "talent_imt_lookup" as "C"
+        {   "C"."ORD",  "C"."VAL", "C"."LOOKUP_KEY" as "TYPE" }
+        WHERE "LOOKUP_KEY" = 'TOPIC_TYPE'
+        UNION
+        SELECT FROM DUMMY
+        {   0 as "ORD",'All' as "VAL",'TRNITM_TYPE' as "TYPE" }
+        UNION
+        SELECT FROM "talent_imt_preptraining_list" as "P"
+        {
+             1 as "ORD"
+            ,'(' || P.ITEM_ID || ') ' || "P"."ITEM_NAME" as "VAL"
+            ,'TRNITM_TYPE' as "TYPE"
+        }
+        WHERE "P"."ACTIVE_FLG" = 'Y'
+        UNION
+        SELECT FROM DUMMY
+        {   0 as "ORD",'All' as "VAL",'GRADE_TYPE' as "TYPE" }
+        UNION
+        SELECT FROM "talent_imt_lookup" as "C"
+        {   "C"."ORD",  "C"."VAL", "C"."LOOKUP_KEY" }
+        WHERE "LOOKUP_KEY" = 'GRADE_TYPE'
+        UNION
+        SELECT FROM "talent_imt_lookup" as "C"
+        {   "C"."ORD",  "C"."VAL", "C"."LOOKUP_KEY" as "TYPE" }
+        WHERE "LOOKUP_KEY" = 'TOPIC_TYPE' AND ACTIVE_FLG = 'Y'
+        UNION
+        Select from "ey.learning::imt.talent_ghrdb_ps_ey_country_r_vw" as "C"
+        DISTINCT
+        {   1 as "ORD"
+            ,CASE   WHEN RTRIM(LTRIM(IFNULL("C"."COUNTRY",''))) = '' THEN "C"."COUNTRY_DESCR"
+                    ELSE "C"."COUNTRY_DESCR" || ' (' || "C"."COUNTRY" || ')'
+             END as "VAL"
+            ,'COUNTRY_TYPE' as "TYPE" }
+        UNION
+        SELECT FROM DUMMY
+        {   0 as "ORD",'All' as "VAL",'RANK_TYPE' as "TYPE" }
+        UNION
+        Select from "ey.learning::imt.talent_ghrdb_ps_ey_rank_r_vw" as "C"
+        DISTINCT
+        {   1 as "ORD"
+            ,CASE   WHEN RTRIM(LTRIM(IFNULL("C"."EY_RANK_CD",''))) = '' THEN "C"."EY_RANK_DESCR"
+                    ELSE "C"."EY_RANK_DESCR" || ' (' || "C"."EY_RANK_CD" || ')'
+             END as "VAL"
+            ,'RANK_TYPE' as "TYPE" }
+        WHERE "C"."EFF_STATUS" = 'A'
+        UNION
+        SELECT FROM DUMMY
+        {   0 as "ORD",'All' as "VAL",'LOC_TYPE' as "TYPE" }
+        UNION
+        Select from "ey.learning::imt.talent_ghrdb_ps_ey_loc_r_vw" as "C"
+        DISTINCT
+        {   1 as "ORD"
+            ,CASE   WHEN RTRIM(LTRIM(IFNULL("C"."LOCATION",''))) = '' THEN "C"."DESCR"
+                    ELSE "C"."DESCR" || ' (' || "C"."LOCATION" || ')'
+             END as "VAL"
+            ,'LOC_TYPE' as "TYPE" }
+        WHERE  "C"."EFF_STATUS" = 'A'
+        UNION
+        SELECT FROM DUMMY
+        {   0 as "ORD",'All' as "VAL",'AREA_TYPE' as "TYPE" }
+        UNION
+        Select from "ey.learning::imt.talent_ghrdb_ps_ey_country_r_vw" as "C"
+        DISTINCT
+        {   1 as "ORD","C"."EY_AREA" as "VAL",'AREA_TYPE' as "TYPE" }
+        Where "C"."EY_AREA" IS NOT NULL
+        UNION
+        SELECT FROM DUMMY
+        {   0 as "ORD",'All' as "VAL",'BU_TYPE' as "TYPE" }
+        UNION
+        Select from "ey.learning::imt.talent_ghrdb_ps_ey_bu_r_vw" as "C"
+        DISTINCT
+        {   1 as "ORD"
+            ,"BUSINESS_UNIT" as "VAL"
+            ,'BU_TYPE' as "TYPE" }
+        UNION
+        SELECT FROM DUMMY
+        {   0 as "ORD",'All' as "VAL",'SL_TYPE' as "TYPE" }
+        UNION
+        SELECT FROM "talent_imt_ghrdb_config_filter" AS "CNF"
+        INNER JOIN  "ey.learning::imt.talent_ghrdb_ps_ey_svc_ln_r_vw" as "C"
+            ON "CNF".KEY_DESP = "C"."EY_SERVICE_LN_DESC"
+        DISTINCT
+        {
+             CNF."ORD" as "ORD"
+            ,CASE   WHEN RTRIM(LTRIM(IFNULL("C"."EY_SERVICE_ASSOC",''))) = '' THEN "C"."EY_SERVICE_LN_DESC"
+                    ELSE "C"."EY_SERVICE_LN_DESC" || ' (' || "C"."EY_SERVICE_ASSOC" || ')'
+             END as "VAL"
+            ,'SL_TYPE' as "TYPE"
+        }
+        WHERE "CNF"."LOOKUP_KEY" = 'SERVICELINE' AND "CNF".ACTIVE_FLG = 'Y' AND "C"."EFF_STATUS" = 'A'
+        UNION
+        SELECT FROM DUMMY
+        {   0 as "ORD",'All' as "VAL",'SMU_TYPE' as "TYPE" }
+        UNION
+        SELECT  FROM "ey.learning::imt.talent_ghrdb_ps_ey_smu_r_vw" as "C"
+        DISTINCT
+        {
+             1 as "ORD"
+            ,CASE   WHEN RTRIM(LTRIM(IFNULL("C"."EY_PRODUCT_CD",''))) = '' THEN "C"."EY_PROD_LDESCR"
+                    ELSE "C"."EY_PROD_LDESCR" || ' (' || "C"."EY_PRODUCT_CD" || ')'
+             END as "VAL"
+            ,'SMU_TYPE' as "TYPE"
+        }
+        ;
+
+        define view GHSTEduLicVw as
+        SELECT FROM
+            "ey.learning::imt.talent_ghrdb_ps_ey_accomps_vw" as A
+            {
+                A.EMPLID,
+                A.ALTER_EMPLID as USER_ID,
+                A.ACCOMP_CATEGORY,
+                A.ACCOMPLISHMENT,
+                A.DT_ISSUED,
+                A.ISSUED_BY,
+                A.COUNTRY,
+                A.EXPIRATN_DT,
+                A.SCHOOL,
+                A.DESCR
+            };
+};

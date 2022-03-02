@@ -17,6 +17,9 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForei
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.symbols.Symbol;
+import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
@@ -24,8 +27,11 @@ import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
@@ -124,6 +130,46 @@ public class HdbddTransformer {
     hdbTableTypeModel.setCreatedBy(UserFacade.getName());
 
     return hdbTableTypeModel;
+  }
+
+  public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location, SymbolTable symbolTable) {
+    XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
+
+    HashMap<String, Symbol> fullSymbolNames = (HashMap<String, Symbol>) symbolTable.getSymbolsByFullName();
+
+    String viewSql = "VIEW \"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\" AS ";
+
+    List<String> selectStatements = new ArrayList<>();
+
+    viewSymbol.getSelectStatements().forEach(ss -> {
+      String dependsOnTable = ((((SelectSymbol) ss).getDependsOnTable() == null) ? "" : ((SelectSymbol) ss).getDependsOnTable());
+      String dependingTableAlias = ((SelectSymbol) ss).getDependingTableAlias();
+      String dependingTableAliasSql = ((dependingTableAlias == null) ? "" : "AS " + dependingTableAlias);
+      String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
+      String join = ((((SelectSymbol) ss).getJoinSql() == null) ? "" : ((SelectSymbol) ss).getJoinSql());
+      String where = ((((SelectSymbol) ss).getWhereSql() == null) ? "" : ((SelectSymbol) ss).getWhereSql());
+      String union = ((((SelectSymbol) ss).getUnion() == false) ? "" : "UNION");
+      String distinct = ((((SelectSymbol) ss).getDistinct() == false) ? "" : "DISTINCT");
+
+      String selectStatement = union + " SELECT " + distinct + " " + selectColumns + " FROM " + "\"" + dependsOnTable + "\"" + " " + dependingTableAliasSql + " " + join + " " + where;
+
+      for (String key : fullSymbolNames.keySet()) {
+        if (fullSymbolNames.get(key) instanceof EntitySymbol || fullSymbolNames.get(key) instanceof ViewSymbol) {
+          selectStatement = selectStatement.replace(key.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), key);
+        }
+      }
+
+      selectStatements.add(selectStatement);
+    });
+
+    viewSql = viewSql + String.join(" ", selectStatements);
+
+    viewModel.setDbContentType(XSKDBContentType.OTHERS);
+    viewModel.setName(viewSymbol.getFullName());
+    viewModel.setSchema(viewModel.getSchema());
+    viewModel.setRawContent(viewSql);
+    viewModel.setLocation(location);
+    return viewModel;
   }
 
   /**

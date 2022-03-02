@@ -359,6 +359,16 @@ public interface CdsListener extends ParseTreeListener {
 	 */
 	void exitViewRule(CdsParser.ViewRuleContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CdsParser#selectRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelectRule(CdsParser.SelectRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#selectRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelectRule(CdsParser.SelectRuleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CdsParser#joinRule}.
 	 * @param ctx the parse tree
 	 */
@@ -378,4 +388,14 @@ public interface CdsListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#whereRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhereRule(CdsParser.WhereRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#whereRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhereRule(CdsParser.WhereRuleContext ctx);
 }

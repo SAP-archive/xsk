@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
-import com.sap.xsk.parser.hdbdd.custom.EntityDefinitionListener;
+import com.sap.xsk.parser.hdbdd.custom.ArtifactDefinitionListener;
 import com.sap.xsk.parser.hdbdd.custom.ReferenceResolvingListener;
 import com.sap.xsk.parser.hdbdd.custom.XSKHdbddErrorListener;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
@@ -32,7 +32,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
 
-public class EntityDefinitionListenerTest {
+public class ArtifactDefinitionListenerTest {
 
   private final SymbolTable symbolTable = new SymbolTable();
 
@@ -56,12 +56,6 @@ public class EntityDefinitionListenerTest {
     assertEquals(0, parser.getNumberOfSyntaxErrors());
     assertEquals(1, parsedEntities.size());
     assertEquals("TEST_SCHEMA", parsedEntities.get(0).getSchema());
-  }
-
-  @Test
-  public void parseViewSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/ParseView.hdbdd", "sap/table/ParseView.hdbdd");
-    System.out.println("JUST A TEST");
   }
 
   @Test
@@ -217,7 +211,7 @@ public class EntityDefinitionListenerTest {
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {
     String content =
         org.apache.commons.io.IOUtils.toString(
-            EntityDefinitionListener.class.getResourceAsStream(sampleFileName),
+            ArtifactDefinitionListener.class.getResourceAsStream(sampleFileName),
             StandardCharsets.UTF_8);
 
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
@@ -237,18 +231,18 @@ public class EntityDefinitionListenerTest {
 
     ParseTree parseTree = hdbtiParser.cdsFile();
 
-    EntityDefinitionListener entityDefinitionListener = new EntityDefinitionListener();
-    entityDefinitionListener.setSymbolTable(symbolTable);
-    entityDefinitionListener.setFileLocation(location);
+    ArtifactDefinitionListener artifactDefinitionListener = new ArtifactDefinitionListener();
+    artifactDefinitionListener.setSymbolTable(symbolTable);
+    artifactDefinitionListener.setFileLocation(location);
 
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-    parseTreeWalker.walk(entityDefinitionListener, parseTree);
+    parseTreeWalker.walk(artifactDefinitionListener, parseTree);
 
     ReferenceResolvingListener referenceResolvingListener = new ReferenceResolvingListener();
     referenceResolvingListener.setSymbolTable(symbolTable);
-    referenceResolvingListener.setEntityElements(entityDefinitionListener.getEntityElements());
-    referenceResolvingListener.setTypeables(entityDefinitionListener.getTypeables());
-    referenceResolvingListener.setAssociations(entityDefinitionListener.getAssociations());
+    referenceResolvingListener.setEntityElements(artifactDefinitionListener.getEntityElements());
+    referenceResolvingListener.setTypeables(artifactDefinitionListener.getTypeables());
+    referenceResolvingListener.setAssociations(artifactDefinitionListener.getAssociations());
 
     try {
       parseTreeWalker.walk(referenceResolvingListener, parseTree);

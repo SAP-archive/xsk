@@ -40,6 +40,11 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
+  public void justTest() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/imt.hdbdd", "");
+  }
+
+    @Test
   public void parseHanaXSClassicContentWithSyntaxErrorFail() {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
@@ -62,11 +67,6 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void justParse() throws Exception {
-    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/justParse.hdbdd", "");
-  }
-
-    @Test
   public void parseHDBDDWithManagedAss() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ProductsWithManagedAss.hdbdd", "");
 
@@ -471,7 +471,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithNoKeyAnnotation () throws Exception {
+  public void parseHDBDDWithNoKeyAnnotation() throws Exception {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/NoKeyAnnSample.hdbdd", "")
@@ -482,20 +482,20 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithGenerateTableTypeAnnotation () throws Exception {
+  public void parseHDBDDWithGenerateTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/GenerateTableTypeAnnotationSample.hdbdd", "");
     assertEquals(1, ((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().size());
 
     XSKDataStructureHDBTableTypeModel tableTypeModel = ((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0);
     assertEquals("gstr2::GenerateTableTypeAnnotationSample.MyNestedStruct", tableTypeModel.getName());
     assertEquals("ADMIN", tableTypeModel.getSchema());
-    assertEquals("name",tableTypeModel.getColumns().get(0).getName());
-    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(0).getType());
-    assertEquals("nested.aNumber",tableTypeModel.getColumns().get(1).getName());
-    assertEquals("INTEGER",tableTypeModel.getColumns().get(1).getType());
-    assertEquals("nested.someText",tableTypeModel.getColumns().get(2).getName());
-    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(2).getType());
-    assertEquals("nested.otherText",tableTypeModel.getColumns().get(3).getName());
-    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(3).getType());
+    assertEquals("name", tableTypeModel.getColumns().get(0).getName());
+    assertEquals("NVARCHAR", tableTypeModel.getColumns().get(0).getType());
+    assertEquals("nested.aNumber", tableTypeModel.getColumns().get(1).getName());
+    assertEquals("INTEGER", tableTypeModel.getColumns().get(1).getType());
+    assertEquals("nested.someText", tableTypeModel.getColumns().get(2).getName());
+    assertEquals("NVARCHAR", tableTypeModel.getColumns().get(2).getType());
+    assertEquals("nested.otherText", tableTypeModel.getColumns().get(3).getName());
+    assertEquals("NVARCHAR", tableTypeModel.getColumns().get(3).getType());
   }
 }

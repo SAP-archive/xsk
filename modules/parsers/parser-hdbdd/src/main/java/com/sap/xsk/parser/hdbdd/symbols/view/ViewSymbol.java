@@ -13,31 +13,37 @@ package com.sap.xsk.parser.hdbdd.symbols.view;
 
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewSymbol extends Symbol implements Scope {
 
-  private String joinSql;
-  private String columnsSql;
-
-
-  public String getJoinSql() {
-    return joinSql;
-  }
-
-  public void setJoinSql(String joinSql) {
-    this.joinSql = joinSql;
-  }
-
-  public String getColumnsSql() {
-    return columnsSql;
-  }
-
-  public void setColumnsSql(String columnsSql) {
-    this.columnsSql = columnsSql;
-  }
+  List<Symbol> selectStatements = new ArrayList<>();
+  String packageId;
+  String context;
 
   public ViewSymbol(Symbol symbol) {
     super(symbol);
+  }
+
+  public List<Symbol> getSelectStatements() {
+    return selectStatements;
+  }
+
+  public String getPackageId() {
+    return packageId;
+  }
+
+  public void setPackageId(String packageId) {
+    this.packageId = packageId;
+  }
+
+  public String getContext() {
+    return context;
+  }
+
+  public void setContext(String context) {
+    this.context = context;
   }
 
   @Override
@@ -47,7 +53,7 @@ public class ViewSymbol extends Symbol implements Scope {
 
   @Override
   public void define(Symbol sym) {
-
+      selectStatements.add(sym);
   }
 
   @Override

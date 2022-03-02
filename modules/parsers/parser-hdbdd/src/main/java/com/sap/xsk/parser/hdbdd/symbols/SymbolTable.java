@@ -45,33 +45,33 @@ public class SymbolTable {
 
   protected void initTypeSystem() {
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("String", 1, Arrays.asList(CdsLexer.STRING)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LargeString",  Arrays.asList(CdsLexer.STRING)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Binary", 1,  Arrays.asList(CdsLexer.VARBINARY)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LargeBinary",  Arrays.asList(CdsLexer.VARBINARY)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LargeString", Arrays.asList(CdsLexer.STRING)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Binary", 1, Arrays.asList(CdsLexer.VARBINARY)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LargeBinary", Arrays.asList(CdsLexer.VARBINARY)));
 
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Integer",  Arrays.asList(CdsLexer.INTEGER)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Integer64",  Arrays.asList(CdsLexer.INTEGER)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Integer", Arrays.asList(CdsLexer.INTEGER)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Integer64", Arrays.asList(CdsLexer.INTEGER)));
 
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Decimal", 2,  Arrays.asList(CdsLexer.DECIMAL, CdsLexer.INTEGER)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("DecimalFloat",  Arrays.asList(CdsLexer.DECIMAL)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("BinaryFloat",  Arrays.asList(CdsLexer.DECIMAL)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Decimal", 2, Arrays.asList(CdsLexer.DECIMAL, CdsLexer.INTEGER)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("DecimalFloat", Arrays.asList(CdsLexer.DECIMAL)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("BinaryFloat", Arrays.asList(CdsLexer.DECIMAL)));
 
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalDate",  Arrays.asList(CdsLexer.LOCAL_DATE)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalTime",  Arrays.asList(CdsLexer.LOCAL_TIME)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCDateTime",  Arrays.asList(CdsLexer.UTC_DATE_TIME)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCTimestamp",  Arrays.asList(CdsLexer.UTC_TIMESTAMP)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Boolean",  Arrays.asList(CdsLexer.BOOLEAN)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalDate", Arrays.asList(CdsLexer.LOCAL_DATE)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalTime", Arrays.asList(CdsLexer.LOCAL_TIME)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCDateTime", Arrays.asList(CdsLexer.UTC_DATE_TIME)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCTimestamp", Arrays.asList(CdsLexer.UTC_TIMESTAMP)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Boolean", Arrays.asList(CdsLexer.BOOLEAN)));
 
-    hanaBuiltInTypes.put("hana.ALPHANUM", new BuiltInTypeSymbol("ALPHANUMERIC", 0,  Arrays.asList(CdsLexer.STRING), true));
-    hanaBuiltInTypes.put("hana.SMALLINT", new BuiltInTypeSymbol("SMALLINT", 0,  Arrays.asList(CdsLexer.INTEGER), true));
-    hanaBuiltInTypes.put("hana.TINYINT", new BuiltInTypeSymbol("TINYINT", 0,  Arrays.asList(CdsLexer.INTEGER), true));
-    hanaBuiltInTypes.put("hana.REAL", new BuiltInTypeSymbol("REAL", 0,  Arrays.asList(CdsLexer.DECIMAL), true));
-    hanaBuiltInTypes.put("hana.SMALLDECIMAL", new BuiltInTypeSymbol("SMALLDECIMAL", 0,  Arrays.asList(CdsLexer.DECIMAL), true));
-    hanaBuiltInTypes.put("hana.VARCHAR", new BuiltInTypeSymbol("NVARCHAR", 1,  Arrays.asList(CdsLexer.STRING), true));
-    hanaBuiltInTypes.put("hana.CLOB", new BuiltInTypeSymbol("CLOB", 0,  Arrays.asList(CdsLexer.VARBINARY), true));
-    hanaBuiltInTypes.put("hana.BINARY", new BuiltInTypeSymbol("BINARY", 0,  Arrays.asList(CdsLexer.VARBINARY), true));
-    hanaBuiltInTypes.put("hana.ST_POINT", new BuiltInTypeSymbol("ST_POINT", 0,  Arrays.asList(CdsLexer.STRING), true));
-    hanaBuiltInTypes.put("hana.ST_GEOMETRY", new BuiltInTypeSymbol("ST_GEOMETRY", 0,  Arrays.asList(CdsLexer.STRING), true));
+    hanaBuiltInTypes.put("hana.ALPHANUM", new BuiltInTypeSymbol("ALPHANUMERIC", 0, Arrays.asList(CdsLexer.STRING), true));
+    hanaBuiltInTypes.put("hana.SMALLINT", new BuiltInTypeSymbol("SMALLINT", 0, Arrays.asList(CdsLexer.INTEGER), true));
+    hanaBuiltInTypes.put("hana.TINYINT", new BuiltInTypeSymbol("TINYINT", 0, Arrays.asList(CdsLexer.INTEGER), true));
+    hanaBuiltInTypes.put("hana.REAL", new BuiltInTypeSymbol("REAL", 0, Arrays.asList(CdsLexer.DECIMAL), true));
+    hanaBuiltInTypes.put("hana.SMALLDECIMAL", new BuiltInTypeSymbol("SMALLDECIMAL", 0, Arrays.asList(CdsLexer.DECIMAL), true));
+    hanaBuiltInTypes.put("hana.VARCHAR", new BuiltInTypeSymbol("NVARCHAR", 1, Arrays.asList(CdsLexer.STRING), true));
+    hanaBuiltInTypes.put("hana.CLOB", new BuiltInTypeSymbol("CLOB", 0, Arrays.asList(CdsLexer.VARBINARY), true));
+    hanaBuiltInTypes.put("hana.BINARY", new BuiltInTypeSymbol("BINARY", 0, Arrays.asList(CdsLexer.VARBINARY), true));
+    hanaBuiltInTypes.put("hana.ST_POINT", new BuiltInTypeSymbol("ST_POINT", 0, Arrays.asList(CdsLexer.STRING), true));
+    hanaBuiltInTypes.put("hana.ST_GEOMETRY", new BuiltInTypeSymbol("ST_GEOMETRY", 0, Arrays.asList(CdsLexer.STRING), true));
 
     initAnnotations();
   }
@@ -88,12 +88,13 @@ public class SymbolTable {
     annotations.put(noKeyObj.getName(), noKeyObj);
 
     AnnotationObj generateTableTypeObj = annotationTemplateFactory.buildTemplateForGenerateTableTypeAnnotation();
-    annotations.put(generateTableTypeObj.getName(),generateTableTypeObj);
+    annotations.put(generateTableTypeObj.getName(), generateTableTypeObj);
   }
 
   public void addEntityToGraph(String fullName) {
     this.entityGraph.put(fullName, null);
   }
+
   public void addViewToGraph(String fullName) {
     this.viewGraph.put(fullName, null);
   }
@@ -148,6 +149,10 @@ public class SymbolTable {
     this.entityGraph.clear();
   }
 
+  public void clearViewGraph() {
+    this.viewGraph.clear();
+  }
+
   public CDSFileScope getGlobalBuiltInTypeScope() {
     return globalBuiltInTypeScope;
   }
@@ -168,7 +173,7 @@ public class SymbolTable {
     passedEntities.add(entityName);
     List<String> children = entityGraph.get(entityName);
     if (children == null) {
-      EntitySymbol bottomEntity =  (EntitySymbol) this.symbolsByFullName.get(entityName);
+      EntitySymbol bottomEntity = (EntitySymbol) this.symbolsByFullName.get(entityName);
       if (bottomEntity == null) {
         throw new CDSRuntimeException(String.format("No entity with name: %s found in symbol table.", entityName));
       }
@@ -190,7 +195,7 @@ public class SymbolTable {
     passedViews.add(viewName);
     List<String> children = viewGraph.get(viewName);
     if (children == null) {
-      ViewSymbol bottomView =  (ViewSymbol) this.symbolsByFullName.get(viewName);
+      ViewSymbol bottomView = (ViewSymbol) this.symbolsByFullName.get(viewName);
       if (bottomView == null) {
         throw new CDSRuntimeException(String.format("No view with name: %s found in symbol table.", viewName));
       }

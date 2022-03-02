@@ -411,6 +411,18 @@ public class CdsBaseListener implements CdsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSelectRule(CdsParser.SelectRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSelectRule(CdsParser.SelectRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterJoinRule(CdsParser.JoinRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -430,6 +442,18 @@ public class CdsBaseListener implements CdsListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhereRule(CdsParser.WhereRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhereRule(CdsParser.WhereRuleContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

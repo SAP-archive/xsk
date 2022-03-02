@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.9.3
 package com.sap.xsk.parser.hdbtable.core;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -23,226 +22,195 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface HdbtableVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#tableColumnsProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTableColumnsProp(@NotNull HdbtableParser.TableColumnsPropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#indexesObject}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIndexesObject(@NotNull HdbtableParser.IndexesObjectContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#hdbtableDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHdbtableDefinition(@NotNull HdbtableParser.HdbtableDefinitionContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignUnique}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnAssignUnique(@NotNull HdbtableParser.ColumnAssignUniqueContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#tableIndexesProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTableIndexesProp(@NotNull HdbtableParser.TableIndexesPropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignDefaultValue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnAssignDefaultValue(@NotNull HdbtableParser.ColumnAssignDefaultValueContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#indexProperties}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIndexProperties(@NotNull HdbtableParser.IndexPropertiesContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignName}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnAssignName(@NotNull HdbtableParser.ColumnAssignNameContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignIndexColumns}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIndexAssignIndexColumns(@NotNull HdbtableParser.IndexAssignIndexColumnsContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnsObject}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnsObject(@NotNull HdbtableParser.ColumnsObjectContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#tableTypeProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTableTypeProp(@NotNull HdbtableParser.TableTypePropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignLength}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnAssignLength(@NotNull HdbtableParser.ColumnAssignLengthContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#indexColumnsArray}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIndexColumnsArray(@NotNull HdbtableParser.IndexColumnsArrayContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignScale}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnAssignScale(@NotNull HdbtableParser.ColumnAssignScaleContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyIndexTypeProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTablePrimaryKeyIndexTypeProp(@NotNull HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignSQLType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnAssignSQLType(@NotNull HdbtableParser.ColumnAssignSQLTypeContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignIndexType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIndexAssignIndexType(@NotNull HdbtableParser.IndexAssignIndexTypeContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignUnique}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIndexAssignUnique(@NotNull HdbtableParser.IndexAssignUniqueContext ctx);
-
+	T visitHdbtableDefinition(HdbtableParser.HdbtableDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#hdbtableProperties}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHdbtableProperties(@NotNull HdbtableParser.HdbtablePropertiesContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#loggingTypeProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLoggingTypeProp(@NotNull HdbtableParser.LoggingTypePropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignNullable}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnAssignNullable(@NotNull HdbtableParser.ColumnAssignNullableContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnsProperties}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnsProperties(@NotNull HdbtableParser.ColumnsPropertiesContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#temporaryProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTemporaryProp(@NotNull HdbtableParser.TemporaryPropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#publicProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPublicProp(@NotNull HdbtableParser.PublicPropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignOrder}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIndexAssignOrder(@NotNull HdbtableParser.IndexAssignOrderContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTablePrimaryKeyProp(@NotNull HdbtableParser.TablePrimaryKeyPropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignPrecision}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnAssignPrecision(@NotNull HdbtableParser.ColumnAssignPrecisionContext ctx);
-
+	T visitHdbtableProperties(HdbtableParser.HdbtablePropertiesContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#schemaNameProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSchemaNameProp(@NotNull HdbtableParser.SchemaNamePropContext ctx);
-
+	T visitSchemaNameProp(HdbtableParser.SchemaNamePropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#temporaryProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemporaryProp(HdbtableParser.TemporaryPropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#tableTypeProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTableTypeProp(HdbtableParser.TableTypePropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#publicProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPublicProp(HdbtableParser.PublicPropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#loggingTypeProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoggingTypeProp(HdbtableParser.LoggingTypePropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#tableColumnsProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTableColumnsProp(HdbtableParser.TableColumnsPropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#tableIndexesProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTableIndexesProp(HdbtableParser.TableIndexesPropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTablePrimaryKeyProp(HdbtableParser.TablePrimaryKeyPropContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyColumnsProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTablePrimaryKeyColumnsProp(@NotNull HdbtableParser.TablePrimaryKeyColumnsPropContext ctx);
-
+	T visitTablePrimaryKeyColumnsProp(HdbtableParser.TablePrimaryKeyColumnsPropContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignComment}.
+	 * Visit a parse tree produced by {@link HdbtableParser#tablePrimaryKeyIndexTypeProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitColumnAssignComment(@NotNull HdbtableParser.ColumnAssignCommentContext ctx);
-
+	T visitTablePrimaryKeyIndexTypeProp(HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#descriptionProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDescriptionProp(@NotNull HdbtableParser.DescriptionPropContext ctx);
-
+	T visitDescriptionProp(HdbtableParser.DescriptionPropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnsObject}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnsObject(HdbtableParser.ColumnsObjectContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnsProperties}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnsProperties(HdbtableParser.ColumnsPropertiesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#indexesObject}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexesObject(HdbtableParser.IndexesObjectContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#indexProperties}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexProperties(HdbtableParser.IndexPropertiesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignName(HdbtableParser.ColumnAssignNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignSQLType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignSQLType(HdbtableParser.ColumnAssignSQLTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignNullable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignNullable(HdbtableParser.ColumnAssignNullableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignUnique}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignUnique(HdbtableParser.ColumnAssignUniqueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignLength}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignLength(HdbtableParser.ColumnAssignLengthContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignComment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignComment(HdbtableParser.ColumnAssignCommentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignDefaultValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignDefaultValue(HdbtableParser.ColumnAssignDefaultValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignPrecision}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignPrecision(HdbtableParser.ColumnAssignPrecisionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#columnAssignScale}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnAssignScale(HdbtableParser.ColumnAssignScaleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIndexAssignName(@NotNull HdbtableParser.IndexAssignNameContext ctx);
+	T visitIndexAssignName(HdbtableParser.IndexAssignNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignUnique}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexAssignUnique(HdbtableParser.IndexAssignUniqueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignOrder}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexAssignOrder(HdbtableParser.IndexAssignOrderContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignIndexColumns}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexAssignIndexColumns(HdbtableParser.IndexAssignIndexColumnsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#indexAssignIndexType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexAssignIndexType(HdbtableParser.IndexAssignIndexTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbtableParser#indexColumnsArray}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexColumnsArray(HdbtableParser.IndexColumnsArrayContext ctx);
 }

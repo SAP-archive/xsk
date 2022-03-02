@@ -155,6 +155,12 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         | `application.image`                                | Application image                         | ``                                                  |
         | `application.homeUrl`                              | Home url for XSK                          | ``                                                  |
         | `application.imagePullPolicy`                      | Image pull policy                         | `Always`                                            |
+        | `application.privateDockerRegistry`                | Paramater to enable docker registry       | ``                                                  |
+        | `application.dockerSecretName`                     | Secret name for docker  registry          | `docker-registry-secret`                            |
+        | `application.dockerServer`                         | Parameter to set Docker server            | `https://index.docker.io/v1/`                       |
+        | `application.dockerUsername`                       | User name for docker registry             | ``                                                  |
+        | `application.dockerPassword`                       | Password for docker registry              | ``                                                  |
+        | `application.dockerEmail`                          | Email for docker registry                 | ``                                                  |
         | `hana.enabled`                                     | Hana enable option                        | ``                                                  |
         | `hana.secretName`                                  | Hana secret name                          | `hana-secret`                                       |
         | `hana.url`                                         | Hana url instance                         | ``                                                  |

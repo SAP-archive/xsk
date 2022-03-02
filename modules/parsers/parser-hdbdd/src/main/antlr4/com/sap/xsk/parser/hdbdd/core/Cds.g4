@@ -44,8 +44,9 @@ keyValue: ID ':' annValue;
 artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | viewRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
 
 viewRule: DEFINE artifactType=VIEW artifactName=ID AS selectRule*;
-selectRule: isUnion=UNION? SELECT FROM dependsOnTable=ID (AS dependingTableAlias=ID)? joinRule? isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'* whereRule?;
-joinRule: .*?;
+selectRule: isUnion=UNION? SELECT FROM dependsOnTable=ID ((AS dependingTableAlias=ID) | dependingTableAlias=ID)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'* whereRule?;
+joinRule: joinType=JOIN_TYPES joinArtifactName=ID AS joinFields;
+joinFields: .*?;
 selectedColumnsRule: .*?;
 whereRule: .*?;
 
@@ -59,6 +60,16 @@ DEFINE: D E F I N E;
 VIEW: V I E W;
 UNION: U N I O N;
 DISTINCT: D I S T I N C T;
+
+JOIN_TYPES: (INNER_JOIN) | (LEFT_JOIN) | (LEFT_OUTER_JOIN) | (RIGHT_OUTER_JOIN) | (FULL_OUTER_JOIN) | (REFERNTIAL_JOIN) | (TEXT_JOIN) | (J O I N);
+
+INNER_JOIN: (I N N E R ' ' J O I N);
+LEFT_JOIN: (L E F T ' ' J O I N);
+LEFT_OUTER_JOIN: (L E F T ' ' O U T E R ' ' J O I N);
+RIGHT_OUTER_JOIN: (R I G H T ' ' O U T E R ' ' J O I N);
+FULL_OUTER_JOIN: (F U L L ' ' O U T E R ' ' J O I N);
+REFERNTIAL_JOIN: (R E F E R E N T I A L ' ' J O I N);
+TEXT_JOIN: (T E X T ' ' J O I N);
 
 BUILT_IN_HANA_TYPE: HanaTypePrefix ('VARCHAR' | 'ALPHANUM' | 'SMALLINT' | 'TINYINT' | 'REAL' | 'SMALLDECIMAL' | 'CLOB' | 'BINARY' | 'ST_POINT' | 'ST_GEOMETRY');
 DATETIME_VALUE_FUNCTION: ( 'CURRENT_DATE' | 'CURRENT_TIME' | 'CURRENT_TIMESTAMP' | 'CURRENT_UTCDATE' | 'CURRENT_UTCTIME' | 'CURRENT_UTCTIMESTAMP' );

@@ -109,6 +109,18 @@ application:
   homeUrl:
   # Image pull policy 
   imagePullPolicy: Always
+  # Enable private docker registry
+  privateDockerRegistry: 
+  # Private Docker secret name 
+  dockerSecretName: docker-registry-secret
+  # Private Docker registry server
+  dockerServer: https://index.docker.io/v1/
+  # Private Docker registry user name
+  dockerUsername:
+  # Private Docker registry password
+  dockerPassword:
+  # Private Docker registry email
+  dockerEmail:
 
 hana:
   # Enable HANA configuration

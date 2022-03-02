@@ -18,6 +18,16 @@ stringData:
 {{ required "Missing HANA set configuration 'hana.enabled=true' " .Values.hana.enabled }}
 {{- end }}
 {{- end }}
+{{- if .Values.application.privateDockerRegistry }}
+apiVersion: v1
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+kind: Secret
+metadata:
+  name: {{ required "Missing docker secret name" .Values.application.dockerSecretName }}
+type: kubernetes.io/dockerconfigjson 
+---
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -86,6 +96,10 @@ spec:
               port: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbeHttpGetPort}}
             initialDelaySeconds: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbeInitialDelaySeconds}}
             periodSeconds: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbePeriodSeconds}}
+      {{- if .Values.application.privateDockerRegistry }}
+      imagePullSecrets:
+      - name: {{ required "Missing docker secret name" .Values.application.dockerSecretName }}
+      {{- end }}
       {{- if .Values.persistentVolumeClaim.enabled }}
       volumes:
       - name: {{ required "Missing volume mounts name" .Values.deployment.volumesName }}

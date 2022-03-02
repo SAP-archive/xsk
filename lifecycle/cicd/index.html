@@ -1779,48 +1779,54 @@
 <tr>
 <th>Name</th>
 <th>Description</th>
+<th>Required for</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>DOCKER_REGISTRY</code></td>
 <td>The Docker Registry <em>(e.g. <code>docker.io</code>, <code>ghcr.io</code>, etc.)</em></td>
+<td><em><code>Build</code></em></td>
 </tr>
 <tr>
 <td><code>DOCKER_USERNAME</code></td>
 <td>The Docker Username <em>(<code>&lt;your-docker-username&gt;</code>)</em></td>
+<td><em><code>Build</code></em></td>
 </tr>
 <tr>
 <td><code>DOCKER_PASSWORD</code></td>
 <td>The Docker Password <em>(<code>&lt;your-docker-password&gt;</code>)</em></td>
+<td><em><code>Build</code></em></td>
 </tr>
 <tr>
 <td><code>HANA_URL</code></td>
 <td>The HANA Cloud URL <em>(e.g. <code>7512c2q1-...:443</code>)</em></td>
+<td><em><code>Deploy</code></em></td>
 </tr>
 <tr>
 <td><code>HANA_USERNAME</code></td>
 <td>The HANA Cloud Username <em>(<code>&lt;your-hana-cloud-username&gt;</code>)</em></td>
+<td><em><code>Deploy</code></em></td>
 </tr>
 <tr>
 <td><code>HANA_PASSWORD</code></td>
 <td>The HANA Cloud Password <em>(<code>&lt;your-hana-cloud-password&gt;</code>)</em></td>
+<td><em><code>Deploy</code></em></td>
 </tr>
 <tr>
 <td><code>KYMA_CERTIFICATE</code></td>
 <td>The Kyma Certificate <em>(e.g. <code>LS0tLS1CRUdJTiBDRVJUS...</code>)</em></td>
+<td><em><code>Deploy</code></em></td>
 </tr>
 <tr>
 <td><code>KYMA_SERVER</code></td>
 <td>The Kyma Server <em>(e.g. <code>https://api.c-a7b1c6...ondemand.com</code>)</em></td>
+<td><em><code>Deploy</code></em></td>
 </tr>
 <tr>
 <td><code>KYMA_TOKEN</code></td>
 <td>The Kyma Token <em>(e.g. <code>eyJhbGciOiJSUzI1NiIsImtpZCI6In...</code>)</em></td>
-</tr>
-<tr>
-<td><code>GH_TOKEN</code></td>
-<td>The GitHub Token <em>(e.g. <code>a385f4...</code>)</em></td>
+<td><em><code>Deploy</code></em></td>
 </tr>
 </tbody>
 </table>

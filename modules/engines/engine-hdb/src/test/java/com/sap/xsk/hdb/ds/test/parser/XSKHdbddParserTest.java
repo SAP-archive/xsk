@@ -40,6 +40,11 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
+  public void justTest() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/imt.hdbdd", "");
+  }
+
+    @Test
   public void parseHanaXSClassicContentWithSyntaxErrorFail() {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,

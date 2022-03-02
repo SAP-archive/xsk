@@ -18,6 +18,8 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrima
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.symbols.Symbol;
+import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
@@ -29,6 +31,7 @@ import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
@@ -129,12 +132,15 @@ public class HdbddTransformer {
     return hdbTableTypeModel;
   }
 
-  public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
+  public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location, SymbolTable symbolTable) {
     XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
+
+    HashMap<String, Symbol> fullSymbolNames = (HashMap<String, Symbol>) symbolTable.getSymbolsByFullName();
 
     String viewSql = "VIEW \"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\" AS ";
 
     List<String> selectStatements = new ArrayList<>();
+
     viewSymbol.getSelectStatements().forEach(ss -> {
       String dependsOnTable = ((((SelectSymbol) ss).getDependsOnTable() == null) ? "" : ((SelectSymbol) ss).getDependsOnTable());
       String dependingTableAlias = ((SelectSymbol) ss).getDependingTableAlias();
@@ -145,20 +151,14 @@ public class HdbddTransformer {
       String union = ((((SelectSymbol) ss).getUnion() == false) ? "" : "UNION");
       String distinct = ((((SelectSymbol) ss).getDistinct() == false) ? "" : "DISTINCT");
 
-      if (dependsOnTable.contains("::")) {
-        selectColumns = selectColumns.replace(dependsOnTable, dependsOnTable);
-      }
-      else {
-        String dependsOnTableFullName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + dependsOnTable;
-        selectColumns = selectColumns.replace(dependsOnTable, dependsOnTableFullName);
-        dependsOnTable = dependsOnTableFullName;
+      String selectStatement = union + " SELECT " + distinct + " " + selectColumns + " FROM " + "\"" + dependsOnTable + "\"" + " " + dependingTableAliasSql + " " + join + " " + where;
+
+      for (String key : fullSymbolNames.keySet()) {
+        if (fullSymbolNames.get(key) instanceof EntitySymbol || fullSymbolNames.get(key) instanceof ViewSymbol) {
+          selectStatement = selectStatement.replace(key.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), key);
+        }
       }
 
-      if (!dependingTableAlias.equals("")) {
-        selectColumns = selectColumns.replace("\"" + dependingTableAlias + "\"", dependingTableAlias);
-      }
-
-      String selectStatement = union + " " + distinct + " SELECT " + selectColumns + " FROM " + "\"" + dependsOnTable + "\"" + " " + dependingTableAliasSql + " " + join + " " + where;
       selectStatements.add(selectStatement);
     });
 

@@ -83,6 +83,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       } catch (CDSRuntimeException | XSKArtifactParserException e) {
         this.symbolTable.clearSymbolsByFullName();
         this.symbolTable.clearEntityGraph();
+        this.symbolTable.clearViewGraph();
         throw new XSKDataStructuresException(e.getMessage());
       }
     }
@@ -258,7 +259,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     List<XSKDataStructureHDBViewModel> viewModels = new ArrayList<>();
     parsedViews.forEach(v -> {
-      viewModels.add(this.hdbddTransformer.transformViewSymbolToHdbViewModel(v, cdsModel.getLocation()));
+      viewModels.add(this.hdbddTransformer.transformViewSymbolToHdbViewModel(v, cdsModel.getLocation(), this.symbolTable));
     });
 
     cdsModel.setTableModels(tableModels);

@@ -435,6 +435,18 @@ public class CdsBaseListener implements CdsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterJoinFields(CdsParser.JoinFieldsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJoinFields(CdsParser.JoinFieldsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}

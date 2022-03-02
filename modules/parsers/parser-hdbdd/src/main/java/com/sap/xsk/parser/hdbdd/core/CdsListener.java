@@ -379,6 +379,16 @@ public interface CdsListener extends ParseTreeListener {
 	 */
 	void exitJoinRule(CdsParser.JoinRuleContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CdsParser#joinFields}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoinFields(CdsParser.JoinFieldsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#joinFields}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoinFields(CdsParser.JoinFieldsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CdsParser#selectedColumnsRule}.
 	 * @param ctx the parse tree
 	 */

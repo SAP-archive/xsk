@@ -259,7 +259,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
     List<XSKDataStructureHDBViewModel> viewModels = new ArrayList<>();
     parsedViews.forEach(v -> {
-      viewModels.add(this.hdbddTransformer.transformViewSymbolToHdbViewModel(v, cdsModel.getLocation(), this.symbolTable));
+      viewModels.add(this.hdbddTransformer.transformViewSymbolToHdbViewModel(v, cdsModel.getLocation()));
     });
 
     cdsModel.setTableModels(tableModels);

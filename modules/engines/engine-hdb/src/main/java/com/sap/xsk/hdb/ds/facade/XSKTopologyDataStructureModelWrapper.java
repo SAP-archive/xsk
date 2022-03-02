@@ -61,7 +61,7 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
       IXSKDataStructureModel.TYPE_HDB_PROCEDURE);
   private final IXSKDataStructureManager<XSKDataStructureHDBTableFunctionModel> xskTableFunctionManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION);
-//  private final IXSKDataStructureManager<XSKDataStructureModel> xskScalarFunctionManagerService = managerServices.get(
+  //  private final IXSKDataStructureManager<XSKDataStructureModel> xskScalarFunctionManagerService = managerServices.get(
 //      IXSKDataStructureModel.TYPE_HDB_SCALAR_FUNCTION);
   private final IXSKDataStructureManager<XSKDataStructureHDBSynonymModel> xskSynonymManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_SYNONYM);
@@ -73,7 +73,7 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
       IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
   private final IXSKDataStructureManager<XSKDataStructureHDBSchemaModel> xskSchemaManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_SCHEMA);
-//  private final IXSKDataStructureManager<XSKDataStructureModel> xskHdbddManagerService = managerServices.get(
+  //  private final IXSKDataStructureManager<XSKDataStructureModel> xskHdbddManagerService = managerServices.get(
 //      IXSKDataStructureModel.TYPE_HDBDD);
   private final IXSKDataStructureManager<XSKDataStructureHDBSequenceModel> xskSequenceManagerService = managerServices.get(
       IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
@@ -137,17 +137,17 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
         case EXECUTE_SCALAR_FUNCTION_DROP:
         case EXECUTE_TABLE_FUNCTION_DROP:
           if (model instanceof XSKDataStructureHDBTableFunctionModel) {
-        	return xskTableFunctionManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableFunctionModel) this.model);
+            return xskTableFunctionManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableFunctionModel) this.model);
           }
           break;
         case EXECUTE_SYNONYM_DROP:
           if (model instanceof XSKDataStructureHDBSynonymModel) {
-        	return xskSynonymManagerService.dropDataStructure(connection, (XSKDataStructureHDBSynonymModel) this.model);
+            return xskSynonymManagerService.dropDataStructure(connection, (XSKDataStructureHDBSynonymModel) this.model);
           }
           break;
         case EXECUTE_VIEW_DROP:
           if (model instanceof XSKDataStructureHDBViewModel) {
-        	return xskViewManagerService.dropDataStructure(connection, (XSKDataStructureHDBViewModel) this.model);
+            return xskViewManagerService.dropDataStructure(connection, (XSKDataStructureHDBViewModel) this.model);
           }
           break;
         case EXECUTE_TABLE_DROP:
@@ -158,7 +158,7 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
             }
             if (SqlFactory.getNative(connection).exists(connection, modelName)) {
               if (SqlFactory.getNative(connection).count(connection, modelName) == 0) {
-            	return xskTableManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableModel) this.model);
+                return xskTableManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableModel) this.model);
               } else {
                 String message = format("Table [{0}] cannot be deleted during the update process, because it is not empty",
                     this.model.getName());
@@ -172,22 +172,22 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
           break;
         case EXECUTE_TABLE_TYPE_DROP:
           if (model instanceof XSKDataStructureHDBTableTypeModel) {
-        	 return xskTableTypeManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableTypeModel) this.model);
+            return xskTableTypeManagerService.dropDataStructure(connection, (XSKDataStructureHDBTableTypeModel) this.model);
           }
           break;
         case EXECUTE_SCHEMA_DROP:
           if (model instanceof XSKDataStructureHDBSchemaModel) {
-        	 return xskSchemaManagerService.dropDataStructure(connection, (XSKDataStructureHDBSchemaModel) this.model);
+            return xskSchemaManagerService.dropDataStructure(connection, (XSKDataStructureHDBSchemaModel) this.model);
           }
           break;
         case EXECUTE_SCHEMA_CREATE:
           if (model instanceof XSKDataStructureHDBSchemaModel) {
-        	 return xskSchemaManagerService.createDataStructure(connection, (XSKDataStructureHDBSchemaModel) this.model);
+            return xskSchemaManagerService.createDataStructure(connection, (XSKDataStructureHDBSchemaModel) this.model);
           }
           break;
         case EXECUTE_TABLE_TYPE_CREATE:
           if (model instanceof XSKDataStructureHDBTableTypeModel) {
-        	 return processTableType((XSKDataStructureHDBTableTypeModel) model);
+            return processTableType((XSKDataStructureHDBTableTypeModel) model);
           }
           break;
         case EXECUTE_TABLE_CREATE:
@@ -284,8 +284,9 @@ public class XSKTopologyDataStructureModelWrapper implements ITopologicallySorta
   }
 
   private boolean processTableType(XSKDataStructureHDBTableTypeModel tableType) throws SQLException {
-    if (!SqlFactory.getNative(connection).exists(connection, tableType.getSchema(), tableType.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {
-    	return xskTableTypeManagerService.createDataStructure(connection, (XSKDataStructureHDBTableTypeModel) tableType);
+    if (!SqlFactory.getNative(connection)
+        .exists(connection, tableType.getSchema(), tableType.getName(), DatabaseArtifactTypes.TABLE_TYPE)) {
+      return xskTableTypeManagerService.createDataStructure(connection, (XSKDataStructureHDBTableTypeModel) tableType);
     } else {
       String message = format("Table Type [{0}] in schema [{1}] already exists during the update process", tableType.getName(),
           tableType.getSchema());

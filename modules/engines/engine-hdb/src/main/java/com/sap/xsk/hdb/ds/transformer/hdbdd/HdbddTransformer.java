@@ -18,8 +18,6 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrima
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
-import com.sap.xsk.parser.hdbdd.symbols.Symbol;
-import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
@@ -27,11 +25,11 @@ import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.JoinSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
@@ -74,8 +72,7 @@ public class HdbddTransformer {
         associationColumns.forEach(ac -> {
           if (ac.getAlias() == null) {
             ac.setName(associationSymbol.getName() + "." + ac.getName());
-          }
-          else {
+          } else {
             ac.setName(ac.getAlias());
           }
         });
@@ -132,32 +129,59 @@ public class HdbddTransformer {
     return hdbTableTypeModel;
   }
 
-  public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location, SymbolTable symbolTable) {
+  public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
     XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
-
-    HashMap<String, Symbol> fullSymbolNames = (HashMap<String, Symbol>) symbolTable.getSymbolsByFullName();
 
     String viewSql = "VIEW \"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\" AS ";
 
     List<String> selectStatements = new ArrayList<>();
 
     viewSymbol.getSelectStatements().forEach(ss -> {
+
       String dependsOnTable = ((((SelectSymbol) ss).getDependsOnTable() == null) ? "" : ((SelectSymbol) ss).getDependsOnTable());
-      String dependingTableAlias = ((SelectSymbol) ss).getDependingTableAlias();
-      String dependingTableAliasSql = ((dependingTableAlias == null) ? "" : "AS " + dependingTableAlias);
+
+      String dependingTableAlias = ((((SelectSymbol) ss).getDependingTableAlias() == null) ? ""
+          : "AS " + ((SelectSymbol) ss).getDependingTableAlias());
+
       String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
-      String join = ((((SelectSymbol) ss).getJoinSql() == null) ? "" : ((SelectSymbol) ss).getJoinSql());
+
       String where = ((((SelectSymbol) ss).getWhereSql() == null) ? "" : ((SelectSymbol) ss).getWhereSql());
+
       String union = ((((SelectSymbol) ss).getUnion() == false) ? "" : "UNION");
       String distinct = ((((SelectSymbol) ss).getDistinct() == false) ? "" : "DISTINCT");
 
-      String selectStatement = union + " SELECT " + distinct + " " + selectColumns + " FROM " + "\"" + dependsOnTable + "\"" + " " + dependingTableAliasSql + " " + join + " " + where;
-
-      for (String key : fullSymbolNames.keySet()) {
-        if (fullSymbolNames.get(key) instanceof EntitySymbol || fullSymbolNames.get(key) instanceof ViewSymbol) {
-          selectStatement = selectStatement.replace(key.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), key);
+      if (!dependsOnTable.contains("::")) {
+        if (dependsOnTable.equalsIgnoreCase("dummy")) {
+          dependsOnTable = dependsOnTable.toUpperCase();
+        }
+        else {
+          String dependsOnTableFullName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + dependsOnTable;
+          selectColumns = selectColumns.replace(dependsOnTable, dependsOnTableFullName);
+          dependsOnTable = dependsOnTableFullName;
         }
       }
+
+      List<String> joinStatements = new ArrayList<>();
+
+      String finalDependsOnTable = dependsOnTable;
+      ((SelectSymbol) ss).getJoinStatements().forEach(js -> {
+        String joinType = ((((JoinSymbol) js).getJoinType() == null) ? "JOIN" : ((JoinSymbol) js).getJoinType());
+        String joinArtifactName = ((((JoinSymbol) js).getJoinArtifactName() == null) ? "" : ((JoinSymbol) js).getJoinArtifactName());
+        String joinFieldsSql = ((((JoinSymbol) js).getJoinFields() == null) ? "" : ((JoinSymbol) js).getJoinFields());
+
+        if (!joinArtifactName.contains("::")) {
+          String joinArtifactFullName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + joinArtifactName;
+          joinFieldsSql = joinFieldsSql.replace(finalDependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), finalDependsOnTable);
+          joinArtifactName = joinArtifactFullName;
+        }
+
+        String joinStatement = joinType + " \"" + joinArtifactName + "\" AS " + joinFieldsSql;
+        joinStatements.add(joinStatement);
+      });
+
+      String selectStatement =
+          union + " SELECT " + distinct + " " + selectColumns + " FROM " + "\"" + dependsOnTable + "\"" + " " + dependingTableAlias + " "
+              + String.join(" ", joinStatements) + " " + where;
 
       selectStatements.add(selectStatement);
     });
@@ -166,7 +190,7 @@ public class HdbddTransformer {
 
     viewModel.setDbContentType(XSKDBContentType.OTHERS);
     viewModel.setName(viewSymbol.getFullName());
-    viewModel.setSchema(viewModel.getSchema());
+    viewModel.setSchema(viewSymbol.getSchema());
     viewModel.setRawContent(viewSql);
     viewModel.setLocation(location);
     return viewModel;
@@ -204,10 +228,10 @@ public class HdbddTransformer {
 
     } else if (fieldSymbol.getType() instanceof DataTypeSymbol) {
       DataTypeSymbol dataType = (DataTypeSymbol) fieldSymbol.getType();
-      if(!(dataType.getType() instanceof StructuredDataTypeSymbol)){
+      if (!(dataType.getType() instanceof StructuredDataTypeSymbol)) {
         BuiltInTypeSymbol builtInType = (BuiltInTypeSymbol) dataType.getType();
         setSqlType(columnModel, builtInType);
-      }else {
+      } else {
         StructuredDataTypeSymbol structuredDataTypeSymbol = (StructuredDataTypeSymbol) dataType.getType();
         transformStructuredDataTypeToHdbTableType(structuredDataTypeSymbol);
       }

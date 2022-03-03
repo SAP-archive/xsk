@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.9.3
 package com.sap.xsk.parser.hdbtable.core;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -29,253 +28,222 @@ public class HdbtableBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTableColumnsProp(@NotNull HdbtableParser.TableColumnsPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitHdbtableDefinition(HdbtableParser.HdbtableDefinitionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndexesObject(@NotNull HdbtableParser.IndexesObjectContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitHdbtableProperties(HdbtableParser.HdbtablePropertiesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitHdbtableDefinition(@NotNull HdbtableParser.HdbtableDefinitionContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitSchemaNameProp(HdbtableParser.SchemaNamePropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignUnique(@NotNull HdbtableParser.ColumnAssignUniqueContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitTemporaryProp(HdbtableParser.TemporaryPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTableIndexesProp(@NotNull HdbtableParser.TableIndexesPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitTableTypeProp(HdbtableParser.TableTypePropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignDefaultValue(@NotNull HdbtableParser.ColumnAssignDefaultValueContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitPublicProp(HdbtableParser.PublicPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndexProperties(@NotNull HdbtableParser.IndexPropertiesContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitLoggingTypeProp(HdbtableParser.LoggingTypePropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignName(@NotNull HdbtableParser.ColumnAssignNameContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitTableColumnsProp(HdbtableParser.TableColumnsPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndexAssignIndexColumns(@NotNull HdbtableParser.IndexAssignIndexColumnsContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitTableIndexesProp(HdbtableParser.TableIndexesPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnsObject(@NotNull HdbtableParser.ColumnsObjectContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitTablePrimaryKeyProp(HdbtableParser.TablePrimaryKeyPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTableTypeProp(@NotNull HdbtableParser.TableTypePropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitTablePrimaryKeyColumnsProp(HdbtableParser.TablePrimaryKeyColumnsPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignLength(@NotNull HdbtableParser.ColumnAssignLengthContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitTablePrimaryKeyIndexTypeProp(HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndexColumnsArray(@NotNull HdbtableParser.IndexColumnsArrayContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitDescriptionProp(HdbtableParser.DescriptionPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignScale(@NotNull HdbtableParser.ColumnAssignScaleContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnsObject(HdbtableParser.ColumnsObjectContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTablePrimaryKeyIndexTypeProp(@NotNull HdbtableParser.TablePrimaryKeyIndexTypePropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnsProperties(HdbtableParser.ColumnsPropertiesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignSQLType(@NotNull HdbtableParser.ColumnAssignSQLTypeContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitIndexesObject(HdbtableParser.IndexesObjectContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndexAssignIndexType(@NotNull HdbtableParser.IndexAssignIndexTypeContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitIndexProperties(HdbtableParser.IndexPropertiesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndexAssignUnique(@NotNull HdbtableParser.IndexAssignUniqueContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignName(HdbtableParser.ColumnAssignNameContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitHdbtableProperties(@NotNull HdbtableParser.HdbtablePropertiesContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignSQLType(HdbtableParser.ColumnAssignSQLTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLoggingTypeProp(@NotNull HdbtableParser.LoggingTypePropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignNullable(HdbtableParser.ColumnAssignNullableContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignNullable(@NotNull HdbtableParser.ColumnAssignNullableContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignUnique(HdbtableParser.ColumnAssignUniqueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnsProperties(@NotNull HdbtableParser.ColumnsPropertiesContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignLength(HdbtableParser.ColumnAssignLengthContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTemporaryProp(@NotNull HdbtableParser.TemporaryPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignComment(HdbtableParser.ColumnAssignCommentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPublicProp(@NotNull HdbtableParser.PublicPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignDefaultValue(HdbtableParser.ColumnAssignDefaultValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndexAssignOrder(@NotNull HdbtableParser.IndexAssignOrderContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignPrecision(HdbtableParser.ColumnAssignPrecisionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTablePrimaryKeyProp(@NotNull HdbtableParser.TablePrimaryKeyPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitColumnAssignScale(HdbtableParser.ColumnAssignScaleContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignPrecision(@NotNull HdbtableParser.ColumnAssignPrecisionContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitIndexAssignName(HdbtableParser.IndexAssignNameContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSchemaNameProp(@NotNull HdbtableParser.SchemaNamePropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitIndexAssignUnique(HdbtableParser.IndexAssignUniqueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTablePrimaryKeyColumnsProp(@NotNull HdbtableParser.TablePrimaryKeyColumnsPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitIndexAssignOrder(HdbtableParser.IndexAssignOrderContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitColumnAssignComment(@NotNull HdbtableParser.ColumnAssignCommentContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitIndexAssignIndexColumns(HdbtableParser.IndexAssignIndexColumnsContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDescriptionProp(@NotNull HdbtableParser.DescriptionPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitIndexAssignIndexType(HdbtableParser.IndexAssignIndexTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndexAssignName(@NotNull HdbtableParser.IndexAssignNameContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIndexColumnsArray(HdbtableParser.IndexColumnsArrayContext ctx) { return visitChildren(ctx); }
 }

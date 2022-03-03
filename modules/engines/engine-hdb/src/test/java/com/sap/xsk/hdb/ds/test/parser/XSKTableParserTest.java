@@ -18,9 +18,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
@@ -241,5 +243,28 @@ public class XSKTableParserTest extends AbstractDirigibleTest {
       assertEquals("DESC", model.getIndexes().get(0).getOrder());
       assertEquals("CPBTREE", model.getIndexes().get(0).getIndexType());
       assertEquals(2, model.getIndexes().get(0).getIndexColumns().size());
+    }
+
+    @Test
+    public void testHdbTableWithEmptyIndexesIsParsedCorrectly() throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+      String hdbTablePath = "/EmptyIndexesTable.hdbtable";
+      assertEmptyOrNoIndexesTable(hdbTablePath);
+    }
+
+    @Test
+    public void testHdbTableWithNoIndexesIsParsedCorrectly() throws XSKDataStructuresException, XSKArtifactParserException, IOException {
+      String hdbTablePath = "/NoIndexesTable.hdbtable";
+      assertEmptyOrNoIndexesTable(hdbTablePath);
+    }
+
+    private static void assertEmptyOrNoIndexesTable(String hdbTablePath) throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+      InputStream in = XSKTableParserTest.class.getResourceAsStream(hdbTablePath);
+      String contents = IOUtils.toString(in, StandardCharsets.UTF_8);
+
+      XSKDataStructureHDBTableModel model = XSKDataStructureModelFactory.parseTable(hdbTablePath, contents);
+
+      assertEquals("Unexpected table schema", "TEST", model.getSchema());
+      assertNotNull("Unexpected table indexes is null", model.getIndexes());
+      assertEquals("Unexpected table indexes count", 0, model.getIndexes().size());
     }
 }

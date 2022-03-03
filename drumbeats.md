@@ -1,5 +1,21 @@
 # Drumbeats
 
+## 2022 Week 08 (21 February - 28 February)
+
+#### Focus topics:
+- Improved processing of artifacts in dependency chain
+- Option to migrate xs projects from zip
+- ESLint on xsjs files
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-02-21..2022-02-28) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-02-21..2022-02-28) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-02-21..2022-02-28) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-02-21..2022-02-28) PRs
+
 ## 2022 Week 07 (14 February - 20 February)
 
 #### Focus topics:

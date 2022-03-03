@@ -22,6 +22,7 @@ import com.sap.xsk.parser.hdbdd.core.CdsParser.ArtifactRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeWithArgsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.JoinFieldsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.JoinRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.SelectRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.SelectedColumnsRuleContext;
@@ -42,6 +43,7 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
+import com.sap.xsk.parser.hdbdd.symbols.view.JoinSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
@@ -128,75 +130,6 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
     fullSymbolName.pop();
-  }
-
-  @Override
-  public void enterViewRule(ViewRuleContext ctx) {
-    Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
-    symbolsByParseTreeContext.put(ctx, newSymbol);
-    registerSymbolToSymbolTable(newSymbol);
-    fullSymbolName.push(newSymbol.getName());
-    this.currentScope = (Scope) newSymbol;
-    ((ViewSymbol) newSymbol).setPackageId(this.packageId);
-    ((ViewSymbol) newSymbol).setContext(((ContextSymbol) currentScope.getEnclosingScope()).getName());
-    if (newSymbol instanceof ViewSymbol) {
-      this.symbolTable.addViewToGraph(newSymbol.getFullName());
-    }
-  }
-
-  @Override
-  public void exitViewRule(ViewRuleContext ctx) {
-    this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
-    fullSymbolName.pop();
-  }
-
-  @Override
-  public void enterSelectRule(SelectRuleContext ctx) {
-    SelectSymbol selectSymbol = new SelectSymbol();
-
-    JoinRuleContext joinRuleContext = ctx.joinRule();
-    if (joinRuleContext.children != null) {
-      int a = joinRuleContext.start.getStartIndex();
-      int b = joinRuleContext.stop.getStopIndex();
-      Interval joinRuleSqlInterval = new Interval(a, b);
-      selectSymbol.setJoinSql(ctx.start.getInputStream().getText(joinRuleSqlInterval));
-    }
-
-    SelectedColumnsRuleContext selectedColumnsRuleContext = ctx.selectedColumnsRule();
-    if (selectedColumnsRuleContext.children != null) {
-      int a = selectedColumnsRuleContext.start.getStartIndex();
-      int b = selectedColumnsRuleContext.stop.getStopIndex();
-      Interval selectedColumnsRuleSqlInterval = new Interval(a, b);
-      selectSymbol.setColumnsSql(ctx.start.getInputStream().getText(selectedColumnsRuleSqlInterval));
-    }
-
-    WhereRuleContext whreRuleContext = ctx.whereRule();
-    if (whreRuleContext.children != null) {
-      int a = whreRuleContext.start.getStartIndex();
-      int b = whreRuleContext.stop.getStopIndex();
-      Interval whereRuleSqlInterval = new Interval(a, b);
-      selectSymbol.setWhereSql(ctx.start.getInputStream().getText(whereRuleSqlInterval));
-    }
-
-    if (ctx.isDistinct != null) {
-      selectSymbol.setDistinct(true);
-    }
-
-    if (ctx.isUnion != null) {
-      selectSymbol.setUnion(true);
-    }
-
-    if (ctx.dependsOnTable != null) {
-      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.getText()));
-    }
-
-    if (ctx.dependingTableAlias != null) {
-      selectSymbol.setDependingTableAlias(ctx.dependingTableAlias.getText());
-    }
-
-
-
-    this.currentScope.define(selectSymbol);
   }
 
   @Override
@@ -490,6 +423,93 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     AnnotationObj annToAssign = new AnnotationObj();
     annToAssign.setName(annId);
     symbolToBeAssigned.addAnnotation(annToAssign.getName(), annToAssign);
+  }
+
+  @Override
+  public void enterViewRule(ViewRuleContext ctx) {
+    Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
+    symbolsByParseTreeContext.put(ctx, newSymbol);
+    registerSymbolToSymbolTable(newSymbol);
+    fullSymbolName.push(newSymbol.getName());
+    this.currentScope = (Scope) newSymbol;
+    ((ViewSymbol) newSymbol).setPackageId(this.packageId);
+    ((ViewSymbol) newSymbol).setContext(((ContextSymbol) currentScope.getEnclosingScope()).getName());
+    if (newSymbol instanceof ViewSymbol) {
+      this.symbolTable.addViewToGraph(newSymbol.getFullName());
+    }
+  }
+
+  @Override
+  public void exitViewRule(ViewRuleContext ctx) {
+    this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
+    fullSymbolName.pop();
+  }
+
+  @Override
+  public void enterSelectRule(SelectRuleContext ctx) {
+    SelectSymbol selectSymbol = new SelectSymbol();
+
+    SelectedColumnsRuleContext selectedColumnsRuleContext = ctx.selectedColumnsRule();
+    if (selectedColumnsRuleContext.children != null) {
+      int a = selectedColumnsRuleContext.start.getStartIndex();
+      int b = selectedColumnsRuleContext.stop.getStopIndex();
+      Interval selectedColumnsRuleSqlInterval = new Interval(a, b);
+      selectSymbol.setColumnsSql(ctx.start.getInputStream().getText(selectedColumnsRuleSqlInterval));
+    }
+
+    WhereRuleContext whreRuleContext = ctx.whereRule();
+    if (whreRuleContext.children != null) {
+      int a = whreRuleContext.start.getStartIndex();
+      int b = whreRuleContext.stop.getStopIndex();
+      Interval whereRuleSqlInterval = new Interval(a, b);
+      selectSymbol.setWhereSql(ctx.start.getInputStream().getText(whereRuleSqlInterval));
+    }
+
+    if (ctx.isDistinct != null) {
+      selectSymbol.setDistinct(true);
+    }
+
+    if (ctx.isUnion != null) {
+      selectSymbol.setUnion(true);
+    }
+
+    if (ctx.dependsOnTable != null) {
+      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.getText()));
+    }
+
+    if (ctx.dependingTableAlias != null) {
+      selectSymbol.setDependingTableAlias(ctx.dependingTableAlias.getText());
+    }
+
+    this.currentScope.define(selectSymbol);
+    selectSymbol.setScope(this.currentScope);
+    this.currentScope = selectSymbol;
+  }
+
+  @Override
+  public void exitSelectRule(SelectRuleContext ctx) {
+    this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
+//    fullSymbolName.pop();
+  }
+
+  @Override
+  public void enterJoinRule(JoinRuleContext ctx) {
+    JoinSymbol joinSymbol = new JoinSymbol();
+
+    joinSymbol.setJoinType(ctx.joinType.getText());
+    String joinArtifactName = handleStringLiteral(ctx.joinArtifactName.getText());
+    joinSymbol.setJoinArtifactName(joinArtifactName);
+    this.symbolTable.addChildToView(((ViewSymbol) this.currentScope.getEnclosingScope()).getFullName(), ((ViewSymbol) this.currentScope.getEnclosingScope()).getPackageId() + "::" + ((ViewSymbol) this.currentScope.getEnclosingScope()).getContext() + "." + joinArtifactName);
+
+    JoinFieldsContext joinFieldsContext = ctx.joinFields();
+    if (joinFieldsContext.children != null) {
+      int a = joinFieldsContext.start.getStartIndex();
+      int b = joinFieldsContext.stop.getStopIndex();
+      Interval joinFieldsSqlInterval = new Interval(a, b);
+      joinSymbol.setJoinFields(ctx.start.getInputStream().getText(joinFieldsSqlInterval));
+    }
+
+    this.currentScope.define(joinSymbol);
   }
 
   private void validateAnnotation(Token annIdToken, Symbol symbol) {

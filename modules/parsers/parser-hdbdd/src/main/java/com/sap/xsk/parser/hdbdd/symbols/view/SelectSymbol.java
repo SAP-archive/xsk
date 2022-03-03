@@ -12,16 +12,24 @@
 package com.sap.xsk.parser.hdbdd.symbols.view;
 
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
+import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SelectSymbol extends Symbol {
+public class SelectSymbol extends Symbol implements Scope {
+
+  List<Symbol> joinStatements = new ArrayList<>();
 
   Boolean isUnion = false;
   Boolean isDistinct = false;
-  String joinSql = null;
   String columnsSql = null;
   String whereSql = null;
   String dependsOnTable = null;
   String dependingTableAlias = null;
+
+  public List<Symbol> getJoinStatements() {
+    return joinStatements;
+  }
 
   public Boolean getUnion() {
     return isUnion;
@@ -37,14 +45,6 @@ public class SelectSymbol extends Symbol {
 
   public void setDistinct(Boolean distinct) {
     isDistinct = distinct;
-  }
-
-  public String getJoinSql() {
-    return joinSql;
-  }
-
-  public void setJoinSql(String joinSql) {
-    this.joinSql = joinSql;
   }
 
   public String getColumnsSql() {
@@ -77,5 +77,25 @@ public class SelectSymbol extends Symbol {
 
   public void setDependingTableAlias(String dependingTableAlias) {
     this.dependingTableAlias = dependingTableAlias;
+  }
+
+  @Override
+  public Scope getEnclosingScope() {
+    return this.getScope();
+  }
+
+  @Override
+  public void define(Symbol sym) {
+    joinStatements.add(sym);
+  }
+
+  @Override
+  public Symbol resolve(String name) {
+    return null;
+  }
+
+  @Override
+  public boolean isDuplicateName(String id) {
+    return false;
   }
 }

@@ -107,6 +107,14 @@ public class SymbolTable {
     this.entityGraph.get(entityName).add(childName);
   }
 
+  public void addChildToView(String viewName, String childName) {
+    if (viewGraph.get(viewName) == null) {
+      this.viewGraph.put(viewName, new ArrayList<>());
+    }
+
+    this.viewGraph.get(viewName).add(childName);
+  }
+
   public void addSymbol(Symbol symbol) {
     symbolsByFullName.put(symbol.getFullName(), symbol);
   }
@@ -195,7 +203,16 @@ public class SymbolTable {
     passedViews.add(viewName);
     List<String> children = viewGraph.get(viewName);
     if (children == null) {
-      ViewSymbol bottomView = (ViewSymbol) this.symbolsByFullName.get(viewName);
+
+      ViewSymbol bottomView = null;
+
+      if (!(this.symbolsByFullName.get(viewName) instanceof ViewSymbol)) {
+        return;
+      }
+      else {
+        bottomView = (ViewSymbol) this.symbolsByFullName.get(viewName);
+      }
+
       if (bottomView == null) {
         throw new CDSRuntimeException(String.format("No view with name: %s found in symbol table.", viewName));
       }

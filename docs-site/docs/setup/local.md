@@ -54,7 +54,7 @@ You can deploy XSK locally using Docker or Tomcat server.
             -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES="HANA" \
             -e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT="HANA" \
             -e HANA_DRIVER="com.sap.db.jdbc.Driver" \
-            -e HANA_URL="jdbc:sap://<hanaHost>?encrypt=true&validateCertificate=true" \
+            -e HANA_URL="jdbc:sap://<hanaHost>?encrypt=true&validateCertificate=false" \
             -e HANA_USERNAME="<hanaUsername>" \
             -e HANA_PASSWORD="<hanaPassword>" \
             --rm -p 8080:8080 -p 8081:8081 \

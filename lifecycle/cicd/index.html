@@ -1761,6 +1761,11 @@
 <span class="w">          </span><span class="no">--set hana.password=&#39;${{ secrets.HANA_PASSWORD }}&#39; \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set persistentVolumeClaim.enabled=false \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set deployment.strategyType=RollingUpdate \</span><span class="w"></span>
+<span class="w">          </span><span class="no">--set application.privateDockerRegistry=true \</span><span class="w"></span>
+<span class="w">          </span><span class="no">--set application.dockerServer=${{secrets.DOCKER_REGISTRY}} \</span><span class="w"></span>
+<span class="w">          </span><span class="no">--set application.dockerUsername=${{secrets.DOCKER_USERNAME}} \</span><span class="w"></span>
+<span class="w">          </span><span class="no">--set application.dockerPassword=${{secrets.DOCKER_PASSWORD}} \</span><span class="w"></span>
+<span class="w">          </span><span class="no">--set application.dockerEmail=${{secrets.DOCKER_EMAIL}} \</span><span class="w"></span>
 <span class="w">          </span><span class="no">--set application.image=${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}</span><span class="w"></span>
 </code></pre></div>
 </div>
@@ -1798,6 +1803,11 @@
 <td><code>DOCKER_PASSWORD</code></td>
 <td>The Docker Password <em>(<code>&lt;your-docker-password&gt;</code>)</em></td>
 <td><em><code>Build</code></em></td>
+</tr>
+<tr>
+<td><code>DOCKER_EMAIL</code></td>
+<td>The Docker Email <em>(<code>&lt;your-docker-email&gt;</code>)</em></td>
+<td><em><code>Deploy</code></em></td>
 </tr>
 <tr>
 <td><code>HANA_URL</code></td>

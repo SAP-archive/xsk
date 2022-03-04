@@ -197,6 +197,11 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
               --set hana.password='${{ secrets.HANA_PASSWORD }}' \
               --set persistentVolumeClaim.enabled=false \
               --set deployment.strategyType=RollingUpdate \
+              --set application.privateDockerRegistry=true \
+              --set application.dockerServer=${{secrets.DOCKER_REGISTRY}} \
+              --set application.dockerUsername=${{secrets.DOCKER_USERNAME}} \
+              --set application.dockerPassword=${{secrets.DOCKER_PASSWORD}} \
+              --set application.dockerEmail=${{secrets.DOCKER_EMAIL}} \
               --set application.image=${{secrets.DOCKER_REGISTRY}}/${{ github.event.inputs.applicationRepository }}:${{ github.event.inputs.applicationReleaseVersion }}
     ```
 
@@ -214,6 +219,7 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
     | `DOCKER_REGISTRY`  | The Docker Registry _(e.g. `docker.io`, `ghcr.io`, etc.)_      |  _`Build`_   |
     | `DOCKER_USERNAME`  | The Docker Username _(`<your-docker-username>`)_               |  _`Build`_   |
     | `DOCKER_PASSWORD`  | The Docker Password _(`<your-docker-password>`)_               |  _`Build`_   |
+    | `DOCKER_EMAIL`     | The Docker Email _(`<your-docker-email>`)_                     |  _`Deploy`_  |
     | `HANA_URL`         | The HANA Cloud URL _(e.g. `7512c2q1-...:443`)_                 |  _`Deploy`_  |
     | `HANA_USERNAME`    | The HANA Cloud Username _(`<your-hana-cloud-username>`)_       |  _`Deploy`_  |
     | `HANA_PASSWORD`    | The HANA Cloud Password _(`<your-hana-cloud-password>`)_       |  _`Deploy`_  |

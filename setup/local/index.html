@@ -1617,7 +1617,7 @@ dirigiblelabs/xsk:latest
 -e DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES=&quot;HANA&quot; \
 -e DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT=&quot;HANA&quot; \
 -e HANA_DRIVER=&quot;com.sap.db.jdbc.Driver&quot; \
--e HANA_URL=&quot;jdbc:sap://&lt;hanaHost&gt;?encrypt=true&amp;validateCertificate=true&quot; \
+-e HANA_URL=&quot;jdbc:sap://&lt;hanaHost&gt;?encrypt=true&amp;validateCertificate=false&quot; \
 -e HANA_USERNAME=&quot;&lt;hanaUsername&gt;&quot; \
 -e HANA_PASSWORD=&quot;&lt;hanaPassword&gt;&quot; \
 --rm -p 8080:8080 -p 8081:8081 \

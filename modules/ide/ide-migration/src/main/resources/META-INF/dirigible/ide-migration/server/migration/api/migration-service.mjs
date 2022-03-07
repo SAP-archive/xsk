@@ -108,6 +108,7 @@ export class MigrationService {
 
     copyFilesLocally(workspaceName, lists) {
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
+        const unmodifiedWorkspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName + "_unmodified");
         const hdbFacade = new XSKHDBCoreFacade();
 
         const locals = [];
@@ -123,6 +124,12 @@ export class MigrationService {
                 fileRunLocation = fileRunLocation.slice(projectName.length + 1);
             }
             let content = this.repo.getContentForObject(file._name, file._packageName, file._suffix);
+
+            const unmodifiedProjectCollection = this._getOrCreateTemporaryProjectCollection(
+                unmodifiedWorkspaceCollection,
+                projectName
+            );
+            const unmodifiedLocalResource = unmodifiedProjectCollection.createResource(fileRunLocation, content);
 
             if (this._isFileCalculationView(fileRunLocation)) {
                 content = this._transformColumnObject(content);
@@ -492,25 +499,19 @@ export class MigrationService {
         for (const resName of resNames) {
             var path = collection.getPath() + "/" + resName;
             let oldProjectRelativePath = parentPath + "/" + resName;
+            
             if (path.endsWith(".hdbtablefunction") || path.endsWith(".hdbscalarfunction")) {
                 let resource = collection.getResource(resName);
                 let content = resource.getText();
+                
                 let visitor = new HanaVisitor(content);
                 visitor.visit();
                 visitor.removeSchemaRefs();
                 visitor.removeViewRefs();
-                let newProjectRelativePath = parentPath + "/" + resName;
-                this.tableFunctionPaths.push(newProjectRelativePath);
-                console.log("Creating new file at: " + newProjectRelativePath);
-                let newFile = project.createFile(newProjectRelativePath);
-                newFile.setText(visitor.content);
-                console.log("Creating new resource at: " + resName);
-                let newResource = collection.createResource(resName, [0]);
-                newResource.setText(visitor.content);
-                console.log("deleting file at: " + path);
-                project.deleteFile(oldProjectRelativePath);
-                console.log("deleting resource at: " + path);
-                resource.delete();
+
+                resource.setText(visitor.content);
+                project.getFile(oldProjectRelativePath).setText(visitor.content);
+                this.tableFunctionPaths.push(oldProjectRelativePath);
             }
         }
 

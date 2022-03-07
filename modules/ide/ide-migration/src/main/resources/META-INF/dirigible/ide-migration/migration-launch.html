@@ -38,6 +38,9 @@
         <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/ide.css" />
 
         <script type="text/javascript" src="js/angular-file-upload.min.js"></script>
+        <!-- Monaco -->
+        <script type="text/javascript" src="/services/v4/js/theme/resources.js/monaco.js"></script>
+		<script type="text/javascript" src="/services/v4/web/ide-monaco/monaco-editor/min/vs/loader.js"></script>
 
         <!-- Project-specific stuff -->
         <script type="text/javascript" src="js/migration-launch.js"></script>
@@ -45,6 +48,7 @@
         <script type="text/javascript" src="js/delivery-unit.js"></script>
         <script type="text/javascript" src="js/neo-credentials.js"></script>
         <script type="text/javascript" src="js/hana-credentials.js"></script>
+        <script type="text/javascript" src="js/changes.js"></script>
         <script type="text/javascript" src="js/start-migration.js"></script>
         <script type="text/javascript" src="js/zip-migration.js"></script>
         <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/migration.css" />
@@ -83,11 +87,12 @@
                 </div>
             </div>
             <div class="migration-main">
-                <div class="steps-container">
+                <div class="steps-container" ng-style="fullWidthEnabled && {'max-width': '100%'}">
                     <div ng-include="'partials/zip-migration.html'" ng-show="migrationFromZip"></div>
                     <div ng-include="'partials/delivery-unit.html'"></div>
                     <div ng-include="'partials/neo-credentials.html'"></div>
                     <div ng-include="'partials/hana-credentials.html'"></div>
+                    <div ng-include="'partials/changes.html'"></div>
                     <div ng-include="'partials/start-migration.html'"></div>
 
                     <div class="bottom-nav margin-top-bottom-lg" ng-hide="bottomNavHidden">

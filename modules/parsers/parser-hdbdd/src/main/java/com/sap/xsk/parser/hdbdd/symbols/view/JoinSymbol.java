@@ -17,6 +17,7 @@ public class JoinSymbol extends Symbol {
 
   String joinType = null;
   String joinArtifactName = null;
+  String joinTableAlias = null;
   String joinFields = null;
 
   public String getJoinType() {
@@ -33,6 +34,14 @@ public class JoinSymbol extends Symbol {
 
   public void setJoinArtifactName(String joinArtifactName) {
     this.joinArtifactName = joinArtifactName;
+  }
+
+  public String getJoinTableAlias() {
+    return joinTableAlias;
+  }
+
+  public void setJoinTableAlias(String joinTableAlias) {
+    this.joinTableAlias = joinTableAlias;
   }
 
   public String getJoinFields() {

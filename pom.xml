@@ -228,7 +228,7 @@
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dirigible.version>6.2.5</dirigible.version>
+		<dirigible.version>6.2.6</dirigible.version>
 
 		<maven.resource.plugin.version>3.2.0</maven.resource.plugin.version>
 		<maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
@@ -244,7 +244,7 @@
 		<scp-cf.version>3.64.0</scp-cf.version>
 		<slf4j.version>1.7.36</slf4j.version>
 		<slf4j.simple.version>1.7.12</slf4j.simple.version>
-		<logback.version>1.2.10</logback.version>
+		<logback.version>1.2.11</logback.version>
 		<com.h2database.version>2.1.210</com.h2database.version>
 		<derby.version>10.12.1.1</derby.version>
 		<activemq.version>5.14.5</activemq.version>

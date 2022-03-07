@@ -82,7 +82,7 @@ function XscConnection(dConnection) {
 					DECLARE parameter_names VARCHAR(100) ARRAY;
 					DECLARE parameter_types VARCHAR(10) ARRAY;
 
-					SELECT DEFINITION INTO definition FROM "SYS"."PROCEDURES" WHERE PROCEDURE_NAME = '$procedure';
+					SELECT SUBSTRING(DEFINITION, 1, LOCATE(LOWER(DEFINITION), 'begin') + LENGTH('begin')) INTO definition FROM "SYS"."PROCEDURES" WHERE PROCEDURE_NAME = '${procedure}';
 
 					matcher := '(?:(?:in|out) \\w+)(?=[\\s\\S]*BEGIN)';
 
@@ -105,7 +105,7 @@ function XscConnection(dConnection) {
 					SELECT * From :procedure_parameters;
 				END;
 			`;
-			procedureParametersStatement = dConnection.prepareStatement(procedureParametersSql.replace('$procedure', procedure));
+			procedureParametersStatement = dConnection.prepareStatement(procedureParametersSql);
 
 			let procedureParametersResultSet = procedureParametersStatement.executeQuery();
 
@@ -143,7 +143,7 @@ function XscConnection(dConnection) {
 			procedureParameters.push("?");
 		}
 
-		let procedureCallSql = `CALL "$schema"."$procedure" (` + procedureParameters.toString() + `)`;
+		let procedureCallSql = `CALL "${schema}"."${procedure}" (` + procedureParameters.toString() + `)`;
 
 		function procedureCall() {
 			let args = Array.prototype.slice.call(arguments);
@@ -171,7 +171,7 @@ function XscConnection(dConnection) {
 
 			try {
 				dConnection = database.getConnection();
-				procedureCallStatement = dConnection.prepareStatement(procedureCallSql.replace('$schema', schema).replace('$procedure', procedure));
+				procedureCallStatement = dConnection.prepareStatement(procedureCallSql);
 				setProcedureParams(procedureCallStatement, finalArgs);
 
 				let hasResults = procedureCallStatement.execute();

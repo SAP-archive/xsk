@@ -22,37 +22,37 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-@WebFilter("/*")
+@WebFilter(urlPatterns = {"/*"}, filterName = "XSODataForwardFilter")
 public class XSODataForwardFilter implements Filter {
 
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-    //
-  }
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
-    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-    //only on production case
-    if (httpServletRequest.getHeader("Dirigible-Editor") == null) {
-      String uri = httpServletRequest.getRequestURI();
-      int index = uri.indexOf(".xsodata");
-      if (index > 0) {
-        String parameters = "";
-        if (uri.length() > index + (".xsodata".length() - 1)) {
-          parameters = uri.substring(index + ".xsodata".length());
-        }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/odata/v2/" + parameters);
-        dispatcher.forward(request, response);
-      }
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        //
     }
-    chain.doFilter(request, response);
-  }
 
-  @Override
-  public void destroy() {
-    //
-  }
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        //only on production case
+        if (httpServletRequest.getHeader("Dirigible-Editor") == null) {
+            String uri = httpServletRequest.getRequestURI();
+            int index = uri.indexOf(".xsodata");
+            if (index > 0) {
+                String parameters = "";
+                if (uri.length() > index + (".xsodata".length() - 1)) {
+                    parameters = uri.substring(index + ".xsodata".length());
+                }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/odata/v2/" + parameters);
+                dispatcher.forward(request, response);
+            }
+        }
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void destroy() {
+        //
+    }
 
 }

@@ -1,24 +1,37 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package custom;
 
 import com.sap.xsk.parser.hana.core.HanaBaseListener;
-import com.sap.xsk.parser.hana.core.HanaParser.Function_nameContext;
-import com.sap.xsk.parser.hana.core.HanaParser.Schema_nameContext;
+import com.sap.xsk.parser.hana.core.HanaParser.Create_func_bodyContext;
 import models.TableFunctionDefinitionModel;
+import org.apache.commons.lang3.StringUtils;
 
 public class HanaTableFunctionListener extends HanaBaseListener {
 
   private final TableFunctionDefinitionModel model = new TableFunctionDefinitionModel();
 
   @Override
-  public void exitSchema_name(Schema_nameContext ctx) {
-    super.exitSchema_name(ctx);
-    model.setSchema(ctx.getText());
-  }
+  public void exitCreate_func_body(Create_func_bodyContext ctx) {
+    super.exitCreate_func_body(ctx);
 
-  @Override
-  public void exitFunction_name(Function_nameContext ctx) {
-    super.exitFunction_name(ctx);
-    model.setName(ctx.getText());
+    String maybeQuotedName = ctx.proc_name().id_expression().getText();
+    String maybeQuotedSchema = ctx.proc_name().schema_name().getText();
+
+    String strippedSchema = StringUtils.strip(maybeQuotedSchema, "\"");
+    String strippedName = StringUtils.strip(maybeQuotedName, "\"");
+
+    model.setSchema(strippedSchema);
+    model.setName(strippedName);
   }
 
   public TableFunctionDefinitionModel getModel() {

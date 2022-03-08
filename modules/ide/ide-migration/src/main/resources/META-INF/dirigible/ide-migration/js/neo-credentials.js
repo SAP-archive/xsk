@@ -77,8 +77,6 @@ migrationLaunchView.controller("NeoCredentialsViewController", [
         $scope.regionSelected = function (regionObject) {
             migrationDataState.neoHostName = regionObject.region;
             $scope.regionDropdownText = regionObject.name;
-
-            $scope.$parent.setFinishEnabled(true);
         };
 
         $scope.filterRegions = function () {
@@ -120,7 +118,6 @@ migrationLaunchView.controller("NeoCredentialsViewController", [
                             $scope.$parent.setPreviousVisible(false);
                             $scope.$parent.setPreviousEnabled(true);
                             $scope.$parent.setNextVisible(true);
-                            $scope.$parent.setFinishVisible(false);
                         }
                     });
                 }

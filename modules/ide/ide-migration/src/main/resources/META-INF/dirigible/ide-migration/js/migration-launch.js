@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-var migrationLaunchView = angular.module("migration-launch", ['angularFileUpload']);
+var migrationLaunchView = angular.module("migration-launch", ["angularFileUpload"]);
 
 migrationLaunchView.factory("$messageHub", [
     function () {
@@ -83,12 +83,15 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
                 topicId: "migration.hana-credentials",
             },
             { id: 3, name: "Delivery Units", topicId: "migration.delivery-unit" },
-            { id: 4, name: "Migration", topicId: "migration.start-migration" },
+            { id: 4, name: "Changes", topicId: "migration.changes" },
+            { id: 5, name: "Migration", topicId: "migration.start-migration" },
         ];
         $scope.zipsteps = [
             { id: 1, name: "Upload ZIP file", topicId: "migration.upload-zip-migration" },
             { id: 2, name: "Migration", topicId: "migration.start-zip-migration" },
         ];
+
+        $scope.fullWidthEnabled = false;
         $scope.onStatisticsPage = true;
         $scope.migrationFromZip = false;
         $scope.bottomNavHidden = false;
@@ -112,7 +115,7 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
             $scope.setFinishVisible(true);
             $scope.setBottomNavEnabled(false);
             $scope.currentStep = $scope.zipsteps[0];
-        }
+        };
 
         $scope.setFinishVisible = function (visible) {
             $scope.finishVisible = visible;
@@ -120,6 +123,10 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
 
         $scope.setFinishEnabled = function (enabled) {
             $scope.finishDisabled = !enabled;
+        };
+
+        $scope.setFullWidthEnabled = function (enabled) {
+            $scope.fullWidthEnabled = enabled;
         };
 
         $scope.setNextVisible = function (visible) {
@@ -185,7 +192,7 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
             }
         };
 
-        $scope.finishClicked = function () {
+        $scope.migrateClicked = function () {
             $messageHub.message($scope.currentStep.topicId, { isVisible: false });
             $scope.currentStep = $scope.steps[$scope.steps.length - 1];
             $messageHub.message($scope.currentStep.topicId, { isVisible: true });
@@ -204,6 +211,6 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
             else return "inactive";
         };
 
-        $messageHub.on("migration.launch", function (msg) { }.bind(this));
+        $messageHub.on("migration.launch", function (msg) {}.bind(this));
     },
 ]);

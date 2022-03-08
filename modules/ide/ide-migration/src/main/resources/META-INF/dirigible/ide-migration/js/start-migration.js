@@ -98,6 +98,7 @@ migrationLaunchView.controller("StartMigrationViewController", [
                 if ("isVisible" in msg.data) {
                     $scope.$apply(function () {
                         $scope.isVisible = msg.data.isVisible;
+                        if (msg.data.isVisible) $scope.$parent.setFullWidthEnabled(false);
                     });
                     if (msg.data.isVisible) {
                         startMigration();
@@ -105,24 +106,28 @@ migrationLaunchView.controller("StartMigrationViewController", [
                 }
             }.bind(this)
         );
-        $messageHub.on('migration.start-zip-migration', function (msg) {
-            if ("isVisible" in msg.data) {
-                $scope.$apply(function () {
-                    $scope.isZipMigrationVisible = msg.data.isVisible;
-                });
-            }
-            if ("migrationFinished" in msg.data) {
-                $scope.$apply(function () {
-                    $scope.migrationFinished = msg.data.migrationFinished;
-                    if ("workspace" in msg.data)
-                        migrationDataState.selectedWorkspace = msg.data.workspace;
-                    $scope.progressTitle = titleList[1];
-                    $scope.statusMessage = ("status" in msg.data) ? msg.data.status : ("workspace" in msg.data)
-                        ? `Successfully migrated uploaded Delivery Unit(s)! Go to workspace "${msg.data.workspace}" and publish them.` :
-                        "Successfully migrated uploaded Delivery Unit(s)!";
-
-                });
-            }
-        }.bind(this));
+        $messageHub.on(
+            "migration.start-zip-migration",
+            function (msg) {
+                if ("isVisible" in msg.data) {
+                    $scope.$apply(function () {
+                        $scope.isZipMigrationVisible = msg.data.isVisible;
+                    });
+                }
+                if ("migrationFinished" in msg.data) {
+                    $scope.$apply(function () {
+                        $scope.migrationFinished = msg.data.migrationFinished;
+                        if ("workspace" in msg.data) migrationDataState.selectedWorkspace = msg.data.workspace;
+                        $scope.progressTitle = titleList[1];
+                        $scope.statusMessage =
+                            "status" in msg.data
+                                ? msg.data.status
+                                : "workspace" in msg.data
+                                ? `Successfully migrated uploaded Delivery Unit(s)! Go to workspace "${msg.data.workspace}" and publish them.`
+                                : "Successfully migrated uploaded Delivery Unit(s)!";
+                    });
+                }
+            }.bind(this)
+        );
     },
 ]);

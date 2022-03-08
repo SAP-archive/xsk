@@ -20,9 +20,10 @@
   <div class="panel panel-default" ng-show="dataLoaded">
     <div class="flex-panel">
       <button class="btn btn-big btn-primary left" ng-click="previousClicked()">Previous</button>
-      <p class="left">{{ data.length }} file(s) will be changed.
+      <!-- <p class="left">{{ data.length }} file(s) will be changed.
         {{data.length > 0 ? ' If you want to exclude a file from the migration, click on "Exclude".' : ""}}
-      </p>
+      </p> -->
+      <p class="left">{{ data.length }} file(s) will be changed.</p>
       <div class="btn-group left" role="group" ng-show="data.length">
         <button type="button" class="btn btn-big btn-default" ng-click="splitDiffView()"
           ng-class="{active:isDiffViewSplit===true}">Split</button>
@@ -40,8 +41,8 @@
             ng-class="{true:'fa-chevron-right', false:'fa-chevron-down'}[file.collapsed]"></i>
         </button>
         <p>{{ file.file }}</p>
-        <button class="btn btn-big" ng-class="{true:'btn-primary', false:'btn-danger'}[file.excluded]"
-          ng-click="file.excluded = !file.excluded">{{file.excluded === true ? "Include" : "Exclude"}}</button>
+        <!-- <button class="btn btn-big" ng-class="{true:'btn-primary', false:'btn-danger'}[file.excluded]"
+          ng-click="file.excluded = !file.excluded">{{file.excluded === true ? "Include" : "Exclude"}}</button> -->
       </div>
       <div id="{{ file.id }}" class="diff-view" ng-hide="file.collapsed" ng-init="createDiffEditor($index)">
         <p>Loading...</p>

@@ -46,44 +46,28 @@ migrationLaunchView.controller("ChangesViewController", [
                 .post("/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/continue-process", JSON.stringify(body), {
                     headers: { "Content-Type": "application/json" },
                 })
-                .then(response => {
+                .then((response) => {
                     const timer = setInterval(function () {
-                        $http.post("/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/get-process", JSON.stringify(body), {
-                            headers: { "Content-Type": "application/json" },
-                        })
+                        $http
+                            .post(
+                                "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/get-process",
+                                JSON.stringify(body),
+                                {
+                                    headers: { "Content-Type": "application/json" },
+                                }
+                            )
                             .then(
                                 function (response) {
-                                    console.log("!!! res: " + JSON.stringify(response));
                                     clearInterval(timer);
-                                    let demoData = response.data.diffViewData;
-                                    // let demoData = [
-                                    //     {
-                                    //         file: "some/test/file.html",
-                                    //         type: "html",
-                                    //         original: `<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />`,
-                                    //         modified: `<meta http-equiv="Content-Type" content="javascript" />`,
-                                    //     },
-                                    //     {
-                                    //         type: "html",
-                                    //         file: "another/test/file.html",
-                                    //         original: `<body></body>`,
-                                    //         modified: `<body>
-                                    //     <div class="main-container">
-                                    //         <h1>Simple heading</h1>
-                                    //         <h2>Simple secondary heading</h2>
-                                    //         <h3>Enough changes</h3>
-                                    //     </div>
-                                    // </body>`,
-                                    //     },
-                                    // ];
+                                    let diffViewData = response.data.diffViewData;
                                     // Add additional keys needed by AngularJS
-                                    for (let i = 0; i < demoData.length; i++) {
-                                        demoData[i]["id"] = `m-${i}`;
-                                        demoData[i]["collapsed"] = false;
-                                        demoData[i]["excluded"] = false;
+                                    for (let i = 0; i < diffViewData.length; i++) {
+                                        diffViewData[i]["id"] = `m-${i}`;
+                                        diffViewData[i]["collapsed"] = false;
+                                        diffViewData[i]["excluded"] = false;
                                     }
                                     // Set data variable
-                                    $scope.data = demoData;
+                                    $scope.data = diffViewData;
                                     // Set full width for better experience
                                     $scope.$parent.setFullWidthEnabled(true);
                                     // Show data
@@ -110,8 +94,7 @@ migrationLaunchView.controller("ChangesViewController", [
                                 }
                             );
                     }, 1000);
-                })
-
+                });
         }
 
         $scope.createDiffEditor = function (index) {

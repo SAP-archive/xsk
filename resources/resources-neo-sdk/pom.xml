@@ -36,7 +36,7 @@
                   <version>${neo-java-web-sdk.version}</version>
                   <type>zip</type>
                   <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk</outputDirectory>
-                  <overWrite>true</overWrite>
+                  <overWrite>false</overWrite>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -54,7 +54,7 @@
                   <artifactId>javax.activation</artifactId>
                   <version>${neo-java-web-sdk.javax.activation.version}</version>
                   <type>jar</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk/tools/lib/cmd</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
                 <artifactItem>
@@ -62,7 +62,7 @@
                   <artifactId>jaxb-api</artifactId>
                   <version>${neo-java-web-sdk.jaxb.version}</version>
                   <type>jar</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk/tools/lib/cmd</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
                 <artifactItem>
@@ -70,7 +70,7 @@
                   <artifactId>jaxb-core</artifactId>
                   <version>${neo-java-web-sdk.jaxb.version}</version>
                   <type>jar</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk/tools/lib/cmd</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
                 <artifactItem>
@@ -78,7 +78,7 @@
                   <artifactId>jaxb-impl</artifactId>
                   <version>${neo-java-web-sdk.jaxb.version}</version>
                   <type>jar</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk/tools/lib/cmd</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
               </artifactItems>

@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-var migrationLaunchView = angular.module("migration-launch", ['angularFileUpload']);
+var migrationLaunchView = angular.module("migration-launch", ["angularFileUpload"]);
 
 migrationLaunchView.factory("$messageHub", [
     function () {
@@ -211,6 +211,6 @@ migrationLaunchView.controller("MigrationLaunchViewController", [
             else return "inactive";
         };
 
-        $messageHub.on("migration.launch", function (msg) { }.bind(this));
-    }
+        $messageHub.on("migration.launch", function (msg) {}.bind(this));
+    },
 ]);

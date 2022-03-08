@@ -50,18 +50,15 @@ export class DiffToolService {
                     fileName: fileName
                 }
 
-                console.log("!!! VM: res: " + JSON.stringify(res));
                 return res;
             })
             .filter(x => x != null);
 
-        const root = "/Users/c5326377/work/target/dirigible/repository/root";
+        const root = this._getRepositoryRootPath();
         const diffResult = rawDiffResult.map(rawDiffResult => {
             const originalPath = rawDiffResult.firstFolderFile.replace(root, "");
-            console.log("!!! VM: orig: " + originalPath);
             const original = (originalPath !== "") ? repository.getResource(originalPath).getText() : "";
             const modifiedPath = rawDiffResult.secondFolderFile.replace(root, "");
-            console.log("!!! VM: mod: " + modifiedPath);
             const modified = (modifiedPath !== "") ? repository.getResource(modifiedPath).getText() : "";
             const file = rawDiffResult.fileName.replace(root, "").replace("_unmodified", "");
             const type = file.substring(file.lastIndexOf(".") + 1);
@@ -74,7 +71,12 @@ export class DiffToolService {
             }
         })
 
-        console.log("!!!! VM: diff: " + JSON.stringify(diffResult));
         return diffResult;
+    }
+
+    _getRepositoryRootPath() {
+        const StaticObjects = Java.type("org.eclipse.dirigible.commons.config.StaticObjects");
+        const repositoryRoot = StaticObjects.get(StaticObjects.REPOSITORY).getParameter("REPOSITORY_ROOT_FOLDER");
+        return repositoryRoot;
     }
 }

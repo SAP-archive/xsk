@@ -367,10 +367,8 @@ function XscPreparedStatement(dPreparedStatement) {
 		dPreparedStatement.setDate(index, value);
 	};
 
-	// probably because we are passing a double value instead of BigDecimal
-	// object
-	this.setDecimal = function(index, value) {
-		dPreparedStatement.setDecimal(index, value);
+	this.setDecimal = function (index, value) {
+    dPreparedStatement.setDecimal(index, new java.math.BigDecimal(value));
 	};
 
 	this.setDouble = function(index, value) {

@@ -35,8 +35,8 @@
                   <artifactId>neo-java-web-sdk</artifactId>
                   <version>${neo-java-web-sdk.version}</version>
                   <type>zip</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk</outputDirectory>
-                  <overWrite>false</overWrite>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk</outputDirectory>
+                  <overWrite>true</overWrite>
                 </artifactItem>
               </artifactItems>
             </configuration>

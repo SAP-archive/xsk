@@ -1,14 +1,3 @@
-/*
- * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Apache License, v2.0
- * which accompanies this distribution, and is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
- * SPDX-License-Identifier: Apache-2.0
- */
 // Generated from com/sap/xsk/parser/hdbdd/core/Cds.g4 by ANTLR 4.9.3
 package com.sap.xsk.parser.hdbdd.core;
 import org.antlr.v4.runtime.atn.*;
@@ -39,7 +28,7 @@ public class CdsParser extends Parser {
 		STRING=52, VARBINARY=53, TYPE_OF=54, WS=55, LINE_COMMENT1=56, LINE_COMMENT2=57, 
 		LINE_COMMENT3=58, A=59, B=60, C=61, D=62, E=63, F=64, G=65, H=66, I=67, 
 		J=68, K=69, L=70, M=71, N=72, O=73, P=74, Q=75, R=76, S=77, T=78, U=79, 
-		V=80, W=81, X=82, Y=83, Z=84, UNDERLINE=85;
+		V=80, W=81, X=82, Y=83, Z=84;
 	public static final int
 		RULE_cdsFile = 0, RULE_namespaceRule = 1, RULE_usingRule = 2, RULE_topLevelSymbol = 3, 
 		RULE_dataTypeRule = 4, RULE_fieldDeclRule = 5, RULE_typeAssignRule = 6, 
@@ -69,10 +58,7 @@ public class CdsParser extends Parser {
 			"'NULL'", "'NOT NULL'", "'='", "'{'", "'}'", "'['", "'*'", "']'", "'@'", 
 			"'#'", null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, "'null'", "'||'", "'<>'", 
-			null, null, null, null, "';'", null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, "'_'"
+			null, null, null, null, "';'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -88,7 +74,7 @@ public class CdsParser extends Parser {
 			"UTC_DATE_TIME", "UTC_TIMESTAMP", "STRING", "VARBINARY", "TYPE_OF", "WS", 
 			"LINE_COMMENT1", "LINE_COMMENT2", "LINE_COMMENT3", "A", "B", "C", "D", 
 			"E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", 
-			"S", "T", "U", "V", "W", "X", "Y", "Z", "UNDERLINE"
+			"S", "T", "U", "V", "W", "X", "Y", "Z"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -2621,7 +2607,7 @@ public class CdsParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3W\u01a1\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3V\u01a1\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+

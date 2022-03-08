@@ -204,7 +204,7 @@ export class MigrationService {
                 const tableModelName = tableModel.getName();
                 const tableModelSchema = tableModel.getSchema();
                 const hdbSynonym = this._generateHdbSynonym(
-                    tableModelName, 
+                    tableModelName,
                     tableModelSchema
                 );
 
@@ -422,7 +422,8 @@ export class MigrationService {
             filePath.endsWith(".hdbcalculationview") ||
             filePath.endsWith(".calculationview") ||
             filePath.endsWith(".analyticprivilege") ||
-            filePath.endsWith(".hdbanalyticprivilege")
+            filePath.endsWith(".hdbanalyticprivilege") ||
+            filePath.endsWith(".hdbflowgraph")
         ) {
             deployables.find((x) => x.projectName === projectName).artifacts.push(runLocation);
         }

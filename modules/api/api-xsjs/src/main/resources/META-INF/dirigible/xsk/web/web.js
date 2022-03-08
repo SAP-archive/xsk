@@ -316,11 +316,7 @@ exports.WebResponse = function () {
 
     syncHeaders();
 
-    if (typeof content === 'string' || content instanceof String) {
-      dResponse.println(content);
-      dResponse.flush();
-      dResponse.close();
-    } else if (content instanceof Array && this.contentType === 'application/zip') {
+    if (content instanceof Array && this.contentType === 'application/zip') {
       var parsedContent = JSON.parse(bytes.byteArrayToText(content));
       var outputStream = dResponse.getOutputStream();
       if (outputStream.isValid()) {
@@ -334,6 +330,10 @@ exports.WebResponse = function () {
           zipOutputStream.close();
         }
       }
+    } else {
+      dResponse.print(content);
+      dResponse.flush();
+      dResponse.close();
     }
   };
 

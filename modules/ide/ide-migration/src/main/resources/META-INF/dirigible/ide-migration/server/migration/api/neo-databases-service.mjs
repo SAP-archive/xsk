@@ -12,7 +12,7 @@
 import { configurations as config } from "@dirigible/core";
 import { MigrationToolExecutor } from "./migration-tool-executor";
 
-const neoClientPath = config.get("user.dir") + "/target/dirigible/resources-neo-sdk/tools/neo.sh";
+const neoClientPath = config.get("user.dir") + "/target/dirigible/resources-neo-sdk/sdk/tools/neo.sh";
 
 export class NeoDatabasesService {
     constructor() {

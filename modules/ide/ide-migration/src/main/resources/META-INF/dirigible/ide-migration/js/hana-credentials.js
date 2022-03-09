@@ -111,6 +111,7 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
         $scope.databaseSelected = function (database) {
             migrationDataState.schemaName = database;
             $scope.databasesDropdownText = database;
+            $scope.userInput();
         };
 
         $messageHub.on(

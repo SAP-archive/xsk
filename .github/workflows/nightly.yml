@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 22 * * *"
 
+  workflow_dispatch:
+
 jobs:
   integration-tests:
     runs-on: ubuntu-latest

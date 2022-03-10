@@ -23,12 +23,20 @@ public class HanaTableFunctionListener extends HanaBaseListener {
   @Override
   public void exitCreate_func_body(Create_func_bodyContext ctx) {
     super.exitCreate_func_body(ctx);
+    String strippedSchema = null;
+    String strippedName = null;
 
-    String maybeQuotedName = ctx.proc_name().id_expression().getText();
-    String maybeQuotedSchema = ctx.proc_name().schema_name().getText();
+    if(ctx.proc_name() != null) {
+      if(ctx.proc_name().id_expression() != null) {
+        String maybeQuotedName = ctx.proc_name().id_expression().getText();
+        strippedName = StringUtils.strip(maybeQuotedName, "\"");
+      }
 
-    String strippedSchema = StringUtils.strip(maybeQuotedSchema, "\"");
-    String strippedName = StringUtils.strip(maybeQuotedName, "\"");
+      if(ctx.proc_name().schema_name() != null) {
+        String maybeQuotedSchema = ctx.proc_name().schema_name().getText();
+        strippedSchema = StringUtils.strip(maybeQuotedSchema, "\"");
+      }
+    }
 
     model.setSchema(strippedSchema);
     model.setName(strippedName);

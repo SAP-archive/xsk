@@ -13,15 +13,12 @@ package com.sap.xsk.parser.parser.custom;
 
 import com.sap.xsk.parser.hana.core.HanaLexer;
 import com.sap.xsk.parser.hana.core.HanaParser;
-import custom.HanaParseListener;
 import custom.HanaTableFunctionListener;
-import exceptions.TableFunctionMissingPropertyException;
 import models.TableFunctionDefinitionModel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.junit.Ignore;
 import org.junit.Test;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -31,22 +28,25 @@ import static org.junit.Assert.assertNotNull;
 
 public class HanaTableFunctionListenerTest {
 
-  private TableFunctionDefinitionModel parseModel(String sample, int expectedSyntaxErrors) {
-    ANTLRInputStream inputStream = new ANTLRInputStream(sample);
-    HanaLexer lexer = new HanaLexer(inputStream);
-    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-    HanaParser parser = new HanaParser(tokenStream);
-    parser.setBuildParseTree(true);
-    HanaParseListener parseListener = new HanaParseListener();
-    parser.addParseListener(parseListener);
-    ParseTree parseTree = parser.sql_script();
+  @Test
+  public void parseTableFunction() throws Exception {
+    String tableFunctionSample = getSample("/sample.hdbtablefunction");
+    TableFunctionDefinitionModel model = parseModel(tableFunctionSample);
+    assertModel(model, "_SYS_BIC", "customer_sample::SAMPLE_FUNCTION");
+  }
 
-    HanaTableFunctionListener listener = new HanaTableFunctionListener();
-    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-    parseTreeWalker.walk(listener, parseTree);
+  @Test
+  public void parseLongTableFunction() throws Exception {
+    String tableFunctionSample = getSample("/sample_long.hdbtablefunction");
+    TableFunctionDefinitionModel model = parseModel(tableFunctionSample);
+    assertModel(model, "_SYS_BIC", "Z.VIEWS::TFD");
+  }
 
-    //assertEquals(expectedSyntaxErrors, parser.getNumberOfSyntaxErrors());
-    return listener.getModel();
+  @Test
+  public void parseTableFunctionWithComment() throws Exception {
+    String tableFunctionSample = getSample("/sample_with_comment.hdbtablefunction");
+    TableFunctionDefinitionModel model = parseModel(tableFunctionSample);
+    assertModel(model, null, "customer_sample::SAMPLE_FUNCTION");
   }
 
   private String getSample(String sampleName) throws IOException {
@@ -54,37 +54,26 @@ public class HanaTableFunctionListenerTest {
         .toString(HanaTableFunctionListenerTest.class.getResourceAsStream(sampleName), StandardCharsets.UTF_8);
   }
 
-  @Test
-  public void parseTableFunctionFileSuccessfully() throws Exception {
-    String tableFunctionSample = getSample("/sample.hdbtablefunction");
-    TableFunctionDefinitionModel model = parseModel(tableFunctionSample, 0);
+  private TableFunctionDefinitionModel parseModel(String sample) {
+    ANTLRInputStream inputStream = new ANTLRInputStream(sample);
+    HanaLexer lexer = new HanaLexer(inputStream);
+    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
-    assertNotNull(model);
-    model.checkForAllMandatoryFieldsPresence();
-    assertEquals("_SYS_BIC", model.getSchema());
-    assertEquals("customer_sample::SAMPLE_FUNCTION", model.getName());
+    HanaParser parser = new HanaParser(tokenStream);
+    parser.setBuildParseTree(true);
+    ParseTree parseTree = parser.sql_script();
+
+    HanaTableFunctionListener listener = new HanaTableFunctionListener();
+    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+    parseTreeWalker.walk(listener, parseTree);
+
+    return listener.getModel();
   }
 
-  @Test //(expected = TableFunctionMissingPropertyException.class)
-  public void parseTableFunctionFileWithSyntaxErrorExceptionThrown() throws Exception {
-    String tableFunctionSample = getSample("/sample_with_errors.hdbtablefunction");
-    TableFunctionDefinitionModel model = parseModel(tableFunctionSample, 1);
-
+  private void assertModel(TableFunctionDefinitionModel model, String expectedSchema, String expectedName) {
     assertNotNull(model);
     model.checkForAllMandatoryFieldsPresence();
-    assertEquals("_SYS_BIC", model.getSchema());
-    assertEquals("customer_sample::SAMPLE_FUNCTION", model.getName());
-  }
-
-
-  @Test
-  public void parseTableFUnctionFileWithComment() throws Exception {
-    String tableFunctionSample = getSample("/sample_with_comment.hdbtablefunction");
-    TableFunctionDefinitionModel model = parseModel(tableFunctionSample, 0);
-
-    assertNotNull(model);
-    model.checkForAllMandatoryFieldsPresence();
-    assertEquals("_SYS_BIC", model.getSchema());
-    assertEquals("customer_sample::SAMPLE_FUNCTION", model.getName());
+    assertEquals(expectedSchema, model.getSchema());
+    assertEquals(expectedName, model.getName());
   }
 }

@@ -36,7 +36,6 @@ public class TableFunctionDefinitionModel {
   }
 
   public void checkForAllMandatoryFieldsPresence() {
-    checkPresence(schema, "schema");
     checkPresence(name, "name");
   }
 

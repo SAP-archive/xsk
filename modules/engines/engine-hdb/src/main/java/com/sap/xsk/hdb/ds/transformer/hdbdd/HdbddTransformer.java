@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrima
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
@@ -30,13 +31,19 @@ import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.database.sql.ISqlKeywords;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.builders.records.SelectBuilder;
 
 public class HdbddTransformer {
 
   private static final String UNMANAGED_ASSOCIATION_MARKER = "@";
+  private static final List<String> JOIN_TYPE_CONSTANTS = List.of(ISqlKeywords.KEYWORD_INNER, ISqlKeywords.KEYWORD_OUTER,
+      ISqlKeywords.KEYWORD_LEFT, ISqlKeywords.KEYWORD_RIGHT, ISqlKeywords.KEYWORD_FULL);
 
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol, String location) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
@@ -132,14 +139,22 @@ public class HdbddTransformer {
   public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
     XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
 
+    StringBuilder finalSql = new StringBuilder();
+//    SelectBuilder controlSqlBuilder = SqlFactory.getDefault().select().column("");
+
     // Preparing the view sql
+    // TODO use create().view()
     String viewSql = "VIEW \"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\" AS ";
 
     // We add all select statements to a list
     List<String> selectStatements = new ArrayList<>();
 
     // We loop through each select statement
-    viewSymbol.getSelectStatements().forEach(ss -> {
+//    viewSymbol.getSelectStatements().forEach(ss -> {
+
+    for(Symbol ss: viewSymbol.getSelectStatements()) {
+      SelectBuilder controlSqlBuilder;
+      String controlSql = "";
 
       // Get the table on which the select depends
       String dependsOnTable = ((((SelectSymbol) ss).getDependsOnTable() == null) ? "" : ((SelectSymbol) ss).getDependsOnTable());
@@ -148,6 +163,7 @@ public class HdbddTransformer {
       String dependingTableAlias = ((SelectSymbol) ss).getDependingTableAlias();
 
       // If there is an alias for the depending table concatenate with AS
+      //TODO remove
       String dependingTableAliasSql = (dependingTableAlias == null) ? ""
           : "AS \"" + dependingTableAlias + "\"";
 
@@ -155,19 +171,23 @@ public class HdbddTransformer {
       String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
 
       // Get the where part after the select columns
+      // TODO possibly replace at the end
       String where = ((((SelectSymbol) ss).getWhereSql() == null) ? "" : ((SelectSymbol) ss).getWhereSql());
 
       // Define union and distict if they are true.
+      //TODO replace below
       String union = ((((SelectSymbol) ss).getUnion() == false) ? "" : "UNION");
       String distinct = ((((SelectSymbol) ss).getDistinct() == false) ? "" : "DISTINCT");
+
+      boolean unionBol = ((SelectSymbol) ss).getUnion();
+      boolean distinctBol = ((SelectSymbol) ss).getDistinct();
 
       // Check if the depending table has :: to know whether short or full name is used in the hdbdd view definiton. In case it is not we should build the full name
       if (!dependsOnTable.contains("::")) {
         // Check if the depending table name is DUMMY. This is a reserved table name for hana dummy tables. We make sure to make it in uppercase
         if (dependsOnTable.equalsIgnoreCase("dummy")) {
           dependsOnTable = dependsOnTable.toUpperCase();
-        }
-        else {
+        } else {
           // Build the full name of the depending table.
           String dependsOnTableFullName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + dependsOnTable;
           // Replace the short ame in the select columns with the full name
@@ -178,6 +198,7 @@ public class HdbddTransformer {
       }
 
       // If the depending table has an alias we replace it in the select columns to make sure it is with quotes
+      // TODO check if needed when using builder
       if (dependingTableAlias != null) {
         selectColumns = selectColumns.replaceAll("" + dependingTableAlias + "[.]|\"" + dependingTableAlias + "\"[.]", "\"" + dependingTableAlias + "\".");
       }
@@ -186,23 +207,34 @@ public class HdbddTransformer {
       List<String> joinStatements = new ArrayList<>();
       List<String> joinAliases = new ArrayList<>();
 
+      // TODO leave only one
       String finalDependsOnTable = dependsOnTable;
 
+      if(distinctBol) {
+        controlSqlBuilder = SqlFactory.getDefault().select().distinct().column(selectColumns).from(finalDependsOnTable, dependingTableAlias);
+      } else {
+        controlSqlBuilder = SqlFactory.getDefault().select().column(selectColumns).from(finalDependsOnTable, dependingTableAlias);
+      }
+
       // Loop through each join statement
-      ((SelectSymbol) ss).getJoinStatements().forEach(js -> {
+//      ((SelectSymbol) ss).getJoinStatements().forEach(js -> {
+      for (Symbol js: ((SelectSymbol) ss).getJoinStatements()) {
         // Get the join type
         String joinType = ((((JoinSymbol) js).getJoinType() == null) ? "JOIN" : ((JoinSymbol) js).getJoinType());
+        joinType = joinType.substring(0, joinType.length() - 5).toUpperCase();
         // Get the join artifact name
         String joinArtifactName = ((((JoinSymbol) js).getJoinArtifactName() == null) ? "" : ((JoinSymbol) js).getJoinArtifactName());
 
         // Get the join artifact alias
         String joinTableAlias = ((JoinSymbol) js).getJoinTableAlias();
         // If not null add it to the join table aliases list for later use
+        // TODO possibly remove
         if (joinTableAlias != null) {
           joinAliases.add(joinTableAlias);
         }
 
         // In case the alias is not null build concatenate with AS
+        // TODO remove
         String joinTableAliasSql = ((joinTableAlias == null) ? "" : "AS \"" + joinTableAlias + "\"");
 
         // Get the rest part of the join
@@ -218,25 +250,50 @@ public class HdbddTransformer {
         joinFieldsSql = joinFieldsSql.replace(finalDependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), finalDependsOnTable);
 
         // Build the final join statement and add to the join statements list
+        // TODO remove
         String joinStatement = joinType + " \"" + joinArtifactName + "\"" + " " + joinTableAliasSql + " " + joinFieldsSql;
         joinStatements.add(joinStatement);
-      });
+
+        // remove on keyword
+        joinFieldsSql = joinFieldsSql.substring(3);
+        if (JOIN_TYPE_CONSTANTS.contains(joinType)) {
+          controlSqlBuilder.genericJoin(joinType, joinArtifactName, joinFieldsSql, joinTableAlias);
+        } else {
+          controlSqlBuilder.join(joinArtifactName, joinFieldsSql, joinTableAlias);
+        }
+      };
 
       // Concatenate the join statements into one string which will be used in the build of the select statement
+      // TODO remove
       String joinStatement = String.join(" ", joinStatements);
 
       // If the depending table of the select statement's alias is not null we should replace it in the join statement and where statement to make sure it has quotes
+      // TODO check if needed when using builder
       if (dependingTableAlias != null) {
-        joinStatement = joinStatement.replaceAll("" + dependingTableAlias + "[.]|\"" + dependingTableAlias + "\"[.]", "\"" + dependingTableAlias + "\".");
+        controlSql = controlSql.replaceAll("" + dependingTableAlias + "[.]|\"" + dependingTableAlias + "\"[.]", "\"" + dependingTableAlias + "\".");
         where = where.replaceAll("" + dependingTableAlias + "[.]|\"" + dependingTableAlias + "\"[.]", "\"" + dependingTableAlias + "\".");
       }
 
       // Replace the join aliases in the join, select columns and where statements to make sure it is with quotes
+      // TODO check if needed when using builder
       for ( String joinAlias : joinAliases ) {
-        joinStatement = joinStatement.replaceAll("" + joinAlias + "[.]|\"" + joinAlias + "\"[.]", "\"" + joinAlias + "\".");
+        controlSql = controlSql.replaceAll("" + joinAlias + "[.]|\"" + joinAlias + "\"[.]", "\"" + joinAlias + "\".");
         selectColumns = selectColumns.replaceAll("" + joinAlias + "[.]|\"" + joinAlias + "\"[.]", "\"" + joinAlias + "\".");
         where = where.replaceAll("" + joinAlias + "[.]|\"" + joinAlias + "\"[.]", "\"" + joinAlias + "\".");
       };
+
+      if(!(((SelectSymbol) ss).getWhereSql() == null)) {
+        // TODO add quotes
+//        controlSqlBuilder.where(((SelectSymbol) ss).getWhereSql());
+        // remove where keyword
+        controlSqlBuilder.where(where.substring(6));
+      }
+
+      if(unionBol) {
+        controlSql = ISqlKeywords.KEYWORD_UNION + " " + controlSqlBuilder.toString();
+      } else {
+        controlSql = controlSqlBuilder.toString();
+      }
 
       // Build the final select statement and add it to the list of select statements
       String selectStatement =
@@ -244,8 +301,10 @@ public class HdbddTransformer {
               + joinStatement + " " + where;
 
       selectStatements.add(selectStatement);
-    });
+      finalSql.append(controlSql).append(" ");
+    };
 
+    finalSql.insert(0, viewSql);
     // Build the final view sql
     viewSql = viewSql + String.join(" ", selectStatements);
 

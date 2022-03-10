@@ -600,7 +600,7 @@ export class MigrationService {
             projectNames.add(projectName);
         }
 
-        for (const projectName of projectNames) {
+        for(const projectName of projectNames) {
             this.handleHDBTableFunctions(workspace, projectName);
         }
     }

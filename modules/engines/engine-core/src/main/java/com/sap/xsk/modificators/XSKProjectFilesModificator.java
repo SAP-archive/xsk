@@ -62,7 +62,7 @@ public class XSKProjectFilesModificator {
   private void replaceSessionUser(String fileExtension, IFile projectFile) {
     if (REPLACE_SESSION_USER_FILE_EXTENSIONS.contains(fileExtension)) {
       byte[] currentContent = projectFile.getContent();
-      projectFile.setContent(new String(currentContent).replace("SESSION_USER", "SESSION_CONTEXT(APPLICATIONUSER)").getBytes());
+      projectFile.setContent(new String(currentContent).replace("SESSION_USER", "SESSION_CONTEXT('APPLICATIONUSER')").getBytes());
     }
   }
 

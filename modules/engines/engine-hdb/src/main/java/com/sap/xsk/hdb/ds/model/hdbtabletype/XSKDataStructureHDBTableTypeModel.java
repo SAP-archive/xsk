@@ -21,7 +21,7 @@ public class XSKDataStructureHDBTableTypeModel extends XSKDataStructureModel {
 
   private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
   private XSKDataStructureHDBTableTypePrimaryKeyModel primaryKey = new XSKDataStructureHDBTableTypePrimaryKeyModel();
-  private boolean publicProp;
+  private Boolean publicProp;
   private String tableTypeName;
 
   public List<XSKDataStructureHDBTableColumnModel> getColumns() {

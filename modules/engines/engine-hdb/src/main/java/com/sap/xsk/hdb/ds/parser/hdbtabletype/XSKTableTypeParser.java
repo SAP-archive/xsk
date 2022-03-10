@@ -42,19 +42,25 @@ import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructureHDBTableTypeModel> {
 
+  // TYPE (?:["'](.*)["'].)?["'](.*)["']
+  // uses non-capturing group in order to handle the
+  // possible case of a table type with only a name and no schema
+  private static final Pattern TABLE_TYPE_SCHEMA_AND_NAME_PATTERN = Pattern.compile("TYPE\\s+(?:[\"'](.*)[\"'].)?[\"'](.*)[\"']");
+  private static final Pattern XS_ADVANCED_TABLE_TYPE_PATTERN = Pattern.compile("^(\\t\\n)*(\\s)*TYPE", Pattern.CASE_INSENSITIVE);
   private static final Logger logger = LoggerFactory.getLogger(XSKTableTypeParser.class);
-  private HDBTableDefinitionModelToHDBTableColumnModelTransformer columnModelTransformer = new HDBTableDefinitionModelToHDBTableColumnModelTransformer();
+  private final HDBTableDefinitionModelToHDBTableColumnModelTransformer columnModelTransformer = new HDBTableDefinitionModelToHDBTableColumnModelTransformer();
 
   @Override
   public XSKDataStructureHDBTableTypeModel parse(XSKDataStructureParametersModel parametersModel)
       throws XSKDataStructuresException, IOException, XSKArtifactParserException {
-    Pattern pattern = Pattern.compile("^(\\t\\n)*(\\s)*TYPE", Pattern.CASE_INSENSITIVE);
-    Matcher matcher = pattern.matcher(parametersModel.getContent().trim().toUpperCase(Locale.ROOT));
+    String contentWithoutPossibleComments = XSKHDBUtils.removeSqlCommentsFromContent(parametersModel.getContent());
+    Matcher matcher = XS_ADVANCED_TABLE_TYPE_PATTERN.matcher(contentWithoutPossibleComments.trim());
     boolean matchFound = matcher.find();
     return (matchFound)
         ? parseHanaXSAdvancedContent(parametersModel.getLocation(), parametersModel.getContent())
@@ -79,8 +85,10 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
     XSKHDBTABLESyntaxErrorListener parserErrorListener = new XSKHDBTABLESyntaxErrorListener();
     hdbtableParser.addErrorListener(parserErrorListener);
     ParseTree parseTree = hdbtableParser.hdbtableDefinition();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location,
+        XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location,
+        XSKCommonsConstants.HDB_TABLE_TYPE_PARSER);
 
     XSKHDBTABLECoreVisitor xskhdbtableCoreVisitor = new XSKHDBTABLECoreVisitor();
 
@@ -93,7 +101,7 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
       hdbtableDefinitionModel.checkForAllMandatoryFieldsPresence();
     } catch (Exception e) {
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
-          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_TABLE_TYPE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_TABLE_TYPE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
       throw new XSKHDBTableMissingPropertyException(
           String.format("Wrong format of table definition: [%s]. [%s]", location, e.getMessage()));
@@ -119,7 +127,7 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
       if (foundMatchKey.size() != 1) {
         String errMsg = String.format("%s: the column does not have a definition but is specified as a primary key", key);
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", errMsg,
-            "", XSKCommonsConstants.HDB_TABLE_TYPE_PARSER,XSKCommonsConstants.MODULE_PARSERS,
+            "", XSKCommonsConstants.HDB_TABLE_TYPE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
             XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
         throw new IllegalStateException(errMsg);
       }
@@ -131,10 +139,27 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
   private XSKDataStructureHDBTableTypeModel parseHanaXSAdvancedContent(String location, String content) {
     logger.debug("Parsing hdbstructure as Hana XS Advanced format");
     XSKDataStructureHDBTableTypeModel dataStructureHDBTableTypeModel = new XSKDataStructureHDBTableTypeModel();
+
     XSKHDBUtils.populateXSKDataStructureModel(location, content, dataStructureHDBTableTypeModel, IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE,
         XSKDBContentType.OTHERS);
+    Pair<String, String> schemaAndNamePair = extractTableTypeSchemaAndName(content);
+
+    dataStructureHDBTableTypeModel.setSchema(schemaAndNamePair.getLeft());
+    dataStructureHDBTableTypeModel.setTableTypeName(schemaAndNamePair.getRight());
     dataStructureHDBTableTypeModel.setRawContent(content);
+
     return dataStructureHDBTableTypeModel;
+  }
+
+  private Pair<String, String> extractTableTypeSchemaAndName(String content) {
+    String contentWithoutPossibleComments = XSKHDBUtils.removeSqlCommentsFromContent(content);
+    Matcher matcher = TABLE_TYPE_SCHEMA_AND_NAME_PATTERN.matcher(contentWithoutPossibleComments);
+
+    if (!matcher.find()) {
+      throw new IllegalStateException("Couldn't extract table type schema and name from content: " + content);
+    }
+
+    return Pair.of(matcher.group(1), matcher.group(2));
   }
 
   @Override

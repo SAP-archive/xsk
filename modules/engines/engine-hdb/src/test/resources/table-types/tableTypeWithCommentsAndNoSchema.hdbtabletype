@@ -1,0 +1,6 @@
+/* some comment here */ TYPE /* some other here */ "customer_sample::publishers" /* comments everywhere!!!! */ AS TABLE (
+   "PUBLISHER" INTEGER,
+   "NAME" NVARCHAR(50),
+   "PRICE" DECIMAL,
+   "COUNT" INTEGER
+)

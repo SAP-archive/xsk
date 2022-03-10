@@ -2,7 +2,7 @@ let connection;
 
 try {
   connection = $.db.getConnection();
-  connection.prepareStatement("SESSION_CONTEXT(APPLICATIONUSER)").execute();
+  connection.prepareStatement("SESSION_CONTEXT('APPLICATIONUSER')").execute();
 }
 catch (e) {
   if (connection) {

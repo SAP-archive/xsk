@@ -195,7 +195,11 @@ public class HdbddTransformer {
       for (Symbol js: ((SelectSymbol) ss).getJoinStatements()) {
         // Get the join type
         String joinType = ((((JoinSymbol) js).getJoinType() == null) ? "JOIN" : ((JoinSymbol) js).getJoinType());
-        joinType = joinType.substring(0, joinType.length() - 5).toUpperCase();
+
+        // Get only the join type when using longer join statements
+        if (joinType.length() > 5) {
+          joinType = joinType.substring(0, joinType.length() - 5).toUpperCase();
+        }
         // Get the join artifact name
         String joinArtifactName = ((((JoinSymbol) js).getJoinArtifactName() == null) ? "" : ((JoinSymbol) js).getJoinArtifactName());
 

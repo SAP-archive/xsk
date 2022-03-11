@@ -140,21 +140,16 @@ public class HdbddTransformer {
     XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
 
     StringBuilder finalSql = new StringBuilder();
-//    SelectBuilder controlSqlBuilder = SqlFactory.getDefault().select().column("");
+    List<String> forReplacement = new ArrayList<>();
 
     // Preparing the view sql
-    // TODO use create().view()
-    String viewSql = "VIEW \"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\" AS ";
-
-    // We add all select statements to a list
-    List<String> selectStatements = new ArrayList<>();
-
-    // We loop through each select statement
-//    viewSymbol.getSelectStatements().forEach(ss -> {
+    String viewSql = SqlFactory.getDefault().create().view("\"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\"").toString();
+    // Cut out CREATE keyword and null value at the end
+    viewSql = viewSql.substring(7, viewSql.length() - 4);
 
     for(Symbol ss: viewSymbol.getSelectStatements()) {
       SelectBuilder controlSqlBuilder;
-      String controlSql = "";
+      String controlSql;
 
       // Get the table on which the select depends
       String dependsOnTable = ((((SelectSymbol) ss).getDependsOnTable() == null) ? "" : ((SelectSymbol) ss).getDependsOnTable());
@@ -162,23 +157,15 @@ public class HdbddTransformer {
       // Get the depnding table's alias. Returns null in case no alias
       String dependingTableAlias = ((SelectSymbol) ss).getDependingTableAlias();
 
-      // If there is an alias for the depending table concatenate with AS
-      //TODO remove
-      String dependingTableAliasSql = (dependingTableAlias == null) ? ""
-          : "AS \"" + dependingTableAlias + "\"";
+      if(dependingTableAlias != null) {
+        forReplacement.add(dependingTableAlias);
+        dependingTableAlias = "\"" + dependingTableAlias + "\"";
+      }
 
       // Get the select columns which is the {...} part in the hdbdd view definition
       String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
 
-      // Get the where part after the select columns
-      // TODO possibly replace at the end
-      String where = ((((SelectSymbol) ss).getWhereSql() == null) ? "" : ((SelectSymbol) ss).getWhereSql());
-
       // Define union and distict if they are true.
-      //TODO replace below
-      String union = ((((SelectSymbol) ss).getUnion() == false) ? "" : "UNION");
-      String distinct = ((((SelectSymbol) ss).getDistinct() == false) ? "" : "DISTINCT");
-
       boolean unionBol = ((SelectSymbol) ss).getUnion();
       boolean distinctBol = ((SelectSymbol) ss).getDistinct();
 
@@ -190,30 +177,17 @@ public class HdbddTransformer {
         } else {
           // Build the full name of the depending table.
           String dependsOnTableFullName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + dependsOnTable;
-          // Replace the short ame in the select columns with the full name
+          // Replace the short name in the select columns with the full name
           selectColumns = selectColumns.replace(dependsOnTable, dependsOnTableFullName);
           // Set the depending table to be with the full name
           dependsOnTable = dependsOnTableFullName;
         }
       }
 
-      // If the depending table has an alias we replace it in the select columns to make sure it is with quotes
-      // TODO check if needed when using builder
-      if (dependingTableAlias != null) {
-        selectColumns = selectColumns.replaceAll("" + dependingTableAlias + "[.]|\"" + dependingTableAlias + "\"[.]", "\"" + dependingTableAlias + "\".");
-      }
-
-      // Define two lists for join statements and join aliases
-      List<String> joinStatements = new ArrayList<>();
-      List<String> joinAliases = new ArrayList<>();
-
-      // TODO leave only one
-      String finalDependsOnTable = dependsOnTable;
-
       if(distinctBol) {
-        controlSqlBuilder = SqlFactory.getDefault().select().distinct().column(selectColumns).from(finalDependsOnTable, dependingTableAlias);
+        controlSqlBuilder = SqlFactory.getDefault().select().distinct().column(selectColumns).from("\"" + dependsOnTable + "\"", dependingTableAlias);
       } else {
-        controlSqlBuilder = SqlFactory.getDefault().select().column(selectColumns).from(finalDependsOnTable, dependingTableAlias);
+        controlSqlBuilder = SqlFactory.getDefault().select().column(selectColumns).from("\"" + dependsOnTable + "\"", dependingTableAlias);
       }
 
       // Loop through each join statement
@@ -227,66 +201,31 @@ public class HdbddTransformer {
 
         // Get the join artifact alias
         String joinTableAlias = ((JoinSymbol) js).getJoinTableAlias();
-        // If not null add it to the join table aliases list for later use
-        // TODO possibly remove
-        if (joinTableAlias != null) {
-          joinAliases.add(joinTableAlias);
-        }
+        forReplacement.add(joinTableAlias);
 
-        // In case the alias is not null build concatenate with AS
-        // TODO remove
-        String joinTableAliasSql = ((joinTableAlias == null) ? "" : "AS \"" + joinTableAlias + "\"");
-
-        // Get the rest part of the join
-        String joinFieldsSql = ((((JoinSymbol) js).getJoinFields() == null) ? "" : ((JoinSymbol) js).getJoinFields());
+        // Get the rest part of the join and use substring to remove the ON keyword
+        String joinFieldsSql = ((((JoinSymbol) js).getJoinFields() == null) ? "" : ((JoinSymbol) js).getJoinFields()).substring(3);
 
         // Check if the join artifact name contains :: to determine if full artfact name is used and build the full name if not
         if (!joinArtifactName.contains("::")) {
-          String joinArtifactFullName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + joinArtifactName;
-          joinArtifactName = joinArtifactFullName;
+          joinArtifactName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + joinArtifactName;
         }
 
-        // Replace the the select from depending table if anywhere in the join with it's full name
-        joinFieldsSql = joinFieldsSql.replace(finalDependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), finalDependsOnTable);
+        // Replace the select from depending table if anywhere in the join with it's full name
+        joinFieldsSql = joinFieldsSql.replace(dependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), dependsOnTable);
 
-        // Build the final join statement and add to the join statements list
-        // TODO remove
-        String joinStatement = joinType + " \"" + joinArtifactName + "\"" + " " + joinTableAliasSql + " " + joinFieldsSql;
-        joinStatements.add(joinStatement);
-
-        // remove on keyword
-        joinFieldsSql = joinFieldsSql.substring(3);
+        // check and create supported join clauses
         if (JOIN_TYPE_CONSTANTS.contains(joinType)) {
-          controlSqlBuilder.genericJoin(joinType, joinArtifactName, joinFieldsSql, joinTableAlias);
+          controlSqlBuilder.genericJoin(joinType, "\"" + joinArtifactName + "\"", joinFieldsSql, "\"" + joinTableAlias + "\"");
         } else {
-          controlSqlBuilder.join(joinArtifactName, joinFieldsSql, joinTableAlias);
+          controlSqlBuilder.join("\"" + joinArtifactName + "\"", joinFieldsSql, "\"" + joinTableAlias + "\"");
         }
-      };
-
-      // Concatenate the join statements into one string which will be used in the build of the select statement
-      // TODO remove
-      String joinStatement = String.join(" ", joinStatements);
-
-      // If the depending table of the select statement's alias is not null we should replace it in the join statement and where statement to make sure it has quotes
-      // TODO check if needed when using builder
-      if (dependingTableAlias != null) {
-        controlSql = controlSql.replaceAll("" + dependingTableAlias + "[.]|\"" + dependingTableAlias + "\"[.]", "\"" + dependingTableAlias + "\".");
-        where = where.replaceAll("" + dependingTableAlias + "[.]|\"" + dependingTableAlias + "\"[.]", "\"" + dependingTableAlias + "\".");
-      }
-
-      // Replace the join aliases in the join, select columns and where statements to make sure it is with quotes
-      // TODO check if needed when using builder
-      for ( String joinAlias : joinAliases ) {
-        controlSql = controlSql.replaceAll("" + joinAlias + "[.]|\"" + joinAlias + "\"[.]", "\"" + joinAlias + "\".");
-        selectColumns = selectColumns.replaceAll("" + joinAlias + "[.]|\"" + joinAlias + "\"[.]", "\"" + joinAlias + "\".");
-        where = where.replaceAll("" + joinAlias + "[.]|\"" + joinAlias + "\"[.]", "\"" + joinAlias + "\".");
       };
 
       if(!(((SelectSymbol) ss).getWhereSql() == null)) {
-        // TODO add quotes
-//        controlSqlBuilder.where(((SelectSymbol) ss).getWhereSql());
         // remove where keyword
-        controlSqlBuilder.where(where.substring(6));
+        String where = ((SelectSymbol) ss).getWhereSql().substring(6);
+        controlSqlBuilder.where(where);
       }
 
       if(unionBol) {
@@ -295,25 +234,25 @@ public class HdbddTransformer {
         controlSql = controlSqlBuilder.toString();
       }
 
-      // Build the final select statement and add it to the list of select statements
-      String selectStatement =
-          union + " SELECT " + distinct + " " + selectColumns + " FROM " + "\"" + dependsOnTable + "\"" + " " + dependingTableAliasSql + " "
-              + joinStatement + " " + where;
+      for(String alias : forReplacement) {
+        controlSql = putQuotesOnAliases(controlSql, alias);
+      }
 
-      selectStatements.add(selectStatement);
       finalSql.append(controlSql).append(" ");
     };
 
     finalSql.insert(0, viewSql);
-    // Build the final view sql
-    viewSql = viewSql + String.join(" ", selectStatements);
 
     viewModel.setDbContentType(XSKDBContentType.OTHERS);
     viewModel.setName(viewSymbol.getFullName());
     viewModel.setSchema(viewSymbol.getSchema());
-    viewModel.setRawContent(viewSql);
+    viewModel.setRawContent(finalSql.toString());
     viewModel.setLocation(location);
     return viewModel;
+  }
+
+  private String putQuotesOnAliases(String toBeReplaced, String alias) {
+    return toBeReplaced.replaceAll("" + alias + "[.]|\"" + alias + "\"[.]", "\"" + alias + "\".");
   }
 
   /**

@@ -46,7 +46,7 @@ public class XSKTableTypeParserTest {
     XSKDataStructureHDBTableTypeModel parsedModel = xskTableTypeParser.parse(parametersModel);
 
     assertEquals("Unexpected schema found", "XSK_SAMPLES_HDI_CUBE", parsedModel.getSchema());
-    assertEquals("Unexpected name found", "customer_sample::publishers", parsedModel.getTableTypeName());
+    assertEquals("Unexpected name found", "customer_sample::publishers", parsedModel.getName());
   }
 
   @Test
@@ -60,7 +60,7 @@ public class XSKTableTypeParserTest {
     XSKDataStructureHDBTableTypeModel parsedModel = xskTableTypeParser.parse(parametersModel);
 
     assertNull("Unexpected schema found", parsedModel.getSchema());
-    assertEquals("Unexpected name found", "customer_sample::publishers", parsedModel.getTableTypeName());
+    assertEquals("Unexpected name found", "customer_sample::publishers", parsedModel.getName());
   }
 
   private static String getTableTypeContentFromResources(String tableTypeFile) {

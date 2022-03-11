@@ -145,7 +145,7 @@ public class XSKTableTypeParser implements XSKDataStructureParser<XSKDataStructu
     Pair<String, String> schemaAndNamePair = extractTableTypeSchemaAndName(content);
 
     dataStructureHDBTableTypeModel.setSchema(schemaAndNamePair.getLeft());
-    dataStructureHDBTableTypeModel.setTableTypeName(schemaAndNamePair.getRight());
+    dataStructureHDBTableTypeModel.setName(schemaAndNamePair.getRight());
     dataStructureHDBTableTypeModel.setRawContent(content);
 
     return dataStructureHDBTableTypeModel;

@@ -22,7 +22,6 @@ public class XSKDataStructureHDBTableTypeModel extends XSKDataStructureModel {
   private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
   private XSKDataStructureHDBTableTypePrimaryKeyModel primaryKey = new XSKDataStructureHDBTableTypePrimaryKeyModel();
   private Boolean publicProp;
-  private String tableTypeName;
 
   public List<XSKDataStructureHDBTableColumnModel> getColumns() {
     return columns;
@@ -46,13 +45,5 @@ public class XSKDataStructureHDBTableTypeModel extends XSKDataStructureModel {
 
   public void setPublicProp(Boolean publicProp) {
     this.publicProp = publicProp;
-  }
-
-  public String getTableTypeName() {
-    return tableTypeName;
-  }
-
-  public void setTableTypeName(String tableTypeName) {
-    this.tableTypeName = tableTypeName;
   }
 }

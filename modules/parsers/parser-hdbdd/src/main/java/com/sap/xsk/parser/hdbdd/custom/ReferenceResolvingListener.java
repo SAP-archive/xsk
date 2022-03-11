@@ -12,6 +12,7 @@
 package com.sap.xsk.parser.hdbdd.custom;
 
 import com.sap.xsk.parser.hdbdd.core.CdsBaseListener;
+import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ManagedForeignKeysContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.UnmanagedForeignKeyContext;
@@ -86,7 +87,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     int valueType = ctx.value.getType();
     BuiltInTypeSymbol typeOfElement = (BuiltInTypeSymbol) this.entityElements.get(ctx.getParent().getParent()).getType();
 
-    //if the default value is se to null, ignore it
+    // If the default value is set to null, ignore it
     if (ctx.NULL() == null) {
       if (typeOfElement.getValueType().stream().filter(el -> el.equals(valueType)).count() < 0) {
         throw new CDSRuntimeException(String.format(
@@ -95,7 +96,13 @@ public class ReferenceResolvingListener extends CdsBaseListener {
       }
 
       EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent().getParent());
-      elementSymbol.setValue(ctx.value.getText());
+
+      // Check if the default value is a hana datetime function
+      if (valueType == CdsLexer.DATETIME_VALUE_FUNCTION) {
+        elementSymbol.setDefaultValueDateTimeFunction(true);
+      }
+
+      elementSymbol.setDefaultValue(ctx.value.getText());
     }
   }
 

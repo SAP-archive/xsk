@@ -18,7 +18,7 @@ try {
   insertStatement.executeUpdate();
   insertStatement.close();
 
-  let selectStatement = connection.prepareStatement("SELECT * FROM SAMPLE_USERS WHERE SESSION_CONTEXT(APPLICATIONUSER) = 'APPUSER'");
+  let selectStatement = connection.prepareStatement("SELECT * FROM SAMPLE_USERS WHERE SESSION_CONTEXT('APPLICATIONUSER') = 'APPUSER'");
   selectStatement.execute();
 
   let resultSet = selectStatement.getResultSet();

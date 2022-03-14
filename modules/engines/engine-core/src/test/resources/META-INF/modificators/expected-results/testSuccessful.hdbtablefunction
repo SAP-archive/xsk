@@ -8,6 +8,6 @@ FUNCTION "XSK_SAMPLES_HDB_TABLEFUNCTION_SIMPLE"."hdb-tablefunction-simple.db::It
 
 BEGIN
 
-	RETURN  SELECT "Id", "Status" FROM "hdb-tablefunction-simple.db::ItemForTableFunction" WHERE (UPPER(SESSION_CONTEXT(APPLICATIONUSER)) = 'TESTUSER');
+	RETURN  SELECT "Id", "Status" FROM "hdb-tablefunction-simple.db::ItemForTableFunction" WHERE (UPPER(SESSION_CONTEXT('APPLICATIONUSER')) = 'TESTUSER');
 
 END;

@@ -8,5 +8,5 @@ BEGIN
        Write your procedure logic
    *************************************/
 
-      SELECT * FROM "hdb_view::Item" WHERE (UPPER(SESSION_CONTEXT(APPLICATIONUSER)) = 'TESTUSER');
+      SELECT * FROM "hdb_view::Item" WHERE (UPPER(SESSION_CONTEXT('APPLICATIONUSER')) = 'TESTUSER');
 END

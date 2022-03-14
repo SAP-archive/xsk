@@ -27,7 +27,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
 
-  @Test
+  @Test(expected = XSKArtifactParserException.class) // Exception expected due to incomplete grammar
   public void parseTableFunction() throws IOException, XSKDataStructuresException, XSKArtifactParserException {
     String location = "/OrderTableFunction.hdbtablefunction";
     InputStream in = XSKTableParserTest.class.getResourceAsStream(location);

@@ -72,11 +72,11 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
 
     XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(),
         XSKCommonsConstants.PARSER_ERROR, location,
-        XSKCommonsConstants.HDB_VIEW_PARSER);
+        XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
 
     XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(),
         XSKCommonsConstants.LEXER_ERROR, location,
-        XSKCommonsConstants.HDB_VIEW_PARSER);
+        XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
 
     HanaTableFunctionListener listener = new HanaTableFunctionListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();

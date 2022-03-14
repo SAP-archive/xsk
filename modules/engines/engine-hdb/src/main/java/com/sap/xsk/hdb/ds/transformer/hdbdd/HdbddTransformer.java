@@ -33,6 +33,8 @@ import org.eclipse.dirigible.api.v3.security.UserFacade;
 public class HdbddTransformer {
 
   private static final String UNMANAGED_ASSOCIATION_MARKER = "@";
+  private static final String CATALOG_ANNOTATION = "Catalog";
+  private static final String CATALOG_OBJ_TABLE_TYPE = "tableType";
 
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol, String location) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
@@ -99,6 +101,8 @@ public class HdbddTransformer {
 
     tableModel.setColumns(tableColumns);
     tableModel.setLocation(location);
+    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null)
+      tableModel.setTableType(entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue());
     return tableModel;
   }
 

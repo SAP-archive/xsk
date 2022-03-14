@@ -20,12 +20,14 @@ import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
+import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
+import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionParser;
 import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
 import com.sap.xsk.utils.XSKCommonsConstants;
@@ -54,6 +56,15 @@ public class XSKDataStructureModelFactory {
     XSKDataStructureParametersModel parametersModel =
         new XSKDataStructureParametersModel(null, location, content, null);
     XSKDataStructureHDBTableModel result = parser.parse(parametersModel);
+    return result;
+  }
+
+  public static XSKDataStructureHDBTableFunctionModel parseTableFunction(String location, String content)
+      throws XSKDataStructuresException, XSKArtifactParserException, IOException {
+    XSKHDBTableFunctionParser parser = new XSKHDBTableFunctionParser();
+    XSKDataStructureParametersModel parametersModel =
+        new XSKDataStructureParametersModel(null, location, content, null);
+    XSKDataStructureHDBTableFunctionModel result = parser.parse(parametersModel);
     return result;
   }
 
@@ -97,7 +108,8 @@ public class XSKDataStructureModelFactory {
    * @param bytes the view definition
    * @return the view model instance
    */
-  public static XSKDataStructureHDBViewModel parseView(String location, byte[] bytes) throws XSKDataStructuresException, XSKArtifactParserException, IOException {
+  public static XSKDataStructureHDBViewModel parseView(String location, byte[] bytes)
+      throws XSKDataStructuresException, XSKArtifactParserException, IOException {
     return parseView(location, new String(bytes));
   }
 

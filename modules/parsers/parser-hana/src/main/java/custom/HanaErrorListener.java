@@ -24,8 +24,9 @@ public class HanaErrorListener extends BaseErrorListener {
   @Override
   public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg,
       RecognitionException e) {
-
-    this.errors.add(new BaseParserErrorsModel(line, charPositionInLine, offendingSymbol == null? "" : offendingSymbol.toString(), msg));
+    String nullReplacedOffendingSymbol = offendingSymbol == null ? "" : offendingSymbol.toString();
+    BaseParserErrorsModel errorModel = new BaseParserErrorsModel(line, charPositionInLine, nullReplacedOffendingSymbol, msg);
+    this.errors.add(errorModel);
   }
 
   public ArrayList<BaseParserErrorsModel> getErrors() {

@@ -18,28 +18,26 @@ import org.apache.commons.lang3.StringUtils;
 
 public class HanaTableFunctionListener extends HanaBaseListener {
 
-  private final TableFunctionDefinitionModel model = new TableFunctionDefinitionModel();
+  private TableFunctionDefinitionModel model;
 
   @Override
   public void exitCreate_func_body(Create_func_bodyContext ctx) {
-    super.exitCreate_func_body(ctx);
     String strippedSchema = null;
     String strippedName = null;
 
-    if(ctx.proc_name() != null) {
-      if(ctx.proc_name().id_expression() != null) {
+    if (ctx.proc_name() != null) {
+      if (ctx.proc_name().id_expression() != null) {
         String maybeQuotedName = ctx.proc_name().id_expression().getText();
         strippedName = StringUtils.strip(maybeQuotedName, "\"");
       }
 
-      if(ctx.proc_name().schema_name() != null) {
+      if (ctx.proc_name().schema_name() != null) {
         String maybeQuotedSchema = ctx.proc_name().schema_name().getText();
         strippedSchema = StringUtils.strip(maybeQuotedSchema, "\"");
       }
     }
 
-    model.setSchema(strippedSchema);
-    model.setName(strippedName);
+    model = new TableFunctionDefinitionModel(strippedSchema, strippedName);
   }
 
   public TableFunctionDefinitionModel getModel() {

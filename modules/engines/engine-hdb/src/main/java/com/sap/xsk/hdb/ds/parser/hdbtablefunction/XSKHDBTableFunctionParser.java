@@ -26,7 +26,8 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import custom.HanaErrorListener;
 import custom.HanaTableFunctionListener;
 import models.TableFunctionDefinitionModel;
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -47,55 +48,85 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
   @Override
   public XSKDataStructureHDBTableFunctionModel parse(XSKDataStructureParametersModel parametersModel)
       throws IOException, XSKDataStructuresException, XSKArtifactParserException {
-      XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
 
-      String location = parametersModel.getLocation();
+    String location = parametersModel.getLocation();
 
-      ByteArrayInputStream is = new ByteArrayInputStream(parametersModel.getContent().getBytes());
-      ANTLRInputStream inputStream = new ANTLRInputStream(is);
+    CharStream inputStream;
+    try (ByteArrayInputStream is = new ByteArrayInputStream(parametersModel.getContent().getBytes())) {
+      inputStream = CharStreams.fromStream(is);
+    }
 
-      HanaLexer lexer = new HanaLexer(inputStream);
-      HanaErrorListener lexerErrorListener = new HanaErrorListener();
-      lexer.removeErrorListeners();//remove the ConsoleErrorListener
-      lexer.addErrorListener(lexerErrorListener);
-      CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+    HanaLexer lexer = new HanaLexer(inputStream);
+    HanaErrorListener lexerErrorListener = new HanaErrorListener();
+    lexer.removeErrorListeners(); // remove the ConsoleErrorListener
+    lexer.addErrorListener(lexerErrorListener);
+    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
-      HanaErrorListener parserErrorListener = new HanaErrorListener();
-      HanaParser parser = new HanaParser(tokenStream);
-      parser.setBuildParseTree(true);
-      parser.removeErrorListeners();
-      parser.addErrorListener(parserErrorListener);
+    HanaErrorListener parserErrorListener = new HanaErrorListener();
+    HanaParser parser = new HanaParser(tokenStream);
+    parser.setBuildParseTree(true);
+    parser.removeErrorListeners();
+    parser.addErrorListener(parserErrorListener);
 
-      ParseTree parseTree = parser.sql_script();
-      XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDB_VIEW_PARSER);
-      XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDB_VIEW_PARSER);
+    ParseTree parseTree = parser.sql_script();
 
-      HanaTableFunctionListener listener = new HanaTableFunctionListener();
-      ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-      parseTreeWalker.walk(listener, parseTree);
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(),
+        XSKCommonsConstants.PARSER_ERROR, location,
+        XSKCommonsConstants.HDB_VIEW_PARSER);
 
-      TableFunctionDefinitionModel antlr4Model = listener.getModel();
-      try {
-        antlr4Model.checkForAllMandatoryFieldsPresence();
-      } catch (Exception e) {
-        XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
-            XSKCommonsConstants.EXPECTED_FIELDS, XSKCommonsConstants.HDB_VIEW_PARSER,XSKCommonsConstants.MODULE_PARSERS,
-            XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(),
+        XSKCommonsConstants.LEXER_ERROR, location,
+        XSKCommonsConstants.HDB_VIEW_PARSER);
 
-        dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location), location, TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
-        throw new XSKDataStructuresException(String.format("Wrong format of HDB Table Function: [%s] during parsing. [%s]", location, e.getMessage()));
-      }
+    HanaTableFunctionListener listener = new HanaTableFunctionListener();
+    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+    parseTreeWalker.walk(listener, parseTree);
 
-      model.setSchema(antlr4Model.getSchema());
-      model.setName(antlr4Model.getName());
-      model.setLocation(parametersModel.getLocation());
-      model.setType(getType());
-      model.setHash(DigestUtils.md5Hex(parametersModel.getContent()));
-      model.setCreatedBy(UserFacade.getName());
-      model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-      model.setContent(parametersModel.getContent());
+    TableFunctionDefinitionModel antlr4Model = listener.getModel();
+    validateAntlrModel(antlr4Model, location);
 
-      return model;
+    return createModel(antlr4Model, parametersModel);
+  }
+
+  private XSKDataStructureHDBTableFunctionModel createModel(TableFunctionDefinitionModel antlrModel,
+      XSKDataStructureParametersModel params) {
+
+    XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
+    model.setSchema(antlrModel.getSchema());
+    model.setName(antlrModel.getName());
+    model.setLocation(params.getLocation());
+    model.setType(getType());
+    model.setHash(DigestUtils.md5Hex(params.getContent()));
+    model.setCreatedBy(UserFacade.getName());
+    model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    model.setContent(params.getContent());
+    model.setRawContent(params.getContent());
+
+    return model;
+  }
+
+  private void validateAntlrModel(TableFunctionDefinitionModel antlrModel, String location) throws XSKDataStructuresException {
+    try {
+      antlrModel.checkForAllMandatoryFieldsPresence();
+    } catch (Exception e) {
+      XSKCommonsUtils.logCustomErrors(location,
+          XSKCommonsConstants.PARSER_ERROR,
+          "",
+          "",
+          e.getMessage(),
+          XSKCommonsConstants.EXPECTED_FIELDS,
+          XSKCommonsConstants.HDB_VIEW_PARSER,
+          XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST,
+          XSKCommonsConstants.PROGRAM_XSK);
+
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),
+          location, TABLE_FUNCTION_ARTEFACT,
+          ArtefactState.FAILED_CREATE,
+          e.getMessage());
+
+      throw new XSKDataStructuresException("Wrong format of HDB Table Function: " + location + " during parsing. ", e);
+    }
   }
 
   @Override

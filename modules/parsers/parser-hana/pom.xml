@@ -30,25 +30,23 @@
           <groupId>com.sap.xsk</groupId>
           <artifactId>xsk-modules-parsers-commons</artifactId>
           <version>0.15.0-SNAPSHOT</version>
-          <scope>compile</scope>
       </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>RELEASE</version>
-      <scope>test</scope>
+      <scope>${junit.version}</scope>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.7</version>
+      <version>${commons.io}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.12.0</version>
-      <scope>compile</scope>
+      <version>${commons.lang3}</version>
     </dependency>
   </dependencies>
   <build>

@@ -11,28 +11,24 @@
  */
 package models;
 
-import exceptions.TableFunctionMissingPropertyException;
 import java.util.Objects;
 
 public class TableFunctionDefinitionModel {
 
-  private String schema;
-  private String name;
+  private final String schema;
+  private final String name;
+
+  public TableFunctionDefinitionModel(String schema, String name) {
+    this.schema = schema;
+    this.name = name;
+  }
 
   public String getSchema() {
     return schema;
   }
 
-  public void setSchema(String schema) {
-    this.schema = schema;
-  }
-
   public String getName() {
     return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public void checkForAllMandatoryFieldsPresence() {

@@ -20,9 +20,7 @@ public class XSKDataStructureHDBTableTypeModel extends XSKDataStructureModel {
 
 
   private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-
   private XSKDataStructureHDBTableTypePrimaryKeyModel primaryKey = new XSKDataStructureHDBTableTypePrimaryKeyModel();
-
   private Boolean publicProp;
 
   public List<XSKDataStructureHDBTableColumnModel> getColumns() {

@@ -129,7 +129,7 @@ public class XSKHDBUtils {
   }
 
   public static String extractProcedureNameFromContent(String content, String location) throws XSKDataStructuresException {
-    content = removeCommentsFromContent(content);
+    content = removeSqlCommentsFromContent(content);
     int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("procedure") + "procedure".length();
     int indexOfBracket = content.indexOf('(', indexOfEndOfProcKeyword);
     if (indexOfEndOfProcKeyword < 0 || indexOfBracket < 0) {
@@ -144,7 +144,7 @@ public class XSKHDBUtils {
 
   public static String extractTableFunctionNameFromContent(String content, String location, String parser)
       throws XSKDataStructuresException {
-    content = removeCommentsFromContent(content);
+    content = removeSqlCommentsFromContent(content);
     int indexOfBracket = content.indexOf('(');
     int indexOfEndOfProcKeyword = content.toLowerCase().indexOf("function") + "function".length();
     if (indexOfBracket > -1 && indexOfEndOfProcKeyword > -1) {
@@ -158,7 +158,7 @@ public class XSKHDBUtils {
     throw new XSKDataStructuresException(errMsg);
   }
 
-  private static String removeCommentsFromContent(String content) {
+  public static String removeSqlCommentsFromContent(String content) {
     return content.replaceAll(commentRegex, "").trim();
   }
 }

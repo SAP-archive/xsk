@@ -81,8 +81,7 @@ public class HdbddTransformer {
         associationColumns.forEach(ac -> {
           if (ac.getAlias() == null) {
             ac.setName(associationSymbol.getName() + "." + ac.getName());
-          }
-          else {
+          } else {
             ac.setName(ac.getAlias());
           }
         });
@@ -112,7 +111,133 @@ public class HdbddTransformer {
 
     tableModel.setColumns(tableColumns);
     tableModel.setLocation(location);
+    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null) {
+      tableModel.setTableType(entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue());
+    }
     return tableModel;
+  }
+
+  public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
+    XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
+
+    StringBuilder finalSql = new StringBuilder();
+    List<String> forReplacement = new ArrayList<>();
+
+    // Preparing the view sql
+    String viewSql = SqlFactory.getDefault().create().view("\"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\"").toString();
+    // Cut out CREATE keyword and null value at the end
+    viewSql = viewSql.substring(7, viewSql.length() - 4);
+
+    for(Symbol ss: viewSymbol.getSelectStatements()) {
+      SelectBuilder controlSqlBuilder;
+      String controlSql;
+
+      // Get the table on which the select depends
+      String dependsOnTable = ((((SelectSymbol) ss).getDependsOnTable() == null) ? "" : ((SelectSymbol) ss).getDependsOnTable());
+
+      // Get the depnding table's alias. Returns null in case no alias
+      String dependingTableAlias = ((SelectSymbol) ss).getDependingTableAlias();
+
+      if(dependingTableAlias != null) {
+        forReplacement.add(dependingTableAlias);
+        dependingTableAlias = "\"" + dependingTableAlias + "\"";
+      }
+
+      // Get the select columns which is the {...} part in the hdbdd view definition
+      String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
+
+      // Define union and distict if they are true.
+      boolean unionBol = ((SelectSymbol) ss).getUnion();
+      boolean distinctBol = ((SelectSymbol) ss).getDistinct();
+
+      // Check if the depending table has :: to know whether short or full name is used in the hdbdd view definiton. In case it is not we should build the full name
+      if (!dependsOnTable.contains("::")) {
+        // Check if the depending table name is DUMMY. This is a reserved table name for hana dummy tables. We make sure to make it in uppercase
+        if (dependsOnTable.equalsIgnoreCase("dummy")) {
+          dependsOnTable = dependsOnTable.toUpperCase();
+        } else {
+          // Build the full name of the depending table.
+          String dependsOnTableFullName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + dependsOnTable;
+          // Replace the short name in the select columns with the full name
+          selectColumns = selectColumns.replace(dependsOnTable, dependsOnTableFullName);
+          // Set the depending table to be with the full name
+          dependsOnTable = dependsOnTableFullName;
+        }
+      }
+
+      if(distinctBol) {
+        controlSqlBuilder = SqlFactory.getDefault().select().distinct().column(selectColumns).from("\"" + dependsOnTable + "\"", dependingTableAlias);
+      } else {
+        controlSqlBuilder = SqlFactory.getDefault().select().column(selectColumns).from("\"" + dependsOnTable + "\"", dependingTableAlias);
+      }
+
+      // Loop through each join statement
+//      ((SelectSymbol) ss).getJoinStatements().forEach(js -> {
+      for (Symbol js: ((SelectSymbol) ss).getJoinStatements()) {
+        // Get the join type
+        String joinType = ((((JoinSymbol) js).getJoinType() == null) ? "JOIN" : ((JoinSymbol) js).getJoinType());
+
+        // Get only the join type when using longer join statements
+        if (joinType.length() > 5) {
+          joinType = joinType.substring(0, joinType.length() - 5).toUpperCase();
+        }
+        // Get the join artifact name
+        String joinArtifactName = ((((JoinSymbol) js).getJoinArtifactName() == null) ? "" : ((JoinSymbol) js).getJoinArtifactName());
+
+        // Get the join artifact alias
+        String joinTableAlias = ((JoinSymbol) js).getJoinTableAlias();
+        forReplacement.add(joinTableAlias);
+
+        // Get the rest part of the join and use substring to remove the ON keyword
+        String joinFieldsSql = ((((JoinSymbol) js).getJoinFields() == null) ? "" : ((JoinSymbol) js).getJoinFields()).substring(3);
+
+        // Check if the join artifact name contains :: to determine if full artfact name is used and build the full name if not
+        if (!joinArtifactName.contains("::")) {
+          joinArtifactName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + joinArtifactName;
+        }
+
+        // Replace the select from depending table if anywhere in the join with it's full name
+        joinFieldsSql = joinFieldsSql.replace(dependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), dependsOnTable);
+
+        // check and create supported join clauses
+        if (JOIN_TYPE_CONSTANTS.contains(joinType)) {
+          controlSqlBuilder.genericJoin(joinType, "\"" + joinArtifactName + "\"", joinFieldsSql, "\"" + joinTableAlias + "\"");
+        } else {
+          controlSqlBuilder.join("\"" + joinArtifactName + "\"", joinFieldsSql, "\"" + joinTableAlias + "\"");
+        }
+      };
+
+      if(!(((SelectSymbol) ss).getWhereSql() == null)) {
+        // remove where keyword
+        String where = ((SelectSymbol) ss).getWhereSql().substring(6);
+        controlSqlBuilder.where(where);
+      }
+
+      if(unionBol) {
+        controlSql = ISqlKeywords.KEYWORD_UNION + " " + controlSqlBuilder.toString();
+      } else {
+        controlSql = controlSqlBuilder.toString();
+      }
+
+      for(String alias : forReplacement) {
+        controlSql = putQuotesOnAliases(controlSql, alias);
+      }
+
+      finalSql.append(controlSql).append(" ");
+    };
+
+    finalSql.insert(0, viewSql);
+
+    viewModel.setDbContentType(XSKDBContentType.OTHERS);
+    viewModel.setName(viewSymbol.getFullName());
+    viewModel.setSchema(viewSymbol.getSchema());
+    viewModel.setRawContent(finalSql.toString());
+    viewModel.setLocation(location);
+    return viewModel;
+  }
+
+  private String putQuotesOnAliases(String toBeReplaced, String alias) {
+    return toBeReplaced.replaceAll("" + alias + "[.]|\"" + alias + "\"[.]", "\"" + alias + "\".");
   }
 
   public XSKDataStructureHDBTableTypeModel transformStructuredDataTypeToHdbTableType(StructuredDataTypeSymbol structuredDataTypeSymbol) {
@@ -171,10 +296,10 @@ public class HdbddTransformer {
 
     } else if (fieldSymbol.getType() instanceof DataTypeSymbol) {
       DataTypeSymbol dataType = (DataTypeSymbol) fieldSymbol.getType();
-      if(!(dataType.getType() instanceof StructuredDataTypeSymbol)){
+      if (!(dataType.getType() instanceof StructuredDataTypeSymbol)){
         BuiltInTypeSymbol builtInType = (BuiltInTypeSymbol) dataType.getType();
         setSqlType(columnModel, builtInType);
-      }else {
+      } else {
         StructuredDataTypeSymbol structuredDataTypeSymbol = (StructuredDataTypeSymbol) dataType.getType();
         transformStructuredDataTypeToHdbTableType(structuredDataTypeSymbol);
       }

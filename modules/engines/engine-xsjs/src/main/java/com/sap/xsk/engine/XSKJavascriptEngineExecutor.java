@@ -45,7 +45,26 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
     String xskApi = getXskApi();
     context.getBindings(ENGINE_JAVA_SCRIPT).putMember("XSK_API", xskApi);
     context.getBindings(ENGINE_JAVA_SCRIPT).putMember("$", context.eval(ENGINE_JAVA_SCRIPT, "mainModule.loadScriptString(XSK_API)"));
+    context.eval(ENGINE_JAVA_SCRIPT, getJSErrorFileNamePolyfillSource());
     super.beforeEval(context);
+  }
+
+  private static String getJSErrorFileNamePolyfillSource() {
+    return "Object.defineProperty(Error.prototype, 'fileName', {\n"
+        + "  get() {\n"
+        + "    const regex = /.*at.*\\((.*)(?::.*\\))/;\n"
+        + "    if (!this.stack) {\n"
+        + "        return \"Unknown\";\n"
+        + "    }\n"
+        + "\n"
+        + "    const found = this.stack.match(regex);\n"
+        + "    if (!found || !found[1]) {\n"
+        + "        return \"Unknown\";\n"
+        + "    }\n"
+        + "\n"
+        + "    return found[1]\n"
+        + "  }\n"
+        + "});";
   }
 
   @Override

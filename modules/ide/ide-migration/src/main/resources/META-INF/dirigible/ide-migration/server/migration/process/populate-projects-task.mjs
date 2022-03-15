@@ -18,7 +18,6 @@ export class PopulateProjectsTask extends MigrationTask {
 
         const migrationService = new MigrationService();
         const workspace = userData.workspace;
-
         for (const deliveryUnit of userData.du) {
             const localFiles = deliveryUnit.locals;
             if (!(localFiles && localFiles.length > 0)) {
@@ -29,14 +28,15 @@ export class PopulateProjectsTask extends MigrationTask {
             migrationService.addFilesWithoutGenerated(userData, workspace, localFiles);
             migrationService.addGeneratedFiles(userData, deliveryUnit, workspace, localFiles);
             migrationService.modifyFiles(workspace, localFiles);
-
-            process.setVariable(this.execution.getId(), "migrationState", "MIGRATION_EXECUTED");
-            this.trackService.updateMigrationStatus("MIGRATION EXECUTED");
-
-            const workspaceHolderFolder = config.get("user.dir") + "/target/dirigible/repository/root"
-            const diffTool = new DiffToolService();
-            const diffViewData = diffTool.diffFolders(`${workspaceHolderFolder}/${workspace}_unmodified`, `${workspaceHolderFolder}/${workspace}`);
-            process.setVariable(this.execution.getId(), "diffViewData", JSON.stringify(diffViewData));
+            migrationService.commitProjectModifications(workspace, localFiles);
         }
+
+        process.setVariable(this.execution.getId(), "migrationState", "MIGRATION_EXECUTED");
+        this.trackService.updateMigrationStatus("MIGRATION EXECUTED");
+
+        const workspaceHolderFolder = config.get("user.dir") + "/target/dirigible/repository/root"
+        const diffTool = new DiffToolService();
+        const diffViewData = diffTool.diffFolders(`${workspaceHolderFolder}/${workspace}_unmodified`, `${workspaceHolderFolder}/${workspace}`);
+        process.setVariable(this.execution.getId(), "diffViewData", JSON.stringify(diffViewData));
     }
 }

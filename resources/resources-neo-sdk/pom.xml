@@ -91,6 +91,7 @@
 
   <properties>
     <license.header.location>../../licensing-header.txt</license.header.location>
+    <maven.clean.plugin.directory>target</maven.clean.plugin.directory>
   </properties>
 
 </project>

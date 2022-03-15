@@ -173,7 +173,6 @@ function XscResultSet(dResultSet) {
 			//          response.println("type: " + dataType + " / toString: " + value.toString());
 			let propertyName = metadata.columns[i].name;
 			objToReturn[propertyName] = value;
-			objToReturn[i] = value;
 		}
 		return objToReturn;
 	}

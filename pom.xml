@@ -281,7 +281,6 @@
         <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
->>>>>>> 2aa39b33eae059b0fc929d8818a8a1624f2e6b16
 
         <profile.content.phase>none</profile.content.phase>
 

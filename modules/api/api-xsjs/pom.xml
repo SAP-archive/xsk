@@ -27,6 +27,11 @@
       <version>${gson.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
       <artifactId>scp-cf</artifactId>
       <version>${scp-cf.version}</version>

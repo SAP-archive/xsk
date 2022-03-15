@@ -24,4 +24,5 @@ derby.log
 !releng/buildpacks/**/bin/
 
 # Ignore Neo SDK
-resources/resources-neo-sdk/src/main/resources/META-INF/dirigible/resources-neo-sdk/
+resources/resources-neo-sdk/src/main/resources/META-INF/dirigible/resources-neo-sdk/*
+!resources/resources-neo-sdk/src/main/resources/META-INF/dirigible/resources-neo-sdk/differ.sh

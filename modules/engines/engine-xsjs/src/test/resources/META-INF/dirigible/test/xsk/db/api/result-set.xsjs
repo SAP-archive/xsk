@@ -63,7 +63,8 @@ function setStatementFields() {
   var bigDec = Java.type('java.math.BigDecimal');
   var dec = new bigDec(10);
 
-  statement.setDecimal(5, dec)
+  statement.setDecimal(5, dec);
+  statement.setDecimal(5, 10);
 
   statement.setDouble(6, 10.11);
 

@@ -1,0 +1,9 @@
+namespace gstr2;
+@Schema: 'ADMIN'
+context TableTypeColumn {
+   @Catalog.tableType : #COLUMN
+   Entity CONFIGURATION{
+      KEY UUID: String(255) NOT NULL;
+      COMPANY_ID: String(255) NOT NULL;
+    };
+};

@@ -1,5 +1,35 @@
 # Drumbeats
 
+
+## 2022 Week 10 (07 March - 13 March)
+
+#### Focus topics:
+- Support for deploying hdbflowgraphs
+- Fixes related to XSOData
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-03-07..2022-03-13) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-03-07..2022-03-13) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-03-07..2022-03-13) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-03-07..2022-03-13) PRs
+
+## 2022 Week 09 (28 February - 06 March)
+
+#### Focus topics:
+- Added loadProcedure functionality in XSJS
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-02-28..2022-03-06) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-02-28..2022-03-06) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-02-28..2022-03-06) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-02-28..2022-03-06) PRs
+
 ## 2022 Week 08 (21 February - 28 February)
 
 #### Focus topics:

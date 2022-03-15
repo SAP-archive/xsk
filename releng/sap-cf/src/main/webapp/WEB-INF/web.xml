@@ -19,6 +19,9 @@
   <listener>
     <listener-class>org.eclipse.dirigible.runtime.core.listener.DirigibleServletContextListener</listener-class>
   </listener>
+  <listener>
+    <listener-class>com.sap.xsk.xsodata.listener.XSODataInitializer</listener-class>
+  </listener>
   <servlet>
     <servlet-name>CXFServlet</servlet-name>
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>

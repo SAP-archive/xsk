@@ -19,14 +19,14 @@ import org.eclipse.dirigible.engine.odata2.transformers.OData2ODataMTransformer;
 
 public class XSKOData2ODataMTransformer {
 
-  private OData2ODataMTransformer oData2ODataMTransformer = new OData2ODataMTransformer();
+    private OData2ODataMTransformer oData2ODataMTransformer = new OData2ODataMTransformer(new XSODataPropertyNameEscaper());
 
-  public String[] transform(ODataDefinition oDataDefinition) throws SQLException {
-    try {
-      return oData2ODataMTransformer.transform(oDataDefinition);
-    } catch (Exception e) {
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, oDataDefinition.getLocation(), XSKCommonsConstants.XSK_ODATA_PARSER);
-      throw e;
+    public String[] transform(ODataDefinition oDataDefinition) throws SQLException {
+        try {
+            return oData2ODataMTransformer.transform(oDataDefinition);
+        } catch (Exception e) {
+            XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, oDataDefinition.getLocation(), XSKCommonsConstants.XSK_ODATA_PARSER);
+            throw e;
+        }
     }
-  }
 }

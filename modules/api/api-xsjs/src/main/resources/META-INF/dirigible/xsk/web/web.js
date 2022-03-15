@@ -10,7 +10,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 /*
- * HANA XS Classic Bridge for Request API
+ * HANA XS Classic Bridge for Web API
  */
 
 var dRequest = require('http/v4/request');
@@ -147,33 +147,32 @@ exports.WebRequest = function (method, queryPath) {
 
   this.entities = function () {
     var dEntitiesArray = [];
-
     if (dRequest.getMethod() === "POST") {
       if (dUpload.isMultipartContent()) {
-        var fileItems = dUpload.parseRequest();
-        for (i = 0; i < fileItems.size(); i++) {
-          var fileItem = fileItems.get(i);
-          if (fileItem.isFormField()) {
-            var requestEntity = new WebEntityRequest();
-            requestEntity.setBody(fileItem);
+        var multipartItems = dUpload.parseRequest();
+        for (i = 0; i < multipartItems.size(); i++) {
+          var multipartItem = multipartItems.get(i);
+          var requestEntity = new WebEntityRequest();
 
-            var fieldName = fileItem.getFieldName();
-            var fieldValue = fileItem.getText();
-
-            var itemHeaders = fileItem.getHeaders();
-            var headerNames = itemHeaders.getHeaderNames();
-
-            for (j = 0; j < headerNames.size(); j++) {
-              var headerName = headerNames.get(j);
-              var headerValue = itemHeaders.getHeader(headerName);
-              requestEntity.headers.set(headerName, headerValue);
-            }
+          if (multipartItem.isFormField()) {
+            var fieldName = multipartItem.getFieldName();
+            var fieldValue = multipartItem.getText();
 
             requestEntity.parameters.set(fieldName, fieldValue);
-            requestEntity.contentType = fileItem.getContentType();
-
-            dEntitiesArray.push(requestEntity);
           }
+
+          var multipartItemHeaders = multipartItem.getHeaders();
+          var headerNames = multipartItemHeaders.getHeaderNames();
+
+          for (j = 0; j < headerNames.size(); j++) {
+            var headerName = headerNames.get(j);
+            var headerValue = multipartItemHeaders.getHeader(headerName);
+            requestEntity.headers.set(headerName, headerValue);
+          }
+
+          requestEntity.setBody(multipartItem);
+          requestEntity.contentType = multipartItem.getContentType();
+          dEntitiesArray.push(requestEntity);
         }
       }
     }
@@ -316,11 +315,7 @@ exports.WebResponse = function () {
 
     syncHeaders();
 
-    if (typeof content === 'string' || content instanceof String) {
-      dResponse.println(content);
-      dResponse.flush();
-      dResponse.close();
-    } else if (content instanceof Array && this.contentType === 'application/zip') {
+    if (content instanceof Array && this.contentType === 'application/zip') {
       var parsedContent = JSON.parse(bytes.byteArrayToText(content));
       var outputStream = dResponse.getOutputStream();
       if (outputStream.isValid()) {
@@ -334,6 +329,10 @@ exports.WebResponse = function () {
           zipOutputStream.close();
         }
       }
+    } else {
+      dResponse.print(content);
+      dResponse.flush();
+      dResponse.close();
     }
   };
 

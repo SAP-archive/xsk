@@ -52,7 +52,7 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
   private static String getJSErrorFileNamePolyfillSource() {
     return "Object.defineProperty(Error.prototype, 'fileName', {\n"
         + "  get() {\n"
-        + "    const regex = /.*at.*\\((.*)(?::.*\\))/;\n"
+        + "    const regex = /at[^\\(]*\\(([^:)]*)(?::\\d*-*\\d*)*\\)/;\n"
         + "    if (!this.stack) {\n"
         + "        return \"Unknown\";\n"
         + "    }\n"

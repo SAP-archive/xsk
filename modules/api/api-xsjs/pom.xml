@@ -22,6 +22,11 @@
       <version>${dirigible.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-api-facade-http</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>${gson.version}</version>

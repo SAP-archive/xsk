@@ -120,7 +120,17 @@ exports.Client = function () {
 
     requestObj.headers = requestHeaders;
 
-    clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination);
+    let options = {};
+
+    if (requestObj.body) {
+        if (typeof requestObj.body === 'string' || requestObj.bodyy instanceof String) {
+          options.text = requestObj.body;
+        } else {
+          options.text = JSON.stringify(requestObj.body);
+        }
+    }
+
+    clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination, JSON.stringify(options));
   }
 
   function sendRequestObjToUrl(requestObj, url, proxy) {
@@ -175,10 +185,11 @@ exports.Client = function () {
 
   function executeRequest(url, requestMethod, options, requestBody) {
     if (requestBody) {
-      if(typeof requestBody === 'string' || requestBody instanceof String)
+      if (typeof requestBody === 'string' || requestBody instanceof String) {
         options.text = requestBody;
-      else
+      } else {
         options.text = JSON.stringify(requestBody);
+      }
     }
 
     switch (requestMethod) {

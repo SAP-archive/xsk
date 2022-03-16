@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-parsers-parent</artifactId>
-        <version>0.14.7</version>
+        <version>0.15.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <name>XSK - Modules - Parsers - XS OData</name>
     <artifactId>xsk-modules-parsers-xsodata</artifactId>
-    <version>0.14.7</version>
+    <version>0.15.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-commons</artifactId>
-            <version>0.14.7</version>
+            <version>0.15.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

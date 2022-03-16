@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-releng-parent</artifactId>
-		<version>0.14.7</version>
+		<version>0.15.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Releng - Kyma</name>
 	<artifactId>xsk-releng-kyma</artifactId>
-	<version>0.14.7</version>
+	<version>0.15.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<build>

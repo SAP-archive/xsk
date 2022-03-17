@@ -1,0 +1,87 @@
+namespace itest;
+
+@Schema: 'TEST_SCHEMA'
+
+context EmployeesWithViewDefinitions {
+
+    entity employees {
+        key ID       : String(32);
+        NAME         : String(500);
+        ADDRESS      : String(5000);
+        AGE          : Integer;
+        PHONE        : String(200);
+    };
+
+    entity employee_roles {
+        key ID       : String(32);
+        TYPE    : String(500);
+    };
+
+   entity employee_salaries {
+       key ID        : String(32);
+       AMOUNT        : String(500);
+   };
+
+    // Basic view definition
+    define view employees_view_basic as
+        select from "itest::EmployeesWithViewDefinitions.employees" as EMP
+        {
+            "EMP"."ID" as "EmployeeID",
+            "EMP"."NAME" as "EmployeeName",
+            "EMP"."ADDRESS" as "EmployeeAddress",
+            "EMP"."AGE" as "EmployeeAge",
+            "EMP"."PHONE" as "EmployeePhone"
+        };
+
+    // View definition with join statements
+    define view employees_view_with_join as
+        select from "itest::EmployeesWithViewDefinitions.employees"
+            join employee_roles as ER
+                on "ER"."ID" = "itest::EmployeesWithViewDefinitions.employees"."ID"
+            join employee_salaries as ES
+                on "ES"."ID" = "itest::EmployeesWithViewDefinitions.employees"."ID"
+        {
+          "itest::EmployeesWithViewDefinitions.employees"."ID" as "EmployeeId",
+          "itest::EmployeesWithViewDefinitions.employees"."NAME" as "EmployeeName",
+          "ER"."TYPE" as "EmployeeRoleType",
+          "ES"."AMOUNT" as "EmployeeSalary"
+        };
+
+    // View definition with where statements
+    define view employees_view_with_where as
+        select from "itest::EmployeesWithViewDefinitions.employees"
+            join employee_roles as ER
+                on "ER"."ID" = "itest::EmployeesWithViewDefinitions.employees"."ID"
+            join employee_salaries as ES
+                on "ES"."ID" = "itest::EmployeesWithViewDefinitions.employees"."ID"
+        {
+          "itest::EmployeesWithViewDefinitions.employees"."ID" as "EmployeeId",
+          "itest::EmployeesWithViewDefinitions.employees"."NAME" as "EmployeeName",
+          "ER"."TYPE" as "EmployeeRoleType",
+          "ES"."AMOUNT" as "EmployeeSalary"
+        }
+        where "itest::EmployeesWithViewDefinitions.employees"."NAME" = 'John';
+
+    // View definition with union statements and dummy table
+    define view employees_view_with_union as
+        select from "itest::EmployeesWithViewDefinitions.employees"
+            join employee_roles as ER
+                on "ER"."ID" = "itest::EmployeesWithViewDefinitions.employees"."ID"
+            join employee_salaries as ES
+                on "ES"."ID" = "itest::EmployeesWithViewDefinitions.employees"."ID"
+        {
+          "itest::EmployeesWithViewDefinitions.employees"."ID" as "EmployeeId",
+          "itest::EmployeesWithViewDefinitions.employees"."NAME" as "EmployeeName",
+          "ER"."TYPE" as "EmployeeRoleType",
+          "ES"."AMOUNT" as "EmployeeSalary"
+        }
+        where "itest::EmployeesWithViewDefinitions.employees"."NAME" = 'John'
+        union
+        select from DUMMY
+        {
+          0 as "EmployeeId",
+          'Ben' as "EmployeeName",
+          'Developer' as "EmployeeRoleType",
+          '2200' as "EmployeeSalary"
+        };
+}

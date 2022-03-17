@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -37,19 +38,19 @@ public class ArtifactDefinitionListenerTest {
   private final SymbolTable symbolTable = new SymbolTable();
 
   @Test
-  public void parseCaseInsensitiveKeysSuccessfully() throws Exception {
+  public void testParseCaseInsensitiveKeysSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/CaseInsensitiveTest.hdbdd", "sap/table/CaseInsensitiveTest.hdbdd");
     assertEquals(0, parser.getNumberOfSyntaxErrors());
   }
 
   @Test
-  public void parseDefaultValuesSuccessfully() throws Exception {
+  public void testParseDefaultValuesSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/DefaultValues.hdbdd", "sap/table/DefaultValues.hdbdd");
     assertEquals(0, parser.getNumberOfSyntaxErrors());
   }
 
   @Test
-  public void parseEntitySuccessfully() throws Exception {
+  public void testParseEntitySuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/ParseEntity.hdbdd", "sap/table/ParseEntity.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
@@ -59,7 +60,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void parseContextSuccessfully() throws Exception {
+  public void testParseContextSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/ParseContext.hdbdd", "sap/table/ParseContext.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 
@@ -69,7 +70,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void parseParseAssociationsSuccessfully() throws Exception {
+  public void testParseParseAssociationsSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/Products.hdbdd", "sap/db/Products.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 
@@ -84,15 +85,8 @@ public class ArtifactDefinitionListenerTest {
     assertEquals(itemsName, parsedEntities.get(2).getElements().get(0).getName());
   }
 
-  //    @Test
-//    public void parseParseStructuredTypeSuccessfully() throws Exception {
-//        CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
-//        List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
-//
-//        assertEquals(0, parser.getNumberOfSyntaxErrors());
-//    }
   @Test
-  public void parseParseStructuredTypeSuccessfully() throws Exception {
+  public void testParseParseStructuredTypeSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
     this.symbolTable.getSortedEntities();//get only Entities
 
@@ -100,7 +94,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void parseUnmanagedAssociationSuccessfully() throws Exception {
+  public void testParseUnmanagedAssociationSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/ProjectProducts.hdbdd", "sap/db/ProjectProducts.hdbdd");
     this.symbolTable.getSortedEntities();//get only Entities
 
@@ -108,7 +102,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void parseHanaBuiltInTypesSuccessfully() throws Exception {
+  public void testParseHanaBuiltInTypesSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/HanaBuiltInTypesTest.hdbdd", "sap/db/HanaBuiltInTypesTest.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
@@ -131,7 +125,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void parseGlobalBuiltInTypesSuccessfully() throws Exception {
+  public void testParseGlobalBuiltInTypesSuccessfully() throws Exception {
     CdsParser parser = parseSampleFile("/GlobalBuiltInTypesTest.hdbdd", "sap/db/GlobalBuiltInTypesTest.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
@@ -160,7 +154,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void parseArtifactsNamedAsKeywordsSuccessfully() throws Exception {
+  public void testParseArtifactsNamedAsKeywordsSuccessfully() throws Exception {
       parseSampleFile("/Context.hdbdd", "sap/db/Context.hdbdd");
       assertEquals(4, this.symbolTable.getSymbolsByFullName().size());
 
@@ -182,7 +176,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void parseInvalidElementDeclarationShouldThrowException() throws Exception {
+  public void testParseInvalidElementDeclarationShouldThrowException() throws Exception {
     try {
       parseSampleFile("/InvalidElementDeclaration.hdbdd", "sap/db/InvalidElementDeclaration.hdbdd");
     } catch (RuntimeException e) {
@@ -192,7 +186,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void parseEntitiesWithEscapedNamesShouldResolveCorrectly() throws Exception {
+  public void testParseEntitiesWithEscapedNamesShouldResolveCorrectly() throws Exception {
     parseSampleFile("/EscapedNamesExample.hdbdd", "com/sap/EscapedNamesExample.hdbdd");
     List<EntitySymbol> sortedEntities = this.symbolTable.getSortedEntities();
 
@@ -206,6 +200,15 @@ public class ArtifactDefinitionListenerTest {
     assertEquals("Escaped-School", school.getName());
     assertNotNull(((Typeable) school.resolve("name")).getType());
     assertNotNull(((Typeable) school.resolve("to")).getType());
+  }
+
+  @Test
+  public void testParseViewsSuccessfully() throws Exception {
+    CdsParser parser = parseSampleFile("/ParseViews.hdbdd", "sap/db/ParseViews.hdbdd");
+    List<ViewSymbol> parsedViews = this.symbolTable.getSortedViews();
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(4, parsedViews.size());
   }
 
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {

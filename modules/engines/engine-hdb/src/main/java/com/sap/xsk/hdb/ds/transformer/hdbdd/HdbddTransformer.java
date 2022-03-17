@@ -33,11 +33,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.builders.records.SelectBuilder;
+import org.eclipse.dirigible.database.sql.builders.view.CreateViewBuilder;
 
 public class HdbddTransformer {
 
@@ -120,13 +123,11 @@ public class HdbddTransformer {
   public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
     XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
 
-    StringBuilder finalSql = new StringBuilder();
+    StringBuilder finalSelectSql = new StringBuilder();
     List<String> forReplacement = new ArrayList<>();
 
     // Preparing the view sql
-    String viewSql = SqlFactory.getDefault().create().view("\"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\"").toString();
-    // Cut out CREATE keyword and null value at the end
-    viewSql = viewSql.substring(7, viewSql.length() - 4);
+    CreateViewBuilder viewSql = SqlFactory.getDefault().create().view("\"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\"");
 
     for(Symbol ss: viewSymbol.getSelectStatements()) {
       SelectBuilder controlSqlBuilder;
@@ -145,6 +146,8 @@ public class HdbddTransformer {
 
       // Get the select columns which is the {...} part in the hdbdd view definition
       String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
+
+      selectColumns = "\"" + selectColumns + "\"";
 
       // Define union and distict if they are true.
       boolean unionBol = ((SelectSymbol) ss).getUnion();
@@ -172,7 +175,6 @@ public class HdbddTransformer {
       }
 
       // Loop through each join statement
-//      ((SelectSymbol) ss).getJoinStatements().forEach(js -> {
       for (Symbol js: ((SelectSymbol) ss).getJoinStatements()) {
         // Get the join type
         String joinType = ((((JoinSymbol) js).getJoinType() == null) ? "JOIN" : ((JoinSymbol) js).getJoinType());
@@ -191,13 +193,14 @@ public class HdbddTransformer {
         // Get the rest part of the join and use substring to remove the ON keyword
         String joinFieldsSql = ((((JoinSymbol) js).getJoinFields() == null) ? "" : ((JoinSymbol) js).getJoinFields()).substring(3);
 
-        // Check if the join artifact name contains :: to determine if full artfact name is used and build the full name if not
+        // Check if the join artifact name contains :: to determine if full artifact name is used and build the full name if not
         if (!joinArtifactName.contains("::")) {
           joinArtifactName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + joinArtifactName;
         }
 
         // Replace the select from depending table if anywhere in the join with it's full name
-        joinFieldsSql = joinFieldsSql.replace(dependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", ""), dependsOnTable);
+        String dependsOnTableShortName = dependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", "");
+        joinFieldsSql = joinFieldsSql.replaceAll("\"" + dependsOnTableShortName + "\"[.]|" + dependsOnTableShortName + "[.]", "\"" + dependsOnTable + "\".");
 
         // check and create supported join clauses
         if (JOIN_TYPE_CONSTANTS.contains(joinType)) {
@@ -208,30 +211,41 @@ public class HdbddTransformer {
       };
 
       if(!(((SelectSymbol) ss).getWhereSql() == null)) {
-        // remove where keyword
-        String where = ((SelectSymbol) ss).getWhereSql().substring(6);
+        String where = ((SelectSymbol) ss).getWhereSql();
         controlSqlBuilder.where(where);
       }
 
       if(unionBol) {
-        controlSql = ISqlKeywords.KEYWORD_UNION + " " + controlSqlBuilder.toString();
+        controlSql = ISqlKeywords.KEYWORD_UNION + " " + controlSqlBuilder.build();
       } else {
-        controlSql = controlSqlBuilder.toString();
+        controlSql = controlSqlBuilder.build();
       }
 
       for(String alias : forReplacement) {
         controlSql = putQuotesOnAliases(controlSql, alias);
       }
 
-      finalSql.append(controlSql).append(" ");
+      // Remove quotes surrounding selected columns
+      Pattern pattern = Pattern.compile("(?i)(?s)(?<=SELECT[\\s\\S])(?:.*)(?=[\\s\\S]FROM)", Pattern.CASE_INSENSITIVE);
+      Matcher matcher = pattern.matcher(controlSql);
+      boolean matchFound = matcher.find();
+
+      if (matchFound) {
+        String selectedColumns = matcher.group();
+        String selectedColumnsWithoutQuotes = selectedColumns.substring(1, selectedColumns.length() - 1);
+
+        controlSql = controlSql.replace(selectedColumns, selectedColumnsWithoutQuotes);
+      }
+
+      finalSelectSql.append(controlSql).append(" ");
     };
 
-    finalSql.insert(0, viewSql);
+    viewSql.asSelect(String.valueOf(finalSelectSql));
 
     viewModel.setDbContentType(XSKDBContentType.OTHERS);
     viewModel.setName(viewSymbol.getFullName());
     viewModel.setSchema(viewSymbol.getSchema());
-    viewModel.setRawContent(finalSql.toString());
+    viewModel.setRawContent(viewSql.build().substring(7));
     viewModel.setLocation(location);
     return viewModel;
   }

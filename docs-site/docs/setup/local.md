@@ -76,6 +76,16 @@ You can deploy XSK locally using Docker or Tomcat server.
                 dirigiblelabs/xsk:latest
                 ```
 
+        === "with Java Debugging Options"
+
+            ```
+            docker run --name xsk \
+            -e JPDA_ADDRESS=0.0.0.0:8000 \
+            -e JPDA_TRANSPORT=dt_socket \
+            --rm -p 8080:8080 -p 8081:8081 -p 8000:8000 \
+            dirigiblelabs/xsk:latest
+            ```
+
     === "Tomcat"
 
         !!! info "Prerequisites"

@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.9.3
 package com.sap.xsk.parser.hdbview.core;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -23,58 +22,51 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface HdbviewVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link HdbviewParser#queryProp}.
+	 * Visit a parse tree produced by {@link HdbviewParser#hdbviewDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitQueryProp(@NotNull HdbviewParser.QueryPropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbviewParser#dependsOnProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDependsOnProp(@NotNull HdbviewParser.DependsOnPropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbviewParser#schemaProp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSchemaProp(@NotNull HdbviewParser.SchemaPropContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link HdbviewParser#dependsOnView}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDependsOnView(@NotNull HdbviewParser.DependsOnViewContext ctx);
-
+	T visitHdbviewDefinition(HdbviewParser.HdbviewDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbviewParser#property}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProperty(@NotNull HdbviewParser.PropertyContext ctx);
-
+	T visitProperty(HdbviewParser.PropertyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link HdbviewParser#hdbviewDefinition}.
+	 * Visit a parse tree produced by {@link HdbviewParser#schemaProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHdbviewDefinition(@NotNull HdbviewParser.HdbviewDefinitionContext ctx);
-
+	T visitSchemaProp(HdbviewParser.SchemaPropContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbviewParser#publicProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPublicProp(@NotNull HdbviewParser.PublicPropContext ctx);
-
+	T visitPublicProp(HdbviewParser.PublicPropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbviewParser#queryProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQueryProp(HdbviewParser.QueryPropContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbviewParser#dependsOnProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDependsOnProp(HdbviewParser.DependsOnPropContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbviewParser#dependsOnTable}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDependsOnTable(@NotNull HdbviewParser.DependsOnTableContext ctx);
+	T visitDependsOnTable(HdbviewParser.DependsOnTableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HdbviewParser#dependsOnView}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDependsOnView(HdbviewParser.DependsOnViewContext ctx);
 }

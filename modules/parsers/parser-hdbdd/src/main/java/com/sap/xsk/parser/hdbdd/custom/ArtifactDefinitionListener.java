@@ -457,10 +457,10 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
       selectSymbol.setColumnsSql(ctx.start.getInputStream().getText(selectedColumnsRuleSqlInterval));
     }
 
-    WhereRuleContext whreRuleContext = ctx.whereRule();
-    if (whreRuleContext.children != null) {
-      int a = whreRuleContext.start.getStartIndex();
-      int b = whreRuleContext.stop.getStopIndex();
+    WhereRuleContext whereRuleContext = ctx.whereRule();
+    if (whereRuleContext != null) {
+      int a = whereRuleContext.start.getStartIndex();
+      int b = whereRuleContext.stop.getStopIndex();
       Interval whereRuleSqlInterval = new Interval(a, b);
       selectSymbol.setWhereSql(ctx.start.getInputStream().getText(whereRuleSqlInterval));
     }
@@ -489,7 +489,6 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   @Override
   public void exitSelectRule(SelectRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
-//    fullSymbolName.pop();
   }
 
   @Override

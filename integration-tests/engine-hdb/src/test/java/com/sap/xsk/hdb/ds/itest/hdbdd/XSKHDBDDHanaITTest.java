@@ -38,7 +38,8 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
 		HanaITestUtils.clearDataFromXSKDataStructure(systemDatasource, Arrays.asList( //
 				"'/itest/ProductsWithManagedAssItest.hdbdd'", //
 				"'/itest/Status.hdbdd'", //
-				"'/itest/ProductsWithManagedAssWithUsingItest.hdbdd'" //
+				"'/itest/ProductsWithManagedAssWithUsingItest.hdbdd'", //
+        "'/itest/EmployeesWithViewDefinitions.hdbdd'"
 		));
 		Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
 		facade.clearCache();
@@ -116,5 +117,58 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
 			}
 		}
 	}
+
+  @Test
+  public void testHDBDDWithViewDefinitions()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
+
+      try {
+        HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+
+        LocalResource resource = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/EmployeesWithViewDefinitions.hdbdd", //
+            "/registry/public/itest/EmployeesWithViewDefinitions.hdbdd" //
+        );
+
+        facade.handleResourceSynchronization(resource);
+        facade.updateEntities();
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employees", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees"));
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employee_roles", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employee_roles"));
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employee_salaries", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employee_salaries"));
+
+        assertTrue(HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_basic", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_basic"));
+
+        assertTrue(HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_join", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_join"));
+
+        assertTrue(HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_where", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_where"));
+
+        assertTrue(HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_union", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_union"));
+
+      } finally {
+        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_basic", TEST_SCHEMA);
+        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_join", TEST_SCHEMA);
+        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_where", TEST_SCHEMA);
+        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_union", TEST_SCHEMA);
+
+        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employees", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employee_roles", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employee_salaries", TEST_SCHEMA);
+
+        HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+      }
+    }
+  }
 
 }

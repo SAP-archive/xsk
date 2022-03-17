@@ -44,7 +44,7 @@ keyValue: ID ':' annValue;
 artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | viewRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
 
 viewRule: DEFINE artifactType=VIEW artifactName=ID AS selectRule*;
-selectRule: isUnion=UNION? SELECT FROM dependsOnTable=ID ((AS dependingTableAlias=ID) | dependingTableAlias=ID)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'* whereRule?;
+selectRule: isUnion=UNION? SELECT FROM dependsOnTable=ID ((AS dependingTableAlias=ID) | dependingTableAlias=ID)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'? (WHERE whereRule ';'?)?;
 joinRule: joinType=JOIN_TYPES joinArtifactName=ID ((AS joinTableAlias=ID) | joinTableAlias=ID)? joinFields;
 joinFields: .*?;
 selectedColumnsRule: .*?;
@@ -56,6 +56,7 @@ AS: A S;
 ON: O N;
 SELECT: S E L E C T;
 FROM: F R O M;
+WHERE: W H E R E;
 DEFINE: D E F I N E;
 VIEW: V I E W;
 UNION: U N I O N;

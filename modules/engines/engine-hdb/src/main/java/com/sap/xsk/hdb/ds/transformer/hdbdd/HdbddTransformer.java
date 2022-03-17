@@ -31,24 +31,22 @@ import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.builders.records.SelectBuilder;
-import org.eclipse.dirigible.database.sql.builders.view.CreateViewBuilder;
+
+import static org.eclipse.dirigible.database.sql.ISqlKeywords.SPACE;
 
 public class HdbddTransformer {
 
   private static final String UNMANAGED_ASSOCIATION_MARKER = "@";
   private static final String CATALOG_ANNOTATION = "Catalog";
   private static final String CATALOG_OBJ_TABLE_TYPE = "tableType";
-  private static final List<String> JOIN_TYPE_CONSTANTS = List.of(ISqlKeywords.KEYWORD_INNER, ISqlKeywords.KEYWORD_OUTER,
-      ISqlKeywords.KEYWORD_LEFT, ISqlKeywords.KEYWORD_RIGHT, ISqlKeywords.KEYWORD_FULL);
+  private static final String QUOTE = "\"";
+  private static final String DOT = ".";
 
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol, String location) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
@@ -123,26 +121,34 @@ public class HdbddTransformer {
   public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
     XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
 
-    StringBuilder finalSelectSql = new StringBuilder();
+    StringBuilder viewSelectSql = new StringBuilder();
     List<String> forReplacement = new ArrayList<>();
 
-    // Preparing the view sql
-    CreateViewBuilder viewSql = SqlFactory.getDefault().create().view("\"" + viewSymbol.getSchema() + "\".\"" + viewSymbol.getFullName() + "\"");
+    viewSelectSql.append(ISqlKeywords.KEYWORD_VIEW).append(SPACE).append(QUOTE).append(viewSymbol.getSchema()).append(QUOTE)
+        .append(DOT).append(QUOTE).append(viewSymbol.getFullName()).append(QUOTE).append(SPACE).append(ISqlKeywords.KEYWORD_AS).append(SPACE);
+
+    String selectStatements = traverseSelectStatements(viewSymbol, forReplacement);
+
+    viewSelectSql.append(selectStatements);
+
+    viewModel.setDbContentType(XSKDBContentType.OTHERS);
+    viewModel.setName(viewSymbol.getFullName());
+    viewModel.setSchema(viewSymbol.getSchema());
+    viewModel.setRawContent(viewSelectSql.toString());
+    viewModel.setLocation(location);
+    return viewModel;
+  }
+
+  public String traverseSelectStatements(ViewSymbol viewSymbol, List<String> forReplacement) {
+    StringBuilder selectSql = new StringBuilder();
+    String returnedSql = "";
 
     for(Symbol ss: viewSymbol.getSelectStatements()) {
-      SelectBuilder controlSqlBuilder;
-      String controlSql;
-
       // Get the table on which the select depends
       String dependsOnTable = ((((SelectSymbol) ss).getDependsOnTable() == null) ? "" : ((SelectSymbol) ss).getDependsOnTable());
 
       // Get the depnding table's alias. Returns null in case no alias
       String dependingTableAlias = ((SelectSymbol) ss).getDependingTableAlias();
-
-      if(dependingTableAlias != null) {
-        forReplacement.add(dependingTableAlias);
-        dependingTableAlias = "\"" + dependingTableAlias + "\"";
-      }
 
       // Get the select columns which is the {...} part in the hdbdd view definition
       String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
@@ -159,95 +165,111 @@ public class HdbddTransformer {
         if (dependsOnTable.equalsIgnoreCase("dummy")) {
           dependsOnTable = dependsOnTable.toUpperCase();
         } else {
-          // Build the full name of the depending table.
-          String dependsOnTableFullName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + dependsOnTable;
+          String dependsOnTableFullName = fullTableNameBuilderFromViewSymbol(dependsOnTable, viewSymbol);
           // Replace the short name in the select columns with the full name
           selectColumns = selectColumns.replace(dependsOnTable, dependsOnTableFullName);
           // Set the depending table to be with the full name
-          dependsOnTable = dependsOnTableFullName;
+          dependsOnTable = dependsOnTableFullName.toString();
         }
-      }
-
-      if(distinctBol) {
-        controlSqlBuilder = SqlFactory.getDefault().select().distinct().column(selectColumns).from("\"" + dependsOnTable + "\"", dependingTableAlias);
-      } else {
-        controlSqlBuilder = SqlFactory.getDefault().select().column(selectColumns).from("\"" + dependsOnTable + "\"", dependingTableAlias);
-      }
-
-      // Loop through each join statement
-      for (Symbol js: ((SelectSymbol) ss).getJoinStatements()) {
-        // Get the join type
-        String joinType = ((((JoinSymbol) js).getJoinType() == null) ? "JOIN" : ((JoinSymbol) js).getJoinType());
-
-        // Get only the join type when using longer join statements
-        if (joinType.length() > 5) {
-          joinType = joinType.substring(0, joinType.length() - 5).toUpperCase();
-        }
-        // Get the join artifact name
-        String joinArtifactName = ((((JoinSymbol) js).getJoinArtifactName() == null) ? "" : ((JoinSymbol) js).getJoinArtifactName());
-
-        // Get the join artifact alias
-        String joinTableAlias = ((JoinSymbol) js).getJoinTableAlias();
-        forReplacement.add(joinTableAlias);
-
-        // Get the rest part of the join and use substring to remove the ON keyword
-        String joinFieldsSql = ((((JoinSymbol) js).getJoinFields() == null) ? "" : ((JoinSymbol) js).getJoinFields()).substring(3);
-
-        // Check if the join artifact name contains :: to determine if full artifact name is used and build the full name if not
-        if (!joinArtifactName.contains("::")) {
-          joinArtifactName = viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + "." + joinArtifactName;
-        }
-
-        // Replace the select from depending table if anywhere in the join with it's full name
-        String dependsOnTableShortName = dependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", "");
-        joinFieldsSql = joinFieldsSql.replaceAll("\"" + dependsOnTableShortName + "\"[.]|" + dependsOnTableShortName + "[.]", "\"" + dependsOnTable + "\".");
-
-        // check and create supported join clauses
-        if (JOIN_TYPE_CONSTANTS.contains(joinType)) {
-          controlSqlBuilder.genericJoin(joinType, "\"" + joinArtifactName + "\"", joinFieldsSql, "\"" + joinTableAlias + "\"");
-        } else {
-          controlSqlBuilder.join("\"" + joinArtifactName + "\"", joinFieldsSql, "\"" + joinTableAlias + "\"");
-        }
-      };
-
-      if(!(((SelectSymbol) ss).getWhereSql() == null)) {
-        String where = ((SelectSymbol) ss).getWhereSql();
-        controlSqlBuilder.where(where);
       }
 
       if(unionBol) {
-        controlSql = ISqlKeywords.KEYWORD_UNION + " " + controlSqlBuilder.build();
-      } else {
-        controlSql = controlSqlBuilder.build();
+        selectSql.append(ISqlKeywords.KEYWORD_UNION).append(SPACE);
       }
+
+      selectSql.append(ISqlKeywords.KEYWORD_SELECT).append(SPACE);
+
+      if(distinctBol) {
+        selectSql.append(ISqlKeywords.KEYWORD_DISTINCT).append(SPACE);
+      }
+
+      String joinStatements = traverseJoinStatements((SelectSymbol) ss, viewSymbol, dependsOnTable, forReplacement);
+
+      selectSql.append(selectColumns).append(SPACE).append(ISqlKeywords.KEYWORD_FROM).append(SPACE)
+          .append(QUOTE).append(dependsOnTable).append(QUOTE).append(SPACE);
+
+      if(dependingTableAlias != null) {
+        forReplacement.add(dependingTableAlias);
+        selectSql.append(ISqlKeywords.KEYWORD_AS).append(SPACE).append(QUOTE).append(dependingTableAlias).append(QUOTE).append(SPACE);
+      }
+
+      selectSql.append(joinStatements).append(SPACE);
+
+      if(!(((SelectSymbol) ss).getWhereSql() == null)) {
+        String where = ((SelectSymbol) ss).getWhereSql();
+        selectSql.append(ISqlKeywords.KEYWORD_WHERE).append(SPACE);
+      }
+
+      returnedSql = selectSql.toString();
 
       for(String alias : forReplacement) {
-        controlSql = putQuotesOnAliases(controlSql, alias);
+        returnedSql = putQuotesOnAliases(returnedSql, alias);
       }
 
-      // Remove quotes surrounding selected columns
-      Pattern pattern = Pattern.compile("(?i)(?s)(?<=SELECT[\\s\\S])(?:.*)(?=[\\s\\S]FROM)", Pattern.CASE_INSENSITIVE);
-      Matcher matcher = pattern.matcher(controlSql);
-      boolean matchFound = matcher.find();
+      returnedSql = removeSelectColumnsQuotes(returnedSql);
+    }
 
-      if (matchFound) {
-        String selectedColumns = matcher.group();
-        String selectedColumnsWithoutQuotes = selectedColumns.substring(1, selectedColumns.length() - 1);
+    return returnedSql;
+  }
 
-        controlSql = controlSql.replace(selectedColumns, selectedColumnsWithoutQuotes);
+  public String traverseJoinStatements(SelectSymbol ss, ViewSymbol viewSymbol, String dependsOnTable, List<String> forReplacement) {
+    StringBuilder joinStatements = new StringBuilder();
+
+    // Loop through each join statement
+    for (Symbol js: ss.getJoinStatements()) {
+      // Get the join type
+      String joinType = (((JoinSymbol) js).getJoinType() == null) ? ISqlKeywords.KEYWORD_JOIN : ((JoinSymbol) js).getJoinType();
+
+      // Get the join artifact name
+      String joinArtifactName = (((JoinSymbol) js).getJoinArtifactName() == null) ? "" : ((JoinSymbol) js).getJoinArtifactName();
+
+      // Get the join artifact alias
+      String joinTableAlias = ((JoinSymbol) js).getJoinTableAlias();
+
+      // Get the rest part of the join and use substring to remove the ON keyword
+      String joinFieldsSql = (((JoinSymbol) js).getJoinFields() == null) ? "" : ((JoinSymbol) js).getJoinFields();
+
+      // Check if the join artifact name contains :: to determine if full artifact name is used and build the full name if not
+      if (!joinArtifactName.contains("::")) {
+        joinArtifactName = fullTableNameBuilderFromViewSymbol(joinArtifactName, viewSymbol);
       }
 
-      finalSelectSql.append(controlSql).append(" ");
+      // Replace the select from depending table if anywhere in the join with it's full name
+      String dependsOnTableShortName = dependsOnTable.replace(viewSymbol.getPackageId() + "::" + viewSymbol.getContext() + ".", "");
+      joinFieldsSql = joinFieldsSql.replaceAll("\"" + dependsOnTableShortName + "\"[.]|" + dependsOnTableShortName + "[.]", "\"" + dependsOnTable + "\".");
+
+      joinStatements.append(joinType).append(SPACE).append(QUOTE).append(joinArtifactName).append(QUOTE).append(SPACE);
+
+      if(joinTableAlias != null) {
+        joinStatements.append(ISqlKeywords.KEYWORD_AS).append(SPACE).append(QUOTE).append(joinTableAlias).append(QUOTE).append(SPACE);
+        forReplacement.add(joinTableAlias);
+      }
+
+      joinStatements.append(joinFieldsSql);
     };
 
-    viewSql.asSelect(String.valueOf(finalSelectSql));
+    return joinStatements.toString();
+  }
 
-    viewModel.setDbContentType(XSKDBContentType.OTHERS);
-    viewModel.setName(viewSymbol.getFullName());
-    viewModel.setSchema(viewSymbol.getSchema());
-    viewModel.setRawContent(viewSql.build().substring(7));
-    viewModel.setLocation(location);
-    return viewModel;
+  public String fullTableNameBuilderFromViewSymbol(String tableName, ViewSymbol viewSymbol) {
+    StringBuilder fullTableName = new StringBuilder();
+    fullTableName.append(viewSymbol.getPackageId()).append("::").append(viewSymbol.getContext()).append(DOT).append(tableName);
+    return fullTableName.toString();
+  }
+
+  public String removeSelectColumnsQuotes(String sqlStatement) {
+    Pattern pattern = Pattern.compile("(?i)(?s)(?<=SELECT[\\s\\S])(?:.*)(?=[\\s\\S]FROM)", Pattern.CASE_INSENSITIVE);
+    Matcher matcher = pattern.matcher(sqlStatement);
+    boolean matchFound = matcher.find();
+
+    if (matchFound) {
+      String selectedColumns = matcher.group();
+      String selectedColumnsWithoutQuotes = selectedColumns.substring(1, selectedColumns.length() - 1);
+
+      return sqlStatement.replace(selectedColumns, selectedColumnsWithoutQuotes);
+    }
+
+    return "";
   }
 
   private String putQuotesOnAliases(String toBeReplaced, String alias) {

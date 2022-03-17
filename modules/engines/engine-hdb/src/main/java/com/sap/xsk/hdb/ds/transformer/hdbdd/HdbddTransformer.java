@@ -153,8 +153,6 @@ public class HdbddTransformer {
       // Get the select columns which is the {...} part in the hdbdd view definition
       String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
 
-      selectColumns = "\"" + selectColumns + "\"";
-
       // Define union and distict if they are true.
       boolean unionBol = ((SelectSymbol) ss).getUnion();
       boolean distinctBol = ((SelectSymbol) ss).getDistinct();
@@ -197,7 +195,7 @@ public class HdbddTransformer {
 
       if(!(((SelectSymbol) ss).getWhereSql() == null)) {
         String where = ((SelectSymbol) ss).getWhereSql();
-        selectSql.append(ISqlKeywords.KEYWORD_WHERE).append(SPACE);
+        selectSql.append(ISqlKeywords.KEYWORD_WHERE).append(SPACE).append(where).append(SPACE);
       }
 
       returnedSql = selectSql.toString();
@@ -205,8 +203,6 @@ public class HdbddTransformer {
       for(String alias : forReplacement) {
         returnedSql = putQuotesOnAliases(returnedSql, alias);
       }
-
-      returnedSql = removeSelectColumnsQuotes(returnedSql);
     }
 
     return returnedSql;
@@ -245,7 +241,7 @@ public class HdbddTransformer {
         forReplacement.add(joinTableAlias);
       }
 
-      joinStatements.append(joinFieldsSql);
+      joinStatements.append(joinFieldsSql).append(SPACE);
     };
 
     return joinStatements.toString();
@@ -255,21 +251,6 @@ public class HdbddTransformer {
     StringBuilder fullTableName = new StringBuilder();
     fullTableName.append(viewSymbol.getPackageId()).append("::").append(viewSymbol.getContext()).append(DOT).append(tableName);
     return fullTableName.toString();
-  }
-
-  public String removeSelectColumnsQuotes(String sqlStatement) {
-    Pattern pattern = Pattern.compile("(?i)(?s)(?<=SELECT[\\s\\S])(?:.*)(?=[\\s\\S]FROM)", Pattern.CASE_INSENSITIVE);
-    Matcher matcher = pattern.matcher(sqlStatement);
-    boolean matchFound = matcher.find();
-
-    if (matchFound) {
-      String selectedColumns = matcher.group();
-      String selectedColumnsWithoutQuotes = selectedColumns.substring(1, selectedColumns.length() - 1);
-
-      return sqlStatement.replace(selectedColumns, selectedColumnsWithoutQuotes);
-    }
-
-    return "";
   }
 
   private String putQuotesOnAliases(String toBeReplaced, String alias) {

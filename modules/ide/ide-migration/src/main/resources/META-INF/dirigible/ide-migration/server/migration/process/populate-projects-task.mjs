@@ -29,6 +29,7 @@ export class PopulateProjectsTask extends MigrationTask {
             migrationService.addGeneratedFiles(userData, deliveryUnit, workspace, localFiles);
             migrationService.modifyFiles(workspace, localFiles);
             migrationService.commitProjectModifications(workspace, localFiles);
+
         }
 
         process.setVariable(this.execution.getId(), "migrationState", "MIGRATION_EXECUTED");
@@ -37,6 +38,7 @@ export class PopulateProjectsTask extends MigrationTask {
         const workspaceHolderFolder = config.get("user.dir") + "/target/dirigible/repository/root"
         const diffTool = new DiffToolService();
         const diffViewData = diffTool.diffFolders(`${workspaceHolderFolder}/${workspace}_unmodified`, `${workspaceHolderFolder}/${workspace}`);
+        migrationService.removeTemporaryFolders(workspace);
         process.setVariable(this.execution.getId(), "diffViewData", JSON.stringify(diffViewData));
     }
 }

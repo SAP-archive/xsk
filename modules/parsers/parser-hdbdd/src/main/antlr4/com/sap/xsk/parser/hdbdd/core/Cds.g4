@@ -31,7 +31,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
 defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | NULL | VARBINARY);
 
 annotationRule: '@' ID ':' annValue                       #AnnObjectRule
-              | '@' annId=ID '.' prop=ID ':' annValue     #AnnPropertyRule
+              | '@' annId=ID ('.' prop=ID)* ':' annValue     #AnnPropertyRule
               | '@' ID                                    #AnnMarkerRule
               ;
 

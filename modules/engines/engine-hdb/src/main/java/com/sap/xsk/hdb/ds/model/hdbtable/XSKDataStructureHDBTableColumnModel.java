@@ -38,6 +38,8 @@ public class XSKDataStructureHDBTableColumnModel {
 
   private String alias;
 
+  private boolean fuzzySearchIndex;
+
   /**
    * The default constructor.
    */
@@ -255,5 +257,23 @@ public class XSKDataStructureHDBTableColumnModel {
 
   public String getAlias() {
     return alias;
+  }
+
+  /**
+   * Check for the Fuzzy search index.
+   *
+   * @return true if enabled
+   */
+  public boolean isFuzzySearchIndexEnabled() {
+    return fuzzySearchIndex;
+  }
+
+  /**
+   * Setter for the Fuzzy search index.
+   *
+   * @param fuzzySearchIndex whether Fuzzy search index is enabled
+   */
+  public void setFuzzySearchIndex(boolean fuzzySearchIndex) {
+    this.fuzzySearchIndex = fuzzySearchIndex;
   }
 }

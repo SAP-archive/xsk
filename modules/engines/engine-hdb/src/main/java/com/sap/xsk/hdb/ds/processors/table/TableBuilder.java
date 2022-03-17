@@ -82,9 +82,10 @@ public class TableBuilder {
           : columnModel.getName();
       DataType type = DataType.valueOf(columnModel.getType());
 
-      sqlTableBuilder
-          .column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(),
-              getColumnModelArgs(columnModel));
+      if (!columnModel.isFuzzySearchIndexEnabled())
+        sqlTableBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(), getColumnModelArgs(columnModel));
+      else
+        sqlTableBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(), true, getColumnModelArgs(columnModel));
     }
   }
 

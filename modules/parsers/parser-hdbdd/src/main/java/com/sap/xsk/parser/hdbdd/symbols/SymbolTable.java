@@ -87,6 +87,9 @@ public class SymbolTable {
 
     AnnotationObj generateTableTypeObj = annotationTemplateFactory.buildTemplateForGenerateTableTypeAnnotation();
     annotations.put(generateTableTypeObj.getName(),generateTableTypeObj);
+
+    AnnotationObj generateSearchIndexObj = annotationTemplateFactory.buildTemplateForSearchIndexAnnotation();
+    annotations.put(generateSearchIndexObj.getName(),generateSearchIndexObj);
   }
 
   public void addEntityToGraph(String fullName) {

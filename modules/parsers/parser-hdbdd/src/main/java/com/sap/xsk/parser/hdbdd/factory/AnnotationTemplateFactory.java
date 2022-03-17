@@ -17,6 +17,7 @@ import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationSimpleValue;
 import com.sap.xsk.parser.hdbdd.symbols.CDSLiteralEnum;
 import com.sap.xsk.parser.hdbdd.symbols.context.ContextSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import java.util.Arrays;
@@ -80,4 +81,14 @@ public class AnnotationTemplateFactory {
     return generateTableTypeObj;
   }
 
+  public AnnotationObj buildTemplateForSearchIndexAnnotation() {
+    AnnotationObj searchIndexObj = new AnnotationObj();
+    searchIndexObj.setName("SearchIndex");
+    searchIndexObj.setTopLevel(false);
+    searchIndexObj.setAllowedForSymbols(Collections.singletonList(EntityElementSymbol.class));
+    AnnotationSimpleValue booleanValue = new AnnotationSimpleValue(CDSLiteralEnum.BOOLEAN.getLiteralType());
+    searchIndexObj.define("enabled", booleanValue);
+
+    return searchIndexObj;
+  }
 }

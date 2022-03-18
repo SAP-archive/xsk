@@ -35,6 +35,7 @@ RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible
 # Add gosu utility for privilege drop
 RUN apt-get update && \
     apt-get install gosu && \
+    apt-get install -y git && \
     apt-get clean
 
 ENTRYPOINT ["/entrypoint.sh"]

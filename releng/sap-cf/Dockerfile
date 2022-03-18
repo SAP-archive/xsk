@@ -26,6 +26,10 @@ RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc
 
 ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 
+RUN apt-get update && \
+    apt-get install -y git && \
+    apt-get clean
+
 EXPOSE 8080
 
 CMD ["catalina.sh", "jpda", "run"]

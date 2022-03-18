@@ -16,7 +16,7 @@ export class CopyFilesTask extends MigrationTask {
         const connectionUrl = process.getVariable(this.execution.getId(), "connectionUrl");
 
         const migrationService = new MigrationService();
-
+        migrationService.removeTemporaryFolders(userData.workspace);
         for (const deliveryUnit of userData.du) {
             migrationService.setupConnection(
                 userDatabaseData.databaseSchema,
@@ -26,7 +26,8 @@ export class CopyFilesTask extends MigrationTask {
             );
             const files = migrationService.getAllFilesForDU(deliveryUnit);
             if (files) {
-                const locals = migrationService.copyFilesLocally(userData.workspace, files);
+                const duName = deliveryUnit.name;
+                const locals = migrationService.copyFilesLocally(userData.workspace, duName, files);
                 deliveryUnit.locals = locals;
             }
         }

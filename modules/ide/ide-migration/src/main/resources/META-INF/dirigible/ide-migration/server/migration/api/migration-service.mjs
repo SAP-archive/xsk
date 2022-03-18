@@ -272,11 +272,12 @@ export class MigrationService {
     }
 
     _generateHdbPublicSynonym(name, schemaName) {
+        const trimmedName = name.split(":").pop();
         return {
             name: name,
             value: {
                 target: {
-                    object: name,
+                    object: trimmedName,
                     schema: schemaName
                 },
             },

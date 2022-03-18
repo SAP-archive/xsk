@@ -498,12 +498,14 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   public void parseHDBDDWithTableTypeAnnotationColumn () throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeColumn.hdbdd", "");
     assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), "COLUMN");
+    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getTableType(), "COLUMN");
   }
 
   @Test
   public void parseHDBDDWithTableTypeAnnotationRow () throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeRow.hdbdd", "");
     assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), "ROW");
+    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getTableType(), "ROW");
   }
 
   /** When the table type is null a COLUMN table is always created */

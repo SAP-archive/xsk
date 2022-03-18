@@ -44,4 +44,30 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
     assertNotNull("Null value for tablefunction createdAt", model.getCreatedAt());
     assertNotNull("Null value for tablefunction createdBy", model.getCreatedBy());
   }
+
+  @Test
+  public void parseNoSchemaTableFunction() throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+      String location = "/OrderTableFunctionNoSchema.hdbtablefunction";
+      InputStream in = XSKTableParserTest.class.getResourceAsStream(location);
+      String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+      XSKDataStructureHDBTableFunctionModel model = XSKDataStructureModelFactory.parseTableFunction(location, content);
+
+      assertEquals("Unexpected tablefunction schema.", model.getSchema(), null);
+      assertEquals("Unexpected tablefunction name.", model.getName(), "hdb_view::OrderTableFunction");
+      assertEquals("Unexpected tablefunction content.", model.getContent(), content);
+      assertEquals("Unexpected tablefunction raw content.", model.getRawContent(), content);
+      assertEquals("Unexpected tablefunction location.", model.getLocation(), location);
+      assertEquals("Unexpected tablefunction type.", model.getType(), "HDBTABLEFUNC");
+      assertEquals("Unexpected tablefunction dependencies.", model.getDependencies().size(), 0);
+      assertNotNull("Null value for tablefunction createdAt", model.getCreatedAt());
+      assertNotNull("Null value for tablefunction createdBy", model.getCreatedBy());
+  }
+
+  @Test(expected = XSKDataStructuresException.class)
+  public void parseNoSchemaNoNameTableFunction() throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+    String location = "/OrderTableFunctionNoSchemaNoName.hdbtablefunction";
+    InputStream in = XSKTableParserTest.class.getResourceAsStream(location);
+    String content = IOUtils.toString(in, StandardCharsets.UTF_8);
+    XSKDataStructureHDBTableFunctionModel model = XSKDataStructureModelFactory.parseTableFunction(location, content);
+  }
 }

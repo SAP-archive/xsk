@@ -26,6 +26,7 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import custom.HanaErrorListener;
 import custom.HanaTableFunctionListener;
 import models.TableFunctionDefinitionModel;
+import models.TableFunctionMissingPropertyException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -70,14 +71,6 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
 
     ParseTree parseTree = parser.sql_script();
 
-//    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(),
-//        XSKCommonsConstants.PARSER_ERROR, location,
-//        XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
-//
-//    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(),
-//        XSKCommonsConstants.LEXER_ERROR, location,
-//        XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER);
-
     HanaTableFunctionListener listener = new HanaTableFunctionListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
     parseTreeWalker.walk(listener, parseTree);
@@ -108,7 +101,7 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
   private void validateAntlrModel(TableFunctionDefinitionModel antlrModel, String location) throws XSKDataStructuresException {
     try {
       antlrModel.checkForAllMandatoryFieldsPresence();
-    } catch (Exception e) {
+    } catch (TableFunctionMissingPropertyException e) {
       XSKCommonsUtils.logCustomErrors(location,
           XSKCommonsConstants.PARSER_ERROR,
           "",

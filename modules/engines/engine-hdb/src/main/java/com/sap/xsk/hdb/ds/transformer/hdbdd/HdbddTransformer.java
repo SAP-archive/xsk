@@ -153,7 +153,6 @@ public class HdbddTransformer {
       // Get the select columns which is the {...} part in the hdbdd view definition
       String selectColumns = ((((SelectSymbol) ss).getColumnsSql() == null) ? "" : ((SelectSymbol) ss).getColumnsSql());
 
-      // Define union and distict if they are true.
       boolean unionBol = ((SelectSymbol) ss).getUnion();
       boolean distinctBol = ((SelectSymbol) ss).getDistinct();
 
@@ -167,7 +166,7 @@ public class HdbddTransformer {
           // Replace the short name in the select columns with the full name
           selectColumns = selectColumns.replace(dependsOnTable, dependsOnTableFullName);
           // Set the depending table to be with the full name
-          dependsOnTable = dependsOnTableFullName.toString();
+          dependsOnTable = dependsOnTableFullName;
         }
       }
 
@@ -211,18 +210,11 @@ public class HdbddTransformer {
   public String traverseJoinStatements(SelectSymbol ss, ViewSymbol viewSymbol, String dependsOnTable, List<String> forReplacement) {
     StringBuilder joinStatements = new StringBuilder();
 
-    // Loop through each join statement
     for (Symbol js: ss.getJoinStatements()) {
-      // Get the join type
+
       String joinType = (((JoinSymbol) js).getJoinType() == null) ? ISqlKeywords.KEYWORD_JOIN : ((JoinSymbol) js).getJoinType();
-
-      // Get the join artifact name
       String joinArtifactName = (((JoinSymbol) js).getJoinArtifactName() == null) ? "" : ((JoinSymbol) js).getJoinArtifactName();
-
-      // Get the join artifact alias
       String joinTableAlias = ((JoinSymbol) js).getJoinTableAlias();
-
-      // Get the rest part of the join and use substring to remove the ON keyword
       String joinFieldsSql = (((JoinSymbol) js).getJoinFields() == null) ? "" : ((JoinSymbol) js).getJoinFields();
 
       // Check if the join artifact name contains :: to determine if full artifact name is used and build the full name if not

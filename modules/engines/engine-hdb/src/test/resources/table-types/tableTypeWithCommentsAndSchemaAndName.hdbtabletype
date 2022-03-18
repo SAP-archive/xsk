@@ -1,0 +1,6 @@
+/* some comment here */ TYPE /* some other here */ "XSK_SAMPLES_HDI_CUBE"."customer_sample::publishers" /* comments everywhere!!!! */ AS TABLE (
+   "PUBLISHER" INTEGER,
+   "NAME" NVARCHAR(50),
+   "PRICE" DECIMAL,
+   "COUNT" INTEGER
+)

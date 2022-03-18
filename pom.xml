@@ -229,12 +229,12 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <dirigible.version>6.2.7</dirigible.version>
+        <dirigible.version>6.2.10</dirigible.version>
 
         <maven.resource.plugin.version>3.2.0</maven.resource.plugin.version>
         <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
         <maven.clean.plugin.directory>src/main/resources/META-INF/dirigible</maven.clean.plugin.directory>
-        <maven.compiler.plugin.version>3.10.0</maven.compiler.plugin.version>
+        <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.scm.plugin.version>1.12.2</maven.scm.plugin.version>
@@ -242,7 +242,8 @@
         <commons.codec>1.10</commons.codec>
         <cxf.version>3.1.11</cxf.version>
         <gson.version>2.9.0</gson.version>
-        <scp-cf.version>3.64.0</scp-cf.version>
+        <guava.version>31.1-jre</guava.version>
+        <scp-cf.version>3.65.0</scp-cf.version>
         <slf4j.version>1.7.36</slf4j.version>
         <slf4j.simple.version>1.7.12</slf4j.simple.version>
         <logback.version>1.2.11</logback.version>
@@ -257,7 +258,7 @@
         <jaxb.version>2.3.0</jaxb.version>
         <jaxws.version>2.3.0</jaxws.version>
         <olingo.version>2.0.11</olingo.version>
-        <mockito.version>4.3.1</mockito.version>
+        <mockito.version>4.4.0</mockito.version>
         <junit.version>4.13.2</junit.version>
         <junitparams.version>1.1.1</junitparams.version>
         <hamcrest.all.version>1.3</hamcrest.all.version>
@@ -275,7 +276,7 @@
         <neo-java-web-sdk.javax.activation.version>1.2.0</neo-java-web-sdk.javax.activation.version>
         <neo-java-web-sdk.jaxb.version>2.2.11</neo-java-web-sdk.jaxb.version>
         <ngdbc.version>2.11.17</ngdbc.version>
-        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
         <commons-csv.version>1.9.0</commons-csv.version>
         <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>

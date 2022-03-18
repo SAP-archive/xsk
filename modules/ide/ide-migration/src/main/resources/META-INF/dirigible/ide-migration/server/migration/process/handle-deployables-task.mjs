@@ -43,19 +43,17 @@ export class HandleDeployablesTask extends MigrationTask {
 
             // Get names of projects with generated synonyms and add them to deployables
             const projectsWithSynonyms = migrationService.getProjectsWithSynonyms(locals);
+            const synonymsPaths = migrationService.checkExistingSynonymTypes(locals)
             if (projectsWithSynonyms) {
                 for (const projectName of projectsWithSynonyms) {
-                    const hdbSynonymFilePath = migrationService.getSynonymFilePath(projectName);
-                    const hdbPublicSynonymFilePath = migrationService.getPublicSynonymFilePath(projectName);
                     const projectDeployables = deployables.find((x) => x.projectName === projectName).artifacts;
-
-                    projectDeployables.push(hdbSynonymFilePath);
-                    projectDeployables.push(hdbPublicSynonymFilePath);
+                    projectDeployables.push(...synonymsPaths);
                 }
             }
 
             deliveryUnit["deployableArtifactsResult"] =
                 migrationService.handlePossibleDeployableArtifacts(
+                    deliveryUnit.name,
                     userData.workspace,
                     deployables
                 );

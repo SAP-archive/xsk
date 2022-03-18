@@ -5,8 +5,8 @@
   <modelUri>Myview2</modelUri>
   <modelUri>Myview3</modelUri>
 </securedModels>
-<whereSql>(UPPER(SESSION_CONTEXT(APPLICATIONUSER)) = 'TESTUSER')
+<whereSql>(UPPER(SESSION_CONTEXT('APPLICATIONUSER')) = 'TESTUSER')
 OR
-SESSION_CONTEXT(APPLICATIONUSER) IN
+SESSION_CONTEXT('APPLICATIONUSER') IN
 (SELECT "Name" FROM "MYTESTVIEW")</whereSql>
 </Privilege:analyticPrivilege>

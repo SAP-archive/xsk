@@ -508,4 +508,23 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertEquals("TIMESTAMP",tableModel.getColumns().get(1).getType());
     assertTrue(tableModel.getColumns().get(1).isDefaultValueDateTimeFunction());
   }
+
+  @Test
+  public void parseHDBDDWithTableTypeAnnotationColumn () throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeColumn.hdbdd", "");
+    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), "COLUMN");
+  }
+
+  @Test
+  public void parseHDBDDWithTableTypeAnnotationRow () throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeRow.hdbdd", "");
+    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), "ROW");
+  }
+
+  /** When the table type is null a COLUMN table is always created */
+  @Test
+  public void parseHDBDDWithNoTableTypeAnnotation () throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/NoTableType.hdbdd", "");
+    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), null);
+  }
 }

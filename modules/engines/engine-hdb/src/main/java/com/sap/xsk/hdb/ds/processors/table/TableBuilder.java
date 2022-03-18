@@ -51,7 +51,12 @@ public class TableBuilder {
   private HanaCreateTableBuilder createTableBuilder(String tableName, String tableType) {
     HanaSqlDialect dialect = new HanaSqlDialect();
     if (null != tableType) {
-      return SqlFactory.getNative(dialect).create().table(tableName, tableType);
+      if (tableType.equalsIgnoreCase(ISqlKeywords.KEYWORD_COLUMN))
+        return SqlFactory.getNative(dialect).create().table(tableName, ISqlKeywords.KEYWORD_COLUMNSTORE);
+      else if (tableType.equalsIgnoreCase(ISqlKeywords.KEYWORD_ROW))
+        return SqlFactory.getNative(dialect).create().table(tableName, ISqlKeywords.KEYWORD_ROWSTORE);
+      else
+        return SqlFactory.getNative(dialect).create().table(tableName);
     }
 
     return SqlFactory.getNative(dialect).create().table(tableName);
@@ -77,9 +82,12 @@ public class TableBuilder {
           : columnModel.getName();
       DataType type = DataType.valueOf(columnModel.getType());
 
-      sqlTableBuilder
-          .column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(),
-              getColumnModelArgs(columnModel));
+      if (!columnModel.isFuzzySearchIndexEnabled()){
+        sqlTableBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(), getColumnModelArgs(columnModel));
+      }
+      else{
+        sqlTableBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(), true, getColumnModelArgs(columnModel));
+      }
     }
   }
 

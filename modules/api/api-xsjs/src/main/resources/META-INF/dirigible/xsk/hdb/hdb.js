@@ -13,30 +13,26 @@
  * HANA XS Classic Bridge for HDB API
  */
 var database = require('db/v4/database');
-
 const PROCEDURE_IN_PARAMETER = 1;
 const PROCEDURE_IN_OUT_PARAMETER = 2;
-
+const PROCEDURE_OUT_PARAMETER = 4;
+const SQL_TABLE_TYPE = 0;
 exports.getConnection = function () {
 	var dConnection = database.getConnection();
 	return new XscConnection(dConnection);
 }
-
 exports.ProcedureResult = function () {
 	this.$resultSets = [];
 }
-
 exports.ResultSet = XscResultSet;
 
 function XscConnection(dConnection) {
 	this.close = function () {
 		dConnection.close();
 	};
-
 	this.commit = function () {
 		dConnection.commit();
 	};
-
 	this.executeQuery = function (query) {
 		var dPreparedStatement = dConnection.prepareStatement(query);
 		var args = Array.prototype.slice.call(arguments, 1);
@@ -44,11 +40,9 @@ function XscConnection(dConnection) {
 		var dResultSet = dPreparedStatement.executeQuery();
 		return new XscResultSet(dResultSet);
 	}
-
 	this.executeUpdate = function (statement) {
 		var dPreparedStatement = dConnection.prepareStatement(statement);
 		var args = Array.prototype.slice.call(arguments, 1);
-
 		if (args.length === 1 && Array.isArray(args[0]) && Array.isArray(args[0][0])) {
 			return executeBatchUpdate(dConnection, dPreparedStatement, args[0]);
 		} else {
@@ -56,127 +50,61 @@ function XscConnection(dConnection) {
 			return dPreparedStatement.executeUpdate();
 		}
 	};
-
 	// Returns always null. I need to think of conditions where it returns an object
 	this.getLastWarning = function () {
 		return dConnection.native.getWarnings();
 	}
-
 	this.loadProcedure = function (schema, procedure) {
-		let dConnection = null;
-		let procedureParametersStatement = null;
-
-		let procedureINParameters = [];
-		let procedureOUTParameters = [];
-		let procedureParametersCount = 0;
-
-		try {
-			dConnection = database.getConnection();
-
-			let procedureParametersSql = `
-				DO BEGIN
-					DECLARE matcher string;
-					DECLARE res string;
-					DECLARE occn integer;
-					DECLARE definition string;
-					DECLARE parameter_names VARCHAR(100) ARRAY;
-					DECLARE parameter_types VARCHAR(10) ARRAY;
-
-					SELECT SUBSTRING(DEFINITION, 1, LOCATE(LOWER(DEFINITION), 'begin') + LENGTH('begin')) INTO definition FROM "SYS"."PROCEDURES" WHERE PROCEDURE_NAME = '${procedure}';
-
-					matcher := '(?:(?:in|out) \\w+)(?=[\\s\\S]*BEGIN)';
-
-					occn := 1;
-					res := '';
-					
-					WHILE (:res IS NOT NULL) DO
-						res := SUBSTR_REGEXPR(:matcher FLAG 'i' IN :definition OCCURRENCE :occn);
-						IF (:res IS NOT NULL) THEN
-							parameter_names[:occn] = SUBSTR_AFTER(:res,' ');
-							parameter_types[:occn] = SUBSTR_BEFORE(:res,' ');
-							
-							occn := occn + 1;
-						ELSE
-							BREAK;
-						END IF;
-					END while; 
-
-					procedure_parameters = UNNEST(:parameter_names, :parameter_types) AS ("PARAMETER_NAME", "PARAMETER_TYPE");
-					SELECT * From :procedure_parameters;
-				END;
-			`;
-			procedureParametersStatement = dConnection.prepareStatement(procedureParametersSql);
-
-			let procedureParametersResultSet = procedureParametersStatement.executeQuery();
-
-			while (procedureParametersResultSet.next()) {
-				let parameterName = procedureParametersResultSet.getString('PARAMETER_NAME');
-				let parameterType = procedureParametersResultSet.getString('PARAMETER_TYPE');
-
-				if (parameterType === 'in' || parameterType === 'IN') {
-					procedureINParameters.push(parameterName);
-				}
-				else if (parameterType === 'out' || parameterType === 'OUT') {
-					procedureOUTParameters.push(parameterName);
-				}
-				else if (parameterType === 'inout' || parameterType === 'INOUT') {
-					procedureINParameters.push(parameterName);
-					procedureOUTParameters.push(parameterName);
-				}
-
-				procedureParametersCount++;
-			}
-
-		} catch (e) {
-			throw new Error(e)
-		} finally {
-			if (procedureParametersStatement !== null) {
-				procedureParametersStatement.close();
-			}
-			if (dConnection !== null) {
-				dConnection.close();
-			}
-		}
-
-		let procedureParameters = [];
-		for (let i = 0; i < procedureParametersCount; i++) {
-			procedureParameters.push("?");
-		}
-
-		let procedureCallSql = `CALL "${schema}"."${procedure}" (` + procedureParameters.toString() + `)`;
-
 		function procedureCall() {
-			let args = Array.prototype.slice.call(arguments);
-			let finalArgs = [];
-			if (args.length === 1 && typeof args[0] === 'object' && !Array.isArray(args[0]) && args[0] !== null) {
-				args = args[0];
-				let newArgs = {};
-
-				for (let arg in args) {
-					let lowerCaseArg = arg.toLowerCase();
-					newArgs[lowerCaseArg] = args[arg];
-				}
-
-				procedureINParameters.forEach(inParam => {
-					finalArgs.push(newArgs[inParam.toLowerCase()]);
-				})
-			} else {
-				finalArgs = args;
-			}
-
+			// Make an array of the procedure call arguments
+			let procedureCallArgs = Array.prototype.slice.call(arguments);
 			let procedureResult = new $.hdb.ProcedureResult;
-
 			let dConnection = null;
 			let procedureCallStatement = null;
-
+			let procedureParameters = [];
 			try {
 				dConnection = database.getConnection();
-				procedureCallStatement = dConnection.prepareStatement(procedureCallSql);
-				setProcedureParams(procedureCallStatement, finalArgs);
-
+				// Get the procedure parameters
+				const procedureParametersResultSet = dConnection.native.getMetaData().getProcedureColumns(null, null, procedure, "%");
+				while (procedureParametersResultSet.next()) {
+					const parameterName = procedureParametersResultSet.getString('COLUMN_NAME');
+					const parameterType = procedureParametersResultSet.getShort('COLUMN_TYPE');
+					const parameterTypeName = procedureParametersResultSet.getString('TYPE_NAME');
+					const parameterDataType = procedureParametersResultSet.getInt('DATA_TYPE');
+					procedureParameters.push({
+						parameterName: parameterName,
+						parameterType: parameterType,
+						parameterTypeName: parameterTypeName,
+						parameterDataType: parameterDataType,
+						parameterValue: null
+					})
+				}
+				// Process the procedure arguments and set them to the in parameters
+				if (procedureCallArgs.length === 1 && typeof procedureCallArgs[0] === 'object' && !Array.isArray(procedureCallArgs[0]) && procedureCallArgs[0] !== null) {
+					procedureCallArgs = procedureCallArgs[0];
+					for (let procedureCallArg in procedureCallArgs) {
+						procedureParameters.forEach(procedureParameter => {
+							if (procedureParameter.parameterName === procedureCallArg.toUpperCase()) {
+								procedureParameter.parameterValue = procedureCallArgs[procedureCallArg];
+							}
+						})
+					}
+				} else {
+					for (let i = 0, argIndex = 0; i < procedureParameters.length; i++) {
+						if (procedureParameters[i].parameterType === PROCEDURE_IN_PARAMETER || procedureParameters[i].parameterType === PROCEDURE_IN_OUT_PARAMETER) {
+							procedureParameters[i].parameterValue = procedureCallArgs[argIndex];
+							argIndex++;
+						}
+					}
+				}
+				// Build procedure call sql
+				let procedureCallSql = `CALL "${schema}"."${procedure}" (` + procedureParameters.map(() => "?").toString() + `)`;
+				// Prepare call statement, set in params and register out params
+				procedureCallStatement = dConnection.prepareCall(procedureCallSql);
+				setProcedureParams(procedureCallStatement, procedureParameters);
+				// Execute the procedure call and get the resultsets
 				let hasResults = procedureCallStatement.execute();
 				let resultSets = [];
-
 				do {
 					if (hasResults) {
 						let resultSet = procedureCallStatement.getResultSet();
@@ -185,24 +113,12 @@ function XscConnection(dConnection) {
 					}
 					hasResults = procedureCallStatement.getMoreResults();
 				} while (hasResults);
-
 				procedureResult.$resultSets = resultSets;
-
-				for (const resultSet in resultSets) {
-					let singleResultSet = resultSets[resultSet];
-					let oneObj = {};
-					let length = 0;
-					for (let i = 0; i < singleResultSet.length; i++) {
-						let rowObj = singleResultSet[i];
-						oneObj[i] = rowObj;
-						length++;
-					}
-					oneObj.length = length;
-					procedureResult[procedureOUTParameters[resultSet]] = oneObj;
-				}
+				// Get the out paramter values
+				getOUTParamsValues(procedureCallStatement, procedureParameters, procedureResult, resultSets);
 				return procedureResult;
 			} catch (e) {
-				throw new Error(e)
+				throw new Error(e);
 			} finally {
 				if (procedureCallStatement !== null) {
 					procedureCallStatement.close();
@@ -212,22 +128,19 @@ function XscConnection(dConnection) {
 				}
 			}
 		}
+
 		return procedureCall;
 	}
-
 	this.rollback = function () {
 		return dConnection.rollback();
 	};
-
 	this.setAutoCommit = function (autoCommit) {
 		dConnection.setAutoCommit(autoCommit);
 	};
-
 	// this method is not part of XS API, I exposed it only for testing purposes
 	this.getAutoCommit = function () {
 		return dConnection.getAutoCommit();
 	};
-
 	// not part of the API, just for testing purposes
 	this.isClosed = function () {
 		return dConnection.isClosed();
@@ -249,7 +162,6 @@ function XscResultSet(dResultSet) {
 			count++;
 		}
 		this.length = count;
-
 	}
 
 	function getResultSetRow(dResultSet, metadata) {
@@ -258,10 +170,9 @@ function XscResultSet(dResultSet) {
 		for (var i = 0; i < len; i++) {
 			let dataType = metadata.columns[i].typeName;
 			let value = getResultSetValueByDataTypeAndRowNumber(dResultSet, dataType, i + 1);
-			//			response.println("type: " + dataType + " / toString: " + value.toString());
+			//          response.println("type: " + dataType + " / toString: " + value.toString());
 			let propertyName = metadata.columns[i].name;
 			objToReturn[propertyName] = value;
-			objToReturn[i] = value;
 		}
 		return objToReturn;
 	}
@@ -269,12 +180,10 @@ function XscResultSet(dResultSet) {
 
 function XscResultSetIterator(myResultSet) {
 	var currentSetRow = -1;
-
 	this.next = function () {
 		++currentSetRow;
 		return currentSetRow < myResultSet.length;
 	};
-
 	this.value = function () {
 		if (currentSetRow < 0 || myResultSet.length === 0) {
 			throw new Error("Error: ResultSet is empty or you haven't called next() before calling value()");
@@ -284,7 +193,6 @@ function XscResultSetIterator(myResultSet) {
 }
 
 function XscResultSetMetaData(dResultSetMetaData) {
-
 	this.columns = getColumnMetadataArray(dResultSetMetaData);
 }
 
@@ -293,34 +201,21 @@ function SQLException() {
 }
 
 // UTIL FUNCTIONS
+function setProcedureParams(dPreparedCallableStatement, procedureParameters) {
+	for (var i = 0, paramIndex = 1; i < procedureParameters.length; i++, paramIndex++) {
+		const procedureParameter = procedureParameters[i];
+		if (procedureParameter.parameterType === PROCEDURE_IN_PARAMETER || procedureParameter.parameterType === PROCEDURE_IN_OUT_PARAMETER) {
+			setParamByType(dPreparedCallableStatement, procedureParameter.parameterTypeName, procedureParameter.parameterValue, paramIndex);
+		}
+	}
+}
+
 function setStatementParams(dPreparedStatement, args) {
 	var parameterMetaData = dPreparedStatement.native.getParameterMetaData();
 	var paramsCount = parameterMetaData.getParameterCount();
-
-	validateParamsCount(paramsCount, args);
-
-	setParams(dPreparedStatement, args, paramsCount, parameterMetaData);
-}
-
-function setProcedureParams(dPreparedStatement, args) {
-	var parameterMetaData = dPreparedStatement.native.getParameterMetaData();
-	var paramsCount = parameterMetaData.getParameterCount();
-	var inParamsCount = 0;
-
-	for (var i = 0, paramIndex = 1; i < paramsCount; i++, paramIndex++) {
-		var paramMode = parameterMetaData.getParameterMode(paramIndex);
-
-		if (paramMode === PROCEDURE_IN_PARAMETER || paramMode === PROCEDURE_IN_OUT_PARAMETER) {
-			inParamsCount++;
-		}
+	if (paramsCount !== args.length) {
+		throw new Error('Invalid arguments count!');
 	}
-
-	validateParamsCount(inParamsCount, args);
-
-	setParams(dPreparedStatement, args, inParamsCount, parameterMetaData)
-}
-
-function setParams(dPreparedStatement, args, paramsCount, parameterMetaData) {
 	for (var i = 0, paramIndex = 1; i < paramsCount; i++, paramIndex++) {
 		var paramType = parameterMetaData.getParameterTypeName(paramIndex);
 		var paramValue = args[i];
@@ -342,7 +237,6 @@ function setParamByType(dPreparedStatement, paramType, paramValue, paramIndex) {
 		case 'BIGINT':
 			dPreparedStatement.setLong(paramIndex, paramValue);
 			break;
-
 		case 'SMALLDECIMAL':
 		case 'DECIMAL':
 			//TODO setBigDecimal doesn't exist
@@ -404,23 +298,15 @@ function setParamByType(dPreparedStatement, paramType, paramValue, paramIndex) {
 	}
 }
 
-function validateParamsCount(paramsCount, args) {
-	if (paramsCount !== args.length) {
-		throw new Error('Invalid arguments count!');
-	}
-}
-
 function executeBatchUpdate(dConnection, dPreparedStatement, batchArguments) {
 	try {
 		var resultsArray = [];
 		dConnection.setAutoCommit(false);
-
 		for (var i = 0; i < batchArguments.length; i++) {
 			setStatementParams(dPreparedStatement, batchArguments[i]);
 			var currentResult = dPreparedStatement.executeUpdate();
 			resultsArray.push(currentResult);
 		}
-
 		dConnection.commit();
 		return resultsArray;
 	} catch (e) {
@@ -432,7 +318,6 @@ function executeBatchUpdate(dConnection, dPreparedStatement, batchArguments) {
 function getColumnMetadataArray(dResultSetMetaData) {
 	var columnsCount = dResultSetMetaData.getColumnCount();
 	var columnMetadataArray = [];
-
 	for (var metaDataColumnIndex = 1; metaDataColumnIndex <= columnsCount; metaDataColumnIndex++) {
 		columnMetadataArray.push({
 			catalogName: dResultSetMetaData.getCatalogName(metaDataColumnIndex),
@@ -447,7 +332,6 @@ function getColumnMetadataArray(dResultSetMetaData) {
 			typeName: dResultSetMetaData.getColumnTypeName(metaDataColumnIndex)
 		});
 	}
-
 	return columnMetadataArray;
 }
 
@@ -506,5 +390,103 @@ function getResultSetValueByDataTypeAndRowNumber(dResultSet, dataType, colNumber
 		case 'ST_POINT':
 			//TODO to do
 			break;
+	}
+}
+
+function getOUTParamsValues(procedureCallStatement, procedureParameters, procedureResult, resultSets) {
+	for (let i = 0, rsIndex = 0; i < procedureParameters.length; i++) {
+		const procedureParameter = procedureParameters[i];
+		if (procedureParameter.parameterType === PROCEDURE_IN_OUT_PARAMETER || procedureParameter.parameterType === PROCEDURE_OUT_PARAMETER) {
+			switch (procedureParameter.parameterDataType) {
+				case java.sql.Types.TINYINT:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getByte(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.VARCHAR:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getString(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.NVARCHAR:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getNString(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.ARRAY:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getArray(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.BIGINT:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getInt(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.BOOLEAN:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getBoolean(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.INTEGER:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getInt(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.TIME:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getTime(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.TIMESTAMP:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getTimestamp(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.BLOB:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getBlob(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.DATE:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getDate(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.DOUBLE:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getDouble(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.FLOAT:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getFloat(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.BIGINT:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getInt(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.DECIMAL:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getBigDecimal(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.SQLXML:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getSQLXML(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.URL:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getUrl(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.NUMERIC:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getInt(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.NCLOB:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getNClob(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.CLOB:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getClob(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.NCHAR:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getNString(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.REF:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getRef(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.JAVA_OBJECT:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getObject(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.LONG:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getLong(procedureParameter.parameterName);
+					break;
+				case java.sql.Types.ROWID:
+					procedureResult[procedureParameter.parameterName] = procedureCallStatement.getRowId(procedureParameter.parameterName);
+					break;
+				case SQL_TABLE_TYPE:
+					const tableResultSet = resultSets[rsIndex];
+					let tableObj = {};
+					let length = 0;
+					for (let i = 0; i < tableResultSet.length; i++) {
+						let rowObj = tableResultSet[i];
+						tableObj[i] = rowObj;
+						length++;
+					}
+					tableObj.length = length;
+					procedureResult[procedureParameter.parameterName] = tableObj;
+					rsIndex++;
+					break;
+			}
+		}
 	}
 }

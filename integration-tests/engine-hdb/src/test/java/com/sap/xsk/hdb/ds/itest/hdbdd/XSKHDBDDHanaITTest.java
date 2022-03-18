@@ -144,4 +144,45 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
     }
   }
 
+  @Test
+  public void testHDBDDWithCatalogTableTypeAnnotation()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
+
+      try {
+        HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+
+
+        LocalResource resource = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/CatalogTableTypes.hdbdd", //
+            "/registry/public/itest/CatalogTableTypes.hdbdd" //
+        );
+
+        facade.handleResourceSynchronization(resource);
+        facade.updateEntities();
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION1", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION1"));
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION2", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION2"));
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION3", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION3"));
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION4", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION4"));
+
+      } finally {
+        HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION1", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION2", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION3", TEST_SCHEMA);
+        HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION4", TEST_SCHEMA);
+
+        HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+      }
+    }
+  }
+
 }

@@ -493,4 +493,19 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     assertEquals("nested.otherText",tableTypeModel.getColumns().get(3).getName());
     assertEquals("NVARCHAR",tableTypeModel.getColumns().get(3).getType());
   }
+
+  @Test
+  public void testParseHDBDDWithDateTimeFunctionDefaultValue () throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/DefaultValueWithDateTimeFunction.hdbdd", "");
+    assertEquals(1, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
+
+    XSKDataStructureHDBTableModel tableModel = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0);
+    assertEquals("gstr2::DefaultValueWithDateTimeFunction.Orders", tableModel.getName());
+    assertEquals("DBADMIN", tableModel.getSchema());
+    assertEquals("Id",tableModel.getColumns().get(0).getName());
+    assertEquals("NVARCHAR",tableModel.getColumns().get(0).getType());
+    assertEquals("Date",tableModel.getColumns().get(1).getName());
+    assertEquals("TIMESTAMP",tableModel.getColumns().get(1).getType());
+    assertTrue(tableModel.getColumns().get(1).isDefaultValueDateTimeFunction());
+  }
 }

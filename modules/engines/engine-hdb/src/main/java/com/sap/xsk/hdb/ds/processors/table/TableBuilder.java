@@ -129,7 +129,7 @@ public class TableBuilder {
       if ((type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR) || type.equals(DataType.NVARCHAR)
           || columnModel.getType().equalsIgnoreCase("ALPHANUM")
           || columnModel.getType().equalsIgnoreCase("SHORTTEXT")
-          || (columnModel.getType().equalsIgnoreCase("TIMESTAMP") && columnModel.isDefaultValueDateTimeFunction() == false))) {
+          || (columnModel.getType().equalsIgnoreCase("TIMESTAMP") && !columnModel.isDefaultValueDateTimeFunction()))) {
         args += " DEFAULT '" + columnModel.getDefaultValue() + "' ";
       } else {
         args += " DEFAULT " + columnModel.getDefaultValue() + " ";

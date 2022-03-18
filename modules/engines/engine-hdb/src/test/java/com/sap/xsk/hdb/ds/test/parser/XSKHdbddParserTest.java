@@ -501,14 +501,14 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionSimple.hdbdd", "");
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
-    assertEquals(viewModel.getRawContent(), ""
+    assertEquals(viewModel.getRawContent().trim(), ""
         + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionSimple.employees_view_basic\" AS "
         + "SELECT \"EMP\".\"ID\" as \"EmployeeID\",\n"
         + "            \"EMP\".\"NAME\" as \"EmployeeName\",\n"
         + "            \"EMP\".\"ADDRESS\" as \"EmployeeAddress\",\n"
         + "            \"EMP\".\"AGE\" as \"EmployeeAge\",\n"
         + "            \"EMP\".\"PHONE\" as \"EmployeePhone\" "
-        + "FROM \"gstr2::ViewDefinitionSimple.employees\" AS \"EMP\" "
+        + "FROM \"gstr2::ViewDefinitionSimple.employees\" AS \"EMP\""
         + "");
   }
 
@@ -517,17 +517,17 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithJoin.hdbdd", "");
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
-    assertEquals(viewModel.getRawContent(), ""
+    assertEquals(viewModel.getRawContent().trim(), ""
         + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithJoin.employees_view_with_join\" AS "
         + "SELECT \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\" as \"EmployeeId\",\n"
         + "          \"gstr2::ViewDefinitionWithJoin.employees\".\"NAME\" as \"EmployeeName\",\n"
         + "          \"ER\".\"TYPE\" as \"EmployeeRoleName\",\n"
         + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
         + "FROM \"gstr2::ViewDefinitionWithJoin.employees\" "
-        + "INNER JOIN \"gstr2::ViewDefinitionWithJoin.employee_roles\" AS \"ER\" "
-        + "ON \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\" "
-        + "INNER JOIN \"gstr2::ViewDefinitionWithJoin.employee_salaries\" AS \"ES\" "
-        + "ON \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\" "
+        + "join \"gstr2::ViewDefinitionWithJoin.employee_roles\" AS \"ER\" "
+        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\" "
+        + "join \"gstr2::ViewDefinitionWithJoin.employee_salaries\" AS \"ES\" "
+        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\""
         + "");
   }
 
@@ -536,18 +536,18 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithWhere.hdbdd", "");
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
-    assertEquals(viewModel.getRawContent(), ""
+    assertEquals(viewModel.getRawContent().trim(), ""
         + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithWhere.employees_view_with_where\" AS "
         + "SELECT \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\" as \"EmployeeId\",\n"
         + "          \"gstr2::ViewDefinitionWithWhere.employees\".\"NAME\" as \"EmployeeName\",\n"
         + "          \"ER\".\"TYPE\" as \"EmployeeRoleType\",\n"
         + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
         + "FROM \"gstr2::ViewDefinitionWithWhere.employees\" "
-        + "INNER JOIN \"gstr2::ViewDefinitionWithWhere.employee_roles\" AS \"ER\" "
-        + "ON \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\" "
-        + "INNER JOIN \"gstr2::ViewDefinitionWithWhere.employee_salaries\" AS \"ES\" "
-        + "ON \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\" "
-        + "WHERE (\"gstr2::employees\".\"NAME\" = 'John';) "
+        + "join \"gstr2::ViewDefinitionWithWhere.employee_roles\" AS \"ER\" "
+        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\" "
+        + "join \"gstr2::ViewDefinitionWithWhere.employee_salaries\" AS \"ES\" "
+        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\"  "
+        + "WHERE \"gstr2::employees\".\"NAME\" = 'John'"
         + "");
   }
 
@@ -556,24 +556,24 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithUnion.hdbdd", "");
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
-    assertEquals(viewModel.getRawContent(), ""
+    assertEquals(viewModel.getRawContent().trim(), ""
         + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithUnion.employees_view_with_union\" AS "
         + "SELECT \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\" as \"EmployeeId\",\n"
         + "          \"gstr2::ViewDefinitionWithUnion.employees\".\"NAME\" as \"EmployeeName\",\n"
         + "          \"ER\".\"TYPE\" as \"EmployeeRoleType\",\n"
         + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
         + "FROM \"gstr2::ViewDefinitionWithUnion.employees\" "
-        + "INNER JOIN \"gstr2::ViewDefinitionWithUnion.employee_roles\" AS \"ER\" "
-        + "ON \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\" "
-        + "INNER JOIN \"gstr2::ViewDefinitionWithUnion.employee_salaries\" AS \"ES\" "
-        + "ON \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\" "
-        + "WHERE (\"gstr2::ViewDefinitionWithUnion.employees\".\"NAME\" = 'John') "
+        + "join \"gstr2::ViewDefinitionWithUnion.employee_roles\" AS \"ER\" "
+        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\" "
+        + "join \"gstr2::ViewDefinitionWithUnion.employee_salaries\" AS \"ES\" "
+        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\"  "
+        + "WHERE \"gstr2::ViewDefinitionWithUnion.employees\".\"NAME\" = 'John' "
         + "UNION "
         + "SELECT 0 as \"EmployeeId\",\n"
         + "          'Ben' as \"EmployeeName\",\n"
         + "          'Developer' as \"EmployeeRoleType\",\n"
         + "          '2200' as \"EmployeeSalary\" "
-        + "FROM \"DUMMY\" "
+        + "FROM \"DUMMY\""
         + "");
   }
 }

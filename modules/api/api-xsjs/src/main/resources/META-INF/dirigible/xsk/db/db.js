@@ -369,9 +369,9 @@ function XscPreparedStatement(dPreparedStatement) {
 
   this.setDecimal = function (index, value) {
     if (value instanceof java.math.BigDecimal) {
-      dPreparedStatement.setDecimal(index, value);
+      dPreparedStatement.setBigDecimal(index, value);
     } else {
-      dPreparedStatement.setDecimal(index, new java.math.BigDecimal(value));
+      dPreparedStatement.setBigDecimal(index, new java.math.BigDecimal(value));
     }
   };
 

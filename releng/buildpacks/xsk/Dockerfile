@@ -10,11 +10,15 @@ RUN chown -R dirigible:dirigible $CATALINA_HOME
 
 RUN chmod -R 777 /usr/local/tomcat
 
+# target run
+
 FROM base as run
 
 RUN chown -R dirigible:dirigible $CATALINA_HOME
 
 RUN chmod -R 777 /usr/local/tomcat
+
+# target build
 
 FROM base as build
 

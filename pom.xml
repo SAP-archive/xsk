@@ -30,6 +30,7 @@
         <module>modules</module>
         <module>resources</module>
         <module>releng</module>
+        <module>coverage-aggregate</module>
     </modules>
 
     <profiles>
@@ -230,6 +231,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <dirigible.version>6.2.10</dirigible.version>
+
+        <!-- Sonar Cloud -->
+        <sonar.organization>sap-1</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectName>XSK</sonar.projectName>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.basedir}/coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
 
         <maven.resource.plugin.version>3.2.0</maven.resource.plugin.version>
         <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>

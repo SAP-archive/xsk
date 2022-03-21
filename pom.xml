@@ -42,6 +42,29 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.version}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>SOURCEFILE</element>
+                                    <excludes>
+                                        <exclude>*src/test/*</exclude>
+                                    </excludes>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>${maven.compiler.plugin.version}</version>
@@ -293,6 +316,7 @@
         <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
+        <jacoco.version>0.8.7</jacoco.version>
 
         <profile.content.phase>none</profile.content.phase>
 

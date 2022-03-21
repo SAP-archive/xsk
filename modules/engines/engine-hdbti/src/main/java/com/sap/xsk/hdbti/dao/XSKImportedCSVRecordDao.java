@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
 
+import org.eclipse.dirigible.api.v3.core.ConsoleFacade;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.PersistenceManager;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -43,7 +44,7 @@ public class XSKImportedCSVRecordDao implements IXSKImportedCSVRecordDao {
         try (Connection connection = dataSource.getConnection()) {
             importedRowModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
             persistenceManager.insert(connection, importedRowModel);
-            logger.info(format("Entity with rowId: %s and tableName: %s was SAVED successfully in %s.", importedRowModel.getRowId(), importedRowModel.getTableName(), "XSK_IMPORTED_CSV_RECORDS"));
+            ConsoleFacade.log("Entity with rowId: "+importedRowModel.getRowId()+" and tableName: "+importedRowModel.getTableName()+" was SAVED successfully in XSK_IMPORTED_CSV_RECORDS");
             return importedRowModel;
         } catch (SQLException e) {
             throw new XSKDataStructuresException(e);
@@ -56,7 +57,7 @@ public class XSKImportedCSVRecordDao implements IXSKImportedCSVRecordDao {
     public XSKImportedCSVRecordModel update(XSKImportedCSVRecordModel importedRowModel) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             persistenceManager.update(connection, importedRowModel);
-            logger.info(format("Entity with rowId: %s and tableName: %s was UPDATED successfully in %s.", importedRowModel.getRowId(), importedRowModel.getTableName(), "XSK_IMPORTED_CSV_RECORDS"));
+            ConsoleFacade.log("Entity with rowId: "+importedRowModel.getRowId()+" and tableName: "+importedRowModel.getTableName()+ " was UPDATED successfully in XSK_IMPORTED_CSV_RECORDS.");
             return importedRowModel;
         }
     }
@@ -74,7 +75,7 @@ public class XSKImportedCSVRecordDao implements IXSKImportedCSVRecordDao {
             });
 
             List<String> ids = importedCSVRecordModels.stream().map(record -> record.getId().toString()).collect(Collectors.toList());
-            logger.info(format("Entities with ids: %s were DELETED successfully in %s.", String.join(", ", ids), "XSK_IMPORTED_CSV_RECORDS"));
+            ConsoleFacade.log("Entities with ids: "+ String.join(", ", ids)+ " were DELETED successfully in XSK_IMPORTED_CSV_RECORDS.");
         }
 
     }

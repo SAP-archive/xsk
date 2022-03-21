@@ -30,7 +30,6 @@ import org.eclipse.dirigible.database.sql.builders.records.UpdateBuilder;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import  org.eclipse.dirigible.api.v3.core.Console;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;

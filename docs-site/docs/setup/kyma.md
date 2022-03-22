@@ -435,7 +435,63 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     !!! Note
             Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host (e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**).
-    
+
+1. Create an Destination service instance (optional)
+
+    === "with Kyma dashboard"
+        - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
+        - Find the `Destination` service.
+        - Create a new service instance.
+        - Bind the servce instance to the **`xsk`** application
+          - NOTE: For `Prefix for injected variables` make sure to specify `destination_`
+
+    === "with kubectl"
+
+         Copy and paste the following content into `destination.yaml`:
+
+         ```yaml
+          apiVersion: servicecatalog.k8s.io/v1beta1
+          kind: ServiceInstance
+          metadata:
+            name: destination-xsk
+            namespace: default
+          spec:
+            clusterServiceClassExternalName: destination
+            clusterServiceClassRef:
+              name: destination
+            clusterServicePlanExternalName: lite
+            parameters: {}
+          ---
+          apiVersion: servicecatalog.k8s.io/v1beta1
+          kind: ServiceBinding
+          metadata:
+            name: destination-xsk-binding
+            namespace: default
+          spec:
+            instanceRef:
+              name: destination-xsk
+            parameters: {}
+            secretName: destination-xsk-binding
+          ---
+          apiVersion: servicecatalog.kyma-project.io/v1alpha1
+          kind: ServiceBindingUsage
+          metadata:
+            name: destination-xsk-usage
+            namespace: default
+          spec:
+            parameters:
+              envPrefix:
+                name: "destination_"
+            serviceBindingRef:
+              name: destination-xsk-binding
+            usedBy:
+              kind: deployment
+              name: xsk
+         ```
+
+        !!! info "Note"
+            Execute the following command to apply the Destination configuration: `kubectl apply -f destination.yaml` or use the **Deploy new resource** functionality.
+
 1. Assign the `Developer` and `Operator` roles.
 
     - Navigate to the SAP BTP Cockpit.

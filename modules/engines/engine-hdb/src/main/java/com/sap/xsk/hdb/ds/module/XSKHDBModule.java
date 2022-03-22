@@ -12,6 +12,7 @@
 package com.sap.xsk.hdb.ds.module;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
 import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
@@ -20,6 +21,7 @@ import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
 import com.sap.xsk.hdb.ds.parser.hdbsequence.XSKHDBSequenceParser;
 import com.sap.xsk.hdb.ds.parser.hdbsynonym.XSKSynonymParser;
 import com.sap.xsk.hdb.ds.parser.hdbtable.XSKTableParser;
+import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionLogger;
 import com.sap.xsk.hdb.ds.parser.hdbtablefunction.XSKHDBTableFunctionParser;
 import com.sap.xsk.hdb.ds.parser.hdbtabletype.XSKTableTypeParser;
 import com.sap.xsk.hdb.ds.parser.hdbview.XSKViewParser;
@@ -37,6 +39,7 @@ import com.sap.xsk.hdb.ds.service.manager.XSKViewManagerService;
 import com.sap.xsk.hdb.ds.service.manager.XSKSynonymManagerService;
 import java.util.HashMap;
 import java.util.Map;
+import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
 
 public class XSKHDBModule extends AbstractDirigibleModule {
@@ -46,6 +49,8 @@ public class XSKHDBModule extends AbstractDirigibleModule {
   private static Map<String, XSKDataStructureParser> parserServices;
 
   private static Map<String, String> parserTypes;
+
+  // Do not initialize classes that may use the database or other Dirigible modules as the static initializer is called too early
 
   public static synchronized Map<String, IXSKDataStructureManager> getManagerServices() {
     if (managerServices == null) {
@@ -90,11 +95,17 @@ public class XSKHDBModule extends AbstractDirigibleModule {
   }
 
   private static void bindParsersToFileExtension(Map<String, XSKDataStructureParser> parserServices) {
+    XSKHDBTableFunctionParser tableFunctionParser = new XSKHDBTableFunctionParser(
+        new XSKDataStructuresSynchronizer(),
+        new HDBTableFunctionSynchronizationArtefactType(),
+        new XSKHDBTableFunctionLogger()
+    );
+
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, new XSKHdbddParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_TABLE, new XSKTableParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_VIEW, new XSKViewParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM, new XSKSynonymParser());
-    parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION, new XSKHDBTableFunctionParser());
+    parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION, tableFunctionParser);
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA, new XSKSchemaParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE, new XSKHDBProcedureParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSEQUENCE, new XSKHDBSequenceParser());
@@ -106,7 +117,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE, new XSKTableParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_VIEW, new XSKViewParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new XSKSynonymParser());
-    parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, new XSKHDBTableFunctionParser());
+    parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, tableFunctionParser);
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new XSKSchemaParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new XSKHDBProcedureParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new XSKHDBSequenceParser());

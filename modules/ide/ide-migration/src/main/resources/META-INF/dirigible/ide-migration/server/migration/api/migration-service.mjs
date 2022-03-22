@@ -27,7 +27,7 @@ export class MigrationService {
 
     synonymFileName = "hdi-synonyms.hdbsynonym";
     publicSynonymFileName = "hdi-public-synonyms.hdbpublicsynonym";
-    fileExtsForHDI = [".hdbcalculationview", ".calculationview", ".analyticprivilege", ".hdbanalyticprivilege", ".hdbflowgraph"];
+    fileExtsForHDI = [".hdbcalculationview", ".calculationview", ".analyticprivilege", ".hdbanalyticprivilege", ".hdbflowgraph", ".hdbtablefunction"];
 
     setupConnection(databaseName, databaseUser, databaseUserPassword, connectionUrl) {
         database.createDataSource(databaseName, "com.sap.db.jdbc.Driver", connectionUrl, databaseUser, databaseUserPassword, null);
@@ -600,7 +600,7 @@ export class MigrationService {
             projectNames.add(projectName);
         }
 
-        for(const projectName of projectNames) {
+        for (const projectName of projectNames) {
             this.handleHDBTableFunctions(workspace, projectName);
         }
     }

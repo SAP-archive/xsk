@@ -43,8 +43,19 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.Artefa
 
 public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKDataStructureHDBTableFunctionModel> {
 
-  private static final XSKDataStructuresSynchronizer dataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
-  private static final HDBTableFunctionSynchronizationArtefactType TABLE_FUNCTION_ARTEFACT = new HDBTableFunctionSynchronizationArtefactType();
+  private final XSKDataStructuresSynchronizer dataStructuresSynchronizer;
+  private final HDBTableFunctionSynchronizationArtefactType tableFunctionSynchronizationArtefactType;
+  private final XSKHDBTableFunctionLogger tableFunctionLogger;
+
+  public XSKHDBTableFunctionParser(
+      XSKDataStructuresSynchronizer dataStructuresSynchronizer,
+      HDBTableFunctionSynchronizationArtefactType tableFunctionSynchronizationArtefactType,
+      XSKHDBTableFunctionLogger tableFunctionLogger
+  ) {
+    this.dataStructuresSynchronizer = dataStructuresSynchronizer;
+    this.tableFunctionSynchronizationArtefactType = tableFunctionSynchronizationArtefactType;
+    this.tableFunctionLogger = tableFunctionLogger;
+  }
 
   @Override
   public XSKDataStructureHDBTableFunctionModel parse(XSKDataStructureParametersModel parametersModel)
@@ -102,19 +113,10 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
     try {
       antlrModel.checkForAllMandatoryFieldsPresence();
     } catch (TableFunctionMissingPropertyException e) {
-      XSKCommonsUtils.logCustomErrors(location,
-          XSKCommonsConstants.PARSER_ERROR,
-          "",
-          "",
-          e.getMessage(),
-          XSKCommonsConstants.EXPECTED_FIELDS,
-          XSKCommonsConstants.HDB_VIEW_PARSER,
-          XSKCommonsConstants.MODULE_PARSERS,
-          XSKCommonsConstants.SOURCE_PUBLISH_REQUEST,
-          XSKCommonsConstants.PROGRAM_XSK);
-
+      tableFunctionLogger.logError(location, XSKCommonsConstants.EXPECTED_FIELDS, e.getMessage());
       dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),
-          location, TABLE_FUNCTION_ARTEFACT,
+          location,
+          tableFunctionSynchronizationArtefactType,
           ArtefactState.FAILED_CREATE,
           e.getMessage());
 

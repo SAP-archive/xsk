@@ -55,17 +55,7 @@ public class XSKDataStructureModelFactory {
     XSKTableParser parser = new XSKTableParser();
     XSKDataStructureParametersModel parametersModel =
         new XSKDataStructureParametersModel(null, location, content, null);
-    XSKDataStructureHDBTableModel result = parser.parse(parametersModel);
-    return result;
-  }
-
-  public static XSKDataStructureHDBTableFunctionModel parseTableFunction(String location, String content)
-      throws XSKDataStructuresException, XSKArtifactParserException, IOException {
-    XSKHDBTableFunctionParser parser = new XSKHDBTableFunctionParser();
-    XSKDataStructureParametersModel parametersModel =
-        new XSKDataStructureParametersModel(null, location, content, null);
-    XSKDataStructureHDBTableFunctionModel result = parser.parse(parametersModel);
-    return result;
+    return parser.parse(parametersModel);
   }
 
   /**
@@ -90,16 +80,14 @@ public class XSKDataStructureModelFactory {
     XSKViewParser parser = new XSKViewParser();
     XSKDataStructureParametersModel parametersModel =
         new XSKDataStructureParametersModel(null, location, content, null);
-    XSKDataStructureHDBViewModel result = parser.parse(parametersModel);
-    return result;
+    return parser.parse(parametersModel);
   }
 
   public static XSKDataStructureModel parseHdbdd(String location, String content) throws XSKDataStructuresException, IOException {
     XSKHdbddParser parser = new XSKHdbddParser();
     XSKDataStructureParametersModel parametersModel =
         new XSKDataStructureParametersModel(null, location, content, XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
-    XSKDataStructureModel result = parser.parse(parametersModel);
-    return result;
+    return parser.parse(parametersModel);
   }
 
   /**
@@ -124,8 +112,7 @@ public class XSKDataStructureModelFactory {
     XSKSynonymParser parser = new XSKSynonymParser();
     XSKDataStructureParametersModel parametersModel =
         new XSKDataStructureParametersModel(null, location, content, null);
-    XSKDataStructureHDBSynonymModel result = parser.parse(parametersModel);
-    return result;
+    return parser.parse(parametersModel);
   }
 
   /**
@@ -139,8 +126,7 @@ public class XSKDataStructureModelFactory {
     XSKSchemaParser parser = new XSKSchemaParser();
     XSKDataStructureParametersModel parametersModel =
         new XSKDataStructureParametersModel(null, location, content, null);
-    XSKDataStructureHDBSchemaModel result = parser.parse(parametersModel);
-    return result;
+    return parser.parse(parametersModel);
   }
 
   /**
@@ -165,8 +151,7 @@ public class XSKDataStructureModelFactory {
     XSKTableTypeParser parser = new XSKTableTypeParser();
     XSKDataStructureParametersModel parametersModel =
         new XSKDataStructureParametersModel(null, location, content, null);
-    XSKDataStructureHDBTableTypeModel result = parser.parse(parametersModel);
-    return result;
+    return parser.parse(parametersModel);
   }
 
   /**

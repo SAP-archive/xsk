@@ -22,6 +22,11 @@ Object.defineProperty(Error.prototype, 'fileName', {
         }
 
         const fileName = found[1];
+        if (fileName === "<eval>") {
+          // <eval> is used for unnamed source executed by GraalVM
+          return "Unknown"
+        }
+
         return fileName[0] === "/" ? fileName : "/" + fileName;
     }
 });

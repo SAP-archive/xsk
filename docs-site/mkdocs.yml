@@ -5,6 +5,7 @@ nav:
     - Welcome: 'index.md'
     - Artifacts: 
       - artifacts/index.md
+      - hdbanalyticprivilege: 'artifacts/hdbanalyticprivilege.md'
       - hdbtable: 'artifacts/hdbtable.md'
       - hdbview: 'artifacts/hdbview.md'
       - hdbtablefunction: 'artifacts/hdbtablefunction.md'

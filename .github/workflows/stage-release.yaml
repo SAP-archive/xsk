@@ -113,6 +113,6 @@ jobs:
       uses: nick-invision/retry@v2
       with:
         timeout_seconds: 15
-        max_attempts: 10
+        max_attempts: 15
         warning_on_retry: false
         command: curl -m 5 --silent --fail --request GET https://${{ secrets.STAGE_NAMESPACE }}.${{ secrets.STAGE_KYMA_HOST }}/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null

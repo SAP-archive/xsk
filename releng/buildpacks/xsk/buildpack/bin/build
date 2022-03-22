@@ -7,7 +7,7 @@ for n in *; do printf '  - %s\n' "$n"; done
 
 echo "Copy projects ..."
 mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/
-cp -R */ /usr/local/tomcat/target/dirigible/repository/root/registry/public/
+cp -R * /usr/local/tomcat/target/dirigible/repository/root/registry/public/
 cp -R /usr/local/tomcat/target/ /workspace/target
 rm -rf /usr/local/tomcat/target/
 

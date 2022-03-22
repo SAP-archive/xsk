@@ -114,7 +114,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
             PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName,
                     XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
             if (null == tableMetadata) {
-                logger.debug("Table with name [" + tableName + "] was not found.");
+                logger.debug("Table with name [{}] was not found.", tableName);
                 return;
             }
             String pkColumnName = tableMetadata.getColumns().get(0).getName();
@@ -137,7 +137,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
             PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName,
                     XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
             if (null == tableMetadata) {
-                logger.debug("Table with name [" + tableName + "] was not found.");
+                logger.debug("Table with name [{}] was not found.", tableName);
                 return;
             }
             String pkColumnName = tableMetadata.getColumns().get(0).getName();

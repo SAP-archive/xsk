@@ -146,6 +146,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://www.xsk.io/artifacts/hdbanalyticprivilege/</loc>
+         <lastmod>2022-03-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://www.xsk.io/artifacts/hdbdd/</loc>
          <lastmod>2022-03-22</lastmod>
          <changefreq>daily</changefreq>

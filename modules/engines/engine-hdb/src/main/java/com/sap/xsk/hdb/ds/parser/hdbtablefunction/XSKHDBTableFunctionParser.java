@@ -23,7 +23,6 @@ import com.sap.xsk.parser.hana.core.HanaLexer;
 import com.sap.xsk.parser.hana.core.HanaParser;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
-import custom.HanaErrorListener;
 import custom.HanaTableFunctionListener;
 import models.TableFunctionDefinitionModel;
 import models.TableFunctionMissingPropertyException;
@@ -69,16 +68,12 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
     }
 
     HanaLexer lexer = new HanaLexer(inputStream);
-    HanaErrorListener lexerErrorListener = new HanaErrorListener();
-    lexer.removeErrorListeners(); // remove the ConsoleErrorListener
-    lexer.addErrorListener(lexerErrorListener);
+    lexer.removeErrorListeners();
     CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
-    HanaErrorListener parserErrorListener = new HanaErrorListener();
     HanaParser parser = new HanaParser(tokenStream);
     parser.setBuildParseTree(true);
     parser.removeErrorListeners();
-    parser.addErrorListener(parserErrorListener);
 
     ParseTree parseTree = parser.sql_script();
 
@@ -100,7 +95,7 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
     model.setName(antlrModel.getName());
     model.setLocation(params.getLocation());
     model.setType(getType());
-    model.setHash(DigestUtils.md5Hex(params.getContent()));
+    model.setHash(DigestUtils.md5Hex(params.getContent())); //NOSONAR
     model.setCreatedBy(UserFacade.getName());
     model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
     model.setContent(params.getContent());

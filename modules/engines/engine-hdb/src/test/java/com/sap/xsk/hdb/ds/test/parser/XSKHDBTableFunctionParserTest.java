@@ -65,14 +65,13 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
     String content = getTestContent(location);
 
     XSKDataStructureHDBTableFunctionModel model = parseTableFunction(location, content);
-
-    assertEquals("Unexpected tablefunction schema.", model.getSchema(), "MYSCHEMA");
-    assertEquals("Unexpected tablefunction name.", model.getName(), "hdb_view::OrderTableFunction");
-    assertEquals("Unexpected tablefunction content.", model.getContent(), content);
-    assertEquals("Unexpected tablefunction raw content.", model.getRawContent(), content);
-    assertEquals("Unexpected tablefunction location.", model.getLocation(), location);
-    assertEquals("Unexpected tablefunction type.", model.getType(), "HDBTABLEFUNC");
-    assertEquals("Unexpected tablefunction dependencies.", model.getDependencies().size(), 0);
+    assertEquals("Unexpected tablefunction schema.", "MYSCHEMA", model.getSchema());
+    assertEquals("Unexpected tablefunction name.", "hdb_view::OrderTableFunction", model.getName());
+    assertEquals("Unexpected tablefunction content.", content, model.getContent());
+    assertEquals("Unexpected tablefunction raw content.", content, model.getRawContent());
+    assertEquals("Unexpected tablefunction location.", location, model.getLocation());
+    assertEquals("Unexpected tablefunction type.", "HDBTABLEFUNC", model.getType());
+    assertEquals("Unexpected tablefunction dependencies.", 0, model.getDependencies().size());
     assertNotNull("Null value for tablefunction createdAt", model.getCreatedAt());
     assertNotNull("Null value for tablefunction createdBy", model.getCreatedBy());
   }
@@ -85,12 +84,12 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
     XSKDataStructureHDBTableFunctionModel model = parseTableFunction(location, content);
 
     assertNull("Unexpected tablefunction schema.", model.getSchema());
-    assertEquals("Unexpected tablefunction name.", model.getName(), "hdb_view::OrderTableFunction");
-    assertEquals("Unexpected tablefunction content.", model.getContent(), content);
-    assertEquals("Unexpected tablefunction raw content.", model.getRawContent(), content);
-    assertEquals("Unexpected tablefunction location.", model.getLocation(), location);
-    assertEquals("Unexpected tablefunction type.", model.getType(), "HDBTABLEFUNC");
-    assertEquals("Unexpected tablefunction dependencies.", model.getDependencies().size(), 0);
+    assertEquals("Unexpected tablefunction name.", "hdb_view::OrderTableFunction", model.getName());
+    assertEquals("Unexpected tablefunction content.", content, model.getContent());
+    assertEquals("Unexpected tablefunction raw content.", content, model.getRawContent());
+    assertEquals("Unexpected tablefunction location.", location, model.getLocation());
+    assertEquals("Unexpected tablefunction type.", "HDBTABLEFUNC", model.getType());
+    assertEquals("Unexpected tablefunction dependencies.", 0, model.getDependencies().size());
     assertNotNull("Null value for tablefunction createdAt", model.getCreatedAt());
     assertNotNull("Null value for tablefunction createdBy", model.getCreatedBy());
   }

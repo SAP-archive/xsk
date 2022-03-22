@@ -208,6 +208,15 @@ public class EntityDefinitionListenerTest {
     assertNotNull(((Typeable) school.resolve("to")).getType());
   }
 
+  @Test
+  public void testParseEntitiesWithCatalogTableTypeAnnotations() throws Exception {
+    CdsParser parser = parseSampleFile("/CatalogTableTypes.hdbdd", "sap/table/CatalogTableTypes.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+
+    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(4, parsedEntities.size());
+  }
+
   private CdsParser parseSampleFile(String sampleFileName, String location) throws Exception {
     String content =
         org.apache.commons.io.IOUtils.toString(

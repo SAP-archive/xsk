@@ -466,7 +466,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithNoKeyAnnotation () throws Exception {
+  public void parseHDBDDWithNoKeyAnnotation() throws Exception {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/NoKeyAnnSample.hdbdd", "")
@@ -477,53 +477,57 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithGenerateTableTypeAnnotation () throws Exception {
+  public void parseHDBDDWithGenerateTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/GenerateTableTypeAnnotationSample.hdbdd", "");
     assertEquals(1, ((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().size());
 
     XSKDataStructureHDBTableTypeModel tableTypeModel = ((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0);
     assertEquals("gstr2::GenerateTableTypeAnnotationSample.MyNestedStruct", tableTypeModel.getName());
     assertEquals("ADMIN", tableTypeModel.getSchema());
-    assertEquals("name",tableTypeModel.getColumns().get(0).getName());
-    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(0).getType());
-    assertEquals("nested.aNumber",tableTypeModel.getColumns().get(1).getName());
-    assertEquals("INTEGER",tableTypeModel.getColumns().get(1).getType());
-    assertEquals("nested.someText",tableTypeModel.getColumns().get(2).getName());
-    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(2).getType());
-    assertEquals("nested.otherText",tableTypeModel.getColumns().get(3).getName());
-    assertEquals("NVARCHAR",tableTypeModel.getColumns().get(3).getType());
+    assertEquals("name", tableTypeModel.getColumns().get(0).getName());
+    assertEquals("NVARCHAR", tableTypeModel.getColumns().get(0).getType());
+    assertEquals("nested.aNumber", tableTypeModel.getColumns().get(1).getName());
+    assertEquals("INTEGER", tableTypeModel.getColumns().get(1).getType());
+    assertEquals("nested.someText", tableTypeModel.getColumns().get(2).getName());
+    assertEquals("NVARCHAR", tableTypeModel.getColumns().get(2).getType());
+    assertEquals("nested.otherText", tableTypeModel.getColumns().get(3).getName());
+    assertEquals("NVARCHAR", tableTypeModel.getColumns().get(3).getType());
   }
 
   @Test
-  public void testParseHDBDDWithDateTimeFunctionDefaultValue () throws Exception {
+  public void testParseHDBDDWithDateTimeFunctionDefaultValue() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/DefaultValueWithDateTimeFunction.hdbdd", "");
     assertEquals(1, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
 
     XSKDataStructureHDBTableModel tableModel = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0);
     assertEquals("gstr2::DefaultValueWithDateTimeFunction.Orders", tableModel.getName());
     assertEquals("DBADMIN", tableModel.getSchema());
-    assertEquals("Id",tableModel.getColumns().get(0).getName());
-    assertEquals("NVARCHAR",tableModel.getColumns().get(0).getType());
-    assertEquals("Date",tableModel.getColumns().get(1).getName());
-    assertEquals("TIMESTAMP",tableModel.getColumns().get(1).getType());
+    assertEquals("Id", tableModel.getColumns().get(0).getName());
+    assertEquals("NVARCHAR", tableModel.getColumns().get(0).getType());
+    assertEquals("Date", tableModel.getColumns().get(1).getName());
+    assertEquals("TIMESTAMP", tableModel.getColumns().get(1).getType());
     assertTrue(tableModel.getColumns().get(1).isDefaultValueDateTimeFunction());
   }
 
   @Test
-  public void parseHDBDDWithTableTypeAnnotationColumn () throws Exception {
+  public void parseHDBDDWithTableTypeAnnotationColumn() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeColumn.hdbdd", "");
-    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), "COLUMN");
+    assertEquals("COLUMN", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
+    assertEquals("COLUMN", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getTableType());
   }
 
   @Test
-  public void parseHDBDDWithTableTypeAnnotationRow () throws Exception {
+  public void parseHDBDDWithTableTypeAnnotationRow() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeRow.hdbdd", "");
-    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), "ROW");
+    assertEquals("ROW", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
+    assertEquals("ROW", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getTableType());
   }
 
-  /** When the table type is null a COLUMN table is always created */
+  /**
+   * When the table type is null a COLUMN table is always created
+   */
   @Test
-  public void parseHDBDDWithNoTableTypeAnnotation () throws Exception {
+  public void parseHDBDDWithNoTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/NoTableType.hdbdd", "");
     assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), null);
   }

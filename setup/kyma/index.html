@@ -2093,6 +2093,67 @@
 </div>
 </li>
 <li>
+<p>Create an Destination service instance (optional)</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">with Kyma dashboard</label><label for="__tabbed_3_2">with kubectl</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ul>
+<li>From the Kyma dashboard, go to <strong>Service Management</strong> <strong>&rarr;</strong> <strong>Catalog</strong>.</li>
+<li>Find the <code>Destination</code> service.</li>
+<li>Create a new service instance.</li>
+<li>Bind the servce instance to the <strong><code>xsk</code></strong> application</li>
+<li>NOTE: For <code>Prefix for injected variables</code> make sure to specify <code>destination_</code></li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Copy and paste the following content into <code>destination.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">servicecatalog.k8s.io/v1beta1</span><span class="w"></span>
+<span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceInstance</span><span class="w"></span>
+<span class="w"> </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination-xsk</span><span class="w"></span>
+<span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">clusterServiceClassExternalName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination</span><span class="w"></span>
+<span class="w">   </span><span class="nt">clusterServiceClassRef</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination</span><span class="w"></span>
+<span class="w">   </span><span class="nt">clusterServicePlanExternalName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lite</span><span class="w"></span>
+<span class="w">   </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">---</span><span class="w"></span>
+<span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">servicecatalog.k8s.io/v1beta1</span><span class="w"></span>
+<span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceBinding</span><span class="w"></span>
+<span class="w"> </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination-xsk-binding</span><span class="w"></span>
+<span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">instanceRef</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination-xsk</span><span class="w"></span>
+<span class="w">   </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="w">   </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination-xsk-binding</span><span class="w"></span>
+<span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">---</span><span class="w"></span>
+<span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">servicecatalog.kyma-project.io/v1alpha1</span><span class="w"></span>
+<span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceBindingUsage</span><span class="w"></span>
+<span class="w"> </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination-xsk-usage</span><span class="w"></span>
+<span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">envPrefix</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;destination_&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">serviceBindingRef</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination-xsk-binding</span><span class="w"></span>
+<span class="w">   </span><span class="nt">usedBy</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployment</span><span class="w"></span>
+<span class="w">     </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xsk</span><span class="w"></span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<p>Execute the following command to apply the Destination configuration: <code>kubectl apply -f destination.yaml</code> or use the <strong>Deploy new resource</strong> functionality.</p>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
 <p>Assign the <code>Developer</code> and <code>Operator</code> roles.</p>
 <ul>
 <li>Navigate to the SAP BTP Cockpit.</li>
@@ -2115,7 +2176,7 @@
 <hr />
 <h3 id="version-update">Version Update</h3>
 <p>To update the XSK version either use the <strong>kubectl</strong> or update the <strong>Deployment YAML</strong> as follows:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">with kubectl</label><label for="__tabbed_3_2">with Deployment YAML</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">with kubectl</label><label for="__tabbed_4_2">with Deployment YAML</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>kubectl set image deployment/xsk xsk=dirigiblelabs/xsk-kyma:&lt;xsk-version&gt;
@@ -2141,7 +2202,7 @@
 </div>
 <h3 id="scaling">Scaling</h3>
 <p>The XSK <strong>Deployment</strong> could be scaled horizontally by adding/removing <strong>Pods</strong> as follows:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Scale to Zero</label><label for="__tabbed_4_2">Scale Up</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Scale to Zero</label><label for="__tabbed_5_2">Scale Up</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>kubectl scale deployment/xsk --replicas=0

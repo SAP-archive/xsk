@@ -37,7 +37,7 @@ public class TableFunctionDefinitionModel {
 
   private <T> void checkPresence(T field, String fieldName) {
     if (Objects.isNull(field)) {
-      throw new TableFunctionMissingPropertyException("Missing mandatory field %s!" + fieldName);
+      throw new TableFunctionMissingPropertyException("Missing mandatory field " + fieldName);
     }
   }
 }

@@ -1,0 +1,11 @@
+namespace itest;
+
+@Schema: 'TEST_SCHEMA'
+
+context DefaultValueWithDateTimeFunction {
+
+  entity  Orders {
+        key Id       : String(32);
+        Date         : UTCTimestamp default CURRENT_UTCTIMESTAMP;
+  };
+};

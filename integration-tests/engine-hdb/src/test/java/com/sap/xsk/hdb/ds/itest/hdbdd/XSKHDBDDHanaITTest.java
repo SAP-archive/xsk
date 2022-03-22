@@ -117,4 +117,31 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
 		}
 	}
 
+  @Test
+  public void testHDBDDWithDateTimeFunctionDefaultValue()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
+
+      try {
+        HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+
+        LocalResource resource = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/DefaultValueWithDateTimeFunction.hdbdd", //
+            "/registry/public/itest/DefaultValueWithDateTimeFunction.hdbdd" //
+        );
+
+        facade.handleResourceSynchronization(resource);
+        facade.updateEntities();
+
+        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::DefaultValueWithDateTimeFunction.Orders", TEST_SCHEMA));
+        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::DefaultValueWithDateTimeFunction.Orders"));
+
+      } finally {
+        HanaITestUtils.dropTable(connection, stmt, "itest::DefaultValueWithDateTimeFunction.Orders", TEST_SCHEMA);
+        HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+      }
+    }
+  }
+
 }

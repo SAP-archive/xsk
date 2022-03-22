@@ -28,6 +28,8 @@ public class XSKDataStructureHDBTableColumnModel {
 
   private String defaultValue;
 
+  private boolean isDefaultValueDateTimeFunction;
+
   private String precision;
 
   private String scale;
@@ -61,8 +63,7 @@ public class XSKDataStructureHDBTableColumnModel {
    * @param unique       the unique
    */
   public XSKDataStructureHDBTableColumnModel(String name, String type, String length, boolean nullable, boolean primaryKey,
-      String defaultValue,
-      String precision, String scale, boolean unique, String alias) {
+      String defaultValue, boolean isDefaultValueDateTimeFunction, String precision, String scale, boolean unique, String alias) {
     super();
     this.name = name;
     this.sqlType = type;
@@ -70,6 +71,7 @@ public class XSKDataStructureHDBTableColumnModel {
     this.nullable = nullable;
     this.primaryKey = primaryKey;
     this.defaultValue = defaultValue;
+    this.isDefaultValueDateTimeFunction = isDefaultValueDateTimeFunction;
     this.precision = precision;
     this.scale = scale;
     this.unique = unique;
@@ -182,6 +184,24 @@ public class XSKDataStructureHDBTableColumnModel {
    */
   public void setDefaultValue(String defaultValue) {
     this.defaultValue = defaultValue;
+  }
+
+  /**
+   * Check if default value is a datetime function.
+   *
+   * @return true if the default value is a datetime function
+   */
+  public boolean isDefaultValueDateTimeFunction() {
+    return isDefaultValueDateTimeFunction;
+  }
+
+  /**
+   * Setter for the default value if datetime function.
+   *
+   * @param isDefaultValueDateTimeFunction whether the default value is a datetime function
+   */
+  public void setDefaultValueDateTimeFunction(boolean isDefaultValueDateTimeFunction) {
+    this.isDefaultValueDateTimeFunction = isDefaultValueDateTimeFunction;
   }
 
   /**

@@ -1,0 +1,11 @@
+namespace gstr2;
+
+@Schema: 'DBADMIN'
+
+context DefaultValueWithDateTimeFunction {
+
+    entity Orders {
+        key Id       : String(32);
+        Date         : UTCTimestamp default CURRENT_UTCTIMESTAMP;
+    };
+};

@@ -159,7 +159,8 @@ public class HdbddTransformer {
       }
 
       columnModel.setNullable(!elementSymbol.isNotNull());
-      columnModel.setDefaultValue(elementSymbol.getValue());
+      columnModel.setDefaultValue(elementSymbol.getDefaultValue());
+      columnModel.setDefaultValueDateTimeFunction(elementSymbol.isDefaultValueDateTimeFunction());
     }
 
     if (fieldSymbol.getType() instanceof BuiltInTypeSymbol) {

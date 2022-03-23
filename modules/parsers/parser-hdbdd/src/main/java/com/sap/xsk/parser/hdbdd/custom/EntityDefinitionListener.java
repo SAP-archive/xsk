@@ -21,6 +21,7 @@ import com.sap.xsk.parser.hdbdd.core.CdsParser;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ArtifactRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeWithArgsContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.factory.SymbolFactory;
@@ -182,7 +183,13 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterElementConstraints(CdsParser.ElementConstraintsContext ctx) {
-    EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent().getParent());
+    FieldSymbol elementSymbol;
+    if(ctx.getParent() instanceof AssociationContext) {
+      elementSymbol = this.associations.get(ctx.getParent());
+    } else {
+      elementSymbol = this.entityElements.get(ctx.getParent().getParent());
+    }
+
     boolean isNotNull = !ctx.getText().equals("null");
     if (!isNotNull && elementSymbol.isKey()) {
       throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Element - part of composite key cannot be null.",
@@ -223,6 +230,11 @@ public class EntityDefinitionListener extends CdsBaseListener {
     }
 
     AssociationSymbol associationSymbol = this.symbolFactory.getAssociationSymbol(ctx, currentScope);
+
+    if(ctx.key != null && ctx.key.getText().equalsIgnoreCase("key")) {
+      associationSymbol.setKey(true);
+    }
+
     this.associations.put(ctx, associationSymbol);
   }
 

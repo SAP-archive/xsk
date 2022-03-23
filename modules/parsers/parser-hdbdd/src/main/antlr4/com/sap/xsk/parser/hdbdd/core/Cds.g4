@@ -18,7 +18,7 @@ elementDeclRule: annotationRule* (key=ID)? (name=ID | '"' name=ID '"') ':' typeA
 elementDetails: defaultValue | elementConstraints;
 elementConstraints: 'null' | 'not null' | 'NULL' | 'NOT NULL';
 
-association: ascId=ID ':' ascKeyword=ID cardinality? toKeyword=ID associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
+association: (key=ID)? ascId=ID ':' ascKeyword=ID cardinality? toKeyword=ID associationTarget (managedForeignKeys | unmanagedForeignKey)* elementConstraints? ';';
 associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
 unmanagedForeignKey: ON pathSubMembers+=ID ('.' pathSubMembers+=ID)* '=' source=ID;
 managedForeignKeys: '{' foreignKey (',' foreignKey)* '}';

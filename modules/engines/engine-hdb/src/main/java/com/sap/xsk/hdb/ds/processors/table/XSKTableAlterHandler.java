@@ -203,11 +203,11 @@ public class XSKTableAlterHandler {
       while (rsIndeces.next()) {
         dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
       }
-
-      TableBuilder tableBuilder = new TableBuilder();
-      tableBuilder.addUniqueIndicesToBuilder(alterTableBuilder, tableModel);
-      executeAlterBuilder(connection, alterTableBuilder);
     }
+
+    TableBuilder tableBuilder = new TableBuilder();
+    tableBuilder.addUniqueIndicesToBuilder(alterTableBuilder, tableModel);
+    executeAlterBuilder(connection, alterTableBuilder);
   }
 
   public void ensurePrimaryKeyIsUnchanged(Connection connection) throws SQLException {

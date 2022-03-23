@@ -25,7 +25,7 @@ public class XSKCommonsDBUtils {
 
 	private static final String SQL_GET_SYNONYM = "SELECT * FROM \"SYS\".\"SYNONYMS\" WHERE \"SYNONYM_NAME\" = ? AND \"SCHEMA_NAME\" = ?";
 
-    private static final String RESULT_TABLE_SCHEMA = "TABLE_SCHEMA";
+    private static final String RESULT_TABLE_SCHEM = "TABLE_SCHEM";
     private static final String RESULT_OBJECT_NAME = "OBJECT_NAME";
 	private static final String RESULT_OBJECT_SCHEMA = "OBJECT_SCHEMA";
 	private static final String RESULT_OBJECT_TYPE = "OBJECT_TYPE";
@@ -35,7 +35,7 @@ public class XSKCommonsDBUtils {
             DatabaseMetaData databaseMetaData = connection.getMetaData();
             ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, tableName, new String[]{ISqlKeywords.KEYWORD_TABLE});
             if (rs.next()) {
-                return rs.getString(RESULT_TABLE_SCHEMA);
+                return rs.getString(RESULT_TABLE_SCHEM);
             }
             return null;
         }

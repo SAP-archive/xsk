@@ -1,69 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.sap.xsk</groupId>
-    <artifactId>xsk-modules-parsers-parent</artifactId>
+    <parent>
+        <groupId>com.sap.xsk</groupId>
+        <artifactId>xsk-modules-parsers-parent</artifactId>
+        <version>0.15.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <name>XSK - Modules - Parsers - HDBDD</name>
+    <artifactId>xsk-modules-parsers-hdbdd</artifactId>
     <version>0.15.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+    <packaging>jar</packaging>
 
-  <name>XSK - Modules - Parsers - HDBDD</name>
-  <artifactId>xsk-modules-parsers-hdbdd</artifactId>
-  <version>0.15.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+    <properties>
+        <sonar.exclusions>src/main/java/com/sap/xsk/parser/hdbdd/core</sonar.exclusions>
+        <license.header.location>../../../licensing-header.txt</license.header.location>
+    </properties>
 
-  <properties>
-    <license.header.location>../../../licensing-header.txt</license.header.location>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr4-runtime</artifactId>
-      <version>${antlr4-runtime.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${commons.io}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sap.xsk</groupId>
-      <artifactId>xsk-modules-parsers-commons</artifactId>
-      <version>0.15.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr4-maven-plugin</artifactId>
-        <version>${antlr4-maven-plugin.version}</version>
-        <configuration>
-          <outputDirectory>${basedir}/src/main/java</outputDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>antlr</id>
-            <goals>
-              <goal>antlr4</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${antlr4-runtime.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sap.xsk</groupId>
+            <artifactId>xsk-modules-parsers-commons</artifactId>
+            <version>0.15.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>${antlr4-maven-plugin.version}</version>
+                <configuration>
+                    <outputDirectory>${basedir}/src/main/java</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>antlr</id>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

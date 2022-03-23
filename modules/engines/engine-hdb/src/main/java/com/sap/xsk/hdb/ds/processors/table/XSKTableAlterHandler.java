@@ -198,15 +198,16 @@ public class XSKTableAlterHandler {
     DatabaseMetaData dmd = connection.getMetaData();
     ResultSet rsIndeces = dmd.getIndexInfo(null, null, this.tableModel.getName(), false, false);
 
-    Statement stmt = connection.createStatement();
-    Set<String> droppedIndices = new HashSet<>();
-    while (rsIndeces.next()) {
-      dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
-    }
+    try (Statement stmt = connection.createStatement()) {
+      Set<String> droppedIndices = new HashSet<>();
+      while (rsIndeces.next()) {
+        dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
+      }
 
-    TableBuilder tableBuilder = new TableBuilder();
-    tableBuilder.addUniqueIndicesToBuilder(alterTableBuilder, tableModel);
-    executeAlterBuilder(connection, alterTableBuilder);
+      TableBuilder tableBuilder = new TableBuilder();
+      tableBuilder.addUniqueIndicesToBuilder(alterTableBuilder, tableModel);
+      executeAlterBuilder(connection, alterTableBuilder);
+    }
   }
 
   public void ensurePrimaryKeyIsUnchanged(Connection connection) throws SQLException {

@@ -12,6 +12,7 @@
 package com.sap.xsk.parser.hdbti.custom;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -126,7 +127,8 @@ public class XSKHDBTIParserTest extends AbstractDirigibleTest {
         .toString(XSKHDBTIParserTest.class.getResourceAsStream("/randomOrder.hdbti"), StandardCharsets.UTF_8);
     XSKHDBTIParser xskhdbtiParser = new XSKHDBTIParser();
 
-    xskhdbtiParser.parse("/test/xsk/com/sap/randomOrder.hdbti", hdbtiSample);
+    XSKHDBTIImportModel model = xskhdbtiParser.parse("/test/xsk/com/sap/randomOrder.hdbti", hdbtiSample);
+    assertNotNull("The XSKHDBTIImportModel should not be null after parsing", model);
   }
 
   @Test(expected = XSKArtifactParserException.class)

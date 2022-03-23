@@ -16,7 +16,8 @@ import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 
 public class EntityElementSymbol extends FieldSymbol {
 
-  private String value;
+  private String defaultValue;
+  private boolean isDefaultValueDateTimeFunction;
   private boolean isKey;
   private boolean isNotNull;
 
@@ -28,17 +29,26 @@ public class EntityElementSymbol extends FieldSymbol {
     super(entityElementSymbol.getType(), entityElementSymbol.getReference(), entityElementSymbol.getName(), entityElementSymbol.getScope(),
         entityElementSymbol.getIdToken(), entityElementSymbol.getFullName(), entityElementSymbol.getAnnotations(),
         entityElementSymbol.getSchema());
-    this.value = entityElementSymbol.getValue();
+    this.defaultValue = entityElementSymbol.getDefaultValue();
+    this.isDefaultValueDateTimeFunction = entityElementSymbol.isDefaultValueDateTimeFunction();
     this.isKey = entityElementSymbol.isKey();
     this.isNotNull = entityElementSymbol.isNotNull();
   }
 
-  public String getValue() {
-    return value;
+  public String getDefaultValue() {
+    return defaultValue;
   }
 
-  public void setValue(String value) {
-    this.value = value;
+  public void setDefaultValue(String value) {
+    this.defaultValue = value;
+  }
+
+  public boolean isDefaultValueDateTimeFunction() {
+    return isDefaultValueDateTimeFunction;
+  }
+
+  public void setDefaultValueDateTimeFunction(boolean defaultValueDateTimeFunction) {
+    isDefaultValueDateTimeFunction = defaultValueDateTimeFunction;
   }
 
   public boolean isNotNull() {

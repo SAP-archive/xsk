@@ -53,6 +53,7 @@ export class HandleDeployablesTask extends MigrationTask {
 
             deliveryUnit["deployableArtifactsResult"] =
                 migrationService.handlePossibleDeployableArtifacts(
+                    deliveryUnit.name,
                     userData.workspace,
                     deployables
                 );

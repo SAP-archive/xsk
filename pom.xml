@@ -30,6 +30,7 @@
         <module>modules</module>
         <module>resources</module>
         <module>releng</module>
+        <module>coverage-aggregate</module>
     </modules>
 
     <profiles>
@@ -40,6 +41,29 @@
             </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.version}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>SOURCEFILE</element>
+                                    <excludes>
+                                        <exclude>*src/test/*</exclude>
+                                    </excludes>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
@@ -229,7 +253,18 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <dirigible.version>6.2.9</dirigible.version>
+        <dirigible.version>6.2.12</dirigible.version>
+
+        <!-- Sonar Cloud -->
+        <sonar.organization>sap-1</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectName>XSK</sonar.projectName>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.basedir}/coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml,
+            ${project.basedir}/../coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml,
+            ${project.basedir}/../../coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml,
+            ${project.basedir}/../../../coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
 
         <maven.resource.plugin.version>3.2.0</maven.resource.plugin.version>
         <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
@@ -275,12 +310,13 @@
         <neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>
         <neo-java-web-sdk.javax.activation.version>1.2.0</neo-java-web-sdk.javax.activation.version>
         <neo-java-web-sdk.jaxb.version>2.2.11</neo-java-web-sdk.jaxb.version>
-        <ngdbc.version>2.11.17</ngdbc.version>
+        <ngdbc.version>2.12.5</ngdbc.version>
         <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
         <commons-csv.version>1.9.0</commons-csv.version>
         <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
+        <jacoco.version>0.8.7</jacoco.version>
 
         <profile.content.phase>none</profile.content.phase>
 

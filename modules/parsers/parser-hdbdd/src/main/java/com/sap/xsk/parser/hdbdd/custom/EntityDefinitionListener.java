@@ -485,11 +485,11 @@ public class EntityDefinitionListener extends CdsBaseListener {
       keys.forEach(k -> {
         AbstractAnnotationValue providedKeyValue = providedObj.getValue(k);
         AbstractAnnotationValue expectedKeyValue = expectedObj.getValue(k);
-        if (providedKeyValue == null) {
-          throw new CDSRuntimeException("ERROR: Missing mandatory field declaration!");
+
+        if (providedKeyValue != null) {
+          compareAnnValues(providedKeyValue, expectedKeyValue);
         }
 
-        compareAnnValues(providedKeyValue, expectedKeyValue);
       });
     } else if (providedValue instanceof AnnotationArray) {
       AnnotationArray providedArray = (AnnotationArray) providedValue;

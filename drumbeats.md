@@ -1,6 +1,22 @@
 # Drumbeats
 
 
+## 2022 Week 11 (14 March - 20 March)
+
+#### Focus topics:
+- Support row table type in HDBDD
+- Support fuzzy search declaration in HDBDD
+- Requests with destination now support sending a body
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-03-14..2022-03-20) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-03-14..2022-03-20) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-03-14..2022-03-20) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-03-14..2022-03-20) PRs
+
 ## 2022 Week 10 (07 March - 13 March)
 
 #### Focus topics:

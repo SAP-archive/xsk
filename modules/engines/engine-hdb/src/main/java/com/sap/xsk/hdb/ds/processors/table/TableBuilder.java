@@ -82,9 +82,12 @@ public class TableBuilder {
           : columnModel.getName();
       DataType type = DataType.valueOf(columnModel.getType());
 
-      sqlTableBuilder
-          .column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(),
-              getColumnModelArgs(columnModel));
+      if (!columnModel.isFuzzySearchIndexEnabled()){
+        sqlTableBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(), getColumnModelArgs(columnModel));
+      }
+      else{
+        sqlTableBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(), true, getColumnModelArgs(columnModel));
+      }
     }
   }
 
@@ -134,7 +137,7 @@ public class TableBuilder {
       if ((type.equals(DataType.VARCHAR) || type.equals(DataType.CHAR) || type.equals(DataType.NVARCHAR)
           || columnModel.getType().equalsIgnoreCase("ALPHANUM")
           || columnModel.getType().equalsIgnoreCase("SHORTTEXT")
-          || columnModel.getType().equalsIgnoreCase("TIMESTAMP"))) {
+          || (columnModel.getType().equalsIgnoreCase("TIMESTAMP") && !columnModel.isDefaultValueDateTimeFunction()))) {
         args += " DEFAULT '" + columnModel.getDefaultValue() + "' ";
       } else {
         args += " DEFAULT " + columnModel.getDefaultValue() + " ";

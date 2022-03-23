@@ -35,6 +35,8 @@ public class HdbddTransformer {
   private static final String UNMANAGED_ASSOCIATION_MARKER = "@";
   private static final String CATALOG_ANNOTATION = "Catalog";
   private static final String CATALOG_OBJ_TABLE_TYPE = "tableType";
+  private static final String SEARCH_INDEX_ANNOTATION = "SearchIndex";
+  private static final String FUZZY_SEARCH_INDEX_ENABLED = "enabled";
 
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol, String location) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
@@ -103,6 +105,14 @@ public class HdbddTransformer {
     tableModel.setLocation(location);
     if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null)
       tableModel.setTableType(entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue());
+
+    for (int i = 0; i < entitySymbol.getElements().size(); i++){
+      EntityElementSymbol currentElement = entitySymbol.getElements().get(i);
+        if (currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION) != null){
+            tableModel.getColumns().get(i).setFuzzySearchIndex(Boolean.parseBoolean(
+                currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED).getValue()));
+        }
+    }
     return tableModel;
   }
 
@@ -149,7 +159,8 @@ public class HdbddTransformer {
       }
 
       columnModel.setNullable(!elementSymbol.isNotNull());
-      columnModel.setDefaultValue(elementSymbol.getValue());
+      columnModel.setDefaultValue(elementSymbol.getDefaultValue());
+      columnModel.setDefaultValueDateTimeFunction(elementSymbol.isDefaultValueDateTimeFunction());
     }
 
     if (fieldSymbol.getType() instanceof BuiltInTypeSymbol) {

@@ -6,9 +6,10 @@ namespace sap.table;
 @Catalog.tableType : #COLUMN
 
 entity DefaultValues{
-Key MY_KEY : hana.VARCHAR(25);
+    Key MY_KEY : hana.VARCHAR(25);
     DIFF_TAX_AMT : Decimal(15,2) default 0.00;
     SUMM_TRANS_ERR_FLAG : hana.VARCHAR(1) default 'N';
     TONI : hana.VARCHAR(10) default null;
     CH_RECEIVED_DATE : LocalDate default null;
+    DATE: UTCTimestamp default CURRENT_UTCTIMESTAMP;
 };

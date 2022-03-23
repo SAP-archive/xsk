@@ -28,6 +28,8 @@ public class XSKDataStructureHDBTableColumnModel {
 
   private String defaultValue;
 
+  private boolean isDefaultValueDateTimeFunction;
+
   private String precision;
 
   private String scale;
@@ -37,6 +39,8 @@ public class XSKDataStructureHDBTableColumnModel {
   private String comment;
 
   private String alias;
+
+  private boolean fuzzySearchIndex;
 
   /**
    * The default constructor.
@@ -59,8 +63,7 @@ public class XSKDataStructureHDBTableColumnModel {
    * @param unique       the unique
    */
   public XSKDataStructureHDBTableColumnModel(String name, String type, String length, boolean nullable, boolean primaryKey,
-      String defaultValue,
-      String precision, String scale, boolean unique, String alias) {
+      String defaultValue, boolean isDefaultValueDateTimeFunction, String precision, String scale, boolean unique, String alias) {
     super();
     this.name = name;
     this.sqlType = type;
@@ -68,6 +71,7 @@ public class XSKDataStructureHDBTableColumnModel {
     this.nullable = nullable;
     this.primaryKey = primaryKey;
     this.defaultValue = defaultValue;
+    this.isDefaultValueDateTimeFunction = isDefaultValueDateTimeFunction;
     this.precision = precision;
     this.scale = scale;
     this.unique = unique;
@@ -183,6 +187,24 @@ public class XSKDataStructureHDBTableColumnModel {
   }
 
   /**
+   * Check if default value is a datetime function.
+   *
+   * @return true if the default value is a datetime function
+   */
+  public boolean isDefaultValueDateTimeFunction() {
+    return isDefaultValueDateTimeFunction;
+  }
+
+  /**
+   * Setter for the default value if datetime function.
+   *
+   * @param isDefaultValueDateTimeFunction whether the default value is a datetime function
+   */
+  public void setDefaultValueDateTimeFunction(boolean isDefaultValueDateTimeFunction) {
+    this.isDefaultValueDateTimeFunction = isDefaultValueDateTimeFunction;
+  }
+
+  /**
    * Getter for the precision value.
    *
    * @return the precision value
@@ -255,5 +277,23 @@ public class XSKDataStructureHDBTableColumnModel {
 
   public String getAlias() {
     return alias;
+  }
+
+  /**
+   * Check for the Fuzzy search index.
+   *
+   * @return true if enabled
+   */
+  public boolean isFuzzySearchIndexEnabled() {
+    return fuzzySearchIndex;
+  }
+
+  /**
+   * Setter for the Fuzzy search index.
+   *
+   * @param fuzzySearchIndex whether Fuzzy search index is enabled
+   */
+  public void setFuzzySearchIndex(boolean fuzzySearchIndex) {
+    this.fuzzySearchIndex = fuzzySearchIndex;
   }
 }

@@ -14,9 +14,8 @@ connection.prepareCall(createTable).execute();
 var insert = "INSERT INTO TEST_USERS (BLOB_, BIGINT_, DATE_, CLOB_, DEC_, DOUBLE_, FLOAT_, INT_, NCLOB_, NSTRING_, REAL_, SMALLINT_, STRING_, TIME_, TIMESTAMP_, TINYINT_) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 var call = connection.prepareCall(insert);
 
-var inputStream = Java.type('java.io.ByteArrayInputStream');
-var blob = new inputStream([123]);
-call.setBlob(1, blob);
+var blob = [123];
+call.setBlob(1, [123]);
 
 call.setBigInt(2, 1000000000000000)
 
@@ -24,10 +23,9 @@ var date = Java.type('java.sql.Date');
 var dateinput = new date(1990, 10, 10);
 call.setDate(3, dateinput);
 
-var charArray = Java.type('java.io.CharArrayReader');
-var clob = new charArray(['a', 'b', 'c']);
+var clob = "abcd";
 
-call.setClob(4,clob);
+call.setClob(4, clob);
 
 var bigDec = Java.type('java.math.BigDecimal');
 var dec = new bigDec(10.11);

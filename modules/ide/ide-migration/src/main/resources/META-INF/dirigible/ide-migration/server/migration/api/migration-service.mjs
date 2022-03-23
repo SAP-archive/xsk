@@ -18,8 +18,7 @@ const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
 const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor");
 const XSKHDBCoreFacade = Java.type("com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade");
 const hdbDDModel = "com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel";
-const hdbTableFunctionModel = "com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel";
-const hdbCalculationViewModel = "migration.calc.view.model";
+const schemaModel = "com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel";
 const xskModificator = new XSKProjectMigrationInterceptor();
 
 export class MigrationService {
@@ -28,6 +27,7 @@ export class MigrationService {
 
     synonymFileName = "hdi-synonyms.hdbsynonym";
     publicSynonymFileName = "hdi-public-synonyms.hdbpublicsynonym";
+    fileExtsForHDI = [".hdbcalculationview", ".calculationview", ".analyticprivilege", ".hdbanalyticprivilege", ".hdbflowgraph", ".hdbtablefunction"];
 
     setupConnection(databaseName, databaseUser, databaseUserPassword, connectionUrl) {
         database.createDataSource(databaseName, "com.sap.db.jdbc.Driver", connectionUrl, databaseUser, databaseUserPassword, null);
@@ -44,14 +44,14 @@ export class MigrationService {
         return this.repo.getAllDeliveryUnits();
     }
 
-    handlePossibleDeployableArtifacts(workspaceName, deployables) {
+    handlePossibleDeployableArtifacts(deliveryUnitName, workspaceName, deployables) {
         let generatedFiles = [];
         let updatedFiles = [];
         for (const deployable of deployables) {
             if (deployable.artifacts && deployable.artifacts.length > 0) {
                 const hdiConfigPath = this.createHdiConfigFile(workspaceName, deployable.project);
                 generatedFiles.push(hdiConfigPath);
-                let hdiPath = this.createHdiFile(workspaceName, deployable.project, hdiConfigPath, deployable.artifacts);
+                let hdiPath = this.createHdiFile(deliveryUnitName, workspaceName, deployable.project, hdiConfigPath, deployable.artifacts);
                 generatedFiles.push(hdiPath);
             }
         }
@@ -78,15 +78,16 @@ export class MigrationService {
         };
     }
 
-    createHdiFile(workspaceName, project, hdiConfigPath, deployables) {
+    createHdiFile(deliveryUnitName, workspaceName, project, hdiConfigPath, deployables) {
         const projectName = project.getName();
+        const groupOrContainerHdiValue = this._buildHDIContainerName(deliveryUnitName, projectName);
         const defaultHanaUser = config.get(HANA_USERNAME, "DBADMIN");
 
         const hdi = {
             configuration: `/${projectName}/${hdiConfigPath.relativePath}`,
             users: [defaultHanaUser],
-            group: projectName,
-            container: projectName,
+            group: groupOrContainerHdiValue,
+            container: groupOrContainerHdiValue,
             deploy: deployables,
             undeploy: [],
         };
@@ -106,7 +107,11 @@ export class MigrationService {
         };
     }
 
-    copyFilesLocally(workspaceName, lists) {
+    _buildHDIContainerName(duName, projectName) {
+        return `${duName}_${projectName}`.toUpperCase();
+    }
+
+    copyFilesLocally(workspaceName, duName, lists) {
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
         const unmodifiedWorkspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName + "_unmodified");
         const hdbFacade = new XSKHDBCoreFacade();
@@ -151,7 +156,8 @@ export class MigrationService {
                 hdbFacade
             );
 
-            const synonymData = this._handleParsedData(parsedData);
+            const hdiContainerName = this._buildHDIContainerName(duName, projectName);
+            const synonymData = this._handleParsedData(parsedData, hdiContainerName);
             const hdbSynonyms = this._appendOrCreateSynonymsFile(this.synonymFileName, synonymData.hdbSynonyms, workspaceName, projectName);
             const hdbPublicSynonyms = this._appendOrCreateSynonymsFile(
                 this.publicSynonymFileName,
@@ -176,8 +182,8 @@ export class MigrationService {
     }
 
     _parseArtifact(fileName, filePath, fileContent, workspacePath, hdbFacade) {
-        if (this._isFileCalculationView(fileName)) {
-            return this._buildCalcViewModel(fileName);
+        if (this._isFileCalculationView(filePath)) {
+            return this._buildCalcViewModel(filePath);
         }
 
         return hdbFacade.parseDataStructureModel(
@@ -197,7 +203,7 @@ export class MigrationService {
         return filePath + this._getFileNameWithExtension(file);
     }
 
-    _handleParsedData(parsedData) {
+    _handleParsedData(parsedData, hdiSchema) {
         if (!parsedData) {
             return [];
         }
@@ -217,65 +223,62 @@ export class MigrationService {
 
                 synonyms.push(hdbSynonym);
             }
-
-            for (const tableTypeModel of parsedData.tableTypeModels) {
-                const tableTypeModelName = tableTypeModel.getName();
-                const tableTypeModelSchema = tableTypeModel.getSchema();
-                const hdbSynonym = this._generateHdbSynonym(
-                    tableTypeModelName,
-                    tableTypeModelSchema
-                );
-
-                synonyms.push(hdbSynonym);
-            }
         } else {
             const modelName = parsedData.getName();
-
-            if (dataModelType == hdbTableFunctionModel || dataModelType == hdbCalculationViewModel) {
-                const hdbPublicSynonym = this._generateHdbPublicSynonym(modelName);
+            const loc = parsedData.getLocation();
+            const fileExt = loc.substring(loc.lastIndexOf('.'), loc.length);
+            if (this.fileExtsForHDI.indexOf(fileExt) >= 0) {
+                const hdbPublicSynonym = this._generateHdbPublicSynonym(modelName, hdiSchema);
                 publicSynonyms.push(hdbPublicSynonym);
-            }
-            else {
+            } else if (dataModelType != schemaModel) {
                 const modelSchema = parsedData.getSchema();
                 const hdbSynonym = this._generateHdbSynonym(modelName, modelSchema);
                 synonyms.push(hdbSynonym);
+            } else {
+                console.log("Synonym won't be generated for file " + loc);
             }
         }
 
         return { hdbSynonyms: synonyms, hdbPublicSynonyms: publicSynonyms };
     }
 
-    _buildCalcViewModel(fileName) {
-        const calcViewName = fileName.substring(0, fileName.lastIndexOf('.'));
+    _buildCalcViewModel(filePath) {
+        // transforms "project/package/name.calculationview" to "project.package::name"
+        let pathWithoutExt = filePath.substring(0, filePath.lastIndexOf('.'));
+        let pathWithDots = pathWithoutExt.replaceAll('/', '.');
+        let lastDotIndex = pathWithDots.lastIndexOf('.');
+        const calcViewName = pathWithDots.substring(0, lastDotIndex) + "::" + pathWithDots.substring(lastDotIndex + 1, pathWithDots.length);
         const calcViewModelClass = {
-            getName: () => hdbCalculationViewModel
+            getName: () => "migration.calc.view.model"
         }
         const calcViewModel = {
             getName: () => calcViewName,
-            getClass: () => calcViewModelClass
+            getClass: () => calcViewModelClass,
+            getLocation: () => filePath
         }
         return calcViewModel;
     }
 
     _generateHdbSynonym(name, schemaName) {
-        const trimmedName = name.split(":").pop();
         return {
             name: name,
             value: {
                 target: {
-                    object: trimmedName,
+                    object: name,
                     schema: schemaName,
                 },
             },
         };
     }
 
-    _generateHdbPublicSynonym(name) {
+    _generateHdbPublicSynonym(name, schemaName) {
+        const trimmedName = name.split(":").pop();
         return {
             name: name,
             value: {
                 target: {
-                    object: name,
+                    object: trimmedName,
+                    schema: schemaName
                 },
             },
         };
@@ -364,6 +367,15 @@ export class MigrationService {
 
         return workspaceCollection.createCollection(projectName);
     }
+    removeTemporaryFolders(workspaceName){
+        let collectionNames = [workspaceName,workspaceName+'_unmodified']
+        for(const collectionName of  collectionNames){
+            const workspaceCollection = repositoryManager.getCollection(collectionName);
+            if (workspaceCollection.exists()) {
+                workspaceCollection.delete();
+            }
+        }
+    }
 
     _getOrCreateHdbSynonymFile(workspaceName, projectName, hdbSynonymFileName) {
         const workspaceCollection = repositoryManager.getCollection(workspaceName);
@@ -425,13 +437,8 @@ export class MigrationService {
             });
         }
 
-        if (
-            filePath.endsWith(".hdbcalculationview") ||
-            filePath.endsWith(".calculationview") ||
-            filePath.endsWith(".analyticprivilege") ||
-            filePath.endsWith(".hdbanalyticprivilege") ||
-            filePath.endsWith(".hdbflowgraph")
-        ) {
+        let fileExt = filePath.substring(filePath.lastIndexOf('.'), filePath.length);
+        if (this.fileExtsForHDI.indexOf(fileExt) >= 0) {
             deployables.find((x) => x.projectName === projectName).artifacts.push(runLocation);
         }
 

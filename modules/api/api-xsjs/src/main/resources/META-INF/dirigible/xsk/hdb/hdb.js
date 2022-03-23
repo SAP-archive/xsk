@@ -239,8 +239,7 @@ function setParamByType(dPreparedStatement, paramType, paramValue, paramIndex) {
 			break;
 		case 'SMALLDECIMAL':
 		case 'DECIMAL':
-			//TODO setBigDecimal doesn't exist
-			dPreparedStatement.setDouble(paramIndex, paramValue);
+			dPreparedStatement.setBigDecimal(paramIndex, paramValue);
 			break;
 		case 'REAL':
 		case 'FLOAT':

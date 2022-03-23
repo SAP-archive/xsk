@@ -83,8 +83,8 @@ public class HDBTableAlterHandlerTest {
       sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
 
       List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true, null));
-      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, false, null, null, true, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, false, null, null, false, null));
       tableModel.setColumns(columns);
       tableModel.setConstraints(constraintsModel);
       tableModel.setName("hdb_table::SampleHdbdd");
@@ -113,7 +113,7 @@ public class HDBTableAlterHandlerTest {
       sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
 
       List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-      columns.add(new XSKDataStructureHDBTableColumnModel("Age", "INTEGER", "32", true, true, null, null, null, true, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Age", "INTEGER", "32", true, true, null, false, null, null, true, null));
       tableModel.setColumns(columns);
       tableModel.setConstraints(constraintsModel);
       tableModel.setName("hdb_table::SampleHdbdd");
@@ -141,8 +141,8 @@ public class HDBTableAlterHandlerTest {
       sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
 
       List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true, null));
-      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, false, null, null, true, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, false, null, null, false, null));
       tableModel.setColumns(columns);
       tableModel.setConstraints(constraintsModel);
       tableModel.setName("hdb_table::SampleHdbdd");
@@ -177,8 +177,8 @@ public class HDBTableAlterHandlerTest {
       sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
 
       List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true, null));
-      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, false, null, null, true, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, false, null, null, false, null));
       tableModel.setColumns(columns);
       tableModel.setConstraints(constraintsModel);
       tableModel.setName("hdb_table::SampleHdbdd");
@@ -212,8 +212,8 @@ public class HDBTableAlterHandlerTest {
       sqlFactory.when(() -> SqlFactory.getNative(mockConnection)).thenReturn(mockSqlFactory);
       sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
       List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, null, null, true, null));
-      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, false, null, false, null, null, true, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, false, null, null, false, null));
       tableModel.setColumns(columns);
       tableModel.setConstraints(constraintsModel);
       tableModel.setName("hdb_table::SampleHdbdd");
@@ -242,8 +242,8 @@ public class HDBTableAlterHandlerTest {
       sqlFactory.when(() -> SqlFactory.deriveDialect(mockConnection)).thenReturn(new HanaSqlDialect());
 
       List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<>();
-      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, true, null, null, null, true, null));
-      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, null, null, false, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Id", "NVARCHAR", "32", true, true, null, false, null, null, true, null));
+      columns.add(new XSKDataStructureHDBTableColumnModel("Name", "NVARCHAR", "32", true, false, null, false, null, null, false, null));
       tableModel.setColumns(columns);
       tableModel.setConstraints(constraintsModel);
       primaryKey.setColumns(new String[]{"Id"});

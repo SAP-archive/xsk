@@ -23,4 +23,4 @@ The information on this page will help you learn how to continue using analytic 
 
 !!! note "SAP Help Portal"
 
-    For more information, see [Analytic Privileges](.hdbanalyticprivilege)](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/2d3056363053436898fcf5a3141b482f.html).
+    For more information, see [Analytic Privileges](https://help.sap.com/viewer/3823b0f33420468ba5f1cf7f59bd6bd9/2.0.06/en-US/2d3056363053436898fcf5a3141b482f.html).

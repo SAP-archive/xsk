@@ -39,7 +39,7 @@ public class XSKCronToQuartzCronTransformer {
     try {
       quartzCronExpression.setYear(parseRange(xskCronExpressionArr[XSK_CRON_YEAR]));
       quartzCronExpression.setMonth(parseRange(xskCronExpressionArr[XSK_CRON_MONTH]));
-      quartzCronExpression.setDayOfMonth(parseRange(xskCronExpressionArr[XSK_CRON_DAY]));
+      quartzCronExpression.setDayOfMonth(checkDayOfWeekAndDayOfMonth());
 
       String quartzDayOfWeek = parseRange(xskCronExpressionArr[XSK_CRON_DAY_OF_WEEK]);
       quartzDayOfWeek = parseDayOfWeekElement(quartzDayOfWeek);
@@ -87,5 +87,18 @@ public class XSKCronToQuartzCronTransformer {
     }
 
     throw new XSKCronExpressionException(String.join(" ", xskCronExpressionArr), XSK_CRON_DAY_OF_WEEK);
+  }
+
+  private String checkDayOfWeekAndDayOfMonth(){
+    final String[] xskCronExpressionDayOfWeekArr = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "1", "2", "3", "4", "5", "6", "7"};
+
+    if (xskCronExpressionArr[XSK_CRON_DAY].equalsIgnoreCase("*")){
+      for (String dayOfWeek : xskCronExpressionDayOfWeekArr ){
+        if (xskCronExpressionArr[XSK_CRON_DAY_OF_WEEK].contains(dayOfWeek)){
+          return "?";
+        }
+      }
+    }
+    return parseRange(xskCronExpressionArr[XSK_CRON_DAY]);
   }
 }

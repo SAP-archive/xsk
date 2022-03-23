@@ -457,10 +457,10 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
       selectSymbol.setColumnsSql(ctx.start.getInputStream().getText(selectedColumnsRuleSqlInterval));
     }
 
-    WhereRuleContext whreRuleContext = ctx.whereRule();
-    if (whreRuleContext != null) {
-      int a = whreRuleContext.start.getStartIndex();
-      int b = whreRuleContext.stop.getStopIndex();
+    WhereRuleContext whereRuleContext = ctx.whereRule();
+    if (whereRuleContext != null) {
+      int a = whereRuleContext.start.getStartIndex();
+      int b = whereRuleContext.stop.getStopIndex();
       Interval whereRuleSqlInterval = new Interval(a, b);
       selectSymbol.setWhereSql(ctx.start.getInputStream().getText(whereRuleSqlInterval));
     }
@@ -478,7 +478,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     }
 
     if (ctx.dependingTableAlias != null) {
-      selectSymbol.setDependingTableAlias(ctx.dependingTableAlias.getText());
+      selectSymbol.setDependingTableAlias(handleStringLiteral(ctx.dependingTableAlias.getText()));
     }
 
     this.currentScope.define(selectSymbol);
@@ -489,7 +489,6 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   @Override
   public void exitSelectRule(SelectRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
-//    fullSymbolName.pop();
   }
 
   @Override
@@ -500,6 +499,10 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     String joinArtifactName = handleStringLiteral(ctx.joinArtifactName.getText());
     joinSymbol.setJoinArtifactName(joinArtifactName);
     this.symbolTable.addChildToView(((ViewSymbol) this.currentScope.getEnclosingScope()).getFullName(), ((ViewSymbol) this.currentScope.getEnclosingScope()).getPackageId() + "::" + ((ViewSymbol) this.currentScope.getEnclosingScope()).getContext() + "." + joinArtifactName);
+
+    if (ctx.joinTableAlias != null) {
+      joinSymbol.setJoinTableAlias(handleStringLiteral(ctx.joinTableAlias.getText()));
+    }
 
     JoinFieldsContext joinFieldsContext = ctx.joinFields();
     if (joinFieldsContext.children != null) {
@@ -746,7 +749,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   }
 
   private String handleStringLiteral(String value) {
-    if (value != null && value.length() > 1) {
+    if (value != null && value.length() > 0) {
       if (value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
         String subStr = value.substring(1, value.length() - 1);
         String escapedQuote = subStr.replace("\\\"", "\"");

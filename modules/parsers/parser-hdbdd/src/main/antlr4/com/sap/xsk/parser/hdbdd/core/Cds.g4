@@ -16,7 +16,7 @@ typeAssignRule: ref=ID '(' args+=INTEGER (',' args+=INTEGER)* ')'               
                 ;
 elementDeclRule: annotationRule* (key=ID)? (name=ID | '"' name=ID '"') ':' typeAssignRule elementDetails* ';';
 elementDetails: defaultValue | elementConstraints;
-elementConstraints: NULL | NOT_NULL;
+elementConstraints: 'null' | 'not null' | 'NULL' | 'NOT NULL';
 
 association: ascId=ID ':' ascKeyword=ID cardinality? toKeyword=ID associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
 associationTarget: pathSubMembers+=ID ('.' pathSubMembers+=ID)*;
@@ -43,9 +43,9 @@ keyValue: ID ':' annValue;
 
 artifactRule: annotationRule* artifactType=ID artifactName=ID '{' (artifactRule | viewRule | dataTypeRule | fieldDeclRule | elementDeclRule | association)* '}' ';'?;
 
-viewRule: DEFINE artifactType=VIEW artifactName=ID AS selectRule*;
-selectRule: isUnion=UNION? SELECT FROM dependsOnTable=ID ((AS dependingTableAlias=ID) | dependingTableAlias=ID)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'* whereRule?;
-joinRule: joinType=JOIN_TYPES joinArtifactName=ID AS joinFields;
+viewRule: DEFINE? artifactType=VIEW artifactName=ID AS selectRule*;
+selectRule: isUnion=UNION? SELECT FROM dependsOnTable=ID ((AS dependingTableAlias=ID) | dependingTableAlias=ID)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'? (WHERE whereRule ';'?)?;
+joinRule: joinType=JOIN_TYPES joinArtifactName=ID ((AS joinTableAlias=ID) | joinTableAlias=ID)? joinFields;
 joinFields: .*?;
 selectedColumnsRule: .*?;
 whereRule: .*?;
@@ -56,6 +56,7 @@ AS: A S;
 ON: O N;
 SELECT: S E L E C T;
 FROM: F R O M;
+WHERE: W H E R E;
 DEFINE: D E F I N E;
 VIEW: V I E W;
 UNION: U N I O N;
@@ -75,11 +76,7 @@ BUILT_IN_HANA_TYPE: HanaTypePrefix ('VARCHAR' | 'ALPHANUM' | 'SMALLINT' | 'TINYI
 DATETIME_VALUE_FUNCTION: ( 'CURRENT_DATE' | 'CURRENT_TIME' | 'CURRENT_TIMESTAMP' | 'CURRENT_UTCDATE' | 'CURRENT_UTCTIME' | 'CURRENT_UTCTIMESTAMP' );
 
 USING: U S I N G;
-NULL: N U L L;
-NOT_NULL: N O T ' ' N U L L;
-
-CONCATENATION: '||';
-NOT_EQUAL_TO: '<>';
+NULL: 'null';
 
 DEFAULT: D E F A U L T;
 ASSOCIATION_MIN: INTEGER '..';

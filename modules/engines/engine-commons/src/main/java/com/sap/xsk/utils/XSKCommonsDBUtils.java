@@ -28,7 +28,7 @@ public class XSKCommonsDBUtils {
             DatabaseMetaData databaseMetaData = connection.getMetaData();
             ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, tableName, new String[]{ISqlKeywords.KEYWORD_TABLE});
             if (rs.next()) {
-                return rs.getString("TABLE_SCHEMA");
+                return rs.getString("TABLE_SCHEM");
             }
             return null;
         }

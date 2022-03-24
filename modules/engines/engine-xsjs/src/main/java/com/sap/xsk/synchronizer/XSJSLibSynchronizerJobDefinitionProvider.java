@@ -32,7 +32,7 @@ public class XSJSLibSynchronizerJobDefinitionProvider implements IJobDefinitionP
     jobDefinition.setGroup(ISchedulerCoreService.JOB_GROUP_INTERNAL);
     jobDefinition.setClazz(XSJSLibSynchronizerJob.class.getCanonicalName());
     jobDefinition.setDescription(XSK_XSJSLIB_SYNCHRONIZER_JOB);
-    jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_XSJSLIB, ""));
+    jobDefinition.setExpression(Configuration.get(DIRIGIBLE_JOB_EXPRESSION_XSK_XSJSLIB, "0/55 * * * * ?"));
     jobDefinition.setSingleton(true);
     return jobDefinition;
   }

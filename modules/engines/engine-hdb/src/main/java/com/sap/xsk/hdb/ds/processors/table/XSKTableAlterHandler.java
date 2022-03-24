@@ -198,10 +198,11 @@ public class XSKTableAlterHandler {
     DatabaseMetaData dmd = connection.getMetaData();
     ResultSet rsIndeces = dmd.getIndexInfo(null, null, this.tableModel.getName(), false, false);
 
-    Statement stmt = connection.createStatement();
-    Set<String> droppedIndices = new HashSet<>();
-    while (rsIndeces.next()) {
-      dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
+    try (Statement stmt = connection.createStatement()) {
+      Set<String> droppedIndices = new HashSet<>();
+      while (rsIndeces.next()) {
+        dropExistingIndex(connection, stmt, droppedIndices, rsIndeces);
+      }
     }
 
     TableBuilder tableBuilder = new TableBuilder();

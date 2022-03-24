@@ -224,7 +224,7 @@ export class HanaRepository {
 
         let bArrJSONLength = [];
         Utils.arrayCopy(respAsByteArr, 10, bArrJSONLength, 0, 4);
-        jsonLength = Utils.byteArrayToInt(bArrJSONLength);
+        let jsonLength = Utils.byteArrayToInt(bArrJSONLength);
         let pointer = 14;
 
         json = utf8.bytesToString(respAsByteArr, pointer, jsonLength);

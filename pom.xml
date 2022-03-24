@@ -301,7 +301,7 @@
         <okhttp.version>2.7.5</okhttp.version>
         <xsuaa.client.version>2.2.0</xsuaa.client.version>
         <apache.httpclient.version>4.5.8</apache.httpclient.version>
-        <commons.lang3>3.9</commons.lang3>
+        <commons.lang3>3.12.0</commons.lang3>
         <license-maven-plugin.version>4.2.rc2</license-maven-plugin.version>
         <antlr4-runtime.version>4.9.3</antlr4-runtime.version>
         <antlr4-maven-plugin.version>4.9.3</antlr4-maven-plugin.version>

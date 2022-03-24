@@ -27,7 +27,7 @@ migrationLaunchView.controller("StartMigrationViewController", [
         let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
 
         function startMigration() {
-            body = {
+            let body = {
                 neo: {
                     hostName: migrationDataState.neoHostName,
                     subaccount: migrationDataState.neoSubaccount,

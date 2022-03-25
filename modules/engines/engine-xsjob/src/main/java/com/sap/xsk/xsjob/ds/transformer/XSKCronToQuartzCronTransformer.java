@@ -15,6 +15,7 @@ import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.xsjob.ds.api.XSKCronExpressionException;
 import java.text.ParseException;
+import java.util.List;
 
 public class XSKCronToQuartzCronTransformer {
 
@@ -90,15 +91,12 @@ public class XSKCronToQuartzCronTransformer {
   }
 
   private String checkDayOfWeekAndDayOfMonth(){
-    final String[] xskCronExpressionDayOfWeekArr = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "1", "2", "3", "4", "5", "6", "7"};
+    final List<String> xskCronExpressionDayOfWeekArr = List.of("mon", "tue", "wed", "thu", "fri", "sat", "sun", "1", "2", "3", "4", "5", "6", "7");
+    final List<String> dayOfWeekList = List.of(xskCronExpressionArr[XSK_CRON_DAY_OF_WEEK].split(","));
 
-    if (xskCronExpressionArr[XSK_CRON_DAY].equalsIgnoreCase("*")){
-      for (String dayOfWeek : xskCronExpressionDayOfWeekArr ){
-        if (xskCronExpressionArr[XSK_CRON_DAY_OF_WEEK].contains(dayOfWeek)){
-          return "?";
-        }
-      }
-    }
-    return parseRange(xskCronExpressionArr[XSK_CRON_DAY]);
+    boolean isEveryDay = xskCronExpressionArr[XSK_CRON_DAY].equalsIgnoreCase("*");
+    boolean hasDayOfWeek = dayOfWeekList.stream().map(String::toLowerCase).anyMatch(xskCronExpressionDayOfWeekArr::contains);
+
+    return isEveryDay && hasDayOfWeek ? "?" : parseRange(xskCronExpressionArr[XSK_CRON_DAY]);
   }
 }

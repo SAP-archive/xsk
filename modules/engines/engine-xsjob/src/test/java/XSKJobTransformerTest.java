@@ -19,12 +19,10 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
@@ -39,17 +37,11 @@ public class XSKJobTransformerTest {
   private final XSKJobCoreService xskJobCoreService = new XSKJobCoreService();
   private final XSKJobToXSKJobDefinitionTransformer xskJobToXSKJobDefinitionTransformer = new XSKJobToXSKJobDefinitionTransformer();
 
-	@Before
-	public void openMocks() {
-		MockitoAnnotations.openMocks(this);
-	}
-
 	@Test
 	public void executeTransformSuccessfully() throws Exception {
-    String EXPECTED_CRON_EXPRESSION_EVERY_FIVE_SECONDS = "*/5 * * * * ? *";
+    String expectedCronExpressionEveryFiveSeconds = "*/5 * * * * ? *";
     String xsjobSample = IOUtils.toString(XSKJobTransformerTest.class.getResourceAsStream("/TestXSKJobTransformSuccess.xsjob"), StandardCharsets.UTF_8);
 		XSKJobArtifact xskJobArtifact = xskJobCoreService.parseJob(xsjobSample);
-
 		Map<String, String> parametersAsMap = xskJobArtifact.getSchedules().get(0).getParameter();
 		ArrayList<XSKJobDefinition> jobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
 
@@ -57,7 +49,7 @@ public class XSKJobTransformerTest {
 		assertEquals("XSJOB/bugXsjob.xsjs", jobDefinitions.get(0).getModule());
 		assertEquals("logFunc", jobDefinitions.get(0).getFunction());
 		assertEquals("My Job configuration My Schedule configuration for execution every second", jobDefinitions.get(0).getDescription());
-    assertEquals(EXPECTED_CRON_EXPRESSION_EVERY_FIVE_SECONDS, jobDefinitions.get(0).getCronExpression());
+    assertEquals(expectedCronExpressionEveryFiveSeconds, jobDefinitions.get(0).getCronExpression());
 		assertEquals(parametersAsMap, jobDefinitions.get(0).getParametersAsMap());
 		assertEquals(parametersAsMap.size(), 1);
 		assertEquals(jobDefinitions.size(), 1);
@@ -82,11 +74,12 @@ public class XSKJobTransformerTest {
 	}
 
   @Test
-  public void executeTransformCronExpression() throws Exception {
-    String EXPECTED_CRON_EXPRESSION_EVERY_WEEK_DAY = "0 30 22 ? * MON,TUE,WED,THU,FRI *";
+  public void testTransformEachDayOfWeekAndMonth() throws Exception {
+    String expectedCronExpressionEveryWeekDay = "0 30 22 ? * MON,TUE,WED,THU,FRI *";
     String xsjobSample = IOUtils.toString(XSKJobTransformerTest.class.getResourceAsStream("/TestXSKJobTransformerCronExpression.xsjob"), StandardCharsets.UTF_8);
     XSKJobArtifact xskJobArtifact = xskJobCoreService.parseJob(xsjobSample);
     ArrayList<XSKJobDefinition> jobDefinitions = xskJobToXSKJobDefinitionTransformer.transform(xskJobArtifact);
-    assertEquals(jobDefinitions.get(0).getCronExpression(), EXPECTED_CRON_EXPRESSION_EVERY_WEEK_DAY);
+    assertEquals(jobDefinitions.size(), 1);
+    assertEquals(jobDefinitions.get(0).getCronExpression(), expectedCronExpressionEveryWeekDay);
   }
 }

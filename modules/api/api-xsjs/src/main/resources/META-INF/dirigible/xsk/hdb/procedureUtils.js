@@ -46,7 +46,7 @@ exports.getProcedureParameters = function (connection, procedureName) {
         })
     }
     parameters.filter(e => e.isTableType).forEach(e => {
-        e.temporaryTableName = `#TEMP_TABLE_${e.parameterTypeName}`;
+        e.temporaryTableName = `"#TEMP_TABLE_${e.parameterTypeName}"`;
         e.temporaryTableType = `"${e.parameterTypeSchema}"."${e.parameterTypeName}"`;
     });
     return parameters;

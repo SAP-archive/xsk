@@ -15,6 +15,7 @@ import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ViewSymbol extends Symbol implements Scope {
 
@@ -64,5 +65,22 @@ public class ViewSymbol extends Symbol implements Scope {
   @Override
   public boolean isDuplicateName(String id) {
     return false;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    if (!super.equals(o))
+      return false;
+    ViewSymbol that = (ViewSymbol) o;
+    return selectStatements.equals(that.selectStatements) && packageId.equals(that.packageId) && context.equals(that.context);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), selectStatements, packageId, context);
   }
 }

@@ -47,12 +47,13 @@ import com.sap.xsk.parser.hdbdd.symbols.view.JoinSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Stack;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -70,7 +71,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   private final ParseTreeProperty<EntityElementSymbol> entityElements = new ParseTreeProperty<>();
   private final ParseTreeProperty<Typeable> typeables = new ParseTreeProperty<>();
   private final ParseTreeProperty<Symbol> symbolsByParseTreeContext = new ParseTreeProperty<>();
-  private final Stack<String> fullSymbolName = new Stack<>();
+  private final Deque<String> fullSymbolNames = new ArrayDeque<>();
   private final ParseTreeProperty<AssociationSymbol> associations = new ParseTreeProperty<>();
   private final ParseTreeProperty<AbstractAnnotationValue> values = new ParseTreeProperty<>();
   private final Set<String> packagesUsed = new HashSet<>();
@@ -80,7 +81,8 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterNamespaceRule(CdsParser.NamespaceRuleContext ctx) {
-    String packageName = ctx.members.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+    String packageName = ctx.members.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
 
     if (!packageName.equals(getExpectedNamespace())) {
       throw new CDSRuntimeException(
@@ -112,13 +114,14 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   public void enterArtifactRule(ArtifactRuleContext ctx) {
     Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
     if (!(this.currentScope instanceof CDSFileScope) && !(this.currentScope instanceof ContextSymbol)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s - Artifact with type: '%s' and name: '%s' is only allowed in a context scope.",
-          ctx.artifactType.getLine(), ctx.artifactType.getText(), ctx.artifactName.getText()));
+      throw new CDSRuntimeException(
+          String.format("Error at line: %s - Artifact with type: '%s' and name: '%s' is only allowed in a context scope.",
+              ctx.artifactType.getLine(), ctx.artifactType.getText(), ctx.artifactName.getText()));
     }
 
     symbolsByParseTreeContext.put(ctx, newSymbol);
     registerSymbolToSymbolTable(newSymbol);
-    fullSymbolName.push(newSymbol.getName());
+    fullSymbolNames.push(newSymbol.getName());
     this.currentScope = (Scope) newSymbol;
     if (newSymbol instanceof EntitySymbol) {
       this.symbolTable.addEntityToGraph(newSymbol.getFullName());
@@ -129,7 +132,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   public void exitArtifactRule(ArtifactRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
-    fullSymbolName.pop();
+    fullSymbolNames.pop();
   }
 
   @Override
@@ -148,8 +151,9 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
 
     Symbol dataTypeSymbol = this.symbolFactory.getDataTypeSymbol(ctx, this.currentScope, this.schema);
     if (!(this.currentScope instanceof CDSFileScope) && !(this.currentScope instanceof ContextSymbol)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s - Artifact with type: '%s' and name: '%s' is only allowed in a context scope.",
-          ctx.name.getLine(), ctx.type.getText(), ctx.name.getText()));
+      throw new CDSRuntimeException(
+          String.format("Error at line: %s - Artifact with type: '%s' and name: '%s' is only allowed in a context scope.",
+              ctx.name.getLine(), ctx.type.getText(), ctx.name.getText()));
     }
 
     typeables.put(ctx, (Typeable) dataTypeSymbol);
@@ -300,7 +304,8 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   @Override
   public void enterAssignType(CdsParser.AssignTypeContext ctx) {
     Typeable typeable = typeables.get(ctx.getParent());
-    String fullReference = ctx.pathSubMembers.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+    String fullReference = ctx.pathSubMembers.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
 
     typeable.setReference(fullReference);
   }
@@ -362,8 +367,13 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
 
       AnnotationObj annotationToBeAssigned = new AnnotationObj();
       annotationToBeAssigned.setName(annId);
-      String fieldName = expectedValue.getKeyValuePairs().keySet().stream().findFirst().get();
-      annotationToBeAssigned.define(fieldName, providedValue);
+      Optional<String> expectedValueKeySet = expectedValue.getKeyValuePairs().keySet().stream().findFirst();
+
+      if (!expectedValueKeySet.isEmpty()) {
+        String fieldName = expectedValueKeySet.get();
+        annotationToBeAssigned.define(fieldName, providedValue);
+      }
+
       annotatedSymbol.addAnnotation(annotationToBeAssigned.getName(), annotationToBeAssigned);
     }
   }
@@ -410,9 +420,10 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
       throw new CDSRuntimeException(String.format("Error at line: %d col: %d.Annotation with name: %s cannot be used as a marker.",
           annIdToken.getLine(), annIdToken.getCharPositionInLine(), annId));
     }
-    if(annId.equals(NOKEY_ANNOTATION)){
-      for(int i =0; i<= ctx.getParent().children.size(); i++){
-        if(ctx.getParent().getChild(i) instanceof DataTypeRuleContext && ctx.getParent().getChild(i).getChild(0).toString().equalsIgnoreCase("key")){
+    if (annId.equals(NOKEY_ANNOTATION)) {
+      for (int i = 0; i <= ctx.getParent().children.size(); i++) {
+        if (ctx.getParent().getChild(i) instanceof DataTypeRuleContext && ctx.getParent().getChild(i).getChild(0).toString()
+            .equalsIgnoreCase("key")) {
           throw new CDSRuntimeException(
               String.format("Error at line: %d col: %d. Annotation %s has been specified for entity with keys.", annIdToken.getLine(),
                   annIdToken.getCharPositionInLine(), expectedAnnObject.getName()));
@@ -430,7 +441,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
     symbolsByParseTreeContext.put(ctx, newSymbol);
     registerSymbolToSymbolTable(newSymbol);
-    fullSymbolName.push(newSymbol.getName());
+    fullSymbolNames.push(newSymbol.getName());
     this.currentScope = (Scope) newSymbol;
     ((ViewSymbol) newSymbol).setPackageId(this.packageId);
     ((ViewSymbol) newSymbol).setContext(((ContextSymbol) currentScope.getEnclosingScope()).getName());
@@ -442,7 +453,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   @Override
   public void exitViewRule(ViewRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
-    fullSymbolName.pop();
+    fullSymbolNames.pop();
   }
 
   @Override
@@ -498,7 +509,9 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     joinSymbol.setJoinType(ctx.joinType.getText());
     String joinArtifactName = handleStringLiteral(ctx.joinArtifactName.getText());
     joinSymbol.setJoinArtifactName(joinArtifactName);
-    this.symbolTable.addChildToView(((ViewSymbol) this.currentScope.getEnclosingScope()).getFullName(), ((ViewSymbol) this.currentScope.getEnclosingScope()).getPackageId() + "::" + ((ViewSymbol) this.currentScope.getEnclosingScope()).getContext() + "." + joinArtifactName);
+    this.symbolTable.addChildToView(((ViewSymbol) this.currentScope.getEnclosingScope()).getFullName(),
+        ((ViewSymbol) this.currentScope.getEnclosingScope()).getPackageId() + "::"
+            + ((ViewSymbol) this.currentScope.getEnclosingScope()).getContext() + "." + joinArtifactName);
 
     if (ctx.joinTableAlias != null) {
       joinSymbol.setJoinTableAlias(handleStringLiteral(ctx.joinTableAlias.getText()));
@@ -518,13 +531,14 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   private void validateAnnotation(Token annIdToken, Symbol symbol) {
     String annId = annIdToken.getText();
     AnnotationObj annotationObj = this.symbolTable.getAnnotation(annId);
-    Optional<Class> allowedSymbols = annotationObj.getAllowedForSymbols().stream().filter(t -> symbol.getClass().equals(t)).findAny();
 
     if (annotationObj == null) {
       throw new CDSRuntimeException(String
           .format("Error at line: %d col: %d. Annotation with name: %s not supported.", annIdToken.getLine(),
               annIdToken.getCharPositionInLine(), annId));
-    } else if (allowedSymbols.isEmpty()) {
+    }
+
+    if (annotationObj.getAllowedForSymbols().stream().filter(t -> symbol.getClass().equals(t)).findAny().isEmpty()) {
       throw new CDSRuntimeException(
           String.format("Error at line: %d col: %d. Annotation %s not allowed for %s", annIdToken.getLine(),
               annIdToken.getCharPositionInLine(), annotationObj.getName(), symbol.getFullName()));
@@ -631,7 +645,6 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   }
 
 
-
   public Symbol resolveReference(String referencedId, Symbol referencingSymbol) {
     if (symbolTable.getGlobalBuiltInTypeScope().resolve(referencedId) != null) {
       return symbolTable.getGlobalBuiltInTypeScope().resolve(referencedId);
@@ -655,10 +668,10 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
 
   private void registerSymbolToSymbolTable(Symbol symbol) {
     String fullName;
-    if (fullSymbolName.isEmpty()) {
+    if (fullSymbolNames.isEmpty()) {
       fullName = symbol.getName();
     } else {
-      fullName = fullSymbolName.stream().collect(Collectors.joining(".")) + "." + symbol.getName();
+      fullName = fullSymbolNames.stream().collect(Collectors.joining(".")) + "." + symbol.getName();
     }
 
     symbol.setFullName(this.packageId + "::" + fullName);
@@ -678,9 +691,9 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
       AnnotationSimpleValue nameValue = (AnnotationSimpleValue) schemaAnnotation.getValue("name");
       this.schema = nameValue.getValue();
       if (symbol instanceof ContextSymbol) {
-        ((ContextSymbol) symbol).getSymbols().forEach((k, v) -> {
-          v.setSchema(this.schema);
-        });
+        ((ContextSymbol) symbol).getSymbols().forEach((k, v) ->
+            v.setSchema(this.schema)
+        );
       } else {
         symbol.setSchema(this.schema);
       }
@@ -726,12 +739,6 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     this.cdsFileScope = cdsFileScope;
   }
 
-  private void checkForDuplicateName(String contextId, int line) {
-    if (this.currentScope.isDuplicateName(contextId)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s  - Duplicate name for: %s", line, contextId));
-    }
-  }
-
   public void setSymbolTable(SymbolTable symbolTable) {
     this.symbolTable = symbolTable;
   }
@@ -754,8 +761,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
         String subStr = value.substring(1, value.length() - 1);
         String escapedQuote = subStr.replace("\\\"", "\"");
         return escapedQuote.replace("\\\\", "\\");
-      }
-      else {
+      } else {
         return value;
       }
     }

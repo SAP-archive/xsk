@@ -31,6 +31,7 @@ import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
+import java.nio.charset.StandardCharsets;
 
 public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
@@ -530,87 +531,46 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   @Test
   public void testParseHDBDDWithNoTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/NoTableType.hdbdd", "");
-    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), null);
+    assertEquals(null, ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
   }
 
   @Test
   public void testParseHDBDDWithViewDefinitionSimple() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionSimple.sql"), StandardCharsets.UTF_8);
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionSimple.hdbdd", "");
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
-    assertEquals(""
-        + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionSimple.employees_view_basic\" AS "
-        + "SELECT \"EMP\".\"ID\" as \"EmployeeID\",\n"
-        + "            \"EMP\".\"NAME\" as \"EmployeeName\",\n"
-        + "            \"EMP\".\"ADDRESS\" as \"EmployeeAddress\",\n"
-        + "            \"EMP\".\"AGE\" as \"EmployeeAge\",\n"
-        + "            \"EMP\".\"PHONE\" as \"EmployeePhone\" "
-        + "FROM \"gstr2::ViewDefinitionSimple.employees\" AS \"EMP\""
-        + "", viewModel.getRawContent().trim());
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
   }
 
   @Test
   public void testParseHDBDDWithViewDefinitionWithJoin() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionWithJoin.sql"), StandardCharsets.UTF_8);
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithJoin.hdbdd", "");
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
-    assertEquals(""
-        + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithJoin.employees_view_with_join\" AS "
-        + "SELECT \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\" as \"EmployeeId\",\n"
-        + "          \"gstr2::ViewDefinitionWithJoin.employees\".\"NAME\" as \"EmployeeName\",\n"
-        + "          \"ER\".\"TYPE\" as \"EmployeeRoleName\",\n"
-        + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
-        + "FROM \"gstr2::ViewDefinitionWithJoin.employees\" "
-        + "join \"gstr2::ViewDefinitionWithJoin.employee_roles\" AS \"ER\" "
-        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\" "
-        + "join \"gstr2::ViewDefinitionWithJoin.employee_salaries\" AS \"ES\" "
-        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithJoin.employees\".\"ID\""
-        + "", viewModel.getRawContent().trim());
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
   }
 
   @Test
   public void testParseHDBDDWithViewDefinitionWithWhere() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionWithWhere.sql"), StandardCharsets.UTF_8);
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithWhere.hdbdd", "");
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
-    assertEquals(""
-        + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithWhere.employees_view_with_where\" AS "
-        + "SELECT \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\" as \"EmployeeId\",\n"
-        + "          \"gstr2::ViewDefinitionWithWhere.employees\".\"NAME\" as \"EmployeeName\",\n"
-        + "          \"ER\".\"TYPE\" as \"EmployeeRoleType\",\n"
-        + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
-        + "FROM \"gstr2::ViewDefinitionWithWhere.employees\" "
-        + "join \"gstr2::ViewDefinitionWithWhere.employee_roles\" AS \"ER\" "
-        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\" "
-        + "join \"gstr2::ViewDefinitionWithWhere.employee_salaries\" AS \"ES\" "
-        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithWhere.employees\".\"ID\"  "
-        + "WHERE \"gstr2::employees\".\"NAME\" = 'John'"
-        + "", viewModel.getRawContent().trim());
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
   }
 
   @Test
   public void testParseHDBDDWithViewDefinitionWithUnion() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionWithUnion.sql"), StandardCharsets.UTF_8);
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithUnion.hdbdd", "");
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
-    assertEquals(""
-        + "VIEW \"DBADMIN\".\"gstr2::ViewDefinitionWithUnion.employees_view_with_union\" AS "
-        + "SELECT \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\" as \"EmployeeId\",\n"
-        + "          \"gstr2::ViewDefinitionWithUnion.employees\".\"NAME\" as \"EmployeeName\",\n"
-        + "          \"ER\".\"TYPE\" as \"EmployeeRoleType\",\n"
-        + "          \"ES\".\"AMOUNT\" as \"EmployeeSalary\" "
-        + "FROM \"gstr2::ViewDefinitionWithUnion.employees\" "
-        + "join \"gstr2::ViewDefinitionWithUnion.employee_roles\" AS \"ER\" "
-        + "on \"ER\".\"ID\" = \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\" "
-        + "join \"gstr2::ViewDefinitionWithUnion.employee_salaries\" AS \"ES\" "
-        + "on \"ES\".\"ID\" = \"gstr2::ViewDefinitionWithUnion.employees\".\"ID\"  "
-        + "WHERE \"gstr2::ViewDefinitionWithUnion.employees\".\"NAME\" = 'John' "
-        + "UNION "
-        + "SELECT 0 as \"EmployeeId\",\n"
-        + "          'Ben' as \"EmployeeName\",\n"
-        + "          'Developer' as \"EmployeeRoleType\",\n"
-        + "          '2200' as \"EmployeeSalary\" "
-        + "FROM \"DUMMY\""
-        + "", viewModel.getRawContent().trim());
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
   }
 }

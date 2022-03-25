@@ -12,5 +12,5 @@
 package com.sap.xsk.parser.hdbdd.symbols;
 
 public enum SymbolTypeEnum {
-  entity, type, context, view;
+  ENTITY, TYPE, CONTEXT, VIEW;
 }

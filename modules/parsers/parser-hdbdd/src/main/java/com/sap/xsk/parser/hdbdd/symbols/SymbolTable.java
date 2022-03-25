@@ -108,10 +108,7 @@ public class SymbolTable {
   }
 
   public void addChildToView(String viewName, String childName) {
-    if (viewGraph.get(viewName) == null) {
-      this.viewGraph.put(viewName, new ArrayList<>());
-    }
-
+    this.viewGraph.computeIfAbsent(viewName, k -> new ArrayList<>());
     this.viewGraph.get(viewName).add(childName);
   }
 

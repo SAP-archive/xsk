@@ -15,6 +15,7 @@ import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SelectSymbol extends Symbol implements Scope {
 
@@ -97,5 +98,24 @@ public class SelectSymbol extends Symbol implements Scope {
   @Override
   public boolean isDuplicateName(String id) {
     return false;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    if (!super.equals(o))
+      return false;
+    SelectSymbol that = (SelectSymbol) o;
+    return joinStatements.equals(that.joinStatements) && isUnion.equals(that.isUnion) && isDistinct.equals(that.isDistinct)
+        && columnsSql.equals(that.columnsSql) && Objects.equals(whereSql, that.whereSql) && dependsOnTable.equals(that.dependsOnTable)
+        && Objects.equals(dependingTableAlias, that.dependingTableAlias);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), joinStatements, isUnion, isDistinct, columnsSql, whereSql, dependsOnTable, dependingTableAlias);
   }
 }

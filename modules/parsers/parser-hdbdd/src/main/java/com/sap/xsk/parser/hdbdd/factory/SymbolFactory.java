@@ -47,19 +47,19 @@ public class SymbolFactory {
 
     Symbol newSymbol = createSymbol(symbolId, currentScope, schema, artifactName);
     switch (symbolTypeEnum) {
-      case context:
+      case CONTEXT:
         ContextSymbol contextSymbol = new ContextSymbol(newSymbol);
         currentScope.define(contextSymbol);
         return contextSymbol;
-      case entity:
+      case ENTITY:
         EntitySymbol entitySymbol = new EntitySymbol(newSymbol);
         currentScope.define(entitySymbol);
         return entitySymbol;
-      case type:
+      case TYPE:
         StructuredDataTypeSymbol dataTypeSymbol = new StructuredDataTypeSymbol(newSymbol);
         currentScope.define(dataTypeSymbol);
         return dataTypeSymbol;
-      case view:
+      case VIEW:
         ViewSymbol viewSymbol = new ViewSymbol(newSymbol);
         currentScope.define(viewSymbol);
         return viewSymbol;
@@ -73,7 +73,7 @@ public class SymbolFactory {
     checkForDuplicateName(typeId, currentScope, ctx.name.getLine());
     SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(ctx.type);
     Symbol newSymbol = createSymbol(typeId, currentScope, schema, ctx.name);
-    if (symbolTypeEnum.equals(SymbolTypeEnum.type)) {
+    if (symbolTypeEnum.equals(SymbolTypeEnum.TYPE)) {
       return new DataTypeSymbol(newSymbol);
     }
 
@@ -157,7 +157,7 @@ public class SymbolFactory {
 
   private SymbolTypeEnum parseToSymbolTypeEnum(Token artifactType) {
     try {
-      return SymbolTypeEnum.valueOf(artifactType.getText().toLowerCase());
+      return SymbolTypeEnum.valueOf(artifactType.getText().toUpperCase());
     } catch (IllegalArgumentException illegalArgumentException) {
       throw new CDSRuntimeException(
           String.format("Error at line: %s  - '%s' is not a valid artifact type.", artifactType.getLine(), artifactType.getText()));

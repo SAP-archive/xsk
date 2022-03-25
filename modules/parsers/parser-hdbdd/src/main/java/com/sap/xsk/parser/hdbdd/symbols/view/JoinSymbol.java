@@ -12,6 +12,7 @@
 package com.sap.xsk.parser.hdbdd.symbols.view;
 
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
+import java.util.Objects;
 
 public class JoinSymbol extends Symbol {
 
@@ -50,5 +51,23 @@ public class JoinSymbol extends Symbol {
 
   public void setJoinFields(String joinFields) {
     this.joinFields = joinFields;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    if (!super.equals(o))
+      return false;
+    JoinSymbol that = (JoinSymbol) o;
+    return joinType.equals(that.joinType) && joinArtifactName.equals(that.joinArtifactName) && Objects.equals(joinTableAlias,
+        that.joinTableAlias) && joinFields.equals(that.joinFields);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), joinType, joinArtifactName, joinTableAlias, joinFields);
   }
 }

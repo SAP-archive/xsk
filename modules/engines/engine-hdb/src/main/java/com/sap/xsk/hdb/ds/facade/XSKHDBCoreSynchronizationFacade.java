@@ -27,14 +27,6 @@ import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
-import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
-import com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel;
-import com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel;
-import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
-import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
-import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
@@ -143,12 +135,12 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
         boolean hdiOnly = Boolean.parseBoolean(Configuration.get(IXSKEnvironmentVariables.XSK_HDI_ONLY, "false"));
         if (!hdiOnly) {
           //Process artefacts for phase 1
-          final List<XSKTopologyDataStructureModelWrapper> listSchemaWrappers = constructListOfSchemaModelWrappers(connection);
+          final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listSchemaWrappers = constructListOfSchemaModelWrappers(connection);
           createArtefactsOnPhaseOne(errors, listSchemaWrappers);
 
           //Process artefacts for phase two
-          final List<XSKTopologyDataStructureModelWrapper> listOfWrappersPhaseTwo = new ArrayList<>();
-          Map<String, XSKTopologyDataStructureModelWrapper> wrappersPhaseTwo = new HashMap<>();
+          final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappersPhaseTwo = new ArrayList<>();
+          Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappersPhaseTwo = new HashMap<>();
           listOfWrappersPhaseTwo.addAll(constructListOfCdsModelWrappers(connection, wrappersPhaseTwo));
           listOfWrappersPhaseTwo.addAll(constructListOfTableModelWrappers(connection, wrappersPhaseTwo));
           listOfWrappersPhaseTwo.addAll(constructListOfSequenceModelWrapper(connection, wrappersPhaseTwo));
@@ -156,8 +148,8 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
           createArtefactsOnPhaseTwo(errors, listOfWrappersPhaseTwo);
 
           //Process artefacts for phase three
-          Map<String, XSKTopologyDataStructureModelWrapper> wrappersPhaseThree = new HashMap<>();
-          final List<XSKTopologyDataStructureModelWrapper> listOfWrappersPhaseThree = new ArrayList<>();
+          Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappersPhaseThree = new HashMap<>();
+          final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappersPhaseThree = new ArrayList<>();
           listOfWrappersPhaseThree.addAll(constructListOfViewModelWrappers(connection, wrappersPhaseThree));
           listOfWrappersPhaseThree.addAll(constructListOfProcedureModelWrappers(connection, wrappersPhaseThree));
           listOfWrappersPhaseThree.addAll(constructListOfTableFunctionModelWrappers(connection, wrappersPhaseThree));
@@ -173,22 +165,22 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   @NotNull
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfCdsModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfCdsModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureCdsModels = managerServices.get(IXSKDataStructureModel.TYPE_HDBDD).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
     dataStructureCdsModels.values().forEach(cdsStructure -> {
-      final IXSKDataStructureManager<XSKDataStructureHDBTableModel> xskTableManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE);
+      final IXSKDataStructureManager<XSKDataStructureModel> xskTableManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE);
       ((XSKDataStructureCdsModel) cdsStructure).getTableModels().forEach(tableModel -> {
         HDBTableSynchronizationArtefactType artefactType = new HDBTableSynchronizationArtefactType();
-        XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBTableModel> tableWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskTableManagerService, tableModel,
+        XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> tableWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskTableManagerService, tableModel,
             artefactType, wrappers);
         listOfWrappers.add(tableWrapper);
       });
 
-      final IXSKDataStructureManager<XSKDataStructureHDBTableTypeModel> xskTableTypeManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
+      final IXSKDataStructureManager<XSKDataStructureModel> xskTableTypeManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
       ((XSKDataStructureCdsModel) cdsStructure).getTableTypeModels().forEach(tableTypeModel -> {
         HDBTableTypeSynchronizationArtefactType artefactType = new HDBTableTypeSynchronizationArtefactType();
-        XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBTableTypeModel> tableTypeWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskTableTypeManagerService,
+        XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> tableTypeWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskTableTypeManagerService,
             tableTypeModel, artefactType, wrappers);
         listOfWrappers.add(tableTypeWrapper);
       });
@@ -197,14 +189,14 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   @NotNull
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfCdsViewWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfCdsViewWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureCdsModels = managerServices.get(IXSKDataStructureModel.TYPE_HDBDD).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
     dataStructureCdsModels.values().forEach(cdsStructure -> {
-      final IXSKDataStructureManager<XSKDataStructureHDBViewModel> xskViewManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW);
+      final IXSKDataStructureManager<XSKDataStructureModel> xskViewManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW);
       ((XSKDataStructureCdsModel) cdsStructure).getViewModels().forEach(viewModel -> {
         HDBTableSynchronizationArtefactType artefactType = new HDBTableSynchronizationArtefactType();
-        XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBViewModel> tableWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskViewManagerService, viewModel,
+        XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> tableWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskViewManagerService, viewModel,
             artefactType, wrappers);
         listOfWrappers.add(tableWrapper);
       });
@@ -212,12 +204,12 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
     return listOfWrappers;
   }
 
-  private void createArtefactsOnPhaseThree(List<String> errors, List<XSKTopologyDataStructureModelWrapper> listOfWrappersPhaseThree) {
-    TopologicalDepleter<XSKTopologyDataStructureModelWrapper> depleter = new TopologicalDepleter<>();
-    TopologicalSorter<XSKTopologyDataStructureModelWrapper> sorter = new TopologicalSorter<>();
-    List<XSKTopologyDataStructureModelWrapper> sortedListOfWrappers = sorter.sort(listOfWrappersPhaseThree);
+  private void createArtefactsOnPhaseThree(List<String> errors, List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappersPhaseThree) {
+    TopologicalDepleter<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> depleter = new TopologicalDepleter<>();
+    TopologicalSorter<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> sorter = new TopologicalSorter<>();
+    List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> sortedListOfWrappers = sorter.sort(listOfWrappersPhaseThree);
     try {
-      List<XSKTopologyDataStructureModelWrapper> results = depleter.deplete(sortedListOfWrappers, "");
+      List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> results = depleter.deplete(sortedListOfWrappers, "");
       printErrors(errors, results, "Executing phase three of DB artefact creation.", ArtefactState.FAILED);
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
@@ -226,13 +218,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   @NotNull
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfSynonymModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappersPhaseThree) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfSynonymModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappersPhaseThree) {
     final Map<String, XSKDataStructureModel> dataStructureSynonymModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SYNONYM).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
-    final IXSKDataStructureManager<XSKDataStructureHDBSynonymModel> xskSynonymManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
+    final IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SYNONYM);
     dataStructureSynonymModels.values().forEach(synonymModel -> {
       HDBSynonymSynchronizationArtefactType artefactType = new HDBSynonymSynchronizationArtefactType();
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBSynonymModel> synonymModelWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskSynonymManagerService, synonymModel,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> synonymModelWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskSynonymManagerService, synonymModel,
           artefactType, wrappersPhaseThree);
       listOfWrappers.add(synonymModelWrapper);
     });
@@ -240,13 +232,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   @NotNull
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfScalarFunctionModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfScalarFunctionModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureScalarFunctionsModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SCALAR_FUNCTION).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
-    final IXSKDataStructureManager<XSKDataStructureHDBTableFunctionModel> xskTableFunctionManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
+    final IXSKDataStructureManager<XSKDataStructureModel> xskTableFunctionManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION);
     dataStructureScalarFunctionsModels.values().forEach(scalarFunctionModel -> {
       HDBScalarFunctionSynchronizationArtefactType artefactType = new HDBScalarFunctionSynchronizationArtefactType();
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBTableFunctionModel> scalarFunctionWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskTableFunctionManagerService,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> scalarFunctionWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskTableFunctionManagerService,
           scalarFunctionModel, artefactType, wrappers);
       listOfWrappers.add(scalarFunctionWrapper);
     });
@@ -254,13 +246,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   @NotNull
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfTableFunctionModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfTableFunctionModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureTableFunctionsModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
-    final IXSKDataStructureManager<XSKDataStructureHDBTableFunctionModel> xskTableFunctionManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
+    final IXSKDataStructureManager<XSKDataStructureModel> xskTableFunctionManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION);
     dataStructureTableFunctionsModels.values().forEach(tableFunctionModel -> {
       HDBTableFunctionSynchronizationArtefactType artefactType = new HDBTableFunctionSynchronizationArtefactType();
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBTableFunctionModel> tableFunctionWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskTableFunctionManagerService,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> tableFunctionWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskTableFunctionManagerService,
           tableFunctionModel, artefactType, wrappers);
       listOfWrappers.add(tableFunctionWrapper);
     });
@@ -268,13 +260,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   @NotNull
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfProcedureModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfProcedureModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureProceduresModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_PROCEDURE).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
-    final IXSKDataStructureManager<XSKDataStructureHDBProcedureModel> xskProceduresManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_PROCEDURE);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
+    final IXSKDataStructureManager<XSKDataStructureModel> xskProceduresManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_PROCEDURE);
     dataStructureProceduresModels.values().forEach(procedureModel -> {
       HDBProcedureSynchronizationArtefactType artefactType = new HDBProcedureSynchronizationArtefactType();
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBProcedureModel> procedureWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskProceduresManagerService, procedureModel,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> procedureWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskProceduresManagerService, procedureModel,
           artefactType, wrappers);
       listOfWrappers.add(procedureWrapper);
     });
@@ -282,26 +274,26 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   @NotNull
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfViewModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfViewModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureViewsModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
-    final IXSKDataStructureManager<XSKDataStructureHDBViewModel> xskViewManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
+    final IXSKDataStructureManager<XSKDataStructureModel> xskViewManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW);
     dataStructureViewsModels.values().forEach(viewModel -> {
       HDBViewSynchronizationArtefactType artefactType = new HDBViewSynchronizationArtefactType();
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBViewModel> viewWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskViewManagerService, viewModel, artefactType,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> viewWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskViewManagerService, viewModel, artefactType,
           wrappers);
       listOfWrappers.add(viewWrapper);
     });
     return listOfWrappers;
   }
 
-  private void createArtefactsOnPhaseTwo(List<String> errors, List<XSKTopologyDataStructureModelWrapper> listOfWrappers) {
-    TopologicalDepleter<XSKTopologyDataStructureModelWrapper> depleter = new TopologicalDepleter<>();
-    TopologicalSorter<XSKTopologyDataStructureModelWrapper> sorter = new TopologicalSorter<>();
+  private void createArtefactsOnPhaseTwo(List<String> errors, List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers) {
+    TopologicalDepleter<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> depleter = new TopologicalDepleter<>();
+    TopologicalSorter<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> sorter = new TopologicalSorter<>();
 
-    List<XSKTopologyDataStructureModelWrapper> sortListOfWrapper = sorter.sort(listOfWrappers);
+    List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> sortListOfWrapper = sorter.sort(listOfWrappers);
     try {
-      List<XSKTopologyDataStructureModelWrapper> results = depleter.deplete(sortListOfWrapper, "");
+      List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> results = depleter.deplete(sortListOfWrapper, "");
       printErrors(errors, results, "Executing phase two of DB artefact creation.", ArtefactState.FAILED);
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
@@ -309,13 +301,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
     }
   }
 
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfTableTypesModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfTableTypesModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureTableTypesModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
-    final IXSKDataStructureManager<XSKDataStructureHDBTableTypeModel> xskTableTypeManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
+    final IXSKDataStructureManager<XSKDataStructureModel> xskTableTypeManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE);
     dataStructureTableTypesModels.values().forEach(tableTypeModel -> {
       HDBTableTypeSynchronizationArtefactType artefactType = new HDBTableTypeSynchronizationArtefactType();
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBTableTypeModel> tableTypeWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskTableTypeManagerService, tableTypeModel,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> tableTypeWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskTableTypeManagerService, tableTypeModel,
           artefactType, wrappers);
       listOfWrappers.add(tableTypeWrapper);
     });
@@ -323,13 +315,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
     return listOfWrappers;
   }
 
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfSequenceModelWrapper(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfSequenceModelWrapper(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureSequencesModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
-    final IXSKDataStructureManager<XSKDataStructureHDBSequenceModel> xskSequenceManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
+    final IXSKDataStructureManager<XSKDataStructureModel> xskSequenceManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SEQUENCE);
     dataStructureSequencesModels.values().forEach(sequenceModel -> {
       HDBSequenceSynchronizationArtefactType artefactType = new HDBSequenceSynchronizationArtefactType();
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBSequenceModel> sequenceWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskSequenceManagerService, sequenceModel,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> sequenceWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskSequenceManagerService, sequenceModel,
           artefactType, wrappers);
       listOfWrappers.add(sequenceWrapper);
     });
@@ -337,13 +329,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
     return listOfWrappers;
   }
 
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfTableModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfTableModelWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
     final Map<String, XSKDataStructureModel> dataStructureTablesModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
-    final IXSKDataStructureManager<XSKDataStructureHDBTableModel> xskTableManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listOfWrappers = new ArrayList<>();
+    final IXSKDataStructureManager<XSKDataStructureModel> xskTableManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_TABLE);
     dataStructureTablesModels.values().forEach(tableModel -> {
       HDBTableSynchronizationArtefactType artefactType = new HDBTableSynchronizationArtefactType();
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBTableModel> tableWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskTableManagerService, tableModel, artefactType,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> tableWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, xskTableManagerService, tableModel, artefactType,
           wrappers);
       listOfWrappers.add(tableWrapper);
     });
@@ -351,13 +343,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
     return listOfWrappers;
   }
 
-  private void createArtefactsOnPhaseOne(List<String> errors, List<XSKTopologyDataStructureModelWrapper> listSchemaWrappers) {
-    TopologicalDepleter<XSKTopologyDataStructureModelWrapper> depleter = new TopologicalDepleter<>();
-    TopologicalSorter<XSKTopologyDataStructureModelWrapper> sorter = new TopologicalSorter<>();
+  private void createArtefactsOnPhaseOne(List<String> errors, List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listSchemaWrappers) {
+    TopologicalDepleter<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> depleter = new TopologicalDepleter<>();
+    TopologicalSorter<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> sorter = new TopologicalSorter<>();
 
-    List<XSKTopologyDataStructureModelWrapper> sortedSchemaModelWrappers = sorter.sort(listSchemaWrappers);
+    List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> sortedSchemaModelWrappers = sorter.sort(listSchemaWrappers);
     try {
-      List<XSKTopologyDataStructureModelWrapper> results = depleter.deplete(sortedSchemaModelWrappers, "");
+      List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> results = depleter.deplete(sortedSchemaModelWrappers, "");
       printErrors(errors, results, "Executing phase one of DB artefact creation.", ArtefactState.FAILED);
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
@@ -366,13 +358,13 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   @NotNull
-  private List<XSKTopologyDataStructureModelWrapper> constructListOfSchemaModelWrappers(Connection connection) {
+  private List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> constructListOfSchemaModelWrappers(Connection connection) {
     Map<String, XSKDataStructureModel> dataStructureSchemasModels = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SCHEMA).getDataStructureModels();
-    final List<XSKTopologyDataStructureModelWrapper> listSchemaWrappers = new ArrayList<>();
-    Map<String, XSKTopologyDataStructureModelWrapper> wrappers = new HashMap<>();
-    IXSKDataStructureManager schemaModelManager = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
+    final List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> listSchemaWrappers = new ArrayList<>();
+    Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers = new HashMap<>();
+    IXSKDataStructureManager<XSKDataStructureModel> schemaModelManager = managerServices.get(IXSKDataStructureModel.TYPE_HDB_SCHEMA);
     dataStructureSchemasModels.values().forEach(schemaModel -> {
-      XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBSchemaModel> schemaWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, schemaModelManager, schemaModel,
+      XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> schemaWrapper = new XSKTopologyDataStructureModelWrapper<>(connection, schemaModelManager, schemaModel,
           new HDBSchemaSynchronizationArtefactType(), wrappers);
       listSchemaWrappers.add(schemaWrapper);
     });
@@ -382,7 +374,7 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
 
   @Override
   public void cleanup() throws XSKDataStructuresException {
-    for (IXSKDataStructureManager dataStructureManager : managerServices.values()) {
+    for (IXSKDataStructureManager<XSKDataStructureModel> dataStructureManager : managerServices.values()) {
       dataStructureManager.cleanup();
     }
 
@@ -415,7 +407,7 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
   }
 
   private boolean isParsed(String location, String content, String resourceExtension)
-      throws XSKDataStructuresException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+      throws XSKDataStructuresException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
     String modelType = getType(resourceExtension);
     if (modelType == null) {
@@ -431,9 +423,9 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
     return managerServices.get(baseDataStructureModel.getType()).existsArtifactMetadata(baseDataStructureModel);
   }
 
-  private void printErrors(List<String> errors, List<XSKTopologyDataStructureModelWrapper> results, String flow, ISynchronizerArtefactType.ArtefactState state) {
-    if (results.size() > 0) {
-      for (XSKTopologyDataStructureModelWrapper result : results) {
+  private void printErrors(List<String> errors, List<XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> results, String flow, ISynchronizerArtefactType.ArtefactState state) {
+    if (!results.isEmpty()) {
+      for (XSKTopologyDataStructureModelWrapper<XSKDataStructureModel> result : results) {
         String errorMessage = String.format("Undepleted: %s in operation: %s", result.getId(), flow);
         logger.error(errorMessage);
         errors.add(errorMessage);

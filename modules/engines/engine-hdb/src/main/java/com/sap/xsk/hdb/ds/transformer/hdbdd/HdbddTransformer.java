@@ -131,41 +131,41 @@ public class HdbddTransformer {
   public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
     XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
 
-    StringBuilder viewSelectSql = new StringBuilder();
-    List<String> forReplacement = new ArrayList<>();
+    StringBuilder viewStatementSql = new StringBuilder();
+    List<String> aliasesForReplacement = new ArrayList<>();
 
-    viewSelectSql.append(ISqlKeywords.KEYWORD_VIEW).append(SPACE).append(QUOTE).append(viewSymbol.getSchema()).append(QUOTE)
+    viewStatementSql.append(ISqlKeywords.KEYWORD_VIEW).append(SPACE).append(QUOTE).append(viewSymbol.getSchema()).append(QUOTE)
         .append(DOT).append(QUOTE).append(viewSymbol.getFullName()).append(QUOTE).append(SPACE).append(ISqlKeywords.KEYWORD_AS)
         .append(SPACE);
 
-    String selectStatements = traverseSelectStatements(viewSymbol, forReplacement);
+    String selectStatementSql = traverseSelectStatements(viewSymbol, aliasesForReplacement);
+    viewStatementSql.append(selectStatementSql);
 
-    viewSelectSql.append(selectStatements);
+    String finalViewSql = viewStatementSql.toString();
+
+    for (String alias : aliasesForReplacement) {
+      finalViewSql = replaceWithQuotes(finalViewSql, alias, alias);
+    }
 
     viewModel.setDbContentType(XSKDBContentType.OTHERS);
     viewModel.setName(viewSymbol.getFullName());
     viewModel.setSchema(viewSymbol.getSchema());
-    viewModel.setRawContent(viewSelectSql.toString());
+    viewModel.setRawContent(finalViewSql);
     viewModel.setLocation(location);
     return viewModel;
   }
 
-  public String traverseSelectStatements(ViewSymbol viewSymbol, List<String> forReplacement) {
+  public String traverseSelectStatements(ViewSymbol viewSymbol, List<String> aliasesForReplacement) {
     StringBuilder selectSql = new StringBuilder();
-    String returnedSql = "";
 
-    for (Symbol ss : viewSymbol.getSelectStatements()) {
-      // Get the table on which the select depends
-      String dependsOnTable = ((SelectSymbol) ss).getDependsOnTable();
-
-      // Get the dependant table's alias. Returns null in case no alias
-      String dependingTableAlias = ((SelectSymbol) ss).getDependingTableAlias();
-
-      // Get the select columns which is the {...} part in the hdbdd view definition
-      String selectColumns = ((SelectSymbol) ss).getColumnsSql();
-
-      boolean unionBol = ((SelectSymbol) ss).getUnion();
-      boolean distinctBol = ((SelectSymbol) ss).getDistinct();
+    for (Symbol symbol : viewSymbol.getSelectStatements()) {
+      SelectSymbol selectSymbol = (SelectSymbol) symbol;
+      String dependsOnTable = selectSymbol.getDependsOnTable();
+      String dependingTableAlias = selectSymbol.getDependingTableAlias();
+      String selectColumns = selectSymbol.getColumnsSql();
+      String where = selectSymbol.getWhereSql();
+      boolean unionBol = selectSymbol.getUnion();
+      boolean distinctBol = selectSymbol.getDistinct();
 
       // Check if the dependant table has :: to know whether short or full name is used in the hdbdd view definition. In case it is not we should build the full name
       if (!dependsOnTable.contains(PACKAGE_DELIMITER)) {
@@ -191,42 +191,35 @@ public class HdbddTransformer {
         selectSql.append(ISqlKeywords.KEYWORD_DISTINCT).append(SPACE);
       }
 
-      String joinStatements = traverseJoinStatements((SelectSymbol) ss, viewSymbol, dependsOnTable, forReplacement);
-
       selectSql.append(selectColumns).append(SPACE).append(ISqlKeywords.KEYWORD_FROM).append(SPACE)
           .append(QUOTE).append(dependsOnTable).append(QUOTE).append(SPACE);
 
       if (dependingTableAlias != null) {
-        forReplacement.add(dependingTableAlias);
         selectSql.append(ISqlKeywords.KEYWORD_AS).append(SPACE).append(QUOTE).append(dependingTableAlias).append(QUOTE).append(SPACE);
+        aliasesForReplacement.add(dependingTableAlias);
       }
+
+      String joinStatements = traverseJoinStatements(selectSymbol, viewSymbol, dependsOnTable, aliasesForReplacement);
 
       selectSql.append(joinStatements).append(SPACE);
 
-      if (!(((SelectSymbol) ss).getWhereSql() == null)) {
-        String where = ((SelectSymbol) ss).getWhereSql();
+      if (where != null) {
         selectSql.append(ISqlKeywords.KEYWORD_WHERE).append(SPACE).append(where).append(SPACE);
-      }
-
-      returnedSql = selectSql.toString();
-
-      for (String alias : forReplacement) {
-        returnedSql = replaceWithQuotes(returnedSql, alias, alias);
       }
     }
 
-    return returnedSql;
+    return selectSql.toString();
   }
 
-  public String traverseJoinStatements(SelectSymbol ss, ViewSymbol viewSymbol, String dependsOnTable, List<String> forReplacement) {
+  public String traverseJoinStatements(SelectSymbol selectSymbol, ViewSymbol viewSymbol, String dependsOnTable, List<String> aliasesForReplacement) {
     StringBuilder joinStatements = new StringBuilder();
 
-    for (Symbol js : ss.getJoinStatements()) {
-
-      String joinType = ((JoinSymbol) js).getJoinType();
-      String joinArtifactName = ((JoinSymbol) js).getJoinArtifactName();
-      String joinTableAlias = ((JoinSymbol) js).getJoinTableAlias();
-      String joinFieldsSql = ((JoinSymbol) js).getJoinFields();
+    for (Symbol symbol : selectSymbol.getJoinStatements()) {
+      JoinSymbol joinSymbol = (JoinSymbol) symbol;
+      String joinType = joinSymbol.getJoinType();
+      String joinArtifactName = joinSymbol.getJoinArtifactName();
+      String joinTableAlias = joinSymbol.getJoinTableAlias();
+      String joinFieldsSql = joinSymbol.getJoinFields();
 
       // Check if the join artifact name contains :: to determine if full artifact name is used and build the full name if not
       if (!joinArtifactName.contains(PACKAGE_DELIMITER)) {
@@ -235,19 +228,17 @@ public class HdbddTransformer {
 
       // Replace the select from dependant table if anywhere in the join with its full name
       String dependsOnTableShortName = shortTableNameExtractorFromViewSymbol(dependsOnTable, viewSymbol);
-
       joinFieldsSql = replaceWithQuotes(joinFieldsSql, dependsOnTableShortName, dependsOnTable);
 
       joinStatements.append(joinType).append(SPACE).append(QUOTE).append(joinArtifactName).append(QUOTE).append(SPACE);
 
       if (joinTableAlias != null) {
         joinStatements.append(ISqlKeywords.KEYWORD_AS).append(SPACE).append(QUOTE).append(joinTableAlias).append(QUOTE).append(SPACE);
-        forReplacement.add(joinTableAlias);
+        aliasesForReplacement.add(joinTableAlias);
       }
 
       joinStatements.append(joinFieldsSql).append(SPACE);
     }
-    ;
 
     return joinStatements.toString();
   }

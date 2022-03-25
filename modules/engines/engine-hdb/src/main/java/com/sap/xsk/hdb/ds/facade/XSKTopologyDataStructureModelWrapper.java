@@ -36,16 +36,16 @@ public class XSKTopologyDataStructureModelWrapper<T extends XSKDataStructureMode
     private final IXSKDataStructureManager<T> modelManager;
     private final T model;
     private final Connection connection;
-    private final Map<String, XSKTopologyDataStructureModelWrapper> wrappers;
+    private final Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers;
 
     public XSKTopologyDataStructureModelWrapper(Connection connection, IXSKDataStructureManager<T> modelManager, T model, AbstractSynchronizationArtefactType artefactType,
-        Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+        Map<String, XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>> wrappers) {
         this.connection = connection;
         this.modelManager = modelManager;
         this.model = model;
         this.artefactType = artefactType;
         this.wrappers = wrappers;
-        this.wrappers.put(getId(), this);
+        this.wrappers.put(getId(), (XSKTopologyDataStructureModelWrapper<XSKDataStructureModel>) this);
     }
 
     public XSKDataStructureModel getModel() {
@@ -63,11 +63,11 @@ public class XSKTopologyDataStructureModelWrapper<T extends XSKDataStructureMode
 
     @Override
     public List<ITopologicallySortable> getDependencies() {
-        List<ITopologicallySortable> dependencies = new ArrayList<ITopologicallySortable>();
+        List<ITopologicallySortable> dependencies = new ArrayList<>();
         for (XSKDataStructureDependencyModel dependency : this.model.getDependencies()) {
             String dependencyName = dependency.getName();
             if (!wrappers.containsKey(dependencyName)) {
-                logger.warn("Dependency is not present in this cycle: " + dependencyName);
+                logger.warn("Dependency is not present in this cycle: {}", dependencyName);
             } else {
                 dependencies.add(wrappers.get(dependencyName));
             }

@@ -124,14 +124,16 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
 	public void testApplyKeysConditionSuccessfully() throws Exception {
 		mockGetTablesSuccessfully();
 		String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
-		parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
+		XSKODataModel model = parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
+		assertNotNull("XSKODataModel should not be null after parsing", model);
 	}
 
 	@Test
 	public void testApplyKeysConditionSuccessfullyWhenSynonym() throws Exception {
 		mockGetTablesSuccessfullyWhenSynonym();
 		String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_keys.xsodata"), StandardCharsets.UTF_8);
-		parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
+		XSKODataModel model = parser.parseXSODataArtifact("/a_1/b-2/c/entity_with_no_namespace.xsodata", content);
+		assertNotNull("XSKODataModel should not be null after parsing", model);
 	}
 
 	@Test(expected = XSKOData2TransformerException.class)

@@ -185,9 +185,10 @@ public class XSKHDBTICoreService implements IXSKHDBTICoreService {
   @Override
   public int getPkIndexForCSVRecord(CSVRecord csvRecord, String tableName, List<String> headerNames) {
 	  PersistenceTableModel tableMetadata = getTableMetadata(tableName);
-	    if(null == tableMetadata){
-	      logger.error("Error occurred while processing csv file."
-	          + " Table with name [" + tableName + "] was not found.");
+	    if(tableMetadata == null){
+	      String errorMessage = "Error occurred while processing csv file. Table with name [" + tableName + "] was not found.";
+		logger.error(errorMessage);
+		throw new IllegalArgumentException(errorMessage);
 	    }
 	    List<PersistenceTableColumnModel> columnModels = tableMetadata.getColumns();
 	    if (headerNames.size() > 0) {

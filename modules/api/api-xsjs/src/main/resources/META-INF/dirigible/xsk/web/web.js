@@ -81,7 +81,7 @@ exports.TupelList = function (dArrayOfContents) {
   }
 };
 
-EntityList = function (webEntitiesArray, parentClassName) {
+const EntityList = function (webEntitiesArray, parentClassName) {
   syncWithWebEntitiesArray.call(this);
 
   this.create = function () {
@@ -150,7 +150,7 @@ exports.WebRequest = function (method, queryPath) {
     if (dRequest.getMethod() === "POST") {
       if (dUpload.isMultipartContent()) {
         var multipartItems = dUpload.parseRequest();
-        for (i = 0; i < multipartItems.size(); i++) {
+        for (let i = 0; i < multipartItems.size(); i++) {
           var multipartItem = multipartItems.get(i);
           var requestEntity = new WebEntityRequest();
 
@@ -164,7 +164,7 @@ exports.WebRequest = function (method, queryPath) {
           var multipartItemHeaders = multipartItem.getHeaders();
           var headerNames = multipartItemHeaders.getHeaderNames();
 
-          for (j = 0; j < headerNames.size(); j++) {
+          for (let j = 0; j < headerNames.size(); j++) {
             var headerName = headerNames.get(j);
             var headerValue = multipartItemHeaders.getHeader(headerName);
             requestEntity.headers.set(headerName, headerValue);
@@ -359,7 +359,7 @@ exports.WebResponse = function () {
   }
 };
 
-WebEntityRequest = function () {
+const WebEntityRequest = function () {
   this.body = new Body();
   this.contentType;
   this.entities = new EntityList([]);

@@ -40,7 +40,7 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
         });
 
         function getDUData() {
-            body = {
+            let body = {
                 neo: {
                     hostName: migrationDataState.neoHostName,
                     subaccount: migrationDataState.neoSubaccount,

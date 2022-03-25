@@ -1,0 +1,16 @@
+/********* Sample without a schema and with comments ************/
+/* FUNCTION "_SYS_BIC"."customer_sample::SAMPLE_FUNCTION" */
+FUNCTION "customer_sample::SAMPLE_FUNCTION" (CurrentUserId INTEGER)
+RETURNS TABLE ("count" INT,  "ADDRESS" DECIMAL(18,0))
+LANGUAGE SQLSCRIPT
+SQL SECURITY DEFINER
+  AS
+
+ /********* Begin Procedure Script ************/
+ BEGIN
+ 	 var_out = SELECT
+		 *
+	FROM "_SYS_BIC"."customer_sample.VIEWS/SALES_ORDERS";
+
+return :var_out;
+END;

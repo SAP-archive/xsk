@@ -6,6 +6,5 @@ try {
   }
   someNestedFunction();
 } catch (e) {
-//  Assert.assertEquals("Unexpected exception fileName", "throwRegularNestedLevelError.js", e.fileName);
-  Assert.assertEquals("Unexpected exception fileName", "<eval>", e.fileName);
+  Assert.assertEquals("Unexpected exception fileName", "/throwRegularNestedLevelError.js", e.fileName);
 }

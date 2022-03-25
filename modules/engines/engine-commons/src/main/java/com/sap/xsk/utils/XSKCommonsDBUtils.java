@@ -23,12 +23,19 @@ import java.sql.SQLException;
 
 public class XSKCommonsDBUtils {
 
-    public static String getTableSchema(DataSource dataSource, String tableName) throws SQLException {
+	private static final String SQL_GET_SYNONYM = "SELECT * FROM \"SYS\".\"SYNONYMS\" WHERE \"SYNONYM_NAME\" = ? AND \"SCHEMA_NAME\" = ?";
+
+    private static final String RESULT_TABLE_SCHEM = "TABLE_SCHEM";
+    private static final String RESULT_OBJECT_NAME = "OBJECT_NAME";
+	private static final String RESULT_OBJECT_SCHEMA = "OBJECT_SCHEMA";
+	private static final String RESULT_OBJECT_TYPE = "OBJECT_TYPE";
+
+	public static String getTableSchema(DataSource dataSource, String tableName) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             DatabaseMetaData databaseMetaData = connection.getMetaData();
             ResultSet rs = databaseMetaData.getTables(connection.getCatalog(), null, tableName, new String[]{ISqlKeywords.KEYWORD_TABLE});
             if (rs.next()) {
-                return rs.getString("TABLE_SCHEM");
+                return rs.getString(RESULT_TABLE_SCHEM);
             }
             return null;
         }
@@ -38,16 +45,17 @@ public class XSKCommonsDBUtils {
     PersistenceTableModel tableMetadata = new PersistenceTableModel();
 
     try (Connection connection = dataSource.getConnection()) {
-      PreparedStatement prepareStatement = connection.prepareStatement("SELECT * FROM \"SYS\".\"SYNONYMS\" WHERE \"SYNONYM_NAME\" = ? AND \"SCHEMA_NAME\" = ?");
-      prepareStatement.setString(1, synonymName);
-      prepareStatement.setString(2, schemaName);
-
-      try (ResultSet resultSet = prepareStatement.executeQuery()) {
-        if (resultSet.next()) {
-          tableMetadata.setTableName(resultSet.getString("OBJECT_NAME"));
-          tableMetadata.setSchemaName(resultSet.getString("OBJECT_SCHEMA"));
-          tableMetadata.setTableType(resultSet.getString("OBJECT_TYPE"));
-        }
+      try (PreparedStatement prepareStatement = connection.prepareStatement(SQL_GET_SYNONYM)) {
+    	  prepareStatement.setString(1, synonymName);
+    	  prepareStatement.setString(2, schemaName);
+    	  
+    	  try (ResultSet resultSet = prepareStatement.executeQuery()) {
+    		  if (resultSet.next()) {
+    			  tableMetadata.setTableName(resultSet.getString(RESULT_OBJECT_NAME));
+    			  tableMetadata.setSchemaName(resultSet.getString(RESULT_OBJECT_SCHEMA));
+    			  tableMetadata.setTableType(resultSet.getString(RESULT_OBJECT_TYPE));
+    		  }
+    	  }
       }
     }
 

@@ -26,7 +26,7 @@ migrationLaunchView.controller("ChangesViewController", [
         $scope.data = [];
 
         function startMigration() {
-            body = {
+            let body = {
                 neo: {
                     hostName: migrationDataState.neoHostName,
                     subaccount: migrationDataState.neoSubaccount,

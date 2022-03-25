@@ -16,6 +16,7 @@ import com.sap.xsk.hdbti.utils.XSKCsvRecordMetadata;
 import com.sap.xsk.utils.XSKCommonsDBUtils;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.cxf.common.util.StringUtils;
+import org.eclipse.dirigible.api.v3.core.ConsoleFacade;
 import org.eclipse.dirigible.commons.api.helpers.DateTimeUtils;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.ds.model.transfer.TableColumn;
@@ -29,7 +30,6 @@ import org.eclipse.dirigible.database.sql.builders.records.UpdateBuilder;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -65,7 +65,7 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
 
             try (PreparedStatement statement = connection.prepareStatement(insertBuilder.generate())) {
                 executeInsertPreparedStatement(csvRecordMetadata, availableTableColumns, statement);
-                logger.info(format("Table row with id: %s was CREATED successfully in %s.", csvRecord.get(0), tableName));
+                ConsoleFacade.log("Table row with id: " + csvRecord.get(0) + " was CREATED successfully in " + tableName);
             }
         }
     }
@@ -111,13 +111,13 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-          PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName,
-              XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
-          if(null == tableMetadata){
-            logger.debug("Table with name [" + tableName + "] was not found.");
-            return;
-          }
-          String pkColumnName = tableMetadata.getColumns().get(0).getName();
+            PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName,
+                    XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
+            if (null == tableMetadata) {
+                logger.debug("Table with name [{}] was not found.", tableName);
+                return;
+            }
+            String pkColumnName = tableMetadata.getColumns().get(0).getName();
             DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
             deleteBuilder.from(tableName).where(String.format("%s IN (%s)", pkColumnName, String.join(",", ids)));
             try (PreparedStatement statement = connection.prepareStatement(deleteBuilder.build())) {
@@ -134,13 +134,13 @@ public class XSKCSVRecordDao implements IXSKCSVRecordDao {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-          PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName,
-              XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
-          if(null == tableMetadata){
-            logger.debug("Table with name [" + tableName + "] was not found.");
-            return;
-          }
-          String pkColumnName = tableMetadata.getColumns().get(0).getName();
+            PersistenceTableModel tableMetadata = dbMetadataUtil.getTableMetadata(tableName,
+                    XSKCommonsDBUtils.getTableSchema(dataSource, tableName));
+            if (null == tableMetadata) {
+                logger.debug("Table with name [{}] was not found.", tableName);
+                return;
+            }
+            String pkColumnName = tableMetadata.getColumns().get(0).getName();
             DeleteBuilder deleteBuilder = new DeleteBuilder(SqlFactory.deriveDialect(connection));
             deleteBuilder.from(tableName).where(String.format("%s='%s'", pkColumnName, id));
             try (PreparedStatement statement = connection.prepareStatement(deleteBuilder.build())) {

@@ -12,56 +12,66 @@
 package com.sap.xsk.engine;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.eclipse.dirigible.repository.api.IRepository;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
 
-import static org.junit.Assert.*;
-
 public class XSKJavascriptEngineExecutorTest extends AbstractDirigibleTest {
+
+  @Before
+  public void setup() {
+    insertJSTestCodeInRepository("throwRegularRootLevelError.js");
+    insertJSTestCodeInRepository("throwRegularErrorWithMissingStack.js");
+    insertJSTestCodeInRepository("throwRegularNestedLevelError.js");
+    insertJSTestCodeInRepository("throwNativeJavaException.js");
+    insertJSTestCodeInRepository("throwJSObject.js");
+  }
 
   @Test
   public void testJSErrorFileNamePolyfillWithRegularRootLevelError() {
-    String source = getJSTestCode("throwRegularRootLevelError.js");
-    executeJSTest(source);
+    executeJSTest("throwRegularRootLevelError.js");
   }
 
   @Test
   public void testJSErrorFileNamePolyfillWithErrorWithNoStack() {
-    String source = getJSTestCode("throwRegularErrorWithMissingStack.js");
-    executeJSTest(source);
+    executeJSTest("throwRegularErrorWithMissingStack.js");
   }
 
   @Test
   public void testJSErrorFileNamePolyfillWithRegularNestedLevelError() {
-    String source = getJSTestCode("throwRegularNestedLevelError.js");
-    executeJSTest(source);
+    executeJSTest("throwRegularNestedLevelError.js");
   }
 
   @Test
   public void testJSErrorFileNamePolyfillWithNativeJavaExceptionPropagation() {
-    String source = getJSTestCode("throwNativeJavaException.js");
-    executeJSTest(source);
+    executeJSTest("throwNativeJavaException.js");
   }
 
   @Test
   public void testJSErrorFileNamePolyfillWithJSObjectThrownAsException() {
-    String source = getJSTestCode("throwJSObject.js");
-    executeJSTest(source);
+    executeJSTest("throwJSObject.js");
   }
 
-  private static void executeJSTest(String testSource) {
-    new XSKJavascriptEngineExecutor().executeServiceCode(testSource, new HashMap<>());
+  private static void executeJSTest(String testSourceFileName) {
+    new XSKJavascriptEngineExecutor().executeServiceModule(testSourceFileName, new HashMap<>());
+  }
+
+  private static void insertJSTestCodeInRepository(String testFileName) {
+      String jsTestCode = getJSTestCode(testFileName);
+      IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+      repository.createResource("/registry/public/" + testFileName, jsTestCode.getBytes(StandardCharsets.UTF_8));
   }
 
   private static String getJSTestCode(String testFileName) {
-    InputStream testFileStream = XSKJavascriptEngineExecutorTest.class.getResourceAsStream("/META-INF/dirigible/test/xsk/error_polyfills/" + testFileName);
+    InputStream testFileStream = XSKJavascriptEngineExecutorTest.class
+        .getResourceAsStream("/META-INF/dirigible/test/xsk/error_polyfills/" + testFileName);
     try {
       return IOUtils.toString(Objects.requireNonNull(testFileStream), StandardCharsets.UTF_8);
     } catch (Exception e) {

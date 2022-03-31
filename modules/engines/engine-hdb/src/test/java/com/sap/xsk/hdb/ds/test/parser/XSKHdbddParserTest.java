@@ -134,9 +134,9 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
     XSKDataStructureHDBTableColumnModel CountryId = orderDataStructure.getColumns().get(2);
     assertEquals("Country.Id", CountryId.getName());
-    assertFalse(CountryId.isPrimaryKey());
+    assertTrue(CountryId.isPrimaryKey());
     assertEquals("32", CountryId.getLength());
-    assertTrue(CountryId.isNullable());
+    assertFalse(CountryId.isNullable());
     assertNull(CountryId.getDefaultValue());
     assertNull(CountryId.getPrecision());
     assertNull(CountryId.getScale());

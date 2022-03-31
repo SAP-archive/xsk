@@ -11,135 +11,67 @@
  */
 package com.sap.xsk.synchronizer;
 
+import com.sap.xsk.utils.XSKCommonsConstants;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.IOrderedSynchronizerContribution;
+import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.engine.api.script.ScriptEngineExecutorsManager;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.sql.DataSource;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrderedSynchronizerContribution {
 
   private static final Logger logger = LoggerFactory.getLogger(XSJSLibSynchronizer.class);
+  private static final String EXPORT_GENERATION_SOURCE_LOCATION = "/META-INF/exports/generateXSJSLibExports.js";
 
+  private static final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
   private final GraalVMJavascriptEngineExecutor graalVMJavascriptEngineExecutor;
-  private static final String EXPORT_GENERATION_SOURCE = "/*\n"
-      + " * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors\n"
-      + " *\n"
-      + " * All rights reserved. This program and the accompanying materials\n"
-      + " * are made available under the terms of the Apache License, v2.0\n"
-      + " * which accompanies this distribution, and is available at\n"
-      + " * http://www.apache.org/licenses/LICENSE-2.0\n"
-      + " *\n"
-      + " * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors\n"
-      + " * SPDX-License-Identifier: Apache-2.0\n"
-      + " */\n"
-      + "var acorn = require(\"acornjs/acorn\");\n"
-      + "\n"
-      + "exports.import = function (namespace, name) {\n"
-      + "  var validPackages;\n"
-      + "  var resourceName;\n"
-      + "  var moduleName;\n"
-      + "\n"
-      + "  if(arguments.length == 1) {\n"
-      + "      validPackages = namespace.split('/');\n"
-      + "      moduleName = validPackages.pop().split('.')[0];\n"
-      + "      resourceName = namespace;\n"
-      + "  } else {\n"
-      + "      validPackages = namespace.split('.');\n"
-      + "      resourceName = validPackages.join('/') + '/' + name + '.xsjslib';\n"
-      + "      moduleName = name;\n"
-      + "  }\n"
-      + "\n"
-      + "  console.info(\"Importing: \" + resourceName);\n"
-      + "\n"
-      + "  var module = xskRequire(resourceName);\n"
-      + "  addToXSJSApis(this, validPackages, moduleName, module);\n"
-      + "\n"
-      + "  console.info(\"Imported: \" + resourceName);\n"
-      + "  return module;\n"
-      + "}\n"
-      + "\n"
-      + "var Require = (function (modulePath) {\n"
-      + "  var _loadedModules = {};\n"
-      + "  var _require = function (path) {\n"
-      + "    var moduleInfo, buffered, head = '(function(exports,module,require){ ', code = '', tail = '})', line = null;\n"
-      + "    moduleInfo = _loadedModules[path];\n"
-      + "    if (moduleInfo) {\n"
-      + "      return moduleInfo;\n"
-      + "    }\n"
-      + "    code = SourceProvider.loadSource(path);\n"
-      + "\n"
-      + "    var exports = getExports(code);\n"
-      + "    code += \"\\n\\n\";\n"
-      + "    exports.forEach(e => code += \"exports.\" + e + \" = \" + e + \";\\n\");\n"
-      + "\n"
-      + "    moduleInfo = {\n"
-      + "      loaded: false,\n"
-      + "      id: path,\n"
-      + "      exports: {},\n"
-      + "      require: _requireClosure()\n"
-      + "    };\n"
-      + "    code = head + code + tail;\n"
-      + "    _loadedModules[path] = moduleInfo;\n"
-      + "    var compiledWrapper = null;\n"
-      + "    try {\n"
-      + "      compiledWrapper = eval(code);\n"
-      + "    } catch (e) {\n"
-      + "      throw new Error('Error evaluating module ' + path + ' line #' + e.lineNumber + ' : ' + e.message, path, e.lineNumber);\n"
-      + "    }\n"
-      + "    var parameters = [moduleInfo.exports, /* exports */\n"
-      + "      moduleInfo, /* module */\n"
-      + "      moduleInfo.require /* require */\n"
-      + "    ];\n"
-      + "    try {\n"
-      + "      compiledWrapper.apply(moduleInfo.exports, /* this */\n"
-      + "          parameters);\n"
-      + "    } catch (e) {\n"
-      + "      throw new Error('Error executing module ' + path + ' line #' + e.lineNumber + ' : ' + e.message, path, e.lineNumber);\n"
-      + "    }\n"
-      + "    moduleInfo.loaded = true;\n"
-      + "    return moduleInfo;\n"
-      + "  };\n"
-      + "  var _requireClosure = function () {\n"
-      + "    return function (path) {\n"
-      + "      var module = _require(path);\n"
-      + "      return module.exports;\n"
-      + "    };\n"
-      + "  };\n"
-      + "  return _requireClosure();\n"
-      + "});\n"
-      + "\n"
-      + "var xskRequire = Require();\n"
-      + "\n"
-      + "function getExports(code) {\n"
-      + "  var nodes = acorn.parse(code);\n"
-      + "  var functionDeclarations = nodes.body.filter(e => e.type === \"FunctionDeclaration\").map(e => e.id.name);\n"
-      + "  var variableDeclarations = nodes.body.filter(e => e.type === \"VariableDeclaration\").flatMap(e => e.declarations.filter(d => d.type === \"VariableDeclarator\").flatMap(d => d.id.name));\n"
-      + "  var exports = functionDeclarations.concat(variableDeclarations);\n"
-      + "  return exports;\n"
-      + "}\n"
-      + "\n"
-      + "function addToXSJSApis (api, validPackages, name, module) {\n"
-      + "  for (var i = 0; i < validPackages.length; i++) {\n"
-      + "    api = api[validPackages[i]] = api[validPackages[i]] || {};\n"
-      + "  }\n"
-      + "  api[name] = module;\n"
-      + "};";
+  private final String EXPORT_GENERATION_SOURCE;
+  private final String targetLocation;
 
-  public XSJSLibSynchronizer() {
+  public XSJSLibSynchronizer() throws IOException {
     this.graalVMJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();
+    this.EXPORT_GENERATION_SOURCE = getExportsGenerationSource();
+    this.targetLocation = XSKCommonsConstants.XSK_REGISTRY_PUBLIC;
     logger.debug("INITIALIZING SYNC");
   }
 
-  /**
-   * Force synchronization.
-   */
-  public static void forceSynchronization() {
-    XSJSLibSynchronizer synchronizer = new XSJSLibSynchronizer();
+  public XSJSLibSynchronizer(String targetLocation) throws IOException {
+    this.graalVMJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();
+    this.EXPORT_GENERATION_SOURCE = getExportsGenerationSource();
+    this.targetLocation = targetLocation;
+    logger.debug("INITIALIZING SYNC");
+  }
+
+  private static String getExportsGenerationSource() throws IOException {
+    try (InputStream is = XSJSLibSynchronizer.class.getResourceAsStream(EXPORT_GENERATION_SOURCE_LOCATION)) {
+      if (is == null) {
+        throw new IOException("Could not load resource: " + EXPORT_GENERATION_SOURCE_LOCATION);
+      }
+      return IOUtils.toString(is, StandardCharsets.UTF_8);
+    }
+  }
+
+  public static void forceSynchronization(String targetLocation) throws IOException {
+    XSJSLibSynchronizer synchronizer = new XSJSLibSynchronizer(targetLocation);
     synchronizer.setForcedSynchronization(true);
     try {
       synchronizer.synchronize();
@@ -148,9 +80,20 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
     }
   }
 
+  public static void cleanup(String targetLocation) throws SchedulerException {
+    try {
+      PreparedStatement pstmt = dataSource.getConnection()
+          .prepareStatement("DELETE FROM \"PROCESSED_XSJSLIB_ARTEFATCTS\" WHERE \"LOCATION\" LIKE '" + targetLocation + "%'");
+      pstmt.executeUpdate();
+    } catch (SQLException e) {
+      throw new SchedulerException("Could not cleanup xsjslib synchronizer entries. ", e);
+    }
+  }
+
   @Override
   protected void synchronizeResource(IResource iResource) throws SynchronizationException {
     logger.trace("Synchronizing XSJSLib Resource...");
+    // TODO: What?
   }
 
   @Override
@@ -166,7 +109,11 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
 
         try {
           ThreadContextFacade.setUp();
-          Object error = graalVMJavascriptEngineExecutor.executeServiceModule(EXPORT_GENERATION_SOURCE, null);
+
+          Map<Object, Object> context = new HashMap<>();
+          context.put("registry_path", targetLocation);
+          Object error = graalVMJavascriptEngineExecutor.executeServiceCode(EXPORT_GENERATION_SOURCE, context);
+
           if (error != null && error.toString() != null) {
             throw new ScriptingException(error.toString());
           }

@@ -11,12 +11,17 @@
  */
 package com.sap.xsk.synchronizer;
 
+import com.sap.xsk.utils.XSKCommonsConstants;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizerJob;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
+import java.io.IOException;
 
 public class XSJSLibSynchronizerJob extends AbstractSynchronizerJob {
 
-  private final XSJSLibSynchronizer xsjsLibSynchronizer = new XSJSLibSynchronizer();
+  private final XSJSLibSynchronizer xsjsLibSynchronizer = new XSJSLibSynchronizer(XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
+
+  public XSJSLibSynchronizerJob() throws IOException {
+  }
 
   @Override
   public String getName() {

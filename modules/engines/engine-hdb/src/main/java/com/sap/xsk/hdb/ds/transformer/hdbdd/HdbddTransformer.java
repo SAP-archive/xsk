@@ -190,10 +190,9 @@ public class HdbddTransformer {
     associationSymbol.getForeignKeys().forEach(fk -> {
       if (fk.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(fk);
-        subElements.forEach(subE ->
-            tableColumns.add(transformFieldSymbolToColumnModel(subE, false)));
+        subElements.forEach(subE -> tableColumns.add(getAssociationForeignKeyColumn(associationSymbol, subE)));
       } else {
-        tableColumns.add(transformFieldSymbolToColumnModel(fk, false));
+        tableColumns.add(getAssociationForeignKeyColumn(associationSymbol, fk));
       }
     });
 
@@ -242,4 +241,14 @@ public class HdbddTransformer {
 
     return subElements;
   }
+
+  private XSKDataStructureHDBTableColumnModel getAssociationForeignKeyColumn(AssociationSymbol associationSymbol, EntityElementSymbol foreignKey){
+    XSKDataStructureHDBTableColumnModel columnModel = transformFieldSymbolToColumnModel(foreignKey, false);
+    columnModel.setPrimaryKey(associationSymbol.isKey());
+    columnModel.setNullable(!associationSymbol.isNotNull());
+
+    return columnModel;
+  }
+
+
 }

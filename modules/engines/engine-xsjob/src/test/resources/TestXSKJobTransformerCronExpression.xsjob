@@ -1,0 +1,11 @@
+{
+    "description": "My Job configuration",
+    "action": "xsjob_cron_demo:handler.xsjslib::consolePrintSuccess",
+    "schedules": [
+        {
+            "description": "Execute at 10:30:00pm, on every Monday, Tuesday, Wednesday, Thursday and Friday, every month",
+            "xscron": "* * * MON,TUE,WED,THU,FRI 22 30 0",
+            "parameter": {}
+        }
+    ]
+}

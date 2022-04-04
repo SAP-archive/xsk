@@ -16,7 +16,7 @@ import java.util.List;
 public class DestinationRequest {
 
   private int method;
-  private String queryPath;
+  private String path;
   private List<Header> headers;
 
   public int getMethod() {
@@ -27,12 +27,12 @@ public class DestinationRequest {
     this.method = method;
   }
 
-  public String getQueryPath() {
-    return queryPath;
+  public String getPath() {
+    return path;
   }
 
-  public void setQueryPath(String queryPath) {
-    this.queryPath = queryPath;
+  public void setPath(String path) {
+    this.path = path;
   }
 
   public List<Header> getHeaders() {

@@ -42,7 +42,7 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
     DestinationRequest destinationRequest = GsonHelper.GSON.fromJson(requestObject, DestinationRequest.class);
     HttpClientRequestOptions parsedOptions = HttpClientFacade.parseOptions(options);
     HttpClient client = HttpClientAccessor.getHttpClient(destination.asHttp());
-    String uri = URI.create(destination.asHttp().getUri() + destinationRequest.getQueryPath()).toString();
+    String uri = URI.create(destination.asHttp().getUri() + destinationRequest.getPath()).toString();
     HttpRequestBase request = getRequest(uri, destinationRequest, parsedOptions);
     setRequestHeaders(destinationRequest, request);
 

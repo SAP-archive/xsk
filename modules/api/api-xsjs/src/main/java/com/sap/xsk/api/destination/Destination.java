@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.api.destination;
 
-import com.google.gson.JsonObject;
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 import java.util.Properties;
 
@@ -22,10 +21,11 @@ public class Destination {
   private String pathPrefix;
   private Properties properties = new Properties();
 
-  Destination(String host, int port, String pathPrefix) {
+  Destination(String host, int port, String pathPrefix, Properties properties) {
     this.host = host;
     this.port = port;
     this.pathPrefix = pathPrefix;
+    this.properties = properties;
   }
 
   public String getHost() {
@@ -40,10 +40,6 @@ public class Destination {
 
   public Properties getProperties() {
     return properties;
-  }
-
-  public void setProperties(Properties properties) {
-    this.properties = properties;
   }
 
   public String getPropertiesAsJSON() {

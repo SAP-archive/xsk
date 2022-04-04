@@ -11,66 +11,41 @@
  */
 package com.sap.xsk.synchronizer;
 
+import com.sap.xsk.exceptions.XSJSLibExportsGenerationSourceNotFoundException;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
-import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.IOrderedSynchronizerContribution;
-import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.engine.api.script.ScriptEngineExecutorsManager;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.sql.DataSource;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrderedSynchronizerContribution {
 
   private static final Logger logger = LoggerFactory.getLogger(XSJSLibSynchronizer.class);
-  private static final String EXPORT_GENERATION_SOURCE_LOCATION = "/META-INF/exports/generateXSJSLibExports.js";
 
-  private static final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
-  private final GraalVMJavascriptEngineExecutor graalVMJavascriptEngineExecutor;
-  private final String EXPORT_GENERATION_SOURCE;
+  private static final String XSJSLIB_RUN_GENERATION_LOCATION = "/exports/XSJSLibRunGeneration.mjs";
+
   private final String targetLocation;
 
-  public XSJSLibSynchronizer() throws IOException {
-    this.graalVMJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();
-    this.EXPORT_GENERATION_SOURCE = getExportsGenerationSource();
-    this.targetLocation = XSKCommonsConstants.XSK_REGISTRY_PUBLIC;
-    logger.debug("INITIALIZING SYNC");
+  public XSJSLibSynchronizer() {
+    this(XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
   }
 
-  public XSJSLibSynchronizer(String targetLocation) throws IOException {
-    this.graalVMJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();
-    this.EXPORT_GENERATION_SOURCE = getExportsGenerationSource();
+  public XSJSLibSynchronizer(String targetLocation) {
     this.targetLocation = targetLocation;
-    logger.debug("INITIALIZING SYNC");
   }
 
-  private static String getExportsGenerationSource() throws IOException {
-    try (InputStream is = XSJSLibSynchronizer.class.getResourceAsStream(EXPORT_GENERATION_SOURCE_LOCATION)) {
-      if (is == null) {
-        throw new IOException("Could not load resource: " + EXPORT_GENERATION_SOURCE_LOCATION);
-      }
-      return IOUtils.toString(is, StandardCharsets.UTF_8);
-    }
-  }
-
-  public static void forceSynchronization(String targetLocation) throws IOException {
+  public static void forceSynchronization(String targetLocation) {
     XSJSLibSynchronizer synchronizer = new XSJSLibSynchronizer(targetLocation);
     synchronizer.setForcedSynchronization(true);
     try {
@@ -80,18 +55,8 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
     }
   }
 
-  public static void cleanup(String targetLocation) throws SchedulerException {
-    try {
-      PreparedStatement pstmt = dataSource.getConnection()
-          .prepareStatement("DELETE FROM \"PROCESSED_XSJSLIB_ARTEFATCTS\" WHERE \"LOCATION\" LIKE '" + targetLocation + "%'");
-      pstmt.executeUpdate();
-    } catch (SQLException e) {
-      throw new SchedulerException("Could not cleanup xsjslib synchronizer entries. ", e);
-    }
-  }
-
   @Override
-  protected void synchronizeResource(IResource iResource) throws SynchronizationException {
+  protected void synchronizeResource(IResource iResource) {
     logger.trace("Synchronizing XSJSLib Resource...");
     // TODO: What?
   }
@@ -107,19 +72,22 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
       if(beforeSynchronizing()) {
         logger.trace("Synchronizing XSJSLibs...");
 
-        try {
-          ThreadContextFacade.setUp();
+//        try {
+//          ThreadContextFacade.setUp();
 
           Map<Object, Object> context = new HashMap<>();
           context.put("registry_path", targetLocation);
-          Object error = graalVMJavascriptEngineExecutor.executeServiceCode(EXPORT_GENERATION_SOURCE, context);
 
-          if (error != null && error.toString() != null) {
-            throw new ScriptingException(error.toString());
-          }
-        } finally {
-          ThreadContextFacade.tearDown();
-        }
+          GraalVMJavascriptEngineExecutor graalVMJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();
+          graalVMJavascriptEngineExecutor.executeService(
+              XSJSLIB_RUN_GENERATION_LOCATION,
+              context,
+              true,
+              false
+          );
+//        } finally {
+//          ThreadContextFacade.tearDown();
+//        }
 
         logger.trace("Done synchronizing XSJSLibs.");
         afterSynchronizing();

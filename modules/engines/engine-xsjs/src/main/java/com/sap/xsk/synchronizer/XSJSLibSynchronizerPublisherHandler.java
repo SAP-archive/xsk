@@ -14,24 +14,19 @@ package com.sap.xsk.synchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.core.publisher.api.handlers.MetadataPublisherHandler;
-import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
-import java.io.IOException;
 
 public class XSJSLibSynchronizerPublisherHandler extends MetadataPublisherHandler {
+  XSJSLibSynchronizerArtefactsCleaner cleaner = new XSJSLibSynchronizerArtefactsCleaner();
 
   @Override
-  public void afterPublish(String location) throws SchedulerException {
-    try {
+  public void afterPublish(String location) {
       String registryLocation = XSKCommonsConstants.XSK_REGISTRY_PUBLIC + location.substring(
           StringUtils.lastIndexOf(location, "workspace/") + 10);
       XSJSLibSynchronizer.forceSynchronization(registryLocation);
-    } catch (IOException e) {
-      throw new SchedulerException("XSJSLib synchronizer could not generate exports. ", e);
-    }
   }
 
   @Override
-  public void afterUnpublish(String location) throws SchedulerException {
-    XSJSLibSynchronizer.cleanup(location);
+  public void afterUnpublish(String location) {
+    cleaner.cleanup(location);
   }
 }

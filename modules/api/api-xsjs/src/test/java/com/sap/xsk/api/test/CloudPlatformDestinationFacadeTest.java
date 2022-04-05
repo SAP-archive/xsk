@@ -74,9 +74,14 @@ public class CloudPlatformDestinationFacadeTest {
 
   @After
   public void close() {
+
+    if (!isKymaFacadeSet) {
+      cloudPlatformAccessor.verify(() -> CloudPlatformAccessor.setCloudPlatformFacade(any()));
+    }
     destinationAccessor.close();
     httpClientAccessor.close();
     cloudPlatformAccessor.close();
+
   }
 
 
@@ -127,11 +132,6 @@ public class CloudPlatformDestinationFacadeTest {
     assertEquals("test-destination.com", dest.getHost());
     assertEquals(8080, dest.getPort());
     assertEquals("/destination", dest.getPathPrefix());
-
-    if (!isKymaFacadeSet) {
-      cloudPlatformAccessor.verify(() -> CloudPlatformAccessor.setCloudPlatformFacade(any()));
-    }
-
   }
 
   @Test
@@ -141,10 +141,6 @@ public class CloudPlatformDestinationFacadeTest {
 
     String response = CloudPlatformDestinationFacade.executeRequest(request, destinationName, options);
     assertEquals("{\"headers\":[],\"statusCode\":200,\"text\":\"success\"}", response);
-
-    if (!isKymaFacadeSet) {
-      cloudPlatformAccessor.verify(() -> CloudPlatformAccessor.setCloudPlatformFacade(any()));
-    }
   }
 
 }

@@ -11,11 +11,13 @@
  */
 package com.sap.xsk.api.test;
 
+import com.sap.cloud.sdk.cloudplatform.CloudPlatformAccessor;
 import com.sap.cloud.sdk.cloudplatform.connectivity.AuthenticationType;
 import com.sap.cloud.sdk.cloudplatform.connectivity.DestinationAccessor;
 import com.sap.cloud.sdk.cloudplatform.connectivity.HttpClientAccessor;
 import com.sap.cloud.sdk.cloudplatform.connectivity.HttpDestination;
 import com.sap.xsk.api.destination.CloudPlatformDestinationFacade;
+import com.sap.xsk.api.destination.CloudPlatformKymaFacade;
 import io.vavr.control.Option;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -27,16 +29,22 @@ import static org.mockito.ArgumentMatchers.any;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import com.sap.xsk.api.destination.Destination;
 import java.net.URI;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+@RunWith(Parameterized.class)
 public class CloudPlatformDestinationFacadeTest {
 
   HttpClient httpClient;
@@ -44,23 +52,38 @@ public class CloudPlatformDestinationFacadeTest {
   String DESTINATION_URI = "http://test-destination.com:8080/destination";
   MockedStatic<DestinationAccessor> destinationAccessor;
   MockedStatic<HttpClientAccessor> httpClientAccessor;
+  MockedStatic<CloudPlatformAccessor> cloudPlatformAccessor;
+  boolean isKymaFacadeSet = false;
+
+  @Parameters
+  public static Collection<Object[]> data() {
+    return Arrays.asList(new Object[][] {
+        { true }, { false }
+    });
+  }
+
+  public CloudPlatformDestinationFacadeTest(boolean isKymaFacadeSet) {
+    this.isKymaFacadeSet = isKymaFacadeSet;
+  }
 
   @Before
   public void setup() throws IOException {
     mockRequest();
-    mockAccessors();
+    mockAccessors(isKymaFacadeSet);
   }
 
   @After
   public void close() {
     destinationAccessor.close();
     httpClientAccessor.close();
+    cloudPlatformAccessor.close();
   }
 
 
-  public void mockAccessors() {
+  public void mockAccessors(Boolean isKymaFacadeSet) {
     destinationAccessor = Mockito.mockStatic(DestinationAccessor.class);
     httpClientAccessor = Mockito.mockStatic(HttpClientAccessor.class);
+    cloudPlatformAccessor = Mockito.mockStatic(CloudPlatformAccessor.class);
 
     com.sap.cloud.sdk.cloudplatform.connectivity.Destination mockedDestination = Mockito.mock(com.sap.cloud.sdk.cloudplatform.connectivity.Destination.class);
     when(mockedDestination.get("URL")).thenReturn(Option.of(DESTINATION_URI));
@@ -76,7 +99,11 @@ public class CloudPlatformDestinationFacadeTest {
 
     httpClientAccessor.when(() -> HttpClientAccessor.getHttpClient(any()))
         .thenReturn(httpClient);
+
+    cloudPlatformAccessor.when(() -> CloudPlatformAccessor.getCloudPlatformFacade())
+        .thenReturn(isKymaFacadeSet ? new CloudPlatformKymaFacade() : null);
   }
+
 
   public void mockRequest() throws IOException {
     httpClient = Mockito.mock(HttpClient.class);
@@ -101,6 +128,10 @@ public class CloudPlatformDestinationFacadeTest {
     assertEquals(8080, dest.getPort());
     assertEquals("/destination", dest.getPathPrefix());
 
+    if (!isKymaFacadeSet) {
+      cloudPlatformAccessor.verify(() -> CloudPlatformAccessor.setCloudPlatformFacade(any()));
+    }
+
   }
 
   @Test
@@ -110,6 +141,10 @@ public class CloudPlatformDestinationFacadeTest {
 
     String response = CloudPlatformDestinationFacade.executeRequest(request, destinationName, options);
     assertEquals("{\"headers\":[],\"statusCode\":200,\"text\":\"success\"}", response);
+
+    if (!isKymaFacadeSet) {
+      cloudPlatformAccessor.verify(() -> CloudPlatformAccessor.setCloudPlatformFacade(any()));
+    }
   }
 
 }

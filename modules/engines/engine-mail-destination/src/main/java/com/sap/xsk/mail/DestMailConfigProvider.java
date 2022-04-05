@@ -14,7 +14,6 @@ package com.sap.xsk.mail;
 import com.sap.cloud.sdk.cloudplatform.connectivity.exception.DestinationAccessException;
 import com.sap.xsk.api.destination.CloudPlatformDestinationFacade;
 import org.eclipse.dirigible.api.v3.mail.api.IMailConfigurationProvider;
-import com.sap.xsk.api.destination.Destination;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

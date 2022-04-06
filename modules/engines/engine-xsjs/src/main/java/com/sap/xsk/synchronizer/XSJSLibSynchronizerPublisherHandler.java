@@ -22,7 +22,8 @@ public class XSJSLibSynchronizerPublisherHandler extends MetadataPublisherHandle
   public void afterPublish(String location) {
       String registryLocation = XSKCommonsConstants.XSK_REGISTRY_PUBLIC + location.substring(
           StringUtils.lastIndexOf(location, "workspace/") + 10);
-      XSJSLibSynchronizer.forceSynchronization(registryLocation);
+      XSJSLibSynchronizer synchronizer = new XSJSLibSynchronizer();
+      synchronizer.synchronizeXSJSLibs(registryLocation);
   }
 
   @Override

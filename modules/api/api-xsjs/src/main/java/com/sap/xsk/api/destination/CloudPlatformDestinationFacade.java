@@ -40,7 +40,7 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
     com.sap.cloud.sdk.cloudplatform.connectivity.Destination fetchedDestination = DestinationAccessor.getDestination(destinationName);
     fetchedDestination.getPropertyNames()
         .forEach(propName -> {
-          Option property = fetchedDestination.get(propName);
+          Option<Object> property = fetchedDestination.get(propName);
           if (!property.isEmpty()) {
             destinationProperties.put(propName, property.get());
           }
@@ -48,9 +48,7 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
 
     URI uri = URI.create((String) fetchedDestination.get("URL").get());
 
-    Destination destination = new Destination(uri.getHost(), uri.getPort(), uri.getPath(), destinationProperties);
-
-    return destination;
+    return new Destination(uri.getHost(), uri.getPort(), uri.getPath(), destinationProperties);
   }
 
   public static String executeRequest(String requestObject, String destinationName, String options)

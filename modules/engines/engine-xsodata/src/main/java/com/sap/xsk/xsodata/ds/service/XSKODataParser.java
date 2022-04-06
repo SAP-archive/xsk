@@ -175,9 +175,8 @@ public class XSKODataParser implements IXSKODataParser {
         String catalogObjectName = getCorrectCatalogObjectName(entity);
 
         if (!checkIfEntityIsOfViewType(catalogObjectName)) {
-          throw new XSKOData2TransformerException(String
-              .format("Keys cannot be specified for source %s. They must only be applied to objects referring a view type",
-                  entity.getRepositoryObject().getCatalogObjectName()));
+          throw new XSKOData2TransformerException("Artefact of type View with name " + entity.getRepositoryObject().getCatalogObjectName() +
+                  " is not found. Synonym with name " + entity.getRepositoryObject().getCatalogObjectName() + " is not found.");
         }
       }
     }

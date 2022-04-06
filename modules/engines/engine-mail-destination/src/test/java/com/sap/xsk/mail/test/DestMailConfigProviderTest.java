@@ -29,8 +29,8 @@ public class DestMailConfigProviderTest {
   private static final String MAIL_SERVER_DESTINATION_NAME = "MAIL_SERVER_DESTINATION_NAME";
   private static final String DESTINATION_NAME = "test-destination";
 
-  MockedStatic<CloudPlatformDestinationFacade> cloudPlatformDestinationFacadeMock;
-  MockedStatic<Configuration>configurationMock;
+  private MockedStatic<CloudPlatformDestinationFacade> cloudPlatformDestinationFacadeMock;
+  private MockedStatic<Configuration>configurationMock;
 
   @Before
   public void setup() {

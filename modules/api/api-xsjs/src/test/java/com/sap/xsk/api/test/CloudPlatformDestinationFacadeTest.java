@@ -47,13 +47,13 @@ import static org.mockito.Mockito.when;
 @RunWith(Parameterized.class)
 public class CloudPlatformDestinationFacadeTest {
 
-  HttpClient httpClient;
-  String destinationName = "test-destination";
-  String DESTINATION_URI = "http://test-destination.com:8080/destination";
-  MockedStatic<DestinationAccessor> destinationAccessor;
-  MockedStatic<HttpClientAccessor> httpClientAccessor;
-  MockedStatic<CloudPlatformAccessor> cloudPlatformAccessor;
-  boolean isKymaFacadeSet = false;
+  private HttpClient httpClient;
+  private String destinationName = "test-destination";
+  private String DESTINATION_URI = "http://test-destination.com:8080/destination";
+  private MockedStatic<DestinationAccessor> destinationAccessor;
+  private MockedStatic<HttpClientAccessor> httpClientAccessor;
+  private MockedStatic<CloudPlatformAccessor> cloudPlatformAccessor;
+  private boolean isKymaFacadeSet = false;
 
   @Parameters
   public static Collection<Object[]> data() {

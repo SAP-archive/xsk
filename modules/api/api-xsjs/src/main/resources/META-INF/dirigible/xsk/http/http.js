@@ -69,15 +69,15 @@ var SET_COOKIE_HEADER = "Set-Cookie";
 var CONTENT_LENGTH_HEADER = "Content-Length";
 
 exports.readDestination = function (destinationPackage, destinationName) {
-  var readDestination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
-  var destination = new exports.Destination();
+  let readDestination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
+  let destination = new exports.Destination();
 
   destination.host = readDestination.getHost();
   destination.port = readDestination.getPort();
   destination.pathPrefix = readDestination.getPathPrefix();
   destination.name = destinationName;
 
-  var properties = JSON.parse(readDestination.getPropertiesAsJSON());
+  let properties = JSON.parse(readDestination.getPropertiesAsJSON());
 
   return Object.assign(destination, properties);
 };

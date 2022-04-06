@@ -21,7 +21,7 @@ public class Destination {
   private String pathPrefix;
   private Properties properties = new Properties();
 
-  Destination(String host, int port, String pathPrefix, Properties properties) {
+  public Destination(String host, int port, String pathPrefix, Properties properties) {
     this.host = host;
     this.port = port;
     this.pathPrefix = pathPrefix;

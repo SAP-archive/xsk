@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 // Generated from com/sap/xsk/parser/hdbdd/core/Cds.g4 by ANTLR 4.9.3
 package com.sap.xsk.parser.hdbdd.core;
 
@@ -71,6 +82,54 @@ public class CdsBaseListener implements CdsListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDataTypeRule(CdsParser.DataTypeRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterContextRule(CdsParser.ContextRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitContextRule(CdsParser.ContextRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStructuredTypeRule(CdsParser.StructuredTypeRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStructuredTypeRule(CdsParser.StructuredTypeRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEntityRule(CdsParser.EntityRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEntityRule(CdsParser.EntityRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterViewRule(CdsParser.ViewRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitViewRule(CdsParser.ViewRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -376,30 +435,6 @@ public class CdsBaseListener implements CdsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArtifactRule(CdsParser.ArtifactRuleContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArtifactRule(CdsParser.ArtifactRuleContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterViewRule(CdsParser.ViewRuleContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitViewRule(CdsParser.ViewRuleContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSelectRule(CdsParser.SelectRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -455,6 +490,18 @@ public class CdsBaseListener implements CdsListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitWhereRule(CdsParser.WhereRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIdentifier(CdsParser.IdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdentifier(CdsParser.IdentifierContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -1,0 +1,10 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+context InvalidAnnotationEnumValue {
+  @Catalog: {tableType: #INLINE}
+  entity Test {
+     Name : String(32);
+  };
+}
+

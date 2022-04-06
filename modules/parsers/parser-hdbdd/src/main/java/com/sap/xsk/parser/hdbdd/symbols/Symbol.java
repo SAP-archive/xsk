@@ -12,6 +12,7 @@
 package com.sap.xsk.parser.hdbdd.symbols;
 
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.IdentifierContext;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class Symbol { // A generic programming language symbol
   private String fullName;
   private String name;      // All com.sap.xsk.parser.hdbdd.symbols at least have a name
   private Scope scope;
-  private Token idToken;
+  private IdentifierContext idToken;
   private String schema;
   private Map<String, AnnotationObj> annotations;
   String alias;
@@ -55,7 +56,7 @@ public class Symbol { // A generic programming language symbol
   public Symbol() {
   }
 
-  public Symbol(String name, Scope scope, Token idToken, String fullName, Map<String, AnnotationObj> annotations, String schema) {
+  public Symbol(String name, Scope scope, IdentifierContext idToken, String fullName, Map<String, AnnotationObj> annotations, String schema) {
     this.name = name;
     this.scope = scope;
     this.idToken = idToken;
@@ -80,11 +81,11 @@ public class Symbol { // A generic programming language symbol
     this.scope = scope;
   }
 
-  public Token getIdToken() {
+  public IdentifierContext getIdToken() {
     return idToken;
   }
 
-  public void setIdToken(Token idToken) {
+  public void setIdToken(IdentifierContext idToken) {
     this.idToken = idToken;
   }
 

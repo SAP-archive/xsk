@@ -9,6 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -39,74 +40,239 @@ public class ArtifactDefinitionListenerTest {
 
   @Test
   public void testParseCaseInsensitiveKeysSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/CaseInsensitiveTest.hdbdd", "sap/table/CaseInsensitiveTest.hdbdd");
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    CdsParser parsedFile = parseSampleFile("/CaseInsensitiveTest.hdbdd", "sap/table/CaseInsensitiveTest.hdbdd");
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
   }
 
   @Test
   public void testParseDefaultValuesSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/DefaultValues.hdbdd", "sap/table/DefaultValues.hdbdd");
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    CdsParser parsedFile = parseSampleFile("/DefaultValues.hdbdd", "sap/table/DefaultValues.hdbdd");
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
   }
 
   @Test
   public void testParseEntitySuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/ParseEntity.hdbdd", "sap/table/ParseEntity.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/ParseEntity.hdbdd", "sap/table/ParseEntity.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
     assertEquals(1, parsedEntities.size());
     assertEquals("TEST_SCHEMA", parsedEntities.get(0).getSchema());
   }
 
   @Test
   public void testParseContextSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/ParseContext.hdbdd", "sap/table/ParseContext.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/ParseContext.hdbdd", "sap/table/ParseContext.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
     assertEquals(10, parsedEntities.size());//-> must be 13 after type is implemented
     parsedEntities.forEach(el -> assertEquals("TEST_SCHEMA", el.getSchema()));
   }
 
   @Test
-  public void testParseParseAssociationsSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/Products.hdbdd", "sap/db/Products.hdbdd");
+  public void testParseAssociationsSuccessfully() throws Exception {
+    CdsParser parsedFile = parseSampleFile("/Products.hdbdd", "sap/db/Products.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
-
-    // product.Orders.items
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
     assertEquals(0, parsedEntities.get(1).getAssociations().get(0).getForeignKeys().size());
     assertEquals(1, parsedEntities.get(1).getAssociations().get(1).getForeignKeys().size());
+    assertEquals(0, parsedEntities.get(1).getAssociations().get(2).getForeignKeys().size());
+    assertEquals(0, parsedEntities.get(1).getAssociations().get(3).getForeignKeys().size());
+    assertEquals(0, parsedEntities.get(1).getAssociations().get(4).getForeignKeys().size());
+    assertEquals(0, parsedEntities.get(1).getAssociations().get(5).getForeignKeys().size());
+  }
 
-    // An entity is supposed to be allowed to have a field with the same name
-    String itemsName = parsedEntities.get(2).getName();
-    assertEquals(itemsName, parsedEntities.get(2).getElements().get(0).getName());
+  @Test
+  public void testParseElementNameAsEntityName() throws Exception {
+    CdsParser parsedFile = parseSampleFile("/ElementNameAsEntityName.hdbdd", "sap/db/ElementNameAsEntityName.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities
+
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
+    assertEquals(parsedEntities.get(0).getName(), parsedEntities.get(0).getElements().get(0).getName());
   }
 
   @Test
   public void testParseParseStructuredTypeSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/ParseStructuredType.hdbdd", "sap/table/ParseStructuredType.hdbdd");
     this.symbolTable.getSortedEntities();//get only Entities
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
   }
 
   @Test
   public void testParseUnmanagedAssociationSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/ProjectProducts.hdbdd", "sap/db/ProjectProducts.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/ProjectProducts.hdbdd", "sap/db/ProjectProducts.hdbdd");
     this.symbolTable.getSortedEntities();//get only Entities
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
+  }
+
+  @Test
+  public void testParseMinimumCardinalityGreaterThanMaximum() throws Exception {
+    try {
+      parseSampleFile("/MinimumCardinalityGreaterThanMaximum.hdbdd", "sap/db/MinimumCardinalityGreaterThanMaximum.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 9 col: 46. Maximum cardinality should be greater than minimum cardinality", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseMaximumCardinalityNegativeNumber() throws Exception {
+    try {
+      parseSampleFile("/MaximumCardinalityNegativeNumber.hdbdd", "sap/db/MaximumCardinalityNegativeNumber.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 9 col: 47. Maximum cardinality should be a positive number.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseMinimumCardinalityNegativeNumber() throws Exception {
+    try {
+      parseSampleFile("/MinimumCardinalityNegativeNumber.hdbdd", "sap/db/MinimumCardinalityNegativeNumber.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 9. Minimum cardinality should be equal or greater than zero.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseInvalidAnnotationValueType() throws Exception {
+    try {
+      parseSampleFile("/InvalidAnnotationValueType.hdbdd", "sap/db/InvalidAnnotationValueType.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("ERROR: Invalid value type provided", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseInvalidAnnotationEnumValue() throws Exception {
+    try {
+      parseSampleFile("/InvalidAnnotationEnumValue.hdbdd", "sap/db/InvalidAnnotationEnumValue.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("ERROR: No such value available for enum!", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseAnnotationAlreadyAssigned() throws Exception {
+    try {
+      parseSampleFile("/AnnotationAlreadyAssigned.hdbdd", "sap/db/AnnotationAlreadyAssigned.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 3. Annotation Catalog already assigned for sap.db::AnnotationAlreadyAssigned.Test.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseNoValueAnnotation() throws Exception {
+    try {
+      parseSampleFile("/NoValueAnnotation.hdbdd", "sap/db/NoValueAnnotation.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 5 col: 3. Values cannot be assigned to annotation nokey.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseInvalidValueTypeForAnnotation() throws Exception {
+    try {
+      parseSampleFile("/InvalidValueTypeForAnnotation.hdbdd", "sap/db/InvalidValueTypeForAnnotation.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 5 col: 3. Invalid value type provided for annotation Catalog.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParsePropertyForAnnotationAlreadyProvided() throws Exception {
+    try {
+      parseSampleFile("/PropertyForAnnotationAlreadyProvided.hdbdd", "sap/db/PropertyForAnnotationAlreadyProvided.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 11. Value for property name: tableType has already been provided.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseInvalidAnnotationProperty() throws Exception {
+    try {
+      parseSampleFile("/InvalidAnnotationProperty.hdbdd", "sap/db/InvalidAnnotationProperty.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 11. No field with name: myTableType exists in annotation Catalog..", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseAnnotationCannotBeUsedAsMarker() throws Exception {
+    try {
+      parseSampleFile("/AnnotationCannotBeUsedAsMarker.hdbdd", "sap/db/AnnotationCannotBeUsedAsMarker.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 3.Annotation with name: Catalog cannot be used as a marker.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseNotAllowedAnnotation() throws Exception {
+    try {
+      parseSampleFile("/NotAllowedAnnotation.hdbdd", "sap/db/NotAllowedAnnotation.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 3. Annotation Catalog not allowed for sap.db::NotAllowedAnnotation.Test", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseTopLevelAnnotation() throws Exception {
+    try {
+      parseSampleFile("/TopLevelAnnotation.hdbdd", "sap/db/TopLevelAnnotation.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 3. Annotation Schema is only allowed for top level entities.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseNotSupportedAnnotation() throws Exception {
+    try {
+      parseSampleFile("/NotSupportedAnnotation.hdbdd", "sap/db/NotSupportedAnnotation.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 3. Annotation with name: Something not supported.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseNoKeyAnnotationForEntityWithKeys() throws Exception {
+    try {
+      parseSampleFile("/NoKeyAnnotationForEntityWithKeys.hdbdd", "sap/db/NoKeyAnnotationForEntityWithKeys.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 3. Annotation nokey has been specified for entity with keys.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseNoKeyAnnotationForEntityWithoutKeys() throws Exception {
+    CdsParser parsedFile = parseSampleFile("/NoKeyAnnotationForEntityWithoutKeys.hdbdd", "sap/db/NoKeyAnnotationForEntityWithoutKeys.hdbdd");
+    List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
+    assertEquals(1, parsedEntities.size());
   }
 
   @Test
   public void testParseHanaBuiltInTypesSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/HanaBuiltInTypesTest.hdbdd", "sap/db/HanaBuiltInTypesTest.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/HanaBuiltInTypes.hdbdd", "sap/db/HanaBuiltInTypes.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
     assertEquals(1, parsedEntities.size());
     EntitySymbol entity = parsedEntities.get(0);
     assertEquals(10, entity.getElements().size());
@@ -126,10 +292,10 @@ public class ArtifactDefinitionListenerTest {
 
   @Test
   public void testParseGlobalBuiltInTypesSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/GlobalBuiltInTypesTest.hdbdd", "sap/db/GlobalBuiltInTypesTest.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/GlobalBuiltInTypes.hdbdd", "sap/db/GlobalBuiltInTypes.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
     assertEquals(1, parsedEntities.size());
     EntitySymbol entity = parsedEntities.get(0);
     assertEquals(16, entity.getElements().size());
@@ -155,22 +321,22 @@ public class ArtifactDefinitionListenerTest {
 
   @Test
   public void testParseArtifactsNamedAsKeywordsSuccessfully() throws Exception {
-      parseSampleFile("/Context.hdbdd", "sap/db/Context.hdbdd");
-      assertEquals(4, this.symbolTable.getSymbolsByFullName().size());
+    parseSampleFile("/Context.hdbdd", "sap/db/Context.hdbdd");
+    assertEquals(4, this.symbolTable.getSymbolsByFullName().size());
 
-      List<EntitySymbol> entitiesParsed = this.symbolTable.getSortedEntities();
-      assertEquals(2, entitiesParsed.size());
+    List<EntitySymbol> entitiesParsed = this.symbolTable.getSortedEntities();
+    assertEquals(2, entitiesParsed.size());
 
-      EntitySymbol parsedEntity = entitiesParsed.get(1);
-      assertNotNull(parsedEntity.resolve("key"));
-      assertNotNull(parsedEntity.resolve("entity"));
-      assertNotNull(parsedEntity.resolve("Type"));
+    EntitySymbol parsedEntity = entitiesParsed.get(1);
+    assertNotNull(parsedEntity.resolve("key"));
+    assertNotNull(parsedEntity.resolve("entity"));
+    assertNotNull(parsedEntity.resolve("Type"));
 
-      EntitySymbol to = entitiesParsed.get(0);
-      assertNotNull(to.resolve("id"));
-      assertNotNull(to.resolve("to"));
+    EntitySymbol to = entitiesParsed.get(0);
+    assertNotNull(to.resolve("id"));
+    assertNotNull(to.resolve("to"));
 
-      assertNotNull(this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type"));
+    assertNotNull(this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type"));
     Symbol resolvedType = this.symbolTable.getSymbolsByFullName().get("sap.db::Context.Type");
     assertEquals(DataTypeSymbol.class, resolvedType.getClass());
   }
@@ -183,6 +349,155 @@ public class ArtifactDefinitionListenerTest {
       assertEquals(CDSRuntimeException.class, e.getClass());
       assertEquals("Error at line: 5 - Element declarations are only allowed for entity scope.", e.getMessage());
     }
+  }
+
+  @Test
+  public void testParseInvalidBuiltInHanaType() throws Exception {
+    try {
+      parseSampleFile("/InvalidBuiltInHanaType.hdbdd", "sap/db/InvalidBuiltInHanaType.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 7. No such hana type found.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseInvalidBuiltInHanaTypeWithArgs() throws Exception {
+    try {
+      parseSampleFile("/InvalidBuiltInHanaTypeWithArgs.hdbdd", "sap/db/InvalidBuiltInHanaTypeWithArgs.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 7 col: 14. No such type:  hana.String.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseTypeWithoutArguments() throws Exception {
+    try {
+      parseSampleFile("/TypeWithoutArguments.hdbdd", "sap/db/TypeWithoutArguments.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 10 col: 14. Constructor usage is only allowed for some built in types.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseUserDefinedTypeWithArguments() throws Exception {
+    try {
+      parseSampleFile("/UserDefinedTypeWithArguments.hdbdd", "sap/db/UserDefinedTypeWithArguments.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 9 col: 11. No such type:  MyCustomType.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseInvalidNumberOfTypeArguments() throws Exception {
+    try {
+      parseSampleFile("/InvalidNumberOfTypeArguments.hdbdd", "sap/db/InvalidNumberOfTypeArguments.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 7 col: 14. Invalid number of constructor arguments passed.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseInvalidBuiltInType() throws Exception {
+    try {
+      parseSampleFile("/InvalidBuiltInType.hdbdd", "sap/db/InvalidBuiltInType.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 7 col: 7 - No such type: Text", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseInvalidReferenceAssociation() throws Exception {
+    try {
+      parseSampleFile("/InvalidReferenceAssociation.hdbdd", "sap/db/InvalidReferenceAssociation.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals(
+          "Failed to parse file: sap/db/InvalidReferenceAssociation.hdbdd. Error at line: 21 col: 10. The provided reference must be an Entity!",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseKeyElementConstraintIsNull() throws Exception {
+    try {
+      parseSampleFile("/KeyElementConstraintNull.hdbdd", "sap/table/KeyElementConstraintNull.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 6 col: 34. Element - part of composite key cannot be null.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseMissingSchemaAnnotation() throws Exception {
+    try {
+      parseSampleFile("/MissingSchema.hdbdd", "sap/table/MissingSchema.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 3. Missing '@Schema' annotation for top level symbol definition: Test", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseTopLevelArtifactNotMatchingFileName() throws Exception {
+    try {
+      parseSampleFile("/TopLevelArtifactNotMatchingFileName.hdbdd", "sap/db/TopLevelArtifactNotMatchingFileName.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 5. Top level symbol name does not match the filename.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseNonExistingUserDefinedType() throws Exception {
+    try {
+      parseSampleFile("/NonExistingUserDefinedType.hdbdd", "sap/db/NonExistingUserDefinedType.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Failed to parse file: sap/db/NonExistingUserDefinedType.hdbdd. Error at line: 9. No such type found: MyCustomType",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseWithUsingDirectiveSuccessfully() throws Exception {
+    CdsParser parsedDataType = parseSampleFile("/UserDefinedDataType.hdbdd", "sap/db/myapp/UserDefinedDataType.hdbdd");
+    CdsParser parsedEntity = parseSampleFile("/UsingDirective.hdbdd", "sap/db/UsingDirective.hdbdd");
+
+    assertEquals(0, parsedDataType.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedEntity.getNumberOfSyntaxErrors());
+  }
+
+  @Test
+  public void testParseWithUsingDirectiveWithAliasSuccessfully() throws Exception {
+    CdsParser parsedDataType = parseSampleFile("/UserDefinedDataType.hdbdd", "sap/db/myapp/UserDefinedDataType.hdbdd");
+    CdsParser parsedEntity = parseSampleFile("/UsingDirectiveWithAlias.hdbdd", "sap/db/UsingDirectiveWithAlias.hdbdd");
+
+    assertEquals(0, parsedDataType.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedEntity.getNumberOfSyntaxErrors());
+  }
+
+  @Test
+  public void testParseWithNonExistingUsingDirective() throws Exception {
+    try {
+      parseSampleFile("/UsingDirective.hdbdd", "sap/db/UsingDirective.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals(
+          "Failed to parse file: sap/db/UsingDirective.hdbdd. Error at line: 2 col: 40. Non existing entity in package: sap.db.myapp::sap.db.myapp::UserDefinedDataType.MyType",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseElementInStructuredType() throws Exception {
+    CdsParser parsedFile = parseSampleFile("/ElementInStructuredType.hdbdd", "sap/db/ElementInStructuredType.hdbdd");
+    assertEquals(1, parsedFile.getNumberOfSyntaxErrors());
   }
 
   @Test
@@ -203,20 +518,30 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
+  public void testParseHdbddWithNamespaceNotMatchingPackageName() throws Exception {
+    try {
+      parseSampleFile("/NamespaceNotMatchingPackageName.hdbdd", "com/sap/NamespaceNotMatchingPackageName.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 1. Namespace does not match the file directory.", e.getMessage());
+    }
+  }
+
+  @Test
   public void testParseEntitiesWithCatalogTableTypeAnnotations() throws Exception {
-    CdsParser parser = parseSampleFile("/CatalogTableTypes.hdbdd", "sap/table/CatalogTableTypes.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/CatalogTableTypes.hdbdd", "sap/table/CatalogTableTypes.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
     assertEquals(4, parsedEntities.size());
   }
 
   @Test
   public void testParseViewsSuccessfully() throws Exception {
-    CdsParser parser = parseSampleFile("/ParseViews.hdbdd", "sap/db/ParseViews.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/ParseViews.hdbdd", "sap/db/ParseViews.hdbdd");
     List<ViewSymbol> parsedViews = this.symbolTable.getSortedViews();
 
-    assertEquals(0, parser.getNumberOfSyntaxErrors());
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
     assertEquals(4, parsedViews.size());
   }
 
@@ -228,20 +553,20 @@ public class ArtifactDefinitionListenerTest {
 
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
-    CdsLexer hdbtiLexer = new CdsLexer(inputStream);
-    CommonTokenStream tokenStream = new CommonTokenStream(hdbtiLexer);
+    CdsLexer hdbddLexer = new CdsLexer(inputStream);
+    CommonTokenStream tokenStream = new CommonTokenStream(hdbddLexer);
 
     XSKHdbddErrorListener lexerErrorListener = new XSKHdbddErrorListener();
-    hdbtiLexer.removeErrorListeners();//remove the ConsoleErrorListener
-    hdbtiLexer.addErrorListener(lexerErrorListener);
+    hdbddLexer.removeErrorListeners(); // Remove the ConsoleErrorListener
+    hdbddLexer.addErrorListener(lexerErrorListener);
+
+    CdsParser hdbddParser = new CdsParser(tokenStream);
+    hdbddParser.setBuildParseTree(true);
     XSKHdbddErrorListener parserErrorListener = new XSKHdbddErrorListener();
+    hdbddParser.removeErrorListeners();
+    hdbddParser.addErrorListener(parserErrorListener);
 
-    CdsParser hdbtiParser = new CdsParser(tokenStream);
-    hdbtiParser.setBuildParseTree(true);
-    hdbtiParser.removeErrorListeners();
-    hdbtiParser.addErrorListener(parserErrorListener);
-
-    ParseTree parseTree = hdbtiParser.cdsFile();
+    ParseTree parseTree = hdbddParser.cdsFile();
 
     ArtifactDefinitionListener artifactDefinitionListener = new ArtifactDefinitionListener();
     artifactDefinitionListener.setSymbolTable(symbolTable);
@@ -262,6 +587,6 @@ public class ArtifactDefinitionListenerTest {
       throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
     }
 
-    return hdbtiParser;
+    return hdbddParser;
   }
 }

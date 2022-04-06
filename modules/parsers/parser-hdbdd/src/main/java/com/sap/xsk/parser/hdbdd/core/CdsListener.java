@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 // Generated from com/sap/xsk/parser/hdbdd/core/Cds.g4 by ANTLR 4.9.3
 package com.sap.xsk.parser.hdbdd.core;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -57,6 +68,46 @@ public interface CdsListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDataTypeRule(CdsParser.DataTypeRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#contextRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterContextRule(CdsParser.ContextRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#contextRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitContextRule(CdsParser.ContextRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#structuredTypeRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterStructuredTypeRule(CdsParser.StructuredTypeRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#structuredTypeRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitStructuredTypeRule(CdsParser.StructuredTypeRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#entityRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterEntityRule(CdsParser.EntityRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#entityRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitEntityRule(CdsParser.EntityRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#viewRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterViewRule(CdsParser.ViewRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#viewRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitViewRule(CdsParser.ViewRuleContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CdsParser#fieldDeclRule}.
 	 * @param ctx the parse tree
@@ -328,26 +379,6 @@ public interface CdsListener extends ParseTreeListener {
 	 */
 	void exitKeyValue(CdsParser.KeyValueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CdsParser#artifactRule}.
-	 * @param ctx the parse tree
-	 */
-	void enterArtifactRule(CdsParser.ArtifactRuleContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CdsParser#artifactRule}.
-	 * @param ctx the parse tree
-	 */
-	void exitArtifactRule(CdsParser.ArtifactRuleContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CdsParser#viewRule}.
-	 * @param ctx the parse tree
-	 */
-	void enterViewRule(CdsParser.ViewRuleContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CdsParser#viewRule}.
-	 * @param ctx the parse tree
-	 */
-	void exitViewRule(CdsParser.ViewRuleContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CdsParser#selectRule}.
 	 * @param ctx the parse tree
 	 */
@@ -397,4 +428,14 @@ public interface CdsListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWhereRule(CdsParser.WhereRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifier(CdsParser.IdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifier(CdsParser.IdentifierContext ctx);
 }

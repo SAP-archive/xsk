@@ -3,7 +3,7 @@ namespace sap.db;
 @Schema : 'TEST_SCHEMA'
 @Catalog.tableType : #COLUMN
 
-entity HanaBuiltInTypesTest {
+entity HanaBuiltInTypes {
    key key1 : hana.VARCHAR(25);
       COL_1 : hana.ALPHANUM;
       COL_2 : hana.SMALLINT;

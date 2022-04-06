@@ -44,7 +44,7 @@ context ParseViews {
         }
         where "sap.db::ParseViews.employees"."NAME" = 'John';
 
-    // View definition with union statements and dummy table
+    // View definition with union and distinct statements and dummy table
     define view employees_view_with_union as
         select from "sap.db::ParseViews.employees"
             join employee_roles as ER
@@ -65,5 +65,11 @@ context ParseViews {
             'Ben' as "EmployeeName",
             'Developer' as "EmployeeRoleType",
             '2200' as "EmployeeSalary"
+        }
+        union
+        select from "sap.db::ParseViews.employees" as "EMP"
+        distinct
+        {
+            "EMP"."NAME as "EMPName"
         };
 }

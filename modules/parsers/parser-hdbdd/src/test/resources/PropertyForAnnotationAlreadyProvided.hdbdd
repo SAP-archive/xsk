@@ -1,0 +1,11 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+context PropertyForAnnotationAlreadyProvided {
+  @Catalog.tableType: #COLUMN
+  @Catalog.tableType: #ROW
+  entity Test {
+     Name : String(32);
+  };
+}
+

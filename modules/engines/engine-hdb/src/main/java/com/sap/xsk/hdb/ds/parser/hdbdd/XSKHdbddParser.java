@@ -101,20 +101,22 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   private void parseHdbdd(String location, String content) throws IOException, XSKArtifactParserException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
-    CdsLexer hdbtiLexer = new CdsLexer(inputStream);
-    CommonTokenStream tokenStream = new CommonTokenStream(hdbtiLexer);
+    CdsLexer hdbddLexer = new CdsLexer(inputStream);
+    CommonTokenStream tokenStream = new CommonTokenStream(hdbddLexer);
 
     XSKHdbddErrorListener lexerErrorListener = new XSKHdbddErrorListener();
-    hdbtiLexer.removeErrorListeners();//remove the ConsoleErrorListener
-    hdbtiLexer.addErrorListener(lexerErrorListener);
+    hdbddLexer.removeErrorListeners();//remove the ConsoleErrorListener
+    hdbddLexer.addErrorListener(lexerErrorListener);
+
+    CdsParser hdbddParser = new CdsParser(tokenStream);
+    hdbddParser.setBuildParseTree(true);
+
     XSKHdbddErrorListener parserErrorListener = new XSKHdbddErrorListener();
+    hdbddParser.removeErrorListeners();
+    hdbddParser.addErrorListener(parserErrorListener);
 
-    CdsParser hdbtiParser = new CdsParser(tokenStream);
-    hdbtiParser.setBuildParseTree(true);
-    hdbtiParser.removeErrorListeners();
-    hdbtiParser.addErrorListener(parserErrorListener);
+    ParseTree parseTree = hdbddParser.cdsFile();
 
-    ParseTree parseTree = hdbtiParser.cdsFile();
     XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location,
         XSKCommonsConstants.HDBDD_PARSER);
     XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location,

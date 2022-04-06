@@ -3,7 +3,7 @@ namespace sap.db;
 @Schema : 'TEST_SCHEMA'
 @Catalog.tableType : #COLUMN
 
-entity GlobalBuiltInTypesTest {
+entity GlobalBuiltInTypes {
    key key1 : String(25);
       COL_1 : LargeString;
       COL_2 : String(10);

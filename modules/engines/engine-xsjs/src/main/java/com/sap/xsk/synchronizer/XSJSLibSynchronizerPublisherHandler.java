@@ -11,16 +11,12 @@
  */
 package com.sap.xsk.synchronizer;
 
-import com.sap.xsk.utils.XSKCommonsConstants;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.core.publisher.api.handlers.MetadataPublisherHandler;
 
 public class XSJSLibSynchronizerPublisherHandler extends MetadataPublisherHandler {
 
   @Override
-  public void afterPublish(String location) {
-      String registryLocation = XSKCommonsConstants.XSK_REGISTRY_PUBLIC + location.substring(
-          StringUtils.lastIndexOf(location, "workspace/") + 10);
+  public void afterPublish(String workspaceLocation, String registryLocation) {
       XSJSLibSynchronizer.forceSynchronization(registryLocation);
   }
 

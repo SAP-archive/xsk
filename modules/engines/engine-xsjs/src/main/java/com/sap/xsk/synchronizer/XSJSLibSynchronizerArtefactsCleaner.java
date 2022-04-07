@@ -23,8 +23,11 @@ public class XSJSLibSynchronizerArtefactsCleaner {
   public void cleanup(String targetLocation) {
     try {
       PreparedStatement pstmt = dataSource.getConnection()
-          .prepareStatement("DELETE FROM \"PROCESSED_XSJSLIB_ARTEFATCTS\" WHERE \"LOCATION\" LIKE ?");
-      pstmt.setString(1, "'" + targetLocation + "%'");
+          .prepareStatement("DELETE FROM \""
+              + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
+              + "\" WHERE \"LOCATION\" LIKE ?");
+
+      pstmt.setString(1, targetLocation + "%");
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new XSJSLibArtefactCleanerSQLException("Could not cleanup xsjslib synchronizer entries. ", e);

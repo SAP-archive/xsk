@@ -85,10 +85,10 @@ public class SymbolTable {
     annotations.put(noKeyObj.getName(), noKeyObj);
 
     AnnotationObj generateTableTypeObj = annotationTemplateFactory.buildTemplateForGenerateTableTypeAnnotation();
-    annotations.put(generateTableTypeObj.getName(),generateTableTypeObj);
+    annotations.put(generateTableTypeObj.getName(), generateTableTypeObj);
 
     AnnotationObj generateSearchIndexObj = annotationTemplateFactory.buildTemplateForSearchIndexAnnotation();
-    annotations.put(generateSearchIndexObj.getName(),generateSearchIndexObj);
+    annotations.put(generateSearchIndexObj.getName(), generateSearchIndexObj);
   }
 
   public void addEntityToGraph(String fullName) {
@@ -100,10 +100,7 @@ public class SymbolTable {
   }
 
   public void addChildToEntity(String entityName, String childName) {
-    if (entityGraph.get(entityName) == null) {
-      this.entityGraph.put(entityName, new ArrayList<>());
-    }
-
+    this.entityGraph.computeIfAbsent(entityName, k -> new ArrayList<>());
     this.entityGraph.get(entityName).add(childName);
   }
 
@@ -141,8 +138,8 @@ public class SymbolTable {
   }
 
   public List<StructuredDataTypeSymbol> getTableTypes() {
-    return this.symbolsByFullName.values().stream().filter(s -> s instanceof StructuredDataTypeSymbol)
-        .map(dt -> (StructuredDataTypeSymbol) dt)
+    return this.symbolsByFullName.values().stream().filter(StructuredDataTypeSymbol.class::isInstance)
+        .map(StructuredDataTypeSymbol.class::cast)
         .collect(Collectors.toList());
   }
 
@@ -205,8 +202,7 @@ public class SymbolTable {
 
       if (!(this.symbolsByFullName.get(viewName) instanceof ViewSymbol)) {
         return;
-      }
-      else {
+      } else {
         bottomView = (ViewSymbol) this.symbolsByFullName.get(viewName);
       }
 

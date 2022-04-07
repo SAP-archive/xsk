@@ -85,6 +85,22 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
+  public void testParseAssociationsWithKeyAndNullConstraint() throws Exception {
+    CdsParser parsedFile = parseSampleFile("/AssociationWithKeyAndNullConstraint.hdbdd", "sap/db/AssociationWithKeyAndNullConstraint.hdbdd");
+    assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
+  }
+
+  @Test
+  public void testParseKeyAssociationIsNull() throws Exception {
+    try {
+      parseSampleFile("/KeyAssociationIsNull.hdbdd", "sap/db/KeyAssociationIsNull.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Error at line: 10 col: 82. Association - part of composite key cannot be null.", e.getMessage());
+    }
+  }
+
+  @Test
   public void testParseElementNameAsEntityName() throws Exception {
     CdsParser parsedFile = parseSampleFile("/ElementNameAsEntityName.hdbdd", "sap/db/ElementNameAsEntityName.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();//get only Entities

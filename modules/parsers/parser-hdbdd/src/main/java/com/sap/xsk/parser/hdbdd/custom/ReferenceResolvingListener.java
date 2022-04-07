@@ -13,7 +13,11 @@ package com.sap.xsk.parser.hdbdd.custom;
 
 import com.sap.xsk.parser.hdbdd.core.CdsBaseListener;
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
-import com.sap.xsk.parser.hdbdd.core.CdsParser;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignTypeContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationTargetContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.DefaultValueContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ForeignKeyContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.IdentifierContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ManagedForeignKeysContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.UnmanagedForeignKeyContext;
@@ -37,8 +41,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 public class ReferenceResolvingListener extends CdsBaseListener {
@@ -71,7 +73,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterAssignType(CdsParser.AssignTypeContext ctx) {
+  public void enterAssignType(AssignTypeContext ctx) {
     Typeable referencingSymbol = typeables.get(ctx.getParent());
     if (referencingSymbol.getType() != null) {
       return;
@@ -84,7 +86,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterDefaultValue(CdsParser.DefaultValueContext ctx) {
+  public void enterDefaultValue(DefaultValueContext ctx) {
     int valueType = ctx.value.getType();
     BuiltInTypeSymbol typeOfElement = (BuiltInTypeSymbol) this.entityElements.get(ctx.getParent().getParent()).getType();
 
@@ -108,7 +110,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterAssociationTarget(CdsParser.AssociationTargetContext ctx) {
+  public void enterAssociationTarget(AssociationTargetContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
 
     Set<Symbol> nonResolvedRefSymbols = new HashSet<>();
@@ -119,7 +121,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
     Symbol resolvedSymbol = resolveReferenceChain(reference, associationSymbol, nonResolvedRefSymbols);
 
-    if (!(resolvedSymbol instanceof EntitySymbol)) {
+    if (!(resolvedSymbol instanceof EntitySymbol) && resolvedSymbol != null) {
       throw new CDSRuntimeException(String.format(
           "Error at line: %d col: %d. The provided reference must be an Entity!",
           resolvedSymbol.getIdToken().start.getLine(), resolvedSymbol.getIdToken().start.getCharPositionInLine()));
@@ -129,7 +131,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
   }
 
   @Override
-  public void exitAssociation(@NotNull CdsParser.AssociationContext ctx) {
+  public void exitAssociation(AssociationContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx);
 
     if (ctx.getChild(ManagedForeignKeysContext.class, 0) == null
@@ -141,7 +143,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterForeignKey(CdsParser.ForeignKeyContext ctx) {
+  public void enterForeignKey(ForeignKeyContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent().getParent());
     associationSymbol.setManaged(true);
     String entityName = associationSymbol.getReference();
@@ -171,7 +173,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterUnmanagedForeignKey(CdsParser.UnmanagedForeignKeyContext ctx) {
+  public void enterUnmanagedForeignKey(UnmanagedForeignKeyContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
     associationSymbol.setManaged(false);
     String targetFullName = associationSymbol.getTarget().getName();
@@ -185,7 +187,6 @@ public class ReferenceResolvingListener extends CdsBaseListener {
           "Error at line: %s. No such field found in entity: %s.",
           associationSymbol.getIdToken().start.getLine(), refFullPath));
     } else if (!(resolvedTargetSymbol instanceof EntityElementSymbol)) {
-      System.out.println("ERROR: Only an entity element could be referenced as a foreign key!");
       throw new CDSRuntimeException(String.format(
           "Error at line: %s. Only an Element of an Entity could be referenced as a foreign key.",
           associationSymbol.getIdToken().start.getLine()));
@@ -245,6 +246,12 @@ public class ReferenceResolvingListener extends CdsBaseListener {
       }
     }
 
+    isCircularDependency(resolvedSubMember, nonResolvedRefSymbols);
+
+    return resolvedSubMember;
+  }
+
+  private void isCircularDependency(Symbol resolvedSubMember, Set<Symbol> nonResolvedRefSymbols) {
     if (resolvedSubMember instanceof FieldSymbol) {
       FieldSymbol resolvedSubMemberField = (FieldSymbol) resolvedSubMember;
       Symbol resolvedMemberType = (Symbol) resolvedSubMemberField.getType();
@@ -259,8 +266,6 @@ public class ReferenceResolvingListener extends CdsBaseListener {
         }
       }
     }
-
-    return resolvedSubMember;
   }
 
   private void setResolvedType(boolean isTypeOfUsed, Typeable typeable, Symbol resolvedSymbol) {

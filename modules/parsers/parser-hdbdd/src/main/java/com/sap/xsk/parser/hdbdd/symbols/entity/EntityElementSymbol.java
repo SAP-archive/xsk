@@ -13,6 +13,7 @@ package com.sap.xsk.parser.hdbdd.symbols.entity;
 
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import java.util.Objects;
 
 public class EntityElementSymbol extends FieldSymbol {
 
@@ -65,5 +66,23 @@ public class EntityElementSymbol extends FieldSymbol {
 
   public void setKey(boolean key) {
     isKey = key;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    if (!super.equals(o))
+      return false;
+    EntityElementSymbol that = (EntityElementSymbol) o;
+    return isDefaultValueDateTimeFunction == that.isDefaultValueDateTimeFunction && isKey == that.isKey && isNotNull == that.isNotNull
+        && defaultValue.equals(that.defaultValue);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), defaultValue, isDefaultValueDateTimeFunction, isKey, isNotNull);
   }
 }

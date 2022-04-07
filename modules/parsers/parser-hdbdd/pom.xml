@@ -53,6 +53,7 @@
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>${antlr4-maven-plugin.version}</version>
                 <configuration>
+                    <libDirectory>${basedir}/src/main/antlr4/com/sap/xsk/parser/hdbdd/core</libDirectory>
                     <outputDirectory>${basedir}/src/main/java</outputDirectory>
                 </configuration>
                 <executions>

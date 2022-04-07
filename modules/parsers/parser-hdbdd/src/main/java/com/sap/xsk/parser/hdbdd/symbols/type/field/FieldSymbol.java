@@ -16,17 +16,14 @@ import com.sap.xsk.parser.hdbdd.core.CdsParser.IdentifierContext;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.Type;
-import org.antlr.v4.runtime.Token;
 import java.util.Map;
+import java.util.Objects;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 
 public class FieldSymbol extends Symbol implements Typeable {
 
   private Type type;
   private String reference;
-  private boolean isKey;
-  private boolean isNotNull;
-
 
   public FieldSymbol(String name) {
     super(name);
@@ -67,19 +64,20 @@ public class FieldSymbol extends Symbol implements Typeable {
     this.reference = token;
   }
 
-  public boolean isKey() {
-    return isKey;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    if (!super.equals(o))
+      return false;
+    FieldSymbol that = (FieldSymbol) o;
+    return type.equals(that.type) && Objects.equals(reference, that.reference);
   }
 
-  public void setKey(boolean key) {
-    isKey = key;
-  }
-
-  public boolean isNotNull() {
-    return isNotNull;
-  }
-
-  public void setNotNull(boolean notNull) {
-    isNotNull = notNull;
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), type, reference);
   }
 }

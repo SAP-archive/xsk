@@ -17,7 +17,6 @@ import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.antlr.v4.runtime.Token;
 
 /***
  * Excerpted from "Language Implementation Patterns",
@@ -30,7 +29,7 @@ import org.antlr.v4.runtime.Token;
 public class Symbol { // A generic programming language symbol
 
   private String fullName;
-  private String name;      // All com.sap.xsk.parser.hdbdd.symbols at least have a name
+  private String name; // All com.sap.xsk.parser.hdbdd.symbols at least have a name
   private Scope scope;
   private IdentifierContext idToken;
   private String schema;

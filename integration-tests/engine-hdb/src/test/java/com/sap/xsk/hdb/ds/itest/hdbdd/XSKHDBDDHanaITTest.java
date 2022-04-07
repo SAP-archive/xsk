@@ -35,11 +35,13 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
 
   @Before
   public void setUpBeforeTest() throws SQLException {
-    HanaITestUtils.clearDataFromXSKDataStructure(systemDatasource, Arrays.asList( //
-        "'/itest/ProductsWithManagedAssItest.hdbdd'", //
-        "'/itest/Status.hdbdd'", //
-        "'/itest/ProductsWithManagedAssWithUsingItest.hdbdd'", //
-        "'/itest/EmployeesWithViewDefinitions.hdbdd'" //
+    HanaITestUtils.clearDataFromXSKDataStructure(systemDatasource, Arrays.asList(
+        "'/itest/ProductsWithManagedAssItest.hdbdd'",
+        "'/itest/Status.hdbdd'",
+        "'/itest/ProductsWithManagedAssWithUsingItest.hdbdd'",
+        "'/itest/DefaultValueWithDateTimeFunction.hdbdd'",
+        "'/itest/CatalogTableTypes.hdbdd'",
+        "'/itest/EmployeesWithViewDefinitions.hdbdd'"
     ));
     Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
     facade.clearCache();

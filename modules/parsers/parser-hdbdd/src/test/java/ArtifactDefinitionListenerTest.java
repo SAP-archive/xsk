@@ -86,7 +86,8 @@ public class ArtifactDefinitionListenerTest {
 
   @Test
   public void testParseAssociationsWithKeyAndNullConstraint() throws Exception {
-    CdsParser parsedFile = parseSampleFile("/AssociationWithKeyAndNullConstraint.hdbdd", "sap/db/AssociationWithKeyAndNullConstraint.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/AssociationWithKeyAndNullConstraint.hdbdd",
+        "sap/db/AssociationWithKeyAndNullConstraint.hdbdd");
     assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
   }
 
@@ -181,7 +182,8 @@ public class ArtifactDefinitionListenerTest {
       parseSampleFile("/AnnotationAlreadyAssigned.hdbdd", "sap/db/AnnotationAlreadyAssigned.hdbdd");
     } catch (RuntimeException e) {
       assertEquals(CDSRuntimeException.class, e.getClass());
-      assertEquals("Error at line: 6 col: 3. Annotation Catalog already assigned for sap.db::AnnotationAlreadyAssigned.Test.", e.getMessage());
+      assertEquals("Error at line: 6 col: 3. Annotation Catalog already assigned for sap.db::AnnotationAlreadyAssigned.Test.",
+          e.getMessage());
     }
   }
 
@@ -277,7 +279,8 @@ public class ArtifactDefinitionListenerTest {
 
   @Test
   public void testParseNoKeyAnnotationForEntityWithoutKeys() throws Exception {
-    CdsParser parsedFile = parseSampleFile("/NoKeyAnnotationForEntityWithoutKeys.hdbdd", "sap/db/NoKeyAnnotationForEntityWithoutKeys.hdbdd");
+    CdsParser parsedFile = parseSampleFile("/NoKeyAnnotationForEntityWithoutKeys.hdbdd",
+        "sap/db/NoKeyAnnotationForEntityWithoutKeys.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
     assertEquals(0, parsedFile.getNumberOfSyntaxErrors());
     assertEquals(1, parsedEntities.size());
@@ -436,6 +439,17 @@ public class ArtifactDefinitionListenerTest {
       assertEquals(
           "Failed to parse file: sap/db/InvalidReferenceAssociation.hdbdd. Error at line: 21 col: 10. The provided reference must be an Entity!",
           e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseCircularDependency() throws Exception {
+    try {
+      parseSampleFile("/CircularDependency.hdbdd", "sap/db/CircularDependency.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals(
+          "Failed to parse file: sap/db/CircularDependency.hdbdd. Circular dependency", e.getMessage());
     }
   }
 

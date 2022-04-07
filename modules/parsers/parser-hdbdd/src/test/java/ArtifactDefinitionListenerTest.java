@@ -51,6 +51,18 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
+  public void testParseInvalidDefaultValueType() throws Exception {
+    try {
+      parseSampleFile("/InvalidDefaultValueType.hdbdd", "sap/table/InvalidDefaultValueType.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals(
+          "Failed to parse file: sap/table/InvalidDefaultValueType.hdbdd. Error at line: 8 col: 50. Incompatible types! Expected NVARCHAR, Provided 1",
+          e.getMessage());
+    }
+  }
+
+  @Test
   public void testParseEntitySuccessfully() throws Exception {
     CdsParser parsedFile = parseSampleFile("/ParseEntity.hdbdd", "sap/table/ParseEntity.hdbdd");
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
@@ -98,6 +110,43 @@ public class ArtifactDefinitionListenerTest {
     } catch (RuntimeException e) {
       assertEquals(CDSRuntimeException.class, e.getClass());
       assertEquals("Error at line: 10 col: 82. Association - part of composite key cannot be null.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseAssociationMissingElementForForeignKey() throws Exception {
+    try {
+      parseSampleFile("/AssociationMissingElementForForeignKey.hdbdd", "sap/db/AssociationMissingElementForForeignKey.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals(
+          "Failed to parse file: sap/db/AssociationMissingElementForForeignKey.hdbdd. Error at line: 10. No such element found in entity: AssociationMissingElementForForeignKey.Country.Id.",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseAssociationMissingElementForUnmanagedForeignKey() throws Exception {
+    try {
+      parseSampleFile("/AssociationMissingElementForUnmanagedForeignKey.hdbdd",
+          "sap/db/AssociationMissingElementForUnmanagedForeignKey.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals(
+          "Failed to parse file: sap/db/AssociationMissingElementForUnmanagedForeignKey.hdbdd. Error at line: 10. No such element found in entity: Country.Id.",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseAssociationElementNotPKForUnmanagedForeignKey() throws Exception {
+    try {
+      parseSampleFile("/AssociationElementNotPKForUnmanagedForeignKey.hdbdd", "sap/db/AssociationElementNotPKForUnmanagedForeignKey.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals(
+          "Failed to parse file: sap/db/AssociationElementNotPKForUnmanagedForeignKey.hdbdd. Error at line: 10. No such element: Id found in: Country or the element is not a primary key.",
+          e.getMessage());
     }
   }
 
@@ -407,6 +456,40 @@ public class ArtifactDefinitionListenerTest {
     } catch (RuntimeException e) {
       assertEquals(CDSRuntimeException.class, e.getClass());
       assertEquals("Error at line: 9 col: 11. No such type:  MyCustomType.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseNoSuchTypeWhenUsingTypeOf() throws Exception {
+    try {
+      parseSampleFile("/NoSuchTypeWhenUsingTypeOf.hdbdd", "sap/db/NoSuchTypeWhenUsingTypeOf.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Failed to parse file: sap/db/NoSuchTypeWhenUsingTypeOf.hdbdd. Error at line: 10. No such type existing.",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseEntityForTypeOf() throws Exception {
+    try {
+      parseSampleFile("/EntityForTypeOf.hdbdd", "sap/db/EntityForTypeOf.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals("Failed to parse file: sap/db/EntityForTypeOf.hdbdd. Error at line: 6. Entities could not be used as a type.",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void testParseReferenceIsFieldNotType() throws Exception {
+    try {
+      parseSampleFile("/ReferenceIsFieldNotType.hdbdd", "sap/db/ReferenceIsFieldNotType.hdbdd");
+    } catch (RuntimeException e) {
+      assertEquals(CDSRuntimeException.class, e.getClass());
+      assertEquals(
+          "Failed to parse file: sap/db/ReferenceIsFieldNotType.hdbdd. Error at line: 10. The reference provided is not a type, but a field. Use 'type of' keyword.",
+          e.getMessage());
     }
   }
 

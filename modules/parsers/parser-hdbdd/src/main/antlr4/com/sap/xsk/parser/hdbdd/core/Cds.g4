@@ -37,7 +37,7 @@ cardinality:  '[' ASSOCIATION_MIN (max=INTEGER | many='*') ']'   # MinMaxCardina
               |  '[' ']'                                         # NoCardinality
               ;
 
-defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | VARBINARY | DATETIME_VALUE_FUNCTION | NULL);
+defaultValue: DEFAULT value=(STRING | INTEGER | DECIMAL | BOOLEAN | LOCAL_TIME | LOCAL_DATE | UTC_DATE_TIME | UTC_TIMESTAMP | VARBINARY | DATETIME_VALUE_FUNCTION | NULL);
 
 annotationRule: '@' identifier ':' annValue                               #AnnObjectRule
               | '@' annId=identifier ('.' prop=identifier)* ':' annValue  #AnnPropertyRule

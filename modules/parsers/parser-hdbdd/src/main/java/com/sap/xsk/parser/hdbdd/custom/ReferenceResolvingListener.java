@@ -92,7 +92,7 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
     // If the default value is set to null, ignore it
     if (ctx.NULL() == null) {
-      if (typeOfElement.getValueType().stream().filter(el -> el.equals(valueType)).count() < 0) {
+      if (typeOfElement.getValueType().stream().filter(el -> el.equals(valueType)).count() < 1) {
         throw new CDSRuntimeException(String.format(
             "Error at line: %d col: %d. Incompatible types! Expected %s, Provided %s",
             ctx.value.getLine(), ctx.value.getCharPositionInLine(), typeOfElement.getName(), ctx.value.getText()));
@@ -154,15 +154,12 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
     if (resolvedSymbol == null) {
       throw new CDSRuntimeException(String.format(
-          "Error at line: %s. No such field found in entity: %s.",
+          "Error at line: %s. No such element found in entity: %s.",
           associationSymbol.getIdToken().start.getLine(), refFullPath));
-    } else if (!(resolvedSymbol instanceof EntityElementSymbol)) {
-      throw new CDSRuntimeException(String.format(
-          "Error at line: %s. Only an entity element could be referenced as a foreign key.",
-          resolvedSymbol.getIdToken().start.getLine()));
     }
 
     EntityElementSymbol entityElement = new EntityElementSymbol((EntityElementSymbol) resolvedSymbol);
+
     if (ctx.alias != null) {
       entityElement.setAlias(ctx.alias.getText());
     }
@@ -184,19 +181,15 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     Symbol resolvedTargetSymbol = resolveReferenceChain(refFullPath, associationSymbol, new HashSet<>(Arrays.asList(associationSymbol)));
     if (resolvedTargetSymbol == null) {
       throw new CDSRuntimeException(String.format(
-          "Error at line: %s. No such field found in entity: %s.",
+          "Error at line: %s. No such element found in entity: %s.",
           associationSymbol.getIdToken().start.getLine(), refFullPath));
-    } else if (!(resolvedTargetSymbol instanceof EntityElementSymbol)) {
-      throw new CDSRuntimeException(String.format(
-          "Error at line: %s. Only an Element of an Entity could be referenced as a foreign key.",
-          associationSymbol.getIdToken().start.getLine()));
     }
 
     EntitySymbol associationHolder = (EntitySymbol) associationSymbol.getScope();
     EntityElementSymbol resolvedSourcePkElement = (EntityElementSymbol) associationHolder.resolve(ctx.source.getText());
     if (resolvedSourcePkElement == null || !resolvedSourcePkElement.isKey()) {
       throw new CDSRuntimeException(String.format(
-          "Error at line: %s. No such field: %s found in: %s or the field is not a primary key.",
+          "Error at line: %s. No such element: %s found in: %s or the element is not a primary key.",
           ctx.source.start.getLine(), ctx.source.getText(), associationSymbol.getTarget().getName()));
     }
 

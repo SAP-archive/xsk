@@ -1,0 +1,12 @@
+namespace sap.db;
+@Schema : 'TEST_SCHEMA'
+
+Context ReferenceIsFieldNotType {
+	type GlobalTypes {
+        Name										 : String(100);
+    };
+
+	type AuditTrailInfo {
+        CreatedBy                : GlobalTypes.Name;
+	};
+};

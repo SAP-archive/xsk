@@ -1,0 +1,9 @@
+namespace sap.table;
+@Schema : 'TEST'
+@Catalog.tableType : #COLUMN
+
+entity InvalidDefaultValueType{
+    Key MY_KEY : hana.VARCHAR(25);
+    DIFF_TAX_AMT : Decimal(15,2) default 0.00;
+    SUMM_TRANS_ERR_FLAG : hana.VARCHAR(1) default 1;
+};

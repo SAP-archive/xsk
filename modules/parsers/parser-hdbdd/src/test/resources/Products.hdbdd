@@ -7,7 +7,7 @@ context Products {
     entity  Orders {
         key Id               : String(32);
         Items                : association[*] to Item on Items.OrderId = Id;
-        Category             : association to Products.Category { Id };
+        Category             : association to Products.Category { Id as CategoryId };
         Prices               : association[] to Price on Prices.Id = Id;
         Tags                 : association[0..*] to Tag on Tags.Id = Id;
         Invoices             : association[0..1] to Invoice on Invoices.Id = Id;

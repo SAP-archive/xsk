@@ -19,7 +19,7 @@ entity GlobalBuiltInTypes {
       COL_12 : LocalTime default null;
       COL_13 : UTCDateTime default null;
       COL_14 : UTCTimestamp default null;
-      COL_15 : Boolean default 'true';
+      COL_15 : Boolean default true;
 
       COL_10 : Decimal(15,2) default 0;
 };

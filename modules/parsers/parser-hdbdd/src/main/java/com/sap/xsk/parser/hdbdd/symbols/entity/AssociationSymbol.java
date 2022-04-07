@@ -15,7 +15,6 @@ import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class AssociationSymbol extends FieldSymbol {
 
@@ -84,23 +83,5 @@ public class AssociationSymbol extends FieldSymbol {
 
   public void setKey(boolean key) {
     isKey = key;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-    if (!super.equals(o))
-      return false;
-    AssociationSymbol that = (AssociationSymbol) o;
-    return isManaged == that.isManaged && isKey == that.isKey && isNotNull == that.isNotNull && cardinality == that.cardinality
-        && target.equals(that.target) && foreignKeys.equals(that.foreignKeys);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), cardinality, target, foreignKeys, isManaged, isKey, isNotNull);
   }
 }

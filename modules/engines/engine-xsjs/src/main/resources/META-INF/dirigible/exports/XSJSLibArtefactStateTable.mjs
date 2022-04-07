@@ -1,6 +1,6 @@
-var dao = require("db/v4/dao");
-var query = require("db/v4/query");
-var digest = require("utils/v4/digest");
+const dao = require("db/v4/dao");
+const query = require("db/v4/query");
+const digest = require("utils/v4/digest");
 
 export class XSJSLibArtefactStateTable {
   tableName = "";
@@ -19,8 +19,8 @@ export class XSJSLibArtefactStateTable {
   }
 
   findEntryByResourceLocation(location) {
-    var sql = "SELECT * FROM \"" + this.tableSchema + "\".\"" + this.tableName + "\" WHERE LOCATION = ?";
-    return query.execute(sql, [location], null, this.tableDB, this.tableLocation).shift();
+    let sql = "SELECT * FROM \"" + this.tableSchema + "\".\"" + this.tableName +"\" WHERE LOCATION = ?";
+    return query.execute(sql, [location], this.tableLocation, this.tableDB).shift();
   }
 
   createEntryForResource(location, content) {
@@ -31,9 +31,11 @@ export class XSJSLibArtefactStateTable {
   }
 
   updateEntryForResource(oldEntry, location, content) {
-    oldEntry.LOCATION = location;
-    oldEntry.HASH = digest.md5Hex(content);
-    this.table.update(oldEntry);
+    this.table.update({
+      id: oldEntry.ID,
+      location: location,
+      hash: digest.md5Hex(content)
+    });
   }
 
   checkForContentChange(foundEntry, content) {
@@ -42,38 +44,38 @@ export class XSJSLibArtefactStateTable {
 
   _getOrCreateXSJSLibArtefactStateTable() {
     try {
-      var newTable = dao.create({
-        table: this.tableName,
-        properties: [{
-          name: "id",
-          column: "ID",
-          type: "BIGINT",
-          id: true
-        }, {
-          name: "location",
-          column: "LOCATION",
-          type: "VARCHAR",
-          required: true,
-          unique: true
-        }, {
-          name: "hash",
-          column: "HASH",
-          type: "VARCHAR",
-          required: true
-        }]
-      },
+        let table = dao.create({
+            table: this.tableName,
+            properties: [{
+                name: "id",
+                column: "ID",
+                type: "BIGINT",
+                id: true
+            }, {
+                name: "location",
+                column: "LOCATION",
+                type: "VARCHAR",
+                required: true,
+                unique: true
+            }, {
+                name: "hash",
+                column: "HASH",
+                type: "VARCHAR",
+                required: true
+            }]
+        },
         null,
         this.tableDB,
         this.tableLocation
-      );
+        );
 
-      if (!newTable.existsTable()) {
-        newTable.createTable();
+        if (!table.existsTable()) {
+          table.createTable();
+        }
+
+        return table;
+      } catch(e) {
+        throw new Error("Cannot check if synchrnoisation is needed. Reason: " + e);
       }
-
-      return newTable;
-    } catch (e) {
-      throw new Error("Cannot check if synchronisation is needed. Reason: " + e);
-    }
   }
 }

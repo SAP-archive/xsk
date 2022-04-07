@@ -11,54 +11,51 @@
  */
 package com.sap.xsk.synchronizer;
 
-import com.sap.xsk.exceptions.XSJSLibExportsGenerationSourceNotFoundException;
 import com.sap.xsk.utils.XSKCommonsConstants;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
-import org.eclipse.dirigible.commons.api.module.AbstractDirigibleModule;
-import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.IOrderedSynchronizerContribution;
-import org.eclipse.dirigible.engine.api.script.ScriptEngineExecutorsManager;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class XSJSLibSynchronizer extends AbstractDirigibleModule {
+public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrderedSynchronizerContribution {
 
   private static final Logger logger = LoggerFactory.getLogger(XSJSLibSynchronizer.class);
 
   private static final String XSJSLIB_RUN_GENERATION_LOCATION = "/exports/XSJSLibRunGeneration.mjs";
 
-  @Override
-  public String getName() {
-    return "XSJSLibSynchronizer";
+  public static final String XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME = "PROCESSED_XSJSLIB_ARTEFACTS";
+
+  private final String targetLocation;
+
+  public XSJSLibSynchronizer() {
+    this(XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
   }
 
-  @Override
-  public int getPriority() {
-    return 666;
+  public XSJSLibSynchronizer(String targetLocation) {
+    this.targetLocation = targetLocation;
   }
 
-  @Override
-  public void configure() {
-    synchronizeXSJSLibs(XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
+  public static void forceSynchronization(String targetLocation) {
+    XSJSLibSynchronizer synchronizer = new XSJSLibSynchronizer(targetLocation);
+    synchronizer.setForcedSynchronization(true);
+    try {
+      synchronizer.synchronize();
+    } finally {
+      synchronizer.setForcedSynchronization(false);
+    }
   }
 
-  public void synchronizeXSJSLibs(String location) {
+  public void synchronizeXSJSLibs() {
     logger.trace("Synchronizing XSJSLibs...");
 
-//        try {
-//          ThreadContextFacade.setUp();
-
     Map<Object, Object> context = new HashMap<>();
-    context.put("registry_path", location);
+    context.put("targetRegistryPath", targetLocation);
+    context.put("stateTableName", XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
 
     GraalVMJavascriptEngineExecutor graalVMJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();
     graalVMJavascriptEngineExecutor.executeService(
@@ -67,10 +64,29 @@ public class XSJSLibSynchronizer extends AbstractDirigibleModule {
         true,
         false
     );
-//        } finally {
-//          ThreadContextFacade.tearDown();
-//        }
 
     logger.trace("Done synchronizing XSJSLibs.");
+  }
+
+  @Override
+  public int getPriority() {
+    return 666;
+  }
+
+  @Override
+  protected void synchronizeResource(IResource iResource)
+      throws SynchronizationException {
+  }
+
+  @Override
+  public void synchronize() {
+    synchronized (XSJSLibSynchronizer.class) {
+      if (beforeSynchronizing()) {
+        logger.trace("Synchronizing XSJSLibs...");
+        synchronizeXSJSLibs();
+        logger.trace("Done synchronizing XSJSLibs.");
+        afterSynchronizing();
+      }
+    }
   }
 }

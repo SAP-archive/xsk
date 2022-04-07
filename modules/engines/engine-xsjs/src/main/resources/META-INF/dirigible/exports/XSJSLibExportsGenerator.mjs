@@ -5,8 +5,8 @@ export class XSJSLibExportsGenerator {
 
   processedArtefactsTable = null;
 
-  constructor(targetRegistryCollection) {
-    this.processedArtefactsTable = new XSJSLibArtefactStateTable("PROCESSED_XSJSLIB_ARTEFATCTS", "PUBLIC", "local", "SystemDB");
+  constructor(targetRegistryCollection, stateTableName) {
+    this.processedArtefactsTable = new XSJSLibArtefactStateTable(stateTableName, "PUBLIC", "local", "SystemDB");
     this._generateExportsRecursively(targetRegistryCollection);
   }
 
@@ -15,8 +15,8 @@ export class XSJSLibExportsGenerator {
       return;
     }
 
-    var resourceNames = this._toJsArray(parentCollection.getResourcesNames());
-    var collectionNames = this._toJsArray(parentCollection.getCollectionsNames());
+    let resourceNames = this._toJsArray(parentCollection.getResourcesNames());
+    let collectionNames = this._toJsArray(parentCollection.getCollectionsNames());
 
     resourceNames
       .filter(resourceName => resourceName.endsWith(".xsjslib"))
@@ -35,25 +35,25 @@ export class XSJSLibExportsGenerator {
   }
 
   _toJsArray(array) {
-    var result = [];
+    let result = [];
     array.forEach(element => result.push(element));
     return result;
   }
 
   _checkTableAndGenerateExportsIfNeeded(resource) {
-    var content = resource.getText();
-    var location = resource.getPath();
+    let content = resource.getText();
+    let location = resource.getPath();
 
-    var contentModifier = new XSJSLibContentModifier();
+    let contentModifier = new XSJSLibContentModifier();
 
-    var foundEntry = this.processedArtefactsTable.findEntryByResourceLocation(location);
+    let foundEntry = this.processedArtefactsTable.findEntryByResourceLocation(location);
 
     if (!foundEntry) {
-      var contentWithExports = contentModifier.writeExportsToResource(resource, content);
-      this.processedArtefactsTable.createEntryForResource(location, contentWithExports);
+        let contentWithExports = contentModifier.writeExportsToResource(resource, content);
+        this.processedArtefactsTable.createEntryForResource(location, contentWithExports);
     }
     else if (this.processedArtefactsTable.checkForContentChange(foundEntry, content)) {
-      var contentWithExports = contentModifier.writeExportsToResource(resource, content);
+      let contentWithExports = contentModifier.writeExportsToResource(resource, content);
       this.processedArtefactsTable.updateEntryForResource(foundEntry, location, contentWithExports);
     }
   }

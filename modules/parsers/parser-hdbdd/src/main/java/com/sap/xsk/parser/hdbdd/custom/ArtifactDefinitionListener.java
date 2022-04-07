@@ -27,6 +27,7 @@ import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignBuiltInTypeWithArgsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeWithArgsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignTypeContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationConstraintsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ContextRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
@@ -216,11 +217,25 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
 
     if (!isNotNull && elementSymbol.isKey()) {
       throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Element - part of composite key cannot be null.",
-          ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getLine(),
-          ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getCharPositionInLine()));
+          ctx.start.getLine(),
+          ctx.start.getCharPositionInLine()));
     }
 
     elementSymbol.setNotNull(isNotNull);
+  }
+
+  @Override
+  public void enterAssociationConstraints(AssociationConstraintsContext ctx) {
+    AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
+    boolean isNotNull = !ctx.getText().equals("null");
+
+    if (!isNotNull && associationSymbol.isKey()) {
+      throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Association - part of composite key cannot be null.",
+          ctx.start.getLine(),
+          ctx.start.getCharPositionInLine()));
+    }
+
+    associationSymbol.setNotNull(isNotNull);
   }
 
   @Override
@@ -234,6 +249,11 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   @Override
   public void enterAssociation(AssociationContext ctx) {
     AssociationSymbol associationSymbol = this.symbolFactory.getAssociationSymbol(ctx, currentScope);
+
+    if(ctx.key != null && ctx.key.getText().equalsIgnoreCase("key")) {
+      associationSymbol.setKey(true);
+    }
+
     this.associations.put(ctx, associationSymbol);
   }
 
@@ -750,9 +770,9 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
 
   private String handleStringLiteral(String value) {
     if (value.length() > 0 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
-        String subStr = value.substring(1, value.length() - 1);
-        String escapedQuote = subStr.replace("\\\"", "\"");
-        return escapedQuote.replace("\\\\", "\\");
+      String subStr = value.substring(1, value.length() - 1);
+      String escapedQuote = subStr.replace("\\\"", "\"");
+      return escapedQuote.replace("\\\\", "\\");
     }
     return value;
   }

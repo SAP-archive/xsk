@@ -21,9 +21,11 @@ typeAssignRule: ref=identifier '(' args+=INTEGER (',' args+=INTEGER)* ')'       
                 ;
 elementDeclRule: annotationRule* (key=identifier)? (name=identifier | '"' name=identifier '"') ':' typeAssignRule elementDetails* ';';
 elementDetails: defaultValue | elementConstraints;
-elementConstraints: 'null' | 'not null' | 'NULL' | 'NOT NULL';
+elementConstraints: constraints;
+associationConstraints: constraints;
+constraints: 'null' | 'not null' | 'NULL' | 'NOT NULL';
 
-association: ascId=identifier ':' ASSOCIATION cardinality? TO associationTarget (managedForeignKeys | unmanagedForeignKey)* ';';
+association: (key=identifier)? ascId=identifier ':' ASSOCIATION cardinality? TO associationTarget (managedForeignKeys | unmanagedForeignKey)* associationConstraints? ';';
 associationTarget: pathSubMembers+=identifier ('.' pathSubMembers+=identifier)*;
 unmanagedForeignKey: ON pathSubMembers+=identifier ('.' pathSubMembers+=identifier)* '=' source=identifier;
 managedForeignKeys: '{' foreignKey (',' foreignKey)* '}';

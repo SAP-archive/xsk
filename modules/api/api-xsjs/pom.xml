@@ -6,13 +6,13 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-modules-api-parent</artifactId>
-    <version>0.15.0-SNAPSHOT</version>
+    <version>0.16.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Modules - API - XSJS</name>
   <artifactId>xsk-modules-api-xsjs</artifactId>
-  <version>0.15.0-SNAPSHOT</version>
+  <version>0.16.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -44,7 +44,7 @@
   </dependencies>
 
   <properties>
-    <sonar.sources>src/main/resources/META-INF/dirigible/xsk</sonar.sources>
+    <sonar.sources>src/main/resources/META-INF/dirigible/xsk,src/main/java/</sonar.sources>
 
     <profile.content.phase>generate-sources</profile.content.phase>
     <content.repository.name>xsk-api</content.repository.name>

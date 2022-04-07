@@ -22,6 +22,8 @@ public class AssociationSymbol extends FieldSymbol {
   private EntitySymbol target;
   private List<EntityElementSymbol> foreignKeys = new ArrayList<>();
   private boolean isManaged;
+  private boolean isKey;
+  private boolean isNotNull;
 
   public AssociationSymbol(String name) {
     super(name);
@@ -65,5 +67,21 @@ public class AssociationSymbol extends FieldSymbol {
 
   public void setManaged(boolean managed) {
     isManaged = managed;
+  }
+
+  public boolean isNotNull() {
+    return isNotNull;
+  }
+
+  public void setNotNull(boolean notNull) {
+    isNotNull = notNull;
+  }
+
+  public boolean isKey() {
+    return isKey;
+  }
+
+  public void setKey(boolean key) {
+    isKey = key;
   }
 }

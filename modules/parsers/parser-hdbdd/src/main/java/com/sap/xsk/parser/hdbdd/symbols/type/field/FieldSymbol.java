@@ -24,6 +24,9 @@ public class FieldSymbol extends Symbol implements Typeable {
 
   private Type type;
   private String reference;
+  private boolean isKey;
+  private boolean isNotNull;
+
 
   public FieldSymbol(String name) {
     super(name);
@@ -62,5 +65,21 @@ public class FieldSymbol extends Symbol implements Typeable {
   @Override
   public void setReference(String token) {
     this.reference = token;
+  }
+
+  public boolean isKey() {
+    return isKey;
+  }
+
+  public void setKey(boolean key) {
+    isKey = key;
+  }
+
+  public boolean isNotNull() {
+    return isNotNull;
+  }
+
+  public void setNotNull(boolean notNull) {
+    isNotNull = notNull;
   }
 }

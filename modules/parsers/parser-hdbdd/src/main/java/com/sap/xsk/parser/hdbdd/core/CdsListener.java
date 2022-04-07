@@ -197,6 +197,26 @@ public interface CdsListener extends ParseTreeListener {
 	 */
 	void exitElementConstraints(CdsParser.ElementConstraintsContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CdsParser#associationConstraints}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssociationConstraints(CdsParser.AssociationConstraintsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#associationConstraints}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssociationConstraints(CdsParser.AssociationConstraintsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#constraints}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstraints(CdsParser.ConstraintsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#constraints}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstraints(CdsParser.ConstraintsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CdsParser#association}.
 	 * @param ctx the parse tree
 	 */

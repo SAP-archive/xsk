@@ -6,8 +6,8 @@ context ProductsWithManagedAss {
     entity  Orders{
         key Id               : String(32);
         CustomerName         : String(500);
-        Country              : association to ProductsWithManagedAss.Country { Id };
-        City                 : association to ProductsWithManagedAss.City;
+        key Country          : association to ProductsWithManagedAss.Country { Id } not null;
+        City                 : association to ProductsWithManagedAss.City null;
     };
 
     entity Country {

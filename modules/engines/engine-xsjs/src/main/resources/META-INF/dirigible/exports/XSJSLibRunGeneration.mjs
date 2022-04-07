@@ -11,7 +11,8 @@
  */
 
 import { XSJSLibExportsGenerator } from '/exports/XSJSLibExportsGenerator.mjs'
-var repository = require('platform/v4/repository');
+const repository = require('platform/v4/repository');
 
-var targetRegistryCollection = repository.getCollection(__context.registry_path);
-new XSJSLibExportsGenerator(targetRegistryCollection);
+let targetRegistryCollection = repository.getCollection(__context.targetRegistryPath);
+let stateTableName = __context.stateTableName;
+new XSJSLibExportsGenerator(targetRegistryCollection, stateTableName);

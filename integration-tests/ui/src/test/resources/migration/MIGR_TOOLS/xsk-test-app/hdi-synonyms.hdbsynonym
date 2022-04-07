@@ -1,0 +1,14 @@
+{
+    "\"XSK_TEST_APP\".\"xsk-test-app::usersProcedure\"": {
+        "target": {
+            "object": "\"XSK_TEST_APP\".\"xsk-test-app::usersProcedure\"",
+            "schema": null
+        }
+    },
+    "xsk-test-app::usersTable": {
+        "target": {
+            "object": "xsk-test-app::usersTable",
+            "schema": "XSK_TEST_APP"
+        }
+    }
+}

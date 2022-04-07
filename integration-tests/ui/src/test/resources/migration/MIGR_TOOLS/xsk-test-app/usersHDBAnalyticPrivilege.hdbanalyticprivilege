@@ -5,7 +5,7 @@
 </securedModels>
 <whereSql>SESSION_CONTEXT('APPLICATIONUSER') = 'APPUSER'
 OR
-SESSION_CONTEXT('APPLICATIONUSER') IN
+SESSION_CONTEXT('APPLICATIONUSER') IN 
 (SELECT "Name" FROM "usersView")
 </whereSql>
 </Privilege:analyticPrivilege>

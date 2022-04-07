@@ -1,0 +1,20 @@
+{
+    "xsk-test-app::test": {
+        "target": {
+            "object": "test",
+            "schema": "MIGR_TOOLS_XSK-TEST-APP"
+        }
+    },
+    "xsk-test-app::usersTableFunction": {
+        "target": {
+            "object": "usersTableFunction",
+            "schema": "MIGR_TOOLS_XSK-TEST-APP"
+        }
+    },
+    "xsk-test-app::usersView": {
+        "target": {
+            "object": "usersView",
+            "schema": "MIGR_TOOLS_XSK-TEST-APP"
+        }
+    }
+}

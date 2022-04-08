@@ -150,14 +150,30 @@ const Body = function (bodyValue) {
 
 exports.WebRequest = function (method, path) {
   const tildeHeaders = {
-    '~server_protocol': function () { return dRequest.getProtocol() },
-    '~server_name': function () { return dRequest.getServerName() },
-    '~server_port': function () { return dRequest.getServerPort() },
-    '~request_line': function (webRequest) { return WEB_UTILS.getMethodName(webRequest.method) + ' ' + webRequest.path + ' ' + dRequest.getProtocol() },
-    '~request_method': function (webRequest) { return WEB_UTILS.getMethodName(webRequest.method) },
-    '~request_uri': function (webRequest) { return webRequest.path },
-    '~path': function (webRequest) { return webRequest.path },
-    '~path_translated': function (webRequest) { return webRequest.path }
+    '~server_protocol': function () {
+      return dRequest.getProtocol()
+    },
+    '~server_name': function () {
+      return dRequest.getServerName()
+    },
+    '~server_port': function () {
+      return dRequest.getServerPort()
+    },
+    '~request_line': function (webRequest) {
+      return WEB_UTILS.getMethodName(webRequest.method) + ' ' + webRequest.path + ' ' + dRequest.getProtocol()
+    },
+    '~request_method': function (webRequest) {
+      return WEB_UTILS.getMethodName(webRequest.method)
+    },
+    '~request_uri': function (webRequest) {
+      return webRequest.path
+    },
+    '~path': function (webRequest) {
+      return webRequest.path
+    },
+    '~path_translated': function (webRequest) {
+      return webRequest.path
+    }
   }
 
   if (typeof method === 'number') {
@@ -222,7 +238,7 @@ exports.WebRequest = function (method, path) {
     }();
 
     this.language = session.language || '';
-    this.method = WEB_UTILS.resolveMethod(dRequest.method);
+    this.method = WEB_UTILS.resolveMethod(dRequest.getMethod());
 
     this.path = function () {
       var dRequestURI = dRequest.getRequestURI();
@@ -242,29 +258,25 @@ exports.WebRequest = function (method, path) {
 
       headerNamesArray.forEach(headerName => {
         var headerValues = dRequest.getHeaders(headerName);
-
         headerValues.forEach(headerValue => {
           if (headerName === 'cookie' || headerName === 'authorization') {
             headerValue = '';
           }
 
-          dHeadersArray.push(
-            {
-              "name": headerName,
-              "value": headerValue
-            }
-          );
+          dHeadersArray.push({
+            "name": headerName,
+            "value": headerValue
+          });
         })
       });
 
-      var addtionalHeaders = ['~server_name', '~server_port', '~server_protocol', '~request_line', '~request_method', '~request_uri', '~path', '~path_translated'];
+      var additionalHeaders = ['~server_name', '~server_port', '~server_protocol', '~request_line', '~request_method', '~request_uri', '~path', '~path_translated'];
 
-      addtionalHeaders.forEach(headerName => {
-        dHeadersArray.push(
-          {
-            "name": headerName,
-            "value": tildeHeaders[headerName](this)
-          });
+      additionalHeaders.forEach(headerName => {
+        dHeadersArray.push({
+          "name": headerName,
+          "value": tildeHeaders[headerName](this)
+        });
       });
 
       return new TupelList(dHeadersArray, true);
@@ -283,7 +295,10 @@ exports.WebRequest = function (method, path) {
     var arrayToReturn = [];
     Object.keys(dParametersObject).map(key => {
       for (var i = 0; i < dParametersObject[key].length; i++) {
-        arrayToReturn.push({ "name": key, "value": dParametersObject[key][i] });
+        arrayToReturn.push({
+          "name": key,
+          "value": dParametersObject[key][i]
+        });
       }
     });
     return arrayToReturn;
@@ -304,8 +319,7 @@ exports.WebResponse = function (clientResponse) {
     this.cookies = new TupelList(getCookieFromClientResponse(clientResponse), true);
     this.headers = new TupelList(clientResponse.headers, true);
     this.status = clientResponse.statusCode;
-  }
-  else {
+  } else {
     this.body = notSupported;
     this.cacheControl;
     this.contentType;
@@ -405,7 +419,10 @@ exports.WebResponse = function (clientResponse) {
       if (header.name === SET_COOKIE_HEADER) {
         var cookieKeyValue = header.value.split(";")[0].trim();
         var cookieKeyValueArray = cookieKeyValue.split("=");
-        var cookieObj = { name: cookieKeyValueArray[0], value: cookieKeyValueArray[1] };
+        var cookieObj = {
+          name: cookieKeyValueArray[0],
+          value: cookieKeyValueArray[1]
+        };
         cookieObjArray.push(cookieObj);
       }
     });
@@ -415,7 +432,7 @@ exports.WebResponse = function (clientResponse) {
 };
 
 const WebEntityRequest = function () {
-  this.body = new Body(null);
+  this.body = new Body([]);
   this.contentType = '';
   this.entities = new EntityList([], false);
   this.headers = new TupelList([], false);

@@ -69,9 +69,17 @@ var SET_COOKIE_HEADER = "Set-Cookie";
 var CONTENT_LENGTH_HEADER = "Content-Length";
 
 exports.readDestination = function (destinationPackage, destinationName) {
-  var destination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
+  let readDestination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
+  let destination = new exports.Destination();
 
-  return destination;
+  destination.host = readDestination.getHost();
+  destination.port = readDestination.getPort();
+  destination.pathPrefix = readDestination.getPathPrefix();
+  destination.name = destinationName;
+
+  let properties = JSON.parse(readDestination.getPropertiesAsJSON());
+
+  return Object.assign(destination, properties);
 };
 
 exports.Client = function () {
@@ -125,14 +133,14 @@ exports.Client = function () {
     let options = {};
 
     if (requestObj.body) {
-        if (typeof requestObj.body === 'string' || requestObj.bodyy instanceof String) {
+        if (typeof requestObj.body === 'string' || requestObj.body instanceof String) {
           options.text = requestObj.body;
         } else {
           options.text = JSON.stringify(requestObj.body);
         }
     }
 
-    clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination, JSON.stringify(options));
+    clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination.name, JSON.stringify(options));
   }
 
   function sendRequestObjToUrl(requestObj, url, proxy) {

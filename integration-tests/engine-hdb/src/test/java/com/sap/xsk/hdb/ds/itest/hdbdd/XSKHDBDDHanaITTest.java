@@ -62,15 +62,17 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
         facade.handleResourceSynchronization(resource);
         facade.updateEntities();
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Orders", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Orders"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Orders", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Orders"));
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Country", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Country"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssItest.Country", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssItest.Country"));
 
       } finally {
-        HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssItest.Orders", TEST_SCHEMA);
-        HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssItest.Country", TEST_SCHEMA);
         HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
       }
     }
@@ -101,19 +103,21 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
         facade.handleResourceSynchronization(resource2);
         facade.updateEntities();
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Orders"));
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Country", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Country"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::ProductsWithManagedAssWithUsingItest.Country", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::ProductsWithManagedAssWithUsingItest.Country"));
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::Status.StatusEntity", schemaName2));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::Status.StatusEntity"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::Status.StatusEntity", schemaName2));
+        assertTrue("Expected synonym was not found!", HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::Status.StatusEntity"));
 
       } finally {
-        HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssWithUsingItest.Orders", TEST_SCHEMA);
-        HanaITestUtils.dropTable(connection, stmt, "itest::ProductsWithManagedAssWithUsingItest.Country", TEST_SCHEMA);
-        HanaITestUtils.dropTable(connection, stmt, "itest::Status.StatusEntity", schemaName2);
         HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
         HanaITestUtils.dropSchema(stmt, schemaName2);
       }
@@ -137,11 +141,12 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
         facade.handleResourceSynchronization(resource);
         facade.updateEntities();
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::DefaultValueWithDateTimeFunction.Orders", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::DefaultValueWithDateTimeFunction.Orders"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::DefaultValueWithDateTimeFunction.Orders", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::DefaultValueWithDateTimeFunction.Orders"));
 
       } finally {
-        HanaITestUtils.dropTable(connection, stmt, "itest::DefaultValueWithDateTimeFunction.Orders", TEST_SCHEMA);
         HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
       }
     }
@@ -164,24 +169,27 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
         facade.handleResourceSynchronization(resource);
         facade.updateEntities();
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION1", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION1"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION1", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION1"));
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION2", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION2"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION2", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION2"));
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION3", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION3"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION3", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION3"));
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION4", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION4"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::CatalogTableTypes.CONFIGURATION4", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::CatalogTableTypes.CONFIGURATION4"));
 
       } finally {
-        HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION1", TEST_SCHEMA);
-        HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION2", TEST_SCHEMA);
-        HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION3", TEST_SCHEMA);
-        HanaITestUtils.dropTable(connection, stmt, "itest::CatalogTableTypes.CONFIGURATION4", TEST_SCHEMA);
-
         HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
       }
     }
@@ -204,40 +212,42 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
         facade.handleResourceSynchronization(resource);
         facade.updateEntities();
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employees", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employees", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees"));
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employee_roles", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employee_roles"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employee_roles", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employee_roles"));
 
-        assertTrue(HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employee_salaries", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employee_salaries"));
+        assertTrue("Expected table was not found!",
+            HanaITestUtils.checkExistOfTable(connection, "itest::EmployeesWithViewDefinitions.employee_salaries", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employee_salaries"));
 
-        assertTrue(HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_basic", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_basic"));
+        assertTrue("Expected view was not found!",
+            HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_basic", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_basic"));
 
-        assertTrue(
+        assertTrue("Expected view was not found!",
             HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_join", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_join"));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_join"));
 
-        assertTrue(
+        assertTrue("Expected view was not found!",
             HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_where", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_where"));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_where"));
 
-        assertTrue(
+        assertTrue("Expected view was not found!",
             HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_union", TEST_SCHEMA));
-        assertTrue(HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_union"));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_union"));
 
       } finally {
-        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_basic", TEST_SCHEMA);
-        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_join", TEST_SCHEMA);
-        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_where", TEST_SCHEMA);
-        HanaITestUtils.dropView(connection, stmt, "itest::EmployeesWithViewDefinitions.employees_view_with_union", TEST_SCHEMA);
-
-        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employees", TEST_SCHEMA);
-        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employee_roles", TEST_SCHEMA);
-        HanaITestUtils.dropTable(connection, stmt, "itest::EmployeesWithViewDefinitions.employee_salaries", TEST_SCHEMA);
-
         HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
       }
     }

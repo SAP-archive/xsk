@@ -1,5 +1,5 @@
-<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="usersAnalyticPrivilegeHDB" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
-<descriptions defaultDescription="xsk-test-app"/>
+<Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="usersAnalyticPrivilege" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
+<descriptions defaultDescription="xsk_test_app"/>
 <securedModels>
   <modelUri>usersView</modelUri>
 </securedModels>

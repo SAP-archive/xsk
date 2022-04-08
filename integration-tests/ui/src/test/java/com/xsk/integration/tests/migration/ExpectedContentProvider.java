@@ -24,7 +24,7 @@ class ExpectedContentProvider {
   private static final ExpectedContentProvider contentProvider = new ExpectedContentProvider();
   private static final String deliveryUnitPath = "/migration";
   private static final String getDeliveryUnitName = "MIGR_TOOLS";
-  private static final String projectName = "xsk-test-app";
+  private static final String projectName = "xsk_test_app";
   private static final String workspaceName = "workspace";
   private static final String contentPath = deliveryUnitPath + "/" + getDeliveryUnitName + "/" + projectName;
 

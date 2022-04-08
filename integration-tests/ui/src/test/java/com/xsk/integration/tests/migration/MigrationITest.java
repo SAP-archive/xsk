@@ -48,7 +48,7 @@ public class MigrationITest {
   private List<ExpectedContent> expectedContentList;
 
   @Test
-  @Parameters({ "Migration-Chrome-Hana", "Migration-Firefox-Hana"})
+  @Parameters({"Chrome", /*"Migration-Chrome-Hana2",*/ "Firefox" /*"Migration-Firefox-Hana2"*/})
   public void migrationTest(String param) throws IOException {
     setup(param);
     loginIfNecessary();
@@ -63,7 +63,7 @@ public class MigrationITest {
   }
 
   private void setup(String param) {
-    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
+    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, false);
     credentials = new MigrationCredentials();
     expectedContentList = expectedContentProvider.getExpectedContentList();
   }
@@ -230,7 +230,6 @@ public class MigrationITest {
     String basicAuth = "Basic " + new String(Base64.getEncoder().encode(DirigibleConnectionProperties.AUTH.getBytes()));
     connection.setRequestProperty("Authorization", basicAuth);
     BufferedInputStream migratedImageStream = new BufferedInputStream(connection.getInputStream());
-
     return migratedImageStream.readAllBytes();
   }
 

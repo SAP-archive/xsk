@@ -48,7 +48,7 @@ public class MigrationITest {
   private List<ExpectedContent> expectedContentList;
 
   @Test
-  @Parameters({/*"Migration-Chrome-Hana1"*/ "Migration-Chrome-Hana2"/*"Migration-Firefox-Hana1"*/, "Migration-Firefox-Hana2"})
+  @Parameters({ "Migration-Chrome-Hana", "Migration-Firefox-Hana"})
   public void migrationTest(String param) throws IOException {
     setup(param);
     loginIfNecessary();
@@ -63,8 +63,8 @@ public class MigrationITest {
   }
 
   private void setup(String param) {
-    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, false);
-    credentials = new MigrationCredentials(true);
+    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
+    credentials = new MigrationCredentials();
     expectedContentList = expectedContentProvider.getExpectedContentList();
   }
 

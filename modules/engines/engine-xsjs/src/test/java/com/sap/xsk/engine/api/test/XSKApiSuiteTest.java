@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -151,17 +152,21 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
 
   private void mockRequest(HttpServletRequest mockedRequest, HttpSession httpSession) {
     when(mockedRequest.getMethod()).thenReturn("GET");
-    when(mockedRequest.getRemoteUser()).thenReturn("tester");
-    when(mockedRequest.getHeader("header1")).thenReturn("header1");
-    when(mockedRequest.getHeader("header1")).thenReturn("header1");
-    when(mockedRequest.getHeader("accept-language")).thenReturn("en-US,en;q=0.9,bg;q=0.8,nb;q=0.7");
-    when(mockedRequest.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("header1", "header2", "accept-language")));
-    when(mockedRequest.getRequestURI()).thenReturn("/services/v3/js/test/test.xsjs");
+    when(mockedRequest.getRemoteUser()).thenReturn("TestUser");
+    when(mockedRequest.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("TestHeader1", "TestHeader2", "Accept-Language")));
+    when(mockedRequest.getHeaders("TestHeader1")).thenReturn(Collections.enumeration(Arrays.asList("TestValue")));
+    when(mockedRequest.getHeaders("TestHeader2")).thenReturn(Collections.enumeration(Arrays.asList("TestValue")));
+    when(mockedRequest.getHeaders("Accept-Language")).thenReturn(Collections.enumeration(Arrays.asList("en-US,en;q=0.9,bg;q=0.8,nb;q=0.7")));
+    when(mockedRequest.getCookies()).thenReturn(new Cookie[]{new Cookie("SESSIONID", "D7B319C3D55AC4CD126181F01E4C1DC7")});
+    when(mockedRequest.getRequestURI()).thenReturn("/services/v4/xsk/test/test.xsjs");
     when(mockedRequest.getSession(true)).thenReturn(httpSession);
+    when(mockedRequest.getServerName()).thenReturn("Test");
+    when(mockedRequest.getServerPort()).thenReturn(443);
+    when(mockedRequest.getProtocol()).thenReturn("HTTP/1.1");
+    when(mockedRequest.getContentType()).thenReturn("application/json");
   }
 
   private void mockResponse(HttpServletResponse mockedResponse) throws IOException {
-    when(mockedResponse.getHeaderNames()).thenReturn(Arrays.asList("header1", "header2"));
     when(mockedResponse.getOutputStream()).thenReturn(new StubServletOutputStream());
   }
 

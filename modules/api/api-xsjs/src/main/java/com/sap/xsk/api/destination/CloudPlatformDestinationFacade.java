@@ -59,7 +59,7 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
     HttpClientRequestOptions parsedOptions = HttpClientFacade.parseOptions(options);
     HttpDestination httpDestination = DestinationAccessor.getDestination(destinationName).asHttp();
     HttpClient client = HttpClientAccessor.getHttpClient(httpDestination);
-    String uri = URI.create(httpDestination.getUri() + destinationRequest.getQueryPath()).toString();
+    String uri = URI.create(httpDestination.getUri() + destinationRequest.getPath()).toString();
     HttpRequestBase request = getRequest(uri, destinationRequest, parsedOptions);
     setRequestHeaders(destinationRequest, request);
 

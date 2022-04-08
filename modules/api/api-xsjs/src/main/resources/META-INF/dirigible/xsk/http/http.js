@@ -10,8 +10,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 var dClient = require("http/v4/client");
-var repositoryManager = require("platform/v4/repository");
-var streams = require("io/v4/streams");
 var web = require("xsk/web/web");
 
 exports.OPTIONS = 0;
@@ -65,9 +63,6 @@ exports.SERVICE_UNAVAILABLE = 503;
 exports.GATEWAY_TIMEOUT = 504;
 exports.HTTP_VERSION_NOT_SUPPORTED = 505;
 
-var SET_COOKIE_HEADER = "Set-Cookie";
-var CONTENT_LENGTH_HEADER = "Content-Length";
-
 exports.readDestination = function (destinationPackage, destinationName) {
   let readDestination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
   let destination = new exports.Destination();
@@ -83,7 +78,6 @@ exports.readDestination = function (destinationPackage, destinationName) {
 };
 
 exports.Client = function () {
-
   var clientResponse;
   var connectionTimeout;
 
@@ -108,7 +102,7 @@ exports.Client = function () {
   };
 
   this.setTrustStore = function (trustStore) {
-    // TODO No dirigible functionality
+    // TODO: No dirigible functionality
   };
 
   this.setTimeout = function (timeout) {
@@ -116,56 +110,46 @@ exports.Client = function () {
   };
 
   function sendRequestObjToDestination(requestObj, destination) {
-    var requestHeaders = getHeadersArrFormTupel(requestObj.headers);
-    requestHeaders = removeContentLengthHeaderIfPost(requestHeaders, requestObj.method);
-    addCookieToHeadersFromTupel(requestObj.cookies, requestHeaders);
-
-    if (requestObj.contentType) {
-      requestHeaders.push( { name: "Content-Type", value: requestObj.contentType } );
-    }
-
-    if (requestObj.parameters !== undefined) {
-      requestObj.queryPath = addQueryParametersToUrl(requestObj.queryPath, requestObj.parameters);
-    }
-
-    requestObj.headers = requestHeaders;
-
     let options = {};
 
+    if (requestObj.contentType) {
+      requestObj.headers.set("Content-Type", requestObj.contentType);
+    }
+
+    var requestHeaders = tupelObjectToArray(requestObj.headers);
+    addCookieToHeadersFromTupel(requestObj.cookies, requestHeaders);
+    requestObj.headers = requestHeaders;
+
+    if (requestObj.parameters !== undefined) {
+      requestObj.path = addQueryParametersToUrl(requestObj.path, requestObj.parameters);
+    }
+
     if (requestObj.body) {
-        if (typeof requestObj.body === 'string' || requestObj.body instanceof String) {
-          options.text = requestObj.body;
-        } else {
-          options.text = JSON.stringify(requestObj.body);
-        }
+      options.text = requestObj.body.asString();
     }
 
     clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination.name, JSON.stringify(options));
   }
 
   function sendRequestObjToUrl(requestObj, url, proxy) {
-    var fullUrl = url + requestObj.queryPath;
+    var fullUrl = url + requestObj.path;
 
     var options = {};
     if (proxy) {
       options = proxyUrlToOptionsObject(proxy);
     }
 
-    options.headers = [];
-    var requestHeaders = getHeadersArrFormTupel(requestObj.headers);
-    requestHeaders = removeContentLengthHeaderIfPost(requestHeaders, requestObj.method);
+    var requestHeaders = tupelObjectToArray(requestObj.headers);
+    addCookieToHeadersFromTupel(requestObj.cookies, requestHeaders);
     options.headers = requestHeaders;
-    addCookieToHeadersFromTupel(requestObj.cookies, options.headers);
+
     addTimeoutToOptions(options);
 
     if (requestObj.contentType) {
       options.contentType = requestObj.contentType;
     }
 
-    if (requestObj.parameters !== undefined) {
-      fullUrl = addQueryParametersToUrl(fullUrl, requestObj.parameters);
-    }
-
+    options.params = tupelObjectToArray(requestObj.parameters);
     clientResponse = executeRequest(fullUrl, requestObj.method, options, requestObj.body);
   }
 
@@ -196,11 +180,7 @@ exports.Client = function () {
 
   function executeRequest(url, requestMethod, options, requestBody) {
     if (requestBody) {
-      if (typeof requestBody === 'string' || requestBody instanceof String) {
-        options.text = requestBody;
-      } else {
-        options.text = JSON.stringify(requestBody);
-      }
+      options.text = requestBody.asString();
     }
 
     switch (requestMethod) {
@@ -222,26 +202,21 @@ exports.Client = function () {
       dResponse = JSON.parse(dResponse);
     }
 
-    var webResponse = new web.WebEntityResponse();
-    webResponse.headers = new web.TupelList(dResponse.headers);
-    webResponse.status = dResponse.statusCode;
-    webResponse.cookies = getTupelCookieFromDirigibleResponse(dResponse);
-    webResponse.setBody(dResponse.text);
-
+    var webResponse = new web.WebResponse(dResponse);
     return webResponse;
   }
 
-  function getHeadersArrFormTupel(headersTupel) {
-    if (!headersTupel) {
+  function tupelObjectToArray(tupelObject) {
+    if (!tupelObject) {
       return;
     }
 
-    var headersArr = [];
-    for (var i = 0; i < headersTupel.length; i++) {
-      headersArr.push(headersTupel[i]);
+    var arr = [];
+    for (var i = 0; i < tupelObject.length; i++) {
+      arr.push(tupelObject[i]);
     }
 
-    return headersArr;
+    return arr;
   }
 
   function getUrlParametersFromTupel(tupelParameters) {
@@ -250,7 +225,7 @@ exports.Client = function () {
       var name = tupelParameters[i].name;
       var value = tupelParameters[i].value;
 
-      if (typeof value === "array") {
+      if (value instanceof Array) {
         value = value.join(",");
       }
 
@@ -284,46 +259,11 @@ exports.Client = function () {
       cookiesArray.push(cookieName + "=" + cookieValue + ";");
     }
 
-    headersArray.push({name: "Cookie", value: cookiesArray.join(" ")});
-  }
-
-  function getTupelCookieFromDirigibleResponse(dResponse) {
-    var headers = dResponse.headers;
-    var cookieObjArray = [];
-    headers.forEach(header => {
-      if (header.name === SET_COOKIE_HEADER) {
-        var cookieKeyValue = header.value.split(";")[0].trim();
-        var cookieKeyValueArray = cookieKeyValue.split("=");
-        var cookieObj = {name: cookieKeyValueArray[0], value: cookieKeyValueArray[1]};
-        cookieObjArray.push(cookieObj);
-      }
-    });
-
-    return new web.TupelList(cookieObjArray);
-  }
-
-  function removeContentLengthHeaderIfPost(headers, method) {
-    if (method === exports.POST) {
-      headers = headers.filter(header => header.name.toUpperCase() !== CONTENT_LENGTH_HEADER.toUpperCase())
-    }
-    return headers;
+    headersArray.push({ name: "Cookie", value: cookiesArray.join(" ") });
   }
 };
 
-exports.Request = function (method, queryPath) {
-  this.parameters = new web.TupelList([]);
-  this.cookies = new web.TupelList([]);
-  this.body;
-  this.contentType;
-  this.entities;
-  this.headers = new web.TupelList([]);
-  this.method = method;
-  this.queryPath = queryPath;
-
-  this.setBody = function (newBody) {
-    this.body = newBody;
-  }.bind(this);
-};
+exports.Request = web.WebRequest;
 
 function processDestValue(destValueArg) {
   if (!destValueArg) {
@@ -339,7 +279,6 @@ function processDestValue(destValueArg) {
   }
 
   return parseDestValue(destValue);
-
 }
 
 function parseDestValue(destValue) {
@@ -352,6 +291,4 @@ function parseDestValue(destValue) {
   return destValue;
 }
 
-exports.Destination = function () {
-
-}
+exports.Destination = function () { }

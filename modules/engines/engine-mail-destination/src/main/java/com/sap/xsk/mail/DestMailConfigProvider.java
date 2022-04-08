@@ -14,7 +14,6 @@ package com.sap.xsk.mail;
 import com.sap.cloud.sdk.cloudplatform.connectivity.exception.DestinationAccessException;
 import com.sap.xsk.api.destination.CloudPlatformDestinationFacade;
 import org.eclipse.dirigible.api.v3.mail.api.IMailConfigurationProvider;
-import com.sap.cloud.sdk.cloudplatform.connectivity.Destination;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +48,10 @@ public class DestMailConfigProvider implements IMailConfigurationProvider {
     Properties properties = new Properties();
     try {
       String destinationName = Configuration.get(DESTINATION_NAME);
-      Destination destination = CloudPlatformDestinationFacade.getDestination(destinationName);
+      Properties destinationProperties = CloudPlatformDestinationFacade.getDestination(destinationName).getProperties();
       for (String key : MAIL_PROPERTIES) {
-        if(!destination.get(key).isEmpty()) {
-          properties.put(key, destination.get(key).get());
+        if(destinationProperties.containsKey(key)) {
+          properties.put(key, destinationProperties.get(key));
         }
       }
     } catch (DestinationAccessException e) {

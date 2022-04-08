@@ -64,9 +64,17 @@ exports.GATEWAY_TIMEOUT = 504;
 exports.HTTP_VERSION_NOT_SUPPORTED = 505;
 
 exports.readDestination = function (destinationPackage, destinationName) {
-  var destination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
+  let readDestination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
+  let destination = new exports.Destination();
 
-  return destination;
+  destination.host = readDestination.getHost();
+  destination.port = readDestination.getPort();
+  destination.pathPrefix = readDestination.getPathPrefix();
+  destination.name = destinationName;
+
+  let properties = JSON.parse(readDestination.getPropertiesAsJSON());
+
+  return Object.assign(destination, properties);
 };
 
 exports.Client = function () {
@@ -120,7 +128,7 @@ exports.Client = function () {
       options.text = requestObj.body.asString();
     }
 
-    clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination, JSON.stringify(options));
+    clientResponse = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.executeRequest(JSON.stringify(requestObj), destination.name, JSON.stringify(options));
   }
 
   function sendRequestObjToUrl(requestObj, url, proxy) {

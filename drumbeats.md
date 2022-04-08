@@ -1,5 +1,36 @@
 # Drumbeats
 
+## 2022 Week 13 (28 March - 03 April)
+
+#### Focus topics:
+- Improvements to processing of large projects
+- Fixes related to HDBDD 
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-03-28..2022-04-03) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-03-28..2022-04-03) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-03-28..2022-04-03) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-03-28..2022-04-03) PRs
+
+## 2022 Week 12 (21 March - 27 March)
+
+#### Focus topics:
+- Introduced paraser for hdbtablefunctions
+- Introduce SonarCloud checks
+- Fix packaging with cloud native buildpacks
+- Fixes related to HDBDD and XSJob
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-03-21..2022-03-27) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-03-21..2022-03-27) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-03-21..2022-03-27) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-03-21..2022-03-27) PRs
 
 ## 2022 Week 11 (14 March - 20 March)
 

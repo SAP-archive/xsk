@@ -1,0 +1,9 @@
+namespace sap.db;
+
+@Schema: 'TEST_SCHEMA'
+
+context ElementInStructuredType {
+   type Test {
+        key Id : String(5000);
+    };
+};

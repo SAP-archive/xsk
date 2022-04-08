@@ -19,6 +19,7 @@ import com.sap.xsk.parser.hdbdd.symbols.context.CDSFileScope;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class SymbolTable {
   private Map<String, Symbol> symbolsByFullName = new HashMap<>();
   private Map<String, AnnotationObj> annotations;
   private Map<String, List<String>> entityGraph = new HashMap<>();
+  private Map<String, List<String>> viewGraph = new HashMap<>();
   private Map<String, BuiltInTypeSymbol> hanaBuiltInTypes = new HashMap<>();
   private AnnotationTemplateFactory annotationTemplateFactory = new AnnotationTemplateFactory();
 
@@ -51,10 +53,10 @@ public class SymbolTable {
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Decimal", 2, Arrays.asList(CdsLexer.DECIMAL, CdsLexer.INTEGER)));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("DecimalFloat", Arrays.asList(CdsLexer.DECIMAL)));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("BinaryFloat", Arrays.asList(CdsLexer.DECIMAL)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalDate", Arrays.asList(CdsLexer.LOCAL_DATE)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalTime", Arrays.asList(CdsLexer.LOCAL_TIME)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCDateTime", Arrays.asList(CdsLexer.UTC_DATE_TIME)));
-    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCTimestamp", Arrays.asList(CdsLexer.UTC_TIMESTAMP)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalDate", Arrays.asList(CdsLexer.LOCAL_DATE, CdsLexer.DATETIME_VALUE_FUNCTION)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("LocalTime", Arrays.asList(CdsLexer.LOCAL_TIME, CdsLexer.DATETIME_VALUE_FUNCTION)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCDateTime", Arrays.asList(CdsLexer.UTC_DATE_TIME, CdsLexer.DATETIME_VALUE_FUNCTION)));
+    globalBuiltInTypeScope.define(new BuiltInTypeSymbol("UTCTimestamp", Arrays.asList(CdsLexer.UTC_TIMESTAMP, CdsLexer.DATETIME_VALUE_FUNCTION)));
     globalBuiltInTypeScope.define(new BuiltInTypeSymbol("Boolean", Arrays.asList(CdsLexer.BOOLEAN)));
 
     hanaBuiltInTypes.put("hana.ALPHANUM", new BuiltInTypeSymbol("ALPHANUMERIC", 0, Arrays.asList(CdsLexer.STRING), true));
@@ -83,22 +85,28 @@ public class SymbolTable {
     annotations.put(noKeyObj.getName(), noKeyObj);
 
     AnnotationObj generateTableTypeObj = annotationTemplateFactory.buildTemplateForGenerateTableTypeAnnotation();
-    annotations.put(generateTableTypeObj.getName(),generateTableTypeObj);
+    annotations.put(generateTableTypeObj.getName(), generateTableTypeObj);
 
     AnnotationObj generateSearchIndexObj = annotationTemplateFactory.buildTemplateForSearchIndexAnnotation();
-    annotations.put(generateSearchIndexObj.getName(),generateSearchIndexObj);
+    annotations.put(generateSearchIndexObj.getName(), generateSearchIndexObj);
   }
 
   public void addEntityToGraph(String fullName) {
     this.entityGraph.put(fullName, null);
   }
 
-  public void addChildToEntity(String entityName, String childName) {
-    if (entityGraph.get(entityName) == null) {
-      this.entityGraph.put(entityName, new ArrayList<>());
-    }
+  public void addViewToGraph(String fullName) {
+    this.viewGraph.put(fullName, null);
+  }
 
+  public void addChildToEntity(String entityName, String childName) {
+    this.entityGraph.computeIfAbsent(entityName, k -> new ArrayList<>());
     this.entityGraph.get(entityName).add(childName);
+  }
+
+  public void addChildToView(String viewName, String childName) {
+    this.viewGraph.computeIfAbsent(viewName, k -> new ArrayList<>());
+    this.viewGraph.get(viewName).add(childName);
   }
 
   public void addSymbol(Symbol symbol) {
@@ -121,9 +129,17 @@ public class SymbolTable {
     return orderedEntities;
   }
 
+  public List<ViewSymbol> getSortedViews() {
+    Set<String> passedViews = new HashSet<>();
+    List<ViewSymbol> orderedViews = new ArrayList<>();
+    viewGraph.keySet().forEach(viewName -> traverseViewGraph(viewName, orderedViews, passedViews));
+
+    return orderedViews;
+  }
+
   public List<StructuredDataTypeSymbol> getTableTypes() {
-    return this.symbolsByFullName.values().stream().filter(s -> s instanceof StructuredDataTypeSymbol)
-        .map(dt -> (StructuredDataTypeSymbol) dt)
+    return this.symbolsByFullName.values().stream().filter(StructuredDataTypeSymbol.class::isInstance)
+        .map(StructuredDataTypeSymbol.class::cast)
         .collect(Collectors.toList());
   }
 
@@ -133,6 +149,10 @@ public class SymbolTable {
 
   public void clearEntityGraph() {
     this.entityGraph.clear();
+  }
+
+  public void clearViewGraph() {
+    this.viewGraph.clear();
   }
 
   public CDSFileScope getGlobalBuiltInTypeScope() {
@@ -167,5 +187,35 @@ public class SymbolTable {
     children.forEach(child -> traverseEntityGraph(child, orderedSymbol, passedEntities));
 
     orderedSymbol.add((EntitySymbol) this.symbolsByFullName.get(entityName));
+  }
+
+  private void traverseViewGraph(String viewName, List<ViewSymbol> orderedSymbol, Set<String> passedViews) {
+    if (passedViews.contains(viewName)) {
+      return;
+    }
+
+    passedViews.add(viewName);
+    List<String> children = viewGraph.get(viewName);
+    if (children == null) {
+
+      ViewSymbol bottomView = null;
+
+      if (!(this.symbolsByFullName.get(viewName) instanceof ViewSymbol)) {
+        return;
+      } else {
+        bottomView = (ViewSymbol) this.symbolsByFullName.get(viewName);
+      }
+
+      if (bottomView == null) {
+        throw new CDSRuntimeException(String.format("No view with name: %s found in symbol table.", viewName));
+      }
+
+      orderedSymbol.add(bottomView);
+      return;
+    }
+
+    children.forEach(child -> traverseViewGraph(child, orderedSymbol, passedViews));
+
+    orderedSymbol.add((ViewSymbol) this.symbolsByFullName.get(viewName));
   }
 }

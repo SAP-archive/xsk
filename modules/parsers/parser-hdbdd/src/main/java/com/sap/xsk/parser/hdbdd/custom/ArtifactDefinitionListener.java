@@ -18,11 +18,38 @@ import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationSimpleValue;
 import com.sap.xsk.parser.hdbdd.core.CdsBaseListener;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
-import com.sap.xsk.parser.hdbdd.core.CdsParser.ArtifactRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AnnMarkerRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AnnObjectRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AnnPropertyRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AnnValueContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ArrRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignBuiltInTypeWithArgsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeWithArgsContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignTypeContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationConstraintsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ContextRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ElementConstraintsContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ElementDeclRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.EntityRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.EnumRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.FieldDeclRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.IdentifierContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.JoinFieldsContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.JoinRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.MaxCardinalityContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.MinMaxCardinalityContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.NamespaceRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.NoCardinalityContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ObjContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.SelectRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.SelectedColumnsRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.StructuredTypeRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.UsingRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ViewRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.WhereRuleContext;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.factory.SymbolFactory;
 import com.sap.xsk.parser.hdbdd.symbols.CDSLiteralEnum;
@@ -34,24 +61,27 @@ import com.sap.xsk.parser.hdbdd.symbols.context.Scope;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.CardinalityEnum;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
-import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.Typeable;
+import com.sap.xsk.parser.hdbdd.symbols.view.JoinSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
+import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Stack;
 import java.util.stream.Collectors;
-import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-public class EntityDefinitionListener extends CdsBaseListener {
+public class ArtifactDefinitionListener extends CdsBaseListener {
 
   private SymbolTable symbolTable;
   private String fileLocation;
@@ -61,7 +91,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
   private final ParseTreeProperty<EntityElementSymbol> entityElements = new ParseTreeProperty<>();
   private final ParseTreeProperty<Typeable> typeables = new ParseTreeProperty<>();
   private final ParseTreeProperty<Symbol> symbolsByParseTreeContext = new ParseTreeProperty<>();
-  private final Stack<String> fullSymbolName = new Stack<>();
+  private final Deque<String> fullSymbolNames = new ArrayDeque<>();
   private final ParseTreeProperty<AssociationSymbol> associations = new ParseTreeProperty<>();
   private final ParseTreeProperty<AbstractAnnotationValue> values = new ParseTreeProperty<>();
   private final Set<String> packagesUsed = new HashSet<>();
@@ -70,20 +100,23 @@ public class EntityDefinitionListener extends CdsBaseListener {
   private static final String NOKEY_ANNOTATION = "nokey";
 
   @Override
-  public void enterNamespaceRule(CdsParser.NamespaceRuleContext ctx) {
-    String packageName = ctx.members.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+  public void enterNamespaceRule(NamespaceRuleContext ctx) {
+    String packageName = ctx.members.stream().map(IdentifierContext::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
 
     if (!packageName.equals(getExpectedNamespace())) {
       throw new CDSRuntimeException(
-          String.format("Error at line: %s. Namespace does not match the file directory.", ctx.members.get(0).getLine()));
+          String.format("Error at line: %s. Namespace does not match the file directory.", ctx.members.get(0).start.getLine()));
     }
     this.packageId = packageName;
   }
 
   @Override
-  public void enterUsingRule(CdsParser.UsingRuleContext ctx) {
-    String packagePath = ctx.pack.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
-    String memberPath = ctx.members.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+  public void enterUsingRule(UsingRuleContext ctx) {
+    String packagePath = ctx.pack.stream().map(IdentifierContext::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
+    String memberPath = ctx.members.stream().map(IdentifierContext::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
     String fullSymbolName = packagePath + "::" + memberPath;
 
     Symbol externalSymbol = this.symbolTable.getSymbol(fullSymbolName);
@@ -100,49 +133,41 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterArtifactRule(ArtifactRuleContext ctx) {
+  public void enterContextRule(ContextRuleContext ctx) {
     Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
-    if (!(this.currentScope instanceof CDSFileScope) && !(this.currentScope instanceof ContextSymbol)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s - Artifact with type: '%s' and name: '%s' is only allowed in a context scope.",
-          ctx.artifactType.getLine(), ctx.artifactType.getText(), ctx.artifactName.getText()));
-    }
-
     symbolsByParseTreeContext.put(ctx, newSymbol);
     registerSymbolToSymbolTable(newSymbol);
-    fullSymbolName.push(newSymbol.getName());
+    fullSymbolNames.push(newSymbol.getName());
     this.currentScope = (Scope) newSymbol;
-    if (newSymbol instanceof EntitySymbol) {
-      this.symbolTable.addEntityToGraph(newSymbol.getFullName());
-    }
   }
 
   @Override
-  public void exitArtifactRule(ArtifactRuleContext ctx) {
+  public void exitContextRule(ContextRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
-    fullSymbolName.pop();
+    fullSymbolNames.pop();
   }
 
   @Override
-  public void enterDataTypeRule(CdsParser.DataTypeRuleContext ctx) {
-    if (ctx.type.getText().equalsIgnoreCase("key")) {
-      if (!(this.currentScope instanceof EntitySymbol)) {
-        throw new CDSRuntimeException(String.format("Error at line: %s - Element declarations are only allowed for entity scope.",
-            ctx.name.getLine()));
-      }
-      EntityElementSymbol elementSymbol = this.symbolFactory.getEntityElementSymbol(ctx, this.currentScope);
-      this.entityElements.put(ctx, elementSymbol);
-      this.symbolsByParseTreeContext.put(ctx, elementSymbol);
-      this.typeables.put(ctx, elementSymbol);
-      return;
-    }
+  public void enterEntityRule(EntityRuleContext ctx) {
+    Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
+    symbolsByParseTreeContext.put(ctx, newSymbol);
+    registerSymbolToSymbolTable(newSymbol);
+    fullSymbolNames.push(newSymbol.getName());
+    this.currentScope = (Scope) newSymbol;
+    this.symbolTable.addEntityToGraph(newSymbol.getFullName());
+  }
 
+  @Override
+  public void exitEntityRule(EntityRuleContext ctx) {
+    this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
+    validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
+    fullSymbolNames.pop();
+  }
+
+  @Override
+  public void enterDataTypeRule(DataTypeRuleContext ctx) {
     Symbol dataTypeSymbol = this.symbolFactory.getDataTypeSymbol(ctx, this.currentScope, this.schema);
-    if (!(this.currentScope instanceof CDSFileScope) && !(this.currentScope instanceof ContextSymbol)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s - Artifact with type: '%s' and name: '%s' is only allowed in a context scope.",
-          ctx.name.getLine(), ctx.type.getText(), ctx.name.getText()));
-    }
-
     typeables.put(ctx, (Typeable) dataTypeSymbol);
     symbolsByParseTreeContext.put(ctx, dataTypeSymbol);
     registerSymbolToSymbolTable(dataTypeSymbol);
@@ -151,84 +176,77 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   @Override
   public void exitDataTypeRule(DataTypeRuleContext ctx) {
-    if (ctx.type.getText().equalsIgnoreCase("key")) {
-      EntityElementSymbol elementSymbol = this.entityElements.get(ctx);
-
-      this.currentScope.define(elementSymbol);
-      return;
-    }
-
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
   }
 
   @Override
-  public void enterElementDeclRule(CdsParser.ElementDeclRuleContext ctx) {
-    EntityElementSymbol elementSymbol = this.symbolFactory.getEntityElementSymbol(ctx, this.currentScope);
-    if (!(this.currentScope instanceof EntitySymbol)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s - Element declarations are only allowed for entity scope.",
-          ctx.name.getLine()));
-    }
+  public void enterStructuredTypeRule(StructuredTypeRuleContext ctx) {
+    Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
+    symbolsByParseTreeContext.put(ctx, newSymbol);
+    registerSymbolToSymbolTable(newSymbol);
+    fullSymbolNames.push(newSymbol.getName());
+    this.currentScope = (Scope) newSymbol;
+  }
 
+  @Override
+  public void exitStructuredTypeRule(StructuredTypeRuleContext ctx) {
+    this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
+    validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
+    fullSymbolNames.pop();
+  }
+
+  @Override
+  public void enterElementDeclRule(ElementDeclRuleContext ctx) {
+    EntityElementSymbol elementSymbol = this.symbolFactory.getEntityElementSymbol(ctx, this.currentScope);
     this.entityElements.put(ctx, elementSymbol);
     this.symbolsByParseTreeContext.put(ctx, elementSymbol);
     this.typeables.put(ctx, elementSymbol);
   }
 
   @Override
-  public void exitElementDeclRule(CdsParser.ElementDeclRuleContext ctx) {
+  public void exitElementDeclRule(ElementDeclRuleContext ctx) {
     EntityElementSymbol elementSymbol = this.entityElements.get(ctx);
-
     this.currentScope.define(elementSymbol);
   }
 
   @Override
-  public void enterElementConstraints(CdsParser.ElementConstraintsContext ctx) {
-    FieldSymbol elementSymbol;
-    if(ctx.getParent() instanceof AssociationContext) {
-      elementSymbol = this.associations.get(ctx.getParent());
-    } else {
-      elementSymbol = this.entityElements.get(ctx.getParent().getParent());
-    }
-
+  public void enterElementConstraints(ElementConstraintsContext ctx) {
+    EntityElementSymbol elementSymbol = this.entityElements.get(ctx.getParent().getParent());
     boolean isNotNull = !ctx.getText().equals("null");
+
     if (!isNotNull && elementSymbol.isKey()) {
       throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Element - part of composite key cannot be null.",
-          ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getLine(),
-          ((TerminalNodeImpl) ctx.children.get(0)).getSymbol().getCharPositionInLine()));
+          ctx.start.getLine(),
+          ctx.start.getCharPositionInLine()));
     }
 
     elementSymbol.setNotNull(isNotNull);
   }
 
   @Override
-  public void enterFieldDeclRule(CdsParser.FieldDeclRuleContext ctx) {
+  public void enterAssociationConstraints(AssociationConstraintsContext ctx) {
+    AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
+    boolean isNotNull = !ctx.getText().equals("null");
+
+    if (!isNotNull && associationSymbol.isKey()) {
+      throw new CDSRuntimeException(String.format("Error at line: %s col: %s. Association - part of composite key cannot be null.",
+          ctx.start.getLine(),
+          ctx.start.getCharPositionInLine()));
+    }
+
+    associationSymbol.setNotNull(isNotNull);
+  }
+
+  @Override
+  public void enterFieldDeclRule(FieldDeclRuleContext ctx) {
     FieldSymbol fieldSymbol = this.symbolFactory.getFieldSymbol(ctx, currentScope);
-    if (this.currentScope instanceof ContextSymbol) {
-      throw new CDSRuntimeException(String.format("Error at line: %s - Field declarations are only allowed for entity and type scopes.",
-          ctx.ID().getSymbol().getLine()));
-    }
-
-    if (this.currentScope instanceof EntitySymbol) {
-      fieldSymbol = this.symbolFactory.getEntityElementSymbol(ctx, this.currentScope);
-    }
-
     this.typeables.put(ctx, fieldSymbol);
     this.symbolsByParseTreeContext.put(ctx, fieldSymbol);
     this.currentScope.define(fieldSymbol);
   }
 
   @Override
-  public void enterAssociation(CdsParser.AssociationContext ctx) {
-    String associationKeyword = ctx.ascKeyword.getText().toLowerCase();
-    String toKeyword = ctx.toKeyword.getText().toLowerCase();
-    if (!associationKeyword.equals("association")) {
-      throw new CDSRuntimeException(String.format("Error at line: %s. The 'Association' keyword is expected instead of: '%s'",
-          ctx.ascKeyword.getLine(), ctx.ascKeyword.getText()));
-    } else if (!toKeyword.equals("to")) {
-      throw new CDSRuntimeException(String.format("Error at line: %s. The 'to' keyword is expected instead of: '%s'",
-          ctx.toKeyword.getLine(), ctx.toKeyword.getText()));
-    }
-
+  public void enterAssociation(AssociationContext ctx) {
     AssociationSymbol associationSymbol = this.symbolFactory.getAssociationSymbol(ctx, currentScope);
 
     if(ctx.key != null && ctx.key.getText().equalsIgnoreCase("key")) {
@@ -239,19 +257,19 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterMaxCardinality(CdsParser.MaxCardinalityContext ctx) {
+  public void enterMaxCardinality(MaxCardinalityContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
     associationSymbol.setCardinality(CardinalityEnum.ONE_TO_MANY);
   }
 
   @Override
-  public void enterNoCardinality(CdsParser.NoCardinalityContext ctx) {
+  public void enterNoCardinality(NoCardinalityContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
     associationSymbol.setCardinality(CardinalityEnum.ONE_TO_MANY);
   }
 
   @Override
-  public void enterMinMaxCardinality(CdsParser.MinMaxCardinalityContext ctx) {
+  public void enterMinMaxCardinality(MinMaxCardinalityContext ctx) {
     AssociationSymbol associationSymbol = this.associations.get(ctx.getParent());
     int firstDotIndex = ctx.ASSOCIATION_MIN().getText().indexOf(".");
     String minValue = ctx.ASSOCIATION_MIN().getText().substring(0, firstDotIndex);
@@ -288,8 +306,8 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterAssignBuiltInTypeWithArgs(CdsParser.AssignBuiltInTypeWithArgsContext ctx) {
-    Token typeIdToken = ctx.ID().getSymbol();
+  public void enterAssignBuiltInTypeWithArgs(AssignBuiltInTypeWithArgsContext ctx) {
+    Token typeIdToken = ctx.ref.ID().getSymbol();
     String typeId = typeIdToken.getText();
     Symbol resolvedType = resolveReference(typeId, this.symbolsByParseTreeContext.get(ctx.getParent()));
 
@@ -300,9 +318,10 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   @Override
-  public void enterAssignType(CdsParser.AssignTypeContext ctx) {
+  public void enterAssignType(AssignTypeContext ctx) {
     Typeable typeable = typeables.get(ctx.getParent());
-    String fullReference = ctx.pathSubMembers.stream().map(Token::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+    String fullReference = ctx.pathSubMembers.stream().map(IdentifierContext::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
 
     typeable.setReference(fullReference);
   }
@@ -333,21 +352,21 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   @Override
-  public void exitAnnObjectRule(CdsParser.AnnObjectRuleContext ctx) {
-    String annId = ctx.ID().getText();
+  public void exitAnnObjectRule(AnnObjectRuleContext ctx) {
+    String annId = ctx.identifier().getText();
     AnnotationObj expectedValue = this.symbolTable.getAnnotation(annId);
     AbstractAnnotationValue providedValue = this.values.get(ctx.annValue());
     Symbol symbolToBeAssigned = this.symbolsByParseTreeContext.get(ctx.getParent());
-    validateAnnotation(ctx.ID().getSymbol(), symbolToBeAssigned);
+    validateAnnotation(ctx.identifier(), symbolToBeAssigned);
     int expectedAnnKeys = expectedValue.getKeysNumber();
 
     Symbol annotatedSymbol = this.symbolsByParseTreeContext.get(ctx.getParent());
     if (expectedAnnKeys == 0) {
       throw new CDSRuntimeException(String.format("Error at line: %d col: %d. Values cannot be assigned to annotation %s.",
-          ctx.ID().getSymbol().getLine(), ctx.ID().getSymbol().getCharPositionInLine(), annId));
+          ctx.identifier().start.getLine(), ctx.identifier().start.getCharPositionInLine(), annId));
     } else if (annotatedSymbol.getAnnotation(annId) != null) {
       throw new CDSRuntimeException(String.format("Error at line: %d col: %d. Annotation %s already assigned for %s.",
-          ctx.ID().getSymbol().getLine(), ctx.ID().getSymbol().getCharPositionInLine(), annId, symbolToBeAssigned.getFullName()));
+          ctx.identifier().start.getLine(), ctx.identifier().start.getCharPositionInLine(), annId, symbolToBeAssigned.getFullName()));
     } else if (providedValue instanceof AnnotationObj) {
       AnnotationObj providedAnnObject = (AnnotationObj) providedValue;
       compareAnnValues(providedValue, expectedValue);
@@ -356,7 +375,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
     } else {
       if (expectedAnnKeys != 1) { //Only one field is available and could be directly assigned
         throw new CDSRuntimeException(String.format("Error at line: %d col: %d. Invalid value type provided for annotation %s.",
-            ctx.ID().getSymbol().getLine(), ctx.ID().getSymbol().getCharPositionInLine(), annId));
+            ctx.identifier().start.getLine(), ctx.identifier().start.getCharPositionInLine(), annId));
       }
 
       AbstractAnnotationValue expectedFieldValue = expectedValue.getKeyValuePairs().values().stream().collect(Collectors.toList()).get(0);
@@ -364,14 +383,19 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
       AnnotationObj annotationToBeAssigned = new AnnotationObj();
       annotationToBeAssigned.setName(annId);
-      String fieldName = expectedValue.getKeyValuePairs().keySet().stream().findFirst().get();
-      annotationToBeAssigned.define(fieldName, providedValue);
+      Optional<String> expectedValueKeySet = expectedValue.getKeyValuePairs().keySet().stream().findFirst();
+
+      if (!expectedValueKeySet.isEmpty()) {
+        String fieldName = expectedValueKeySet.get();
+        annotationToBeAssigned.define(fieldName, providedValue);
+      }
+
       annotatedSymbol.addAnnotation(annotationToBeAssigned.getName(), annotationToBeAssigned);
     }
   }
 
   @Override
-  public void exitAnnPropertyRule(CdsParser.AnnPropertyRuleContext ctx) {
+  public void exitAnnPropertyRule(AnnPropertyRuleContext ctx) {
     String annId = ctx.annId.getText();
     String annProperty = ctx.prop.getText();
     Symbol symbolToBeAssigned = this.symbolsByParseTreeContext.get(ctx.getParent());
@@ -382,10 +406,10 @@ public class EntityDefinitionListener extends CdsBaseListener {
     AnnotationObj assignedAnnotation = symbolToBeAssigned.getAnnotation(annId);
     if (expectedFieldValue == null) {
       throw new CDSRuntimeException(String.format("Error at line: %d col: %d. No field with name: %s exists in annotation %s..",
-          ctx.prop.getLine(), ctx.prop.getCharPositionInLine(), annProperty, annId));
+          ctx.prop.start.getLine(), ctx.prop.start.getCharPositionInLine(), annProperty, annId));
     } else if (assignedAnnotation != null && assignedAnnotation.getValue(annProperty) != null) {
       throw new CDSRuntimeException(String.format("Error at line: %d col: %d. Value for property name: %s has already been provided.",
-          ctx.prop.getLine(), ctx.prop.getCharPositionInLine(), annProperty));
+          ctx.prop.start.getLine(), ctx.prop.start.getCharPositionInLine(), annProperty));
     }
 
     AbstractAnnotationValue providedValue = this.values.get(ctx.annValue());
@@ -401,23 +425,24 @@ public class EntityDefinitionListener extends CdsBaseListener {
   }
 
   @Override
-  public void exitAnnMarkerRule(CdsParser.AnnMarkerRuleContext ctx) {
-    String annId = ctx.ID().getText();
+  public void exitAnnMarkerRule(AnnMarkerRuleContext ctx) {
+    String annId = ctx.identifier().getText();
     AnnotationObj expectedAnnObject = this.symbolTable.getAnnotation(annId);
     Symbol symbolToBeAssigned = this.symbolsByParseTreeContext.get(ctx.getParent());
-    Token annIdToken = ctx.ID().getSymbol();
+    IdentifierContext annIdToken = ctx.identifier();
     validateAnnotation(annIdToken, symbolToBeAssigned);
 
     if (expectedAnnObject.getKeysNumber() != 0) {
       throw new CDSRuntimeException(String.format("Error at line: %d col: %d.Annotation with name: %s cannot be used as a marker.",
-          annIdToken.getLine(), annIdToken.getCharPositionInLine(), annId));
+          annIdToken.start.getLine(), annIdToken.start.getCharPositionInLine(), annId));
     }
-    if(annId.equals(NOKEY_ANNOTATION)){
-      for(int i =0; i<= ctx.getParent().children.size(); i++){
-        if(ctx.getParent().getChild(i) instanceof DataTypeRuleContext && ctx.getParent().getChild(i).getChild(0).toString().equalsIgnoreCase("key")){
+    if (annId.equals(NOKEY_ANNOTATION)) {
+      for (int i = 0; i <= ctx.getParent().children.size(); i++) {
+        if (ctx.getParent().getChild(i) instanceof ElementDeclRuleContext && ctx.getParent().getChild(i).getChild(0).getText()
+            .equalsIgnoreCase("key")) {
           throw new CDSRuntimeException(
-              String.format("Error at line: %d col: %d. Annotation %s has been specified for entity with keys.", annIdToken.getLine(),
-                  annIdToken.getCharPositionInLine(), expectedAnnObject.getName()));
+              String.format("Error at line: %d col: %d. Annotation %s has been specified for entity with keys.", annIdToken.start.getLine(),
+                  annIdToken.start.getCharPositionInLine(), expectedAnnObject.getName()));
         }
       }
     }
@@ -427,23 +452,174 @@ public class EntityDefinitionListener extends CdsBaseListener {
     symbolToBeAssigned.addAnnotation(annToAssign.getName(), annToAssign);
   }
 
-  private void validateAnnotation(Token annIdToken, Symbol symbol) {
+  @Override
+  public void enterViewRule(ViewRuleContext ctx) {
+    Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
+    symbolsByParseTreeContext.put(ctx, newSymbol);
+    registerSymbolToSymbolTable(newSymbol);
+    fullSymbolNames.push(newSymbol.getName());
+    this.currentScope = (Scope) newSymbol;
+    ((ViewSymbol) newSymbol).setPackageId(this.packageId);
+    ((ViewSymbol) newSymbol).setContext(((ContextSymbol) currentScope.getEnclosingScope()).getName());
+    this.symbolTable.addViewToGraph(newSymbol.getFullName());
+  }
+
+  @Override
+  public void exitViewRule(ViewRuleContext ctx) {
+    this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
+    fullSymbolNames.pop();
+  }
+
+  @Override
+  public void enterSelectRule(SelectRuleContext ctx) {
+    SelectSymbol selectSymbol = new SelectSymbol();
+
+    SelectedColumnsRuleContext selectedColumnsRuleContext = ctx.selectedColumnsRule();
+    if (selectedColumnsRuleContext.children != null) {
+      int a = selectedColumnsRuleContext.start.getStartIndex();
+      int b = selectedColumnsRuleContext.stop.getStopIndex();
+      Interval selectedColumnsRuleSqlInterval = new Interval(a, b);
+      selectSymbol.setColumnsSql(ctx.start.getInputStream().getText(selectedColumnsRuleSqlInterval));
+    }
+
+    WhereRuleContext whereRuleContext = ctx.whereRule();
+    if (whereRuleContext != null) {
+      int a = whereRuleContext.start.getStartIndex();
+      int b = whereRuleContext.stop.getStopIndex();
+      Interval whereRuleSqlInterval = new Interval(a, b);
+      selectSymbol.setWhereSql(ctx.start.getInputStream().getText(whereRuleSqlInterval));
+    }
+
+    if (ctx.isDistinct != null) {
+      selectSymbol.setDistinct(true);
+    }
+
+    if (ctx.isUnion != null) {
+      selectSymbol.setUnion(true);
+    }
+
+    if (ctx.dependsOnTable != null) {
+      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.getText()));
+    }
+
+    if (ctx.dependingTableAlias != null) {
+      selectSymbol.setDependingTableAlias(handleStringLiteral(ctx.dependingTableAlias.getText()));
+    }
+
+    this.currentScope.define(selectSymbol);
+    selectSymbol.setScope(this.currentScope);
+    this.currentScope = selectSymbol;
+  }
+
+  @Override
+  public void exitSelectRule(SelectRuleContext ctx) {
+    this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
+  }
+
+  @Override
+  public void enterJoinRule(JoinRuleContext ctx) {
+    JoinSymbol joinSymbol = new JoinSymbol();
+
+    joinSymbol.setJoinType(ctx.joinType.getText());
+
+    if (ctx.joinArtifactName != null) {
+      String joinArtifactName = handleStringLiteral(ctx.joinArtifactName.getText());
+      joinSymbol.setJoinArtifactName(joinArtifactName);
+      this.symbolTable.addChildToView(((ViewSymbol) this.currentScope.getEnclosingScope()).getFullName(),
+          ((ViewSymbol) this.currentScope.getEnclosingScope()).getPackageId() + "::"
+              + ((ViewSymbol) this.currentScope.getEnclosingScope()).getContext() + "." + joinArtifactName);
+    }
+
+    if (ctx.joinTableAlias != null) {
+      joinSymbol.setJoinTableAlias(handleStringLiteral(ctx.joinTableAlias.getText()));
+    }
+
+    JoinFieldsContext joinFieldsContext = ctx.joinFields();
+    if (joinFieldsContext.children != null) {
+      int a = joinFieldsContext.start.getStartIndex();
+      int b = joinFieldsContext.stop.getStopIndex();
+      Interval joinFieldsSqlInterval = new Interval(a, b);
+      joinSymbol.setJoinFields(ctx.start.getInputStream().getText(joinFieldsSqlInterval));
+    }
+
+    this.currentScope.define(joinSymbol);
+  }
+
+  @Override
+  public void exitAnnValue(AnnValueContext ctx) {
+    if (ctx.literal != null) {
+      AbstractAnnotationValue annotationValue = new AnnotationSimpleValue(ctx.literal.getType());
+      annotationValue.setValue(ctx.getText());
+      this.values.put(ctx, annotationValue);
+    }
+  }
+
+  @Override
+  public void enterEnumRule(EnumRuleContext ctx) {
+    AnnotationEnum annotationEnum = new AnnotationEnum();
+    annotationEnum.setValue(ctx.identifier().ID().getText());
+    this.values.put(ctx.getParent(), annotationEnum);
+  }
+
+  @Override
+  public void exitArrRule(ArrRuleContext ctx) {
+    AnnotationArray annotationArray = new AnnotationArray(CDSLiteralEnum.ENUM.getLiteralType());
+    ctx.annValue().forEach(valueCtx -> annotationArray.addValue(this.values.get(valueCtx)));
+    this.values.put(ctx.getParent(), annotationArray);
+  }
+
+  @Override
+  public void exitObj(ObjContext ctx) {
+    AnnotationObj annotationObj = new AnnotationObj();
+    for (CdsParser.KeyValueContext keyValueCtx :
+        ctx.keyValue()) {
+      String key = keyValueCtx.identifier().ID().getText();
+      AbstractAnnotationValue value = this.values.get(keyValueCtx.annValue());
+      annotationObj.define(key, value);
+    }
+
+    this.values.put(ctx.getParent(), annotationObj);
+  }
+
+  public Symbol resolveReference(String referencedId, Symbol referencingSymbol) {
+    if (symbolTable.getGlobalBuiltInTypeScope().resolve(referencedId) != null) {
+      return symbolTable.getGlobalBuiltInTypeScope().resolve(referencedId);
+    }
+
+    Symbol resolvedTypeSymbol = referencingSymbol.getScope().resolve(referencedId);
+
+    if (resolvedTypeSymbol == null && referencingSymbol instanceof EntityElementSymbol) {
+      resolvedTypeSymbol = referencingSymbol.getScope().getEnclosingScope().resolve(referencedId);
+      if (resolvedTypeSymbol == null) {
+        throw new CDSRuntimeException(
+            String.format("Error at line: %s col: %s - No such type: %s", referencingSymbol.getIdToken().start.getLine(),
+                referencingSymbol.getIdToken().start.getLine(), referencedId));
+      }
+
+      return resolvedTypeSymbol;
+    }
+
+    return resolvedTypeSymbol;
+  }
+
+  private void validateAnnotation(IdentifierContext annIdToken, Symbol symbol) {
     String annId = annIdToken.getText();
     AnnotationObj annotationObj = this.symbolTable.getAnnotation(annId);
-    Optional<Class> allowedSymbols = annotationObj.getAllowedForSymbols().stream().filter(t -> symbol.getClass().equals(t)).findAny();
 
     if (annotationObj == null) {
       throw new CDSRuntimeException(String
-          .format("Error at line: %d col: %d. Annotation with name: %s not supported.", annIdToken.getLine(),
-              annIdToken.getCharPositionInLine(), annId));
-    } else if (allowedSymbols.isEmpty()) {
+          .format("Error at line: %d col: %d. Annotation with name: %s not supported.", annIdToken.start.getLine(),
+              annIdToken.start.getCharPositionInLine(), annId));
+    }
+
+    if (annotationObj.getAllowedForSymbols().stream().filter(t -> symbol.getClass().equals(t)).findAny().isEmpty()) {
       throw new CDSRuntimeException(
-          String.format("Error at line: %d col: %d. Annotation %s not allowed for %s", annIdToken.getLine(),
-              annIdToken.getCharPositionInLine(), annotationObj.getName(), symbol.getFullName()));
+          String.format("Error at line: %d col: %d. Annotation %s not allowed for %s", annIdToken.start.getLine(),
+              annIdToken.start.getCharPositionInLine(), annotationObj.getName(), symbol.getFullName()));
     } else if (annotationObj.isTopLevel() && !(symbol.getScope() instanceof CDSFileScope)) {
       throw new CDSRuntimeException(
-          String.format("Error at line: %d col: %d. Annotation %s is only allowed for top level entities.", annIdToken.getLine(),
-              annIdToken.getCharPositionInLine(), annotationObj.getName()));
+          String.format("Error at line: %d col: %d. Annotation %s is only allowed for top level entities.", annIdToken.start.getLine(),
+              annIdToken.start.getCharPositionInLine(), annotationObj.getName()));
     }
   }
 
@@ -506,71 +682,12 @@ public class EntityDefinitionListener extends CdsBaseListener {
     }
   }
 
-  @Override
-  public void exitAnnValue(CdsParser.AnnValueContext ctx) {
-    if (ctx.literal != null) {
-      AbstractAnnotationValue annotationValue = new AnnotationSimpleValue(ctx.literal.getType());
-      annotationValue.setValue(ctx.getText());
-      this.values.put(ctx, annotationValue);
-    }
-  }
-
-  @Override
-  public void enterEnumRule(CdsParser.EnumRuleContext ctx) {
-    AnnotationEnum annotationEnum = new AnnotationEnum();
-    annotationEnum.setValue(ctx.ID().getText());
-    this.values.put(ctx.getParent(), annotationEnum);
-  }
-
-  @Override
-  public void exitArrRule(CdsParser.ArrRuleContext ctx) {
-    AnnotationArray annotationArray = new AnnotationArray(CDSLiteralEnum.ENUM.getLiteralType());
-    ctx.annValue().forEach(valueCtx -> annotationArray.addValue(this.values.get(valueCtx)));
-    this.values.put(ctx.getParent(), annotationArray);
-  }
-
-  @Override
-  public void exitObj(CdsParser.ObjContext ctx) {
-    AnnotationObj annotationObj = new AnnotationObj();
-    for (CdsParser.KeyValueContext keyValueCtx :
-        ctx.keyValue()) {
-      String key = keyValueCtx.ID().getText();
-      AbstractAnnotationValue value = this.values.get(keyValueCtx.annValue());
-      annotationObj.define(key, value);
-    }
-
-    this.values.put(ctx.getParent(), annotationObj);
-  }
-
-
-
-  public Symbol resolveReference(String referencedId, Symbol referencingSymbol) {
-    if (symbolTable.getGlobalBuiltInTypeScope().resolve(referencedId) != null) {
-      return symbolTable.getGlobalBuiltInTypeScope().resolve(referencedId);
-    }
-
-    Symbol resolvedTypeSymbol = referencingSymbol.getScope().resolve(referencedId);
-
-    if (resolvedTypeSymbol == null && referencingSymbol instanceof FieldSymbol) {
-      resolvedTypeSymbol = referencingSymbol.getScope().getEnclosingScope().resolve(referencedId);
-      if (resolvedTypeSymbol == null) {
-        throw new CDSRuntimeException(
-            String.format("Error at line: %s col: %s - No such type: %s", referencingSymbol.getIdToken().getLine(),
-                referencingSymbol.getIdToken().getLine(), referencedId));
-      }
-
-      return resolvedTypeSymbol;
-    }
-
-    return resolvedTypeSymbol;
-  }
-
   private void registerSymbolToSymbolTable(Symbol symbol) {
     String fullName;
-    if (fullSymbolName.isEmpty()) {
+    if (fullSymbolNames.isEmpty()) {
       fullName = symbol.getName();
     } else {
-      fullName = fullSymbolName.stream().collect(Collectors.joining(".")) + "." + symbol.getName();
+      fullName = fullSymbolNames.stream().collect(Collectors.joining(".")) + "." + symbol.getName();
     }
 
     symbol.setFullName(this.packageId + "::" + fullName);
@@ -585,14 +702,14 @@ public class EntityDefinitionListener extends CdsBaseListener {
     AnnotationObj schemaAnnotation = symbol.getAnnotation("Schema");
     if (schemaAnnotation == null) {
       throw new CDSRuntimeException(String.format("Error at line: %s. Missing '@Schema' annotation for top level symbol definition: %s",
-          symbol.getIdToken().getLine(), symbol.getName()));
+          symbol.getIdToken().start.getLine(), symbol.getName()));
     } else {
       AnnotationSimpleValue nameValue = (AnnotationSimpleValue) schemaAnnotation.getValue("name");
       this.schema = nameValue.getValue();
       if (symbol instanceof ContextSymbol) {
-        ((ContextSymbol) symbol).getSymbols().forEach((k, v) -> {
-          v.setSchema(this.schema);
-        });
+        ((ContextSymbol) symbol).getSymbols().forEach((k, v) ->
+            v.setSchema(this.schema)
+        );
       } else {
         symbol.setSchema(this.schema);
       }
@@ -600,7 +717,7 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
     if (!symbol.getName().equals(getTopLevelSymbolExpectedName())) {
       throw new CDSRuntimeException(String.format("Error at line: %s. Top level symbol name does not match the filename.",
-          symbol.getIdToken().getLine()));
+          symbol.getIdToken().start.getLine()));
     }
   }
 
@@ -616,10 +733,6 @@ public class EntityDefinitionListener extends CdsBaseListener {
     splitFileLocation = Arrays.stream(splitFileLocation).filter(s -> !s.isEmpty()).toArray(String[]::new);
     splitFileLocation = Arrays.copyOfRange(splitFileLocation, 0, splitFileLocation.length - 1);
     return String.join(".", splitFileLocation);
-  }
-
-  public ParseTreeProperty<Symbol> getSymbolsByParseTreeContext() {
-    return this.symbolsByParseTreeContext;
   }
 
   public ParseTreeProperty<EntityElementSymbol> getEntityElements() {
@@ -638,12 +751,6 @@ public class EntityDefinitionListener extends CdsBaseListener {
     this.cdsFileScope = cdsFileScope;
   }
 
-  private void checkForDuplicateName(String contextId, int line) {
-    if (this.currentScope.isDuplicateName(contextId)) {
-      throw new CDSRuntimeException(String.format("Error at line: %s  - Duplicate name for: %s", line, contextId));
-    }
-  }
-
   public void setSymbolTable(SymbolTable symbolTable) {
     this.symbolTable = symbolTable;
   }
@@ -658,5 +765,14 @@ public class EntityDefinitionListener extends CdsBaseListener {
 
   public void setFileLocation(String fileLocation) {
     this.fileLocation = fileLocation;
+  }
+
+  private String handleStringLiteral(String value) {
+    if (value.length() > 0 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
+      String subStr = value.substring(1, value.length() - 1);
+      String escapedQuote = subStr.replace("\\\"", "\"");
+      return escapedQuote.replace("\\\\", "\\");
+    }
+    return value;
   }
 }

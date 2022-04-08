@@ -1,0 +1,13 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+
+context TypeWihtoutArguments {
+  type MyType : Integer;
+
+  @Catalog.tableType : #COLUMN
+  entity TypeWithoutArguments {
+     key Id : MyType(10);
+  };
+}
+

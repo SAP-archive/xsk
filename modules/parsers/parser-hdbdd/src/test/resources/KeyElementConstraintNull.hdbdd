@@ -1,0 +1,7 @@
+namespace sap.table;
+@Schema : 'TEST'
+@Catalog.tableType : #COLUMN
+
+entity KeyElementConstraintNull{
+    Key MY_KEY : hana.VARCHAR(25) null;
+};

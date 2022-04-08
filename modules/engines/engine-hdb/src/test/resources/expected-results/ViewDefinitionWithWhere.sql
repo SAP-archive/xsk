@@ -1,0 +1,4 @@
+VIEW "DBADMIN"."gstr2::ViewDefinitionWithWhere.employees_view_with_where" AS SELECT "gstr2::ViewDefinitionWithWhere.employees"."ID" as "EmployeeId",
+          "gstr2::ViewDefinitionWithWhere.employees"."NAME" as "EmployeeName",
+          "ER"."TYPE" as "EmployeeRoleType",
+          "ES"."AMOUNT" as "EmployeeSalary" FROM "gstr2::ViewDefinitionWithWhere.employees" join "gstr2::ViewDefinitionWithWhere.employee_roles" AS "ER" on "ER"."ID" = "gstr2::ViewDefinitionWithWhere.employees"."ID" join "gstr2::ViewDefinitionWithWhere.employee_salaries" AS "ES" on "ES"."ID" = "gstr2::ViewDefinitionWithWhere.employees"."ID"  WHERE "gstr2::employees"."NAME" = 'John'

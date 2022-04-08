@@ -69,6 +69,46 @@ public interface CdsListener extends ParseTreeListener {
 	 */
 	void exitDataTypeRule(CdsParser.DataTypeRuleContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CdsParser#contextRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterContextRule(CdsParser.ContextRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#contextRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitContextRule(CdsParser.ContextRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#structuredTypeRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterStructuredTypeRule(CdsParser.StructuredTypeRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#structuredTypeRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitStructuredTypeRule(CdsParser.StructuredTypeRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#entityRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterEntityRule(CdsParser.EntityRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#entityRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitEntityRule(CdsParser.EntityRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#viewRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterViewRule(CdsParser.ViewRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#viewRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitViewRule(CdsParser.ViewRuleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CdsParser#fieldDeclRule}.
 	 * @param ctx the parse tree
 	 */
@@ -156,6 +196,26 @@ public interface CdsListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitElementConstraints(CdsParser.ElementConstraintsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#associationConstraints}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssociationConstraints(CdsParser.AssociationConstraintsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#associationConstraints}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssociationConstraints(CdsParser.AssociationConstraintsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#constraints}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstraints(CdsParser.ConstraintsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#constraints}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstraints(CdsParser.ConstraintsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CdsParser#association}.
 	 * @param ctx the parse tree
@@ -339,13 +399,63 @@ public interface CdsListener extends ParseTreeListener {
 	 */
 	void exitKeyValue(CdsParser.KeyValueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CdsParser#artifactRule}.
+	 * Enter a parse tree produced by {@link CdsParser#selectRule}.
 	 * @param ctx the parse tree
 	 */
-	void enterArtifactRule(CdsParser.ArtifactRuleContext ctx);
+	void enterSelectRule(CdsParser.SelectRuleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CdsParser#artifactRule}.
+	 * Exit a parse tree produced by {@link CdsParser#selectRule}.
 	 * @param ctx the parse tree
 	 */
-	void exitArtifactRule(CdsParser.ArtifactRuleContext ctx);
+	void exitSelectRule(CdsParser.SelectRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#joinRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoinRule(CdsParser.JoinRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#joinRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoinRule(CdsParser.JoinRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#joinFields}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoinFields(CdsParser.JoinFieldsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#joinFields}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoinFields(CdsParser.JoinFieldsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#selectedColumnsRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#selectedColumnsRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelectedColumnsRule(CdsParser.SelectedColumnsRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#whereRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhereRule(CdsParser.WhereRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#whereRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhereRule(CdsParser.WhereRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifier(CdsParser.IdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifier(CdsParser.IdentifierContext ctx);
 }

@@ -1,0 +1,16 @@
+namespace sap.db;
+
+@Schema: 'ADMIN'
+
+context MinimumCardinalityGreaterThanMaximum {
+
+    entity  Orders {
+        key Id               : String(32);
+        Items                : association[1..0] to Item on Items.OrderId = Id;
+    };
+
+    entity Item {
+        key Item            : String(32);
+        OrderId             : String(500);
+    };
+};

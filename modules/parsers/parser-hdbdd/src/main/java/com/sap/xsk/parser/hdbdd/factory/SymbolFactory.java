@@ -11,8 +11,15 @@
  */
 package com.sap.xsk.parser.hdbdd.factory;
 
-import com.sap.xsk.parser.hdbdd.core.CdsParser;
-import com.sap.xsk.parser.hdbdd.core.CdsParser.ArtifactRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ContextRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ElementDeclRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.EntityRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.FieldDeclRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.IdentifierContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.StructuredTypeRuleContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.ViewRuleContext;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTypeEnum;
@@ -25,58 +32,79 @@ import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
 import org.antlr.v4.runtime.Token;
 
 public class SymbolFactory {
 
-  public Symbol getSymbol(ArtifactRuleContext artifactRuleContext, Scope currentScope, String schema) {
-    String symbolId = HdbddUtils.processEscapedSymbolName(artifactRuleContext.artifactName.getText());
-    checkForDuplicateName(symbolId, currentScope, artifactRuleContext.artifactName.getLine());
-    SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(artifactRuleContext.artifactType);
+  public Symbol getSymbol(ContextRuleContext contextRuleContext, Scope currentScope, String schema) {
+    return getSymbol(currentScope, schema, contextRuleContext.artifactName, contextRuleContext.artifactType);
+  }
 
-    Symbol newSymbol = createSymbol(symbolId, currentScope, schema, artifactRuleContext.artifactName);
+  public Symbol getSymbol(StructuredTypeRuleContext structuredTypeRuleContext, Scope currentScope, String schema) {
+    return getSymbol(currentScope, schema, structuredTypeRuleContext.artifactName, structuredTypeRuleContext.artifactType);
+  }
+
+  public Symbol getSymbol(EntityRuleContext entityRuleContext, Scope currentScope, String schema) {
+    return getSymbol(currentScope, schema, entityRuleContext.artifactName, entityRuleContext.artifactType);
+  }
+
+  public Symbol getSymbol(ViewRuleContext viewRuleContext, Scope currentScope, String schema) {
+    return getSymbol(currentScope, schema, viewRuleContext.artifactName, viewRuleContext.artifactType);
+  }
+
+  private Symbol getSymbol(Scope currentScope, String schema, IdentifierContext artifactName, Token artifactType) {
+    String symbolId = HdbddUtils.processEscapedSymbolName(artifactName.getText());
+    checkForDuplicateName(symbolId, currentScope, artifactName.start.getLine());
+    SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(artifactType);
+
+    Symbol newSymbol = createSymbol(symbolId, currentScope, schema, artifactName);
     switch (symbolTypeEnum) {
-      case context:
+      case CONTEXT:
         ContextSymbol contextSymbol = new ContextSymbol(newSymbol);
         currentScope.define(contextSymbol);
         return contextSymbol;
-      case entity:
+      case ENTITY:
         EntitySymbol entitySymbol = new EntitySymbol(newSymbol);
         currentScope.define(entitySymbol);
         return entitySymbol;
-      case type:
+      case TYPE:
         StructuredDataTypeSymbol dataTypeSymbol = new StructuredDataTypeSymbol(newSymbol);
         currentScope.define(dataTypeSymbol);
         return dataTypeSymbol;
+      case VIEW:
+        ViewSymbol viewSymbol = new ViewSymbol(newSymbol);
+        currentScope.define(viewSymbol);
+        return viewSymbol;
       default:
         return null;
     }
   }
 
-  public DataTypeSymbol getDataTypeSymbol(CdsParser.DataTypeRuleContext ctx, Scope currentScope, String schema) {
-    String typeId = HdbddUtils.processEscapedSymbolName(ctx.name.getText());
-    checkForDuplicateName(typeId, currentScope, ctx.name.getLine());
-    SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(ctx.type);
-    Symbol newSymbol = createSymbol(typeId, currentScope, schema, ctx.name);
-    if (symbolTypeEnum.equals(SymbolTypeEnum.type)) {
+  public DataTypeSymbol getDataTypeSymbol(DataTypeRuleContext ctx, Scope currentScope, String schema) {
+    String typeId = HdbddUtils.processEscapedSymbolName(ctx.artifactName.getText());
+    checkForDuplicateName(typeId, currentScope, ctx.artifactName.start.getLine());
+    SymbolTypeEnum symbolTypeEnum = parseToSymbolTypeEnum(ctx.artifactType);
+    Symbol newSymbol = createSymbol(typeId, currentScope, schema, ctx.artifactName);
+    if (symbolTypeEnum.equals(SymbolTypeEnum.TYPE)) {
       return new DataTypeSymbol(newSymbol);
     }
 
     throw new CDSRuntimeException(String
-        .format("Error at line: %s  - Invalid type provided: '%s' Data type syntax is only allowed for keyword 'type'", ctx.name.getLine(),
-            ctx.type.getText()));
+        .format("Error at line: %s  - Invalid type provided: '%s' Data type syntax is only allowed for keyword 'type'", ctx.artifactName.start.getLine(),
+            ctx.artifactType.getText()));
   }
 
-  public EntityElementSymbol getEntityElementSymbol(CdsParser.ElementDeclRuleContext ctx, Scope currentScope) {
+  public EntityElementSymbol getEntityElementSymbol(ElementDeclRuleContext ctx, Scope currentScope) {
     String elementId = HdbddUtils.processEscapedSymbolName(ctx.name.getText());
-    checkForDuplicateName(elementId, currentScope, ctx.name.getLine());
+    checkForDuplicateName(elementId, currentScope, ctx.name.start.getLine());
 
     EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
     elementSymbol.setIdToken(ctx.name);
     if (ctx.key != null && !ctx.key.getText().equalsIgnoreCase("key")) {
       throw new CDSRuntimeException(String
-          .format("Error at line: %s  - Before an entity element declaration only the 'key' keyword is allowed", ctx.key.getLine()));
+          .format("Error at line: %s  - Before an entity element declaration only the 'key' keyword is allowed", ctx.key.start.getLine()));
     }
     boolean isKey = ctx.key != null;
     elementSymbol.setKey(isKey);
@@ -84,37 +112,37 @@ public class SymbolFactory {
     return elementSymbol;
   }
 
-  public EntityElementSymbol getEntityElementSymbol(CdsParser.FieldDeclRuleContext ctx, Scope currentScope) {
-    String elementId = HdbddUtils.processEscapedSymbolName(ctx.ID().getText());
-    checkForDuplicateName(elementId, currentScope, ctx.ID().getSymbol().getLine());
+  public EntityElementSymbol getEntityElementSymbol(FieldDeclRuleContext ctx, Scope currentScope) {
+    String elementId = HdbddUtils.processEscapedSymbolName(ctx.identifier().getText());
+    checkForDuplicateName(elementId, currentScope, ctx.identifier().start.getLine());
     EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
-    elementSymbol.setIdToken(ctx.ID().getSymbol());
+    elementSymbol.setIdToken(ctx.identifier());
 
     return elementSymbol;
   }
 
-  public EntityElementSymbol getEntityElementSymbol(CdsParser.DataTypeRuleContext ctx, Scope currentScope) {
-    String elementId = HdbddUtils.processEscapedSymbolName(ctx.name.getText());
-    checkForDuplicateName(elementId, currentScope, ctx.name.getLine());
+  public EntityElementSymbol getEntityElementSymbol(DataTypeRuleContext ctx, Scope currentScope) {
+    String elementId = HdbddUtils.processEscapedSymbolName(ctx.artifactName.getText());
+    checkForDuplicateName(elementId, currentScope, ctx.artifactName.start.getLine());
     EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
-    elementSymbol.setIdToken(ctx.name);
+    elementSymbol.setIdToken(ctx.artifactName);
     elementSymbol.setKey(true);
 
     return elementSymbol;
   }
 
-  public FieldSymbol getFieldSymbol(CdsParser.FieldDeclRuleContext ctx, Scope currentScope) {
-    String filedId = HdbddUtils.processEscapedSymbolName(ctx.ID().getText());
-    checkForDuplicateName(filedId, currentScope, ctx.ID().getSymbol().getLine());
+  public FieldSymbol getFieldSymbol(FieldDeclRuleContext ctx, Scope currentScope) {
+    String filedId = HdbddUtils.processEscapedSymbolName(ctx.identifier().getText());
+    checkForDuplicateName(filedId, currentScope, ctx.identifier().start.getLine());
     FieldSymbol fieldSymbol = new FieldSymbol(filedId, currentScope);
-    fieldSymbol.setIdToken(ctx.ID().getSymbol());
+    fieldSymbol.setIdToken(ctx.identifier());
 
     return fieldSymbol;
   }
 
-  public AssociationSymbol getAssociationSymbol(CdsParser.AssociationContext ctx, Scope currentScope) {
+  public AssociationSymbol getAssociationSymbol(AssociationContext ctx, Scope currentScope) {
     String associationId = HdbddUtils.processEscapedSymbolName(ctx.ascId.getText());
-    checkForDuplicateName(associationId, currentScope, ctx.ascId.getLine());
+    checkForDuplicateName(associationId, currentScope, ctx.ascId.start.getLine());
 
     AssociationSymbol associationSymbol = new AssociationSymbol(associationId, currentScope);
     associationSymbol.setIdToken(ctx.ascId);
@@ -127,7 +155,7 @@ public class SymbolFactory {
     return associationSymbol;
   }
 
-  private Symbol createSymbol(String symbolId, Scope currentScope, String schema, Token idToken) {
+  private Symbol createSymbol(String symbolId, Scope currentScope, String schema, IdentifierContext idToken) {
     Symbol symbol = new Symbol(symbolId, currentScope);
     symbol.setIdToken(idToken);
     symbol.setSchema(schema);
@@ -143,7 +171,7 @@ public class SymbolFactory {
 
   private SymbolTypeEnum parseToSymbolTypeEnum(Token artifactType) {
     try {
-      return SymbolTypeEnum.valueOf(artifactType.getText().toLowerCase());
+      return SymbolTypeEnum.valueOf(artifactType.getText().toUpperCase());
     } catch (IllegalArgumentException illegalArgumentException) {
       throw new CDSRuntimeException(
           String.format("Error at line: %s  - '%s' is not a valid artifact type.", artifactType.getLine(), artifactType.getText()));

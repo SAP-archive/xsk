@@ -1,0 +1,13 @@
+namespace sap.db;
+@Schema : 'TEST_SCHEMA'
+
+Context EntityForTypeOf {
+	type AuditTrailInfo {
+        CreatedBy : type of Users;
+	};
+
+	entity Users {
+	  key Id : String(20);
+	  Name   : String(20);
+	}
+};

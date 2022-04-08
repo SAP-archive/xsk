@@ -26,10 +26,12 @@ import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
+import java.nio.charset.StandardCharsets;
 
 public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
@@ -40,18 +42,18 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHanaXSClassicContentWithSyntaxErrorFail() {
+  public void testParseHanaXSClassicContentWithSyntaxErrorFail() {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG.hdbdd", "")
     );
     assertEquals(
-        "Failed to parse file: gstr2/ITC_EXPIRED_CONFIG.hdbdd. Error at line: 6  - 'KeY1' is not a valid artifact type.",
+        "Failed to parse file: gstr2/ITC_EXPIRED_CONFIG.hdbdd. Error at line: 6  - Before an entity element declaration only the 'key' keyword is allowed",
         exception.getMessage());
   }
 
   @Test
-  public void parseHanaXSClassicContentWithLexerErrorFail() {
+  public void testParseHanaXSClassicContentWithLexerErrorFail() {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG1.hdbdd", "")
@@ -62,7 +64,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithManagedAss() throws Exception {
+  public void testParseHDBDDWithManagedAss() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ProductsWithManagedAss.hdbdd", "");
 
     assertEquals(3, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
@@ -179,7 +181,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithManagedAssAndAlias() throws Exception {
+  public void testParseHDBDDWithManagedAssAndAlias() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ClientsWithManagedAssAndAlias.hdbdd", "");
 
     assertEquals(2, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
@@ -377,7 +379,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithUnManagedAss() throws Exception {
+  public void testParseHDBDDWithUnManagedAss() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ProductsWithUnManagedAss.hdbdd", "");
 
     assertEquals(2, ((XSKDataStructureCdsModel) parsedModel).getTableModels().size());
@@ -466,7 +468,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithNoKeyAnnotation() throws Exception {
+  public void testParseHDBDDWithNoKeyAnnotation() throws Exception {
     XSKDataStructuresException exception = assertThrows(
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/NoKeyAnnSample.hdbdd", "")
@@ -477,7 +479,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithGenerateTableTypeAnnotation() throws Exception {
+  public void testParseHDBDDWithGenerateTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/GenerateTableTypeAnnotationSample.hdbdd", "");
     assertEquals(1, ((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().size());
 
@@ -510,14 +512,14 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void parseHDBDDWithTableTypeAnnotationColumn() throws Exception {
+  public void testParseHDBDDWithTableTypeAnnotationColumn() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeColumn.hdbdd", "");
     assertEquals("COLUMN", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
     assertEquals("COLUMN", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getTableType());
   }
 
   @Test
-  public void parseHDBDDWithTableTypeAnnotationRow() throws Exception {
+  public void testParseHDBDDWithTableTypeAnnotationRow() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TableTypeRow.hdbdd", "");
     assertEquals("ROW", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
     assertEquals("ROW", ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getTableType());
@@ -527,8 +529,48 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
    * When the table type is null a COLUMN table is always created
    */
   @Test
-  public void parseHDBDDWithNoTableTypeAnnotation() throws Exception {
+  public void testParseHDBDDWithNoTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/NoTableType.hdbdd", "");
-    assertEquals(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType(), null);
+    assertEquals(null, ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
+  }
+
+  @Test
+  public void testParseHDBDDWithViewDefinitionSimple() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionSimple.sql"), StandardCharsets.UTF_8);
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionSimple.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testParseHDBDDWithViewDefinitionWithJoin() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionWithJoin.sql"), StandardCharsets.UTF_8);
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithJoin.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testParseHDBDDWithViewDefinitionWithWhere() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionWithWhere.sql"), StandardCharsets.UTF_8);
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithWhere.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testParseHDBDDWithViewDefinitionWithUnion() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionWithUnion.sql"), StandardCharsets.UTF_8);
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionWithUnion.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
   }
 }

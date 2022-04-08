@@ -163,6 +163,7 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
                     listOfWrappersPhaseThree.addAll(constructListOfTableFunctionModelWrappers(connection, wrappersPhaseThree));
                     listOfWrappersPhaseThree.addAll(constructListOfScalarFunctionModelWrappers(connection, wrappersPhaseThree));
                     listOfWrappersPhaseThree.addAll(constructListOfSynonymModelWrappers(connection, wrappersPhaseThree));
+                    listOfWrappersPhaseThree.addAll(constructListOfCdsViewWrappers(connection, wrappersPhaseThree));
                     createArtefactsOnPhaseThree(errors, listOfWrappersPhaseThree);
                 }
             }
@@ -193,6 +194,22 @@ public class XSKHDBCoreSynchronizationFacade implements IXSKHDBCoreSynchronizati
             });
         });
         return listOfWrappers;
+    }
+
+    @NotNull
+    private List<XSKTopologyDataStructureModelWrapper> constructListOfCdsViewWrappers(Connection connection, Map<String, XSKTopologyDataStructureModelWrapper> wrappers) {
+      final Map<String, XSKDataStructureModel> dataStructureCdsModels = managerServices.get(IXSKDataStructureModel.TYPE_HDBDD).getDataStructureModels();
+      final List<XSKTopologyDataStructureModelWrapper> listOfWrappers = new ArrayList<>();
+      dataStructureCdsModels.values().forEach(cdsStructure -> {
+        final IXSKDataStructureManager<XSKDataStructureHDBViewModel> xskViewManagerService = managerServices.get(IXSKDataStructureModel.TYPE_HDB_VIEW);
+        ((XSKDataStructureCdsModel) cdsStructure).getViewModels().forEach(viewModel -> {
+          HDBTableSynchronizationArtefactType artefactType = new HDBTableSynchronizationArtefactType();
+          XSKTopologyDataStructureModelWrapper<XSKDataStructureHDBViewModel> tableWrapper = new XSKTopologyDataStructureModelWrapper(connection, xskViewManagerService, viewModel,
+              artefactType, wrappers);
+          listOfWrappers.add(tableWrapper);
+        });
+      });
+      return listOfWrappers;
     }
 
     private void createArtefactsOnPhaseThree(List<String> errors, List<XSKTopologyDataStructureModelWrapper> listOfWrappersPhaseThree) {

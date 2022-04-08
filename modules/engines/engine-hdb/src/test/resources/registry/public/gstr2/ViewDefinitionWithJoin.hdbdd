@@ -1,0 +1,20 @@
+namespace gstr2;
+
+@Schema: 'DBADMIN'
+
+context ViewDefinitionWithJoin {
+
+    define view employees_view_with_join as
+        select from "gstr2::ViewDefinitionWithJoin.employees"
+            join employee_roles as ER
+                on "ER"."ID" = "gstr2::ViewDefinitionWithJoin.employees"."ID"
+            join employee_salaries as ES
+                on "ES"."ID" = "gstr2::ViewDefinitionWithJoin.employees"."ID"
+        {
+          "gstr2::ViewDefinitionWithJoin.employees"."ID" as "EmployeeId",
+          "gstr2::ViewDefinitionWithJoin.employees"."NAME" as "EmployeeName",
+          "ER"."TYPE" as "EmployeeRoleName",
+          "ES"."AMOUNT" as "EmployeeSalary"
+        };
+
+}

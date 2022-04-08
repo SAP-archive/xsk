@@ -1,0 +1,10 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+context InvalidAnnotationValueType {
+  @Catalog: { tableType: 'Catalog' }
+  entity Test {
+     Name : String(32);
+  };
+}
+

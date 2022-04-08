@@ -167,7 +167,7 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
   }
 
   private void mockResponse(HttpServletResponse mockedResponse) throws IOException {
-    when(mockedResponse.getHeaderNames()).thenReturn(Arrays.asList("header1", "header2"));
+    when(mockedResponse.getHeaderNames()).thenReturn(Arrays.asList("TestHeader1", "TestHeader2"));
     when(mockedResponse.getOutputStream()).thenReturn(new StubServletOutputStream());
   }
 

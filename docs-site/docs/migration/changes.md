@@ -23,7 +23,7 @@ Due to the changes between HANA Cloud and HANA on Neo, XSK performs modification
     "configuration": "path/to/hdiconfig", 
     "users": ["HDI_CONTAINER_USER"],
     "group": "CONTAINER_GROUP_NAME", 
-    "container": "CONTAINER)NAME", 
+    "container": "CONTAINER_NAME", 
     "deploy": [
         "path/to/artifact/to/be/deployed1",
         "path/to/artifact/to/be/deployed2"

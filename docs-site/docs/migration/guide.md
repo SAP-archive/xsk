@@ -13,14 +13,14 @@ Follow this guide for steps how to migrate an SAP HANA XS Classic application to
 ## Supported artifacts and APIs
 ---
 
-1. Check out the [APIs page](./api/index.md) for a list of APIs and their compatibility status.
-2. Checkout the [Artifacts page](./artifacts/index.md) for a list of artifacts and their compatibility status.
+1. Check out the [APIs page](../api/index.md) for a list of APIs and their compatibility status.
+2. Checkout the [Artifacts page](../artifacts/index.md) for a list of artifacts and their compatibility status.
 
 ## Preparation
 ---
 
-Before starting the migration process, make sure to follow the steps in the [Prerequisites section](./setup/prerequisites/index.md).
-Next, make sure to setup XSK on [Kyma](./setup/kyma.md).
+Before starting the migration process, make sure to follow the steps in the [Prerequisites section](../setup/prerequisites/index.md).
+Next, make sure to setup XSK on [Kyma](../setup/kyma.md).
 
 ## Steps
 

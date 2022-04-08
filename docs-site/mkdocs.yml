@@ -20,6 +20,7 @@ nav:
       - xsodata: 'artifacts/xsodata.md'
       - xshttpdest: 'artifacts/xshttpdest.md'
     - API:
+      - api/index.md
       - $.db: 'api/db.md'
       - $.hdb: 'api/hdb.md'
       - $.import: 'api/import.md'
@@ -64,6 +65,9 @@ nav:
       - Configurations:
         - Environment Variables: 'setup/configurations/environment-variables.md'
         - HDI: 'setup/configurations/hdi.md'
+    - Migration:
+      - Guide: 'migration/guide.md'
+      - Changes: 'migration/changes.md'
     - Lifecycle:
       - CI/CD: 'lifecycle/cicd.md'
     - Cheat Sheet:

@@ -41,16 +41,16 @@
                 <div class="col-sm-11"><input type="text" class="form-control" placeholder="user"
                                               ng-model="hdi.users[$index]">
                 </div>
-                <div class="col-sm-1"><i class="close fa fa-2x fa-remove" ng-click="deleteUser($index)"></i></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-remove" ng-click="deleteUser($index)"></em></div>
             </div>
             <div class="row" ng-show="showUserInputFileds">
                 <div class="col-sm-11"><input type="text" id="user" class="form-control"
                                               placeholder="path" ng-model="user"></div>
-                <div class="col-sm-1"><i class="close fa fa-2x fa-plus" ng-click="addUser(this,user)""></i></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-plus" ng-click="addUser(this,user)"></em></div>
             </div>
-            <button type=" button" ng-click="showUserField()" class="btn btn-lg"><i class="fa fa-plus"
+            <button type=" button" ng-click="showUserField()" class="btn btn-lg"><em class="fa fa-plus"
                                                                                     aria-hidden="false">
-                User</i></button>
+                User</em></button>
         </div>
         <h3>Group</h3>
         <div class="form-group">
@@ -66,34 +66,34 @@
             <div class="form-group" style="padding-bottom:10px; " ng-repeat="deployPath in hdi.deploy track by $index">
                 <div class="col-sm-11"><input type="text" class="form-control" placeholder="deployPath"
                                               ng-model="hdi.deploy[$index]"></div>
-                <div class="col-sm-1"><i class="close fa fa-2x fa-remove" ng-click="deleteDeploy($index)"></i></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-remove" ng-click="deleteDeploy($index)"></em></div>
             </div>
             <div class="row" ng-show="showTextField">
                 <div class="col-sm-11"><input type="text" id="deployPath" class="form-control"
                                               placeholder="path" ng-model="path"></div>
-                <div class="col-sm-1"><i class="close fa fa-2x fa-plus" ng-click="addDeployPath(this,path)""></i></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-plus" ng-click="addDeployPath(this,path)"></em></div>
             </div>
-            <button type=" button" ng-click="showAdditionalTextField()" class="btn btn-lg"><i class="fa fa-plus"
+            <button type=" button" ng-click="showAdditionalTextField()" class="btn btn-lg"><em class="fa fa-plus"
                                                                                               aria-hidden="false">
-              Path</i></button>
+              Path</em></button>
         </div>
 
         <h3>Undeploy</h3>
         <div class="form-group" style="border:1px solid black; padding: 20px;">
-            <div class="row" style="padding-bottom:10px; " ng-repeat="deployPath in hdi.undeploy track by $index">
-                <div class="col-sm-11"><input type="text" class="form-control" placeholder="deployPath"
+            <div class="row" style="padding-bottom:10px; " ng-repeat="unDeployPath in hdi.undeploy track by $index">
+                <div class="col-sm-11"><input type="text" class="form-control" placeholder="unDeployPath"
                                               ng-model="hdi.undeploy[$index]"></div>
-                <div class="col-sm-1"><i class="close fa fa-2x fa-remove" ng-click="deleteUnDeploy($index)""></i></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-remove" ng-click="deleteUnDeploy($index)"></em></div>
             </div>
             <div class="row" ng-show="showUndeployField">
-                <div class="col-sm-11"><input type="text" id="deployPath" class="form-control"
+                <div class="col-sm-11"><input type="text" id="unDeployPath" class="form-control"
                                               placeholder="path" ng-model="undeployPath"></div>
-                <div class="col-sm-1"><i class="close fa fa-2x fa-plus"
-                                         ng-click="addUnDeployPath(this,undeployPath)""></i></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-plus"
+                                         ng-click="addUnDeployPath(this,undeployPath)"></em></div>
             </div>
-            <button type=" button" ng-click="showUndeployPathField()" class="btn btn-lg"><i class="fa fa-plus"
+            <button type=" button" ng-click="showUndeployPathField()" class="btn btn-lg"><em class="fa fa-plus"
                                                                                             aria-hidden="false">
-              Path</i></button>
+              Path</em></button>
         </div>
         <button type="button" class="btn btn-primary" style="margin-top:10px;" ng-click="save()">Save
         </button>

@@ -100,56 +100,6 @@ angular.module('page', [])
 			$scope.save()
 		}
 
-		//     $scope.deleteSchedule = function (scheduleIndex) {
-		//       console.log("Schedule to delete" + scheduleIndex);
-		//       $scope.hdi.schedules.splice(scheduleIndex, 1);
-		//       console.log("Schedule to delete" + scheduleIndex);
-		//       $scope.save();
-		//     }
-		//     $scope.addScheduler = function () {
-		//       var schedule = {
-		//         "description": "",
-		//         "xscron": "",
-		//         "parameter": {}
-		//       };
-		//       $scope.hdi.schedules.push(schedule);
-		//       $scope.save();
-		//     };
-
-		//     $scope.hoverIn = function () {
-		//       this.hoverEdit = true;
-		//     };
-
-		//     $scope.hoverOut = function () {
-		//       this.hoverEdit = false;
-		//     };
-
-		//     $scope.create = function () {
-		//       let exists = $scope.roles.filter(function (e) {
-		//         return e.name === $scope.entity.name;
-		//       });
-		//       if (exists.length === 0) {
-		//         $scope.roles.push($scope.entity);
-		//         toggleEntityModal();
-		//       } else {
-		//         $scope.error = "Role with a name [" + $scope.entity.name + "] already exists!";
-		//       }
-		//     };
-
-		//     $scope.update = function (key, value) {
-		//       console.log("UPDATE ", key, value);
-		//       $scope.deleteParameter(scheduleIndex, oldKey)
-		//       $scope.addParameter(key, value);
-		//     };
-
-		//     $scope.delete = function () {
-		//       $scope.roles = $scope.roles.filter(function (e) {
-		//         return e !== $scope.entity;
-		//       });
-		//       toggleEntityModal();
-		//     };
-
-
 		function saveContents(text) {
 			console.log('Save called...');
 			if ($scope.file) {
@@ -170,7 +120,7 @@ angular.module('page', [])
 
 		function removeNull(array) {
 			return array.filter(x => x !== null)
-		};
+		}
 
 		$scope.save = function () {
 			contents = angular.toJson($scope.hdi);
@@ -184,10 +134,5 @@ angular.module('page', [])
 				messageHub.post({data: $scope.file}, 'editor.file.dirty');
 			}
 		});
-
-
-		// $(function () {
-		//   $('[data-toggle="tooltip"]').tooltip()
-		// })
 	});
 

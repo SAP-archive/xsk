@@ -21,7 +21,6 @@
         <module>ide-hdbti</module>
         <module>xsk-workspace-menu</module>
         <module>xsk-ide-xsjob</module>
-        <module>xsk-xsjob-menu</module>
         <module>xsk-ide-hdi</module>
     </modules>
 

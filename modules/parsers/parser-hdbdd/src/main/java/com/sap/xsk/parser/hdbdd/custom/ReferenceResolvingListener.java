@@ -55,8 +55,10 @@ public class ReferenceResolvingListener extends CdsBaseListener {
 
   @Override
   public void enterUsingRule(UsingRuleContext ctx) {
-    String packagePath = ctx.pack.stream().map(IdentifierContext::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
-    String memberPath = ctx.members.stream().map(IdentifierContext::getText).map(HdbddUtils::processEscapedSymbolName).collect(Collectors.joining("."));
+    String packagePath = ctx.pack.stream().map(IdentifierContext::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
+    String memberPath = ctx.members.stream().map(IdentifierContext::getText).map(HdbddUtils::processEscapedSymbolName)
+        .collect(Collectors.joining("."));
     String fullSymbolName = packagePath + "::" + memberPath;
     Symbol externalSymbol = this.symbolTable.getSymbol(fullSymbolName);
     if (externalSymbol == null) {
@@ -135,7 +137,8 @@ public class ReferenceResolvingListener extends CdsBaseListener {
     AssociationSymbol associationSymbol = this.associations.get(ctx);
 
     if (ctx.getChild(ManagedForeignKeysContext.class, 0) == null
-        && ctx.getChild(UnmanagedForeignKeyContext.class, 0) == null) {
+        && ctx.getChild(UnmanagedForeignKeyContext.class, 0) == null
+        && associationSymbol.getTarget() != null) {
       List<EntityElementSymbol> associationKeys = associationSymbol.getTarget().getKeys();
       associationSymbol.setForeignKeys(associationKeys);
       associationSymbol.setManaged(true);
@@ -264,7 +267,8 @@ public class ReferenceResolvingListener extends CdsBaseListener {
   private void setResolvedType(boolean isTypeOfUsed, Typeable typeable, Symbol resolvedSymbol) {
     Symbol typeableSymbol = (Symbol) typeable;
     if (resolvedSymbol == null) {
-      throw new CDSRuntimeException(String.format("Error at line: %s. No such type existing.", typeableSymbol.getIdToken().start.getLine()));
+      throw new CDSRuntimeException(
+          String.format("Error at line: %s. No such type existing.", typeableSymbol.getIdToken().start.getLine()));
     } else if (resolvedSymbol instanceof EntitySymbol) {
       throw new CDSRuntimeException(
           String.format("Error at line: %s. Entities could not be used as a type.", typeableSymbol.getIdToken().start.getLine()));

@@ -333,7 +333,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
 
     Typeable typeable = typeables.get(ctx.getParent());
     if (builtInHanaType == null) {
-      throw new CDSRuntimeException(String.format("Error at line: %s. No such hana type found.", ctx.hanaType.getLine()));
+      throw new CDSRuntimeException(String.format("Error at line: %s. No such hana type found.", ctx.hanaType.start.getLine()));
     } else {
       typeable.setType(builtInHanaType);
     }
@@ -341,7 +341,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
 
   @Override
   public void enterAssignHanaTypeWithArgs(AssignHanaTypeWithArgsContext ctx) {
-    Token typeIdToken = ctx.BUILT_IN_HANA_TYPE().getSymbol();
+    Token typeIdToken = ctx.hanaType.ID().getSymbol();
     String typeId = typeIdToken.getText();
     Symbol resolvedType = this.symbolTable.getHanaType(typeId);
 

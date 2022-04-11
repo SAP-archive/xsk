@@ -63,7 +63,7 @@ public class MigrationITest {
   }
 
   private void setup(String param) {
-    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, false);
+    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
     credentials = new MigrationCredentials();
     expectedContentList = expectedContentProvider.getExpectedContentList();
   }

@@ -2,19 +2,33 @@
 title: Database User
 ---
 
-SAP HANA Cloud Database User
+SAP HANA (Cloud) Database User
 ===
 
 ## Overview
 ---
 
-To perform a successful migration, you need a database user.
-We recommend that you create a new database user instead of the default/admin `DBADMIN` database user.
+To perform a successful migration, you need database users in HANA on Neo and HANA Cloud.
+We recommend that you create a new database user instead of the default ones (`SYSTEM` and `DBADMIN` respectively).
 
 ## Steps
 ---
 
-To create a new database user, go through the following steps:
+### SAP HANA on Neo
+To create a new database user in SAP HANA on Neo, execute the following statement:
+
+```SQL
+CREATE USER <XSK-USERNAME> PASSWORD <XSK-PASSWORD> NO FORCE_FIRST_PASSWORD_CHANGE;
+GRANT SELECT ON _SYS_REPO.DELIVERY_UNITS TO <XSK-USERNAME>;
+GRANT SELECT ON _SYS_REPO.ACTIVE_OBJECT TO <XSK-USERNAME>;
+GRANT CATALOG READ TO <XSK-USERNAME>;
+GRANT EXPORT TO <XSK-USERNAME>;
+GRANT EXECUTE ON REPOSITORY_REST to <XSK-USERNAME>;
+GRANT REPO.READ ON ".REPO_PACKAGE_ROOT" TO <XSK-USERNAME>;
+```
+
+### SAP HANA Cloud
+To create a new database user in SAP HANA Cloud, go through the following steps:
 
 === "SAP HANA Cockpit"
 

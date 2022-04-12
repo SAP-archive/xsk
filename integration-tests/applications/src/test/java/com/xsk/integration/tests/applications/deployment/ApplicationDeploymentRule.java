@@ -9,19 +9,20 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications;
+package com.xsk.integration.tests.applications.deployment;
 
+import com.xsk.integration.tests.applications.deployment.XSKProjectDeployer;
 import org.junit.rules.ExternalResource;
 import java.nio.file.Path;
 
 public class ApplicationDeploymentRule extends ExternalResource {
 
-  private final XSKProjectPublisher projectPublisher;
+  private final XSKProjectDeployer projectPublisher;
   private final String applicationName;
 
   public ApplicationDeploymentRule(String applicationName) {
     this.applicationName = applicationName;
-    projectPublisher = new XSKProjectPublisher();
+    projectPublisher = new XSKProjectDeployer();
   }
 
   @Override
@@ -29,11 +30,13 @@ public class ApplicationDeploymentRule extends ExternalResource {
     super.before();
     String resourcePathString = getClass().getResource("/test-applications/" + applicationName).getPath();
     Path resourcePath = Path.of(resourcePathString);
-    projectPublisher.publish(applicationName, resourcePath);
+    projectPublisher.deploy(applicationName, resourcePath);
   }
 
   @Override
   protected void after() {
     super.after();
+    String resourcePathString = getClass().getResource("/test-applications/" + applicationName).getPath();
+    projectPublisher.undeploy(applicationName, resourcePathString);
   }
 }

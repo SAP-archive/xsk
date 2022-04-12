@@ -9,15 +9,15 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications;
+package com.xsk.integration.tests.applications.deployment;
 
-class PublishException extends RuntimeException {
+public class DeploymentException extends RuntimeException {
 
-  public PublishException(String message) {
+  public DeploymentException(String message) {
     super(message);
   }
 
-  public PublishException(String message, Throwable cause) {
+  public DeploymentException(String message, Throwable cause) {
     super(message, cause);
   }
 }

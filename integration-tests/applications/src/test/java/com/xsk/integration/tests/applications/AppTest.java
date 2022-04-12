@@ -11,6 +11,7 @@
  */
 package com.xsk.integration.tests.applications;
 
+import com.xsk.integration.tests.applications.deployment.ApplicationDeploymentRule;
 import org.junit.ClassRule;
 import org.junit.Test;
 

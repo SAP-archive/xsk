@@ -31,15 +31,19 @@ jobs:
           install: true
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
+        if: ${{ env.SONAR_TOKEN != '' }}
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Maven Build and Analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean install -B sonar:sonar -Dsonar.projectKey=SAP_xsk
+        run: |
+          [ "$SONAR_TOKEN" ] && SONAR_ARG="-B sonar:sonar -Dsonar.projectKey=SAP_xsk"
+          mvn clean install $SONAR_ARG
       - name: Docker Login
         run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
       - name: Push XSK

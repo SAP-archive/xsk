@@ -2,15 +2,15 @@
 <!-- Copyright (c) 2013 SAP AG, All Rights Reserved -->
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-  <meta charset="utf-8"/>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta charset="utf-8"/>
 
-  <title>XS IDE</title>
-  <script id="sap-ui-bootstrap" type="text/javascript"
-          src="/sap/ui5/1/resources/sap-ui-core.js"
-          data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.ui.demokit"
-          data-sap-ui-theme="sap_goldreflection">
-  </script>
+<title>XS IDE</title>
+<script id="sap-ui-bootstrap" type="text/javascript"
+    src="/sap/ui5/1/resources/sap-ui-core.js"
+    data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.ui.demokit"
+    data-sap-ui-theme="sap_goldreflection">
+    </script>
 </head>
 
 <body class="sapUiBody">
@@ -26,14 +26,14 @@ var oInput = new sap.ui.commons.TextArea({
     wrapping : sap.ui.core.Wrapping.Off,
     valueState : sap.ui.core.ValueState.Warning
     });
-
+    
 // create a simple button with some text and a tooltip only
 var oButton = new sap.ui.commons.Button({
         text : "Call Backend",
         tooltip : "call backend javascript",
         press : function() {
-                            $.get("logic.xsjs",function(result){
-                                                                oInput.setValue(result);
+                            $.get("logic.xsjs",function(result){    
+                                                                oInput.setValue(result); 
                                                                 });
                             }
         });

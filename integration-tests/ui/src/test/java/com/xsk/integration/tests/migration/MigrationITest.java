@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.xsk.integration.tests.migration;
@@ -48,7 +48,7 @@ public class MigrationITest {
   private List<ExpectedContent> expectedContentList;
 
   @Test
-  @Parameters({"Migration-Chrome-Hana1", /*"Migration-Chrome-Hana2",*/ "Migration-Firefox-Hana1", /*"Migration-Firefox-Hana2"*/})
+  @Parameters({"Chrome", /*"Migration-Chrome-Hana2",*/ "Firefox" /*"Migration-Firefox-Hana2"*/})
   public void migrationTest(String param) throws IOException {
     setup(param);
     loginIfNecessary();
@@ -56,6 +56,7 @@ public class MigrationITest {
     enterNeoDBTunnelCredentials();
     enterHanaCredentials();
     selectDeliveryUnits();
+    approveChanges();
     goToWorkspace();
     openFilesFromJstree();
     validateAllMigratedFileContents();
@@ -63,7 +64,7 @@ public class MigrationITest {
 
   private void setup(String param) {
     webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
-    credentials = new MigrationCredentials(param.contains("Hana2"));
+    credentials = new MigrationCredentials();
     expectedContentList = expectedContentProvider.getExpectedContentList();
   }
 
@@ -110,7 +111,12 @@ public class MigrationITest {
     webBrowser.selectAndAssertDropdown("deliveryUnitList", (item) -> item.equals(expectedContentProvider.getExpectedDeliveryUnitName()));
     webBrowser.clickItem(By.xpath("//*[@ng-disabled=\"duDropdownDisabled\"]"));
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//*[@ng-click=\"finishClicked()\"]"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click=\"nextClicked()\"]"));
+  }
+
+  private void approveChanges() {
+    webBrowser.clickItem(By.xpath("//*[@ng-click=\"startMigration()\"]"));
+
   }
 
   private void goToWorkspace() {
@@ -224,7 +230,6 @@ public class MigrationITest {
     String basicAuth = "Basic " + new String(Base64.getEncoder().encode(DirigibleConnectionProperties.AUTH.getBytes()));
     connection.setRequestProperty("Authorization", basicAuth);
     BufferedInputStream migratedImageStream = new BufferedInputStream(connection.getInputStream());
-
     return migratedImageStream.readAllBytes();
   }
 

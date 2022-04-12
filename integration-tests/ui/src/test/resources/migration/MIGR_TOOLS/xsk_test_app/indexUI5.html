@@ -2,14 +2,14 @@
 <!-- Copyright (c) 2013 SAP AG, All Rights Reserved -->
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-  <meta charset="utf-8"/>
-  <title>Hello World Demo with SAPUI5</title>
-  <script id="sap-ui-bootstrap" type="text/javascript"
-          src="/sap/ui5/1/resources/sap-ui-core.js"
-          data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.ui.demokit"
-          data-sap-ui-theme="sap_goldreflection">
-  </script>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta charset="utf-8"/>
+<title>Hello World Demo with SAPUI5</title>
+<script id="sap-ui-bootstrap" type="text/javascript"
+    src="/sap/ui5/1/resources/sap-ui-core.js"
+    data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.ui.demokit"
+    data-sap-ui-theme="sap_goldreflection">
+    </script>
 </head>
 
 <body class="sapUiBody">
@@ -30,26 +30,26 @@ var oButton = new sap.ui.commons.Button({
         text : "Call Backend",
         tooltip : "call backend javascript",
         press : function() {
-                            $.get("logic.xsjs",function(result){
-                                                                oInput.setValue(result);
+                            $.get("logic.xsjs",function(result){    
+                                                                oInput.setValue(result); 
                                                                 });
                             }
         });
-
+ 
 var oLayout1 = new sap.ui.commons.layout.VerticalLayout({content: [oInput, oButton]});
 
 var oLink1 = new sap.ui.commons.Link({
-        text: "Introducing...SAP HANA Extended Application Services (XS)",
+        text: "Introducing...SAP HANA Extended Application Services (XS)", 
         href:"http://www.saphana.com/docs/DOC-3789"
         });
-
+        
 var oLink2 = new sap.ui.commons.Link({
-        text: "UI Development Toolkit for HTML5 Developer Center",
+        text: "UI Development Toolkit for HTML5 Developer Center", 
         href:"http://scn.sap.com/community/developer-center/front-end"
         });
-
+        
 var oLayout2 = new sap.ui.commons.layout.VerticalLayout({content: [oLink1, oLink2]});
-
+    
  var oShell = new sap.ui.ux3.Shell("myShell", {
     appTitle: "SAPUI5 Gold Reflection Shell",
 	appIcon: "./images/SAPLogo.gif",

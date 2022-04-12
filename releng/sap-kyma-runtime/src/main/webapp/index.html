@@ -9,15 +9,17 @@
   -->
 <!DOCTYPE HTML>
 <html lang="en" xml:lang="en">
-  <title>XSK</title>
-<body>
-	<iframe id="statistics" title="statistics" src='' style="width:0;height:0;border:0; border:none;"></iframe>
-	<script type="text/javascript">
-		var url = 'https://www.dirigible.io/services/statistics.html?type=anonymous';
-    	document.getElementById('statistics').src = url;
-		setTimeout(function() {
-			window.location = 'home';
-		}, 150);
-	</script>
-</body>
+  <head>
+    <title>XSK</title>
+  </head>
+  <body>
+    <iframe id="statistics" title="statistics" src='' style="width:0;height:0;border:0; border:none;"></iframe>
+    <script type="text/javascript">
+      var url = 'https://www.dirigible.io/services/statistics.html?type=anonymous';
+        document.getElementById('statistics').src = url;
+      setTimeout(function() {
+        window.location = 'home';
+      }, 150);
+    </script>
+  </body>
 </html>

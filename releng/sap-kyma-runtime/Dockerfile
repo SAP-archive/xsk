@@ -20,7 +20,7 @@ EXPOSE 8080
 
 ADD entrypoint.sh /entrypoint.sh
 
-RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible
+RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 xsk
 
 # Add gosu utility for privilege drop
 RUN apt-get update && \
@@ -30,4 +30,4 @@ RUN apt-get update && \
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["/usr/local/tomcat/bin/catalina.sh","jpda","run"]
+CMD ["/usr/local/tomcat/bin/catalina.sh","run"]

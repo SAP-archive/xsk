@@ -69,7 +69,7 @@
     	<appender-ref ref="ConsoleLoggingAppender" />
 	</logger>
 
-	<root level="INFO">
+	<root level="ERROR">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE_BASE" />
 	</root>

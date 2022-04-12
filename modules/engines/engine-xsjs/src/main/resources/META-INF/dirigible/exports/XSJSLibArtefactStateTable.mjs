@@ -68,11 +68,14 @@ export class XSJSLibArtefactStateTable {
         this.tableDB,
         this.tableLocation
         );
-
+        try {
+          table.existsTable();
+        } catch(e) {
+          throw new Error("IVOOO!!!:: " + e);
+        }
         if (!table.existsTable()) {
           table.createTable();
         }
-
         return table;
       } catch(e) {
         throw new Error("Cannot check if synchrnoisation is needed. Reason: " + e);

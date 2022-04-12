@@ -5,9 +5,6 @@ FROM tomcat:9.0.56-jre11-openjdk-slim AS base
 
 COPY target/ROOT.war $CATALINA_HOME/webapps/
 
-# Copy application folder
-ARG APP_PATH
-COPY $APP_PATH /usr/local/tomcat/target/dirigible/repository/root/registry/public/
 ENV DIRIGIBLE_HOME_URL=/services/v4/web/
 
 # Install wget 

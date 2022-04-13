@@ -5,8 +5,14 @@ export class XSJSLibExportsGenerator {
 
   processedArtefactsTable = null;
 
-  constructor(targetRegistryCollection, stateTableName) {
-    this.processedArtefactsTable = new XSJSLibArtefactStateTable(stateTableName, "PUBLIC", "local", "SystemDB");
+  constructor(targetRegistryCollection, stateTableParams) {
+    this.processedArtefactsTable = new XSJSLibArtefactStateTable(
+      stateTableParams.name,
+      stateTableParams.schema,
+      stateTableParams.location,
+      stateTableParams.db
+    );
+
     this._generateExportsRecursively(targetRegistryCollection);
   }
 

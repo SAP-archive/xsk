@@ -44,41 +44,42 @@ export class XSJSLibArtefactStateTable {
 
   _getOrCreateXSJSLibArtefactStateTable() {
     try {
-        let table = dao.create({
-            table: this.tableName,
-            properties: [{
-                name: "id",
-                column: "ID",
-                type: "BIGINT",
-                id: true
-            }, {
-                name: "location",
-                column: "LOCATION",
-                type: "VARCHAR",
-                required: true,
-                unique: true
-            }, {
-                name: "hash",
-                column: "HASH",
-                type: "VARCHAR",
-                required: true
-            }]
-        },
-        null,
-        this.tableDB,
-        this.tableLocation
-        );
-        try {
-          table.existsTable();
-        } catch(e) {
-          throw new Error("IVOOO!!!:: " + e);
-        }
-        if (!table.existsTable()) {
-          table.createTable();
-        }
-        return table;
-      } catch(e) {
-        throw new Error("Cannot check if synchrnoisation is needed. Reason: " + e);
+      let table = dao.create({
+        table: this.tableName,
+        properties: [{
+          name: "id",
+          column: "ID",
+          type: "BIGINT",
+          id: true
+        }, {
+          name: "location",
+          column: "LOCATION",
+          type: "VARCHAR",
+          required: true,
+          unique: true
+        }, {
+          name: "hash",
+          column: "HASH",
+          type: "VARCHAR",
+          required: true
+        }]
+      },
+      null,
+      this.tableDB,
+      this.tableLocation
+      );
+
+      if (!table.existsTable()) {
+        table.createTable();
       }
+
+      return table;
+    } catch(e) {
+      throw new Error("Cannot check if synchrnoisation is needed. Reason: " + e);
+    }
+  }
+
+  clear() {
+    this.table.remove();
   }
 }

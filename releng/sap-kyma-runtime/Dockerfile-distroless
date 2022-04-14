@@ -1,0 +1,61 @@
+# Docker descriptor for XSK
+# Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License, v2.0
+# which accompanies this distribution, and is available at
+# http://www.apache.org/licenses/LICENSE-2.0
+  
+# SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+# SPDX-License-Identifier: Apache-2.0
+
+FROM tomcat:9.0.56-jre11-openjdk AS base
+
+RUN rm -R /usr/local/tomcat/webapps.dist
+COPY target/ROOT.war $CATALINA_HOME/webapps/
+
+RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
+RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
+
+RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 xsk
+RUN chown -R xsk:xsk $CATALINA_HOME
+
+FROM sapmachine:11.0.14.1 as jdk
+
+FROM gcr.io/distroless/base-debian11
+
+ENV DIRIGIBLE_HOME_URL=/services/v4/web/
+
+COPY --from=base /etc/passwd /etc/passwd
+USER xsk
+ENV CATALINA_HOME=/usr/local/tomcat
+COPY --from=base --chown=xsk:xsk $CATALINA_HOME $CATALINA_HOME 
+WORKDIR $CATALINA_HOME 
+
+COPY --from=jdk /usr/lib/jvm/sapmachine-11/ /usr/lib/java
+COPY --from=jdk /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/libz.so.1
+
+ENV JAVA_HOME /usr/lib/java
+ENV PATH $PATH:$JAVA_HOME/bin
+
+ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
+
+EXPOSE 8080 
+
+CMD ["java", \
+ "-Djava.util.logging.config.file=/usr/local/tomcat/conf/logging.properties", \
+ "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager", \
+ "-Djdk.tls.ephemeralDHKeySize=2048", \
+ "-Djava.protocol.handler.pkgs=org.apache.catalina.webresources", \
+ "-Dorg.apache.catalina.security.SecurityListener.UMASK=0027", \
+ "-Dignore.endorsed.dirs=", \
+ "-classpath", \
+ "/usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar", \
+ "-Dcatalina.base=/usr/local/tomcat/", \
+ "-Dcatalina.home=/usr/local/tomcat/", \
+ "-Djava.io.tmpdir=/usr/local/tomcat/temp", \
+ "org.apache.catalina.startup.Bootstrap", \
+ "start" \
+]
+
+ENTRYPOINT []

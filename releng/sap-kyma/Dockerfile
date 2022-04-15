@@ -13,7 +13,7 @@ RUN echo "Using external JDK"
 COPY $JDK_HOME /usr/local/jdk
 ENV JAVA_HOME=/usr/local/jdk
 ENV JRE_HOME=/usr/local/jdk
-ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED" # used for XSODataInitializer
+ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
 
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"

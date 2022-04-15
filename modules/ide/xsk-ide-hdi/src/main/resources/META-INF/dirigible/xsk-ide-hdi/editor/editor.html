@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="page">
+<head>
+    <title>HDI Editor</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css">
+    <link type="image/png" rel="shortcut icon" href="/services/v4/web/resources/images/favicon.png"/>
+
+    <!-- Custom IDE Styles -->
+    <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/ide.css"/>
+    <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/xsjob.css"/>
+
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular.min.js"></script>
+    <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular-resource.min.js"></script>
+    <script type="text/javascript" src="/services/v4/web/ide-core/ui/message-hub.js"></script>
+</head>
+
+<body ng-controller="PageController">
+<div class="container">
+    <div class="page-header">
+        <h1>HDI Description: {{file}}</h1>
+    </div>
+    <form>
+        <h3>Configuration</h3>
+        <div class="form-group">
+            <input type="text" class="form-control" ng-model="hdi.configuration" value="dirigible-defined">
+        </div>
+        <h3>Users</h3>
+        <div class="form-group" style="border:1px solid black; padding: 20px;">
+
+            <div class="row" style="padding-bottom:10px; " ng-repeat="user in hdi.users track by $index">
+                <div class="col-sm-11"><input type="text" class="form-control" placeholder="user"
+                                              ng-model="hdi.users[$index]">
+                </div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-remove" ng-click="deleteUser($index)"></em></div>
+            </div>
+            <div class="row" ng-show="showUserInputFileds">
+                <div class="col-sm-11"><input type="text" id="user" class="form-control"
+                                              placeholder="path" ng-model="user"></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-plus" ng-click="addUser(this,user)"></em></div>
+            </div>
+            <button type=" button" ng-click="showUserField()" class="btn btn-lg"><em class="fa fa-plus"
+                                                                                    aria-hidden="false">
+                User</em></button>
+        </div>
+        <h3>Group</h3>
+        <div class="form-group">
+            <input type="text" class="form-control" ng-model="hdi.group" value="dirigible-defined">
+        </div>
+        <h3>Containers</h3>
+        <div class="form-group">
+            <input type="text" class="form-control" ng-model="hdi.container" value="dirigible-defined">
+        </div>
+
+        <h3>Deploy</h3>
+        <div class="form-group" style="border:1px solid black; padding: 20px;">
+            <div class="form-group" style="padding-bottom:10px; " ng-repeat="deployPath in hdi.deploy track by $index">
+                <div class="col-sm-11"><input type="text" class="form-control" placeholder="deployPath"
+                                              ng-model="hdi.deploy[$index]"></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-remove" ng-click="deleteDeploy($index)"></em></div>
+            </div>
+            <div class="row" ng-show="showTextField">
+                <div class="col-sm-11"><input type="text" id="deployPath" class="form-control"
+                                              placeholder="path" ng-model="path"></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-plus" ng-click="addDeployPath(this,path)"></em></div>
+            </div>
+            <button type=" button" ng-click="showAdditionalTextField()" class="btn btn-lg"><em class="fa fa-plus"
+                                                                                              aria-hidden="false">
+              Path</em></button>
+        </div>
+
+        <h3>Undeploy</h3>
+        <div class="form-group" style="border:1px solid black; padding: 20px;">
+            <div class="row" style="padding-bottom:10px; " ng-repeat="unDeployPath in hdi.undeploy track by $index">
+                <div class="col-sm-11"><input type="text" class="form-control" placeholder="unDeployPath"
+                                              ng-model="hdi.undeploy[$index]"></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-remove" ng-click="deleteUnDeploy($index)"></em></div>
+            </div>
+            <div class="row" ng-show="showUndeployField">
+                <div class="col-sm-11"><input type="text" id="unDeployPath" class="form-control"
+                                              placeholder="path" ng-model="undeployPath"></div>
+                <div class="col-sm-1"><em class="close fa fa-2x fa-plus"
+                                         ng-click="addUnDeployPath(this,undeployPath)"></em></div>
+            </div>
+            <button type=" button" ng-click="showUndeployPathField()" class="btn btn-lg"><em class="fa fa-plus"
+                                                                                            aria-hidden="false">
+              Path</em></button>
+        </div>
+        <button type="button" class="btn btn-primary" style="margin-top:10px;" ng-click="save()">Save
+        </button>
+    </form>
+</div>
+<script type="text/javascript" src="editor.js"></script>
+
+</body>
+
+</html>

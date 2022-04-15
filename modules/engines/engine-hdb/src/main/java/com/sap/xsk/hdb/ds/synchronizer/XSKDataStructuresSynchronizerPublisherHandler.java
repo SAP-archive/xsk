@@ -24,7 +24,7 @@ public class XSKDataStructuresSynchronizerPublisherHandler extends MetadataPubli
   }
 
   @Override
-  public void afterPublish(String location) {
+  public void afterPublish(String workspaceLocation, String registryLocation) {
 
   }
 

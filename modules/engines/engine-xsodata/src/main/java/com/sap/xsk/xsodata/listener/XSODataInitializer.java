@@ -12,6 +12,7 @@
 package com.sap.xsk.xsodata.listener;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -37,23 +38,24 @@ public class XSODataInitializer implements ServletContextListener {
     }
   }
 
-  private void setFinalStatic(Field field, Object newValue) throws Exception {
+  private void setFinalStatic(Field field, Object newValue)
+      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     field.setAccessible(true);
 
     Field modifiersField = getModifiersField();
     modifiersField.setAccessible(true);
-    modifiersField.setInt(field, (field.getModifiers() & ~Modifier.FINAL));
+    modifiersField.setInt(field, (field.getModifiers() & ~Modifier.FINAL)); // NOSONAR
 
     field.set(null, newValue);
   }
 
-  private Field getModifiersField() throws Exception {
+  private Field getModifiersField() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
     Method getDeclaredFields0 = Class.class.getDeclaredMethod("getDeclaredFields0", boolean.class);
-    getDeclaredFields0.setAccessible(true);
+    getDeclaredFields0.setAccessible(true); // NOSONAR
     Field[] allDeclaredFields = (Field[]) getDeclaredFields0.invoke(Field.class, false);
     return Arrays.stream(allDeclaredFields)
         .filter(f -> "modifiers".equals(f.getName()))
         .findFirst()
-        .orElseThrow(() -> new RuntimeException("Could not get modifiers field"));
+        .orElseThrow(() -> new IllegalStateException("Could not get modifiers field"));
   }
 }

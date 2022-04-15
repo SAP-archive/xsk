@@ -15,9 +15,14 @@ import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableIndexModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AbstractAnnotationValue;
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationArray;
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
@@ -31,7 +36,9 @@ import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -49,6 +56,11 @@ public class HdbddTransformer {
   private static final String QUOTE = "\"";
   private static final String DOT = ".";
   private static final String PACKAGE_DELIMITER = "::";
+  private static final String INDEX = "index";
+  private static final String UNIQUE = "unique";
+  private static final String NAME = "name";
+  private static final String ORDER = "order";
+  private static final String ELEMENT_NAMES = "elementNames";
 
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol, String location) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
@@ -114,8 +126,52 @@ public class HdbddTransformer {
 
     tableModel.setColumns(tableColumns);
     tableModel.setLocation(location);
-    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null) {
+    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null){
       tableModel.setTableType(entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue());
+
+      if (entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX) != null){
+        List<XSKDataStructureHDBTableIndexModel> indexes = new ArrayList<>();
+        List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndexes = new ArrayList<>();
+        AnnotationArray catalogIndexAnnArray = (AnnotationArray) entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX);
+
+        for (AbstractAnnotationValue currentAnnValue : catalogIndexAnnArray.getValues()){
+          AnnotationObj annObject = (AnnotationObj) currentAnnValue;
+          Boolean isUnique = annObject.getValue(UNIQUE) != null && Boolean.parseBoolean(annObject.getValue(UNIQUE).getValue());
+          String name = annObject.getValue(NAME) != null ? annObject.getValue(NAME).getValue() : null;
+          String order = annObject.getValue(ORDER) != null ? annObject.getValue(ORDER).getValue() : null;
+          Set<String> indexColumnSet = new HashSet<>();
+
+          ((AnnotationArray) annObject.getValue(ELEMENT_NAMES)).getValues().forEach(currentElement -> {
+            indexColumnSet.add(currentElement.getValue());
+          });
+
+          if (!isUnique){
+            XSKDataStructureHDBTableIndexModel indexModel = new XSKDataStructureHDBTableIndexModel();
+            if (name != null){
+              indexModel.setIndexName(name);
+            }
+            if (order != null){
+              indexModel.setOrder(order);
+            }
+            indexModel.setIndexColumns(indexColumnSet);
+            indexModel.setUnique(false);
+            indexes.add(indexModel);
+          }
+          else {
+            XSKDataStructureHDBTableConstraintUniqueModel uniqueIndexModel = new XSKDataStructureHDBTableConstraintUniqueModel();
+            if (name != null){
+              uniqueIndexModel.setIndexName(name);
+            }
+            if (order != null){
+              uniqueIndexModel.setOrder(order);
+            }
+            uniqueIndexModel.setColumns(indexColumnSet.toArray(String[]::new));
+            uniqueIndexes.add(uniqueIndexModel);
+          }
+        }
+        tableModel.setIndexes(indexes);
+        tableModel.getConstraints().setUniqueIndices(uniqueIndexes);
+      }
     }
 
     for (int i = 0; i < entitySymbol.getElements().size(); i++) {

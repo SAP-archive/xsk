@@ -531,7 +531,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   @Test
   public void testParseHDBDDWithNoTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/NoTableType.hdbdd", "");
-    assertEquals(null, ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
+    assertNull(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
   }
 
   @Test
@@ -573,4 +573,17 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
     assertEquals(expectedRawContent, viewModel.getRawContent().trim());
   }
+
+  @Test
+  public void testParseHDBDDWithUniqueCatalogIndex() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CatalogIndexUnique.hdbdd", "");
+    assertFalse(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getConstraints().getUniqueIndices().isEmpty());
+  }
+
+  @Test
+  public void testParseHDBDDWithNonUniqueCatalogIndex() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CatalogIndexNonUnique.hdbdd", "");
+    assertFalse(((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getIndexes().get(0).isUnique());
+  }
+
 }

@@ -64,17 +64,6 @@
                             </rules>
                         </configuration>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven.compiler.plugin.version}</version>
-                        <configuration>
-                            <source>${maven.compiler.source}</source>
-                            <target>${maven.compiler.target}</target>
-                            <debug>true</debug>
-                            <debuglevel>lines,vars,source</debuglevel>
-                        </configuration>
-                    </plugin>
                     <!-- <plugin>
                       <groupId>org.apache.maven.plugins</groupId>
                       <artifactId>maven-javadoc-plugin</artifactId>
@@ -270,8 +259,8 @@
         <maven.clean.plugin.version>3.2.0</maven.clean.plugin.version>
         <maven.clean.plugin.directory>src/main/resources/META-INF/dirigible</maven.clean.plugin.directory>
         <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <maven.scm.plugin.version>1.12.2</maven.scm.plugin.version>
         <commons.io>2.7</commons.io>
         <commons.codec>1.10</commons.codec>
@@ -331,6 +320,7 @@
         <content.output.directory>${basedir}/src/main/resources/META-INF/dirigible/${content.project.name}</content.output.directory>
 
         <license.header.location>licensing-header.txt</license.header.location>
+        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
 
     </properties>
 </project>

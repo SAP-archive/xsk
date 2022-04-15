@@ -4,7 +4,7 @@
 # (Optional) JDK_TYPE could be `default-jdk` or `external-jdk`
 ARG JDK_TYPE=default-jdk
 
-FROM tomcat:9.0.56-jre11-openjdk AS base
+FROM tomcat:9.0.56-jre17-openjdk AS base
 
 FROM base AS xsk-external-jdk
 # If JDK_TYPE is set to `external-jdk`, then the JDK_HOME is required and it should point to the home directory of the jdk
@@ -13,6 +13,7 @@ RUN echo "Using external JDK"
 COPY $JDK_HOME /usr/local/jdk
 ENV JAVA_HOME=/usr/local/jdk
 ENV JRE_HOME=/usr/local/jdk
+ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED" # used for XSODataInitializer
 
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
@@ -25,6 +26,7 @@ RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgre
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
 ENV DIRIGIBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
+ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
 
 EXPOSE 8080
 

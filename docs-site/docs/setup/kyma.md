@@ -40,6 +40,18 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
 1. Access the SAP BTP, Kyma environment via the SAP BTP cockpit.
 
+1. Download your kubeconfig from Kyma Environment when you click on KubeconfigURL
+
+1. Install [kubectl-oidc_login](https://github.com/int128/kubelogin)
+
+    - Install kubectl-oidc_login from GitHub releases for your OS architecture
+
+        ```
+        curl -fsSL github.com/int128/kubelogin/releases/latest/download/kubelogin_linux_amd64.zip -O &&
+        unzip kubelogin_linux_amd64.zip &&
+        sudo mv kubelogin /usr/bin/kubectl-oidc_login
+        ```
+
 1. Create an SAP HANA Cloud secret.
 
     !!! info "Prerequisites"

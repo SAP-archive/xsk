@@ -1773,6 +1773,21 @@
 <p>Access the SAP BTP, Kyma environment via the SAP BTP cockpit.</p>
 </li>
 <li>
+<p>Download your kubeconfig from Kyma Environment when you click on KubeconfigURL</p>
+</li>
+<li>
+<p>Install <a href="https://github.com/int128/kubelogin">kubectl-oidc_login</a></p>
+<ul>
+<li>
+<p>Install kubectl-oidc_login from GitHub releases for your OS architecture</p>
+<div class="highlight"><pre><span></span><code>curl -fsSL github.com/int128/kubelogin/releases/latest/download/kubelogin_linux_amd64.zip -O &amp;&amp;
+unzip kubelogin_linux_amd64.zip &amp;&amp;
+sudo mv kubelogin /usr/bin/kubectl-oidc_login
+</code></pre></div>
+</li>
+</ul>
+</li>
+<li>
 <p>Create an SAP HANA Cloud secret.</p>
 <div class="admonition info">
 <p class="admonition-title">Prerequisites</p>

@@ -130,7 +130,7 @@ public class XSKODataUtils {
       if (!entity.getKeyList().isEmpty()) {
         oDataEntityDefinition.setKeys(entity.getKeyList());
       } else if (entity.getKeyGenerated() != null) {
-        oDataEntityDefinition.getKeys().add(entity.getKeyGenerated());
+        oDataEntityDefinition.setKeyGenerated(entity.getKeyGenerated());
       }
 
       //process Aggregations

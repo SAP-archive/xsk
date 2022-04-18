@@ -15,29 +15,30 @@ angular.module('page', [])
     let messageHub = new FramesMessageHub();
     let contents;
 
-    function getResource(resourcePath) {
+    function getResource(thePath) {
       let xhr = new XMLHttpRequest();
-      xhr.open('GET', resourcePath, false);
+      xhr.open('GET', thePath, false);
       xhr.send();
       if (xhr.status === 200) {
         return xhr.responseText;
       }
     }
 
-    function loadContents(file) {
-      if (file) {
-        return getResource('/services/v4/ide/workspaces' + file);
+    function loadContents(xsaccessfile) {
+      if (!xsaccessfile) {
+        console.error('XSACCESS file parameter is not present in the URL');
+      } else {
+        return getResource('/services/v4/ide/workspaces' + xsaccessfile);
       }
-      console.error('file parameter is not present in the URL');
     }
 
     function getViewParameters() {
       if (window.frameElement.hasAttribute("data-parameters")) {
-        let params = JSON.parse(window.frameElement.getAttribute("data-parameters"));
-        $scope.file = params["file"];
+        let readParams = JSON.parse(window.frameElement.getAttribute("data-parameters"));
+        $scope.file = readParams["file"];
       } else {
-        let searchParams = new URLSearchParams(window.location.search);
-        $scope.file = searchParams.get('file');
+        let scanSearchParams = new URLSearchParams(window.location.search);
+        $scope.file = scanSearchParams.get('file');
       }
     }
 
@@ -68,7 +69,6 @@ angular.module('page', [])
       $scope.anonymous_connection_allowed = $scope.data.anonymous_connection ? true : false;
       $scope.allAllowedMethods = ["GET", "POST", "HEAD", "OPTIONS"];
       $scope.initJSONcontent();
-
     }
 
     load();
@@ -112,22 +112,21 @@ angular.module('page', [])
         $scope.data.cors.allowMethods = $scope.data.cors.allowMethods.filter((x) => x != method);
     }
 
-
-    function saveContents(text) {
-      console.log('Save called...');
+    function saveContents(contentToSave) {
       if ($scope.file) {
+        console.log('Save of XSACCESS called...');
         let xhr = new XMLHttpRequest();
         xhr.open('PUT', '/services/v4/ide/workspaces' + $scope.file);
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {
-            console.log('file saved: ' + $scope.file);
+            console.log('XSACCESS file saved: ' + $scope.file);
           }
         };
-        xhr.send(text);
+        xhr.send(contentToSave);
         messageHub.post({ data: $scope.file }, 'editor.file.saved');
-        messageHub.post({ data: 'File [' + $scope.file + '] saved.' }, 'status.message');
+        messageHub.post({ data: 'Requested file [' + $scope.file + '] saved.' }, 'status.message');
       } else {
-        console.error('file parameter is not present in the request');
+        console.error('XSACCESS file parameter is not present in the request');
       }
     }
 

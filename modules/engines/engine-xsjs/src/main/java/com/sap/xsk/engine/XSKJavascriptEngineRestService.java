@@ -11,53 +11,111 @@
  */
 package com.sap.xsk.engine;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Authorization;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingDependencyException;
 import org.eclipse.dirigible.commons.api.service.AbstractRestService;
 import org.eclipse.dirigible.commons.api.service.IRestService;
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.engine.js.graalium.execution.CodeRunner;
+import org.eclipse.dirigible.engine.js.graalium.execution.GraalJSCodeRunner;
+import org.eclipse.dirigible.engine.js.graalium.execution.modules.DirigibleModuleProvider;
+import org.eclipse.dirigible.engine.js.graalium.execution.polyfills.RequirePolyfill;
+import org.eclipse.dirigible.engine.js.graalium.execution.polyfills.internal.DirigibleContextGlobalObject;
+import org.eclipse.dirigible.engine.js.graalium.execution.polyfills.internal.DirigibleEngineTypeGlobalObject;
+import org.eclipse.dirigible.repository.api.ICollection;
+import org.eclipse.dirigible.repository.api.IRepository;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Objects;
 
 @Path("/xsk")
-@Api(value = "JavaScript Engine - HANA XS Classic", authorizations = {@Authorization(value = "basicAuth", scopes = {})})
-@ApiResponses({@ApiResponse(code = 401, message = "Unauthorized"), @ApiResponse(code = 403, message = "Forbidden"),
-    @ApiResponse(code = 404, message = "Not Found"), @ApiResponse(code = 500, message = "Internal Server Error")})
 public class XSKJavascriptEngineRestService extends AbstractRestService {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKJavascriptEngineRestService.class);
+  private static String XSK_API_CONTENT = null;
+  private static final String ENGINE_JAVA_SCRIPT = "js";
+  private static final String XSK_API_LOCATION = "/xsk/api.js";
 
-  private XSKJavascriptEngineProcessor processor = new XSKJavascriptEngineProcessor();
-
-  @Context
-  private HttpServletResponse response;
-
-  /**
-   * Execute service.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @GET
-  @Path("/{path:.*}")
-  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
-  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServiceGet(@PathParam("path") String path) {
+  @Path("/{projectName}/{projectFilePath:.*}")
+  public Response get(
+      @PathParam("projectName") String projectName,
+      @PathParam("projectFilePath") String projectFilePath
+  ) {
+    return executeXSJS(projectName, projectFilePath);
+  }
+
+  @POST
+  @Path("/{projectName}/{projectFilePath:.*}")
+  public Response post(
+      @PathParam("projectName") String projectName,
+      @PathParam("projectFilePath") String projectFilePath
+  ) {
+    return executeXSJS(projectName, projectFilePath);
+  }
+
+  @PUT
+  @Path("/{projectName}/{projectFilePath:.*}")
+  public Response put(
+      @PathParam("projectName") String projectName,
+      @PathParam("projectFilePath") String projectFilePath
+  ) {
+    return executeXSJS(projectName, projectFilePath);
+  }
+
+  @DELETE
+  @Path("/{projectName}/{projectFilePath:.*}")
+  public Response delete(
+      @PathParam("projectName") String projectName,
+      @PathParam("projectFilePath") String projectFilePath
+  ) {
+    return executeXSJS(projectName, projectFilePath);
+  }
+
+  @HEAD
+  @Path("/{projectName}/{projectFilePath:.*}")
+  public Response head(
+      @PathParam("projectName") String projectName,
+      @PathParam("projectFilePath") String projectFilePath
+  ) {
+    return executeXSJS(projectName, projectFilePath);
+  }
+
+  @PATCH
+  @Path("/{projectName}/{projectFilePath:.*}")
+  public Response patch(
+      @PathParam("projectName") String projectName,
+      @PathParam("projectFilePath") String projectFilePath
+  ) {
+    return executeXSJS(projectName, projectFilePath);
+  }
+
+  private Response executeXSJS(String projectName, String projectFilePath) {
     try {
-      processor.executeService(path);
+      CodeRunner codeRunner = createXSJSCodeRunner(projectName);
+
+      Source xskApiSource = Source.newBuilder("js", DirigibleModuleProvider.loadSource("/xsk/api"), "xsk-api.js")
+          .internal(true)
+          .build();
+      codeRunner.run(xskApiSource);
+
+      codeRunner.run(java.nio.file.Path.of(projectFilePath));
       return Response.ok().build();
     } catch (ScriptingDependencyException e) {
       logger.error(e.getMessage(), e);
@@ -70,60 +128,47 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
     }
   }
 
-  /**
-   * Execute service post.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
-  @POST
-  @Path("/{path:.*}")
-  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
-  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServicePost(@PathParam("path") String path) {
-    return executeRhinoServiceGet(path);
+  private CodeRunner createXSJSCodeRunner(String projectName) {
+    IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+    java.nio.file.Path projectPath = java.nio.file.Path.of(projectName);
+    java.nio.file.Path repositoryRootPath = java.nio.file.Path.of(repository.getRepositoryPath());
+    java.nio.file.Path projectDirectoryPath = repositoryRootPath.resolve("registry/public").resolve(projectPath);
+
+    return GraalJSCodeRunner
+        .newBuilder(projectDirectoryPath, getOrCreateInternalFolder("dependencies"), getOrCreateInternalFolder("core-modules"))
+        .addJSPolyfill(new RequirePolyfill())
+        .addGlobalObject(new DirigibleEngineTypeGlobalObject())
+        .addGlobalObject(new DirigibleContextGlobalObject(new HashMap<>()))
+        .waitForDebugger(false)
+        .build();
   }
 
-  /**
-   * Execute service put.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
-  @PUT
-  @Path("/{path:.*}")
-  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
-  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServicePut(@PathParam("path") String path) {
-    return executeRhinoServiceGet(path);
+  private static java.nio.file.Path getOrCreateInternalFolder(String folderName) {
+    IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+    ICollection folder = repository.getCollection(folderName);
+    if (!folder.exists()) {
+      folder.create();
+    }
+
+    String dependenciesCollectionPathString = folder.getPath();
+    String dependenciesCollectionInternalPathString = repository.getInternalResourcePath(dependenciesCollectionPathString);
+    return java.nio.file.Path.of(dependenciesCollectionInternalPathString);
   }
 
-  /**
-   * Execute service delete.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
-  @DELETE
-  @Path("/{path:.*}")
-  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
-  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServiceDelete(@PathParam("path") String path) {
-    return executeRhinoServiceGet(path);
-  }
+  private static Source getJSErrorFileNamePolyfillSource() {
+    String errorFileNamePolyfillName = "/ErrorFileNamePolyfill.js";
+    InputStream errorFileNamePolyfillInputStream = XSKJavascriptEngineExecutor.class
+        .getResourceAsStream("/js/polyfills" + errorFileNamePolyfillName);
 
-  /**
-   * Execute service head.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
-  @HEAD
-  @Path("/{path:.*}")
-  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
-  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServiceHead(@PathParam("path") String path) {
-    return executeRhinoServiceGet(path);
+    try {
+      String errorFileNamePolyfillCode = IOUtils.toString(Objects.requireNonNull(errorFileNamePolyfillInputStream), StandardCharsets.UTF_8);
+      return Source
+          .newBuilder(ENGINE_JAVA_SCRIPT, errorFileNamePolyfillCode, errorFileNamePolyfillName)
+          .internal(true)
+          .build();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /*

@@ -34,6 +34,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${com.h2database.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-engine-javascript-graalvm</artifactId>
       <version>${dirigible.version}</version>
@@ -91,17 +97,9 @@
       <version>${javax.websocket-api.version}</version>
       <scope>provided</scope>
     </dependency>
-
-
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-commons-test</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-database-derby</artifactId>
       <version>${dirigible.version}</version>
       <scope>test</scope>
     </dependency>
@@ -152,6 +150,12 @@
       <groupId>com.sap.cloud.sdk.testutil</groupId>
       <artifactId>testutil-core</artifactId>
       <version>${scp-cf.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-database-h2</artifactId>
+      <version>${dirigible.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

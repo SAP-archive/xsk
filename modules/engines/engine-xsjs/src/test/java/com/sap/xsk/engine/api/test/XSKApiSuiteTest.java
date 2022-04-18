@@ -88,7 +88,6 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     TEST_MODULES.add("test/xsk/response/response.xsjs");
     TEST_MODULES.add("test/xsk/session/session.xsjs");
     TEST_MODULES.add("test/xsk/trace/trace.xsjs");
-    TEST_MODULES.add("test/xsk/import/import.xsjs");
     TEST_MODULES.add("test/xsk/util/util.xsjs");
     TEST_MODULES.add("test/xsk/util/codec/codec.xsjs");
     TEST_MODULES.add("test/xsk/http/http.xsjs");

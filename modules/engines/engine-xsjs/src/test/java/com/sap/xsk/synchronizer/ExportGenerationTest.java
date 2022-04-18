@@ -11,11 +11,11 @@
  */
 package com.sap.xsk.synchronizer;
 
+import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.ISchedulerCoreService;
 import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
-import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
@@ -29,13 +29,13 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ExportGenerationTest extends AbstractDirigibleTest {
+public class ExportGenerationTest /*extends AbstractDirigibleTest*/ {
 
   private static final Logger logger = LoggerFactory.getLogger(ExportGenerationTest.class);
 
   @Before
   public void setUp() {
-    String rootFolder = "target/test-classes/";
+    String rootFolder = "target/test-classes/META-INF/";
     IRepository repository = new LocalRepository(rootFolder, false);
     StaticObjects.set(StaticObjects.REPOSITORY, repository);
   }
@@ -88,6 +88,19 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
   @Test
   public void exportsGeneratorTest() throws ScriptingException {
     runJsTest("/test/xsk/exports/exportsGeneratorTest.mjs");
+  }
+
+  @Test
+  public void importTest() throws ScriptingException {
+    logger.info("XSJSLib Import test starting... ");
+    Map<Object, Object> context = new HashMap<>();
+    XSJSLibSynchronizer.forceSynchronization("../../test/xsk/import/");
+    XSKJavascriptEngineExecutor xskJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
+    xskJavascriptEngineExecutor.executeServiceModule(
+        "/test/xsk/import/import.xsjs",
+        context
+    );
+    logger.info("XSJSLib Import test passed successfully. ");
   }
 
   private void runJsTest(String testModule) throws ScriptingException {

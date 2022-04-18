@@ -17,10 +17,8 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
@@ -31,6 +29,8 @@ import javax.servlet.http.HttpSession;
 
 import com.sap.cloud.sdk.testutil.MockDestination;
 import com.sap.cloud.sdk.testutil.MockUtil;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.apache.cxf.helpers.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ContextException;
 import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
@@ -46,17 +46,14 @@ import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.eclipse.dirigible.repository.api.RepositoryWriteException;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@RunWith(JUnitParamsRunner.class)
 public class XSKApiSuiteTest extends AbstractDirigibleTest {
-
-  private static final List<String> TEST_MODULES = new ArrayList<>();
 
   private IExtensionsCoreService extensionsCoreService;
 
@@ -76,136 +73,33 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     this.graaljsJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
   }
 
-//  @Before
-//  public void registerModules() {
-//    // DB tests
-//    TEST_MODULES.add("test/xsk/db/api/db.xsjs");
-//    TEST_MODULES.add("test/xsk/db/api/connection.xsjs");
-//    TEST_MODULES.add("test/xsk/db/api/parameter-metadata.xsjs");
-//    TEST_MODULES.add("test/xsk/db/api/callable-statement.xsjs");
-//    TEST_MODULES.add("test/xsk/db/api/prepared-statement.xsjs");
-//    TEST_MODULES.add("test/xsk/db/api/result-set.xsjs");
-//    TEST_MODULES.add("test/xsk/db/api/resultset-metadata.xsjs");
-//
-//    TEST_MODULES.add("test/xsk/response/response.xsjs");
-//    TEST_MODULES.add("test/xsk/session/session.xsjs");
-//    TEST_MODULES.add("test/xsk/trace/trace.xsjs");
-//    TEST_MODULES.add("test/xsk/util/util.xsjs");
-//    TEST_MODULES.add("test/xsk/util/codec/codec.xsjs");
-//    TEST_MODULES.add("test/xsk/http/http.xsjs");
-//    TEST_MODULES.add("test/xsk/net/net.xsjs");
-//
-//    // HDB tests
-//    TEST_MODULES.add("test/xsk/hdb/column-metadata.xsjs");
-//    TEST_MODULES.add("test/xsk/hdb/connection-execute-query.xsjs");
-//    TEST_MODULES.add("test/xsk/hdb/connection-execute-update.xsjs");
-//    TEST_MODULES.add("test/xsk/hdb/result-set.xsjs");
-//    TEST_MODULES.add("test/xsk/hdb/resultset-metadata.xsjs");
-//  }
-//
-//  @Test
-//  public void runSuite() throws IOException, ContextException, ExtensionsException {
-//    for (String testModule : TEST_MODULES) {
-//      runSuite(graaljsJavascriptEngineExecutor, repository, testModule);
-//    }
-//  }
-
   @Test
-  public void test_A_Db() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/db/api/db.xsjs");
+  @Parameters({
+      "test/xsk/db/api/db.xsjs",
+      "test/xsk/db/api/connection.xsjs",
+      "test/xsk/db/api/parameter-metadata.xsjs",
+      "test/xsk/db/api/callable-statement.xsjs",
+      "test/xsk/db/api/prepared-statement.xsjs",
+      "test/xsk/db/api/result-set.xsjs",
+      "test/xsk/db/api/resultset-metadata.xsjs",
+      "test/xsk/response/response.xsjs",
+      "test/xsk/session/session.xsjs",
+      "test/xsk/trace/trace.xsjs",
+      "test/xsk/util/util.xsjs",
+      "test/xsk/util/codec/codec.xsjs",
+      "test/xsk/http/http.xsjs",
+      "test/xsk/net/net.xsjs",
+      "test/xsk/hdb/column-metadata.xsjs",
+      "test/xsk/hdb/connection-execute-query.xsjs",
+      "test/xsk/hdb/connection-execute-update.xsjs",
+      "test/xsk/hdb/result-set.xsjs",
+      "test/xsk/hdb/resultset-metadata.xsjs",
+  })
+  public void runXSKApiTest(String testModule) throws IOException, ContextException, ExtensionsException {
+    runXSKApiTest(graaljsJavascriptEngineExecutor, repository, testModule);
   }
 
-  @Test
-  public void test_B_Connection() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/db/api/connection.xsjs");
-  }
-
-  @Test
-  public void test_C_ParameterMetadata() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/db/api/parameter-metadata.xsjs");
-  }
-
-  @Test
-  public void test_D_CallableStatement() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/db/api/callable-statement.xsjs");
-  }
-
-  @Test
-  public void test_E_PreparedStatement() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/db/api/prepared-statement.xsjs");
-  }
-
-  @Test
-  public void test_F_ResultSet() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/db/api/result-set.xsjs");
-  }
-
-  @Test
-  public void test_G_ResultSetMetadata() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/db/api/resultset-metadata.xsjs");
-  }
-
-  @Test
-  public void test_H_Response() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/response/response.xsjs");
-  }
-
-  @Test
-  public void test_I_Session() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/session/session.xsjs");
-  }
-
-  @Test
-  public void test_J_Trace() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/trace/trace.xsjs");
-  }
-
-  @Test
-  public void test_K_Util() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/util/util.xsjs");
-  }
-
-  @Test
-  public void test_L_Codec() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/util/codec/codec.xsjs");
-  }
-
-  @Test
-  public void test_M_Http() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/http/http.xsjs");
-  }
-
-  @Test
-  public void test_N_Net() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/net/net.xsjs");
-  }
-
-  @Test
-  public void test_O_ColumnMetadata() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/hdb/column-metadata.xsjs");
-  }
-
-  @Test
-  public void test_P_ConnectionExecuteQuery() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/hdb/connection-execute-query.xsjs");
-  }
-
-  @Test
-  public void test_Q_ConnectionExecuteUpdate() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/hdb/connection-execute-update.xsjs");
-  }
-
-  @Test
-  public void test_R_HDBResultSet() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/hdb/result-set.xsjs");
-  }
-
-  @Test
-  public void test_S_HDBResultSetMetadata() throws IOException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository, "test/xsk/hdb/resultset-metadata.xsjs");
-  }
-
-  private void runSuite(IJavascriptEngineExecutor executor, IRepository repository, String testModule)
+  private void runXSKApiTest(IJavascriptEngineExecutor executor, IRepository repository, String testModule)
       throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException {
     mockDestination();
 
@@ -242,10 +136,10 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     when(mockedRequest.getRemoteUser()).thenReturn("TestUser");
     when(mockedRequest.getHeaderNames())
         .thenReturn(Collections.enumeration(Arrays.asList("TestHeader1", "TestHeader2", "Accept-Language")));
-    when(mockedRequest.getHeaders("TestHeader1")).thenReturn(Collections.enumeration(Arrays.asList("TestValue")));
-    when(mockedRequest.getHeaders("TestHeader2")).thenReturn(Collections.enumeration(Arrays.asList("TestValue")));
+    when(mockedRequest.getHeaders("TestHeader1")).thenReturn(Collections.enumeration(Collections.singletonList("TestValue")));
+    when(mockedRequest.getHeaders("TestHeader2")).thenReturn(Collections.enumeration(Collections.singletonList("TestValue")));
     when(mockedRequest.getHeaders("Accept-Language"))
-        .thenReturn(Collections.enumeration(Arrays.asList("en-US,en;q=0.9,bg;q=0.8,nb;q=0.7")));
+        .thenReturn(Collections.enumeration(Collections.singletonList("en-US,en;q=0.9,bg;q=0.8,nb;q=0.7")));
     when(mockedRequest.getCookies()).thenReturn(new Cookie[]{new Cookie("SESSIONID", "D7B319C3D55AC4CD126181F01E4C1DC7")});
     when(mockedRequest.getRequestURI()).thenReturn("/services/v4/xsk/test/test.xsjs");
     when(mockedRequest.getSession(true)).thenReturn(httpSession);
@@ -290,7 +184,7 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     mockUtil.mockDestination(destination);
   }
 
-  private class StubServletOutputStream extends ServletOutputStream {
+  private static class StubServletOutputStream extends ServletOutputStream {
 
     public void write(int i) {
       System.out.write(i);

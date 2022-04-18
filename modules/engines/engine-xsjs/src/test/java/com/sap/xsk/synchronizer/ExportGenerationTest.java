@@ -13,9 +13,11 @@ package com.sap.xsk.synchronizer;
 
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.ISchedulerCoreService;
 import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
+import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
@@ -29,9 +31,14 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ExportGenerationTest /*extends AbstractDirigibleTest*/ {
+public class ExportGenerationTest extends AbstractDirigibleTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExportGenerationTest.class);
+
+  public ExportGenerationTest() {
+    // should be executed before parent @Before method as parent would otherwise initialize the DB in a persistent way
+    Configuration.set("DIRIGIBLE_DATABASE_H2_URL", "jdbc:h2:mem:xsk-tests");
+  }
 
   @Before
   public void setUp() {

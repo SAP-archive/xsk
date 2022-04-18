@@ -2,13 +2,9 @@ import { assertEquals } from './prettyAssert.mjs'
 import { XSJSLibArtefactStateTable } from '/exports/XSJSLibArtefactStateTable.mjs'
 import { query } from '@dirigible-v4/db'
 import { digest } from '@dirigible-v4/utils'
+import { getParams } from '/test/xsk/exports/stateTableParamsProvider.mjs'
 
-let stateTableParams = {
-  name: "XSJSLIB_EXPORT_TEST_TABLE",
-  schema: "PUBLIC",
-  location: "local",
-  db: "SystemDB"
-}
+let stateTableParams = getParams();
 
 function _fetchAllEntriesInTable() {
   let sql = "SELECT * FROM " + stateTableParams.name;

@@ -27,7 +27,7 @@ var typeAssertion = metadata.getColumnType(1) == 4;
 
 var typeNameAssertion = metadata.getColumnTypeName(1) == "INTEGER";
 
-var precisionAssertion = metadata.getPrecision(1) == 10;
+var precisionAssertion = metadata.getPrecision(1) == 32;
 
 var scaleAssertion = metadata.getScale(1) == 0;
 

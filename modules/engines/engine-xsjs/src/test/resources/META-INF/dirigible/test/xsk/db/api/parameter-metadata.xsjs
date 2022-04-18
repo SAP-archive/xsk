@@ -24,7 +24,7 @@ for (var i = 1; i <= count; i++) {
   var parameterMode = parameterMetaData.getParameterMode(i) > 0;
   var precision = parameterMetaData.getPrecision(i) > 0;
   var scale = parameterMetaData.getScale(i) >=0 ;
-  var isNullable = parameterMetaData.isNullable(i) == 0 || parameterMetaData.isNullable(i) == 1;
+  var isNullable = parameterMetaData.isNullable(i) == 0 || parameterMetaData.isNullable(i) == 1 || parameterMetaData.isNullable(i) == 2;
   var isSigned = typeof parameterMetaData.isSigned(i) == "boolean";
   assertions.push(typeName, type, parameterMode, precision, scale, isNullable, isSigned, count == 8);
 }

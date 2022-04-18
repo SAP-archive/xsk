@@ -112,7 +112,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.dirigible</groupId>
-            <artifactId>dirigible-database-derby</artifactId>
+            <artifactId>dirigible-database-h2</artifactId>
             <version>${dirigible.version}</version>
             <scope>test</scope>
         </dependency>

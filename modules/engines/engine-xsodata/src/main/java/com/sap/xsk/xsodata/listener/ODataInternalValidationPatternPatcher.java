@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.xsodata.listener;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.olingo.odata2.core.edm.provider.EdmNamedImplProv;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -35,13 +34,13 @@ class ODataNamesValidationPatternPatcher {
 
   private static void setFinalStatic(Field field, Object newValue)
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    field.setAccessible(true);
+    field.setAccessible(true); // NOSONAR
 
     Field modifiersField = getModifiersField();
-    modifiersField.setAccessible(true);
+    modifiersField.setAccessible(true); // NOSONAR
     modifiersField.setInt(field, (field.getModifiers() & ~Modifier.FINAL)); // NOSONAR
 
-    field.set(null, newValue);
+    field.set(null, newValue); // NOSONAR
   }
 
   private static Field getModifiersField() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

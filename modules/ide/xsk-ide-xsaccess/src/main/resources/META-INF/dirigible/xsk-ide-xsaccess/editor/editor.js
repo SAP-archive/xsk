@@ -15,11 +15,6 @@ angular.module('page', [])
     let messageHub = new FramesMessageHub();
     let contents;
 
-    function toggleEntityModal() {
-      $('#entityModal').modal('toggle');
-      $scope.error = null;
-    }
-
     function getResource(resourcePath) {
       let xhr = new XMLHttpRequest();
       xhr.open('GET', resourcePath, false);
@@ -56,7 +51,7 @@ angular.module('page', [])
           allowHeaders: [''],
           exposeHeaders: ['']
         };
-      if ($scope.data.headers.customHeaders && $scope.data.headers.customHeaders)
+      if ($scope.data.headers.customHeaders && $scope.data.headers.customHeaders.length)
         $scope.data.headers.customHeaders = $scope.data.headers.customHeaders.map((x) => {
           return {
             ...x,
@@ -80,9 +75,11 @@ angular.module('page', [])
 
     function updateObjectNestedProp(obj, value, propPath) {
       const [head, ...rest] = propPath.split('.');
-      !rest.length
-        ? obj[head] = value
-        : updateObjectNestedProp(obj[head], value, rest.join('.'));
+      if (!rest.length) {
+        obj[head] = value;
+      } else {
+        updateObjectNestedProp(obj[head], value, rest.join('.'));
+      }
     }
 
     function getNestedValue(obj, path) {
@@ -92,7 +89,7 @@ angular.module('page', [])
     }
 
     $scope.deleteInList = function (path, index) {
-      let newKeyValue = getNestedValue($scope.data, path).filter((val, num) => num != index);
+      let newKeyValue = getNestedValue($scope.data, path).filter((_val, num) => num != index);
       if (!newKeyValue.length) newKeyValue.push('');
       updateObjectNestedProp(
         $scope.data,
@@ -135,25 +132,25 @@ angular.module('page', [])
     }
 
     $scope.createSaveContent = function () {
-      let contents = JSON.parse(angular.toJson($scope.data));
-      if (contents.cors.enabled) {
-        contents.cors.allowOrigin = contents.cors.allowOrigin.filter((x) => x.trim());
-        contents.cors.allowHeaders = contents.cors.allowHeaders.filter((x) => x.trim());
-        contents.cors.exposeHeaders = contents.cors.exposeHeaders.filter((x) => x.trim());
+      let contentsJSON = JSON.parse(angular.toJson($scope.data));
+      if (contentsJSON.cors.enabled) {
+        contentsJSON.cors.allowOrigin = contentsJSON.cors.allowOrigin.filter((x) => x.trim());
+        contentsJSON.cors.allowHeaders = contentsJSON.cors.allowHeaders.filter((x) => x.trim());
+        contentsJSON.cors.exposeHeaders = contentsJSON.cors.exposeHeaders.filter((x) => x.trim());
       } else {
-        contents.cors = { enabled: false };
+        contentsJSON.cors = { enabled: false };
       }
-      if (!contents.headers.enabled) {
-        contents.headers = { enabled: false };
+      if (!contentsJSON.headers.enabled) {
+        contentsJSON.headers = { enabled: false };
       } else {
-        contents.headers.customHeaders = contents.headers.customHeaders.map((x) => {
+        contentsJSON.headers.customHeaders = contentsJSON.headers.customHeaders.map((x) => {
           return { name: x.name, value: x.thevalue + (x.thevalue == 'ALLOW-FROM' ? " " + x.url : '') };
         }).filter((x) => x.name.trim());
       }
-      contents.authorization = contents.authorization.filter((x) => x.trim());
-      contents.mime_mapping = contents.mime_mapping.filter((x) => x.extension.trim() && x.mimetype.trim());
-      contents.rewrite_rules = contents.rewrite_rules.filter((x) => x.source.trim() && x.target.trim());
-      return JSON.stringify(contents, null, 4);
+      contentsJSON.authorization = contentsJSON.authorization.filter((x) => x.trim());
+      contentsJSON.mime_mapping = contentsJSON.mime_mapping.filter((x) => x.extension.trim() && x.mimetype.trim());
+      contentsJSON.rewrite_rules = contentsJSON.rewrite_rules.filter((x) => x.source.trim() && x.target.trim());
+      return JSON.stringify(contentsJSON, null, 4);
     }
 
     $scope.previewJson = function () {

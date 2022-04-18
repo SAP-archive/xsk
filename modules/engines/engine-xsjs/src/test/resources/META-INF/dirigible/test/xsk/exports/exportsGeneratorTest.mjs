@@ -7,9 +7,9 @@ import { digest } from '@dirigible-v4/utils'
 
 let stateTableParams = {
   name: "XSJSLIB_EXPORT_TEST_TABLE",
-  schema: "APP",
+  schema: "PUBLIC",
   location: "local",
-  db: "DefaultDB"
+  db: "SystemDB"
 }
 
 function _fetchAllEntriesInTable() {

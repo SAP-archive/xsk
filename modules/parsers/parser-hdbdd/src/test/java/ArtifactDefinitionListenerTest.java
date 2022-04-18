@@ -435,7 +435,7 @@ public class ArtifactDefinitionListenerTest {
       parseSampleFile("/InvalidBuiltInHanaTypeWithArgs.hdbdd", "sap/db/InvalidBuiltInHanaTypeWithArgs.hdbdd");
     } catch (RuntimeException e) {
       assertEquals(CDSRuntimeException.class, e.getClass());
-      assertEquals("Error at line: 7 col: 14. No such type:  hana.String.", e.getMessage());
+      assertEquals("Error at line: 7 col: 19. No such type:  String.", e.getMessage());
     }
   }
 
@@ -499,7 +499,7 @@ public class ArtifactDefinitionListenerTest {
       parseSampleFile("/InvalidNumberOfTypeArguments.hdbdd", "sap/db/InvalidNumberOfTypeArguments.hdbdd");
     } catch (RuntimeException e) {
       assertEquals(CDSRuntimeException.class, e.getClass());
-      assertEquals("Error at line: 7 col: 14. Invalid number of constructor arguments passed.", e.getMessage());
+      assertEquals("Error at line: 7 col: 19. Invalid number of constructor arguments passed.", e.getMessage());
     }
   }
 
@@ -631,7 +631,7 @@ public class ArtifactDefinitionListenerTest {
   }
 
   @Test
-  public void testParseHdbddWithNamespaceNotMatchingPackageName() throws Exception {
+  public void testParseNamespaceNotMatchingPackageName() throws Exception {
     try {
       parseSampleFile("/NamespaceNotMatchingPackageName.hdbdd", "com/sap/NamespaceNotMatchingPackageName.hdbdd");
     } catch (RuntimeException e) {

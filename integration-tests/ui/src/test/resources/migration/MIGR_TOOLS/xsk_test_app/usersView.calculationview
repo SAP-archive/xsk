@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="usersView" applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="2.3" defaultClient="$$client$$" visibility="internal" outputViewType="Projection" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
-<descriptions defaultDescription="xsk-test-app"/>
+<descriptions defaultDescription="xsk_test_app"/>
 <localVariables/>
 <variableMappings/>
 <dataSources>
   <DataSource id="users">
     <viewAttributes allViewAttributes="true"/>
-    <resourceUri>xsk-test-app::usersTable</resourceUri>
+    <resourceUri>xsk_test_app::usersTable</resourceUri>
   </DataSource>
 </dataSources>
 <calculationViews/>
@@ -13,7 +13,7 @@
   <attributes>
       <attribute id="Name" order="1" attributeHierarchyActive="false" displayAttribute="false">
         <descriptions defaultDescription="User Name"/>
-        <keyMapping columnObjectName="xsk-test-app::usersTable" columnName="Name"/>
+        <keyMapping columnObjectName="xsk_test_app::usersTable" columnName="Name"/>
       </attribute>
   </attributes>
   <calculatedAttributes/>

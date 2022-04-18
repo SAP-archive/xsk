@@ -112,25 +112,6 @@ public class SymbolFactory {
     return elementSymbol;
   }
 
-  public EntityElementSymbol getEntityElementSymbol(FieldDeclRuleContext ctx, Scope currentScope) {
-    String elementId = HdbddUtils.processEscapedSymbolName(ctx.identifier().getText());
-    checkForDuplicateName(elementId, currentScope, ctx.identifier().start.getLine());
-    EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
-    elementSymbol.setIdToken(ctx.identifier());
-
-    return elementSymbol;
-  }
-
-  public EntityElementSymbol getEntityElementSymbol(DataTypeRuleContext ctx, Scope currentScope) {
-    String elementId = HdbddUtils.processEscapedSymbolName(ctx.artifactName.getText());
-    checkForDuplicateName(elementId, currentScope, ctx.artifactName.start.getLine());
-    EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
-    elementSymbol.setIdToken(ctx.artifactName);
-    elementSymbol.setKey(true);
-
-    return elementSymbol;
-  }
-
   public FieldSymbol getFieldSymbol(FieldDeclRuleContext ctx, Scope currentScope) {
     String filedId = HdbddUtils.processEscapedSymbolName(ctx.identifier().getText());
     checkForDuplicateName(filedId, currentScope, ctx.identifier().start.getLine());

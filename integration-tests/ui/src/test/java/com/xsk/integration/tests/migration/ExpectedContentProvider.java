@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License, v2.0
  * which accompanies this distribution, and is available at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-FileCopyrightText: 2021 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.xsk.integration.tests.migration;
@@ -24,7 +24,7 @@ class ExpectedContentProvider {
   private static final ExpectedContentProvider contentProvider = new ExpectedContentProvider();
   private static final String deliveryUnitPath = "/migration";
   private static final String getDeliveryUnitName = "MIGR_TOOLS";
-  private static final String projectName = "xsk-test-app";
+  private static final String projectName = "xsk_test_app";
   private static final String workspaceName = "workspace";
   private static final String contentPath = deliveryUnitPath + "/" + getDeliveryUnitName + "/" + projectName;
 

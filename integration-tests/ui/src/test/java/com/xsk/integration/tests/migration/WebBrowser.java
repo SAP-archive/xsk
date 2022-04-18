@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.xsk.integration.tests.migration;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -13,6 +24,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -73,7 +85,7 @@ class WebBrowser {
     browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
     jsExecutor = (JavascriptExecutor) (browser);
-    browserWait = new WebDriverWait(browser, 120);
+    browserWait = new WebDriverWait(browser, Duration.ofSeconds(120));
     browserActions = new Actions(browser);
   }
 

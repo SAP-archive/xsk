@@ -11,15 +11,15 @@ topLevelSymbol: dataTypeRule* | contextRule? | structuredTypeRule? | entityRule?
 
 dataTypeRule: annotationRule* artifactType=TYPE artifactName=identifier ':' typeAssignRule ';';
 contextRule: annotationRule* artifactType=CONTEXT artifactName=identifier '{' (contextRule | dataTypeRule | structuredTypeRule | entityRule | viewRule)* '}' ';'?;
-structuredTypeRule: annotationRule* artifactType=TYPE artifactName=identifier '{' fieldDeclRule* '}' ';'?;
+structuredTypeRule: annotationRule* artifactType=TYPE artifactName=identifier '{' (fieldDeclRule | association)* '}' ';'?;
 entityRule: annotationRule* artifactType=ENTITY artifactName=identifier '{' ( elementDeclRule | association)* '}' ';'?;
 viewRule: annotationRule* DEFINE? artifactType=VIEW artifactName=identifier AS selectRule*;
 
 fieldDeclRule: (identifier | '"' identifier '"') ':' typeAssignRule ';';
-typeAssignRule: ref=identifier '(' args+=INTEGER (',' args+=INTEGER)* ')'                # AssignBuiltInTypeWithArgs
-                | hanaType=BUILT_IN_HANA_TYPE                                            # AssignHanaType
-                | hanaType=BUILT_IN_HANA_TYPE '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
-                | TYPE_OF? pathSubMembers+=identifier ('.'pathSubMembers+=identifier)*   # AssignType
+typeAssignRule: ref=identifier '(' args+=INTEGER (',' args+=INTEGER)* ')'                 # AssignBuiltInTypeWithArgs
+                | HANA '.' hanaType=identifier                                            # AssignHanaType
+                | HANA '.' hanaType=identifier '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
+                | TYPE_OF? pathSubMembers+=identifier ('.'pathSubMembers+=identifier)*    # AssignType
                 ;
 elementDeclRule: annotationRule* (key=identifier)? (name=identifier | '"' name=identifier '"') ':' typeAssignRule elementDetails* ';';
 elementDetails: defaultValue | elementConstraints;
@@ -58,6 +58,7 @@ whereRule: .*?;
 
 identifier: ID
 | NAMESPACE
+| HANA
 | AS
 | ON
 | SELECT

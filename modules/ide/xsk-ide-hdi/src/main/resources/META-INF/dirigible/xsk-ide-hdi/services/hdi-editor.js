@@ -9,23 +9,15 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.migration;
-
-class ExpectedContent {
-
-  private final String filePath;
-  private final byte[] content;
-
-  ExpectedContent(String filePath, byte[] content) {
-    this.filePath = filePath;
-    this.content = content;
-  }
-
-  String getFilePath() {
-    return filePath;
-  }
-
-  byte[] getContent() {
-    return content;
-  }
-}
+exports.getEditor = function () {
+	return {
+		"id": "hdi",
+		"name": "HDI",
+		"factory": "frame",
+		"region": "center-top",
+		"label": "HDI",
+		"defaultEditor": false,
+		"link": "../xsk-ide-hdi/editor/editor.html",
+		"contentTypes": ["application/json+hdi"]
+	};
+};

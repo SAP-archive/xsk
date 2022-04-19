@@ -10,16 +10,16 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Download sapmachine JDK 11
+      - name: Download sapmachine JDK 17
         run: |
-          download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
-          wget -O "${RUNNER_TEMP}/sapmachine-jdk-11.0.11.tar.gz" "${download_url}"
-      - name: Setup sapmachine JDK 11
+          download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-17.0.2/sapmachine-jdk-17.0.2_linux-x64_bin.tar.gz"
+          wget -O "${RUNNER_TEMP}/sapmachine-jdk-17.tar.gz" "${download_url}"
+      - name: Setup sapmachine JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'jdkfile'
-          jdkFile: ${{ runner.temp }}/sapmachine-jdk-11.0.11.tar.gz
-          java-version: '11.0.11'
+          jdkFile: ${{ runner.temp }}/sapmachine-jdk-17.tar.gz
+          java-version: '17.0.2'
           architecture: x64
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

@@ -11,32 +11,47 @@
  */
 package com.xsk.integration.tests.applications.deployment;
 
-import com.xsk.integration.tests.applications.deployment.XSKProjectDeployer;
+import com.xsk.integration.tests.applications.Deployment;
+import com.xsk.integration.tests.applications.kyma.KymaCredentials;
 import org.junit.rules.ExternalResource;
+
 import java.nio.file.Path;
+import java.util.Objects;
+
+import static com.xsk.integration.tests.applications.Deployment.KYMA;
+import static com.xsk.integration.tests.applications.Deployment.LOCAL;
 
 public class ApplicationDeploymentRule extends ExternalResource {
+    public static String HOST;
+    private final XSKProjectDeployer projectPublisher;
+    private final String applicationName;
+    private Deployment deployment;
+    KymaCredentials kymaCredentials = new KymaCredentials();
 
-  private final XSKProjectDeployer projectPublisher;
-  private final String applicationName;
+    public ApplicationDeploymentRule(String applicationName, Deployment deployment) {
+        this.deployment = deployment;
 
-  public ApplicationDeploymentRule(String applicationName) {
-    this.applicationName = applicationName;
-    projectPublisher = new XSKProjectDeployer();
-  }
+        switch (deployment){
+          case KYMA:
+            HOST = kymaCredentials.getHost();
+          case LOCAL:
+            HOST = "http://localhost:8080";
+        }
+        this.applicationName = applicationName;
+        projectPublisher = new XSKProjectDeployer(deployment);
+    }
 
-  @Override
-  protected void before() throws Throwable {
-    super.before();
-    String resourcePathString = getClass().getResource("/test-applications/" + applicationName).getPath();
-    Path resourcePath = Path.of(resourcePathString);
-    projectPublisher.deploy(applicationName, resourcePath);
-  }
+    @Override
+    protected void before() throws Throwable {
+        super.before();
+        String resourcePathString = Objects.requireNonNull(getClass().getResource("/test-applications/" + applicationName)).getPath();
+        Path resourcePath = Path.of(resourcePathString);
+        projectPublisher.deploy(applicationName, resourcePath);
+    }
 
-  @Override
-  protected void after() {
-    super.after();
-    String resourcePathString = getClass().getResource("/test-applications/" + applicationName).getPath();
-    projectPublisher.undeploy(applicationName, resourcePathString);
-  }
+    @Override
+    protected void after() {
+        super.after();
+        projectPublisher.undeploy(applicationName, applicationName);
+    }
 }

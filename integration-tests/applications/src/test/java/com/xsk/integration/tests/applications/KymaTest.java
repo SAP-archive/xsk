@@ -15,18 +15,18 @@ import com.xsk.integration.tests.applications.deployment.ApplicationDeploymentRu
 import org.junit.ClassRule;
 import org.junit.Test;
 
-public class AppTest {
+public class KymaTest {
 
-    @ClassRule
-    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("hdb-simple", Deployment.LOCAL);
+  @ClassRule
+  public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", Deployment.KYMA);
 
-    @Test
-    public void test1() {
-        int a = 5;
-    }
+  @Test
+  public void test1() {
+    int a = 5;
+  }
 
-    @Test
-    public void test2() {
-        int a = 5;
-    }
+  @Test
+  public void test2() {
+    int a = 5;
+  }
 }

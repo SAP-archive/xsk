@@ -12,23 +12,38 @@
 package com.xsk.integration.tests.applications.deployment.client;
 
 
+import com.xsk.integration.tests.applications.Deployment;
 import com.xsk.integration.tests.applications.deployment.DeploymentException;
+import com.xsk.integration.tests.applications.kyma.TokenProvider;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.message.BasicHeader;
 
+import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
 public class XSKHttpClient {
-    private final CloseableHttpAsyncClient httpClient;
 
-    public XSKHttpClient() {
-        httpClient = HttpAsyncClients.createDefault();
+    private CloseableHttpAsyncClient httpClient;
+
+    public XSKHttpClient(Deployment deployment) {
+        switch (deployment) {
+            case KYMA:
+                TokenProvider tokenProvider = new TokenProvider();
+                String kymaToken = tokenProvider.getToken();
+                BasicHeader authHeader = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + kymaToken);
+                httpClient = HttpAsyncClients.custom().setDefaultHeaders(List.of(authHeader)).build();
+            case LOCAL:
+                httpClient = HttpAsyncClients.createDefault();
+        }
         httpClient.start();
     }
+
 
     CompletableFuture<HttpResponse> executeRequestAsync(HttpUriRequest request) {
         var future = new CompletableHttpResponseFuture();

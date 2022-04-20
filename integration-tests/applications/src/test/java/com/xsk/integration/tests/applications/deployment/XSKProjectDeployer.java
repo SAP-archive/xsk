@@ -11,6 +11,7 @@
  */
 package com.xsk.integration.tests.applications.deployment;
 
+import com.xsk.integration.tests.applications.Deployment;
 import com.xsk.integration.tests.applications.deployment.client.PublisherClient;
 import com.xsk.integration.tests.applications.deployment.client.WorkspaceClient;
 import com.xsk.integration.tests.applications.deployment.client.XSKHttpClient;
@@ -24,9 +25,11 @@ public class XSKProjectDeployer {
 
     private final WorkspaceClient workspaceClient;
     private final PublisherClient publisherClient;
+    private final Deployment xskDeployment;
 
-    public XSKProjectDeployer() {
-        XSKHttpClient xskHttpClient = new XSKHttpClient();
+    public XSKProjectDeployer(Deployment deployment) {
+        XSKHttpClient xskHttpClient = new XSKHttpClient(deployment);
+        this.xskDeployment = deployment;
         this.workspaceClient = new WorkspaceClient(xskHttpClient);
         this.publisherClient = new PublisherClient(xskHttpClient);
     }
@@ -40,9 +43,21 @@ public class XSKProjectDeployer {
     }
 
     public CompletableFuture<HttpResponse> deployAsync(String projectName, Path projectFolderPath) throws DeploymentException {
-        return workspaceClient.createWorkspace(projectName)
-                .thenCompose(x -> workspaceClient.importProjectInWorkspace(projectName, projectName, projectFolderPath))
-                .thenCompose(x -> publisherClient.publishProjectInWorkspace(projectName, projectName));
+        switch (xskDeployment) {
+            case KYMA:
+                return workspaceClient.createWorkspace(projectName)
+                        .thenCompose(x -> workspaceClient.importProjectInWorkspace(projectName, projectName, projectFolderPath))
+                        .thenCompose(x -> publisherClient.publishProjectInWorkspace(projectName, projectName));
+            case LOCAL:
+                return workspaceClient.login()
+                        .thenCompose(x -> workspaceClient.createWorkspace(projectName))
+                        .thenCompose(x -> workspaceClient.importProjectInWorkspace(projectName, projectName, projectFolderPath))
+                        .thenCompose(x -> publisherClient.publishProjectInWorkspace(projectName, projectName));
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + xskDeployment);
+        }
+
     }
 
     public void undeploy(String applicationName, String applicationFolderPath) {
@@ -54,7 +69,9 @@ public class XSKProjectDeployer {
     }
 
     public CompletableFuture<HttpResponse> undeployAsync(String projectName) throws DeploymentException {
-        return publisherClient.unpublishProjectFromWorkspace(projectName, projectName);
+        return publisherClient.unpublishProjectFromWorkspace(projectName, projectName)
+                .thenCompose(x -> workspaceClient.deleteWorkspace(projectName));
+
     }
 
 

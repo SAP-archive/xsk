@@ -11,6 +11,7 @@
  */
 package com.xsk.integration.tests.applications.deployment.client;
 
+import com.sun.security.jgss.GSSUtil;
 import com.xsk.integration.tests.applications.deployment.DeploymentException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -20,6 +21,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,15 +32,17 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static com.xsk.integration.tests.applications.deployment.ApplicationDeploymentRule.HOST;
+
 public class WorkspaceClient {
 
-    private static final String WORKSPACE_SERVICE_URL = "http://localhost:8080/services/v4/ide/workspaces/";
-    private static final String TRANSPORT_SERVICE_URL = "http://localhost:8080/services/v4/transport/project/";
+    private static final String WORKSPACE_SERVICE_URL = HOST + "/services/v4/ide/workspaces/";
+    private static final String TRANSPORT_SERVICE_URL = HOST + "/services/v4/transport/project/";
 
     private final XSKHttpClient xskHttpClient;
 
     public WorkspaceClient(XSKHttpClient xskHttpClient) {
-        this.xskHttpClient =xskHttpClient;
+        this.xskHttpClient = xskHttpClient;
     }
 
     public CompletableFuture<HttpResponse> createWorkspace(String workspaceName) {
@@ -51,10 +55,33 @@ public class WorkspaceClient {
         }
     }
 
+    public CompletableFuture<HttpResponse> login() {
+        try {
+            var uri = new URI("http://localhost:8080/services/v4/web/ide/");
+            HttpUriRequest request = RequestBuilder.get(uri).build();
+            return xskHttpClient.executeRequestAsync(request)
+                    .thenCompose(x -> {
+                        try {
+                            var jsecurityUri = new URI("http://localhost:8080/services/v4/web/ide/j_security_check");
+                            HttpUriRequest loginRequest = RequestBuilder
+                                    .post(jsecurityUri)
+                                    .addParameter("j_username", "dirigible")
+                                    .addParameter("j_password", "dirigible")
+                                    .build();
+                            return xskHttpClient.executeRequestAsync(loginRequest);
+                        } catch (URISyntaxException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public CompletableFuture<HttpResponse> importProjectInWorkspace(String workspaceName, String projectName, Path projectFolderPath) {
         try {
             byte[] projectZip = zipProject(projectName, projectFolderPath);
+
             var uri = new URI(TRANSPORT_SERVICE_URL).resolve(workspaceName);
             HttpEntity multiPartHttpEntity = MultipartEntityBuilder.create()
                     .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
@@ -64,7 +91,6 @@ public class WorkspaceClient {
             HttpUriRequest multipartRequest = RequestBuilder.post(uri)
                     .setEntity(multiPartHttpEntity)
                     .build();
-
             return xskHttpClient.executeRequestAsync(multipartRequest);
 
         } catch (URISyntaxException e) {
@@ -79,6 +105,8 @@ public class WorkspaceClient {
                     .filter(path -> !Files.isDirectory(path))
                     .collect(Collectors.toList());
 
+
+
             for (var filePath : filePaths) {
                 var zipEntry = new ZipEntry(Path.of(projectName, projectFolderPath.relativize(filePath).toString()).toString());
                 zipOutputStream.putNextEntry(zipEntry);
@@ -90,4 +118,15 @@ public class WorkspaceClient {
         }
         return byteArrayOutputStream.toByteArray();
     }
+
+    public CompletableFuture<HttpResponse> deleteWorkspace(String workspace) {
+        try {
+            var uri = new URI(WORKSPACE_SERVICE_URL).resolve(workspace);
+            HttpUriRequest request = RequestBuilder.delete(uri).build();
+            return xskHttpClient.executeRequestAsync(request);
+        } catch (URISyntaxException e) {
+            throw new DeploymentException("Creating workspace failed", e);
+        }
+    }
+
 }

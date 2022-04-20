@@ -1,0 +1,7 @@
+PROCEDURE "DBADMIN"."CUSTOMERS_BY_COUNTRY_AND_ALL_CUSTOMERS" (in customerId tinyint, IN row1 varchar(50), out customersByCountry "DBADMIN"."CUSTOMERS", out allCustomers "DBADMIN"."CUSTOMERS")
+AS
+  BEGIN
+    INSERT INTO "DBADMIN"."CUSTOMERS" VALUES (:customerId, 'TEST', 'TEST');
+    customersByCountry = SELECT * FROM "DBADMIN"."CUSTOMERS" WHERE COUNTRY = :row1;
+    allCustomers = SELECT * FROM "DBADMIN"."CUSTOMERS";
+  END;

@@ -1,4 +1,5 @@
 import { process } from "@dirigible/bpm";
+import { repository } from "@dirigible/platform";
 import { MigrationService } from "../api/migration-service.mjs";
 import { MigrationTask } from "./task.mjs";
 import { configurations as config } from "@dirigible/core";
@@ -39,6 +40,27 @@ export class PopulateProjectsTask extends MigrationTask {
         const diffTool = new DiffToolService();
         const diffViewData = diffTool.diffFolders(`${workspaceHolderFolder}/${workspace}_unmodified`, `${workspaceHolderFolder}/${workspace}`);
         migrationService.removeTemporaryFolders(workspace);
-        process.setVariable(this.execution.getId(), "diffViewData", JSON.stringify(diffViewData));
+
+        this._persistDiffViewData(diffViewData);
+    }
+
+    _persistDiffViewData(diffViewData) {
+        const diffViewsCollectionPath = "/diff-views";
+        const diffViewsCollection = repository.getCollection(diffViewsCollectionPath);
+        if (!diffViewsCollection.exists()) {
+          diffViewsCollection.create();
+        }
+
+        const executionId = this.execution.getId();
+        const currentDiffViewFileName = `migration-process-id-${executionId}`;
+
+        const currentDiffViewResource = diffViewsCollection.getResource(currentDiffViewFileName);
+        if (!currentDiffViewResource.exists()) {
+          currentDiffViewResource.create();
+        }
+
+        const diffViewDataJson = JSON.stringify(diffViewData);
+        currentDiffViewResource.setText(diffViewDataJson);
+        process.setVariable(this.execution.getId(), "diffViewDataFileName", `${diffViewsCollectionPath}/${currentDiffViewFileName}`);
     }
 }

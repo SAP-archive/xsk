@@ -2,6 +2,7 @@ import { tasks as tasksService, process as processService } from "@dirigible/bpm
 import { client as httpClient, rs } from "@dirigible/http";
 import { database } from "@dirigible/db";
 import { url } from "@dirigible/utils";
+import { repository } from "@dirigible/platform";
 import { NeoDatabasesService } from "./neo-databases-service.mjs"
 import { TrackService } from "./track-service.mjs";
 
@@ -117,8 +118,14 @@ function getProcessState(ctx, req, res) {
         response.deliveryUnits = JSON.parse(deliveryUnitsJson);
         response.connectionId = connectionId;
     } else if (migrationState === "MIGRATION_EXECUTED") {
-        const diffViewData = processService.getVariable(processInstanceIdString, "diffViewData");
-        response.diffViewData = JSON.parse(diffViewData);
+        const diffViewDataFileName = processService.getVariable(processInstanceIdString, "diffViewDataFileName");
+        const diffViewResource = repository.getResource(diffViewDataFileName);
+        if (diffViewResource.exists()) {
+          const diffViewDataJson = diffViewResource.getText();
+          response.diffViewData = JSON.parse(diffViewDataJson);
+        } else {
+          response.diffViewData = [];
+        }
     }
 
     res.print(JSON.stringify(response));

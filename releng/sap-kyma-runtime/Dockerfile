@@ -9,33 +9,52 @@
 # SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
 # SPDX-License-Identifier: Apache-2.0
 
-FROM tomcat:9.0.56-jre11-openjdk-slim AS base
+FROM tomcat:9.0.56-jre11-openjdk AS base
 
+RUN rm -R /usr/local/tomcat/webapps.dist
 COPY target/ROOT.war $CATALINA_HOME/webapps/
-
-ENV DIRIGIBLE_HOME_URL=/services/v4/web/
-
-# Install wget 
-RUN apt-get update && \
-    apt-get install wget -y
 
 RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
-ENV DIRIGIBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
+RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/
 
-EXPOSE 8080
+FROM sapmachine:17.0.2 as jdk
 
-ADD entrypoint.sh /entrypoint.sh
+FROM gcr.io/distroless/base-debian11
 
-RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 xsk
+ENV DIRIGIBLE_HOME_URL=/services/v4/web/
+ENV CATALINA_HOME=/usr/local/tomcat
 
-# Add gosu utility for privilege drop
-RUN apt-get update && \
-    apt-get install gosu && \
-    apt-get install -y git && \
-    apt-get clean
+USER nonroot
+COPY --from=base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
+WORKDIR $CATALINA_HOME 
 
-ENTRYPOINT ["/entrypoint.sh"]
+COPY --from=jdk /usr/lib/jvm/sapmachine-17/ /usr/lib/java
+COPY --from=jdk /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/libz.so.1
 
-CMD ["/usr/local/tomcat/bin/catalina.sh","run"]
+ENV JAVA_HOME /usr/lib/java
+ENV PATH $PATH:$JAVA_HOME/bin
+
+ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
+EXPOSE 8080 
+
+CMD ["java", \
+ "-Djava.util.logging.config.file=/usr/local/tomcat/conf/logging.properties", \
+ "--add-opens=java.base/java.lang=ALL-UNNAMED", \
+ "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED", \
+ "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager", \
+ "-Djdk.tls.ephemeralDHKeySize=2048", \
+ "-Djava.protocol.handler.pkgs=org.apache.catalina.webresources", \
+ "-Dorg.apache.catalina.security.SecurityListener.UMASK=0027", \
+ "-Dignore.endorsed.dirs=", \
+ "-classpath", \
+ "/usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar", \
+ "-Dcatalina.base=/usr/local/tomcat/", \
+ "-Dcatalina.home=/usr/local/tomcat/", \
+ "-Djava.io.tmpdir=/usr/local/tomcat/temp", \
+ "org.apache.catalina.startup.Bootstrap", \
+ "start" \
+]
+
+ENTRYPOINT []

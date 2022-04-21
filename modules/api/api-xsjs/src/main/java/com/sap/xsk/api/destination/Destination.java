@@ -21,6 +21,10 @@ public class Destination {
   private String pathPrefix;
   private Properties properties = new Properties();
 
+  public Destination(Properties properties) {
+    this.properties = properties;
+  }
+
   public Destination(String host, int port, String pathPrefix, Properties properties) {
     this.host = host;
     this.port = port;

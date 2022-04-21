@@ -220,16 +220,16 @@ exports.Client = function () {
   }
 
   function getUrlParametersFromTupel(tupelParameters) {
-    var queryParameterPairs = [];
-    for (var i = 0; i < tupelParameters.length; i++) {
-      var name = tupelParameters[i].name;
-      var value = tupelParameters[i].value;
+    let queryParameterPairs = [];
+    for (const i in tupelParameters) {
+      let name = tupelParameters[i].name;
+      let value = tupelParameters[i].value;
 
       if (value instanceof Array) {
         value = value.join(",");
       }
 
-      var queryPair = name + "=" + value;
+      let queryPair = name + "=" + value;
 
       queryParameterPairs.push(queryPair);
     }

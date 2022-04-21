@@ -92,6 +92,7 @@ public class CloudPlatformDestinationFacadeTest {
 
     com.sap.cloud.sdk.cloudplatform.connectivity.Destination mockedDestination = Mockito.mock(com.sap.cloud.sdk.cloudplatform.connectivity.Destination.class);
     when(mockedDestination.get("URL")).thenReturn(Option.of(DESTINATION_URI));
+    when(mockedDestination.isHttp()).thenReturn(true);
 
     HttpDestination mockedHttpDestination = Mockito.mock(HttpDestination.class);
     when(mockedHttpDestination.getAuthenticationType()).thenReturn(AuthenticationType.NO_AUTHENTICATION);

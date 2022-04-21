@@ -293,7 +293,7 @@
         <jaxb.version>2.3.0</jaxb.version>
         <jaxws.version>2.3.0</jaxws.version>
         <olingo.version>2.0.11</olingo.version>
-        <mockito.version>4.4.0</mockito.version>
+        <mockito.version>4.5.0</mockito.version>
         <junit.version>4.13.2</junit.version>
         <junitparams.version>1.1.1</junitparams.version>
         <hamcrest.all.version>1.3</hamcrest.all.version>

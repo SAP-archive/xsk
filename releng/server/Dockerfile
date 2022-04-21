@@ -4,7 +4,7 @@
 # (Optional) JDK_TYPE could be `default-jdk` or `external-jdk`
 ARG JDK_TYPE=default-jdk
 
-FROM tomcat:8.5.43-jdk11-openjdk AS base
+FROM tomcat:8.5.78-jdk17-openjdk AS base
 
 FROM base AS xsk-external-jdk
 # If JDK_TYPE is set to `external-jdk`, then the JDK_HOME is required and it should point to the home directory of the jdk
@@ -19,7 +19,6 @@ RUN echo "The default OpenJDK will be used"
 
 FROM xsk-${JDK_TYPE} AS dependencies-base
 
-RUN rm -R /usr/local/tomcat/webapps/*
 COPY target/ROOT.war $CATALINA_HOME/webapps/
 
 RUN rm /usr/local/tomcat/conf/tomcat-users.xml
@@ -34,6 +33,7 @@ RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc
 #ENV JPDA_TRANSPORT=dt_socket
 
 ENV DIRIGIBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
+ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
 
 EXPOSE 8080 8081 8000
 

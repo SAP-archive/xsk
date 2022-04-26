@@ -3,8 +3,8 @@ api = "0.5"
 
 # Buildpack ID and metadata
 [buildpack]
-id = "buildpacks-xsk-kyma"
-version = "latest"
+id = "dirigiblelabs/buildpacks-xsk-kyma-runtime"
+version = "#{XSKVersion}#"
 name = "XSK Kyma Buildpack"
 
 # Stacks that the buildpack will work with

@@ -4,10 +4,10 @@ uri = "."
 
 [[order]]
     [[order.group]]
-    id = "buildpacks-xsk-kyma"
-    version = "latest"
+    id = "dirigiblelabs/buildpacks-xsk-kyma-runtime"
+    version = "#{XSKVersion}#"
 
 [stack]
 id = "com.sap.kneo.xsk"
-build-image = "buildpacks-stack-build-xsk-kyma"
-run-image = "buildpacks-stack-run-xsk-kyma"
+build-image = "dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime"
+run-image = "dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime"

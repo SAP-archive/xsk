@@ -66,9 +66,9 @@ jobs:
       - name: Push XSK for SAP Kyma Runtime
         run: |
           cd releng/sap-kyma-runtime
-          docker build -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
-          docker build -t dirigiblelabs/xsk-kyma-runtime .
-          docker build -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
+          docker build --load -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
+          docker build --load -t dirigiblelabs/xsk-kyma-runtime .
+          docker build --load -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
           docker push dirigiblelabs/xsk-kyma-runtime-base
           docker push dirigiblelabs/xsk-kyma-runtime
           docker push dirigiblelabs/xsk-kyma-runtime-distro

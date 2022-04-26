@@ -24,6 +24,9 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 
 import org.junit.After;
@@ -57,8 +60,8 @@ public class CloudPlatformDestinationFacadeTest {
 
   @Parameters
   public static Collection<Object[]> data() {
-    return Arrays.asList(new Object[][] {
-        { true }, { false }
+    return Arrays.asList(new Object[][]{
+        {true}, {false}
     });
   }
 
@@ -74,10 +77,6 @@ public class CloudPlatformDestinationFacadeTest {
 
   @After
   public void close() {
-
-    if (!isKymaFacadeSet) {
-      cloudPlatformAccessor.verify(() -> CloudPlatformAccessor.setCloudPlatformFacade(any()));
-    }
     destinationAccessor.close();
     httpClientAccessor.close();
     cloudPlatformAccessor.close();
@@ -90,9 +89,10 @@ public class CloudPlatformDestinationFacadeTest {
     httpClientAccessor = Mockito.mockStatic(HttpClientAccessor.class);
     cloudPlatformAccessor = Mockito.mockStatic(CloudPlatformAccessor.class);
 
-    com.sap.cloud.sdk.cloudplatform.connectivity.Destination mockedDestination = Mockito.mock(com.sap.cloud.sdk.cloudplatform.connectivity.Destination.class);
+    com.sap.cloud.sdk.cloudplatform.connectivity.Destination mockedDestination = Mockito.mock(
+        com.sap.cloud.sdk.cloudplatform.connectivity.Destination.class);
     when(mockedDestination.get("URL")).thenReturn(Option.of(DESTINATION_URI));
-    when(mockedDestination.isHttp()).thenReturn(true);
+    when(mockedDestination.isHttp()).thenReturn(true, false);
 
     HttpDestination mockedHttpDestination = Mockito.mock(HttpDestination.class);
     when(mockedHttpDestination.getAuthenticationType()).thenReturn(AuthenticationType.NO_AUTHENTICATION);
@@ -101,7 +101,7 @@ public class CloudPlatformDestinationFacadeTest {
     when(mockedDestination.asHttp()).thenReturn(mockedHttpDestination);
 
     destinationAccessor.when(() -> DestinationAccessor.getDestination(destinationName))
-        .thenReturn(mockedDestination);
+        .thenReturn(mockedDestination, mockedDestination);
 
     httpClientAccessor.when(() -> HttpClientAccessor.getHttpClient(any()))
         .thenReturn(httpClient);
@@ -133,6 +133,12 @@ public class CloudPlatformDestinationFacadeTest {
     assertEquals("test-destination.com", dest.getHost());
     assertEquals(8080, dest.getPort());
     assertEquals("/destination", dest.getPathPrefix());
+
+    // when .isHttp() is false
+    Destination dest2 = CloudPlatformDestinationFacade.getDestination(destinationName);
+    assertNull(dest2.getHost());
+    assertEquals(0, dest2.getPort());
+    assertNull(dest2.getPathPrefix());
   }
 
   @Test

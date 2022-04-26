@@ -33,6 +33,8 @@ jobs:
         uses: docker/setup-buildx-action@v1
         with:
           install: true
+      - name: Set Multi-Builder Docker Buildx
+        run: docker buildx create --use --name multi-builder --platform linux/arm64,linux/amd64
       - name: Maven Build
         run: mvn clean install
       - name: Docker Login
@@ -61,11 +63,11 @@ jobs:
       - name: Push XSK for SAP Kyma Runtime
         run: |
           cd releng/sap-kyma-runtime
-          docker build -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
-          docker build -t dirigiblelabs/xsk-kyma-runtime .
-          docker build -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
+          docker build --load -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
           docker push dirigiblelabs/xsk-kyma-runtime-base
+          docker build --load -t dirigiblelabs/xsk-kyma-runtime .
           docker push dirigiblelabs/xsk-kyma-runtime
+          docker build --load -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
           docker push dirigiblelabs/xsk-kyma-runtime-distro
           cd ../../
       - uses: buildpacks/github-actions/setup-pack@v4.1.0
@@ -113,19 +115,19 @@ jobs:
           cd ../../../../
       - name: XSK Kyma Runtime Buildpack
         run: |
-          cd releng/buildpacks/xsk-kyma-runtime/
-          docker build -t dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime . --target base
-          docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime
-          docker build -t dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime . --target run
-          docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime
-          docker build -t dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime . --target build
-          docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime
+          cd releng/buildpacks/xsk-kyma/
+          docker build --load -t dirigiblelabs/buildpacks-stack-base-xsk-kyma . --target base
+          docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma
+          docker build --load -t dirigiblelabs/buildpacks-stack-run-xsk-kyma . --target run
+          docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma
+          docker build --load -t dirigiblelabs/buildpacks-stack-build-xsk-kyma . --target build
+          docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma
           cd buildpack/
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
-          pack buildpack package dirigiblelabs/buildpacks-xsk-kyma-runtime --config ./package.toml
-          docker push dirigiblelabs/buildpacks-xsk-kyma-runtime
-          pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma-runtime --config ./builder.toml
-          docker push dirigiblelabs/buildpacks-builder-xsk-kyma-runtime
+          pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
+          docker push dirigiblelabs/buildpacks-xsk-kyma
+          pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
+          docker push dirigiblelabs/buildpacks-builder-xsk-kyma
           cd ../../../../
       - name: XSK Cloud Foundry Buildpack
         run: |

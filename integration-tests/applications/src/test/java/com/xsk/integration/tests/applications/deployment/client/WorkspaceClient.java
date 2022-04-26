@@ -11,7 +11,6 @@
  */
 package com.xsk.integration.tests.applications.deployment.client;
 
-import com.sun.security.jgss.GSSUtil;
 import com.xsk.integration.tests.applications.deployment.DeploymentException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,7 +20,6 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,6 +41,26 @@ public class WorkspaceClient {
 
     public WorkspaceClient(XSKHttpClient xskHttpClient) {
         this.xskHttpClient = xskHttpClient;
+    }
+
+    private static byte[] zipProject(String projectName, Path projectFolderPath) {
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        try (ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
+            var filePaths = Files.walk(projectFolderPath)
+                    .filter(path -> !Files.isDirectory(path))
+                    .collect(Collectors.toList());
+
+
+            for (var filePath : filePaths) {
+                var zipEntry = new ZipEntry(Path.of(projectName, projectFolderPath.relativize(filePath).toString()).toString());
+                zipOutputStream.putNextEntry(zipEntry);
+                Files.copy(filePath, zipOutputStream);
+                zipOutputStream.closeEntry();
+            }
+        } catch (IOException e) {
+            throw new DeploymentException("Could not zip path: " + projectFolderPath);
+        }
+        return byteArrayOutputStream.toByteArray();
     }
 
     public CompletableFuture<HttpResponse> createWorkspace(String workspaceName) {
@@ -96,27 +114,6 @@ public class WorkspaceClient {
         } catch (URISyntaxException e) {
             throw new DeploymentException("Import project into workspace failed", e);
         }
-    }
-
-    private static byte[] zipProject(String projectName, Path projectFolderPath) {
-        var byteArrayOutputStream = new ByteArrayOutputStream();
-        try (ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
-            var filePaths = Files.walk(projectFolderPath)
-                    .filter(path -> !Files.isDirectory(path))
-                    .collect(Collectors.toList());
-
-
-
-            for (var filePath : filePaths) {
-                var zipEntry = new ZipEntry(Path.of(projectName, projectFolderPath.relativize(filePath).toString()).toString());
-                zipOutputStream.putNextEntry(zipEntry);
-                Files.copy(filePath, zipOutputStream);
-                zipOutputStream.closeEntry();
-            }
-        } catch (IOException e) {
-            throw new DeploymentException("Could not zip path: " + projectFolderPath);
-        }
-        return byteArrayOutputStream.toByteArray();
     }
 
     public CompletableFuture<HttpResponse> deleteWorkspace(String workspace) {

@@ -27,19 +27,22 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
+import static com.xsk.integration.tests.applications.Deployment.KYMA;
+import static com.xsk.integration.tests.applications.Deployment.LOCAL;
+
+
 public class XSKHttpClient {
 
     private CloseableHttpAsyncClient httpClient;
 
     public XSKHttpClient(Deployment deployment) {
-        switch (deployment) {
-            case KYMA:
-                TokenProvider tokenProvider = new TokenProvider();
-                String kymaToken = tokenProvider.getToken();
-                BasicHeader authHeader = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + kymaToken);
-                httpClient = HttpAsyncClients.custom().setDefaultHeaders(List.of(authHeader)).build();
-            case LOCAL:
-                httpClient = HttpAsyncClients.createDefault();
+        if (deployment == KYMA) {
+            TokenProvider tokenProvider = new TokenProvider();
+            String kymaToken = tokenProvider.getToken();
+            BasicHeader authHeader = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + kymaToken);
+            httpClient = HttpAsyncClients.custom().setDefaultHeaders(List.of(authHeader)).build();
+        } else if (deployment == LOCAL) {
+            httpClient = HttpAsyncClients.createDefault();
         }
         httpClient.start();
     }

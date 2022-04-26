@@ -13,11 +13,11 @@ package com.xsk.integration.tests.applications.deployment;
 
 public class DeploymentException extends RuntimeException {
 
-  public DeploymentException(String message) {
-    super(message);
-  }
+    public DeploymentException(String message) {
+        super(message);
+    }
 
-  public DeploymentException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public DeploymentException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

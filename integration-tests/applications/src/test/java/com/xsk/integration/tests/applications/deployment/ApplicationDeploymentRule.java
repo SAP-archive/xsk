@@ -25,16 +25,12 @@ public class ApplicationDeploymentRule extends ExternalResource {
     public static String HOST;
     private final XSKProjectDeployer projectPublisher;
     private final String applicationName;
-    private Deployment deployment;
     KymaCredentials kymaCredentials = new KymaCredentials();
 
     public ApplicationDeploymentRule(String applicationName, Deployment deployment) {
-        this.deployment = deployment;
-
-        switch (deployment){
-          case KYMA:
+        if (deployment == KYMA) {
             HOST = kymaCredentials.getHost();
-          case LOCAL:
+        } else if (deployment == LOCAL) {
             HOST = "http://localhost:8080";
         }
         this.applicationName = applicationName;

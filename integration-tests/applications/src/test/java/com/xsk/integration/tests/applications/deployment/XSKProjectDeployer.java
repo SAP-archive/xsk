@@ -21,6 +21,8 @@ import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static com.xsk.integration.tests.applications.Deployment.LOCAL;
+
 public class XSKProjectDeployer {
 
     private final WorkspaceClient workspaceClient;
@@ -43,20 +45,13 @@ public class XSKProjectDeployer {
     }
 
     public CompletableFuture<HttpResponse> deployAsync(String projectName, Path projectFolderPath) throws DeploymentException {
-        switch (xskDeployment) {
-            case KYMA:
-                return workspaceClient.createWorkspace(projectName)
-                        .thenCompose(x -> workspaceClient.importProjectInWorkspace(projectName, projectName, projectFolderPath))
-                        .thenCompose(x -> publisherClient.publishProjectInWorkspace(projectName, projectName));
-            case LOCAL:
-                return workspaceClient.login()
-                        .thenCompose(x -> workspaceClient.createWorkspace(projectName))
-                        .thenCompose(x -> workspaceClient.importProjectInWorkspace(projectName, projectName, projectFolderPath))
-                        .thenCompose(x -> publisherClient.publishProjectInWorkspace(projectName, projectName));
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + xskDeployment);
+        if (xskDeployment == LOCAL) {
+            workspaceClient.login();
         }
+        return workspaceClient.createWorkspace(projectName)
+                .thenCompose(x -> workspaceClient.importProjectInWorkspace(projectName, projectName, projectFolderPath))
+                .thenCompose(x -> publisherClient.publishProjectInWorkspace(projectName, projectName));
+
 
     }
 

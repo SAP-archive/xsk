@@ -13,8 +13,8 @@ public class KymaCredentials {
 
     public KymaCredentials() {
         host = Configuration.get("KYMA_HOST");
-        clientId = Configuration.get("KYMA_CLIENT_ID");
-        clientSecret = Configuration.get("KYMA_CLIENT_SECRET");
+        clientId = Configuration.get("XSUAA_CLIENT_ID");
+        clientSecret = Configuration.get("XSUAA_CLIENT_SECRET");
         username = Configuration.get("KYMA_USERNAME");
         password = Configuration.get("KYMA_PASSWORD");
         tokenUrl = Configuration.get("KYMA_TOKEN_URL");

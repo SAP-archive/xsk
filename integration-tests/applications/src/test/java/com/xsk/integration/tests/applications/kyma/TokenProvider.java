@@ -3,7 +3,7 @@ package com.xsk.integration.tests.applications.kyma;
 import com.xsk.integration.tests.applications.deployment.XSKKymaException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.utils.URIBuilder;
-import org.json.JSONObject;
+import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -30,10 +30,11 @@ public class TokenProvider {
 
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
-            JSONObject objJsonObject = new JSONObject(response.body());
-            return objJsonObject.getString("access_token");
+
+            KymaResponseBody responseBody = GsonHelper.GSON.fromJson(response.body(), KymaResponseBody.class);
+            return responseBody.getAccess_token();
         } catch (RuntimeException | IOException | InterruptedException | URISyntaxException e) {
-            throw new XSKKymaException("Can't access JWT Token for kyma instance"+ e);
+            throw new XSKKymaException("Can't access JWT Token for kyma instance" + e);
         }
     }
 }

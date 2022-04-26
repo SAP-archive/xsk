@@ -18,7 +18,7 @@ import org.junit.Test;
 public class AppTest {
 
     @ClassRule
-    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("hdb-simple", Deployment.LOCAL);
+    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", Deployment.LOCAL);
 
     @Test
     public void test1() {

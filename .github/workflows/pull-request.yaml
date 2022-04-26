@@ -57,6 +57,13 @@ jobs:
           cp -r "${JAVA_HOME}" jdk
           docker build -t dirigiblelabs/xsk-kyma --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
           cd ../../
+      - name: Push XSK for SAP Kyma Runtime
+        run: |
+          cd releng/sap-kyma-runtime
+          docker build -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
+          docker build -t dirigiblelabs/xsk-kyma-runtime .
+          docker build -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
+          cd ../../
       - uses: buildpacks/github-actions/setup-pack@v4.1.0
       - name: XSK Buildpack
         run: |
@@ -79,6 +86,17 @@ jobs:
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
           pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
           pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
+          cd ../../../../
+      - name: XSK Kyma Runtime Buildpack
+        run: |
+          cd releng/buildpacks/xsk-kyma-runtime/
+          docker build -t dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime . --target base
+          docker build -t dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime . --target run
+          docker build -t dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime . --target build
+          cd buildpack/
+          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
+          pack buildpack package dirigiblelabs/buildpacks-xsk-kyma-runtime --config ./package.toml
+          pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma-runtime --config ./builder.toml
           cd ../../../../
       - name: XSK Cloud Foundry Buildpack
         run: |

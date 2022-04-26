@@ -109,11 +109,11 @@ jobs:
       - name: XSK Kyma Runtime Buildpack
         run: |
           cd releng/buildpacks/xsk-kyma-runtime/
-          docker build -t dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime . --target base
+          docker build --load -t dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime . --target base
           docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime
-          docker build -t dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime . --target run
+          docker build --load -t dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime . --target run
           docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime
-          docker build -t dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime . --target build
+          docker build --load -t dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime . --target build
           docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime
           cd buildpack/
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;

@@ -57,6 +57,13 @@ jobs:
           cp -r "${JAVA_HOME}" jdk
           docker build -t dirigiblelabs/xsk-kyma --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
           cd ../../
+      - name: Push XSK for SAP Kyma Runtime
+        run: |
+          cd releng/sap-kyma-runtime
+          docker build -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
+          docker build -t dirigiblelabs/xsk-kyma-runtime .
+          docker build -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
+          cd ../../
       - uses: buildpacks/github-actions/setup-pack@v4.1.0
       - name: XSK Buildpack
         run: |

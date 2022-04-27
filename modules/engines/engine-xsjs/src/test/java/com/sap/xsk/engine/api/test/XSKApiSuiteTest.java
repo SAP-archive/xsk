@@ -34,7 +34,6 @@ import junitparams.Parameters;
 import org.apache.cxf.helpers.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ContextException;
 import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
-import org.eclipse.dirigible.commons.api.module.DirigibleModulesInstallerModule;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -47,7 +46,6 @@ import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.eclipse.dirigible.repository.api.RepositoryWriteException;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -73,9 +71,6 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     this.extensionsCoreService = new ExtensionsCoreService();
     this.repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
     this.graaljsJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
-//    if(StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE) == null) {
-//      DirigibleModulesInstallerModule.configure();
-//    }
   }
 
   @Test

@@ -1,4 +1,4 @@
-import { assertEquals } from './prettyAssert.mjs'
+import { assertEquals } from './utils/utils.mjs'
 import { XSJSLibContentModifier } from '/exports/XSJSLibContentModifier.mjs'
 import { repository } from '@dirigible-v4/platform'
 

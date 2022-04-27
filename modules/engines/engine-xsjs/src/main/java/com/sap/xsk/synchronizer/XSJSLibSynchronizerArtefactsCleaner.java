@@ -14,22 +14,22 @@ package com.sap.xsk.synchronizer;
 import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class XSJSLibSynchronizerArtefactsCleaner {
+
   private final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
 
   public void cleanup(String targetLocation) {
-    try (Connection connection = dataSource.getConnection()) {
-      PreparedStatement pstmt = connection
-          .prepareStatement("DELETE FROM \""
-              + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
-              + "\" WHERE \"LOCATION\" LIKE ?");
-
-      pstmt.setString(1, targetLocation + "%");
-      pstmt.executeUpdate();
+    try (PreparedStatement deleteStatement =
+        dataSource.getConnection().prepareStatement(
+            "DELETE FROM \""
+                + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
+                + "\" WHERE \"LOCATION\" LIKE ?")
+    ) {
+      deleteStatement.setString(1, targetLocation + "%");
+      deleteStatement.executeUpdate();
     } catch (SQLException e) {
       throw new XSJSLibArtefactCleanerSQLException("Could not cleanup xsjslib synchronizer entries. ", e);
     }

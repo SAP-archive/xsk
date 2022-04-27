@@ -13,7 +13,9 @@ package com.sap.xsk.synchronizer;
 
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
-import org.eclipse.dirigible.commons.api.module.DirigibleModulesInstallerModule;
+import com.sap.xsk.exceptions.XSJSLibExportsGenerationSourceNotFoundException;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -21,13 +23,13 @@ import org.eclipse.dirigible.core.scheduler.api.ISchedulerCoreService;
 import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
+import org.eclipse.dirigible.repository.api.IEntity;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
@@ -42,8 +44,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+@RunWith(JUnitParamsRunner.class)
 public class ExportGenerationTest extends AbstractDirigibleTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExportGenerationTest.class);
@@ -54,13 +56,14 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
   }
 
   @Before
-  public void setUp() {
-    String rootFolder = "target/test-classes/META-INF/";
-    IRepository repository = new LocalRepository(rootFolder, false);
-    StaticObjects.set(StaticObjects.REPOSITORY, repository);
-//    if(StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE) == null) {
-//      DirigibleModulesInstallerModule.configure();
-//    }
+  public void beforeTest() {
+    setUpRepository();
+    cleanup();
+  }
+
+  @After
+  public void afterTest() {
+    cleanup();
   }
 
   @Test
@@ -121,18 +124,19 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
   public void artefactCleanerTest() {
     logger.info("XSJSLibArtefactStateCleaner test starting... ");
 
-    runJs("/test/xsk/exports/createTableHelper.mjs"); // create a state table with an entry
+    runJs("/test/xsk/exports/utils/createTableHelper.mjs"); // create a state table with an entry
 
     XSJSLibSynchronizerArtefactsCleaner cleaner = new XSJSLibSynchronizerArtefactsCleaner();
     cleaner.cleanup("bbb/");
 
     DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
-    try (Connection connection = dataSource.getConnection()) {
-      PreparedStatement pstmt = connection
-          .prepareStatement("SELECT FROM \"" + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
-              + "\" WHERE \"LOCATION\" LIKE 'bbb/'");
-
-      ResultSet result = pstmt.executeQuery();
+    try (PreparedStatement selectStatement = dataSource.getConnection()
+        .prepareStatement(
+            "SELECT FROM \""
+                + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
+                + "\" WHERE \"LOCATION\" LIKE 'bbb/'")
+    ) {
+      ResultSet result = selectStatement.executeQuery();
       assertNotNull("Unexpected null result set after state table cleanup", result);
 
       result.last();
@@ -146,38 +150,76 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
   }
 
   @Test
+  public void exportGenerationSourceNotFoundExceptionTest() {
+    try {
+      throw new XSJSLibExportsGenerationSourceNotFoundException("test");
+    } catch (XSJSLibExportsGenerationSourceNotFoundException exception) {
+      assertEquals("Unexpected exception message", "test", exception.getMessage());
+    }
+
+    try {
+      throw new XSJSLibExportsGenerationSourceNotFoundException(new RuntimeException("test"));
+    } catch (XSJSLibExportsGenerationSourceNotFoundException exception) {
+      assertEquals("Unexpected exception cause", RuntimeException.class, exception.getCause().getClass());
+    }
+  }
+
+  @Test
+  public void artefactStateExceptionTest() {
+    try {
+      throw new XSJSLibArtefactCleanerSQLException("test", new RuntimeException("test2"));
+    } catch (XSJSLibArtefactCleanerSQLException exception) {
+      assertEquals("Unexpected exception message", "test", exception.getMessage());
+      assertEquals("Unexpected exception cause", RuntimeException.class, exception.getCause().getClass());
+    }
+  }
+
+  @Test
   public void contentModifierTest() throws ScriptingException {
     runJsTest("/test/xsk/exports/contentModifierTest.mjs");
   }
 
   @Test
-  public void stateTableTest() throws ScriptingException {
-    runJsTest("/test/xsk/exports/stateTableTest.mjs");
+  @Parameters({
+      "/test/xsk/exports/stateTableWriteTest.mjs",
+      "/test/xsk/exports/stateTableUpdateTest.mjs",
+      "/test/xsk/exports/stateTableFindTest.mjs",
+      "/test/xsk/exports/stateTableCheckContentChangeTest.mjs"
+  })
+  public void stateTableTest(String testModule) throws ScriptingException {
+    runJsTest(testModule);
   }
 
   @Test
-  public void exportsGeneratorTest() throws ScriptingException {
-    runJsTest("/test/xsk/exports/exportsGeneratorTest.mjs");
+  @Parameters({
+      "/test/xsk/exports/singleFileExportGenerationTest.mjs",
+      "/test/xsk/exports/singleFileExportUpdateTest.mjs",
+      "/test/xsk/exports/multiFileExportGeneration.mjs",
+  })
+  public void exportsGeneratorTest(String testModule) throws ScriptingException {
+    runJsTest(testModule);
   }
 
   @Test
   public void importTest() throws ScriptingException {
     logger.info("XSJSLib Import test starting... ");
 
-    Map<Object, Object> context = new HashMap<>();
     XSJSLibSynchronizer.forceSynchronization("../../test/xsk/import/");
+
+    Map<Object, Object> context = new HashMap<>();
     XSKJavascriptEngineExecutor xskJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
     Object result = xskJavascriptEngineExecutor.executeServiceModule(
         "/test/xsk/import/import.xsjs",
         context
     );
+
     assertNull("Unexpected xsjs execution result for import.xsjs", result);
 
     logger.info("XSJSLib Import test passed successfully. ");
   }
 
   private void runJsTest(String testModule) {
-    logger.info("XSJSLib Export js test starting... " + testModule);
+    logger.info("XSJSLib Export js test starting(" + testModule + ")");
 
     Object executionResult = runJs(testModule);
     assertNull(
@@ -199,21 +241,35 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
     );
   }
 
-  @After
-  public void cleanupTestTables() {
-    logger.info("Cleaning up tables after test execution.");
+  private void cleanup() {
+    logger.info("Cleaning up tables and repository after test execution.");
 
+    cleanupRepository();
     dropTableIfExists(XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
     dropTableIfExists("XSJSLIB_EXPORT_TEST_TABLE");
   }
 
-  private void dropTableIfExists(String tableName){
+  private void setUpRepository() {
+    String rootFolder = "target/test-classes/META-INF/";
+    IRepository repository = new LocalRepository(rootFolder, false);
+    StaticObjects.set(StaticObjects.REPOSITORY, repository);
+  }
+
+  private void cleanupRepository() {
+    IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+    repository.getRoot().getResources().forEach(IEntity::delete);
+    repository.getRoot().getCollections().forEach(IEntity::delete);
+  }
+
+  private void dropTableIfExists(String tableName) {
     DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
-    try (Connection connection = dataSource.getConnection()) {
-      if(tableExists(tableName, connection)) {
-        PreparedStatement pstmt = connection
-            .prepareStatement("DROP TABLE \"" + tableName + "\"");
-        pstmt.executeUpdate();
+    try (Connection connection = dataSource.getConnection();
+        PreparedStatement dropStatement = connection.prepareStatement(
+            "DROP TABLE \"" + tableName + "\""
+        )
+    ) {
+      if (tableExists(tableName, connection)) {
+        dropStatement.executeUpdate();
       }
     } catch (SQLException e) {
       throw new XSJSLibArtefactCleanerSQLException("Could not drop table after test", e);
@@ -221,11 +277,12 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
   }
 
   private boolean tableExists(String tableName, Connection connection) throws SQLException {
-      ResultSet resultSet = connection.getMetaData().getTables(
-          null,
-          null,
-          tableName,
-          null);
-      return resultSet.next();
+    ResultSet resultSet = connection.getMetaData().getTables(
+        null,
+        null,
+        tableName,
+        null
+    );
+    return resultSet.next();
   }
 }

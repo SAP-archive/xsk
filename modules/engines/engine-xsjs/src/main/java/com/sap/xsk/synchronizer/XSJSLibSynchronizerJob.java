@@ -19,6 +19,7 @@ import org.eclipse.dirigible.core.scheduler.api.ISynchronizer;
 import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
 
 public class XSJSLibSynchronizerJob extends AbstractSynchronizerJob implements IJobDefinitionProvider {
+
   private static final String XSK_XSJSLIB_SYNCHRONIZER_JOB = "XSK XSJSLib Synchronizer Job";
   private static final String DIRIGIBLE_JOB_EXPRESSION_XSK_XSJSLIB = "DIRIGIBLE_JOB_EXPRESSION_XSK_XSJSLIB";
   private static final String DIRIGIBLE_INTERNAL_XSK_XSJSLIB_SYNCHRONIZER_JOB = "dirigible-internal-xsk-xsjslib-synchronizer-job";

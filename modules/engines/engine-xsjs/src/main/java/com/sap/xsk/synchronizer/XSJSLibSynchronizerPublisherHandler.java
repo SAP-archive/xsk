@@ -17,7 +17,7 @@ public class XSJSLibSynchronizerPublisherHandler extends MetadataPublisherHandle
 
   @Override
   public void afterPublish(String workspaceLocation, String registryLocation) {
-      XSJSLibSynchronizer.forceSynchronization(registryLocation);
+    XSJSLibSynchronizer.forceSynchronization(registryLocation);
   }
 
   @Override

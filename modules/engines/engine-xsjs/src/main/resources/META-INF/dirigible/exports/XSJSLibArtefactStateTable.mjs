@@ -64,7 +64,7 @@ export class XSJSLibArtefactStateTable {
           required: true
         }]
       },
-      null,
+      "XSJSLibArtefactStateTable",
       this.tableDB,
       this.tableLocation
       );

@@ -3,7 +3,7 @@ const acorn = require("acornjs/acorn");
 export class XSJSLibContentModifier {
 
   writeExportsToResource(resource, content) {
-    let contentWithExports = this._getXSJSLibContentWithExports(content);
+    const contentWithExports = this._getXSJSLibContentWithExports(content);
     resource.setText(contentWithExports);
     return contentWithExports;
   }
@@ -15,16 +15,16 @@ export class XSJSLibContentModifier {
   }
 
   _getExports(code) {
-    let nodes = acorn.parse(code);
+    const nodes = acorn.parse(code);
 
-    let functionDeclarations = nodes.body.filter(e => e.type === "FunctionDeclaration")
+    const functionDeclarations = nodes.body.filter(e => e.type === "FunctionDeclaration")
       .map(e => e.id.name);
 
-    let variableDeclarations = nodes.body.filter(e => e.type === "VariableDeclaration")
+    const variableDeclarations = nodes.body.filter(e => e.type === "VariableDeclaration")
       .flatMap(e => e.declarations.filter(d => d.type === "VariableDeclarator")
         .flatMap(d => d.id.name));
 
-    let exports = functionDeclarations.concat(variableDeclarations);
+    const exports = functionDeclarations.concat(variableDeclarations);
 
     return exports;
   }

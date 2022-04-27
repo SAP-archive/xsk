@@ -1,18 +1,19 @@
 import { XSJSLibContentModifier } from '/exports/XSJSLibContentModifier.mjs'
 import { XSJSLibArtefactStateTable } from '/exports/XSJSLibArtefactStateTable.mjs'
+import { digest } from '@dirigible-v4/utils'
 
 export class XSJSLibExportsGenerator {
 
   processedArtefactsTable = null;
 
-  constructor(targetRegistryCollection, stateTableParams) {
+  constructor(stateTableParams) {
     this.processedArtefactsTable = new XSJSLibArtefactStateTable(
       stateTableParams.name,
-      stateTableParams.schema,
-      stateTableParams.location,
-      stateTableParams.db
+      stateTableParams.schema
     );
+  }
 
+  run(targetRegistryCollection) {
     this._generateExportsRecursively(targetRegistryCollection);
   }
 
@@ -21,8 +22,8 @@ export class XSJSLibExportsGenerator {
       return;
     }
 
-    let resourceNames = this._toJsArray(parentCollection.getResourcesNames());
-    let collectionNames = this._toJsArray(parentCollection.getCollectionsNames());
+    const resourceNames = this._toJsArray(parentCollection.getResourcesNames());
+    const collectionNames = this._toJsArray(parentCollection.getCollectionsNames());
 
     resourceNames
       .filter(resourceName => resourceName.endsWith(".xsjslib"))
@@ -31,7 +32,7 @@ export class XSJSLibExportsGenerator {
         try {
           this._checkTableAndGenerateExportsIfNeeded(resource);
         } catch (e) {
-          throw new Error("Cannot check if synchrnoisation is needed. Reason: " + e);
+          throw new Error("Cannot check if synchronisation is needed. Reason: ", e);
         }
       });
 
@@ -41,26 +42,30 @@ export class XSJSLibExportsGenerator {
   }
 
   _toJsArray(array) {
-    let result = [];
-    array.forEach(element => result.push(element));
-    return result;
+    return [
+      ...array
+    ];
   }
 
   _checkTableAndGenerateExportsIfNeeded(resource) {
-    let content = resource.getText();
-    let location = resource.getPath();
+    const content = resource.getText();
+    const location = resource.getPath();
 
-    let contentModifier = new XSJSLibContentModifier();
+    const contentModifier = new XSJSLibContentModifier();
 
-    let foundEntry = this.processedArtefactsTable.findEntryByResourceLocation(location);
+    const foundEntry = this.processedArtefactsTable.findEntryByResourceLocation(location);
 
     if (!foundEntry) {
-        let contentWithExports = contentModifier.writeExportsToResource(resource, content);
+        const contentWithExports = contentModifier.writeExportsToResource(resource, content);
         this.processedArtefactsTable.createEntryForResource(location, contentWithExports);
     }
-    else if (this.processedArtefactsTable.checkForContentChange(foundEntry, content)) {
-      let contentWithExports = contentModifier.writeExportsToResource(resource, content);
+    else if (this._checkForContentChange(foundEntry, content)) {
+      const contentWithExports = contentModifier.writeExportsToResource(resource, content);
       this.processedArtefactsTable.updateEntryForResource(foundEntry, location, contentWithExports);
     }
+  }
+
+  _checkForContentChange(foundEntry, content) {
+    return foundEntry.HASH !== digest.md5Hex(content);
   }
 }

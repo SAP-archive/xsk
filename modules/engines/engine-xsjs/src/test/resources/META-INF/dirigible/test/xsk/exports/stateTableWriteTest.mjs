@@ -6,25 +6,23 @@ import { fetchAllEntriesInTable } from './utils/utils.mjs'
 
 function writeTableTest() {
   // create new state table
-  let stateTableParams = getParams();
-  let table = new XSJSLibArtefactStateTable(
+  const stateTableParams = getParams();
+  const table = new XSJSLibArtefactStateTable(
     stateTableParams.name,
-    stateTableParams.schema,
-    stateTableParams.location,
-    stateTableParams.db
+    stateTableParams.schema
   );
 
   // write in state table
-  let content = "function asd(){}";
+  const content = "function asd(){}";
   table.createEntryForResource("asd/asd.xsjslib", content);
 
   // assert entry count is as expected
-  let actual = fetchAllEntriesInTable(stateTableParams);
-  assertEquals(1, actual.length, "Unexpected result length");
+  const entries = fetchAllEntriesInTable(stateTableParams);
+  assertEquals(1, entries.length, "Unexpected result length");
 
   // assert entry content is as expected
-  actual = actual.shift(); // get first element;
-  let expected = {"ID":0, "LOCATION":"asd/asd.xsjslib", "HASH": digest.md5Hex(content)};
+  const actual = entries.shift(); // get first element;
+  const expected = {"ID":0, "LOCATION":"asd/asd.xsjslib", "HASH": digest.md5Hex(content)};
   assertEquals(JSON.stringify(Object.keys(expected)), JSON.stringify(Object.keys(actual)), "Unexpected entry keys.");
   assertEquals(expected.LOCATION, actual.LOCATION, "Unexpected entry location.");
   assertEquals(expected.HASH, actual.HASH, "Unexpected entry hash.");

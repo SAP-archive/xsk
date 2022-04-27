@@ -1,26 +1,21 @@
-const dao = require("db/v4/dao");
-const query = require("db/v4/query");
-const digest = require("utils/v4/digest");
+import { dao } from '@dirigible-v4/db'
+import { query } from '@dirigible-v4/db'
+import { digest } from '@dirigible-v4/utils'
 
 export class XSJSLibArtefactStateTable {
   tableName = "";
   tableSchema = "";
-  tableLocation = "";
-  tableDB = "";
-
   table = null;
 
-  constructor(tableName, tableSchema, tableLocation, tableDB) {
+  constructor(tableName, tableSchema) {
     this.tableName = tableName;
     this.tableSchema = tableSchema;
-    this.tableLocation = tableLocation;
-    this.tableDB = tableDB;
     this.table = this._getOrCreateXSJSLibArtefactStateTable();
   }
 
   findEntryByResourceLocation(location) {
-    let sql = "SELECT * FROM \"" + this.tableSchema + "\".\"" + this.tableName +"\" WHERE LOCATION = ?";
-    return query.execute(sql, [location], this.tableLocation, this.tableDB).shift();
+    const sql = "SELECT * FROM \"" + this.tableSchema + "\".\"" + this.tableName +"\" WHERE LOCATION = ?";
+    return query.execute(sql, [location], "local", "SystemDB").shift();
   }
 
   createEntryForResource(location, content) {
@@ -38,13 +33,9 @@ export class XSJSLibArtefactStateTable {
     });
   }
 
-  checkForContentChange(foundEntry, content) {
-    return foundEntry.HASH !== digest.md5Hex(content);
-  }
-
   _getOrCreateXSJSLibArtefactStateTable() {
     try {
-      let table = dao.create({
+      const table = dao.create({
         table: this.tableName,
         properties: [{
           name: "id",
@@ -65,8 +56,8 @@ export class XSJSLibArtefactStateTable {
         }]
       },
       "XSJSLibArtefactStateTable",
-      this.tableDB,
-      this.tableLocation
+      "SystemDB",
+      "local"
       );
 
       if (!table.existsTable()) {

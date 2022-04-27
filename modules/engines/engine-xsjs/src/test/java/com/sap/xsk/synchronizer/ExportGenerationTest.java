@@ -48,8 +48,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JUnitParamsRunner.class)
 public class ExportGenerationTest extends AbstractDirigibleTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(ExportGenerationTest.class);
-
   public ExportGenerationTest() {
     // should be executed before parent @Before method as parent would otherwise initialize the DB in a persistent way
     Configuration.set("DIRIGIBLE_DATABASE_H2_URL", "jdbc:h2:mem:xsk-tests");
@@ -67,20 +65,14 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void synchronizerTest() {
-    logger.info("XSJSLibSynchronizer test starting... ");
-
+  public void synchronizerGetPriorityTest() {
     XSJSLibSynchronizer synchronizer = new XSJSLibSynchronizer();
     assertEquals("Unexpected XSJSLibSynchronizer Priority",
         666, synchronizer.getPriority());
-
-    logger.info("XSJSLibSynchronizer test passed successfully.");
   }
 
   @Test
   public void synchronizerJobTest() {
-    logger.info("XSJSLibSynchronizerJob test starting... ");
-
     XSJSLibSynchronizerJob job = new XSJSLibSynchronizerJob();
 
     assertEquals("Unexpected XSJSLib Job Name",
@@ -88,14 +80,10 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
 
     assertEquals("Unexpected XSJSLib Job Synchronizer",
         XSJSLibSynchronizer.class, job.getSynchronizer().getClass());
-
-    logger.info("XSJSLibSynchronizerJob test passed successfully.");
   }
 
   @Test
   public void synchronizerJobDefinitionTest() {
-    logger.info("XSJSLibSynchronizerJobDefinition test starting... ");
-
     XSJSLibSynchronizerJob job = new XSJSLibSynchronizerJob();
     JobDefinition jobDefinition = job.getJobDefinition();
 
@@ -116,25 +104,23 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
 
     assertTrue("Unexpected XSJSLib Job Definition Singleton Flag",
         jobDefinition.isSingleton());
-
-    logger.info("XSJSLibSynchronizerJobDefinition test passed successfully.");
   }
 
   @Test
-  public void artefactCleanerTest() {
-    logger.info("XSJSLibArtefactStateCleaner test starting... ");
+  public void artefactCleanerCreateAndCleanupStateTableTest() throws SQLException {
+    // Run a script that creates a table with an Entry(location: "testFolder/abc.xsjslib", hash: "abc");
+    runJs("/test/xsk/exports/utils/createTableHelper.mjs");
 
-    runJs("/test/xsk/exports/utils/createTableHelper.mjs"); // create a state table with an entry
-
+    String testFolder = "testFolder/";
     XSJSLibSynchronizerArtefactsCleaner cleaner = new XSJSLibSynchronizerArtefactsCleaner();
-    cleaner.cleanup("bbb/");
+    cleaner.cleanup(testFolder);
 
     DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
     try (PreparedStatement selectStatement = dataSource.getConnection()
         .prepareStatement(
             "SELECT FROM \""
                 + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
-                + "\" WHERE \"LOCATION\" LIKE 'bbb/'")
+                + "\" WHERE \"LOCATION\" LIKE '" + testFolder + "'")
     ) {
       ResultSet result = selectStatement.executeQuery();
       assertNotNull("Unexpected null result set after state table cleanup", result);
@@ -142,41 +128,7 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
       result.last();
       int entries = result.getRow();
       assertEquals("Unexpected count of entries after state table cleanup", 0, entries);
-    } catch (SQLException e) {
-      throw new XSJSLibArtefactCleanerSQLException("Could not cleanup xsjslib synchronizer entries. ", e);
     }
-
-    logger.info("XSJSLibArtefactStateCleaner test passed successfully.");
-  }
-
-  @Test
-  public void exportGenerationSourceNotFoundExceptionTest() {
-    try {
-      throw new XSJSLibExportsGenerationSourceNotFoundException("test");
-    } catch (XSJSLibExportsGenerationSourceNotFoundException exception) {
-      assertEquals("Unexpected exception message", "test", exception.getMessage());
-    }
-
-    try {
-      throw new XSJSLibExportsGenerationSourceNotFoundException(new RuntimeException("test"));
-    } catch (XSJSLibExportsGenerationSourceNotFoundException exception) {
-      assertEquals("Unexpected exception cause", RuntimeException.class, exception.getCause().getClass());
-    }
-  }
-
-  @Test
-  public void artefactStateExceptionTest() {
-    try {
-      throw new XSJSLibArtefactCleanerSQLException("test", new RuntimeException("test2"));
-    } catch (XSJSLibArtefactCleanerSQLException exception) {
-      assertEquals("Unexpected exception message", "test", exception.getMessage());
-      assertEquals("Unexpected exception cause", RuntimeException.class, exception.getCause().getClass());
-    }
-  }
-
-  @Test
-  public void contentModifierTest() throws ScriptingException {
-    runJsTest("/test/xsk/exports/contentModifierTest.mjs");
   }
 
   @Test
@@ -184,17 +136,11 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
       "/test/xsk/exports/stateTableWriteTest.mjs",
       "/test/xsk/exports/stateTableUpdateTest.mjs",
       "/test/xsk/exports/stateTableFindTest.mjs",
-      "/test/xsk/exports/stateTableCheckContentChangeTest.mjs"
-  })
-  public void stateTableTest(String testModule) throws ScriptingException {
-    runJsTest(testModule);
-  }
-
-  @Test
-  @Parameters({
+      "/test/xsk/exports/contentChangeCheckTest.mjs",
+      "/test/xsk/exports/contentModifierTest.mjs",
       "/test/xsk/exports/singleFileExportGenerationTest.mjs",
       "/test/xsk/exports/singleFileExportUpdateTest.mjs",
-      "/test/xsk/exports/multiFileExportGeneration.mjs",
+      "/test/xsk/exports/multiFileExportGenerationTest.mjs",
   })
   public void exportsGeneratorTest(String testModule) throws ScriptingException {
     runJsTest(testModule);
@@ -202,8 +148,6 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
 
   @Test
   public void importTest() throws ScriptingException {
-    logger.info("XSJSLib Import test starting... ");
-
     XSJSLibSynchronizer.forceSynchronization("../../test/xsk/import/");
 
     Map<Object, Object> context = new HashMap<>();
@@ -214,20 +158,14 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
     );
 
     assertNull("Unexpected xsjs execution result for import.xsjs", result);
-
-    logger.info("XSJSLib Import test passed successfully. ");
   }
 
   private void runJsTest(String testModule) {
-    logger.info("XSJSLib Export js test starting(" + testModule + ")");
-
     Object executionResult = runJs(testModule);
     assertNull(
         "XSJSLib Export js test unexpected js execution result for " + testModule,
         executionResult
     );
-
-    logger.info("XSJSLib Export js test passed successfully: " + testModule);
   }
 
   private Object runJs(String testModule) throws ScriptingException {
@@ -242,8 +180,6 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
   }
 
   private void cleanup() {
-    logger.info("Cleaning up tables and repository after test execution.");
-
     cleanupRepository();
     dropTableIfExists(XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
     dropTableIfExists("XSJSLIB_EXPORT_TEST_TABLE");

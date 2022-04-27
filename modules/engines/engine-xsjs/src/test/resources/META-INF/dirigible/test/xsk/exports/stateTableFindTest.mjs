@@ -5,21 +5,19 @@ import { getParams } from './utils/stateTableParamsProvider.mjs'
 
 function findTableTest() {
   // create new state table
-  let stateTableParams = getParams();
-  let table = new XSJSLibArtefactStateTable(
+  const stateTableParams = getParams();
+  const table = new XSJSLibArtefactStateTable(
     stateTableParams.name,
-    stateTableParams.schema,
-    stateTableParams.location,
-    stateTableParams.db
+    stateTableParams.schema
   );
 
   // create new entry in the state table
-  let content = "function asd(){}";
+  const content = "function asd(){}";
   table.createEntryForResource("asd/asd.xsjslib", content);
 
   // find the entry
-  let actual = table.findEntryByResourceLocation("asd/asd.xsjslib");
-  let expected = {"ID":0, "LOCATION":"asd/asd.xsjslib", "HASH": digest.md5Hex(content)};
+  const actual = table.findEntryByResourceLocation("asd/asd.xsjslib");
+  const expected = {"ID":0, "LOCATION":"asd/asd.xsjslib", "HASH": digest.md5Hex(content)};
 
   // assert entry content is as expected
   assertEquals(JSON.stringify(Object.keys(expected)), JSON.stringify(Object.keys(actual)), "Unexpected entry keys.");

@@ -13,12 +13,11 @@
 import { XSJSLibExportsGenerator } from '/exports/XSJSLibExportsGenerator.mjs'
 const repository = require('platform/v4/repository');
 
-let targetRegistryCollection = repository.getCollection(__context.targetRegistryPath);
-let stateTableParams = {
+const targetRegistryCollection = repository.getCollection(__context.targetRegistryPath);
+const stateTableParams = {
   name: __context.stateTableName,
-  schema: "PUBLIC",
-  location: "local",
-  db: "SystemDB"
+  schema: "PUBLIC"
 }
 
-new XSJSLibExportsGenerator(targetRegistryCollection, stateTableParams);
+const generator = new XSJSLibExportsGenerator(stateTableParams);
+generator.run(targetRegistryCollection);

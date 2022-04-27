@@ -6,34 +6,32 @@ import { fetchAllEntriesInTable } from './utils/utils.mjs'
 
 function updateTableTest() {
   // create new state table
-  let stateTableParams = getParams();
-  let table = new XSJSLibArtefactStateTable(
+  const stateTableParams = getParams();
+  const table = new XSJSLibArtefactStateTable(
     stateTableParams.name,
-    stateTableParams.schema,
-    stateTableParams.location,
-    stateTableParams.db
+    stateTableParams.schema
   );
 
   // create new entry in the state table
-  let content = "function asd(){}";
+  const content = "function asd(){}";
   table.createEntryForResource("asd/asd.xjslib", content);
 
   // assert entry count is as expected
-  let result = fetchAllEntriesInTable(stateTableParams);
+  const result = fetchAllEntriesInTable(stateTableParams);
   assertEquals(1, result.length, "Unexpected result length");
 
   // update the entry
-  let oldEntry = result.shift();
-  content = "function asd2(){}";
-  table.updateEntryForResource(oldEntry, "asd2/asd2.xsjslib", content);
+  const oldEntry = result.shift();
+  const newContent = "function asd2(){}";
+  table.updateEntryForResource(oldEntry, "asd2/asd2.xsjslib", newContent);
 
   // assert the entry count is as expected
-  let actual = fetchAllEntriesInTable(stateTableParams);
-  assertEquals(1, actual.length, "Unexpected result length");
-  actual = actual.shift();
+  const entries = fetchAllEntriesInTable(stateTableParams);
+  assertEquals(1, entries.length, "Unexpected result length");
+  const actual = entries.shift();
 
   // assert the updated entry content is as expected
-  let expected = {"ID":0, "LOCATION":"asd2/asd2.xsjslib", "HASH": digest.md5Hex(content)};
+  const expected = {"ID":0, "LOCATION":"asd2/asd2.xsjslib", "HASH": digest.md5Hex(newContent)};
   assertEquals(JSON.stringify(Object.keys(expected)), JSON.stringify(Object.keys(actual)), "Unexpected entry keys.");
   assertEquals(expected.LOCATION, actual.LOCATION, "Unexpected entry location.");
   assertEquals(expected.HASH, actual.HASH, "Unexpected entry hash.");

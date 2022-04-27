@@ -2,16 +2,12 @@ import { XSJSLibArtefactStateTable } from '/exports/XSJSLibArtefactStateTable.mj
 
 let stateTableParams = {
   name: "PROCESSED_XSJSLIB_ARTEFACTS",
-  schema: "PUBLIC",
-  location: "local",
-  db: "SystemDB"
+  schema: "PUBLIC"
 }
 
 let table = new XSJSLibArtefactStateTable(
   stateTableParams.name,
-  stateTableParams.schema,
-  stateTableParams.location,
-  stateTableParams.db
+  stateTableParams.schema
 );
 
-table.createEntryForResource("bbb/abc.xsjslib", "abc");
+table.createEntryForResource("testFolder/abc.xsjslib", "abc");

@@ -85,8 +85,8 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
       if (beforeSynchronizing()) {
         logger.trace("Synchronizing XSJSLibs...");
         synchronizeXSJSLibs();
-        logger.trace("Done synchronizing XSJSLibs.");
         afterSynchronizing();
+        logger.trace("Done synchronizing XSJSLibs.");
       }
     }
   }

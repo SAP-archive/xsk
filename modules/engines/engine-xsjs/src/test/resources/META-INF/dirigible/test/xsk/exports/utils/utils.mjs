@@ -10,5 +10,5 @@ export function assertEquals(expected, actual, message) {
 
 export function fetchAllEntriesInTable(stateTableParams) {
   let sql = "SELECT * FROM " + stateTableParams.name;
-  return query.execute(sql, null, stateTableParams.location, stateTableParams.db);
+  return query.execute(sql, null, "local", "SystemDB");
 }

@@ -29,6 +29,8 @@ jobs:
         uses: docker/setup-buildx-action@v1
         with:
           install: true
+      - name: Set Multi-Builder Docker Buildx
+        run: docker buildx create --use --name multi-builder --platform linux/arm64,linux/amd64
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -67,10 +69,10 @@ jobs:
         run: |
           cd releng/sap-kyma-runtime
           docker build --load -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
-          docker build --load -t dirigiblelabs/xsk-kyma-runtime .
-          docker build --load -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
           docker push dirigiblelabs/xsk-kyma-runtime-base
+          docker build --load -t dirigiblelabs/xsk-kyma-runtime .
           docker push dirigiblelabs/xsk-kyma-runtime
+          docker build --load -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
           docker push dirigiblelabs/xsk-kyma-runtime-distro
           cd ../../
       - uses: buildpacks/github-actions/setup-pack@v4.1.0

@@ -82,6 +82,7 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
             type: choice
             options: 
             - 'dirigiblelabs/xsk-kyma'
+            - 'dirigiblelabs/xsk-kyma-runtime-distro' 
             - 'dirigiblelabs/xsk-cf'
             - 'dirigiblelabs/xsk'
           xskVersion:
@@ -110,12 +111,18 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
               fetch-depth: 0
           - name: Build Dockerfile
             run: |
+              [ ${{github.event.inputs.xskRepository}} != 'dirigiblelabs/xsk-kyma-runtime-distro' ] &&
+              PUBLIC=('
+                RUN mkdir -p "/usr/local/tomcat/target/dirigible/repository/root/registry/public/"
+                COPY . "/usr/local/tomcat/target/dirigible/repository/root/registry/public/" 
+                RUN rm -rf "/usr/local/tomcat/target/dirigible/repository/root/registry/public/Dockerfile" 
+                RUN rm -rf "/usr/local/tomcat/target/dirigible/repository/root/registry/public/.github/"
+              ') || 
+              PUBLIC=('COPY . "/usr/local/tomcat/target/dirigible/repository/root/registry/public/"')
+
               DOCKERFILE_CONTENT=$(cat << EOF
               FROM ${{ github.event.inputs.xskRepository }}:${{ github.event.inputs.xskVersion }}
-              RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/
-              COPY . /usr/local/tomcat/target/dirigible/repository/root/registry/public/
-              RUN rm -rf /usr/local/tomcat/target/dirigible/repository/root/registry/public/Dockerfile
-              RUN rm -rf /usr/local/tomcat/target/dirigible/repository/root/registry/public/.github/
+              $PUBLIC
               EOF
               )
               echo "$DOCKERFILE_CONTENT" >> Dockerfile

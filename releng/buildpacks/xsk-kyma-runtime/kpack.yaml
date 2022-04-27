@@ -1,0 +1,35 @@
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStore
+metadata:
+  name: xsk-store
+spec:
+  sources:
+  - image: dirigiblelabs/buildpacks-xsk-kyma-runtime:<tag>
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: xsk-stack
+spec:
+  id: com.sap.kneo.xsk
+  buildImage:
+    image: dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime:<tag>
+  runImage:
+    image: dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime:<tag>
+---
+apiVersion: kpack.io/v1alpha1
+kind: Builder
+metadata:
+  name: xsk-builder
+spec:
+  serviceAccount: docker-registry-service-account
+  tag: dirigiblelabs/xsk-builder:<tag>
+  stack:
+    name: xsk-stack
+    kind: ClusterStack
+  store:
+    name: xsk-store
+    kind: ClusterStore
+  order:
+  - group:
+    - id: dirigiblelabs/buildpacks-xsk-kyma--runtime

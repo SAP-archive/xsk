@@ -16,6 +16,7 @@
 	<modules>
 		<module>xsk</module>
 		<module>xsk-kyma</module>
+		<module>xsk-kyma-runtime</module>
 		<module>xsk-cf</module>
 	</modules>
 

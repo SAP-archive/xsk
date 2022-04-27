@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/lifecycle/cicd/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.9">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.120efc48.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c5ef100.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.9647289d.min.css">
@@ -1744,6 +1744,7 @@
 <span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">choice</span><span class="w"></span>
 <span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;dirigiblelabs/xsk-kyma&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;dirigiblelabs/xsk-kyma-runtime-distro&#39;</span><span class="w"> </span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;dirigiblelabs/xsk-cf&#39;</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;dirigiblelabs/xsk&#39;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">xskVersion</span><span class="p">:</span><span class="w"></span>
@@ -1772,12 +1773,18 @@
 <span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Dockerfile</span><span class="w"></span>
 <span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">          </span><span class="no">[ ${{github.event.inputs.xskRepository}} != &#39;dirigiblelabs/xsk-kyma-runtime-distro&#39; ] &amp;&amp;</span><span class="w"></span>
+<span class="w">          </span><span class="no">PUBLIC=(&#39;</span><span class="w"></span>
+<span class="w">            </span><span class="no">RUN mkdir -p &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="no">COPY . &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/&quot; </span><span class="w"></span>
+<span class="w">            </span><span class="no">RUN rm -rf &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/Dockerfile&quot; </span><span class="w"></span>
+<span class="w">            </span><span class="no">RUN rm -rf &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/.github/&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="no">&#39;) || </span><span class="w"></span>
+<span class="w">          </span><span class="no">PUBLIC=(&#39;COPY . &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/&quot;&#39;)</span><span class="w"></span>
+
 <span class="w">          </span><span class="no">DOCKERFILE_CONTENT=$(cat &lt;&lt; EOF</span><span class="w"></span>
 <span class="w">          </span><span class="no">FROM ${{ github.event.inputs.xskRepository }}:${{ github.event.inputs.xskVersion }}</span><span class="w"></span>
-<span class="w">          </span><span class="no">RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/</span><span class="w"></span>
-<span class="w">          </span><span class="no">COPY . /usr/local/tomcat/target/dirigible/repository/root/registry/public/</span><span class="w"></span>
-<span class="w">          </span><span class="no">RUN rm -rf /usr/local/tomcat/target/dirigible/repository/root/registry/public/Dockerfile</span><span class="w"></span>
-<span class="w">          </span><span class="no">RUN rm -rf /usr/local/tomcat/target/dirigible/repository/root/registry/public/.github/</span><span class="w"></span>
+<span class="w">          </span><span class="no">$PUBLIC</span><span class="w"></span>
 <span class="w">          </span><span class="no">EOF</span><span class="w"></span>
 <span class="w">          </span><span class="no">)</span><span class="w"></span>
 <span class="w">          </span><span class="no">echo &quot;$DOCKERFILE_CONTENT&quot; &gt;&gt; Dockerfile</span><span class="w"></span>
@@ -2059,7 +2066,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.6e54b5cd.min.js"></script>
+      <script src="../../assets/javascripts/bundle.748e2769.min.js"></script>
       
     
   </body>

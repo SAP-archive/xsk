@@ -13,23 +13,23 @@
  * HANA XS Classic Bridge for Web API
  */
 
-var dRequest = require('http/v4/request');
-var dResponse = require('http/v4/response');
-var dUpload = require('http/v4/upload');
-var session = require('xsk/session/session');
-var zip = require('io/v4/zip');
-var bytes = require("io/v4/bytes");
+const dRequest = require('http/v4/request');
+const dResponse = require('http/v4/response');
+const dUpload = require('http/v4/upload');
+const session = require('xsk/session/session');
+const zip = require('io/v4/zip');
+const bytes = require("io/v4/bytes");
 
-var WEB_UTILS = require('xsk/web/webUtils');
+const WEB_UTILS = require('xsk/web/webUtils');
 
-var SET_COOKIE_HEADER = "Set-Cookie";
+const SET_COOKIE_HEADER = "Set-Cookie";
 
-const TupelList = function (dArrayOfContents, isReadOnly) {
-  var internalDArrayOfContents = dArrayOfContents ? dArrayOfContents : [];
+exports.TupelList = function (dArrayOfContents, isReadOnly) {
+  let internalDArrayOfContents = dArrayOfContents ? dArrayOfContents instanceof Array ? dArrayOfContents : Object.values(dArrayOfContents) : [];
   syncWithContentsArray.call(this);
 
   this.get = function (name) {
-    var requestedElement = internalDArrayOfContents.find(function (element) {
+    const requestedElement = internalDArrayOfContents.find(function (element) {
       return element.name === name;
     });
     return requestedElement ? requestedElement.value : undefined;
@@ -40,7 +40,7 @@ const TupelList = function (dArrayOfContents, isReadOnly) {
       notAllowed();
     }
 
-    var length = internalDArrayOfContents.length;
+    const length = internalDArrayOfContents.length;
     internalDArrayOfContents = internalDArrayOfContents.filter(function (element) {
       return element.name !== name;
     });
@@ -76,6 +76,10 @@ const TupelList = function (dArrayOfContents, isReadOnly) {
     syncWithContentsArray.call(this);
   };
 
+  this.getAll = function () {
+   return internalDArrayOfContents;
+  };
+
   function assignOptionsToCookie(cookie, options) {
     cookie.path = options.path;
     cookie.domain = options.domain;
@@ -85,7 +89,7 @@ const TupelList = function (dArrayOfContents, isReadOnly) {
   }
 
   function syncWithContentsArray() {
-    for (var i = 0; i < internalDArrayOfContents.length; i++) {
+    for (let i = 0; i < internalDArrayOfContents.length; i++) {
       this[i] = internalDArrayOfContents[i];
     }
 
@@ -110,7 +114,7 @@ const EntityList = function (webEntitiesArray, isReadOnly) {
   };
 
   function syncWithWebEntitiesArray() {
-    for (var i = 0; i < webEntitiesArray.length; i++) {
+    for (let i = 0; i < webEntitiesArray.length; i++) {
       this[i] = webEntitiesArray[i];
     }
 
@@ -138,6 +142,7 @@ const Body = function (bodyValue) {
       return dRequest.getText();
     }
   };
+
 
   this.asWebRequest = function () {
     if (bodyValue) {
@@ -203,27 +208,27 @@ exports.WebRequest = function (method, path) {
     this.cookies = new TupelList(dRequest.getCookies(), true);
 
     this.entities = function () {
-      var dEntitiesArray = [];
+      let dEntitiesArray = [];
       if (dRequest.getMethod() === 'POST') {
         if (dUpload.isMultipartContent()) {
-          var multipartItems = dUpload.parseRequest();
+          const multipartItems = dUpload.parseRequest();
           for (let i = 0; i < multipartItems.size(); i++) {
-            var multipartItem = multipartItems.get(i);
-            var requestEntity = new WebEntityRequest();
+            const multipartItem = multipartItems.get(i);
+            let requestEntity = new WebEntityRequest();
 
             if (multipartItem.isFormField()) {
-              var fieldName = multipartItem.getFieldName();
-              var fieldValue = multipartItem.getText();
+              const fieldName = multipartItem.getFieldName();
+              const fieldValue = multipartItem.getText();
 
               requestEntity.parameters.set(fieldName, fieldValue);
             }
 
-            var multipartItemHeaders = multipartItem.getHeaders();
-            var headerNames = multipartItemHeaders.getHeaderNames();
+            const multipartItemHeaders = multipartItem.getHeaders();
+            const headerNames = multipartItemHeaders.getHeaderNames();
 
             for (let j = 0; j < headerNames.size(); j++) {
-              var headerName = headerNames.get(j);
-              var headerValue = multipartItemHeaders.getHeader(headerName);
+              const headerName = headerNames.get(j);
+              const headerValue = multipartItemHeaders.getHeader(headerName);
               requestEntity.headers.set(headerName, headerValue);
             }
 
@@ -241,23 +246,23 @@ exports.WebRequest = function (method, path) {
     this.method = WEB_UTILS.resolveMethod(dRequest.getMethod());
 
     this.path = function () {
-      var dRequestURI = dRequest.getRequestURI();
-      var filePlaceInURI = dRequestURI.search(XSJS_FILE_EXTENSION);
+      const dRequestURI = dRequest.getRequestURI();
+      const filePlaceInURI = dRequestURI.search(XSJS_FILE_EXTENSION);
       return dRequestURI.substring(0, filePlaceInURI + XSJS_FILE_EXTENSION_LENGTH + dRequestURI.length);
     }();
 
     this.queryPath = function () {
-      var dRequestURI = dRequest.getRequestURI();
-      var filePlaceInURI = dRequestURI.search(XSJS_FILE_EXTENSION);
+      const dRequestURI = dRequest.getRequestURI();
+      const filePlaceInURI = dRequestURI.search(XSJS_FILE_EXTENSION);
       return dRequestURI.substring(filePlaceInURI + XSJS_FILE_EXTENSION_LENGTH, dRequestURI.length);
     }();
 
     this.headers = function () {
-      var dHeadersArray = [];
-      var headerNamesArray = dRequest.getHeaderNames();
+      let dHeadersArray = [];
+      const headerNamesArray = dRequest.getHeaderNames();
 
       headerNamesArray.forEach(headerName => {
-        var headerValues = dRequest.getHeaders(headerName);
+        const headerValues = dRequest.getHeaders(headerName);
         headerValues.forEach(headerValue => {
           if (headerName === 'cookie' || headerName === 'authorization') {
             headerValue = '';
@@ -270,7 +275,7 @@ exports.WebRequest = function (method, path) {
         })
       });
 
-      var additionalHeaders = ['~server_name', '~server_port', '~server_protocol', '~request_line', '~request_method', '~request_uri', '~path', '~path_translated'];
+      const additionalHeaders = ['~server_name', '~server_port', '~server_protocol', '~request_line', '~request_method', '~request_uri', '~path', '~path_translated'];
 
       additionalHeaders.forEach(headerName => {
         dHeadersArray.push({
@@ -283,7 +288,7 @@ exports.WebRequest = function (method, path) {
     }.bind(this)();
 
     this.parameters = function () {
-      var dArrayOfPairs = dRequest.getParameters();
+      let dArrayOfPairs = dRequest.getParameters();
       dArrayOfPairs = transformParametersObject(dArrayOfPairs);
       return new TupelList(dArrayOfPairs, true);
     }();
@@ -292,9 +297,9 @@ exports.WebRequest = function (method, path) {
   }
 
   function transformParametersObject(dParametersObject) {
-    var arrayToReturn = [];
+    let arrayToReturn = [];
     Object.keys(dParametersObject).map(key => {
-      for (var i = 0; i < dParametersObject[key].length; i++) {
+      for (let i = 0; i < dParametersObject[key].length; i++) {
         arrayToReturn.push({
           "name": key,
           "value": dParametersObject[key][i]
@@ -329,30 +334,30 @@ exports.WebResponse = function (clientResponse) {
     this.status; // from $.net.http
 
     this.followUp = function (followUpObject) {
-      var {
+      let {
         uri: uri,
         functionName: functionName,
         parameter: parameters
-      } = followUpObject
+      } = followUpObject;
 
       if (uri && functionName) {
         try {
-          var params = new Array();
+          let params = new Array();
 
           if (parameters && typeof parameters === 'object') {
-            for (var param in parameters) {
+            for (let param in parameters) {
               params.push(parameters[param]);
             }
           }
 
-          var splitUri = uri.split(":");
-          var pathToFile = splitUri[0].replace(".", "/");
-          var fileName = splitUri[1];
+          const splitUri = uri.split(":");
+          const pathToFile = splitUri[0].replace(".", "/");
+          const fileName = splitUri[1];
 
-          var parsedUri = pathToFile + "/" + fileName;
+          const parsedUri = pathToFile + "/" + fileName;
 
-          var module = require(parsedUri);
-          var func = module[functionName];
+          const module = require(parsedUri);
+          const func = module[functionName];
           func.apply(this, params);
         } catch (error) {
           if (error instanceof Error) {
@@ -375,11 +380,11 @@ exports.WebResponse = function (clientResponse) {
       syncCookies.bind(this)();
 
       if (content instanceof Array && this.contentType === 'application/zip') {
-        var parsedContent = JSON.parse(bytes.byteArrayToText(content));
-        var outputStream = dResponse.getOutputStream();
+        const parsedContent = JSON.parse(bytes.byteArrayToText(content));
+        const outputStream = dResponse.getOutputStream();
         if (outputStream.isValid()) {
           try {
-            var zipOutputStream = zip.createZipOutputStream(outputStream);
+            let zipOutputStream = zip.createZipOutputStream(outputStream);
             for (let file in parsedContent) {
               zipOutputStream.createZipEntry(file);
               zipOutputStream.writeText(parsedContent[file]);
@@ -397,29 +402,29 @@ exports.WebResponse = function (clientResponse) {
   }
 
   function syncHeaders() {
-    var responseHeaders = this.headers;
-    for (var headerId = 0; headerId < responseHeaders.length; headerId++) {
-      var header = responseHeaders[headerId];
+    const responseHeaders = this.headers;
+    for (let headerId = 0; headerId < responseHeaders.length; headerId++) {
+      let header = responseHeaders[headerId];
       dResponse.setHeader(header.name, header.value);
     }
   };
 
   function syncCookies() {
-    var responseCookies = this.cookies;
-    for (var cookieId = 0; cookieId < responseCookies.length; cookieId++) {
+    const responseCookies = this.cookies;
+    for (let cookieId = 0; cookieId < responseCookies.length; cookieId++) {
       dResponse.addCookie(responseCookies[cookieId]);
     }
   };
 
   function getCookieFromClientResponse(clientResponse) {
-    var headers = clientResponse.headers;
-    var cookieObjArray = [];
+    const headers = clientResponse.headers;
+    let cookieObjArray = [];
 
     headers.forEach(header => {
       if (header.name === SET_COOKIE_HEADER) {
-        var cookieKeyValue = header.value.split(";")[0].trim();
-        var cookieKeyValueArray = cookieKeyValue.split("=");
-        var cookieObj = {
+        const cookieKeyValue = header.value.split(";")[0].trim();
+        const cookieKeyValueArray = cookieKeyValue.split("=");
+        const cookieObj = {
           name: cookieKeyValueArray[0],
           value: cookieKeyValueArray[1]
         };

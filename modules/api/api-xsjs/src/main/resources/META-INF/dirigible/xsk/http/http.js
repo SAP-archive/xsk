@@ -9,8 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-var dClient = require("http/v4/client");
-var web = require("xsk/web/web");
+const dClient = require("http/v4/client");
+const web = require("xsk/web/web");
 
 exports.OPTIONS = 0;
 exports.GET = 1;
@@ -221,19 +221,16 @@ exports.Client = function () {
 
   function getUrlParametersFromTupel(tupelParameters) {
     let queryParameterPairs = [];
-    for (const i in tupelParameters) {
-      let name = tupelParameters[i].name;
-      let value = tupelParameters[i].value;
+    const tupleClass = new web.TupelList(tupelParameters, true);
+    const tupleParameters = tupleClass.getAll();
 
-      if (value instanceof Array) {
-        value = value.join(",");
-      }
-
-      let queryPair = name + "=" + value;
+    for (let tupleCount = 0; tupleCount < tupleParameters.length; tupleCount++) {
+      const name = tupleParameters[tupleCount].name;
+      const value = tupleParameters[tupleCount].value instanceof Array ? tupleParameters[tupleCount].value.join(",") : tupleParameters[tupleCount].value;
+      const queryPair = name + "=" + value;
 
       queryParameterPairs.push(queryPair);
     }
-
     return queryParameterPairs.join("&");
   }
 

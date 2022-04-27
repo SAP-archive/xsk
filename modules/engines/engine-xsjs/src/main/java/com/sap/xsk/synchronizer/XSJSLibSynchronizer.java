@@ -76,6 +76,7 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
   @Override
   protected void synchronizeResource(IResource iResource)
       throws SynchronizationException {
+    // Not used.
   }
 
   @Override

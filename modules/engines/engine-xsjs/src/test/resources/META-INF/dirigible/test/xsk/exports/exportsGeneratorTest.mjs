@@ -130,6 +130,7 @@ function testMultiFileFolderExportGeneration() {
 
 _clearTable();
 testSingleFileExportGeneration();
+_clearTable();
 testSingleFileExportUpdate();
 _clearTable();
 testMultiFileFolderExportGeneration();

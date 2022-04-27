@@ -258,7 +258,7 @@ exports.WebRequest = function (method, path) {
     }();
 
     this.headers = function () {
-      let dHeadersArray = [];
+      const dHeadersArray = [];
       const headerNamesArray = dRequest.getHeaderNames();
 
       headerNamesArray.forEach(headerName => {
@@ -288,7 +288,7 @@ exports.WebRequest = function (method, path) {
     }.bind(this)();
 
     this.parameters = function () {
-      let dArrayOfPairs = dRequest.getParameters();
+      const dArrayOfPairs = dRequest.getParameters();
       dArrayOfPairs = transformParametersObject(dArrayOfPairs);
       return new TupelList(dArrayOfPairs, true);
     }();
@@ -297,7 +297,7 @@ exports.WebRequest = function (method, path) {
   }
 
   function transformParametersObject(dParametersObject) {
-    let arrayToReturn = [];
+    const arrayToReturn = [];
     Object.keys(dParametersObject).map(key => {
       for (let i = 0; i < dParametersObject[key].length; i++) {
         arrayToReturn.push({
@@ -334,7 +334,7 @@ exports.WebResponse = function (clientResponse) {
     this.status; // from $.net.http
 
     this.followUp = function (followUpObject) {
-      let {
+      const {
         uri: uri,
         functionName: functionName,
         parameter: parameters
@@ -342,7 +342,7 @@ exports.WebResponse = function (clientResponse) {
 
       if (uri && functionName) {
         try {
-          let params = new Array();
+          const params = new Array();
 
           if (parameters && typeof parameters === 'object') {
             for (let param in parameters) {
@@ -384,7 +384,7 @@ exports.WebResponse = function (clientResponse) {
         const outputStream = dResponse.getOutputStream();
         if (outputStream.isValid()) {
           try {
-            let zipOutputStream = zip.createZipOutputStream(outputStream);
+            const zipOutputStream = zip.createZipOutputStream(outputStream);
             for (let file in parsedContent) {
               zipOutputStream.createZipEntry(file);
               zipOutputStream.writeText(parsedContent[file]);
@@ -403,22 +403,21 @@ exports.WebResponse = function (clientResponse) {
 
   function syncHeaders() {
     const responseHeaders = this.headers;
-    for (let headerId = 0; headerId < responseHeaders.length; headerId++) {
-      let header = responseHeaders[headerId];
+    for (const header of responseHeaders) {
       dResponse.setHeader(header.name, header.value);
     }
   };
 
   function syncCookies() {
     const responseCookies = this.cookies;
-    for (let cookieId = 0; cookieId < responseCookies.length; cookieId++) {
-      dResponse.addCookie(responseCookies[cookieId]);
+    for (const responseCookie of responseCookies) {
+      dResponse.addCookie(responseCookie);
     }
   };
 
   function getCookieFromClientResponse(clientResponse) {
     const headers = clientResponse.headers;
-    let cookieObjArray = [];
+    const cookieObjArray = [];
 
     headers.forEach(header => {
       if (header.name === SET_COOKIE_HEADER) {

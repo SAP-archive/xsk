@@ -220,16 +220,16 @@ exports.Client = function () {
   }
 
   function getUrlParametersFromTupel(tupelParameters) {
-    let queryParameterPairs = [];
+    const queryParameterPairs = [];
     const tupleClass = new web.TupelList(tupelParameters, true);
     const tupleParameters = tupleClass.getAll();
 
-    for (let tupleCount = 0; tupleCount < tupleParameters.length; tupleCount++) {
-      const name = tupleParameters[tupleCount].name;
-      const value = tupleParameters[tupleCount].value instanceof Array ? tupleParameters[tupleCount].value.join(",") : tupleParameters[tupleCount].value;
-      const queryPair = name + "=" + value;
+    for (const tupleParameter of tupleParameters) {
+      const name = tupleParameter.name;
+      const value = tupleParameter.value instanceof Array ? tupleParameter.value.join(",") : tupleParameter.value;
+      const queryParameterPair = name + "=" + value;
 
-      queryParameterPairs.push(queryPair);
+      queryParameterPairs.push(tupleParameter);
     }
     return queryParameterPairs.join("&");
   }

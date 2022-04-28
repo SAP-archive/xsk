@@ -9,14 +9,9 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications.deployment;
+package com.xsk.integration.tests.applications;
 
-public class DeploymentException extends RuntimeException {
-    public DeploymentException(String message) {
-        super(message);
-    }
-
-    public DeploymentException(String message, Throwable cause) {
-        super(message, cause);
-    }
+public enum DeploymentType {
+    LOCAL,
+    KYMA
 }

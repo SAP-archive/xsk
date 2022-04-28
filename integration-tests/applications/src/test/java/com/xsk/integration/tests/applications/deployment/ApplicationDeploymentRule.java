@@ -11,36 +11,32 @@
  */
 package com.xsk.integration.tests.applications.deployment;
 
-import com.xsk.integration.tests.applications.Deployment;
-import com.xsk.integration.tests.applications.kyma.KymaCredentials;
+import com.xsk.integration.tests.applications.DeploymentType;
+import com.xsk.integration.tests.applications.kyma.ApplicationDeploymentConfiguration;
 import org.junit.rules.ExternalResource;
 
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Objects;
 
-import static com.xsk.integration.tests.applications.Deployment.KYMA;
-import static com.xsk.integration.tests.applications.Deployment.LOCAL;
-
 public class ApplicationDeploymentRule extends ExternalResource {
-    public static String HOST;
+    public static URI HOST;
     private final XSKProjectDeployer projectPublisher;
     private final String applicationName;
-    KymaCredentials kymaCredentials = new KymaCredentials();
+    ApplicationDeploymentConfiguration applicationDeploymentConfiguration = new ApplicationDeploymentConfiguration();
 
-    public ApplicationDeploymentRule(String applicationName, Deployment deployment) {
-        if (deployment == KYMA) {
-            HOST = kymaCredentials.getHost();
-        } else if (deployment == LOCAL) {
-            HOST = "http://localhost:8080";
-        }
+    public ApplicationDeploymentRule(String applicationName, DeploymentType deploymentType) {
+        HOST = applicationDeploymentConfiguration.getHost(deploymentType);
         this.applicationName = applicationName;
-        projectPublisher = new XSKProjectDeployer(deployment);
+        projectPublisher = new XSKProjectDeployer(deploymentType);
     }
 
     @Override
     protected void before() throws Throwable {
         super.before();
-        String resourcePathString = Objects.requireNonNull(getClass().getResource("/test-applications/" + applicationName)).getPath();
+        URL resource = getClass().getResource("/test-applications/" + applicationName);
+        String resourcePathString = Objects.requireNonNull(resource).getPath();
         Path resourcePath = Path.of(resourcePathString);
         projectPublisher.deploy(applicationName, resourcePath);
     }

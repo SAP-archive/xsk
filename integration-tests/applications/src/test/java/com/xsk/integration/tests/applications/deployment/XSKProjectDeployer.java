@@ -11,7 +11,7 @@
  */
 package com.xsk.integration.tests.applications.deployment;
 
-import com.xsk.integration.tests.applications.Deployment;
+import com.xsk.integration.tests.applications.DeploymentType;
 import com.xsk.integration.tests.applications.deployment.client.PublisherClient;
 import com.xsk.integration.tests.applications.deployment.client.WorkspaceClient;
 import com.xsk.integration.tests.applications.deployment.client.XSKHttpClient;
@@ -21,17 +21,13 @@ import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.xsk.integration.tests.applications.Deployment.LOCAL;
-
 public class XSKProjectDeployer {
 
     private final WorkspaceClient workspaceClient;
     private final PublisherClient publisherClient;
-    private final Deployment xskDeployment;
 
-    public XSKProjectDeployer(Deployment deployment) {
-        XSKHttpClient xskHttpClient = new XSKHttpClient(deployment);
-        this.xskDeployment = deployment;
+    public XSKProjectDeployer(DeploymentType deploymentType) {
+        XSKHttpClient xskHttpClient = XSKHttpClient.create(deploymentType);
         this.workspaceClient = new WorkspaceClient(xskHttpClient);
         this.publisherClient = new PublisherClient(xskHttpClient);
     }
@@ -40,19 +36,15 @@ public class XSKProjectDeployer {
         try {
             deployAsync(applicationName, applicationFolderPath).get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new DeploymentException("Publish " + applicationName + " to " + applicationFolderPath + " failed", e);
+            String errorMessage = "Publish " + applicationName + " to " + applicationFolderPath + " failed";
+            throw new DeploymentException(errorMessage, e);
         }
     }
 
     public CompletableFuture<HttpResponse> deployAsync(String projectName, Path projectFolderPath) throws DeploymentException {
-        if (xskDeployment == LOCAL) {
-            workspaceClient.login();
-        }
         return workspaceClient.createWorkspace(projectName)
                 .thenCompose(x -> workspaceClient.importProjectInWorkspace(projectName, projectName, projectFolderPath))
                 .thenCompose(x -> publisherClient.publishProjectInWorkspace(projectName, projectName));
-
-
     }
 
     public void undeploy(String applicationName, String applicationFolderPath) {

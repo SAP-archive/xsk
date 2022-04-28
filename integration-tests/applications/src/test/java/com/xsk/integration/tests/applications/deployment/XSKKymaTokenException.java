@@ -11,12 +11,12 @@
  */
 package com.xsk.integration.tests.applications.deployment;
 
-public class DeploymentException extends RuntimeException {
-    public DeploymentException(String message) {
+public class XSKKymaTokenException extends RuntimeException {
+    public XSKKymaTokenException(String message) {
         super(message);
     }
 
-    public DeploymentException(String message, Throwable cause) {
+    public XSKKymaTokenException(String message, Throwable cause) {
         super(message, cause);
     }
 }

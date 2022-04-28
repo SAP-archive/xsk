@@ -18,15 +18,6 @@ import org.junit.Test;
 public class AppTest {
 
     @ClassRule
-    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", Deployment.LOCAL);
+    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", DeploymentType.LOCAL);
 
-    @Test
-    public void test1() {
-        int a = 5;
-    }
-
-    @Test
-    public void test2() {
-        int a = 5;
-    }
 }

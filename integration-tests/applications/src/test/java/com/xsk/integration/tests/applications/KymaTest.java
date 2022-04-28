@@ -18,15 +18,6 @@ import org.junit.Test;
 public class KymaTest {
 
     @ClassRule
-    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", Deployment.KYMA);
+    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", DeploymentType.KYMA);
 
-    @Test
-    public void test1() {
-        int a = 5;
-    }
-
-    @Test
-    public void test2() {
-        int a = 5;
-    }
 }

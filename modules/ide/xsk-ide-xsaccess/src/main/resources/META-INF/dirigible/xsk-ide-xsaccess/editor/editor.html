@@ -63,14 +63,14 @@
         <div class="form-group page-header">
           <h2>Anonymous connection</h2>
           <div>
-            <input type="radio" class="form-group" ng-model="anonymous_connection_allowed" ng-value="false"
+            <input type="radio" class="form-group" ng-model="anonymousConnectionAllowed" ng-value="false"
               id="dataExposedACF" />
             <label for=" dataExposedACF"> disabled</label>
-            <input type="radio" class="form-group" ng-model="anonymous_connection_allowed" ng-value="true"
+            <input type="radio" class="form-group" ng-model="anonymousConnectionAllowed" ng-value="true"
               id="dataExposedACT" />
             <label for="dataExposedACT"> enabled (be carefull!)</label>
           </div>
-          <input type="text" class="form-control" ng-show="anonymous_connection_allowed"
+          <input type="text" class="form-control" ng-show="anonymousConnectionAllowed"
             placeholder="Example: sap.hana.sqlcon::AnonConn" ng-model=" data.anonymous_connection" />
         </div>
 
@@ -98,7 +98,7 @@
             </div>
             <div class="row">
               <span ng-repeat="method in allAllowedMethods" style="padding-right: 15px">
-                <input type="checkbox" ng-click="trigCorsMethod(method)" value="{{method}}"
+                <input type="checkbox" ng-click="triggerCorsMethod(method)" value="{{method}}"
                   ng-checked="data.cors.allowMethods.includes(method)" id="corsMethod{{method}}" />
                 <label for="corsMethod{{method}}">{{method}}</label>
               </span>

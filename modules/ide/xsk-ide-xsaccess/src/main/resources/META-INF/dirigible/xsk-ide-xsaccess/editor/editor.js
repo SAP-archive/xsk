@@ -12,11 +12,10 @@
 angular.module('page', [])
   .controller('PageController', function ($scope) {
 
-    let messageHub = new FramesMessageHub();
-    let contents;
+    const messageHub = new FramesMessageHub();
 
     function getResource(thePath) {
-      let xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.open('GET', thePath, false);
       xhr.send();
       if (xhr.status === 200) {
@@ -27,19 +26,24 @@ angular.module('page', [])
     function loadContents(xsaccessfile) {
       if (!xsaccessfile) {
         console.error('XSACCESS file parameter is not present in the URL');
-      } else {
-        return getResource('/services/v4/ide/workspaces' + xsaccessfile);
+        return;
       }
+      return getResource('/services/v4/ide/workspaces' + xsaccessfile);
     }
 
     function getViewParameters() {
       if (window.frameElement.hasAttribute("data-parameters")) {
-        let readParams = JSON.parse(window.frameElement.getAttribute("data-parameters"));
-        $scope.file = readParams["file"];
+        const dataParameters = window.frameElement.getAttribute("data-parameters");
+        const readParams = JSON.parse(dataParameters);
+        $scope.file = readParams.file;
       } else {
-        let scanSearchParams = new URLSearchParams(window.location.search);
+        const scanSearchParams = new URLSearchParams(window.location.search);
         $scope.file = scanSearchParams.get('file');
       }
+    }
+
+    function isAllowFrom(value) {
+      return value.substr(0, 10) == 'ALLOW-FROM';
     }
 
     $scope.initJSONcontent = function () {
@@ -53,20 +57,20 @@ angular.module('page', [])
           exposeHeaders: ['']
         };
       if ($scope.data.headers.customHeaders && $scope.data.headers.customHeaders.length)
-        $scope.data.headers.customHeaders = $scope.data.headers.customHeaders.map((x) => {
+        $scope.data.headers.customHeaders = $scope.data.headers.customHeaders.map((customHeader) => {
           return {
-            ...x,
-            thevalue: x.value.substr(0, 10) == 'ALLOW-FROM' ? 'ALLOW-FROM' : x.value,
-            url: x.value.substr(0, 10) == 'ALLOW-FROM' ? x.value.substr(11) : ''
+            ...customHeader,
+            thevalue: isAllowFrom(x.value) ? 'ALLOW-FROM' : x.value,
+            url: isAllowFrom(x.value) ? x.value.substr(11) : ''
           }
         })
     }
 
     function load() {
       getViewParameters();
-      contents = loadContents($scope.file);
+      const contents = loadContents($scope.file);
       $scope.data = JSON.parse(contents);
-      $scope.anonymous_connection_allowed = $scope.data.anonymous_connection ? true : false;
+      $scope.anonymousConnectionAllowed = $scope.data.anonymous_connection ? true : false;
       $scope.allAllowedMethods = ["GET", "POST", "HEAD", "OPTIONS"];
       $scope.initJSONcontent();
     }
@@ -89,7 +93,7 @@ angular.module('page', [])
     }
 
     $scope.deleteInList = function (path, index) {
-      let newKeyValue = getNestedValue($scope.data, path).filter((_val, num) => num != index);
+      const newKeyValue = getNestedValue($scope.data, path).filter((_val, num) => num != index);
       if (!newKeyValue.length) newKeyValue.push('');
       updateObjectNestedProp(
         $scope.data,
@@ -98,14 +102,14 @@ angular.module('page', [])
     }
 
     $scope.addInList = function (path, value) {
-      let newKeyValue = getNestedValue($scope.data, path);
+      const newKeyValue = getNestedValue($scope.data, path);
       newKeyValue.push(value);
       updateObjectNestedProp($scope.data,
         newKeyValue,
         path);
     }
 
-    $scope.trigCorsMethod = function (method) {
+    $scope.triggerCorsMethod = function (method) {
       if (!$scope.data.cors.allowMethods.includes(method))
         $scope.data.cors.allowMethods.push(method);
       else
@@ -115,7 +119,7 @@ angular.module('page', [])
     function saveContents(contentToSave) {
       if ($scope.file) {
         console.log('Save of XSACCESS called...');
-        let xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
         xhr.open('PUT', '/services/v4/ide/workspaces' + $scope.file);
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {
@@ -157,7 +161,7 @@ angular.module('page', [])
     }
 
     $scope.save = function () {
-      let content = $scope.createSaveContent();
+      const content = $scope.createSaveContent();
       saveContents(content);
     };
 

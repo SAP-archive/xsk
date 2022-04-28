@@ -41,19 +41,6 @@
     <module>applications</module>
   </modules>
 
-<!--  <build>-->
-<!--    <plugins>-->
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-surefire-plugin</artifactId>-->
-<!--        <version>${maven.surefire.plugin.version}</version>-->
-<!--        <configuration>-->
-<!--&lt;!&ndash;          <skipTests>${integration.tests.skip}</skipTests>&ndash;&gt;-->
-<!--        </configuration>-->
-<!--      </plugin>-->
-<!--    </plugins>-->
-<!--  </build>-->
-
 	<properties>
 		<license.header.location>../licensing-header.txt</license.header.location>
 	</properties>

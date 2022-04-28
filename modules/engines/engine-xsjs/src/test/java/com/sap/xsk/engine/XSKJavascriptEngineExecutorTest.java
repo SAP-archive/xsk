@@ -12,6 +12,7 @@
 package com.sap.xsk.engine;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.repository.api.IRepository;
@@ -24,6 +25,11 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class XSKJavascriptEngineExecutorTest extends AbstractDirigibleTest {
+
+  public XSKJavascriptEngineExecutorTest() {
+    // should be executed before parent @Before method as parent would otherwise initialize the DB in a persistent way
+    Configuration.set("DIRIGIBLE_DATABASE_H2_URL", "jdbc:h2:mem:xsk-tests");
+  }
 
   @Before
   public void setup() {

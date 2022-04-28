@@ -38,4 +38,4 @@ for (var i = 0; i < columnCount; i++) {
 response.contentType = "text/plain";
 response.println(body);
 
-assertTrue(conn != null&& resultSet != null && columnCount !=null && body != null && lastColumnName ==="WEIGHT"&& lastColumnTypeName==="DOUBLE");
+assertTrue(conn != null&& resultSet != null && columnCount !=null && body != null && lastColumnName ==="WEIGHT"&& lastColumnTypeName==="DOUBLE PRECISION");

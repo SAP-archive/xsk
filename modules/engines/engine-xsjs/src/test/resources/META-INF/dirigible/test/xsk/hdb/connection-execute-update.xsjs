@@ -6,8 +6,8 @@ var db = $.hdb;
  	var insertResult = connection.executeUpdate(insertStatement, 4, 'PETKO', 'MOMCHEV', 24 ,89);
  	response.println("Insert Result: Query OK, " + insertResult + " row affected");
 
- 	var updateStatement = "UPDATE EXAMPLE.TEST_USERS SET WEIGHT=? WHERE ID BETWEEN ? AND ?";
- 	var updateResult = connection.executeUpdate(updateStatement, 75, 1, 3);
+ 	var updateStatement = "UPDATE EXAMPLE.TEST_USERS SET WEIGHT=? WHERE ID = 4";
+ 	var updateResult = connection.executeUpdate(updateStatement, 75);
  	response.println("Update Result: Query OK, " + updateResult + " row affected");
 
  	response.println("is auto commit enabled: " + connection.getAutoCommit());
@@ -21,4 +21,4 @@ var db = $.hdb;
  	response.println("Warnings: " + connection.getLastWarning());
  	response.println("is connection closed: " + connection.isClosed());
 
-  assertTrue(insertResult ===1 && updateResult === 4);
+  assertTrue(insertResult ===1 && updateResult > 0);

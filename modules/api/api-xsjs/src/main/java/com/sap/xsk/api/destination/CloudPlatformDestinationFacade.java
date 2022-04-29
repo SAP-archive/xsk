@@ -46,9 +46,13 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
           }
         });
 
-    URI uri = URI.create((String) fetchedDestination.get("URL").get());
+    if (fetchedDestination.isHttp()) {
+      URI uri = URI.create((String) fetchedDestination.get("URL").get());
 
-    return new Destination(uri.getHost(), uri.getPort(), uri.getPath(), destinationProperties);
+      return new Destination(uri.getHost(), uri.getPort(), uri.getPath(), destinationProperties);
+    } else {
+      return new Destination(destinationProperties);
+    }
   }
 
   public static String executeRequest(String requestObject, String destinationName, String options)

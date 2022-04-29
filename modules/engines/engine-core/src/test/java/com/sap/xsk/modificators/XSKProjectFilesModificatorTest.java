@@ -190,6 +190,11 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
     assertEquals("", projectFilesModificator.processWhereSql(""));
   }
 
+  @Test
+  public void testModifyProjectFiles() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testReplaceReservedWordRow.hdbprocedure");
+  }
+
   private void modifyProjectFilesAssertArrayEqualsWhenModified(String fileName) throws IOException {
     byte[] expectedModifiedFile = getByteArrayFromResourceName("/META-INF/modificators/expected-results/" + fileName);
     byte[] fileContent = getByteArrayFromResourceName("/META-INF/modificators/files-to-modify/" + fileName);

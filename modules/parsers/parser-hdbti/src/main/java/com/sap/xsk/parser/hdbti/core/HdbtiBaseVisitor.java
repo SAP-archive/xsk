@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbti/core/Hdbti.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbti/core/Hdbti.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbti.core;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -29,133 +28,117 @@ public class HdbtiBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitObjConfig(@NotNull HdbtiParser.ObjConfigContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitImportArr(HdbtiParser.ImportArrContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignUseHeaderNames(@NotNull HdbtiParser.AssignUseHeaderNamesContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitObjConfig(HdbtiParser.ObjConfigContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignExpression(@NotNull HdbtiParser.AssignExpressionContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignExpression(HdbtiParser.AssignExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignHeader(@NotNull HdbtiParser.AssignHeaderContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignTable(HdbtiParser.AssignTableContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignDistinguishEmptyFromNull(@NotNull HdbtiParser.AssignDistinguishEmptyFromNullContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignSchema(HdbtiParser.AssignSchemaContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitImportArr(@NotNull HdbtiParser.ImportArrContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignFile(HdbtiParser.AssignFileContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignDelimEnclosing(@NotNull HdbtiParser.AssignDelimEnclosingContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignHeader(HdbtiParser.AssignHeaderContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPair(@NotNull HdbtiParser.PairContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignUseHeaderNames(HdbtiParser.AssignUseHeaderNamesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTableName(@NotNull HdbtiParser.TableNameContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignDelimField(HdbtiParser.AssignDelimFieldContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignFile(@NotNull HdbtiParser.AssignFileContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignDelimEnclosing(HdbtiParser.AssignDelimEnclosingContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignDelimField(@NotNull HdbtiParser.AssignDelimFieldContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignDistinguishEmptyFromNull(HdbtiParser.AssignDistinguishEmptyFromNullContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPairValue(@NotNull HdbtiParser.PairValueContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitAssignKeys(HdbtiParser.AssignKeysContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignSchema(@NotNull HdbtiParser.AssignSchemaContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitKeyArr(HdbtiParser.KeyArrContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPairKey(@NotNull HdbtiParser.PairKeyContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitPair(HdbtiParser.PairContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignTable(@NotNull HdbtiParser.AssignTableContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitPairKey(HdbtiParser.PairKeyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignKeys(@NotNull HdbtiParser.AssignKeysContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitPairValue(HdbtiParser.PairValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitKeyArr(@NotNull HdbtiParser.KeyArrContext ctx) { return visitChildren(ctx); }
+	@Override public T visitTableName(HdbtiParser.TableNameContext ctx) { return visitChildren(ctx); }
 }

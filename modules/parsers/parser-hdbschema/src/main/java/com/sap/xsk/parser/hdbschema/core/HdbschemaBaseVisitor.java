@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbschema/core/Hdbschema.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbschema/core/Hdbschema.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbschema.core;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -29,13 +28,12 @@ public class HdbschemaBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitHdbschemaDefinition(@NotNull HdbschemaParser.HdbschemaDefinitionContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitHdbschemaDefinition(HdbschemaParser.HdbschemaDefinitionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSchemaNameProp(HdbschemaParser.SchemaNamePropContext ctx) { return visitChildren(ctx); }
 }

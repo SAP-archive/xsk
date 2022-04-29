@@ -30,10 +30,12 @@
         <div class="form-group page-header">
           <h2>Exposed</h2>
           <div>
-            <input type="radio" class="form-group" ng-model="data.exposed" ng-value="false" id="dataExposedF" />
-            <label for=" dataExposedF"> false</label>
-            <input type="radio" class="form-group" ng-model="data.exposed" ng-value="true" id="dataExposedT" />
-            <label for="dataExposedT"> true</label>
+            <input type="radio" class="form-group" ng-model="data.exposed" ng-value="false"
+              id="dataExposedFalseRadioInput" />
+            <label for=" dataExposedFalseRadioInput"> false</label>
+            <input type="radio" class="form-group" ng-model="data.exposed" ng-value="true"
+              id="dataExposedTrueRadioInput" />
+            <label for="dataExposedTrueRadioInput"> true</label>
           </div>
         </div>
         <div class="form-group page-header">
@@ -64,11 +66,11 @@
           <h2>Anonymous connection</h2>
           <div>
             <input type="radio" class="form-group" ng-model="anonymousConnectionAllowed" ng-value="false"
-              id="dataExposedACF" />
-            <label for=" dataExposedACF"> disabled</label>
+              id="anonymousConnectionDisabledRadioInput" />
+            <label for="anonymousConnectionDisabledRadioInput"> disabled</label>
             <input type="radio" class="form-group" ng-model="anonymousConnectionAllowed" ng-value="true"
-              id="dataExposedACT" />
-            <label for="dataExposedACT"> enabled (be carefull!)</label>
+              id="anonymousConnectionEnabledRadioInput" />
+            <label for="anonymousConnectionEnabledRadioInput"> enabled (be carefull!)</label>
           </div>
           <input type="text" class="form-control" ng-show="anonymousConnectionAllowed"
             placeholder="Example: sap.hana.sqlcon::AnonConn" ng-model=" data.anonymous_connection" />
@@ -87,10 +89,12 @@
         <div class="form-group page-header">
           <h2>CORS</h2>
           <div>
-            <input type="radio" class="form-group" ng-model="data.cors.enabled" ng-value="false" id="dataCorsF" />
-            <label for="dataCorsF"> disabled</label>
-            <input type="radio" class="form-group" ng-model="data.cors.enabled" ng-value="true" id="dataCorsT" />
-            <label for="dataCorsT"> enabled</label>
+            <input type="radio" class="form-group" ng-model="data.cors.enabled" ng-value="false"
+              id="corsDisabledRadioInput" />
+            <label for="corsDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.cors.enabled" ng-value="true"
+              id="corsEnabledRadioInput" />
+            <label for="corsEnabledRadioInput"> enabled</label>
           </div>
           <div ng-show="data.cors.enabled">
             <div class="row">
@@ -177,20 +181,24 @@
         <div class="form-group page-header">
           <h2>Entity tags (etags)</h2>
           <div>
-            <input type="radio" class="form-group" ng-model="data.enable_etags" ng-value="false" id="etagsF" />
-            <label for="etagsF"> disabled</label>
-            <input type="radio" class="form-group" ng-model="data.enable_etags" ng-value="true" id="etagsT" />
-            <label for="etagsT"> enabled</label>
+            <input type="radio" class="form-group" ng-model="data.enable_etags" ng-value="false"
+              id="etagsDisabledRadioInput" />
+            <label for="etagsDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.enable_etags" ng-value="true"
+              id="etagsEnabledRadioInput" />
+            <label for="etagsEnabledRadioInput"> enabled</label>
           </div>
         </div>
 
         <div class="form-group page-header">
           <h2>Forse SSL</h2>
           <div>
-            <input type="radio" class="form-group" ng-model="data.force_ssl" ng-value="false" id="sslF" />
-            <label for="sslF"> disabled</label>
-            <input type="radio" class="form-group" ng-model="data.force_ssl" ng-value="true" id="sslT" />
-            <label for="sslT"> enabled</label>
+            <input type="radio" class="form-group" ng-model="data.force_ssl" ng-value="false"
+              id="forceSSLDisabledRadioInput" />
+            <label for="forceSSLDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.force_ssl" ng-value="true"
+              id="forceSSLEnabledRadioInput" />
+            <label for="forceSSLEnabledRadioInput"> enabled</label>
           </div>
         </div>
 
@@ -221,10 +229,12 @@
         <div class="form-group page-header">
           <h2>Cross-site request-forgery (XSRF) attacks protection</h2>
           <div>
-            <input type="radio" class="form-group" ng-model="data.prevent_xsrf" ng-value="false" id="xsrfF" />
-            <label for="xsrfF"> disabled</label>
-            <input type="radio" class="form-group" ng-model="data.prevent_xsrf" ng-value="true" id="xsrfT" />
-            <label for="xsrfT"> enabled</label>
+            <input type="radio" class="form-group" ng-model="data.prevent_xsrf" ng-value="false"
+              id="xsrfProtectionDisabledRadioInput" />
+            <label for="xsrfProtectionDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.prevent_xsrf" ng-value="true"
+              id="xsrfProtectionEnabledRadioInput" />
+            <label for="xsrfProtectionEnabledRadioInput"> enabled</label>
           </div>
         </div>
 
@@ -254,10 +264,12 @@
         <div class="form-group page-header">
           <h2>Support for the X-Frame-Options HTTP header field</h2>
           <div>
-            <input type="radio" class="form-group" ng-model="data.headers.enabled" ng-value="false" id="hdrsF" />
-            <label for="hdrsF"> disabled</label>
-            <input type="radio" class="form-group" ng-model="data.headers.enabled" ng-value="true" id="hdrsT" />
-            <label for="hdrsT"> enabled</label>
+            <input type="radio" class="form-group" ng-model="data.headers.enabled" ng-value="false"
+              id="xFrameHeaderDisabledInputRadio" />
+            <label for="xFrameHeaderDisabledInputRadio"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.headers.enabled" ng-value="true"
+              id="xFrameHeaderEnabledInputRadio" />
+            <label for="xFrameHeaderEnabledInputRadio"> enabled</label>
           </div>
           <div ng-show="data.headers.enabled">
             <div class="row">
@@ -273,16 +285,16 @@
                 <div class="col-sm-1">Value:</div>
                 <div class="col-sm-3">
                   <input type="radio" class="form-group" ng-model="data.headers.customHeaders[$index].thevalue"
-                    value="DENY" id="custhdrsDENY{{$index}}" />
-                  <label for="custhdrsDENY{{$index}}"> DENY</label>
+                    value="DENY" id="customHeadersDeny{{$index}}" />
+                  <label for="customHeadersDeny{{$index}}"> DENY</label>
 
                   <input type="radio" class="form-group" ng-model="data.headers.customHeaders[$index].thevalue"
-                    value="SAMEORIGIN" id="custhdrsSAMEORIGIN{{$index}}" />
-                  <label for="custhdrsSAMEORIGIN{{$index}}"> SAMEORIGIN</label>
+                    value="SAMEORIGIN" id="customHeadersSameOrigin{{$index}}" />
+                  <label for="customHeadersSameOrigin{{$index}}"> SAMEORIGIN</label>
 
                   <input type="radio" class="form-group" ng-model="data.headers.customHeaders[$index].thevalue"
-                    value="ALLOW-FROM" id="custhdrsALLOW{{$index}}" />
-                  <label for="custhdrsALLOW{{$index}}"> ALLOW-FROM</label>
+                    value="ALLOW-FROM" id="customHeadersAllow{{$index}}" />
+                  <label for="customHeadersAllow{{$index}}"> ALLOW-FROM</label>
                 </div>
                 <div class="col-sm-1">
                   <span ng-show="data.headers.customHeaders[$index].thevalue == 'ALLOW-FROM'">URL:</span>

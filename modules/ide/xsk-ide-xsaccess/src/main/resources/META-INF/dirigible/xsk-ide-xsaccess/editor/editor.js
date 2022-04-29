@@ -25,7 +25,6 @@ angular.module('page', [])
 
     function loadContents(xsaccessfile) {
       if (!xsaccessfile) {
-        console.error('XSACCESS file parameter is not present in the URL');
         return;
       }
       return getResource('/services/v4/ide/workspaces' + xsaccessfile);
@@ -47,15 +46,17 @@ angular.module('page', [])
     }
 
     $scope.initJSONcontent = function () {
-      if (!('allowMethods' in $scope.data.cors))
+      if (!('allowMethods' in $scope.data.cors)) {
+        const defauleEnabledMethods = ["GET", "POST", "HEAD", "OPTIONS"];
         $scope.data.cors = {
           ...$scope.data.cors,
-          allowMethods: $scope.allAllowedMethods,
+          allowMethods: defauleEnabledMethods,
           allowOrigin: ["*", "*.sap.com"],
           maxAge: 3600,
           allowHeaders: [''],
           exposeHeaders: ['']
         };
+      }
       if ($scope.data.headers.customHeaders && $scope.data.headers.customHeaders.length)
         $scope.data.headers.customHeaders = $scope.data.headers.customHeaders.map((customHeader) => {
           return {
@@ -71,7 +72,7 @@ angular.module('page', [])
       const contents = loadContents($scope.file);
       $scope.data = JSON.parse(contents);
       $scope.anonymousConnectionAllowed = $scope.data.anonymous_connection ? true : false;
-      $scope.allAllowedMethods = ["GET", "POST", "HEAD", "OPTIONS"];
+      $scope.allAllowedMethods = ["GET", "POST", "HEAD", "OPTIONS", "PATCH", "DELETE", "PUT", "CONNECT", "TRACE"];
       $scope.initJSONcontent();
     }
 
@@ -93,7 +94,7 @@ angular.module('page', [])
     }
 
     $scope.deleteInList = function (path, index) {
-      const newKeyValue = getNestedValue($scope.data, path).filter((_val, num) => num != index);
+      let newKeyValue = getNestedValue($scope.data, path).filter((_val, num) => num != index);
       if (!newKeyValue.length) newKeyValue.push('');
       updateObjectNestedProp(
         $scope.data,
@@ -102,7 +103,8 @@ angular.module('page', [])
     }
 
     $scope.addInList = function (path, value) {
-      const newKeyValue = getNestedValue($scope.data, path);
+      let newKeyValue = getNestedValue($scope.data, path);
+      if (!newKeyValue) newKeyValue = [];
       newKeyValue.push(value);
       updateObjectNestedProp($scope.data,
         newKeyValue,
@@ -118,19 +120,11 @@ angular.module('page', [])
 
     function saveContents(contentToSave) {
       if ($scope.file) {
-        console.log('Save of XSACCESS called...');
         const xhr = new XMLHttpRequest();
         xhr.open('PUT', '/services/v4/ide/workspaces' + $scope.file);
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4) {
-            console.log('XSACCESS file saved: ' + $scope.file);
-          }
-        };
         xhr.send(contentToSave);
         messageHub.post({ data: $scope.file }, 'editor.file.saved');
         messageHub.post({ data: 'Requested file [' + $scope.file + '] saved.' }, 'status.message');
-      } else {
-        console.error('XSACCESS file parameter is not present in the request');
       }
     }
 

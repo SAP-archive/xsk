@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbschema/core/Hdbschema.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbschema/core/Hdbschema.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbschema.core;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class HdbschemaParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.3", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.10.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -30,21 +30,63 @@ public class HdbschemaParser extends Parser {
 	public static final int
 		T__0=1, STRING=2, EQ=3, SEMICOLON=4, COMMA=5, WS=6, ESC=7, LINE_COMMENT=8, 
 		COMMENT=9;
-	public static final String[] tokenNames = {
-		"<INVALID>", "'schema_name'", "STRING", "'='", "';'", "','", "WS", "ESC", 
-		"LINE_COMMENT", "COMMENT"
-	};
 	public static final int
 		RULE_hdbschemaDefinition = 0, RULE_schemaNameProp = 1;
-	public static final String[] ruleNames = {
-		"hdbschemaDefinition", "schemaNameProp"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"hdbschemaDefinition", "schemaNameProp"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
+
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "'schema_name'", null, "'='", "';'", "','"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, null, "STRING", "EQ", "SEMICOLON", "COMMA", "WS", "ESC", "LINE_COMMENT", 
+			"COMMENT"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
+
+	@Override
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
 
 	@Override
 	public String getGrammarFileName() { return "Hdbschema.g4"; }
-
-	@Override
-	public String[] getTokenNames() { return tokenNames; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -59,6 +101,7 @@ public class HdbschemaParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class HdbschemaDefinitionContext extends ParserRuleContext {
 		public SchemaNamePropContext schemaNameProp() {
 			return getRuleContext(SchemaNamePropContext.class,0);
@@ -88,7 +131,8 @@ public class HdbschemaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(4); schemaNameProp();
+			setState(4);
+			schemaNameProp();
 			}
 		}
 		catch (RecognitionException re) {
@@ -103,9 +147,9 @@ public class HdbschemaParser extends Parser {
 	}
 
 	public static class SchemaNamePropContext extends ParserRuleContext {
-		public TerminalNode SEMICOLON() { return getToken(HdbschemaParser.SEMICOLON, 0); }
 		public TerminalNode EQ() { return getToken(HdbschemaParser.EQ, 0); }
 		public TerminalNode STRING() { return getToken(HdbschemaParser.STRING, 0); }
+		public TerminalNode SEMICOLON() { return getToken(HdbschemaParser.SEMICOLON, 0); }
 		public SchemaNamePropContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -131,10 +175,14 @@ public class HdbschemaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(6); match(T__0);
-			setState(7); match(EQ);
-			setState(8); match(STRING);
-			setState(9); match(SEMICOLON);
+			setState(6);
+			match(T__0);
+			setState(7);
+			match(EQ);
+			setState(8);
+			match(STRING);
+			setState(9);
+			match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -149,10 +197,14 @@ public class HdbschemaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\13\16\4\2\t\2\4\3"+
-		"\t\3\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\2\2\4\2\4\2\2\13\2\6\3\2\2\2\4\b"+
-		"\3\2\2\2\6\7\5\4\3\2\7\3\3\2\2\2\b\t\7\3\2\2\t\n\7\5\2\2\n\13\7\4\2\2"+
-		"\13\f\7\6\2\2\f\5\3\2\2\2\2";
+		"\u0004\u0001\t\f\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0001"+
+		"\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0000\u0000\u0002\u0000\u0002\u0000\u0000\t\u0000\u0004"+
+		"\u0001\u0000\u0000\u0000\u0002\u0006\u0001\u0000\u0000\u0000\u0004\u0005"+
+		"\u0003\u0002\u0001\u0000\u0005\u0001\u0001\u0000\u0000\u0000\u0006\u0007"+
+		"\u0005\u0001\u0000\u0000\u0007\b\u0005\u0003\u0000\u0000\b\t\u0005\u0002"+
+		"\u0000\u0000\t\n\u0005\u0004\u0000\u0000\n\u0003\u0001\u0000\u0000\u0000"+
+		"\u0000";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

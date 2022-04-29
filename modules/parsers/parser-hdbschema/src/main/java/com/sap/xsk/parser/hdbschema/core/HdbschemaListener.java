@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbschema/core/Hdbschema.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbschema/core/Hdbschema.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbschema.core;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -23,21 +22,20 @@ public interface HdbschemaListener extends ParseTreeListener {
 	 * Enter a parse tree produced by {@link HdbschemaParser#hdbschemaDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void enterHdbschemaDefinition(@NotNull HdbschemaParser.HdbschemaDefinitionContext ctx);
+	void enterHdbschemaDefinition(HdbschemaParser.HdbschemaDefinitionContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link HdbschemaParser#hdbschemaDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void exitHdbschemaDefinition(@NotNull HdbschemaParser.HdbschemaDefinitionContext ctx);
-
+	void exitHdbschemaDefinition(HdbschemaParser.HdbschemaDefinitionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HdbschemaParser#schemaNameProp}.
 	 * @param ctx the parse tree
 	 */
-	void enterSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx);
+	void enterSchemaNameProp(HdbschemaParser.SchemaNamePropContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link HdbschemaParser#schemaNameProp}.
 	 * @param ctx the parse tree
 	 */
-	void exitSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx);
+	void exitSchemaNameProp(HdbschemaParser.SchemaNamePropContext ctx);
 }

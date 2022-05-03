@@ -19,51 +19,53 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class XSKSecureCryptoFacade {
-    private static final String hmacMD5Algorithm = "HmacMD5";
-    private static final String hmacSHA1Algorithm = "HmacSHA1";
-    private static final String hmacSHA256Algorithm = "HmacSHA256";
-    private static final String SHA256 = "SHA-256";
-    private static final String MD5 = "MD5";
-    private static final String SHA1 = "SHA1";
+     public static final String HMAC_MD_5 = "HmacMD5";
+    public static final String HMAC_SHA_1 = "HmacSHA1";
+    public static final String HMAC_SHA_256 = "HmacSHA256";
+    public static final String SHA256 = "SHA-256";
+    public static final String MD5 = "MD5";
+    public static final String SHA1 = "SHA1";
 
+    private XSKSecureCryptoFacade() {
+    }
 
     public static byte[] md5(String data, String key) throws NoSuchAlgorithmException, InvalidKeyException {
-        return encryptHash(data, key, MD5, hmacMD5Algorithm);
+        return encryptHash(data, key, MD5, HMAC_MD_5);
     }
 
     public static byte[] md5(byte[] data, String key) throws NoSuchAlgorithmException, InvalidKeyException {
-        return encryptHash(data, key, MD5, hmacMD5Algorithm);
+        return encryptHash(data, key, MD5, HMAC_MD_5);
     }
 
     public static byte[] sha1(String data, String key) throws NoSuchAlgorithmException, InvalidKeyException {
-        return encryptHash(data, key, SHA1, hmacSHA1Algorithm);
+        return encryptHash(data, key, SHA1, HMAC_SHA_1);
     }
 
     public static byte[] sha1(byte[] data, String key) throws NoSuchAlgorithmException, InvalidKeyException {
-        return encryptHash(data, key, SHA1, hmacSHA1Algorithm);
+        return encryptHash(data, key, SHA1, HMAC_SHA_1);
     }
 
     public static byte[] sha256(String data, String key) throws NoSuchAlgorithmException, InvalidKeyException {
-        return encryptHash(data, key, SHA256, hmacSHA256Algorithm);
+        return encryptHash(data, key, SHA256, HMAC_SHA_256);
     }
 
     public static byte[] sha256(byte[] data, String key) throws NoSuchAlgorithmException, InvalidKeyException {
-        return encryptHash(data, key, SHA256, hmacSHA256Algorithm);
+        return encryptHash(data, key, SHA256, HMAC_SHA_256);
     }
 
-    private static byte[] encryptHash(String data, String key, String encryptType, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
+    public static byte[] encryptHash(String data, String key, String encryptType, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
         if (key != null) {
             SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), algorithm);
             Mac mac = Mac.getInstance(algorithm);
             mac.init(secretKeySpec);
-            return mac.doFinal(data.getBytes());
+            return mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
         } else {
             MessageDigest digest = MessageDigest.getInstance(encryptType);
             return digest.digest(data.getBytes(StandardCharsets.UTF_8));
         }
     }
 
-    private static byte[] encryptHash(byte[] data, String key, String encryptType, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
+    public static byte[] encryptHash(byte[] data, String key, String encryptType, String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
         if (key != null) {
             SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), algorithm);
             Mac mac = Mac.getInstance(algorithm);

@@ -50,14 +50,14 @@ exports.crypto = function (){
     return new XSCrypto()
 
 }
-function XSCrypto(){
-    this.md5 = function (data,key){
+class XSCrypto{
+    md5 = function (data,key){
         return com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade.md5(data,key);
     }
-    this.sha1 = function (data,key){
+    sha1 = function (data,key){
         return com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade.sha1(data,key);
     }
-    this.sha256 = function (data,key){
+    sha256 = function (data,key){
         return com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade.sha256(data,key);
     }
 }

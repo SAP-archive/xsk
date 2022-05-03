@@ -1,5 +1,21 @@
 # Drumbeats
 
+## 2022 Week 15 (11 April - 17 April)
+
+#### Focus topics:
+- Support XSOData NCLOB data type
+- Test execution against HANA 2
+- HDI file editor
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-04-11..2022-04-17) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-04-11..2022-04-17) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-04-11..2022-04-17) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-04-11..2022-04-17) PRs
+
+
 ## 2022 Week 14 (04 April - 10 April)
 
 #### Focus topics:

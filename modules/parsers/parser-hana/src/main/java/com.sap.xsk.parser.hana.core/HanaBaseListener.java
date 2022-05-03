@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com.sap.xsk.parser.hana.core/Hana.g4 by ANTLR 4.9.3
+// Generated from com.sap.xsk.parser.hana.core/Hana.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hana.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -574,18 +574,6 @@ public class HanaBaseListener implements HanaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitProc_stmt_list(HanaParser.Proc_stmt_listContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAny_token(HanaParser.Any_tokenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAny_token(HanaParser.Any_tokenContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

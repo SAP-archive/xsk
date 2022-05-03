@@ -127,46 +127,29 @@ public class HdbddTransformer {
     tableModel.setColumns(tableColumns);
     tableModel.setLocation(location);
     if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null){
-      tableModel.setTableType(entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue());
+      String tableType = entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue();
+      tableModel.setTableType(tableType);
 
       if (entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX) != null){
         List<XSKDataStructureHDBTableIndexModel> indexes = new ArrayList<>();
         List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndexes = new ArrayList<>();
-        AnnotationArray catalogIndexAnnArray = (AnnotationArray) entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX);
+        AnnotationArray catalogIndexAnnotationArray = (AnnotationArray) entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX);
 
-        for (AbstractAnnotationValue currentAnnValue : catalogIndexAnnArray.getValues()){
-          AnnotationObj annObject = (AnnotationObj) currentAnnValue;
-          Boolean isUnique = annObject.getValue(UNIQUE) != null && Boolean.parseBoolean(annObject.getValue(UNIQUE).getValue());
-          String name = annObject.getValue(NAME) != null ? annObject.getValue(NAME).getValue() : null;
-          String order = annObject.getValue(ORDER) != null ? annObject.getValue(ORDER).getValue() : null;
+        for (AbstractAnnotationValue currentAnnotationValue : catalogIndexAnnotationArray.getValues()){
+          AnnotationObj annotationObject = (AnnotationObj) currentAnnotationValue;
+          boolean isUnique = Boolean.parseBoolean(getCatalogAnnotationValue(annotationObject, UNIQUE));
+          String name = getCatalogAnnotationValue(annotationObject, NAME);
+          String order = getCatalogAnnotationValue(annotationObject, ORDER);
           Set<String> indexColumnSet = new HashSet<>();
 
-          ((AnnotationArray) annObject.getValue(ELEMENT_NAMES)).getValues().forEach(currentElement -> {
-            indexColumnSet.add(currentElement.getValue());
-          });
+          ((AnnotationArray) annotationObject.getValue(ELEMENT_NAMES)).getValues()
+              .forEach(currentElement -> indexColumnSet.add(currentElement.getValue()));
 
           if (!isUnique){
-            XSKDataStructureHDBTableIndexModel indexModel = new XSKDataStructureHDBTableIndexModel();
-            if (name != null){
-              indexModel.setIndexName(name);
-            }
-            if (order != null){
-              indexModel.setOrder(order);
-            }
-            indexModel.setIndexColumns(indexColumnSet);
-            indexModel.setUnique(false);
-            indexes.add(indexModel);
+            indexes.add(new XSKDataStructureHDBTableIndexModel(name, order, indexColumnSet, false));
           }
           else {
-            XSKDataStructureHDBTableConstraintUniqueModel uniqueIndexModel = new XSKDataStructureHDBTableConstraintUniqueModel();
-            if (name != null){
-              uniqueIndexModel.setIndexName(name);
-            }
-            if (order != null){
-              uniqueIndexModel.setOrder(order);
-            }
-            uniqueIndexModel.setColumns(indexColumnSet.toArray(String[]::new));
-            uniqueIndexes.add(uniqueIndexModel);
+            uniqueIndexes.add(new XSKDataStructureHDBTableConstraintUniqueModel(name, order, indexColumnSet.toArray(String[]::new)));
           }
         }
         tableModel.setIndexes(indexes);
@@ -445,5 +428,9 @@ public class HdbddTransformer {
     columnModel.setNullable(!associationSymbol.isNotNull());
 
     return columnModel;
+  }
+
+  private String getCatalogAnnotationValue (AnnotationObj annotationObject, String value){
+    return annotationObject.getValue(value) != null ? annotationObject.getValue(value).getValue() : null;
   }
 }

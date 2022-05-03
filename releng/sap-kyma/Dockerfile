@@ -1,5 +1,13 @@
-# Docker descriptor for Dirigible
-# License - http://www.eclipse.org/legal/epl-v20.html
+# Docker descriptor for XSK
+# Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License, v2.0
+# which accompanies this distribution, and is available at
+# http://www.apache.org/licenses/LICENSE-2.0
+  
+# SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+# SPDX-License-Identifier: Apache-2.0
 
 # (Optional) JDK_TYPE could be `default-jdk` or `external-jdk`
 ARG JDK_TYPE=default-jdk
@@ -35,7 +43,7 @@ EXPOSE 8080
 
 ADD entrypoint.sh /entrypoint.sh
 
-RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible
+RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 xsk
 
 # Add gosu utility for privilege drop
 RUN apt-get update && \

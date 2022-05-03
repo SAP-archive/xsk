@@ -99,7 +99,6 @@
                         </dependency>
                       </dependencies>
                     </plugin> -->
-
                 </plugins>
             </build>
         </profile>
@@ -253,7 +252,9 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+
         <dirigible.version>6.2.19</dirigible.version>
+
 
         <!-- Sonar Cloud -->
         <sonar.organization>sap-1</sonar.organization>
@@ -331,8 +332,10 @@
         <content.source.directory>target/${content.project.name}</content.source.directory>
         <content.output.directory>${basedir}/src/main/resources/META-INF/dirigible/${content.project.name}</content.output.directory>
 
+
         <license.header.location>licensing-header.txt</license.header.location>
         <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
+
 
     </properties>
 </project>

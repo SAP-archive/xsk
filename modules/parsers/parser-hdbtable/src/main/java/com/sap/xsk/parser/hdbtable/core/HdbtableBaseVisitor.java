@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.9.3
+// Generated from com/sap/xsk/parser/hdbtable/core/Hdbtable.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbtable.core;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 

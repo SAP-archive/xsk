@@ -21,6 +21,9 @@ import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataCoreService;
 import com.sap.xsk.xsodata.ds.service.XSKTableMetadataProvider;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,9 @@ import org.eclipse.dirigible.engine.odata2.definition.ODataEntityDefinition;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandler;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes;
 import org.eclipse.dirigible.engine.odata2.definition.ODataNavigation;
+import org.eclipse.dirigible.engine.odata2.definition.ODataParameter;
 import org.eclipse.dirigible.engine.odata2.definition.ODataProperty;
+import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +52,10 @@ import org.slf4j.LoggerFactory;
 public class XSKODataUtils {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataUtils.class);
-  private static final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
   private final XSKTableMetadataProvider metadataProvider;
+  private final DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
 
   public XSKODataUtils(XSKTableMetadataProvider metadataProvider) {
     this.metadataProvider = metadataProvider;
@@ -64,6 +70,8 @@ public class XSKODataUtils {
     oDataDefinitionModel.setNamespace(namespace);
 
     for (XSKHDBXSODATAEntity entity : xskoDataModel.getService().getEntities()) {
+      List<PersistenceTableColumnModel> allEntityParameters = new ArrayList<>();
+
       String tableName = entity.getRepositoryObject().getCatalogObjectName();
 
       ODataEntityDefinition oDataEntityDefinition = new ODataEntityDefinition();
@@ -73,17 +81,44 @@ public class XSKODataUtils {
 
       entity.getNavigates().forEach(processNavigation(xskoDataModel, oDataDefinitionModel, oDataEntityDefinition));
 
-      //set properties
+      // Set properties
       try {
         PersistenceTableModel tableMetadata = metadataProvider.getPersistenceTableModel(tableName);
+
         if (tableMetadata == null) {
           logger.error("DB artifact {} not available for entity {}, so it will be skipped.", tableName, entity.getAlias());
           continue;
         }
+
+        oDataEntityDefinition.setDataStructureType(tableMetadata.getTableType());
+
         List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
 
         if (ISqlKeywords.METADATA_CALC_VIEW.equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity
             .getWithoutPropertyProjections().isEmpty()) {
+
+          try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                "SELECT DISTINCT VARIABLE_NAME, COLUMN_TYPE_D, COLUMN_SQL_TYPE, MANDATORY, \"ORDER\" FROM _SYS_BI.BIMC_VARIABLE_VIEW_HDI WHERE \"QUALIFIED_NAME\" = ? ORDER BY \"ORDER\"");
+            statement.setString(1, tableName);
+
+            ResultSet calcViewParameters = statement.executeQuery();
+
+            while (calcViewParameters.next()) {
+              PersistenceTableColumnModel calcViewParam = new PersistenceTableColumnModel();
+
+              String calcViewParamName = calcViewParameters.getString("VARIABLE_NAME");
+              String calcViewParamType = calcViewParameters.getString("COLUMN_TYPE_D");
+
+              calcViewParam.setName(calcViewParamName);
+              calcViewParam.setType(dbMetadataUtil.convertSqlTypeToOdataEdmType(calcViewParamType));
+              calcViewParam.setNullable(false);
+              calcViewParam.setPrimaryKey(false);
+
+              allEntityParameters.add(calcViewParam);
+            }
+          }
+
           allEntityDbColumns.forEach(el -> {
             ODataProperty oDataProperty = new ODataProperty();
             oDataProperty.setName(el.getName());
@@ -139,6 +174,56 @@ public class XSKODataUtils {
       }
 
       oDataDefinitionModel.getEntities().add(oDataEntityDefinition);
+
+      // MOVE IN A SEPARATE METHOD
+
+      if (entity.getParameterType() != null) {
+
+        ODataEntityDefinition oDataEntityParametersDefinition = new ODataEntityDefinition();
+
+        String parameterEntitySetName = entity.getParameterEntitySet().getParameterEntitySetName();
+
+        oDataEntityParametersDefinition.setName(parameterEntitySetName);
+        oDataEntityParametersDefinition.setAlias(parameterEntitySetName);
+        oDataEntityParametersDefinition.setTable(tableName);
+        oDataEntityParametersDefinition.setDataStructureType(oDataEntityDefinition.getDataStructureType());
+
+        allEntityParameters.forEach(el -> {
+          ODataParameter oDataParameter = new ODataParameter();
+          oDataParameter.setName(el.getName());
+          oDataParameter.setColumn(el.getName());
+          oDataParameter.setNullable(el.isNullable());
+          oDataParameter.setType(el.getType());
+
+          oDataEntityDefinition.getParameters().add(oDataParameter);
+          oDataEntityParametersDefinition.getParameters().add(oDataParameter);
+        });
+
+        ODataAssociationDefinition oDataParametersAssociation = new ODataAssociationDefinition();
+        oDataParametersAssociation.setName(oDataEntityParametersDefinition.getName() + "_" + oDataEntityDefinition.getName() + "Type");
+
+        ODataAssociationEndDefinition oDataParametersFrom = new ODataAssociationEndDefinition();
+        ODataAssociationEndDefinition oDataParametersTo = new ODataAssociationEndDefinition();
+
+        oDataParametersFrom.setEntity(oDataEntityParametersDefinition.getName());
+        oDataParametersFrom.setMultiplicity("*");
+        oDataParametersTo.setEntity(oDataEntityDefinition.getName());
+        oDataParametersTo.setMultiplicity("*");
+
+        oDataParametersAssociation.setFrom(oDataParametersFrom);
+        oDataParametersAssociation.setTo(oDataParametersTo);
+
+        oDataDefinitionModel.getAssociations().add(oDataParametersAssociation);
+
+        ODataNavigation oDataResultsNavigation = new ODataNavigation();
+        oDataResultsNavigation.setName(entity.getParameterEntitySet().getParameterResultsProperty());
+        oDataResultsNavigation.setAssociation(oDataParametersAssociation.getName());
+        oDataEntityParametersDefinition.getNavigations().add(oDataResultsNavigation);
+
+        oDataDefinitionModel.getEntities().add(oDataEntityParametersDefinition);
+      }
+
+      //
     }
     return oDataDefinitionModel;
   }

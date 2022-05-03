@@ -19,12 +19,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class XSKSecureCryptoFacade {
-     public static final String HMAC_MD_5 = "HmacMD5";
-    public static final String HMAC_SHA_1 = "HmacSHA1";
-    public static final String HMAC_SHA_256 = "HmacSHA256";
-    public static final String SHA256 = "SHA-256";
-    public static final String MD5 = "MD5";
-    public static final String SHA1 = "SHA1";
+    private static final String HMAC_MD_5 = "HmacMD5";
+    private static final String HMAC_SHA_1 = "HmacSHA1";
+    private static final String HMAC_SHA_256 = "HmacSHA256";
+    private static final String SHA256 = "SHA-256";
+    private static final String MD5 = "MD5";
+    private static final String SHA1 = "SHA1";
 
     private XSKSecureCryptoFacade() {
     }

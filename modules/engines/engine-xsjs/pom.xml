@@ -166,6 +166,7 @@
   </dependencies>
 
   <properties>
+    <maven.clean.plugin.directory>target</maven.clean.plugin.directory>
     <license.header.location>../../../licensing-header.txt</license.header.location>
   </properties>
 

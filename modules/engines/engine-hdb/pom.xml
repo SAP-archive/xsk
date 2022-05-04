@@ -7,25 +7,25 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-modules-engines-parent</artifactId>
-    <version>0.16.0</version>
+    <version>0.17.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Modules - Engines - HDB</name>
   <artifactId>xsk-modules-engines-hdb</artifactId>
-  <version>0.16.0</version>
+  <version>0.17.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-engines-commons</artifactId>
-      <version>0.16.0</version>
+      <version>0.17.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-all</artifactId>
-      <version>0.16.0</version>
+      <version>0.17.0-SNAPSHOT</version>
       <exclusions>
         <exclusion>
           <groupId>log4j</groupId>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-api-all</artifactId>
-      <version>0.16.0</version>
+      <version>0.17.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -169,31 +169,31 @@
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbti</artifactId>
-      <version>0.16.0</version>
+      <version>0.17.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-      <version>0.16.0</version>
+      <version>0.17.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbschema</artifactId>
-      <version>0.16.0</version>
+      <version>0.17.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-      <version>0.16.0</version>
+      <version>0.17.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbdd</artifactId>
-      <version>0.16.0</version>
+      <version>0.17.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
       <dependency>

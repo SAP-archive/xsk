@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-require.config({ paths: { vs: "/services/v4/web/ide-monaco/monaco-editor/min/vs" } });
+require.config({ paths: { vs: "/webjars/monaco-editor/0.33.0/min/vs" } });
 let editors = [];
 migrationLaunchView.controller("ChangesViewController", [
     "$scope",

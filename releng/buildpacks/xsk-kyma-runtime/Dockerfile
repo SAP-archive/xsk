@@ -16,16 +16,16 @@ ENV CNB_GROUP_ID=1000
 ENV CNB_STACK_ID="com.sap.kneo.xsk"
 LABEL io.buildpacks.stack.id="com.sap.kneo.xsk"
 
-RUN groupadd cnb --gid ${CNB_GROUP_ID} && \
-  useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash cnb
-RUN chown -R cnb:cnb /usr/local/tomcat
+RUN groupadd xsk --gid ${CNB_GROUP_ID} && \
+  useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash xsk
+RUN chown -R xsk:xsk /usr/local/tomcat
 
 FROM base as run
 
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
-RUN chown -R cnb:cnb /usr/local/tomcat
+RUN chown -R xsk:xsk /usr/local/tomcat
 
 FROM base as build
 
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
-RUN chown -R cnb:cnb /usr/local/tomcat
+RUN chown -R xsk:xsk /usr/local/tomcat

@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com.sap.xsk.parser.hana.core/Hana.g4 by ANTLR 4.9.3
+// Generated from com.sap.xsk.parser.hana.core/Hana.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hana.core;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -297,12 +297,6 @@ public interface HanaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProc_stmt_list(HanaParser.Proc_stmt_listContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link HanaParser#any_token}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAny_token(HanaParser.Any_tokenContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HanaParser#func_stmt_list}.
 	 * @param ctx the parse tree

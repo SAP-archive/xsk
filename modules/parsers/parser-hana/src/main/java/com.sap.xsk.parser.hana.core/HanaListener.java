@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com.sap.xsk.parser.hana.core/Hana.g4 by ANTLR 4.9.3
+// Generated from com.sap.xsk.parser.hana.core/Hana.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hana.core;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -478,16 +478,6 @@ public interface HanaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitProc_stmt_list(HanaParser.Proc_stmt_listContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HanaParser#any_token}.
-	 * @param ctx the parse tree
-	 */
-	void enterAny_token(HanaParser.Any_tokenContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HanaParser#any_token}.
-	 * @param ctx the parse tree
-	 */
-	void exitAny_token(HanaParser.Any_tokenContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HanaParser#func_stmt_list}.
 	 * @param ctx the parse tree

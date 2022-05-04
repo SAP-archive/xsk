@@ -253,7 +253,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 
-        <dirigible.version>6.2.19</dirigible.version>
+        <dirigible.version>6.2.21</dirigible.version>
 
 
         <!-- Sonar Cloud -->

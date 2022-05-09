@@ -1,0 +1,22 @@
+namespace sap.db;
+
+@Schema: 'ADMIN'
+
+context CircularDependency {
+
+    entity  Orders {
+        key Id               : String(32);
+        Item                : association[*] to Item on Item.OrderId = Id;
+        Category             : association to Products.Category { Id };
+    };
+
+    entity Item {
+        key Item            : String(32);
+        OrderId             : String(500);
+    };
+
+    entity Category {
+        key Id              : String(32);
+        Parent              : type of Item.OrderId;
+    };
+};

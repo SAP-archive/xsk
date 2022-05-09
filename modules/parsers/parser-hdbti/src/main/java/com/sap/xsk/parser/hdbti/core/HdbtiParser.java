@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbti/core/Hdbti.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbti/core/Hdbti.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbti.core;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -22,41 +22,84 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class HdbtiParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.3", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.10.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__16=1, T__15=2, T__14=3, T__13=4, T__12=5, T__11=6, T__10=7, T__9=8, 
-		T__8=9, T__7=10, T__6=11, T__5=12, T__4=13, T__3=14, T__2=15, T__1=16, 
-		T__0=17, STRING=18, BOOLEAN=19, TRUE=20, FALSE=21, WS=22, RB=23, LB=24, 
-		EQ=25, LINE_COMMENT=26, COMMENT=27;
-	public static final String[] tokenNames = {
-		"<INVALID>", "'file'", "'delimField'", "'useHeaderNames'", "'hdbtable'", 
-		"':'", "'{'", "';'", "'}'", "'keys'", "'schema'", "'table'", "'delimEnclosing'", 
-		"'header'", "'cdstable'", "','", "'import'", "'distinguishEmptyFromNull'", 
-		"STRING", "BOOLEAN", "'true'", "'false'", "WS", "'['", "']'", "'='", "LINE_COMMENT", 
-		"COMMENT"
-	};
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
+		STRING=18, BOOLEAN=19, TRUE=20, FALSE=21, WS=22, RB=23, LB=24, EQ=25, 
+		LINE_COMMENT=26, COMMENT=27;
 	public static final int
 		RULE_importArr = 0, RULE_objConfig = 1, RULE_assignExpression = 2, RULE_assignTable = 3, 
 		RULE_assignSchema = 4, RULE_assignFile = 5, RULE_assignHeader = 6, RULE_assignUseHeaderNames = 7, 
 		RULE_assignDelimField = 8, RULE_assignDelimEnclosing = 9, RULE_assignDistinguishEmptyFromNull = 10, 
 		RULE_assignKeys = 11, RULE_keyArr = 12, RULE_pair = 13, RULE_pairKey = 14, 
 		RULE_pairValue = 15, RULE_tableName = 16;
-	public static final String[] ruleNames = {
-		"importArr", "objConfig", "assignExpression", "assignTable", "assignSchema", 
-		"assignFile", "assignHeader", "assignUseHeaderNames", "assignDelimField", 
-		"assignDelimEnclosing", "assignDistinguishEmptyFromNull", "assignKeys", 
-		"keyArr", "pair", "pairKey", "pairValue", "tableName"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"importArr", "objConfig", "assignExpression", "assignTable", "assignSchema", 
+			"assignFile", "assignHeader", "assignUseHeaderNames", "assignDelimField", 
+			"assignDelimEnclosing", "assignDistinguishEmptyFromNull", "assignKeys", 
+			"keyArr", "pair", "pairKey", "pairValue", "tableName"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
+
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "'import'", "','", "';'", "'{'", "'}'", "'schema'", "'file'", "'header'", 
+			"'useHeaderNames'", "'delimField'", "'delimEnclosing'", "'distinguishEmptyFromNull'", 
+			"'keys'", "':'", "'table'", "'hdbtable'", "'cdstable'", null, null, "'true'", 
+			"'false'", null, "'['", "']'", "'='"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, null, null, null, null, "STRING", "BOOLEAN", "TRUE", "FALSE", 
+			"WS", "RB", "LB", "EQ", "LINE_COMMENT", "COMMENT"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
+
+	@Override
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
 
 	@Override
 	public String getGrammarFileName() { return "Hdbti.g4"; }
-
-	@Override
-	public String[] getTokenNames() { return tokenNames; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -71,7 +114,11 @@ public class HdbtiParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class ImportArrContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
+		public TerminalNode RB() { return getToken(HdbtiParser.RB, 0); }
+		public TerminalNode LB() { return getToken(HdbtiParser.LB, 0); }
 		public List<ObjConfigContext> objConfig() {
 			return getRuleContexts(ObjConfigContext.class);
 		}
@@ -104,22 +151,29 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(34); match(T__1);
-			setState(35); match(EQ);
-			setState(36); match(RB);
+			setState(34);
+			match(T__0);
+			setState(35);
+			match(EQ);
+			setState(36);
+			match(RB);
 			setState(45);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==T__11) {
+			if (_la==T__3) {
 				{
-				setState(37); objConfig();
+				setState(37);
+				objConfig();
 				setState(42);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==T__2) {
+				while (_la==T__1) {
 					{
 					{
-					setState(38); match(T__2);
-					setState(39); objConfig();
+					setState(38);
+					match(T__1);
+					setState(39);
+					objConfig();
 					}
 					}
 					setState(44);
@@ -129,8 +183,10 @@ public class HdbtiParser extends Parser {
 				}
 			}
 
-			setState(47); match(LB);
-			setState(48); match(T__10);
+			setState(47);
+			match(LB);
+			setState(48);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -177,21 +233,24 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(50); match(T__11);
+			setState(50);
+			match(T__3);
 			setState(54);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__16) | (1L << T__15) | (1L << T__14) | (1L << T__13) | (1L << T__8) | (1L << T__7) | (1L << T__6) | (1L << T__5) | (1L << T__4) | (1L << T__3) | (1L << T__0))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__14) | (1L << T__15) | (1L << T__16))) != 0)) {
 				{
 				{
-				setState(51); assignExpression();
+				setState(51);
+				assignExpression();
 				}
 				}
 				setState(56);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(57); match(T__9);
+			setState(57);
+			match(T__4);
 			}
 		}
 		catch (RecognitionException re) {
@@ -206,20 +265,14 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignExpressionContext extends ParserRuleContext {
-		public AssignDistinguishEmptyFromNullContext assignDistinguishEmptyFromNull() {
-			return getRuleContext(AssignDistinguishEmptyFromNullContext.class,0);
-		}
-		public AssignKeysContext assignKeys() {
-			return getRuleContext(AssignKeysContext.class,0);
-		}
-		public AssignDelimFieldContext assignDelimField() {
-			return getRuleContext(AssignDelimFieldContext.class,0);
-		}
-		public AssignDelimEnclosingContext assignDelimEnclosing() {
-			return getRuleContext(AssignDelimEnclosingContext.class,0);
+		public AssignTableContext assignTable() {
+			return getRuleContext(AssignTableContext.class,0);
 		}
 		public AssignSchemaContext assignSchema() {
 			return getRuleContext(AssignSchemaContext.class,0);
+		}
+		public AssignFileContext assignFile() {
+			return getRuleContext(AssignFileContext.class,0);
 		}
 		public AssignHeaderContext assignHeader() {
 			return getRuleContext(AssignHeaderContext.class,0);
@@ -227,11 +280,17 @@ public class HdbtiParser extends Parser {
 		public AssignUseHeaderNamesContext assignUseHeaderNames() {
 			return getRuleContext(AssignUseHeaderNamesContext.class,0);
 		}
-		public AssignFileContext assignFile() {
-			return getRuleContext(AssignFileContext.class,0);
+		public AssignDelimFieldContext assignDelimField() {
+			return getRuleContext(AssignDelimFieldContext.class,0);
 		}
-		public AssignTableContext assignTable() {
-			return getRuleContext(AssignTableContext.class,0);
+		public AssignDelimEnclosingContext assignDelimEnclosing() {
+			return getRuleContext(AssignDelimEnclosingContext.class,0);
+		}
+		public AssignDistinguishEmptyFromNullContext assignDistinguishEmptyFromNull() {
+			return getRuleContext(AssignDistinguishEmptyFromNullContext.class,0);
+		}
+		public AssignKeysContext assignKeys() {
+			return getRuleContext(AssignKeysContext.class,0);
 		}
 		public AssignExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -257,61 +316,71 @@ public class HdbtiParser extends Parser {
 		enterRule(_localctx, 4, RULE_assignExpression);
 		try {
 			setState(68);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__13:
-			case T__6:
-			case T__3:
+			case T__14:
+			case T__15:
+			case T__16:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(59); assignTable();
-				}
-				break;
-			case T__7:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(60); assignSchema();
-				}
-				break;
-			case T__16:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(61); assignFile();
-				}
-				break;
-			case T__4:
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(62); assignHeader();
-				}
-				break;
-			case T__14:
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(63); assignUseHeaderNames();
-				}
-				break;
-			case T__15:
-				enterOuterAlt(_localctx, 6);
-				{
-				setState(64); assignDelimField();
+				setState(59);
+				assignTable();
 				}
 				break;
 			case T__5:
-				enterOuterAlt(_localctx, 7);
+				enterOuterAlt(_localctx, 2);
 				{
-				setState(65); assignDelimEnclosing();
+				setState(60);
+				assignSchema();
 				}
 				break;
-			case T__0:
-				enterOuterAlt(_localctx, 8);
+			case T__6:
+				enterOuterAlt(_localctx, 3);
 				{
-				setState(66); assignDistinguishEmptyFromNull();
+				setState(61);
+				assignFile();
+				}
+				break;
+			case T__7:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(62);
+				assignHeader();
 				}
 				break;
 			case T__8:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(63);
+				assignUseHeaderNames();
+				}
+				break;
+			case T__9:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(64);
+				assignDelimField();
+				}
+				break;
+			case T__10:
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(65);
+				assignDelimEnclosing();
+				}
+				break;
+			case T__11:
+				enterOuterAlt(_localctx, 8);
+				{
+				setState(66);
+				assignDistinguishEmptyFromNull();
+				}
+				break;
+			case T__12:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(67); assignKeys();
+				setState(67);
+				assignKeys();
 				}
 				break;
 			default:
@@ -333,6 +402,7 @@ public class HdbtiParser extends Parser {
 		public TableNameContext tableName() {
 			return getRuleContext(TableNameContext.class,0);
 		}
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public TerminalNode STRING() { return getToken(HdbtiParser.STRING, 0); }
 		public AssignTableContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -359,10 +429,14 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(70); tableName();
-			setState(71); match(EQ);
-			setState(72); match(STRING);
-			setState(73); match(T__10);
+			setState(70);
+			tableName();
+			setState(71);
+			match(EQ);
+			setState(72);
+			match(STRING);
+			setState(73);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -377,6 +451,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignSchemaContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public TerminalNode STRING() { return getToken(HdbtiParser.STRING, 0); }
 		public AssignSchemaContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -403,10 +478,14 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(75); match(T__7);
-			setState(76); match(EQ);
-			setState(77); match(STRING);
-			setState(78); match(T__10);
+			setState(75);
+			match(T__5);
+			setState(76);
+			match(EQ);
+			setState(77);
+			match(STRING);
+			setState(78);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -421,6 +500,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignFileContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public TerminalNode STRING() { return getToken(HdbtiParser.STRING, 0); }
 		public AssignFileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -447,10 +527,14 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(80); match(T__16);
-			setState(81); match(EQ);
-			setState(82); match(STRING);
-			setState(83); match(T__10);
+			setState(80);
+			match(T__6);
+			setState(81);
+			match(EQ);
+			setState(82);
+			match(STRING);
+			setState(83);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -465,6 +549,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignHeaderContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public TerminalNode BOOLEAN() { return getToken(HdbtiParser.BOOLEAN, 0); }
 		public AssignHeaderContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -491,10 +576,14 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(85); match(T__4);
-			setState(86); match(EQ);
-			setState(87); match(BOOLEAN);
-			setState(88); match(T__10);
+			setState(85);
+			match(T__7);
+			setState(86);
+			match(EQ);
+			setState(87);
+			match(BOOLEAN);
+			setState(88);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -509,6 +598,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignUseHeaderNamesContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public TerminalNode BOOLEAN() { return getToken(HdbtiParser.BOOLEAN, 0); }
 		public AssignUseHeaderNamesContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -535,10 +625,14 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(90); match(T__14);
-			setState(91); match(EQ);
-			setState(92); match(BOOLEAN);
-			setState(93); match(T__10);
+			setState(90);
+			match(T__8);
+			setState(91);
+			match(EQ);
+			setState(92);
+			match(BOOLEAN);
+			setState(93);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -553,6 +647,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignDelimFieldContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public TerminalNode STRING() { return getToken(HdbtiParser.STRING, 0); }
 		public AssignDelimFieldContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -579,10 +674,14 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(95); match(T__15);
-			setState(96); match(EQ);
-			setState(97); match(STRING);
-			setState(98); match(T__10);
+			setState(95);
+			match(T__9);
+			setState(96);
+			match(EQ);
+			setState(97);
+			match(STRING);
+			setState(98);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -597,6 +696,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignDelimEnclosingContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public TerminalNode STRING() { return getToken(HdbtiParser.STRING, 0); }
 		public AssignDelimEnclosingContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -623,10 +723,14 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(100); match(T__5);
-			setState(101); match(EQ);
-			setState(102); match(STRING);
-			setState(103); match(T__10);
+			setState(100);
+			match(T__10);
+			setState(101);
+			match(EQ);
+			setState(102);
+			match(STRING);
+			setState(103);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -641,6 +745,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignDistinguishEmptyFromNullContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public TerminalNode BOOLEAN() { return getToken(HdbtiParser.BOOLEAN, 0); }
 		public AssignDistinguishEmptyFromNullContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -667,10 +772,14 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(105); match(T__0);
-			setState(106); match(EQ);
-			setState(107); match(BOOLEAN);
-			setState(108); match(T__10);
+			setState(105);
+			match(T__11);
+			setState(106);
+			match(EQ);
+			setState(107);
+			match(BOOLEAN);
+			setState(108);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -685,6 +794,7 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class AssignKeysContext extends ParserRuleContext {
+		public TerminalNode EQ() { return getToken(HdbtiParser.EQ, 0); }
 		public KeyArrContext keyArr() {
 			return getRuleContext(KeyArrContext.class,0);
 		}
@@ -713,9 +823,12 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(110); match(T__8);
-			setState(111); match(EQ);
-			setState(112); keyArr();
+			setState(110);
+			match(T__12);
+			setState(111);
+			match(EQ);
+			setState(112);
+			keyArr();
 			}
 		}
 		catch (RecognitionException re) {
@@ -730,11 +843,13 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class KeyArrContext extends ParserRuleContext {
-		public PairContext pair(int i) {
-			return getRuleContext(PairContext.class,i);
-		}
+		public TerminalNode RB() { return getToken(HdbtiParser.RB, 0); }
+		public TerminalNode LB() { return getToken(HdbtiParser.LB, 0); }
 		public List<PairContext> pair() {
 			return getRuleContexts(PairContext.class);
+		}
+		public PairContext pair(int i) {
+			return getRuleContext(PairContext.class,i);
 		}
 		public KeyArrContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -762,20 +877,25 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(114); match(RB);
+			setState(114);
+			match(RB);
 			setState(123);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==STRING) {
 				{
-				setState(115); pair();
+				setState(115);
+				pair();
 				setState(120);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==T__2) {
+				while (_la==T__1) {
 					{
 					{
-					setState(116); match(T__2);
-					setState(117); pair();
+					setState(116);
+					match(T__1);
+					setState(117);
+					pair();
 					}
 					}
 					setState(122);
@@ -785,8 +905,10 @@ public class HdbtiParser extends Parser {
 				}
 			}
 
-			setState(125); match(LB);
-			setState(126); match(T__10);
+			setState(125);
+			match(LB);
+			setState(126);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -801,11 +923,11 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static class PairContext extends ParserRuleContext {
-		public PairValueContext pairValue() {
-			return getRuleContext(PairValueContext.class,0);
-		}
 		public PairKeyContext pairKey() {
 			return getRuleContext(PairKeyContext.class,0);
+		}
+		public PairValueContext pairValue() {
+			return getRuleContext(PairValueContext.class,0);
 		}
 		public PairContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -832,9 +954,12 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(128); pairKey();
-			setState(129); match(T__12);
-			setState(130); pairValue();
+			setState(128);
+			pairKey();
+			setState(129);
+			match(T__13);
+			setState(130);
+			pairValue();
 			}
 		}
 		catch (RecognitionException re) {
@@ -875,7 +1000,8 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(132); match(STRING);
+			setState(132);
+			match(STRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -916,7 +1042,8 @@ public class HdbtiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(134); match(STRING);
+			setState(134);
+			match(STRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -959,10 +1086,14 @@ public class HdbtiParser extends Parser {
 			{
 			setState(136);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__13) | (1L << T__6) | (1L << T__3))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
-			consume();
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -977,40 +1108,80 @@ public class HdbtiParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\35\u008d\4\2\t\2"+
-		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
-		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\3\2\3\2\3\2\3\2\3\2\3\2\7\2+\n\2\f\2\16\2.\13\2\5\2\60\n\2\3\2\3\2\3"+
-		"\2\3\3\3\3\7\3\67\n\3\f\3\16\3:\13\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3"+
-		"\4\3\4\3\4\5\4G\n\4\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3"+
-		"\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n"+
-		"\3\13\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\16\3\16"+
-		"\3\16\3\16\7\16y\n\16\f\16\16\16|\13\16\5\16~\n\16\3\16\3\16\3\16\3\17"+
-		"\3\17\3\17\3\17\3\20\3\20\3\21\3\21\3\22\3\22\3\22\2\2\23\2\4\6\b\n\f"+
-		"\16\20\22\24\26\30\32\34\36 \"\2\3\5\2\6\6\r\r\20\20\u0088\2$\3\2\2\2"+
-		"\4\64\3\2\2\2\6F\3\2\2\2\bH\3\2\2\2\nM\3\2\2\2\fR\3\2\2\2\16W\3\2\2\2"+
-		"\20\\\3\2\2\2\22a\3\2\2\2\24f\3\2\2\2\26k\3\2\2\2\30p\3\2\2\2\32t\3\2"+
-		"\2\2\34\u0082\3\2\2\2\36\u0086\3\2\2\2 \u0088\3\2\2\2\"\u008a\3\2\2\2"+
-		"$%\7\22\2\2%&\7\33\2\2&/\7\31\2\2\',\5\4\3\2()\7\21\2\2)+\5\4\3\2*(\3"+
-		"\2\2\2+.\3\2\2\2,*\3\2\2\2,-\3\2\2\2-\60\3\2\2\2.,\3\2\2\2/\'\3\2\2\2"+
-		"/\60\3\2\2\2\60\61\3\2\2\2\61\62\7\32\2\2\62\63\7\t\2\2\63\3\3\2\2\2\64"+
-		"8\7\b\2\2\65\67\5\6\4\2\66\65\3\2\2\2\67:\3\2\2\28\66\3\2\2\289\3\2\2"+
-		"\29;\3\2\2\2:8\3\2\2\2;<\7\n\2\2<\5\3\2\2\2=G\5\b\5\2>G\5\n\6\2?G\5\f"+
-		"\7\2@G\5\16\b\2AG\5\20\t\2BG\5\22\n\2CG\5\24\13\2DG\5\26\f\2EG\5\30\r"+
-		"\2F=\3\2\2\2F>\3\2\2\2F?\3\2\2\2F@\3\2\2\2FA\3\2\2\2FB\3\2\2\2FC\3\2\2"+
-		"\2FD\3\2\2\2FE\3\2\2\2G\7\3\2\2\2HI\5\"\22\2IJ\7\33\2\2JK\7\24\2\2KL\7"+
-		"\t\2\2L\t\3\2\2\2MN\7\f\2\2NO\7\33\2\2OP\7\24\2\2PQ\7\t\2\2Q\13\3\2\2"+
-		"\2RS\7\3\2\2ST\7\33\2\2TU\7\24\2\2UV\7\t\2\2V\r\3\2\2\2WX\7\17\2\2XY\7"+
-		"\33\2\2YZ\7\25\2\2Z[\7\t\2\2[\17\3\2\2\2\\]\7\5\2\2]^\7\33\2\2^_\7\25"+
-		"\2\2_`\7\t\2\2`\21\3\2\2\2ab\7\4\2\2bc\7\33\2\2cd\7\24\2\2de\7\t\2\2e"+
-		"\23\3\2\2\2fg\7\16\2\2gh\7\33\2\2hi\7\24\2\2ij\7\t\2\2j\25\3\2\2\2kl\7"+
-		"\23\2\2lm\7\33\2\2mn\7\25\2\2no\7\t\2\2o\27\3\2\2\2pq\7\13\2\2qr\7\33"+
-		"\2\2rs\5\32\16\2s\31\3\2\2\2t}\7\31\2\2uz\5\34\17\2vw\7\21\2\2wy\5\34"+
-		"\17\2xv\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{~\3\2\2\2|z\3\2\2\2}u\3"+
-		"\2\2\2}~\3\2\2\2~\177\3\2\2\2\177\u0080\7\32\2\2\u0080\u0081\7\t\2\2\u0081"+
-		"\33\3\2\2\2\u0082\u0083\5\36\20\2\u0083\u0084\7\7\2\2\u0084\u0085\5 \21"+
-		"\2\u0085\35\3\2\2\2\u0086\u0087\7\24\2\2\u0087\37\3\2\2\2\u0088\u0089"+
-		"\7\24\2\2\u0089!\3\2\2\2\u008a\u008b\t\2\2\2\u008b#\3\2\2\2\b,/8Fz}";
+		"\u0004\u0001\u001b\u008b\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001"+
+		"\u0002\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004"+
+		"\u0002\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007"+
+		"\u0002\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b"+
+		"\u0002\f\u0007\f\u0002\r\u0007\r\u0002\u000e\u0007\u000e\u0002\u000f\u0007"+
+		"\u000f\u0002\u0010\u0007\u0010\u0001\u0000\u0001\u0000\u0001\u0000\u0001"+
+		"\u0000\u0001\u0000\u0001\u0000\u0005\u0000)\b\u0000\n\u0000\f\u0000,\t"+
+		"\u0000\u0003\u0000.\b\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001"+
+		"\u0001\u0001\u0001\u0005\u00015\b\u0001\n\u0001\f\u00018\t\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001"+
+		"\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u0002E\b"+
+		"\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001"+
+		"\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0005\u0001"+
+		"\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001"+
+		"\u0006\u0001\u0006\u0001\u0006\u0001\u0007\u0001\u0007\u0001\u0007\u0001"+
+		"\u0007\u0001\u0007\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001\t\u0001"+
+		"\t\u0001\t\u0001\t\u0001\t\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001"+
+		"\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\f\u0001\f\u0001\f\u0001"+
+		"\f\u0005\fw\b\f\n\f\f\fz\t\f\u0003\f|\b\f\u0001\f\u0001\f\u0001\f\u0001"+
+		"\r\u0001\r\u0001\r\u0001\r\u0001\u000e\u0001\u000e\u0001\u000f\u0001\u000f"+
+		"\u0001\u0010\u0001\u0010\u0001\u0010\u0000\u0000\u0011\u0000\u0002\u0004"+
+		"\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e \u0000"+
+		"\u0001\u0001\u0000\u000f\u0011\u0086\u0000\"\u0001\u0000\u0000\u0000\u0002"+
+		"2\u0001\u0000\u0000\u0000\u0004D\u0001\u0000\u0000\u0000\u0006F\u0001"+
+		"\u0000\u0000\u0000\bK\u0001\u0000\u0000\u0000\nP\u0001\u0000\u0000\u0000"+
+		"\fU\u0001\u0000\u0000\u0000\u000eZ\u0001\u0000\u0000\u0000\u0010_\u0001"+
+		"\u0000\u0000\u0000\u0012d\u0001\u0000\u0000\u0000\u0014i\u0001\u0000\u0000"+
+		"\u0000\u0016n\u0001\u0000\u0000\u0000\u0018r\u0001\u0000\u0000\u0000\u001a"+
+		"\u0080\u0001\u0000\u0000\u0000\u001c\u0084\u0001\u0000\u0000\u0000\u001e"+
+		"\u0086\u0001\u0000\u0000\u0000 \u0088\u0001\u0000\u0000\u0000\"#\u0005"+
+		"\u0001\u0000\u0000#$\u0005\u0019\u0000\u0000$-\u0005\u0017\u0000\u0000"+
+		"%*\u0003\u0002\u0001\u0000&\'\u0005\u0002\u0000\u0000\')\u0003\u0002\u0001"+
+		"\u0000(&\u0001\u0000\u0000\u0000),\u0001\u0000\u0000\u0000*(\u0001\u0000"+
+		"\u0000\u0000*+\u0001\u0000\u0000\u0000+.\u0001\u0000\u0000\u0000,*\u0001"+
+		"\u0000\u0000\u0000-%\u0001\u0000\u0000\u0000-.\u0001\u0000\u0000\u0000"+
+		"./\u0001\u0000\u0000\u0000/0\u0005\u0018\u0000\u000001\u0005\u0003\u0000"+
+		"\u00001\u0001\u0001\u0000\u0000\u000026\u0005\u0004\u0000\u000035\u0003"+
+		"\u0004\u0002\u000043\u0001\u0000\u0000\u000058\u0001\u0000\u0000\u0000"+
+		"64\u0001\u0000\u0000\u000067\u0001\u0000\u0000\u000079\u0001\u0000\u0000"+
+		"\u000086\u0001\u0000\u0000\u00009:\u0005\u0005\u0000\u0000:\u0003\u0001"+
+		"\u0000\u0000\u0000;E\u0003\u0006\u0003\u0000<E\u0003\b\u0004\u0000=E\u0003"+
+		"\n\u0005\u0000>E\u0003\f\u0006\u0000?E\u0003\u000e\u0007\u0000@E\u0003"+
+		"\u0010\b\u0000AE\u0003\u0012\t\u0000BE\u0003\u0014\n\u0000CE\u0003\u0016"+
+		"\u000b\u0000D;\u0001\u0000\u0000\u0000D<\u0001\u0000\u0000\u0000D=\u0001"+
+		"\u0000\u0000\u0000D>\u0001\u0000\u0000\u0000D?\u0001\u0000\u0000\u0000"+
+		"D@\u0001\u0000\u0000\u0000DA\u0001\u0000\u0000\u0000DB\u0001\u0000\u0000"+
+		"\u0000DC\u0001\u0000\u0000\u0000E\u0005\u0001\u0000\u0000\u0000FG\u0003"+
+		" \u0010\u0000GH\u0005\u0019\u0000\u0000HI\u0005\u0012\u0000\u0000IJ\u0005"+
+		"\u0003\u0000\u0000J\u0007\u0001\u0000\u0000\u0000KL\u0005\u0006\u0000"+
+		"\u0000LM\u0005\u0019\u0000\u0000MN\u0005\u0012\u0000\u0000NO\u0005\u0003"+
+		"\u0000\u0000O\t\u0001\u0000\u0000\u0000PQ\u0005\u0007\u0000\u0000QR\u0005"+
+		"\u0019\u0000\u0000RS\u0005\u0012\u0000\u0000ST\u0005\u0003\u0000\u0000"+
+		"T\u000b\u0001\u0000\u0000\u0000UV\u0005\b\u0000\u0000VW\u0005\u0019\u0000"+
+		"\u0000WX\u0005\u0013\u0000\u0000XY\u0005\u0003\u0000\u0000Y\r\u0001\u0000"+
+		"\u0000\u0000Z[\u0005\t\u0000\u0000[\\\u0005\u0019\u0000\u0000\\]\u0005"+
+		"\u0013\u0000\u0000]^\u0005\u0003\u0000\u0000^\u000f\u0001\u0000\u0000"+
+		"\u0000_`\u0005\n\u0000\u0000`a\u0005\u0019\u0000\u0000ab\u0005\u0012\u0000"+
+		"\u0000bc\u0005\u0003\u0000\u0000c\u0011\u0001\u0000\u0000\u0000de\u0005"+
+		"\u000b\u0000\u0000ef\u0005\u0019\u0000\u0000fg\u0005\u0012\u0000\u0000"+
+		"gh\u0005\u0003\u0000\u0000h\u0013\u0001\u0000\u0000\u0000ij\u0005\f\u0000"+
+		"\u0000jk\u0005\u0019\u0000\u0000kl\u0005\u0013\u0000\u0000lm\u0005\u0003"+
+		"\u0000\u0000m\u0015\u0001\u0000\u0000\u0000no\u0005\r\u0000\u0000op\u0005"+
+		"\u0019\u0000\u0000pq\u0003\u0018\f\u0000q\u0017\u0001\u0000\u0000\u0000"+
+		"r{\u0005\u0017\u0000\u0000sx\u0003\u001a\r\u0000tu\u0005\u0002\u0000\u0000"+
+		"uw\u0003\u001a\r\u0000vt\u0001\u0000\u0000\u0000wz\u0001\u0000\u0000\u0000"+
+		"xv\u0001\u0000\u0000\u0000xy\u0001\u0000\u0000\u0000y|\u0001\u0000\u0000"+
+		"\u0000zx\u0001\u0000\u0000\u0000{s\u0001\u0000\u0000\u0000{|\u0001\u0000"+
+		"\u0000\u0000|}\u0001\u0000\u0000\u0000}~\u0005\u0018\u0000\u0000~\u007f"+
+		"\u0005\u0003\u0000\u0000\u007f\u0019\u0001\u0000\u0000\u0000\u0080\u0081"+
+		"\u0003\u001c\u000e\u0000\u0081\u0082\u0005\u000e\u0000\u0000\u0082\u0083"+
+		"\u0003\u001e\u000f\u0000\u0083\u001b\u0001\u0000\u0000\u0000\u0084\u0085"+
+		"\u0005\u0012\u0000\u0000\u0085\u001d\u0001\u0000\u0000\u0000\u0086\u0087"+
+		"\u0005\u0012\u0000\u0000\u0087\u001f\u0001\u0000\u0000\u0000\u0088\u0089"+
+		"\u0007\u0000\u0000\u0000\u0089!\u0001\u0000\u0000\u0000\u0006*-6Dx{";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

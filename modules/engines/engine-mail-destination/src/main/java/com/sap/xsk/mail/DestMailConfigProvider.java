@@ -14,25 +14,33 @@ package com.sap.xsk.mail;
 import com.sap.cloud.sdk.cloudplatform.connectivity.exception.DestinationAccessException;
 import com.sap.xsk.api.destination.CloudPlatformDestinationFacade;
 import org.eclipse.dirigible.api.v3.mail.api.IMailConfigurationProvider;
-import com.sap.cloud.sdk.cloudplatform.connectivity.Destination;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DestMailConfigProvider implements IMailConfigurationProvider {
+
   private static final String MAIL_USER = "mail.user";
   private static final String MAIL_PASSWORD = "mail.password";
   private static final String MAIL_TRANSPORT_PROTOCOL = "mail.transport.protocol";
-  private static final String MAIL_SMTPS_HOST = "mail.smtps.host";
-  private static final String MAIL_SMTPS_PORT = "mail.smtps.port";
-  private static final String MAIL_SMTPS_AUTH = "mail.smtps.auth";
-  private static final String MAIL_SMTP_HOST = "mail.smtp.host";
-  private static final String MAIL_SMTP_PORT = "mail.smtp.port";
-  private static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
-  private static List<String> MAIL_PROPERTIES = List.of(MAIL_USER, MAIL_PASSWORD, MAIL_TRANSPORT_PROTOCOL, MAIL_SMTPS_HOST, MAIL_SMTPS_PORT,
-      MAIL_SMTPS_AUTH, MAIL_SMTP_HOST, MAIL_SMTP_PORT, MAIL_SMTP_AUTH);
+  private static final String PROXY_TYPE = "ProxyType";
+  private static final String HOST = "host";
+  private static final String PORT = "port";
+  private static final String AUTH = "auth";
+  private static final String SOCKS_HOST = "socks.host";
+  private static final String SOCKS_PORT = "socks.port";
+  private static final String PROXY_USERNAME = "proxy.user";
+  private static final String PROXY_PASSWORD = "proxy.password";
+  private static final List<String> PROTOCOL_PROPERTIES = List.of(HOST, PORT, AUTH, SOCKS_HOST, SOCKS_HOST, SOCKS_PORT, PROXY_USERNAME,
+      PROXY_PASSWORD);
+  private static final List<String> MAIL_PROPERTIES = Stream.concat(
+      PROTOCOL_PROPERTIES.stream().map(p -> Arrays.asList("mail.smtp." + p, "mail.smtps." + p))
+          .flatMap(List::stream), Stream.of(MAIL_USER, MAIL_PASSWORD, MAIL_TRANSPORT_PROTOCOL, PROXY_TYPE)).collect(Collectors.toList());
 
   private static final String PROVIDER_NAME = "destination";
   private static final String DESTINATION_NAME = "MAIL_SERVER_DESTINATION_NAME";
@@ -49,17 +57,18 @@ public class DestMailConfigProvider implements IMailConfigurationProvider {
     Properties properties = new Properties();
     try {
       String destinationName = Configuration.get(DESTINATION_NAME);
-      Destination destination = CloudPlatformDestinationFacade.getDestination(destinationName);
+      Properties destinationProperties = CloudPlatformDestinationFacade.getDestination(destinationName).getProperties();
       for (String key : MAIL_PROPERTIES) {
-        if(!destination.get(key).isEmpty()) {
-          properties.put(key, destination.get(key).get());
+        if (destinationProperties.containsKey(key)) {
+          properties.put(key, destinationProperties.get(key));
         }
       }
     } catch (DestinationAccessException e) {
-      logger.error("Cannot find destination for mail configuration. Please check if " + DESTINATION_NAME + " is set and the destination exists.");
+      logger.error(
+          "Cannot find destination for mail configuration. Please check if " + DESTINATION_NAME + " is set and the destination exists.");
     }
 
-    if(properties.isEmpty()) {
+    if (properties.isEmpty()) {
       logger.error("Destination object does not contain necessary mail settings!");
     }
     return properties;

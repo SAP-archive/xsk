@@ -2,6 +2,6 @@
 
 set -e
 
-chown -R dirigible:dirigible $CATALINA_HOME
+chown -R xsk:xsk $CATALINA_HOME
 
-exec gosu dirigible $@
+exec gosu xsk $@

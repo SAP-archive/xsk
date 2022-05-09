@@ -1,6 +1,3 @@
-/* used to test default values */
-//used to test default values
-
 namespace sap.table;
 @Schema : 'TEST'
 @Catalog.tableType : #COLUMN

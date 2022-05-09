@@ -1,0 +1,8 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+@Catalog.tableType : #COLUMN
+
+entity InvalidNumberOfTypeArguments {
+   key Name : hana.VARCHAR(20, 20, 20);
+};

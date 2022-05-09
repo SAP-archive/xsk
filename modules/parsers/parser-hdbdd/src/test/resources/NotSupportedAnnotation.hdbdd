@@ -1,0 +1,11 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+context NotSupportedAnnotation {
+
+  @Something
+  entity Test {
+     Name : String(32);
+  };
+}
+

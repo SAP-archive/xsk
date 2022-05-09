@@ -1,0 +1,15 @@
+namespace sap.db;
+using sap.db.myapp::UserDefinedDataType.MyType;
+
+@Schema: 'TEST_SCHEMA'
+
+context UsingDirective {
+     Entity Entity {
+          Id           : String(5000);
+          Name         : String(5000);
+          Description  : type of Entity.Name;
+          Type         : String(20);
+          key key      : Integer;
+          entity       : type of Entity.Id;
+      };
+};

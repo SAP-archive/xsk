@@ -1,0 +1,24 @@
+namespace sap.db;
+
+@Schema : 'GSTR2DB'
+
+context InvalidReferenceAssociation {
+     Entity Entity {
+          Id            : String(5000);
+          Name          : String(5000);
+          Description   : type of Entity.Name;
+          Type          : String(20);
+          key key       : Integer;
+          entity        : type of Entity.Id;
+      };
+
+     Entity To {
+          key id        : Integer;
+          to            : String(32);
+          association   : association to Type on association.Id = id;
+     }
+
+     type Type {
+          Id            : String(32);
+     };
+};

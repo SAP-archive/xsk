@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<!-- Copyright (c) 2013 SAP AG, All Rights Reserved -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta charset="utf-8"/>
+<title>Hello World Demo with SAPUI5</title>
+<script id="sap-ui-bootstrap" type="text/javascript"
+    src="/sap/ui5/1/resources/sap-ui-core.js"
+    data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.ui.demokit"
+    data-sap-ui-theme="sap_goldreflection">
+    </script>
+</head>
+
+<body class="sapUiBody">
+<div id=root></div>
+<script type="text/javascript">
+
+var oInput = new sap.ui.commons.TextArea({
+    id : 'input2',
+    value : 'click button to call backend javascript',
+	tooltip : 'This is a tooltip',
+	cols : 100,
+	rows : 4,
+	wrapping : sap.ui.core.Wrapping.Off,
+	valueState : sap.ui.core.ValueState.Warning
+	});
+
+var oButton = new sap.ui.commons.Button({
+        text : "Call Backend",
+        tooltip : "call backend javascript",
+        press : function() {
+                            $.get("logic.xsjs",function(result){    
+                                                                oInput.setValue(result); 
+                                                                });
+                            }
+        });
+ 
+var oLayout1 = new sap.ui.commons.layout.VerticalLayout({content: [oInput, oButton]});
+
+var oLink1 = new sap.ui.commons.Link({
+        text: "Introducing...SAP HANA Extended Application Services (XS)", 
+        href:"http://www.saphana.com/docs/DOC-3789"
+        });
+        
+var oLink2 = new sap.ui.commons.Link({
+        text: "UI Development Toolkit for HTML5 Developer Center", 
+        href:"http://scn.sap.com/community/developer-center/front-end"
+        });
+        
+var oLayout2 = new sap.ui.commons.layout.VerticalLayout({content: [oLink1, oLink2]});
+    
+ var oShell = new sap.ui.ux3.Shell("myShell", {
+    appTitle: "SAPUI5 Gold Reflection Shell",
+	appIcon: "./images/SAPLogo.gif",
+	appIconTooltip: "SAP logo",
+	showLogoutButton: true,
+	showSearchTool: true,
+	showInspectorTool: true,
+	showFeederTool: true,
+	worksetItems: [new sap.ui.ux3.NavigationItem("WI_home",{key:"wi_home",text:"Home"}),
+	               new sap.ui.ux3.NavigationItem("WI_API",{key:"wi_api",text:"Documentation"})],
+	paneBarItems: [ new sap.ui.core.Item("PI_Date",{key:"pi_date",text:"date"}),
+	                new sap.ui.core.Item("PI_Browser",{key:"pi_browser",text:"browser"})],
+	content: oLayout1,
+	toolPopups: [new sap.ui.ux3.ToolPopup("contactTool",{
+								title: "New Contact",
+								tooltip: "Create New Contact",
+								icon: "images/Contact_regular.png",
+								iconHover: "images/Contact_hover.png",
+								content:[new sap.ui.commons.TextView({text:"Here could be a contact sheet."})],
+								buttons: [new sap.ui.commons.Button("cancelContactButton", {text:"Cancel",press:function(oEvent){
+									sap.ui.getCore().byId("contactTool").close();
+								}})]
+							})],
+	headerItems: [new sap.ui.commons.TextView({text:"User Name",tooltip:"U.Name"}),
+	              new sap.ui.commons.Button({text:"Personalize",tooltip:"Personalize",press:function(oEvent){alert("Here could open an personalize dialog");}}),
+								new sap.ui.commons.MenuButton({
+									text: "Help",
+									tooltip: "Help Menu",
+									menu: new sap.ui.commons.Menu("menu1",{items:[
+										new sap.ui.commons.MenuItem("menuitem1",{text:"Help"}),
+										new sap.ui.commons.MenuItem("menuitem2",{text:"Report Incident"}),
+										new sap.ui.commons.MenuItem("menuitem3",{text:"About"})]})
+								})],
+	worksetItemSelected: function(oEvent){
+		var sId = oEvent.getParameter("id");
+		var oShell = oEvent.oSource;
+		switch (sId) {
+		case "WI_home":
+			oShell.setContent(oLayout1);
+			break;
+		case "WI_API":
+			oShell.setContent(oLayout2);
+			break;
+		default:
+			break;
+		}
+	},
+	paneBarItemSelected: function(oEvent){
+		var sKey = oEvent.getParameter("key");
+		var oShell = oEvent.oSource;
+		switch (sKey) {
+		case "pi_date":
+			var oDate = new Date();
+			oShell.setPaneContent(new sap.ui.commons.TextView({text:oDate.toLocaleString()}), true);
+			break;
+		case "pi_browser":
+			oShell.setPaneContent(new sap.ui.commons.TextView({text:"You browser provides the following information:\n"+navigator.userAgent}), true);
+			break;
+		default:
+			break;
+		}
+	},
+	logout:function(){
+		alert("Logout Button has been clicked.\nThe application can now do whatever is required.");
+	},
+ 	search:function(oEvent){
+ 		alert("Search triggered: " + oEvent.getParameter("text"));
+ 	},
+ 	feedSubmit:function(oEvent){
+ 		alert("Feed entry submitted: " + oEvent.getParameter("text"));
+ 	}
+}).placeAt("root");
+
+</script>
+</body>
+</html>

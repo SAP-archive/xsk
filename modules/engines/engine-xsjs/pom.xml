@@ -7,27 +7,38 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-modules-engines-parent</artifactId>
-    <version>0.15.0-SNAPSHOT</version>
+    <version>0.17.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Modules - Engines - XS JS</name>
   <artifactId>xsk-modules-engines-xsjs</artifactId>
-  <version>0.15.0-SNAPSHOT</version>
+  <version>0.17.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-all</artifactId>
-      <version>0.15.0-SNAPSHOT</version>
+      <version>0.17.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-api-all</artifactId>
-      <version>0.15.0-SNAPSHOT</version>
+      <version>0.17.0-SNAPSHOT</version>
     </dependency>
-
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${com.h2database.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-engine-javascript-graalvm</artifactId>
@@ -86,17 +97,9 @@
       <version>${javax.websocket-api.version}</version>
       <scope>provided</scope>
     </dependency>
-
-
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-commons-test</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-database-derby</artifactId>
       <version>${dirigible.version}</version>
       <scope>test</scope>
     </dependency>
@@ -118,7 +121,12 @@
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>pl.pragmatists</groupId>
+      <artifactId>JUnitParams</artifactId>
+      <version>${junitparams.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
@@ -128,25 +136,31 @@
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbti</artifactId>
-      <version>0.15.0-SNAPSHOT</version>
+      <version>0.17.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-      <version>0.15.0-SNAPSHOT</version>
+      <version>0.17.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-      <version>0.15.0-SNAPSHOT</version>
+      <version>0.17.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.cloud.sdk.testutil</groupId>
       <artifactId>testutil-core</artifactId>
       <version>${scp-cf.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-database-h2</artifactId>
+      <version>${dirigible.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -1,0 +1,8 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+@Catalog.tableType : #COLUMN
+
+entity InvalidBuiltInHanaType {
+   key Name : Text(200);
+};

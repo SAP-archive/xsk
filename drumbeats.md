@@ -1,6 +1,114 @@
 # Drumbeats
 
 
+## 2022 Week 18 (02 May - 08 May)
+
+#### Focus topics:
+- Improvements to CI flow
+- Framework for runtime test execution
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-05-02..2022-05-08) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-05-02..2022-05-08) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-05-02..2022-05-08) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-05-02..2022-05-08) PRs
+
+## 2022 Week 17 (25 April - 01 May)
+
+#### Focus topics:
+- Runtime-only image build
+- Performance improvement for xsjslib imports
+- Import zip functionality improvements
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-04-25..2022-05-01) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-04-25..2022-05-01) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-04-25..2022-05-01) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-04-25..2022-05-01) PRs
+
+## 2022 Week 16 (18 April - 24 April)
+
+#### Focus topics:
+- Support XSOData `key generate local "ID"`
+- SapMachine 17 used
+- Allow consumption of SAP BTP Connectivity service from Kyma
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-04-18..2022-04-24) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-04-18..2022-04-24) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-04-18..2022-04-24) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-04-18..2022-04-24) PRs
+
+## 2022 Week 15 (11 April - 17 April)
+
+#### Focus topics:
+- Support XSOData NCLOB data type
+- Test execution against HANA 2
+- HDI file editor
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-04-11..2022-04-17) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-04-11..2022-04-17) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-04-11..2022-04-17) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-04-11..2022-04-17) PRs
+
+
+## 2022 Week 14 (04 April - 10 April)
+
+#### Focus topics:
+- Support XSOData many to many relationships
+- Support views in HDBDD
+- Fixes related to xsjs APIs 
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-04-04..2022-04-10) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-04-04..2022-04-10) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-04-04..2022-04-10) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-04-04..2022-04-10) PRs
+
+## 2022 Week 13 (28 March - 03 April)
+
+#### Focus topics:
+- Improvements to processing of large projects
+- Fixes related to HDBDD 
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-03-28..2022-04-03) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-03-28..2022-04-03) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-03-28..2022-04-03) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-03-28..2022-04-03) PRs
+
+## 2022 Week 12 (21 March - 27 March)
+
+#### Focus topics:
+- Introduced paraser for hdbtablefunctions
+- Introduce SonarCloud checks
+- Fix packaging with cloud native buildpacks
+- Fixes related to HDBDD and XSJob
+- Fixes related to migration flow and artifact processing
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-03-21..2022-03-27) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-03-21..2022-03-27) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-03-21..2022-03-27) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-03-21..2022-03-27) PRs
+
 ## 2022 Week 11 (14 March - 20 March)
 
 #### Focus topics:

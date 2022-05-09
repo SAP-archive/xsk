@@ -130,7 +130,7 @@ public class XSKODataUtils {
       if (!entity.getKeyList().isEmpty()) {
         oDataEntityDefinition.setKeys(entity.getKeyList());
       } else if (entity.getKeyGenerated() != null) {
-        oDataEntityDefinition.getKeys().add(entity.getKeyGenerated());
+        oDataEntityDefinition.setKeyGenerated(entity.getKeyGenerated());
       }
 
       //process Aggregations
@@ -210,6 +210,16 @@ public class XSKODataUtils {
       toDef.setProperties((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
       oDataAssociationDefinition.setFrom(fromDef);
       oDataAssociationDefinition.setTo(toDef);
+
+      if (xsOdataAssoc.getDependent().getMultiplicityType().getText().equals(EdmMultiplicity.MANY.toString())
+          && xsOdataAssoc.getPrincipal().getMultiplicityType().getText().equals(EdmMultiplicity.MANY.toString())) {
+
+        fromDef.getMappingTableDefinition().setMappingTableName(xsOdataAssoc.getAssociationTable().getRepositoryObject());
+        fromDef.getMappingTableDefinition().setMappingTableJoinColumn(xsOdataAssoc.getAssociationTable().getPrincipal().getKeys().get(0));
+
+        toDef.getMappingTableDefinition().setMappingTableName(xsOdataAssoc.getAssociationTable().getRepositoryObject());
+        toDef.getMappingTableDefinition().setMappingTableJoinColumn(xsOdataAssoc.getAssociationTable().getDependent().getKeys().get(0));
+      }
 
       oDataDefinitionModel.getAssociations().add(oDataAssociationDefinition);
     };

@@ -1,0 +1,25 @@
+namespace sap.db;
+
+@Schema: 'ADMIN'
+
+context AssociationWithKeyAndNullConstraint {
+
+    entity  Orders{
+        key Id               : String(32);
+        CustomerName         : String(500);
+        key Country          : association to AssociationWithKeyAndNullConstraint.Country { Id } not null;
+        City                 : association to AssociationWithKeyAndNullConstraint.City null;
+    };
+
+    entity Country {
+        key Id              : String(32);
+        key Id2             : String(32);
+        Name                : String(32);
+    };
+
+    entity City {
+        key Id              : String(32);
+        key Name            : String(32);
+        key PostalCode      : String(32);
+    };
+};

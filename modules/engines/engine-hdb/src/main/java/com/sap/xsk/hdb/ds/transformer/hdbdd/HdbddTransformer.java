@@ -17,6 +17,8 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForei
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
@@ -24,11 +26,17 @@ import com.sap.xsk.parser.hdbdd.symbols.type.BuiltInTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.DataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.JoinSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
+import org.eclipse.dirigible.database.sql.ISqlKeywords;
+
+import static org.eclipse.dirigible.database.sql.ISqlKeywords.SPACE;
 
 public class HdbddTransformer {
 
@@ -37,6 +45,10 @@ public class HdbddTransformer {
   private static final String CATALOG_OBJ_TABLE_TYPE = "tableType";
   private static final String SEARCH_INDEX_ANNOTATION = "SearchIndex";
   private static final String FUZZY_SEARCH_INDEX_ENABLED = "enabled";
+  private static final String DUMMY_TABLE = "DUMMY";
+  private static final String QUOTE = "\"";
+  private static final String DOT = ".";
+  private static final String PACKAGE_DELIMITER = "::";
 
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol, String location) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
@@ -72,8 +84,7 @@ public class HdbddTransformer {
         associationColumns.forEach(ac -> {
           if (ac.getAlias() == null) {
             ac.setName(associationSymbol.getName() + "." + ac.getName());
-          }
-          else {
+          } else {
             ac.setName(ac.getAlias());
           }
         });
@@ -103,17 +114,147 @@ public class HdbddTransformer {
 
     tableModel.setColumns(tableColumns);
     tableModel.setLocation(location);
-    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null)
+    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null) {
       tableModel.setTableType(entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue());
+    }
 
-    for (int i = 0; i < entitySymbol.getElements().size(); i++){
+    for (int i = 0; i < entitySymbol.getElements().size(); i++) {
       EntityElementSymbol currentElement = entitySymbol.getElements().get(i);
-        if (currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION) != null){
-            tableModel.getColumns().get(i).setFuzzySearchIndex(Boolean.parseBoolean(
-                currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED).getValue()));
-        }
+      if (currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION) != null) {
+        tableModel.getColumns().get(i).setFuzzySearchIndex(Boolean.parseBoolean(
+            currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED).getValue()));
+      }
     }
     return tableModel;
+  }
+
+  public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
+    XSKDataStructureHDBViewModel viewModel = new XSKDataStructureHDBViewModel();
+
+    StringBuilder viewStatementSql = new StringBuilder();
+    List<String> aliasesForReplacement = new ArrayList<>();
+
+    viewStatementSql.append(ISqlKeywords.KEYWORD_VIEW).append(SPACE).append(QUOTE).append(viewSymbol.getSchema()).append(QUOTE)
+        .append(DOT).append(QUOTE).append(viewSymbol.getFullName()).append(QUOTE).append(SPACE).append(ISqlKeywords.KEYWORD_AS)
+        .append(SPACE);
+
+    String selectStatementSql = traverseSelectStatements(viewSymbol, aliasesForReplacement);
+    viewStatementSql.append(selectStatementSql);
+
+    String finalViewSql = viewStatementSql.toString();
+
+    for (String alias : aliasesForReplacement) {
+      finalViewSql = replaceWithQuotes(finalViewSql, alias, alias);
+    }
+
+    viewModel.setDbContentType(XSKDBContentType.OTHERS);
+    viewModel.setName(viewSymbol.getFullName());
+    viewModel.setSchema(viewSymbol.getSchema());
+    viewModel.setRawContent(finalViewSql);
+    viewModel.setLocation(location);
+    return viewModel;
+  }
+
+  public String traverseSelectStatements(ViewSymbol viewSymbol, List<String> aliasesForReplacement) {
+    StringBuilder selectSql = new StringBuilder();
+
+    for (Symbol symbol : viewSymbol.getSelectStatements()) {
+      SelectSymbol selectSymbol = (SelectSymbol) symbol;
+      String dependsOnTable = selectSymbol.getDependsOnTable();
+      String dependingTableAlias = selectSymbol.getDependingTableAlias();
+      String selectColumns = selectSymbol.getColumnsSql();
+      String where = selectSymbol.getWhereSql();
+      boolean unionBol = selectSymbol.getUnion();
+      boolean distinctBol = selectSymbol.getDistinct();
+
+      // Check if the dependant table has :: to know whether short or full name is used in the hdbdd view definition. In case it is not we should build the full name
+      if (!dependsOnTable.contains(PACKAGE_DELIMITER)) {
+        // Check if the dependant table name is DUMMY. This is a reserved table name for hana dummy tables. We make sure to make it in uppercase
+        if (dependsOnTable.equalsIgnoreCase(DUMMY_TABLE)) {
+          dependsOnTable = dependsOnTable.toUpperCase();
+        } else {
+          String dependsOnTableFullName = fullTableNameBuilderFromViewSymbol(dependsOnTable, viewSymbol);
+          // Replace the short name in the select columns with the full name
+          selectColumns = replaceWithQuotes(selectColumns, dependsOnTable, dependsOnTableFullName);
+          // Set the dependant table to be with the full name
+          dependsOnTable = dependsOnTableFullName;
+        }
+      }
+
+      if (unionBol) {
+        selectSql.append(ISqlKeywords.KEYWORD_UNION).append(SPACE);
+      }
+
+      selectSql.append(ISqlKeywords.KEYWORD_SELECT).append(SPACE);
+
+      if (distinctBol) {
+        selectSql.append(ISqlKeywords.KEYWORD_DISTINCT).append(SPACE);
+      }
+
+      selectSql.append(selectColumns).append(SPACE).append(ISqlKeywords.KEYWORD_FROM).append(SPACE)
+          .append(QUOTE).append(dependsOnTable).append(QUOTE).append(SPACE);
+
+      if (dependingTableAlias != null) {
+        selectSql.append(ISqlKeywords.KEYWORD_AS).append(SPACE).append(QUOTE).append(dependingTableAlias).append(QUOTE).append(SPACE);
+        aliasesForReplacement.add(dependingTableAlias);
+      }
+
+      String joinStatements = traverseJoinStatements(selectSymbol, viewSymbol, dependsOnTable, aliasesForReplacement);
+
+      selectSql.append(joinStatements).append(SPACE);
+
+      if (where != null) {
+        selectSql.append(ISqlKeywords.KEYWORD_WHERE).append(SPACE).append(where).append(SPACE);
+      }
+    }
+
+    return selectSql.toString();
+  }
+
+  public String traverseJoinStatements(SelectSymbol selectSymbol, ViewSymbol viewSymbol, String dependsOnTable, List<String> aliasesForReplacement) {
+    StringBuilder joinStatements = new StringBuilder();
+
+    for (Symbol symbol : selectSymbol.getJoinStatements()) {
+      JoinSymbol joinSymbol = (JoinSymbol) symbol;
+      String joinType = joinSymbol.getJoinType();
+      String joinArtifactName = joinSymbol.getJoinArtifactName();
+      String joinTableAlias = joinSymbol.getJoinTableAlias();
+      String joinFieldsSql = joinSymbol.getJoinFields();
+
+      // Check if the join artifact name contains :: to determine if full artifact name is used and build the full name if not
+      if (!joinArtifactName.contains(PACKAGE_DELIMITER)) {
+        joinArtifactName = fullTableNameBuilderFromViewSymbol(joinArtifactName, viewSymbol);
+      }
+
+      // Replace the select from dependant table if anywhere in the join with its full name
+      String dependsOnTableShortName = shortTableNameExtractorFromViewSymbol(dependsOnTable, viewSymbol);
+      joinFieldsSql = replaceWithQuotes(joinFieldsSql, dependsOnTableShortName, dependsOnTable);
+
+      joinStatements.append(joinType).append(SPACE).append(QUOTE).append(joinArtifactName).append(QUOTE).append(SPACE);
+
+      if (joinTableAlias != null) {
+        joinStatements.append(ISqlKeywords.KEYWORD_AS).append(SPACE).append(QUOTE).append(joinTableAlias).append(QUOTE).append(SPACE);
+        aliasesForReplacement.add(joinTableAlias);
+      }
+
+      joinStatements.append(joinFieldsSql).append(SPACE);
+    }
+
+    return joinStatements.toString();
+  }
+
+  private String fullTableNameBuilderFromViewSymbol(String tableName, ViewSymbol viewSymbol) {
+    StringBuilder fullTableName = new StringBuilder();
+    fullTableName.append(viewSymbol.getPackageId()).append(PACKAGE_DELIMITER).append(viewSymbol.getContext()).append(DOT).append(tableName);
+    return fullTableName.toString();
+  }
+
+  private String shortTableNameExtractorFromViewSymbol(String fullTableName, ViewSymbol viewSymbol) {
+    return fullTableName.replace(viewSymbol.getPackageId() + PACKAGE_DELIMITER + viewSymbol.getContext() + DOT, "");
+  }
+
+  private String replaceWithQuotes(String inContent, String toBeReplaced, String replacement) {
+    return inContent.replaceAll(toBeReplaced + "[.]|\"" + toBeReplaced + "\"[.]", "\"" + replacement + "\".");
   }
 
   public XSKDataStructureHDBTableTypeModel transformStructuredDataTypeToHdbTableType(StructuredDataTypeSymbol structuredDataTypeSymbol) {
@@ -173,10 +314,10 @@ public class HdbddTransformer {
 
     } else if (fieldSymbol.getType() instanceof DataTypeSymbol) {
       DataTypeSymbol dataType = (DataTypeSymbol) fieldSymbol.getType();
-      if(!(dataType.getType() instanceof StructuredDataTypeSymbol)){
+      if (!(dataType.getType() instanceof StructuredDataTypeSymbol)) {
         BuiltInTypeSymbol builtInType = (BuiltInTypeSymbol) dataType.getType();
         setSqlType(columnModel, builtInType);
-      }else {
+      } else {
         StructuredDataTypeSymbol structuredDataTypeSymbol = (StructuredDataTypeSymbol) dataType.getType();
         transformStructuredDataTypeToHdbTableType(structuredDataTypeSymbol);
       }
@@ -190,10 +331,9 @@ public class HdbddTransformer {
     associationSymbol.getForeignKeys().forEach(fk -> {
       if (fk.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(fk);
-        subElements.forEach(subE ->
-            tableColumns.add(transformFieldSymbolToColumnModel(subE, false)));
+        subElements.forEach(subE -> tableColumns.add(getAssociationForeignKeyColumn(associationSymbol, subE)));
       } else {
-        tableColumns.add(transformFieldSymbolToColumnModel(fk, false));
+        tableColumns.add(getAssociationForeignKeyColumn(associationSymbol, fk));
       }
     });
 
@@ -241,5 +381,13 @@ public class HdbddTransformer {
     });
 
     return subElements;
+  }
+
+  private XSKDataStructureHDBTableColumnModel getAssociationForeignKeyColumn(AssociationSymbol associationSymbol, EntityElementSymbol foreignKey){
+    XSKDataStructureHDBTableColumnModel columnModel = transformFieldSymbolToColumnModel(foreignKey, false);
+    columnModel.setPrimaryKey(associationSymbol.isKey());
+    columnModel.setNullable(!associationSymbol.isNotNull());
+
+    return columnModel;
   }
 }

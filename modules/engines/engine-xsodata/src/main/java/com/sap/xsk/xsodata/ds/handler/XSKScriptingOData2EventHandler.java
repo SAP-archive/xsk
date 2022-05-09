@@ -19,13 +19,17 @@ import org.apache.olingo.odata2.api.uri.info.PostUriInfo;
 import org.apache.olingo.odata2.api.uri.info.PutMergePatchUriInfo;
 import org.eclipse.dirigible.commons.api.context.InvalidStateException;
 import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.engine.odata2.handler.ScriptingOData2EventHandler;
 import org.eclipse.dirigible.engine.odata2.sql.api.SQLStatement;
+import org.eclipse.dirigible.engine.odata2.sql.api.SQLStatementParam;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLContext;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLInsertBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLSelectBuilder;
+import org.eclipse.dirigible.engine.odata2.sql.builder.SQLUpdateBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLUtils;
+import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
@@ -33,6 +37,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,12 +49,23 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
+  private static final String DUMMY_BUILDER = "dummyBuilder";
+  private static final String SELECT_BUILDER = "selectBuilder";
+  private static final String INSERT_BUILDER = "insertBuilder";
+  private static final String UPDATE_BUILDER = "updateBuilder";
+  private static final String SQL_CONTEXT = "sqlContext";
+  private static final String CONNECTION = "connection";
+  private static final String BEFORE_TABLE_NAME = "beforeTableName";
+  private static final String AFTER_TABLE_NAME = "afterTableName";
+  private static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
+  private static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
+
   @Override
   public void beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
-    SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get("dummyBuilder");
-    SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get("insertBuilder");
-    SQLContext sqlContext = (SQLContext) context.get("sqlContext");
+    SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
+    SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
     Connection connectionParam = null;
     try {
@@ -58,19 +74,11 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
       String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
-      createTemporaryTableLikeTable(connectionParam, afterTableName, "XSK_SAMPLES_XSODATA_SIMPLE." + targetTableName);
+      createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
+      insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
 
-      insertBuilder.setTableName("\"" + afterTableName + "\"");
-      SQLStatement statement = insertBuilder.build(sqlContext);
-      PreparedStatement preparedStatement = connectionParam.prepareStatement(statement.sql());
-      SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
-      preparedStatement.executeUpdate();
-
-      context.put("connection", connectionParam);
-      context.put("afterTableName", afterTableName);
-      context.remove("dummyBuilder");
-      context.remove("insertBuilder");
-      context.remove("sqlContext");
+      context.put(CONNECTION, connectionParam);
+      context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.beforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
     } catch (SQLException | ODataException e) {
@@ -79,7 +87,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("afterTableName"));
+        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -90,8 +98,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   @Override
   public void afterCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get("selectBuilder");
-    SQLContext sqlContext = (SQLContext) context.get("sqlContext");
+    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
     Connection connectionParam = null;
     try {
@@ -100,10 +108,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
       createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
 
-      context.put("connection", connectionParam);
-      context.put("afterTableName", afterTableName);
-      context.remove("selectBuilder");
-      context.remove("sqlContext");
+      context.put(CONNECTION, connectionParam);
+      context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
     } catch (SQLException | ODataException e) {
@@ -112,7 +118,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("afterTableName"));
+        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -123,9 +129,9 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   @Override
   public ODataResponse onCreateEntity(PostUriInfo uriInfo, InputStream content, String requestContentType, String contentType,
       Map<Object, Object> context) {
-    SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get("dummyBuilder");
-    SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get("insertBuilder");
-    SQLContext sqlContext = (SQLContext) context.get("sqlContext");
+    SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
+    SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
     Connection connectionParam = null;
     try {
@@ -134,28 +140,20 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
       String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
-      createTemporaryTableLikeTable(connectionParam, afterTableName, "XSK_SAMPLES_XSODATA_SIMPLE." + targetTableName);
+      createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
+      insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
 
-      insertBuilder.setTableName("\"" + afterTableName + "\"");
-      SQLStatement statement = insertBuilder.build(sqlContext);
-      PreparedStatement preparedStatement = connectionParam.prepareStatement(statement.sql());
-      SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
-      preparedStatement.executeUpdate();
+      context.put(CONNECTION, connectionParam);
+      context.put(AFTER_TABLE_NAME, afterTableName);
 
-      context.put("connection", connectionParam);
-      context.put("afterTableName", afterTableName);
-      context.remove("dummyBuilder");
-      context.remove("insertBuilder");
-      context.remove("sqlContext");
-
-      return super.onCreateEntity(uriInfo, content, requestContentType, contentType, context); //TODO: handle return properly
+      return super.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
     } catch (SQLException | ODataException e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("afterTableName"));
+        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -166,31 +164,27 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   @Override
   public void beforeUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
       ODataEntry entry, Map<Object, Object> context) {
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get("selectBuilder");
-    SQLInsertBuilder updateBuilder = (SQLInsertBuilder) context.get("updateBuilder");
-    SQLContext sqlContext = (SQLContext) context.get("sqlContext");
+    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLUpdateBuilder updateBuilder = (SQLUpdateBuilder) context.get(UPDATE_BUILDER);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
     Connection connectionParam = null;
     try {
       connectionParam = dataSource.getConnection();
 
       String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
-      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
       String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String beforeUpdateEntityTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+
+      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
       createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
+      updateTemporaryTable(connectionParam, updateBuilder, afterTableName, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, beforeUpdateEntityTableName, selectBuilder, sqlContext);
 
-      updateBuilder.setTableName("\"" + afterTableName + "\"");
-      SQLStatement statement = updateBuilder.build(sqlContext);
-      PreparedStatement preparedStatement = connectionParam.prepareStatement(statement.sql());
-      SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
-      preparedStatement.executeUpdate();
-
-      context.put("connection", connectionParam);
-      context.put("beforeTableName", beforeTableName);
-      context.put("afterTableName", afterTableName);
-      context.remove("selectBuilder");
-      context.remove("updateBuilder");
-      context.remove("sqlContext");
+      context.put(CONNECTION, connectionParam);
+      context.put(BEFORE_TABLE_NAME, beforeTableName);
+      context.put(AFTER_TABLE_NAME, afterTableName);
+      context.put(BEFORE_UPDATE_ENTITY_TABLE_NAME, beforeUpdateEntityTableName);
 
       super.beforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
     } catch (SQLException | ODataException e) {
@@ -199,8 +193,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("beforeTableName"));
-        dropTemporaryTable((String) context.get("afterTableName"));
+        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
+        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -211,28 +205,19 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   @Override
   public void afterUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
       ODataEntry entry, Map<Object, Object> context) {
-    SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get("dummyBuilder");
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get("selectBuilder");
-    SQLContext sqlContext = (SQLContext) context.get("sqlContext");
+    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
     Connection connectionParam = null;
     try {
       connectionParam = dataSource.getConnection();
 
-      String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
-      String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
-      createTemporaryTableLikeTable(connectionParam, beforeTableName, "XSK_SAMPLES_XSODATA_SIMPLE." + targetTableName);
       String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
       createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
 
-      // TODO: save entry before the update in "beforeTableName" temp table
-
-      context.put("connection", connectionParam);
-      context.put("beforeTableName", beforeTableName);
-      context.put("afterTableName", afterTableName);
-      context.remove("dummyBuilder");
-      context.remove("selectBuilder");
-      context.remove("sqlContext");
+      context.put(CONNECTION, connectionParam);
+      context.put(BEFORE_TABLE_NAME, context.get(BEFORE_UPDATE_ENTITY_TABLE_NAME));
+      context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.afterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
     } catch (SQLException | ODataException e) {
@@ -241,8 +226,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("beforeTableName"));
-        dropTemporaryTable((String) context.get("afterTableName"));
+        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
+        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -253,41 +238,34 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   @Override
   public ODataResponse onUpdateEntity(PutMergePatchUriInfo uriInfo, InputStream content, String requestContentType, boolean merge,
       String contentType, Map<Object, Object> context) {
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get("selectBuilder");
-    SQLInsertBuilder updateBuilder = (SQLInsertBuilder) context.get("updateBuilder");
-    SQLContext sqlContext = (SQLContext) context.get("sqlContext");
+    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLUpdateBuilder updateBuilder = (SQLUpdateBuilder) context.get(UPDATE_BUILDER);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
     Connection connectionParam = null;
     try {
       connectionParam = dataSource.getConnection();
 
       String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
-      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
       String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+
+      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
       createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
+      updateTemporaryTable(connectionParam, updateBuilder, afterTableName, sqlContext);
 
-      updateBuilder.setTableName("\"" + afterTableName + "\"");
-      SQLStatement statement = updateBuilder.build(sqlContext);
-      PreparedStatement preparedStatement = connectionParam.prepareStatement(statement.sql());
-      SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
-      preparedStatement.executeUpdate();
+      context.put(CONNECTION, connectionParam);
+      context.put(BEFORE_TABLE_NAME, beforeTableName);
+      context.put(AFTER_TABLE_NAME, afterTableName);
 
-      context.put("connection", connectionParam);
-      context.put("beforeTableName", beforeTableName);
-      context.put("afterTableName", afterTableName);
-      context.remove("selectBuilder");
-      context.remove("updateBuilder");
-      context.remove("sqlContext");
-
-      return super.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);//TODO: handle return correctly
+      return super.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
     } catch (SQLException | ODataException e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("beforeTableName"));
-        dropTemporaryTable((String) context.get("afterTableName"));
+        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
+        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -297,20 +275,22 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
   @Override
   public void beforeDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get("selectBuilder");
-    SQLContext sqlContext = (SQLContext) context.get("sqlContext");
+    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
     Connection connectionParam = null;
     try {
       connectionParam = dataSource.getConnection();
 
       String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
-      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
+      String beforeDeleteEntityTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
-      context.put("connection", connectionParam);
-      context.put("beforeTableName", beforeTableName);
-      context.remove("selectBuilder");
-      context.remove("sqlContext");
+      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, beforeDeleteEntityTableName, selectBuilder, sqlContext);
+
+      context.put(CONNECTION, connectionParam);
+      context.put(BEFORE_TABLE_NAME, beforeTableName);
+      context.put(BEFORE_DELETE_ENTITY_TABLE_NAME, beforeDeleteEntityTableName);
 
       super.beforeDeleteEntity(uriInfo, contentType, context);
     } catch (SQLException | ODataException e) {
@@ -319,7 +299,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("beforeTableName"));
+        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -333,21 +313,17 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     try {
       connectionParam = dataSource.getConnection();
 
-      String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
-
-      // TODO: save entry before the delete in "beforeTableName" temp table
-
-      context.put("connection", connectionParam);
-      context.put("beforeTableName", beforeTableName);
+      context.put(CONNECTION, connectionParam);
+      context.put(BEFORE_TABLE_NAME, context.get(BEFORE_DELETE_ENTITY_TABLE_NAME));
 
       super.afterDeleteEntity(uriInfo, contentType, context);
-    } catch (SQLException | ODataException e) {
+    } catch (SQLException e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("beforeTableName"));
+        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -357,8 +333,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
   @Override
   public ODataResponse onDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get("selectBuilder");
-    SQLContext sqlContext = (SQLContext) context.get("sqlContext");
+    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
     Connection connectionParam = null;
     try {
@@ -367,19 +343,17 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
       createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
 
-      context.put("connection", connectionParam);
-      context.put("beforeTableName", beforeTableName);
-      context.remove("selectBuilder");
-      context.remove("sqlContext");
+      context.put(CONNECTION, connectionParam);
+      context.put(BEFORE_TABLE_NAME, beforeTableName);
 
-      return super.onDeleteEntity(uriInfo, contentType, context); //TODO: handle return properly
+      return super.onDeleteEntity(uriInfo, contentType, context);
     } catch (SQLException | ODataException e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get("beforeTableName"));
+        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -395,12 +369,14 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   private String getSQLInsertBuilderTargetTable(SQLInsertBuilder insertBuilder, SQLContext sqlContext) throws ODataException {
     SQLStatement sqlStatement = insertBuilder.build(sqlContext);
     sqlStatement.sql();
-
     return insertBuilder.getTargetTableName();
   }
 
   private void createTemporaryTableLikeTable(Connection connection, String temporaryTableName, String likeTableName) throws SQLException {
-    String sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName).setLikeTable(likeTableName).build();
+    DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
+    String odataArtifactTypeSchema = dbMetadataUtil.getOdataArtifactTypeSchema(DBMetadataUtil.normalizeTableName(likeTableName));
+    String sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
+        .setLikeTable(odataArtifactTypeSchema != null ? odataArtifactTypeSchema + "." + likeTableName : likeTableName).build();
     PreparedStatement preparedStatement = connection.prepareStatement(sql);
     preparedStatement.execute();
   }
@@ -409,16 +385,47 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       SQLContext sqlContext) throws SQLException, ODataException {
     String sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
         .setAsSelectQuery(selectBuilder.buildSelect(sqlContext)).build();
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-    SQLUtils.setParamsOnStatement(preparedStatement, selectBuilder.getStatementParams());
+    String sqlWithoutAliases = sql.replaceAll("_T[0-9]+\"", "\"");
+    String sqlWithParameters = replaceSqlParameters(sqlWithoutAliases, selectBuilder.getStatementParams());
+    PreparedStatement preparedStatement = connection.prepareStatement(sqlWithParameters);
     preparedStatement.execute();
   }
 
-  private void dropTemporaryTable(String temporaryTableName) throws SQLException {
-    Connection connection = dataSource.getConnection();
-    String sql = SqlFactory.getNative(connection).drop().table(temporaryTableName).build();
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+  private String replaceSqlParameters(String sql, List<SQLStatementParam> parameters) {
+    for (SQLStatementParam p : parameters) {
+      sql = sql.replaceFirst("\\?", "'" + p.getValue() + "'");
+    }
+
+    return sql;
+  }
+
+  private void insertIntoTemporaryTable(Connection connection, SQLInsertBuilder insertBuilder, String temporaryTableName,
+      SQLContext sqlContext)
+      throws ODataException, SQLException {
+    insertBuilder.setTableName("\"" + temporaryTableName + "\"");
+    executeSQLStatement(connection, insertBuilder.build(sqlContext));
+  }
+
+  private void updateTemporaryTable(Connection connection, SQLUpdateBuilder updateBuilder, String temporaryTableName, SQLContext sqlContext)
+      throws ODataException, SQLException {
+    updateBuilder.setTableName("\"" + temporaryTableName + "\"");
+    executeSQLStatement(connection, updateBuilder.build(sqlContext));
+  }
+
+  private void executeSQLStatement(Connection connection, SQLStatement statement) throws SQLException, ODataException {
+    PreparedStatement preparedStatement = connection.prepareStatement(statement.sql());
+    SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
     preparedStatement.executeUpdate();
+  }
+
+  private void dropTemporaryTable(String temporaryTableName) throws SQLException {
+    try (Connection connection = dataSource.getConnection()) {
+      if (SqlFactory.getNative(connection).exists(connection, temporaryTableName)) {
+        String sql = SqlFactory.getNative(connection).drop().table(temporaryTableName).build();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.executeUpdate();
+      }
+    }
   }
 
   private void closeConnection(Connection connection) throws SQLException {

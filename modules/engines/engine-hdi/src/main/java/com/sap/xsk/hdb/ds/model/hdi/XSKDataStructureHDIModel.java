@@ -33,6 +33,19 @@ public class XSKDataStructureHDIModel extends XSKDataStructureModel {
 
   private String content;
 
+  private String fixedName (String groupOrContainerName) {
+    String GROUP_AND_CONTAINER_NAME_PATTERN = "[^\\w]";
+    String REPLACE_FORBIDDEN_CHARACTERS_WITH = "_";
+    String fixedName = groupOrContainerName.replaceAll(GROUP_AND_CONTAINER_NAME_PATTERN, REPLACE_FORBIDDEN_CHARACTERS_WITH);
+    while (fixedName.charAt(0) == '_') {
+      fixedName = fixedName.substring(1);
+      if (fixedName.length() == 0) {
+        return "UNNAMED_PROJECT";
+      }
+    }
+    return fixedName;
+  }
+
   public String getConfiguration() {
     return configuration;
   }
@@ -54,7 +67,7 @@ public class XSKDataStructureHDIModel extends XSKDataStructureModel {
   }
 
   public void setGroup(String group) {
-    this.group = group;
+    this.group = fixedName(group);
   }
 
   public String getContainer() {
@@ -62,7 +75,7 @@ public class XSKDataStructureHDIModel extends XSKDataStructureModel {
   }
 
   public void setContainer(String container) {
-    this.container = container;
+    this.container = fixedName(container);
   }
 
   public String[] getDeploy() {

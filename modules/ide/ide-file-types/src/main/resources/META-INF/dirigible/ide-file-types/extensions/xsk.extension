@@ -1,0 +1,5 @@
+{
+    "module": "ide-file-types/extensions/xsk.js",
+    "extensionPoint": "ide-file-types",
+    "description": "XSK File Types"
+}

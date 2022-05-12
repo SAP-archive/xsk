@@ -15,6 +15,7 @@
 var database = require('db/v4/database');
 var PROCEDURE_UTILS = require('xsk/hdb/procedureUtils');
 var HDB_UTILS = require('xsk/hdb/hdbUtils');
+const TYPE_CONVERTER = require('xsk/db/sqlToXSCColumnTypeConverter');
 
 exports.getConnection = function () {
 	var dConnection = database.getConnection();
@@ -266,7 +267,7 @@ function getColumnMetadataArray(dResultSetMetaData) {
 			precision: dResultSetMetaData.getPrecision(metaDataColumnIndex),
 			scale: dResultSetMetaData.getScale(metaDataColumnIndex),
 			tableName: dResultSetMetaData.getTableName(metaDataColumnIndex),
-			type: dResultSetMetaData.getColumnType(metaDataColumnIndex),
+			type: TYPE_CONVERTER.convert(dResultSetMetaData.getColumnType(metaDataColumnIndex)),
 			typeName: dResultSetMetaData.getColumnTypeName(metaDataColumnIndex)
 		});
 	}

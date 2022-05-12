@@ -11,6 +11,7 @@
  */
 var dClient = require("http/v4/client");
 var web = require("xsk/web/web");
+var config = require("core/v4/configurations");
 
 exports.OPTIONS = 0;
 exports.GET = 1;
@@ -114,6 +115,11 @@ exports.Client = function () {
 
     if (requestObj.contentType) {
       requestObj.headers.set("Content-Type", requestObj.contentType);
+    }
+
+    if (destination.ProxyType === "OnPremise") {
+      options.proxyHost = config.get("DIRIGIBLE_CONNECTIVITY_ONPREMISE_PROXY_HOST");
+      options.proxyPort = config.get("DIRIGIBLE_CONNECTIVITY_ONPREMISE_PROXY_PORT");
     }
 
     var requestHeaders = tupelObjectToArray(requestObj.headers);

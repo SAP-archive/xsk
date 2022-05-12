@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+
+
 public class XSKDataStructureHDIModel extends XSKDataStructureModel {
 
   private String configuration;
@@ -33,17 +35,21 @@ public class XSKDataStructureHDIModel extends XSKDataStructureModel {
 
   private String content;
 
-  private String fixedName (String groupOrContainerName) {
+  private String nameConvertedToValid (String groupOrContainerName) {
     String GROUP_AND_CONTAINER_NAME_PATTERN = "[^\\w]";
     String REPLACE_FORBIDDEN_CHARACTERS_WITH = "_";
     String fixedName = groupOrContainerName.replaceAll(GROUP_AND_CONTAINER_NAME_PATTERN, REPLACE_FORBIDDEN_CHARACTERS_WITH);
     while (fixedName.charAt(0) == '_') {
       fixedName = fixedName.substring(1);
       if (fixedName.length() == 0) {
-        return "UNNAMED_PROJECT";
+        return "NAME_CONVERSION_LEADS_TO_TRIM";
       }
     }
     return fixedName;
+  }
+
+  public Boolean isNameValid (String name) {
+    return name.equals(nameConvertedToValid(name));
   }
 
   public String getConfiguration() {
@@ -67,7 +73,11 @@ public class XSKDataStructureHDIModel extends XSKDataStructureModel {
   }
 
   public void setGroup(String group) {
-    this.group = fixedName(group);
+    if (isNameValid(group)) {
+        this.group = group;
+    } else {
+      throw new XSKInvalidNameException("Invalid group name " + group + "! Name may only contain alphanumeric and underscore characters and also cannot start with an underscore.");
+    }
   }
 
   public String getContainer() {
@@ -75,7 +85,11 @@ public class XSKDataStructureHDIModel extends XSKDataStructureModel {
   }
 
   public void setContainer(String container) {
-    this.container = fixedName(container);
+    if (isNameValid(container)) {
+      this.container = container;
+    } else {
+      throw new XSKInvalidNameException("Invalid container name " + container + "! Name may only contain alphanumeric and underscore characters and also cannot start with an underscore.");
+    }
   }
 
   public String[] getDeploy() {

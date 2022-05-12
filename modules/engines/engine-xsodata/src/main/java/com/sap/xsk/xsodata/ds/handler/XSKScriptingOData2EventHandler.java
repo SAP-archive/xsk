@@ -62,8 +62,6 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   private static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
   private static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
 
-  private static final String SELECT_WILDCARD_FROM = "SELECT * FROM ";
-
   @Override
   public void beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
@@ -387,8 +385,9 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
           .setLikeTable(qualifiedName).build();
     } else {
+      String selectWildcardFromViewSQL = SqlFactory.getNative(connection).select().column("*").from(qualifiedName).build();
       sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
-          .setAsSelectQuery(SELECT_WILDCARD_FROM + qualifiedName).setSelectWithNoData(true).build();
+          .setAsSelectQuery(selectWildcardFromViewSQL).setSelectWithNoData(true).build();
     }
 
     PreparedStatement preparedStatement = prepareStatement(connection, sql);

@@ -90,8 +90,6 @@ public class XSKODataUtils {
           continue;
         }
 
-        oDataEntityDefinition.setDataStructureType(tableMetadata.getTableType());
-
         List<PersistenceTableColumnModel> allEntityDbColumns = tableMetadata.getColumns();
 
         if (ISqlKeywords.METADATA_CALC_VIEW.equals(tableMetadata.getTableType()) && entity.getWithPropertyProjections().isEmpty() && entity
@@ -283,12 +281,24 @@ public class XSKODataUtils {
         PersistenceTableColumnModel calcViewParam = new PersistenceTableColumnModel();
 
         String calcViewParamName = calcViewParameters.getString("VARIABLE_NAME");
-        String calcViewParamType = calcViewParameters.getString("COLUMN_TYPE_D");
+        String calcViewParamType = calcViewParameters.getString("COLUMN_SQL_TYPE");
+        String calcViewParamMandatory = calcViewParameters.getString("MANDATORY");
 
+        boolean isNullable = false;
+        
+        if (calcViewParamMandatory.equals("0")) {
+          isNullable = true;
+        }
+
+        Integer index = calcViewParamType.indexOf("(");
+
+        if (index != -1) {
+          calcViewParamType = calcViewParamType.substring(0, index);
+        }
+        
         calcViewParam.setName(calcViewParamName);
         calcViewParam.setType(dbMetadataUtil.convertSqlTypeToOdataEdmType(calcViewParamType));
-        calcViewParam.setNullable(false);
-        calcViewParam.setPrimaryKey(false);
+        calcViewParam.setNullable(isNullable);
 
         allEntityParameters.add(calcViewParam);
       }
@@ -307,12 +317,10 @@ public class XSKODataUtils {
     oDataEntityParametersDefinition.setName(parameterEntitySetName);
     oDataEntityParametersDefinition.setAlias(parameterEntitySetName);
     oDataEntityParametersDefinition.setTable(tableName);
-    oDataEntityParametersDefinition.setDataStructureType(oDataEntityDefinition.getDataStructureType());
 
     allEntityParameters.forEach(el -> {
       ODataParameter oDataParameter = new ODataParameter();
       oDataParameter.setName(el.getName());
-      oDataParameter.setColumn(el.getName());
       oDataParameter.setNullable(el.isNullable());
       oDataParameter.setType(el.getType());
 

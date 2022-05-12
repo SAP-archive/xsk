@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 
 class WebBrowser {
+
   private WebDriver browser;
   private WebDriverWait browserWait;
   private Actions browserActions;
@@ -93,6 +94,20 @@ class WebBrowser {
     browserWait.until(ExpectedConditions.visibilityOfElementLocated(by)).click();
   }
 
+  void doubleClickItem(WebElement element) {
+    browserActions.doubleClick(element).perform();
+  }
+
+  void submitForm(By by) {
+    var found = findElementsBy(by);
+    if (found.size() == 1) {
+      found.get(0).submit();
+    } else {
+      throw new RuntimeException("Selenium test submitForm() error:"
+          + " Form not found or multiple forms with same locator.");
+    }
+  }
+
   void switchToIframe(By by) {
     browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(by));
   }
@@ -103,6 +118,7 @@ class WebBrowser {
 
   void enterAndAssertField(By by, String value) {
     var field = browser.findElement(by);
+    browserActions.doubleClick(field).build().perform();
     field.sendKeys(value);
     assertEquals("Input field value doesn't match sent keys.",
         value, field.getAttribute("value"));
@@ -110,9 +126,13 @@ class WebBrowser {
 
   void selectAndAssertDropdown(String listName, Predicate<String> dropDownItemMatcher) {
     var dropdownList = browserWait.until(
-        ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@ng-repeat=\"option in " + listName + "\"]")));
+        ExpectedConditions.presenceOfAllElementsLocatedBy(
+            By.xpath("//*[@ng-repeat=\"option in " + listName + "\"]")
+        )
+    );
     WebElement dropdownButton = dropdownList.get(0).findElement(By.xpath("./../../button"));
     browserWait.until(ExpectedConditions.elementToBeClickable(dropdownButton)).click();
+
     var selection = dropdownList
         .stream()
         .filter((WebElement it) -> {
@@ -141,9 +161,12 @@ class WebBrowser {
     return (String) jsExecutor.executeScript(javascript);
   }
 
-  void doubleClickVisibleElementBy(By by) {
-    var anchor = browserWait.until(ExpectedConditions.visibilityOfElementLocated(by));
-    browserActions.doubleClick(anchor).perform();
+  List<WebElement> findAllVisibleWebElements(By by) {
+    return browserWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+  }
+
+  void contextClick(WebElement element) {
+    browserActions.contextClick(element).perform();
   }
 
   List<WebElement> findElementsBy(By by) {
@@ -168,7 +191,7 @@ class WebBrowser {
 
   void quit() {
     if (browser != null) {
-      browser.quit();
+      //browser.quit();
     }
   }
 }

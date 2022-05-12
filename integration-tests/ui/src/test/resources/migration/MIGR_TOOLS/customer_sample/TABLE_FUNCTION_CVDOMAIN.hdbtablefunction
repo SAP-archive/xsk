@@ -1,0 +1,26 @@
+FUNCTION "customer_sample::TABLE_FUNCTION_CVDOMAIN" ()
+RETURNS TABLE ("Id" INTEGER, "Title" NVARCHAR (250), "AppIds" NVARCHAR (1000), "AppTitles" NVARCHAR (2000))
+LANGUAGE SQLSCRIPT
+SQL SECURITY DEFINER
+  AS 
+
+/********* Begin Procedure Script ************/ 
+BEGIN 
+
+    lt_domains = select "Id", "Title" 
+    from "ZCORTO0030812.DATA::data.Domain";
+    
+    lt_apps = select "DomainId",
+    STRING_AGG("Id",', ' ORDER BY "Title" asc) AS "AppIds",
+    STRING_AGG("Title",', ' ORDER BY "Title" asc) AS "AppTitles"
+    from "ZCORTO0030812.DATA::data.App"
+    group by "DomainId";
+    
+    var_out = select d.*, a."AppIds", "AppTitles"
+    from :lt_domains as d
+    left outer join :lt_apps as a
+    on a."DomainId" = d."Id";
+
+
+return :var_out;
+END;

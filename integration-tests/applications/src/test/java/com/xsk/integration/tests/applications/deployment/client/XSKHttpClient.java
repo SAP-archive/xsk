@@ -83,7 +83,7 @@ public class XSKHttpClient {
     }
 
 
-    CompletableFuture<HttpResponse> executeRequestAsync(HttpUriRequest request) {
+    public CompletableFuture<HttpResponse> executeRequestAsync(HttpUriRequest request) {
         var future = new CompletableHttpResponseFuture(request.getURI());
         httpClient.execute(request, future);
         return future;

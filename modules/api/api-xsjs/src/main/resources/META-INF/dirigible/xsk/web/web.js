@@ -149,19 +149,7 @@ const Body = function (bodyValue) {
 };
 
 exports.WebRequest = function (method, path) {
-  const tildeHeaders = {
-    '~server_protocol': function () {
-      return dRequest.getProtocol()
-    },
-    '~server_name': function () {
-      return dRequest.getServerName()
-    },
-    '~server_port': function () {
-      return dRequest.getServerPort()
-    },
-    '~request_line': function (webRequest) {
-      return WEB_UTILS.getMethodName(webRequest.method) + ' ' + webRequest.path + ' ' + dRequest.getProtocol()
-    },
+  var tildeHeaders = {
     '~request_method': function (webRequest) {
       return WEB_UTILS.getMethodName(webRequest.method)
     },
@@ -192,9 +180,24 @@ exports.WebRequest = function (method, path) {
         throw new Error('Not supported for outbound requests');
       }
     });
-
-    addTildeHeaders(this, ['~server_protocol', '~request_method', '~request_uri']);
+    // TODO: set tildeHeaders for outbound requests
+    // addTildeHeaders(this, ['~server_protocol', '~request_method', '~request_uri']);
   } else {
+    tildeHeaders = Object.assign(tildeHeaders,
+      {
+        '~server_protocol': function () {
+          return dRequest.getProtocol()
+        },
+        '~server_name': function () {
+          return dRequest.getServerName()
+        },
+        '~server_port': function () {
+          return dRequest.getServerPort()
+        },
+        '~request_line': function (webRequest) {
+          return WEB_UTILS.getMethodName(webRequest.method) + ' ' + webRequest.path + ' ' + dRequest.getProtocol()
+        }
+      })
     const XSJS_FILE_EXTENSION_LENGTH = 5;
     const XSJS_FILE_EXTENSION = ".xsjs";
 

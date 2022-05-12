@@ -260,6 +260,8 @@
         <sonar.organization>sap-1</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectName>XSK</sonar.projectName>
+        <sonar.coverage.exclusions>**/*.js,**/*.xsjs</sonar.coverage.exclusions>
+        <sonar.cpd.exclusions>**/releng/**/*.*</sonar.cpd.exclusions>
         <sonar.coverage.jacoco.xmlReportPaths>
             ${project.basedir}/coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml,
             ${project.basedir}/../coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml,

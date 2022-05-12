@@ -36,7 +36,10 @@ import javax.sql.DataSource;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -59,8 +62,10 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   private static final String CONNECTION = "connection";
   private static final String BEFORE_TABLE_NAME = "beforeTableName";
   private static final String AFTER_TABLE_NAME = "afterTableName";
+  private static final String ON_CREATE_ENTITY_TABLE_NAME = "onCreateEntityTableName";
   private static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
   private static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
+  private static final String ENTRY_MAP = "entryMap";
 
   @Override
   public void beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
@@ -107,8 +112,13 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     try {
       connectionParam = dataSource.getConnection();
 
-      String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
-      createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
+      String afterTableName;
+      if(context.containsKey(ON_CREATE_ENTITY_TABLE_NAME)) {
+        afterTableName = (String) context.get(ON_CREATE_ENTITY_TABLE_NAME);
+      } else {
+        afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+        createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
+      }
 
       context.put(CONNECTION, connectionParam);
       context.put(AFTER_TABLE_NAME, afterTableName);
@@ -147,15 +157,18 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
       context.put(CONNECTION, connectionParam);
       context.put(AFTER_TABLE_NAME, afterTableName);
+      context.put(ON_CREATE_ENTITY_TABLE_NAME, afterTableName);
 
-      return super.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
+      ODataResponse response = super.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
+
+      context.put(ENTRY_MAP, readEntryMap(connectionParam, afterTableName));
+      return response;
     } catch (SQLException | ODataException e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
       try {
         closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
       } catch (SQLException e) {
         logger.error(e.getMessage(), e);
         throw new InvalidStateException(e);
@@ -448,6 +461,30 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } catch (SQLException e) {
       throw new IllegalStateException(ERROR_WHEN_PREPARING_TEMPORARY_TABLE_SQL + e.getMessage());
     }
+  }
+
+  private Map<String, Object> readEntryMap(Connection connection, String tableName) throws SQLException {
+    String selectCreatedEntitySQL = SqlFactory.getNative(connection).select().column("*").from(tableName).build();
+    try (PreparedStatement statement = connection.prepareStatement(selectCreatedEntitySQL)) {
+      Map<String, Object> currentTargetEntity = new HashMap<>();
+      try (ResultSet resultSet = statement.executeQuery()) {
+        while (resultSet.next()) {
+          currentTargetEntity = resultSetToEntryMap(resultSet);
+        }
+      }
+      return currentTargetEntity;
+    }
+  }
+
+  private Map<String, Object> resultSetToEntryMap(ResultSet resultSet) throws SQLException {
+    ResultSetMetaData resultSetMetadata = resultSet.getMetaData();
+    int columnCount = resultSetMetadata.getColumnCount();
+    HashMap<String, Object> entry = new HashMap(columnCount);
+    for(int i = 1; i <= columnCount; i++){
+      entry.put(resultSetMetadata.getColumnName(i), resultSet.getObject(i));
+    }
+
+    return entry;
   }
 
   private void closeConnection(Connection connection) throws SQLException {

@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAggregationType;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
@@ -192,18 +193,22 @@ public class XSKOdataParserTest extends AbstractDirigibleTest {
 		parser.parseXSODataArtifact("/entity_with_wrong_over_join_prop.xsodata", content);
 	}
 
-	@Test(expected = XSKOData2TransformerException.class)
-	public void testApplyImplicitAggregatesWithKeyGeneratedCondition() throws Exception {
+	@Test
+	public void testImplicitAggregation() throws Exception {
 		mockGetTablesSuccessfully();
-		String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_wrong_implicit_aggregation.xsodata"), StandardCharsets.UTF_8);
-		parser.parseXSODataArtifact("/entity_with_wrong_implicit_aggregation.xsodata", content);
+		String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_implicit_aggregation.xsodata"), StandardCharsets.UTF_8);
+		XSKODataModel xskoDataModel = parser.parseXSODataArtifact("/entity_with_implicit_aggregation.xsodata", content);
+    assertEquals(0, xskoDataModel.getService().getEntities().get(0).getAggregations().size());
+    assertEquals(XSKHDBXSODATAAggregationType.IMPLICIT, xskoDataModel.getService().getEntities().get(0).getAggregationType());
 	}
 
-	@Test(expected = XSKOData2TransformerException.class)
-	public void testApplyExplicitAggregatesWithKeyGeneratedCondition() throws Exception {
+	@Test
+	public void testExplicitAggregation() throws Exception {
 		mockGetTablesSuccessfully();
-		String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_wrong_explicit_aggregation.xsodata"), StandardCharsets.UTF_8);
-		parser.parseXSODataArtifact("/entity_with_wrong_explicit_aggregation.xsodata", content);
+		String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_explicit_aggregation.xsodata"), StandardCharsets.UTF_8);
+    XSKODataModel xskoDataModel = parser.parseXSODataArtifact("/entity_with_explicit_aggregation.xsodata", content);
+    assertEquals(3, xskoDataModel.getService().getEntities().get(0).getAggregations().size());
+    assertEquals(XSKHDBXSODATAAggregationType.EXPLICIT, xskoDataModel.getService().getEntities().get(0).getAggregationType());
 	}
 
 	@Test(expected = XSKOData2TransformerException.class)

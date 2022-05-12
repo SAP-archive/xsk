@@ -44,6 +44,7 @@ import java.util.UUID;
 public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKScriptingOData2EventHandler.class);
+  private static final String ERROR_WHEN_PREPARING_TEMPORARY_TABLE_SQL = "Error when preparing temporary table SQL: ";
 
   private static final String ODATA2_EVENT_HANDLER_NAME = "xsk-odata-event-handler";
 
@@ -54,11 +55,14 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   private static final String INSERT_BUILDER = "insertBuilder";
   private static final String UPDATE_BUILDER = "updateBuilder";
   private static final String SQL_CONTEXT = "sqlContext";
+
   private static final String CONNECTION = "connection";
   private static final String BEFORE_TABLE_NAME = "beforeTableName";
   private static final String AFTER_TABLE_NAME = "afterTableName";
   private static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
   private static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
+
+  private static final String SELECT_WILDCARD_FROM = "SELECT * FROM ";
 
   @Override
   public void beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
@@ -374,10 +378,20 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
   private void createTemporaryTableLikeTable(Connection connection, String temporaryTableName, String likeTableName) throws SQLException {
     DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
-    String odataArtifactTypeSchema = dbMetadataUtil.getOdataArtifactTypeSchema(DBMetadataUtil.normalizeTableName(likeTableName));
-    String sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
-        .setLikeTable(odataArtifactTypeSchema != null ? odataArtifactTypeSchema + "." + likeTableName : likeTableName).build();
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    String normalizedTableName = DBMetadataUtil.normalizeTableName(likeTableName);
+    String odataArtifactTypeSchema = dbMetadataUtil.getOdataArtifactTypeSchema(normalizedTableName);
+    String artefactType = dbMetadataUtil.getArtifactType(connection.getMetaData(), connection, normalizedTableName, odataArtifactTypeSchema);
+    String qualifiedName = odataArtifactTypeSchema + "." + likeTableName;
+    String sql;
+    if(artefactType.equals(ISqlKeywords.METADATA_TABLE)) {
+      sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
+          .setLikeTable(qualifiedName).build();
+    } else {
+      sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
+          .setAsSelectQuery(SELECT_WILDCARD_FROM + qualifiedName).setSelectWithNoData(true).build();
+    }
+
+    PreparedStatement preparedStatement = prepareStatement(connection, sql);
     preparedStatement.execute();
   }
 
@@ -387,7 +401,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
         .setAsSelectQuery(selectBuilder.buildSelect(sqlContext)).build();
     String sqlWithoutAliases = sql.replaceAll("_T[0-9]+\"", "\"");
     String sqlWithParameters = replaceSqlParameters(sqlWithoutAliases, selectBuilder.getStatementParams());
-    PreparedStatement preparedStatement = connection.prepareStatement(sqlWithParameters);
+    PreparedStatement preparedStatement = prepareStatement(connection, sqlWithParameters);
     preparedStatement.execute();
   }
 
@@ -412,19 +426,28 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     executeSQLStatement(connection, updateBuilder.build(sqlContext));
   }
 
-  private void executeSQLStatement(Connection connection, SQLStatement statement) throws SQLException, ODataException {
-    PreparedStatement preparedStatement = connection.prepareStatement(statement.sql());
-    SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
-    preparedStatement.executeUpdate();
-  }
-
   private void dropTemporaryTable(String temporaryTableName) throws SQLException {
     try (Connection connection = dataSource.getConnection()) {
       if (SqlFactory.getNative(connection).exists(connection, temporaryTableName)) {
         String sql = SqlFactory.getNative(connection).drop().table(temporaryTableName).build();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = prepareStatement(connection, sql);
         preparedStatement.executeUpdate();
       }
+    }
+  }
+
+  private void executeSQLStatement(Connection connection, SQLStatement statement) throws SQLException, ODataException {
+    PreparedStatement preparedStatement = prepareStatement(connection, statement.sql());
+    SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
+    preparedStatement.executeUpdate();
+  }
+
+  private PreparedStatement prepareStatement(Connection connection, String sql) {
+    try {
+      logger.debug("Preparing temporary table statement: {}", sql);
+      return connection.prepareStatement(sql);
+    } catch (SQLException e) {
+      throw new IllegalStateException(ERROR_WHEN_PREPARING_TEMPORARY_TABLE_SQL + e.getMessage());
     }
   }
 

@@ -1,4 +1,4 @@
-
+package com.sap.xsk.xsodata.ds.service;
 /*
  * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
  *

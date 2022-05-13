@@ -180,8 +180,7 @@ exports.WebRequest = function (method, path) {
         throw new Error('Not supported for outbound requests');
       }
     });
-    // TODO: set tildeHeaders for outbound requests
-    // addTildeHeaders(this, ['~server_protocol', '~request_method', '~request_uri']);
+    // set tildeHeaders for outbound requests?
   } else {
     tildeHeaders = Object.assign(tildeHeaders,
       {
@@ -306,13 +305,6 @@ exports.WebRequest = function (method, path) {
     });
     return arrayToReturn;
   };
-
-  function addTildeHeaders(webRequest, headersToAdd) {
-    headersToAdd.forEach(headerName => {
-      const headerValue = tildeHeaders[headerName](webRequest);
-      webRequest.headers.set(headerName, headerValue);
-    })
-  }
 };
 
 exports.WebResponse = function (clientResponse) {

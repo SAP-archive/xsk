@@ -25,7 +25,7 @@ public class XSKTableImportSynchronizerPublisherHandler extends MetadataPublishe
   }
 
   @Override
-  public void afterPublish(String location) {
+  public void afterPublish(String workspaceLocation, String registryLocation) {
 
   }
 

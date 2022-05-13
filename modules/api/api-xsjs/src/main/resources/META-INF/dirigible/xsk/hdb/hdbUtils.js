@@ -25,8 +25,10 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
         case "REAL":
         case "FLOAT":
             return resultSet.getFloat(colNumber);
+        case "DOUBLE PRECISION":
         case "DOUBLE":
             return resultSet.getDouble(colNumber);
+        case "CHARACTER VARYING":
         case "VARCHAR":
         case "ALPHANUM":
             return resultSet.getString(colNumber);
@@ -85,9 +87,11 @@ exports.setParamByType = function (preparedStatement, paramType, paramValue, par
         case "FLOAT":
             preparedStatement.setFloat(paramIndex, paramValue);
             break;
+        case "DOUBLE PRECISION":
         case "DOUBLE":
             preparedStatement.setDouble(paramIndex, paramValue);
             break;
+        case "CHARACTER VARYING":
         case "VARCHAR":
         case "ALPHANUM":
             preparedStatement.setString(paramIndex, paramValue);

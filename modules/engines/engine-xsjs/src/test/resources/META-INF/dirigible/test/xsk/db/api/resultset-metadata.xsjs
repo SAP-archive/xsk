@@ -23,7 +23,7 @@ var labelAssertion = metadata.getColumnLabel(1) == "ID";
 
 var nameAssertion = metadata.getColumnName(1) == "ID";
 
-var typeAssertion = metadata.getColumnType(1) == 4;
+var typeAssertion = metadata.getColumnType(1) == 3;
 
 var typeNameAssertion = metadata.getColumnTypeName(1) == "INTEGER";
 

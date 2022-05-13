@@ -113,7 +113,7 @@ public class XSKODataUtils {
           oDataProperty.setColumn(prop);
           List<PersistenceTableColumnModel> dbProp = allEntityDbColumns.stream().filter(x -> x.getName().equals(prop))
               .collect(Collectors.toList());
-          if (dbProp.size() > 0) {
+          if (!dbProp.isEmpty()) {
             oDataProperty.setNullable(dbProp.get(0).isNullable());
             oDataProperty.setType(dbProp.get(0).getType());
           }
@@ -147,7 +147,7 @@ public class XSKODataUtils {
       }
 
       // Process Aggregations
-      if (entity.getAggregations().size() > 0) {
+      if (!entity.getAggregations().isEmpty()) {
         oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
       }
 
@@ -211,7 +211,7 @@ public class XSKODataUtils {
       //The Multiplicity of the Principal role must be 1 or 0..1
       validateEdmMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText(), navigate.getAssociation());
       fromDef.setMultiplicity(xsOdataAssoc.getPrincipal().getMultiplicityType().getText());
-      fromDef.setProperties((ArrayList<String>) xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
+      fromDef.setProperties(xsOdataAssoc.getPrincipal().getBindingRole().getKeys());
       ODataAssociationEndDefinition toDef = new ODataAssociationEndDefinition();
       toDef.setEntity(xsOdataAssoc.getDependent().getEntitySetName());
 
@@ -224,7 +224,7 @@ public class XSKODataUtils {
         toDef.setMultiplicity(xsOdataAssoc.getDependent().getMultiplicityType().getText());
       }
 
-      toDef.setProperties((ArrayList<String>) xsOdataAssoc.getDependent().getBindingRole().getKeys());
+      toDef.setProperties(xsOdataAssoc.getDependent().getBindingRole().getKeys());
       oDataAssociationDefinition.setFrom(fromDef);
       oDataAssociationDefinition.setTo(toDef);
 
@@ -271,36 +271,40 @@ public class XSKODataUtils {
    */
   private void getParametersForCalcView(List<PersistenceTableColumnModel> allEntityParameters, String tableName) throws SQLException {
     try (Connection connection = dataSource.getConnection()) {
-      PreparedStatement statement = connection.prepareStatement(
-          "SELECT DISTINCT VARIABLE_NAME, COLUMN_TYPE_D, COLUMN_SQL_TYPE, MANDATORY, \"ORDER\" FROM _SYS_BI.BIMC_VARIABLE_VIEW_HDI WHERE \"QUALIFIED_NAME\" = ? ORDER BY \"ORDER\"");
-      statement.setString(1, tableName);
+      try (PreparedStatement statement = connection.prepareStatement(
+          "SELECT DISTINCT VARIABLE_NAME, COLUMN_SQL_TYPE, MANDATORY, \"ORDER\" "
+              + "FROM _SYS_BI.BIMC_VARIABLE_VIEW_HDI "
+              + "WHERE \"QUALIFIED_NAME\" = ? "
+              + "ORDER BY \"ORDER\"")) {
+        statement.setString(1, tableName);
 
-      ResultSet calcViewParameters = statement.executeQuery();
+        ResultSet calcViewParameters = statement.executeQuery();
 
-      while (calcViewParameters.next()) {
-        PersistenceTableColumnModel calcViewParam = new PersistenceTableColumnModel();
+        while (calcViewParameters.next()) {
+          PersistenceTableColumnModel calcViewParam = new PersistenceTableColumnModel();
 
-        String calcViewParamName = calcViewParameters.getString("VARIABLE_NAME");
-        String calcViewParamType = calcViewParameters.getString("COLUMN_SQL_TYPE");
-        String calcViewParamMandatory = calcViewParameters.getString("MANDATORY");
+          String calcViewParamName = calcViewParameters.getString("VARIABLE_NAME");
+          String calcViewParamType = calcViewParameters.getString("COLUMN_SQL_TYPE");
+          String calcViewParamMandatory = calcViewParameters.getString("MANDATORY");
 
-        boolean isNullable = false;
-        
-        if (calcViewParamMandatory.equals("0")) {
-          isNullable = true;
+          boolean isNullable = false;
+
+          if (calcViewParamMandatory.equals("0")) {
+            isNullable = true;
+          }
+
+          Integer index = calcViewParamType.indexOf("(");
+
+          if (index != -1) {
+            calcViewParamType = calcViewParamType.substring(0, index);
+          }
+
+          calcViewParam.setName(calcViewParamName);
+          calcViewParam.setType(dbMetadataUtil.convertSqlTypeToOdataEdmType(calcViewParamType));
+          calcViewParam.setNullable(isNullable);
+
+          allEntityParameters.add(calcViewParam);
         }
-
-        Integer index = calcViewParamType.indexOf("(");
-
-        if (index != -1) {
-          calcViewParamType = calcViewParamType.substring(0, index);
-        }
-        
-        calcViewParam.setName(calcViewParamName);
-        calcViewParam.setType(dbMetadataUtil.convertSqlTypeToOdataEdmType(calcViewParamType));
-        calcViewParam.setNullable(isNullable);
-
-        allEntityParameters.add(calcViewParam);
       }
     }
   }

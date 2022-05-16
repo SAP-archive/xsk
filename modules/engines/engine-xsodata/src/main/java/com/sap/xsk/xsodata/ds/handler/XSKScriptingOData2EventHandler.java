@@ -88,7 +88,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.beforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
-    } catch (SQLException | ODataException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -113,7 +113,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       connectionParam = dataSource.getConnection();
 
       String afterTableName;
-      if(context.containsKey(ON_CREATE_ENTITY_TABLE_NAME)) {
+      if (context.containsKey(ON_CREATE_ENTITY_TABLE_NAME)) {
         afterTableName = (String) context.get(ON_CREATE_ENTITY_TABLE_NAME);
       } else {
         afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
@@ -124,7 +124,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
-    } catch (SQLException | ODataException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -163,7 +163,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
       context.put(ENTRY_MAP, readEntryMap(connectionParam, afterTableName));
       return response;
-    } catch (SQLException | ODataException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -202,7 +202,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_UPDATE_ENTITY_TABLE_NAME, beforeUpdateEntityTableName);
 
       super.beforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
-    } catch (SQLException | ODataException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -235,7 +235,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.afterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
-    } catch (SQLException | ODataException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -273,7 +273,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
 
       return super.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
-    } catch (SQLException | ODataException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -308,7 +308,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_DELETE_ENTITY_TABLE_NAME, beforeDeleteEntityTableName);
 
       super.beforeDeleteEntity(uriInfo, contentType, context);
-    } catch (SQLException | ODataException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -332,7 +332,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_TABLE_NAME, context.get(BEFORE_DELETE_ENTITY_TABLE_NAME));
 
       super.afterDeleteEntity(uriInfo, contentType, context);
-    } catch (SQLException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -362,7 +362,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_TABLE_NAME, beforeTableName);
 
       return super.onDeleteEntity(uriInfo, contentType, context);
-    } catch (SQLException | ODataException e) {
+    } catch (Exception e) {
       logger.error(e.getMessage(), e);
       throw new InvalidStateException(e);
     } finally {
@@ -391,14 +391,15 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     DBMetadataUtil dbMetadataUtil = new DBMetadataUtil();
     String normalizedTableName = DBMetadataUtil.normalizeTableName(likeTableName);
     String odataArtifactTypeSchema = dbMetadataUtil.getOdataArtifactTypeSchema(normalizedTableName);
-    String artefactType = dbMetadataUtil.getArtifactType(connection.getMetaData(), connection, normalizedTableName, odataArtifactTypeSchema);
-    String qualifiedName = odataArtifactTypeSchema + "." + likeTableName;
+    String artefactType = dbMetadataUtil.getArtifactType(connection.getMetaData(), connection, normalizedTableName,
+        odataArtifactTypeSchema);
     String sql;
-    if(artefactType.equals(ISqlKeywords.METADATA_TABLE)) {
+    if (artefactType.equals(ISqlKeywords.METADATA_TABLE)) {
       sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
-          .setLikeTable(qualifiedName).build();
+          .setLikeTable(odataArtifactTypeSchema + "." + likeTableName).build();
     } else {
-      String selectWildcardFromViewSQL = SqlFactory.getNative(connection).select().column("*").from(qualifiedName).build();
+      String selectWildcardFromViewSQL = SqlFactory.getNative(connection).select().column("*")
+          .from(odataArtifactTypeSchema + "." + normalizedTableName).build();
       sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
           .setAsSelectQuery(selectWildcardFromViewSQL).setSelectWithNoData(true).build();
     }
@@ -480,7 +481,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     ResultSetMetaData resultSetMetadata = resultSet.getMetaData();
     int columnCount = resultSetMetadata.getColumnCount();
     HashMap<String, Object> entry = new HashMap(columnCount);
-    for(int i = 1; i <= columnCount; i++){
+    for (int i = 1; i <= columnCount; i++) {
       entry.put(resultSetMetadata.getColumnName(i), resultSet.getObject(i));
     }
 

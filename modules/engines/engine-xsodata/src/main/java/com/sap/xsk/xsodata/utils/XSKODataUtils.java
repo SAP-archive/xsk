@@ -11,6 +11,8 @@
  */
 package com.sap.xsk.xsodata.utils;
 
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAggregation;
+import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAggregationType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAAssociation;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
@@ -134,7 +136,12 @@ public class XSKODataUtils {
       }
 
       //process Aggregations
-      if (entity.getAggregations().size() > 0) {
+      if (XSKHDBXSODATAAggregationType.EXPLICIT.equals(entity.getAggregationType())) {
+        oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
+        for(XSKHDBXSODATAAggregation aggregation: entity.getAggregations()) {
+          oDataEntityDefinition.getAggregationsTypeAndColumn().put(aggregation.getAggregateColumnName(), aggregation.getAggregateFunction());
+        }
+      } else if (XSKHDBXSODATAAggregationType.IMPLICIT.equals(entity.getAggregationType())) {
         oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
       }
 

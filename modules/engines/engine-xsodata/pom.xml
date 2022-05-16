@@ -173,6 +173,7 @@
         <version>${maven.surefire.plugin.version}</version>
         <configuration>
           <argLine>
+            @{argLine}
             --add-opens java.base/java.lang=ALL-UNNAMED
             --add-opens java.base/java.lang.reflect=ALL-UNNAMED
           </argLine>

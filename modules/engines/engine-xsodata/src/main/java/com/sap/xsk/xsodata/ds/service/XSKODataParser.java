@@ -131,7 +131,6 @@ public class XSKODataParser implements IXSKODataParser {
       applyNavEntryFromEndCondition(odataModel);
       applyNumberOfJoinPropertiesCondition(odataModel);
       applyOrderOfJoinPropertiesCondition(odataModel);
-      applyAggregatesWithKeyGeneratedCondition(odataModel);
       applyParametersToViewsCondition(odataModel);
       applyOmittedParamResultCondition(odataModel);
     } catch (Exception ex) {
@@ -277,25 +276,6 @@ public class XSKODataParser implements IXSKODataParser {
         if (ass.getAssociationTable().getPrincipal().getKeys().size() != ass.getPrincipal().getBindingRole().getKeys().size()) {
           throw new XSKOData2TransformerException(String
               .format("Different number of %s properties in association %s", XSKHDBXSODATABindingType.PRINCIPAL.getText(), ass.getName()));
-        }
-      }
-    });
-  }
-
-  /**
-   * Aggregates can only be applied in combination with keygenerated.
-   * Here is a working example:
-   * <pre>
-   * "sap.test.odata.db.views::COUNT_VIEW"
-   * 		keys generate local "ID"
-   * 		aggregates always (SUM of "COUNTER");
-   * 	</pre>
-   */
-  private void applyAggregatesWithKeyGeneratedCondition(XSKODataModel odataModel) {
-    odataModel.getService().getEntities().forEach(entity -> {
-      if (entity.getAggregationType() != null) {
-        if (entity.getKeyGenerated() == null) {
-          throw new XSKOData2TransformerException(String.format("Missing specification of keys for view  %s", entity.getAlias()));
         }
       }
     });

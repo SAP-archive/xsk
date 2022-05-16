@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+
+<!--    <parent>-->
+<!--      <artifactId>xsk-modules-parent</artifactId>-->
+<!--      <groupId>com.sap.xsk</groupId>-->
+<!--      <version>0.17.0-SNAPSHOT</version>-->
+<!--    </parent>-->
+
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.sap.xsk.js.tests.plugin</groupId>
+  <artifactId>js-tests-maven-plugin</artifactId>
+  <version>0.17.0-SNAPSHOT</version>
+  <packaging>maven-plugin</packaging>
+
+  <name>xsk-js-tests-maven-plugin Maven Mojo</name>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <id>default-descriptor</id>
+            <phase>process-classes</phase>
+          </execution>
+          <!-- if you want to generate help goal -->
+          <execution>
+            <id>help-goal</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>3.8.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>3.6.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>3.8.5</version>
+    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.apache.maven</groupId>-->
+<!--      <artifactId>maven-project</artifactId>-->
+<!--      <version>2.2.1</version>-->
+<!--    </dependency>-->
+
+
+<!--    <dependency>-->
+<!--      <groupId>com.sap.xsk</groupId>-->
+<!--      <artifactId>xsk-modules-engines-xsjs</artifactId>-->
+<!--      <version>0.17.0-SNAPSHOT</version>-->
+<!--    </dependency>-->
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-commons-api</artifactId>
+      <version>7.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ext-jasmine</artifactId>
+      <version>7.0.0-SNAPSHOT</version>
+    </dependency>
+
+<!--    We should remove the dependencies below -->
+    <dependency>
+      <groupId>org.eclipse.jetty.websocket</groupId>
+      <artifactId>javax-websocket-server-impl</artifactId>
+      <version>9.4.46.v20220331</version>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <license.header.location>../../licensing-header.txt</license.header.location>
+  </properties>
+
+</project>

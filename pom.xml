@@ -170,6 +170,25 @@
                             <debuglevel>lines,vars,source</debuglevel>
                         </configuration>
                     </plugin>
+                    <plugin>
+                      <groupId>com.sap.xsk.js.tests.plugin</groupId>
+                      <artifactId>js-tests-maven-plugin</artifactId>
+                      <version>0.17.0-SNAPSHOT</version>
+                      <executions>
+                        <execution>
+                          <goals>
+                            <goal>xsk-js-tests</goal>
+                          </goals>
+                        </execution>
+                      </executions>
+                      <dependencies>
+                        <dependency>
+                          <groupId>com.sap.xsk</groupId>
+                          <artifactId>xsk-modules-engines-xsjs</artifactId>
+                          <version>0.17.0-SNAPSHOT</version>
+                        </dependency>
+                      </dependencies>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

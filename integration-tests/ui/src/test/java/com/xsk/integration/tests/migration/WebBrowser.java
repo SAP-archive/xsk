@@ -191,7 +191,7 @@ class WebBrowser {
 
   void quit() {
     if (browser != null) {
-      //browser.quit();
+      browser.quit();
     }
   }
 }

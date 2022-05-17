@@ -11,28 +11,18 @@
  */
 package models;
 
+
 import java.util.Objects;
 
-public class HDBProcedureDefinitionModel {
-
-    private final String schema;
-    private final String name;
+public class HDBProcedureDefinitionModel extends DefinitionModel {
 
     public HDBProcedureDefinitionModel(String schema, String name) {
-        this.schema = schema;
-        this.name = name;
-    }
+        super(schema, name);
 
-    public String getSchema() {
-        return schema;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void checkForAllMandatoryFieldsPresence() {
-        checkPresence(name, "name");
+        checkPresence(this.getName(), "name");
     }
 
     private <T> void checkPresence(T field, String fieldName) {

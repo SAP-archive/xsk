@@ -19,16 +19,12 @@ import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
-import com.sap.xsk.parser.hana.core.HanaLexer;
-import com.sap.xsk.parser.hana.core.HanaParser;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
 import custom.HanaTableFunctionListener;
 import models.TableFunctionDefinitionModel;
 import models.TableFunctionMissingPropertyException;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -62,20 +58,7 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
 
     String location = parametersModel.getLocation();
 
-    CharStream inputStream;
-    try (ByteArrayInputStream is = new ByteArrayInputStream(parametersModel.getContent().getBytes())) {
-      inputStream = CharStreams.fromStream(is);
-    }
-
-    HanaLexer lexer = new HanaLexer(inputStream);
-    lexer.removeErrorListeners();
-    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-
-    HanaParser parser = new HanaParser(tokenStream);
-    parser.setBuildParseTree(true);
-    parser.removeErrorListeners();
-
-    ParseTree parseTree = parser.sql_script();
+    ParseTree parseTree = XSKHDBUtils.getParsedThree(parametersModel);
 
     HanaTableFunctionListener listener = new HanaTableFunctionListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
@@ -91,6 +74,7 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
       XSKDataStructureParametersModel params) {
 
     XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
+
     model.setSchema(antlrModel.getSchema());
     model.setName(antlrModel.getName());
     model.setLocation(params.getLocation());

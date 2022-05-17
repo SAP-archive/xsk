@@ -14,7 +14,6 @@ FROM dirigiblelabs/xsk-kyma-runtime-base AS base
 ENV DIRIGIBLE_HOME_URL=/services/v4/web/
 ENV CATALINA_HOME=/usr/local/tomcat
 
-ENV DIRIGIBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
 
 EXPOSE 8080

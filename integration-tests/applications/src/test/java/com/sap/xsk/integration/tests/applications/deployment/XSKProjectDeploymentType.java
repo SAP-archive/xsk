@@ -9,19 +9,9 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications.kyma;
+package com.sap.xsk.integration.tests.applications.deployment;
 
-import com.google.gson.annotations.SerializedName;
-
-public class KymaTokenResponseBody {
-    @SerializedName("access_token")
-    private final String accessToken;
-
-    public KymaTokenResponseBody(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
+public enum XSKProjectDeploymentType {
+    LOCAL,
+    KYMA
 }

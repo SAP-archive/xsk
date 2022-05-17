@@ -9,15 +9,19 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications;
+package com.sap.xsk.integration.tests.core.client.http.kyma.token;
 
-import com.xsk.integration.tests.applications.deployment.ApplicationDeploymentRule;
-import org.junit.ClassRule;
-import org.junit.Test;
+import com.google.gson.annotations.SerializedName;
 
-public class KymaTest {
+public class TokenServiceResponseBody {
+    @SerializedName("access_token")
+    private final String accessToken;
 
-    @ClassRule
-    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", DeploymentType.KYMA);
+    public TokenServiceResponseBody(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
 }

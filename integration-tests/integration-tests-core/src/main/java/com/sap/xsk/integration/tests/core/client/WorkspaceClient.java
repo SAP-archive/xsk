@@ -9,9 +9,10 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications.deployment.client;
+package com.sap.xsk.integration.tests.core.client;
 
-import com.xsk.integration.tests.applications.deployment.DeploymentException;
+import com.sap.xsk.integration.tests.core.client.http.XSKHttpClient;
+import com.sap.xsk.integration.tests.core.client.http.XSKHttpClientException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -29,18 +30,17 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static com.xsk.integration.tests.applications.deployment.ApplicationDeploymentRule.HOST;
-
 public class WorkspaceClient {
 
-    private static final URI WORKSPACE_SERVICE_URL = HOST.resolve("/services/v4/ide/workspaces/");
-    private static final URI TRANSPORT_SERVICE_URL = HOST.resolve("/services/v4/transport/project/");
+    private final URI workspaceServiceUri;
+    private final URI transportServiceUri;
 
     private final XSKHttpClient xskHttpClient;
 
     public WorkspaceClient(XSKHttpClient xskHttpClient) {
-
         this.xskHttpClient = xskHttpClient;
+        this.workspaceServiceUri = xskHttpClient.getBaseHost().resolve("/services/v4/ide/workspaces/");
+        this.transportServiceUri = xskHttpClient.getBaseHost().resolve("/services/v4/transport/project/");
     }
 
     private static byte[] zipProject(String projectName, Path projectFolderPath) {
@@ -58,19 +58,19 @@ public class WorkspaceClient {
             }
         } catch (IOException e) {
             String errorMessage = "Could not zip path: " + projectFolderPath;
-            throw new DeploymentException(errorMessage, e);
+            throw new XSKClientException(errorMessage, e);
         }
         return byteArrayOutputStream.toByteArray();
     }
 
     public CompletableFuture<HttpResponse> createWorkspace(String workspaceName) {
         try {
-            var uri = WORKSPACE_SERVICE_URL.resolve(workspaceName);
+            var uri = workspaceServiceUri.resolve(workspaceName);
             HttpUriRequest request = RequestBuilder.post(uri).build();
             return xskHttpClient.executeRequestAsync(request);
-        } catch (DeploymentException e) {
+        } catch (XSKHttpClientException e) {
             String errorMessage = "Error when creating workspace " + workspaceName;
-            throw new DeploymentException(errorMessage, e);
+            throw new XSKClientException(errorMessage, e);
         }
 
     }
@@ -78,7 +78,7 @@ public class WorkspaceClient {
     public CompletableFuture<HttpResponse> importProjectInWorkspace(String workspaceName, String projectName, Path projectFolderPath) {
         try {
             byte[] projectZip = zipProject(projectName, projectFolderPath);
-            var uri = TRANSPORT_SERVICE_URL.resolve(workspaceName);
+            var uri = transportServiceUri.resolve(workspaceName);
             HttpEntity multiPartHttpEntity = MultipartEntityBuilder.create()
                     .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
                     .addBinaryBody("file", projectZip)
@@ -88,21 +88,21 @@ public class WorkspaceClient {
                     .setEntity(multiPartHttpEntity)
                     .build();
             return xskHttpClient.executeRequestAsync(multipartRequest);
-        } catch (DeploymentException e) {
+        } catch (XSKHttpClientException e) {
             String errorMessage = "Cannot import project " + projectName + " to workspace " + workspaceName;
-            throw new DeploymentException(errorMessage, e);
+            throw new XSKClientException(errorMessage, e);
         }
 
     }
 
     public CompletableFuture<HttpResponse> deleteWorkspace(String workspace) {
         try {
-            var uri = WORKSPACE_SERVICE_URL.resolve(workspace);
+            var uri = workspaceServiceUri.resolve(workspace);
             HttpUriRequest request = RequestBuilder.delete(uri).build();
             return xskHttpClient.executeRequestAsync(request);
-        } catch (DeploymentException e) {
+        } catch (XSKHttpClientException e) {
             String errorMessage = "Error deleting workspace " + workspace;
-            throw new DeploymentException(errorMessage, e);
+            throw new XSKClientException(errorMessage, e);
         }
 
     }

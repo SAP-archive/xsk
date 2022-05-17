@@ -9,14 +9,15 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications.deployment;
+package com.sap.xsk.integration.tests.core.client.http;
 
-public class XSKKymaTokenException extends RuntimeException {
-    public XSKKymaTokenException(String message) {
-        super(message);
-    }
+public class XSKHttpClientException extends RuntimeException {
 
-    public XSKKymaTokenException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public XSKHttpClientException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public XSKHttpClientException(String message) {
+    super(message);
+  }
 }

@@ -12,8 +12,8 @@
 package com.xsk.integration.tests.migration;
 
 import com.google.common.base.Strings;
-import com.xsk.integration.tests.applications.DeploymentType;
-import com.xsk.integration.tests.applications.deployment.client.XSKHttpClient;
+import com.sap.xsk.integration.tests.core.client.http.XSKHttpClient;
+import com.sap.xsk.integration.tests.core.client.http.local.LocalXSKHttpClient;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.http.HttpEntity;
@@ -23,6 +23,7 @@ import org.apache.http.util.EntityUtils;
 import org.junit.After;
 import org.junit.Test;
 
+import static com.xsk.integration.tests.migration.DirigibleConnectionProperties.LOCALHOST_URI;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -198,7 +199,7 @@ public class MigrationITest {
       var fileQueryParameter = parsedSrc.get("file");
 
       if (collectionHasElementEndingWith(fileQueryParameter, filePath)) {
-        if(isImageFile(filePath)) {
+        if (isImageFile(filePath)) {
           assertImageFileEquals(file);
         } else {
           assertMonacoTextFileEquals(iframe, file);
@@ -275,11 +276,11 @@ public class MigrationITest {
 
     System.out.println(
         "[MigrationITest] Asserting text file equals: "
-        + file.getFilePath()
-        + "\n Expected: \n"
-        + expectedTextFile
-        + "\n Actual: \n"
-        + migratedTextFile
+            + file.getFilePath()
+            + "\n Expected: \n"
+            + expectedTextFile
+            + "\n Actual: \n"
+            + migratedTextFile
     );
 
     assertEquals("Text files after migration must match expected content ",
@@ -287,14 +288,16 @@ public class MigrationITest {
   }
 
   private byte[] getImageFileContent(String filePath) throws IOException {
-    var imageUrl = new URL("http://"
-        + DirigibleConnectionProperties.HOST
-        + ":" + DirigibleConnectionProperties.PORT
-        + "/services/v4/ide/workspaces/"
-        + expectedContentProvider.getExpectedWorkspaceName()
-        + filePath);
+    var imageUrl = new URL(
+        "http://"
+            + DirigibleConnectionProperties.HOST
+            + ":" + DirigibleConnectionProperties.PORT
+            + "/services/v4/ide/workspaces/"
+            + expectedContentProvider.getExpectedWorkspaceName()
+            + filePath
+    );
 
-    XSKHttpClient client = XSKHttpClient.create(DeploymentType.LOCAL);
+    XSKHttpClient client = LocalXSKHttpClient.create(LOCALHOST_URI);
     try {
       HttpUriRequest request = RequestBuilder.get(imageUrl.toURI()).build();
       var response = client.executeRequestAsync(request).get();

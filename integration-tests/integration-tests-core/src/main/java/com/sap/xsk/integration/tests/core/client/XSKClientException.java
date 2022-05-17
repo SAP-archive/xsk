@@ -9,15 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications;
+package com.sap.xsk.integration.tests.core.client;
 
-import com.xsk.integration.tests.applications.deployment.ApplicationDeploymentRule;
-import org.junit.ClassRule;
-import org.junit.Test;
+public class XSKClientException extends RuntimeException{
 
-public class AppTest {
-
-    @ClassRule
-    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", DeploymentType.LOCAL);
-
+  public XSKClientException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

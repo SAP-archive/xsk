@@ -9,9 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications;
+package com.sap.xsk.integration.tests.core.client.http.kyma.token;
 
-public enum DeploymentType {
-    LOCAL,
-    KYMA
+public class TokenServiceException extends RuntimeException {
+
+  public TokenServiceException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

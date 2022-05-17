@@ -9,14 +9,15 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications.deployment;
+package com.sap.xsk.integration.tests.applications;
 
-public class DeploymentException extends RuntimeException {
-    public DeploymentException(String message) {
-        super(message);
-    }
+import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentRule;
+import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentType;
+import org.junit.ClassRule;
 
-    public DeploymentException(String message, Throwable cause) {
-        super(message, cause);
-    }
+public class KymaTest {
+
+    @ClassRule
+    public static XSKProjectDeploymentRule xskProjectDeploymentRule = new XSKProjectDeploymentRule("simple", XSKProjectDeploymentType.KYMA);
+
 }

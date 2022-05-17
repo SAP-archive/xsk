@@ -11,6 +11,8 @@
  */
 package com.xsk.integration.tests.migration;
 
+import java.net.URI;
+
 class DirigibleConnectionProperties {
 
   static final String HOST = "localhost";
@@ -20,4 +22,5 @@ class DirigibleConnectionProperties {
   static final String AUTH_PASSWORD = "dirigible";
   static final String AUTH = AUTH_USERNAME + ":" + AUTH_PASSWORD;
   static final String BASE_URL = "http://" + AUTH + "@" + HOST + ":" + PORT + IDE_URI;
+  static final URI LOCALHOST_URI = URI.create("http://localhost:8080");
 }

@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications.kyma;
+package com.sap.xsk.integration.tests.core.client.http.kyma.token;
 
-import com.xsk.integration.tests.applications.deployment.XSKKymaTokenException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.utils.URIBuilder;
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
@@ -23,17 +22,17 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Base64;
 
-public class TokenProvider {
-    ApplicationDeploymentConfiguration applicationDeploymentConfiguration = new ApplicationDeploymentConfiguration();
+public class TokenService {
+    TokenServiceConfiguration tokenServiceConfiguration = new TokenServiceConfiguration();
 
     public String getToken() {
         try {
-            byte[] baseAuthCreds = (applicationDeploymentConfiguration.getClientId() + ":" + applicationDeploymentConfiguration.getClientSecret()).getBytes();
+            byte[] baseAuthCreds = (tokenServiceConfiguration.getClientId() + ":" + tokenServiceConfiguration.getClientSecret()).getBytes();
             var token64 = Base64.getEncoder().encodeToString(baseAuthCreds);
-            URIBuilder queryBuilder = new URIBuilder(applicationDeploymentConfiguration.getTokenUrl());
-            queryBuilder.setParameter("grant_type", applicationDeploymentConfiguration.getGrantType());
-            queryBuilder.setParameter("username", applicationDeploymentConfiguration.getUsername());
-            queryBuilder.setParameter("password", applicationDeploymentConfiguration.getPassword());
+            URIBuilder queryBuilder = new URIBuilder(tokenServiceConfiguration.getTokenUrl());
+            queryBuilder.setParameter("grant_type", tokenServiceConfiguration.getGrantType());
+            queryBuilder.setParameter("username", tokenServiceConfiguration.getUsername());
+            queryBuilder.setParameter("password", tokenServiceConfiguration.getPassword());
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(queryBuilder.build())
@@ -43,10 +42,10 @@ public class TokenProvider {
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
 
-            KymaTokenResponseBody responseBody = GsonHelper.GSON.fromJson(response.body(), KymaTokenResponseBody.class);
+            TokenServiceResponseBody responseBody = GsonHelper.GSON.fromJson(response.body(), TokenServiceResponseBody.class);
             return responseBody.getAccessToken();
         } catch (RuntimeException | IOException | InterruptedException | URISyntaxException e) {
-            throw new XSKKymaTokenException("Can't access JWT Token for kyma instance", e);
+            throw new TokenServiceException("Can't access JWT Token for kyma instance", e);
         }
     }
 }

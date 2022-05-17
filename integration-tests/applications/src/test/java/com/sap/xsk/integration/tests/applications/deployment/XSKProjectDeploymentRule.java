@@ -9,27 +9,21 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.applications.deployment;
+package com.sap.xsk.integration.tests.applications.deployment;
 
-import com.xsk.integration.tests.applications.DeploymentType;
-import com.xsk.integration.tests.applications.kyma.ApplicationDeploymentConfiguration;
 import org.junit.rules.ExternalResource;
 
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public class ApplicationDeploymentRule extends ExternalResource {
-    public static URI HOST;
+public class XSKProjectDeploymentRule extends ExternalResource {
     private final XSKProjectDeployer projectPublisher;
     private final String applicationName;
-    ApplicationDeploymentConfiguration applicationDeploymentConfiguration = new ApplicationDeploymentConfiguration();
 
-    public ApplicationDeploymentRule(String applicationName, DeploymentType deploymentType) {
-        HOST = applicationDeploymentConfiguration.getHost(deploymentType);
+    public XSKProjectDeploymentRule(String applicationName, XSKProjectDeploymentType XSKProjectDeploymentType) {
         this.applicationName = applicationName;
-        projectPublisher = new XSKProjectDeployer(deploymentType);
+        projectPublisher = new XSKProjectDeployer(XSKProjectDeploymentType);
     }
 
     @Override

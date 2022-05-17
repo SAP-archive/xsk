@@ -12,9 +12,11 @@
 package com.sap.xsk.hdb.ds.module;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.artefacts.HDBProcedureSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.parser.hdbdd.XSKHdbddParser;
+import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureLogger;
 import com.sap.xsk.hdb.ds.parser.hdbprocedure.XSKHDBProcedureParser;
 import com.sap.xsk.hdb.ds.parser.hdbscalarfunction.XSKHDBScalarFunctionParser;
 import com.sap.xsk.hdb.ds.parser.hdbschema.XSKSchemaParser;
@@ -101,13 +103,19 @@ public class XSKHDBModule extends AbstractDirigibleModule {
         new XSKHDBTableFunctionLogger()
     );
 
+    XSKHDBProcedureParser hdbProcedureParser = new XSKHDBProcedureParser(
+            new XSKDataStructuresSynchronizer(),
+            new HDBProcedureSynchronizationArtefactType(),
+            new XSKHDBProcedureLogger()
+    );
+
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_ENTITIES, new XSKHdbddParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_TABLE, new XSKTableParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_VIEW, new XSKViewParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_SYNONYM, new XSKSynonymParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBTABLEFUNCTION, tableFunctionParser);
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSCHEMA, new XSKSchemaParser());
-    parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE, new XSKHDBProcedureParser());
+    parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBPROCEDURE, hdbProcedureParser);
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSEQUENCE, new XSKHDBSequenceParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_HDBSCALARFUNCTION, new XSKHDBScalarFunctionParser());
     parserServices.put(IXSKDataStructureModel.FILE_EXTENSION_STRUCTURE, new XSKTableTypeParser());
@@ -119,7 +127,7 @@ public class XSKHDBModule extends AbstractDirigibleModule {
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SYNONYM, new XSKSynonymParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_FUNCTION, tableFunctionParser);
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SCHEMA, new XSKSchemaParser());
-    parserServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, new XSKHDBProcedureParser());
+    parserServices.put(IXSKDataStructureModel.TYPE_HDB_PROCEDURE, hdbProcedureParser);
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SEQUENCE, new XSKHDBSequenceParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_SCALAR_FUNCTION, new XSKHDBScalarFunctionParser());
     parserServices.put(IXSKDataStructureModel.TYPE_HDB_TABLE_TYPE, new XSKTableTypeParser());

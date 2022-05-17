@@ -490,4 +490,26 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
     }
 
   }
+
+  @Test
+  public void testAggregationsConstruction() throws Exception {
+    XSKODataParser parser = new XSKODataParser();
+    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_aggregations_for_conversion.xsodata"), StandardCharsets.UTF_8);
+    XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_aggregations_for_conversion.xsodata", content);
+
+    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("USER_ID", "Edm.Int32", false, true);
+    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("USER_PAYMENT", "Edm.Int32", true, false);
+    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("ROLE_NUMBER", "Edm.Int32", true, false);
+    PersistenceTableModel model = new PersistenceTableModel("TEST_VIEW", Arrays.asList(column1, column2, column3),
+        new ArrayList<>());
+    model.setTableType("CALC VIEW");
+    when(metadataProvider.getPersistenceTableModel("TEST_VIEW")).thenReturn(model);
+
+    ODataDefinition oDataDefinition = oDataUtil.convertXSKODataModelToODataDefinition(xskoDataModel);
+
+    assertTrue(oDataDefinition.getEntities().get(0).getAggregationsTypeAndColumn().containsKey("USER_PAYMENT"));
+    assertTrue(oDataDefinition.getEntities().get(0).getAggregationsTypeAndColumn().containsValue("SUM"));
+    assertTrue(oDataDefinition.getEntities().get(0).getAnnotationsEntityType().containsKey("sap:semantics"));
+    assertTrue(oDataDefinition.getEntities().get(0).getAnnotationsEntityType().containsValue("aggregate"));
+  }
 }

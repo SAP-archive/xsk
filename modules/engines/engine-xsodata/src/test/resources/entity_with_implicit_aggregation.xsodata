@@ -4,7 +4,5 @@ service namespace "my.demo.namespace" {
 
  //Implicit Aggregations
  "package::PLANNED_ACTUAL_SALES" as "PlannedCalcView"
-       //keys generate local "ID" -> ->Aggregates can only be applied in combination with keygenerated.
        aggregates always;
-
 }

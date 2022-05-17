@@ -4,7 +4,5 @@ service namespace "my.demo.namespace" {
 
  //Explicit Aggregations
  "package::revenues" as "Revenues"
-        //keys generate local "ID" ->Aggregates can only be applied in combination with keygenerated.
         aggregates always (SUM of "Amount", AVG of "Amount", MIN of "Amount");
-
 }

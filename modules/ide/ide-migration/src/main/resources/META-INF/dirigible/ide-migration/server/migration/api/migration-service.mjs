@@ -18,7 +18,6 @@ const ByteArrayOutputStream = Java.type("java.io.ByteArrayOutputStream");
 const XSKProjectMigrationInterceptor = Java.type("com.sap.xsk.modificators.XSKProjectMigrationInterceptor");
 const XSKHDBCoreFacade = Java.type("com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade");
 const hdbDDModel = "com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel";
-const schemaModel = "com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel";
 const xskModificator = new XSKProjectMigrationInterceptor();
 
 export class MigrationService {
@@ -27,6 +26,7 @@ export class MigrationService {
 
     synonymFileName = "hdi-synonyms.hdbsynonym";
     publicSynonymFileName = "hdi-public-synonyms.hdbpublicsynonym";
+    modelsWithoutSynonym = ["com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel", "com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel"];
     fileExtsForHDI = [".hdbcalculationview", ".calculationview", ".analyticprivilege", ".hdbanalyticprivilege", ".hdbflowgraph", ".hdbtablefunction"];
 
     setupConnection(databaseName, databaseUser, databaseUserPassword, connectionUrl) {
@@ -108,7 +108,12 @@ export class MigrationService {
     }
 
     _buildHDIContainerName(duName, projectName) {
-        return `${duName}_${projectName}`.toUpperCase();
+        const groupAndContainerNamePattern = /[^\w]/g;
+        const forbiddenCharactersReplacer = "_";
+
+        const nameAccordingToConvention = `hdi_${duName}_${projectName}`.toUpperCase().replace(groupAndContainerNamePattern, forbiddenCharactersReplacer);
+
+        return nameAccordingToConvention;
     }
 
     copyFilesLocally(workspaceName, duName, lists) {
@@ -226,16 +231,19 @@ export class MigrationService {
         } else {
             const modelName = parsedData.getName();
             const loc = parsedData.getLocation();
-            const fileExt = loc.substring(loc.lastIndexOf('.'), loc.length);
-            if (this.fileExtsForHDI.indexOf(fileExt) >= 0) {
-                const hdbPublicSynonym = this._generateHdbPublicSynonym(modelName, hdiSchema);
+            if (this.modelsWithoutSynonym.indexOf(dataModelType) >= 0) {
+                // synonym not needed
+                console.log("Synonym won't be generated for file " + loc);
+            } else if (this._shouldGeneratePublicSynonym(loc)) {
+                // public synonym needed
+                const artifactName = this._getPublicSynonymArtifactName(modelName, loc);
+                const hdbPublicSynonym = this._generateHdbPublicSynonym(modelName, hdiSchema, artifactName);
                 publicSynonyms.push(hdbPublicSynonym);
-            } else if (dataModelType != schemaModel) {
+            } else {
+                // hdb synonym needed
                 const modelSchema = parsedData.getSchema();
                 const hdbSynonym = this._generateHdbSynonym(modelName, modelSchema);
                 synonyms.push(hdbSynonym);
-            } else {
-                console.log("Synonym won't be generated for file " + loc);
             }
         }
 
@@ -271,13 +279,12 @@ export class MigrationService {
         };
     }
 
-    _generateHdbPublicSynonym(name, schemaName) {
-        const trimmedName = name.split(":").pop();
+    _generateHdbPublicSynonym(synonymName, schemaName, artifactName) {
         return {
-            name: name,
+            name: synonymName,
             value: {
                 target: {
-                    object: trimmedName,
+                    object: artifactName,
                     schema: schemaName
                 },
             },
@@ -367,9 +374,9 @@ export class MigrationService {
 
         return workspaceCollection.createCollection(projectName);
     }
-    removeTemporaryFolders(workspaceName){
-        let collectionNames = [workspaceName,workspaceName+'_unmodified']
-        for(const collectionName of  collectionNames){
+    removeTemporaryFolders(workspaceName) {
+        let collectionNames = [workspaceName, workspaceName + '_unmodified']
+        for (const collectionName of collectionNames) {
             const workspaceCollection = repositoryManager.getCollection(collectionName);
             if (workspaceCollection.exists()) {
                 workspaceCollection.delete();
@@ -437,7 +444,7 @@ export class MigrationService {
             });
         }
 
-        let fileExt = filePath.substring(filePath.lastIndexOf('.'), filePath.length);
+        let fileExt = this._getFileExtension(filePath);
         if (this.fileExtsForHDI.indexOf(fileExt) >= 0) {
             deployables.find((x) => x.projectName === projectName).artifacts.push(runLocation);
         }
@@ -493,12 +500,7 @@ export class MigrationService {
         const projectFile = project.createFile(relativePath);
         const resource = repositoryManager.getResource(repositoryPath);
 
-        if (
-            relativePath.endsWith(".hdbcalculationview") ||
-            relativePath.endsWith(".calculationview") ||
-            repositoryPath.endsWith(".hdbcalculationview") ||
-            repositoryPath.endsWith(".calculationview")
-        ) {
+        if (this._isFileCalculationView(relativePath) || this._isFileCalculationView(repositoryPath)) {
             const modifiedContent = xskModificator.modify(resource.getContent());
             projectFile.setContent(modifiedContent);
         } else {
@@ -581,6 +583,22 @@ export class MigrationService {
         let resource = projectCollection.getResource(hdiPath);
         resource.setText(hdiJson);
         hdiFile.setText(hdiJson);
+    }
+
+    _getPublicSynonymArtifactName(artifactName, filePath) {
+        if (this._isFileCalculationView(filePath)) {
+            return artifactName.split(":").pop()
+        }
+        return artifactName;
+    }
+
+    _shouldGeneratePublicSynonym(filePath) {
+        const fileExtension = this._getFileExtension(filePath);
+        return this.fileExtsForHDI.indexOf(fileExtension) >= 0;
+    }
+
+    _getFileExtension(filePath) {
+        return filePath.substring(filePath.lastIndexOf('.'), filePath.length);
     }
 
     addFilesWithoutGenerated(userData, workspace, localFiles) {

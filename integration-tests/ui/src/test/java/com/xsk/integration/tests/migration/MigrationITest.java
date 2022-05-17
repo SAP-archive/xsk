@@ -84,7 +84,7 @@ public class MigrationITest {
     webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Username']"), DirigibleConnectionProperties.AUTH_USERNAME);
     webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Password']"), DirigibleConnectionProperties.AUTH_PASSWORD);
     webBrowser.log();
-    webBrowser.submitForm(By.name("loginForm"));
+    webBrowser.clickItem(By.xpath("//button[text() = 'Log in']"));
   }
 
   private void navigateToMigrationPerspective() {

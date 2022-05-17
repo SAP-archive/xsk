@@ -424,7 +424,8 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
     when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
     when(mockResultSet.next()).thenReturn(true).thenReturn(false).thenReturn(true).thenReturn(false);
     when(mockResultSet.getString("VARIABLE_NAME")).thenReturn("CurrentUserId");
-    when(mockResultSet.getString("COLUMN_TYPE_D")).thenReturn("INTEGER");
+    when(mockResultSet.getString("COLUMN_SQL_TYPE")).thenReturn("INTEGER");
+    when(mockResultSet.getString("MANDATORY")).thenReturn("0");
 
     ODataDefinition oDataDefinition = oDataUtil.convertXSKODataModelToODataDefinition(xskoDataModel);
 

@@ -443,7 +443,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   private Map<String, Object> resultSetToEntryMap(ResultSet resultSet) throws SQLException {
     ResultSetMetaData resultSetMetadata = resultSet.getMetaData();
     int columnCount = resultSetMetadata.getColumnCount();
-    HashMap<String, Object> entry = new HashMap(columnCount);
+    HashMap<String, Object> entry = new HashMap<>(columnCount);
     for (int i = 1; i <= columnCount; i++) {
       entry.put(resultSetMetadata.getColumnName(i), resultSet.getObject(i));
     }

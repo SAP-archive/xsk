@@ -49,7 +49,15 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
   private static final Logger logger = LoggerFactory.getLogger(XSKScriptingOData2EventHandler.class);
   private static final String ERROR_WHEN_PREPARING_TEMPORARY_TABLE_SQL = "Error when preparing temporary table SQL: ";
-  private static final String UNABLE_TO_SET_UP_TEMPORARY_TABLES = "Unable to set up temporary tables";
+  private static final String UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT = "Unable to handle beforeCreateEntity event";
+  private static final String UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT = "Unable to handle afterCreateEntity event";
+  private static final String UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT = "Unable to handle onCreateEntity event";
+  private static final String UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT = "Unable to handle beforeUpdateEntity event";
+  private static final String UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT = "Unable to handle afterUpdateEntity event";
+  private static final String UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT = "Unable to handle onUpdateEntity event";
+  private static final String UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT = "Unable to handle beforeDeleteEntity event";
+  private static final String UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT = "Unable to handle afterDeleteEntity event";
+  private static final String UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT = "Unable to handle onDeleteEntity event";
   private static final String UNABLE_TO_DROP_TEMPORARY_TABLES = "Unable to drop temporary tables";
   private static final String UNABLE_TO_CLOSE_CONNECTION = "Unable to close connection";
 
@@ -92,17 +100,11 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.beforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
-    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-      }
+      closeConnection(connectionParam);
+      dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
     }
   }
 
@@ -128,17 +130,11 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
-    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-      }
+      closeConnection(connectionParam);
+      dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
     }
   }
 
@@ -151,11 +147,10 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
     Connection connectionParam = null;
     try {
-      connectionParam = dataSource.getConnection();
-
       String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
       String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
+      connectionParam = dataSource.getConnection();
       createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
       insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
 
@@ -167,16 +162,10 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
       context.put(ENTRY_MAP, readEntryMap(connectionParam, afterTableName));
       return response;
-    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_CLOSE_CONNECTION, e);
-      }
+      closeConnection(connectionParam);
     }
   }
 
@@ -206,18 +195,12 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_UPDATE_ENTITY_TABLE_NAME, beforeUpdateEntityTableName);
 
       super.beforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
-    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
-        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-      }
+      closeConnection(connectionParam);
+      dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
+      dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
     }
   }
 
@@ -239,18 +222,12 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
 
       super.afterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
-    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
-        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-      }
+      closeConnection(connectionParam);
+      dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
+      dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
     }
   }
 
@@ -277,18 +254,12 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
 
       return super.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
-    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
-        dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-      }
+      closeConnection(connectionParam);
+      dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
+      dropTemporaryTable((String) context.get(AFTER_TABLE_NAME));
     }
   }
 
@@ -312,17 +283,11 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_DELETE_ENTITY_TABLE_NAME, beforeDeleteEntityTableName);
 
       super.beforeDeleteEntity(uriInfo, contentType, context);
-    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-      }
+      closeConnection(connectionParam);
+      dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
     }
   }
 
@@ -336,17 +301,11 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_TABLE_NAME, context.get(BEFORE_DELETE_ENTITY_TABLE_NAME));
 
       super.afterDeleteEntity(uriInfo, contentType, context);
-    } catch (org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-      }
+      closeConnection(connectionParam);
+      dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
     }
   }
 
@@ -366,17 +325,11 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_TABLE_NAME, beforeTableName);
 
       return super.onDeleteEntity(uriInfo, contentType, context);
-    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(e);
-    } catch (SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_SET_UP_TEMPORARY_TABLES, e);
+    } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT, e);
     } finally {
-      try {
-        closeConnection(connectionParam);
-        dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
-      } catch (SQLException e) {
-        throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-      }
+      closeConnection(connectionParam);
+      dropTemporaryTable((String) context.get(BEFORE_TABLE_NAME));
     }
   }
 
@@ -445,7 +398,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     executeSQLStatement(connection, updateBuilder.build(sqlContext));
   }
 
-  private void dropTemporaryTable(String temporaryTableName) throws SQLException {
+  private void dropTemporaryTable(String temporaryTableName) {
     try (Connection connection = dataSource.getConnection()) {
       if (SqlFactory.getNative(connection).exists(connection, temporaryTableName)) {
         String sql = SqlFactory.getNative(connection).drop().table(temporaryTableName).build();
@@ -453,6 +406,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
           preparedStatement.executeUpdate();
         }
       }
+    } catch (SQLException e) {
+      logger.error(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
     }
   }
 
@@ -496,9 +451,13 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     return entry;
   }
 
-  private void closeConnection(Connection connection) throws SQLException {
-    if (connection != null && !connection.isClosed()) {
-      connection.close();
+  private void closeConnection(Connection connection) {
+    try {
+      if (connection != null && !connection.isClosed()) {
+        connection.close();
+      }
+    } catch (SQLException e) {
+      logger.error(UNABLE_TO_CLOSE_CONNECTION, e);
     }
   }
 

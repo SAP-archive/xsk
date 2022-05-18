@@ -75,16 +75,17 @@ public class MigrationITest {
 
   private void loginIfNecessary() {
     try {
-      webBrowser.waitForVisibilityOfElement(By.xpath("/html/body/div/div/h3[text() = 'Sign in to Eclipse Dirigible']"));
+      webBrowser.waitForVisibilityOfElement(By.xpath("/html/body/div/div/h3[text() = 'Sign in to SAP XSK']"));
     } catch (Throwable t) {
       return; // assume we're already logged in
     }
 
     webBrowser.log();
-    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Username']"), DirigibleConnectionProperties.AUTH_USERNAME);
-    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Password']"), DirigibleConnectionProperties.AUTH_PASSWORD);
+    webBrowser.switchToDefaultContent();
+    webBrowser.enterAndAssertField(By.name("j_username"), DirigibleConnectionProperties.AUTH_USERNAME);
+    webBrowser.enterAndAssertField(By.name("j_password"), DirigibleConnectionProperties.AUTH_PASSWORD);
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//button[text() = 'Log in']"));
+    webBrowser.submitForm(By.name("loginForm"));
   }
 
   private void navigateToMigrationPerspective() {

@@ -70,17 +70,17 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
 
     private XSKDataStructureHDBProcedureModel createModel(HDBProcedureDefinitionModel antlrModel,
                                                           XSKDataStructureParametersModel params) {
-        return new XSKDataStructureHDBProcedureModel(
-                params.getLocation(),
-                antlrModel.getName(),
-                getType(),
-                DigestUtils.md5Hex(params.getContent()),
-                UserFacade.getName(),
-                new Timestamp(new java.util.Date().getTime()),
-                antlrModel.getSchema(),
-                params.getContent(),
-                params.getContent()
-        );
+        XSKDataStructureHDBProcedureModel hdbProcedureModel = new XSKDataStructureHDBProcedureModel();
+        hdbProcedureModel.setSchema(antlrModel.getSchema());
+        hdbProcedureModel.setName(antlrModel.getName());
+        hdbProcedureModel.setLocation(params.getLocation());
+        hdbProcedureModel.setType(getType());
+        hdbProcedureModel.setHash(DigestUtils.md5Hex(params.getContent())); //NOSONAR
+        hdbProcedureModel.setCreatedBy(UserFacade.getName());
+        hdbProcedureModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+        hdbProcedureModel.setContent(params.getContent());
+        hdbProcedureModel.setRawContent(params.getContent());
+        return hdbProcedureModel;
     }
 
     private void validateAntlrModel(HDBProcedureDefinitionModel antlrModel, String location) throws XSKDataStructuresException {

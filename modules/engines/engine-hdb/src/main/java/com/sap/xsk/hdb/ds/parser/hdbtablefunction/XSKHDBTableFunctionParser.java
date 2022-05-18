@@ -12,7 +12,6 @@
 package com.sap.xsk.hdb.ds.parser.hdbtablefunction;
 import java.io.IOException;
 import java.sql.Timestamp;
-
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
@@ -27,7 +26,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
@@ -71,17 +69,17 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
   private XSKDataStructureHDBTableFunctionModel createModel(TableFunctionDefinitionModel antlrModel,
       XSKDataStructureParametersModel params) {
 
-    return new XSKDataStructureHDBTableFunctionModel(
-                    params.getLocation(),
-                    antlrModel.getName(),
-                    getType(),
-                    DigestUtils.md5Hex(params.getContent()),
-                    UserFacade.getName(),
-                    new Timestamp(new java.util.Date().getTime()),
-                    antlrModel.getSchema(),
-                    params.getContent(),
-                    params.getContent()
-            );
+    XSKDataStructureHDBTableFunctionModel tableFunctionModel = new XSKDataStructureHDBTableFunctionModel();
+    tableFunctionModel.setSchema(antlrModel.getSchema());
+    tableFunctionModel.setName(antlrModel.getName());
+    tableFunctionModel.setLocation(params.getLocation());
+    tableFunctionModel.setType(getType());
+    tableFunctionModel.setHash(DigestUtils.md5Hex(params.getContent())); //NOSONAR
+    tableFunctionModel.setCreatedBy(UserFacade.getName());
+    tableFunctionModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
+    tableFunctionModel.setContent(params.getContent());
+    tableFunctionModel.setRawContent(params.getContent());
+    return tableFunctionModel;
   }
 
   private void validateAntlrModel(TableFunctionDefinitionModel antlrModel, String location) throws XSKDataStructuresException {

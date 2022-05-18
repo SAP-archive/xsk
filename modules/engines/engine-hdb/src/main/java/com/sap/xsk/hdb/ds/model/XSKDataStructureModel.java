@@ -28,18 +28,6 @@ import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 @Table(name = "XSK_DATA_STRUCTURES")
 public class XSKDataStructureModel {
 
-  public XSKDataStructureModel(String location, String name, String type, String hash, String createdBy, Timestamp createdAt, String schema, String rawContent) {
-    this.location = location;
-    this.name = name;
-    this.type = type;
-    this.hash = hash;
-    this.createdBy = createdBy;
-    this.createdAt = createdAt;
-    this.schema = schema;
-    this.rawContent = rawContent;
-  }
-  public XSKDataStructureModel(){}
-
   @Id
   @Column(name = "DS_LOCATION", columnDefinition = "VARCHAR", nullable = false, length = 255)
   private String location;

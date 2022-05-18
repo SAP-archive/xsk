@@ -65,8 +65,7 @@ public class XSKTableTypeParserTest {
     @Test
     public void testParsedXSAdvancedTableTypeSchemaAndNameAreExtracted()
             throws XSKDataStructuresException, XSKArtifactParserException, IOException {
-        String tableTypeFile =
-                (isTableTypeWithComments) ? "tableTypeWithCommentsAndSchemaAndName." : "tableTypeWithSchemaAndName.hdbtabletype";
+        String tableTypeFile = (isTableTypeWithComments) ? "tableTypeWithCommentsAndSchemaAndName.hdbtabletype" : "tableTypeWithSchemaAndName.hdbtabletype";
         String tableTypeContent = getTableTypeContentFromResources(tableTypeFile);
         XSKDataStructureParametersModel parametersModel = new XSKDataStructureParametersModel(null, tableTypeFile, tableTypeContent, null);
 

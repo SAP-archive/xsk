@@ -13,16 +13,28 @@ package com.sap.xsk.hdb.ds.model.hdbprocedure;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
+import java.sql.Timestamp;
+
 public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
 
-  private String content;
+    private String content;
 
-  public String getContent() {
-    return content;
-  }
+    public XSKDataStructureHDBProcedureModel(String location, String name, String type, String hash, String createdBy, Timestamp createdAt, String schema, String content, String rawContent) {
+        super(location, name, type, hash, createdBy, createdAt, schema, rawContent);
+        this.content = content;
+    }
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+    public XSKDataStructureHDBProcedureModel() {
+        super();
+    }
+
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
 }

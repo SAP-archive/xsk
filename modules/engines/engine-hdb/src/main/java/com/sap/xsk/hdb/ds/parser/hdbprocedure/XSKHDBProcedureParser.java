@@ -11,14 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.parser.hdbprocedure;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.sql.Timestamp;
-
 import com.sap.xsk.exceptions.XSKArtifactParserException;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.artefacts.HDBProcedureSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
+import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
@@ -30,85 +29,82 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
-
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType;
 
-public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStructureHDBProcedureModel>   {
+import java.io.IOException;
+import java.sql.Timestamp;
 
-  private final XSKDataStructuresSynchronizer dataStructuresSynchronizer;
-  private final HDBProcedureSynchronizationArtefactType procedureSynchronizationArtefactType;
-  private final XSKHDBProcedureLogger procedureLogger;
+public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStructureHDBProcedureModel> {
+
+    private final XSKDataStructuresSynchronizer dataStructuresSynchronizer;
+    private final HDBProcedureSynchronizationArtefactType procedureSynchronizationArtefactType;
+    private final XSKHDBProcedureLogger procedureLogger;
 
 
-  public XSKHDBProcedureParser(XSKDataStructuresSynchronizer dataStructuresSynchronizer,
-                               HDBProcedureSynchronizationArtefactType procedureSynchronizationArtefactType,
-                               XSKHDBProcedureLogger procedureLogger) {
-    this.dataStructuresSynchronizer = dataStructuresSynchronizer;
-    this.procedureSynchronizationArtefactType = procedureSynchronizationArtefactType;
-    this.procedureLogger = procedureLogger;
-  }
-
-  @Override
-  public XSKDataStructureHDBProcedureModel parse(XSKDataStructureParametersModel parametersModel)
-          throws IOException, XSKDataStructuresException, XSKArtifactParserException {
-
-    String location = parametersModel.getLocation();
-
-    ParseTree parseTree = XSKHDBUtils.getParsedThree(parametersModel);
-
-    HanaProcedureListener listener = new HanaProcedureListener();
-
-    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-    parseTreeWalker.walk(listener, parseTree);
-
-    HDBProcedureDefinitionModel antlr4Model = listener.getModel();
-    validateAntlrModel(antlr4Model, location);
-
-    return createModel(antlr4Model, parametersModel);
-  }
-
-  private XSKDataStructureHDBProcedureModel createModel(HDBProcedureDefinitionModel antlrModel,
-                                                            XSKDataStructureParametersModel params) {
-
-    XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-    model.setSchema(antlrModel.getSchema());
-    model.setName(antlrModel.getName());
-    model.setLocation(params.getLocation());
-    model.setType(getType());
-    model.setHash(DigestUtils.md5Hex(params.getContent())); //NOSONAR
-    model.setCreatedBy(UserFacade.getName());
-    model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    model.setContent(params.getContent());
-    model.setRawContent(params.getContent());
-
-    return model;
-  }
-
-  private void validateAntlrModel(HDBProcedureDefinitionModel antlrModel, String location) throws XSKDataStructuresException {
-    try {
-      antlrModel.checkForAllMandatoryFieldsPresence();
-    } catch (HDBProcedureMissingPropertyException e) {
-      procedureLogger.logError(location, XSKCommonsConstants.EXPECTED_FIELDS, e.getMessage());
-      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),
-              location,
-              procedureSynchronizationArtefactType,
-              ISynchronizerArtefactType.ArtefactState.FAILED_CREATE,
-              e.getMessage());
-
-      throw new XSKDataStructuresException("Wrong format of HDB Table Function: " + location + " during parsing. ", e);
+    public XSKHDBProcedureParser(XSKDataStructuresSynchronizer dataStructuresSynchronizer,
+                                 HDBProcedureSynchronizationArtefactType procedureSynchronizationArtefactType,
+                                 XSKHDBProcedureLogger procedureLogger) {
+        this.dataStructuresSynchronizer = dataStructuresSynchronizer;
+        this.procedureSynchronizationArtefactType = procedureSynchronizationArtefactType;
+        this.procedureLogger = procedureLogger;
     }
-  }
 
-  @Override
-  public String getType() {
-    return IXSKDataStructureModel.TYPE_HDB_PROCEDURE;
-  }
+    @Override
+    public XSKDataStructureHDBProcedureModel parse(XSKDataStructureParametersModel parametersModel)
+            throws IOException, XSKDataStructuresException, XSKArtifactParserException {
 
-  @Override
-  public Class<XSKDataStructureHDBProcedureModel> getDataStructureClass() {
-    return XSKDataStructureHDBProcedureModel.class;
-  }
+        String location = parametersModel.getLocation();
+
+        ParseTree parseTree = XSKHDBUtils.getParsedThree(parametersModel);
+
+        HanaProcedureListener listener = new HanaProcedureListener();
+
+        ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+        parseTreeWalker.walk(listener, parseTree);
+
+        HDBProcedureDefinitionModel antlr4Model = listener.getModel();
+        validateAntlrModel(antlr4Model, location);
+
+        return createModel(antlr4Model, parametersModel);
+    }
+
+    private XSKDataStructureHDBProcedureModel createModel(HDBProcedureDefinitionModel antlrModel,
+                                                          XSKDataStructureParametersModel params) {
+        return new XSKDataStructureHDBProcedureModel(
+                params.getLocation(),
+                antlrModel.getName(),
+                getType(),
+                DigestUtils.md5Hex(params.getContent()),
+                UserFacade.getName(),
+                new Timestamp(new java.util.Date().getTime()),
+                antlrModel.getSchema(),
+                params.getContent(),
+                params.getContent()
+        );
+    }
+
+    private void validateAntlrModel(HDBProcedureDefinitionModel antlrModel, String location) throws XSKDataStructuresException {
+        try {
+            antlrModel.checkForAllMandatoryFieldsPresence();
+        } catch (HDBProcedureMissingPropertyException e) {
+            procedureLogger.logError(location, XSKCommonsConstants.EXPECTED_FIELDS, e.getMessage());
+            dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),
+                    location,
+                    procedureSynchronizationArtefactType,
+                    ISynchronizerArtefactType.ArtefactState.FAILED_CREATE,
+                    e.getMessage());
+
+            throw new XSKDataStructuresException("Wrong format of HDB Table Function: " + location + " during parsing. ", e);
+        }
+    }
+
+    @Override
+    public String getType() {
+        return IXSKDataStructureModel.TYPE_HDB_PROCEDURE;
+    }
+
+    @Override
+    public Class<XSKDataStructureHDBProcedureModel> getDataStructureClass() {
+        return XSKDataStructureHDBProcedureModel.class;
+    }
 }

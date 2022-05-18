@@ -10,8 +10,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.parser.hdbtablefunction;
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 
@@ -73,19 +71,17 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
   private XSKDataStructureHDBTableFunctionModel createModel(TableFunctionDefinitionModel antlrModel,
       XSKDataStructureParametersModel params) {
 
-    XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
-
-    model.setSchema(antlrModel.getSchema());
-    model.setName(antlrModel.getName());
-    model.setLocation(params.getLocation());
-    model.setType(getType());
-    model.setHash(DigestUtils.md5Hex(params.getContent())); //NOSONAR
-    model.setCreatedBy(UserFacade.getName());
-    model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    model.setContent(params.getContent());
-    model.setRawContent(params.getContent());
-
-    return model;
+    return new XSKDataStructureHDBTableFunctionModel(
+                    params.getLocation(),
+                    antlrModel.getName(),
+                    getType(),
+                    DigestUtils.md5Hex(params.getContent()),
+                    UserFacade.getName(),
+                    new Timestamp(new java.util.Date().getTime()),
+                    antlrModel.getSchema(),
+                    params.getContent(),
+                    params.getContent()
+            );
   }
 
   private void validateAntlrModel(TableFunctionDefinitionModel antlrModel, String location) throws XSKDataStructuresException {

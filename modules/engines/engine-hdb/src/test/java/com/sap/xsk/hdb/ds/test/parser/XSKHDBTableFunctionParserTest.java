@@ -66,6 +66,8 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
         assertEquals("Unexpected tablefunction dependencies.", 0, model.getDependencies().size());
         assertNotNull("Null value for tablefunction createdAt", model.getCreatedAt());
         assertNotNull("Null value for tablefunction createdBy", model.getCreatedBy());
+        assertEquals("Cant access data structure model class", "class com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel", parser.getDataStructureClass().toString());
+
     }
 
     @Test

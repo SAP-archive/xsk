@@ -60,6 +60,7 @@ public class XSKHDBProcedureParserTest {
         assertEquals("Unexpected hdbprocedure dependencies.", 0, model.getDependencies().size());
         assertNotNull("Null value for hdbprocedure createdAt", model.getCreatedAt());
         assertNotNull("Null value for hdbprocedure createdBy", model.getCreatedBy());
+        assertEquals("Cant access data structure model class", "class com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel", parser.getDataStructureClass().toString());
     }
 
 

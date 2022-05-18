@@ -6,13 +6,13 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-integration-tests-parent</artifactId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.16.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Integration Tests - UI</name>
   <artifactId>xsk-integration-tests-ui</artifactId>
-  <version>0.17.0-SNAPSHOT</version>
+  <version>0.16.1</version>
   <packaging>jar</packaging>
 
   <dependencies>

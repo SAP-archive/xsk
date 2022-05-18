@@ -151,8 +151,9 @@ public class XSKODataUtils {
       // Process Aggregations
       if (XSKHDBXSODATAAggregationType.EXPLICIT.equals(entity.getAggregationType())) {
         oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
-        for(XSKHDBXSODATAAggregation aggregation: entity.getAggregations()) {
-          oDataEntityDefinition.getAggregationsTypeAndColumn().put(aggregation.getAggregateColumnName(), aggregation.getAggregateFunction());
+        for (XSKHDBXSODATAAggregation aggregation : entity.getAggregations()) {
+          oDataEntityDefinition.getAggregationsTypeAndColumn()
+              .put(aggregation.getAggregateColumnName(), aggregation.getAggregateFunction());
         }
       } else if (XSKHDBXSODATAAggregationType.IMPLICIT.equals(entity.getAggregationType())) {
         oDataEntityDefinition.getAnnotationsEntityType().put("sap:semantics", "aggregate");
@@ -285,32 +286,33 @@ public class XSKODataUtils {
               + "ORDER BY \"ORDER\"")) {
         statement.setString(1, tableName);
 
-        ResultSet calcViewParameters = statement.executeQuery();
+        try (ResultSet calcViewParameters = statement.executeQuery()) {
 
-        while (calcViewParameters.next()) {
-          PersistenceTableColumnModel calcViewParam = new PersistenceTableColumnModel();
+          while (calcViewParameters.next()) {
+            PersistenceTableColumnModel calcViewParam = new PersistenceTableColumnModel();
 
-          String calcViewParamName = calcViewParameters.getString("VARIABLE_NAME");
-          String calcViewParamType = calcViewParameters.getString("COLUMN_SQL_TYPE");
-          String calcViewParamMandatory = calcViewParameters.getString("MANDATORY");
+            String calcViewParamName = calcViewParameters.getString("VARIABLE_NAME");
+            String calcViewParamType = calcViewParameters.getString("COLUMN_SQL_TYPE");
+            String calcViewParamMandatory = calcViewParameters.getString("MANDATORY");
 
-          boolean isNullable = false;
+            boolean isNullable = false;
 
-          if (calcViewParamMandatory.equals("0")) {
-            isNullable = true;
+            if (calcViewParamMandatory.equals("0")) {
+              isNullable = true;
+            }
+
+            Integer index = calcViewParamType.indexOf("(");
+
+            if (index != -1) {
+              calcViewParamType = calcViewParamType.substring(0, index);
+            }
+
+            calcViewParam.setName(calcViewParamName);
+            calcViewParam.setType(dbMetadataUtil.convertSqlTypeToOdataEdmType(calcViewParamType));
+            calcViewParam.setNullable(isNullable);
+
+            allEntityParameters.add(calcViewParam);
           }
-
-          Integer index = calcViewParamType.indexOf("(");
-
-          if (index != -1) {
-            calcViewParamType = calcViewParamType.substring(0, index);
-          }
-
-          calcViewParam.setName(calcViewParamName);
-          calcViewParam.setType(dbMetadataUtil.convertSqlTypeToOdataEdmType(calcViewParamType));
-          calcViewParam.setNullable(isNullable);
-
-          allEntityParameters.add(calcViewParam);
         }
       }
     }

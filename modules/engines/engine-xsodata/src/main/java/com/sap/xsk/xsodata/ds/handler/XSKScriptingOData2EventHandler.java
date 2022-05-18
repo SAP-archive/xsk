@@ -58,7 +58,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
   private static final String UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT = "Unable to handle beforeDeleteEntity event";
   private static final String UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT = "Unable to handle afterDeleteEntity event";
   private static final String UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT = "Unable to handle onDeleteEntity event";
-  private static final String UNABLE_TO_DROP_TEMPORARY_TABLES = "Unable to drop temporary tables";
+  private static final String UNABLE_TO_DROP_TEMPORARY_TABLE = "Unable to drop temporary table";
   private static final String UNABLE_TO_CLOSE_CONNECTION = "Unable to close connection";
 
   private static final String ODATA2_EVENT_HANDLER_NAME = "xsk-odata-event-handler";
@@ -407,7 +407,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
         }
       }
     } catch (SQLException e) {
-      logger.error(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
+      logger.error(UNABLE_TO_DROP_TEMPORARY_TABLE, e);
     }
   }
 

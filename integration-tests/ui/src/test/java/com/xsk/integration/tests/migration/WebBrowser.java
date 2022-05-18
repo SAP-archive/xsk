@@ -13,6 +13,7 @@ package com.xsk.integration.tests.migration;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -75,7 +76,6 @@ class WebBrowser {
     FirefoxOptions options = new FirefoxOptions();
     options.setHeadless(isHeadless);
     options.addArguments("--height=1080", "--width=1920", "-private");
-
     setupBrowserCommon(new FirefoxDriver(options));
   }
 
@@ -84,6 +84,7 @@ class WebBrowser {
     browser.navigate().to(baseUrl);
     browser.manage().window().maximize();
     browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+    browser.manage().window().setSize(new Dimension(1920,1080));
 
     jsExecutor = (JavascriptExecutor) (browser);
     browserWait = new WebDriverWait(browser, Duration.ofSeconds(120));
